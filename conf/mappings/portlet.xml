@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <portlet-app-def>
 
-<portlet-app uid="org.gridsphere.portlets.HelloWorld">
+<portlet-app uid="org.gridlab.gridsphere.portlets.HelloWorld">
     <portlet-app-name>Hello World Two Portlet Application</portlet-app-name>
 
 </portlet-app>
 
-<portlet-app uid="org.gridsphere.portlets.HalloWelt">
+<portlet-app uid="org.gridlab.gridsphere.portlets.HalloWelt">
     <portlet-app-name>Hello World Two Portlet Application</portlet-app-name>
     <portlet href="WEB-INF/web.xml#Servlet_1902648614" id="Portlet_1902648614">
         <portlet-name>Hello World Two</portlet-name>
