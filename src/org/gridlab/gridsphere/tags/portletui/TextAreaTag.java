@@ -14,8 +14,8 @@ public class TextAreaTag extends BaseComponentTag {
 
     public static final String TEXTAREA_STYLE = "portlet-frame-textarea";
     protected TextAreaBean textAreaBean = null;
-    protected int cols;
-    protected int rows;
+    protected int cols = 0;
+    protected int rows = 0;;
 
     /**
      *  Gets the number of columns of the TextArea.
@@ -50,34 +50,35 @@ public class TextAreaTag extends BaseComponentTag {
     }
 
     public int doEndTag() throws JspException {
-            //textAreaBean.setCssStyle(TEXTAREA_STYLE);
-            textAreaBean = (TextAreaBean)pageContext.getSession().getAttribute(getBeanKey());
-            if (textAreaBean == null) {
-                textAreaBean = new TextAreaBean();
-                textAreaBean.setRows(rows);
-                textAreaBean.setCols(cols);
-                this.setBaseComponentBean(textAreaBean);
-            }
-            if (!beanId.equals("")) {
-                //System.err.println("storing bean in the session");
-                store(getBeanKey(), textAreaBean);
-            }
-            //debug();
+        //textAreaBean.setCssStyle(TEXTAREA_STYLE);
 
-            Object parentTag = getParent();
-            if (parentTag instanceof ContainerTag) {
-                ContainerTag containerTag = (ContainerTag)parentTag;
-                containerTag.addTagBean(textAreaBean);
-            } else {
-                try {
-                    JspWriter out = pageContext.getOut();
-                    out.print(textAreaBean.toString());
-                } catch (Exception e) {
-                    throw new JspException(e.getMessage());
-                }
-            }
-            return EVAL_BODY_INCLUDE;
+        textAreaBean = (TextAreaBean)pageContext.getSession().getAttribute(getBeanKey());
+        if (textAreaBean == null) {
+            textAreaBean = new TextAreaBean();
+            textAreaBean.setRows(rows);
+            textAreaBean.setCols(cols);
+            this.setBaseComponentBean(textAreaBean);
         }
+        if (!beanId.equals("")) {
+            //System.err.println("storing bean in the session");
+            store(getBeanKey(), textAreaBean);
+        }
+        //debug();
+
+        Object parentTag = getParent();
+        if (parentTag instanceof ContainerTag) {
+            ContainerTag containerTag = (ContainerTag)parentTag;
+            containerTag.addTagBean(textAreaBean);
+        } else {
+            try {
+                JspWriter out = pageContext.getOut();
+                out.print(textAreaBean.toString());
+            } catch (Exception e) {
+                throw new JspException(e.getMessage());
+            }
+        }
+        return EVAL_BODY_INCLUDE;
+    }
 
 
 }

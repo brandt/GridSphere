@@ -85,6 +85,9 @@ public class TableCellTag extends ContainerTag {
             }
             rowTag.addTagBean(cellBean);
         }
+        if (!beanId.equals("")) {
+            store(beanId, cellBean);
+        }
         return EVAL_BODY_INCLUDE;
     }
 }

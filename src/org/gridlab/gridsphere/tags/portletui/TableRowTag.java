@@ -58,7 +58,9 @@ public class TableRowTag extends ContainerTag {
 
             tableTag.setTableModel(tableModel);
         }
-
+        if (!beanId.equals("")) {
+            store(beanId, rowBean);
+        }
         return EVAL_PAGE;
     }
 }
