@@ -188,7 +188,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             // if title bar is not assigned a label and we have one then use it
             if ((!label.equals("")) && (titleBar.getLabel().equals(""))) titleBar.setLabel(label + "TB");
             titleBar.setPortletClass(portletClass);
-            titleBar.setTheme(theme);
             list = titleBar.init(req, list);
             titleBar.addComponentListener(this);
             titleBar.setTheme(theme);
@@ -456,7 +455,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         writer.print("<table  ");
 
         if (getOuterPadding().equals("")) {
-            writer.print(" cellspacing=\"0\" class=\"window-main" + this.getFormattedComponentTheme() + "\" ");
+            writer.print(" cellspacing=\"0\" class=\"window-main" + this.getTheme() + "\" ");
         } else {
             //out.print("border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"");        // this is the main table around one portlet
             //out.print(" cellspacing=\""+getOuterPadding()+"\" style=\"padding:"+getOuterPadding()+"px\"  class=\"window-main\" ");        // this is the main table around one portlet
@@ -471,7 +470,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         // Render title bar
         if (titleBar != null) {
-            titleBar.setComponentTheme(this.componentTheme);
             titleBar.doRender(event);
             /*
             if (titleBar.hasRenderError()) {

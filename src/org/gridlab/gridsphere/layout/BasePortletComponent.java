@@ -30,7 +30,6 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected String label = new String();
     protected String name = new String();
     protected String theme = "default";
-    protected String componentTheme = "";
     protected boolean isVisible = true;
     protected String roleString = PortletRole.GUEST.toString();
     protected String groupString = PortletGroupFactory.GRIDSPHERE_GROUP.getName();
@@ -88,33 +87,15 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     }
 
     /**
-     * Gets the theme for on component annd its childs
-     *
-     * @return name of the componenttheme
-     */
-    public String getComponentTheme() {
-        return componentTheme;
-    }
-
-    /**
-     * Set the theme for the component and its childs.
-     *
-     * @param componentTheme
-     */
-    public void setComponentTheme(String componentTheme) {
-        this.componentTheme = componentTheme;
-    }
-
-    /**
      * Returns the componentTheme for usage directly in HTML/css
      *
      * @return formatted componentTheme to use with html/css
      */
     protected String getFormattedComponentTheme() {
-        if (this.componentTheme.equals("")) {
-            return this.componentTheme;
+        if (this.theme.equals("")) {
+            return this.theme;
         } else {
-            return "-"+this.componentTheme;
+            return "-"+theme;
         }
     }
 
