@@ -70,7 +70,7 @@ public class ListBoxItemTag extends BaseComponentTag {
         List beans = listbox.getBeans();
         Iterator it = beans.iterator();
         while (it.hasNext()) {
-            ListBoxItemBean listboxitem = (ListBoxItemBean)it.next();
+            ListBoxItemBean listboxitem = (ListBoxItemBean) it.next();
             if (name != null) {
                 if (name.equals(listboxitem.getName())) {
                     listboxitem.setValue(value);
@@ -96,7 +96,7 @@ public class ListBoxItemTag extends BaseComponentTag {
                 List beans = listbox.getBeans();
                 Iterator it = beans.iterator();
                 while (it.hasNext()) {
-                    ListBoxItemBean listboxitem = (ListBoxItemBean)it.next();
+                    ListBoxItemBean listboxitem = (ListBoxItemBean) it.next();
                     if (listboxitem.isSelected()) {
                         selected = false;
                     }
@@ -107,7 +107,7 @@ public class ListBoxItemTag extends BaseComponentTag {
 
     public int doEndTag() throws JspException {
 
-        ListBoxTag listboxTag = (ListBoxTag)getParent();
+        ListBoxTag listboxTag = (ListBoxTag) getParent();
         if (listboxTag != null) {
             //System.err.println("Setting action param bean: " + name + " " + value);
             ListBoxItemBean listboxitem = new ListBoxItemBean();

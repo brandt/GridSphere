@@ -114,7 +114,7 @@ public class TableCellTag extends BaseComponentTag {
 
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
-            cellBean = (TableCellBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            cellBean = (TableCellBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (cellBean == null) cellBean = new TableCellBean();
         } else {
             cellBean = new TableCellBean();
@@ -124,9 +124,9 @@ public class TableCellTag extends BaseComponentTag {
             if (valign != null) cellBean.setValign(align);
         }
 
-        TableRowTag rowTag = (TableRowTag)getParent();
+        TableRowTag rowTag = (TableRowTag) getParent();
         if (rowTag.getHeader()) {
-            cellBean.setCssStyle(TableRowBean.TABLE_HEADER_STYLE);
+            cellBean.setCssClass(TableRowBean.TABLE_HEADER_STYLE);
         }
         try {
             JspWriter out = pageContext.getOut();

@@ -22,7 +22,7 @@ public class FrameBean extends TableBean implements TagBean {
     public static final String ERROR_TYPE = "error";
     public static final String MESSAGE_TYPE = "message";
 
-    protected String style = TextBean.MSG_INFO;
+    protected String textStyle = TextBean.MSG_INFO;
 
     /**
      * Constructs a default frame bean
@@ -71,7 +71,7 @@ public class FrameBean extends TableBean implements TagBean {
      * @param style the text style
      */
     public void setStyle(String style) {
-        this.style = style;
+        this.textStyle = style;
     }
 
     /**
@@ -80,7 +80,7 @@ public class FrameBean extends TableBean implements TagBean {
      * @return the text style
      */
     public String getStyle() {
-        return style;
+        return textStyle;
     }
 
     /**
@@ -91,7 +91,7 @@ public class FrameBean extends TableBean implements TagBean {
         TableRowBean tr = new TableRowBean();
         TableCellBean tc = new TableCellBean();
         TextBean text = new TextBean();
-        text.setStyle(style);
+        text.setCssClass(textStyle);
         if (key != null) {
             text.setKey(key);
         }
@@ -99,7 +99,7 @@ public class FrameBean extends TableBean implements TagBean {
             text.setValue(value);
         }
         tc.addBean(text);
-        tc.setCssStyle(style);
+        tc.setCssClass(textStyle);
         tr.addBean(tc);
         defaultModel.addTableRowBean(tr);
     }
@@ -107,7 +107,7 @@ public class FrameBean extends TableBean implements TagBean {
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         if ((key != null) || (value != null)) createMessage();
-        sb.append("<table class=\"" + TABLE_FRAME_STYLE + "\" ");
+        sb.append("<table " + getFormattedCss() + " ");
         if (cellSpacing != null) sb.append(" cellspacing=\"" + cellSpacing + "\" ");
         if (cellPadding != null) sb.append(" cellpadding=\"" + cellPadding + "\" ");
         if (border != null) sb.append(" border=\"" + border + "\" ");

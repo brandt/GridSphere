@@ -176,7 +176,7 @@ public class ImageBean extends BaseComponentBean implements TagBean {
 
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("<img src=\""+this.src+"\" border=\"" + border + "\" alt=\""+alt+"\" title=\""+this.title+"\"");
+        sb.append("<img src=\"" + this.src + "\" border=\"" + border + "\" alt=\"" + alt + "\" title=\"" + this.title + "\"");
         if (width != null) sb.append(" \"" + width + "\"");
         if (height != null) sb.append(" \"" + height + "\"");
         if (align != null) sb.append(" \"" + align + "\"");
@@ -188,6 +188,6 @@ public class ImageBean extends BaseComponentBean implements TagBean {
         return "";
     }
 }
- 
+
 
 

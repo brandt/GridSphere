@@ -77,7 +77,7 @@ public class ActionParamTag extends TagSupport {
     }
 
     public int doStartTag() throws JspException {
-        ActionTag actionTag = (ActionTag)getParent();
+        ActionTag actionTag = (ActionTag) getParent();
         if (actionTag != null) {
             //System.err.println("Setting action param bean: " + name + " " + value);
             paramBean = new ActionParamBean(name, value);

@@ -5,8 +5,6 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.PortletSession;
 import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
 
 import java.util.Locale;
@@ -16,14 +14,16 @@ import java.util.ResourceBundle;
  * The abstract <code>BaseComponentTag</code> is used by all UI tags to provide CSS support and general
  * name, value attributes
  */
-public abstract class BaseComponentTag extends BaseBeanTag   {
+public abstract class BaseComponentTag extends BaseBeanTag {
 
     protected String name = null;
     protected String value = null;
     protected boolean readonly = false;
     protected boolean disabled = false;
     protected String cssStyle = null;
+    protected String cssClass = null;
     protected boolean supportsJS = false;
+
 
     /**
      * Sets the name of the bean
@@ -148,7 +148,7 @@ public abstract class BaseComponentTag extends BaseBeanTag   {
      */
     protected void setBaseComponentBean(BaseComponentBean componentBean) {
         componentBean.setBeanId(beanId);
-        if (cssStyle != null) componentBean.setCssStyle(cssStyle);
+        if (cssStyle != null) componentBean.setCssClass(cssStyle);
         componentBean.setDisabled(disabled);
         componentBean.setReadOnly(readonly);
         if (name != null) componentBean.setName(name);
@@ -168,8 +168,8 @@ public abstract class BaseComponentTag extends BaseBeanTag   {
      * @param componentBean a ui bean
      */
     protected void updateBaseComponentBean(BaseComponentBean componentBean) {
-        if ((cssStyle != null) && (!componentBean.getCssStyle().equals(""))) {
-            componentBean.setCssStyle(cssStyle);
+        if ((cssStyle != null) && componentBean.getCssStyle() == null) {
+            componentBean.setCssClass(cssStyle);
         }
         if ((name != null) && (componentBean.getName() == null)) {
             componentBean.setName(name);
@@ -185,7 +185,7 @@ public abstract class BaseComponentTag extends BaseBeanTag   {
     }
 
     protected String getLocalizedText(String key) {
-        PortletRequest req = (PortletRequest)pageContext.getAttribute("portletRequest");
+        PortletRequest req = (PortletRequest) pageContext.getAttribute("portletRequest");
         Locale locale = req.getLocale();
         ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
         return bundle.getString(key);

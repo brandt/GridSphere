@@ -12,12 +12,13 @@ import java.util.*;
  */
 public abstract class BeanContainer extends BaseComponentBean {
 
-    public List container  = new Vector();
+    public List container = new Vector();
 
     /**
      * Constructs a default bean container
      */
-    public BeanContainer() {}
+    public BeanContainer() {
+    }
 
     /**
      * Constructs a bean container with the supplied name
@@ -78,7 +79,7 @@ public abstract class BeanContainer extends BaseComponentBean {
      */
     public void sortByValue() {
         SortedSet sorted = new TreeSet();
-        for (int i=0;i<container.size();i++) {
+        for (int i = 0; i < container.size(); i++) {
             sorted.add(container.get(i));
         }
         Vector result = new Vector();

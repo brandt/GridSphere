@@ -167,7 +167,7 @@ public class ImageTag extends BaseComponentTag {
 
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
-            urlImageBean = (ImageBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            urlImageBean = (ImageBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (urlImageBean == null) {
                 urlImageBean = new ImageBean();
                 setImageBean(urlImageBean);
@@ -179,7 +179,7 @@ public class ImageTag extends BaseComponentTag {
 
         Tag parent = getParent();
         if (parent instanceof ActionLinkTag) {
-            ActionLinkTag actionTag = (ActionLinkTag)parent;
+            ActionLinkTag actionTag = (ActionLinkTag) parent;
             actionTag.setImageBean(urlImageBean);
         } else {
             try {

@@ -14,10 +14,17 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
     protected String value = null;
     protected boolean readonly = false;
     protected boolean disabled = false;
-    protected String cssStyle = "";
     protected String key = null;
     protected boolean visible = true;
     protected boolean supportsJS = false;
+
+    protected String gsStyle = "";
+    protected String cssStyle = null;
+    protected String cssClass = null;
+
+    public final static String MENU_HORIZONTAL = "horizontal";
+    public final static String MENU_VERTICAL = "vertical";
+
 
     /**
      * Constructs a default base component bean
@@ -150,24 +157,6 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
     }
 
     /**
-     * Returns the CSS style name of the bean
-     *
-     * @return the name of the css style
-     */
-    public String getCssStyle() {
-        return cssStyle;
-    }
-
-    /**
-     * Sets the CSS style of the bean
-     *
-     * @param style css style name to set for the bean
-     */
-    public void setCssStyle(String style) {
-        this.cssStyle = style;
-    }
-
-    /**
      * Sets the bean visibility
      *
      * @param visible is true if the bean shoudl be visible, false otherwise
@@ -204,8 +193,83 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
     }
 
     public int compareTo(Object o) {
-        BaseComponentBean otherBean = (BaseComponentBean)o;
+        BaseComponentBean otherBean = (BaseComponentBean) o;
         return value.compareToIgnoreCase(otherBean.getValue());
+    }
+
+    /**
+     * Returns the current css style
+     * @return css style of the element
+     */
+    public String getCssStyle() {
+        return cssStyle;
+    }
+
+    /**
+     * Sets the css style of the element. If it is null nothing will be changed
+     * @param cssStyle
+     */
+    public void setCssStyle(String cssStyle) {
+
+        if (cssStyle != null) this.cssStyle = cssStyle;
+    }
+
+    /**
+     * Returns the current css class of the element.
+     * @return css class of the element
+     */
+    public String getCssClass() {
+        return cssClass;
+    }
+
+    /**
+     * Sets the css class of the element. If null nothing will be changed.
+     * @param cssClass
+     */
+    public void setCssClass(String cssClass) {
+        if (cssClass != null) this.cssClass = cssClass;
+    }
+
+    /**
+     * Returns the formatted css commands for inserting into html components.
+     * @return formatted css string for style/class attribute
+     */
+    public String getFormattedCss() {
+        String result = new String();
+        if (this.cssStyle != null) {
+            result = result + " style=\"" + this.cssStyle + "\"";
+        }
+        if (this.cssClass != null) {
+            result = result + " class=\"" + this.cssClass + "\"";
+        }
+        return result + " ";
+    }
+
+    /**
+     * Adds a css style to the exiting style.
+     * @param style style to be added
+     */
+    public void addCssStyle(String style) {
+        if (cssStyle != null) {
+            cssStyle += style;
+        } else {
+            this.setCssStyle(style);
+        }
+
+    }
+
+    /**
+     * Deletes the current css style.
+     */
+    public void deleteCssStyle() {
+        cssStyle = null;
+    }
+
+    /**
+     * Deletes the current css class setting.
+     */
+    public void deleteCssClass() {
+        cssClass = null;
     }
 }
 

@@ -5,12 +5,13 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ActionLinkBean;
-import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.Tag;
 import java.util.ArrayList;
 
 /**
@@ -94,7 +95,7 @@ public class ActionLinkTag extends ActionTag {
 
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
-            actionlink = (ActionLinkBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            actionlink = (ActionLinkBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (actionlink == null) {
                 actionlink = new ActionLinkBean();
                 actionlink.setStyle(style);
@@ -104,6 +105,16 @@ public class ActionLinkTag extends ActionTag {
             actionlink = new ActionLinkBean();
             this.setBaseComponentBean(actionlink);
             actionlink.setStyle(style);
+        }
+
+
+        Tag parent = getParent();
+        if (parent instanceof ActionMenuTag) {
+            ActionMenuTag actionMenuTag = (ActionMenuTag) parent;
+            if (!actionMenuTag.getAlign().equals("horizontal")) {
+                actionlink.setCssStyle("display: block");
+                System.out.println("\n\n\n\n\n\n\n SET CSSSTYLE!!!!\n\n\n\n\n\n");
+            }
         }
 
         paramBeans = new ArrayList();

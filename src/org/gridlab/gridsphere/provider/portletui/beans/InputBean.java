@@ -19,7 +19,7 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
      * Constructs a default input bean
      */
     public InputBean() {
-        this.cssStyle = INPUT_STYLE;
+        this.cssClass = INPUT_STYLE;
     }
 
     /**
@@ -29,7 +29,7 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
      */
     public InputBean(String name) {
         super(name);
-        this.cssStyle = INPUT_STYLE;
+        this.cssClass = INPUT_STYLE;
     }
 
     /**
@@ -70,7 +70,7 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
 
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("<input class=\"" + cssStyle + "\" ");
+        sb.append("<input " + getFormattedCss() + " ");
         sb.append("type=\"" + inputtype + "\" ");
 
 

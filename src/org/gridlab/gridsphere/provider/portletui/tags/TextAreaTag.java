@@ -57,7 +57,7 @@ public class TextAreaTag extends BaseComponentTag {
 
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
-            textAreaBean = (TextAreaBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            textAreaBean = (TextAreaBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (textAreaBean == null) {
                 textAreaBean = new TextAreaBean();
                 textAreaBean.setBeanId(beanId);

@@ -21,7 +21,7 @@ public class CheckBoxBean extends SelectElementBean {
      */
     public CheckBoxBean() {
         super(NAME);
-        this.cssStyle = CHECKBOX_STYLE;
+        this.cssClass = CHECKBOX_STYLE;
     }
 
     /**
@@ -32,7 +32,7 @@ public class CheckBoxBean extends SelectElementBean {
     public CheckBoxBean(String beanId) {
         super(NAME);
         this.beanId = beanId;
-        this.cssStyle = CHECKBOX_STYLE;
+        this.cssClass = CHECKBOX_STYLE;
     }
 
     /**
@@ -45,7 +45,7 @@ public class CheckBoxBean extends SelectElementBean {
         super(NAME);
         this.request = request;
         this.beanId = beanId;
-        this.cssStyle = CHECKBOX_STYLE;
+        this.cssClass = CHECKBOX_STYLE;
     }
 
     public String toStartString() {

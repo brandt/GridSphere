@@ -25,14 +25,14 @@ public class PanelBean extends BeanContainer implements TagBean {
     protected String width = PANEL_WIDTH;
 
     private String cols = "100%";
-    private String[] colArray = { cols };
+    private String[] colArray = {cols};
     private int numCols = 1;
 
     /**
      * Constructs a default panel bean
      */
     public PanelBean() {
-        this.cssStyle = PANEL_STYLE;
+        this.cssClass = PANEL_STYLE;
     }
 
     /**
@@ -42,7 +42,7 @@ public class PanelBean extends BeanContainer implements TagBean {
      * @param beanId the bean identifier
      */
     public PanelBean(PortletRequest req, String beanId) {
-        this.cssStyle = PANEL_STYLE;
+        this.cssClass = PANEL_STYLE;
         this.beanId = beanId;
         this.request = req;
     }
@@ -193,7 +193,7 @@ public class PanelBean extends BeanContainer implements TagBean {
 
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("<table class=\"" + cssStyle + "\" ");
+        sb.append("<table " + getFormattedCss() + " ");
         sb.append(" cellspacing=\"" + cellSpacing + "\" ");
         sb.append(" cellpadding=\"" + cellPadding + "\" ");
         sb.append(" border=\"" + border + "\" ");
@@ -212,13 +212,14 @@ public class PanelBean extends BeanContainer implements TagBean {
         while (i < numRows) {
             sb.append("<tr>");
             while ((j < numCols) && (i < numRows)) {
-                TagBean tagBean = (TagBean)container.get(i);
+                TagBean tagBean = (TagBean) container.get(i);
                 //System.err.println("in panel bean colArray " + i + " " + colArray[j]);
-                sb.append("<td width=\"" + colArray[j] +"\">");
+                sb.append("<td width=\"" + colArray[j] + "\">");
                 sb.append(tagBean.toStartString());
                 sb.append(tagBean.toEndString());
                 sb.append("</td>");
-                j++; i++;
+                j++;
+                i++;
             }
             j = 0;
             sb.append("</tr>");

@@ -22,7 +22,7 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
      */
     public TextAreaBean() {
         super(NAME);
-        this.cssStyle = TextBean.MSG_INFO;
+        this.cssClass = TextBean.MSG_INFO;
     }
 
     /**
@@ -33,7 +33,7 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
      */
     public TextAreaBean(PortletRequest req, String beanId) {
         super(NAME);
-        this.cssStyle = TextBean.MSG_INFO;
+        this.cssClass = TextBean.MSG_INFO;
         this.request = req;
         this.beanId = beanId;
     }
@@ -73,6 +73,7 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         sb.append("<textarea ");
+        sb.append(getFormattedCss());
 
         String pname = (name == null) ? "" : name;
         String sname = pname;

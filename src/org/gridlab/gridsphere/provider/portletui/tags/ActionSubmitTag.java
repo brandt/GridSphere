@@ -43,7 +43,7 @@ public class ActionSubmitTag extends ActionTag {
     public int doStartTag() throws JspException {
         actionSubmitBean = new ActionSubmitBean();
         if (!beanId.equals("")) {
-            actionSubmitBean = (ActionSubmitBean)pageContext.getAttribute(getBeanKey());
+            actionSubmitBean = (ActionSubmitBean) pageContext.getAttribute(getBeanKey());
         }
         if (actionSubmitBean == null) actionSubmitBean = new ActionSubmitBean();
         paramBeans = new ArrayList();
@@ -62,20 +62,25 @@ public class ActionSubmitTag extends ActionTag {
         }
 
         actionSubmitBean.setAction(action);
+        if (cssStyle != null) {
+            actionSubmitBean.setCssStyle(cssStyle);
+        }
+        if (cssClass != null) {
+            actionSubmitBean.setCssClass(cssClass);
+        }
 
         Object parentTag = getParent();
         if (parentTag instanceof ContainerTag) {
-            ContainerTag containerTag = (ContainerTag)parentTag;
+            ContainerTag containerTag = (ContainerTag) parentTag;
             containerTag.addTagBean(actionSubmitBean);
-        } else {
-            try {
-                JspWriter out = pageContext.getOut();
-                out.print(actionSubmitBean.toStartString());
-            } catch (Exception e) {
-                throw new JspException(e.getMessage());
-            }
-        }
 
+        }
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(actionSubmitBean.toStartString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
+        }
         return EVAL_BODY_INCLUDE;
     }
 
@@ -83,7 +88,7 @@ public class ActionSubmitTag extends ActionTag {
 
         Iterator it = paramBeans.iterator();
         while (it.hasNext()) {
-            ActionParamBean pbean = (ActionParamBean)it.next();
+            ActionParamBean pbean = (ActionParamBean) it.next();
             portletAction.addParameter(pbean.getName(), pbean.getValue());
         }
 

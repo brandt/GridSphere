@@ -10,7 +10,7 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
  *  A <code>SpecialBean</code> is just a demonstration of how to create a tag/bean pair
  * that can dynamically choose to use JavaScript or not based on browser detection
  */
-public class SpecialBean extends BaseComponentBean implements TagBean  {
+public class SpecialBean extends BaseComponentBean implements TagBean {
 
     public static final String NAME = "sp";
 
@@ -18,23 +18,23 @@ public class SpecialBean extends BaseComponentBean implements TagBean  {
 
     public SpecialBean() {
         super(NAME);
-        this.cssStyle = TEXTFIELD_STYLE;
+        this.cssClass = TEXTFIELD_STYLE;
     }
 
     public SpecialBean(String name) {
         super(name);
-        this.cssStyle = TEXTFIELD_STYLE;
+        this.cssClass = TEXTFIELD_STYLE;
     }
 
     public SpecialBean(String name, String id) {
         super(name);
         this.beanId = id;
-        this.cssStyle = TEXTFIELD_STYLE;
+        this.cssClass = TEXTFIELD_STYLE;
     }
 
-     public SpecialBean(PortletRequest request, String id) {
+    public SpecialBean(PortletRequest request, String id) {
         super(NAME);
-        this.cssStyle = TEXTFIELD_STYLE;
+        this.cssClass = TEXTFIELD_STYLE;
         this.request = request;
         this.beanId = id;
     }

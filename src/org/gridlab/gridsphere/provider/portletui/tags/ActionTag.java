@@ -107,7 +107,7 @@ public abstract class ActionTag extends BaseComponentTag {
             portletAction = new DefaultPortletAction(action);
             Iterator it = paramBeans.iterator();
             while (it.hasNext()) {
-                ActionParamBean pbean = (ActionParamBean)it.next();
+                ActionParamBean pbean = (ActionParamBean) it.next();
                 portletAction.addParameter(pbean.getName(), pbean.getValue());
             }
             actionURI.addAction(portletAction);

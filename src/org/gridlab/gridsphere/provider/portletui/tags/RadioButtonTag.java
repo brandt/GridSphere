@@ -40,7 +40,7 @@ public class RadioButtonTag extends BaseComponentTag {
     public int doStartTag() throws JspException {
 
         if (!beanId.equals("")) {
-            radiobutton = (RadioButtonBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            radiobutton = (RadioButtonBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (radiobutton == null) {
                 radiobutton = new RadioButtonBean();
                 radiobutton.setSelected(selected);

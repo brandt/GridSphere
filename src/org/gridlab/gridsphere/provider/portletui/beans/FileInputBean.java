@@ -34,7 +34,7 @@ public class FileInputBean extends InputBean implements TagBean {
      */
     public FileInputBean() {
         super(NAME);
-        this.cssStyle = SUBMIT_STYLE;
+        this.cssClass = SUBMIT_STYLE;
         this.inputtype = "file";
     }
 
@@ -47,7 +47,7 @@ public class FileInputBean extends InputBean implements TagBean {
      */
     public FileInputBean(PortletRequest request, String beanId) throws IOException {
         super(NAME);
-        this.cssStyle = SUBMIT_STYLE;
+        this.cssClass = SUBMIT_STYLE;
         this.inputtype = "file";
         this.request = request;
         this.beanId = beanId;
@@ -55,7 +55,7 @@ public class FileInputBean extends InputBean implements TagBean {
 
     public FileInputBean(PortletRequest request, String beanId, FileItem fileItem) throws IOException {
         super(NAME);
-        this.cssStyle = SUBMIT_STYLE;
+        this.cssClass = SUBMIT_STYLE;
         this.inputtype = "file";
         this.request = request;
         this.beanId = beanId;

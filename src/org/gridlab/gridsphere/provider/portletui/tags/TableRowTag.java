@@ -95,7 +95,7 @@ public class TableRowTag extends BaseComponentTag {
 
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
-            rowBean = (TableRowBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            rowBean = (TableRowBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (rowBean == null) rowBean = new TableRowBean();
         } else {
             rowBean = new TableRowBean();

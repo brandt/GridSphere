@@ -52,7 +52,7 @@ public abstract class BaseBean implements TagBean {
         this.beanId = beanId;
     }
 
-    public void setPortletRequest(PortletRequest request)  {
+    public void setPortletRequest(PortletRequest request) {
         this.request = request;
     }
 
@@ -66,7 +66,7 @@ public abstract class BaseBean implements TagBean {
     }
 
     protected String getBeanKey() {
-        String compId = (String)request.getAttribute(SportletProperties.COMPONENT_ID);
+        String compId = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
         //System.err.println("in BaseBeanImpl: beankey: " + beanId + "_" + compId);
         return beanId + "_" + compId;
     }

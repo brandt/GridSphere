@@ -154,7 +154,7 @@ public class TableTag extends BaseComponentTag {
         boolean includeBody = true;
 
         if (!beanId.equals("")) {
-            tableBean = (TableBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            tableBean = (TableBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (tableBean == null) {
                 tableBean = new TableBean();
             } else {

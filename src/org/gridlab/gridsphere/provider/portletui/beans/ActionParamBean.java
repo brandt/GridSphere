@@ -17,7 +17,8 @@ public class ActionParamBean extends BaseBean {
     /**
      * Constructs a default action param bean
      */
-    public ActionParamBean() {}
+    public ActionParamBean() {
+    }
 
     /**
      * Constructs an action param bean from a supplied portlet request and bean identifier

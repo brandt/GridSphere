@@ -74,7 +74,7 @@ public class ActionFormTag extends ActionTag {
             if (isMultipart) {
                 out.print(" enctype=\"multipart/form-data\"");
             }
-            String noName = (String)pageContext.getAttribute("gs_formNumber", PageContext.REQUEST_SCOPE);
+            String noName = (String) pageContext.getAttribute("gs_formNumber", PageContext.REQUEST_SCOPE);
             if (name == null) {
                 // use a counter to continually increase form number to provide unique form name
                 int ctr = 0;
@@ -90,7 +90,7 @@ public class ActionFormTag extends ActionTag {
                 name = "form" + noName;
             }
 
-            out.print(" name=\""+name+"\"");
+            out.print(" name=\"" + name + "\"");
 
             out.println(">");
             // add JS info

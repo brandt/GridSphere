@@ -72,18 +72,18 @@ public class FrameTag extends TableTag {
 
     public int doStartTag() throws JspException {
         if (style.equalsIgnoreCase("error") || (style.equalsIgnoreCase("err"))) {
-            this.cssStyle = TextBean.MSG_ERROR;
+            this.cssClass = TextBean.MSG_ERROR;
         } else if (style.equalsIgnoreCase("status")) {
-            this.cssStyle = TextBean.MSG_STATUS;
+            this.cssClass = TextBean.MSG_STATUS;
         } else if (style.equalsIgnoreCase("info")) {
-            this.cssStyle = TextBean.MSG_INFO;
+            this.cssClass = TextBean.MSG_INFO;
         } else if (style.equalsIgnoreCase("alert")) {
-            this.cssStyle = TextBean.MSG_ALERT;
+            this.cssClass = TextBean.MSG_ALERT;
         } else if (style.equalsIgnoreCase("success")) {
-            this.cssStyle = TextBean.MSG_SUCCESS;
+            this.cssClass = TextBean.MSG_SUCCESS;
         }
         if (!beanId.equals("")) {
-            tableBean = (FrameBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            tableBean = (FrameBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (tableBean == null) {
                 tableBean = new FrameBean(beanId);
                 this.setBaseComponentBean(tableBean);
@@ -92,6 +92,7 @@ public class FrameTag extends TableTag {
                 String key = tableBean.getKey();
                 if (key != null) {
                     tableBean.setValue(getLocalizedText(key));
+                    tableBean.setCssClass(cssClass);
                     tableBean.setCssStyle(cssStyle);
                 }
 
@@ -108,11 +109,12 @@ public class FrameTag extends TableTag {
                 Locale locale = pageContext.getRequest().getLocale();
                 ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
                 tableBean.setValue(bundle.getString(tableBean.getKey()));
+                tableBean.setCssClass(cssClass);
                 tableBean.setCssStyle(cssStyle);
             }
         }
 
-        PanelTag panelTag = (PanelTag)findAncestorWithClass(this, PanelTag.class);
+        PanelTag panelTag = (PanelTag) findAncestorWithClass(this, PanelTag.class);
         if (panelTag != null) {
 
             int numCols = panelTag.getNumCols();
@@ -144,7 +146,7 @@ public class FrameTag extends TableTag {
     public int doEndTag() throws JspException {
 
         if (!beanId.equals("")) {
-            tableBean = (FrameBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            tableBean = (FrameBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (tableBean == null) {
                 return EVAL_PAGE;
             }
@@ -157,7 +159,7 @@ public class FrameTag extends TableTag {
             throw new JspException(e.getMessage());
         }
 
-        PanelTag panelTag = (PanelTag)findAncestorWithClass(this, PanelTag.class);
+        PanelTag panelTag = (PanelTag) findAncestorWithClass(this, PanelTag.class);
         if (panelTag != null) {
             int numCols = panelTag.getNumCols();
             int thiscol = panelTag.getColumnCounter();

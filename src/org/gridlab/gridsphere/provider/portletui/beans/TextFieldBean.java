@@ -9,7 +9,7 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 /**
  * The <code>TextFieldBean</code> represents a text field element
  */
-public class TextFieldBean extends InputBean implements TagBean  {
+public class TextFieldBean extends InputBean implements TagBean {
 
     public static final String NAME = "tf";
 
@@ -49,7 +49,7 @@ public class TextFieldBean extends InputBean implements TagBean  {
      * @param req the portlet request
      * @param beanId the bean identifier
      */
-     public TextFieldBean(PortletRequest req, String beanId) {
+    public TextFieldBean(PortletRequest req, String beanId) {
         super(NAME);
         this.inputtype = "text";
         this.request = req;

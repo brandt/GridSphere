@@ -25,13 +25,13 @@ public class TableCellBean extends BeanContainer implements TagBean {
      */
     public TableCellBean() {
         super();
-        this.cssStyle = TABLE_CELL_STYLE;
+        this.cssClass = TABLE_CELL_STYLE;
     }
 
     public TableCellBean(BaseComponentBean compBean) {
         super();
         this.addBean(compBean);
-        this.cssStyle = TABLE_CELL_STYLE;
+        this.cssClass = TABLE_CELL_STYLE;
     }
 
     /**
@@ -44,7 +44,7 @@ public class TableCellBean extends BeanContainer implements TagBean {
         super();
         this.request = req;
         this.beanId = beanId;
-        this.cssStyle = TABLE_CELL_STYLE;
+        this.cssClass = TABLE_CELL_STYLE;
     }
 
     /**
@@ -122,7 +122,7 @@ public class TableCellBean extends BeanContainer implements TagBean {
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         sb.append("<td ");
-        if (!cssStyle.equals("")) sb.append("class=\"" + cssStyle + "\"");
+        sb.append(getFormattedCss());
         if (width != null) sb.append(" width=\"" + width + "\"");
         if (height != null) sb.append(" height=\"" + height + "\"");
         if (align != null) sb.append(" align=\"" + align + "\"");
@@ -130,7 +130,7 @@ public class TableCellBean extends BeanContainer implements TagBean {
         sb.append(">");
         Iterator it = container.iterator();
         while (it.hasNext()) {
-            BaseComponentBean bean = (BaseComponentBean)it.next();
+            BaseComponentBean bean = (BaseComponentBean) it.next();
             sb.append(bean.toStartString());
             sb.append(bean.toEndString());
         }

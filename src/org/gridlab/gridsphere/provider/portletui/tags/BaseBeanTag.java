@@ -42,7 +42,7 @@ public abstract class BaseBeanTag extends BodyTagSupport {
      * @return the unique bean key
      */
     protected String getBeanKey() {
-        String compId = (String)pageContext.findAttribute(SportletProperties.COMPONENT_ID);
+        String compId = (String) pageContext.findAttribute(SportletProperties.COMPONENT_ID);
         //System.err.println("in BaseBeanTag: beankey: " + beanId + "_" + compId);
         return beanId + "_" + compId;
     }
@@ -70,22 +70,22 @@ public abstract class BaseBeanTag extends BodyTagSupport {
         Enumeration enum = pageContext.getAttributeNamesInScope(PageContext.REQUEST_SCOPE);
         System.err.println("Printing attribues in request scope");
         while (enum.hasMoreElements()) {
-            System.err.println((String)enum.nextElement());
+            System.err.println((String) enum.nextElement());
         }
         enum = pageContext.getAttributeNamesInScope(PageContext.SESSION_SCOPE);
         System.err.println("Printing attribues in session scope");
         while (enum.hasMoreElements()) {
-            System.err.println((String)enum.nextElement());
+            System.err.println((String) enum.nextElement());
         }
         enum = pageContext.getAttributeNamesInScope(PageContext.PAGE_SCOPE);
         System.err.println("Printing attribues in page scope");
         while (enum.hasMoreElements()) {
-            System.err.println((String)enum.nextElement());
+            System.err.println((String) enum.nextElement());
         }
         enum = pageContext.getAttributeNamesInScope(PageContext.APPLICATION_SCOPE);
         System.err.println("Printing attribues in application scope");
         while (enum.hasMoreElements()) {
-            System.err.println((String)enum.nextElement());
+            System.err.println((String) enum.nextElement());
         }
     }
 

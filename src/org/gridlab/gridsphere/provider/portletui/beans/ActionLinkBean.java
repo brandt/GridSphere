@@ -64,18 +64,16 @@ public class ActionLinkBean extends ActionBean implements TagBean {
 
     public String toEndString() {
         String hlink = "<a href=\"" + action + "\"" + " onClick=\"this.href='" + action + "&JavaScript=enabled'\"/>" + value + "</a>";
-        if (style.equals("none")) {
-            return hlink;
-        } else if (style.equalsIgnoreCase("error") || (style.equalsIgnoreCase("err"))) {
-            this.cssStyle = TextBean.MSG_ERROR;
+        if (style.equalsIgnoreCase("error") || (style.equalsIgnoreCase("err"))) {
+            this.cssClass = TextBean.MSG_ERROR;
         } else if (style.equalsIgnoreCase("status")) {
-            this.cssStyle = TextBean.MSG_STATUS;
+            this.cssClass = TextBean.MSG_STATUS;
         } else if (style.equalsIgnoreCase("info")) {
-            this.cssStyle = TextBean.MSG_INFO;
+            this.cssClass = TextBean.MSG_INFO;
         } else if (style.equalsIgnoreCase("alert")) {
-            this.cssStyle = TextBean.MSG_ALERT;
+            this.cssClass = TextBean.MSG_ALERT;
         } else if (style.equalsIgnoreCase("success")) {
-            this.cssStyle = TextBean.MSG_SUCCESS;
+            this.cssClass = TextBean.MSG_SUCCESS;
         } else if (style.equalsIgnoreCase(TextBean.MSG_BOLD)) {
             return "<b>" + hlink + "</b>";
         } else if (style.equalsIgnoreCase(TextBean.MSG_ITALIC)) {
@@ -83,7 +81,8 @@ public class ActionLinkBean extends ActionBean implements TagBean {
         } else if (style.equalsIgnoreCase(TextBean.MSG_UNDERLINE)) {
             return "<u>" + hlink + "</u>";
         }
-        return "<a href=\"" + action + "\"" + " class=" + cssStyle + " onClick=\"this.href='" + action + "&JavaScript=enabled'\"/>" + value + "</a>";
+
+        return "<a href=\"" + action + "\"" + getFormattedCss() + " onClick=\"this.href='" + action + "&JavaScript=enabled'\"/>" + value + "</a>";
     }
 
 }

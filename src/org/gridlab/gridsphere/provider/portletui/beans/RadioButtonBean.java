@@ -21,18 +21,18 @@ public class RadioButtonBean extends SelectElementBean {
      */
     public RadioButtonBean() {
         super(NAME);
-        this.cssStyle = RADIO_STYLE;
+        this.cssClass = RADIO_STYLE;
     }
 
     /**
      * Constructs a radio button bean using a supplied portlet request and bean identifier
      *
-     * @param req the portlet request
-     * @param beanId the bean identifier
+     * @param request the portlet request
+     * @param id the bean identifier
      */
     public RadioButtonBean(PortletRequest request, String id) {
         super(NAME);
-        this.cssStyle = RADIO_STYLE;
+        this.cssClass = RADIO_STYLE;
         this.request = request;
         this.beanId = id;
     }

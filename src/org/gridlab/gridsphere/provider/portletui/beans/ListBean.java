@@ -67,10 +67,10 @@ public class ListBean extends BaseComponentBean implements TagBean {
                 sb.append("<li>");
                 Object o = myList.get(i);
                 if (o instanceof String) {
-                    String s = (String)o;
+                    String s = (String) o;
                     sb.append(s);
                 } else if (o instanceof List) {
-                    List l = (List)o;
+                    List l = (List) o;
                     sb.append(toListString(l));
                 }
                 sb.append("</li>");

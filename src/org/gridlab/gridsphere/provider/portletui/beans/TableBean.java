@@ -32,7 +32,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
      * @param cssStyle the CSS style
      */
     public TableBean(String cssStyle) {
-        this.cssStyle = cssStyle;
+        this.cssClass = cssStyle;
     }
 
     /**
@@ -83,7 +83,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
         return width;
     }
 
-     /**
+    /**
      * Sets the table alignment e.g. "left", "center" or "right"
      *
      * @param align the table alignment
@@ -158,7 +158,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         if (defaultModel == null) return "";
-        sb.append("<table");
+        sb.append("<table " + getFormattedCss() + " ");
         if (cellSpacing != null) sb.append(" cellspacing=\"" + cellSpacing + "\" ");
         if (cellPadding != null) sb.append(" cellpadding=\"" + cellPadding + "\" ");
         if (border != null) sb.append(" border=\"" + border + "\" ");

@@ -28,7 +28,7 @@ public class ListBoxBean extends BeanContainer implements TagBean {
      */
     public ListBoxBean() {
         super(NAME);
-        this.cssStyle = LISTBOX_STYLE;
+        this.cssClass = LISTBOX_STYLE;
     }
 
     /**
@@ -39,7 +39,7 @@ public class ListBoxBean extends BeanContainer implements TagBean {
     public ListBoxBean(String beanId) {
         super(NAME);
         this.beanId = beanId;
-        this.cssStyle = LISTBOX_STYLE;
+        this.cssClass = LISTBOX_STYLE;
     }
 
     /**
@@ -50,7 +50,7 @@ public class ListBoxBean extends BeanContainer implements TagBean {
      */
     public ListBoxBean(PortletRequest request, String beanId) {
         super(NAME);
-        this.cssStyle = LISTBOX_STYLE;
+        this.cssClass = LISTBOX_STYLE;
         this.request = request;
         this.beanId = beanId;
     }
@@ -102,7 +102,7 @@ public class ListBoxBean extends BeanContainer implements TagBean {
         if (!beanId.equals("")) {
             sname = "ui_" + vbName + "_" + beanId + "_" + pname;
         }
-        sb.append("<select name='"+sname+"' size='"+size+"'");
+        sb.append("<select name='" + sname + "' size='" + size + "'");
         if (isMultiple) {
             sb.append(" multiple='multiple'");
         }
@@ -117,7 +117,7 @@ public class ListBoxBean extends BeanContainer implements TagBean {
         StringBuffer sb = new StringBuffer();
         Iterator it = container.iterator();
         while (it.hasNext()) {
-            ListBoxItemBean itemBean = (ListBoxItemBean)it.next();
+            ListBoxItemBean itemBean = (ListBoxItemBean) it.next();
             sb.append(itemBean.toStartString());
             sb.append(itemBean.toEndString());
         }
@@ -132,7 +132,7 @@ public class ListBoxBean extends BeanContainer implements TagBean {
     public String getSelectedValue() {
         Iterator it = container.iterator();
         while (it.hasNext()) {
-            ListBoxItemBean item = (ListBoxItemBean)it.next();
+            ListBoxItemBean item = (ListBoxItemBean) it.next();
             if (item.isSelected()) {
                 return item.getValue();
             }
@@ -148,7 +148,7 @@ public class ListBoxBean extends BeanContainer implements TagBean {
     public boolean hasSelectedValue() {
         Iterator it = container.iterator();
         while (it.hasNext()) {
-            ListBoxItemBean item = (ListBoxItemBean)it.next();
+            ListBoxItemBean item = (ListBoxItemBean) it.next();
             if (item.isSelected()) {
                 return true;
             }
@@ -160,7 +160,7 @@ public class ListBoxBean extends BeanContainer implements TagBean {
         List result = new ArrayList();
         Iterator it = container.iterator();
         while (it.hasNext()) {
-            ListBoxItemBean item = (ListBoxItemBean)it.next();
+            ListBoxItemBean item = (ListBoxItemBean) it.next();
             if (item.isSelected()) {
                 if (names) {
                     result.add(item.getName());
@@ -196,7 +196,7 @@ public class ListBoxBean extends BeanContainer implements TagBean {
     public String getSelectedName() {
         Iterator it = container.iterator();
         while (it.hasNext()) {
-            ListBoxItemBean item = (ListBoxItemBean)it.next();
+            ListBoxItemBean item = (ListBoxItemBean) it.next();
             if (item.isSelected()) {
                 return item.getName();
             }
@@ -212,7 +212,7 @@ public class ListBoxBean extends BeanContainer implements TagBean {
         ArrayList result = new ArrayList();
         Iterator it = container.iterator();
         while (it.hasNext()) {
-            ListBoxItemBean item = (ListBoxItemBean)it.next();
+            ListBoxItemBean item = (ListBoxItemBean) it.next();
             if (item.isSelected()) {
                 result.add(item);
             }

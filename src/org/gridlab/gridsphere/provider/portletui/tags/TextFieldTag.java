@@ -59,7 +59,7 @@ public class TextFieldTag extends BaseComponentTag {
 
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
-            textFieldBean = (TextFieldBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            textFieldBean = (TextFieldBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (textFieldBean == null) {
                 textFieldBean = new TextFieldBean();
                 if (maxlength != 0) textFieldBean.setMaxLength(maxlength);

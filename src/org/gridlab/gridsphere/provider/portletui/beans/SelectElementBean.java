@@ -83,7 +83,7 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
         if (results.isEmpty()) {
             return null;
         } else {
-            return (String)results.get(0);
+            return (String) results.get(0);
         }
     }
 
@@ -102,7 +102,7 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
         if (!beanId.equals("")) {
             sname = "ui_" + vbName + "_" + beanId + "_" + pname;
         }
-        return "<input type='"
+        return "<input " + getFormattedCss() + " type='"
                 + type
                 + "' name='"
                 + sname

@@ -28,13 +28,13 @@ public class ListTag extends BaseComponentTag {
 
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
-            listBean = (ListBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            listBean = (ListBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
         }
         return SKIP_BODY;
     }
 
-     public int doEndTag() throws JspException {
-         if (listBean != null) {
+    public int doEndTag() throws JspException {
+        if (listBean != null) {
             try {
                 JspWriter out = pageContext.getOut();
                 out.print(listBean.toEndString());

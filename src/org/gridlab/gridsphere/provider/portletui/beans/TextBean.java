@@ -26,14 +26,13 @@ public class TextBean extends BaseComponentBean implements TagBean {
     public static final String MSG_UNDERLINE = "underline";
 
     protected String style = "info";
-    protected String format = null;
 
     /**
      * Constructs a default text bean
      */
     public TextBean() {
         super(NAME);
-        this.cssStyle = MSG_INFO;
+        this.cssClass = MSG_INFO;
     }
 
     /**
@@ -44,7 +43,7 @@ public class TextBean extends BaseComponentBean implements TagBean {
     public TextBean(String beanId) {
         super(NAME);
         this.beanId = beanId;
-        this.cssStyle = MSG_INFO;
+        this.cssClass = MSG_INFO;
     }
 
     /**
@@ -57,7 +56,7 @@ public class TextBean extends BaseComponentBean implements TagBean {
         super(NAME);
         this.beanId = beanId;
         this.request = req;
-        this.cssStyle = MSG_INFO;
+        this.cssClass = MSG_INFO;
     }
 
     /**
@@ -95,18 +94,20 @@ public class TextBean extends BaseComponentBean implements TagBean {
      * Sets the format of the text
      *
      * @param format
+     * @deprecated use setCssStyle
      */
     public void setFormat(String format) {
-        this.format = format;
+        this.cssStyle = format;
     }
 
     /**
      * Returns the format of the text
      *
      * @return the format of the text
+     * @deprecated use getCssStyle
      */
     public String getFormat() {
-        return format;
+        return cssStyle;
     }
 
     public String toStartString() {
@@ -116,15 +117,15 @@ public class TextBean extends BaseComponentBean implements TagBean {
     public String toEndString() {
         String text = null;
         if (style.equalsIgnoreCase("error") || (style.equalsIgnoreCase("err"))) {
-            this.cssStyle = MSG_ERROR;
+            this.cssClass = MSG_ERROR;
         } else if (style.equalsIgnoreCase("status")) {
-            this.cssStyle = MSG_STATUS;
+            this.cssClass = MSG_STATUS;
         } else if (style.equalsIgnoreCase("info")) {
-            this.cssStyle = MSG_INFO;
+            this.cssClass = MSG_INFO;
         } else if (style.equalsIgnoreCase("alert")) {
-            this.cssStyle = MSG_ALERT;
+            this.cssClass = MSG_ALERT;
         } else if (style.equalsIgnoreCase("success")) {
-            this.cssStyle = MSG_SUCCESS;
+            this.cssClass = MSG_SUCCESS;
         } else if (style.equalsIgnoreCase("nostyle")) {
             return value;
         } else if (style.equalsIgnoreCase(TextBean.MSG_BOLD)) {
@@ -134,8 +135,7 @@ public class TextBean extends BaseComponentBean implements TagBean {
         } else if (style.equalsIgnoreCase(TextBean.MSG_UNDERLINE)) {
             return "<u>" + value + "</u>";
         }
-        text = "<span class=\"" + cssStyle + "\"";
-        if (format != null) text += " style=\"" + format + "\"";
+        text = "<span " + getFormattedCss();
         text += ">" + value + "</span>";
         return text;
     }

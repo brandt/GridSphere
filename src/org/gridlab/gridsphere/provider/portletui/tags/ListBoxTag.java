@@ -91,7 +91,7 @@ public class ListBoxTag extends ContainerTag {
         list = new Vector();
 
         if (!beanId.equals("")) {
-            listbox = (ListBoxBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            listbox = (ListBoxBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (listbox == null) {
                 listbox = new ListBoxBean(beanId);
                 listbox.setSize(size);
@@ -121,7 +121,7 @@ public class ListBoxTag extends ContainerTag {
 
         Iterator it = list.iterator();
         while (it.hasNext()) {
-            ListBoxItemBean itembean = (ListBoxItemBean)it.next();
+            ListBoxItemBean itembean = (ListBoxItemBean) it.next();
             listbox.addBean(itembean);
         }
         try {

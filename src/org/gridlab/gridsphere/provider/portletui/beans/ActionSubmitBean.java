@@ -21,7 +21,7 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
      */
     public ActionSubmitBean() {
         super(NAME);
-        this.cssStyle = SUBMIT_STYLE;
+        this.cssClass = SUBMIT_STYLE;
     }
 
     /**
@@ -32,13 +32,13 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
      */
     public ActionSubmitBean(PortletRequest req, String beanId) {
         super(NAME);
-        this.cssStyle = SUBMIT_STYLE;
+        this.cssClass = SUBMIT_STYLE;
         this.request = req;
         this.beanId = beanId;
     }
 
     public String toStartString() {
-        return "<input class=\"" + cssStyle + "\" type=\"submit\" ";
+        return "<input " + getFormattedCss() + " type=\"submit\" ";
     }
 
     public String toEndString() {

@@ -61,7 +61,7 @@ public class PasswordTag extends BaseComponentTag {
     public int doStartTag() throws JspException {
 
         if (!beanId.equals("")) {
-            passwordBean = (PasswordBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            passwordBean = (PasswordBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (passwordBean == null) {
                 passwordBean = new PasswordBean();
                 this.setBaseComponentBean(passwordBean);

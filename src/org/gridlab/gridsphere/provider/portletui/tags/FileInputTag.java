@@ -57,7 +57,7 @@ public class FileInputTag extends BaseComponentTag {
 
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
-            fileInputBean = (FileInputBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            fileInputBean = (FileInputBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (fileInputBean == null) {
                 fileInputBean = new FileInputBean();
                 fileInputBean.setBeanId(beanId);

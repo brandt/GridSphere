@@ -168,7 +168,7 @@ public class PanelTag extends BaseComponentTag {
 
         counter = 0;
         if (!beanId.equals("")) {
-            panelBean = (PanelBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            panelBean = (PanelBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (panelBean == null) {
                 panelBean = new PanelBean();
                 this.setBaseComponentBean(panelBean);
@@ -185,7 +185,7 @@ public class PanelTag extends BaseComponentTag {
             int i = 0;
             String colStr;
             while (st.hasMoreElements()) {
-                colStr = (String)st.nextElement();
+                colStr = (String) st.nextElement();
                 colArray[i++] = colStr.trim();
             }
 
@@ -195,6 +195,8 @@ public class PanelTag extends BaseComponentTag {
             panelBean.setCellSpacing(cellSpacing);
             panelBean.setCellPadding(cellPadding);
             panelBean.setBorder(border);
+            panelBean.setCssClass(cssClass);
+            panelBean.setCssStyle(cssStyle);
             if (align != null) panelBean.setAlign(align);
         }
 
