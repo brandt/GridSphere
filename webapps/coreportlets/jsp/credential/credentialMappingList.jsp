@@ -4,27 +4,27 @@
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
-<jsp:useBean id="credentialMappingBean"
+<jsp:useBean id="credentialMappingAdminBean"
              class="org.gridlab.gridsphere.portlets.grid.security.CredentialMappingAdminBean"
              scope="request"/>
 <form name="CredentialMappingPortlet" method="POST"
-      action="<%=credentialMappingBean.getPortletActionURI(CredentialMappingAdminBean.ACTION_CREDENTIAL_MAPPING_LIST)%>">
+      action="<%=credentialMappingAdminBean.getPortletActionURI(CredentialMappingAdminBean.ACTION_CREDENTIAL_MAPPING_LIST)%>">
   <input type="hidden" name="credentialMappingID" value=""/>
   <script type="text/javascript">
     function CredentialMappingPortlet_listCredentialMapping_onClick() {
-      document.CredentialMappingPortlet.action="<%=credentialMappingBean.getPortletActionURI(CredentialMappingAdminBean.ACTION_CREDENTIAL_MAPPING_LIST)%>";
+      document.CredentialMappingPortlet.action="<%=credentialMappingAdminBean.getPortletActionURI(CredentialMappingAdminBean.ACTION_CREDENTIAL_MAPPING_LIST)%>";
       document.CredentialMappingPortlet.submit();
     }
 
     function CredentialMappingPortlet_newCredentialMapping_onClick(credentialMappingID) {
       document.CredentialMappingPortlet.credentialMappingID.value="";
-      document.CredentialMappingPortlet.action="<%=credentialMappingBean.getPortletActionURI(CredentialMappingAdminBean.ACTION_CREDENTIAL_MAPPING_EDIT)%>";
+      document.CredentialMappingPortlet.action="<%=credentialMappingAdminBean.getPortletActionURI(CredentialMappingAdminBean.ACTION_CREDENTIAL_MAPPING_EDIT)%>";
       document.CredentialMappingPortlet.submit();
     }
 
     function CredentialMappingPortlet_viewCredentialMapping_onClick(credentialMappingID) {
       document.CredentialMappingPortlet.credentialMappingID.value=credentialMappingID;
-      document.CredentialMappingPortlet.action="<%=credentialMappingBean.getPortletActionURI(CredentialMappingAdminBean.ACTION_CREDENTIAL_MAPPING_VIEW)%>";
+      document.CredentialMappingPortlet.action="<%=credentialMappingAdminBean.getPortletActionURI(CredentialMappingAdminBean.ACTION_CREDENTIAL_MAPPING_VIEW)%>";
       document.CredentialMappingPortlet.submit();
     }
   </script>
@@ -55,7 +55,7 @@
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="500">
-<% List credentialMappingList = credentialMappingBean.getCredentialMappingList();
+<% List credentialMappingList = credentialMappingAdminBean.getCredentialMappingList();
    int numCredentialMappings = credentialMappingList.size();
    if (numCredentialMappings == 0) { %>
         <tr>

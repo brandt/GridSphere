@@ -33,7 +33,6 @@ public class CredentialManagerServiceImpl
 
     private static PortletLog _log = SportletLog.getInstance(CredentialManagerServiceImpl.class);
     private PortletServiceAuthorizer authorizer = null;
-    private AuthorizationUtility authorizeUtility = null;
     private GlobusCredentialManager credentialManager = GlobusCredentialManager.getInstance();
 
     private CredentialManagerServiceImpl() {
@@ -59,7 +58,7 @@ public class CredentialManagerServiceImpl
      * Must be super user
      */
     public List getCredentialPermissions() {
-        this.authorizeUtility.authorizeSuperUser("getCredentialPermissions");
+        this.authorizer.authorizeSuperUser();
         return this.credentialManager.getCredentialPermissions();
     }
 
@@ -67,7 +66,7 @@ public class CredentialManagerServiceImpl
      * Must be super user
      */
     public CredentialPermission getCredentialPermission(String permission) {
-        this.authorizeUtility.authorizeSuperUser("getCredentialPermission");
+        this.authorizer.authorizeSuperUser();
         return this.credentialManager.getCredentialPermission(permission);
     }
 
@@ -75,7 +74,7 @@ public class CredentialManagerServiceImpl
      * Must be super user
      */
     public CredentialPermission createCredentialPermission(String permission) {
-        this.authorizeUtility.authorizeSuperUser("createCredentialPermission");
+        this.authorizer.authorizeSuperUser();
         return this.credentialManager.createCredentialPermission(permission);
     }
 
@@ -83,7 +82,7 @@ public class CredentialManagerServiceImpl
      * Must be super user
      */
     public CredentialPermission createCredentialPermission(String permission, String description) {
-        this.authorizeUtility.authorizeSuperUser("createCredentialPermission");
+        this.authorizer.authorizeSuperUser();
         return this.credentialManager.createCredentialPermission(permission);
     }
 
@@ -91,7 +90,7 @@ public class CredentialManagerServiceImpl
      * Must be super user
      */
     public void deleteCredentialPermission(String permission) {
-        this.authorizeUtility.authorizeSuperUser("deleteCredentialPermission");
+        this.authorizer.authorizeSuperUser();
         this.credentialManager.deleteCredentialPermission(permission);
     }
 
@@ -99,7 +98,7 @@ public class CredentialManagerServiceImpl
      * Must be super user
      */
     public boolean existsCredentialPermission(String permission) {
-        this.authorizeUtility.authorizeSuperUser("existsCredentialPermission");
+        this.authorizer.authorizeSuperUser();
         return this.credentialManager.existsCredentialPermission(permission);
     }
 
@@ -109,7 +108,7 @@ public class CredentialManagerServiceImpl
      * Must be super user
      */
     public List getPermittedCredentialSubjects() {
-        this.authorizeUtility.authorizeSuperUser("getPermittedCredentialSubjects");
+        this.authorizer.authorizeSuperUser();
         return this.credentialManager.getPermittedCredentialSubjects();
     }
 
@@ -117,7 +116,7 @@ public class CredentialManagerServiceImpl
      * Must be super user
      */
     public boolean isCredentialPermitted(String subject) {
-        this.authorizeUtility.authorizeSuperUser("isCredentialPermitted");
+        this.authorizer.authorizeSuperUser();
         return this.credentialManager.isCredentialPermitted(subject);
     }
 
@@ -127,7 +126,7 @@ public class CredentialManagerServiceImpl
      * Must be super user
      */
     public List getCredentialMappings() {
-        this.authorizeUtility.authorizeSuperUser("getCredentialMappings");
+        this.authorizer.authorizeSuperUser();
         return this.credentialManager.getCredentialMappings();
     }
 
@@ -136,7 +135,7 @@ public class CredentialManagerServiceImpl
      */
     public CredentialMapping getCredentialMapping(String subject) {
         User user = this.credentialManager.getCredentialUser(subject);
-        this.authorizeUtility.authorizeSuperOrSameUser(user, "getCredentialMapping");
+        this.authorizer.authorizeSuperOrSameUser(user);
         return this.credentialManager.getCredentialMapping(subject);
     }
 
@@ -145,7 +144,7 @@ public class CredentialManagerServiceImpl
      */
     public CredentialMapping createCredentialMapping(String subject, User user)
             throws CredentialNotPermittedException {
-        this.authorizeUtility.authorizeSuperUser("createCredentialMapping");
+        this.authorizer.authorizeSuperUser();
         return this.credentialManager.createCredentialMapping(subject, user);
     }
 
@@ -154,7 +153,7 @@ public class CredentialManagerServiceImpl
      */
     public CredentialMapping createCredentialMapping(String subject, User user, String tag)
             throws CredentialNotPermittedException {
-        this.authorizeUtility.authorizeSuperUser("createCredentialMapping");
+        this.authorizer.authorizeSuperUser();
         return this.credentialManager.createCredentialMapping(subject, user, tag);
     }
 
@@ -162,7 +161,7 @@ public class CredentialManagerServiceImpl
      * Must be super user
      */
     public void deleteCredentialMapping(String subject) {
-        this.authorizeUtility.authorizeSuperUser("deleteCredentialMapping");
+        this.authorizer.authorizeSuperUser();
         this.credentialManager.deleteCredentialMapping(subject);
     }
 
@@ -170,7 +169,7 @@ public class CredentialManagerServiceImpl
      * Must be super or same user
      */
     public List getCredentialMappings(User user) {
-        this.authorizeUtility.authorizeSuperOrSameUser(user, "getCredentialMappings");
+        this.authorizer.authorizeSuperOrSameUser(user);
         return this.credentialManager.getCredentialMappings(user);
     }
 
@@ -178,7 +177,7 @@ public class CredentialManagerServiceImpl
      * Must be super user
      */
     public void deleteCredentialMappings(User user) {
-        this.authorizeUtility.authorizeSuperUser("deleteCredentialMappings");
+        this.authorizer.authorizeSuperUser();
         this.credentialManager.deleteCredentialMappings(user);
     }
 
@@ -186,7 +185,7 @@ public class CredentialManagerServiceImpl
      * Must be super user
      */
     public List getCredentialMappingRequests() {
-        this.authorizeUtility.authorizeSuperUser();
+        this.authorizer.authorizeSuperUser();
         return this.credentialManager.getCredentialMappingRequests();
     }
 
@@ -194,7 +193,7 @@ public class CredentialManagerServiceImpl
      * Must be super or same user
      */
     public List getCredentialMappingRequests(User user) {
-        this.authorizeUtility.authorizeSuperUser();
+        this.authorizer.authorizeSuperUser();
         return this.credentialManager.getCredentialMappingRequests(user);
     }
 
@@ -202,7 +201,7 @@ public class CredentialManagerServiceImpl
      * Must be super user
      */
     public CredentialMappingRequest getCredentialMappingRequest(String id) {
-        this.authorizeUtility.authorizeSuperUser();
+        this.authorizer.authorizeSuperUser();
         return this.credentialManager.getCredentialMappingRequest(id);
     }
 
@@ -217,7 +216,7 @@ public class CredentialManagerServiceImpl
      * Must be super or same user
      */
     public CredentialMappingRequest createCredentialMappingRequest(CredentialMapping mapping) {
-        this.authorizeUtility.authorizeSuperOrSameUser(mapping.getUser());
+        this.authorizer.authorizeSuperOrSameUser(mapping.getUser());
         return this.credentialManager.createCredentialMappingRequest(mapping);
     }
 
@@ -225,7 +224,7 @@ public class CredentialManagerServiceImpl
      * Must be super or same user
      */
     public void submitCredentialMappingRequest(CredentialMappingRequest mappingRequest) {
-        this.authorizeUtility.authorizeSuperOrSameUser(mappingRequest.getUser());
+        this.authorizer.authorizeSuperOrSameUser(mappingRequest.getUser());
         this.credentialManager.submitCredentialMappingRequest(mappingRequest);
     }
 
@@ -233,7 +232,7 @@ public class CredentialManagerServiceImpl
      * Must be super user
      */
     public CredentialMapping approveCredentialMappingRequest(CredentialMappingRequest mappingRequest) {
-        this.authorizeUtility.authorizeSuperUser();
+        this.authorizer.authorizeSuperUser();
         return this.credentialManager.approveCredentialMappingRequest(mappingRequest);
     }
     /*
@@ -241,7 +240,7 @@ public class CredentialManagerServiceImpl
      */
 
     public void denyCredentialMappingRequest(CredentialMappingRequest mappingRequest) {
-        this.authorizeUtility.authorizeSuperUser();
+        this.authorizer.authorizeSuperUser();
         this.credentialManager.denyCredentialMappingRequest(mappingRequest);
     }
 
@@ -251,7 +250,7 @@ public class CredentialManagerServiceImpl
      * Must be super user
      */
     public User getCredentialUser(String subject) {
-        this.authorizeUtility.authorizeSuperUser("getCredentialUser");
+        this.authorizer.authorizeSuperUser();
         return this.credentialManager.getCredentialUser(subject);
     }
 
@@ -259,7 +258,7 @@ public class CredentialManagerServiceImpl
      * Must be super or same user
      */
     public List getCredentialSubjects(User user) {
-        this.authorizeUtility.authorizeSuperOrSameUser(user, "getCredentialSubjects");
+        this.authorizer.authorizeSuperOrSameUser(user);
         return this.credentialManager.getCredentialSubjects(user);
     }
 
@@ -267,7 +266,7 @@ public class CredentialManagerServiceImpl
      * Must be super or same user
      */
     public List getCredentialTags(User user) {
-        this.authorizeUtility.authorizeSuperOrSameUser(user, "getCredentialTags");
+        this.authorizer.authorizeSuperOrSameUser(user);
         return this.credentialManager.getCredentialTags(user);
     }
 
@@ -277,7 +276,7 @@ public class CredentialManagerServiceImpl
     public String getCredentialTag(String subject)
             throws CredentialMappingNotFoundException {
         User user = getCredentialUser(subject);
-        this.authorizeUtility.authorizeSuperOrSameUser(user, "getCredentialTag");
+        this.authorizer.authorizeSuperOrSameUser(user);
         return this.credentialManager.getCredentialTag(subject);
     }
 
@@ -286,7 +285,7 @@ public class CredentialManagerServiceImpl
      */
     public void setCredentialTag(String subject, String tag)
             throws CredentialMappingNotFoundException {
-        this.authorizeUtility.authorizeSuperUser("setCredentialTag");
+        this.authorizer.authorizeSuperUser();
         this.credentialManager.setCredentialTag(subject, tag);
     }
 
@@ -296,7 +295,7 @@ public class CredentialManagerServiceImpl
     public String getCredentialLabel(String subject)
             throws CredentialMappingNotFoundException {
         User user = getCredentialUser(subject);
-        this.authorizeUtility.authorizeSuperOrSameUser(user, "getCredentialLabel");
+        this.authorizer.authorizeSuperOrSameUser(user);
         return this.credentialManager.getCredentialLabel(subject);
     }
 
@@ -305,7 +304,7 @@ public class CredentialManagerServiceImpl
      */
     public void setCredentialLabel(String subject, String label)
             throws CredentialMappingNotFoundException {
-        this.authorizeUtility.authorizeSuperUser("setCredentialLabel");
+        this.authorizer.authorizeSuperUser();
         this.credentialManager.setCredentialLabel(subject, label);
     }
 
@@ -315,7 +314,7 @@ public class CredentialManagerServiceImpl
     public List getCredentialHosts(String subject)
             throws CredentialMappingNotFoundException {
         User user = getCredentialUser(subject);
-        this.authorizeUtility.authorizeSuperOrSameUser(user, "getCredentialHosts");
+        this.authorizer.authorizeSuperOrSameUser(user);
         return this.credentialManager.getCredentialHosts(subject);
     }
 
@@ -325,7 +324,7 @@ public class CredentialManagerServiceImpl
     public void addCredentialHost(String subject, String host)
             throws CredentialMappingNotFoundException {
         User user = getCredentialUser(subject);
-        this.authorizeUtility.authorizeSuperOrSameUser(user, "addCredentialHost");
+        this.authorizer.authorizeSuperOrSameUser(user);
         this.credentialManager.addCredentialHost(subject, host);
     }
 
@@ -335,7 +334,7 @@ public class CredentialManagerServiceImpl
     public void addCredentialHosts(String subject, List hosts)
             throws CredentialMappingNotFoundException {
         User user = getCredentialUser(subject);
-        this.authorizeUtility.authorizeSuperOrSameUser(user, "addCredentialHosts");
+        this.authorizer.authorizeSuperOrSameUser(user);
         this.credentialManager.addCredentialHosts(subject, hosts);
     }
 
@@ -345,7 +344,7 @@ public class CredentialManagerServiceImpl
     public void removeCredentialHost(String subject, String host)
             throws CredentialMappingNotFoundException {
         User user = getCredentialUser(subject);
-        this.authorizeUtility.authorizeSuperOrSameUser(user, "removeCredentialHost");
+        this.authorizer.authorizeSuperOrSameUser(user);
         this.credentialManager.removeCredentialHost(subject, host);
     }
 
@@ -353,7 +352,7 @@ public class CredentialManagerServiceImpl
      * Must be super user
      */
     public List getCredentialSubjectsForHost(String host) {
-        this.authorizeUtility.authorizeSuperUser("getCredentialSubjectsForHost");
+        this.authorizer.authorizeSuperUser();
         return this.credentialManager.getCredentialSubjectsForHost(host);
     }
 
@@ -361,7 +360,7 @@ public class CredentialManagerServiceImpl
      * Must be super or same user
      */
     public List getCredentialSubjectsForHost(User user, String host) {
-        this.authorizeUtility.authorizeSuperOrSameUser(user, "getCredentialSubjectsForHost");
+        this.authorizer.authorizeSuperOrSameUser(user);
         return this.credentialManager.getCredentialSubjectsForHost(user, host);
     }
 
@@ -426,7 +425,7 @@ public class CredentialManagerServiceImpl
      */
     public void destroyCredential(String subject) {
         User user = getCredentialUser(subject);
-        this.authorizeUtility.authorizeSuperOrSameUser(user, "destroyCredential");
+        this.authorizer.authorizeSuperOrSameUser(user);
         this.credentialManager.destroyCredential(subject);
     }
 
@@ -434,7 +433,7 @@ public class CredentialManagerServiceImpl
      * Must be super or same user
      */
     public void destroyCredentials(User user) {
-        this.authorizeUtility.authorizeSuperOrSameUser(user, "destroyCredentials");
+        this.authorizer.authorizeSuperOrSameUser(user);
         this.credentialManager.destroyCredentials(user);
     }
 
@@ -444,7 +443,7 @@ public class CredentialManagerServiceImpl
      * Must be super user
      */
     public List getActiveCredentials() {
-        this.authorizeUtility.authorizeSuperUser("getActiveCredentials");
+        this.authorizer.authorizeSuperUser();
         return this.credentialManager.getActiveCredentials();
     }
 
@@ -452,7 +451,7 @@ public class CredentialManagerServiceImpl
      * Must be super or same user
      */
     public List getActiveCredentials(User user) {
-        this.authorizeUtility.authorizeSuperOrSameUser(user, "getActiveCredentials");
+        this.authorizer.authorizeSuperOrSameUser(user);
         return this.credentialManager.getActiveCredentials(user);
     }
 
@@ -461,7 +460,7 @@ public class CredentialManagerServiceImpl
      */
     public Credential getActiveCredential(String subject) {
         User user = getCredentialUser(subject);
-        this.authorizeUtility.authorizeSuperOrSameUser(user, "getActiveCredential");
+        this.authorizer.authorizeSuperOrSameUser(user);
         return this.credentialManager.getActiveCredential(subject);
     }
 
@@ -469,7 +468,7 @@ public class CredentialManagerServiceImpl
      * Must be super or same user
      */
     public List getActiveCredentialsForHost(User user, String host) {
-        this.authorizeUtility.authorizeSuperOrSameUser(user, "getActiveCredentialsForHost");
+        this.authorizer.authorizeSuperOrSameUser(user);
         return this.credentialManager.getActiveCredentialsForHost(user, host);
     }
 
@@ -478,7 +477,7 @@ public class CredentialManagerServiceImpl
      */
     public boolean isActiveCredential(String subject) {
         User user = getCredentialUser(subject);
-        this.authorizeUtility.authorizeSuperOrSameUser(user, "isActiveCredential");
+        this.authorizer.authorizeSuperOrSameUser(user);
         return this.credentialManager.isActiveCredential(subject);
     }
 
@@ -486,7 +485,7 @@ public class CredentialManagerServiceImpl
      * Must be super or same user
      */
     public boolean hasActiveCredentials(User user) {
-        this.authorizeUtility.authorizeSuperOrSameUser(user, "hasActiveCredentials");
+        this.authorizer.authorizeSuperOrSameUser(user);
         return this.credentialManager.hasActiveCredentials(user);
     }
 
@@ -494,7 +493,7 @@ public class CredentialManagerServiceImpl
      * Must be super user
      */
     public List getActiveCredentialSubjects() {
-        this.authorizeUtility.authorizeSuperUser("getActiveCredentialSubjects");
+        this.authorizer.authorizeSuperUser();
         return this.credentialManager.getActiveCredentialSubjects();
     }
 
@@ -502,7 +501,7 @@ public class CredentialManagerServiceImpl
      * Must be super or same user
      */
     public List getActiveCredentialSubjects(User user) {
-        this.authorizeUtility.authorizeSuperOrSameUser(user, "getActiveCredentialSubjects");
+        this.authorizer.authorizeSuperOrSameUser(user);
         return this.credentialManager.getActiveCredentialSubjects(user);
     }
 
@@ -510,7 +509,7 @@ public class CredentialManagerServiceImpl
      * Must be super user
      */
     public List getActiveCredentialMappings() {
-        this.authorizeUtility.authorizeSuperUser("getActiveCredentialMappings");
+        this.authorizer.authorizeSuperUser();
         return this.credentialManager.getActiveCredentialMappings();
     }
 
@@ -518,7 +517,7 @@ public class CredentialManagerServiceImpl
      * Must be super or same user
      */
     public List getActiveCredentialMappings(User user) {
-        this.authorizeUtility.authorizeSuperOrSameUser(user, "getActiveCredentialMappings");
+        this.authorizer.authorizeSuperOrSameUser(user);
         return this.credentialManager.getActiveCredentialMappings(user);
     }
 }

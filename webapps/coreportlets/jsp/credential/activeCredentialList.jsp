@@ -4,21 +4,21 @@
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
-<jsp:useBean id="activeCredentialBean"
+<jsp:useBean id="credentialManagerAdminBean"
              class="org.gridlab.gridsphere.portlets.grid.security.CredentialManagerAdminBean"
              scope="request"/>
 <form name="ActiveCredentialPortlet" method="POST"
-      action="<%=activeCredentialBean.getPortletActionURI(CredentialManagerAdminBean.ACTION_ACTIVE_CREDENTIAL_LIST)%>">
+      action="<%=credentialManagerAdminBean.getPortletActionURI(CredentialManagerAdminBean.ACTION_ACTIVE_CREDENTIAL_LIST)%>">
   <input type="hidden" name="credentialID" value=""/>
   <script type="text/javascript">
     function ActiveCredentialPortlet_listCredential_onClick() {
-      document.ActiveCredentialPortlet.action="<%=activeCredentialBean.getPortletActionURI(CredentialManagerAdminBean.ACTION_ACTIVE_CREDENTIAL_LIST)%>";
+      document.ActiveCredentialPortlet.action="<%=credentialManagerAdminBean.getPortletActionURI(CredentialManagerAdminBean.ACTION_ACTIVE_CREDENTIAL_LIST)%>";
       document.ActiveCredentialPortlet.submit();
     }
 
     function ActiveCredentialPortlet_viewCredential_onClick(credentialID) {
       document.ActiveCredentialPortlet.credentialID.value=credentialID;
-      document.ActiveCredentialPortlet.action="<%=activeCredentialBean.getPortletActionURI(CredentialManagerAdminBean.ACTION_ACTIVE_CREDENTIAL_VIEW)%>";
+      document.ActiveCredentialPortlet.action="<%=credentialManagerAdminBean.getPortletActionURI(CredentialManagerAdminBean.ACTION_ACTIVE_CREDENTIAL_VIEW)%>";
       document.ActiveCredentialPortlet.submit();
     }
   </script>
@@ -45,7 +45,7 @@
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
-<% List activeCredentialList = activeCredentialBean.getActiveCredentialList();
+<% List activeCredentialList = credentialManagerAdminBean.getActiveCredentialList();
    int numCredentials = activeCredentialList.size();
    if (numCredentials == 0) { %>
         <tr>

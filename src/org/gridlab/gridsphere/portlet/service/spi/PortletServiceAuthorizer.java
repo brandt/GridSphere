@@ -24,4 +24,9 @@ public interface PortletServiceAuthorizer {
      */
     public void authorizeAdminUser(PortletGroup group) throws PortletServiceAuthorizationException;
 
+    public void authorizeSuperOrAdminUser(PortletGroup group) throws PortletServiceAuthorizationException;
+
+    public void authorizeSuperOrSameUser(User user) throws PortletServiceAuthorizationException;
+
+    public void authorizeSuperAdminOrSameUser(User user, PortletGroup group) throws PortletServiceAuthorizationException;
 }

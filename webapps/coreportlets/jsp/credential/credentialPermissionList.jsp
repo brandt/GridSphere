@@ -4,28 +4,28 @@
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
-<jsp:useBean id="credentialPermissionBean"
+<jsp:useBean id="credentialPermissionAdminBean"
              class="org.gridlab.gridsphere.portlets.grid.security.CredentialPermissionAdminBean"
              scope="request"/>
-<% List credentialPermissionList = credentialPermissionBean.getCredentialPermissionList(); %>
+<% List credentialPermissionList = credentialPermissionAdminBean.getCredentialPermissionList(); %>
     <form name="CredentialPermissionPortlet" method="POST"
-      action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_LIST)%>">
+      action="<%=credentialPermissionAdminBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_LIST)%>">
   <input type="hidden" name="credentialPermissionID" value=""/>
   <script type="text/javascript">
     function CredentialPermissionPortlet_listCredentialPermission_onClick() {
-      document.CredentialPermissionPortlet.action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_LIST)%>";
+      document.CredentialPermissionPortlet.action="<%=credentialPermissionAdminBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_LIST)%>";
       document.CredentialPermissionPortlet.submit();
     }
 
     function CredentialPermissionPortlet_newCredentialPermission_onClick(credentialPermissionID) {
       document.CredentialPermissionPortlet.credentialPermissionID.value="";
-      document.CredentialPermissionPortlet.action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_EDIT)%>";
+      document.CredentialPermissionPortlet.action="<%=credentialPermissionAdminBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_EDIT)%>";
       document.CredentialPermissionPortlet.submit();
     }
 
     function CredentialPermissionPortlet_viewCredentialPermission_onClick(credentialPermissionID) {
       document.CredentialPermissionPortlet.credentialPermissionID.value=credentialPermissionID;
-      document.CredentialPermissionPortlet.action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_VIEW)%>";
+      document.CredentialPermissionPortlet.action="<%=credentialPermissionAdminBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_VIEW)%>";
       document.CredentialPermissionPortlet.submit();
     }
   </script>

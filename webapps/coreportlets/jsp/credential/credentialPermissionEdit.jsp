@@ -4,31 +4,31 @@
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
-<jsp:useBean id="credentialPermissionBean"
+<jsp:useBean id="credentialPermissionAdminBean"
              class="org.gridlab.gridsphere.portlets.grid.security.CredentialPermissionAdminBean"
              scope="request"/>
 <form name="CredentialPermissionPortlet" method="POST"
-      action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_EDIT)%>">
-  <input type="hidden" name="credentialPermissionID" value="<%=credentialPermissionBean.getCredentialPermissionID()%>"/>
+      action="<%=credentialPermissionAdminBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_EDIT)%>">
+  <input type="hidden" name="credentialPermissionID" value="<%=credentialPermissionAdminBean.getCredentialPermissionID()%>"/>
   <script type="text/javascript">
     function CredentialPermissionPortlet_editConfirmCredentialPermission_onClick() {
-      document.CredentialPermissionPortlet.action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_EDIT_CONFIRM)%>";
+      document.CredentialPermissionPortlet.action="<%=credentialPermissionAdminBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_EDIT_CONFIRM)%>";
       document.CredentialPermissionPortlet.submit();
     }
 
     function CredentialPermissionPortlet_editCancelCredentialPermission_onClick() {
-      document.CredentialPermissionPortlet.action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_EDIT_CANCEL)%>";
+      document.CredentialPermissionPortlet.action="<%=credentialPermissionAdminBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_EDIT_CANCEL)%>";
       document.CredentialPermissionPortlet.submit();
     }
   </script>
 <table class="portlet-pane" cellspacing="1">
-<% if (credentialPermissionBean.isFormInvalid()) { %>
+<% if (credentialPermissionAdminBean.isFormInvalid()) { %>
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-message-alert">
-            <%=credentialPermissionBean.getFormInvalidMessage()%>
+            <%=credentialPermissionAdminBean.getFormInvalidMessage()%>
           </td>
         </tr>
       </table>
@@ -68,7 +68,7 @@
          <td class="portlet-frame-input" width="250">
              <input type="text"
                     name="permittedSubjects"
-                    value="<%=credentialPermissionBean.getPermittedSubjects()%>"/>
+                    value="<%=credentialPermissionAdminBean.getPermittedSubjects()%>"/>
          </td>
        </tr>
        <tr>
@@ -78,7 +78,7 @@
          <td class="portlet-frame-input">
              <input type="text"
                     name="description"
-                    value="<%=credentialPermissionBean.getDescription()%>"/>
+                    value="<%=credentialPermissionAdminBean.getDescription()%>"/>
          </td>
        </tr>
       </table>

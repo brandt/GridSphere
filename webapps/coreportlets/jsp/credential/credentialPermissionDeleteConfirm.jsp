@@ -4,21 +4,21 @@
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
-<jsp:useBean id="credentialPermissionBean"
+<jsp:useBean id="credentialPermissionAdminBean"
              class="org.gridlab.gridsphere.portlets.grid.security.CredentialPermissionAdminBean"
              scope="request"/>
 <form name="CredentialPermissionPortlet" method="POST"
-      action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_VIEW)%>">
-  <input type="hidden" name="credentialPermissionID" value="<%=credentialPermissionBean.getCredentialPermissionID()%>"/>
+      action="<%=credentialPermissionAdminBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_VIEW)%>">
+  <input type="hidden" name="credentialPermissionID" value="<%=credentialPermissionAdminBean.getCredentialPermissionID()%>"/>
   <script type="text/javascript">
     function CredentialPermissionPortlet_listCredentialPermission_onClick() {
-      document.CredentialPermissionPortlet.action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_LIST)%>";
+      document.CredentialPermissionPortlet.action="<%=credentialPermissionAdminBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_LIST)%>";
       document.CredentialPermissionPortlet.submit();
     }
 
     function CredentialPermissionPortlet_newCredentialPermission_onClick(credentialPermissionID) {
       document.CredentialPermissionPortlet.credentialPermissionID.value="";
-      document.CredentialPermissionPortlet.action="<%=credentialPermissionBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_EDIT)%>";
+      document.CredentialPermissionPortlet.action="<%=credentialPermissionAdminBean.getPortletActionURI(CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_EDIT)%>";
       document.CredentialPermissionPortlet.submit();
     }
   </script>
@@ -39,7 +39,7 @@
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-title">
-              Deleted Credential Permission [<%=credentialPermissionBean.getPermittedSubjects()%>]
+              Deleted Credential Permission [<%=credentialPermissionAdminBean.getPermittedSubjects()%>]
           </td>
         </tr>
         <tr>
@@ -65,7 +65,7 @@
            Permitted Subjects
          </td>
          <td class="portlet-frame-text" width="250">
-           <%=credentialPermissionBean.getPermittedSubjects()%>
+           <%=credentialPermissionAdminBean.getPermittedSubjects()%>
          </td>
        </tr>
        <tr>
@@ -73,7 +73,7 @@
            Description
          </td>
          <td class="portlet-frame-text">
-           <%=credentialPermissionBean.getDescription()%>
+           <%=credentialPermissionAdminBean.getDescription()%>
          </td>
        </tr>
       </table>
