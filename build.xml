@@ -275,9 +275,7 @@ Copyright:
   </target>
 
   <target name="testacl" depends="compile">
-    <java classname="org.gridlab.gridsphere.services.security.acl.test.ACLServiceTest" classpathref="classpath">
-        <arg value="50 50"/>
-    </java>
+    <java classname="org.gridlab.gridsphere.services.security.acl.test.ACLServiceTest" classpathref="classpath"/>
   </target>
 
 </project>
