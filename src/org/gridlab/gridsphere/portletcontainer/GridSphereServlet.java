@@ -272,13 +272,17 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      *
      * @param event a <code>GridSphereEvent</code>
      */
-    protected void logout(GridSphereEvent event) {
+    protected void logout(GridSphereEvent event)  {
         log.debug("in logout of GridSphere Servlet");
         PortletRequest req = event.getPortletRequest();
         PortletSession session = req.getPortletSession();
         session.removeAttribute(SportletProperties.PORTLET_USER);
         userSessionManager.removeSessions(req.getUser());
-        layoutEngine.logoutPortlets(event);
+        try {
+            layoutEngine.logoutPortlets(event);
+        } catch (IOException e) {
+            log.error("Logout failed!"+e);
+        }
     }
 
     /**
