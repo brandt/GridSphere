@@ -122,11 +122,11 @@ public class InputTag extends TagSupport {
             JspWriter out = pageContext.getOut();
             ServletRequest req = pageContext.getRequest();
             out.print("<input");
-            out.print(" type=" + type);
-            out.print(" name=" + name);
+            out.print(" type=\"" + type+"\"");
+            out.print(" name=\"" + name+"\"");
             if ((type.equals(TEXT)) || (type.equals(PASSWORD))) {
-                out.print(" size=" + size);
-                out.print(" maxlen=" + maxLength);
+                out.print(" size=\"" + size+"\"");
+                out.print(" maxlen=\"" + maxLength+"\"");
             }
             String oldvalue = req.getParameter(name);
             if (oldvalue != null) value = oldvalue;

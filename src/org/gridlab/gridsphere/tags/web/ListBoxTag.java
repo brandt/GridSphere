@@ -7,6 +7,8 @@ package org.gridlab.gridsphere.tags.web;
 import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.tags.web.model.ListBoxModel;
+import org.gridlab.gridsphere.tags.web.model.ListSelectItem;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -17,15 +19,15 @@ import java.util.Iterator;
 
 public class ListBoxTag extends TagSupport {
 
-    private Collection col;
+    private ListBoxModel col;
     private boolean allowMultiple = false;
 
-    public void setCollection(Collection col) {
-        this.col = col;
+    public ListBoxModel getCollection() {
+        return col;
     }
 
-    public Collection getCollection() {
-        return col;
+    public void setCollection(ListBoxModel col) {
+        this.col = col;
     }
 
     public void setMultiple(boolean allowMultiple) {
@@ -39,16 +41,24 @@ public class ListBoxTag extends TagSupport {
     public int doStartTag() throws JspException {
         try {
             JspWriter out = pageContext.getOut();
-            out.print("<select ");
-            out.print(" name=" + getId());
-            if (allowMultiple) {
+            out.print("<select size=\"");
+            out.print(col.getListboxsize()+"\"");
+            out.print(" name=\"" + col.getName()+"\"");
+            if (col.isMultipleSelection()) {
                 out.print(" multiple");
             }
             out.print(">");
             Iterator it = col.iterator();
             while (it.hasNext()) {
-                out.print("<option>");
-                out.print((String)it.next());
+                ListSelectItem item = (ListSelectItem)it.next();
+                out.print("<option value=\"");
+                out.print(item.getValue());
+                out.print("\"");
+                if (item.isSelected()) {
+                    out.print(" selected ");
+                }
+                out.print(">");
+                out.print(item.getLabel());
                 out.print("</option>");
             }
             out.print("</select>");

@@ -13,13 +13,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.io.IOException;
 
-/**
- * Created by IntelliJ IDEA.
- * User: novotny
- * Date: Jan 10, 2003
- * Time: 11:11:04 AM
- * To change this template use Options | File Templates.
- */
 public class DataGridTag extends TagSupport {
 
     private Collection col;
