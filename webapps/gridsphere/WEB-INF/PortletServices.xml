@@ -76,12 +76,25 @@
         <implementation>org.gridlab.gridsphere.services.core.note.impl.NoteServiceImpl</implementation>
     </service>
 
-
     <service>
         <name>TextMessagingService</name>
         <description>Provides the ability to send textmessages to different services</description>
         <interface>org.gridlab.gridsphere.services.core.messaging.TextMessagingService</interface>
         <implementation>org.gridlab.gridsphere.services.core.messaging.impl.TextMessagingServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Timer Service</name>
+        <description>Timer Service</description>
+        <interface>org.gridlab.gridsphere.services.core.timer.TimerService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.timer.impl.TimerServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Cache Service</name>
+        <description>Cache Service</description>
+        <interface>org.gridlab.gridsphere.services.core.cache.CacheService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.cache.impl.CacheServiceImpl</implementation>
     </service>
 
 </portlet-services>
