@@ -50,7 +50,6 @@ public class PortletURLImpl implements PortletURL {
     private Map store = new HashMap();
     private boolean redirect = true;
     private String contextPath = null;
-    private String id = "";
 
     /**
      * Constructs a PortletURL from a servlet request and response
@@ -64,9 +63,7 @@ public class PortletURLImpl implements PortletURL {
         this.req = req;
         this.contextPath = req.getContextPath();
         this.isSecure = req.isSecure();
-        this.id = createUniquePrefix(2);
         store.put(SportletProperties.COMPONENT_ID, (String) req.getAttribute(SportletProperties.COMPONENT_ID));
-        store.put(SportletProperties.PREFIX, id);
     }
 
     /**
@@ -141,7 +138,7 @@ public class PortletURLImpl implements PortletURL {
     public void setParameter(String name, String value) {
         if (name == null) throw new IllegalArgumentException("name is NULL");
         if (value == null) throw new IllegalArgumentException("value is NULL");
-        store.put(id + "_" + name, value);
+        store.put(name, value);
     }
 
     /**
@@ -167,7 +164,7 @@ public class PortletURLImpl implements PortletURL {
         if (name == null) throw new IllegalArgumentException("name is NULL");
         if (values == null) throw new IllegalArgumentException("values is NULL");
         if (values.length == 0) throw new IllegalArgumentException("values is NULL");
-        store.put(id + "_" + name, values);
+        store.put(name, values);
     }
 
     /**
@@ -292,27 +289,6 @@ public class PortletURLImpl implements PortletURL {
             newURL = res.encodeURL(url);
         }
         s.append(newURL);
-        return s.toString();
-    }
-
-    /**
-     *  A string utility that produces a string composed of
-     * <code>numChars</code> number of characters
-     *
-     * @param numChars the number of characters in the resulting <code>String</code>
-     * @return the <code>String</code>
-     */
-    private String createUniquePrefix(int numChars) {
-        StringBuffer s = new StringBuffer();
-        for (int i = 0; i <= numChars; i++) {
-            int nextChar = (int) (Math.random() * 62);
-            if (nextChar < 10) //0-9
-                s.append(nextChar);
-            else if (nextChar < 36) //a-z
-                s.append((char) (nextChar - 10 + 'a'));
-            else
-                s.append((char) (nextChar - 36 + 'A'));
-        }
         return s.toString();
     }
 

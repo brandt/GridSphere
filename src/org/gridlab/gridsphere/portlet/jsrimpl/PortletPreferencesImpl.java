@@ -5,7 +5,6 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name;
 
 import javax.portlet.ReadOnlyException;
 import javax.portlet.ValidatorException;
@@ -14,7 +13,6 @@ import javax.portlet.PortletPreferences;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Enumeration;
 import java.io.IOException;
 
 

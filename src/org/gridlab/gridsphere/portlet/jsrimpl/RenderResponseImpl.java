@@ -133,9 +133,6 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
         req.setAttribute(SportletProperties.PORTLET_TITLE, title);
     }
 
-
-
-
     /**
      * Sets the MIME type for the render response. The portlet must
      * set the content type before calling {@link #getWriter} or

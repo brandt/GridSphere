@@ -55,7 +55,8 @@ public class PersistencePreferenceAttribute {
     }
 
     public String[] getAValues() {
-        return (String[]) this.values.toArray();
+        String[] array = new String[values.size()];
+        return (String[]) this.values.toArray(array);
     }
 
     public void setValue(String value)  {
