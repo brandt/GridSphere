@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.exolab.castor.jdo.PersistenceException;
 
 import java.io.*;
 import java.util.*;
@@ -37,6 +38,7 @@ public class PortletLayoutEngine {
     private String layoutMappingFile = null;
 
     private PortletContainer guestContainer = null;
+    private PortletContainer errorContainer = null;
     private static int counter = 0;
     private String newuserLayoutPath;
     private PortletContainer newuserContainer;
@@ -57,6 +59,21 @@ public class PortletLayoutEngine {
      * Constructs a concrete instance of the PortletLayoutEngine
      */
     private PortletLayoutEngine() {
+        String errorLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_DIR) + "/ErrorLayout.xml";
+        layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING);
+        newuserLayoutPath = GridSphereConfig.getProperty(GridSphereConfigProperties.NEW_USER_LAYOUT);
+        String guestLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GUEST_USER_LAYOUT);
+        try {
+            errorContainer = PortletLayoutDescriptor.loadPortletContainer(errorLayoutFile, layoutMappingFile);
+            guestContainer = PortletLayoutDescriptor.loadPortletContainer(guestLayoutFile, layoutMappingFile);
+            errorContainer.init(new ArrayList());
+        } catch (IOException e) {
+            error = "Caught IOException trying to unmarshall GuestUserLayout.xml" + e.getMessage();
+            log.error(error, e);
+        } catch (PersistenceManagerException e) {
+            error = "Caught PersistenceManagerException trying to unmarshall GuestUserLayout.xml" + e.getMessage();
+            log.error(error, e);
+        }
     }
 
     /**
@@ -83,22 +100,6 @@ public class PortletLayoutEngine {
         applicationTabs.remove(webAppName);
     }
 
-    /**
-     * Initializes the portlet layout engine by loading in the defined Guest
-     * user layout and new user layout templates specified in
-     * {@link GridSphereConfigProperties}
-     *
-     * @throws IOException if an I/O error occurs during the template layout loading
-     * @throws PersistenceManagerException if a descriptor parsing error occurs
-     */
-    public void init() throws IOException, PersistenceManagerException {
-
-        layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING);
-        newuserLayoutPath = GridSphereConfig.getProperty(GridSphereConfigProperties.NEW_USER_LAYOUT);
-        String guestLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GUEST_USER_LAYOUT);
-        guestContainer = PortletLayoutDescriptor.loadPortletContainer(guestLayoutFile, layoutMappingFile);
-    }
-
     public void removeUser(User user) {
         System.err.println("REMOVING USER: " + user.getFullName());
         if (userLayouts.containsKey(user)) {
@@ -110,12 +111,19 @@ public class PortletLayoutEngine {
           return null;
     }
 
-    protected PortletContainer getPortletContainer(GridSphereEvent event) throws PortletLayoutException {
+    protected PortletContainer getPortletContainer(GridSphereEvent event)  {
         // if user is guest then use guest template
         PortletContainer pc = null;
 
-        User user = event.getPortletRequest().getUser();
-        PortletSession session = event.getPortletRequest().getPortletSession(true);
+        PortletRequest req = event.getPortletRequest();
+        User user = req.getUser();
+        PortletSession session = req.getPortletSession(true);
+
+        // Check for framework errors
+        Exception portletException = (Exception)req.getAttribute(GridSphereProperties.ERROR);
+        if (portletException != null) {
+            return errorContainer;
+        }
 
         // Need to provide one guest container per users session
         if (user instanceof GuestUser) {
@@ -128,6 +136,7 @@ public class PortletLayoutEngine {
 
                 PortletContainer newcontainer = null;
                 try {
+
                     synchronized (new Integer(counter)) {
                         counter = (counter >= MAX_GUEST_CONTAINERS) ? 0 : counter++;
                         newcontainer = (PortletContainer)guestContainer.clone();
@@ -136,9 +145,8 @@ public class PortletLayoutEngine {
                     guests.put(id, newcontainer);
                 } catch (Exception e) {
                     System.err.println("Unable to make deepcopy!!");
+                    e.printStackTrace();
                 }
-
-
                 return newcontainer;
             }
 

@@ -484,13 +484,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         if (supportedModes.isEmpty()) return null;
 
         // Unless user is a super they shoudl not see configure mode
-        List l = req.getGroups();
-        Iterator it = l.iterator();
-        boolean hasConfigurePermission = true;
-        while (it.hasNext()) {
-            PortletGroup g = (PortletGroup)it.next();
-        }
-        PortletRole role = req.getRole(group);
+        boolean hasConfigurePermission = false;
+        PortletRole role = req.getRole();
         if (role.isAdmin() || role.isSuper()) {
             hasConfigurePermission = true;
         }

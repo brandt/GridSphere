@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
@@ -24,6 +25,8 @@ import java.util.List;
  */
 public class PortletContainer implements Serializable, Cloneable {
 
+    protected transient PortletLog log = SportletLog.getInstance(PortletContainer.class);
+
     protected int COMPONENT_ID = 0;
 
     // The actual portlet layout components
@@ -33,7 +36,7 @@ public class PortletContainer implements Serializable, Cloneable {
     protected List componentIdentifiers = new ArrayList();
 
     // The list of portlets a user has-- generally contained within a PortletFrame/PortletTitleBar combo
-    protected List portlets = new ArrayList();
+    //protected List portlets = new ArrayList();
 
     protected String name = "";
     protected String theme = GridSphereConfig.getProperty(GridSphereConfigProperties.DEFAULT_THEME);
@@ -144,10 +147,10 @@ public class PortletContainer implements Serializable, Cloneable {
             comp.setTheme(theme);
             list = comp.init(list);
         }
-        System.err.println("Made a components list!!!! " + list.size());
+        log.debug("Made a components list!!!! " + list.size());
         for (int i = 0; i < list.size(); i++) {
             ComponentIdentifier c = (ComponentIdentifier) list.get(i);
-            System.err.println("id: " + c.getComponentID() + " : " + c.getClassName() + " : " + c.hasPortlet());
+            log.debug("id: " + c.getComponentID() + " : " + c.getClassName() + " : " + c.hasPortlet());
 
         }
         componentIdentifiers = list;
@@ -162,7 +165,7 @@ public class PortletContainer implements Serializable, Cloneable {
      * @throws PortletException if an error occurs while invoking login on the portlets
      * @see <a href="org.gridlab.gridsphere.portlet.Portlet#login">Portlet.login(PortletRequest)</a>
      */
-    public void loginPortlets(GridSphereEvent event) throws PortletException {
+    public void loginPortlets(GridSphereEvent event) throws PortletException, IOException {
         Iterator it = componentIdentifiers.iterator();
         ComponentIdentifier cid = null;
         PortletFrame f = null;
@@ -171,11 +174,10 @@ public class PortletContainer implements Serializable, Cloneable {
             System.err.println(cid.getClassName());
             if (cid.getClassName().equals("org.gridlab.gridsphere.layout.PortletFrame")) {
                 f = (PortletFrame) cid.getPortletComponent();
-                portlets.add(f.getPortletClass());
+                //portlets.add(f.getPortletClass());
+                PortletInvoker.login(f.getPortletClass(), event.getPortletRequest(), event.getPortletResponse());
             }
         }
-
-        // set ACL stuff
     }
 
     /**

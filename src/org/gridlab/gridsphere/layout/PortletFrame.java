@@ -35,63 +35,12 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     private String portletClass = null;
     private PortletTitleBar titleBar = null;
     private List listeners = new ArrayList();
-    private PortletErrorMessage errorFrame = new PortletErrorMessage();
+    private PortletErrorFrame errorFrame = new PortletErrorFrame();
     private boolean transparent = false;
     private String innerPadding = "";
     private String outerPadding = "";
 
     private transient PortletDataManager dataManager = SportletDataManager.getInstance();
-
-    // Playing with the idea of a portlet error frame to abstract error display
-    class PortletErrorMessage implements Serializable {
-
-        private String id = "";
-        private Exception e = null;
-        private String msg = "";
-
-        public PortletErrorMessage() {
-
-        }
-
-        public boolean hasMessage() {
-            return (msg.equals("") ? false: true);
-        }
-
-        public String getPortletID() {
-            return id;
-        }
-
-        public void setPortletID(String portletID) {
-            this.id = portletID;
-        }
-
-        public String getMessage() {
-            return msg;
-        }
-
-        public void clearMessage() {
-            this.msg = "";
-        }
-
-        public void setMessage(String msg) {
-            this.msg += msg;
-        }
-
-        public void setMessage(String msg, Exception e) {
-            this.msg += msg;
-            setException(e);
-        }
-
-        public Exception getException() {
-            return e;
-        }
-
-        public void setException(Exception e) {
-            this.msg += e.getMessage();
-        }
-
-
-    }
 
     /**
      * Constructs an instance of PortletFrame
@@ -284,7 +233,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 data = dataManager.getPortletData(req.getUser(), portletClass);
                 req.setAttribute(GridSphereProperties.PORTLETDATA, data);
             } catch (PersistenceManagerException e) {
-                errorFrame.setMessage("Unable to retrieve user's portlet data", e);
+                errorFrame.setError("Unable to retrieve user's portlet data!", e);
             }
         }
 
@@ -295,7 +244,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 try {
                     PortletInvoker.actionPerformed(portletClass, action, req, res);
                 } catch (PortletException e) {
-                    errorFrame.setMessage("Unable to perform action", e);
+                    errorFrame.setException(e);
                 }
                 String message = (String)req.getAttribute(GridSphereProperties.PORTLETERROR);
                 if (message != null) {
@@ -322,9 +271,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         req.setAttribute(GridSphereProperties.PORTLETID, portletClass);
 
-        if (errorFrame.hasMessage()) {
-            out.println(errorFrame.getMessage());
-            errorFrame.clearMessage();
+        if (errorFrame.hasError()) {
+            errorFrame.doRender(event);
             return;
         }
 
@@ -336,7 +284,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 data = dataManager.getPortletData(req.getUser(), portletClass);
                 req.setAttribute(GridSphereProperties.PORTLETDATA, data);
             } catch (PersistenceManagerException e) {
-                errorFrame.setMessage("Unable to retrieve user's portlet data", e);
+                errorFrame.setError("Unable to retrieve user's portlet data", e);
             }
         }
 
@@ -373,16 +321,14 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 out.println("<tr><td>");
             }
 
-            if (errorFrame.hasMessage()) {
-                out.println(errorFrame.getMessage());
-                errorFrame.clearMessage();
+            if (errorFrame.hasError()) {
+                errorFrame.doRender(event);
             } else {
                 try {
                     PortletInvoker.service(portletClass, req, res);
                 } catch (PortletException e) {
-                    errorFrame.setMessage("Unable to invoke service method", e);
-                    out.println(errorFrame.getMessage());
-                errorFrame.clearMessage();
+                    errorFrame.setError("Unable to invoke service method", e);
+                    errorFrame.doRender(event);
                 }
             }
             out.println("</td></tr>");
@@ -398,6 +344,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         PortletFrame f = (PortletFrame)super.clone();
         f.titleBar = (this.titleBar == null) ? null : (PortletTitleBar)this.titleBar.clone();
         f.outerPadding = this.outerPadding;
+        f.errorFrame = this.errorFrame;
         f.transparent = this.transparent;
         f.innerPadding = this.innerPadding;
         f.portletClass = this.portletClass;
