@@ -66,13 +66,40 @@ public interface SportletUser extends User {
     public void setUserID(String userID);
 
     /**
+     * This is alias for the getUserID method, which for all intensive
+     * purposes represents the name required for this user to login.
+     *
+     * @return String the user id
+     */
+    public String getLoginName();
+
+    /**
+     * This is an alias for the setUserID method, which for all intensive
+     * purposes represents the name required for this user to login.
+     *
+     * @param String the user id
+     */
+    public void setLoginName(String login);
+
+    /**
+     * Returns the password required by this user to login.
+     *
+     * @return String the user's password
+     */
+    public String getLoginPassword();
+
+    /**
+     * Sets the password required by this user to login.
+     *
+     * @param String the user's password
+     */
+    public void setLoginPassword(String password);
+
+    /**
      * Sets the point of time that this user was last logged in, or null if this information is not available.
      * The time is returned in number of milliseconds since January 1, 1970 GMT.
      *
      * @param lastLoginTime the last login time
      */
     public void setLastLoginTime(long lastLoginTime);
-
-
-
 }

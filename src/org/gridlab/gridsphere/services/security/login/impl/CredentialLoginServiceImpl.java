@@ -100,9 +100,6 @@ public class CredentialLoginServiceImpl
             ex.putInvalidParameter("username", "Username not provided!");
             throw ex;
         }
-        // VERY LAME THAT I CANNOT SIMPLY RETRIEVE A USER OBJECT AS NEEDED!!!!!!!!!!!!!!!!!!
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //User user = this.userService.getUser(username);
         User user = null;
         if (user == null) {

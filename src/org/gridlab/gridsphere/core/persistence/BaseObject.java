@@ -174,6 +174,14 @@ public class BaseObject implements org.exolab.castor.jdo.TimeStampable, org.exol
 
         return newVector;
     }
-}
 
+    /**
+     * Returns true if the given user has the same object id as this object.
+     *
+     * @return User information represented as a String
+     */
+    public boolean equals(Object object) {
+        return this.ObjectID.equals(((BaseObject)object).ObjectID);
+    }
+}
 

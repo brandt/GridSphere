@@ -587,7 +587,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @param name loginname
      * @return requested user object
      */
-    private User getUser(String name) {
+    public User getUser(String name) {
         String command =
                 "select u from "+jdoSUImpl+" u where UserID=\"" + name + "\"";
         return selectUser(command);
@@ -599,7 +599,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @param ID unique ID
      * @return requested user
      */
-    private User getUserByID(String ID) {
+    public User getUserByID(String ID) {
         String command =
                 "select u from "+jdoSUImpl+" u where ObjectID=\"" + ID + "\"";
         return selectUser(command);
@@ -611,7 +611,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @param command the oql query
      * @return the requested user
      */
-    private User selectUser(String oql) {
+    public User selectUser(String oql) {
         SportletUserImpl user = null;
         try {
             user = (SportletUserImpl) pm.restoreObject(oql);
@@ -626,7 +626,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @param user the userobject
      * @todo check/pass up the exception
      */
-    private void saveUser(User user) {
+    public void saveUser(User user) {
         try {
             pm.update(user);
         } catch (PersistenceManagerException e) {
@@ -639,7 +639,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @param user the userobject
      * @todo check/pass up the exception
      */
-    private void removeUser(String userName) {
+    public void removeUser(String userName) {
         if (existsUser(userName)) {
             User user = getUser(userName);
             try {

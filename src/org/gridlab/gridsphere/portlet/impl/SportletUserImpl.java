@@ -30,11 +30,25 @@ import java.util.List;
  */
 public class SportletUserImpl extends BaseObject implements SportletUser, HttpSessionBindingListener {
 
-    // store used to maintain user attributes
-    private transient Hashtable Store = new Hashtable();
     private transient PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
 
-    // Data fields that make up the Role object
+    // store used to maintain user attributes
+    private transient Hashtable store = new Hashtable();
+
+    /**
+     * @sql-size 32
+     * @sql-name userid
+     */
+    private String UserID = new String();
+
+    /**
+     * @sql-size 32
+     * @sql-name password
+     * @get-method getLoginPassword
+     * @set-method setLoginPassword
+     */
+    private String Password = new String();
+
     /**
      * @sql-size 50
      * @sql-name familyname
@@ -56,11 +70,6 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
      */
     private String EmailAddress = new String();
     /**
-     * @sql-size 32
-     * @sql-name userid
-     */
-    private String UserID = new String();
-    /**
      * @sql-size 256
      * @sql-name organization
      */
@@ -78,34 +87,77 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
     public Vector Attributes = new Vector();
 
     /**
-     * Sets the value of the attribute with the given name,
+     * Returns the internal unique user id.
      *
-     * @param name the attribute name
-     * @param value the attribute value
+     * @return the internal unique id
      */
-    public void setAttribute(String name, String value) {
-        Store.put(name, value);
+    public String getID() {
+        return getOid();
     }
 
     /**
-     * Returns the value of the attribute with the given name,s
-     * or null if no attribute with the given name exists.
+     * Sets the internal unique user id.
      *
-     * @param name the attribute name
-     * @return the attribute value
+     * @param id the internal unique id
      */
-    public Object getAttribute(String name) {
-        return Store.get(name);
+    public void setID(String id) {
+        setOid(id);
     }
 
     /**
-     * Returns an enumeration of names of all attributes available to this request.
-     * This method returns an empty enumeration if the request has no attributes available to it.
+     * Returns the user id of the user, or null if the user id is not available.
      *
-     * @return an enumeration of attribute names
+     * @return the user id
      */
-    public Enumeration getAttributeNames() {
-        return Store.elements();
+    public String getUserID() {
+        return UserID;
+    }
+
+    /**
+     * Sets the user id of the user, or null if the user id is not available.
+     *
+     * @param userID the user id
+     */
+    public void setUserID(String userID) {
+        this.UserID = userID;
+    }
+
+    /**
+     * This is alias for the getUserID method, which for all intensive
+     * purposes represents the name required for this user to login.
+     *
+     * @return String the user id
+     */
+    public String getLoginName() {
+        return this.UserID;
+    }
+
+    /**
+     * This is an alias for the setUserID method, which for all intensive
+     * purposes represents the name required for this user to login.
+     *
+     * @param String the user id
+     */
+    public void setLoginName(String name) {
+        this.UserID = name;
+    }
+
+    /**
+     * Returns the password required by this user to login.
+     *
+     * @return String the user's password
+     */
+    public String getLoginPassword() {
+        return this.Password;
+    }
+
+    /**
+     * Sets the password required by this user to login.
+     *
+     * @param String the user's password
+     */
+    public void setLoginPassword(String password) {
+        this.Password = password;
     }
 
     /**
@@ -185,42 +237,6 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
     }
 
     /**
-     * Returns the internal unique user id.
-     *
-     * @return the internal unique id
-     */
-    public String getID() {
-        return getOid();
-    }
-
-    /**
-     * Sets the internal unique user id.
-     *
-     * @param id the internal unique id
-     */
-    public void setID(String id) {
-        setOid(id);
-    }
-
-    /**
-     * Returns the user id of the user, or null if the user id is not available.
-     *
-     * @return the user id
-     */
-    public String getUserID() {
-        return UserID;
-    }
-
-    /**
-     * Sets the user id of the user, or null if the user id is not available.
-     *
-     * @param userID the user id
-     */
-    public void setUserID(String userID) {
-        this.UserID = userID;
-    }
-
-    /**
      * Gets the organization the user belongs to
      *
      * @return organization the organization
@@ -258,6 +274,47 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
         this.LastLoginTime = lastLoginTime;
     }
 
+    /**
+     * Returns the value of the attribute with the given name,s
+     * or null if no attribute with the given name exists.
+     *
+     * @param name the attribute name
+     * @return the attribute value
+     */
+    public Object getAttribute(String name) {
+        return store.get(name);
+    }
+
+    /**
+     * Sets the value of the attribute with the given name,
+     *
+     * @param name the attribute name
+     * @param value the attribute value
+     */
+    public void setAttribute(String name, String value) {
+        store.put(name, value);
+    }
+
+    /**
+     * Returns an enumeration of names of all attributes available to this request.
+     * This method returns an empty enumeration if the request has no attributes available to it.
+     *
+     * @return an enumeration of attribute names
+     */
+    public Enumeration getAttributeNames() {
+        return store.elements();
+    }
+
+    /**
+     * Returns an enumeration of names of all attributes available to this request.
+     * This method returns an empty enumeration if the request has no attributes available to it.
+     *
+     * @return an enumeration of attribute names
+     */
+    public Enumeration getAttributeValues() {
+        return store.elements();
+    }
+
     /*
     public List getACL() {
         return ACL;
@@ -268,11 +325,11 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
     }
     */
     private void convert2vector() {
-        Enumeration allkeys = Store.keys();
+        Enumeration allkeys = store.keys();
         SportletUserImplAttribute ha = null;
         while (allkeys.hasMoreElements()) {
             String key = (String) allkeys.nextElement();
-            ha = new SportletUserImplAttribute(key, (String) Store.get(key));
+            ha = new SportletUserImplAttribute(key, (String) store.get(key));
             ha.setUser(this);
             Attributes.add(ha);
         }
@@ -281,7 +338,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
     private void convert2hash() {
         for (int i = 0; i < Attributes.size(); i++) {
             SportletUserImplAttribute ha = (SportletUserImplAttribute) Attributes.get(i);
-            Store.put((String) ha.getKey(), (String) ha.getValue());
+            store.put((String) ha.getKey(), (String) ha.getValue());
         }
     }
 
@@ -290,7 +347,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
     }
 
     public void setAttributes(Vector attributes) {
-        Attributes = attributes;
+        attributes = attributes;
     }
 
     public void jdoBeforeCreate(Database database) throws Exception {

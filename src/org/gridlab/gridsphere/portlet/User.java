@@ -98,6 +98,4 @@ public interface User {
      * @return User information represented as a String
      */
     public String toString();
-
-
 }
