@@ -71,13 +71,11 @@ Copyright:
     <!-- =================================================================== -->
     <path id="classpath">
         <pathelement location="${classes.dir}"/>
-        <pathelement location="${jnet.jar}"/>
-        <pathelement location="${jsse.jar}"/>
-        <pathelement location="${jcert.jar}"/>
-        <pathelement location="${pkcs11.jar}"/>
+
         <fileset dir="${env.CATALINA_HOME}/common/lib">
             <include name="*.jar"/>
         </fileset>
+
         <!-- this is for the XML JARs in Tomcat 4.1.x -->
         <fileset dir="${env.CATALINA_HOME}/common/endorsed">
             <include name="*.jar"/>
@@ -119,7 +117,7 @@ Copyright:
         <echo message="ANT_HOME is set to = ${env.ANT_HOME}"/>
         <echo message="JAVA_HOME is set to = ${env.JAVA_HOME}"/>
         <echo message="CATALINA_HOME is set to = ${env.CATALINA_HOME}"/>
-        <echo message=""/>
+        <echo message="${classpath}"/>
 
         <echo message="=== Required Libraries ===" />
         <echo message="log4j.present=${log4j.present}" />
@@ -134,6 +132,12 @@ Copyright:
         <echo message="optimize=${optimize}" />
     </target>
 
+    <!-- =================================================================== -->
+    <!-- Functions                                                           -->
+    <!-- =================================================================== -->
+    <target name="setenv-deploy" description="Check for CATALINA_HOME required for deployment">
+
+    </target>
 
     <!-- =================================================================== -->
     <!-- puts out a HELP test                                                -->
@@ -650,16 +654,27 @@ Copyright:
     <!-- Runs all JUnit tests: needs optional.jar and junit in classpath     -->
     <!-- =================================================================== -->
     <target name="runtests" depends="test-prepare, compiletests,  db-hsqldb-junit, jar" if="junit.present" description="Runs all JUnit tests">
-
-        <java fork="no" classname="junit.textui.TestRunner"
-                taskname="junit" failonerror="true">
-            <arg value="org.gridlab.gridsphere.AllJUnitTests"/>
+        <mkdir dir="${build.dir}/reports"/>
+        <junit printsummary="yes" fork="yes" haltonfailure="no">
             <classpath>
-                <path refid="classpath" />
-                <!--<pathelement location="${src.dir}" />       -->
+                <path refid="classpath"/>
                 <pathelement location="${build.dir}/lib/${Name}.jar"/>
             </classpath>
-        </java>
+            <test name="org.gridlab.gridsphere.AllJUnitTests" todir="${build.dir}/reports">
+                <formatter type="xml"/>
+            </test>
+        </junit>
+    </target>
+
+
+    <target name="make-test-reports" depends="test-prepare, compiletests,  db-hsqldb-junit, jar" if="junit.present" description="Execute Unit Tests">
+       <mkdir dir="${build.dir}/reports/html"/>
+       <junitreport todir="${build.dir}/reports">
+            <fileset dir="${build.dir}/reports">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${build.dir}/reports/html"/>
+        </junitreport>
     </target>
 
 <!-- +++++++++++++++ END TESTS +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
