@@ -35,6 +35,10 @@
 	            <title>Správce souborů</title>
 		    <description>Poskytuje uživatelům virtuální systém souborů</description>
 		</language>
+		<language locale="pl">
+                    <title>Menadżer plików</title>
+                    <description>Udostępnia użytkownikowi wirtualny system plików</description>
+              </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -69,6 +73,10 @@
 	            <title>Reklamní tabule</title>
 	            <description>Zobrazuje libovolný statický obsah v portletu</description>
 	        </language>
+		<language locale="pl">
+                    <title>Plakat</title>
+                    <description>Wyświetla plakat w portlecie</description>
+                </language>
                 <config-param>
                     <param-name>title</param-name>
                     <param-value>Welcome to GridSphere</param-value>
@@ -237,7 +245,11 @@
 		<language locale="hu">
                     <title>Felhasználói hozzáférés kezelő</title>
                     <description>Lehetővé teszi a portal adminisztrátorok számára, a felhasználók adminisztrációját.</description>
-               </language>
+                </language>
+	        <language locale="pl">
+                    <title>Menadżer kont użytkowników</title>
+                    <description>Umożliwia administratorowi portalu administrowanie kontami użytkowników</description>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -276,6 +288,10 @@
 		<language locale="hu">
                    <title>Portlet csoport kezelő</title>
                    <description>Lehetővé teszi a portal adminisztrátorok számára, portlet csoportok kezelését.</description>
+               </language>
+	       <language locale="pl">
+                   <title>Menadżer grup portletów</title>
+                   <description>Umożliwia administratorowi portalu administrowanie grupami portletów</description>
                </language>
             </concrete-portlet>
         </concrete-portlet-app>
@@ -316,6 +332,10 @@
                    <title>Portlet alkalmazás kezelő</title>
                    <description>Lehetővé teszi a portal adminisztrátorok számára, portletek kezelését.</description>
                </language>
+	       <language locale="pl">
+                  <title>Menadżer portletów</title>
+                  <description>Umożliwia administratorowi portalu administrowanie portletami</description>
+              </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -353,6 +373,10 @@
 		 <language locale="hu">
                      <title>Jegyzettömb</title>
                      <description>Kereshető jegyzettömb alkalmazás.</description>
+                </language>
+		<language locale="pl">
+                     <title>Notatnik</title>
+                     <description>Udostępnia użytkownikowi notatnik z możliwością przeszukiwania</description>
                 </language>
              </concrete-portlet>
          </concrete-portlet-app>
@@ -392,6 +416,10 @@
 		 <language locale="hu">
                      <title>Felépítés szekesztő</title>
                      <description>Lehetővé teszi a portletekből egyéni weblapok felépítését</description>
+                 </language>
+		 <language locale="pl">                    
+		     <title>Menadżer układów graficznych</title>
+		     <description>Udostępnia użytkownikowi dostosowywanie układów graficznych</description>
                  </language>
                  <config-param>
                     <param-name>supported-themes</param-name>
@@ -436,6 +464,10 @@
                     <title>Felhasználói adatok</title>
                     <description>Lehetővé teszi a felhasználók számára, saját beállításaik szerkesztését.</description>
                </language>
+	       <language locale="pl">
+                    <title>Menadżer profili</title>
+                    <description>Dostosowywanie profili użytkownika</description>
+              </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -472,7 +504,11 @@
                <language locale="hu">
                     <title>Nyelvválasztás</title>
                     <description>Nyelv választása</description>
-                </language>
+               </language>
+	       <language locale="pl">
+                    <title>Lokalizacja</title>
+                    <description>Wybór lokalizacji</description>
+               </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -506,6 +542,10 @@
 		<language locale="hu">
                     <title>Portlet Feliratkozás</title>
                     <description>Felhasználói portletek testreszabása.</description>
+               </language>
+	       <language locale="pl">
+                    <title>Subskrypcja portletów</title>
+                    <description>Dostosowywanie portletów użytkownika</description>
                </language>
             </concrete-portlet>
         </concrete-portlet-app>
@@ -547,6 +587,10 @@
                     <title>Szöveges üzenetküldés</title>
                     <description>Lehtővé teszi a felhasználók számára az üzenetküldést</description>
                 </language>
+		<language locale="pl">
+                    <title>Wiadomości tekstowe</title>
+                    <description>Pozwala użytkownikowi na wysyłanie wiadomości</description>
+               </language>
              </concrete-portlet>
          </concrete-portlet-app>
      </portlet-app-def>
