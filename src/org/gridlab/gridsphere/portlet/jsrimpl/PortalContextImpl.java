@@ -23,7 +23,7 @@ import java.util.Map;
  * The portlet can only read the <CODE>PortalContext</CODE> data.
  */
 public class PortalContextImpl implements PortalContext {
-    private static final String GRIDSPHERE_INFO = "GridSphere/2.0";
+    private static final String GRIDSPHERE_INFO = "GridSphere/2.0.2";
     private Map props = new HashMap();
     //private PortletApp portletApp = null;
     private List windowStates = null;
