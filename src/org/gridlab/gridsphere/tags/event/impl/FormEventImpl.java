@@ -89,12 +89,16 @@ public class FormEventImpl implements FormEvent {
     public Object getElementBean(String name) {
         PortletRequest request = event.getPortletRequest();
         HttpSession session = request.getSession();
+        System.out.println("GETELEMENTBEAN VALUE:"+((BaseNameValueBean)session.getAttribute(name)).getValue());
         return session.getAttribute(name);
     }
 
     public Object getUpdatedElementBean(String name) {
-        BaseNameValueBean bean = (BaseNameValueBean)getElementBean(name);
         PortletRequest request = event.getPortletRequest();
+        HttpSession session = request.getSession();
+        BaseNameValueBean bean = (BaseNameValueBean)session.getAttribute(name);
+
+        System.out.println("BEANORIGINAL:"+bean.getValue());
         String[] values = request.getParameterValues(bean.getName());
         bean.setValue(values[0]);
         return bean;

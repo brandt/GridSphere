@@ -9,6 +9,10 @@ public class BaseButtonBean extends BaseNameValueBean implements ButtonBean {
 
     protected String type = new String();
 
+    public BaseButtonBean(String name, String value) {
+        super(name, value, false);
+    }
+
     public void setType(String type) {
         this.type = type;
     }

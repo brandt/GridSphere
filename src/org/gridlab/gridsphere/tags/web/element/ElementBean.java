@@ -5,6 +5,8 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
+import org.gridlab.gridsphere.portlet.PortletRequest;
+
 public interface ElementBean {
 
     public String getId();
@@ -34,6 +36,14 @@ public interface ElementBean {
     public String getCssStyle();
 
     public void setCssStyle(String style);
+
+    /**
+     * Store the bean under the id 'id' in the portletrequest as well as in the users session.
+     * If an object in session/request exists under this name it gets replaced with this bean.
+     * @param id the id of the object
+     * @param request the portletrequest to store the data in
+     */
+    public void store(String id, PortletRequest request);
 
     /**
      * Returns the HTML reprensetation of the element

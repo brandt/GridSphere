@@ -7,7 +7,7 @@ package org.gridlab.gridsphere.tags.web.element;
 public class InputFieldBean extends ReadOnlyBaseBean implements InputBean {
 
     protected int size;
-    protected String inputtype;
+    protected String inputtype = "text";
     protected int maxlength;
 
     public InputFieldBean() {

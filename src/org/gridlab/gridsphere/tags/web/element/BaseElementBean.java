@@ -5,6 +5,10 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
+import org.gridlab.gridsphere.portlet.PortletRequest;
+
+import javax.servlet.http.HttpSession;
+
 public abstract class BaseElementBean implements ElementBean {
 
     protected String id;
@@ -54,5 +58,15 @@ public abstract class BaseElementBean implements ElementBean {
         this.cssStyle = style;
     }
 
-
+    /**
+     * Store the bean under the id 'id' in the portletrequest as well as in the users session.
+     * If an object in session/request exists under this name it gets replaced with this bean.
+     * @param id the id of the object
+     * @param request the portletrequest to store the data in
+     */
+    public void store(String id, PortletRequest request) {
+        request.setAttribute(id, this);
+        HttpSession session = request.getSession();
+        session.setAttribute(id, this);
+    }
 }
