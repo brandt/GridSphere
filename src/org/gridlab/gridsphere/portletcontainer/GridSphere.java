@@ -8,16 +8,16 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletConfig;
 import org.gridlab.gridsphere.portlet.impl.GuestUser;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
 import org.gridlab.gridsphere.services.container.parsing.ServletParsingService;
 import org.gridlab.gridsphere.event.impl.ActionEventImpl;
 import org.gridlab.gridsphere.event.ActionEvent;
+import org.gridlab.gridsphere.layout.*;
 
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
+import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,10 +25,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Properties;
+import java.util.*;
 
 
 public class GridSphere extends HttpServlet {
@@ -39,6 +36,8 @@ public class GridSphere extends HttpServlet {
 
     private static PortletRegistryService registryService = null;
     private static ServletParsingService parseService = null;
+    private static PortletLayoutService layoutService = null;
+    private static PortletLayoutEngine layoutEngine = null;
 
     private static Collection abstractPortlets = new HashSet();
     private static Collection registeredPortlets = null;
@@ -46,37 +45,29 @@ public class GridSphere extends HttpServlet {
 
     private static boolean firstDoGet = true;
 
+    private static Throwable initFailure = null;
+
 
     public final void init(ServletConfig config) throws ServletException {
         super.init(config);
-
         synchronized (this.getClass()) {
-            try {
-                configure(config);
-                log.info("init success");
-
-            } catch (Exception e) {
-                System.err.println("GridSphere: init() failed: " + e.getMessage());
-            }
+            configure(config);
         }
     }
 
-    protected static synchronized void configure(ServletConfig config) throws Exception {
-
-        FileInputStream fistream = null;
-        ServletContext context = config.getServletContext();
-
-        log.info("configure() in GridSphere");
-        log.info("Application Server info:");
+    protected static synchronized void configure(ServletConfig config) {
 
         // Start services
-
-        parseService =
+        try {
+            parseService =
                 (ServletParsingService) factory.createPortletService(ServletParsingService.class, config, true);
-        registryService =
+            registryService =
                 (PortletRegistryService) factory.createPortletService(PortletRegistryService.class, config, true);
 
-        Iterator it = registryService.getRegisteredPortlets().iterator();
+            layoutEngine = PortletLayoutEngine.getInstance(config);
+
+            Iterator it = registryService.getRegisteredPortlets().iterator();
+
         while (it.hasNext()) {
             RegisteredPortlet regPortlet = (RegisteredPortlet) it.next();
             System.err.println("portlet name: " + regPortlet.getPortletName());
@@ -90,13 +81,17 @@ public class GridSphere extends HttpServlet {
             abPortlet.initConcrete(portletSettings);
         }
 
+
         // Get a portlet config object
         portletConfig = parseService.getPortletConfig(config);
 
         // read portlet.xml and retrieve portlet info
         log.info("configure() in GridSphere");
 
-
+        } catch (Exception e) {
+            initFailure = e;
+            log.error("Unable to instantiate services in GridSphere", e);
+        }
     }
 
     /**
@@ -133,11 +128,33 @@ public class GridSphere extends HttpServlet {
 
         portletRequest = parseService.getPortletRequest(req);
         portletResponse = parseService.getPortletResponse(res);
+        try {
 
+        if (initFailure != null) {
+            System.err.println(initFailure.getMessage());
+            throw initFailure;
+        }
 
+        doRender(portletRequest, portletResponse);
+        //doPortletLifecycle(portletRequest, portletResponse);
 
+        } catch (Exception e) {
+            handleException(portletResponse, e);
+        } catch (Throwable t) {
+            handleException(portletResponse, t);
+        }
+
+    }
+
+    public void doRender(PortletRequest req, PortletResponse res) throws IOException, ServletException {
+        // Make a layout
+        log.info("in doRender()");
+        layoutEngine.doRender(res);
+    }
+
+    public void doPortletLifecycle(PortletRequest req, PortletResponse res) throws IOException, ServletException {
         // Check if user is guest
-        User user = portletRequest.getUser();
+        User user = req.getUser();
 
         // If GuestUser then only display login portlet
         if (user instanceof GuestUser) {
@@ -175,8 +192,8 @@ public class GridSphere extends HttpServlet {
 
 
         // Here is some code for handling actions
-        DefaultPortletAction action = (DefaultPortletAction)portletRequest.getAttribute(GridSphereProperties.ACTION);
-        ActionEvent actionEvent = new ActionEventImpl(action, ActionEvent.ACTION_NOTYETPERFORMED, portletRequest, portletResponse);
+        DefaultPortletAction action = (DefaultPortletAction)req.getAttribute(GridSphereProperties.ACTION);
+        ActionEvent actionEvent = new ActionEventImpl(action, ActionEvent.ACTION_NOTYETPERFORMED, req, res);
         String portletID = action.getPortletID();
 
         AbstractPortlet coolPortlet = registryService.getActivePortlet(portletID);
@@ -188,15 +205,15 @@ public class GridSphere extends HttpServlet {
 
 
         // Check for LOGIN
-        String login = (String) portletRequest.getAttribute(GridSphereProperties.LOGIN);
+        String login = (String) req.getAttribute(GridSphereProperties.LOGIN);
         if (login != null) {
-            doLogin(portletRequest, portletResponse);
+            doLogin(req, res);
         }
 
         // Check for LOGOFF
-        String logoff = (String) portletRequest.getAttribute(GridSphereProperties.LOGOFF);
+        String logoff = (String) req.getAttribute(GridSphereProperties.LOGOFF);
         if (logoff != null) {
-            doLogoff(portletRequest, portletResponse);
+            doLogoff(req, res);
         }
 
         // This gets called right here in servlets's service method-- just invokes portlet service method of the active portlet
@@ -204,7 +221,7 @@ public class GridSphere extends HttpServlet {
         // Hmm.. what if include is really slow and so even if jsp handles caching it doesn't matter? We'll see...
         //helloPortlet.service(portletRequest, portletResponse);
 
-        PrintWriter out = portletResponse.getWriter();
+        PrintWriter out = res.getWriter();
         //ServletOutputStream out = portletResponse.getOutputStream();
         out.println("<html><body>");
 
@@ -213,10 +230,10 @@ public class GridSphere extends HttpServlet {
             AbstractPortlet ab = (AbstractPortlet) it.next();
 
             // First execute portlet business logic
-            ab.execute(portletRequest);
+            ab.execute(req);
             out.println("<b>portlet</b>");
             // Second forward to presentation logic
-            ab.service(portletRequest, portletResponse);
+            ab.service(req, res);
         }
 
         out.println("</body></html>");
@@ -251,14 +268,28 @@ public class GridSphere extends HttpServlet {
             AbstractPortlet ab = (AbstractPortlet) abstractIt.next();
             RegisteredPortlet reg = (RegisteredPortlet) registeredIt.next();
             ab = reg.getActivePortlet();
-            PortletConfig pConfig = reg.getPortletConfig();
             PortletSettings pSettings = reg.getPortletSettings();
-            ab.destroy(pConfig);
+            ab.destroy(portletConfig);
             ab.destroyConcrete(pSettings);
         }
 
         SportletServiceFactory.getInstance().shutdownServices();
         System.gc();
     }
+
+    private final void handleException(PortletResponse res, Throwable t) {
+            // make sure that the stack trace makes it the log
+            log.error("GridSphere: handleException: " + t.getMessage());
+
+            String mimeType = "text/plain";
+            try {
+                PrintWriter out = res.getWriter();
+                out.print(t.getMessage());
+                t.printStackTrace(out);
+            } catch (IOException e) {
+                log.error("Couldn't even write the error to screen!: " + e.getMessage());
+            }
+    }
+
 
 }
