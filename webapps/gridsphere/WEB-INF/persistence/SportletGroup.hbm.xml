@@ -23,7 +23,7 @@
         <property name="Description" type="string" column="description"/>
         <property name="Public" type="boolean" column="ispublic"/>
 
-        <set name="PortletRoleList" table="portletrolelist" lazy="true">
+        <set name="PortletRoleList" table="portletrolelist" cascade="all">
             <key column="role_oid"/>
             <one-to-many class="org.gridlab.gridsphere.portlet.impl.SportletRoleInfo"/>
         </set>
