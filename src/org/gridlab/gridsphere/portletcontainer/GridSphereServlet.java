@@ -202,10 +202,19 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 user = userManagerService.getUser(uid);
             }
         }
-        if (user == null) user = GuestUser.getInstance();
+        List groups = null;
+        PortletRole role = PortletRole.GUEST;
+        if (user == null) {
+            user = GuestUser.getInstance();
+            groups = new ArrayList();
+            groups.add(PortletGroupFactory.GRIDSPHERE_GROUP);
+        } else {
+            groups = aclService.getGroups(user);
+            role = aclService.getRoleInGroup(user, PortletGroupFactory.GRIDSPHERE_GROUP);
+        }
         req.setAttribute(SportletProperties.PORTLET_USER, user);
-        List groups = aclService.getGroups(user);
         req.setAttribute(SportletProperties.PORTLETGROUPS, groups);
+        req.setAttribute(SportletProperties.PORTLET_ROLE, role);
     }
 
     /**
@@ -232,7 +241,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             session.setAttribute(SportletProperties.PORTLET_USER, user.getID());
             if (aclService.hasSuperRole(user)) {
                 log.debug("User: " + user.getUserName() + " logged in as SUPER");
-                req.setAttribute(SportletProperties.PORTLET_ROLE, PortletRole.SUPER);
+                //req.setAttribute(SportletProperties.PORTLET_ROLE, PortletRole.SUPER);
             }
             List groups = aclService.getGroups(req.getUser());
             Iterator it = groups.iterator();
@@ -240,6 +249,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 PortletGroup g = (PortletGroup)it.next();
                 log.debug("groups:" + g.toString());
             }
+            PortletRole role = aclService.getRoleInGroup(user, PortletGroupFactory.GRIDSPHERE_GROUP);
+            req.setAttribute(SportletProperties.PORTLET_ROLE, role);
             req.setAttribute(SportletProperties.PORTLETGROUPS, groups);
             log.debug("Adding User: " + user.getID() + " with session:" + session.getId() + " to usersessionmanager");
             userSessionManager.addSession(user, session);

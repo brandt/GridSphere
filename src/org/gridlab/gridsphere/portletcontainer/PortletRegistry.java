@@ -4,6 +4,8 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
+import org.gridlab.gridsphere.portlet.PortletRole;
+
 import java.util.*;
 
 /**
@@ -87,6 +89,25 @@ public class PortletRegistry {
         return webappPortlets;
     }
 
+    public List getAllConcretePortletIDs(PortletRole role, String webApplicationName) {
+        List newlist = new Vector();
+        Collection appColl = getApplicationPortlets(webApplicationName);
+        Iterator appIt = appColl.iterator();
+        while (appIt.hasNext()) {
+            ApplicationPortlet app = (ApplicationPortlet)appIt.next();
+            List concPortlets = app.getConcretePortlets();
+            Iterator cit = concPortlets.iterator();
+            while (cit.hasNext()) {
+                ConcretePortlet conc = (ConcretePortlet)cit.next();
+                String concID = conc.getConcretePortletID();
+                PortletRole reqrole = conc.getConcretePortletConfig().getRequiredRole();
+                if (role.compare(role, reqrole) >= 0) {
+                    newlist.add(concID);
+                }
+            }
+        }
+        return newlist;
+    }
     /**
      * Returns the application portlet id given a concrete portlet id
      *

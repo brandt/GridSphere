@@ -28,7 +28,7 @@ public class ConcreteSportletConfig implements ConcretePortletConfig {
     private String defaultLocale = new String();
     private List languageList = new ArrayList();
     private String name = new String();
-    private RequiredRole accessRestrictions = new RequiredRole();
+    private AccessRestrictions accessRestrictions = new AccessRestrictions();
     private ConfigParamList configParamList = new ConfigParamList();
 
     /**
@@ -138,7 +138,7 @@ public class ConcreteSportletConfig implements ConcretePortletConfig {
      * <p>
      * Sets the access restrictions for this portlet
      */
-    public void setAccessRestrictions(RequiredRole accessRestrictions) {
+    public void setAccessRestrictions(AccessRestrictions accessRestrictions) {
         this.accessRestrictions = accessRestrictions;
     }
 
@@ -148,7 +148,7 @@ public class ConcreteSportletConfig implements ConcretePortletConfig {
      * <p>
      * Returns the access restrictions for this portlet
      */
-    public RequiredRole getAccessRestrictions() {
+    public AccessRestrictions getAccessRestrictions() {
         return accessRestrictions;
     }
 

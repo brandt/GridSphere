@@ -16,6 +16,7 @@ import org.gridlab.gridsphere.layout.*;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 
 import java.util.*;
+import java.io.IOException;
 
 
 /**
@@ -48,6 +49,11 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
     public void reloadPage(PortletRequest req) {
         PortletPage page = pageFactory.createPortletPage(req);
         page.init(req, new Vector());
+        try {
+            page.save();
+        } catch (IOException e) {
+            log.error("Unable to save portlet page", e);
+        }
     }
 
     public String getTheme(PortletRequest req) {
