@@ -21,7 +21,7 @@
         </id>
 
         <property name="Userid" type="string" column="userid"/>
-        <property name="head" type="string" column="head"/>
+        <property name="name" type="string" column="name"/>
         <property name="content" type="string" column="content"/>
     </class>
 
