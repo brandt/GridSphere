@@ -81,6 +81,10 @@
         </field>
     </class>
 
+    <class name="org.gridlab.gridsphere.layout.PortletRowLayout" extends="org.gridlab.gridsphere.layout.PortletFrameLayout">
+        <map-to xml="row-layout"/>
+    </class>
+
     <class name="org.gridlab.gridsphere.layout.PortletGridLayout" extends="org.gridlab.gridsphere.layout.PortletFrameLayout">
         <map-to xml="grid-layout"/>
         <field name="Columns" type="string">
