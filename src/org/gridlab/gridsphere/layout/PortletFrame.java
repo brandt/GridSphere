@@ -18,6 +18,7 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
+import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -36,6 +37,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     public static final String FRAME_CLOSE_CANCEL_ACTION = "cancelClose";
 
     private transient CacheService cacheService = null;
+
+    private transient AccessControlManagerService aclService = null;
 
     // renderPortlet is true in doView and false on minimized
     private boolean renderPortlet = true;
@@ -172,6 +175,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
             cacheService = (CacheService) factory.createPortletService(CacheService.class, null, true);
+            aclService = (AccessControlManagerService)factory.createPortletService(AccessControlManagerService.class, null, true);
         } catch (PortletServiceException e) {
             System.err.println("Unable to init Cache service! " + e.getMessage());
         }
@@ -196,6 +200,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             titleBar.setTheme(theme);
             list = titleBar.init(req, list);
             titleBar.addComponentListener(this);
+            titleBar.setAccessControlService(aclService);
         }
         // invalidate cache 
         req.setAttribute(CacheService.NO_CACHE, "true");
@@ -250,6 +255,16 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         super.actionPerformed(event);
 
+        User user = event.getPortletRequest().getUser();
+        // do role checking if user is logged in
+       /*
+        if (!(user instanceof GuestUser)) {
+            boolean hasrole = aclService.hasRequiredRole(user, portletClass);
+            System.err.println("hasRole = " + hasrole);
+            if (!hasrole) return;
+
+        }
+         */
         PortletRequest request = event.getPortletRequest();
         if ((titleBar != null) && (!hasTitleBarEvent)) {
             titleBar.setActive(true);
@@ -320,8 +335,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
             req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
 
-            PortletRole role = req.getRole();
-            if (role.compare(role, requiredRole) < 0) return;
+            //PortletRole role = req.getRole();
+            //if (role.compare(role, requiredRole) < 0) return;
 
             PortletResponse res = event.getPortletResponse();
 
@@ -329,7 +344,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             req.setAttribute(SportletProperties.PORTLETID, portletClass);
 
             // Override if user is a guest
-            User user = req.getUser();
+            //Uuser = req.getUser();
             if (user instanceof GuestUser) {
                 req.setMode(Portlet.Mode.VIEW);
             } else {
@@ -416,15 +431,25 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletRequest req = event.getPortletRequest();
+
+        /*
         PortletRole userRole = req.getRole();
         if (userRole.compare(userRole, requiredRole) < 0) {
             return;
         }
+         */
 
         super.doRender(event);
 
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
+
+        User user = req.getUser();
+        if (!(user instanceof GuestUser)) {
+            boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
+            System.err.println("hasRole = " + hasrole + " portletclass= " + portletClass);
+            if (!hasrole) return;
+        }
 
         String id = event.getPortletRequest().getPortletSession(true).getId();
         StringBuffer frame = (StringBuffer) cacheService.getCached(portletClass + id);
@@ -433,6 +458,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             out.println(frame.toString());
             return;
         }
+
+
+
         frame = new StringBuffer();
 
         req.setAttribute(SportletProperties.PORTLETID, portletClass);

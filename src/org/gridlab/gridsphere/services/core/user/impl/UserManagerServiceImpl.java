@@ -39,6 +39,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     private static boolean isInitialized = false;
 
     private String jdoUser = SportletUserImpl.class.getName();
+    private PortletServiceConfig config = null;
 
     public UserManagerServiceImpl() {
     }
@@ -49,6 +50,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.info("Entering init()");
+        this.config = config;
         if (!isInitialized) {
 
             PortletServiceFactory factory = SportletServiceFactory.getInstance();
@@ -60,13 +62,13 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             } catch (PortletServiceNotFoundException e) {
                 throw new PortletServiceUnavailableException("Cannot initialize usermanager service", e);
             }
-            initRootUser(config);
+            //initRootUser(config);
             log.info("Entering init()");
             isInitialized = true;
         }
     }
 
-    private void initRootUser(PortletServiceConfig config) {
+    public void initRootUser() {
         log.info("Entering initRootUser()");
         /** 1. Retrieve root user properties **/
         // Login name
@@ -127,7 +129,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                
                 aclManager.grantSuperRole(rootUser);
             }
-             */
+            */
         }
 
         log.info("Exiting initRootUser()");

@@ -89,9 +89,8 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         loadServices(ctx);
         // load portlet.xml
         loadPortlets(ctx);
-        // load layout.xml
-        loadLayout(ctx);
-        // load group.xml
+
+        // load group.xml (and if found load layout.xml)
         loadGroup(ctx);
     }
 
@@ -146,15 +145,18 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
      *
      * @param ctx the <code>ServletContext</code>
      */
-    protected void loadLayout(ServletContext ctx) throws PortletException {
+    protected void loadLayout(ServletContext ctx, String groupName) throws PortletException {
         // load in the portlet.xml file
+        if (isJSR) return;
         String layoutXMLfile = ctx.getRealPath("/WEB-INF/layout.xml");
-        File f = new File(layoutXMLfile);
-        if (f.exists()) {
+        File fin = new File(layoutXMLfile);
+
+        if (fin.exists()) {
             try {
-                PortletTabRegistry.addGroupTab(webApplicationName, layoutXMLfile);
+                PortletTabRegistry.copyFile(fin, groupName);
+                log.info("Loaded a layout descriptor " + groupName);
             } catch (Exception e) {
-                throw new PortletException("Unable to deserialize layout.xml for: " + webApplicationName, e);
+                throw new PortletException("Unable to deserialize layout.xml for: " + groupName, e);
             }
         } else {
             log.debug("Did not find layout.xml for: " + ctx.getServletContextName());
@@ -180,11 +182,14 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
                 if (g == null) {
                     aclManager.createGroup(group);
                 }
+                log.info("Loaded a group descriptor " + group.getName());
+                // now load layout
+                loadLayout(ctx, group.getName());
             } catch (Exception e) {
                 throw new PortletException("Unable to deserialize group.xml for: " + webApplicationName, e);
             }
         } else {
-            log.debug("Did not find layout.xml for: " + ctx.getServletContextName());
+            log.debug("Did not find group.xml for: " + ctx.getServletContextName());
         }
     }
 

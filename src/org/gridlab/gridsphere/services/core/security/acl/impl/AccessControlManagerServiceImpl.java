@@ -19,9 +19,7 @@ import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.user.impl.UserManagerServiceImpl;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 public class AccessControlManagerServiceImpl implements PortletServiceProvider, AccessControlManagerService {
 
@@ -55,7 +53,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         log.info("Entering initGroups()");
 
         //initSportletGroup((SportletGroup)SportletGroup.SUPER);
-        initSportletGroup((SportletGroup) PortletGroupFactory.GRIDSPHERE_GROUP);
+        //initSportletGroup((SportletGroup) PortletGroupFactory.GRIDSPHERE_GROUP);
 
         // NO MORE CREATING GROUPS FROM WEBAPP NAMES
         /*
@@ -75,7 +73,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         // Creating groups
         log.info("Entering initGroups()");
     }
-
+    /*
     private void initSportletGroup(SportletGroup group) {
         String groupName = group.getName();
         if (!existsGroupWithName(groupName)) {
@@ -95,7 +93,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
             }
         }
     }
-
+     */
 
     public void destroy() {
         log.info("Calling destroy()");
@@ -225,6 +223,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         return selectGroups("");
     }
 
+
     public List selectGroups(String criteria) {
         // Build object query
         StringBuffer oqlBuffer = new StringBuffer();
@@ -253,6 +252,9 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         return selectSportletGroup("where grp.oid='" + id + "'");
     }
 
+    public PortletGroup getCoreGroup() {
+        return selectSportletGroup("where grp.Core='" + true + "'");
+    }
 
     private SportletGroup selectSportletGroup(String criteria) {
         // Build object query
@@ -417,13 +419,43 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         //}
     }
 
-    public PortletRole getRequiredRole(User user, String portletID) {
+    public boolean hasRequiredRole(User user, String portletID, boolean checkAdmin) {
+        // first check to see if portletID is in groups
 
-        List groups = getGroups(user);
-        Iterator it = groups.iterator();
-
-        return PortletRole.GUEST;
-
+        List userGroups = this.getGroups(user);
+        boolean found = false;
+        Iterator it = this.getGroups().iterator();
+        while (it.hasNext()) {
+            PortletGroup group = (PortletGroup)it.next();
+            Set roleList = group.getPortletRoleList();
+            Iterator roleIt = roleList.iterator();
+            System.err.println("group= " + group.getName());
+            while (roleIt.hasNext()) {
+                SportletRoleInfo roleInfo = (SportletRoleInfo)roleIt.next();
+                System.err.println("class= " + roleInfo.getPortletClass());
+                if (roleInfo.getPortletClass().equals(portletID)) {
+                    // check if user has this group
+                    found = true;
+                    if (userGroups.contains(group)) {
+                        System.err.println("group= " + group.getName());
+                        PortletRole usersRole = this.getRoleInGroup(user, group);
+                        System.err.println("usersRole= " + usersRole);
+                        PortletRole reqRole = PortletRole.toPortletRole(roleInfo.getRole());
+                        System.err.println("reqRole= " + reqRole);
+                        if (usersRole.compare(usersRole, reqRole) >= 0) {
+                            if (checkAdmin) {
+                                if (usersRole.compare(usersRole, PortletRole.ADMIN) >= 0) {
+                                    return true;
+                                } 
+                            } else {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return (found == true) ? false : true;
     }
 
     public void addGroupEntry(User user, PortletGroup group, PortletRole role) {
@@ -456,12 +488,12 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     }
 
     public List getUsersWithSuperRole() {
-        List users = getUsers(SportletGroup.CORE);
+        List users = getUsers(getCoreGroup());
         List supers = new Vector();
         Iterator it = users.iterator();
         while (it.hasNext()) {
             User u = (User) it.next();
-            if (this.hasRoleInGroup(u, SportletGroup.CORE, PortletRole.SUPER)) {
+            if (this.hasRoleInGroup(u, getCoreGroup(), PortletRole.SUPER)) {
                 supers.add(u);
             }
         }
@@ -470,11 +502,11 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
 
     public void grantSuperRole(User user) {
         //addGroupEntry(user, SportletGroup.SUPER, PortletRole.SUPER);
-        addGroupEntry(user, SportletGroup.CORE, PortletRole.SUPER);
+        addGroupEntry(user, getCoreGroup(), PortletRole.SUPER);
     }
 
     public boolean hasSuperRole(User user) {
-        return hasRoleInGroup(user, SportletGroup.CORE, PortletRole.SUPER);
+        return hasRoleInGroup(user, getCoreGroup(), PortletRole.SUPER);
         //isUserInGroup(user, SportletGroup.SUPER);
     }
 }

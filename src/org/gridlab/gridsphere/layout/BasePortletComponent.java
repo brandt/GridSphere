@@ -235,6 +235,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      * @throws IOException            if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
+
         super.actionPerformed(event);
     }
 

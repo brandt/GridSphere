@@ -164,7 +164,7 @@ public class PortletLayoutEngine {
 
                     page.init(event.getPortletRequest(), new Vector());
                     PortletTabbedPane pane = pageFactory.getUserTabbedPane(event.getPortletRequest());
-                    pane.save();
+                    if (pane != null) pane.save();
                 }
             }
         } catch (PortletLayoutException e) {

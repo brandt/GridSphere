@@ -253,7 +253,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
         Iterator it = groups.keySet().iterator();
         while (it.hasNext()) {
             PortletGroup g = (PortletGroup) it.next();
-            if (g.equals(PortletGroupFactory.GRIDSPHERE_GROUP)) continue;
+            if (g.equals((PortletGroup)req.getAttribute(SportletProperties.PORTLET_GROUP))) continue;
             Iterator sit = g.getPortletRoleList().iterator();
             PortletRole role = (PortletRole) groups.get(g);
             while (sit.hasNext()) {

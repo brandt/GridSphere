@@ -96,10 +96,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         // create root user in default group if necessary
         log.debug("Creating user manager service");
         userManagerService = (UserManagerService) factory.createPortletService(UserManagerService.class, getServletConfig().getServletContext(), true);
+
         loginService = (LoginService) factory.createPortletService(LoginService.class, getServletConfig().getServletContext(), true);
         log.debug("Creating portlet manager service");
         portletManager = (PortletManagerService) factory.createPortletService(PortletManagerService.class, getServletConfig().getServletContext(), true);
-
     }
 
     /**
@@ -144,11 +144,16 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 try {
                     // initialize needed services
                     initializeServices();
+
+                    // create a root user if none available
+                    userManagerService.initRootUser();
+
                     // initialize all portlets
                     PortletInvoker.initAllPortlets(portletReq, portletRes);
                 } catch (PortletException e) {
                     req.setAttribute(SportletProperties.ERROR, e);
                 }
+
                 layoutEngine = PortletLayoutEngine.getInstance();
                 firstDoGet = Boolean.FALSE;
             }
@@ -230,7 +235,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             u.setUserName("tckuser");
             u.setUserID("tckuser");
             Map l = new HashMap();
-            l.put(SportletGroup.CORE, PortletRole.USER);
+            l.put(aclService.getCoreGroup(), PortletRole.USER);
             req.setAttribute(SportletProperties.PORTLET_USER, u);
             req.setAttribute(SportletProperties.PORTLETGROUPS, l);
             req.setAttribute(SportletProperties.PORTLET_ROLE, PortletRole.USER);
@@ -249,11 +254,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         }
         HashMap groups = new HashMap();
+        PortletGroup coreGroup = aclService.getCoreGroup();
         PortletRole role = PortletRole.GUEST;
         if (user == null) {
             user = GuestUser.getInstance();
             groups = new HashMap();
-            groups.put(PortletGroupFactory.GRIDSPHERE_GROUP, PortletRole.GUEST);
+            groups.put(coreGroup, PortletRole.GUEST);
         } else {
             List mygroups = aclService.getGroups(user);
             Iterator it = mygroups.iterator();
@@ -265,9 +271,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         }
 
         // req.getPortletRole returns the role user has in core gridsphere group
-        role = aclService.getRoleInGroup(user, PortletGroupFactory.GRIDSPHERE_GROUP);
+        role = aclService.getRoleInGroup(user, coreGroup);
 
         // set user, role and groups in request
+        req.setAttribute(SportletProperties.PORTLET_GROUP, coreGroup);
         req.setAttribute(SportletProperties.PORTLET_USER, user);
         req.setAttribute(SportletProperties.PORTLETGROUPS, groups);
         req.setAttribute(SportletProperties.PORTLET_ROLE, role);

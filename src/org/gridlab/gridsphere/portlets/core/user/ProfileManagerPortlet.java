@@ -206,7 +206,8 @@ public class ProfileManagerPortlet extends ActionPortlet {
             cb.setValue(g.getName());
             cb.setDisabled(disable);
             // make sure user cannot deselect core gridsphere group
-            if (g.equals(PortletGroupFactory.GRIDSPHERE_GROUP)) cb.setDisabled(true);
+            PortletGroup coreGroup = aclManagerService.getCoreGroup();
+            if (g.equals(coreGroup)) cb.setDisabled(true);
 
             //System.err.println("g= " + g.getName() + " gridsphere group= " + PortletGroupFactory.GRIDSPHERE_GROUP.getName());
 
@@ -387,11 +388,12 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
         // first get groups user is already in
         List groupEntries = aclManagerService.getGroupEntries(user);
+        PortletGroup coreGroup = aclManagerService.getCoreGroup();
         Iterator geIt = groupEntries.iterator();
         List usergroups = new ArrayList();
         while (geIt.hasNext()) {
             GroupEntry ge = (GroupEntry) geIt.next();
-            if (!ge.getGroup().equals(PortletGroupFactory.GRIDSPHERE_GROUP)) {
+            if (!ge.getGroup().equals(coreGroup)) {
                 log.debug("user is in group: " + ge.getGroup());
                 //aclManagerService.deleteGroupEntry(ge);
                 usergroups.add(ge.getGroup().getName());

@@ -65,7 +65,6 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
         // load group.xml
         loadGroup(context);
 
-
     }
 
 
@@ -105,12 +104,29 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
 
     }
 
+    protected void loadLayout(ServletContext ctx, String groupName) throws PortletException {
+        // load in the portlet.xml file
+        String layoutXMLfile = ctx.getRealPath("/WEB-INF/layout.xml");
+        File fin = new File(layoutXMLfile);
+
+        if (fin.exists()) {
+            try {
+                PortletTabRegistry.copyFile(fin, groupName);
+                log.info("Loaded a layout descriptor " + groupName);
+            } catch (Exception e) {
+                throw new PortletException("Unable to deserialize layout.xml for: " + groupName, e);
+            }
+        } else {
+            log.debug("Did not find layout.xml for: " + ctx.getServletContextName());
+        }
+    }
+
     /**
      * Loads in a group descriptor file from the associated servlet context
      *
      * @param ctx the <code>ServletContext</code>
      */
-    protected void loadGroup(ServletContext ctx) throws PortletException {
+   protected void loadGroup(ServletContext ctx) throws PortletException {
         // load in the portlet.xml file
         String groupXMLfile = ctx.getRealPath("/WEB-INF/group.xml");
         File f = new File(groupXMLfile);
@@ -123,11 +139,12 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
                 if (g == null) {
                     aclManager.createGroup(group);
                 }
+                loadLayout(ctx, group.getName());
             } catch (Exception e) {
                 throw new PortletException("Unable to deserialize group.xml for: " + webApplicationName, e);
             }
         } else {
-            log.debug("Did not find layout.xml for: " + ctx.getServletContextName());
+            log.debug("Did not find group.xml for: " + ctx.getServletContextName());
         }
     }
 

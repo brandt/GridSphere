@@ -241,6 +241,12 @@ public abstract class ActionTag extends BaseComponentTag {
                 portletAction = new DefaultPortletAction(compId + "%" + action);
             }
 
+        } else {
+            if (compId == null) {
+                portletAction = new DefaultPortletAction(action); 
+            } else {
+                portletAction = new DefaultPortletAction(compId + "%" + action);
+            }
         }
 
         if (!paramBeans.isEmpty()) {

@@ -77,12 +77,13 @@ public class GroupManagerPortlet extends ActionPortlet {
         User user = req.getUser();
         List groupList = new ArrayList();
         List groups = aclManagerService.getGroups();
+        PortletGroup coreGroup = aclManagerService.getCoreGroup();
         Iterator it = groups.iterator();
         while (it.hasNext()) {
             PortletGroup g = (PortletGroup) it.next();
 
             //String desc = g.getDescription();
-            if ((aclManagerService.hasAdminRoleInGroup(user, g)) && (!g.equals(PortletGroupFactory.GRIDSPHERE_GROUP))) {
+            if ((aclManagerService.hasAdminRoleInGroup(user, g)) && (!g.equals(coreGroup))) {
                 log.info("user " + user.getFullName() + " is admin");
                 //System.err.println("group= " + g.getName() + " ispublic=" + g.isPublic());
 
@@ -96,6 +97,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         List webappNames = portletMgr.getWebApplicationNames();
         if (webappNames.size() > 1) req.setAttribute("create", "yes");
 
+        req.setAttribute("coreGroup", coreGroup);
         req.setAttribute("groupList", groupList);
         setNextState(req, DO_VIEW_GROUP_LIST);
         log.debug("Exiting doViewListGroup");
@@ -104,7 +106,7 @@ public class GroupManagerPortlet extends ActionPortlet {
     public void doCreateNewGroup(FormEvent event) {
 
         PortletRequest req = event.getPortletRequest();
-
+        PortletGroup coreGroup = aclManagerService.getCoreGroup();
         // see if there is a group already
         PortletGroup group = null;
         Set portletRoleList = null;
@@ -134,14 +136,14 @@ public class GroupManagerPortlet extends ActionPortlet {
 
         Iterator it = webappNames.iterator();
 
-
+        String gsname = coreGroup.getName();
         PortletRole role = req.getRole();
         while (it.hasNext()) {
 
 
             String g = (String) it.next();
 
-            if (g.equals(PortletGroupFactory.GRIDSPHERE_GROUP.toString())) continue;
+            if (g.equals(gsname)) continue;
 
             TableRowBean tr = new TableRowBean();
             tr.setHeader(true);
@@ -278,14 +280,19 @@ public class GroupManagerPortlet extends ActionPortlet {
     }
 
     public void doMakeGroup(FormEvent evt) throws PortletException {
-        this.checkSuperRole(evt);
+        //this.checkSuperRole(evt);
         AccessControlManagerServiceImpl aclService = AccessControlManagerServiceImpl.getInstance();
         List webappNames = portletMgr.getWebApplicationNames();
         Iterator it = webappNames.iterator();
         Set portletRoles = new HashSet();
+
+        PortletGroup coreGroup = aclManagerService.getCoreGroup();
+
         while (it.hasNext()) {
             String g = (String) it.next();
-            if (g.equals(PortletGroupFactory.GRIDSPHERE_GROUP.toString())) {
+
+
+            if (g.equals(coreGroup.getName())) {
                 continue;
             }
 
@@ -496,6 +503,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         PortletRequest req = evt.getPortletRequest();
         Set existingDefaults = portalConfigService.getPortalConfigSettings().getDefaultGroups();
         List groups = aclManagerService.getGroups();
+        PortletGroup coreGroup = aclManagerService.getCoreGroup();
         req.setAttribute("groups", groups);
 
 
@@ -529,7 +537,7 @@ public class GroupManagerPortlet extends ActionPortlet {
             CheckBoxBean cb = new CheckBoxBean();
             cb.setBeanId("groupCB");
             cb.setValue(g.getName());
-            if (g.equals(PortletGroupFactory.GRIDSPHERE_GROUP)) {
+            if (g.equals(coreGroup)) {
                 cb.setDisabled(true);
             }
             if (existingDefaults.contains(g)) {
@@ -557,7 +565,7 @@ public class GroupManagerPortlet extends ActionPortlet {
     }
 
     public void doSaveDefaultGroups(FormEvent evt) throws PortletException {
-        this.checkSuperRole(evt);
+
         System.err.println("in doSaveDefaultGroups");
         CheckBoxBean cb = evt.getCheckBoxBean("groupCB");
         PortletRequest req = evt.getPortletRequest();
@@ -745,7 +753,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         String groupId = event.getAction().getParameter("groupID");
 
         PortletGroup group = aclManagerService.getGroup(groupId);
-
+        PortletGroup coreGroup = aclManagerService.getCoreGroup();
         List users = aclManagerService.getUsers(group);
         if (!users.isEmpty()) {
             createErrorMessage(event, this.getLocalizedText(event.getPortletRequest(), "GROUP_REMOVE_USERS_MSG"));
@@ -753,7 +761,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         } else {
 
             // delete group from acl service
-            if (!group.equals(PortletGroupFactory.GRIDSPHERE_GROUP))  {
+            if (!group.equals(coreGroup))  {
                 aclManagerService.deleteGroup(group);
 
                 // delete group from layout registry

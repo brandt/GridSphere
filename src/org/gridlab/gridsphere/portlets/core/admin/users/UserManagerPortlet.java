@@ -75,7 +75,8 @@ public class UserManagerPortlet extends ActionPortlet {
         req.setAttribute("user", user);
         HiddenFieldBean hf = evt.getHiddenFieldBean("userID");
         hf.setValue(user.getID());
-        PortletRole role = aclManagerService.getRoleInGroup(user, PortletGroupFactory.GRIDSPHERE_GROUP);
+        PortletGroup coreGroup = aclManagerService.getCoreGroup();
+        PortletRole role = aclManagerService.getRoleInGroup(user, coreGroup);
         req.setAttribute("role", role.toString());
         setNextState(req, DO_VIEW_USER_VIEW);
     }
@@ -110,8 +111,8 @@ public class UserManagerPortlet extends ActionPortlet {
         // get user
         User user = this.userManagerService.getUser(userID);
         if (user == null) doNewUser(evt);
-
-        PortletRole role = aclManagerService.getRoleInGroup(user, PortletGroupFactory.GRIDSPHERE_GROUP);
+        PortletGroup coreGroup = aclManagerService.getCoreGroup();
+        PortletRole role = aclManagerService.getRoleInGroup(user, coreGroup);
         setSelectedUserRole(evt, role);
 
         setUserValues(evt, user);
@@ -146,7 +147,8 @@ public class UserManagerPortlet extends ActionPortlet {
             }
             req.setAttribute("user", user);
 
-            PortletRole role = aclManagerService.getRoleInGroup(user, PortletGroupFactory.GRIDSPHERE_GROUP);
+            PortletGroup coreGroup = aclManagerService.getCoreGroup();
+            PortletRole role = aclManagerService.getRoleInGroup(user, coreGroup);
             req.setAttribute("role", role.toString());
 
             setNextState(req, "doListUsers");
@@ -165,7 +167,8 @@ public class UserManagerPortlet extends ActionPortlet {
         User user = this.userManagerService.getUser(userId);
         if (user != null) {
             req.setAttribute("user", user);
-            PortletRole role = aclManagerService.getRoleInGroup(user, PortletGroupFactory.GRIDSPHERE_GROUP);
+            PortletGroup coreGroup = aclManagerService.getCoreGroup();
+            PortletRole role = aclManagerService.getRoleInGroup(user, coreGroup);
             req.setAttribute("role", role.toString());
             this.userManagerService.deleteUser(user);
             createSuccessMessage(evt, this.getLocalizedText(req, "USER_DELETE_SUCCESS"));

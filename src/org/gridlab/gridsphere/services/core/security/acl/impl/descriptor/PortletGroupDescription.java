@@ -8,6 +8,7 @@ public class PortletGroupDescription {
     private String groupName = "";
     private String groupDescription = "";
     private String groupVisibility = "PUBLIC";
+    private String isCore = "false";
 
     private Set portletRoleList = new HashSet();
 
@@ -16,6 +17,14 @@ public class PortletGroupDescription {
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;
+    }
+
+    public String getCore() {
+        return isCore;
+    }
+
+    public void setCore(String core) {
+        isCore = core;
     }
 
     public String getGroupName() {

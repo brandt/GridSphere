@@ -9,8 +9,7 @@ import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -28,8 +27,6 @@ public class PortletTabRegistry {
     private static String guestLayoutFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/GuestUserLayout.xml");
 
 
-    // Store application tabs in a hash
-    private static Map applicationTabs = new Hashtable();
     private static Map tabDescriptors = new Hashtable();
     private static Map groupTabs = new Hashtable();
     private static PortletPage guestPage = null;
@@ -97,10 +94,6 @@ public class PortletTabRegistry {
         return guestLayoutFile;
     }
 
-    public static PortletTabbedPane getApplicationTabs(String webAppName) {
-        return (PortletTabbedPane) applicationTabs.get(webAppName);
-    }
-
     public static PortletTabbedPane getGroupTabs(String groupName) {
         return (PortletTabbedPane) groupTabs.get(groupName);
     }
@@ -163,9 +156,10 @@ public class PortletTabRegistry {
             if (groupTabs.containsKey(tab)) {
                 groupTabs.put(tab, pane);
             }
+            /*
             if (applicationTabs.containsKey(tab)) {
                 applicationTabs.put(tab, pane);
-            }
+            }*/
         } catch (IOException e) {
             log.error("Unable to reload tab: " + tab, e);
         }
@@ -183,15 +177,43 @@ public class PortletTabRegistry {
             tabDescriptors.remove(groupName);
         }
         groupTabs.remove(groupName);
-        applicationTabs.remove(groupName);
-    }
-
-    public static Map getApplicationTabs() {
-        return Collections.unmodifiableMap(applicationTabs);
+        //applicationTabs.remove(groupName);
     }
 
     public static String getTabDescriptorPath(String webAppName) {
         return (String) tabDescriptors.get(webAppName);
+    }
+
+    public static void copyFile(File in, String groupName) throws Exception {
+
+        // copy over group tabs if they don't exist
+        String tabDesc = groupLayoutDir + File.separator + groupName + ".xml";
+        File out = new File(tabDesc);
+        if (!out.exists()) {
+            copyFile(in, out);
+        }
+        addGroupTab(groupName, tabDesc);
+    }
+
+    public static void copyFile(File in, File out) throws Exception {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(in), "UTF-8"));
+
+        //while (line == (reader.))
+        //File out = new File(groupLayoutDir + File.separator + groupName);
+
+        //FileInputStream fis = new FileInputStream(in);
+        OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(out), "UTF-8");
+        //BufferedWriter writer = new BufferedWriter(new OutputStreamWriter())
+        char[] buf = new char[1024];
+        int i = 0;
+        while ((i = reader.read(buf)) != -1) {
+            writer.write(buf, 0, i);
+        }
+        //fis.close();
+        //fos.close();
+        reader.close();
+        writer.close();
+
     }
 
 

@@ -114,7 +114,7 @@ public class PortletPageFactory implements PortletSessionListener {
         }
     }
 
-
+    /*
     public void addPortletApplicationTab(PortletRequest req, String webAppName) {
         PortletPage page = createPortletPage(req);
         PortletTabbedPane pagePane = page.getPortletTabbedPane();
@@ -133,7 +133,8 @@ public class PortletPageFactory implements PortletSessionListener {
             page.init(req, new ArrayList());
         }
     }
-
+    */
+    
     public void addPortletGroupTab(PortletRequest req, String groupName) {
         PortletPage page = createPortletPage(req);
         PortletTabbedPane pagePane = page.getPortletTabbedPane();
@@ -296,7 +297,7 @@ public class PortletPageFactory implements PortletSessionListener {
                 }
             }
 
-            PortletTabbedPane gsTab = PortletTabRegistry.getGroupTabs(PortletGroupFactory.GRIDSPHERE_GROUP.getName());
+            PortletTabbedPane gsTab = PortletTabRegistry.getGroupTabs(((PortletGroup)req.getAttribute(SportletProperties.PORTLET_GROUP)).getName());
             List tabs = gsTab.getPortletTabs();
             for (int j = 0; j < tabs.size(); j++) {
                 PortletTab tab = (PortletTab) tabs.get(j);
@@ -308,7 +309,7 @@ public class PortletPageFactory implements PortletSessionListener {
             while (it.hasNext()) {
                 PortletGroup g = (PortletGroup) it.next();
 
-                if (g.getName().equals(PortletGroupFactory.GRIDSPHERE_GROUP.getName())) continue;
+                if (g.getName().equals(((PortletGroup)req.getAttribute(SportletProperties.PORTLET_GROUP)).getName())) continue;
 
                 log.debug("adding group layout: " + g.getName());
                 PortletTabbedPane portletTabs = PortletTabRegistry.getGroupTabs(g.getName());

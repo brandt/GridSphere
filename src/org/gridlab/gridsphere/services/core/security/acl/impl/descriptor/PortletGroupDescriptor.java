@@ -47,7 +47,13 @@ public class PortletGroupDescriptor {
         if ("PRIVATE".equalsIgnoreCase(visibility)) {
             ispublic = false;
         }
+        boolean iscore = false;
+        String core = groupDescription.getCore();
+        if ("yes".equalsIgnoreCase(core) || "true".equalsIgnoreCase(core)) {
+            iscore = true;
+        }
         group.setPublic(ispublic);
+        group.setCore(iscore);
         group.setPortletRoleList(groupDescription.getPortletRoleInfo());
         return group;
     }

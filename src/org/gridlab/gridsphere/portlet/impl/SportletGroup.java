@@ -35,11 +35,13 @@ public class SportletGroup implements Serializable, Cloneable, PortletGroup {
      * The <code>SUPER</code> PortletGroup is the group that only super users of
      * the portal belong to
      */
-    public static final PortletGroup CORE = new SportletGroup(SportletGroup.CORE_GROUP, CORE_GROUP_DESC);
+    //public static final PortletGroup CORE = new SportletGroup(SportletGroup.CORE_GROUP, CORE_GROUP_DESC);
 
     private String Name = "";
     private boolean isPublic = true;
     private String description = "";
+    private boolean isCore = false;
+
     private Set portletRoleList = new HashSet();
 
     /**
@@ -99,6 +101,18 @@ public class SportletGroup implements Serializable, Cloneable, PortletGroup {
      */
     public String getName() {
         return Name;
+    }
+
+    public boolean isCore() {
+        return isCore;
+    }
+
+    public void setCore(boolean core) {
+        isCore = core;
+    }
+
+    public boolean getCore() {
+        return isCore;
     }
 
     /**

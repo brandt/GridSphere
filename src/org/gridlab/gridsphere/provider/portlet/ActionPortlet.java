@@ -195,6 +195,12 @@ public class ActionPortlet extends AbstractPortlet {
         return tagBeans;
     }
 
+    /**
+     * @deprecated
+     *
+     * @param event
+     * @throws PortletException
+     */
     protected void checkSuperRole(FormEvent event) throws PortletException {
         PortletRequest req = event.getPortletRequest();
         PortletRole userRole = req.getRole();
@@ -203,6 +209,12 @@ public class ActionPortlet extends AbstractPortlet {
         }
     }
 
+    /**
+     * @deprecated
+     *
+     * @param event
+     * @throws PortletException
+     */
     protected void checkAdminRole(FormEvent event) throws PortletException {
         PortletRequest req = event.getPortletRequest();
         PortletRole userRole = req.getRole();
@@ -211,7 +223,12 @@ public class ActionPortlet extends AbstractPortlet {
         }
     }
 
-
+    /**
+     * @deprecated
+     *
+     * @param event
+     * @throws PortletException
+     */ 
     protected void checkUserRole(FormEvent event) throws PortletException {
         PortletRequest req = event.getPortletRequest();
         PortletRole userRole = req.getRole();

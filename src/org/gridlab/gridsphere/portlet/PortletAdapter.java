@@ -174,8 +174,7 @@ public abstract class PortletAdapter extends Portlet {
         //List groups = aclService.getGroupsWithPortlet(portletID);
         //if (groups != null) {
             user = request.getUser();
-            PortletRole role = aclService.getRequiredRole(user, portletID);
-
+        
         //}
 
 
@@ -201,13 +200,13 @@ public abstract class PortletAdapter extends Portlet {
                     break;
                 case Portlet.Mode.CONFIGURE_MODE:
                     //System.err.println("about to invoke configure mode");
-                    if (role.compare(role, PortletRole.ADMIN) < 0) {
+                    /*if (role.compare(role, PortletRole.ADMIN) < 0) {
                         log.debug("user not privledged to access configure mode");
                         request.setMode(Portlet.Mode.VIEW);
                         doView(request, response);
-                    } else {
+                    } else {*/
                         doConfigure(request, response);
-                    }
+                    //}
                     break;
                 case Portlet.Mode.HELP_MODE:
                     doHelp(request, response);

@@ -96,18 +96,9 @@ public class LayoutManagerPortlet extends ActionPortlet {
             lb.addBean(item);
         }
 
-        Map tabs = PortletTabRegistry.getApplicationTabs();
-
-        List tabNames = new ArrayList();
-        Iterator it = tabs.keySet().iterator();
-        while (it.hasNext()) {
-            tabNames.add((String) it.next());
-        }
-
-        req.setAttribute("tabNames", tabNames);
 
         Map groups = PortletTabRegistry.getGroupTabs();
-        it = groups.keySet().iterator();
+        Iterator it = groups.keySet().iterator();
         Map groupNames = new HashMap();
 
         User user = req.getUser();
@@ -122,7 +113,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
             }
         }
         req.setAttribute("groupNames", groupNames);
-
+        PortletGroup coreGroup = aclManagerService.getCoreGroup();
+        req.setAttribute("coreGroup", coreGroup.getName());
         setNextState(req, VIEW_JSP);
     }
 
@@ -206,9 +198,10 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         Boolean allowImport = Boolean.TRUE;
 
+        /*
         if (PortletTabRegistry.getApplicationTabs(group) != null) {
             allowImport = Boolean.FALSE;
-        }
+        }*/
 
         TextAreaBean ta = event.getTextAreaBean("layoutFile");
         HiddenFieldBean hf = event.getHiddenFieldBean("layoutHF");
@@ -267,7 +260,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
             out.close();
             try {
                 PortletTabRegistry.loadPage(tmpFile);
-                copyFile(new File(tmpFile), new File(guestFile));
+                PortletTabRegistry.copyFile(new File(tmpFile), new File(guestFile));
                 PortletTabRegistry.reloadGuestLayout();
 
                 createSuccessMessage(event, this.getLocalizedText(event.getPortletRequest(), "LAYOUTMGR_VALID_LAYOUT"));
@@ -298,7 +291,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         try {
             PortletTabRegistry.loadTab(tmpFile);
 
-            copyFile(new File(tmpFile), new File(groupFile));
+            PortletTabRegistry.copyFile(new File(tmpFile), new File(groupFile));
             PortletTabRegistry.reloadTab(groupHF.getValue(), groupFile);
             createSuccessMessage(event, this.getLocalizedText(event.getPortletRequest(), "LAYOUTMGR_VALID_LAYOUT"));
         } catch (Exception e) {
@@ -347,26 +340,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletTabRegistry.removeGroupTab(group);
         createSuccessMessage(event, this.getLocalizedText(event.getPortletRequest(), "LAYOUTMGR_DELETE_LAYOUT") + "  " + group);
         setNextState(req, VIEW_JSP);
-    }
-
-    private void copyFile(File in, File out) throws Exception {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(in), "UTF-8"));
-
-        //while (line == (reader.))
-
-        //FileInputStream fis = new FileInputStream(in);
-        OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(out), "UTF-8");
-        //BufferedWriter writer = new BufferedWriter(new OutputStreamWriter())
-        char[] buf = new char[1024];
-        int i = 0;
-        while ((i = reader.read(buf)) != -1) {
-            writer.write(buf, 0, i);
-        }
-        //fis.close();
-        //fos.close();
-        reader.close();
-        writer.close();
-
     }
 
     private void createErrorMessage(FormEvent event, String msg) {

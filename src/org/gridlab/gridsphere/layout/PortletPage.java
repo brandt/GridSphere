@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
+import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -31,6 +32,7 @@ public class PortletPage implements Serializable, Cloneable {
     protected int COMPONENT_ID = -1;
 
     protected transient CacheService cacheService = null;
+    private transient AccessControlManagerService aclService = null;
 
     protected PortletContainer footerContainer = null;
     protected PortletContainer headerContainer = null;
@@ -202,10 +204,13 @@ public class PortletPage implements Serializable, Cloneable {
 
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
+
             cacheService = (CacheService) factory.createPortletService(CacheService.class, null, true);
+            aclService = (AccessControlManagerService)factory.createPortletService(AccessControlManagerService.class, null, true);
         } catch (PortletServiceException e) {
             System.err.println("Unable to init Cache service! " + e.getMessage());
         }
+
 
         componentIdentifiers = new Vector();
 
@@ -351,6 +356,28 @@ public class PortletPage implements Serializable, Cloneable {
                 PortletRole userRole = event.getPortletRequest().getRole();
                 if (userRole.compare(userRole, comp.getRequiredRole()) >= 0) {
                     if (comp != null) {
+                        User user = event.getPortletRequest().getUser();
+                        if (comp instanceof PortletFrame) {
+
+                            // do role checking if user is logged in
+                            if (!(user instanceof GuestUser)) {
+                                String portletClass = ((PortletFrame)comp).getPortletClass();
+                                boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
+                                System.err.println("hasRole = " + hasrole);
+                                if (!hasrole) return;
+
+                            }
+                        } else if (comp instanceof PortletTitleBar) {
+                            if (!(user instanceof GuestUser)) {
+                                String portletClass = ((PortletTitleBar)comp).getPortletClass();
+                                boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
+                                System.err.println("hasRole = " + hasrole);
+                                if (!hasrole) return;
+                            }
+
+                        }
+
+
                         System.err.println("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
                         comp.actionPerformed(event);
                     }

@@ -21,6 +21,8 @@ public interface AccessControlManagerService extends PortletService {
      * PORTLET GROUP METHODS **
      */
 
+    public PortletGroup getCoreGroup();
+
     public List getGroups();
 
     public void deleteGroup(PortletGroup group);
@@ -80,7 +82,7 @@ public interface AccessControlManagerService extends PortletService {
 
     public PortletRole getRoleInGroup(User user, PortletGroup group);
 
-    public PortletRole getRequiredRole(User user, String portletClass);
+    public boolean hasRequiredRole(User user, String portletClass, boolean isAdmin);
 
     public boolean hasRoleInGroup(User user, PortletGroup group, PortletRole role);
 

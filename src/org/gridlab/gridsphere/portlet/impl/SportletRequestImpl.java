@@ -166,13 +166,13 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
     }
 
     /**
-     * Returns the PortletGroup objects representing the users group membership
+     * Returns the PortletGroup representing the core portal group
      *
-     * @param groups an array of PortletGroup objects.
+     * @param group a PortletGroup .
      * @see PortletGroup
      */
-    public void setGroup(List groups) {
-        this.getHttpServletRequest().setAttribute(SportletProperties.PORTLET_GROUP, groups);
+    public void setGroup(PortletGroup group) {
+        this.getHttpServletRequest().setAttribute(SportletProperties.PORTLET_GROUP, group);
     }
 
     /**
