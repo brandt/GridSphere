@@ -20,7 +20,7 @@
             <bind-xml name="interface"/>
         </field>
         <field name="UserRequired" type="boolean">
-            <bind-xml name="user"/>
+            <bind-xml name="user-required"/>
         </field>
         <field name="SecureWrapper" type="string">
             <bind-xml name="secure-wrapper"/>

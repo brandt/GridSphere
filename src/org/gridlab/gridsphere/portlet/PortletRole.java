@@ -83,7 +83,7 @@ public class PortletRole  {
     }
 
     public boolean equals(Object object) {
-        if ((object == null) || (!(object instanceof PortletRole))) {
+        if ((object == null) || (!(object instanceof this.getClass()))) {
             return false;
         }
         String thisRole = toString();

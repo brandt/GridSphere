@@ -67,19 +67,8 @@ public class SportletGroup extends BaseObject implements PortletGroup {
         return false;
     }
 
-    /*
-    public boolean equals(String object) {
-        if (object == null) {
-            return false;
-        }
-        String thisGroup = getName();
-        String thatGroup = (String)object;
-        return thisGroup.equals(thatGroup);
-    }
-    */
-
     public boolean equals(Object object) {
-        if ((object == null) || (!(object instanceof SportletGroup))) {
+        if ((object == null) || (!(object instanceof this.getClass()))) {
             return false;
         }
         String thatGroup = ((PortletGroup)object).toString();
