@@ -94,5 +94,4 @@ public interface AccessControlService extends PortletService {
      */
     public boolean isUserInGroup(User user, PortletGroup group) throws PortletServiceException ;
 
-
 }

@@ -12,7 +12,7 @@ import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletRole;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
@@ -25,8 +25,9 @@ import org.gridlab.gridsphere.portletcontainer.descriptor.Role;
 
 import java.util.List;
 import java.util.Vector;
+import java.util.ArrayList;
 
-public class AccessControlServiceImpl  implements AccessControlService, PortletServiceProvider {
+public class AccessControlServiceImpl implements AccessControlService, PortletServiceProvider {
 
     protected transient static PortletLog log = SportletLog.getInstance(AccessControlServiceImpl.class);
 
@@ -36,8 +37,6 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
     private String jdoSportletGroup = new String();
 
     public AccessControlServiceImpl() throws PersistenceManagerException {
-        super();
-
         pm = PersistenceManagerRdbms.getInstance();
         jdoUserACL = UserACL.class.getName();
         jdoSportletUserImpl = SportletUserImpl.class.getName();
@@ -137,7 +136,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
      * @return true if the user has the specified role in the specified group, false otherwise
      */
     public List getRolesInGroup(User user, PortletGroup group) throws PortletServiceException {
-        return null;
+        return new ArrayList();
     }
 
     /**

@@ -14,7 +14,7 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletRole;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 
 import java.util.List;
@@ -54,7 +54,7 @@ public class ACLManager {
         UserACL rootacl = new UserACL();
         rootacl.setUserID(user.getID());
         rootacl.setRoleID(PortletRole.SUPER.getID());
-        rootacl.setGroupID(PortletGroup.SUPER.getID());
+        rootacl.setGroupID(SportletGroup.SUPER.getID());
         rootacl.setStatus(UserACL.STATUS_APPROVED);
 
         try {

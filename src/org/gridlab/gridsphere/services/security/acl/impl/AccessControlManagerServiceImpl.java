@@ -14,7 +14,7 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletRole;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
@@ -22,13 +22,24 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
 
 
-public class AccessControlManagerServiceImpl implements PortletServiceProvider, AccessControlManagerService {
+public class AccessControlManagerServiceImpl implements AccessControlManagerService {
 
     protected transient static PortletLog log = SportletLog.getInstance(AccessControlManagerServiceImpl.class);
 
     private PersistenceManagerRdbms pm = null;
     private String jdoUserACL = new String();
     private String jdoSportletGroup = new String();
+
+    private static AccessControlManagerServiceImpl instance = new AccessControlManagerServiceImpl();
+    private static int numClients = 0;
+    private static int MAX_CLIENTS = 1;
+
+    // Only single instance allowed of this class
+    public static AccessControlManagerServiceImpl getInstance() {
+        numClients++;
+        if (numClients <= MAX_CLIENTS) return instance;
+        return null;
+    }
 
     public AccessControlManagerServiceImpl() {
         super();
@@ -67,7 +78,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         UserACL rootacl = new UserACL();
         rootacl.setUserID(user.getID());
         rootacl.setRoleID(PortletRole.SUPER.getID());
-        rootacl.setGroupID(PortletGroup.SUPER.getID());
+        rootacl.setGroupID(SportletGroup.SUPER.getID());
         rootacl.setStatus(UserACL.STATUS_APPROVED);
 
         try {
@@ -192,7 +203,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
                 log.error("User " + user.getFullName() + " did not requested a role with an accountrequest change");
             } else {
                 // we don't want to approve a superuserrole by an admin!
-                if (notapproved.getRoleID() != SportletRole.SUPER.getID()) {
+                if (notapproved.getRoleID() != PortletRole.SUPER.getID()) {
                     // delete the status the user has until now
                     UserACL approved = (UserACL) pm.restoreObject(command2);
                     if (approved != null) {
