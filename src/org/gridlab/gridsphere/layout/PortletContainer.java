@@ -20,7 +20,7 @@ public class PortletContainer {
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletContainer.class);
 
     protected List components = new Vector();
-    protected PortletInsets insets;
+
     protected LayoutManager layoutManager;
     protected String name = "";
 
@@ -69,10 +69,6 @@ public class PortletContainer {
 
     public List getPortletComponents() {
         return components;
-    }
-
-    public PortletInsets getPortletInsets() {
-        return insets;
     }
 
     public void remove(int index) {

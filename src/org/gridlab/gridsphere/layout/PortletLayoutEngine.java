@@ -4,31 +4,52 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletResponse;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.PortletConfig;
+import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.GuestUser;
 
 import javax.servlet.ServletConfig;
-import java.io.PrintWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.Map;
+import java.util.Hashtable;
 
 public class PortletLayoutEngine {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletLayoutEngine.class);
     private static PortletLayoutEngine instance = null;
     private PortletConfig config = null;
-    private PortletLayoutDescriptor layout = null;
+
+    private PortletLayoutDescriptor templateLayout = null;
+    private String templateLayoutPath, layoutMappingPath;
+    private PortletLayoutDescriptor guestLayout = null;
+
+
     private boolean reload = false;
     private String error = "";
 
+    private Map userLayouts = new Hashtable();
+
     private PortletLayoutEngine(PortletConfig config) throws PortletLayoutDescriptorException {
         this.config = config;
-        layout = new PortletLayoutDescriptor(config);
+        // load in template guest layout.xml file
+        String appRoot = config.getServletContext().getRealPath("") + "/";
+        String layoutMappingFile = config.getInitParameter("layout-mapping.xml");
+        layoutMappingPath = appRoot + layoutMappingFile;
+
+        //String layoutConfigFile = config.getInitParameter("guest-layout.xml");
+        String layoutConfigFile = config.getInitParameter("layout.xml");
+        if ((layoutConfigFile == null) || (layoutMappingFile == null)) {
+            throw new PortletLayoutDescriptorException("Unable to get guest layout info from web.xml");
+        }
+        String guestLayoutPath = appRoot + layoutConfigFile;
+        layoutMappingPath = appRoot + layoutMappingFile;
+        guestLayout = new PortletLayoutDescriptor(guestLayoutPath, layoutMappingPath);
     }
+
+    private static synchronized void doSync() {}
 
     public static PortletLayoutEngine getInstance(PortletConfig config) throws PortletLayoutDescriptorException {
         if (instance == null) {
+            doSync();
             instance = new PortletLayoutEngine(config);
         }
         return instance;
@@ -43,19 +64,44 @@ public class PortletLayoutEngine {
     }
 
     public void doRender(PortletRequest req, PortletResponse res) throws PortletLayoutException {
-        // for now just render
         log.debug("in doRender()");
-        if (reload) {
-            layout.reload();
+
+        PortletContainer pc = null;
+
+        // Check for user
+        User user = req.getUser();
+
+        if (user == null) System.err.println("User is null in doRender");
+        // if user is guest then use guest template
+        if (user instanceof GuestUser) {
+            pc = guestLayout.getPortletContainer();
+
+        // Check if we have user's layout already
+        } else if (userLayouts.containsKey(user)) {
+
+            pc = (PortletContainer)userLayouts.get(user);
+
+        // If not we try to load it in (creating new one if necessary)
+        } else {
+
+            try {
+                PortletLayoutDescriptor pld = loadUserLayout(user);
+                pc = pld.getPortletContainer();
+            } catch (IOException e) {
+                log.error("Unable to loadUserLayout for user: " + user, e);
+                doRenderError(req, res, e);
+            }
+            userLayouts.put(user, pc);
         }
-        PrintWriter out = null;
-        PortletContainer pc = layout.getPortletContainer();
+
+        // XXX: How do we signal a user has logged out so we can userLayouts.remove(user)???
+
+        // for now just render
+        if (reload) {
+            //layout.reload();
+        }
 
         try {
-            out = res.getWriter();
-            if (layout == null) {
-               doRenderError(req, res);
-            }
             pc.doRender(config.getContext(), req, res);
         } catch (IOException e) {
             error = e.getMessage();
@@ -64,7 +110,7 @@ public class PortletLayoutEngine {
         }
     }
 
-    public void doRenderError(PortletRequest req, PortletResponse res) {
+    public void doRenderError(PortletRequest req, PortletResponse res, Throwable t) {
         PrintWriter out = null;
         try {
             out = res.getWriter();
@@ -73,6 +119,56 @@ public class PortletLayoutEngine {
         }
         out.println("<h>Portlet Layout Engine unable to render!</h>");
         out.println("<b>" + error + "</b>");
+    }
+
+    protected PortletLayoutDescriptor loadUserLayout(User user) throws PortletLayoutDescriptorException, IOException {
+        this.config = config;
+        // load in layout.xml file
+        String appRoot = config.getServletContext().getRealPath("") + "/";
+        String userLayoutDir = config.getInitParameter("user-layouts-dir");
+        String layoutMappingFile = config.getInitParameter("layout-mapping.xml");
+        if ((userLayoutDir == null) || (layoutMappingFile == null)) {
+            throw new PortletLayoutDescriptorException("Unable to get layout info from web.xml");
+        }
+
+        String layoutPath = appRoot + userLayoutDir + "/" + user.getID();
+        File f = new File(layoutPath);
+        // if no layout file exists for user, make new one from template
+        if (!f.exists()) {
+            f.createNewFile();
+            File layoutFile = new File(layoutPath);
+            copyFile(layoutFile, f);
+        }
+
+        PortletLayoutDescriptor userLayout = new PortletLayoutDescriptor(layoutPath, layoutMappingPath);
+
+        return userLayout;
+    }
+
+    protected void copyFile(File oldFile, File newFile) throws IOException {
+        // Destination and streams
+        FileInputStream fis = new FileInputStream(oldFile);
+        FileOutputStream fos = new FileOutputStream(newFile);
+
+        // Amount of data to copy
+        long fileLength = oldFile.length();
+        byte[] bytes = new byte[1024]; // 1K at a time
+        int length = 0;
+        long totalLength = 0;
+        while (length > -1) {
+            length = fis.read(bytes);
+            if (length > 0) {
+                fos.write(bytes, 0, length);
+                totalLength += length;
+            }
+        }
+        // Test that we copied all the data
+        if (fileLength != totalLength) {
+            throw new IOException("File copy size missmatch");
+        }
+        fos.flush();
+        fos.close();
+        fis.close();
     }
 
 }
