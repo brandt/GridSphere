@@ -28,4 +28,8 @@ public class PortletException extends ServletException {
         super(text);
     }
 
+    public PortletException(String text, Throwable t) {
+        super(text, t);
+    }
+
 }
