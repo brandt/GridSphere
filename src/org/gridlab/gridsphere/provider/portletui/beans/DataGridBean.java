@@ -153,7 +153,6 @@ public class DataGridBean extends BeanContainer implements TagBean {
         } else {
             prefix+="_";
         }
-        System.out.println("\n\n\n\n\n\n WE GOT DATAGRIDPREFIX "+prefix+"\n\n\n\n\n\n");
 
         String req_beanId = request.getParameter(prefix+"beanId");
 

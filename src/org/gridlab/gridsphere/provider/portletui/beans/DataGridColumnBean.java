@@ -138,10 +138,9 @@ public class DataGridColumnBean extends BeanContainer {
             }
 
             if (attributes!=null && bean instanceof SelectElementBean) {
-                if (attributes.isSelected(this.getData(data, this.var))) {
-                    SelectElementBean seBean = (SelectElementBean)bean;
-                    seBean.setSelected(true);
-                }
+                SelectElementBean seBean = (SelectElementBean)bean;
+                seBean.setSelected(attributes.isSelected(this.getData(data, this.var)));
+                seBean.setDisabled(attributes.isDisabled(this.getData(data, this.var)));
 
             }
 
