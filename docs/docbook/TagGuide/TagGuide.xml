@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- $Id$ -->
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1//EN"
-  "http://www.oasis-open.org/docbook/xml/4.1/docbookx.dtd" [
+  "../common/docbook-xml-4.2/docbookx.dtd" [
   <!-- Useful snippets -->
-  
+
 <!ENTITY % GridSphereLinks SYSTEM "../common/GridSphereLinks.xml">
-  
+
   %GridSphereLinks;
-  
+
 <!-- Each chapter is in its own file -->
-  
+
 <!ENTITY chap-intro SYSTEM "intro.xml">
+<!ENTITY chap-formtags SYSTEM "formtags.xml">
 
 <!-- Application, page, library, component specification entities  -->
 ]>
@@ -32,7 +33,8 @@
       <holder>GridLab Project</holder>
     </copyright>
   </bookinfo>
-  
+
   &chap-intro;
+  &chap-formtags;
 
 </book>

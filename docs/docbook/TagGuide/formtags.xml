@@ -1,0 +1,504 @@
+<!--
+    Author:     Oliver Wehrens
+    Version:    $Id$
+-->
+
+<chapter id="formtags">
+
+    <para>
+
+        These tags can be used in a jsp file to display....??!??
+
+    </para>
+
+    <example>
+        <title>Usage on GS Tags</title>
+        <screen>
+<![CDATA[<%@ taglib uri="/portletWidgets" prefix="gs" %>
+<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
+<portletAPI:init/>]]>
+        </screen>
+    </example>
+
+
+
+    <title>Formtags</title>
+    <para>
+
+    </para>
+
+    <sect1 id="parameters">
+        <title>Parameters</title>
+
+            <title>Tagattributes</title>
+
+            <table>
+                <title>attributes of tags</title>
+                <tgroup cols="2">
+                    <thead>
+                        <row>
+                            <entry>attributename</entry><entry>description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>name</entry><entry>string: name of the tag</entry>
+                        </row>
+                        <row>
+                            <entry>value</entry><entry>string: value of the tag</entry>
+                        </row>
+                        <row>
+                            <entry>size</entry><entry>integer: size of the field</entry>
+                        </row>
+                        <row>
+                            <entry>maxlength</entry><entry>integer: maximal length of the field</entry>
+                        </row>
+                        <row>
+                            <entry>disabled</entry><entry>boolean: if the element is disabled</entry>
+                        </row>
+                        <row>
+                            <entry>readonly</entry><entry>boolean: if the element is readonly</entry>
+                        </row>
+                        <row>
+                            <entry>checked</entry><entry>boolean: if the element is selected</entry>
+                        </row>
+                        <row>
+                            <entry>bean</entry><entry>string: name of the corresponding bean</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+
+            To most of the tags you can pass in a name of the bean you saved from your java file (see down for
+            an example).
+    </sect1>
+
+    <!-- ================================================================ -->
+
+    <sect1 id="tags">
+        <title>Tags</title>
+
+        <sect2 id="actiontag">
+            <title>ActionLink</title>
+            <para>
+                This tag creates an actionlink pointing to the same portlet with additional parameters.
+            </para>
+            <table>
+                <title>Attributes to actionlink</title>
+                <tgroup cols="3">
+                    <tbody>
+                        <row>
+                            <entry>label</entry><entry>action</entry> <entry>bean (ActionLinkBean)</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+
+            <example>
+                <title>Usage of actionlink</title>
+                <screen>
+<![CDATA[<gs:actionlink label="mylabel" action="name=hallo"/>]]>
+                </screen>
+                This example would create an html href pointing to the current portlet with a clickable
+                text mylabel and a paramter/value pair name/hallo. Alternativly you could use an
+                actionlinkbean (see actionlinkbean) to pass into this tag.
+            </example>
+        </sect2>
+
+
+        <sect2 id="checkboxtag">
+            <title>CheckBox</title>
+            <para>
+                This tag shows a checkbox.
+            </para>
+            <table>
+                <title>Attributes to checkbox</title>
+                <tgroup cols="4">
+                    <tbody>
+                        <row>
+                            <entry>name</entry><entry>value</entry><entry>checked</entry><entry>disabled</entry>
+                        </row>
+                        <row>
+                            <entry>bean (CheckBoxBean)</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of checkbox</title>
+                <screen>
+<![CDATA[<gs:checkbox name="name" value="value" checked="true" disabled="false"/>]]>
+                </screen>
+                This creates a selected checkbox with the name 'name' and the value 'value'.
+            </example>
+        </sect2>
+
+        <sect2 id="formtag">
+            <title>Form</title>
+            <para>
+                This tag is used to surround a form.
+            </para>
+            <example>
+                <title>Usage of form</title>
+                <screen>
+<![CDATA[<gs:form action="identifier">
+...
+</gs:form>]]>
+                </screen>
+            </example>
+        </sect2>
+
+        <sect2 id="fileinputtag">
+            <title>FileInput</title>
+        </sect2>
+
+
+        <sect2 id="passwordfieldtag">
+            <title>PasswordField</title>
+            <para>
+                This tag renders a passwordfield.
+            </para>
+            <table>
+                <title>Attributes to passwordfield</title>
+                <tgroup cols="4">
+                    <tbody>
+                        <row>
+                            <entry>name</entry><entry>value</entry><entry>size</entry><entry>disabled</entry>
+                        </row>
+                        <row>
+                            <entry>maxlength</entry><entry>bean (PasswordBean)</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of passwordfield</title>
+                <screen>
+<![CDATA[<gs:password name="password" value="" size="15"/>]]>
+                </screen>
+                This example creates a password field with the name password, no default value and a size of 15 characters.
+            </example>
+        </sect2>
+
+
+        <sect2 id="radiobuttontag">
+            <title>RadioButton</title>
+            <para>
+                This tag shows a radiobutton. You can group multiple radiobuttons simple by giving
+                the radiobuttons the same name. see radiobuttonlist.
+            </para>
+            <table>
+                <title>Attributes to radiobutton</title>
+                <tgroup cols="4">
+                    <tbody>
+                        <row>
+                            <entry>name</entry><entry>value</entry><entry>checked</entry><entry>disabled</entry>
+                        </row>
+                        <row>
+                           <entry>bean (RadioButtonBean)</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of radiobutton</title>
+                <screen>
+<![CDATA[<gs:radiobutton name="name" value="value" checked="true" disabled="false"/>]]>
+                </screen>
+                This creates a selected radiobutton woth the name 'name' and the value 'value'.
+            </example>
+        </sect2>
+
+        <sect2 id="submitbuttontag">
+            <title>SubmitButton</title>
+        </sect2>
+
+
+        <sect2 id="textareatag">
+            <title>TextArea</title>
+            <para>
+                This tag creates a textarea.
+            </para>
+            <table>
+                <title>Attributes to textarea</title>
+                <tgroup cols="4">
+                    <tbody>
+                        <row>
+                            <entry>name</entry><entry>value</entry><entry>readonly</entry><entry>disabled</entry>
+                        </row>
+                        <row>
+                           <entry>bean (TextAreaBean)</entry><entry>cols</entry><entry>rows</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of textarea</title>
+                <screen>
+<![CDATA[<gs:textarea name="inputfield" value="This is text" rows="120" cols="30"  disabled="false" />]]>
+                </screen>
+                This creates a 120x30 textinputfield with the name 'inputfield' and the text 'This is text'.
+            </example>
+        </sect2>
+
+        <sect2 id="textfieldtag">
+            <title>TextField</title>
+            <para>
+                This tag shows a textinputfield.
+            </para>
+            <table>
+                <title>Attributes to textfield</title>
+                <tgroup cols="4">
+                    <tbody>
+                        <row>
+                            <entry>name</entry><entry>value</entry><entry>size</entry><entry>disabled</entry>
+                        </row>
+                        <row>
+                            <entry>maxlength</entry><entry>bean (TextFieldBean)</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of textfield</title>
+                <screen>
+<![CDATA[<gs:textfield name="textfield" value="" size="15"/>]]>
+                </screen>
+                This example creates a input field with the name textfield, no default value and a size of 15 characters.
+            </example>
+        </sect2>
+
+
+        <sect2 id="texttag">
+            <title>Text</title>
+            <para>
+                This tag shows text.
+            </para>
+            <table>
+                <title>Attributes to text</title>
+                <tgroup cols="1">
+                    <tbody>
+                        <row>
+                            <entry>text</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of text</title>
+                <screen>
+<![CDATA[<gs:text text="text"/>]]>
+                </screen>
+            </example>
+        </sect2>
+
+
+        <sect2 id="labeltag">
+            <title>Label</title>
+            <para>
+                This tag shows a label.
+            </para>
+            <table>
+                <title>Attributes to label</title>
+                <tgroup cols="2">
+                    <tbody>
+                        <row>
+                            <entry>text</entry><entry>bean (LabelBean)</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of label</title>
+                <screen>
+<![CDATA[<gs:text text="label"/>]]>
+                </screen>
+            </example>
+            This example creates a label with the text 'label'.
+        </sect2>
+
+
+        <sect2 id="dropdownlist">
+            <title>DropDownList</title>
+            <para>
+                This tag creates a dropdownlist. You need to pass in a see dropdownlistbean.
+            </para>
+            <table>
+                <title>Attributes to dropdownlist</title>
+                <tgroup cols="1">
+                    <tbody>
+                        <row>
+                            <entry>bean (DropDownListBean)</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of dropdownlist</title>
+                <screen>
+<![CDATA[<gs:dropdownlist  bean="name of dropdownlistbean"/>]]>
+                </screen>
+                This example creates a dropdownlist from the bean.
+            </example>
+        </sect2>
+
+
+        <sect2 id="listbox">
+            <title>ListBox</title>
+            <para>
+                This tag creates a listbox. You need to pass in a see listboxbean.
+            </para>
+            <table>
+                <title>Attributes to listbox</title>
+                <tgroup cols="1">
+                    <tbody>
+                        <row>
+                            <entry>bean (ListBoxBean)</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of listbox</title>
+                <screen>
+<![CDATA[<gs:listbox  bean="name of listboxbean"/>]]>
+                </screen>
+                This example creates a listbox from the bean.
+            </example>
+        </sect2>
+
+
+        <sect2 id="checkboxlist">
+            <title>CheckBoxList</title>
+            <para>
+                This tag creates a list of checkboxes with associated labels.  You need to pass in a see checkboxlistbean.
+            </para>
+            <table>
+                <title>Attributes to checkboxlist</title>
+                <tgroup cols="1">
+                    <tbody>
+                        <row>
+                            <entry>bean (CheckBoxListBean)</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of checkboxlist</title>
+                <screen>
+<![CDATA[<gs:checkboxlist  bean="name of checkboxlistbean"/>]]>
+                </screen>
+                This example creates a list of checkboxes (with labels) from the bean.
+            </example>
+        </sect2>
+
+
+        <sect2 id="radiobuttonlist">
+            <title>RadioButtonList</title>
+            <para>
+                This tag creates a list of radiobuttons with associated labels.
+            </para>
+            <table>
+                <title>Attributes to radiobuttonlist</title>
+                <tgroup cols="1">
+                    <tbody>
+                        <row>
+                            <entry>bean (RadioButtonListBean)</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of radiobuttonlist</title>
+                <screen>
+<![CDATA[<gs:checkboxlist  bean="name of radiobuttonlistbean"/>]]>
+                </screen>
+                This creates a list of radiobuttons (with labels) from the bean.
+            </example>
+        </sect2>
+
+
+    </sect1>
+
+    <!-- ================================================================ -->
+
+    <sect1 id="beans">
+        <title>Elementbeans</title>
+        <para>
+            This section describes the beans you can use to build forms easy.
+        </para>
+            <table>
+                <title>attributes of beans</title>
+                <tgroup cols="2">
+                    <thead>
+                        <row>
+                            <entry>attributename</entry><entry>description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>font</entry><entry>font of the tag</entry>
+                        </row>
+                        <row>
+                            <entry>color</entry><entry>color of the tag</entry>
+                        </row>
+                        <row>
+                            <entry>backgroundcolor</entry><entry>backgroundcolor of the tag</entry>
+                        </row>
+                        <row>
+                            <entry>cssstyle</entry><entry>CSS style of the element</entry>
+                        </row>
+                        <row>
+                            <entry>size</entry><entry>size of the inputfield</entry>
+                        </row>
+                        <row>
+                            <entry>maxlength</entry><entry>maximal length of the inputfield</entry>
+                        </row>
+                        <row>
+                            <entry>disabled</entry><entry>if the element is disabled</entry>
+                        </row>
+                        <row>
+                            <entry>readonly</entry><entry>if the element is readonly</entry>
+                        </row>
+                        <row>
+                            <entry>selected</entry><entry>if the element is selected</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+
+
+        <sect2 id="actionlinkbean">
+            <title>ActionLinkBean</title>
+            The actionlinkbean extends from the see textbean. Addtional it provides a method
+            for setting the link (action).
+
+            <table>
+                <title>Methods provided by ActionLinkBean</title>
+                <tgroup cols="2">
+                    <thead>
+                        <row>
+                            <entry>methods</entry><entry>description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>setLink</entry><entry>sets the actionlink</entry>
+                        </row>
+                        <row>
+                            <entry>getLink</entry><entry>returns the actionlink</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </sect2>
+    </sect1>
+
+    <!-- ================================================================ -->
+
+    <sect1 id="forms">
+        <title>Formhandling</title>
+
+    </sect1>
+
+</chapter>
