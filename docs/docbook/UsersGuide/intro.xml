@@ -35,6 +35,7 @@
         <listitem><para>Jakarta Tomcat Servlet Container &Tomcat; 4.1.18+ is
             required. (Currently, only Tomcat 4.1.18 fully supports the Manager web
             application that allows for dynamic portlet management.)
+            (Make sure you get the full Tomcat version and not the Light Edition (LE))
         </para></listitem>
         </itemizedlist>
     </sect1>

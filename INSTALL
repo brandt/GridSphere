@@ -16,7 +16,8 @@ xalan.jar are found in the lib directory.
 2) You will also need a Tomcat 4.1+ servlet container available at
 http://jakarta.apache.org/tomcat. In addition to providing a hosting
 environment for GridSphere, Tomcat provides some of the required XML (JAR)
-libraries that are needed for compilation.
+libraries that are needed for compilation. (Make sure you get the full 
+Tomcat version and not the Light Edition (LE))
 
 3) (Optional) If you wish to build PDF formats of the documentation download a
 FOP binary from http://xml.apache.org/fop/download.html and unpack it and set
