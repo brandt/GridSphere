@@ -100,6 +100,9 @@ public class SportletSettings implements PortletSettings {
     public String getTitle(Locale locale, Client client) {
         Iterator it = langList.iterator();
         String title = defaultTitle;
+        
+        if (locale == null) return title; 
+        
         while (it.hasNext()) {
             LanguageInfo langInfo = (LanguageInfo) it.next();
             if (locale.getLanguage().equals(langInfo.getLocale())) {
