@@ -4,7 +4,7 @@ package org.gridlab.gridsphere.portlet.jsrimpl;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletWindow;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor2.Supports;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.RenderRequest;
@@ -626,9 +626,9 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         if (supports != null) {
             for (int i = 0; i < supports.length; i++) {
                 Supports s = supports[i];
-                org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor2.PortletMode[] modes = s.getPortletMode();
+                org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode[] modes = s.getPortletMode();
                 for (int j = 0; j < modes.length; j++) {
-                    org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor2.PortletMode m = modes[j];
+                    org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode m = modes[j];
                     if (m.getContent().equalsIgnoreCase(mode.toString())) {
                         return s.getMimeType().getContent();
                     }
@@ -659,9 +659,9 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         if (supports != null) {
             for (int i = 0; i < supports.length; i++) {
                 Supports s = supports[i];
-                org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor2.PortletMode[] modes = s.getPortletMode();
+                org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode[] modes = s.getPortletMode();
                 for (int j = 0; j < modes.length; j++) {
-                    org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor2.PortletMode m = modes[j];
+                    org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode m = modes[j];
                     if (m.getContent().equalsIgnoreCase(mode.toString())) {
                         types.add(s.getMimeType().getContent());
                     }

@@ -1,10 +1,10 @@
 
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor2.PortletDefinition;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor2.PortletApp;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor2.CustomWindowState;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor2.CustomPortletMode;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletApp;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode;
 
 import javax.portlet.PortalContext;
 import javax.portlet.WindowState;

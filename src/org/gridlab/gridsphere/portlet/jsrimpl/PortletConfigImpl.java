@@ -2,10 +2,10 @@ package org.gridlab.gridsphere.portlet.jsrimpl;
 
 
 
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor2.PortletDefinition;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor2.PortletInfo;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor2.InitParam;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor2.SupportedLocale;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.InitParam;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SupportedLocale;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletContext;

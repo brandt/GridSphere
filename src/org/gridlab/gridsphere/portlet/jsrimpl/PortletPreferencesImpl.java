@@ -3,9 +3,9 @@ package org.gridlab.gridsphere.portlet.jsrimpl;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor2.Preference;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor2.Value;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor2.Name;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name;
 
 import javax.portlet.ReadOnlyException;
 import javax.portlet.ValidatorException;
@@ -62,7 +62,7 @@ public class PortletPreferencesImpl implements PortletPreferences
         this.pm = pm;
     }
 
-    public PortletPreferencesImpl(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor2.PortletPreferences portletPrefs, PersistenceManagerRdbms pm, ClassLoader loader) {
+    public PortletPreferencesImpl(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences portletPrefs, PersistenceManagerRdbms pm, ClassLoader loader) {
         this.pm = pm;
         Preference[] prefs = portletPrefs.getPreference();
         for (int i = 0; i < prefs.length; i++) {
