@@ -10,8 +10,6 @@
 
 <ui:form>
 
-<ui:messagebox beanId="messageBox"/>
-
 <h3><ui:text key="LAYOUT_THEME" style="nostyle"/></h3>
 <ui:group>
 <ui:text key="LAYOUT_SELECT_THEME"/>&nbsp;<ui:listbox beanId="themeLB"/> <ui:actionsubmit action="saveTheme" key="SAVE"/>
