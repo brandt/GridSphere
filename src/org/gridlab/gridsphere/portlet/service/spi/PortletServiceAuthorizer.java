@@ -24,7 +24,7 @@ public interface PortletServiceAuthorizer {
     /**
      *  Authorizes operations that require admin user access
      *
-     * @param <code>PortletGroup</code> the portlet group within which the
+     * @param group the portlet group within which the
      * user should be an admin if they are not a super user.
      * @throws PortletServiceAuthorizationException if supplied user is not an admin user
      */
@@ -33,7 +33,7 @@ public interface PortletServiceAuthorizer {
     /**
      * Authorizes operations that require super or admin user access
      *
-     * @param <code>PortletGroup</code> the portlet group within which the
+     * @param group the portlet group within which the
      * user should be an admin if they are not a super user
      * @throws PortletServiceAuthorizationException if supplied user is not a super or admin user
      */
@@ -43,7 +43,7 @@ public interface PortletServiceAuthorizer {
      * Authorizes operations that require either a super user or can be invoked
      * only if the supplied user  matches the associated user
      *
-     * @param <code>PortletGroup</code> the portlet group within which the
+     * @param user the portlet group within which the
      * user should be an admin if they are not a super user
      * @throws PortletServiceAuthorizationException if supplied user is
      * not a super or same user
@@ -54,7 +54,7 @@ public interface PortletServiceAuthorizer {
      * Authorizes operations that require either a super user, or admin user, or
      * can be invoked only if the supplied user  matches the associated user
      *
-     * @param <code>PortletGroup</code> the portlet group within which the
+     * @param user the portlet group within which the
      * user should be an admin if they are not a super user
      * @throws PortletServiceAuthorizationException if supplied user is
      * not a super, admin, or same  user

@@ -233,11 +233,9 @@ public class SportletResponse implements PortletResponse {
         res.flushBuffer();
     }
 
-
     public void resetBuffer() throws IllegalStateException {
-        //res.resetBuffer();
+        res.resetBuffer();
     }
-
 
     public boolean isCommitted() {
         return res.isCommitted();

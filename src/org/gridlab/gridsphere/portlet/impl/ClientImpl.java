@@ -6,7 +6,6 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.Capability;
 import org.gridlab.gridsphere.portlet.Client;
-import org.gridlab.gridsphere.portlet.PortletLog;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -51,7 +50,6 @@ public class ClientImpl implements Client {
         String browserInfo = "Unknown browser";
 
         if (j >= 0) {
-
             browserInfo = userAgent.substring(j + 1).trim();
         }
             //System.err.println("browser info: " + browserInfo);
