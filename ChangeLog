@@ -21,4 +21,6 @@ Changes since GridSphere 1.0
 + BeanContainer now supports sorting by the value of the BaseComponentBeans
 + Upgraded docbook-xsl to 1.62.4 and docbook-xml to 4.3.CR1
 + GridSphere libs are placed in build/lib and not lib now
++ Improved image tag/bean and can be nested inside actionlink tag
++ Added LocalePortlet to display available locales at the top of portal
 
