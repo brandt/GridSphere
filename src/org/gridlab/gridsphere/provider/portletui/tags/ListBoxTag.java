@@ -24,6 +24,7 @@ public class ListBoxTag extends ContainerTag {
     protected int size = 1;
     protected String onChange = null;
 
+
     /**
      * Returns the (html) size of the field.
      *
@@ -66,7 +67,7 @@ public class ListBoxTag extends ContainerTag {
      *
      * @param isMultiple is true if listbox provides multiple selections, false otherwise
      */
-    public void setMultipleSelection(boolean isMultiple) {
+    public void setMultiple(boolean isMultiple) {
         this.isMultiple = isMultiple;
     }
 
@@ -83,7 +84,7 @@ public class ListBoxTag extends ContainerTag {
      *
      * @return true if this listbox supports multiple selection, false otherwise
      */
-    public boolean getMultipleSelection() {
+    public boolean getMultiple() {
         return isMultiple;
     }
 
@@ -95,6 +96,7 @@ public class ListBoxTag extends ContainerTag {
             if (listbox == null) {
                 listbox = new ListBoxBean();
                 listbox.setSize(size);
+                listbox.setMultipleSelection(isMultiple);
                 listbox.setOnChange(onChange);
                 this.setBaseComponentBean(listbox);
             } else {
@@ -106,6 +108,7 @@ public class ListBoxTag extends ContainerTag {
             listbox = new ListBoxBean();
             listbox.setSize(size);
             listbox.setOnChange(onChange);
+            listbox.setMultipleSelection(isMultiple);
             this.setBaseComponentBean(listbox);
         }
         try {
