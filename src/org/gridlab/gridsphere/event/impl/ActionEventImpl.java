@@ -18,11 +18,11 @@ import java.util.EventObject;
  */
 public class ActionEventImpl extends EventObject implements ActionEvent {
 
-    private DefaultPortletAction action;
+    private PortletAction action;
     private PortletRequest request;
     private PortletResponse response;
 
-    public ActionEventImpl(DefaultPortletAction action, PortletRequest request, PortletResponse response) {
+    public ActionEventImpl(PortletAction action, PortletRequest request, PortletResponse response) {
         super(action);
         this.action = action;
         this.request = request;
