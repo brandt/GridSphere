@@ -119,7 +119,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public void attributeAdded(HttpSessionBindingEvent event) {
 
-        System.err.println("attributeAdded('" + event.getSession().getId() + "', '" +
+        log.info("attributeAdded('" + event.getSession().getId() + "', '" +
                 event.getName() + "', '" + event.getValue() + "')");
 
     }
@@ -132,7 +132,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public void attributeRemoved(HttpSessionBindingEvent event) {
 
-        System.err.println("attributeRemoved('" + event.getSession().getId() + "', '" +
+        log.info("attributeRemoved('" + event.getSession().getId() + "', '" +
                 event.getName() + "', '" + event.getValue() + "')");
 
     }
@@ -145,7 +145,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public void attributeReplaced(HttpSessionBindingEvent event) {
 
-        System.err.println("attributeReplaced('" + event.getSession().getId() + "', '" +
+        log.info("attributeReplaced('" + event.getSession().getId() + "', '" +
                 event.getName() + "', '" + event.getValue() + "')");
 
     }
