@@ -67,7 +67,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         Iterator it = groupList.iterator();
         while (it.hasNext()) {
             PortletGroup g = (PortletGroup)it.next();
-            groupDescs.add(this.aclManagerService.getGroupDescription(g.getName()));
+            groupDescs.add(this.aclManagerService.getGroupDescription(g));
         }
         req.setAttribute("groupList", groupList);
         req.setAttribute("groupDescs", groupDescs);
@@ -233,7 +233,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         // Load group
         if (!groupID.equals("")) {
             group = this.aclManagerService.getGroup(groupID);
-            groupDescription = this.aclManagerService.getGroupDescription(group.getName());
+            groupDescription = this.aclManagerService.getGroupDescription(group);
         }
 
         if (groupID.equals("")) {

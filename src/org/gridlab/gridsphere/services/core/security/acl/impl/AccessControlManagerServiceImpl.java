@@ -63,8 +63,8 @@ public class AccessControlManagerServiceImpl implements AccessControlManagerServ
         return aclManager.getGroupByName(groupName);
     }
 
-    public String getGroupDescription(String groupName) {
-        return aclManager.getGroupDescription(groupName);
+    public String getGroupDescription(PortletGroup group) {
+        return aclManager.getGroupDescription(group);
     }
 
     /*** GROUP REQUEST METHODS ***/

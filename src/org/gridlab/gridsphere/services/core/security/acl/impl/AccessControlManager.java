@@ -8,16 +8,16 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 import org.gridlab.gridsphere.services.core.security.acl.*;
-import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
-import org.gridlab.gridsphere.services.core.security.password.impl.DbmsPasswordManagerService;
-import org.gridlab.gridsphere.services.core.user.impl.AccountRequestImpl;
+import org.gridlab.gridsphere.services.core.user.impl.*;
 import org.gridlab.gridsphere.services.core.user.impl.GroupEntryImpl;
 import org.gridlab.gridsphere.services.core.user.impl.GroupRequestImpl;
 import org.gridlab.gridsphere.services.core.user.impl.UserManager;
@@ -33,20 +33,17 @@ public class AccessControlManager implements AccessControlManagerService {
     private static UserManager userManager = null;
     private PortletManager pms = null;
     private PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
-    private PasswordManagerService passwordManagerService = DbmsPasswordManagerService.getInstance();
 
-    private static boolean isInitialized = false;
-
-    private String jdoUser = SportletUserImpl.class.getName();
-    private String jdoAccountRequest = AccountRequestImpl.class.getName();
     private String jdoGroupRequest = GroupRequestImpl.class.getName();
     private String jdoGroupEntry = GroupEntryImpl.class.getName();
     private String jdoPortletGroup = SportletGroup.class.getName();
 
+    private static boolean isInitialized = false;
+
     private AccessControlManager() {
         pms = PortletManager.getInstance();
         userManager = UserManager.getInstance();
-        initGroups();
+        //initGroups();
     }
 
     public static void main(String[] args) throws Exception  {
@@ -63,7 +60,12 @@ public class AccessControlManager implements AccessControlManagerService {
         return instance;
     }
 
-    public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {}
+    public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
+        if (!isInitialized) {
+            initGroups();
+        }
+        isInitialized = true;
+    }
 
     private void initGroups() {
         log.info("Entering initGroups()");
@@ -72,12 +74,10 @@ public class AccessControlManager implements AccessControlManagerService {
         initSportletGroup((SportletGroup)PortletGroupFactory.GRIDSPHERE_GROUP);
 
         List webappNames = pms.getPortletWebApplicationNames();
-
         Iterator it = webappNames.iterator();
         while (it.hasNext()) {
             String groupName = (String)it.next();
             if (!existsGroupWithName(groupName)) {
-                String groupDescription = pms.getPortletWebApplicationDescription(groupName);
                 createGroup(groupName);
             }
         }
@@ -89,15 +89,14 @@ public class AccessControlManager implements AccessControlManagerService {
         String groupName = group.getName();
         if (!existsGroupWithName(groupName)) {
             try {
-                log.error("Creating group...." + groupName);
+                log.info("Creating group...." + groupName);
                 pm.create(group);
-                log.error("Created group...." + groupName);
             } catch (Exception e) {
                 log.error("Error creating group " + groupName, e);
             }
         } else {
             try {
-                log.error("Resetting group...." + groupName);
+                log.info("Resetting group...." + groupName);
                 SportletGroup realGroup = this.getSportletGroupByName(groupName);
                 group.setID(realGroup.getID());
             } catch (Exception e) {
@@ -464,8 +463,8 @@ public class AccessControlManager implements AccessControlManagerService {
         return getSportletGroupByName(name);
     }
 
-    public String getGroupDescription(String groupName) {
-        return pms.getPortletWebApplicationDescription(groupName);
+    public String getGroupDescription(PortletGroup group) {
+        return pms.getPortletWebApplicationDescription(group.getName());
     }
     private SportletGroup getSportletGroupByName(String name) {
         return selectSportletGroup("where grp.Name='" + name + "'");
