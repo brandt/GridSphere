@@ -3,8 +3,6 @@
 
 <portletAPI:init/>
 
-<div id="page-logo">
 <gs:actionlink action="logout" label="logout"/>
-</div>
 
 

@@ -1,12 +1,15 @@
 /*
  * @author <a href="wehrens@aei.mpg.de">Oliver Wehrens</a>
+ *
+ * The Class provides methods for getting data out of a portletrequest.
  * @version $Id$
  */
 
-package org.gridlab.gridsphere.tags.event.impl ;
+package org.gridlab.gridsphere.tags.event.impl;
 
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.tags.event.FormEvent;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.tags.event.FormEvent;
@@ -53,11 +56,11 @@ public class FormEventImpl implements FormEvent {
 
         PortletRequest req = event.getPortletRequest();
         Enumeration enum = req.getParameterNames();
-        while(enum.hasMoreElements()) {
-            String name = (String)enum.nextElement();
+        while (enum.hasMoreElements()) {
+            String name = (String) enum.nextElement();
             if (name.startsWith("gssubmit:")) {
                 String button = req.getParameter(name);
-                if (button!=null) {
+                if (button != null) {
                     result = name.substring(9);
                 }
             }
@@ -69,7 +72,7 @@ public class FormEventImpl implements FormEvent {
     private boolean checkParameterName(String name) {
         Enumeration enum = request.getParameterNames();
         while (enum.hasMoreElements()) {
-            if ( ((String)enum.nextElement()).equals(name) ) {
+            if (((String) enum.nextElement()).equals(name)) {
                 return true;
             }
         }
@@ -78,28 +81,34 @@ public class FormEventImpl implements FormEvent {
 
     private Object getBean(String name, PortletRequest request) {
         HttpSession session = request.getSession();
-        NameBean bean = (NameBean)session.getAttribute(name);
+        NameBean bean = (NameBean) session.getAttribute(name);
         return bean;
     }
 
+    /**
+     * Gets back the prev. saved bean with the modifications from the userinterface.
+     * @param name name of the bean
+     * @param request requestobject where the bean was stored (in the session of the request)
+     * @return updated elementbean
+     */
     public Object getElementBean(String name, PortletRequest request) {
         HttpSession session = request.getSession();
-        NameBean bean = (NameBean)getBean(name, request);
-        System.out.println("Getting Bean "+name+" from Session");
+        NameBean bean = (NameBean) getBean(name, request);
+        System.out.println("Getting Bean " + name + " from Session");
         //if (checkParameterName("gstag:"+bean.getName())) {
-            String[] values = request.getParameterValues("gstag:"+bean.getName());
-            //if (values.length>0) {
-                System.out.println("Updated bean: "+bean.getName());
-                bean.update(values);
-                session.setAttribute(name, bean);
-            //}
+        String[] values = request.getParameterValues("gstag:" + bean.getName());
+        //if (values.length>0) {
+        System.out.println("Updated bean: " + bean.getName());
+        bean.update(values);
+        session.setAttribute(name, bean);
+        //}
         //}
         return bean;
     }
 
     public CheckBoxBean getCheckBox(String name) {
-        CheckBoxBean checkbox = (CheckBoxBean)getBean(name, request);
-        if (checkParameterName("gstag:"+name)) {
+        CheckBoxBean checkbox = (CheckBoxBean) getBean(name, request);
+        if (checkParameterName("gstag:" + name)) {
             checkbox.setSelected(true);
         } else {
             checkbox.setSelected(false);
@@ -107,28 +116,37 @@ public class FormEventImpl implements FormEvent {
         return checkbox;
     }
 
+    /**
+     * Gets back the prev. saved bean with the modifications from the userinterface.
+     * @param name name of the bean
+     * @return updated elementbean
+     */
     public Object getElementBean(String name) {
         PortletRequest request = event.getPortletRequest();
         return getElementBean(name, request);
     }
 
+    /**
+     * Prints out all request parameters (debug)
+     * @param req paremter of this request will be printed out
+     */
     public void printRequestParameter(PortletRequest req) {
         System.out.println("\n\n show request params\n--------------------\n");
         Enumeration enum = req.getParameterNames();
         while (enum.hasMoreElements()) {
-            String name = (String)enum.nextElement();
-            System.out.println("name :"+name);
+            String name = (String) enum.nextElement();
+            System.out.println("name :" + name);
             String values[] = req.getParameterValues(name);
             if (values.length == 1) {
                 String pval = values[0];
                 if (pval.length() == 0) {
                     pval = "no value";
                 }
-                System.out.println(" value : "+pval);
+                System.out.println(" value : " + pval);
             } else {
                 System.out.println(" value :");
-                for (int i=0;i<values.length;i++) {
-                    System.out.println("            - "+values[i]);
+                for (int i = 0; i < values.length; i++) {
+                    System.out.println("            - " + values[i]);
                 }
 
             }

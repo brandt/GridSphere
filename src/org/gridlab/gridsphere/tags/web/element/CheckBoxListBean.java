@@ -13,10 +13,21 @@ public class CheckBoxListBean extends DropDownListBean {
         super(name);
     }
 
+    /**
+     * Adds a checkbox to the list.
+     * @param value vaule of the checkbox
+     * @param label label of the checkbox
+     */
     public void add(String value, String label) {
         add(value, label, false);
     }
 
+    /**
+     * Adds a checkbox to the list.
+     * @param value of the checkbox
+     * @param label label of the checkbox
+     * @param selected selected status of the checkbox
+     */
     public void add(String value, String label, boolean selected) {
         CheckBoxBean cbb = new CheckBoxBean(this.name, value, selected, false);
         cbb.setLabel(label);

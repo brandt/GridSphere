@@ -4,6 +4,11 @@
  */
 package org.gridlab.gridsphere.tags.web.element;
 
+/**
+ * All elements which should be updatable (like most of the formelements)
+ * needs to implement this interface.
+ */
+
 public interface Updateable extends Element {
 
     /**

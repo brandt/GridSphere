@@ -25,26 +25,51 @@ public class TextFieldBean extends ReadOnlyBaseBean implements Input {
         this.maxlength = maxlength;
     }
 
+    /**
+     * Returns the (html) size of the field.
+     * @return size of the field
+     */
     public int getSize() {
         return size;
     }
 
+    /**
+     * Sets the (html) size of the field
+     * @param size size of the field
+     */
     public void setSize(int size) {
         this.size = size;
     }
 
+    /**
+     * Returns the (html) inputtype of the field.
+     * @return inputtype of the field
+     */
     public String getInputtype() {
         return inputtype;
     }
 
+    /**
+     * Sets the (html) inputtype of the field
+     * @param ioputtype (html) inputtype of the field
+     *
+     */
     public void setInputtype(String inputtype) {
         this.inputtype = inputtype;
     }
 
+    /**
+     * Returns the (html) maxlength of the field
+     * @return maxlength of the field
+     */
     public int getMaxlength() {
         return maxlength;
     }
 
+    /**
+     * Sets the (html) maxlnegth of the field
+     * @param maxlength maxlength of the field
+     */
     public void setMaxlength(int maxlength) {
         this.maxlength = maxlength;
     }

@@ -329,7 +329,19 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
 
         out.println("<!-- PORTLET STARTS HERE -->");
         //out.println("<div class=\"window-main\">");
-        out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">");        // this is the main table around one portlet
+        out.print("<table  ");
+
+        if (getOuterPadding().equals("")) {
+           out.print("cellpadding=\"0\" cellspacing=\"0\" class=\"window-main\" ");
+        } else {
+            //out.print("border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"");        // this is the main table around one portlet
+            out.print("cellpadding=\""+getOuterPadding()+"\" cellspacing=\""+getOuterPadding()+"\" style=\"spacing:"+getOuterPadding()+"px; padding:"+getOuterPadding()+"px\"  class=\"window-main\" ");        // this is the main table around one portlet
+            //out.print("cellpadding=\""+getOuterPadding()+"\" class=\"window-main\" ");        // this is the main table around one portlet
+        }
+
+
+
+        out.println(">");
 
         // Render title bar
         if (titleBar != null) {
@@ -340,7 +352,11 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         }
         if (renderPortlet) {
             if (!transparent) {
-                out.println("<tr><td class=\"window-content\">");      // now the portlet content begins
+                out.print("<tr><td  ");      // now the portlet content begins
+                if (!getInnerPadding().equals("")) {
+                    out.print("style=\"padding:"+getInnerPadding()+"px\"");
+                }
+                out.println(" class=\"window-content\"> " );
             } else {
                 out.println("<tr><td>");
             }

@@ -24,6 +24,11 @@ public class DropDownListBean extends BaseListBean implements DropDownList {
         this.name = name;
     }
 
+    /**
+     * Adds an entry to the dropdownlist.
+     * @param name name of the entry
+     * @param value value of the entry
+     */
     public void add(String name, String value) {
         ListBoxItemBean item = new ListBoxItemBean();
         item.setName(name);
@@ -31,6 +36,10 @@ public class DropDownListBean extends BaseListBean implements DropDownList {
         list.addElement(item);
     }
 
+    /**
+     * Adds a selectable item to the list
+     * @param item selectable item to be added
+     */
     public void add(Selectable item) {
         list.addElement(item);
     }
@@ -63,6 +72,10 @@ public class DropDownListBean extends BaseListBean implements DropDownList {
         }
     }
 
+    /**
+     * Returns the selected values of the list.
+     * @return selected values oof the list
+     */
     public ArrayList getSelectedValues() {
         ArrayList result = new ArrayList();
         Iterator it = list.iterator();
@@ -75,6 +88,10 @@ public class DropDownListBean extends BaseListBean implements DropDownList {
         return result;
     }
 
+    /**
+     * Returns the selected items of the list
+     * @return  the selected item of the list
+     */
     public ArrayList getSelectedItems() {
         ArrayList result = new ArrayList();
         Iterator it = list.iterator();

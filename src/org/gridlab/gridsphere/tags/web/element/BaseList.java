@@ -6,8 +6,16 @@ package org.gridlab.gridsphere.tags.web.element;
 
 public interface BaseList extends Element {
 
+    /**
+     * Returns the name of the list.
+     * @return the name of the list
+     */
     public String getName();
 
+    /**
+     * Sets the name of the list
+     * @param name name of the list
+     */
     public void setName(String name);
 
     public abstract String toString();

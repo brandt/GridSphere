@@ -69,14 +69,12 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
      * @many-key reference
      */
     private Vector UserdnsSV = new Vector();
-    //@todo needs to be saved
 
     /**
      * @field-type AccountRequestImplMyproxyUserNames
      * @many-key reference
      */
     private  Vector MyproxyUserNamesSV = new Vector();
-    //@todo needs to be saved
 
     // Password bean
     private transient PasswordBean passwordBean = null;

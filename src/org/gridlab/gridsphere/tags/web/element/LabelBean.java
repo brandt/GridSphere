@@ -34,6 +34,10 @@ public class LabelBean extends NameBean implements Label {
         return value;
     }
 
+    /**
+     * Updates the values of the class.
+     * @param values array of stringvalues with updated values for this class
+     */
     public void update(String[] values) {}
 
     public String toString() {

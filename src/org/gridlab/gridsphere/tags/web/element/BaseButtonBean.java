@@ -17,14 +17,25 @@ public class BaseButtonBean extends NameValueDisableBean implements Button {
         super(name, value, false);
     }
 
+    /**
+     * Sets the type of the button.
+     * @param type type of the button
+     */
     public void setType(String type) {
         this.type = type;
     }
 
+    /**
+     * Returns the type of the button.
+     * @return type of the button
+     */
     public String getType() {
         return this.type;
     }
 
+    /**
+     * Returns the tagname of the button
+     */
     public String getTagName() {
         return "gssubmit:";
     }

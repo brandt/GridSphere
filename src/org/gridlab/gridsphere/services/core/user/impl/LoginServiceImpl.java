@@ -1,10 +1,5 @@
 /*
- * Created by IntelliJ IDEA.
- * User: russell
- * Date: Dec 18, 2002
- * Time: 2:04:14 PM
- * To change template for new interface use
- * Code Style | Class Templates options (Tools | IDE Options).
+ * @version: $Id$
  */
 package org.gridlab.gridsphere.services.core.user.impl;
 

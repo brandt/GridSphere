@@ -1,6 +1,8 @@
 /**
  * @author <a href="oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
  * @version $Id$
+ *
+ * The Class provides
  */
 package org.gridlab.gridsphere.tags.web.element;
 

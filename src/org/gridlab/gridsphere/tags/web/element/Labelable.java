@@ -19,8 +19,16 @@ public interface Labelable extends Element {
      */
     public void setLabelColor(String color) ;
 
+    /**
+     * Sets the label.
+     * @param label of the element
+     */
     public void setLabel(Label label);
 
+    /**
+     * Returns the label of the element.
+     * @return label of the element
+     */
     public Label getLabel();
 
 

@@ -48,6 +48,11 @@ public abstract class SelectElementBean extends NameValueDisableBean implements 
                 "/>";
     }
 
+    /**
+     * Updates the value of the selectelement to a certain status.
+     *
+     * @param values array containing updated values for the element
+     */
     public void update(String[] values) {
         this.selected = (values == null) ? true : false;
     }

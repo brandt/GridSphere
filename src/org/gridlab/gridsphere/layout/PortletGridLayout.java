@@ -127,7 +127,7 @@ public class PortletGridLayout extends PortletFrameLayout {
             // new column
             out.println("<td width=\"" + colSizes[i] + "%\" valign=\"top\"> <!-- this is a row -->");
             // construct a table inside this column
-            out.println("<table border=\"0\" width=\"100%\" cellpadding=\"2\" cellspacing=\"0\"> <!-- this is table inside row (" + i + ")-->");
+            out.println("<table border=\"0\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"> <!-- this is table inside row (" + i + ")-->");
             // now render the portlets in this column
             //out.println("<tr>");
             for (int j = 1; j <= portletsPerColumns; j++) {

@@ -12,6 +12,9 @@ import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.exolab.castor.xml.Unmarshaller;
 import org.exolab.castor.jdo.conf.Mapping;
 
+/**
+ * The class is a helper class for storing hashmaps to persistent storage (castor only).
+ */
 public class Attribute extends BaseObject {
 
     /**
@@ -19,6 +22,7 @@ public class Attribute extends BaseObject {
      * @sql-name key
      */
     private String Key = new String();
+
     /**
      * @sql-size 256
      * @sql-name value
