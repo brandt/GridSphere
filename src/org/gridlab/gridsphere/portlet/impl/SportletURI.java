@@ -24,7 +24,6 @@ public class SportletURI implements PortletURI {
     private boolean isSecure = false;
     private boolean redirect = true;
     private String contextPath = null;
-    //private String id = "";
     private Map actionParams = new HashMap();
     private Set sportletProps = null;
 
@@ -73,27 +72,6 @@ public class SportletURI implements PortletURI {
         sportletProps.add(SportletProperties.COMPONENT_ID);
         sportletProps.add(SportletProperties.PORTLET_WINDOW);
         sportletProps.add(SportletProperties.PORTLET_MODE);
-    }
-
-    /**
-     *  A string utility that produces a string composed of
-     * <code>numChars</code> number of characters
-     *
-     * @param numChars the number of characters in the resulting <code>String</code>
-     * @return the <code>String</code>
-     */
-    private String createUniquePrefix(int numChars) {
-        StringBuffer s = new StringBuffer();
-        for (int i = 0; i <= numChars; i++) {
-            int nextChar = (int) (Math.random() * 62);
-            if (nextChar < 10) //0-9
-                s.append(nextChar);
-            else if (nextChar < 36) //a-z
-                s.append((char) (nextChar - 10 + 'a'));
-            else
-                s.append((char) (nextChar - 36 + 'A'));
-        }
-        return s.toString();
     }
 
     /**
@@ -200,18 +178,14 @@ public class SportletURI implements PortletURI {
         }
         s.append(req.getServerName() + ":" + req.getServerPort());
 
-        // add the actionsprams and prefix them
-
+        // add the action params
         Set paramSet = actionParams.keySet();
         Iterator it = paramSet.iterator();
         while (it.hasNext()) {
             String name = (String) it.next();
-            //String newname = id + "_" + name;
             String value = (String) actionParams.get(name);
-            //store.put(newname, value);
             store.put(name, value);
         }
-        //if (!actionParams.isEmpty()) store.put(SportletProperties.PREFIX, id);
 
         String url = contextPath;
         String newURL;
@@ -224,7 +198,6 @@ public class SportletURI implements PortletURI {
         }
         boolean firstParam = true;
         it = set.iterator();
-        //try {
         while (it.hasNext()) {
             if (!firstParam)
                 url += "&";
@@ -240,10 +213,7 @@ public class SportletURI implements PortletURI {
             }
             firstParam = false;
         }
-        /*
-        } catch (UnsupportedEncodingException e) {
-            System.err.println("Unable to support UTF-8 encoding!");
-        }*/
+
         if (redirect) {
             newURL = res.encodeRedirectURL(url);
         } else {
