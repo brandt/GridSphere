@@ -81,7 +81,7 @@ public class ConcretePortletImpl implements ConcretePortlet {
         }
 
         portletClass = cappname;
-        portletName = concreteApp.getName();
+        portletName = concreteApp.getConcretePortletInfo().getName();
         servletName = portletApp.getServletName();
 
         /*

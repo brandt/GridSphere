@@ -76,7 +76,7 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
                 ConcretePortlet concretePortlet = new ConcretePortletImpl(pdd, portletApp, concApp);
                 concretePortlets.add(concretePortlet);
             } catch (ConcretePortletException e) {
-                log.error("Unable to create concrete portlet: " + concApp.getName(), e);
+                log.error("Unable to create concrete portlet: " + concApp.getConcretePortletInfo().getName(), e);
             }
         }
         id = portletApp.getID();

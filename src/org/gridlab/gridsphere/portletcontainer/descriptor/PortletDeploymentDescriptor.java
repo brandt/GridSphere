@@ -30,17 +30,6 @@ public class PortletDeploymentDescriptor {
     private PortletCollection pc = null;
 
     /**
-     * Default PortletDeployemntDescriptor reads in portlet.xml and portlet-mapping.xml
-     * from location defined in gridsphere.properties
-     */
-    public PortletDeploymentDescriptor() throws IOException, PortletDeploymentDescriptorException {
-        GridSphereConfig gsConfig = GridSphereConfig.getInstance();
-        String fullPath = gsConfig.getProperty(GridSphereConfigProperties.PORTLET_XML);
-        String mappingPath = gsConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING_XML);
-        load(fullPath, mappingPath);
-    }
-
-    /**
      * Constructs a PortletDeploymentDescriptor from a portlet.xml and mapping file
      *
      * @param portletFilePath location of the portlet.xml

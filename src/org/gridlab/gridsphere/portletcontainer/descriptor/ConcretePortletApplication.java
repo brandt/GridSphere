@@ -12,7 +12,7 @@ import java.util.List;
 public class ConcretePortletApplication {
 
     private String id = new String();
-    private String name = new String();
+    //private String name = new String();
     private Vector contextParamList = new Vector();
     private ConcretePortletInfo portletInfo = new ConcretePortletInfo();
 
@@ -28,30 +28,12 @@ public class ConcretePortletApplication {
     }
 
     /**
-     * sets the UID of a ConcretePortletApplication
+     * Sets the ID of a ConcretePortletApplication
      *
-     * @param uid the UID of the ConcretePortletApplication
+     * @param id the ID of the ConcretePortletApplication
      */
     public void setID(String id) {
         this.id = id;
-    }
-
-    /**
-     * gets the name of a PortletApplication
-     *
-     * @returns name of the PortletApplication
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * sets the name of a PortletApplication
-     *
-     * @param name name of a PortletApplication
-     */
-    public void setName(String name) {
-        this.name = name;
     }
 
     /**
