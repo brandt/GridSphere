@@ -63,9 +63,9 @@ public interface SportletRequest extends PortletRequest {
     public void setMode(Portlet.Mode mode);
 
     /**
-     * Returns the mode that the portlet was running at last, or null if no previous mode exists.
+     * Sets the previos portlet mode.
      *
-     * @return the previous portlet mode
+     * @param the previous portlet mode
      */
     public void setPreviousMode(Portlet.Mode previousMode);
 
@@ -75,5 +75,7 @@ public interface SportletRequest extends PortletRequest {
      * @return the portlet window
      */
     public void setWindow(PortletWindow window);
+
+    public void logRequest();
 
 }

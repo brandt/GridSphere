@@ -107,7 +107,7 @@ public class SportletContext implements PortletContext {
                 throw new PortletException("Unable to include resource: RequestDispatcher is null");
             }
         } catch (Exception e) {
-            throw new PortletException("Unable to include resource " + e.getMessage());
+            throw new PortletException("Unable to include resource ", e);
         }
     }
 
@@ -354,8 +354,11 @@ public class SportletContext implements PortletContext {
         context.setAttribute(name, object);
     }
 
+    /**
+     * Returns the <display-name> of the web application
+     */
     public final String getServletContextName() {
-        return null;
+        return context.getServletContextName();
     }
 
 }

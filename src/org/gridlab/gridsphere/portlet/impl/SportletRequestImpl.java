@@ -296,9 +296,9 @@ public class SportletRequestImpl implements SportletRequest {
     }
 
     /**
-     * Returns the mode that the portlet was running at last, or null if no previous mode exists.
+     * Sets the previous portlet mode.
      *
-     * @return the previous portlet mode
+     * @param previousMode the previous portlet mode
      */
     public void setPreviousMode(Portlet.Mode previousMode) {
         req.setAttribute(GridSphereProperties.PREVIOUSMODE, previousMode);

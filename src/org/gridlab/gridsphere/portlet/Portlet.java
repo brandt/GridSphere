@@ -13,8 +13,10 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSessionEvent;
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
@@ -166,8 +168,7 @@ public abstract class Portlet extends HttpServlet
 
     }
 
-    public Portlet() {
-    }
+    public Portlet() {}
 
     /**
      * Called by the portlet container to indicate to this portlet that it is put into service.
@@ -242,6 +243,10 @@ public abstract class Portlet extends HttpServlet
      */
     public abstract void service(PortletRequest request, PortletResponse response)
             throws PortletException, IOException;
+
+    public abstract void sessionCreated(HttpSessionEvent event);
+
+    public abstract void sessionDestroyed(HttpSessionEvent event);
 
     /**
      * Description copied from interface: PortletSessionListener
@@ -365,9 +370,11 @@ public abstract class Portlet extends HttpServlet
             } else {
                 log.error("Portlet received unsupported lifecycle method: " + method);
             }
-        } catch (UnavailableException e) {
-
+        } catch (PortletException e) {
+            PrintWriter out = response.getWriter();
+            e.printStackTrace(out);
         }
+
         request.removeAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD);
     }
 

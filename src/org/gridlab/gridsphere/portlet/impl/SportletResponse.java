@@ -22,13 +22,6 @@ public class SportletResponse implements PortletResponse {
     private HttpServletRequest req = null;
     private SportletURI sportletURI = null;
 
-    // HARDCODED FOR SportletURI -- needs to have the servlet name
-    // config.getServletConfig().getServletName()
-    // Can't blindly use ServletConfig.getServletName since that only works
-    // if access provided using the mapping e.g. /gridsphere, but
-    // if user goes to /GridSphere, the actual servlet name then
-    // getServletName returns some crazy "org.apache.catalina.INVOKER.GridSphere"
-
     public SportletResponse(HttpServletResponse res, PortletRequest req) {
         this.res = res;
         this.req = req;

@@ -7,12 +7,14 @@ package org.gridlab.gridsphere.portlet;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.PortletProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletSettings;
+import org.gridlab.gridsphere.portlet.impl.SportletSession;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import javax.servlet.UnavailableException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSessionEvent;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Hashtable;
@@ -129,9 +131,6 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
     public void service(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         log.info("in PortletAdapter: service(PortletRequest, PortletResponse)");
 
-        Portlet.Mode mode = request.getMode();
-        Portlet.Mode previousMode = request.getPreviousMode();
-
         // set the proper PortletSettings
         String portletID = (String)request.getAttribute(GridSphereProperties.PORTLETID);
         if (portletID == null) {
@@ -141,13 +140,23 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
         portletSettings = (PortletSettings)allPortletSettings.get(portletID);
         request.setAttribute(GridSphereProperties.PORTLETSETTINGS, portletSettings);
 
-        /*  UNCOMMENT THIS WHEN PREVIOUS MODE IS WORKING
-        if (previousMode.getMode() == Portlet.Mode.CONFIGURE.getMode()) {
-            sportletSettings.enableConfigurePermission(true);
-        }
-        */
         String method = (String)request.getAttribute(PortletProperties.PORTLET_ACTION_METHOD);
         if (method != null) return;
+
+        Portlet.ModeModifier modifier = (Portlet.ModeModifier)request.getAttribute(GridSphereProperties.MODEMODIFIER);
+
+        if (modifier == Portlet.ModeModifier.CURRENT) {
+            request.setAttribute(GridSphereProperties.PORTLETMODE, request.getMode());
+            request.setAttribute(GridSphereProperties.PREVIOUSMODE, request.getPreviousMode());
+        } else if (modifier == Portlet.ModeModifier.PREVIOUS) {
+            request.setAttribute(GridSphereProperties.PORTLETMODE, request.getPreviousMode());
+        } else if (modifier == Portlet.ModeModifier.REQUESTED) {
+            request.setAttribute(GridSphereProperties.PORTLETMODE, request.getMode());
+            request.setAttribute(GridSphereProperties.PREVIOUSMODE, request.getPreviousMode());
+        }
+
+        Portlet.Mode mode = request.getMode();
+        Portlet.Mode previousMode = request.getPreviousMode();
 
         if (mode != null) {
             switch (mode.getMode()) {
@@ -164,18 +173,19 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
                     doHelp(request, response);
                     break;
                 default:
-                    doErrorMessage(request, response, "Received invalid PortletMode command : " + mode);
                     log.error("Received invalid PortletMode command : " + mode);
-                    throw new PortletException("Received invalid PortletMode command");
+                    throw new PortletException("Received invalid PortletMode command: " + mode);
             }
         } else {
-            doErrorMessage(request, response, "Received NULL PortletMode command");
-            log.error("Received invalid PortletMode command : " + mode);
-            throw new PortletException("Received invalid PortletMode command");
+            log.error("Received NULL PortletMode command");
+            throw new PortletException("Received NULL PortletMode command");
         }
-
         //request.removeAttribute(GridSphereProperties.PORTLETMODE);
     }
+
+    public abstract void sessionCreated(HttpSessionEvent event);
+
+    public abstract void sessionDestroyed(HttpSessionEvent event);
 
     /**
      * Description copied from interface: PortletSessionListener
@@ -200,6 +210,7 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      */
     public void logout(PortletSession session) {
         // XXX: FILL ME IN
+
     }
 
     /**
