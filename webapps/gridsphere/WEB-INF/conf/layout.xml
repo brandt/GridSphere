@@ -15,9 +15,8 @@
 
 <!-- Login -->
 <portlet-frame>
+    <width>60</width>
     <portlet-border>
-        <config-mode>true</config-mode>
-        <window-mode>true</window-mode>
         <title-color>#FFFFFF</title-color>
         <line-color>#336699</line-color>
         <font>Arial, Helvetica, sans-serif</font>
@@ -58,8 +57,8 @@
         <selected>true</selected>
         <portlet-panel>
             <grid-layout>
-                <columns>3</columns>
-                <rows>1</rows>
+                <columns>1</columns>
+                <rows>3</rows>
                 <portlet-insets>
                     <width>2</width>
                     <height>2</height>
@@ -68,8 +67,6 @@
                     <name>HalloWelt</name>
                     <width>90</width>
                     <portlet-border>
-                        <config-mode>true</config-mode>
-                        <window-mode>true</window-mode>
                         <title-color>#FFFFFF</title-color>
                         <line-color>#336699</line-color>
                         <font>Arial, Helvetica, sans-serif</font>
@@ -84,8 +81,6 @@
                     <name>HelloWorld</name>
                     <width>90</width>
                     <portlet-border>
-                        <config-mode>true</config-mode>
-                        <window-mode>true</window-mode>
                         <title-color>#FFFFFF</title-color>
                         <line-color>#336699</line-color>
                         <font>Arial, Helvetica, sans-serif</font>
@@ -100,8 +95,6 @@
                     <name>HelloWorld</name>
                     <width>90</width>
                     <portlet-border>
-                        <config-mode>true</config-mode>
-                        <window-mode>true</window-mode>
                         <title-color>#FFFFFF</title-color>
                         <line-color>#336699</line-color>
                         <font>Arial, Helvetica, sans-serif</font>
