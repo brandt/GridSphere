@@ -1,5 +1,9 @@
-<jsp:useBean id="error" class="java.lang.Throwable" scope="request"/> 
-<b>An error occurred!</b>
+<jsp:useBean id="error" class="java.lang.Throwable" scope="request"/>
+
+
+<%@ include file="/html/pagehead.html" %>
+
+<h2>GridSphere portal failed to initialize!</h2>
 <p>
 <br>
 	<%= error.getMessage() %>
