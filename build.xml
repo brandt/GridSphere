@@ -221,7 +221,7 @@ Copyright:
     </target>
 
 
-    <target name="mysql" depends="mapping">
+    <target name="db-mysql" depends="mapping">
       <sql
           driver="org.gjt.mm.mysql.Driver"
           url="jdbc:mysql://127.0.0.1/portaltest"
@@ -233,7 +233,7 @@ Copyright:
         </sql>
     </target>
 
-    <target name="postgres">
+    <target name="db-postgres">
       <sql
           driver="org.postgresql.Driver"
           url="jdbc:postgresql:testdb"
@@ -245,7 +245,7 @@ Copyright:
         </sql>
     </target>
 
-    <target name="hsqldb">
+    <target name="db-hsqldb">
       <sql
           driver="org.hsqldb.jdbcDriver"
           url="jdbc:hsqldb:testdb"
