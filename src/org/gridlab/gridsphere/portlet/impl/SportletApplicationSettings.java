@@ -4,18 +4,16 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-
-import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
-import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
-import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletDescriptor;
+import org.gridlab.gridsphere.portlet.AccessDeniedException;
+import org.gridlab.gridsphere.portlet.PortletApplicationSettings;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
+import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletDescriptor;
 
-import java.util.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 /**
  * The PortletApplicationSettings interface provides the portlet with the application's dynamic configuration.
@@ -56,7 +54,6 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
      * @return an enumeration of all available attributes names
      */
     public Enumeration getAttributeNames() {
-
         return store.keys();
     }
 
@@ -94,8 +91,8 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
         Enumeration enum = store.elements();
         ArrayList list = new ArrayList();
         while (enum.hasMoreElements()) {
-            String key = (String)enum.nextElement();
-            String value = (String)store.get(key);
+            String key = (String) enum.nextElement();
+            String value = (String) store.get(key);
             ConfigParam parms = new ConfigParam(key, value);
             list.add(parms);
         }

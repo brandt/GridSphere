@@ -1,3 +1,4 @@
+$Id$
 <?xml version="1.0" encoding="UTF-8"?>
 <portlet-layout>
 
@@ -99,15 +100,12 @@
             <portlet-tab>
                 <title>Access Control</title>
                 <portlet-panel>
-                    <flow-layout>
-                        <align>1</align>
-                        <hgap>1</hgap>
-                        <vgap>1</vgap>
-                        <portlet-frame>
+                    <grid-layout> 
+			<portlet-frame>
                             <name>AccessControlManagerPortlet</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.AccessControllerPortlet.1</portlet-class>
                         </portlet-frame>
-                    </flow-layout>
+                    </grid-layout>
                 </portlet-panel>
             </portlet-tab>
         </portlet-tabbed-pane>
