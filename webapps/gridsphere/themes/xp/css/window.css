@@ -7,6 +7,8 @@ Version: $Id$
 
 .window-main {
    width: 100%;
+   cellspacing: 2px;
+
 }
 
 .window-title {
@@ -18,6 +20,7 @@ Version: $Id$
   border-top: 1px solid #0053e2;
   border-right: 1px solid #0053e2;
   border-left: 1px solid #0053e2;
+
 }
 
 
@@ -50,6 +53,8 @@ Version: $Id$
   border-right: 1px solid #0053e2;
   border-left: 1px solid #0053e2;
   border-bottom: 1px solid #0053e2;
+  spacing-top: 5px;
+  spacing-right: 2px;
 }
 
 
