@@ -95,6 +95,10 @@ public class TextTag extends BaseComponentTag {
         this.key = key;
     }
 
+    public int doStartTag() throws JspException {
+        return EVAL_BODY_BUFFERED;
+    }
+
     public int doEndTag() throws JspException {
 
         if (!beanId.equals("")) {
@@ -118,10 +122,8 @@ public class TextTag extends BaseComponentTag {
         }
 
 
-
-        // this doesn't work anymore
-        if ((bodyContent != null) && (value == null)) {
-            textBean.setValue(bodyContent.getString());
+        if ((this.getBodyContent() != null) && (value == null)) {
+            textBean.setValue(this.getBodyContent().getString());
         }
 
         Tag parent = getParent();
