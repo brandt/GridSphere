@@ -174,9 +174,12 @@ Copyright:
     <target name="configure-database" depends="setenv">
         <mkdir dir="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/persistence/"/>
         <copy overwrite="true" file="webapp/WEB-INF/persistence/hibernate.properties" todir="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/persistence/"/>
+        <pathconvert targetos="windows" dirsep="/" property="cathome">
+            <path location="${env.CATALINA_HOME}"/>
+        </pathconvert>
         <replace file="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/persistence/hibernate.properties"
             token="@3RDPARTY_WEBAPP@"
-            value="${env.CATALINA_HOME}/webapps/${project.name}"/>
+            value="${cathome}/webapps/${project.name}"/>
     </target>
 
     <target name="create-database" depends="setenv, configure-database, deploy">
