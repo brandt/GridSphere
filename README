@@ -10,6 +10,15 @@ You can also check the online web site
 (http://www.gridsphere.org) which contains the most up to date 
 information.
 
+In addition, please subscribe to the following mail lists from the mailman
+interface at https://www.gridlab.org/mailman/listinfo:
+
+gridsphere-users -- Mail list used for the discussion of developing portals using the GridSphere framework
+
+gridsphere-dev -- Mail list used for the discussion of GridSphere framework development
+
+gridsphere-cvs -- Mail list used to receive CVS notifications
+
 Thank you.
 
 The GridSphere Team	http://www.gridsphere.org
