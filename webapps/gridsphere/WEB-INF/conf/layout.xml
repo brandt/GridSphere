@@ -57,16 +57,28 @@
                 <selected>true</selected>
                 <portlet-panel>
                     <grid-layout>
-                        <columns>2</columns>
-                        <rows>2</rows>
+                        <columns>1</columns>
                         <portlet-frame>
                             <width>60</width>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.LoginPortlet.1</portlet-class>
                         </portlet-frame>
                         <portlet-frame>
-                            <name>HalloWelt</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.624.2</portlet-class>
+                            <name>DemoPortlet</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.DemoPortlet.2</portlet-class>
                         </portlet-frame>
+                        <portlet-frame>
+                            <name>ManagerPortlet</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.PortletApplicationManager.1</portlet-class>
+                        </portlet-frame>
+                    </grid-layout>
+                </portlet-panel>
+            </portlet-tab-page>
+            <portlet-tab-page>
+                <title>Whatever</title>
+                <selected>false</selected>
+                <portlet-panel>
+                    <grid-layout>
+                        <columns>1</columns>
                         <portlet-frame>
                             <name>HelloWorld</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.2</portlet-class>
@@ -79,13 +91,14 @@
                 </portlet-panel>
             </portlet-tab-page>
             <portlet-tab-page>
-                <title>Whatever</title>
+                <title>New Stuff</title>
                 <selected>false</selected>
                 <portlet-panel>
                     <grid-layout>
-                        <columns>1</columns>
-                        <rows>2</rows>
+                        <columns>2</columns>
                         <portlet-frame>
+                            <name>HelloWorld</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.2</portlet-class>
                             <name>RSS</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.RSSPortlet.1</portlet-class>
                         </portlet-frame>

@@ -48,9 +48,6 @@
 
     <class name="org.gridlab.gridsphere.layout.PortletGridLayout" extends="org.gridlab.gridsphere.layout.BaseLayoutManager">
         <map-to xml="grid-layout"/>
-        <field name="Rows" type="integer">
-            <bind-xml name="rows"/>
-        </field>
         <field name="Columns" type="integer">
             <bind-xml name="columns"/>
         </field>
