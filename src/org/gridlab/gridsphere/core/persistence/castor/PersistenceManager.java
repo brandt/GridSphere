@@ -25,7 +25,7 @@ public class PersistenceManager implements PersistenceInterface {
 
     /**
      * The great PersistenceManager
-     * @param ConfigurationFile filename for the database.xml configurationfile for castor
+     * @param Configfile filename for the database.xml configurationfile for castor
      * @param Databasename which database to use in the database
      */
     public PersistenceManager(String Configfile, String Databasename) throws ConfigurationException {

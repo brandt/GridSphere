@@ -9,18 +9,12 @@ package org.gridlab.gridsphere.core.persistence.castor;
  *
  */
 
-import org.apache.log4j.Category;
 import org.exolab.castor.jdo.*;
 import org.exolab.castor.jdo.PersistenceException;
 import org.exolab.castor.mapping.MappingException;
 import org.gridlab.gridsphere.core.persistence.*;
-import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
-import org.gridlab.gridsphere.portlet.impl.SportletGroup;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletLog;
-
-//import org.gridlab.gridsphere.core.persistence.*;
-
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -37,7 +31,7 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
     String DatabaseName = null;
     String Query = null;
 
-
+    // @todo need to check settings for rollback !!
 
     public PersistenceManagerRdbms() {
         super();
@@ -197,8 +191,14 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
         }
     }
 
+
     /**
-     * Dummy for restore;
+     * restores objects from storage
+     *
+     * @param query String object containing OQL query
+     * @throws ConfigurationException if configurations are not set
+     * @throws RestoreException if restore failes for some reason
+     * @return list of objects from OQL query
      */
     public List restoreList(String query) throws ConfigurationException, RestoreException {
         setQuery(query);
@@ -208,7 +208,6 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
     /**
      * restores objects from storage
      *
-     * @param query String object containing OQL query
      * @throws ConfigurationException if configurations are not set
      * @throws RestoreException if restore failes for some reason
      * @return list of objects from OQL query
@@ -399,7 +398,6 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
         } catch (MappingException e) {
             log.error("MappingException!" + e);
             throw new DeleteException("Mapping Error: "+e);
-
         }
 
     }

@@ -112,7 +112,7 @@ public class BaseObject implements org.exolab.castor.jdo.TimeStampable, org.exol
      * @return a vector of stringobjects
      */
     public Vector convertToStringVector(Object object, List vector, Class cl) {
-        log.info("converting from Vector to StringVector");
+        //log.info("converting from Vector to StringVector");
 
         Vector newVector = new Vector();
 
@@ -137,7 +137,7 @@ public class BaseObject implements org.exolab.castor.jdo.TimeStampable, org.exol
 
             newVector.add(v);
 
-            log.info("converted to type :"+cl.getName());
+            //log.info("converted to type :"+cl.getName());
 
         }
         return newVector;
@@ -151,7 +151,7 @@ public class BaseObject implements org.exolab.castor.jdo.TimeStampable, org.exol
      */
     public Vector convertToVector(List vector) {
 
-        log.info("converting from StringVector to Vector");
+        //log.info("converting from StringVector to Vector");
 
         Vector newVector = new Vector();
 

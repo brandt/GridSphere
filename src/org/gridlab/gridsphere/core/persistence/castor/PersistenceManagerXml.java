@@ -5,7 +5,6 @@
  */
 package org.gridlab.gridsphere.core.persistence.castor;
 
-import org.apache.log4j.Category;
 import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.mapping.MappingException;
 import org.exolab.castor.xml.MarshalException;
@@ -13,14 +12,14 @@ import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.Unmarshaller;
 import org.exolab.castor.xml.ValidationException;
 import org.gridlab.gridsphere.core.persistence.*;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Class provides easy access to marshal/unmarshal objects to XML files
@@ -53,7 +52,7 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
     /**
      * checks if all setting for marshalling xml data are done
      *
-     * @throws ConfigurationsExcpetion if one variable is not set
+     * @throws ConfigurationException if one variable is not set
      */
     private void checkSetting() throws ConfigurationException {
 
@@ -84,7 +83,7 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
     /**
      * sets the mapping file
      *
-     * @param mappingfile file containing the mapping
+     * @param mappingFile file containing the mapping
      */
     public void setMappingFile(String mappingFile) {
         MappingFile = mappingFile;
@@ -103,7 +102,7 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
     /**
      * updates an object in the xml file (same as create)
      *
-     * @throws UpdateExcpetion if the update failed
+     * @throws UpdateException if the update failed
      * @param object update 'object'
      */
     public void update(Object object) throws UpdateException {
@@ -121,7 +120,7 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
      * marshals the given object to an xml file
      *
      * @throws CreateException if the creation failed
-     * @throws ConfiguratonExcpetion if the configuration was wrong
+     * @throws ConfigurationException if the configuration was wrong
      * @param object object to be marshalled
      */
     public void create(Object object) throws CreateException, ConfigurationException {
@@ -161,8 +160,7 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
     /**
      * restores an object from an xml file
      *
-     * @param qobject instance of object
-     * @throws RestoreExcpetion if restore was not succsessful
+     * @throws RestoreException if restore was not succsessful
      * @throws ConfigurationException if there was a configurationerror
      * @return object which was unmarshalled
      */
@@ -200,9 +198,9 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
      * restore objects from xml file, just here to justify interface could be empty
      * since it makes no sense in xml files
      *
-     * @throws RestoreExcpetion if restore failed
-     * @throws ConfigurationExcpetion if config was wrong
-     * @returns list of objects (here just with one object)
+     * @throws RestoreException if restore failed
+     * @throws ConfigurationException if config was wrong
+     * @return list of objects (here just with one object)
      */
     public List restoreList() throws RestoreException, ConfigurationException {
 
