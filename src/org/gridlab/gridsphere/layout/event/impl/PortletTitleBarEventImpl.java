@@ -34,10 +34,8 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
         this.id = id;
         if (req.getParameter(GridSphereProperties.PORTLETMODE) != null) {
             action = PortletTitleBarEvent.Action.MODE_MODIFY;
-            System.err.println("Got a mode event");
         } else if (req.getParameter(GridSphereProperties.PORTLETWINDOW) != null) {
             action = PortletTitleBarEvent.Action.WINDOW_MODIFY;
-            System.err.println("Got a window event");
         }
     }
 

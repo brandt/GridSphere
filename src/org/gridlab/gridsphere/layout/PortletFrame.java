@@ -257,7 +257,6 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.actionPerformed(event);
-        System.err.println("in action Performed in PortletFrame");
         // process events
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
@@ -290,19 +289,21 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
 
 
         // now perform actionPerformed on Portlet if it has an action
-        DefaultPortletAction action = event.getAction();
-        if (action.getName() != "") {
-            try {
-                PortletInvoker.actionPerformed(portletClass, action, req, res);
-            } catch (PortletException e) {
-                errorFrame.setMessage("Unable to perform action", e);
+        if (event.hasAction()) {
+            DefaultPortletAction action = event.getAction();
+            if (action.getName() != "") {
+                try {
+                    PortletInvoker.actionPerformed(portletClass, action, req, res);
+                } catch (PortletException e) {
+                    errorFrame.setMessage("Unable to perform action", e);
+                }
+                String message = (String)req.getAttribute(GridSphereProperties.PORTLETERROR);
+                if (message != null) {
+                    errorFrame.setMessage(message);
+                }
             }
-            String message = (String)req.getAttribute(GridSphereProperties.PORTLETERROR);
-            if (message != null) {
-                errorFrame.setMessage(message);
-            }
+            // in case portlet mode got reset
         }
-        // in case portlet mode got reset
         if (titleBar != null) titleBar.setPortletMode(req.getMode().toString());
     }
 
@@ -374,16 +375,20 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
                 out.println("<tr><td>");
             }
 
-            try {
-                PortletInvoker.service(portletClass, req, res);
-            } catch (PortletException e) {
-                errorFrame.setMessage("Unable to invoke service method", e);
-            }
-
             if (errorFrame.hasMessage()) {
                 out.println(errorFrame.getMessage());
                 errorFrame.clearMessage();
+            } else {
+
+                try {
+                    PortletInvoker.service(portletClass, req, res);
+                } catch (PortletException e) {
+                    errorFrame.setMessage("Unable to invoke service method", e);
+                    out.println(errorFrame.getMessage());
+                errorFrame.clearMessage();
+                }
             }
+
 
             out.println("</td></tr>");
         } else {
