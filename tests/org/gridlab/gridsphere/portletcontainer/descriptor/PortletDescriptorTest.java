@@ -117,7 +117,7 @@ public class PortletDescriptorTest extends GridSphereServletTest {
         assertEquals(true, contextList.containsKey("buzzle"));
         assertEquals(true, contextList.containsValue("yea"));
 
-        ConcretePortletConfig onePI = concreteOne.getConcreteSportletConfig();
+        ConcreteSportletConfig onePI = concreteOne.getConcreteSportletConfig();
         assertEquals("Hello World 1", onePI.getName());
         assertEquals("en", onePI.getDefaultLocale());
 
@@ -158,7 +158,7 @@ public class PortletDescriptorTest extends GridSphereServletTest {
         assertEquals(true, configHash.containsKey("Portlet Master"));
         assertEquals(true, configHash.containsValue("secondguy@some.com"));
 
-        ConcretePortletConfig twoPI = concreteTwo.getConcreteSportletConfig();
+        ConcreteSportletConfig twoPI = concreteTwo.getConcreteSportletConfig();
         assertEquals(twoPI.getName(), "Hello World 2");
         assertEquals(twoPI.getDefaultLocale(), "en");
 
