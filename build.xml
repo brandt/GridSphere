@@ -369,7 +369,6 @@ Copyright:
     <!-- Compiles and runs all JUnit tests: needs optional.jar and junit in classpath     -->
     <!-- =================================================================== -->
     <target name="compiletests" if="junit.present" depends="compile" description="Compiles all JUnit tests">
-        <copy file="${gswebapp.dir}/WEB-INF/conf/PortletServices.properties" todir="${classes.dir}"/>
         <javac  srcdir="${test.dir}"
 		    destdir="${classes.dir}"
 		    classpathref="classpath"
