@@ -7,7 +7,7 @@
 <hibernate-mapping>
     <class
         name="org.gridlab.gridsphere.portlet.jsrimpl.PersistencePreference"
-        table="persistencepref"
+        table="portletpref"
         >
 
         <id
@@ -22,6 +22,12 @@
 
         <property name="userId" type="string" column="userid"/>
         <property name="portletId" type="string" column="portletid"/>
+        <map name="attributes" table="portletprefattribute" cascade="all">
+            <key column="attr_oid"/>
+            <index column="attr_ndx" type="string"/>
+            <many-to-many column="value_oid" class="org.gridlab.gridsphere.portlet.jsrimpl.PersistencePreferenceAttribute"/>
+
+        </map>
 
     </class>
 

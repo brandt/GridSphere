@@ -13,18 +13,8 @@ public class PersistencePreferenceAttribute {
 
     private String oid = null;
     protected boolean readonly = false;
-    protected String key = null;
     protected List values = new ArrayList();
 
-    /**
-     * public String getKey() {
-     * return key;
-     * }
-     * <p/>
-     * public void setKey(String key) {
-     * this.key = key;
-     * }
-     */
     public String getOid() {
         return oid;
     }
@@ -42,11 +32,15 @@ public class PersistencePreferenceAttribute {
         this.values = values;
     }
 
+    public List getValues() {
+        return values;
+    }
+
     public boolean isReadOnly() {
         return readonly;
     }
 
-    public void setValues(String[] values) throws ReadOnlyException {
+    public void setAValues(String[] values) throws ReadOnlyException {
         if (!readonly) {
             this.values = new ArrayList();
             for (int i = 0; i < values.length; i++) {
@@ -57,16 +51,17 @@ public class PersistencePreferenceAttribute {
         }
     }
 
-    public String[] getValues() {
+    public String[] getAValues() {
         return (String[]) this.values.toArray();
     }
 
     public void setValue(String value) throws ReadOnlyException {
-        setValues(new String[]{value});
+        setAValues(new String[]{value});
     }
 
     public String getValue() {
         return (String) values.get(0);
     }
+
 
 }

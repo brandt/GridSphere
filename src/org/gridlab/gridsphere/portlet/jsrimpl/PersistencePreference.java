@@ -182,7 +182,7 @@ public class PersistencePreference implements PortletPreferences {
     public String[] getValues(String key, String[] def) {
         if (key == null) throw new IllegalArgumentException("key is NULL");
         if (attributes.containsKey(key)) {
-            return ((PersistencePreferenceAttribute) attributes.get(key)).getValues();
+            return ((PersistencePreferenceAttribute) attributes.get(key)).getAValues();
         }
         return def;
     }
@@ -230,14 +230,14 @@ public class PersistencePreference implements PortletPreferences {
         if (attributes.containsKey(key)) {
             PersistencePreferenceAttribute attr = (PersistencePreferenceAttribute) attributes.get(key);
             if (!attr.isReadOnly()) {
-                attr.setValues(values);
+                attr.setAValues(values);
             } else {
                 throw new ReadOnlyException("value is READONLY");
             }
 
         } else {
             PersistencePreferenceAttribute attr = new PersistencePreferenceAttribute();
-            attr.setValues(values);
+            attr.setAValues(values);
             attributes.put(key, attr);
         }
     }
@@ -275,7 +275,7 @@ public class PersistencePreference implements PortletPreferences {
         while (it.hasNext()) {
             String key = (String) it.next();
             PersistencePreferenceAttribute attr = (PersistencePreferenceAttribute) attributes.get(key);
-            map.put(key, attr.getValues());
+            map.put(key, attr.getAValues());
         }
         return map;
     }
@@ -346,6 +346,7 @@ public class PersistencePreference implements PortletPreferences {
         } */
         try {
             if (this.getOid() != null) {
+
                 pm.update(this);
             } else {
                 pm.create(this);
