@@ -13,7 +13,6 @@ import javax.servlet.jsp.PageContext;
 
 public class TextAreaTag extends BaseComponentTag {
 
-
     protected TextAreaBean textAreaBean = null;
     protected int cols = 0;
     protected int rows = 0;

@@ -34,10 +34,12 @@ public class TableRowTag extends ContainerTag {
         //System.err.println("in TableRowTag:doStartTag");
         list = new Vector();
 
-        rowBean = new TableRowBean();
+
         if (!beanId.equals("")) {
             rowBean = (TableRowBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (rowBean == null) rowBean = new TableRowBean();
+        } else {
+            rowBean = new TableRowBean();
         }
 
         return EVAL_BODY_INCLUDE;
@@ -47,7 +49,6 @@ public class TableRowTag extends ContainerTag {
         //System.err.println("in TableRowTag:doEndTag");
         TableTag tableTag = (TableTag)getParent();
         if (tableTag != null) {
-            DefaultTableModel tableModel = tableTag.getTableModel();
 
             Iterator it = list.iterator();
             while (it.hasNext()) {
@@ -55,15 +56,12 @@ public class TableRowTag extends ContainerTag {
                 rowBean.addBean(bean);
             }
 
+            DefaultTableModel tableModel = tableTag.getTableModel();
             tableModel.addTableRowBean(rowBean);
-
             tableTag.setTableModel(tableModel);
+
         }
-        /*
-        if (!beanId.equals("")) {
-            store(beanId, rowBean);
-        }
-        */
+
         return EVAL_PAGE;
     }
 }

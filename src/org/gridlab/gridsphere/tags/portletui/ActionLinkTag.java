@@ -18,8 +18,6 @@ public class ActionLinkTag extends ActionTag {
     protected ActionLinkBean actionlink = null;
     protected String key = null;
 
-    public static final String ACTION_STYLE = "portlet-frame-label";
-
     public void setKey(String key) {
         this.key = key;
     }
@@ -32,30 +30,22 @@ public class ActionLinkTag extends ActionTag {
         return key;
     }
 
-    public void setActionLinkBean(ActionLinkBean actionlink) {
-        this.actionlink = actionlink;
-    }
-
-    public ActionLinkBean getActionLinkBean() {
-        return actionlink;
-    }
-
     public int doStartTag() throws JspException {
-        this.cssStyle = ACTION_STYLE;
+        actionlink = new ActionLinkBean();
         paramBeans = new ArrayList();
         createActionURI();
         return EVAL_BODY_INCLUDE;
     }
 
     public int doEndTag() throws JspTagException {
-        if (!beanId.equals("")) {
-            actionlink = (ActionLinkBean)pageContext.getSession().getAttribute(getBeanKey());
-            if (actionlink == null) {
-                actionlink = new ActionLinkBean();
-            }
-        } else {
-            actionlink = new ActionLinkBean();
+        actionlink.setValue(value);
+        if (getKey() != null) {
+            actionlink.setKey(key);
+            Locale locale = pageContext.getRequest().getLocale();
+            ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
+            actionlink.setValue(bundle.getString(actionlink.getKey()));
         }
+        this.setBaseComponentBean(actionlink);
 
         Iterator it = paramBeans.iterator();
         while (it.hasNext()) {
@@ -64,28 +54,11 @@ public class ActionLinkTag extends ActionTag {
         }
 
         actionlink.setAction(createActionURI());
-        //actionlink.setValue(value);
-
-        this.setBaseComponentBean(actionlink);
-
-        if (getKey() != null) {
-            actionlink.setKey(key);
-            Locale locale = pageContext.getRequest().getLocale();
-            ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
-            actionlink.setValue(bundle.getString(actionlink.getKey()));
-        }
-        //actionlink.setAction(action);
-
-
-        if (!beanId.equals("")) {
-            store(getBeanKey(), actionlink);
-        }
 
         Object parentTag = getParent();
         if (parentTag instanceof ContainerTag) {
             ContainerTag containerTag = (ContainerTag)parentTag;
             containerTag.addTagBean(actionlink);
-            //System.err.println("inTextTag: adding " + textBean.toString());
         } else {
 
             try {

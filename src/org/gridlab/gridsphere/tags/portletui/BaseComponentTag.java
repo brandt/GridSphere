@@ -39,7 +39,7 @@ public abstract class BaseComponentTag extends BaseBeanTag   {
     }
 
     /**
-     * Returns the label of the beans.
+     * Returns the value of the tag
      * @return label of the beans
      */
     public String getValue() {

@@ -15,21 +15,9 @@ import java.util.ArrayList;
 
 public class ActionSubmitTag extends ActionTag {
 
-    public static final String SUBMIT_STYLE = "portlet-frame-text";
-
     protected String key = "";
 
     protected ActionSubmitBean actionSubmitBean = null;
-
-    public void setActionSubmitBean(ActionSubmitBean actionSubmitBean) {
-        this.actionSubmitBean = actionSubmitBean;
-    }
-
-    public ActionSubmitBean getActionSubmitbean() {
-        return actionSubmitBean;
-    }
-
-
 
     public String getKey() {
         return key;
@@ -39,42 +27,35 @@ public class ActionSubmitTag extends ActionTag {
         this.key = key;
     }
 
-
     public int doStartTag() throws JspException {
         actionSubmitBean = new ActionSubmitBean();
         if (!beanId.equals("")) {
-            actionSubmitBean = (ActionSubmitBean)pageContext.getSession().getAttribute(getBeanKey());
-            if (actionSubmitBean == null) actionSubmitBean = new ActionSubmitBean();
+            actionSubmitBean = (ActionSubmitBean)pageContext.getAttribute(getBeanKey());
         }
-        actionSubmitBean.setCssStyle(SUBMIT_STYLE);
+        if (actionSubmitBean == null) actionSubmitBean = new ActionSubmitBean();
         paramBeans = new ArrayList();
         return EVAL_BODY_INCLUDE;
     }
 
     public int doEndTag() throws JspException {
 
-
-
-        /*
-        ActionFormTag formTag = (ActionFormTag)findAncestorWithClass(this, ActionFormTag.class);
-        if (formTag != null) {
-            formTag.setAction(actionSubmitBean.getAction());
-        }
-        */
-
         if (!key.equals("")) {
             actionSubmitBean.setKey(key);
-
             Locale locale = pageContext.getRequest().getLocale();
             ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
             String localizedText = bundle.getString(actionSubmitBean.getKey());
             if (localizedText != null) {
-                actionSubmitBean.setValue(localizedText);
+                value = localizedText;
             }
         }
 
+        if (!beanId.equals("")) {
+            this.updateBaseComponentBean(actionSubmitBean);
+        } else {
+            this.setBaseComponentBean(actionSubmitBean);
+        }
+
         actionSubmitBean.setAction(action);
-        this.setBaseComponentBean(actionSubmitBean);
 
         Object parentTag = getParent();
         if (parentTag instanceof ContainerTag) {

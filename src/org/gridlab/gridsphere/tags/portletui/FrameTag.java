@@ -20,12 +20,7 @@ import java.util.Iterator;
  */
 public class FrameTag extends TableTag {
 
-    public static final String FRAME_WIDTH = "100%";
-    public static final String FRAME_SPACING = "1";
-
     public int doStartTag() throws JspException {
-        this.width = FRAME_WIDTH;
-        this.cellSpacing = FRAME_SPACING;
 
         if (!beanId.equals("")) {
             tableBean = (FrameBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
@@ -33,10 +28,11 @@ public class FrameTag extends TableTag {
                 //System.err.println("Found a non-null tableframebean");
                 return SKIP_BODY;
             } else {
+                System.err.println("creating new tableframebean");
                 tableBean = new FrameBean();
             }
         } else {
-            //System.err.println("creating new tableframebean");
+            System.err.println("creating new tableframebean");
             tableBean = new FrameBean();
         }
         return EVAL_BODY_INCLUDE;

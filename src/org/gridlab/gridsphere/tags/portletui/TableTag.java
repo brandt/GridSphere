@@ -21,7 +21,7 @@ public class TableTag extends BaseBeanTag {
 
     protected TableBean tableBean = null;
     //protected DefaultTableModel model = null;
-    protected String cellSpacing = "1";
+    protected String cellSpacing = null;
     protected String width = null;
 
     public void setTableModel(DefaultTableModel tableModel) {
@@ -77,16 +77,8 @@ public class TableTag extends BaseBeanTag {
         // do all the rendering for this table
         //System.err.println("in TableTag:doEndTag");
 
-        tableBean.setWidth(width);
-        tableBean.setCellSpacing(cellSpacing);
-
-        //tableBean.setTableModel();
-        /*
-        if (!beanId.equals("")) {
-            //System.err.println("setting tablemodel in table");
-            store(getBeanKey(), tableBean);
-        }
-        */
+        if (width != null) tableBean.setWidth(width);
+        if (cellSpacing != null) tableBean.setCellSpacing(cellSpacing);
 
         Object parent = getParent();
         if (parent instanceof ContainerTag) {
