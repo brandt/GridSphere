@@ -156,15 +156,6 @@ public class SportletUserImpl extends BaseObject implements SportletUser  {
     }
 
     /**
-     * get the internal unique user id
-     *
-     * @return internal Id
-     */
-    public String getUserID() {
-        return Id;
-    }
-
-    /**
      * Returns the user id of the user, or null if the user id is not available.
      *
      * @return the user id
