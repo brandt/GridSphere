@@ -333,7 +333,7 @@ public abstract class Portlet extends HttpServlet
         String propsFile = config.getServletContext().getRealPath("/WEB-INF/classes/log4j.properties");
         File f = new File(propsFile);
         if (f.exists()) {
-            System.err.println("configuring to use " + propsFile);
+            //System.err.println("configuring to use " + propsFile);
             SportletLog.setConfigureURL(propsFile);
         }
     }
