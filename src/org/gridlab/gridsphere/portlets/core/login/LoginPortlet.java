@@ -34,6 +34,9 @@ public class LoginPortlet extends ActionPortlet {
     public static final Integer LOGIN_ERROR_UNKNOWN = new Integer(-1);
 
     public static final String DO_VIEW_USER_EDIT_LOGIN = "login/createaccount.jsp"; //edit user
+    public static final String DO_CONFIGURE = "login/config.jsp"; //edit user
+
+    private static boolean canUserCreateAccount = true;
 
     private UserManagerService userManagerService = null;
     private AccessControlManagerService aclService = null;
@@ -49,6 +52,7 @@ public class LoginPortlet extends ActionPortlet {
             throw new UnavailableException("Unable to initialize services");
         }
         DEFAULT_VIEW_PAGE = "doViewUser";
+        DEFAULT_CONFIGURE_PAGE = "showConfigure";
     }
 
     public void initConcrete(PortletSettings settings) throws UnavailableException {
@@ -60,7 +64,12 @@ public class LoginPortlet extends ActionPortlet {
         PortletRequest request = event.getPortletRequest();
         User user = request.getUser();
         request.setAttribute("user", user);
-        setNextState(request, "login/login.jsp");
+        if (user instanceof GuestUser) {
+            request.setAttribute("canUserCreateAcct", Boolean.valueOf(canUserCreateAccount));
+            setNextState(request, "login/login.jsp");
+        } else {
+            showConfigure(event);
+        }
     }
 
 
@@ -71,7 +80,8 @@ public class LoginPortlet extends ActionPortlet {
         if (user instanceof GuestUser) {
             out.println(getPortletSettings().getTitle(request.getLocale(), null));
         } else {
-            getPortletConfig().getContext().include("/jsp/login/login_title.jsp", request, response);
+            out.println(getLocalizedText(request, "LOGIN_CONFIGURE"));
+            //getPortletConfig().getContext().include("/jsp/login/login_title.jsp", request, response);
         }
         /*
          ResourceBundle resBundle = ResourceBundle.getBundle("Portlet", locale);
@@ -273,5 +283,21 @@ public class LoginPortlet extends ActionPortlet {
         this.aclService.approveGroupRequest(groupRequest);
     }
 
+    public void showConfigure(FormEvent event) {
+        PortletRequest req = event.getPortletRequest();
+        CheckBoxBean acctCB = event.getCheckBoxBean("acctCB");
+        acctCB.setSelected(canUserCreateAccount);
+        setNextState(req, DO_CONFIGURE);
+    }
 
+    public void setUserCreateAccount(FormEvent event) {
+        CheckBoxBean acctCB = event.getCheckBoxBean("acctCB");
+        String useracct = acctCB.getSelectedValue();
+        if (useracct != null) {
+            canUserCreateAccount = true;
+        } else {
+            canUserCreateAccount = false;
+        }
+        showConfigure(event);
+    }
 }
