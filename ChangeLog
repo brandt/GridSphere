@@ -15,6 +15,12 @@ Changes since Gridsphere 1.1.1
 + Updated templating build system to develop JSR portlets
 + Added create TCK user/layout code to GS portal and layout engine to 
  run thru compliance tests. Ant target/task deploytck creates gs style portlet WAR's out of existing TCK WAR files.
++ Added out-of-the-box windows support
++ Changed themes to be imageless
++ Added support for messaging a portaluser (e.g. via AIM, Mail...)
++ Added reporting on databaseproblems
++ general bugfixing
+
 
 
 Changes since GridSphere 1.0
