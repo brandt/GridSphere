@@ -29,7 +29,7 @@ public class DropDownListBean extends BaseListBean implements DropDownList {
      * @param name name of the entry
      * @param value value of the entry
      */
-    public void add(String name, String value) {
+    public void add(String label, String value) {
         ListBoxItemBean item = new ListBoxItemBean();
         item.setName(name);
         item.setValue(value);
@@ -75,7 +75,7 @@ public class DropDownListBean extends BaseListBean implements DropDownList {
 
     /**
      * Returns the selected values of the list.
-     * @return selected values oof the list
+     * @return selected values of the list
      */
     public ArrayList getSelectedValues() {
         ArrayList result = new ArrayList();
