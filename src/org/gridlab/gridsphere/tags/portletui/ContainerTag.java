@@ -5,11 +5,14 @@
 package org.gridlab.gridsphere.tags.portletui;
 
 import org.gridlab.gridsphere.provider.portletui.beans.TagBean;
+import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
+import org.gridlab.gridsphere.provider.portletui.beans.BeanContainer;
 
 import javax.servlet.jsp.JspException;
 import java.util.List;
 import java.util.Vector;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public abstract class ContainerTag extends BaseComponentTag {
 
@@ -30,5 +33,19 @@ public abstract class ContainerTag extends BaseComponentTag {
     public abstract int doStartTag() throws JspException;
 
     public abstract int doEndTag() throws JspException;
+
+    public void doEndTag(BeanContainer beanContainer) throws JspException {
+
+        super.doEndTag(beanContainer);
+
+        Iterator it = list.iterator();
+        while (it.hasNext()) {
+            BaseComponentBean bc = (BaseComponentBean)it.next();
+            beanContainer.addBean(bc);
+        }
+
+
+
+    }
 
 }

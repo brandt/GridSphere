@@ -6,6 +6,11 @@
 package org.gridlab.gridsphere.tags.portletui;
 
 import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TagBean;
+
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.Tag;
 
 public abstract class BaseComponentTag extends BaseBeanTag   {
 
@@ -167,6 +172,7 @@ public abstract class BaseComponentTag extends BaseBeanTag   {
         if (backgroundcolor != null) componentBean.setBackgroundColor(backgroundcolor);
         if (color != null) componentBean.setColor(color);
         if (cssStyle != null) componentBean.setCssStyle(cssStyle);
+
         componentBean.setDisabled(disabled);
         if (font != null) componentBean.setFont(font);
         if (name != null) componentBean.setName(name);
@@ -206,5 +212,15 @@ public abstract class BaseComponentTag extends BaseBeanTag   {
         }
     }
 
+    public void doEndTag(TagBean tagBean) throws JspException {
+        /*
+        Object parentTag = getParent();
+        if (parentTag instanceof ContainerTag) {
+            ContainerTag containerTag = (ContainerTag)parentTag;
+            containerTag.addTagBean(tagBean);
+        }
+        */
+
+    }
 
 }

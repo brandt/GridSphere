@@ -32,7 +32,7 @@ public class RadioButtonTag extends BaseComponentTag {
         return selected;
     }
 
-    public int doEndTag() throws JspException {
+    public int doStartTag() throws JspException {
 
         if (!beanId.equals("")) {
             radiobutton = (RadioButtonBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
@@ -51,19 +51,15 @@ public class RadioButtonTag extends BaseComponentTag {
 
         //debug();
 
-        Object parentTag = getParent();
-        if (parentTag instanceof ContainerTag) {
-            ContainerTag containerTag = (ContainerTag)parentTag;
-            containerTag.addTagBean(radiobutton);
-        } else {
-            try {
-                JspWriter out = pageContext.getOut();
-                out.print(radiobutton.toString());
-            } catch (Exception e) {
-                throw new JspException(e.getMessage());
-            }
+
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(radiobutton.toStartString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
         }
-        return EVAL_BODY_INCLUDE;
+
+        return SKIP_BODY;
     }
 
 }

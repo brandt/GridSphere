@@ -12,12 +12,13 @@ import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import java.util.List;
 import java.util.Iterator;
+import java.util.ArrayList;
 
 /**
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-public class TableTag extends BaseBeanTag {
+public class TableTag extends BaseComponentTag {
 
     protected TableBean tableBean = null;
     //protected DefaultTableModel model = null;
@@ -57,43 +58,38 @@ public class TableTag extends BaseBeanTag {
     }
 
     public int doStartTag() throws JspException {
+
         if (!beanId.equals("")) {
             tableBean = (TableBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
-
-            if (tableBean != null) {
-                //System.err.println("Found a non-null tablebean");
-                return SKIP_BODY;
-            } else {
+            if (tableBean == null) {
                 tableBean = new TableBean();
             }
         } else {
             tableBean = new TableBean();
+
+            if (width != null) tableBean.setWidth(width);
+            if (cellSpacing != null) tableBean.setCellSpacing(cellSpacing);
+        }
+
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(tableBean.toStartString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
         }
 
         return EVAL_BODY_INCLUDE;
     }
 
     public int doEndTag() throws JspException {
-        // do all the rendering for this table
-        //System.err.println("in TableTag:doEndTag");
 
-        if (width != null) tableBean.setWidth(width);
-        if (cellSpacing != null) tableBean.setCellSpacing(cellSpacing);
-
-        Object parent = getParent();
-        if (parent instanceof ContainerTag) {
-            ContainerTag t = (ContainerTag)parent;
-            t.addTagBean(tableBean);
-        } else {
-
-            try {
-                JspWriter out = pageContext.getOut();
-                //System.err.println("printing table " + tableBean.toString());
-                out.print(tableBean.toString());
-            } catch (Exception e) {
-                throw new JspException(e);
-            }
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(tableBean.toEndString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
         }
+
         return EVAL_PAGE;
     }
 }

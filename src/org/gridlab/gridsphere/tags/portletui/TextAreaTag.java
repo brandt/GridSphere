@@ -49,7 +49,7 @@ public class TextAreaTag extends BaseComponentTag {
         this.rows = rows;
     }
 
-    public int doEndTag() throws JspException {
+    public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
             textAreaBean = (TextAreaBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (textAreaBean == null) {
@@ -76,20 +76,31 @@ public class TextAreaTag extends BaseComponentTag {
 
         //debug();
 
-        Object parentTag = getParent();
-        if (parentTag instanceof ContainerTag) {
-            ContainerTag containerTag = (ContainerTag)parentTag;
-            containerTag.addTagBean(textAreaBean);
-        } else {
-            try {
-                JspWriter out = pageContext.getOut();
-                out.print(textAreaBean.toString());
-            } catch (Exception e) {
-                throw new JspException(e.getMessage());
-            }
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(textAreaBean.toStartString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
         }
+
         return EVAL_BODY_INCLUDE;
     }
 
+    public int doEndTag() throws JspException {
+
+        if ((bodyContent != null) && (value == null)) {
+            textAreaBean.setValue(bodyContent.getString());
+        }
+
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(textAreaBean.toEndString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
+        }
+
+
+        return EVAL_PAGE;
+    }
 
 }

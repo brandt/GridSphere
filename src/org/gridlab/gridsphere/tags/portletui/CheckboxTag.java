@@ -32,19 +32,15 @@ public class CheckboxTag extends BaseComponentTag {
         return selected;
     }
 
-    public int doEndTag() throws JspException {
+    public int doStartTag() throws JspException {
 
         if (!beanId.equals("")) {
             checkbox = (CheckBoxBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (checkbox == null) {
-                System.err.println("did not find checkbox bean!! " + getBeanKey());
                 checkbox = new CheckBoxBean(beanId);
                 checkbox.setSelected(selected);
                 this.setBaseComponentBean(checkbox);
             } else {
-                System.err.println("found checkbox bean!! " + getBeanKey());
-                System.err.println("isselected = " + checkbox.isSelected());
-                System.err.println("name = " + checkbox.getName());
                 this.updateBaseComponentBean(checkbox);
             }
         } else {
@@ -55,19 +51,15 @@ public class CheckboxTag extends BaseComponentTag {
 
         //debug();
 
-        Object parentTag = getParent();
-        if (parentTag instanceof ContainerTag) {
-            ContainerTag containerTag = (ContainerTag)parentTag;
-            containerTag.addTagBean(checkbox);
-        } else {
-            try {
-                JspWriter out = pageContext.getOut();
-                out.print(checkbox.toString());
-            } catch (Exception e) {
-                throw new JspException(e.getMessage());
-            }
+
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(checkbox.toStartString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
         }
-        return EVAL_BODY_INCLUDE;
+
+        return SKIP_BODY;
     }
 
 }

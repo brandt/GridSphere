@@ -67,8 +67,4 @@ public abstract class ActionTag extends BaseComponentTag {
         return actionURI.toString();
     }
 
-    public abstract int doStartTag() throws JspException;
-
-    public abstract int doEndTag() throws JspException;
-
 }

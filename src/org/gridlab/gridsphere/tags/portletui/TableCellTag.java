@@ -4,18 +4,21 @@ import org.gridlab.gridsphere.provider.portletui.beans.*;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.JspWriter;
 import java.util.Iterator;
 import java.util.Vector;
+import java.util.ArrayList;
 
 /**
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-public class TableCellTag extends ContainerTag {
+public class TableCellTag extends BaseComponentTag {
 
     protected TableCellBean cellBean = null;
     protected String width = null;
     protected String cellSpacing = null;
+    protected String style = TextBean.TEXT_LABEL_STYLE;
 
     public void setWidth(String width) {
         this.width = width;
@@ -23,6 +26,14 @@ public class TableCellTag extends ContainerTag {
 
     public String getWidth() {
         return width;
+    }
+
+    public void setStyle(String style) {
+        this.style = style;
+    }
+
+    public String getStyle() {
+        return style;
     }
 
     public void setCellSpacing(String cellSpacing) {
@@ -42,58 +53,36 @@ public class TableCellTag extends ContainerTag {
     }
 
     public int doStartTag() throws JspException {
-
-        list = new Vector();
-
         if (!beanId.equals("")) {
             cellBean = (TableCellBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (cellBean == null) cellBean = new TableCellBean();
         } else {
             cellBean = new TableCellBean();
+            if (cellSpacing != null) cellBean.setCellSpacing(cellSpacing);
+            if (width != null) cellBean.setWidth(width);
         }
 
-        Object tag = getParent();
-        if (tag instanceof ContainerTag) {
-            ContainerTag rowTag = (ContainerTag)tag;
-            if (rowTag == null) return SKIP_BODY;
-            return EVAL_BODY_INCLUDE;
-        } else return SKIP_BODY;
-        //return EVAL_BODY_BUFFERED;
+        TableRowTag rowTag = (TableRowTag)getParent();
+        if (rowTag.getHeader()) {
+            cellBean.setCssStyle(TableRowBean.TABLE_HEADER_STYLE);
+        }
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(cellBean.toStartString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
+        }
+
+        return EVAL_BODY_INCLUDE;
     }
 
     public int doEndTag() throws JspException {
-        if (cellSpacing != null) cellBean.setCellSpacing(cellSpacing);
-        if (width != null) cellBean.setWidth(width);
-        Object tag = getParent();
-        if (!(tag instanceof ContainerTag)) {
-            return EVAL_PAGE;
-        }
-        ContainerTag rowTag = (ContainerTag)tag;
-        if (rowTag != null) {
-            /* if (list.isEmpty()) {
-                None of this works yet--- to include non ui tags within tablecell tags
-                try {
-                    JspWriter out = pageContext.getOut();
-                    out.print("");
-                    JspWriter writer = getPreviousOut();
 
-                    if ((out != null) && (writer != null)) bodyContent.writeOut(writer);
-                } catch (IOException e) {
-                    throw new JspException("Unable to include body!", e);
-                }
-
-            } else { */
-                Iterator it = list.iterator();
-                while (it.hasNext()) {
-                    BaseComponentBean bean = (BaseComponentBean)it.next();
-                    if (bean.toString() != null) {
-                        cellBean.addBean(bean);
-                        String css = bean.getCssStyle();
-                        if (css != null) cellBean.setCssStyle(bean.getCssStyle());
-                    }
-                }
-                rowTag.addTagBean(cellBean);
-
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(cellBean.toEndString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
         }
         return EVAL_PAGE;
     }

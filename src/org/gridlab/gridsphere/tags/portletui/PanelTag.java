@@ -17,7 +17,7 @@ import java.util.Vector;
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-public class PanelTag extends ContainerTag {
+public class PanelTag extends BaseComponentTag {
 
     public static final String PANEL_WIDTH = "200";
     public static final String PANEL_SPACING = "1";
@@ -26,14 +26,6 @@ public class PanelTag extends ContainerTag {
     protected String cellSpacing = PANEL_SPACING;
 
     protected PanelBean panelBean = null;
-
-    public void setPanelBean(PanelBean panelBean) {
-        this.panelBean = panelBean;
-    }
-
-    public PanelBean getPanelBean() {
-        return panelBean;
-    }
 
     public void setWidth(String width) {
         this.width = width;
@@ -52,37 +44,33 @@ public class PanelTag extends ContainerTag {
     }
 
     public int doStartTag() throws JspException {
-        list = new Vector();
 
         if (!beanId.equals("")) {
             panelBean = (PanelBean)pageContext.getSession().getAttribute(getBeanKey());
-            if (panelBean != null) {
-                return SKIP_BODY;
-            } else {
-                panelBean = new PanelBean();
-            }
-        } else {
-            panelBean = new PanelBean();
         }
-        panelBean.setWidth(width);
-        panelBean.setCellSpacing(cellSpacing);
+        if (panelBean == null) {
+            panelBean = new PanelBean();
+
+            panelBean.setWidth(width);
+            panelBean.setCellSpacing(cellSpacing);
+        }
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(panelBean.toStartString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
+        }
 
         return EVAL_BODY_INCLUDE;
     }
 
     public int doEndTag() throws JspException {
-        // add all components to pane
-        Iterator it = list.iterator();
-        while (it.hasNext()) {
-            BaseComponentBean bc = (BaseComponentBean)it.next();
-            panelBean.addBean(bc);
-        }
 
         try {
             JspWriter out = pageContext.getOut();
-            out.print(panelBean.toString());
+            out.print(panelBean.toEndString());
         } catch (Exception e) {
-            throw new JspException(e);
+            throw new JspException(e.getMessage());
         }
 
         return EVAL_PAGE;

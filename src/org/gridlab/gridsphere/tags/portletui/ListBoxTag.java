@@ -14,7 +14,7 @@ import javax.servlet.jsp.PageContext;
 import java.util.Vector;
 import java.util.Iterator;
 
-public class ListBoxTag extends ContainerTag {
+public class ListBoxTag extends BaseComponentTag {
 
     protected ListBoxBean listbox = null;
 
@@ -37,11 +37,7 @@ public class ListBoxTag extends ContainerTag {
     }
 
     public int doStartTag() throws JspException {
-        list = new Vector();
-        return EVAL_BODY_INCLUDE;
-    }
 
-    public int doEndTag() throws JspException {
         if (!beanId.equals("")) {
             listbox = (ListBoxBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (listbox == null) {
@@ -56,27 +52,24 @@ public class ListBoxTag extends ContainerTag {
             listbox.setSize(size);
             this.setBaseComponentBean(listbox);
         }
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(listbox.toStartString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
+        }
+        return EVAL_BODY_INCLUDE;
+    }
 
-        Iterator it = list.iterator();
-        while (it.hasNext()) {
-            BaseComponentBean bc = (BaseComponentBean)it.next();
-            listbox.addBean(bc);
+    public int doEndTag() throws JspException {
+
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(listbox.toEndString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
         }
 
-        //debug();
-
-        Object parentTag = getParent();
-        if (parentTag instanceof ContainerTag) {
-            ContainerTag containerTag = (ContainerTag)parentTag;
-            containerTag.addTagBean(listbox);
-        } else {
-            try {
-                JspWriter out = pageContext.getOut();
-                out.print(listbox.toString());
-            } catch (Exception e) {
-                throw new JspException(e.getMessage());
-            }
-        }
         return EVAL_PAGE;
     }
 

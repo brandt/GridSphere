@@ -34,10 +34,6 @@ public class ActionSubmitTag extends ActionTag {
         }
         if (actionSubmitBean == null) actionSubmitBean = new ActionSubmitBean();
         paramBeans = new ArrayList();
-        return EVAL_BODY_INCLUDE;
-    }
-
-    public int doEndTag() throws JspException {
 
         actionSubmitBean.setName(createActionURI());
         if (!key.equals("")) {
@@ -65,11 +61,11 @@ public class ActionSubmitTag extends ActionTag {
         } else {
             try {
                 JspWriter out = pageContext.getOut();
-                out.print(actionSubmitBean.toString());
+                out.print(actionSubmitBean.toStartString());
             } catch (Exception e) {
                 throw new JspException(e.getMessage());
             }
         }
-        return EVAL_PAGE;
+        return SKIP_BODY;
     }
 }

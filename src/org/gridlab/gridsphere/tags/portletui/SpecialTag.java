@@ -33,18 +33,13 @@ public class SpecialTag extends BaseComponentTag {
 
         //debug();
 
-        Object parentTag = getParent();
-        if (parentTag instanceof ContainerTag) {
-            ContainerTag containerTag = (ContainerTag)parentTag;
-            containerTag.addTagBean(specialBean);
-        } else {
-            try {
-                JspWriter out = pageContext.getOut();
-                out.print(specialBean.toString());
-            } catch (Exception e) {
-                throw new JspException(e.getMessage());
-            }
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(specialBean.toStartString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
         }
+
         return EVAL_BODY_INCLUDE;
     }
 

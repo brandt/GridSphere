@@ -36,59 +36,39 @@ public class TextTag extends BaseComponentTag {
         this.key = key;
     }
 
-    public int doStartTag() throws JspException {
-
-        if (!beanId.equals("")) {
-           //System.err.println("in TextTag: gettung text bean from session");
-           textBean = (TextBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
-           if (textBean == null) {
-               textBean = new TextBean(beanId);
-           } else {
-               key = textBean.getKey();
-               value = textBean.getValue();
-           }
-       } else {
-            textBean = new TextBean();
-       }
-       return EVAL_BODY_INCLUDE;
-    }
-
     public int doEndTag() throws JspException {
 
-        //System.err.println("in TextTag:doEnd");
         if (!beanId.equals("")) {
-            if ((key != null) && (textBean.getKey() == null)) {
-                textBean.setKey(key);
+            textBean = (TextBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            if (textBean == null) {
+                textBean = new TextBean(beanId);
+                this.setBaseComponentBean(textBean);
             }
-            this.updateBaseComponentBean(textBean);
         } else {
-            if (key != null) textBean.setKey(key);
-            textBean.setStyle(style);
+            textBean = new TextBean();
             this.setBaseComponentBean(textBean);
         }
-        //debug();
 
-        if (textBean.getKey() != null) {
+        textBean.setStyle(style);
+
+        if (key != null) {
             Locale locale = pageContext.getRequest().getLocale();
             ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
-            textBean.setValue(bundle.getString(textBean.getKey()));
+            textBean.setValue(bundle.getString(key));
         }
 
-        Object parentTag = getParent();
-        if (parentTag instanceof ContainerTag) {
-            ContainerTag containerTag = (ContainerTag)parentTag;
-            containerTag.addTagBean(textBean);
-            //System.err.println("inTextTag: adding " + textBean.toString());
-        } else {
-            try {
-                JspWriter out = pageContext.getOut();
-                out.print(textBean.toString());
-            } catch (Exception e) {
-                throw new JspException(e.getMessage());
-            }
+        if ((bodyContent != null) && (value == null)) {
+            textBean.setValue(bodyContent.getString());
         }
 
-        return EVAL_BODY_INCLUDE;
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(textBean.toEndString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
+        }
+
+        return EVAL_PAGE;
     }
 
 }

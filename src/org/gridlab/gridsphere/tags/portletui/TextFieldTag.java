@@ -49,7 +49,7 @@ public class TextFieldTag extends BaseComponentTag {
         this.maxlength = maxlength;
     }
 
-    public int doEndTag() throws JspException {
+    public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
             textFieldBean = (TextFieldBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (textFieldBean == null) {
@@ -67,20 +67,14 @@ public class TextFieldTag extends BaseComponentTag {
         }
 
         //debug();
-
-        Object parentTag = getParent();
-        if (parentTag instanceof ContainerTag) {
-            ContainerTag containerTag = (ContainerTag)parentTag;
-            containerTag.addTagBean(textFieldBean);
-        } else {
-            try {
-                JspWriter out = pageContext.getOut();
-                out.print(textFieldBean.toString());
-            } catch (Exception e) {
-                throw new JspException(e.getMessage());
-            }
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(textFieldBean.toStartString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
         }
-        return EVAL_BODY_INCLUDE;
+
+        return SKIP_BODY;
     }
 
 }

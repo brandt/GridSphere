@@ -56,41 +56,31 @@ public class PasswordTag extends BaseComponentTag {
         this.maxlength = maxlength;
     }
 
-    public int doEndTag() throws JspException {
+    public int doStartTag() throws JspException {
 
         if (!beanId.equals("")) {
             passwordBean = (PasswordBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (passwordBean == null) {
                 passwordBean = new PasswordBean(beanId);
+                this.setBaseComponentBean(passwordBean);
+            } else {
+                this.updateBaseComponentBean(passwordBean);
             }
         } else {
-                passwordBean = new PasswordBean();
+            passwordBean = new PasswordBean();
+            passwordBean.setCssStyle(PASSWORD_STYLE);
+            passwordBean.setMaxLength(maxlength);
+            passwordBean.setSize(size);
+            this.setBaseComponentBean(passwordBean);
         }
-        passwordBean.setCssStyle(PASSWORD_STYLE);
-        passwordBean.setMaxLength(maxlength);
-        passwordBean.setSize(size);
-        this.setBaseComponentBean(passwordBean);
 
-        /*if (!beanId.equals("")) {
-            //System.err.println("storing bean in the session");
-            store(getBeanKey(), passwordBean);
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(passwordBean.toStartString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
         }
-        */
-        //debug();
-
-        Object parentTag = getParent();
-        if (parentTag instanceof ContainerTag) {
-            ContainerTag containerTag = (ContainerTag)parentTag;
-            containerTag.addTagBean(passwordBean);
-        } else {
-            try {
-                JspWriter out = pageContext.getOut();
-                out.print(passwordBean.toString());
-            } catch (Exception e) {
-                throw new JspException(e.getMessage());
-            }
-        }
-        return EVAL_BODY_INCLUDE;
+        return SKIP_BODY;
     }
 
 }

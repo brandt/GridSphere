@@ -34,10 +34,7 @@ public class ActionLinkTag extends ActionTag {
         actionlink = new ActionLinkBean();
         paramBeans = new ArrayList();
         createActionURI();
-        return EVAL_BODY_INCLUDE;
-    }
 
-    public int doEndTag() throws JspTagException {
         actionlink.setValue(value);
         if (getKey() != null) {
             actionlink.setKey(key);
@@ -46,7 +43,10 @@ public class ActionLinkTag extends ActionTag {
             actionlink.setValue(bundle.getString(actionlink.getKey()));
         }
         this.setBaseComponentBean(actionlink);
+        return EVAL_BODY_INCLUDE;
+    }
 
+    public int doEndTag() throws JspException {
         Iterator it = paramBeans.iterator();
         while (it.hasNext()) {
             ActionParamBean pbean = (ActionParamBean)it.next();
@@ -63,7 +63,7 @@ public class ActionLinkTag extends ActionTag {
 
             try {
                 JspWriter out = pageContext.getOut();
-                out.println(actionlink);
+                out.println(actionlink.toStartString());
             } catch (Exception e) {
                 throw new JspTagException(e.getMessage());
             }

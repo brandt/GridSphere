@@ -25,18 +25,15 @@ public class ListBoxItemTag extends BaseComponentTag {
     }
 
     public int doStartTag() throws JspException {
-        return EVAL_BODY_INCLUDE;
-    }
-
-    public int doEndTag() throws JspException {
-        Object tag = getParent();
-        if (tag instanceof ListBoxTag) {
-            ListBoxTag listBoxTag = (ListBoxTag)tag;
-            listboxitem = new ListBoxItemBean();
-            this.setBaseComponentBean(listboxitem);
-            listBoxTag.addTagBean(listboxitem);
+        listboxitem = new ListBoxItemBean();
+        this.setBaseComponentBean(listboxitem);
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(listboxitem.toStartString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
         }
-        return EVAL_PAGE;
+        return SKIP_BODY;
     }
 
 }

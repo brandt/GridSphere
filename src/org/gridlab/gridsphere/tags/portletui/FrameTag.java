@@ -2,11 +2,15 @@ package org.gridlab.gridsphere.tags.portletui;
 
 import org.gridlab.gridsphere.provider.portletui.beans.FrameBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TableBean;
+import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.JspWriter;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.ArrayList;
 
 /**
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
@@ -46,30 +50,53 @@ public class FrameTag extends TableTag {
 
         if (!beanId.equals("")) {
             tableBean = (FrameBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
-            if (tableBean != null) {
-                return SKIP_BODY;
+            if (tableBean == null) {
+                tableBean = new FrameBean(beanId);
+                this.setBaseComponentBean(tableBean);
             } else {
-                tableBean = new FrameBean();
+                String key = tableBean.getKey();
+                if (key != null) {
+
+                    Locale locale = pageContext.getRequest().getLocale();
+                    ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
+                    tableBean.setValue(bundle.getString(tableBean.getKey()));
+                    tableBean.setCssStyle(style);
+                }
+
             }
         } else {
             tableBean = new FrameBean();
+
+            this.setBaseComponentBean(tableBean);
+            if (key != null) {
+                tableBean.setKey(key);
+                Locale locale = pageContext.getRequest().getLocale();
+                ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
+                tableBean.setValue(bundle.getString(tableBean.getKey()));
+                tableBean.setCssStyle(style);
+            }
+            if (value != null) {
+                tableBean.setValue(value);
+                tableBean.setCssStyle(style);
+            }
+        }
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(tableBean.toStartString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
         }
         return EVAL_BODY_INCLUDE;
     }
 
     public int doEndTag() throws JspException {
-        if (key != null) {
-            tableBean.setKey(key);
-            Locale locale = pageContext.getRequest().getLocale();
-            ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
-            tableBean.setValue(bundle.getString(tableBean.getKey()));
-            tableBean.setCssStyle(style);
-        }
-        if (value != null) {
-            tableBean.setValue(value);
-            tableBean.setCssStyle(style);
-        }
 
-        return super.doEndTag();
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(tableBean.toEndString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
+        }
+        return EVAL_PAGE;
     }
 }

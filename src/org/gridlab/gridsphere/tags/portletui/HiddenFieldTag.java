@@ -33,18 +33,15 @@ public class HiddenFieldTag extends BaseComponentTag {
         return selected;
     }
 
-    public int doEndTag() throws JspException {
+    public int doStartTag() throws JspException {
 
         if (!beanId.equals("")) {
             hidden = (HiddenFieldBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (hidden == null) {
-                System.err.println("did not find hidden bean!! " + getBeanKey());
                 hidden = new HiddenFieldBean(beanId);
 
                 this.setBaseComponentBean(hidden);
             } else {
-                System.err.println("found hidden bean!! " + getBeanKey());
-                System.err.println("name = " + hidden.getName());
                 this.updateBaseComponentBean(hidden);
             }
         } else {
@@ -54,19 +51,15 @@ public class HiddenFieldTag extends BaseComponentTag {
 
         //debug();
 
-        Object parentTag = getParent();
-        if (parentTag instanceof ContainerTag) {
-            ContainerTag containerTag = (ContainerTag)parentTag;
-            containerTag.addTagBean(hidden);
-        } else {
-            try {
-                JspWriter out = pageContext.getOut();
-                out.print(hidden.toString());
-            } catch (Exception e) {
-                throw new JspException(e.getMessage());
-            }
+
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(hidden.toStartString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
         }
-        return EVAL_BODY_INCLUDE;
+
+        return SKIP_BODY;
     }
 
 }
