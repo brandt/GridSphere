@@ -10,6 +10,7 @@
         <title lang="fr">Bienvenue</title>
         <title lang="de">Willkommen</title>
         <title lang="cs">Vítejte</title>
+        <title lang="nl">Welkom</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab label="settings">
             	<title lang="zh">配置</title>
@@ -20,6 +21,7 @@
                 <title lang="fr">Configuration</title>
                 <title lang="de">Einstellungen</title>
                 <title lang="cs">Nastavení</title>
+                <title lang="nl">Eigenschappen</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -39,6 +41,7 @@
                 <title lang="fr">Agencement</title>
                 <title lang="de">Layout</title>
                 <title lang="cs">Umísťování</title>
+                <title lang="nl">Layout</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="50%">
@@ -61,6 +64,7 @@
         <title lang="fr">Administration</title>
         <title lang="de">Administrieren</title>
         <title lang="cs">Administrace</title>
+        <title lang="nl">Administratie</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab label="portlets" required-role="SUPER">
                 <title lang="zh">门件</title>
@@ -68,6 +72,7 @@
                 <title lang="pl">Portlety</title>
                 <title lang="hu">Portletek</title>
                 <title lang="cs">Portlety</title>
+                <title lang="nl">Portlets</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="40%">
@@ -95,6 +100,7 @@
                 <title lang="fr">Usagers</title>
                 <title lang="de">Nutzer</title>
                 <title lang="cs">Uživatelé</title>
+                <title lang="nl">Gebruikers</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="50%">
@@ -115,6 +121,7 @@
                 <title lang="fr">Groupes</title>
                 <title lang="de">Gruppen</title>
                 <title lang="cs">Skupiny</title>
+                <title lang="nl">Groepen</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="70%">
@@ -135,6 +142,7 @@
                 <title lang="fr">Agencements</title>
                 <title lang="de">Layouts</title>
                 <title lang="cs">Umísťování</title>
+                <title lang="nl">Layouts</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
