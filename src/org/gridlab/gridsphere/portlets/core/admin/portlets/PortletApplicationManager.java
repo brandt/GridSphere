@@ -17,6 +17,7 @@ import org.gridlab.gridsphere.layout.PortletTabRegistry;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,9 +33,15 @@ public class PortletApplicationManager extends ActionPortlet {
     public static final String HELP_JSP = "admin/portlets/help.jsp";
 
     private TomcatManagerWrapper tomcat = TomcatManagerWrapper.getInstance();
+    private PortletManagerService portletManager = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
+        try {
+            portletManager = (PortletManagerService) getConfig().getContext().getService(PortletManagerService.class);
+        } catch (PortletServiceException e) {
+            log.error("Unable to get portlet manager instance", e);
+        }
         DEFAULT_VIEW_PAGE = "listPortlets";
         DEFAULT_HELP_PAGE = HELP_JSP;
     }
@@ -68,15 +75,8 @@ public class PortletApplicationManager extends ActionPortlet {
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
 
-        User user = event.getPortletRequest().getUser();
         MessageBoxBean msg = event.getMessageBoxBean("msg");
-        PortletManagerService portletManager = null;
-        try {
-            portletManager = (PortletManagerService) getConfig().getContext().getService(PortletManagerService.class, user);
-        } catch (PortletServiceException e) {
-            msg.setKey("PORTLET_ERR_REGISTRY");
-            msg.setMessageType(MessageStyle.MSG_ERROR);
-        }
+
 
         Map params = action.getParameters();
         String operation = (String) params.get("operation");
@@ -141,32 +141,38 @@ public class PortletApplicationManager extends ActionPortlet {
 
         try {
             FileInputBean fi = event.getFileInputBean("userfile");
-            User user = event.getPortletRequest().getUser();
+
             String fileName = fi.getFileName();
             log.info("filename = " + fileName);
+
+            String webappPath = this.getPortletConfig().getContext().getRealPath("");
+            int idx = webappPath.lastIndexOf("webapps");
+
+
             if (fileName.equals("")) return;
-            PortletManagerService portletManager = null;
-            try {
-                portletManager = (PortletManagerService) getConfig().getContext().getService(PortletManagerService.class, user);
-            } catch (PortletServiceException e) {
-                MessageBoxBean msg = event.getMessageBoxBean("msg");
-                msg.setKey("PORTLET_ERR_REGISTRY");
-                msg.setMessageType(MessageStyle.MSG_ERROR);
-                throw new PortletException("PortletRegistry service unavailable! ", e);
-            }
 
             int isWar = fileName.indexOf(".war");
             if (isWar > 0) {
                 String appName = fileName.substring(0, isWar);
                 log.debug("installing and initing webapp: " + appName);
+
+                webappPath = webappPath.substring(0, idx) + "webapps" + File.separator;
+                //System.err.println(webappPath + fileName);
+                fi.saveFile(webappPath + fileName);
+
                 tomcat.installWebApp(req, appName, fileName);
-                portletManager.initPortletWebApplication(appName, req, res);
+
+                File pfile = new File(webappPath + appName + File.separator + "WEB-INF" + File.separator + "portlet.xml");
+                System.err.println(webappPath + appName + File.separator + "WEB-INF" + File.separator + "portlet.xml");
+                if (pfile.exists()) {
+                    //System.err.println("file exists");
+                    portletManager.initPortletWebApplication(appName, req, res);
+                }
+                createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_DEPLOY") + " " + appName);
             }
             log.debug("fileinputbean value=" + fi.getValue());
         } catch (Exception e) {
-            MessageBoxBean errMsg = event.getMessageBoxBean("errorFrame");
-            errMsg.setKey("PORTLET_ERR_UPLOAD");
-            errMsg.setMessageType(MessageStyle.MSG_ERROR);
+            createErrorMessage(event, this.getLocalizedText(req, "PORTLET_ERR_DEPLOY"));
             log.error("Unable to store uploaded file ", e);
         }
         setNextState(req, DEFAULT_VIEW_PAGE);
@@ -180,19 +186,19 @@ public class PortletApplicationManager extends ActionPortlet {
         if (req.getRole().compare(req.getRole(), PortletRole.SUPER) < 0) return;
         try {
             TextFieldBean tf = event.getTextFieldBean("webappNameTF");
-            User user = event.getPortletRequest().getUser();
+
             String webappName = tf.getValue();
             if (webappName == null) return;
-            PortletManagerService portletManager = null;
-            try {
-                portletManager = (PortletManagerService) getConfig().getContext().getService(PortletManagerService.class, user);
-            } catch (PortletServiceException e) {
-                createErrorMessage(event, this.getLocalizedText(req, "PORTLET_ERR_REGISTRY"));
-                throw new PortletException("PortletRegistry service unavailable! ", e);
-            }
-
+            String webappPath = this.getConfig().getContext().getRealPath("");
+            int idx = webappPath.lastIndexOf(File.separator);
+            webappPath = webappPath.substring(0, idx+1);
             tomcat.installWebApp(req, webappName);
-            portletManager.initPortletWebApplication(webappName, req, res);
+
+            File pfile = new File(webappPath + webappName + File.separator + "WEB-INF" + File.separator + "portlet.xml");
+            //System.err.println(webappPath + webappName + File.separator + "WEB-INF" + File.separator + "portlet.xml");
+            if (pfile.exists()) {
+                portletManager.initPortletWebApplication(webappName, req, res);
+            }
             createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_DEPLOY") + " " + webappName);
         } catch (Exception e) {
             createErrorMessage(event, this.getLocalizedText(req, "PORTLET_ERR_DEPLOY"));
