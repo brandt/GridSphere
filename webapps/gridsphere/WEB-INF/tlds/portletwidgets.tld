@@ -75,12 +75,12 @@
     <attribute>
         <name>label</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
         <name>action</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
         <name>bean</name>
@@ -118,7 +118,7 @@
     <attribute>
         <name>text</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
         <name>bean</name>
@@ -410,7 +410,7 @@
     <attribute>
         <name>value</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
@@ -491,7 +491,7 @@
     <attribute>
         <name>value</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
