@@ -15,7 +15,6 @@ public class HelloWorld extends AbstractPortlet {
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
-        System.err.println("init() in HelloWorld");
     }
 
     public void execute(PortletRequest request) throws PortletException {
