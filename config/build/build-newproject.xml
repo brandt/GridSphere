@@ -16,16 +16,17 @@
         <echo>Updating a Portlet Project</echo>
         <input message="Please enter a Project Title e.g. Cool Portlets" addproperty="project.title"/>
 
-        <input message="Please enter the Project Name e.g. the lowercase directory name e.g. coolportlets" addproperty="project.name"/>
-        <property name="project.dir" value="projects/${project.name}"/>
-        <echo message="Overwriting ${project.dir}/build.xml"/>
-        <copy file="config/build/build.project.xml" tofile="${project.dir}/build.xml" overwrite="true"/>
-        <replace file="${project.dir}/build.xml"
+        <input message="Please enter the Project Name e.g. the lowercase directory name e.g. coolportlets" addproperty="newproject.name"/>
+        <property name="newproject.dir" value="projects/${newproject.name}"/>
+        <echo message="Overwriting ${newproject.dir}/build.xml"/>
+        <copy file="config/build/build.properties" tofile="${newproject.dir}/build.properties" overwrite="true"/>
+        <copy file="config/build/build.project.xml" tofile="${newproject.dir}/build.xml" overwrite="true"/>
+        <replace file="${newproject.dir}/build.xml"
                  token="@PROJECT_TITLE@"
                  value="${project.title}"/>
-        <replace file="${project.dir}/build.xml"
+        <replace file="${newproject.dir}/build.xml"
                  token="@PROJECT_NAME@"
-                 value="${project.name}"/>
+                 value="${newproject.name}"/>
     </target>
 
     <!-- =================================================================== -->
@@ -59,7 +60,9 @@
         <mkdir dir="${project.dir}/lib"/>
         <mkdir dir="${project.dir}/config"/>
         <copy file="config/log4j.properties" tofile="${project.dir}/config/log4j.properties"/>
-
+        <copy todir="${project.dir}/config/database">
+            <fileset dir="config/database"/>
+        </copy>
         <mkdir dir="${project.dir}/webapp"/>
         <mkdir dir="${project.dir}/webapp/WEB-INF"/>
 

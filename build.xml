@@ -227,6 +227,8 @@ Copyright:
     <target name="gridsphere-jar" depends="compile" description="Makes gridsphere JAR">
         <echo message="Configuring Database"/>
 
+        <property name="TEST_HOME" value="${GRIDSPHERE_HOME}"/>
+
         <property name="DATABASE_CONFIG" value="${GRIDSPHERE_HOME}/database/${DATABASE_TYPE}db.xml"/>
         <property name="DATABASE_NAME" value="gridsphere"/>
 
@@ -236,6 +238,7 @@ Copyright:
     <target name="make-gridsphere-jar" depends="compile">
         <echo message="DATABASE_NAME is set to = ${DATABASE_NAME}"/>
         <echo message="DATABASE_CONFIG is set to = ${DATABASE_CONFIG}"/>
+
         <mkdir dir="${build.classes}/gridsphere"/>
         <copy overwrite="true" file="config/gridsphere.properties"
             tofile="${build.classes}/gridsphere/gridsphere.properties"/>

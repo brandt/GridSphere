@@ -171,7 +171,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates castor definitions                                          -->
     <!-- =================================================================== -->
-    <target name="configure-database" depends="doclet-mapping">
+    <target name="configure-database" depends="doclet-mapping" if="use.persistence">
         <property name="DATABASE_FILE"
                   value="${GRIDSPHERE_HOME}/database/${DATABASE_TYPE}db.xml"/>
         <echo message="Preprocessing Database file: ${DATABASE_FILE}"/>
