@@ -60,13 +60,6 @@ public interface AccessControlService extends PortletService {
     public List getAllGroups();
 
     /**
-     * Return a list of all PortletRole objects
-     *
-     * @return a list of all PortletRole objects
-     */
-    public List getAllRoles();
-
-    /**
      * Returns a list of PortletGroup objects associated with a user
      *
      * @param user the User object
