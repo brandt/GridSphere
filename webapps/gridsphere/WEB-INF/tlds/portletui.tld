@@ -12,7 +12,7 @@
 
     <tag>
         <name>actionparam</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.ActionParamTag</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ActionParamTag</tag-class>
         <body-content>empty</body-content>
         <description>
             Creates a portlet action parameter
@@ -36,7 +36,7 @@
 
     <tag>
         <name>actionlink</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.ActionLinkTag</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ActionLinkTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Creates a portlet action link
@@ -65,7 +65,7 @@
 
     <tag>
         <name>actionsubmit</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.ActionSubmitTag</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ActionSubmitTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Creates a submit button
@@ -99,7 +99,7 @@
 
     <tag>
         <name>checkbox</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.CheckboxTag</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.CheckboxTag</tag-class>
         <body-content>empty</body-content>
         <description>
             Wraps HTML input checkbox tag
@@ -133,7 +133,7 @@
 
     <tag>
         <name>fileform</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.FileFormTag</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.FileFormTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Wrapper around HTML form tag
@@ -157,7 +157,7 @@
 
     <tag>
         <name>fileinput</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.FileInputTag</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.FileInputTag</tag-class>
         <body-content>empty</body-content>
         <description>
             Wraps HTML input file upload tag
@@ -186,7 +186,7 @@
 
     <tag>
         <name>form</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.ActionFormTag</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ActionFormTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Wrapper around HTML form tag
@@ -210,7 +210,7 @@
 
     <tag>
         <name>frame</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.FrameTag</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.FrameTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Shows table frame
@@ -249,7 +249,7 @@
 
     <tag>
         <name>hiddenfield</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.HiddenFieldTag</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.HiddenFieldTag</tag-class>
         <body-content>empty</body-content>
         <description>
             makes a hidden text field
@@ -273,7 +273,7 @@
 
     <tag>
         <name>listbox</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.ListBoxTag</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ListBoxTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             makes a listbox
@@ -297,7 +297,7 @@
 
     <tag>
         <name>listboxitem</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.ListBoxItemTag</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ListBoxItemTag</tag-class>
         <body-content>empty</body-content>
         <description>
             makes a listbox item
@@ -321,7 +321,7 @@
 
     <tag>
         <name>panel</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.PanelTag</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.PanelTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Shows table pane which contains tableframes
@@ -355,7 +355,7 @@
 
     <tag>
         <name>password</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.PasswordTag</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.PasswordTag</tag-class>
         <body-content>empty</body-content>
         <description>
             Wraps HTML input text tag
@@ -399,7 +399,7 @@
 
     <tag>
         <name>radiobutton</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.RadioButtonTag</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.RadioButtonTag</tag-class>
         <body-content>empty</body-content>
         <description>
             Wraps HTML input radio button tag
@@ -433,7 +433,7 @@
 
     <tag>
         <name>special</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.SpecialTag</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.SpecialTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Shows table row
@@ -447,7 +447,7 @@
 
     <tag>
         <name>table</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.TableTag</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.TableTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Shows table
@@ -471,7 +471,7 @@
 
     <tag>
         <name>tablerow</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.TableRowTag</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.TableRowTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Shows table row
@@ -491,7 +491,7 @@
 
     <tag>
         <name>tablecell</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.TableCellTag</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.TableCellTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Shows table cell
@@ -525,8 +525,8 @@
 
     <tag>
         <name>text</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.TextTag</tag-class>
-        <body-content>empty</body-content>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.TextTag</tag-class>
+        <body-content>JSP</body-content>
         <description>
             Shows text
         </description>
@@ -554,8 +554,8 @@
 
     <tag>
         <name>textarea</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.TextAreaTag</tag-class>
-        <body-content>empty</body-content>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.TextAreaTag</tag-class>
+        <body-content>JSP</body-content>
         <description>
             Shows text
         </description>
@@ -588,7 +588,7 @@
 
     <tag>
         <name>textfield</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.TextFieldTag</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.TextFieldTag</tag-class>
         <body-content>empty</body-content>
         <description>
             Wraps HTML input text tag
@@ -631,14 +631,14 @@
     </tag>
 
     <tag>
-        <name>urlimage</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.URLImageTag</tag-class>
+        <name>image</name>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ImageTag</tag-class>
         <body-content>empty</body-content>
         <description>
-            Shows an image from an url
+            Displays an image
         </description>
         <attribute>
-            <name>url</name>
+            <name>src</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

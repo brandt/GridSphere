@@ -12,7 +12,7 @@
 
   <tag>
     <name>actionparam</name>
-    <tag-class>org.gridlab.gridsphere.tags.ui.ParamTag</tag-class>
+    <tag-class>org.gridlab.gridsphere.provider.portletui.tags.old.ParamTag</tag-class>
     <body-content>empty</body-content>
     <description>
         Creates a portlet action parameter
@@ -31,7 +31,7 @@
 
   <tag>
     <name>fileinput</name>
-    <tag-class>org.gridlab.gridsphere.tags.ui.FileInputTag</tag-class>
+    <tag-class>org.gridlab.gridsphere.provider.portletui.tags.old.FileInputTag</tag-class>
     <body-content>empty</body-content>
     <description>
         Wraps HTML file input tag
@@ -67,7 +67,7 @@
   <!-- ================================================================================================ -->
   <tag>
     <name>actionlink</name>
-    <tag-class>org.gridlab.gridsphere.tags.ui.ActionLinkTag</tag-class>
+    <tag-class>org.gridlab.gridsphere.provider.portletui.tags.old.ActionLinkTag</tag-class>
     <body-content>JSP</body-content>
     <description>
         Creates a portlet action link
@@ -91,7 +91,7 @@
 
     <tag>
         <name>newactionlink</name>
-        <tag-class>org.gridlab.gridsphere.tags.ui.NewActionLinkTag</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.old.ui.NewActionLinkTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Creates a portlet action link
@@ -110,7 +110,7 @@
 
   <tag>
     <name>text</name>
-    <tag-class>org.gridlab.gridsphere.tags.ui.TextTag</tag-class>
+    <tag-class>org.gridlab.gridsphere.provider.portletui.tags.old.TextTag</tag-class>
     <body-content>JSP</body-content>
     <description>
         Shows text
@@ -129,7 +129,7 @@
 
   <tag>
     <name>label</name>
-    <tag-class>org.gridlab.gridsphere.tags.ui.LabelTag</tag-class>
+    <tag-class>org.gridlab.gridsphere.provider.portletui.tags.old.LabelTag</tag-class>
     <body-content>JSP</body-content>
     <description>
         Shows a label
@@ -148,7 +148,7 @@
 
     <tag>
     <name>checkbox</name>
-    <tag-class>org.gridlab.gridsphere.tags.ui.CheckboxTag</tag-class>
+    <tag-class>org.gridlab.gridsphere.provider.portletui.tags.old.CheckboxTag</tag-class>
     <body-content>empty</body-content>
     <description>
         Wraps HTML input checkbox tag
@@ -182,7 +182,7 @@
 
   <tag>
     <name>radiobutton</name>
-    <tag-class>org.gridlab.gridsphere.tags.ui.RadioButtonTag</tag-class>
+    <tag-class>org.gridlab.gridsphere.provider.portletui.tags.old.RadioButtonTag</tag-class>
     <body-content>empty</body-content>
     <description>
         Wraps HTML input radio button tag
@@ -216,7 +216,7 @@
 
   <tag>
     <name>textfield</name>
-    <tag-class>org.gridlab.gridsphere.tags.ui.TextFieldTag</tag-class>
+    <tag-class>org.gridlab.gridsphere.provider.portletui.tags.old.TextFieldTag</tag-class>
     <body-content>empty</body-content>
     <description>
         Wraps HTML input text tag
@@ -260,7 +260,7 @@
 
   <tag>
     <name>fileinput</name>
-    <tag-class>org.gridlab.gridsphere.tags.ui.FileInputTag</tag-class>
+    <tag-class>org.gridlab.gridsphere.provider.portletui.tags.old.FileInputTag</tag-class>
     <body-content>empty</body-content>
     <description>
         Wraps HTML input file upload tag
@@ -289,7 +289,7 @@
 
   <tag>
     <name>password</name>
-    <tag-class>org.gridlab.gridsphere.tags.ui.PasswordFieldTag</tag-class>
+    <tag-class>org.gridlab.gridsphere.provider.portletui.tags.old.PasswordFieldTag</tag-class>
     <body-content>empty</body-content>
     <description>
         Wraps HTML input text tag
@@ -334,7 +334,7 @@
 
   <tag>
     <name>textarea</name>
-    <tag-class>org.gridlab.gridsphere.tags.ui.TextAreaTag</tag-class>
+    <tag-class>org.gridlab.gridsphere.provider.portletui.tags.old.TextAreaTag</tag-class>
     <body-content>empty</body-content>
     <description>
         Wraps HTML input text tag
@@ -378,7 +378,7 @@
 
   <tag>
     <name>form</name>
-    <tag-class>org.gridlab.gridsphere.tags.ui.FormTag</tag-class>
+    <tag-class>org.gridlab.gridsphere.provider.portletui.tags.old.FormTag</tag-class>
     <body-content>JSP</body-content>
     <description>
         Wrapper around HTML form tag
@@ -402,7 +402,7 @@
 
   <tag>
     <name>fileform</name>
-    <tag-class>org.gridlab.gridsphere.tags.ui.FileFormTag</tag-class>
+    <tag-class>org.gridlab.gridsphere.provider.portletui.tags.old.FileFormTag</tag-class>
     <body-content>JSP</body-content>
     <description>
         Wrapper around HTML form tag with multipart/mime set for file uploading
@@ -416,7 +416,7 @@
 
   <tag>
     <name>submit</name>
-    <tag-class>org.gridlab.gridsphere.tags.ui.SubmitButtonTag</tag-class>
+    <tag-class>org.gridlab.gridsphere.provider.portletui.tags.old.SubmitButtonTag</tag-class>
     <body-content>empty</body-content>
     <description>
         Wraps HTML submit input tag
@@ -440,7 +440,7 @@
 
   <tag>
     <name>dropdownlist</name>
-    <tag-class>org.gridlab.gridsphere.tags.ui.BaseTag</tag-class>
+    <tag-class>org.gridlab.gridsphere.provider.portletui.tags.old.BaseTag</tag-class>
     <body-content>empty</body-content>
     <description>
         makes a dropdownlist
@@ -454,7 +454,7 @@
 
   <tag>
     <name>listbox</name>
-    <tag-class>org.gridlab.gridsphere.tags.ui.BaseTag</tag-class>
+    <tag-class>org.gridlab.gridsphere.provider.portletui.tags.old.BaseTag</tag-class>
     <body-content>empty</body-content>
     <description>
         makes a listbox
@@ -468,7 +468,7 @@
 
    <tag>
     <name>checkboxlist</name>
-    <tag-class>org.gridlab.gridsphere.tags.ui.BaseTag</tag-class>
+    <tag-class>org.gridlab.gridsphere.provider.portletui.tags.old.BaseTag</tag-class>
     <body-content>empty</body-content>
     <description>
         makes a checkboxlist
@@ -482,7 +482,7 @@
 
    <tag>
     <name>radiobuttonlist</name>
-    <tag-class>org.gridlab.gridsphere.tags.ui.BaseTag</tag-class>
+    <tag-class>org.gridlab.gridsphere.provider.portletui.tags.old.BaseTag</tag-class>
     <body-content>empty</body-content>
     <description>
         makes a radiobuttonlist
@@ -497,7 +497,7 @@
 
    <tag>
     <name>hiddenfield</name>
-    <tag-class>org.gridlab.gridsphere.tags.ui.HiddenFieldTag</tag-class>
+    <tag-class>org.gridlab.gridsphere.provider.portletui.tags.old.HiddenFieldTag</tag-class>
     <body-content>empty</body-content>
     <description>
         makes a hidden text field
@@ -521,7 +521,7 @@
 
   <tag>
     <name>table</name>
-    <tag-class>org.gridlab.gridsphere.tags.ui.BaseTag</tag-class>
+    <tag-class>org.gridlab.gridsphere.provider.portletui.tags.old.BaseTag</tag-class>
     <body-content>empty</body-content>
     <description>
         displays a table
