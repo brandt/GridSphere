@@ -8,6 +8,8 @@ import org.gridlab.gridsphere.provider.ui.beans.TagBean;
 import org.gridlab.gridsphere.provider.validator.NoValidation;
 import org.gridlab.gridsphere.provider.validator.Validator;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import javax.servlet.jsp.JspException;
@@ -17,6 +19,8 @@ import javax.servlet.jsp.tagext.TagSupport;
 import javax.servlet.ServletRequest;
 
 public class BaseTag extends TagSupport {
+
+    protected PortletLog portletLog = SportletLog.getInstance(BaseTag.class);
 
     protected String type;
     protected String value = "";
@@ -169,11 +173,10 @@ public class BaseTag extends TagSupport {
     public int doStartTag() throws JspException {
         if (!bean.equals("")) {
             Object beanElement = pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID)+":"+bean);
-            System.out.println("GET: "+GridSphereProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID)+":"+bean);;
+            portletLog.debug("GET: "+GridSphereProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID)+":"+bean);
             try {
                 this.htmlelement = (TagBean) beanElement;
             } catch (Exception e) {
-                System.err.println("This is an error retrieving tag bean with name: " + GridSphereProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID)+bean);
                 if (beanElement == null) {
                     System.err.println("Tag bean attribute with given name is not set!");
                 } else {
@@ -186,6 +189,7 @@ public class BaseTag extends TagSupport {
         if (this.htmlelement == null) {
             System.err.println("Html bean is null!");
         } else {
+            portletLog.debug("Tag bean equals  " + this.htmlelement.toString());
             try {
                 JspWriter out = pageContext.getOut();
                 out.print(htmlelement.toString());

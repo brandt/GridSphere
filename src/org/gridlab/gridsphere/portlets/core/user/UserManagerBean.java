@@ -298,6 +298,7 @@ public class UserManagerBean extends ActionEventHandler {
         userRoleEditBean.add("Guest Role", "guest");
 
         if (this.user == null) {
+            log.debug("");
             userIDBean = new HiddenFieldBean("userID", "");
             userNameEditBean = new TextFieldBean("userName", "");
             familyNameEditBean = new TextFieldBean("familyName", "");
