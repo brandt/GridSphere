@@ -19,6 +19,8 @@ import java.util.Enumeration;
  */
 public class SportletConfig implements PortletConfig {
 
+    private static PortletLog log = SportletLog.getInstance(SportletConfig.class);
+
     private ServletConfig servletConfig = null;
     private PortletContext context = null;
     private String portletName = null;
@@ -29,6 +31,7 @@ public class SportletConfig implements PortletConfig {
     public SportletConfig(ServletConfig servletConfig) {
         this.servletConfig = servletConfig;
         this.context = new SportletContext(servletConfig);
+        this.logConfig();
     }
 
     /**
@@ -90,4 +93,39 @@ public class SportletConfig implements PortletConfig {
         return servletConfig.getServletName();
     }
 
+    public void logConfig() {
+        String name, paramvalue, vals;
+        Object attrvalue;
+        Enumeration enum, eenum;
+
+        log.info("PortletConfig Information");
+        log.info("portlet name: " + this.getName());
+        log.info("servlet name: " + this.getServletName());
+        log.info("config init parameters: ");
+        enum = this.getInitParameterNames();
+        while (enum.hasMoreElements()) {
+            name = (String) enum.nextElement();
+            vals = getInitParameter(name);
+            log.info("\t\tname=" + name + " value=" + vals);
+        }
+        log.info("PortletContext Information:");
+        log.info("Container Info: " + context.getContainerInfo());
+        log.info("major version: " + context.getMajorVersion() + " minor version: " + context.getMinorVersion());
+        /*
+        log.info("Server Info: " + context.getServerInfo());
+        enum = context.getAttributeNames();
+        while (enum.hasMoreElements()) {
+            name = (String) enum.nextElement();
+            attrvalue = (Object) context.getAttribute(name);
+            log.debug("\t\tname=" + name + " object type=" + attrvalue.getClass().getName());
+        }
+        log.info("context init parameters: ");
+        enum = context.getInitParameterNames();
+        while (enum.hasMoreElements()) {
+            name = (String) enum.nextElement();
+            vals = context.getInitParameter(name);
+            log.info("\t\tname=" + name + " value=" + vals);
+        }
+        */
+    }
 }

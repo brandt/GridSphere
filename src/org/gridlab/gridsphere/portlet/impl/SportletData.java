@@ -12,6 +12,7 @@ import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplica
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Locale;
+import java.io.IOException;
 
 /**
  * The PortletData contains information about the concrete portlet instance.
@@ -82,12 +83,13 @@ public class SportletData implements PortletData {
      * Stores all attributes.
      *
      * @throws AccessDeniedException if the caller isn't authorized to access this data object
+     * @throws IOException if the streaming causes an I/O problem
      */
-    public void store() throws AccessDeniedException {
+    public void store() throws AccessDeniedException, IOException {
         if (!hasConfigurePermission) {
             throw new AccessDeniedException("User is unauthorized to store portlet data attributes");
         }
-        // make store persistent
-    }   // FIX ME: Oliver Wehrens
+        // make store persistent: Oliver Wehrens
+    }
 
 }

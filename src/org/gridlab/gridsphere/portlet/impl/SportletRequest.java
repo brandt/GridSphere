@@ -6,7 +6,7 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
 
 import javax.servlet.RequestDispatcher;
@@ -547,7 +547,7 @@ public class SportletRequest implements PortletRequest {
         Object attrvalue;
         Enumeration enum, eenum;
 
-        log.debug("HttpRequest Information");
+        log.debug("PortletRequest Information");
         log.debug("\trequest headers: ");
 
         enum = getHeaderNames();
@@ -571,8 +571,7 @@ public class SportletRequest implements PortletRequest {
         while (enum.hasMoreElements()) {
             name = (String) enum.nextElement();
             attrvalue = (Object) getAttribute(name);
-            log.debug("\t\tname=" + name + " object type=" + attrvalue.getClass
-                    ().getName());
+            log.debug("\t\tname=" + name + " object type=" + attrvalue.getClass().getName());
         }
         log.debug("\trequest parameter names: note if a parameter has multiple values, only the first element is displayed ");
         enum = getParameterNames();
