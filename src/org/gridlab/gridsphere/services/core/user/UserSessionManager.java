@@ -100,7 +100,13 @@ public class UserSessionManager implements PortletSessionListener {
         Iterator it = userSessions.iterator();
         while (it.hasNext()) {
             PortletSession session = (PortletSession)it.next();
-            if (session != null) session.invalidate();
+            if (session != null) {
+                try {
+                    session.invalidate();
+                } catch (IllegalStateException e) {
+                    log.debug("session " + session.getId() + " for user " + user.getID() + " has already been invalidated!");
+                }
+            }
         }
         userSessions.remove(user.getID());
     }
