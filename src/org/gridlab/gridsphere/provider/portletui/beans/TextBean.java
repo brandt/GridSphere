@@ -14,25 +14,25 @@ public class TextBean extends BaseComponentBean implements TagBean {
 
     public static final String NAME = "tb";
 
+    protected String style = "info";
+
+    /* @deprectaed -- use MessageStyle instead */
     // CSS definitions according to Portlet API spec. PLT.C
     public static final String MSG_STATUS = "portlet-msg-status";
     public static final String MSG_INFO = "portlet-msg-info";
     public static final String MSG_ERROR = "portlet-msg-error";
     public static final String MSG_ALERT = "portlet-msg-alert";
     public static final String MSG_SUCCESS = "portlet-msg-success";
-
     public static final String MSG_ITALIC = "italic";
     public static final String MSG_BOLD = "bold";
     public static final String MSG_UNDERLINE = "underline";
-
-    protected String style = "info";
 
     /**
      * Constructs a default text bean
      */
     public TextBean() {
         super(NAME);
-        this.cssClass = MSG_INFO;
+        this.cssClass = MessageStyle.MSG_INFO;
     }
 
     /**
@@ -43,7 +43,7 @@ public class TextBean extends BaseComponentBean implements TagBean {
     public TextBean(String beanId) {
         super(NAME);
         this.beanId = beanId;
-        this.cssClass = MSG_INFO;
+        this.cssClass = MessageStyle.MSG_INFO;
     }
 
     /**
@@ -56,7 +56,7 @@ public class TextBean extends BaseComponentBean implements TagBean {
         super(NAME);
         this.beanId = beanId;
         this.request = req;
-        this.cssClass = MSG_INFO;
+        this.cssClass = MessageStyle.MSG_INFO;
     }
 
     /**
@@ -98,22 +98,22 @@ public class TextBean extends BaseComponentBean implements TagBean {
         String text = "";
         if (value == null) return "";
         if (style.equalsIgnoreCase("error") || (style.equalsIgnoreCase("err"))) {
-            this.cssClass = MSG_ERROR;
+            this.cssClass = MessageStyle.MSG_ERROR;
         } else if (style.equalsIgnoreCase("status")) {
-            this.cssClass = MSG_STATUS;
+            this.cssClass = MessageStyle.MSG_STATUS;
         } else if (style.equalsIgnoreCase("info")) {
-            this.cssClass = MSG_INFO;
+            this.cssClass = MessageStyle.MSG_INFO;
         } else if (style.equalsIgnoreCase("alert")) {
-            this.cssClass = MSG_ALERT;
+            this.cssClass = MessageStyle.MSG_ALERT;
         } else if (style.equalsIgnoreCase("success")) {
-            this.cssClass = MSG_SUCCESS;
+            this.cssClass = MessageStyle.MSG_SUCCESS;
         } else if (style.equalsIgnoreCase("nostyle")) {
             return value;
-        } else if (style.equalsIgnoreCase(TextBean.MSG_BOLD)) {
+        } else if (style.equalsIgnoreCase(MessageStyle.MSG_BOLD)) {
             return "<b>" + value + "</b>";
-        } else if (style.equalsIgnoreCase(TextBean.MSG_ITALIC)) {
+        } else if (style.equalsIgnoreCase(MessageStyle.MSG_ITALIC)) {
             return "<i>" + value + "</i>";
-        } else if (style.equalsIgnoreCase(TextBean.MSG_UNDERLINE)) {
+        } else if (style.equalsIgnoreCase(MessageStyle.MSG_UNDERLINE)) {
             return "<u>" + value + "</u>";
         }
         text = "<span " + getFormattedCss();

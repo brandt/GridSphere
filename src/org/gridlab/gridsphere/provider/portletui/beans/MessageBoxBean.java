@@ -16,7 +16,7 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
 
     private List text = new ArrayList();
     private List keys = new ArrayList();
-    private String messageType = TextBean.MSG_INFO;
+    private String messageType = MessageStyle.MSG_INFO;
     private String width = null;
     private String height = null;
 

@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.provider.portlet.tags.jsr;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.provider.portletui.beans.ActionLinkBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
+import org.gridlab.gridsphere.provider.portletui.beans.MessageStyle;
 import org.gridlab.gridsphere.provider.portletui.tags.ActionTag;
 
 import javax.portlet.RenderResponse;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 public class RenderURLTagImpl extends ActionTag {
 
     protected ActionLinkBean actionlink = null;
-    protected String style = TextBean.MSG_INFO;
+    protected String style = MessageStyle.MSG_INFO;
 
     /**
      * Sets the style of the text: Available styles are

@@ -114,7 +114,7 @@ public class LoginPortlet extends ActionPortlet {
         if (errorKey != null) {
             MessageBoxBean frame = event.getMessageBoxBean("msg");
             frame.setKey(LoginPortlet.LOGIN_ERROR_FLAG);
-            frame.setMessageType(TextBean.MSG_ERROR);
+            frame.setMessageType(MessageStyle.MSG_ERROR);
             req.removeAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
         }
 
@@ -413,13 +413,13 @@ public class LoginPortlet extends ActionPortlet {
     private void createErrorMessage(FormEvent evt, String text) {
         MessageBoxBean msg = evt.getMessageBoxBean("msg");
         msg.setValue(text);
-        msg.setMessageType(TextBean.MSG_ERROR);
+        msg.setMessageType(MessageStyle.MSG_ERROR);
     }
 
     private void createSuccessMessage(FormEvent evt, String text) {
         MessageBoxBean msg = evt.getMessageBoxBean("msg");
         msg.setValue(text);
-        msg.setMessageType(TextBean.MSG_SUCCESS);
+        msg.setMessageType(MessageStyle.MSG_SUCCESS);
     }
 
     public void newpassword(FormEvent evt) {

@@ -7,6 +7,7 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
+import org.gridlab.gridsphere.provider.portletui.beans.MessageStyle;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -20,7 +21,7 @@ public class TextTag extends BaseComponentTag {
 
     protected TextBean textBean = null;
     protected String key = null;
-    protected String style = TextBean.MSG_INFO;
+    protected String style = MessageStyle.MSG_INFO;
     protected String format = null;
 
     /**

@@ -25,7 +25,7 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
      */
     public TextAreaBean() {
         super(NAME);
-        this.cssClass = TextBean.MSG_INFO;
+        this.cssClass = MessageStyle.MSG_INFO;
     }
 
     /**
@@ -35,7 +35,7 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
      */
     public TextAreaBean(String beanId) {
         super(NAME);
-        this.cssClass = TextBean.MSG_INFO;
+        this.cssClass = MessageStyle.MSG_INFO;
         this.beanId = beanId;
     }
 
@@ -47,7 +47,7 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
      */
     public TextAreaBean(HttpServletRequest req, String beanId) {
         super(NAME);
-        this.cssClass = TextBean.MSG_INFO;
+        this.cssClass = MessageStyle.MSG_INFO;
         this.request = req;
         this.beanId = beanId;
     }

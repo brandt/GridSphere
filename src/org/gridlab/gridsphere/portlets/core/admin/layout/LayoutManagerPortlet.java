@@ -343,13 +343,13 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     private void createErrorMessage(FormEvent event, String msg) {
         MessageBoxBean msgBox = event.getMessageBoxBean("msg");
-        msgBox.setMessageType(TextBean.MSG_ERROR);
+        msgBox.setMessageType(MessageStyle.MSG_ERROR);
         msgBox.setValue(msg);
     }
 
     private void createSuccessMessage(FormEvent event, String msg) {
         MessageBoxBean msgBox = event.getMessageBoxBean("msg");
-        msgBox.setMessageType(TextBean.MSG_SUCCESS);
+        msgBox.setMessageType(MessageStyle.MSG_SUCCESS);
         msgBox.setValue(msg);
     }
 }

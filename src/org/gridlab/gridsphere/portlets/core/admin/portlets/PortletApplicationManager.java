@@ -54,7 +54,7 @@ public class PortletApplicationManager extends ActionPortlet {
             event.getPortletRequest().setAttribute("result", result);
             MessageBoxBean msg = event.getMessageBoxBean("msg");
             msg.setKey("PORTLET_ERR_LIST");
-            msg.setMessageType(TextBean.MSG_ERROR);
+            msg.setMessageType(MessageStyle.MSG_ERROR);
         }
 
         //if (result != null) log.debug("result: " + result.getReturnCode() + " " + result.getDescription());
@@ -74,7 +74,7 @@ public class PortletApplicationManager extends ActionPortlet {
             portletManager = (PortletManagerService) getConfig().getContext().getService(PortletManagerService.class, user);
         } catch (PortletServiceException e) {
             msg.setKey("PORTLET_ERR_REGISTRY");
-            msg.setMessageType(TextBean.MSG_ERROR);
+            msg.setMessageType(MessageStyle.MSG_ERROR);
         }
 
         Map params = action.getParameters();
@@ -118,11 +118,11 @@ public class PortletApplicationManager extends ActionPortlet {
         } catch (IOException e) {
             log.error("Caught IOException!", e);
             msg.setKey("PORTLET_ERR_IO");
-            msg.setMessageType(TextBean.MSG_ERROR);
+            msg.setMessageType(MessageStyle.MSG_ERROR);
         } catch (TomcatManagerException e) {
             log.error("Caught TomcatmanagerException!", e);
             msg.setKey("PORTLET_ERR_TOMCAT");
-            msg.setMessageType(TextBean.MSG_ERROR);
+            msg.setMessageType(MessageStyle.MSG_ERROR);
         }
         req.setAttribute("result", result);
         if (result != null) log.debug("result: " + result.getReturnCode() + " " + result.getDescription());
@@ -148,7 +148,7 @@ public class PortletApplicationManager extends ActionPortlet {
             } catch (PortletServiceException e) {
                 MessageBoxBean msg = event.getMessageBoxBean("msg");
                 msg.setKey("PORTLET_ERR_REGISTRY");
-                msg.setMessageType(TextBean.MSG_ERROR);
+                msg.setMessageType(MessageStyle.MSG_ERROR);
                 throw new PortletException("PortletRegistry service unavailable! ", e);
             }
 
@@ -163,7 +163,7 @@ public class PortletApplicationManager extends ActionPortlet {
         } catch (Exception e) {
             MessageBoxBean errMsg = event.getMessageBoxBean("errorFrame");
             errMsg.setKey("PORTLET_ERR_UPLOAD");
-            errMsg.setMessageType(TextBean.MSG_ERROR);
+            errMsg.setMessageType(MessageStyle.MSG_ERROR);
             log.error("Unable to store uploaded file ", e);
         }
         setNextState(req, DEFAULT_VIEW_PAGE);
@@ -200,13 +200,13 @@ public class PortletApplicationManager extends ActionPortlet {
 
     private void createErrorMessage(FormEvent event, String msg) {
         MessageBoxBean msgBox = event.getMessageBoxBean("msg");
-        msgBox.setMessageType(TextBean.MSG_ERROR);
+        msgBox.setMessageType(MessageStyle.MSG_ERROR);
         msgBox.setValue(msg);
     }
 
     private void createSuccessMessage(FormEvent event, String msg) {
         MessageBoxBean msgBox = event.getMessageBoxBean("msg");
-        msgBox.setMessageType(TextBean.MSG_SUCCESS);
+        msgBox.setMessageType(MessageStyle.MSG_SUCCESS);
         msgBox.setValue(msg);
     }
 }

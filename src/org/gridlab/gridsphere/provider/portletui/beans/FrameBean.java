@@ -22,7 +22,7 @@ public class FrameBean extends TableBean implements TagBean {
     public static final String ERROR_TYPE = "error";
     public static final String MESSAGE_TYPE = "message";
 
-    protected String textStyle = TextBean.MSG_INFO;
+    protected String textStyle = MessageStyle.MSG_INFO;
 
     /**
      * Constructs a default frame bean

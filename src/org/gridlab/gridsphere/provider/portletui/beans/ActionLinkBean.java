@@ -93,20 +93,20 @@ public class ActionLinkBean extends ActionBean implements TagBean {
 
         //String hlink = "<a href=\"" + action + "\"" + " onClick=\"this.href='" + action + "&JavaScript=enabled'\"/>" + value + "</a>";
         if (style.equalsIgnoreCase("error") || (style.equalsIgnoreCase("err"))) {
-            this.cssClass = TextBean.MSG_ERROR;
+            this.cssClass = MessageStyle.MSG_ERROR;
         } else if (style.equalsIgnoreCase("status")) {
-            this.cssClass = TextBean.MSG_STATUS;
+            this.cssClass = MessageStyle.MSG_STATUS;
         } else if (style.equalsIgnoreCase("info")) {
-            this.cssClass = TextBean.MSG_INFO;
+            this.cssClass = MessageStyle.MSG_INFO;
         } else if (style.equalsIgnoreCase("alert")) {
-            this.cssClass = TextBean.MSG_ALERT;
+            this.cssClass = MessageStyle.MSG_ALERT;
         } else if (style.equalsIgnoreCase("success")) {
-            this.cssClass = TextBean.MSG_SUCCESS;
-        } else if (style.equalsIgnoreCase(TextBean.MSG_BOLD)) {
+            this.cssClass = MessageStyle.MSG_SUCCESS;
+        } else if (style.equalsIgnoreCase(MessageStyle.MSG_BOLD)) {
             this.addCssStyle("font-weight: bold;");
-        } else if (style.equalsIgnoreCase(TextBean.MSG_ITALIC)) {
+        } else if (style.equalsIgnoreCase(MessageStyle.MSG_ITALIC)) {
             this.addCssStyle("font-weight: italic;");
-        } else if (style.equalsIgnoreCase(TextBean.MSG_UNDERLINE)) {
+        } else if (style.equalsIgnoreCase(MessageStyle.MSG_UNDERLINE)) {
             this.addCssStyle("font-weight: underline;");
         }
         StringBuffer sb = new StringBuffer();
