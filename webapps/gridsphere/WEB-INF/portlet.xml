@@ -52,7 +52,7 @@
                     <keywords>anmelden logout</keywords>
                 </language>
                 <language locale="hu">
-                    <title>Bejelentkezés</title>
+                    <title>Bejelentkezés/title>
                     <title-short>Bejelentkezés</title-short>
                     <description>A portlet a portálba való bejelentkezésre szolgál</description>
                     <keywords>bejelentkezés portlet</keywords>
