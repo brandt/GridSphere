@@ -29,7 +29,7 @@ import java.util.Collections;
 public class PortletTab extends BasePortletComponent implements Serializable, Cloneable {
 
     private String title = "";
-    private boolean selected = false;
+    private transient boolean selected = false;
     private PortletComponent portletComponent = null;
 
     /**

@@ -53,17 +53,13 @@ public class PortletPageFactory implements PortletSessionListener {
             userdir.mkdir();
         }
 
-        reloadGuestUserLayout();
-    }
-
-    public void reloadGuestUserLayout() throws IOException, PersistenceManagerException {
         String guestLayoutFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/GuestUserLayout.xml");
 
         guestPage = PortletLayoutDescriptor.loadPortletPage(guestLayoutFile, layoutMappingFile);
         guestPage.setLayoutDescriptor(guestLayoutFile);
     }
 
-    public static PortletPageFactory getInstance() throws IOException, PersistenceManagerException {
+    public static synchronized PortletPageFactory getInstance() throws IOException, PersistenceManagerException {
         if (instance == null) {
             instance = new PortletPageFactory();
         }
@@ -252,50 +248,59 @@ public class PortletPageFactory implements PortletSessionListener {
             String userLayout = userLayoutDir + File.separator + user.getID();
 
             File f = new File(userLayout);
-            try {
+            // try {
 
-                if (f.exists()) {
-                    //page = (PortletPage)deepCopy(templatePage);
-                    //page.setLayoutDescriptor(userLayout);
+            if (f.exists()) {
+                //page = (PortletPage)deepCopy(templatePage);
+                //page.setLayoutDescriptor(userLayout);
 
+                try {
                     page = PortletLayoutDescriptor.loadPortletPage(userLayout, layoutMappingFile);
                     //page.setPortletTabbedPane(pane);
                     page.init(req, new ArrayList());
-                } else {
-
-                    // is user a SUPER?
-                    PortletRole role = req.getRole();
-                    if (role.equals(PortletRole.SUPER)) {
-
-                        page = createFromAllWebApps(req);
-
-
-                    }  else {
-
-                        List groups = (List)req.getAttribute(SportletProperties.PORTLETGROUPS);
-                        page = createFromGroups(req, groups);
-
-                    }
-
-                // save user's layout
-                try {
-                    userLayout = userLayoutDir + File.separator + user.getID();
-                    page.setLayoutDescriptor(userLayout);
-
-                    page.save();
-                } catch (IOException e) {
-                    log.error("Unable to save users layout!", e);
+                } catch (Exception e) {
+                    page = createNewPage(req);
                 }
-                }
+            } else {
+                page = createNewPage(req);
+            }
+            userLayouts.put(sessionId, page);
+            sessionManager.addSessionListener(sessionId, this);
+            //} catch (Exception e) {
+            //    log.error("Unable to create new user layout", e);
+            //}
+        }
+        return page;
+    }
 
-                userLayouts.put(sessionId, page);
-                sessionManager.addSessionListener(sessionId, this);
-            } catch (Exception e) {
-                log.error("Unable to create new user layout", e);
+
+        public PortletPage createNewPage(PortletRequest req) {
+            // is user a SUPER?
+            PortletPage page = null;
+            PortletRole role = req.getRole();
+            if (role.equals(PortletRole.SUPER)) {
+
+                page = createFromAllWebApps(req);
+
+
+            }  else {
+
+                List groups = (List)req.getAttribute(SportletProperties.PORTLETGROUPS);
+                page = createFromGroups(req, groups);
+
             }
 
-            return page;
-        }
+            // save user's layout
+            try {
+                String userLayout = userLayoutDir + File.separator + req.getUser().getID();
+                page.setLayoutDescriptor(userLayout);
+
+                page.save();
+            } catch (IOException e) {
+                log.error("Unable to save users layout!", e);
+            }
+
+        return page;
     }
 
     public PortletPage createFromGuestLayoutXML(PortletRequest req) {
