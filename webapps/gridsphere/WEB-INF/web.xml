@@ -176,11 +176,6 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>NotePadPortlet</servlet-name>
-        <url-pattern>/note/notepad</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
         <servlet-name>TextMessagingPortlet</servlet-name>
         <url-pattern>/textmessaging</url-pattern>
     </servlet-mapping>
