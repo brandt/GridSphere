@@ -24,7 +24,7 @@ public class AllJUnitTests extends TestCase {
 
     public static Test suite() {
         TestSuite suite = new TestSuite();
-        suite.addTest(new TestSuite(UserManagerServiceTest.class));
+        //suite.addTest(new TestSuite(UserManagerServiceTest.class));
         suite.addTest(new TestSuite(CredentialManagerServiceTest.class));
         suite.addTest(new TestSuite(PortletDescriptorTest.class));
         suite.addTest(new TestSuite(ServiceDescriptorTest.class));

@@ -46,7 +46,6 @@ public abstract class AbstractCredentialManager implements CredentialManager {
     private String credentialPermissionImpl = null;
     private String credentialMappingImpl = null;
 
-
     /****** CREDENTIAL PERMISSION PERSISTENCE METHODS *******/
 
     public List getCredentialPermissions() {
@@ -75,7 +74,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         }
     }
 
-    public void createCredentialPermission(String pattern) {
+    public CredentialPermission createCredentialPermission(String pattern) {
         CredentialPermission permission = null;
         // Create new permission of proper type
         try {
@@ -85,6 +84,21 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         }
         permission.setPermittedSubjects(pattern);
         createCredentialPermission(permission);
+        return permission;
+    }
+
+    public CredentialPermission createCredentialPermission(String pattern, String description) {
+        CredentialPermission permission = null;
+        // Create new permission of proper type
+        try {
+            permission = (CredentialPermission)Class.forName(this.credentialPermissionImpl).newInstance();
+        } catch (Exception e) {
+            _log.error("Error creating instance of credential permission", e);
+        }
+        permission.setPermittedSubjects(pattern);
+        permission.setDescription(description);
+        createCredentialPermission(permission);
+        return permission;
     }
 
     public void createCredentialPermission(CredentialPermission permission) {
@@ -185,7 +199,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         try {
             String query = "select cm from "
                          + this.credentialMappingImpl
-                         + " cm where cm.subject=" + subject;
+                         + " cm where cm.subject=\"" + subject + "\"";
             _log.debug(query);
             return (CredentialMapping)this.pm.restoreObject(query);
         } catch (PersistenceManagerException e) {
@@ -194,7 +208,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         }
     }
 
-    public void createCredentialMapping(String subject, User user)
+    public CredentialMapping createCredentialMapping(String subject, User user)
             throws CredentialNotPermittedException {
         CredentialMapping mapping = null;
         // Create new mapping of proper type
@@ -206,6 +220,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         mapping.setSubject(subject);
         mapping.setUser(user.getID());
         createCredentialMapping(mapping);
+        return mapping;
     }
 
     public void createCredentialMapping(CredentialMapping mapping)
@@ -259,7 +274,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         try {
             String query = "select cm from "
                          + this.credentialMappingImpl
-                         + " cm where cm.user=" + user;
+                         + " cm where cm.user=\"" + user.getID() + "\"";
             _log.debug(query);
             return this.pm.restoreList(query);
         } catch (PersistenceManagerException e) {
@@ -272,7 +287,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         try {
             String query = "delete cm from "
                          + this.credentialMappingImpl
-                         + " cm where cm.user=" + user;
+                         + " cm where cm.user=\"" + user.getID() + "\"";
             _log.debug(query);
             this.pm.deleteList(query);
         } catch (PersistenceManagerException e) {
@@ -286,7 +301,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         try {
             String query = "select cm.subject from "
                          + this.credentialMappingImpl
-                         + " cm";
+                         + " cm where cm.subject=\"" + subject + "\"";
             _log.debug(query);
             value = (String)this.pm.restoreObject(query);
         } catch (PersistenceManagerException e) {
@@ -298,17 +313,12 @@ public abstract class AbstractCredentialManager implements CredentialManager {
 
     /****** CREDENTIAL MAPPING CONVENIENCE METHODS *******/
 
-
     public User getCredentialUser(String subject) {
         User user = null;
-        String query = "select cm.user from "
-                     + this.credentialMappingImpl
-                     + " cm where cm.subject=" + subject;
-        _log.debug(query);
-        try {
-            user = (User)this.pm.restoreObject(query);
-        } catch (PersistenceManagerException e) {
-            _log.error("Error retrieving credential user", e);
+        // Improve on this later...
+        CredentialMapping mapping = getCredentialMapping(subject);
+        if (mapping != null) {
+            // Get user with given id from UserManagerService
         }
         return user;
     }
@@ -317,7 +327,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         List subjects = null;
         String query = "select cm.subject from "
                      + this.credentialMappingImpl
-                     + " cm where cm.user=" + user;
+                     + " cm where cm.user=\"" + user.getID() + "\"";
         _log.debug(query);
         try {
             subjects = this.pm.restoreList(query);
@@ -332,7 +342,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         List tags = new Vector();
         String query = "select cm.tag from "
                      + this.credentialMappingImpl
-                     + " cm where cm.user=" + user;
+                     + " cm where cm.user=\"" + user.getID() + "\"";
         _log.debug(query);
         try {
             tags = this.pm.restoreList(query);
@@ -348,7 +358,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         String tag = null;
         String query = "select cm.tag from "
                      + this.credentialMappingImpl
-                     + " cm where cm.subject=" + subject;
+                     + " cm where cm.subject=\"" + subject + "\"";
         _log.debug(query);
         try {
             tag = (String)this.pm.restoreObject(query);
@@ -376,9 +386,9 @@ public abstract class AbstractCredentialManager implements CredentialManager {
     public List getCredentialHosts(String subject)
             throws MappingNotFoundException {
         List hosts = null;
-        String query = "select cm.subject from "
+        String query = "select cm.hosts from "
                      + this.credentialMappingImpl
-                     + " cm where cm.subject=" + subject;
+                     + " cm where cm.subject=\"" + subject + "\"";
         _log.debug(query);
         try {
             hosts = this.pm.restoreList(query);

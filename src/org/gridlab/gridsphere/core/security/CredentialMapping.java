@@ -56,15 +56,15 @@ public interface CredentialMapping {
      */
     public void addHost(String host);
 
-    /** 
+    /**
      */
-    public void addHost(List hosts);
+    public void addHosts(List hosts);
 
-    /** 
+    /**
      */
     public void removeHost(String host);
 
-    /** 
+    /**
      */
     public boolean hasHost(String host);
 }

@@ -433,6 +433,9 @@ Copyright:
       <java classname="org.gridlab.gridsphere.services.user.UserManagerServiceTest2" classpathref="classpath"/>
   </target>
 
+  <target name="testcredentialmanagerservice" depends="compile">
+      <java classname="org.gridlab.gridsphere.services.security.credential.CredentialManagerServiceTest" classpathref="classpath"/>
+  </target>
 
     <!-- =================================================================== -->
     <!-- compiles performance tests     -->

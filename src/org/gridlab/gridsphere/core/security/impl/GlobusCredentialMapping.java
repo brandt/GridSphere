@@ -32,11 +32,13 @@ public class GlobusCredentialMapping extends BaseObject implements CredentialMap
     private String subject= null;
 
     /**
-     * @sql-size 15
-     * @sql-name user
+     * @sql-size 256
+     * @sql-name userid
+     * @get-method getUser
+     * @set-method setUser
      * @required
      */
-    private String user = null;
+    private String userid = null;
 
     /**
      * @sql-size 15
@@ -76,24 +78,18 @@ public class GlobusCredentialMapping extends BaseObject implements CredentialMap
     /**
      */
     public String getUser() {
-        return this.user;
+        return this.userid;
     }
 
     /**
      */
-    public void setUser(String userId) {
-        this.user = user;
+    public void setUser(String userid) {
+        this.userid = userid;
     }
 
     /**
      */
     public String getTag() {
-        String tag = null;
-        if (this.tag == null) {
-            return this.user;
-        } else {
-            tag = this.tag;
-        }
         return tag;
     }
 
@@ -151,7 +147,7 @@ public class GlobusCredentialMapping extends BaseObject implements CredentialMap
 
     /**
      */
-    public void addHost(List hosts) {
+    public void addHosts(List hosts) {
         for (int ii = 0; ii < hosts.size(); ++ii) {
             String host = (String)hosts.get(ii);
             addHost(host);

@@ -2,12 +2,12 @@
  * @author <a href="mailto:russell@aei-potsdam.mpg.de">Michael Paul Russell</a>
  * @version $Id$
  * <p>
- * GridSphere requires portlet users to authenticate with credentials at login. The 
- * credentials that portlet users authenticate with are then kept in memory and used 
+ * GridSphere requires portlet users to authenticate with credentials at login. The
+ * credentials that portlet users authenticate with are then kept in memory and used
  * as required to authenticate on behalf of portlet users to other Grid services.
  * <p>
- * This interface describes methods for permitting credentials for use within GridSphere, 
- * mapping credential subjects to portlet users and hostnames, and finally methods for 
+ * This interface describes methods for permitting credentials for use within GridSphere,
+ * mapping credential subjects to portlet users and hostnames, and finally methods for
  * managing credentials on the behalf of portlet users.
  */
 package org.gridlab.gridsphere.core.security;
@@ -24,9 +24,9 @@ public interface CredentialManager {
 
     public CredentialPermission getCredentialPermission(String permission);
 
-    public void createCredentialPermission(CredentialPermission permission);
+    public CredentialPermission createCredentialPermission(String permission);
 
-    public void createCredentialPermission(String subjectPattern);
+    public CredentialPermission createCredentialPermission(String permission, String description);
 
     public void updateCredentialPermission(CredentialPermission permission);
 
@@ -44,10 +44,7 @@ public interface CredentialManager {
 
     public CredentialMapping getCredentialMapping(String subject);
 
-    public void createCredentialMapping(CredentialMapping mapping)
-            throws CredentialNotPermittedException;
-
-    public void createCredentialMapping(String subject, User user)
+    public CredentialMapping createCredentialMapping(String subject, User user)
             throws CredentialNotPermittedException;
 
     public void updateCredentialMapping(CredentialMapping mapping)
