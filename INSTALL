@@ -48,7 +48,7 @@ compile -- compiles the GridSphere source code
 deploy -- deploys the GridSphere framework and all portlets to a
 	  Tomcat servlet container located at $CATALINA_HOME
 
-createdatabase - creates a new, fresh database with original
+create-database - creates a new, fresh database with original
                  GridSphere settings, this wipes out your current database!
 
 docs -- compiles all GridSphere docbook documentation and
