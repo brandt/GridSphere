@@ -327,11 +327,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             }
 
         } else {
-             System.err.println("\t\t\tin frame action before titel.action!!\t\t" + request.getWindowState());
-
             // now perform actionPerformed on Portlet if it has an action
             titleBar.actionPerformed(event);
-             System.err.println("\t\t\tin frame action after titel.action!!\t\t");
+   
             request.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
 
             //PortletRole role = req.getRole();
