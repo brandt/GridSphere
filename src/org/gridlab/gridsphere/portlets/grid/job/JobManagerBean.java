@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.portlets.grid.job;
 
 import org.gridlab.gridsphere.portlets.PortletBean;
+import org.gridlab.gridsphere.portlets.GridSpherePortletBean;
 import org.gridlab.gridsphere.services.grid.job.*;
 import org.gridlab.gridsphere.services.grid.job.impl.grms.*;
 import org.gridlab.gridsphere.services.grid.security.credential.Credential;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-public class JobManagerBean extends PortletBean {
+public class JobManagerBean extends GridSpherePortletBean {
 
     // User job pages
     public static final String PAGE_USER_JOB_LIST = "/jsp/job/userJobList.jsp";
@@ -38,27 +39,26 @@ public class JobManagerBean extends PortletBean {
     private List userJobList = null;
     private Job userJob = null;
 
-
     /******************************************
      * Portlet bean methods
      ******************************************/
 
     public JobManagerBean() {
-        initView();
     }
 
-    public JobManagerBean(PortletConfig config, PortletRequest request, PortletResponse response)
+    public void init(PortletConfig config, PortletRequest request, PortletResponse response)
             throws PortletException {
-        init(config, request, response);
+        super.init(config, request, response);
+        initPage();
         initServices();
-        initView();
     }
 
-    protected void initView() {
-        setTitle("Job Manager");
+    private void initPage() {
+        setTitle("Job Manager Portlet");
+        setPage(PAGE_USER_JOB_LIST);
     }
 
-    protected void initServices()
+    private void initServices()
             throws PortletException {
         this.log.debug("Entering initServices()");
         this.jobManagerService = (JobManagerService) getPortletService(JobManagerService.class);
@@ -75,9 +75,15 @@ public class JobManagerBean extends PortletBean {
      ******************************************/
 
     public void loadJobManagerDescription()
-            throws JobManagerException {
-        User user = getPortletUser();
-        this.jobManagerDescription = jobManagerService.getJobManagerDescription(user);
+            throws PortletException {
+        try {
+            User user = getPortletUser();
+            this.jobManagerDescription = this.jobManagerService.getJobManagerDescription(user);
+        } catch (Exception e) {
+            this.log.error("Error getting job manager description", e);
+            this.jobManagerDescription = "";
+            throw new PortletException(e.getMessage());
+        }
     }
 
     public String getJobManagerDescription()
@@ -92,24 +98,28 @@ public class JobManagerBean extends PortletBean {
     public void doListUserJob()
             throws PortletException {
         loadUserJobList();
+        setTitle("Job Manager: List Jobs");
         setPage(PAGE_USER_JOB_LIST);
     }
 
     public void doViewUserJob()
             throws PortletException {
         loadUserJob();
+        setTitle("Job Manager: View Job");
         setPage(PAGE_USER_JOB_VIEW);
     }
 
     public void doNewUserJob()
             throws PortletException {
-        setPage(PAGE_USER_JOB_APPLICATION_EDIT);
+        setTitle("Job Manager: New Job");
+        setPage(PAGE_USER_JOB_EDIT);
     }
 
     public void doStageUserJob()
             throws PortletException {
         loadUserJob();
-        setPage(PAGE_USER_JOB_APPLICATION_EDIT);
+        setTitle("Job Manager: Stage Job");
+        setPage(PAGE_USER_JOB_EDIT);
     }
 
     public void doEditUserJobApplication()
@@ -117,6 +127,7 @@ public class JobManagerBean extends PortletBean {
         loadUserJob();
         editUserJob();
         validateUserJobApplication();
+        setTitle("Job Manager: Edit Job Application");
         setPage(PAGE_USER_JOB_APPLICATION_EDIT);
     }
 
@@ -125,9 +136,11 @@ public class JobManagerBean extends PortletBean {
         loadUserJob();
         editUserJob();
         try {
+            setTitle("Job Manager: Edit Job Resources");
             validateUserJobApplication();
             setPage(PAGE_USER_JOB_RESOURCES_EDIT);
         } catch (Exception e) {
+            setTitle("Job Manager: Edit Job Application");
             setPage(PAGE_USER_JOB_APPLICATION_EDIT);
         }
     }
@@ -138,8 +151,10 @@ public class JobManagerBean extends PortletBean {
         editUserJob();
         try {
             validateUserJobResources();
+            setTitle("Job Manager: Verify Job");
             setPage(PAGE_USER_JOB_EDIT_VERIFY);
         } catch (Exception e) {
+            setTitle("Job Manager: Edit Job Resources");
             setPage(PAGE_USER_JOB_RESOURCES_EDIT);
         }
     }
@@ -149,18 +164,21 @@ public class JobManagerBean extends PortletBean {
         loadUserJob();
         editUserJob();
         submitUserJob();
+        setTitle("Job Manager: Submit Job");
         setPage(PAGE_USER_JOB_RESOURCES_EDIT);
     }
 
     public void doCancelEditUserJob()
             throws PortletException {
         loadUserJobList();
+        setTitle("Job Manager: List Jobs");
         setPage(PAGE_USER_JOB_LIST);
     }
 
     public void doMigrateUserJob()
             throws PortletException {
         loadUserJob();
+        setTitle("Job Manager: Migrate Job");
         setPage(PAGE_USER_JOB_MIGRATE);
     }
 
@@ -168,7 +186,8 @@ public class JobManagerBean extends PortletBean {
             throws PortletException {
         loadUserJob();
         migrateUserJob();
-        setPage(PAGE_USER_JOB_MIGRATE);
+        setTitle("Job Manager: View Job");
+        setPage(PAGE_USER_JOB_VIEW);
     }
 
     public void loadUserJobList() {

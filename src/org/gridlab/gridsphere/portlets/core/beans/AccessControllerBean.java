@@ -80,7 +80,7 @@ public class AccessControllerBean extends PortletBean {
     private User groupEntryUser = null;
     private PortletGroup groupEntryGroup = null;
     private PortletRole groupEntryRole = null;
-    private PortletGroup BASE_GROUP = null;
+    private PortletGroup CORE_GROUP = null;
 
     public AccessControllerBean() {
         super();
@@ -100,7 +100,7 @@ public class AccessControllerBean extends PortletBean {
         this.userManagerService = (UserManagerService)getPortletService(UserManagerService.class);
         this.aclManagerService = (AccessControlManagerService)getPortletService(AccessControlManagerService.class);
         this.log.debug("Exiting initServices()");
-        this.BASE_GROUP = aclManagerService.getBaseGroup();
+        this.CORE_GROUP = aclManagerService.getGroup("core");
     }
 
     private void initView() {
@@ -277,21 +277,14 @@ public class AccessControllerBean extends PortletBean {
     }
 
     public List getAllRolesInBaseGroup() {
-        return getAllRolesInGroup(BASE_GROUP);
+        return getAllRolesInGroup(CORE_GROUP);
     }
 
     public List getAllRolesInGroup(PortletGroup group) {
         List allRoles = new Vector();
-        if (group.isSuperGroup()) {
-            allRoles.add(PortletRole.SUPER);
-        } else {
-            allRoles.add(PortletRole.GUEST);
-            allRoles.add(PortletRole.USER);
-            allRoles.add(PortletRole.ADMIN);
-            if (group.isBaseGroup()) {
-                allRoles.add(PortletRole.SUPER);
-            }
-        }
+        allRoles.add(PortletRole.GUEST);
+        allRoles.add(PortletRole.USER);
+        allRoles.add(PortletRole.ADMIN);
         return allRoles;
     }
 
@@ -508,29 +501,6 @@ public class AccessControllerBean extends PortletBean {
         // Retrieve and save access right
         GroupEntry groupEntry = this.aclManagerService.getGroupEntry(user, group);
         setGroupEntry(groupEntry);
-    }
-
-    private void addGroupEntriesOld()
-            throws PortletException {
-        // Instantiate group entry list
-        List entryList = new Vector();
-        // Get portlet group
-        PortletGroup group = getGroup();
-        // Get ids of users to add
-        List groupEntryUserIDList = getParameterCheckBoxList("groupEntryUserID");
-        for (int ii = 0; ii < groupEntryUserIDList.size(); ++ii) {
-            String groupEntryUserID = (String)groupEntryUserIDList.get(ii);
-            // Get user to add
-            User user = this.userManagerService.getUser(groupEntryUserID);
-            // Get role for user ...
-            PortletRole role = PortletRole.USER;
-            // Add group entry
-            GroupEntry entry = addGroupEntry(user, group, role);
-            // Put entry in list
-            entryList.add(entry);
-        }
-        // Set group entry list
-        setGroupEntryList(entryList);
     }
 
     private void addGroupEntries()

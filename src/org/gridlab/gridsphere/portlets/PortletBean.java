@@ -54,6 +54,10 @@ public class PortletBean {
         return this.config;
     }
 
+    public void setPortletConfig(PortletConfig config) {
+        this.config = config;
+    }
+
     public PortletRequest getPortletRequest() {
         return this.request;
     }

@@ -302,7 +302,7 @@ public class UserManagerBean extends PortletBean {
     }
 
     public List getAllRolesInBaseGroup() {
-        return getAllRolesInGroup(SportletGroup.BASE);
+        return getAllRolesInGroup(SportletGroup.CORE);
     }
 
     public List getAllRolesInGroup(PortletGroup group) {
@@ -313,7 +313,7 @@ public class UserManagerBean extends PortletBean {
             allRoles.add(PortletRole.GUEST);
             allRoles.add(PortletRole.USER);
             allRoles.add(PortletRole.ADMIN);
-            if (group.equals(SportletGroup.BASE)) {
+            if (group.equals(SportletGroup.CORE)) {
                 allRoles.add(PortletRole.SUPER);
             }
         }
@@ -359,7 +359,7 @@ public class UserManagerBean extends PortletBean {
             this.baseGroupRole = PortletRole.SUPER;
         } else {
             this.baseGroupRole =
-                    this.aclManagerService.getRoleInGroup(this.user, SportletGroup.BASE);
+                    this.aclManagerService.getRoleInGroup(this.user, SportletGroup.CORE);
             if (this.baseGroupRole == null) {
                 this.baseGroupRole = PortletRole.USER;
             }
@@ -498,7 +498,7 @@ public class UserManagerBean extends PortletBean {
         // Create appropriate access request
         GroupRequest accessRequest = this.aclManagerService.createGroupRequest();
         accessRequest.setUser(user);
-        accessRequest.setGroup(SportletGroup.BASE);
+        accessRequest.setGroup(SportletGroup.CORE);
         // If super role was chosen
         if (role.equals(PortletRole.SUPER)) {
             this.log.debug("Granting super role");

@@ -21,13 +21,13 @@ import org.gridlab.gridsphere.portlet.PortletGroup;
 public class SportletGroup extends BaseObject implements PortletGroup {
 
     private static final String SUPER_GROUP = "super";
-    private static final String BASE_GROUP = "base";
+    private static final String CORE_GROUP = "core";
 
     /**
      * The <code>BASE</code> PortletGroup is the group that every portal user
      * is a member of by default
      */
-    public static final PortletGroup BASE = new SportletGroup(SportletGroup.BASE_GROUP);
+    public static final PortletGroup CORE = new SportletGroup(SportletGroup.CORE_GROUP);
 
     /**
      * The <code>SUPER</code> PortletGroup is the group that only super users of
@@ -92,28 +92,6 @@ public class SportletGroup extends BaseObject implements PortletGroup {
      */
     public void setID(String id) {
         setOid(id);
-    }
-
-    /**
-     * Tests if the supplied group is an instance of the <code>BASE</code> group
-     *
-     * @reeturn <code>true</code> if the group is <code>BASE</code> or
-     * <code>false</code> otherwise
-     */
-    public boolean isBaseGroup() {
-        if (Name.equals(BASE_GROUP)) return true;
-        return false;
-    }
-
-    /**
-     * Tests if the supplied group is an instance of the <code>SUPER</code> group
-     *
-     * @return <code>true</code> if the group is <code>SUPER</code> or
-     * <code>false</code> otherwise
-     */
-    public boolean isSuperGroup() {
-        if (Name.equals(SUPER_GROUP)) return true;
-        return false;
     }
 
     /**

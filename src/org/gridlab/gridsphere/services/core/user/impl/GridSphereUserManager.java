@@ -78,7 +78,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         log.info("Entering initGroups()");
         // Creating groups
         initGroup(SportletGroup.SUPER);
-        initGroup(SportletGroup.BASE);
+        initGroup(SportletGroup.CORE);
         log.info("Entering initServices()");
     }
 
@@ -422,7 +422,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         // If new user then set initial set acl
         if (request.isNewUser()) {
             // Grant user role in base group
-            addGroupEntry(user, SportletGroup.BASE,  PortletRole.USER);
+            addGroupEntry(user, SportletGroup.CORE,  PortletRole.USER);
         }
     }
 
@@ -796,8 +796,12 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     }
 
     public List getGroupEntries(User user) {
-        String criteria = "where groupEntry.user=\"" + user.getID() + "\"";
-        return selectGroupEntries(criteria);
+        if (hasSuperRole(user)) {
+            return new Vector();
+        } else {
+            String criteria = "where groupEntry.user=\"" + user.getID() + "\"";
+            return selectGroupEntries(criteria);
+        }
     }
 
     public List getGroupEntries(PortletGroup group) {
@@ -927,7 +931,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
             oqlBuffer.append(" and ");
         }
         oqlBuffer.append("portletGroup.ObjectID !=\"");
-        oqlBuffer.append(SportletGroup.SUPER.getID());
+        oqlBuffer.append(getSuperGroup().getID());
         oqlBuffer.append("\"");
         // Generate object query
         String oql = oqlBuffer.toString();
@@ -945,19 +949,11 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         return selectSportletGroup("where portletGroup.ObjectID=\"" + id + "\"");
     }
 
-    /**
-     *
-     * @deprecated
-     */
-    public PortletGroup getBaseGroup() {
-        return SportletGroup.BASE;
+    private PortletGroup getCoreGroup() {
+        return SportletGroup.CORE;
     }
 
-    /**
-     *
-     * @deprecated
-     */
-    public PortletGroup getSuperGroup() {
+    private PortletGroup getSuperGroup() {
         return SportletGroup.SUPER;
     }
 
@@ -1047,10 +1043,12 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     }
 
     public List getGroups(User user) {
-        String oql = "select groupEntry.group from "
+        String oql = "select groupEntry.user from "
                    + jdoGroupEntry
                    + " groupEntry where user=\""
                    + user.getID()
+                   + "\" and group !=\""
+                   + getSuperGroup().getID()
                    + "\"";
         try {
             return pm.restoreList(oql);
@@ -1076,7 +1074,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     public PortletRole getRoleInGroup(User user, PortletGroup group) {
         GroupEntry entry = getGroupEntry(user, group);
         if (entry == null) {
-            return null;
+            return PortletRole.GUEST;
         }
         return entry.getRole();
     }

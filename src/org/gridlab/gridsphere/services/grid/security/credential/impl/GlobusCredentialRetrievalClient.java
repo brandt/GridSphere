@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Vector;
 import java.util.StringTokenizer;
 import java.util.Iterator;
+import java.io.File;
+import java.io.FileOutputStream;
 
 public class GlobusCredentialRetrievalClient implements CredentialRetrievalClient {
 
@@ -37,9 +39,11 @@ public class GlobusCredentialRetrievalClient implements CredentialRetrievalClien
 
     private static PortletLog _log = SportletLog.getInstance(GlobusCredentialRetrievalClient.class);
 
-    private MyProxy myProxy = null;
     private GSSCredential portalProxy = null;
-    private long lifetime = 0;
+    private String myProxyHost = null;
+    private int myProxyPort = DEFAULT_PORT;
+
+    private long myProxyLifetime = DEFAULT_LIFETIME;
 
     private GlobusCredentialRetrievalClient() {
       // Force explicit setting of hostname and port
@@ -47,28 +51,34 @@ public class GlobusCredentialRetrievalClient implements CredentialRetrievalClien
 
     public GlobusCredentialRetrievalClient(String host, int port) {
         _log.info("Entering GlobusCredentialRetrievalClient(host, port)");
-        _log.info("MyProxy host = " + host);
-        _log.info("MyProxy port = " + port);
-        long lifetime = DEFAULT_LIFETIME;
-        _log.info("MyProxy lifetime = " + lifetime);
-        /** Apply init parameters **/
-        // MyProxy instance
-        this.myProxy = new MyProxy(host, port);
+        // Set host
+        this.myProxyHost = host;
+        _log.info("MyProxy host = " + myProxyHost);
+        // Set port
+        if (port > 0) {
+            this.myProxyPort = port;
+        }
+        _log.info("MyProxy port = " + myProxyPort);
         // Default lifetime
-        this.lifetime = lifetime;
+        _log.info("MyProxy lifetime = " + myProxyLifetime);
         _log.info("Exiting GlobusCredentialRetrievalClient(hostname, port)");
     }
 
     public GlobusCredentialRetrievalClient(String host, int port, long lifetime) {
         _log.info("Entering GlobusCredentialRetrievalClient(host, port, lifetime)");
-        _log.info("MyProxy host = " + host);
-        _log.info("MyProxy port = " + port);
-        _log.info("MyProxy lifetime = " + lifetime);
-        /** Apply init parameters **/
-        // MyProxy instance
-        this.myProxy = new MyProxy(host, port);
-        // Default lifetime
-        this.lifetime = lifetime;
+        // Set host
+        this.myProxyHost = host;
+        _log.info("MyProxy host = " + myProxyHost);
+        // Set port
+        if (port > 0) {
+            this.myProxyPort = port;
+        }
+        _log.info("MyProxy port = " + myProxyPort);
+        // Set lifetime
+        if (lifetime > 0) {
+            this.myProxyLifetime = lifetime;
+        }
+        _log.info("MyProxy lifetime = " + myProxyLifetime);
         _log.info("Exiting GlobusCredentialRetrievalClient(hostname, port, lifetime)");
     }
 
@@ -77,19 +87,19 @@ public class GlobusCredentialRetrievalClient implements CredentialRetrievalClien
     }
 
     public String getHost() {
-        return this.myProxy.getHost();
+        return this.myProxyHost;
     }
 
     public int getPort() {
-        return this.myProxy.getPort();
+        return this.myProxyPort;
     }
 
     public long getCredentialLifetime() {
-        return this.lifetime;
+        return this.myProxyLifetime;
     }
 
     public void setCredentialLifetime(long lifetime) {
-        this.lifetime = lifetime;
+        this.myProxyLifetime = lifetime;
     }
 
     private GSSCredential getPortalGlobusProxy()
@@ -121,14 +131,14 @@ public class GlobusCredentialRetrievalClient implements CredentialRetrievalClien
 
     public List retrieveCredentials(String username, String passphrase)
         throws CredentialRetrievalException {
-        return retrieveCredentials(username, passphrase, this.lifetime);
+        return retrieveCredentials(username, passphrase, this.myProxyLifetime);
     }
 
     public List retrieveCredentials(String username, String passphrase, long lifetime)
         throws CredentialRetrievalException {
         _log.info("Entering retrieveCredentials(user, passphrase, lifetime)");
         // Retrieve credential from MyProxy
-        GlobusCredential credential = myProxyGet(username, passphrase, this.lifetime);
+        GlobusCredential credential = myProxyGet(username, passphrase, this.myProxyLifetime);
         // Insert credential into a list and return
         List credentials = new Vector();
         credentials.add(credential);
@@ -138,7 +148,7 @@ public class GlobusCredentialRetrievalClient implements CredentialRetrievalClien
 
     public Credential retrieveCredential(String username, String passphrase, String subject)
         throws CredentialRetrievalException {
-        return retrieveCredential(username, passphrase, subject, this.lifetime);
+        return retrieveCredential(username, passphrase, subject, this.myProxyLifetime);
     }
 
     public Credential retrieveCredential(String username,
@@ -181,12 +191,14 @@ public class GlobusCredentialRetrievalClient implements CredentialRetrievalClien
             _log.error(m, e);
             throw new CredentialRetrievalException(m, e);
         }
+        // Instantiate MyProxy client
+        MyProxy myProxy = new MyProxy(this.myProxyHost, this.myProxyPort);
         // Retrieve Globus proxy from MyProxy
         GlobusGSSCredentialImpl userProxy = null;
         try {
             userProxy =
                 (GlobusGSSCredentialImpl)
-                    this.myProxy.get(portalProxy, username, passphrase, (int)lifetime);
+                    myProxy.get(portalProxy, username, passphrase, (int)lifetime);
         } catch (MyProxyException e) {
             String m = "Error retrieving Globus proxy with MyProxy client";
             _log.error(m, e);
@@ -200,25 +212,5 @@ public class GlobusCredentialRetrievalClient implements CredentialRetrievalClien
         }
         _log.info("Exiting myProxyGet(username, passphrase, lifetime)");
         return credential;
-    }
-
-    /**
-     * Reverses the order of the expected subject elements, converts "/" to ",",
-     * and removes extra spaces in each element.
-     *  For example:
-     *    "/O=Grid/O=Globus/OU=gridsphere.org/CN=Jane Doe"
-     *  translates to:
-     *    ",CN=Jane Doe,OU=gridsphere.org,O=Globus,O=Grid"
-     */
-    public String translateExpectedSubject(String expectedSubject) {
-        StringBuffer translatedSubjectBuffer = new StringBuffer();
-        StringTokenizer tokenizer = new StringTokenizer(expectedSubject, "/");
-        while (tokenizer.hasMoreTokens()) {
-            translatedSubjectBuffer.insert(0, tokenizer.nextToken().trim());
-            translatedSubjectBuffer.insert(0, ",");
-        }
-        String translatedSubject = translatedSubjectBuffer.toString();
-        _log.debug("Translated expected subject to " + translatedSubject);
-        return translatedSubject;
     }
 }

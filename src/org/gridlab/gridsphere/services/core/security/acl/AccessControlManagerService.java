@@ -3,7 +3,7 @@
  * User: russell
  * Date: Jan 31, 2003
  * Time: 4:06:44 AM
- * To change template for new class use 
+ * To change template for new class use
  * Code Style | Class Templates options (Tools | IDE Options).
  */
 package org.gridlab.gridsphere.services.core.security.acl;
@@ -23,17 +23,6 @@ public interface AccessControlManagerService extends PortletService {
     public List getGroups();
 
     public PortletGroup getGroup(String groupId);
-
-    /**
-     * @deprecated
-     */
-    public PortletGroup getBaseGroup();
-
-    /**
-     *
-     * @deprecated
-     */
-    public PortletGroup getSuperGroup();
 
     public PortletGroup getGroupByName(String groupName);
 

@@ -74,6 +74,7 @@ public class GrmsJobManager implements JobManagerService {
     private URL serviceURL = null;
     private SortedMap allUserJobs = null;
     private GrmsJobMonitor jobMonitor = null;
+    private String jobManagerDescription = null;
 
     public static GrmsJobManager getInstance() {
         if (_instance == null) {
@@ -130,7 +131,17 @@ public class GrmsJobManager implements JobManagerService {
         }
     }
 
+    public GsiScenarioBroker connect() throws Exception {
+        GSSCredential gssProxy = getPortalGSSProxy();
+        return connect(gssProxy);
+    }
+
     public GsiScenarioBroker connect(User user) throws Exception {
+        GSSCredential gssProxy = getUserDefaultGSSProxy(user);
+        return connect(gssProxy);
+    }
+
+    public GsiScenarioBroker connect(GSSCredential gssProxy) throws Exception {
         GsiScenarioBroker grmsBroker = null;
         try {
             _logger.info("GrmsJobManager: Getting service handle...");
@@ -142,7 +153,6 @@ public class GrmsJobManager implements JobManagerService {
             System.err.println(message);
             throw e;
         }
-        GSSCredential gssProxy = getUserDefaultGSSProxy(user);
         setPortProperties(grmsBroker, gssProxy);
         return grmsBroker;
     }
@@ -157,16 +167,17 @@ public class GrmsJobManager implements JobManagerService {
 
     public String getJobManagerDescription(User user)
             throws JobManagerException {
-        String jobManagerDescription = "";
-        try {
-            GsiScenarioBroker grmsBroker = connect(user);
-            jobManagerDescription = grmsBroker.getServiceDescription();
-        } catch (Exception e) {
-            _logger.error("getJobManagerDescription", e);
-            System.err.println(e.getMessage());
-            throw new JobManagerException(e.getMessage());
+        if (this.jobManagerDescription == null) {
+            try {
+                GsiScenarioBroker grmsBroker = connect(user);
+                this.jobManagerDescription = grmsBroker.getServiceDescription();
+            } catch (Exception e) {
+                _logger.error("getJobManagerDescription", e);
+                System.err.println(e.getMessage());
+                throw new JobManagerException(e.getMessage());
+            }
         }
-        return jobManagerDescription;
+        return this.jobManagerDescription;
     }
 
     public List getJobList(User user)
@@ -647,19 +658,19 @@ public class GrmsJobManager implements JobManagerService {
     }
 
     private GSSCredential getUserDefaultGSSProxy(User user) {
-        if (credentialManager.hasActiveCredentials(user)) {
+        if (user == null || !credentialManager.hasActiveCredentials(user)) {
+            _logger.info("GrmsJobManager: User has no active proxies");
+            GSSCredential portalProxy = getPortalGSSProxy();
+            return portalProxy;
+        } else {
             _logger.info("GrmsJobManager: Getting user proxy");
             List credentials = credentialManager.getActiveCredentials(user);
             GlobusCredential credential = (GlobusCredential)credentials.get(0);
             return credential.getGSSProxy();
-        } else {
-            _logger.info("GrmsJobManager: User has no active proxies");
-            GSSCredential portalProxy = getPortalGlobusProxy();
-            return portalProxy;
         }
     }
 
-    private GSSCredential getPortalGlobusProxy() {
+    private GSSCredential getPortalGSSProxy() {
         _logger.debug("Portal credential has not been set yet");
         try {
             ExtendedGSSManager manager = (ExtendedGSSManager)ExtendedGSSManager.getInstance();

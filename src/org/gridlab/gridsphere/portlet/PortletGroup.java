@@ -15,24 +15,6 @@ package org.gridlab.gridsphere.portlet;
 public interface PortletGroup {
 
     /**
-     * Tests to see if this group object is a <code>BASE</code>
-     * group that every user is a member of by default.
-     *
-     * @return <code>true</code> if this group is a <code>BASE</group>,
-     * returns <code>false</code> otherwise.
-     */
-    public boolean isBaseGroup();
-
-    /**
-     * Tests to see if this group object is a <code>SUPER</code>
-     * group that every super user is a member of by default.
-     *
-     * @return <code>true</code> if this group is a <code>SUPER</group>,
-     * returns <code>false</code> otherwise.
-     */
-    public boolean isSuperGroup();
-
-    /**
      * Returns the name of this group
      *
      * @return the name of this group

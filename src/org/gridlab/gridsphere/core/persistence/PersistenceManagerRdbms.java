@@ -25,5 +25,7 @@ public interface PersistenceManagerRdbms {
 
     public void delete(Object object) throws PersistenceManagerException;
 
+    public void deleteList(String query) throws PersistenceManagerException;
+
     public Object getObjectByOid(Class cl, String Oid) throws PersistenceManagerException;
 }
