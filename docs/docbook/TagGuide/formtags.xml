@@ -411,6 +411,11 @@
                     </thead>
                     <tbody>
                         <row>
+                            <entry>align</entry><entry>no</entry><entry>string:  left, center, right, justify  for horizontal alignment</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
                             <entry>width</entry><entry>no</entry><entry>integer: the width of the panel</entry>
                         </row>
                     </tbody>
@@ -478,6 +483,11 @@
                     </thead>
                     <tbody>
                         <row>
+                            <entry>align</entry><entry>no</entry><entry>string:  left, center, right, justify  for horizontal alignment</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
                             <entry>width</entry><entry>no</entry><entry>integer: the width of the panel</entry>
                         </row>
                     </tbody>
@@ -527,6 +537,21 @@
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
                         </row>
                     </thead>
+                    <tbody>
+                        <row>
+                            <entry>header</entry><entry>no</entry><entry>boolean: true if this row is a header equivalent to &lt;th&gt; in HTML</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>align</entry><entry>no</entry><entry>string:  left, center, right, justify  for horizontal alignment</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>valign</entry><entry>no</entry><entry>string: top, middle, bottom or baseline for vertical alignment</entry>
+                        </row>
+                    </tbody>
                 </tgroup>
             </table>
             <example>
@@ -569,12 +594,27 @@
                     </thead>
                     <tbody>
                         <row>
-                            <entry>width</entry><entry>no</entry><entry>integer: the width of the panel</entry>
+                            <entry>width</entry><entry>no</entry><entry>integer: the width of the cell</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>height</entry><entry>no</entry><entry>integer: the height of the cell</entry>
                         </row>
                     </tbody>
                     <tbody>
                         <row>
                             <entry>cellspacing</entry><entry>no</entry><entry>integer: the cellspacing table width</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>align</entry><entry>no</entry><entry>string:  left, center, right, justify  for horizontal alignment</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>valign</entry><entry>no</entry><entry>string: top, middle, bottom or baseline for vertical alignment</entry>
                         </row>
                     </tbody>
                 </tgroup>
@@ -622,6 +662,11 @@
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
                         </row>
                     </thead>
+                    <tbody>
+                        <row>
+                            <entry>align</entry><entry>no</entry><entry>string:  left, center, right, justify  for horizontal alignment</entry>
+                        </row>
+                    </tbody>
                     <tbody>
                         <row>
                             <entry>width</entry><entry>no</entry><entry>integer: the width of the panel</entry>
