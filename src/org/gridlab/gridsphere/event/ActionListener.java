@@ -9,14 +9,14 @@ import org.gridlab.gridsphere.portlet.PortletException;
 import java.util.EventListener;
 
 /**
- * The ActionListener interface is an addition to the Portlet interface.
- * If an object wishes to receive action events in the portlet,
- * this interface has to be implemented additionally to the Portlet interface.
+ * The <code>ActionListener</code> interface is implemented by the
+ * {@link org.gridlab.gridsphere.portlet.AbstractPortlet} and must be
+ * implemented by all portlets that wish to handle action events.
  */
 public interface ActionListener extends EventListener {
 
     /**
-     * Notifies this listener that the action which the listener is watching for has been performed.
+     * Gives notification that an action event has occured
      *
      * @param event the action event
      * @throws PortletException if the listener has trouble fulfilling the request

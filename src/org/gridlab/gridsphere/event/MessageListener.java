@@ -9,14 +9,14 @@ import org.gridlab.gridsphere.portlet.PortletException;
 import java.util.EventListener;
 
 /**
- * The MessageListener interface is an addition to the Portlet  interface.
- * If an object wishes to receive message events in the portlet, this interface has to be
- * implemented additionally to the Portlet interface.
+ * The <code>MessageListener</code> interface is implemented by the
+ * {@link org.gridlab.gridsphere.portlet.AbstractPortlet} and must be
+ * implemented by all portlets that wish to receive message events.
  */
 public interface MessageListener extends EventListener {
 
     /**
-     * Notifies this listener that the message which the listener is watching for has been performed.
+     * Gives notification taht a message has been received
      *
      * @param event the message event
      *

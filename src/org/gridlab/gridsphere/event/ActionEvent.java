@@ -10,7 +10,7 @@ import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 
 /**
- * An ActionEvent is sent by the portlet container when an HTTP request is received that is associated with an action.
+ * An <code>ActionEvent</code> is sent by the portlet container when an HTTP request is received that is associated with an action.
  */
 public interface ActionEvent extends Event {
 
@@ -31,14 +31,14 @@ public interface ActionEvent extends Event {
     /**
      * Return the portlet request associated with this action event
      *
-     * @return portletRequest the PortletRequest
+     * @return the <code>PortletRequest</code>
      */
     public PortletRequest getPortletRequest();
 
     /**
      * Return the portlet response associated with this action event
      *
-     * @return portletResponse the PortletResponse
+     * @return the <code>PortletResponse</code>
      */
     public PortletResponse getPortletResponse();
 

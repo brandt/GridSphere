@@ -7,7 +7,7 @@ package org.gridlab.gridsphere.event;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 
 /**
- * The Event is the base interface for all events that can occur whithin the portlet container.
+ * The <code>Event</code> is the base interface for all events that can occur whithin the portlet container.
  * To be informed of events, a listener has to be registered with the respective event source.
  * The portlet container delivers all events to the respective event listeners (and thereby the portlets)
  * before the content generation is started. Should a listener, while processing the event, find that another
@@ -24,8 +24,7 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 public interface Event {
 
     /**
-     * Returns the portlet request that has caused this event. If this event is not triggered by a request,
-     * this methods returns null
+     * Returns the portlet request that has caused this event
      *
      * @return the portlet request
      */

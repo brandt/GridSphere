@@ -5,7 +5,7 @@
 package org.gridlab.gridsphere.event;
 
 /**
- * A WindowEvent is sent by a portlet window whenever the user or the portal interacts with its controls.
+ * A <code>WindowEvent</code> is sent by a portlet window whenever the user or the portal interacts with its controls.
  */
 public interface WindowEvent extends Event {
 
