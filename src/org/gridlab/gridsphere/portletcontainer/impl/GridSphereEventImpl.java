@@ -64,7 +64,6 @@ public class GridSphereEventImpl implements GridSphereEvent {
         return ctx;
     }
 
-
     public GridSphereEvent.Action getAction() {
         String action = req.getParameter(GridSphereProperties.ACTION);
         return GridSphereEvent.Action.toAction(action);
@@ -75,12 +74,18 @@ public class GridSphereEventImpl implements GridSphereEvent {
         return false;
     }
 
+    public boolean hasMessagingAction() {
+        return false;
+    }
+
     public SportletURI createNewAction(GridSphereEvent.Action action, int PortletComponentID, String ActivePortletID) {
         SportletURI sportletURI = new SportletURI(res);
         sportletURI.addParameter(GridSphereProperties.ACTION, action.toString());
         String sid = new Integer(PortletComponentID).toString();
         sportletURI.addParameter(GridSphereProperties.COMPONENT_ID, sid);
-        sportletURI.addParameter(GridSphereProperties.PORTLETID, ActivePortletID);
+        if (ActivePortletID != null) {
+            sportletURI.addParameter(GridSphereProperties.PORTLETID, ActivePortletID);
+        }
         return sportletURI;
     }
 
