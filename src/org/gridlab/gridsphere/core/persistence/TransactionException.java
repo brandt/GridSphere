@@ -6,7 +6,7 @@
 
 package org.gridlab.gridsphere.core.persistence;
 
-public class TransactionException extends PersistenceException {
+public class TransactionException extends PersistenceManagerException {
 
     public TransactionException () {
         super();

@@ -8,7 +8,7 @@
 
 package org.gridlab.gridsphere.core.persistence;
 
-public class UpdateException extends PersistenceException {
+public class UpdateException extends PersistenceManagerException {
 
     public UpdateException() {
         super();

@@ -9,7 +9,7 @@
 
 package org.gridlab.gridsphere.core.persistence;
 
-public class ConfigurationException extends PersistenceException {
+public class ConfigurationException extends PersistenceManagerException {
 
     public ConfigurationException() {
         super();

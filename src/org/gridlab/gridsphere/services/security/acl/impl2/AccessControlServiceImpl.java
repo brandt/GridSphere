@@ -31,10 +31,10 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
 
     PersistenceManagerRdbms pm = null;
 
-    public AccessControlServiceImpl() throws PersistenceException {
+    public AccessControlServiceImpl() throws PersistenceManagerException {
         super();
 
-        pm = new PersistenceManagerRdbms();
+        pm = PersistenceManagerRdbms.getInstance();
 
         log.info("AccessControlServiceImpl constructor done ");
     }
@@ -54,7 +54,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
         UserACL acl = null;
         try {
             acl = (UserACL)pm.restoreObject(command);
-        } catch (PersistenceException e) {
+        } catch (PersistenceManagerException e) {
             log.error("PM Exception: "+e);
         }
 
@@ -69,7 +69,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
         List result = null;
         try {
             result = pm.restoreList(command);
-        } catch (PersistenceException e) {
+        } catch (PersistenceManagerException e) {
             log.error("PM Exception: "+e);
         }
         return result;
@@ -149,7 +149,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
 
         try {
             result = pm.restoreList(command);
-        } catch (PersistenceException e) {
+        } catch (PersistenceManagerException e) {
             log.error("Transaction error "+e);
             throw new PortletServiceException();
         }
@@ -162,7 +162,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
         PortletGroup g = null;
         try {
             g = (PortletGroup)pm.restoreObject(command);
-        } catch (PersistenceException e) {
+        } catch (PersistenceManagerException e) {
             log.error("Exception " + e);
             throw new PortletServiceException("Could ot get group "+id);
         }
@@ -189,7 +189,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
 
         try {
             acl=pm.restoreList(command);
-        } catch (PersistenceException e) {
+        } catch (PersistenceManagerException e) {
             log.error("Exception " + e);
             throw new PortletServiceException("Could not get ACLs "+e);
         }

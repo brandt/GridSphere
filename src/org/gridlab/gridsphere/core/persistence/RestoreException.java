@@ -8,7 +8,7 @@
 
 package org.gridlab.gridsphere.core.persistence;
 
-public class RestoreException extends PersistenceException {
+public class RestoreException extends PersistenceManagerException {
 
     public RestoreException () {
         super();

@@ -6,7 +6,7 @@
 
 package org.gridlab.gridsphere.core.persistence;
 
-public class QueryException extends PersistenceException {
+public class QueryException extends PersistenceManagerException {
 
     public QueryException() {
         super();

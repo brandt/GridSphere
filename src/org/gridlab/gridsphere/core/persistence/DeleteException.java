@@ -8,7 +8,7 @@
 
 package org.gridlab.gridsphere.core.persistence;
 
-public class DeleteException extends PersistenceException {
+public class DeleteException extends PersistenceManagerException {
 
     public DeleteException () {
         super();

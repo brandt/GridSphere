@@ -6,7 +6,7 @@
 package org.gridlab.gridsphere.services.user.impl;
 
 import org.gridlab.gridsphere.core.persistence.BaseObject;
-import org.gridlab.gridsphere.core.persistence.PersistenceException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletLog;
@@ -288,10 +288,10 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
     public void addToGroup(PortletGroup group, PortletRole role) {
         UserACL acl;
         acl = new UserACL(this.getID(), role.getRole(), group.getID());
-        PersistenceManagerRdbms pm = new PersistenceManagerRdbms();
+        PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
         try {
             pm.create(acl);
-        } catch (PersistenceException e) {
+        } catch (PersistenceManagerException e) {
             e.printStackTrace();
         }
     }

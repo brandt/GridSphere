@@ -6,7 +6,7 @@
 
 package org.gridlab.gridsphere.services.security.acl.impl2;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletLog;
@@ -30,7 +30,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
 
     public AccessControlManagerServiceImpl() {
         super();
-        pm = new PersistenceManagerRdbms();
+        pm = PersistenceManagerRdbms.getInstance();
     }
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
@@ -47,7 +47,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     private void delete(String command) throws PortletServiceException {
         try {
             pm.deleteList(command);
-        } catch (PersistenceException e) {
+        } catch (PersistenceManagerException e) {
             log.equals("Delete error " + e);
             throw new PortletServiceException("Delete Exception " + e);
         }
@@ -58,7 +58,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
      *
      * @param user the User object
      */
-    public void addUserToSuperRole(User user) {
+    public void addUserToSuperRole(User user) throws PortletServiceException {
 
         UserACL rootacl = new UserACL();
         rootacl.setUserID(user.getID());
@@ -68,8 +68,9 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
 
         try {
             pm.create(rootacl);
-        } catch (PersistenceException e) {
+        } catch (PersistenceManagerException e) {
             log.error("Exception :" + e);
+            throw new PortletServiceException("Unable to add user to super role: " + e);
         }
     }
 
@@ -83,7 +84,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         SportletGroup ga = new SportletGroup(Name);
         try {
             pm.create(ga);
-        } catch (PersistenceException e) {
+        } catch (PersistenceManagerException e) {
             log.error("Transaction Exception " + e);
             throw new PortletServiceException(e.toString());
         }
@@ -103,7 +104,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
             SportletGroup pg = (SportletGroup) pm.restoreObject(command);
             pg.setName(newGroupName);
             pm.update(pg);
-        } catch (PersistenceException e) {
+        } catch (PersistenceManagerException e) {
             throw new PortletServiceException("Persistence Error:" + e.toString());
         }
     }
@@ -160,7 +161,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
                 }
             }
 
-        } catch (PersistenceException e) {
+        } catch (PersistenceManagerException e) {
             log.error("TransactionException " + e);
             throw new PortletServiceException(e.toString());
         }

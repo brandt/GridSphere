@@ -7,11 +7,8 @@ package org.gridlab.gridsphere.services.user.impl;
 
 import org.gridlab.gridsphere.core.mail.MailMessage;
 import org.gridlab.gridsphere.core.mail.MailUtils;
-import org.gridlab.gridsphere.core.persistence.ConfigurationException;
-import org.gridlab.gridsphere.core.persistence.CreateException;
-import org.gridlab.gridsphere.core.persistence.PersistenceException;
-import org.gridlab.gridsphere.core.persistence.RestoreException;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
@@ -45,12 +42,10 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     private static AccessControlService aclService = null;
     private static AccessControlManagerService aclManagerService = null;
 
-    private PersistenceManagerRdbms pm = null;
+    private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
 
     public UserManagerServiceImpl() {
         super();
-        pm = new PersistenceManagerRdbms();
-
     }
 
     /**
@@ -108,10 +103,8 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
         try {
             pm.create(request);
-        } catch (ConfigurationException e) {
+        } catch (PersistenceManagerException e) {
             log.info("conf error " + e);
-        } catch (CreateException e) {
-            log.info("create error " + e);
         }
 
         // mail the super user
@@ -151,10 +144,8 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         List requests = null;
         try {
             requests = pm.restoreList(command);
-        } catch (ConfigurationException e) {
+        } catch (PersistenceManagerException e) {
             log.info("Config error " + e);
-        } catch (RestoreException e) {
-            log.info("Restore error " + e);
         }
         return requests;
     }
@@ -178,7 +169,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                     "select ar from org.gridlab.gridsphere.services.user.impl.AccountRequestImpl ar where ar.ObjectID=" + userid;
             try {
                 requestImpl = (AccountRequestImpl) pm.restoreObject(command);
-            } catch (PersistenceException e) {
+            } catch (PersistenceManagerException e) {
                 log.error("PM Exception :" + e);
             }
 
@@ -199,7 +190,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                     pm.create(user);
                 }
                 pm.delete(requestImpl);
-            } catch (PersistenceException e) {
+            } catch (PersistenceManagerException e) {
                 log.error("PM Exception :" + e);
             }
             // Mail the user
@@ -243,7 +234,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 if (!existsUser(userid)) {
                     pm.deleteList(command2);
                 }
-            } catch (PersistenceException e) {
+            } catch (PersistenceManagerException e) {
                 log.error("PM Exception :" + e);
             }
             // Mail the user
@@ -340,7 +331,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         SportletUserImpl user = null;
         try {
             user = (SportletUserImpl) pm.restoreObject(command);
-        } catch (PersistenceException e) {
+        } catch (PersistenceManagerException e) {
             log.error("PM Exception :" + e.toString());
         }
         return user;
@@ -420,7 +411,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                     pm.delete(user);
                 } catch (PortletServiceException e) {
                     log.error("Could not delete the ACL of the user " + e);
-                } catch (PersistenceException e) {
+                } catch (PersistenceManagerException e) {
                     log.error("Could not delete User " + e);
                 }
             }
@@ -440,7 +431,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         SportletUser user = null;
         try {
             user = (SportletUser) pm.restoreObject(command);
-        } catch (PersistenceException e) {
+        } catch (PersistenceManagerException e) {
             log.error("Exception " + e);
         }
         return !(user == null);
@@ -458,7 +449,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         SportletUser user = null;
         try {
             user = (SportletUser) pm.restoreObject(command);
-        } catch (PersistenceException e) {
+        } catch (PersistenceManagerException e) {
             log.error("Exception " + e);
         }
         return !(user == null);
@@ -475,7 +466,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         List result = null;
         try {
             result = pm.restoreList(command);
-        } catch (PersistenceException e) {
+        } catch (PersistenceManagerException e) {
             log.error("Exception " + e);
         }
         return result;
