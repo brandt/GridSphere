@@ -1,11 +1,6 @@
 /*
-<<<<<<< FormEvent.java
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
-=======
- * @author <a href="wehrens@aei.mpg.de">Oliver Wehrens</a>
- * @versiob $Id$
->>>>>>> 1.11
  */
 package org.gridlab.gridsphere.provider.event;
 
@@ -179,8 +174,18 @@ public interface FormEvent extends ActionEvent {
 
     public DataGridBean getDataGridBean(String beanId);
 
+    /***
+     * Return an existing <code>IncludeBean</code> or create a new one
+     * @param beanId
+     * @return
+     */
     public IncludeBean getIncludeBean(String beanId);
 
+    /***
+     * Return an existing <code>MessageBoxBean</code> or create a new one
+     * @param beanId
+     * @return
+     */
     public MessageBoxBean getMessageBoxBean(String beanId);
 
     /**

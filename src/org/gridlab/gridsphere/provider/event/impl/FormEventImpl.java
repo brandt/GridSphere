@@ -442,9 +442,25 @@ public class FormEventImpl implements FormEvent {
         if (tagBeans.containsKey(beanKey)) {
             return (IncludeBean) tagBeans.get(beanKey);
         }
-        IncludeBean includeBean = new IncludeBean(request, response, beanId);
+        IncludeBean includeBean = new IncludeBean(request, beanId);
         tagBeans.put(beanKey, includeBean);
         return includeBean;
+    }
+
+    /**
+     * Return an existing <code>MessageBoxBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a IncludeBean
+     */
+    public MessageBoxBean getMessageBoxBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (MessageBoxBean)tagBeans.get(beanKey);
+        }
+        MessageBoxBean messageBoxBean = new MessageBoxBean(request, beanId);
+        tagBeans.put(beanKey, messageBoxBean);
+        return messageBoxBean;
     }
 
     /**
@@ -760,16 +776,6 @@ public class FormEventImpl implements FormEvent {
         DataGridBean dgBean = new DataGridBean(request, beanId);
         tagBeans.put(beanKey, dgBean);
         return dgBean;
-    }
-
-    public MessageBoxBean getMessageBoxBean(String beanId) {
-        String beanKey = getBeanKey(beanId);
-        if (tagBeans.containsKey(beanKey)) {
-            return (MessageBoxBean) tagBeans.get(beanKey);
-        }
-        MessageBoxBean mbean = new MessageBoxBean(request, beanId);
-        tagBeans.put(beanKey, mbean);
-        return mbean;
     }
 
     public ActionMenuBean getActionMenuBean(String beanId) {

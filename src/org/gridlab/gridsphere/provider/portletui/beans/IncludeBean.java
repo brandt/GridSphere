@@ -19,7 +19,6 @@ import javax.servlet.jsp.JspWriter;
 
 public class IncludeBean extends BaseBean implements TagBean {
 
-    private static PortletLog log = SportletLog.getInstance(IncludeBean.class);
     private ServletContext servletContext = null;
     private PortletResponse response = null;
     private JspWriter jspWriter = null;
@@ -35,11 +34,16 @@ public class IncludeBean extends BaseBean implements TagBean {
     /**
      * Constructs an include bean
      */
-    public IncludeBean(PortletRequest request, PortletResponse response, String beanId) {
-        super();
-        setPortletRequest(request);
-        setPortletResponse(response);
-        setBeanId(beanId);
+    public IncludeBean(String beanId) {
+        super(beanId);
+    }
+
+    /**
+     * Constructs an include bean
+     */
+    public IncludeBean(PortletRequest request, String beanId) {
+        this.request = request;
+        this.beanId = beanId;
     }
 
     public ServletContext getServletContext() {
@@ -72,18 +76,6 @@ public class IncludeBean extends BaseBean implements TagBean {
 
     public void setPage(String page) {
         this.page = page;
-    }
-
-    public void includePage() {
-        RequestDispatcher rd = servletContext.getRequestDispatcher(page);
-        try {
-            // Very important here... must pass it the appropriate jsp writer!!!
-            // Or else this include won't be contained within the parent content
-            // but either before or after it.
-            rd.include(request, new ServletResponseWrapperInclude(response, jspWriter));
-        } catch (Exception e) {
-            log.error("Unable to include page ", e);
-        }
     }
 
     public String toStartString() {

@@ -5,10 +5,14 @@ import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.apache.jasper.runtime.ServletResponseWrapperInclude;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.ServletContext;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 /*
  * @author <a href="mailto:russell@aei.mpg.de">Michael Russell</a>
@@ -44,15 +48,10 @@ public class IncludeTag extends BaseBeanTag {
         if (beanId.equals("")) {
             // If no bean id, create new bean
             includeBean = new IncludeBean();
-            includeBean.setPortletRequest((PortletRequest)pageContext.getAttribute("portletRequest"));
-            includeBean.setPortletResponse((PortletResponse)pageContext.getAttribute("portletResponse"));
             if (servletContext == null) {
                 // If no servlet context provided, then provide this context
-                includeBean.setServletContext(pageContext.getServletContext());
-            } else {
-                includeBean.setServletContext(servletContext);
+                servletContext = pageContext.getServletContext();
             }
-            includeBean.setPage(page);
         } else {
             // Else get bean with bean id
             includeBean = (IncludeBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
@@ -62,12 +61,30 @@ public class IncludeTag extends BaseBeanTag {
             }
             if (includeBean.getServletContext() == null) {
                 // If no servlet context provided, then provide this context
-                includeBean.setServletContext(pageContext.getServletContext());
+                servletContext = pageContext.getServletContext();
+            } else {
+                log.debug("Using include bean context");
+                servletContext = includeBean.getServletContext();
             }
+            page = includeBean.getPage();
         }
         // Set portlet request and response attributes
-        includeBean.setJspWriter(pageContext.getOut());
-        includeBean.includePage();
+        includePage();
         return SKIP_BODY;
+    }
+
+    protected void includePage() {
+        RequestDispatcher rd = servletContext.getRequestDispatcher(page);
+        try {
+            ServletRequest request = pageContext.getRequest();
+            ServletResponse response = pageContext.getResponse();
+            // Very important here... must pass it the appropriate jsp writer!!!
+            // Or else this include won't be contained within the parent content
+            // but either before or after it.
+            rd.include(request, new ServletResponseWrapperInclude(response, pageContext.getOut()));
+            //rd.include(pageContext.getRequest(), pageContext.getResponse());
+        } catch (Exception e) {
+            log.error("Unable to include page ", e);
+        }
     }
 }
