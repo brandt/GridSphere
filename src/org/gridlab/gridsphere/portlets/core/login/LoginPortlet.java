@@ -154,8 +154,6 @@ public class LoginPortlet extends ActionPortlet {
             //check if the user is new or not
             validateUser(evt);
             //new and valid user and will save it
-
-
             notifyNewUser(evt);
 
             setNextState(req, "doViewUser");
@@ -274,16 +272,6 @@ public class LoginPortlet extends ActionPortlet {
         saveUserRole(newuser);
         log.debug("Exiting saveUser()");
         return newuser;
-    }
-
-    private void editSportletUser(FormEvent event, SportletUser SportletUser) {
-        log.debug("Entering editSportletUser()");
-        //SportletUser.setUserName(event.getTextFieldBean("userName").getValue());
-        //SportletUser.setFullName(event.getTextFieldBean("fullName").getValue());
-        //SportletUser.setEmailAddress(event.getTextFieldBean("emailAddress").getValue());
-        //SportletUser.setOrganization(event.getTextFieldBean("organization").getValue());
-
-        log.debug("Exiting editSportletUser()");
     }
 
     private void saveUserRole(User user) {
@@ -575,25 +563,39 @@ public class LoginPortlet extends ActionPortlet {
             String passwordValue = event.getPasswordBean("password").getValue();
             String confirmPasswordValue = event.getPasswordBean("confirmPassword").getValue();
 
+            System.err.println("password= " + passwordValue);
+
             // Otherwise, password must match confirmation
             if (!passwordValue.equals(confirmPasswordValue)) {
                 createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_MISMATCH"));
+                setNextState(req, DO_NEW_PASSWORD);
                 // If they do match, then validate password with our service
-            } else if (passwordValue == null) {
-                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_NOTSET"));
-            } else if (passwordValue.length() == 0) {
-                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_BLANK"));
-            } else if (passwordValue.length() < 5) {
-                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_TOOSHORT"));
             } else {
-                // save password
-                PasswordEditor editPasswd = passwordManagerService.editPassword(user);
-                editPasswd.setValue(passwordValue);
-                editPasswd.setDateLastModified(Calendar.getInstance().getTime());
-                passwordManagerService.savePassword(editPasswd);
-                createSuccessMessage(event, this.getLocalizedText(req, "USER_PASSWORD_SUCCESS"));
-                requestService.deleteRequest(request);
+                if (passwordValue == null) {
+                    createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_NOTSET"));
+                    setNextState(req, DO_NEW_PASSWORD);
+                    return;
+                } else if (passwordValue.length() == 0) {
+                    createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_BLANK"));
+                    setNextState(req, DO_NEW_PASSWORD);
+                    return;
+                } else if (passwordValue.length() < 5) {
+                    System.err.println("length < 5 password= " + passwordValue);
+                    createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_TOOSHORT"));
+                    setNextState(req, DO_NEW_PASSWORD);
+                    return;
+                } else {
+                    // save password
+                    System.err.println("saving password= " + passwordValue);
+                    PasswordEditor editPasswd = passwordManagerService.editPassword(user);
+                    editPasswd.setValue(passwordValue);
+                    editPasswd.setDateLastModified(Calendar.getInstance().getTime());
+                    passwordManagerService.savePassword(editPasswd);
+                    createSuccessMessage(event, this.getLocalizedText(req, "USER_PASSWORD_SUCCESS"));
+                    requestService.deleteRequest(request);
+                }
             }
+
         }
     }
 
