@@ -45,15 +45,13 @@ public class ClientImpl implements Client {
         // Opera 6.0b2:  Mozilla/4.0 (compatible; MSIE 5.0; Mac_PowerPC) Opera 6.0  [en]
 
         int i = userAgent.indexOf(" ");
-        if (i >= 0) String mozillaVersion = userAgent.substring(0, i);
+
         //System.err.println("mozilla version: " + mozillaVersion);
         int j = userAgent.lastIndexOf(")");
         String browserInfo = "Unknown browser";
 
         if (j >= 0) {
-            String platformInfo = userAgent.substring(i + 1, j + 1).trim();
 
-        //System.err.println("platform info: " + platformInfo);
             browserInfo = userAgent.substring(j + 1).trim();
         }
             //System.err.println("browser info: " + browserInfo);
