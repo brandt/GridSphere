@@ -38,6 +38,7 @@ Copyright:
     <property name="manwebapp.dir"  value="webapps/gsmanager"/>
     <property name="test.dir"       value="tests"/>
     <property name="perf.dir"       value="perf"/>
+    <property name="conf.dir"       value="conf"/>
     <property name="dist.dir"       value="${Name}-${version}" />
     <property name="build.lib"      value="${build.dir}/lib"/>
     <property name="classes.dir"    value="${build.dir}/classes"/>
@@ -301,12 +302,12 @@ Copyright:
         <echo message="force mapping: ${var_force_mapping}"/>
         <condition property="var_force_mapping">
             <not>
-                <available file="webapps/gridsphere/WEB-INF/conf/mapping/docletmapping.xml"/>
+                <available file="${gswapp.dir}/WEB-INF/conf/mapping/docletmapping.xml"/>
             </not>
         </condition>
         <condition property="var_force_mapping">
             <not>
-                <available file="conf/dbcreate.sql"/>
+                <available file="${conf.dir}/dbcreate.sql"/>
             </not>
         </condition>
     </target>
@@ -328,7 +329,7 @@ Copyright:
             private="true"
             doclet="org.castor.doclet.jdo.JDO"
             docletpath="lib/jdom.jar;lib/castor-doclet.jar"
-            additionalparam="-J-DFILE=webapps/gridsphere/WEB-INF/conf/mapping/docletmapping.xml -J-DLOG=1">
+            additionalparam="-J-DFILE=${gswebapp.dir}/WEB-INF/conf/mapping/docletmapping.xml -J-DLOG=1">
         <classpath refid="classpath"/>
         </javadoc>
 
@@ -348,13 +349,13 @@ Copyright:
         <echo message="FORCE: ${var_force_database}"/>
         <condition property="var_force_database">
             <not>
-                <available file="conf/gridsphere-db.script"/>
+                <available file="${conf.dir}/gridsphere-db.script"/>
             </not>
         </condition>
         <echo message="FORCE 1: ${var_force_database}"/>
         <condition property="var_force_database">
             <not>
-                <available file="conf/gridsphere-db.properties"/>
+                <available file="${conf.dir}/gridsphere-db.properties"/>
             </not>
         </condition>
         <echo message="FORCE 2: ${var_force_database}"/>
@@ -367,7 +368,7 @@ Copyright:
           userid="root"
           password=""
           onerror="continue"
-          src="conf/dbcreate.sql">
+          src="${conf.dir}/dbcreate.sql">
           <classpath refid="classpath"/>
         </sql>
     </target>
@@ -379,7 +380,7 @@ Copyright:
           userid="portal"
           password=""
           onerror="continue"
-          src="conf/dbcreate.sql">
+          src="${conf.dir}/dbcreate.sql">
           <classpath refid="classpath"/>
         </sql>
     </target>
@@ -391,7 +392,7 @@ Copyright:
           userid="sa"
           password=""
           onerror="continue"
-          src="conf/dbcreate.sql">
+          src="${conf.dir}/dbcreate.sql">
           <classpath refid="classpath"/>
         </sql>
     </target>
@@ -404,7 +405,7 @@ Copyright:
           userid="sa"
           password=""
           onerror="continue"
-          src="conf/dbcreate.sql">
+          src="${conf.dir}/dbcreate.sql">
           <classpath refid="classpath"/>
         </sql>
     </target>
