@@ -9,6 +9,10 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 
 public interface Element {
 
+    /**
+     * Gets the ID of the element
+     * @return the id of the element
+     */
     public String getId();
 
     /**
@@ -78,6 +82,8 @@ public interface Element {
      * @return html string presenting the object
      */
     public String toString();
+
+
 
 
 }

@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface Selectable extends Valueable {
+public interface Selectable extends Label {
 
     /**
      * Sets the selected status of the bean.

@@ -109,10 +109,14 @@ public abstract class BaseElementBean implements Element {
      * @param request the portletrequest to store the data in
      */
     public void store(String id, PortletRequest request) {
+        store(id, request, this);
+    }
+
+    private void store(String id, PortletRequest request, Object ob) {
         this.id = id;
-        request.setAttribute(id, this);
+        request.setAttribute(id, ob);
         HttpSession session = request.getSession();
-        session.setAttribute(id, this);
+        session.setAttribute(id, ob);
     }
 
     /**

@@ -11,7 +11,7 @@ import javax.servlet.jsp.JspException;
 
 public class TextTag extends BaseTag {
 
-    private String text = new String();
+    protected String text = new String();
     private TextBean textelement = new TextBean();
 
 

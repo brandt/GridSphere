@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface Button extends Valueable {
+public interface Button extends Label {
 
     /**
      * Sets the type of the button

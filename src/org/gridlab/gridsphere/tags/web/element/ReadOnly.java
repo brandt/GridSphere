@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface ReadOnly extends Valueable {
+public interface ReadOnly extends Label {
 
     /**
      * Sets the bean to readonly.

@@ -5,9 +5,18 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public class LabelBean extends NameBean implements Valueable {
+public class LabelBean extends NameBean implements Label {
 
     protected String value = new String();
+
+    public LabelBean() {
+        super();
+    }
+
+    public LabelBean(String label) {
+        super();
+        this.value = label;
+    }
 
     /**
      * Sets the value of the bean.
@@ -26,5 +35,9 @@ public class LabelBean extends NameBean implements Valueable {
     }
 
     public void update(String[] values) {}
+
+    public String toString() {
+        return getCSS(value);
+    }
 
 }

@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface Valueable extends Nameable {
+public interface Label extends Nameable {
 
     /**
      * Sets the value of the bean.
@@ -18,6 +18,5 @@ public interface Valueable extends Nameable {
      * @return the value of the bean
      */
     public String getValue();
-
 
 }
