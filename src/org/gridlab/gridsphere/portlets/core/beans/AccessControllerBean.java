@@ -111,14 +111,13 @@ public class AccessControllerBean extends PortletBean {
 
     public void doAction(PortletAction action)
             throws PortletException {
+        super.doAction(action);
         if (action instanceof DefaultPortletAction) {
             // Save action to be performed
             String actionName = ((DefaultPortletAction)action).getName();
-            setActionPerformed(actionName);
-            this.log.debug("Action performed = " + actionName);
             // Perform appropriate action
             if (actionName.equals(ACTION_GROUP_LIST)) {
-                doListGroups();
+                doListGroup();
             } else if (actionName.equals(ACTION_GROUP_VIEW)) {
                 doViewGroup();
             } else if (actionName.equals(ACTION_GROUP_EDIT)) {
@@ -144,20 +143,23 @@ public class AccessControllerBean extends PortletBean {
             } else if (this.actionPerformed.equals(ACTION_GROUP_ENTRY_REMOVE_CONFIRM)) {
                 doConfirmRemoveGroupEntry();
             } else {
-                doListGroups();
+                doListGroup();
             }
         } else {
             this.log.debug("Action not default portlet action!");
-            doListGroups();
+            doListGroup();
         }
     }
 
-    public void doListGroups()
+    public void doDefaultViewAction()
+            throws PortletException {
+        doListGroup();
+    }
+
+    public void doListGroup()
             throws PortletException {
         this.log.debug("Entering doListGroups");
-        // Load group list
         loadGroupList();
-        // Set next page attribute
         setNextPage(PAGE_GROUP_LIST);
         this.log.debug("Exiting doListGroups");
     }
@@ -165,9 +167,7 @@ public class AccessControllerBean extends PortletBean {
     public void doViewGroup()
             throws PortletException {
         this.log.debug("Entering doViewGroup");
-        // Load group so we can edit attributes
         loadGroup();
-        // Set next page attribute
         setNextPage(PAGE_GROUP_VIEW);
         this.log.debug("Exiting doViewGroup");
     }
@@ -175,9 +175,7 @@ public class AccessControllerBean extends PortletBean {
     public void doEditGroup()
             throws PortletException {
         this.log.debug("Entering doEditGroup");
-        // Load group so we can edit attributes
         loadGroup();
-        // Set next page attribute
         setNextPage(PAGE_GROUP_EDIT);
         this.log.debug("Exiting doEditGroup");
     }
@@ -186,19 +184,13 @@ public class AccessControllerBean extends PortletBean {
             throws PortletException {
         this.log.debug("Entering doConfirmEditGroup");
         try {
-            // Load group so we have original attributes (for existing groups)
             loadGroup();
-            // Apply group parameters
             editGroup();
-            // Save group
             saveGroup();
-            // View group
-            doViewGroup();
+            setNextPage(PAGE_GROUP_VIEW);
         } catch (PortletException e) {
-            // Set form validation
             setIsFormInvalid(true);
             setFormInvalidMessage(e.getMessage());
-            // Set next page attribute
             setNextPage(PAGE_GROUP_EDIT);
         }
         this.log.debug("Exiting doConfirmEditGroup");
@@ -207,9 +199,7 @@ public class AccessControllerBean extends PortletBean {
     public void doDeleteGroup()
             throws PortletException {
         this.log.debug("Entering doDeleteGroup");
-        // Load group so we can have attributes
         loadGroup();
-        // Set next page attribute
         setNextPage(PAGE_GROUP_DELETE);
         this.log.debug("Exiting doDeleteGroup");
     }
@@ -217,86 +207,66 @@ public class AccessControllerBean extends PortletBean {
     public void doConfirmDeleteGroup()
             throws PortletException {
         this.log.debug("Entering doConfirmDeleteGroup");
-        // Load group so we can have attributes
         loadGroup();
-        // Delete group
         deleteGroup();
-        // Set next page attribute
         setNextPage(PAGE_GROUP_DELETE_CONFIRM);
         this.log.debug("Exiting doConfirmDeleteGroup");
     }
 
     public void doViewGroupEntry()
             throws PortletException {
-        // Load group
         loadGroup();
-        // Load access right
         loadGroupEntry();
-        // Set next page attribute
         setNextPage(PAGE_GROUP_ENTRY_VIEW);
     }
 
     public void doEditGroupEntry()
             throws PortletException {
-        // Load group so we can edit attributes
         loadGroup();
-        // Load access right
         loadGroupEntry();
-        // Set next page attribute
         setNextPage(PAGE_GROUP_ENTRY_EDIT);
     }
 
     public void doConfirmEditGroupEntry()
             throws PortletException {
-        // Load group
         loadGroup();
-        // Load access right
         loadGroupEntry();
-        // Edit access right
-        editGroupEntry();
-        // Save access right
-        saveGroupEntry();
-        // View access right
-        doViewGroupEntry();
+        try {
+            editGroupEntry();
+            saveGroupEntry();
+            setNextPage(PAGE_GROUP_ENTRY_VIEW);
+        } catch (PortletException e) {
+            setIsFormInvalid(true);
+            setFormInvalidMessage(e.getMessage());
+            setNextPage(PAGE_GROUP_ENTRY_EDIT);
+        }
     }
 
     public void doAddGroupEntry()
             throws PortletException {
-        // Load group
         loadGroup();
-        // Load users not in group
         loadUserNotGroupList();
-        // Set next page attribute
         setNextPage(PAGE_GROUP_ENTRY_ADD);
     }
 
     public void doConfirmAddGroupEntry()
             throws PortletException {
-        // Load group
         loadGroup();
-        // Add group entries
         addGroupEntries();
-        // Set next page attribute
         setNextPage(PAGE_GROUP_ENTRY_ADD_CONFIRM);
     }
 
     public void doRemoveGroupEntry()
             throws PortletException {
-        // Load group
         loadGroup();
-        // Load access rights
         readGroupEntryList();
-        // Set next page attribute
         setNextPage(PAGE_GROUP_ENTRY_REMOVE);
     }
 
     public void doConfirmRemoveGroupEntry()
             throws PortletException {
-        // Load group
         loadGroup();
-        // Add group entries
         removeGroupEntries();
-        // Set next page attribute
         setNextPage(PAGE_GROUP_ENTRY_REMOVE_CONFIRM);
     }
 

@@ -378,6 +378,14 @@ public class CredentialManagerProxy
     /****** CREDENTIAL USEAGE METHODS *******/
 
     /*
+     * Must be super user
+     */
+    public List getActiveCredentials() {
+        this.authorizer.authorizeSuperUser("getActiveCredentials");
+        return this.credentialManager.getActiveCredentials();
+    }
+
+    /*
      * Must be super or same user
      */
     public List getActiveCredentials(User user) {

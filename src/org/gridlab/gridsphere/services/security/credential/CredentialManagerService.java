@@ -112,6 +112,8 @@ public interface CredentialManagerService extends PortletService {
 
     /****** CREDENTIAL USEAGE METHODS *******/
 
+    public List getActiveCredentials();
+
     public List getActiveCredentials(User user);
 
     public Credential getActiveCredential(String subject);

@@ -99,14 +99,13 @@ public class UserManagerBean extends PortletBean {
 
     public void doAction(PortletAction action)
             throws PortletException {
+        super.doAction(action);
         if (action instanceof DefaultPortletAction) {
             // Save action to be performed
             String actionName = ((DefaultPortletAction)action).getName();
-            setActionPerformed(actionName);
-            this.log.debug("Action performed = " + actionName);
             // Perform appropriate action
             if (actionName.equals(ACTION_USER_LIST)) {
-                doListUsers();
+                doListUser();
             } else if (actionName.equals(ACTION_USER_VIEW)) {
                 doViewUser();
             } else if (actionName.equals(ACTION_USER_EDIT)) {
@@ -118,74 +117,62 @@ public class UserManagerBean extends PortletBean {
             } else if (actionName.equals(ACTION_USER_DELETE_CONFIRM)) {
                 doConfirmDeleteUser();
             } else {
-                doListUsers();
+                doListUser();
             }
         } else {
             this.log.debug("Action not default portlet action!");
-            doListUsers();
+            doListUser();
         }
     }
 
-    public void doListUsers()
+    public void doListUser()
             throws PortletException {
-        // Load user list
         loadUserList();
-        // Set next page attribute
         setNextPage(PAGE_USER_LIST);
     }
 
     public void doViewUser()
             throws PortletException {
-        // Load user so we can edit attributes
         loadUser();
-        // Set next page attribute
         setNextPage(PAGE_USER_VIEW);
     }
 
     public void doEditUser()
             throws PortletException {
-        // Load user so we can edit attributes
         loadUser();
-        // Set next page attribute
         setNextPage(PAGE_USER_EDIT);
     }
 
     public void doConfirmEditUser()
             throws PortletException {
+        loadUser();
         try {
-            // Load user so we have original attributes (for existing users)
-            loadUser();
-            // Apply user parameters
             editUser();
-            // Save user
             saveUser();
-            // Set next page attribute
             setNextPage(PAGE_USER_VIEW);
         } catch (PortletException e) {
-            // Set form validation
             setIsFormInvalid(true);
             setFormInvalidMessage(e.getMessage());
-            // Set next page attribute
             setNextPage(PAGE_USER_EDIT);
         }
     }
 
     public void doDeleteUser()
             throws PortletException {
-        // Load user so we can have attributes
         loadUser();
-        // Set next page attribute
         setNextPage(PAGE_USER_DELETE);
     }
 
     public void doConfirmDeleteUser()
             throws PortletException {
-        // Load user so we can have attributes
         loadUser();
-        // Delete user
         deleteUser();
-        // Set next page attribute
         setNextPage(PAGE_USER_DELETE_CONFIRM);
+    }
+
+    public void doDefaultViewAction()
+            throws PortletException {
+        doListUser();
     }
 
     public PortletURI getUserListURI() {

@@ -47,7 +47,7 @@ public class CredentialManagerPortlet extends AbstractPortlet {
         CredentialManagerBean credentialManagerBean = getCredentialManagerBean(request, response);
         // If no action performed, then perform list users
         if (credentialManagerBean.getActionPerformed() == null) {
-            credentialManagerBean.doListCredentialMappings();
+            credentialManagerBean.doDefaultViewAction();
         }
         // Get next page to display
         String nextPage = credentialManagerBean.getNextPage();

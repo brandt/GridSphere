@@ -29,7 +29,7 @@ public class LoginPortlet extends AbstractPortlet {
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         User user = request.getUser();
         if (user instanceof GuestUser) {
-            log.info("YO WE IN GUEST USER!");
+            log.info("YO WE IN GUEST USER");
             getPortletConfig().getContext().include("/jsp/login.jsp", request, response);
         } else {
             log.info("YO WE IN VIEW USER!");

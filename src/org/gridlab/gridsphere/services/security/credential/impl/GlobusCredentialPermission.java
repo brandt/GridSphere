@@ -74,33 +74,6 @@ public class GlobusCredentialPermission extends BaseObject implements Credential
     /**
      */
     public boolean isCredentialPermitted(String subject) {
-        /*** GHETTO STYLE
-        boolean answer = false;
-        subject = subject.trim();
-        String pattern = this.pattern.trim();
-        // Search for wild character
-        int index = pattern.indexOf("*");
-        // If pattern matches "...*" check if subject starts with pattern
-        if (index > 0) {
-            pattern = pattern.substring(0, index);
-            answer = (subject.indexOf(pattern) == 0);
-        // If pattern matches "*..." then..
-        } else if (index == 0) {
-             int length = pattern.length();
-            // If pattern matches "*" then return true
-             if (length == 1) {
-                answer = true;
-             // Otherwise compare rest of string to subject
-             } else {
-                 pattern = pattern.substring(index+1);
-                 answer = (subject.endsWith(pattern));
-             }
-        // If pattern does not contain "*" then compare entire strings
-        } else {
-                answer = (this.pattern.equals(subject));
-        }
-        return answer;
-        ***/
         RE ex = null;
         try {
             ex = new RE(this.permittedSubjects);

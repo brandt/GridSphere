@@ -57,7 +57,7 @@ public class AccessControllerPortlet extends AbstractPortlet {
         AccessControllerBean aclManagerBean = getAccessControlManagerBean(request, response);
         // If no action performed, then perform list groups
         if (aclManagerBean.getActionPerformed() == null) {
-            aclManagerBean.doListGroups();
+            aclManagerBean.doDefaultViewAction();
         }
         // Get next page to display
         String nextPage = aclManagerBean.getNextPage();

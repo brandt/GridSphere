@@ -698,6 +698,18 @@ public final class GlobusCredentialManagerService
 
     /****** CREDENTIAL USEAGE METHODS *******/
 
+    public List getActiveCredentials() {
+        List activeCredentials = new Vector();
+        Iterator users = this.credentials.keySet().iterator();
+        while (users.hasNext()) {
+            User user = (User)users.next();
+            List userCredentials = getActiveCredentials(user);
+            activeCredentials.addAll(userCredentials);
+        }
+
+        return activeCredentials;
+    }
+
     public List getActiveCredentials(User user) {
         List activeCredentials = new Vector();
         // Get user's credential collection

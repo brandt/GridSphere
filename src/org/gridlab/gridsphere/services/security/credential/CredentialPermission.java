@@ -36,10 +36,5 @@ public interface CredentialPermission {
 
     /**
      */
-    public void setDescription(String description);
-
-    /**
-     */
     public boolean isCredentialPermitted(String subject);
-
 }

@@ -53,11 +53,10 @@ public class UserManagerPortlet extends AbstractPortlet {
         getPortletLog().debug("Entering doView()");
         // Get instance of user manager bean
         UserManagerBean userManagerBean = getUserManagerBean(request, response);
-        // If no action performed, then perform list users
         if (userManagerBean.getActionPerformed() == null) {
-            userManagerBean.doListUsers();
+            userManagerBean.doDefaultViewAction();
         }
-        // Get next page to display
+        // Get next page from do view
         String nextPage = userManagerBean.getNextPage();
         // Include the given page
         getPortletConfig().getContext().include(nextPage, request, response);

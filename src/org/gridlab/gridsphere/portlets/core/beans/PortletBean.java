@@ -142,6 +142,19 @@ public class PortletBean {
     public void doAction(PortletAction action)
             throws PortletException {
         setActionPerformed(action);
+        this.log.debug("Action performed = " + action);
+    }
+
+    public void doDefaultViewAction()
+            throws PortletException {
+    }
+
+    public String doView()
+            throws PortletException {
+        if (this.actionPerformed == null) {
+            doDefaultViewAction();
+        }
+        return getNextPage();
     }
 
     public boolean isFormInvalid() {
@@ -236,7 +249,6 @@ public class PortletBean {
             return defaultValue;
         }
     }
-
 
     public long[] getParameterValuesAsLng(String param) {
         String values[] = this.request.getParameterValues(param);
