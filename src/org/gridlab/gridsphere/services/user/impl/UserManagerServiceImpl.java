@@ -374,8 +374,8 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     public void setPortletData(User user, String portletID, PortletData data) {
 
         SportletData sd = (SportletData)data;
-        sd.setPortletID(portletID);
-        sd.setUserID(user.getID());
+        //sd.setPortletID(portletID);
+        //sd.setUserID(user.getID());
         try {
             pm.update(sd);
         } catch (PersistenceManagerException e) {
