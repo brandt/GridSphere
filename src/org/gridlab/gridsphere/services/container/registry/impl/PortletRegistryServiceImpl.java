@@ -49,18 +49,13 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
         log.info("in init()");
 
         // Must have latest role and group information from ACL service
+        AccessControlService aclService = null;
         List knownGroups, knownRoles;
         try {
-            AccessControlService aclService = (AccessControlService) factory.createPortletService(AccessControlService.class, config.getServletConfig(), true);
-            knownGroups = aclService.getAllGroups();
-            knownRoles = aclService.getAllRoles();
+            aclService = (AccessControlService) factory.createPortletService(AccessControlService.class, config.getServletConfig(), true);
         } catch (PortletServiceException e) {
             throw new PortletServiceUnavailableException("Unable to get instance of AccessControlService");
         }
-
-        // SINCE ACL SERVICE DOESN"T WORK YET
-        knownGroups = new Vector();
-        knownRoles = new Vector();
 
         // Now parse portlet.xml and place into PortletDeploymentDescriptor
         PortletDeploymentDescriptor pdd = null;
@@ -78,8 +73,7 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
             PortletApplication portletApp = portletDef.getPortletApp();
             Iterator concreteIt = portletDef.getConcreteApps().iterator();
             while (concreteIt.hasNext()) {
-                RegisteredPortlet registeredPortlet = new RegisteredSportlet(portletApp, (ConcretePortletApplication)concreteIt.next(),
-                        knownGroups, knownRoles);
+                RegisteredPortlet registeredPortlet = new RegisteredSportlet(pdd, portletApp, (ConcretePortletApplication)concreteIt.next(), aclService);
 
                 // use the portlet app ID as the portlet ID
                 String portletID = registeredPortlet.getPortletAppID();
@@ -138,6 +132,16 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
             }
         }
         return null;
+    }
+
+    public List getActivePortlets(List concretePortletIDs) {
+        List active = new Vector();
+        Iterator it = concretePortletIDs.iterator();
+        while (it.hasNext()) {
+            String concretePortletID = (String)it.next();
+            active.add(getActivePortlet(concretePortletID));
+        }
+        return active;
     }
 
     /**

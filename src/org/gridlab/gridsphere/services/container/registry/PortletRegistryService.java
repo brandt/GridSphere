@@ -5,9 +5,7 @@
 package org.gridlab.gridsphere.services.container.registry;
 
 import org.gridlab.gridsphere.portlet.service.PortletService;
-import org.gridlab.gridsphere.portlet.AbstractPortlet;
-import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
 
 import java.util.Collection;
@@ -30,7 +28,6 @@ public interface PortletRegistryService extends PortletService {
      */
     public List getRegisteredPortlets();
 
-
     /**
      * Return a registered portlet given its identifier
      *
@@ -38,11 +35,6 @@ public interface PortletRegistryService extends PortletService {
      */
     public RegisteredPortlet getRegisteredPortlet(String concretePortletID);
 
-    /*
-    public Collection getRegisteredPortletsByGroup(PortletGroup group);
-
-    public Collection getRegisteredPortletsByRole(PortletRole role);
-    */
 
     public AbstractPortlet getActivePortlet(String concretePortletID);
 
