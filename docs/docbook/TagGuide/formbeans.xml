@@ -82,23 +82,7 @@
                 </tbody>
                 <tbody>
                     <row>
-                        <entry>color</entry><entry>no</entry><entry>string: the foreground color of this component</entry>
-                    </row>
-                </tbody>
-                <tbody>
-                    <row>
-                        <entry>bgcolor</entry><entry>no</entry><entry>string: the background color of this component</entry>
-                    </row>
-                </tbody>
-                <tbody>
-                    <row>
                         <entry>cssStyle</entry><entry>no</entry><entry>string: the CSS style to use for rendering this
-                        component</entry>
-                    </row>
-                </tbody>
-                <tbody>
-                    <row>
-                        <entry>font</entry><entry>no</entry><entry>string: the font to use when rendering text for this
                         component</entry>
                     </row>
                 </tbody>
@@ -121,6 +105,7 @@
             <listitem>ListBoxBean</listitem>
             <listitem>PanelBean</listitem>
             <listitem>PasswordBean</listitem>
+            <listitem>RenderLinkBean</listitem>
             <listitem>TextBean</listitem>
             <listitem>TextAreaBean</listitem>
             <listitem>TextFieldBean</listitem>

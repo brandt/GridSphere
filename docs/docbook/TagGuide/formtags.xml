@@ -112,8 +112,9 @@
         <para>
             As discussed in the Tutorial, action tags are used to send actions back to portlets
             to trigger a particular sequence of logic operations. An action can come in 2 flavors,
-            an actionlink or an actionsubmit. Action tags are required to supply an action attribute
-            value that provides an action name that is made available to the Portlet via the
+            an actionlink or an actionsubmit. An action tag provides two attributes that are used to
+            generate the appropriate action. A label attribute can be used to link to another portlet
+            component. An action attribute provides an action name that is made available to the Portlet via the
             &ActionEvent; object. Both action tags may also contain one or more actionparam tags to
             define action parameters.
         </para>
@@ -132,7 +133,12 @@
                     </thead>
                     <tbody>
                         <row>
-                            <entry>action</entry><entry>yes</entry><entry>string: name of the action</entry>
+                            <entry>action</entry><entry>no</entry><entry>string: name of the action</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>label</entry><entry>no</entry><entry>string: component label</entry>
                         </row>
                     </tbody>
                     <tbody>
@@ -173,6 +179,20 @@
                 By providing a beanId, the tag will first check for the existence of a myAction ActionLinkBean
                 that would have been created by the portlet and uses that first. Otherwise one is created using the
                 specified default values.
+                <screen>
+<![CDATA[
+<ui:actionlink label="login">Click to login</>]]>
+                </screen>
+                This example would create an html hyperlink pointing to the Login portlet (as defined by
+                label="login" in the layout descriptor file) with a clickable
+                text value of "Click to login" as specified in the body of the tag.
+                <screen>
+<![CDATA[
+<ui:actionlink label="login" action="doSomething">Click to login and doSomething</>]]>
+                </screen>
+                This example would create an html hyperlink pointing to the Login portlet (as defined by
+                label="login" in the layout descriptor file) that would also invoke the doSomething method
+                of the Login portlet.
             </example>
         </sect2>
 
@@ -262,6 +282,16 @@
                 </screen>
                 This example would create a button that when triggered will invoke the doActionLink method
                 of the portlet and also contains additional action parameters.
+                <screen>
+                <![CDATA[
+         <ui:actionsubmit label="aportlet" action="doActionLink" key="DOIT">
+            <ui:actionparam name="somename" value="avalue"/>
+            <ui:actionparam name="anothername" value="anewvalue"/>
+         </ui:actionsubmit>
+ ]]>
+                </screen>
+                This example is the same as above, but triggers the event in the portlet identified
+           by the "aportlet".
             </example>
         </sect2>
 
@@ -270,7 +300,9 @@
             <para>
                 The form tag is used to create a form and can contain other UI tags as well as actionparam tags
                 specifying action parameters. If a form tag contains a actionsubmit tag, then the action specified
-                in the actionsubmit will override any action specified in the form tag.
+                in the actionsubmit will override any action specified in the form tag. A form tag may also specify
+                a label that will cause the form event to be sent to the portlet component identified by the label
+                as specified in the layout descriptor file.
             </para>
             <example>
                 <title>Usage of form</title>
@@ -280,6 +312,15 @@
 ...
 </ui:form>]]>
                 </screen>
+                Creates a form that when submitted will invoke the "doSomeAction" method of the current portlet.
+                <screen>
+<![CDATA[
+<ui:form label="login">
+...
+</ui:form>]]>
+                </screen>
+                Creates a form that when submitted will invoke the portlet component as identified by the "login"
+                attribute.
             </example>
         </sect2>
 
