@@ -36,6 +36,7 @@ Copyright:
     <property name="gswebapp.dir"   value="webapps/gridsphere"/>
     <property name="corewebapp.dir" value="webapps/coreportlets"/>
     <property name="gridwebapp.dir" value="webapps/gridportlets"/>
+    <property name="exwebapp.dir"   value="webapps/exampleportlets"/>
     <property name="manwebapp.dir"  value="webapps/gsmanager"/>
     <property name="test.dir"       value="tests"/>
     <property name="perf.dir"       value="perf"/>
@@ -44,7 +45,7 @@ Copyright:
     <property name="classes.dir"    value="${build.dir}/classes"/>
     <property name="build.war"      value="${build.dir}/webapp"/>
     <property name="docs.dir"       value="${build.dir}/docs"/>
-    <property name="javadoc.dir"    value="${build.dir}/javadocs"/>
+    <property name="javadoc.dir"    value="docs/javadocs"/>
     <property name="reports.tests"  value="${build.dir}/tests"/>
     <property name="test.cfg.dir"   value="${src.dir}"/>
 
@@ -134,13 +135,6 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Functions                                                           -->
-    <!-- =================================================================== -->
-    <target name="setenv-deploy" description="Check for CATALINA_HOME required for deployment">
-
-    </target>
-
-    <!-- =================================================================== -->
     <!-- puts out a HELP test                                                -->
     <!-- =================================================================== -->
 
@@ -151,14 +145,10 @@ Copyright:
         <echo message="                           mapping,jar,deploy)                   "/>
         <echo message="clean                  will clean up the build dir               "/>
         <echo message="runtests               will build and run the tests              "/>
-        <echo message="deploy                 deployes GS to tomcat                     "/>
+        <echo message="deploy                 deploys GS to tomcat                      "/>
         <echo message="force-mapping          will rebuild the mapping file for castor  "/>
         <echo message="force-database         will rebuild the databasestructure        "/>
         <echo message="                           in the deployed gridsphere            "/>
-    </target>
-
-    <target name="newproject" description="creates a new project template">
-
     </target>
 
     <!-- =================================================================== -->
@@ -254,8 +244,18 @@ Copyright:
     <!-- =================================================================== -->
     <target name="core-portlets-jar" depends="compile" description="Create ${build.lib}/coreportlets.jar">
         <jar jarfile="${build.lib}/coreportlets.jar" basedir="${classes.dir}" >
-            <include name="org/gridlab/gridsphere/portlets/*" />
             <include name="org/gridlab/gridsphere/portlets/core/**" />
+            <include name="${conf.dir}/log4j.properties"/>
+        </jar>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates example portlets required by GridSphere                        -->
+    <!-- =================================================================== -->
+    <target name="example-portlets-jar" depends="compile" description="Create ${build.lib}/exampleportlets.jar">
+        <jar jarfile="${build.lib}/exampleportlets.jar" basedir="${classes.dir}" >
+            <include name="org/gridlab/gridsphere/portlets/*" />
+            <include name="org/gridlab/gridsphere/portlets/examples/**" />
             <include name="${conf.dir}/log4j.properties"/>
         </jar>
     </target>
@@ -265,7 +265,6 @@ Copyright:
     <!-- =================================================================== -->
     <target name="grid-portlets-jar" depends="compile" description="Create ${build.lib}/gridportlets.jar">
         <jar jarfile="${build.lib}/gridportlets.jar" basedir="${classes.dir}" >
-            <include name="org/gridlab/gridsphere/portlets/*" />
             <include name="org/gridlab/gridsphere/portlets/grid/**" />
             <include name="${conf.dir}/log4j.properties"/>
         </jar>
@@ -285,7 +284,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates all JAR's                                                   -->
     <!-- =================================================================== -->
-    <target name="jar" depends="gridsphere-jar, portlet-jar, portlet-widgets-jar, manager-portlet-jar" description="Creates all jars"/>
+    <target name="jar" depends="gridsphere-jar, portlet-jar, portlet-widgets-jar, grid-portlets-jar, example-portlets-jar, manager-portlet-jar" description="Creates all jars"/>
 
 
 <!-- +++++++++++++++++ END JARCREATION +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
@@ -529,6 +528,22 @@ Copyright:
         </war>
     </target>
 
+    <!-- =================================================================== -->
+    <!-- Creates the example portlets WAR file                                  -->
+    <!-- =================================================================== -->
+    <target name="examples-war" depends="jar" description="Create exampleportlets WAR for deployment">
+        <war warfile="${build.dir}/exampleportlets.war"
+            webxml="${exwebapp.dir}/WEB-INF/web.xml">
+            <classes dir="${classes.dir}"/>
+            <lib dir="${lib.dir}">
+                <include name="*.jar"/>
+                <exclude name="servlet*.jar"/>
+            </lib>
+            <fileset dir="${exwebapp.dir}">
+                <exclude name="WEB-INF/web.xml"/>
+            </fileset>
+        </war>
+    </target>
 <!-- +++++++++++++++ END WAR CREATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
 
@@ -605,11 +620,11 @@ Copyright:
     <!-- ================================================================= -->
     <!-- Deploys GridSphere portlets to a local server                     -->
     <!-- ================================================================= -->
-    <target name="deploy-portlets" depends="deploy-manager-portlet, deploy-core-portlets, deploy-grid-portlets" description="Deploys GridSphere portlets to a local server">
+    <target name="deploy-portlets" depends="deploy-manager-portlet, deploy-core-portlets, deploy-grid-portlets, deploy-example-portlets" description="Deploys GridSphere portlets to a local server">
     </target>
 
     <!-- ================================================================= -->
-    <!-- Deploys GS manager portlet to a local server                           -->
+    <!-- Deploys GS manager portlet to a local server                      -->
     <!-- ================================================================= -->
     <target name="deploy-manager-portlet" depends="manager-portlet-jar" description="Deploys GridSphere manager portlet to a local server">
         <copy todir="${build.war}/gsmanager">
@@ -623,7 +638,7 @@ Copyright:
     </target>
 
     <!-- ================================================================= -->
-    <!-- Deploys GS core portlets to a local server                           -->
+    <!-- Deploys GS core portlets to a local server                        -->
     <!-- ================================================================= -->
     <target name="deploy-core-portlets" depends="core-portlets-jar" description="Deploys core portlets to a local server">
         <copy todir="${build.war}/coreportlets">
@@ -637,7 +652,21 @@ Copyright:
     </target>
 
     <!-- ================================================================= -->
-    <!-- Deploys GS grid portlets to a local server                           -->
+    <!-- Deploys GS example portlets to a local server                        -->
+    <!-- ================================================================= -->
+    <target name="deploy-example-portlets" depends="example-portlets-jar" description="Deploys example portlets to a local server">
+        <copy todir="${build.war}/exampleportlets">
+            <fileset dir="${exwebapp.dir}"/>
+        </copy>
+        <copy todir="${env.CATALINA_HOME}/webapps/exampleportlets">
+            <fileset dir="${build.war}/exampleportlets"/>
+        </copy>
+        <copy file="${build.lib}/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/exampleportlets/WEB-INF/lib"/>
+        <copy file="${build.lib}/exampleportlets.jar" todir="${env.CATALINA_HOME}/webapps/exampleportlets/WEB-INF/lib"/>
+    </target>
+
+    <!-- ================================================================= -->
+    <!-- Deploys GS grid portlets to a local server                        -->
     <!-- ================================================================= -->
     <target name="deploy-grid-portlets" depends="grid-portlets-jar" description="Deploys grid portlets to a local server">
         <copy todir="${build.war}/gridportlets">
@@ -655,9 +684,9 @@ Copyright:
 
 <!-- +++++++++++++++ START TESTS +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
-    <!-- =================================================================== -->
+    <!-- ================================================================================ -->
     <!-- Compiles and runs all JUnit tests: needs optional.jar and junit in classpath     -->
-    <!-- =================================================================== -->
+    <!-- ================================================================================ -->
     <target name="compiletests" if="junit.present" depends="compile" description="Compiles all JUnit tests">
         <javac  srcdir="${test.dir}"
 		    destdir="${classes.dir}"
