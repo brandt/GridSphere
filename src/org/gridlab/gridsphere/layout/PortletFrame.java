@@ -263,7 +263,10 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         hasTitleBarEvent = false;
 
+
+
         PortletComponentEvent titleBarEvent = event.getLastRenderEvent();
+
 
         if ((titleBarEvent != null) && (titleBarEvent instanceof PortletTitleBarEvent)) {
             PortletTitleBarEvent tbEvt = (PortletTitleBarEvent) titleBarEvent;
@@ -315,6 +318,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             }
 
         } else {
+
+            titleBar.actionPerformed(event);
 
             // process events
             PortletRequest req = event.getPortletRequest();
