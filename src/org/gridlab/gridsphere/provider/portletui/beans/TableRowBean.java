@@ -8,7 +8,7 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Iterator;
 
-public class TableRowBean extends BeanContainer {
+public class TableRowBean extends BeanContainer implements TagBean {
 
     protected boolean isHeader = false;
     public static final String TABLE_HEADER_STYLE = "portlet-section-header";

@@ -5,6 +5,8 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
+import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletURI;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,16 +15,24 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class TableBean extends BaseComponentBean implements TagBean {
 
+    public static final String CURRENT_PAGE = "tablepage";
+    public static final String SHOW_ALL = "showall";
+    public static final String SHOW_PAGES = "showpages";
+
     protected DefaultTableModel defaultModel = null;
     protected String cellSpacing = null;
     protected String cellPadding = null;
     protected String border = null;
     protected String width = null;
     protected String align = null;
+    protected int currentPage;
     protected boolean isSortable = false;
     protected String sortableId = "t1";
     private int rowCount = 0;
     private int maxRows = -1;
+    private boolean showall = false;
+    protected PortletResponse res = null;
+    protected String uris = "";
 
     /**
      * Constructs a default table bean
@@ -39,6 +49,12 @@ public class TableBean extends BaseComponentBean implements TagBean {
     public TableBean(String cssStyle) {
         this.cssClass = cssStyle;
     }
+
+    public TableBean(HttpServletRequest req) {
+        super();
+        this.request = req;
+    }
+
 
     /**
      * Constructs a table bean from a supplied portlet request and bean identifier
@@ -184,6 +200,13 @@ public class TableBean extends BaseComponentBean implements TagBean {
         return rowCount;
     }
 
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
     public void setMaxRows(int maxRows) {
         this.maxRows = maxRows;
     }
@@ -192,7 +215,16 @@ public class TableBean extends BaseComponentBean implements TagBean {
         return maxRows;
     }
 
+    public boolean isShowall() {
+        return showall;
+    }
+
+    public void setShowall(boolean showall) {
+        this.showall = showall;
+    }
+
     public String toStartString() {
+        System.err.println("in table bean start");
         StringBuffer sb = new StringBuffer();
         if (isSortable) {
             sb.append("<table class=\"sortable\" id=\" " + sortableId + "\" ");
@@ -209,22 +241,41 @@ public class TableBean extends BaseComponentBean implements TagBean {
     }
 
     public String toEndString() {
-        //if (defaultModel==null) return "";
         StringBuffer sb = new StringBuffer();
         sb.append("</table>");
-        /*
-        System.err.println("maxrows " + maxRows);
-        if (maxRows > 0) {
-            int numpages = (rowCount + 1) / maxRows;
-            System.err.println("in table bean " + numpages);
-            sb.append("Page " + currentPage + " out of " + numpages);
-            for (int i = 0; i < numpages; i++) {
-
-                sb.append(" | " + i + 1 + " | ");
-            }
+         String uri = "";
+        if (showall) {
+            uri = res.createURI().toString();
+            sb.append("<a href=\"" + uri + "&" + TableBean.SHOW_PAGES + "\">" + "Show pages" + "</a>");
         }
-        */
+        if (maxRows > 0) {
+            int numpages = (rowCount + 1) / maxRows + 1;
+            int dispPage = currentPage + 1;
+            int c = 0;
+            sb.append("Page " + dispPage + " out of " + numpages);
+
+            for (int i = 0; i < numpages; i++) {
+                c = i+1;
+                if (c == dispPage) {
+                    sb.append(" | <b>" + c + "</b>");
+                } else {
+                    // create an actionlink
+                    uris = res.createURI().toString();
+                    System.err.println("uri = " + uris);
+                    uri = uris+  "&" + TableBean.CURRENT_PAGE + "=" + i;
+                    sb.append(" | " + "<a href=\"" + uri + "\">" + c + "</a>");
+                }
+            }
+            uri = res.createURI().toString();
+            sb.append(" | ");
+            sb.append("<a href=\"" + uri + "&" + TableBean.SHOW_ALL + "\">" + "Show all" + "</a>");
+            rowCount = 0;
+        }
+
         return sb.toString();
     }
 
+    public void setPortletResponse(PortletResponse res) {
+        this.res = res;
+    }
 }
