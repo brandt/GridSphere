@@ -271,8 +271,8 @@ public class PortletPageFactory implements PortletSessionListener {
         } else {
             PortletPage newcontainer = null;
             try {
-                newcontainer = (PortletPage)guestPage.clone();
-                //newcontainer = (PortletPage)deepCopy(guestPage);
+                //newcontainer = (PortletPage)guestPage.clone();
+                newcontainer = (PortletPage)deepCopy(guestPage);
                 newcontainer.init(new ArrayList());
                 guests.put(id, newcontainer);
                 sessionManager.addSessionListener(id, this);
