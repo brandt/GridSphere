@@ -91,10 +91,11 @@ public class ActionMenuTag extends ContainerTag {
         }
         if (actionMenuBean == null) {
             actionMenuBean = new ActionMenuBean();
-            if (this.layout != null) actionMenuBean.setAlign(layout);
-            if (this.title != null) actionMenuBean.setTitle(title);
-            if (this.menuType != null) actionMenuBean.setMenuType(this.menuType);
         }
+        if (this.layout != null) actionMenuBean.setAlign(layout);
+        if (this.title != null) actionMenuBean.setTitle(title);
+        if (this.menuType != null) actionMenuBean.setMenuType(this.menuType);
+
 
         Tag parent = getParent();
         if (parent instanceof ActionMenuTag) {
