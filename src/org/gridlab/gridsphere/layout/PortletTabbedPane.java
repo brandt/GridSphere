@@ -307,7 +307,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                 out.println("<td class=\"tab-empty\">&nbsp;</td>");
             }
         }
-        out.println("<td class=\"tab-fillup\">&nbsp</td></tr></table>");
+        out.println("<td class=\"tab-fillup\">&nbsp;</td></tr></table>");
 
         if (!tabs.isEmpty()) {
             PortletTab selectedTab = (PortletTab) tabs.get(selectedIndex);
