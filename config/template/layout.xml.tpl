@@ -1,7 +1,10 @@
 <portlet-tabbed-pane>
-    <portlet-tab title="@PROJECT_TITLE@">
+    <portlet-tab label="@PROJECT_TITLE@">
+	<title lang="en">@PROJECT_TITLE@</title>
         <portlet-tabbed-pane style="sub-menu">
-            <portlet-tab title="Hello World!">
+            <portlet-tab label="hellotab">
+		<title lang="en">Hello World!</title>
+		<title lang="de">Hallo Welt!</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
