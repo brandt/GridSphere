@@ -1,4 +1,4 @@
-<%@ page import="java.util.Iterator,
+<%@ page import="java.util.Iterator, java.util.List,
                  org.gridlab.gridsphere.services.core.security.acl.GroupEntry"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
