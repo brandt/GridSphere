@@ -140,7 +140,7 @@
         <implementation>org.gridlab.gridsphere.services.core.cache.impl.CacheServiceImpl</implementation>
         <service-config>
             <param-name>isCachingOn</param-name>
-            <param-value>false</param-value>
+            <param-value>true</param-value>
         </service-config>
     </service>
 
