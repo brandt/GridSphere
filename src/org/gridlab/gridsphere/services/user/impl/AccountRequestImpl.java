@@ -6,16 +6,21 @@
 package org.gridlab.gridsphere.services.user.impl;
 
 import org.gridlab.gridsphere.services.user.AccountRequest;
+import org.gridlab.gridsphere.services.security.acl.impl2.UserACL;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
+import org.gridlab.gridsphere.portlet.impl.SportletRole;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
+import org.gridlab.gridsphere.core.persistence.ConfigurationException;
+import org.gridlab.gridsphere.core.persistence.CreateException;
+import org.gridlab.gridsphere.core.persistence.PersistenceException;
 import org.gridlab.gridsphere.core.persistence.castor.StringVector;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 
 import java.util.List;
 import java.util.Vector;
-import java.util.Random;
 
 public class AccountRequestImpl extends BaseObject implements AccountRequest {
 
@@ -147,7 +152,7 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
     /**
      * Sets the given e-mail of the user.
      *
-     * @param the email address
+     * @param emailAddress the email address
      */
     public void setEmailAddress(String emailAddress) {
         this.EmailAddress = emailAddress;
@@ -176,7 +181,7 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
     /**
      * Sets the list of myproxy user names that can be used for this user
      *
-     * @param userdns the array of strings containing user DN information
+     * @param myproxyUserNames userdns the array of strings containing user DN information
      */
     public void setMyproxyUserNames(List myproxyUserNames) {
         MyproxyUserNames = myproxyUserNames;
@@ -216,8 +221,6 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
 
     /**
      * Returns the list of myproxy user names that can be used for this user
-     *
-     * @param userdns the array of strings containing user DN information
      */
     public List getMyProxyUserDN() {
         return Userdns;
@@ -263,11 +266,28 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
             DesiredGroups.add(pg);
             SportletGroup sg = (SportletGroup)pg;
             sg.addAccountRequest(this);
-            log.info("called addDesiredGroups for "+this.getFullName()+" and group "+sg.getName());
+           // log.info("called addDesiredGroups for "+this.getFullName()+" and group "+sg.getName());
         }
     }
 
     // ----
+
+    //@todo should be done using the aclmanager service!
+    /**
+     * Adds a user with status 'candidate' to a group
+     *
+     * @param group
+     */
+    public void addToGroup(PortletGroup group){
+        UserACL acl = new UserACL(this.getID(),SportletRole.getCandidateRole().getRole() ,group.getID());
+        PersistenceManagerRdbms pm = new PersistenceManagerRdbms();
+        try {
+            pm.create(acl);
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+        }
+        log.info("added request for"+getFullName()+" for group "+group.getName());
+    }
 
     /**
      * Prints the constents of the account request to a String
