@@ -57,14 +57,14 @@ public class SportletDataManager implements PortletDataManager {
 
         // get sportlet data if it exists
         SportletData data = (SportletData) pm.restore(command);
-
         // or create one
         if (data == null) {
-            data = new SportletData(pm);
+            data = new SportletData();
             data.setPortletID(portletID);
             data.setUserID(user.getID());
             pm.create(data);
         }
+        data.setPersistenceManager(pm);
         return data;
     }
 
