@@ -447,7 +447,8 @@ public class PortletPage implements Serializable, Cloneable {
     public void doRenderWML(GridSphereEvent event) throws PortletLayoutException, IOException {
 
         PortletResponse res = event.getPortletResponse();
-
+        PortletRequest req = event.getPortletRequest();
+        
         PrintWriter out = null;
 
         // set content to UTF-8 for il8n
@@ -464,7 +465,7 @@ public class PortletPage implements Serializable, Cloneable {
         out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         out.println("<!DOCTYPE html PUBLIC \"-//WAPFORUM//DTD XHTML Mobile 1.0//EN\" \"http://www.wapforum.org/DTD/xhtml-mobile10.dtd\">");
         out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
-        out.println("  <link type=\"text/css\" href=\"themes/" + theme + "/css/defaultwap.css\" rel=\"stylesheet\"/>");
+        out.println("  <link type=\"text/css\" href=\"" + req.getContextPath() + "/themes/" + theme + "/css/defaultwap.css\" rel=\"stylesheet\"/>");
         //out.println("\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
         //out.println("<wml>");
         out.println("<head>");
@@ -517,11 +518,11 @@ public class PortletPage implements Serializable, Cloneable {
         writer.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>");
         writer.println("<meta name=\"keywords\" content=\"" + keywords + "\"/>");
         writer.println("<meta http-equiv=\"Pragma\" content=\"no-cache\"/>");
-        writer.println("  <link type=\"text/css\" href=\"themes/" + theme + "/css" +
+        writer.println("  <link type=\"text/css\" href=\"" + req.getContextPath() + "/themes/" + theme + "/css" +
                 "/default.css\" rel=\"stylesheet\"/>");
         writer.println("<link rel=\"icon\" href=\"images/favicon.ico\" type=\"imge/x-icon\">");
-        writer.println("<link rel=\"shortcut icon\" href=\"images/favicon.ico\" type=\"image/x-icon\">");
-        writer.println("<script language=\"JavaScript\" src=\"javascript/gridsphere.js\"></script>");
+        writer.println("<link rel=\"shortcut icon\" href=\"" + req.getContextPath() + "/images/favicon.ico\" type=\"image/x-icon\">");
+        writer.println("<script language=\"JavaScript\" src=\"" + req.getContextPath() + "/javascript/gridsphere.js\"></script>");
         writer.println("</head><body>");
 
 

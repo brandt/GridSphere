@@ -456,7 +456,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         //out.println("<img height=\"3\" src=\"themes/" + theme + "/images/spacer.gif\"/>");
         // pane.append("<table><tr><td height=\"600px\">");
         pane.append("<!-- start tabbed pane --><table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
-        pane.append("<tr >");
+        pane.append("<tr>");
 
         PortletTab tab;
         for (int i = 0; i < tabs.size(); i++) {
@@ -468,7 +468,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                 String lang = req.getLocale().getLanguage();
                 String title = tab.getTitle(lang);
 
-                String path = "themes" + File.separator + theme + File.separator + "images" + File.separator;
+                String path = req.getContextPath() + "/themes" + File.separator + theme + File.separator + "images" + File.separator;
                 if (tab.isSelected()) {
                     pane.append("<td height=\"24\" width=\"6\"><img src=\"" + path + "tab-active-left.gif\"></td>");
                     pane.append("<td height=\"24\" nowrap=\"nowrap\" background=\"" + path + "tab-active-middle.gif\">");
@@ -520,7 +520,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
         PortletRole userRole = req.getRole();
 
-        String path = "themes" + File.separator + theme + File.separator + "images" + File.separator;
+        String path = req.getContextPath() + "/themes" + File.separator + theme + File.separator + "images" + File.separator;
         StringBuffer pane = new StringBuffer();
         // Render tabs titles get always the same componenttheme as the upper menu
         pane.append("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"tab-sub-pane" + theme + "\" width=\"100%\"><tr><td>");
