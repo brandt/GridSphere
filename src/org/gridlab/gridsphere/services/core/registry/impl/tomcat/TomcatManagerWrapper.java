@@ -5,6 +5,8 @@
 package org.gridlab.gridsphere.services.core.registry.impl.tomcat;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 import org.apache.commons.httpclient.HttpClient;
@@ -26,6 +28,7 @@ public class TomcatManagerWrapper {
 
     private static TomcatManagerWrapper instance = new TomcatManagerWrapper();
     private PortletManagerService pm = PortletManager.getInstance();
+    private static PortletLog log = SportletLog.getInstance(TomcatManagerWrapper.class);
 
     private TomcatManagerWrapper() {
     }
@@ -43,6 +46,7 @@ public class TomcatManagerWrapper {
         TomcatWebAppResult result = null;
         try {
             String serverName = req.getServerName();
+            String scheme = req.getScheme();
             int serverPort = req.getServerPort();
 
 
@@ -53,8 +57,9 @@ public class TomcatManagerWrapper {
                     new UsernamePasswordCredentials(USERNAME, PASSWORD)
             );
 
-            GetMethod get = new GetMethod("http://" + serverName + ":" + serverPort + "/manager" + command);
-
+            String cmdStr = scheme + "://" + serverName + ":" + serverPort + "/manager" + command;
+            GetMethod get = new GetMethod(cmdStr);
+            log.debug("connecting to URL " + cmdStr);
             get.setDoAuthentication( true );
 
             // execute the GET
