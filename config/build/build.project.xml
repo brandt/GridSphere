@@ -301,7 +301,7 @@ Copyright:
                   tofile="${build.classes}/${project.name}/log4j.properties"/>
 
         <jar jarfile="lib/${project.name}.jar" basedir="${build.classes}" >
-            <include name="org/**" />
+            <include name="**" />
             <exclude name="**/services/**"/>
             <include name="${project.name}/**" />
         </jar>
