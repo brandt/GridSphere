@@ -110,15 +110,6 @@ public class FileInputBean extends InputBean implements TagBean {
         System.err.println("saved file :" + value);
     }
 
-    /**
-     * store Uploded file into file
-     *
-     */
-    public void storeFile(File file) throws Exception {
-        if (savedFileItem != null) {
-            savedFileItem.write(file);
-        }
-    }
 
     /**
      * Returns the uploaded file name
