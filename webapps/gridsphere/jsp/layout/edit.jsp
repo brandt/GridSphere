@@ -4,20 +4,10 @@
 <portletAPI:init/>
 <ui:form>
 
-<ui:panel>
-<ui:listbox beanId="themeLB"/>
+Select a theme: <ui:listbox beanId="themeLB"/> <ui:actionsubmit action="saveTheme" value="Save theme"/>
 
-</ui:panel>
-<ui:panel>
+</ui:form>
+<ui:form>
+Select a tab: <ui:listbox beanId="tabsLB"/>  <ui:actionsubmit action="editTab" value="Edit tab"/>
 
-Current top-level tabs:
-<ui:frame>
-    <ui:tablerow beanId="tabsRow"/>
-</ui:frame>
-</ui:panel>
-
-
-<ui:panel>
-<ui:actionsubmit action="saveChanges" value="Save changes"/>
-</ui:panel>
 </ui:form>
