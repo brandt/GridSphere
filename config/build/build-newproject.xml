@@ -15,7 +15,6 @@
     <target name="update-project" description="Updates existing project with updated build.xml script">
         <echo>Updating a Portlet Project</echo>
         <input message="Please enter a Project Title e.g. Cool Portlets" addproperty="project.title"/>
-
         <input message="Please enter the Project Name e.g. the lowercase directory name e.g. coolportlets" addproperty="project.name"/>
         <property name="newproject.dir" value="projects/${project.name}"/>
         <echo message="Overwriting ${newproject.dir}/build.xml"/>
@@ -93,7 +92,8 @@
             value="${project.title}"/>
         <replace file="${project.dir}/webapp/WEB-INF/layout.xml" token="@PROJECT_TITLE@"
             value="${project.title}"/>
-
+        <replace file="${project.dir}/webapp/WEB-INF/web.xml" token="@PROJECT_NAME@"
+            value="${project.name}"/>
 
         <mkdir dir="${project.dir}/webapp/html"/>
         <mkdir dir="${project.dir}/webapp/jsp"/>
