@@ -4,8 +4,7 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The <code>DefaultPortletAction</code> is a portlet action with default parameters.
@@ -71,5 +70,21 @@ public final class DefaultPortletAction implements PortletAction {
             return (((DefaultPortletAction) obj).getName().equals(this.getName()));
         }
         return false;
+    }
+
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("action=");
+        buffer.append(name);
+        Object[] parameterNames = store.keySet().toArray();
+        for (int ii = 0; ii < parameterNames.length; ++ii) {
+            String parameterName = (String)parameterNames[ii];
+            String parameterValue = (String)store.get(parameterName);
+            buffer.append("&");
+            buffer.append(parameterName);
+            buffer.append("=");
+            buffer.append(parameterValue);
+        }
+        return buffer.toString();
     }
 }

@@ -252,18 +252,29 @@ public class PortletPage implements Serializable, Cloneable {
      * @throws IOException if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
+        log.debug("Entering actionPerformed()");
         // if there is a layout action do it!
-        if (event.getPortletComponentID() != -1) {
+        if (event.getPortletComponentID() == -1) {
+            log.warn("Event has invalid component id associated with it!");
+        } else {
+        //if (event.getPortletComponentID() != -1) {
             // the component id determines where in the list the portlet component is
             ComponentIdentifier compId = (ComponentIdentifier) componentIdentifiers.get(event.getPortletComponentID());
-            if (compId != null) {
+            if (compId == null) {
+                log.warn("Event has invalid component id associated with it!");
+            } else {
+            //if (compId != null) {
                 PortletComponent comp = compId.getPortletComponent();
                 // perform an action if the component is non null
-                if (comp != null) {
+                if (comp == null) {
+                    log.warn("Event has invalid component id associated with it!");
+                } else {
+                //if (comp != null) {
                     comp.actionPerformed(event);
                 }
             }
         }
+        log.debug("Exiting actionPerformed()");
     }
 
     /**

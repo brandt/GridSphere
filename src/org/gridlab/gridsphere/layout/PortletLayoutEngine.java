@@ -231,9 +231,15 @@ public class PortletLayoutEngine {
      * @throws IOException if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) throws IOException {
-        log.debug("in actionPerformed()");
+        log.debug("Entering actionPerformed()");
+        if (log.isDebugEnabled()) {
+            log.debug("Event component = " + event.getPortletComponentID());
+            if (event.hasAction()) {
+                DefaultPortletAction action = event.getAction();
+                log.debug("Event action = " + action.toString());
+            }
+        }
         PortletPage pc = null;
-
         // XXX: How do we signal a user has logged out so we can userLayouts.remove(user)???
         try {
             pc = getPortletContainer(event);
@@ -246,6 +252,7 @@ public class PortletLayoutEngine {
             doRenderError(event.getPortletRequest(), event.getPortletResponse(), e);
             log.error("Caught LayoutException: ", e);
         }
+        log.debug("Exiting actionPerformed()");
     }
 
     public void doRenderError(PortletRequest req, PortletResponse res, Throwable t) {
