@@ -92,10 +92,9 @@ public class FrameTag extends TableTag {
                 String key = tableBean.getKey();
                 if (key != null) {
                     tableBean.setValue(getLocalizedText(key));
-                    tableBean.setCssClass(cssClass);
-                    tableBean.setCssStyle(cssStyle);
                 }
-
+                tableBean.setCssClass(cssClass);
+                tableBean.setCssStyle(cssStyle);
             }
         } else {
             tableBean = new FrameBean();

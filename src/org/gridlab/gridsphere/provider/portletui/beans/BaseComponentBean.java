@@ -21,10 +21,6 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
     protected String cssStyle = null;
     protected String cssClass = null;
 
-    public final static String MENU_HORIZONTAL = "horizontal";
-    public final static String MENU_VERTICAL = "vertical";
-
-
     /**
      * Constructs a default base component bean
      */
@@ -233,7 +229,7 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
      * Returns the formatted css commands for inserting into html components.
      * @return formatted css string for style/class attribute
      */
-    public String getFormattedCss() {
+    protected String getFormattedCss() {
         String result = new String();
         if (this.cssStyle != null) {
             result = result + " style=\"" + this.cssStyle + "\"";

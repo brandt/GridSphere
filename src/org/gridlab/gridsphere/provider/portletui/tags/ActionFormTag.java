@@ -81,8 +81,7 @@ public class ActionFormTag extends ActionTag {
                 if (noName == null) {
                     ctr = 1;
                 } else {
-
-                    ctr = new Integer(noName).intValue() + 1;
+                    ctr = Integer.parseInt(noName) + 1;
                 }
                 noName = String.valueOf(ctr);
 

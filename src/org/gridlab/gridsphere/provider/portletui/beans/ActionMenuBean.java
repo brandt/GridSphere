@@ -15,8 +15,11 @@ public class ActionMenuBean extends BeanContainer implements TagBean {
     public final static String TYPE_ACTIONBAR = "actionbar";
     // public final static String TYPE_LINKTREE = "linktree";
     // public final static String TYPE_DROPDOWN = "dropdown";
+    public final static String MENU_HORIZONTAL = "horizontal";
+    public final static String MENU_VERTICAL = "vertical";
 
-    protected String align = BaseComponentBean.MENU_HORIZONTAL;
+
+    protected String align = MENU_HORIZONTAL;
     protected String title = null;
     private boolean hasParentMenu = false;
     protected String menuType = TYPE_ACTIONBAR;

@@ -12,7 +12,7 @@ import java.util.Iterator;
 public class ActionMenuItemBean extends BeanContainer {
 
     protected boolean seperator = false;
-    protected String align = BaseComponentBean.MENU_HORIZONTAL;
+    protected String align = ActionMenuBean.MENU_HORIZONTAL;
     protected String menuType = ActionMenuBean.TYPE_ACTIONBAR;
     //protected String info = null;
 
@@ -64,7 +64,7 @@ public class ActionMenuItemBean extends BeanContainer {
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         if (menuType.equals(ActionMenuBean.TYPE_ACTIONBAR)) {
-            if (this.align.equals(BaseComponentBean.MENU_VERTICAL)) {
+            if (this.align.equals(ActionMenuBean.MENU_VERTICAL)) {
                 sb.append("<div style=\"display: block; margin-top: 5px;\">");
             }
         }
@@ -81,7 +81,7 @@ public class ActionMenuItemBean extends BeanContainer {
             sb.append(itemBean.toStartString());
             sb.append(itemBean.toEndString());
         }
-        if (align.equals(BaseComponentBean.MENU_VERTICAL)) {
+        if (align.equals(ActionMenuBean.MENU_VERTICAL)) {
             sb.append("</div>");
         }
         return sb.toString();

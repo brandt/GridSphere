@@ -160,7 +160,7 @@ public class DataGridBean extends BeanContainer implements TagBean {
         if (req_beanId != null) {
             if (req_beanId.equals(beanId)) {
                 String req_startPos = request.getParameter(prefix+req_beanId + "_pos");
-                startPos = new Integer(req_startPos).intValue();
+                startPos = Integer.parseInt(req_startPos);
                 if (startPos > list.size()) startPos = list.size();
             }
         }
