@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.portlet.service.spi.impl;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletConfig;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
@@ -35,7 +36,7 @@ import java.lang.reflect.Constructor;
  */
 public class SportletServiceFactory implements PortletServiceFactory {
 
-    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(SportletServiceFactory.class);
+    private static PortletLog log = SportletLog.getInstance(SportletServiceFactory.class);
 
     private static SportletServiceFactory instance = new SportletServiceFactory();
 
@@ -163,6 +164,13 @@ public class SportletServiceFactory implements PortletServiceFactory {
         } catch (Exception e) {
             log.error("Unable to create portlet service: " + serviceImpl, e);
             throw new PortletServiceNotFoundException("Unable to create portlet service: " + serviceImpl);
+        }
+
+        try {
+            psp.init(portletServiceConfig);
+        } catch (PortletServiceUnavailableException e) {
+           log.error("Unable to initialize portlet service: " + serviceImpl, e);
+           throw new PortletServiceNotFoundException("Unable to initialize portlet service: " + serviceImpl);
         }
 
         initServices.put(service, psp);

@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.portlet.service.spi;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.User;
 
 import javax.servlet.ServletConfig;
 import java.util.Properties;
@@ -33,18 +34,16 @@ public interface PortletServiceFactory {
             throws PortletServiceUnavailableException, PortletServiceNotFoundException;
 
     /**
-     * createPortletServiceFactory instantiates the given class and initializes it. The properties
+     * createPortletServiceFactory instantiates the given class and initializes it
      *
      * @param service the class of the service
-     * @param serviceProperties the service properties
      * @param servletConfig the servlet configuration
      * @param boolean reuse a previous initialized service if true, otherwise create a new service instance if false
      * @return the instantiated portlet service
-     * @throws PortletUnavailableException if the portlet service is unavailable
+     * @throws PortletServiceUnavailableException if the portlet service is unavailable
      * @throws PortletServiceNotFoundException if the PortletService is not found
      */
-    public PortletService createPortletService(Class service,
-                                               String servicesXMLPath,
+    public PortletService createPortletUserService(Class service, User user,
                                                ServletConfig servletConfig,
                                                boolean useCachedService)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException;
