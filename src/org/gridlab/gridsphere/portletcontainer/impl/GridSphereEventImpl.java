@@ -17,6 +17,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.portletcontainer.PortletWrapper;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryManager;
+import org.gridlab.gridsphere.services.container.registry.UserPortletManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +31,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
     protected int PortletComponentID = -1;
     protected String ActivePortletID = null;
+    protected UserPortletManager userPortletManager = UserPortletManager.getInstance();
 
     public GridSphereEventImpl(ServletConfig config, HttpServletRequest req, HttpServletResponse res) {
         this.req = new SportletRequestImpl(req);
@@ -44,6 +46,10 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
         ActivePortletID = req.getParameter(GridSphereProperties.PORTLETID);
 
+    }
+
+    public UserPortletManager getUserPortletManager() {
+        return userPortletManager;
     }
 
     public SportletRequest getSportletRequest() {
