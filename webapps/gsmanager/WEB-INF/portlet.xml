@@ -43,16 +43,9 @@
             <title>Portlet Application Manager</title>
             <description>Displays Portlet Variables and Settings</description>
         </language>
-        <owner>
-            <group-name>CACTUS</group-name>
-            <role-name>ADMIN</role-name>
-        </owner>
-        <group>
-            <group-name>ANY</group-name>
-        </group>
-        <role>
-            <role-name>GUEST</role-name>
-        </role>
+        <allowed-access visibility="public">
+            <role>ANY</role>
+        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
