@@ -50,10 +50,15 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
         this.aclManager = userManager;
     }
 
+    /**
+     * Returns the internal user associated with this user
+     *
+     * @return the internal user
+     */ 
     public User getInternalUser() {
         return user;
     }
-    
+
     /**
      * Authorizes operations that require super user access
      *
