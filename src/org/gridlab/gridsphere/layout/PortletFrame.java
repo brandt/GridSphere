@@ -382,7 +382,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
                     if (mystate == PortletWindow.State.MINIMIZED) {
                         renderPortlet = false;
-                    } else if (mystate == PortletWindow.State.RESIZING) {
+                    } else if ((mystate == PortletWindow.State.RESIZING) || (mystate == PortletWindow.State.NORMAL)) {
                         renderPortlet = true;
                         frameEvent = new PortletFrameEventImpl(this, request, PortletFrameEvent.FrameAction.FRAME_RESTORED, COMPONENT_ID);
                         frameEvent.setOriginalWidth(originalWidth);
