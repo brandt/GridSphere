@@ -21,7 +21,12 @@
 
         <property name="userID" type="string" column="userid"/>
         <property name="label" type="string" column="label"/>
-         <property name="lifetime" type="timestamp" column="lifetime"/>
+        <property name="lifetime" type="timestamp" column="lifetime"/>
+        <map name="attributes" table="requestattributes">
+            <key column="gsoid"/>
+            <index column="attribute" type="string"/>
+            <element column="value" type="string"/>
+        </map>
 
     </class>
 </hibernate-mapping>
