@@ -52,7 +52,7 @@ public class SportletServiceFactory implements PortletServiceFactory {
     private Hashtable serviceFactories = new Hashtable();
 
     /**
-     * Private constructor. Use getInstance() instead.
+     * Private constructor. Use getDefault() instead.
      */
     private SportletServiceFactory() {
         // Reads in the service definitions from the xml file and stores them in allServices

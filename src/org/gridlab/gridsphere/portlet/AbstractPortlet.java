@@ -53,35 +53,40 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
         super.service(request, response);
         String method = (String) request.getAttribute(SportletProperties.PORTLET_ACTION_METHOD);
         if (method != null) {
-            log.info("Received ACTION_METHOD: " + method);
-            if (method.equals(SportletProperties.DO_TITLE)) {
-                doTitle(request, response);
-            } else if (method.equals(SportletProperties.WINDOW_EVENT)) {
-                WindowEvent winEvent = (WindowEvent) request.getAttribute(SportletProperties.WINDOW_EVENT);
-                switch (winEvent.getEventId()) {
-                    case WindowEvent.WINDOW_MAXIMIZED:
-                        windowMaximized(winEvent);
-                        break;
-                    case WindowEvent.WINDOW_MINIMIZED:
-                        windowMinimized(winEvent);
-                        break;
-                    case WindowEvent.WINDOW_RESTORED:
-                        windowRestored(winEvent);
-                        break;
-                    default:
-                        doError(request, response, "Received invalid WindowEvent : " + winEvent.getEventId());
-                        log.error("Received invalid WindowEvent : " + winEvent.getEventId());
+            try {
+                log.info("Received ACTION_METHOD: " + method);
+                if (method.equals(SportletProperties.DO_TITLE)) {
+                    doTitle(request, response);
+                } else if (method.equals(SportletProperties.WINDOW_EVENT)) {
+                    WindowEvent winEvent = (WindowEvent) request.getAttribute(SportletProperties.WINDOW_EVENT);
+                    switch (winEvent.getEventId()) {
+                        case WindowEvent.WINDOW_MAXIMIZED:
+                            windowMaximized(winEvent);
+                            break;
+                        case WindowEvent.WINDOW_MINIMIZED:
+                            windowMinimized(winEvent);
+                            break;
+                        case WindowEvent.WINDOW_RESTORED:
+                            windowRestored(winEvent);
+                            break;
+                        default:
+                            doError(request, response, "Received invalid WindowEvent : " + winEvent.getEventId());
+                            log.error("Received invalid WindowEvent : " + winEvent.getEventId());
+                    }
+                } else if (method.equals(SportletProperties.ACTION_PERFORMED)) {
+                    // Set the appropiate portlet action
+                    DefaultPortletAction action = (DefaultPortletAction) request.getAttribute(SportletProperties.ACTION_EVENT);
+                    ActionEvent evt = new ActionEventImpl(action, request, response);
+                    actionPerformed(evt);
+                } else if (method.equals(SportletProperties.MESSAGE_RECEIVED)) {
+                    // Set the appropiate portlet action
+                    DefaultPortletMessage msg = (DefaultPortletMessage) request.getAttribute(SportletProperties.MESSAGE_EVENT);
+                    MessageEvent evt = new MessageEventImpl(request, msg);
+                    messageReceived(evt);
                 }
-            } else if (method.equals(SportletProperties.ACTION_PERFORMED)) {
-                // Set the appropiate portlet action
-                DefaultPortletAction action = (DefaultPortletAction) request.getAttribute(SportletProperties.ACTION_EVENT);
-                ActionEvent evt = new ActionEventImpl(action, request, response);
-                actionPerformed(evt);
-            } else if (method.equals(SportletProperties.MESSAGE_RECEIVED)) {
-                // Set the appropiate portlet action
-                DefaultPortletMessage msg = (DefaultPortletMessage) request.getAttribute(SportletProperties.MESSAGE_EVENT);
-                MessageEvent evt = new MessageEventImpl(request, msg);
-                messageReceived(evt);
+            } catch (Exception e) {
+                log.error("in PortletAdapter: service()", e);
+                doError(request, response, e);
             }
         }
         request.removeAttribute(SportletProperties.PORTLET_ACTION_METHOD);

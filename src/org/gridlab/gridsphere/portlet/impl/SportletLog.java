@@ -38,7 +38,7 @@ public class SportletLog implements PortletLog {
     private Logger logger;
 
     /**
-     * Constructor not accessible. Use getInstance instead.
+     * Constructor not accessible. Use getDefault instead.
      */
     private SportletLog(Class clazz) {
         logger = Logger.getLogger(clazz);
