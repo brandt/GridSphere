@@ -10,7 +10,10 @@ import org.gridlab.gridsphere.portlet.Client;
 import org.gridlab.gridsphere.portlet.PortletData;
 import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.exolab.castor.jdo.Database;
+import org.exolab.castor.jdo.PersistenceException;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -32,7 +35,8 @@ import java.io.IOException;
 public class SportletData extends BaseObject implements PortletData  {
 
     protected transient Hashtable store = new Hashtable();
-    protected transient boolean hasConfigurePermission = false;
+    private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
+
 
     /**
      * Saves the hashtable (for castor)
@@ -63,10 +67,6 @@ public class SportletData extends BaseObject implements PortletData  {
     public SportletData() {};
 
 
-    public void enableConfigurePermission(boolean hasConfigurePermission) {
-        this.hasConfigurePermission = hasConfigurePermission;
-    }
-
     /**
      * Returns the value of the attribute with the given name, or null if no such attribute exists.
      *
@@ -93,10 +93,7 @@ public class SportletData extends BaseObject implements PortletData  {
      *
      * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
-    public void removeAttribute(String name) throws AccessDeniedException {
-        if (!hasConfigurePermission) {
-            throw new AccessDeniedException("User is unauthorized to remove portlet data attributes");
-        }
+    public void removeAttribute(String name) {
         store.remove(name);
     }
 
@@ -108,24 +105,17 @@ public class SportletData extends BaseObject implements PortletData  {
      *
      * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
-    public void setAttribute(String name, String value) throws AccessDeniedException {
-        if (!hasConfigurePermission) {
-            throw new AccessDeniedException("User is unauthorized to set portlet data attributes");
-        }
+    public void setAttribute(String name, String value)  {
         store.put(name, value);
     }
 
     /**
      * Stores all attributes.
      *
-     * @throws AccessDeniedException if the caller isn't authorized to access this data object
-     * @throws IOException if the streaming causes an I/O problem
+     * @throws PersistenceManagerException store fails
      */
-    public void store() throws AccessDeniedException, IOException {
-        if (!hasConfigurePermission) {
-            throw new AccessDeniedException("User is unauthorized to store portlet data attributes");
-        }
-        // make store persistent: Oliver Wehrens
+    public void store() throws PersistenceManagerException {
+        pm.update(this);
     }
 
 

@@ -4,6 +4,9 @@
  */
 package org.gridlab.gridsphere.portlet;
 
+import org.exolab.castor.jdo.PersistenceException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+
 import java.util.Enumeration;
 import java.io.IOException;
 
@@ -35,7 +38,7 @@ public interface PortletData {
      *
      * @param name the attribute name
      */
-    public void removeAttribute(String name) throws AccessDeniedException;
+    public void removeAttribute(String name);
 
     /**
      * Sets the attribute with the given name and value.
@@ -45,14 +48,14 @@ public interface PortletData {
      *
      * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
-    public void setAttribute(String name, String value) throws AccessDeniedException;
+    public void setAttribute(String name, String value);
 
     /**
      * Stores all attributes.
      *
      * @throws AccessDeniedException if the caller isn't authorized to access this data object
-     * @throws IOException if the streaming causes an I/O problem
+     * @throws PersistenceManagerException if the store failed
      */
-    public void store() throws AccessDeniedException, IOException;
+    public void store() throws PersistenceManagerException;
 
 }
