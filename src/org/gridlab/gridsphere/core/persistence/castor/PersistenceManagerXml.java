@@ -1,13 +1,11 @@
-package org.gridlab.gridsphere.core.persistence.castor;
-
-
 /*
  * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
- * @team sonicteam
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  *
  * The Class provides easy access to marshal/unmarshal objects to XML files
  */
+package org.gridlab.gridsphere.core.persistence.castor;
 
 import org.apache.log4j.Category;
 import org.exolab.castor.mapping.Mapping;
@@ -29,10 +27,25 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
 
     static Category cat = Category.getInstance(PersistenceManagerXml.class.getName());
 
+    private static PersistenceManagerXml instance;
 
     private String URL = null;
     private String MappingFile = null;
 
+    /**
+     * PersistenceManagerXml default constructor
+     */
+    private PersistenceManagerXml() {}
+
+    private static synchronized void doSync() {}
+
+    public static PersistenceManagerXml getInstance() {
+        if (instance == null) {
+            doSync();
+            instance = new PersistenceManagerXml();
+        }
+        return instance;
+    }
 
     /**
      * checks if all setting for marshalling xml data are done

@@ -9,58 +9,60 @@ import org.gridlab.gridsphere.core.persistence.castor.Query;
 
 public interface PersistenceInterface {
     /**
-     * begins a transaction
+     * Begins a transaction
      *
-     * @throws TransactionException of something went wrong
+     * @throws PersistenceException of something went wrong
      */
-    void begin() throws TransactionException;
+    public void begin() throws PersistenceException;
 
     /**
-     * commits changes to the storage
+     * Commits changes to the storage
      *
-     * @throws TransactionException of something went wrong
+     * @throws PersistenceException of something went wrong
      */
-    void commit() throws TransactionException;
+    public void commit() throws PersistenceException;
 
     /**
-     * rollback the changes since begin()
+     * Rollback the changes since begin()
      *
-     * @throws TransactionException of something went wrong
+     * @throws PersistenceException of something went wrong
      */
-    void rollback() throws TransactionException;
+    public void rollback() throws PersistenceException;
 
     /**
-     * closes the transaction
-     *
-     * @throws TransactionException of something went wrong
+     * Closes the transaction
      */
-    void close();
+    public void close();
 
     /**
-     * uupdates the object in the storage
+     * Updates the object in the storage
+     *
      * @param object object to be updated
      * @throws UpdateException if something went wrong with the update
      */
-    void update(Object object) throws UpdateException;
+    public void update(Object object) throws PersistenceException;
 
     /**
-     * creates an object in the persistence storage
+     * Creates an object in the persistence storage
+     *
      * @param object object to be created in the storage
      * @throws CreateException if something went wrong with the creation
      */
-    void create(Object object) throws CreateException;
+    public void create(Object object) throws PersistenceException;
 
     /**
      * Deletes an object in the persistence storage
+     *
      * @param object object to be deleted
      * @throws DeleteException if something went wrong with the deletion of the object
      */
-    void delete(Object object) throws DeleteException;
+    public void delete(Object object) throws PersistenceException;
 
     /**
      * Gets a query object
+     *
      * @returns Query query object
      * @see Query
      */
-    Query getQuery();
+    public Query getQuery();
 }
