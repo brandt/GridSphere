@@ -16,15 +16,12 @@ import org.gridlab.gridsphere.portlet.PortletSettings;
  */
 public interface RegisteredPortlet {
 
-    /**
-     * Returns the portlet configuration for this portlet
-     *
-     * @return the portlet configuration
-     */
-    public PortletConfig getPortletConfig();
+    public String getPortletAppID();
+
+    public String getConcretePortletAppID();
 
     /**
-     * Returns the portlet settings for this portlet
+     * Returns the portlet settings for this concrete portlet
      *
      * @return the portlet settings
      */
@@ -36,6 +33,13 @@ public interface RegisteredPortlet {
      * @return the portlet name
      */
     public String getPortletName();
+
+    /**
+     * Return the classname of this portlet
+     *
+     * @return the portlet classname
+     */
+    public String getPortletClass();
 
     /**
      * Return the instantiated abstract portlet instance

@@ -16,6 +16,7 @@ import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
 import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication;
 import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
+import org.gridlab.gridsphere.portletcontainer.RegisteredPortletException;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 
 import javax.servlet.ServletConfig;
@@ -26,8 +27,9 @@ import java.util.List;
 
 /**
  * A RegisteredSportlet provides the portlet container with information used to create and manage the
- * portlet's lifecycle. A RegisteredPortlet is responsible for parsing the portlet.xml file for
- * portlet settings and portlet configuration information. The RegisteredPortlet also maintains an instantiated
+ * portlet's lifecycle. A RegisteredPortlet is created given a PortletApplication and a corresponding
+ * ConcretePortletApplication provided by the PortletDeploymentDescriptor. The RegisteredPortlet parses
+ * the information provided and provides PortletSettings. The RegisteredPortlet also maintains an instantiated
  * portlet that is managed by the portlet container.
  */
 public class RegisteredSportlet implements RegisteredPortlet {
@@ -35,83 +37,59 @@ public class RegisteredSportlet implements RegisteredPortlet {
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(RegisteredSportlet.class);
 
     private AbstractPortlet abstractPortlet = null;
-    private PortletConfig portletConfig = null;
     private PortletSettings portletSettings = null;
     private String portletName = "Undefined PortletInfo";
-  /*
-    public RegisteredSportlet(ServletConfig servletConfig) throws Exception {
-        configure(servletConfig);
-    }
-  */
-    public RegisteredSportlet(PortletApplication portletApp, ConcretePortletApplication concreteApp) throws Exception {
-        configure(portletApp, concreteApp);
-    }
+    private String portletClass = "Unknown Portlet Class";
+    private String appID = null;
+    private String concreteID = null;
 
-    protected synchronized void configure(PortletApplication portletApp, ConcretePortletApplication concreteApp) throws Exception {
-        String portletClass = null;
-        String uid = concreteApp.getUID();
+    public RegisteredSportlet(PortletApplication portletApp, ConcretePortletApplication concreteApp,
+                              List knownGroups, List knownRoles) throws RegisteredPortletException {
+
+        log.info("in RegisteredSportlet construcor");
+        int index;
+        String appname, cappname;
+
+        // Get PortletApplication UID  e.g. classname.number
+        appID = portletApp.getUID();
+        index = appID.lastIndexOf(".");
+        appname = appID.substring(0, index);
+        String appNo = appID.substring(index+1);
+
+        // Get ConcretePortletApplication UID e.g. classname.number.number
+        concreteID = concreteApp.getUID();
+        index = concreteID.lastIndexOf(".");
+        String concreteNo = concreteID.substring(index+1);
+        String cappNo = concreteID.substring(0, index);
+        index = cappNo.lastIndexOf(".");
+        cappNo = cappNo.substring(index+1);
+        cappname = concreteID.substring(0, index);
+
+        // Check that cappID = appID and cappname = appname
+        if ((!appNo.equals(cappNo)) || (!appname.equals(cappname))) {
+            log.error("<portlet-app uid=" + appname + appNo + " does not match <concrete-portlet-app uid=" + cappname + cappNo);
+            throw new RegisteredPortletException("<portlet-app uid=" + appname + appNo + " does not match <concrete-portlet-app uid=" + cappname + cappNo);
+        }
+
+        portletClass = cappname;
         portletName = concreteApp.getName();
+
         try {
-            abstractPortlet = (AbstractPortlet) Class.forName(uid).newInstance();
+            abstractPortlet = (AbstractPortlet) Class.forName(portletClass).newInstance();
         } catch (Exception e) {
             log.error("Unable to create AbstractPortlet: " + portletClass, e);
-            throw new Exception("Unable to create registered portlet");
+            throw new RegisteredPortletException("Unable to create instance of portlet: " + portletClass);
         }
+
+        portletSettings = new SportletSettings(concreteApp, knownGroups, knownRoles);
     }
 
-    /**
-     * Configures the PortletConfig and PortletSettings objects from the portlet.xml file
-     */
-    protected synchronized void configure(ServletConfig config) throws Exception {
-        FileInputStream fistream = null;
-        log.info("configure() in PortletInfo");
-        String appRoot = config.getServletContext().getRealPath("");
-        String portletConfigFile = config.getInitParameter("portlet.xml");
-        String portletMappingFile = config.getInitParameter("portlet-mapping.xml");
-        if (portletConfigFile == null) {
-            portletConfigFile = "/WEB-INF/conf/portlet.xml";
-        }
-        if (portletMappingFile == null) {
-            portletMappingFile = "/WEB-INF/conf/portlet-mapping.xml";
-        }
-        String portletFilePath = appRoot + portletConfigFile;
-        String mappingFilePath = appRoot + portletMappingFile;
-
-        // Now parse portlet.xml and stick relevant info into portletSettings and portletConfig
-        portletConfig = new SportletConfig(config);
-
-        // Create Access Control Service
-        AccessControlService aclService = (AccessControlService)portletConfig.getContext().getService(AccessControlService.class);
-        List allGroups = aclService.getAllGroups();
-        List allRoles = aclService.getAllRoles();
-
-        PortletDeploymentDescriptor pdd = new PortletDeploymentDescriptor(portletFilePath, mappingFilePath);
-
-        //String portletClass = "org.gridlab.gridsphere.portlets.HelloWorld";
-        Iterator portletApps = pdd.getPortletDef().iterator();
-        while (portletApps.hasNext()) {
-            ConcretePortletApplication portletApp = (ConcretePortletApplication) portletApps.next();
-
-            // create SportletSettings for each <portlet-app> definition
-            portletSettings = new SportletSettings(portletApp, allGroups, allRoles);
-            String portletClass = portletApp.getUID();
-            portletName = portletApp.getName();
-            try {
-                abstractPortlet = (AbstractPortlet) Class.forName(portletClass).newInstance();
-            } catch (Exception e) {
-                log.error("Unable to create AbstractPortlet: " + portletClass, e);
-                throw new Exception("Unable to create registered portlet");
-            }
-        }
+    public String getPortletAppID() {
+        return appID;
     }
 
-    /**
-     * Returns the portlet configuration for this portlet
-     *
-     * @return the portlet configuration
-     */
-    public PortletConfig getPortletConfig() {
-        return portletConfig;
+    public String getConcretePortletAppID() {
+        return concreteID;
     }
 
     /**
@@ -139,6 +117,10 @@ public class RegisteredSportlet implements RegisteredPortlet {
      */
     public AbstractPortlet getActivePortlet() {
         return abstractPortlet;
+    }
+
+    public String getPortletClass() {
+        return portletClass;
     }
 
 }
