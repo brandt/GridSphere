@@ -1,4 +1,4 @@
-package org.gridlab.gridsphere.portlet;
+package org.gridlab.gridsphere.portlet.impl;
 
 /*
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
@@ -6,7 +6,7 @@ package org.gridlab.gridsphere.portlet;
  * The <code>PortletRoleInfo</code> saves the role associated to a concrete portlet.
  */
 
-public class PortletRoleInfo {
+public class SportletRoleInfo {
 
     private transient PortletRole portletRole;
     private String portletClass = new String();

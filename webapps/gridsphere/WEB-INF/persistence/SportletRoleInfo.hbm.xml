@@ -6,7 +6,7 @@
 
 <hibernate-mapping>
     <class
-        name="org.gridlab.gridsphere.portlet.PortletRoleInfo"
+        name="org.gridlab.gridsphere.portlet.impl.SportletRoleInfo"
         table="portletroleinfo"
         >
 
