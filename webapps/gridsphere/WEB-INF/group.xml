@@ -2,7 +2,7 @@
 <portlet-group core="true">
     <group-name>gridsphere</group-name>
     <group-description>Core GridSphere Group</group-description>
-    <group-visibility>PUBLIC</group-visibility>
+    <group-visibility>HIDDEN</group-visibility>
     <portlet-role-info>
         <portlet-class>org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet.1</portlet-class>
         <required-role>USER</required-role>
