@@ -286,6 +286,7 @@ public class ActionPortlet extends GenericPortlet {
      */
     public void doViewJSP(RenderRequest request, RenderResponse response, String jsp)  {
         log.debug("Including JSP page:" + jsp);
+        response.setContentType("text/html");
         try {
             if (jsp.startsWith("/")) {
                 getPortletConfig().getPortletContext().getRequestDispatcher(jsp).include(request, response);
