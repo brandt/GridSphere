@@ -14,7 +14,7 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
 
 
-public class AccessControlManagerServiceImpl implements PortletServiceProvider, AccessControlManagerService {
+public class AccessControlManagerServiceImpl implements PortletServiceProvider {
 
     /**
      * Initializes the portlet service.
@@ -68,28 +68,6 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
      * @param group the PortletGroup
      */
     public void removeGroup(PortletGroup group) {
-
-    }
-
-    /**
-     * Add a role to a user in a group
-     *
-     * @param user the Role object
-     * @param group the PortletGroup
-     * @param role the PortletRole
-     */
-    public void addRoleInGroup(User user, PortletGroup group, PortletRole role) {
-
-    }
-
-    /**
-     * Add a user to a group with a specified role
-     *
-     * @param user the Role object
-     * @param group the PortletGroup
-     * @param role the PortletRole
-     */
-    public void addUserToGroup(User user, PortletGroup group, PortletRole role) {
 
     }
 
