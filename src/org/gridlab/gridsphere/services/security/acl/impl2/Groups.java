@@ -39,6 +39,10 @@ public class Groups extends BaseObject implements PortletGroup {
         return false;
     }
 
+    public int getGroup() {
+        return 0;
+    }
+
 }
 
 
