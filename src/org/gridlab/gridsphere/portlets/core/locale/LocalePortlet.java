@@ -5,14 +5,12 @@
 package org.gridlab.gridsphere.portlets.core.locale;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
 
 import javax.servlet.UnavailableException;
-import java.io.IOException;
 import java.util.Locale;
 
 public class LocalePortlet extends ActionPortlet {
@@ -22,7 +20,6 @@ public class LocalePortlet extends ActionPortlet {
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         DEFAULT_VIEW_PAGE = "showLocale";
-
     }
 
 
@@ -50,10 +47,11 @@ public class LocalePortlet extends ActionPortlet {
             request.getPortletSession(true).setAttribute(User.LOCALE, locale);
         }
         Locale loc = new Locale(locale, "", "");
-        request.setAttribute("locale", locale);
+        request.setAttribute("locale", loc);
 
         ListBoxBean localeSelector = event.getListBoxBean("localeSelector");
         localeSelector.clear();
+        localeSelector.setOnChange("GridSphere_SelectLocale(this)");
         localeSelector.setSize(1);
 
         ListBoxItemBean bean_uk = makeLocaleBean(Locale.UK.getDisplayLanguage(new Locale("en","","")), "en_UK", locale, "UK");
@@ -82,7 +80,9 @@ public class LocalePortlet extends ActionPortlet {
     }
 
     public void selectLang(FormEvent event) throws PortletException {
-        ListBoxBean localeSelector = event.getListBoxBean("localeSelector");
+        ListBoxBean localeSelector = event.getListBoxBean("localeLB");
+
+
         PortletSession session = event.getPortletRequest().getPortletSession(true);
         session.setAttribute(User.LOCALE, localeSelector.getSelectedValue());
     }

@@ -21,6 +21,7 @@ public class ListBoxBean extends BeanContainer implements TagBean {
 
     protected int size = 0;
     protected boolean isMultiple = false;
+    protected String onChange = null;
 
     /**
      * Constructs a default list box bean
@@ -90,6 +91,10 @@ public class ListBoxBean extends BeanContainer implements TagBean {
         return isMultiple;
     }
 
+    public void setOnChange(String onChange) {
+        this.onChange = onChange;
+    }
+
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         String pname = (name == null) ? "" : name;
@@ -100,6 +105,9 @@ public class ListBoxBean extends BeanContainer implements TagBean {
         sb.append("<select name='"+sname+"' size='"+size+"'");
         if (isMultiple) {
             sb.append(" multiple='multiple'");
+        }
+        if (onChange != null) {
+            sb.append(" onChange='" + onChange + "'");
         }
         sb.append(">");
         return sb.toString();

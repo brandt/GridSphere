@@ -22,6 +22,7 @@ public class ListBoxTag extends ContainerTag {
     protected ListBoxBean listbox = null;
     protected boolean isMultiple = false;
     protected int size = 1;
+    protected String onChange = null;
 
     /**
      * Returns the (html) size of the field.
@@ -40,6 +41,25 @@ public class ListBoxTag extends ContainerTag {
     public void setSize(int size) {
         this.size = size;
     }
+
+    /**
+     * Returns the onChange JavaScript function
+     *
+     * @return onChange JavaScript function
+     */
+    public String getOnChange() {
+        return onChange;
+    }
+
+    /**
+     * Sets the onChange JavaScript function
+     *
+     * @param onChange the onChange JavaScript function
+     */
+    public void setOnChange(String onChange) {
+        this.onChange = onChange;
+    }
+
 
     /**
      * Sets multiple selection
@@ -75,14 +95,17 @@ public class ListBoxTag extends ContainerTag {
             if (listbox == null) {
                 listbox = new ListBoxBean(beanId);
                 listbox.setSize(size);
+                listbox.setOnChange(onChange);
                 this.setBaseComponentBean(listbox);
             } else {
                 if (size != 1) listbox.setSize(size);
                 this.updateBaseComponentBean(listbox);
+                listbox.setOnChange(onChange);
             }
         } else {
             listbox = new ListBoxBean();
             listbox.setSize(size);
+            listbox.setOnChange(onChange);
             this.setBaseComponentBean(listbox);
         }
         try {
