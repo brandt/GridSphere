@@ -16,15 +16,11 @@ import org.gridlab.gridsphere.services.core.security.acl.InvalidGroupRequestExce
 import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
 import org.gridlab.gridsphere.services.core.security.acl.GroupAction;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
-import org.gridlab.gridsphere.services.core.security.password.Password;
-import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.AccountRequest;
 import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
-import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
-import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 
 import javax.servlet.UnavailableException;
 import java.util.*;
@@ -42,7 +38,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
     // Portlet services
     private UserManagerService userManagerService = null;
     private AccessControlManagerService aclManagerService = null;
-    private PasswordManagerService passwordManagerService = null;
     private LayoutManagerService layoutMgr = null;
     private List supportedLocales = null;
     private PortletRegistry portletRegistry = null;
@@ -53,7 +48,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
         try {
             this.userManagerService = (UserManagerService)config.getContext().getService(UserManagerService.class);
             this.aclManagerService = (AccessControlManagerService)config.getContext().getService(AccessControlManagerService.class);
-            this.passwordManagerService = (PasswordManagerService)config.getContext().getService(PasswordManagerService.class);
             this.portletRegistry = PortletRegistry.getInstance();
             this.layoutMgr = (LayoutManagerService)config.getContext().getService(LayoutManagerService.class);
         } catch (PortletServiceException e) {
@@ -278,8 +272,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
         AccountRequest acctReq = userManagerService.createAccountRequest(user);
         acctReq.setAttribute(User.LOCALE, language);
-        Password pwd = this.passwordManagerService.getPassword(user);
-        acctReq.setPasswordValue(pwd.getValue());
+
         if (email != null) acctReq.setEmailAddress(email);
         if (username != null) acctReq.setUserName(username);
         if (fullname != null) acctReq.setFullName(fullname);

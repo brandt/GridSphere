@@ -201,9 +201,9 @@ public class UserManagerPortlet extends ActionPortlet {
         event.getTextFieldBean("fullName").setValue(user.getFullName());
         event.getTextFieldBean("emailAddress").setValue(user.getEmailAddress());
         event.getTextFieldBean("organization").setValue(user.getOrganization());
-        Password pwd = this.passwordManagerService.getPassword(user);
-        event.getPasswordBean("password").setValue(pwd.getValue());
-        event.getPasswordBean("confirmPassword").setValue(pwd.getValue());
+        //Password pwd = this.passwordManagerService.getPassword(user);
+        //event.getPasswordBean("password").setValue(pwd.getValue());
+        //event.getPasswordBean("confirmPassword").setValue(pwd.getValue());
     }
 
     private void validateUser(FormEvent event, boolean newuser)
@@ -253,7 +253,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
 
         if (!isInvalid) {
-            isInvalid = isInvalidPassword(event, message);
+            isInvalid = isInvalidPassword(event, newuser, message);
         }
 
         // Throw exception if error was found
@@ -263,16 +263,19 @@ public class UserManagerPortlet extends ActionPortlet {
         log.debug("Exiting validateUser()");
     }
 
-    private boolean isInvalidPassword(FormEvent event, StringBuffer message) {
+    private boolean isInvalidPassword(FormEvent event, boolean newuser, StringBuffer message) {
         // Validate password
         String passwordValue = event.getPasswordBean("password").getValue();
         String confirmPasswordValue = event.getPasswordBean("confirmPassword").getValue();
 
         // If user already exists and password unchanged, no problem
-        if (passwordValue.length() == 0 ||
+        if (passwordValue.length() == 0 &&
                    confirmPasswordValue.length() == 0) {
-            message.append("Password cannot be empty<br>");
-            return true;
+            if (newuser) {
+                message.append("Password cannot be empty<br>");
+                return true;
+            }
+            return false;
         }
         // Otherwise, password must match confirmation
         if (!passwordValue.equals(confirmPasswordValue)) {
@@ -302,6 +305,7 @@ public class UserManagerPortlet extends ActionPortlet {
         } else {
             System.err.println("Creating account request for existing user");
             accountRequest = this.userManagerService.createAccountRequest(user);
+            //accountRequest.setPasswordValidation(false);
         }
 
         // Edit account attributes

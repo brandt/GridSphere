@@ -208,7 +208,7 @@ public class UserManager implements UserManagerService {
              // Save account request if not already saved
              if (existsAccountRequest(request)) {
                  // First validate account request
-                 validateAccountRequest(request);
+                 //validateAccountRequest(request);
                  /* Update account request */
                  try {
                      log.debug("Updating account request record: " + request.getID());
@@ -218,7 +218,10 @@ public class UserManager implements UserManagerService {
                      log.error(msg, e);
                  }
                  /* Store passsword for requested account */
-                 saveAccountRequestPassword(request);
+                 if (request.getPassword().isDirty()) {
+                     validateAccountRequest(request);
+                     saveAccountRequestPassword(request);
+                 }
              }
          }
     }
@@ -233,6 +236,7 @@ public class UserManager implements UserManagerService {
         // Then validate password if requested
         User user = getUser(request.getID());
         if (user == null) {
+
             if (request.getPasswordValidation()) {
                 log.info("Validating password for account request");
                 try {
@@ -255,6 +259,7 @@ public class UserManager implements UserManagerService {
                 log.info("Not validating password for account request");
             }
         }
+
     }
 
     private void saveAccountRequestPassword(AccountRequest request) throws InvalidAccountRequestException {
@@ -274,6 +279,8 @@ public class UserManager implements UserManagerService {
         log.debug("Saving password record for account request " + request.getUserName());
         // Otherwise attempt to save password edits
         //System.err.println("before save passwd request id: " + request.getID());
+
+        log.debug("Saving password as " + passwordBean.getValue());
         try {
             this.passwordManagerService.savePassword(passwordBean);
         } catch (InvalidPasswordException e) {
@@ -304,7 +311,7 @@ public class UserManager implements UserManagerService {
             // Save user from account request
             saveSportletUserImpl(user);
             // Activate user password
-            activateAccountRequestPassword(request, user);
+            if (request.getPassword().isDirty()) activateAccountRequestPassword(request, user);
             // Activate user access rights
             activateAccountRequestGroupEntries(request, user);
             // Delete account request

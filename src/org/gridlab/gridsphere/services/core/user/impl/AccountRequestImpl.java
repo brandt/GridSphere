@@ -311,10 +311,6 @@ public class AccountRequestImpl implements AccountRequest {
         return this.passwordBean;
     }
 
-    public void setPassword(PasswordEditor passwordBean) {
-        this.passwordBean = passwordBean;
-    }
-
     public String getPasswordValue() {
         return this.passwordBean.getValue();
     }

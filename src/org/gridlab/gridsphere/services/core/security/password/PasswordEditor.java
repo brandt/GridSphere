@@ -34,15 +34,6 @@ public class PasswordEditor implements Password {
         this.user = user;
     }
 
-    public PasswordEditor(Password password) {
-        // Get password values
-        this.user = password.getUser();
-        this.hint = password.getHint();
-        this.dateExpires = password.getDateExpires();
-        this.dateCreated = password.getDateCreated();
-        this.dateLastModified = password.getDateLastModified();
-    }
-
     public User getUser() {
         return this.user;
     }
