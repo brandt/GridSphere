@@ -39,6 +39,7 @@ public class SportletContext implements PortletContext {
 
     public SportletContext(ServletConfig config) {
         this.config = config;
+        this.context = config.getServletContext();
     }
 
     /**
