@@ -141,7 +141,7 @@
 
     <class name="org.gridlab.gridsphere.layout.PortletTabbedPane" extends="org.gridlab.gridsphere.layout.BasePortletComponent">
         <map-to xml="portlet-tabbed-pane"/>
-        <field name="PortletTabs" type="org.gridlab.gridsphere.layout.PortletTab" collection="arraylist">
+        <field name="PortletTabs" type="org.gridlab.gridsphere.layout.PortletTab" collection="vector">
             <bind-xml name="portlet-tab"/>
         </field>
         <field name="Style" type="string">

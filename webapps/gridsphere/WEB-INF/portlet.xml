@@ -379,7 +379,6 @@
             <supports>
                 <markup name="html">
                     <view/>
-                    <edit/>
                     <help/>
                 </markup>
             </supports>
