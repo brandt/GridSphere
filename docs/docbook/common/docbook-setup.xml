@@ -38,7 +38,7 @@ http://jakarta.apache.org/proposals/tapestry
 	value="../common/GridSphere-${docbook.xsl.base}-Fop.xsl"/>
 
 <property environment="env"/>
-<property name="fop.exists" value="${env.FOP_HOME}"/>
+<property name="fop.dir" value="${env.FOP_HOME}"/>
 
 <xmlcatalog id="docbook.catalog">
 	<dtd publicId="-//OASIS//DTD DocBook XML V4.1//EN" location="${docbook.dtd.dir}/docbookx.dtd"/>
@@ -101,11 +101,9 @@ http://jakarta.apache.org/proposals/tapestry
  <mkdir dir="${common-images.dest.dir}"/>
 
  <echo message="FOP_HOME is set to = ${env.FOP_HOME}"/>
- <condition property="fop.dir">
-    <not>
-      <equals arg1="${fop.exists}" arg2="${env.FOP_HOME}" trim="true"/>
-    </not>
-</condition>
+ <condition property="fop.exists">
+      <equals arg1="${fop.dir}" arg2="${env.FOP_HOME}" trim="true"/>
+ </condition>
 </target>
 
 <target name="clean">
@@ -176,9 +174,7 @@ Converting Flow Objects to PDF ...
 
 </echo>
 
-	<java classname="org.apache.fop.apps.Fop"
-		fork="true"
-		dir="${html.output.dir}">
+	<java classname="org.apache.fop.apps.Fop" fork="true" maxmemory="256m" dir="${html.output.dir}">
 		<classpath>
 			<fileset dir="${fop.dir}">
 				<include name="build/fop.jar"/>
