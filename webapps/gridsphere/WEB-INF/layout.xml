@@ -7,12 +7,17 @@
         <title lang="it">Benvenuto</title>
 	<title lang="pl">Witamy</title>
 	<title lang="hu">Üdvözöllek</title>
+	<title lang="fr">Bienvenue</title>
+	<title lang="de">Willkommen</title>
+	<title lang="cs">Vítejte</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab label="home">
                 <title lang="en">Home</title>
                 <title lang="it">Inizio</title>
 		<title lang="pl">Start</title>
 		<title lang="hu">Otthon</title>
+		<title lang="de">Start</title>
+		<title lang="cs">Výchozí</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -28,6 +33,9 @@
                 <title lang="it">Preferenze</title>
 		<title lang="pl">Ustawienia</title>
 		<title lang="hu">Beállítások</title>
+		<title lang="fr">Configuration</title>
+		<title lang="de">Einstellungen</title>
+		<title lang="cs">Nastavení</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -43,6 +51,9 @@
                 <title lang="it">Sottoscrizione</title>
 		<title lang="pl">Subskrypcje</title>
 		<title lang="hu">Feliratkozás</title>
+		<title lang="fr">Inscription</title>
+		<title lang="de">Abonnieren</title>
+		<title lang="cs">Správa portletů</title> 
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -56,7 +67,11 @@
             <portlet-tab label="layouttab">
                 <title lang="en">Layout</title>
                 <title lang="it">Layout</title>
+		<title lang="pl">Układ graficzny</title>
 		<title lang="hu">Kinézet</title>
+		<title lang="fr">Agencement</title>
+		<title lang="de">Layout</title>
+		<title lang="cs">Umísťování</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -70,7 +85,11 @@
             <portlet-tab label="utilities">
                 <title lang="en">Utilities</title>
                 <title lang="it">Utilità</title>
+		<title lang="pl">Narzędzia</title>
 		<title lang="hu">Segédprogramok</title>
+		<title lang="fr">Utilitaires</title>
+		<title lang="de">Utilities</title>
+		<title lang="cs">Pomůcky</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="50%">
@@ -100,11 +119,15 @@
         <title lang="it">Amministrazione</title>
 	<title lang="pl">Administracja</title>
 	<title lang="hu">Adminisztráció</title>
+	<title lang="fr">Administration</title>
+	<title lang="de">Administrieren</title>
+	<title lang="cs">Administrace</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab label="portlets">
                 <title lang="en">Portlets</title>
 		<title lang="pl">Portlety</title>
 		<title lang="hu">Portletek</title>
+		<title lang="cs">Portlety</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="30%">
@@ -123,7 +146,11 @@
             <portlet-tab label="users">
                 <title lang="en">Users</title>
                 <title lang="it">Utenti</title>
+		<title lang="pl">Użytkownicy</title>
 		<title lang="hu">Felhasználók</title>
+		<title lang="fr">Usagers</title>
+		<title lang="de">Nutzer</title>
+		<title lang="cs">Uživatelé</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="50%">
@@ -140,6 +167,9 @@
                 <title lang="it">Gruppi</title>
 		<title lang="pl">Grupy</title>
 		<title lang="hu">Csoportok</title>
+		<title lang="fr">Groupes</title>
+		<title lang="de">Gruppen</title>
+		<title lang="cs">Skupiny</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="50%">
