@@ -235,6 +235,7 @@ public class PortletServlet  extends HttpServlet
         if (method.equals(SportletProperties.SERVICE)) {
             String action = (String) request.getAttribute(SportletProperties.PORTLET_ACTION_METHOD);
             if (action != null) {
+                log.debug("in PortletServlet: action is not NULL");
                 if (action.equals(SportletProperties.DO_TITLE)) {
                     RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext);
                     RenderResponse renderResponse = new RenderResponseImpl(request, response);

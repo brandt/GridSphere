@@ -12,6 +12,10 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
+import org.gridlab.gridsphere.portlet.service.PortletService;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletConfig;
@@ -196,7 +200,7 @@ public class ActionPortlet extends GenericPortlet {
      * @throws PortletException if a portlet exception occurs
      */
     public void processAction(ActionRequest actionRequest, ActionResponse actionResponse) throws PortletException {
-        log.debug("in ActionPortlet: actionPerformed");
+        log.debug("in ActionPortlet: processAction\t\t\t");
         DefaultPortletAction action = (DefaultPortletAction) actionRequest.getAttribute(SportletProperties.ACTION_EVENT);
         ActionFormEvent formEvent = new ActionFormEventImpl(action, actionRequest, actionResponse);
 
@@ -727,6 +731,11 @@ public class ActionPortlet extends GenericPortlet {
 
     private String getUniqueId() {
         return this.getPortletConfig().getPortletName();
+    }
+
+    public PortletService createPortletService(Class serviceClass) throws PortletServiceException {
+        PortletServiceFactory factory = SportletServiceFactory.getInstance();
+        return factory.createPortletService(serviceClass, null, true);
     }
 
 }
