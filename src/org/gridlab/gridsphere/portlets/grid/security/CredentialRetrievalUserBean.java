@@ -13,19 +13,19 @@ import org.gridlab.gridsphere.services.grid.security.credential.*;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.grid.security.credential.CredentialManagerService;
 import org.gridlab.gridsphere.services.grid.security.credential.CredentialMapping;
-import org.gridlab.gridsphere.portlets.core.beans.PortletBean;
+import org.gridlab.gridsphere.portlets.PortletBean;
 
 import java.util.List;
 
 public class CredentialRetrievalUserBean extends PortletBean {
 
     // Credential retrieval pages
-    public static final String PAGE_USER_ACTIVE_CREDENTIAL_LIST = "/jsp/credential/userActiveCredentialList.jsp";
-    public static final String PAGE_USER_ACTIVE_CREDENTIAL_VIEW = "/jsp/credential/userActiveCredentialView.jsp";
-    public static final String PAGE_USER_CREDENTIAL_RETRIEVE = "/jsp/credential/userCredentialRetrieve.jsp";
-    public static final String PAGE_USER_CREDENTIAL_REFRESH = "/jsp/credential/userCredentialRefresh.jsp";
-    public static final String PAGE_USER_CREDENTIAL_DESTROY = "/jsp/credential/userCredentialDestroy.jsp";
-    public static final String PAGE_USER_CREDENTIAL_DESTROY_CONFIRM = "/jsp/credential/userCredentialDestroyConfirm.jsp";
+    public static final String PAGE_USER_ACTIVE_CREDENTIAL_LIST = "/jsp/security/userActiveCredentialList.jsp";
+    public static final String PAGE_USER_ACTIVE_CREDENTIAL_VIEW = "/jsp/security/userActiveCredentialView.jsp";
+    public static final String PAGE_USER_CREDENTIAL_RETRIEVE = "/jsp/security/userCredentialRetrieve.jsp";
+    public static final String PAGE_USER_CREDENTIAL_REFRESH = "/jsp/security/userCredentialRefresh.jsp";
+    public static final String PAGE_USER_CREDENTIAL_DESTROY = "/jsp/security/userCredentialDestroy.jsp";
+    public static final String PAGE_USER_CREDENTIAL_DESTROY_CONFIRM = "/jsp/security/userCredentialDestroyConfirm.jsp";
 
     // Credential retrieval variables
     private List credentialMappingList = null;
@@ -67,22 +67,22 @@ public class CredentialRetrievalUserBean extends PortletBean {
 
     public void doDefaultViewAction()
             throws PortletException {
-        doListUserActiveCredentials();
+        doListActiveUserCredentials();
     }
 
     /******************************************
      * Credential retrieval actions
      ******************************************/
 
-    public void doListUserActiveCredentials()
+    public void doListActiveUserCredentials()
             throws PortletException {
         this.log.debug("Entering doListActiveCredentials");
-        loadActiveCredentialMappingList();
+        loadActiveUserCredentialMappingList();
         setPage(PAGE_USER_ACTIVE_CREDENTIAL_LIST);
         this.log.debug("Exiting doListActiveCredentials");
     }
 
-    public void doViewUserActiveCredential()
+    public void doViewActiveUserCredential()
            throws PortletException {
         this.log.debug("Entering doViewActiveCredential");
         loadActiveCredentialMapping();
@@ -124,7 +124,7 @@ public class CredentialRetrievalUserBean extends PortletBean {
      public void doCancelDestroyUserCredentials()
               throws PortletException {
           this.log.debug("Entering doCancelDestroyCredentials");
-          doListUserActiveCredentials();
+          doListActiveUserCredentials();
           this.log.debug("Exiting doCancelDestroyCredentials");
      }
 
@@ -174,9 +174,9 @@ public class CredentialRetrievalUserBean extends PortletBean {
         return this.credentialUser.getFullName();
     }
 
-    public void loadActiveCredentialMappingList()
+    public void loadActiveUserCredentialMappingList()
             throws PortletException {
-        this.credentialMappingList = this.credentialManagerService.getCredentialMappings();
+        this.credentialMappingList = this.credentialManagerService.getCredentialMappings(this.user);
     }
 
     public void loadActiveCredentialMapping()
@@ -211,6 +211,8 @@ public class CredentialRetrievalUserBean extends PortletBean {
 
     public void retrieveCredentials()
             throws PortletException {
+        String password = getParameter("password");
+        this.credentialManagerService.retrieveCredentials(this.user, password);
     }
 
     public void refreshCredentials()
@@ -219,5 +221,6 @@ public class CredentialRetrievalUserBean extends PortletBean {
 
     public void destroyCredentials()
             throws PortletException {
+        this.credentialManagerService.destroyCredentials(this.user);
     }
 }

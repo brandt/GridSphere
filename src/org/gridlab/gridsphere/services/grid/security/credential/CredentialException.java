@@ -8,9 +8,9 @@
  */
 package org.gridlab.gridsphere.services.grid.security.credential;
 
-import org.globus.common.ChainedException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 
-public class CredentialException extends ChainedException {
+public class CredentialException extends PortletServiceException {
 
     public CredentialException() {
         super();
@@ -19,8 +19,8 @@ public class CredentialException extends ChainedException {
     public CredentialException(String message) {
         super(message);
     }
-    
+
     public CredentialException(String message, Throwable ex) {
-        super(message, ex);
+        super(message + ";" + ex.getMessage());
     }
 }

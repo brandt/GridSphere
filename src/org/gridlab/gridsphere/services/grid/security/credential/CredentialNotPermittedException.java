@@ -17,7 +17,7 @@ public class CredentialNotPermittedException extends CredentialException {
     public CredentialNotPermittedException(String message) {
         super(message);
     }
-    
+
     public CredentialNotPermittedException(String message, Throwable ex) {
         super(message, ex);
     }

@@ -18,7 +18,7 @@ public class CredentialRetrievalException extends CredentialException {
     public CredentialRetrievalException(String message) {
         super(message);
     }
-    
+
     public CredentialRetrievalException(String message, Throwable ex) {
         super(message, ex);
     }

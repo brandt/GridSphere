@@ -11,7 +11,7 @@ package org.gridlab.gridsphere.portlets.grid.security;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.services.grid.security.credential.*;
 import org.gridlab.gridsphere.services.grid.security.credential.CredentialPermission;
-import org.gridlab.gridsphere.portlets.core.beans.PortletBean;
+import org.gridlab.gridsphere.portlets.PortletBean;
 
 import java.util.List;
 
@@ -28,11 +28,11 @@ public class CredentialPermissionAdminBean extends PortletBean {
     public static final String ACTION_CREDENTIAL_PERMISSION_DELETE_CANCEL = "doCancelDeleteCredentialPermission";
 
     // Credential permission pages
-    public static final String PAGE_CREDENTIAL_PERMISSION_LIST = "/jsp/credential/credentialPermissionList.jsp";
-    public static final String PAGE_CREDENTIAL_PERMISSION_VIEW = "/jsp/credential/credentialPermissionView.jsp";
-    public static final String PAGE_CREDENTIAL_PERMISSION_EDIT = "/jsp/credential/credentialPermissionEdit.jsp";
-    public static final String PAGE_CREDENTIAL_PERMISSION_DELETE = "/jsp/credential/credentialPermissionDelete.jsp";
-    public static final String PAGE_CREDENTIAL_PERMISSION_DELETE_CONFIRM = "/jsp/credential/credentialPermissionDeleteConfirm.jsp";
+    public static final String PAGE_CREDENTIAL_PERMISSION_LIST = "/jsp/security/credentialPermissionList.jsp";
+    public static final String PAGE_CREDENTIAL_PERMISSION_VIEW = "/jsp/security/credentialPermissionView.jsp";
+    public static final String PAGE_CREDENTIAL_PERMISSION_EDIT = "/jsp/security/credentialPermissionEdit.jsp";
+    public static final String PAGE_CREDENTIAL_PERMISSION_DELETE = "/jsp/security/credentialPermissionDelete.jsp";
+    public static final String PAGE_CREDENTIAL_PERMISSION_DELETE_CONFIRM = "/jsp/security/credentialPermissionDeleteConfirm.jsp";
 
     // Credential permission variables
     private List credentialPermissionList = null;

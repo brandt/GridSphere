@@ -10,7 +10,7 @@ package org.gridlab.gridsphere.portlets.grid.security;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.services.grid.security.credential.*;
-import org.gridlab.gridsphere.portlets.core.beans.PortletBean;
+import org.gridlab.gridsphere.portlets.PortletBean;
 
 import java.util.List;
 
@@ -21,8 +21,8 @@ public class CredentialManagerAdminBean extends PortletBean {
     public static final String ACTION_ACTIVE_CREDENTIAL_VIEW = "doViewActiveCredential";
 
     // Credential mapping pages
-    public static final String PAGE_ACTIVE_CREDENTIAL_LIST = "/jsp/credential/activeCredentialList.jsp";
-    public static final String PAGE_ACTIVE_CREDENTIAL_VIEW = "/jsp/credential/activeCredentialView.jsp";
+    public static final String PAGE_ACTIVE_CREDENTIAL_LIST = "/jsp/security/activeCredentialList.jsp";
+    public static final String PAGE_ACTIVE_CREDENTIAL_VIEW = "/jsp/security/activeCredentialView.jsp";
 
     // Credential mapping variables
     private List activeCredentialList = null;

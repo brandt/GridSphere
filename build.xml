@@ -35,6 +35,7 @@ Copyright:
     <property name="conf.dir"       value="conf"/>
     <property name="gswebapp.dir"   value="webapps/gridsphere"/>
     <property name="corewebapp.dir" value="webapps/coreportlets"/>
+    <property name="gridwebapp.dir" value="webapps/gridportlets"/>
     <property name="manwebapp.dir"  value="webapps/gsmanager"/>
     <property name="test.dir"       value="tests"/>
     <property name="perf.dir"       value="perf"/>
@@ -219,7 +220,7 @@ Copyright:
             <!-- don't include portlet API -->
             <exclude name="org/gridlab/gridsphere/portlet/**"/>
             <exclude name="org/gridlab/gridsphere/event/**"/>
-            <!-- don't include core portlets -->
+            <!-- don't include portlets -->
             <exclude name="org/gridlab/gridsphere/portlets/**"/>
             <!-- don't include portlet widgets tag library -->
             <exclude name="org/gridlab/gridsphere/tags/**"/>
@@ -253,8 +254,19 @@ Copyright:
     <!-- =================================================================== -->
     <target name="core-portlets-jar" depends="compile" description="Create ${build.lib}/coreportlets.jar">
         <jar jarfile="${build.lib}/coreportlets.jar" basedir="${classes.dir}" >
-            <include name="org/gridlab/gridsphere/portlets/**" />
-            <exclude name="org/gridlab/gridsphere/portlets/manager/**" />
+            <include name="org/gridlab/gridsphere/portlets/*" />
+            <include name="org/gridlab/gridsphere/portlets/core/**" />
+            <include name="${conf.dir}/log4j.properties"/>
+        </jar>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates grid portlets required by GridSphere                        -->
+    <!-- =================================================================== -->
+    <target name="grid-portlets-jar" depends="compile" description="Create ${build.lib}/gridportlets.jar">
+        <jar jarfile="${build.lib}/gridportlets.jar" basedir="${classes.dir}" >
+            <include name="org/gridlab/gridsphere/portlets/*" />
+            <include name="org/gridlab/gridsphere/portlets/grid/**" />
             <include name="${conf.dir}/log4j.properties"/>
         </jar>
     </target>
@@ -500,22 +512,38 @@ Copyright:
         </war>
     </target>
 
+    <!-- =================================================================== -->
+    <!-- Creates the grid portlets WAR file                                  -->
+    <!-- =================================================================== -->
+    <target name="grid-war" depends="jar" description="Create GridSphere WAR for deployment">
+        <war warfile="${build.dir}/gridportlets.war"
+            webxml="${gridwebapp.dir}/WEB-INF/web.xml">
+            <classes dir="${classes.dir}"/>
+            <lib dir="${lib.dir}">
+                <include name="*.jar"/>
+                <exclude name="servlet*.jar"/>
+            </lib>
+            <fileset dir="${gridwebapp.dir}">
+                <exclude name="WEB-INF/web.xml"/>
+            </fileset>
+        </war>
+    </target>
+
 <!-- +++++++++++++++ END WAR CREATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
 
 <!-- +++++++++++++++ START DEPLOY  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
     <!-- ================================================================= -->
-    <!-- Deploys core portlets to a local server                              -->
+    <!-- Deploys portlets to a local server                              -->
     <!-- ================================================================= -->
-    <target name="deploy" depends="deploy-prepare, db-hsqldb, deploy-gs, deploy-portlets, deploy-manager-portlet" description="deploys gs"/>
-
+    <target name="deploy" depends="deploy-prepare, db-hsqldb, deploy-gs, deploy-portlets" description="deploys gs"/>
 
     <!-- ================================================================= -->
-    <!-- Deploys core GridSphere to a local server                              -->
+    <!-- Prepares GridSphere for deployment to a local server              -->
     <!-- ================================================================= -->
     <target name="deploy-prepare" description="prepares local deployment">
-        <!-- Make core gpdk directory if necessary -->
+        <!-- Make core gridsphere directory if necessary -->
         <mkdir dir="${env.CATALINA_HOME}/gridsphere"/>
         <mkdir dir="${env.CATALINA_HOME}/gridsphere/creds"/>
         <!-- where hsqldb stores the datafiles -->
@@ -553,6 +581,7 @@ Copyright:
                 <exclude name="portlet-widget-tags.jar"/>
                 <exclude name="gsmanager-portlet.jar"/>
                 <exclude name="coreportlets.jar"/>
+                <exclude name="gridportlets.jar"/>
             </fileset>
         </copy>
 
@@ -574,17 +603,9 @@ Copyright:
     </target>
 
     <!-- ================================================================= -->
-    <!-- Deploys core portlets to a local server                           -->
+    <!-- Deploys GridSphere portlets to a local server                     -->
     <!-- ================================================================= -->
-    <target name="deploy-portlets" depends="core-portlets-jar" description="Deploys core portlets to a local server">
-        <copy todir="${build.war}/coreportlets">
-            <fileset dir="${corewebapp.dir}"/>
-        </copy>
-        <copy todir="${env.CATALINA_HOME}/webapps/coreportlets">
-            <fileset dir="${build.war}/coreportlets"/>
-        </copy>
-        <copy file="${build.lib}/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/coreportlets/WEB-INF/lib"/>
-        <copy file="${build.lib}/coreportlets.jar" todir="${env.CATALINA_HOME}/webapps/coreportlets/WEB-INF/lib"/>
+    <target name="deploy-portlets" depends="deploy-manager-portlet, deploy-core-portlets, deploy-grid-portlets" description="Deploys GridSphere portlets to a local server">
     </target>
 
     <!-- ================================================================= -->
@@ -599,6 +620,34 @@ Copyright:
         <copy todir="${env.CATALINA_HOME}/${manwebapp.dir}">
             <fileset dir="${build.war}/gsmanager"/>
         </copy>
+    </target>
+
+    <!-- ================================================================= -->
+    <!-- Deploys GS core portlets to a local server                           -->
+    <!-- ================================================================= -->
+    <target name="deploy-core-portlets" depends="core-portlets-jar" description="Deploys core portlets to a local server">
+        <copy todir="${build.war}/coreportlets">
+            <fileset dir="${corewebapp.dir}"/>
+        </copy>
+        <copy todir="${env.CATALINA_HOME}/webapps/coreportlets">
+            <fileset dir="${build.war}/coreportlets"/>
+        </copy>
+        <copy file="${build.lib}/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/coreportlets/WEB-INF/lib"/>
+        <copy file="${build.lib}/coreportlets.jar" todir="${env.CATALINA_HOME}/webapps/coreportlets/WEB-INF/lib"/>
+    </target>
+
+    <!-- ================================================================= -->
+    <!-- Deploys GS grid portlets to a local server                           -->
+    <!-- ================================================================= -->
+    <target name="deploy-grid-portlets" depends="grid-portlets-jar" description="Deploys grid portlets to a local server">
+        <copy todir="${build.war}/gridportlets">
+            <fileset dir="${gridwebapp.dir}"/>
+        </copy>
+        <copy todir="${env.CATALINA_HOME}/webapps/gridportlets">
+            <fileset dir="${build.war}/gridportlets"/>
+        </copy>
+        <copy file="${build.lib}/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/gridportlets/WEB-INF/lib"/>
+        <copy file="${build.lib}/gridportlets.jar" todir="${env.CATALINA_HOME}/webapps/gridportlets/WEB-INF/lib"/>
     </target>
 
 <!-- +++++++++++++++ END DEPLOY  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->

@@ -17,7 +17,7 @@ public class CredentialMappingNotFoundException extends CredentialException {
     public CredentialMappingNotFoundException(String message) {
         super(message);
     }
-    
+
     public CredentialMappingNotFoundException(String message, Throwable ex) {
         super(message, ex);
     }

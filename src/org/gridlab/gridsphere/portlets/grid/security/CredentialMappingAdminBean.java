@@ -13,7 +13,7 @@ import org.gridlab.gridsphere.services.grid.security.credential.*;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.grid.security.credential.CredentialManagerService;
 import org.gridlab.gridsphere.services.grid.security.credential.CredentialMapping;
-import org.gridlab.gridsphere.portlets.core.beans.PortletBean;
+import org.gridlab.gridsphere.portlets.PortletBean;
 
 import java.util.List;
 
@@ -30,11 +30,11 @@ public class CredentialMappingAdminBean extends PortletBean {
     public static final String ACTION_CREDENTIAL_MAPPING_DELETE_CANCEL = "doCancelDeleteCredentialMapping";
 
     // Credential mapping pages
-    public static final String PAGE_CREDENTIAL_MAPPING_LIST = "/jsp/credential/credentialMappingList.jsp";
-    public static final String PAGE_CREDENTIAL_MAPPING_VIEW = "/jsp/credential/credentialMappingView.jsp";
-    public static final String PAGE_CREDENTIAL_MAPPING_EDIT = "/jsp/credential/credentialMappingEdit.jsp";
-    public static final String PAGE_CREDENTIAL_MAPPING_DELETE = "/jsp/credential/credentialMappingDelete.jsp";
-    public static final String PAGE_CREDENTIAL_MAPPING_DELETE_CONFIRM = "/jsp/credential/credentialMappingDeleteConfirm.jsp";
+    public static final String PAGE_CREDENTIAL_MAPPING_LIST = "/jsp/security/credentialMappingList.jsp";
+    public static final String PAGE_CREDENTIAL_MAPPING_VIEW = "/jsp/security/credentialMappingView.jsp";
+    public static final String PAGE_CREDENTIAL_MAPPING_EDIT = "/jsp/security/credentialMappingEdit.jsp";
+    public static final String PAGE_CREDENTIAL_MAPPING_DELETE = "/jsp/security/credentialMappingDelete.jsp";
+    public static final String PAGE_CREDENTIAL_MAPPING_DELETE_CONFIRM = "/jsp/security/credentialMappingDeleteConfirm.jsp";
 
     // Credential mapping variables
     private List credentialMappingList = null;
