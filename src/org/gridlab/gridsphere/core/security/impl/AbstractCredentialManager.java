@@ -55,6 +55,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
             String query = "select cp from "
                          + this.jdoCredentialPermissionImpl
                          + " cp";
+            _log.debug(query);
             return this.pm.restoreList(query);
         } catch (PersistenceManagerException e) {
             _log.error("Error retrieving credential permissions", e);
@@ -67,6 +68,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
             String query = "select cp from "
                          + this.jdoCredentialPermissionImpl
                          + " cp where cp.pattern=" + pattern;
+            _log.debug(query);
             return (CredentialPermission)this.pm.restoreObject(query);
         } catch (PersistenceManagerException e) {
             _log.error("Error retrieving credential permission", e);
@@ -141,6 +143,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
             String query = "select cm from "
                          + this.jdoCredentialMappingImpl
                          + " cm";
+            _log.debug(query);
             return this.pm.restoreList(query);
         } catch (PersistenceManagerException e) {
             _log.error("Error retrieving credential maps ", e);
@@ -153,6 +156,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
             String query = "select cm from "
                          + this.jdoCredentialMappingImpl
                          + " cm where cm.subject=" + subject;
+            _log.debug(query);
             return (CredentialMapping)this.pm.restoreObject(query);
         } catch (PersistenceManagerException e) {
             _log.error("Error retrieving credential mapping " + e);
@@ -210,6 +214,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
             String query = "select cm from "
                          + this.jdoCredentialMappingImpl
                          + " cm where cm.user=" + user;
+            _log.debug(query);
             return this.pm.restoreList(query);
         } catch (PersistenceManagerException e) {
             _log.error("Error retrieving credential maps for user", e);
@@ -222,6 +227,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
             String query = "delete cm from "
                          + this.jdoCredentialMappingImpl
                          + " cm where cm.user=" + user;
+            _log.debug(query);
             this.pm.deleteList(query);
         } catch (PersistenceManagerException e) {
             _log.error("Error removing credential maps for user", e);
@@ -235,6 +241,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         String query = "select cm.user from "
                      + this.jdoCredentialMappingImpl
                      + " cm where cm.subject=" + subject;
+        _log.debug(query);
         try {
             user = (User)this.pm.restoreObject(query);
         } catch (PersistenceManagerException e) {
@@ -248,6 +255,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         String query = "select cm.subject from "
                      + this.jdoCredentialMappingImpl
                      + " cm where cm.user=" + user;
+        _log.debug(query);
         try {
             subjects = this.pm.restoreList(query);
         } catch (PersistenceManagerException e) {
@@ -280,6 +288,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         String query = "select cm.tag from "
                      + this.jdoCredentialMappingImpl
                      + " cm where cm.user=" + user;
+        _log.debug(query);
         try {
             tags = this.pm.restoreList(query);
         } catch (PersistenceManagerException e) {
@@ -295,6 +304,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         String query = "select cm.tag from "
                      + this.jdoCredentialMappingImpl
                      + " cm where cm.subject=" + subject;
+        _log.debug(query);
         try {
             tag = (String)this.pm.restoreObject(query);
         } catch (PersistenceManagerException e) {
@@ -324,6 +334,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         String query = "select cm.subject from "
                      + this.jdoCredentialMappingImpl
                      + " cm where cm.subject=" + subject;
+        _log.debug(query);
         try {
             hosts = this.pm.restoreList(query);
         } catch (PersistenceManagerException e) {
@@ -392,10 +403,10 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         return this.retrievalClient.getCredentialLifetime();
     }
 
-    public void retrieveCredentials(User user, String password)
+    public List retrieveCredentials(User user, String password)
         throws CredentialRetrievalException {
+        List credentials = new Vector();
         StringBuffer msgs = null;
-        int numReturned = 0;
         // Iterate through the credential mappings associated with user
         Iterator iterator = getCredentialMappings(user).iterator();
         while (iterator.hasNext()) {
@@ -409,7 +420,8 @@ public abstract class AbstractCredentialManager implements CredentialManager {
                 credential = this.retrievalClient.retrieveCredential(tag, password, subject);
                 // Store the retrieved credential
                 storeCredential(credential);
-                // Update retrieved credentials count
+                // Add credential to returned list
+                credentials.add(credential);
             } catch (CredentialRetrievalException e) {
                 // Record each error message we come across
                 if (msgs == null) {
@@ -430,11 +442,18 @@ public abstract class AbstractCredentialManager implements CredentialManager {
                 _log.debug(msg);
             }
         }
-        // Throw exception if no credentials were retrieved
-        if (numReturned == 0) {
+        // Throw exception if no credentials were
+        // successfully retrieved and stored
+        if (credentials.size() == 0) {
             // Provide the error messages from above
             throw new CredentialRetrievalException(msgs.toString());
         }
+        return credentials;
+   }
+
+   public List refreshCredentials(User user)
+        throws CredentialRetrievalException {
+        throw new CredentialRetrievalException("Method not yet implemented!");
    }
 
     /****** CREDENTIAL STORAGE METHODS *******/
@@ -502,6 +521,8 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         }
     }
 
+    /****** CREDENTIAL USEAGE METHODS *******/
+
     public List getActiveCredentials(User user) {
         List activeCredentials = new Vector();
         // Get user's credential collection
@@ -533,8 +554,6 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         }
         return activeCredentials;
     }
-
-    /****** CREDENTIAL USEAGE METHODS *******/
 
     public List getActiveCredentialsForHost(User user, String host) {
         List activeCredentials = new Vector();

@@ -96,7 +96,7 @@ public interface CredentialManager {
 
     public long getCredentialRetrievalLifetime();
 
-    public void retrieveCredentials(User user, String passphrase)
+    public List retrieveCredentials(User user, String passphrase)
             throws CredentialRetrievalException;
 
     /****** CREDENTIAL STORAGE METHODS *******/
