@@ -79,7 +79,7 @@ Invoke "ant help"
     <import file="config/build/build-deploy.xml"/>
     <import file="config/build/build-unittests.xml"/>
     <import file="config/build/build-server-tomcat.xml"/>
-
+    <import file="config/build/build-update.xml"/>
 
     <!-- ============================= Targets ===================================================== -->
 
@@ -233,7 +233,7 @@ Invoke "ant help"
     <!-- Builds and deploys GridSphere                                       -->
     <!-- =================================================================== -->
 
-    <target name="install" depends="clean, license, deploy, create-database, docs" description="Build and deploy GridSphere">
+    <target name="install" depends="clean, license, deploy, create-database" description="Build and deploy GridSphere">
 <!--        <antcall target="create-database"/>-->
         <echo message="GridSphere successfully installed."/>
         <echo message=" "/>

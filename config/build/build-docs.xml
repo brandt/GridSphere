@@ -10,6 +10,10 @@ Build include file for the GridSphere Portal source code, see build.xml
 
     <!-- Generates the documentation. Include file to build.xm -->
 
+    <target name="answer-docs" description="Check whether to create GridSphere Documentation" if="install.docs">
+        <antcall target="docs"/>
+    </target>
+
     <target name="docs" depends="javadoc, docbook" description="Create GridSphere Documentation"/>
 
     <target name="check-javadocs">
