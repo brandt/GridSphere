@@ -25,7 +25,7 @@ Version: $Id$
 }
 
 .portlet-frame {
-  background-color: white;
+  background-color: inherit;
   border: none;
   padding: 0;
   spacing: 0;
@@ -39,10 +39,6 @@ Version: $Id$
   font-family: inherit;
   font-weight: bold;
   text-align: center;
-  padding-top: 1;
-  padding-right: 2;
-  padding-left: 2;
-  padding-bottom: 1;
 }
 
 .portlet-frame-actions {
@@ -50,10 +46,6 @@ Version: $Id$
   border: none;
   color: #000000;
   font-family: inherit;
-  padding-top: 2;
-  padding-right: 2;
-  padding-left: 2;
-  padding-bottom: 2;
 }
 
 .portlet-frame-message {
@@ -61,10 +53,6 @@ Version: $Id$
   border: none;
   color: #000000;
   font-family: inherit;
-  padding-top: 4;
-  padding-right: 4;
-  padding-left: 4;
-  padding-bottom: 4;
 }
 
 .portlet-frame-message-alert {
@@ -72,10 +60,6 @@ Version: $Id$
   border: none;
   color: darkred;
   font-family: inherit;
-  padding-top: 4;
-  padding-right: 4;
-  padding-left: 4;
-  padding-bottom: 4;
 }
 
 .portlet-frame-header {
@@ -85,7 +69,6 @@ Version: $Id$
   font-family: inherit;
   font-size: 10px;
   text-align: center;
-  padding: 1;
 }
 
 .portlet-frame-header-checkbox {
@@ -105,10 +88,6 @@ Version: $Id$
   color: #000000;
   font-family: inherit;
   text-align: left;
-  padding-top: 1;
-  padding-right: 2;
-  padding-left: 2;
-  padding-bottom: 1;
 }
 
 .portlet-frame-label-alert {
@@ -117,10 +96,6 @@ Version: $Id$
   color: darkred;
   font-family: inherit;
   text-align: left;
-  padding-top: 1;
-  padding-right: 2;
-  padding-left: 2;
-  padding-bottom: 1;
 }
 
 .portlet-frame-text {
@@ -129,10 +104,6 @@ Version: $Id$
   color: #000000;
   font-family: inherit;
   text-align: left;
-  padding-top: 1;
-  padding-right: 2;
-  padding-left: 2;
-  padding-bottom: 1;
 }
 
 .portlet-frame-text-alert {
@@ -141,10 +112,6 @@ Version: $Id$
   color: darkred;
   font-family: inherit;
   text-align: left;
-  padding-top: 1;
-  padding-right: 2;
-  padding-left: 2;
-  padding-bottom: 1;
 }
 
 .portlet-frame-input {
@@ -153,10 +120,6 @@ Version: $Id$
   color: #000000;
   font-family: inherit;
   text-align: left;
-  padding-top: 1;
-  padding-right: 2;
-  padding-left: 2;
-  padding-bottom: 1;
 }
 
 .portlet-frame-input-alert {
@@ -165,10 +128,6 @@ Version: $Id$
   color: darkred;
   font-family: inherit;
   text-align: left;
-  padding-top: 1;
-  padding-right: 2;
-  padding-left: 2;
-  padding-bottom: 1;
 }
 
 .portlet-frame-number {
@@ -177,10 +136,6 @@ Version: $Id$
   color: #000000;
   font-family: inherit;
   text-align: right;
-  padding-top: 1;
-  padding-right: 2;
-  padding-left: 2;
-  padding-bottom: 1;
 }
 
 .portlet-frame-number-alert {
@@ -189,10 +144,6 @@ Version: $Id$
   color: darkred;
   font-family: inherit;
   text-align: right;
-  padding-top: 1;
-  padding-right: 2;
-  padding-left: 2;
-  padding-bottom: 1;
 }
 
 .portlet-frame-entry-checkbox {
@@ -221,10 +172,6 @@ used to display non-accentuated information
    line-height:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
 }
 
 /**********************************************
@@ -241,10 +188,6 @@ in lighter color
    line-height:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
 }
 
 
@@ -265,10 +208,6 @@ in lighter color
    font-weight:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
    border:none;
 }
 
@@ -287,11 +226,6 @@ in lighter color
    font-weight:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
-   border:none;
 }
 
 /**********************************************
@@ -308,10 +242,6 @@ in lighter color
    font-weight:bold;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
    border:none;
 }
 
@@ -329,10 +259,6 @@ in lighter color
    font-weight:bold;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
    border:none;
 }
 
@@ -352,10 +278,6 @@ in lighter color
    font-weight:bold;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
    border:none;
 }
 
@@ -373,22 +295,17 @@ in lighter color
   font-family: inherit;
   font-size: 10px;
   text-align: center;
-  padding: 1;
 }
 
 /**********************************************
   Normal text in a table cell
 **********************************************/
 .portlet-section-body {
-  background-color: white;
+  background-color: inherit;
   border: none;
-  color: white;
+  color: inherit;
   font-family: inherit;
   text-align: left;
-  padding-top: 1;
-  padding-right: 2;
-  padding-left: 2;
-  padding-bottom: 1;
 }
 
 /**********************************************
@@ -404,10 +321,6 @@ in lighter color
    line-height:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
    border-left: thin  solid black;
    border-right: thin  solid black;
    border-bottom: thin  solid black;
@@ -426,10 +339,6 @@ in lighter color
    line-height:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
    border-left: thin  solid black;
    border-right: thin  solid black;
    border-bottom: thin  solid black;
@@ -448,10 +357,6 @@ in lighter color
    line-height:normal;
    text-align:center;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
    border-left: thin  solid black;
    border-right: thin  solid black;
    border-bottom: double black;
@@ -470,10 +375,6 @@ in lighter color
    line-height:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
    border:none;
 }
 
@@ -493,10 +394,6 @@ in lighter color
    line-height:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
    /*border:thin dashed grey;*/
    border:none;
 }
@@ -520,10 +417,6 @@ in lighter color
    line-height:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
 }
 
 /**********************************************
@@ -540,10 +433,6 @@ in lighter color
    line-height:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
 }
 
 /**********************************************
@@ -560,10 +449,6 @@ in lighter color
    line-height:normal;
    text-align:center;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
 }
 
 /**********************************************
@@ -580,10 +465,6 @@ in lighter color
    line-height:normal;
    text-align:center;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
 }
 
 /**********************************************
@@ -600,10 +481,6 @@ in lighter color
    line-height:normal;
    text-align:center;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
 }
 
 /**********************************************
@@ -620,10 +497,6 @@ in lighter color
    line-height:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
 }
 
 /**********************************************
@@ -637,10 +510,6 @@ in lighter color
    line-height:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
 }
 
 /*^^^^^^^^^^^

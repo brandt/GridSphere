@@ -23,11 +23,9 @@ Version: $Id$
 
 }
 
-
 .ui-datagrid-controls {
     border: 1px solid #bbbdb6;
     color: #808080;
-
 }
 
 .ui-datagrid-controls-element-inactive {
@@ -75,4 +73,11 @@ a.ui-datagrid-controls-element-active:link {
 .ui-datagrid-cell {
     margin: 0px;
     padding: 0px;
+}
+
+
+.ui-messagebox {
+    border: 1px solid black;
+    padding: 5px;
+    margin: 5px;
 }
