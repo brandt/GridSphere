@@ -11,9 +11,7 @@ import org.gridlab.gridsphere.layout.event.PortletTitleBarEvent;
 import org.gridlab.gridsphere.layout.event.impl.PortletFrameEventImpl;
 import org.gridlab.gridsphere.layout.event.impl.PortletTitleBarEventImpl;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
-import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
+import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
@@ -22,6 +20,7 @@ import org.gridlab.gridsphere.services.core.cache.CacheService;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
 import javax.portlet.PortletMode;
+import javax.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -506,13 +505,15 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
                 //System.err.println("in portlet frame render: class= " + portletClass + " setting prev mode= " + req.getPreviousMode() + " cur mode= " + req.getMode());
                 if (hasError(req)) {
-                    doRenderError(postframe, req);
+                    doRenderError(postframe, req, wrappedResponse);
+                    postframe.append(storedWriter.toString());
                 } else {
                     try {
                         PortletInvoker.service(portletClass, req, wrappedResponse);
                         postframe.append(storedWriter.toString());
                     } catch (PortletException e) {
-                        doRenderError(postframe, req);
+                        doRenderError(postframe, req, wrappedResponse);
+                        postframe.append(storedWriter.toString());
                     }
                 }
             }
@@ -552,15 +553,17 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         return (((Exception)req.getAttribute(SportletProperties.PORTLETERROR + portletClass) != null) ? true : false);
     }
 
-    public void doRenderError(StringBuffer postframe, PortletRequest req) {
+    public void doRenderError(StringBuffer postframe, PortletRequest req, PortletResponse res) {
         Throwable ex = (Throwable)req.getAttribute(SportletProperties.PORTLETERROR + portletClass);
         if (ex != null) {
-            postframe.append("<p><b>An error occured!</b><p>");
-            StringWriter sw = new StringWriter();
-            PrintWriter w = new PrintWriter(sw);
-            ex.printStackTrace(w);
-            w.close();
-            postframe.append(sw.toString());
+            try {
+                req.setAttribute("error", ex);
+                RequestDispatcher dispatcher = GridSphereConfig.getServletContext().getRequestDispatcher("/jsp/errors/custom_error.jsp");
+                dispatcher.include(req, res);
+            } catch (Exception e) {
+                System.err.println("Unable to include custom error page!!");
+                ex.printStackTrace();
+            }
         }
     }
 
