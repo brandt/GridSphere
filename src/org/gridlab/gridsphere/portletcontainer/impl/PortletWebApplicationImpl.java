@@ -103,21 +103,27 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
 
         // First we see if this is a gridsphere portlet descriptor and load in as gridsphere-portlet.xml
         log.info("Loading gridsphere-portlet.xml...");
-        String portletXMLfile = ctx.getRealPath("/WEB-INF/gridsphere-portlet.xml");
-        File f = new File(portletXMLfile);
-        if (!f.exists()) {
+        String gsportletXMLfile = ctx.getRealPath("/WEB-INF/gridsphere-portlet.xml");
+        File gs = new File(gsportletXMLfile);
+
+        String portletXMLfile = ctx.getRealPath("/WEB-INF/portlet.xml");
+        File jsr = new File(portletXMLfile);
+
+        if (gs.exists() && jsr.exists()) {
+            isJSR = true;
+        }
+
+        if (!gs.exists()) {
             // trying
             log.info("Instead loading portlet.xml as a gridsphere portlet descriptor...");
-            portletXMLfile = ctx.getRealPath("/WEB-INF/portlet.xml");
-        } else {
-            isJSR = true;
+            gsportletXMLfile = portletXMLfile;
         }
         //String portletMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING);
 
         String portletMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-mapping.xml");
         pdd = null;
         try {
-            pdd = new PortletDeploymentDescriptor(portletXMLfile, portletMappingFile);
+            pdd = new PortletDeploymentDescriptor(gsportletXMLfile, portletMappingFile);
         } catch (Exception e) {
             log.error("Mapping Error! " + webApplicationName, e);
             throw new PortletException("Unable to load portlets from: " + webApplicationName + " + due to mapping error", e);
