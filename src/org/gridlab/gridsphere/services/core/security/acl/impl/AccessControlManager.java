@@ -646,16 +646,21 @@ public class AccessControlManager implements AccessControlManagerService {
     }
 
     public List getUsersWithSuperRole() {
-        return getUsers(SportletGroup.SUPER);
+        List users = getUsers(SportletGroup.CORE);
+        List supers = new Vector();
+        Iterator it = users.iterator();
+        while (it.hasNext()) {
+            User u = (User)it.next();
+            if (this.hasRoleInGroup(u, SportletGroup.CORE, PortletRole.SUPER)) {
+                supers.add(u);
+            }
+        }
+        return supers;
     }
 
     public void grantSuperRole(User user) {
         //addGroupEntry(user, SportletGroup.SUPER, PortletRole.SUPER);
         addGroupEntry(user, SportletGroup.CORE, PortletRole.SUPER);
-    }
-
-    public void revokeSuperRole(User user) {
-        removeGroupEntry(user, SportletGroup.SUPER);
     }
 
     public boolean hasSuperRole(User user) {

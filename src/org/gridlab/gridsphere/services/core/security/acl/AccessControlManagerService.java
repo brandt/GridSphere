@@ -100,7 +100,5 @@ public interface AccessControlManagerService extends PortletService {
 
     public void grantSuperRole(User user);
 
-    public void revokeSuperRole(User user);
-
     public boolean hasSuperRole(User user);
 }

@@ -204,10 +204,6 @@ public class AccessControlManagerServiceImpl implements AccessControlManagerServ
         aclManager.grantSuperRole(user);
     }
 
-    public void revokeSuperRole(User user) {
-        aclManager.revokeSuperRole(user);
-    }
-
     public boolean hasSuperRole(User user) {
         return aclManager.hasSuperRole(user);
     }
