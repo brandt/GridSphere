@@ -125,7 +125,7 @@ public class SubscriptionPortlet extends ActionPortlet {
                         // set 2nd column to portlet display name from concrete portlet
                         Locale loc = req.getLocale();
 
-                        concID = conc.getDisplayName(loc);
+                        // concID = conc.getDisplayName(loc);
                         tb.setValue(concID);
                         newtc2.addBean(tb);
                         newtr.addBean(newtc2);
@@ -133,7 +133,7 @@ public class SubscriptionPortlet extends ActionPortlet {
                         TextBean tb2 = new TextBean();
 
                         // set 3rd column to portlet description from concrete portlet
-                        tb2.setValue(conc.getDescription(loc));
+                        // tb2.setValue(conc.getDescription(loc));
                         newtc.addBean(tb2);
                         newtr.addBean(newtc);
                         model.addTableRowBean(newtr);
