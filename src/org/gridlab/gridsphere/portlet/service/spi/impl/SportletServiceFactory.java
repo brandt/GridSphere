@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.portlet.service.spi.impl;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletConfig;
+import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
@@ -25,6 +26,7 @@ import java.util.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 
 /**
  * The PortletServiceCacheFactory provides a singleton factory to create portlet services.
@@ -44,7 +46,9 @@ public class SportletServiceFactory implements PortletServiceFactory {
     // Hash of all services key = service interface name, value = SportletServiceDefinition
     private Hashtable allServices = new Hashtable();
 
-    private String ServiceMappingPath;
+    private static Hashtable serviceFactories = new Hashtable();
+
+    private String serviceMappingPath;
 
     /**
      * Private constructor. Use getInstance() instead.
@@ -53,13 +57,21 @@ public class SportletServiceFactory implements PortletServiceFactory {
         // Reads in the service definitions from the xml file and stores them in allServices
         // organized according to service interface keys and service definition values
         String servicesPath = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_SERVICES_XML);
-        ServiceMappingPath = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_SERVICES_MAPPING_XML);
-        addServices(servicesPath, ServiceMappingPath);
+        serviceMappingPath = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_SERVICES_MAPPING_XML);
+        addServices(servicesPath, serviceMappingPath);
     }
 
-    private SportletServiceFactory(ServletContext ctx) {
-
+    private SportletServiceFactory(ServletContext context) {
+        String webApplicationName = context.getServletContextName();;
+        // get the servlet context for the coreportlets webapp
+        String contextURIPath = "/" +  webApplicationName;
+        ServletContext ctx = context.getContext(contextURIPath);
+        if (ctx == null) System.err.println("Unable to get ServletContext for: " + contextURIPath);
+        // load in the PortletServices.xml file
+        String servicesPath = ctx.getRealPath("") + "/WEB-INF/PortletServices.xml";
+        addServices(servicesPath, serviceMappingPath);
     }
+
 
     private void addServices(String servicesPath, String mappingPath) {
         SportletServiceDescriptor descriptor = null;
@@ -81,6 +93,17 @@ public class SportletServiceFactory implements PortletServiceFactory {
     }
 
     public static SportletServiceFactory getInstance() {
+        return instance;
+    }
+
+    public static SportletServiceFactory getInstance(ServletContext ctx) {
+        String contextName = ctx.getServletContextName();
+        if (serviceFactories.contains(contextName)) {
+            return (SportletServiceFactory)serviceFactories.get(contextName);
+        } else {
+            SportletServiceFactory newFactory = new SportletServiceFactory(ctx);
+            serviceFactories.put(contextName, newFactory);
+        }
         return instance;
     }
 
@@ -115,7 +138,6 @@ public class SportletServiceFactory implements PortletServiceFactory {
         }
 
         String serviceName = service.getName();
-
         SportletServiceDefinition def = (SportletServiceDefinition)allServices.get(serviceName);
         if (def == null) {
             log.error("Unable to find portlet service interface: " + serviceName +
@@ -123,6 +145,7 @@ public class SportletServiceFactory implements PortletServiceFactory {
             throw new PortletServiceNotFoundException("Unable to find portlet service: " + serviceName);
         }
 
+        /* Create the service implementation */
         String serviceImpl = def.getImplementation();
         if (serviceImpl == null) {
             log.error("Unable to find implementing portlet service: " + serviceName +
@@ -141,36 +164,60 @@ public class SportletServiceFactory implements PortletServiceFactory {
             log.error("Unable to create portlet service: " + serviceImpl, e);
             throw new PortletServiceNotFoundException("Unable to create portlet service: " + serviceImpl);
         }
-        psp.init(portletServiceConfig);
+
         initServices.put(service, psp);
         return psp;
     }
 
     /**
-     * createPortletServiceFactory instantiates the given class and initializes it. If the portlet serviceProperties
-     * is null then the location of the must be specified in the ServletContext as an InitParameter with the
-     * "PortletServices.properties" key. If no properties file is found or any error occurs an exception is thrown.
+     * createPortletServiceFactory instantiates the given class and initializes it
      *
      * @param service the class of the service
-     * @param serviceProperties the service properties
      * @param servletConfig the servlet configuration
      * @param boolean reuse a previous initialized service if true, otherwise create a new service instance if false
      * @return the instantiated portlet service
      * @throws PortletServiceUnavailableException if the portlet service is unavailable
      * @throws PortletServiceNotFoundException if the PortletService is not found
      */
-    public PortletService createPortletService(Class service,
-                                               String servicesXMLPath,
+    public PortletService createPortletUserService(Class service, User user,
                                                ServletConfig servletConfig,
                                                boolean useCachedService)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException {
-        if (service == null) {
-            throw new PortletServiceUnavailableException("Received null service class");
+
+        PortletServiceProvider psp = null;
+
+        String serviceName = service.getName();
+
+        // get instance of ACL service
+        PortletService serviceImpl = createPortletService(service, servletConfig, useCachedService);
+
+        SportletServiceDefinition def = (SportletServiceDefinition)allServices.get(serviceName);
+        if (def == null) {
+            log.error("Unable to find portlet service interface: " + serviceName +
+            " . Please check PortletServices.xml file for proper service entry");
+            throw new PortletServiceNotFoundException("Unable to find portlet service: " + serviceName);
         }
-        if (!allServices.contains(service.getName())) {
-            addServices(servicesXMLPath, ServiceMappingPath);
+
+        /* Create the service implementation */
+        String serviceWrapperName = def.getSecureWrapper();
+        if (serviceWrapperName == null) {
+            log.error("Unable to find secure wrapper implementing portlet service: " + serviceWrapperName +
+                    " . Please check PortletServices.xml file for proper service entry");
+            throw new PortletServiceNotFoundException("Unable to find implementing portlet service wrapper for interface: " + serviceWrapperName);
         }
-        return createPortletService(service, servletConfig, useCachedService);
+
+        // instantiate wrapper with user and impl
+        try {
+            Class c = Class.forName(serviceWrapperName);
+            Class[] parameterTypes = new Class[] { PortletServiceProvider.class, User.class };
+            Object[] obj = new Object[] { serviceImpl, user };
+            Constructor con = c.getConstructor(parameterTypes);
+            psp = (PortletServiceProvider)con.newInstance(obj);
+        } catch (Exception e) {
+            log.error("Unable to create portlet service wrapper: " + serviceWrapperName, e);
+            throw new PortletServiceNotFoundException("Unable to create portlet service: " + serviceName);
+        }
+        return psp;
     }
 
     public Enumeration getActiveServices() {

@@ -6,8 +6,6 @@ package org.gridlab.gridsphere.portlet.service.spi.impl.descriptor;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import java.io.IOException;
 
@@ -21,12 +19,6 @@ public class SportletServiceDescriptor extends Descriptor {
 
     public SportletServiceDescriptor(String descriptorFile, String mappingFile) throws IOException, DescriptorException {
         services = (SportletServiceCollection)load(descriptorFile, mappingFile);
-    }
-
-    public SportletServiceDescriptor() throws IOException, DescriptorException {
-        descriptorPath = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_SERVICES_XML);
-        mappingPath = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_SERVICES_MAPPING_XML);
-        services = (SportletServiceCollection)load(descriptorPath, mappingPath);
     }
 
     public SportletServiceCollection getServiceCollection() {
