@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.services.user;
 
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portlet.PortletData;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.core.mail.MailMessage;
@@ -105,6 +106,24 @@ public interface UserManagerService extends PortletService {
      * @param user the user to logoff
      */
     public void logoffUser(User user);
+
+    /**
+     * Returns the users portlet data for the specified portlet
+     *
+     * @param User the user
+     * @param portletID the concrete portlet id
+     * @return the PortletData for this portlet or null if none exists.
+     */
+    public PortletData getPortletData(User user, String portletID);
+
+    /**
+     * Makes the users persistent portlet data persistent
+     *
+     * @param User the user
+     * @param portletID the concrete portlet id
+     * @param data the PortletData
+     */
+    public void setPortletData(User user, String portletID, PortletData data);
 
     /**
      * Save user to DB

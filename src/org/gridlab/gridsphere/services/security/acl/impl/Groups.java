@@ -4,7 +4,7 @@
  * @version $Id$
  */
 
-package org.gridlab.gridsphere.services.security.acl.impl2;
+package org.gridlab.gridsphere.services.security.acl.impl;
 
 
 import org.gridlab.gridsphere.core.persistence.BaseObject;

@@ -70,7 +70,7 @@
       <bind-xml name="User" />
     </field>
   </class>
-  <class name="org.gridlab.gridsphere.services.security.acl.impl2.UserACL" identity="ObjectID">
+  <class name="org.gridlab.gridsphere.services.security.acl.impl.UserACL" identity="ObjectID">
     <map-to table="useracl" />
     <field name="ObjectID" type="string" get-method="getOid" set-method="setOid">
       <sql name="objectid" />

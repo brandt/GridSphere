@@ -9,10 +9,7 @@ import org.gridlab.gridsphere.core.mail.MailMessage;
 import org.gridlab.gridsphere.core.mail.MailUtils;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
@@ -224,7 +221,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             String command =
                     "select ar from org.gridlab.gridsphere.services.user.impl.AccountRequestImpl ar where ar.ObjectID=" + userid;
             String command2 =
-                    "select acl from org.gridlab.gridsphere.services.security.acl.impl2.UserACL acl where " +
+                    "select acl from org.gridlab.gridsphere.services.security.acl.impl.UserACL acl where " +
                     "UserID=\"" + request.getID() + "\"";
 
             try {
@@ -319,6 +316,29 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         AccountRequest ar = new AccountRequestImpl(user);
 
         return ar;
+    }
+
+    /**
+     * Returns the users portlet data for the specified portlet
+     *
+     * @param User the user
+     * @param portletID the concrete portlet id
+     * @return the PortletData for this portlet or null if none exists.
+     */
+    public PortletData getPortletData(User user, String portletID) {
+        // XXX: FIX ME
+        return null;
+    }
+
+    /**
+     * Makes the users persistent portlet data persistent
+     *
+     * @param User the user
+     * @param portletID the concrete portlet id
+     * @param data the PortletData
+     */
+    public void setPortletData(User user, String portletID, PortletData data) {
+        // XXX: FIX ME
     }
 
     /**

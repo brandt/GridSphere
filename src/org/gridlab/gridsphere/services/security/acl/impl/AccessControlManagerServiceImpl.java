@@ -4,7 +4,7 @@
  * @version $Id$
  */
 
-package org.gridlab.gridsphere.services.security.acl.impl2;
+package org.gridlab.gridsphere.services.security.acl.impl;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
@@ -121,7 +121,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         delete(command);
 
         command =
-                "select g from org.gridlab.gridsphere.services.security.acl.impl2.UserACL g where g.GroupID=" + groupid;
+                "select g from org.gridlab.gridsphere.services.security.acl.impl.UserACL g where g.GroupID=" + groupid;
         delete(command);
     }
 
@@ -135,9 +135,9 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     public void approveUserInGroup(User user, PortletGroup group) throws PortletServiceException {
         // all users need to make an accountrequest to get in groups, without it ... no
 
-        String command2 = "select acl from org.gridlab.gridsphere.services.security.acl.impl2.UserACL acl where " +
+        String command2 = "select acl from org.gridlab.gridsphere.services.security.acl.impl.UserACL acl where " +
                 "UserID=\"" + user.getID() + "\" and GroupID=\"" + group.getID() + "\" and Status=" + UserACL.STATUS_APPROVED;
-        String command = "select acl from org.gridlab.gridsphere.services.security.acl.impl2.UserACL acl where " +
+        String command = "select acl from org.gridlab.gridsphere.services.security.acl.impl.UserACL acl where " +
                 "UserID=\"" + user.getID() + "\" and GroupID=\"" + group.getID() + "\" and Status=" + UserACL.STATUS_NOT_APPROVED;
 
         UserACL notapproved = null;
@@ -175,7 +175,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
      */
     public void removeUserFromGroup(User user, PortletGroup group) throws PortletServiceException {
         String command =
-                "select r from org.gridlab.gridsphere.services.security.acl.impl2.UserACL r where r.UserID=" + user.getID() +
+                "select r from org.gridlab.gridsphere.services.security.acl.impl.UserACL r where r.UserID=" + user.getID() +
                 " and r.GroupID=" + group.getID() + " and r.Status=" + UserACL.STATUS_APPROVED;
         delete(command);
     }
@@ -187,7 +187,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
      */
     public void removeUserGroupRequest(User user, PortletGroup group) throws PortletServiceException {
         String command =
-                "select r from org.gridlab.gridsphere.services.security.acl.impl2.UserACL r where r.UserID=" + user.getID() +
+                "select r from org.gridlab.gridsphere.services.security.acl.impl.UserACL r where r.UserID=" + user.getID() +
                 " and r.GroupID=" + group.getID() + " and r.Status=" + UserACL.STATUS_NOT_APPROVED;
         delete(command);
 
