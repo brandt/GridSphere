@@ -177,7 +177,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Compiles Grid services if OGSA/CoG is present                       -->
     <!-- =================================================================== -->
-    <target name="compile-grid" depends="setenv" if="${grid.present}" description="Compile GridSphere source code">
+    <target name="compile-grid" depends="setenv" if="grid.exists" description="Compile GridSphere source code">
         <echo>Compiling Grid Services</echo>
         <javac srcdir="src/org/gridlab//gridsphere/services/grid"
             destdir="${build.classes}"
@@ -350,7 +350,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates grid portlets required by GridSphere                        -->
     <!-- =================================================================== -->
-    <target name="grid-portlets-jar" depends="compile-portlets" if="${grid.exists}" description="Create lib/gridportlets.jar">
+    <target name="grid-portlets-jar" depends="compile-portlets" if="grid.exists" description="Create lib/gridportlets.jar">
         <jar jarfile="lib/gridportlets.jar" basedir="${build.classes}" >
             <include name="org/gridlab/gridsphere/portlets/PortletBean.class" />
             <include name="org/gridlab/gridsphere/portlets/grid/**" />
@@ -434,7 +434,7 @@ Copyright:
         </javadoc>
     </target>
 
-    <target name="grid-mapping" depends="check-mapping" if="var_force_mapping, ${grid.exists}">
+    <target name="grid-mapping" depends="check-mapping" if="var_force_mapping, grid.exists">
         <javadoc packagenames="org.gridlab.gridsphere.services.grid.*"
             sourcepath="src"
             private="true"
@@ -583,7 +583,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates the grid portlets WAR file                                  -->
     <!-- =================================================================== -->
-    <target name="grid-portlets-war" depends="grid-portlets-jar" if="${grid.present}" description="Create gridportlets WAR">
+    <target name="grid-portlets-war" depends="grid-portlets-jar" if="grid.exists" description="Create gridportlets WAR">
         <war warfile="${build.webapps}/gridportlets.war" update="true"
             webxml="${gridwebapp.dir}/WEB-INF/web.xml">
             <lib dir="lib">
@@ -734,7 +734,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Deploys GS grid portlets to a local server                          -->
     <!-- =================================================================== -->
-    <target name="deploy-grid-portlets" depends="grid-portlets-jar" if="${grid.present}" description="Deploys grid portlets to a local server">
+    <target name="deploy-grid-portlets" depends="grid-portlets-jar" if="grid.exists" description="Deploys grid portlets to a local server">
         <copy todir="${build.webapps}/gridportlets">
             <fileset dir="${gridwebapp.dir}"/>
         </copy>
