@@ -12,7 +12,7 @@
 
     <auth-module>
         <name>PasswordAuth</name>
-        <description>Hashed password based authentication using GridSphere database</description>
+        <description lang="en">Hashed password based authentication using GridSphere database</description>
         <implementation>org.gridlab.gridsphere.services.core.security.auth.modules.impl.PasswordAuthModule</implementation>
         <active>true</active>
         <priority>100</priority>
@@ -21,6 +21,5 @@
             <param-value>avalue</param-value>
         </auth-config>
     </auth-module>
-
 
 </auth-modules>
