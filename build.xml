@@ -44,7 +44,7 @@ Copyright:
     <property name="deprecation" value="true"/>
 
     <!-- Version properties -->
-    <property name="version" value="1.0"/>
+    <property name="version" value="1.0.1"/>
     <property name="release" value=""/>
     <property name="version.release" value="${version} ${release}"/>
     <property name="gridsphere.project" value="gridsphere"/>
@@ -769,16 +769,18 @@ Copyright:
                 <exclude name="*.ipr"/>
                 <exclude name="*.iws"/>
                 <exclude name="projects"/>
-                <exclude name="${gridsphere.project}-*.tgz"/>
+                <exclude name="${gridsphere.project}-${version}-src.tgz"/>
+                <exclude name="${gridsphere.project}-${version}-src.zip"/>
             </tarfileset>
         </tar>
 
-        <zip destfile="${gridsphere.project}-${version}-src.zip" basedir=".">
+        <zip destfile="../${gridsphere.project}-${version}-src.zip" basedir=".">
             <exclude name="**/CVS"/>
             <exclude name="*.ipr"/>
             <exclude name="*.iws"/>
             <exclude name="projects"/>
-            <exclude name="${gridsphere.project}-*.zip"/>
+            <exclude name="${gridsphere.project}-${version}-src.zip"/>
+            <exclude name="${gridsphere.project}-${version}-src.tgz"/>
         </zip>
     </target>
 </project>
