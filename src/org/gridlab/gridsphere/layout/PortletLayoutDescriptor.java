@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.core.persistence.ConfigurationException;
 import org.gridlab.gridsphere.core.persistence.RestoreException;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerXml;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletConfig;
 
 import javax.servlet.ServletConfig;
 import java.util.Iterator;
@@ -21,8 +22,9 @@ public class PortletLayoutDescriptor {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletLayoutDescriptor.class);
     private PortletContainer pc = null;
+    private String layoutPath, layoutMappingPath;
 
-    public PortletLayoutDescriptor(ServletConfig config) throws PortletLayoutDescriptorException {
+    public PortletLayoutDescriptor(PortletConfig config) throws PortletLayoutDescriptorException {
         // load in layout.xml file
         String appRoot = config.getServletContext().getRealPath("") + "/";
         String portletConfigFile = config.getInitParameter("layout.xml");
@@ -33,15 +35,9 @@ public class PortletLayoutDescriptor {
         if (portletMappingFile == null) {
             portletMappingFile = "WEB-INF/conf/layout-mapping.xml";
         }
-        String fullPath = appRoot + portletConfigFile;
-        String mappingPath = appRoot + portletMappingFile;
-        try {
-            FileInputStream fistream = new FileInputStream(fullPath);
-        } catch (FileNotFoundException e) {
-            log.error("Can't find file: " + fullPath);
-            throw new PortletLayoutDescriptorException("Unable to create layout from " + fullPath + " using " + mappingPath);
-        }
-        load(fullPath, mappingPath);
+        layoutPath = appRoot + portletConfigFile;
+        layoutMappingPath = appRoot + portletMappingFile;
+        load(layoutPath, layoutMappingPath);
     }
 
     /**
@@ -51,8 +47,8 @@ public class PortletLayoutDescriptor {
      * @param mappingFilePath location of the mapping file
      * @throws PortletLayoutDescriptorException if the PortletLayoutDescriptor cannot be created
      */
-    public PortletLayoutDescriptor(String portletFilePath, String mappingFilePath) throws PortletLayoutDescriptorException  {
-        load(portletFilePath, mappingFilePath);
+    public PortletLayoutDescriptor(String layoutPath, String layoutMappingPath) throws PortletLayoutDescriptorException  {
+        load(layoutPath, layoutMappingPath);
     }
 
     /**
@@ -62,6 +58,10 @@ public class PortletLayoutDescriptor {
      */
     public PortletContainer getPortletContainer() {
         return pc;
+    }
+
+    public void reload() throws PortletLayoutDescriptorException {
+        load(layoutPath, layoutMappingPath);
     }
 
     /**

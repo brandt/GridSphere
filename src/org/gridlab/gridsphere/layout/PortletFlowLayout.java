@@ -4,11 +4,19 @@
  */
 package org.gridlab.gridsphere.layout;
 
+import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletContext;
+import org.gridlab.gridsphere.portlet.PortletLog;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Hashtable;
+import java.io.IOException;
 
-public class PortletFlowLayout implements LayoutManager {
+public class PortletFlowLayout extends BasePortletComponent implements LayoutManager {
+
+    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletFlowLayout.class);
 
     public static final int LEFT = 1;
     public static final int RIGHT = 2;
@@ -17,8 +25,6 @@ public class PortletFlowLayout implements LayoutManager {
     private int align = LEFT;
     private int hgap = 1;
     private int vgap = 1;
-
-    private Map components = new Hashtable();
 
     public PortletFlowLayout() {}
 
@@ -56,18 +62,8 @@ public class PortletFlowLayout implements LayoutManager {
         return vgap;
     }
 
-    public void addLayoutComponent(String name, PortletComponent comp) {
-        components.put(name, comp);
+    public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
+        log.debug("in doRender()");
     }
-
-    public void layoutContainer(PortletContainer parent) {
-
-    }
-
-    public void removeLayoutComponent(PortletComponent comp) {
-        if (components.containsValue(comp))
-            components.values().remove(comp);
-    }
-
 }
 

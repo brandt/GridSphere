@@ -12,16 +12,16 @@ public class PortletTab {
     private String title;
     private String background;
     private String foreground;
-    private PortletComponent component;
+    private PortletPanel panel;
     private boolean selected = false;
     private PortletTabbedPane parent;
 
     public PortletTab() {}
 
-    public PortletTab(PortletTabbedPane parent, String title, PortletComponent component) {
+    public PortletTab(PortletTabbedPane parent, String title, PortletPanel panel) {
         this.parent = parent;
         this.title = title;
-        this.component = component;
+        this.panel = panel;
     }
 
     public String getTitle() {
@@ -56,12 +56,12 @@ public class PortletTab {
         return selected;
     }
 
-    public PortletComponent getComponent() {
-        return component;
+    public PortletPanel getPortletPanel() {
+        return panel;
     }
 
-    public void setComponent(PortletComponent component) {
-        this.component = component;
+    public void setPortletPanel(PortletPanel panel) {
+        this.panel = panel;
     }
 
 }

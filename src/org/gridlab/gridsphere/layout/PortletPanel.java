@@ -5,10 +5,14 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletContext;
 
 import java.io.PrintWriter;
+import java.io.IOException;
 
-public class PortletPanel extends BasePortletComponent {
+public class PortletPanel {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletPanel.class);
 
@@ -28,8 +32,9 @@ public class PortletPanel extends BasePortletComponent {
         return layoutManager;
     }
 
-    public void doRender(PrintWriter out) {
+    public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
         log.debug("in doRender()");
+        layoutManager.doRender(ctx, req, res);
     }
 
 }

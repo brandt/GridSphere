@@ -4,11 +4,10 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portlet.PortletResponse;
-import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.*;
 
 import java.awt.*;
-import java.io.PrintWriter;
+import java.io.IOException;
 
 public interface PortletComponent {
 
@@ -16,28 +15,32 @@ public interface PortletComponent {
 
     public String getForeground();
 
-    public PortletBorder getBorder();
+    public PortletBorder getPortletBorder();
 
-    public PortletInsets getInsets();
+    public PortletInsets getPortletInsets();
 
     public String getName();
 
-    public void doRender(PrintWriter out);
+    public String getHeight();
 
-    public void doBeginRender(PrintWriter out);
-
-    public void doEndRender(PrintWriter out);
-
-    public int getHeight();
-
-    public int getWidth();
+    public String getWidth();
 
     public void setBackground(String bgColor);
 
     public void setForeground(String ggColor);
 
-    public void setBorder(PortletBorder border);
+    public void setPortletBorder(PortletBorder border);
+
+    //public void setPortletMode(Portlet.Mode mode);
 
     public void setName(String name);
+
+    public void setPortletInsets(PortletInsets insets);
+
+    public void setHeight(String height);
+
+    public void setWidth(String width);
+
+    public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException;
 
 }

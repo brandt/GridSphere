@@ -7,32 +7,33 @@ package org.gridlab.gridsphere.layout;
 import org.gridlab.gridsphere.portlet.*;
 
 import java.io.PrintWriter;
+import java.io.FileInputStream;
 import java.io.IOException;
 
-public class PortletImage extends BasePortletComponent {
+public class PortletText extends BasePortletComponent {
 
-    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletImage.class);
+    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletText.class);
 
-    private String image;
+    private String text;
 
-    public PortletImage() {}
+    public PortletText() {}
 
-    public PortletImage(String image) {
-        this.image = image;
+    public PortletText(String text) {
+        setText(text);
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public String getImage() {
-        return image;
+    public String getText() {
+        return text;
     }
 
     public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
-        req.setAttribute("image", image);
+        log.debug("in doRender()");
         try {
-            ctx.include("/WEB-INF/conf/layout/image.jsp", req, res);
+            ctx.include(text, req, res);
         } catch (PortletException e) {
             log.error("Unable to include component JSP", e);
             throw new PortletLayoutException("Unable to include component JSP", e);

@@ -4,26 +4,25 @@
  */
 package org.gridlab.gridsphere.layout;
 
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletContext;
+
 import java.util.Hashtable;
 import java.util.Map;
+import java.io.IOException;
 
-public class PortletGridLayout implements LayoutManager {
+public class PortletGridLayout extends BasePortletComponent implements LayoutManager {
+
+    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletGridLayout.class);
 
     private int rows = 1;
     private int cols = 1;
-    private int hgap = 1;
-    private int vgap = 1;
-
-    private Map components = new Hashtable();
 
     public PortletGridLayout() {}
 
     public PortletGridLayout(int rows, int cols) {
-        this.rows = rows;
-        this.cols = cols;
-    }
-
-    public PortletGridLayout(int rows, int cols, int hgap, int vgap) {
         this.rows = rows;
         this.cols = cols;
     }
@@ -44,35 +43,24 @@ public class PortletGridLayout implements LayoutManager {
         return cols;
     }
 
-    public void setHgap(int hgap) {
-        this.hgap = hgap;
-    }
+    public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
+        log.debug("in doRender()");
+        if (insets == null) insets = new PortletInsets();
 
-    public int getHgap() {
-        return hgap;
-    }
-
-    public void setVgap(int vgap) {
-        this.vgap = vgap;
-    }
-
-    public int getVgap() {
-        return vgap;
-    }
-
-    public void addLayoutComponent(String name, PortletComponent comp) {
-        components.put(name, comp);
-    }
-
-    public void layoutContainer(PortletContainer parent) {
+        int i, j, k;
+        if (components.size() > rows*cols)
+            throw new PortletLayoutException("Number of components specified exceeds rows * columns");
+        k = 0;
+        for (i = 0; i < rows; i++) {
+            insets.doRender(ctx,req,res);
+            for (j = 0; j < cols; j++) {
+                PortletComponent p = (PortletComponent)components.get(k);
+                p.doRender(ctx, req, res);
+                k++;
+                insets.doRender(ctx,req,res);
+            }
+        }
 
     }
-
-    public void removeLayoutComponent(PortletComponent comp) {
-        if (components.containsValue(comp))
-            components.values().remove(comp);
-    }
-
-
 }
 
