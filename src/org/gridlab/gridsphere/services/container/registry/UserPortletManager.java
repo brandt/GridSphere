@@ -63,40 +63,29 @@ public class UserPortletManager {
         login(concretePortletID, req, res);
     }
 
-    public void service(String concretePortletID, HttpServletRequest req, HttpServletResponse res) {
+    public void service(String concretePortletID, HttpServletRequest req, HttpServletResponse res) throws PortletException {
         log.info("in service()");
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         PortletWrapper wrapper = appPortlet.getPortletWrapper();
-        try {
-            wrapper.service(concretePortletID, req, res);
-        } catch (Exception e) {
-            // do something here
-        }
+        wrapper.service(concretePortletID, req, res);
     }
 
-    public void actionPerformed(String concretePortletID, PortletAction action, HttpServletRequest req, HttpServletResponse res) {
+    public void actionPerformed(String concretePortletID, PortletAction action, HttpServletRequest req, HttpServletResponse res)
+            throws PortletException {
         log.info("in actionPerformed()");
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         PortletWrapper wrapper = appPortlet.getPortletWrapper();
-        try {
-            wrapper.actionPerformed(action, req, res);
-        } catch (Exception e) {
-            // do something here
-        }
+        wrapper.actionPerformed(action, req, res);
     }
 
-    public void doTitle(String concretePortletID, HttpServletRequest req, HttpServletResponse res) {
+    public void doTitle(String concretePortletID, HttpServletRequest req, HttpServletResponse res) throws PortletException {
         log.info("in doTitle()");
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         PortletWrapper wrapper = appPortlet.getPortletWrapper();
-        try {
-            wrapper.doTitle(req, res);
-        } catch (Exception e) {
-            // do something here
-        }
+        wrapper.doTitle(req, res);
     }
 
     public void destroyUserPortlet(String concretePortletID, HttpServletRequest req, HttpServletResponse res) {

@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.services.container.registry;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.PortletWrapper;
 import org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryManager;
+import org.gridlab.gridsphere.portlet.AbstractPortlet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
