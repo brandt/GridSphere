@@ -37,4 +37,14 @@ public interface PortletMessageService extends PortletService {
      */
     public void send(String portletName, PortletMessage message) throws AccessDeniedException;
 
+    /**
+     * Retrieves the messages for the given portlet name and removes them from the queue
+     *
+     * @para portletName the name of the portlet(s) to send the message to
+     * @return a list of PortletMessage objects
+     *
+     * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
+     */
+    public List retrieveMessages(String portletName) throws AccessDeniedException;
+
 }

@@ -64,6 +64,12 @@ public class PortletMessageServiceImpl implements PortletMessageService, Portlet
     }
 
     public List retrieveMessages(String portletName) throws AccessDeniedException {
-        return (List)messages.get(portletName);
+        List messageList = new ArrayList();
+        List l = (List)messages.get(portletName);
+        if (l != null) {
+            messageList.addAll(l);
+            messages.remove(l);
+        }
+        return messageList;
     }
 }
