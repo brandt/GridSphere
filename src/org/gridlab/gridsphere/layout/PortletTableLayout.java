@@ -89,7 +89,9 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
             if (p instanceof PortletLayout) {
                 PortletComponent maxi = getMaximizedComponent(components);
                 if (maxi!=null) {
+                    out.println("<table border=\"0\" width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"><tbody><tr><td>");
                     maxi.doRender(event);
+                    out.println("</td></tr></tbody></table>");
                     return;
                 }
             }
