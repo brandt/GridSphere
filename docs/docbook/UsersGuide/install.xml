@@ -36,19 +36,27 @@
   </sect1>
 
   <sect1>
-    <title>GridSphere Home Directory</title>
-      By default GridSphere will create a directory to store persistent information such as
-      its database and user's layouts as well as any other files required to be kept long-term.
-      This can be set in <filename>build.properties</filename> as the property
-      <emphasis>gridsphere.home</emphasis>. If this is not set, then the default location is
-      $CATALINA_HOME/gridsphere. The directory structure of <emphasis>gridsphere.home</emphasis> is as follows:
+    <title>GridSphere Web Application</title>
+      GridSphere exists like any other web application and is packaged according to the Java Servlet specification.
+      The directory structure is as follows:
       <para>
       <simplelist>
-      <member><filename>PortletMaster.xml</filename> - provides portlet manager initialization information such as which portlet web applications are initialized at startup</member>
-      <member><filename>mapping</filename> - contains all the mapping files used to convert XML descriptors into Java</member>
-      <member><filename>layout</filename> - contains user's specific layouts including the GuestUserLayout.xml and NewUserLayout.xml</member>
-      <member><filename>gridsphere</filename> - contains persistent gridsphere data</member>
-      <member><filename>gridsphere/database</filename> - contains the GridSphere database and configuration files</member>
+          <member><filename>jsp/</filename> - contains JSP web pages for the GridSphere core portlets</member>
+          <member><filename>html/</filename> - contains HTML web pages for the GridSphere core portlets</member>
+          <member><filename>javscript/</filename> - contains JavaScript used by the portal</member>
+          <member><filename>themes/</filename> - contains CSS stylesheets used to create common look and feel</member>
+          <member><filename>WEB-INF/</filename> - contains GridSphere configuration files, layouts, and database</member>
+          <member><filename>WEB-INF/PortletMaster.xml</filename> - contains the master descriptor file used to identify loaded portlet web applications</member>
+          <member><filename>WEB-INF/portlet.xml</filename> - contains the portlet descriptor for core portlets</member>
+          <member><filename>WEB-INF/layout.xml</filename> - contains a default layout for the core portlets</member>
+          <member><filename>WEB-INF/web.xml</filename> - contains servlet mappings necessary for the servlet container</member>
+
+          <member><filename>WEB-INF/tlds</filename> - contains Tag Library Descriptors used by GridSphere tag libraries</member>
+          <member><filename>WEB-INF/lib</filename> - contains external libraries used by the core portlets and JSPs</member>
+          <member><filename>WEB-INF/classes</filename> - contains localization properties file used by the core portlets</member>
+          <member><filename>WEB-INF/database</filename> - contains the GridSphere database and configuration files</member>
+          <member><filename>WEB-INF/layout</filename> - contains user's specific layouts including the GuestUserLayout.xml and NewUserLayout.xml</member>
+          <member><filename>WEB-INF/mapping</filename> - contains all the mapping files used to convert XML descriptors into Java</member>
       </simplelist>
       </para>
   </sect1>

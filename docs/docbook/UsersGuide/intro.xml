@@ -83,14 +83,17 @@
 	To allow this, modify $CATALINA_HOME/conf/server.xml and make sure the following line is there:
 	<programlisting><literallayout>
 
-    <![CDATA[<Context path="/gridsphere" docBase="gridsphere" debug="0" reloadable="false" crossContext="true">
-                  <Logger className="org.apache.catalina.logger.FileLogger" prefix="localhost_gridsphere_log."
-                          suffix=".txt" timestamp="true"/>
+    <![CDATA[<Context path="/gridsphere"
+                      docBase="gridsphere" debug="0"
+                      reloadable="false" crossContext="true">
+                  <Logger className="org.apache.catalina.logger.FileLogger"
+                      prefix="localhost_gridsphere_log."
+                      suffix=".txt" timestamp="true"/>
 	         </Context>]]>
-
-    <important>Make sure there are no line-breaks in the Logger line-- cutting and pasting into
-    vi can cause problems ;-) and Tomcat may give few warnings</important>
-    </literallayout></programlisting></para></listitem>
+    </literallayout>
+    <important>Make sure there are no line-breaks between attributes in the
+    Context and Logger lines. Cutting and pasting into vi can cause problems ;-) and Tomcat may give few warnings</important>
+    </programlisting></para></listitem>
 	<listitem><para>The Portlet Manager Portlet requires the Tomcat manager webapp to be configured. Modify
         <filename>$CATALINA_HOME/conf/tomcat-users.xml</filename> and make sure the following line is there:
 	<programlisting><literallayout>
