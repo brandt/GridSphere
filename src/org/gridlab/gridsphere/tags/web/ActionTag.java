@@ -21,9 +21,10 @@ public class ActionTag extends TagSupport {
 
     private String action;
     private String label;
+    private PortletURI someURI;
 
     public void setAction(String action) {
-        this.action =action;
+        this.action = action;
     }
 
     public String getAction() {
@@ -40,10 +41,9 @@ public class ActionTag extends TagSupport {
 
     public void createActionURI() {
         PortletResponse res = (PortletResponse)pageContext.getAttribute("portletResponse");
-        PortletURI someURI = res.createURI();
-        DefaultPortletAction anAction = new DefaultPortletAction(action);
-        someURI.addAction(anAction);
-        pageContext.setAttribute("_uri", someURI);
+        someURI = res.createURI();
+        DefaultPortletAction portletAction = new DefaultPortletAction(action);
+        pageContext.setAttribute("_action", portletAction);
     }
 
     public int doStartTag() throws JspException {
@@ -55,7 +55,8 @@ public class ActionTag extends TagSupport {
         try {
             JspWriter out = pageContext.getOut();
             out.print("<a href= \"");
-            PortletURI someURI = (PortletURI)pageContext.getAttribute("_uri");
+            DefaultPortletAction action = (DefaultPortletAction)pageContext.getAttribute("_action");
+            someURI.addAction(action);
             if (someURI != null) out.print(someURI.toString());
             out.print("\">");
             out.print(label);

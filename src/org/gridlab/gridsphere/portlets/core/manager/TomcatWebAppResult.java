@@ -6,7 +6,9 @@
  * To change template for new class use 
  * Code Style | Class Templates options (Tools | IDE Options).
  */
-package org.gridlab.gridsphere.portlets.core.beans;
+package org.gridlab.gridsphere.portlets.core.manager;
+
+import org.gridlab.gridsphere.portlet.PortletURI;
 
 import java.io.BufferedReader;
 import java.io.IOException;

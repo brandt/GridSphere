@@ -1,3 +1,7 @@
+/*
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @version $Id$
+ */
 package org.gridlab.gridsphere.tags.web;
 
 import org.gridlab.gridsphere.portlet.PortletURI;
@@ -12,13 +16,6 @@ import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.TagSupport;
 import javax.servlet.ServletRequest;
 
-/**
- * Created by IntelliJ IDEA.
- * User: novotny
- * Date: Jan 10, 2003
- * Time: 11:11:04 AM
- * To change this template use Options | File Templates.
- */
 public class InputTag extends TagSupport {
 
     protected String type;

@@ -1,22 +1,15 @@
 /*
- * Created by IntelliJ IDEA.
- * User: novotny
- * Date: Dec 23, 2002
- * Time: 1:10:23 AM
- * To change template for new class use 
- * Code Style | Class Templates options (Tools | IDE Options).
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @version $Id$
  */
-package org.gridlab.gridsphere.portlets.core.beans;
+package org.gridlab.gridsphere.portlets.core.manager;
 
-import org.gridlab.gridsphere.portletcontainer.PortletRegistryManager;
-
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.Iterator;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.HttpURLConnection;
-import java.io.*;
+import java.util.StringTokenizer;
 
 public class TomcatManagerWrapper {
 
@@ -25,13 +18,14 @@ public class TomcatManagerWrapper {
 
     private static TomcatManagerWrapper instance = new TomcatManagerWrapper();
 
-    private TomcatManagerWrapper() {}
+    private TomcatManagerWrapper() {
+    }
 
     public static TomcatManagerWrapper getInstance() {
         return instance;
     }
 
-    public TomcatWebAppResult doCommand(String command)  {
+    public TomcatWebAppResult doCommand(String command) {
         String show = "";
         TomcatWebAppResult result = null;
         try {
@@ -45,14 +39,14 @@ public class TomcatManagerWrapper {
                 sun.misc.BASE64Encoder encoder =
                         (sun.misc.BASE64Encoder)
                         Class.forName("sun.misc.BASE64Encoder").newInstance();
-                encoding = encoder.encode (up.getBytes());
+                encoding = encoder.encode(up.getBytes());
 
             } catch (Exception ex) { // sun's base64 encoder isn't available
                 //Base64Converter encoder = new Base64Converter();
                 //encoding = encoder.encode(up.getBytes());
                 //System.err.println("NO SUN BASE64 Encoder!");
             }
-            con.setRequestProperty("Authorization","Basic " + encoding);
+            con.setRequestProperty("Authorization", "Basic " + encoding);
 
             con.setUseCaches(false);
             con.connect();
@@ -60,7 +54,7 @@ public class TomcatManagerWrapper {
             if (con instanceof HttpURLConnection) {
                 HttpURLConnection httpConnection = (HttpURLConnection) con;
                 // test for 401 result (HTTP only)
-                if (httpConnection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED)  {
+                if (httpConnection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
                     System.err.println("HTTP Authorization failure");
 
                 } else {
@@ -69,6 +63,7 @@ public class TomcatManagerWrapper {
             }
 
             int length = con.getContentLength();
+
             if ((length > 0)) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
 
@@ -100,50 +95,44 @@ public class TomcatManagerWrapper {
     /**
      * Return the list of web applications.
      */
-    public TomcatWebAppResult getWebAppList(List list) {
+    public TomcatWebAppResult getWebAppList() {
         return doCommand("/list");
     }
 
     public TomcatWebAppResult reloadWebApp(String context) {
-        // reload?path=/examples
         if (!context.startsWith("/")) context = "/" + context;
-        return doCommand("reload?path=" + context);
+        return doCommand("/reload?path=" + context);
     }
 
     public TomcatWebAppResult removeWebApp(String context) {
-        // remove?path=/examples
         if (!context.startsWith("/")) context = "/" + context;
-        return doCommand("remove?path=" + context);
+        return doCommand("/remove?path=" + context);
     }
 
     public TomcatWebAppResult startWebApp(String context) {
-        // remove?path=/examples
         if (!context.startsWith("/")) context = "/" + context;
-        return doCommand("start?path=" + context);
+        return doCommand("/start?path=" + context);
     }
 
     public TomcatWebAppResult stopWebApp(String context) {
-        // remove?path=/examples
         if (!context.startsWith("/")) context = "/" + context;
-        return doCommand("stop?path=" + context);
+        return doCommand("/stop?path=" + context);
     }
 
     public TomcatWebAppResult deployWebApp(String context) {
-        // remove?path=/examples
         if (!context.startsWith("/")) context = "/" + context;
-        return doCommand("deploy?path=" + context);
+        return doCommand("/deploy?path=" + context);
     }
 
     public TomcatWebAppResult undeployWebApp(String context) {
-        // remove?path=/examples
         if (!context.startsWith("/")) context = "/" + context;
-        return doCommand("undeploy?path=" + context);
+        return doCommand("/undeploy?path=" + context);
     }
 
     public TomcatWebAppResult installWebApp(String context, String warFile) {
         //install?path=/foo&war=file:/path/to/foo
         if (!context.startsWith("/")) context = "/" + context;
-        return doCommand("install?path=" + context + "&war=" + warFile);
+        return doCommand("/install?path=" + context + "&war=" + warFile);
     }
 
 }
