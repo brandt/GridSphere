@@ -282,4 +282,3 @@ public class ActionPortlet extends AbstractPortlet {
     }
 
 }
-

@@ -22,6 +22,7 @@ import org.gridlab.gridsphere.provider.ui.beans.*;
 import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
 import org.gridlab.gridsphere.provider.portletui.beans.PasswordBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
@@ -221,4 +222,11 @@ public class FormEventImpl implements FormEvent {
         return null;
     }
 
+    public TextBean getTextBean(String name) {
+        return null;
+    }
+
+    public Map getTagBeans() {
+        return null;
+    }
 }
