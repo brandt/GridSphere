@@ -94,10 +94,6 @@ public class PortletBean {
         return actionURI;
     }
 
-    public PortletURI getPortletActionURI(PortletActionConstant action) {
-        return action.createDefaultPortletActionURI(this.request, this.response);
-    }
-
     public String getParameter(String param) {
         String value = this.request.getParameter(param);
         if (value == null)

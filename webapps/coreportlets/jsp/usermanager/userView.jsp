@@ -39,6 +39,13 @@
     <td>
       <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
         <tr>
+          <td align="center" bgcolor="#6666FF">
+            <font color="WHITE"><strong>
+              View User [<%=userManagerBean.getUserName()%>]
+            </strong></font>
+          </td>
+        </tr>
+        <tr>
           <td bgcolor="#CCCCCC">
             <input type="button"
                    name="<%=UserManagerBean.ACTION_USER_LIST%>"
@@ -65,15 +72,7 @@
     <td>
       <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
         <tr>
-          <td bgcolor="#CCCCCC">
-             User ID:&nbsp;
-          </td>
-          <td bgcolor="WHITE">
-             <%=userManagerBean.getUserID()%>
-          </td>
-        </tr>
-        <tr>
-          <td bgcolor="#CCCCCC">
+          <td width="200" bgcolor="#CCCCCC">
              User Name:&nbsp;
           </td>
           <td bgcolor="WHITE">

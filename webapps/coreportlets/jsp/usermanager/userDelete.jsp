@@ -25,6 +25,23 @@
     <td>
       <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
         <tr>
+          <td align="center" bgcolor="#6666FF">
+            <font color="WHITE"><strong>
+              Delete User [<%=userManagerBean.getUserName()%>]
+            </strong></font>
+          </td>
+        <tr>
+          <td bgcolor="WHITE">
+            Click "<font color="DARKRED">Confirm Delete</font>" to delete this user, "Cancel Delete" otherwise.
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+        <tr>
           <td bgcolor="#CCCCCC">
             <input type="button"
                    name="<%=UserManagerBean.ACTION_USER_DELETE_CONFIRM%>"
@@ -43,26 +60,7 @@
     <td>
       <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
         <tr>
-          <td bgcolor="WHITE">
-            Click "Confirm Delete" to delete the given user account.
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
-        <tr>
-          <td bgcolor="#CCCCCC">
-             User ID:&nbsp;
-          </td>
-          <td bgcolor="WHITE">
-             <%=userManagerBean.getUserID()%>
-          </td>
-        </tr>
-        <tr>
-          <td bgcolor="#CCCCCC">
+          <td width="200" bgcolor="#CCCCCC">
              User Name:&nbsp;
           </td>
           <td bgcolor="WHITE">

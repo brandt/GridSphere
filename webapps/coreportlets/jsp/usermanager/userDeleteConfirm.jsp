@@ -26,12 +26,29 @@
     <td>
       <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
         <tr>
+          <td align="center" bgcolor="#6666FF">
+            <font color="WHITE"><strong>
+              Deleted User [<%=userManagerBean.getUserName()%>]
+            </strong></font>
+          </td>
+        <tr>
+          <td bgcolor="WHITE">
+            The following user was deleted.
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+        <tr>
           <td bgcolor="#CCCCCC">
             <input type="button"
                    name="<%=UserManagerBean.ACTION_USER_LIST%>"
                    value="List Users"
                    onClick="javascript:UserManagerPortlet_listUser_onClick()"/>
-            &&<input type="button"
+            &nbsp;&nbsp;<input type="button"
                    name="<%=UserManagerBean.ACTION_USER_EDIT%>"
                    value="New User"
                    onClick="javascript:UserManagerPortlet_newUser_onClick()"/>
@@ -44,26 +61,7 @@
     <td>
       <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
         <tr>
-          <td bgcolor="WHITE">
-            The given user account was deleted.
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
-        <tr>
-          <td bgcolor="#CCCCCC">
-             User ID:&nbsp;
-          </td>
-          <td bgcolor="WHITE">
-             <%=userManagerBean.getUserID()%>
-          </td>
-        </tr>
-        <tr>
-          <td bgcolor="#CCCCCC">
+          <td width="200" bgcolor="#CCCCCC">
              User Name:&nbsp;
           </td>
           <td bgcolor="WHITE">

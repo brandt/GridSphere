@@ -32,6 +32,13 @@
     <td>
       <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
         <tr>
+          <td align="center" bgcolor="#6666FF">
+            <font color="WHITE"><strong>
+              List Users
+            </strong></font>
+          </td>
+        </tr>
+        <tr>
           <td bgcolor="#CCCCCC">
             <input type="button"
                    name="<%=UserManagerBean.ACTION_USER_LIST%>"
@@ -50,17 +57,25 @@
     <td>
       <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
         <tr>
-          <td bgcolor="#CCCCCC">
-            ID
+          <td width="100" bgcolor="#6666FF">
+            <font color="WHITE">
+              User Name
+            </font>
           </td>
-          <td bgcolor="#CCCCCC">
-            User Name
+          <td width="200" bgcolor="#6666FF">
+            <font color="WHITE">
+              Full Name
+            </font>
           </td>
-          <td bgcolor="#CCCCCC">
-            Full Name
+          <td width="200" bgcolor="#6666FF">
+            <font color="WHITE">
+              Email Address
+            </font>
           </td>
-          <td bgcolor="#CCCCCC">
-            Email Address
+          <td width="*" bgcolor="#6666FF">
+            <font color="WHITE">
+              Organization
+            </font>
           </td>
         </tr>
 <% List userList = userManagerBean.getUserList();
@@ -79,17 +94,17 @@
         <tr>
           <td bgcolor="WHITE">
             <a href="javascript:UserManagerPortlet_viewUser_onClick('<%=user.getID()%>')">
-              <%=user.getID()%>
+              <%=user.getUserID()%>
             </a>
-          </td>
-          <td bgcolor="WHITE">
-            <%=user.getUserID()%>
           </td>
           <td bgcolor="WHITE">
             <%=user.getFullName()%>
           </td>
           <td bgcolor="WHITE">
             <%=user.getEmailAddress()%>
+          </td>
+          <td bgcolor="WHITE">
+            <%=user.getOrganization()%>
           </td>
         </tr>
 <%   }

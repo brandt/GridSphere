@@ -15,27 +15,161 @@
 <form name="AccessContollerPortlet" method="POST" action="<%=aclManagerBean.getGroupViewURI()%>">
   <input type="hidden" name="groupID" value="<%=aclManagerBean.getGroupID()%>"/>
   <script language="JAVASCRIPT">
+
+    function AccessControllerPortlet_listGroup_onClick() {
+      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_LIST)%>";
+      document.AccessControllerPortlet.action=action;
+      document.AccessContollerPortlet.submit();
+    }
+
+    function AccessControllerPortlet_viewGroup_onClick(groupID) {
+      document.AccessControllerPortlet.groupID.value=groupID;
+      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_VIEW)%>";
+      document.AccessControllerPortlet.action=action;
+      document.AccessContollerPortlet.submit();
+    }
+
+    function AccessControllerPortlet_newGroup_onClick() {
+      document.AccessControllerPortlet.groupID.value="";
+      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_EDIT)%>";
+      document.AccessControllerPortlet.action=action;
+      document.AccessContollerPortlet.submit();
+    }
+
+    function AccessControllerPortlet_editGroup_onClick() {
+      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_EDIT)%>";
+      document.AccessControllerPortlet.action=action;
+      document.AccessContollerPortlet.submit();
+    }
+
+    function AccessContollerPortlet_confirmEditGroup_onClick() {
+      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_EDIT_CONFIRM)%>";
+      document.AccessControllerPortlet.action=action;
+      document.AccessContollerPortlet.submit();
+    }
+
+    function AccessContollerPortlet_cancelEditGroup_onClick() {
+      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_EDIT_CANCEL)%>";
+      document.AccessControllerPortlet.action=action;
+      document.AccessContollerPortlet.submit();
+    }
+
+    function AccessControllerPortlet_deleteGroup_onClick() {
+      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_DELETE)%>";
+      document.AccessControllerPortlet.action=action;
+      document.AccessContollerPortlet.submit();
+    }
+
     function AccessContollerPortlet_confirmDeleteGroup_onClick() {
-      document.AccessContollerPortlet.action="<%=aclManagerBean.getGroupDeleteConfirmURI()%>";
+      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_DELETE_CONFIRM)%>";
+      document.AccessControllerPortlet.action=action;
       document.AccessContollerPortlet.submit();
     }
 
     function AccessContollerPortlet_cancelDeleteGroup_onClick() {
-      document.AccessContollerPortlet.action="<%=aclManagerBean.getGroupDeleteCancelURI()%>";
+      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_DELETE_CANCEL)%>";
+      document.AccessControllerPortlet.action=action;
       document.AccessContollerPortlet.submit();
     }
+
+    function AccessControllerPortlet_viewGroupEntry_onClick(groupEntryID) {
+      document.AccessControllerPortlet.groupEntryID.value=groupEntryID;
+      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_VIEW)%>";
+      document.AccessControllerPortlet.action=action;
+      document.AccessContollerPortlet.submit();
+    }
+
+    function AccessControllerPortlet_newGroupEntry_onClick() {
+      document.AccessControllerPortlet.groupEntryID.value="";
+      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_EDIT)%>";
+      document.AccessControllerPortlet.action=action;
+      document.AccessContollerPortlet.submit();
+    }
+
+    function AccessControllerPortlet_editGroupEntry_onClick() {
+      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_EDIT)%>";
+      document.AccessControllerPortlet.action=action;
+      document.AccessContollerPortlet.submit();
+    }
+
+    function AccessContollerPortlet_confirmEditGroupEntry_onClick() {
+      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_EDIT_CONFIRM)%>";
+      document.AccessControllerPortlet.action=action;
+      document.AccessContollerPortlet.submit();
+    }
+
+    function AccessContollerPortlet_cancelEditGroupEntry_onClick() {
+      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_EDIT_CANCEL)%>";
+      document.AccessControllerPortlet.action=action;
+      document.AccessContollerPortlet.submit();
+    }
+
+    function AccessControllerPortlet_addGroupEntry_onClick() {
+      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_ADD)%>";
+      document.AccessControllerPortlet.action=action;
+      document.AccessControllerPortlet.submit();
+    }
+
+    function AccessControllerPortlet_confirmAddGroupEntry_onClick() {
+      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_ADD_CONFIRM)%>";
+      document.AccessControllerPortlet.action=action;
+      document.AccessControllerPortlet.submit();
+    }
+
+    function AccessControllerPortlet_cancelAddGroupEntry_onClick() {
+      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_ADD_CONFIRM)%>";
+      document.AccessControllerPortlet.action=action;
+      document.AccessControllerPortlet.submit();
+    }
+
+    function AccessControllerPortlet_removeGroupEntry_onClick(groupID) {
+      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_REMOVE)%>";
+      document.AccessControllerPortlet.action=action;
+      document.AccessControllerPortlet.submit();
+    }
+
+    function AccessControllerPortlet_confirmRemoveGroupEntry_onClick() {
+      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_REMOVE_CONFIRM)%>";
+      document.AccessControllerPortlet.action=action;
+      document.AccessControllerPortlet.submit();
+    }
+
+    function AccessControllerPortlet_cancelRemoveGroupEntry_onClick() {
+      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_REMOVE_CONFIRM)%>";
+      document.AccessControllerPortlet.action=action;
+      document.AccessControllerPortlet.submit();
+    }
+
   </script>
 <table border="0" cellspacing="1" cellpadding="2" width="100%">
   <tr>
     <td>
       <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
         <tr>
+          <td align="center" bgcolor="#6666FF">
+            <font color="WHITE"><strong>
+              Delete Group [<%=aclManagerBean.getGroupName()%>]
+            </strong></font>
+          </td>
+        </tr>
+        <tr>
+          <td bgcolor="WHITE">
+            Click "<font color="DARKRED">Confirm Delete</font>" to delete this group, "Cancel Delete" otherwise.
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+        <tr>
           <td bgcolor="#CCCCCC">
-            <input type="button"
+            <input type="submit"
                    name="<%=AccessControllerBean.ACTION_GROUP_DELETE_CONFIRM%>"
                    value="Confirm Delete"
                    onClick="javascript:AccessContollerPortlet_confirmDeleteGroup_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
+            &nbsp;&nbsp;<input type="submit"
                    name="<%=AccessControllerBean.ACTION_GROUP_DELETE_CANCEL%>"
                    value="Cancel Delete"
                    onClick="javascript:AccessContollerPortlet_cancelDeleteGroup_onClick()"/>
@@ -48,27 +182,24 @@
     <td>
       <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
         <tr>
-          <td bgcolor="WHITE">
-            Click "Confirm Delete" to delete the given portlet group.
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
-        <tr>
-          <td bgcolor="#CCCCCC">
-             Group ID:&nbsp;
+          <td width="200" bgcolor="#CCCCCC">
+              Group Name:&nbsp;
           </td>
           <td bgcolor="WHITE">
-             <%=aclManagerBean.getGroupID()%>
+             <%=aclManagerBean.getGroupName()%>
           </td>
         </tr>
         <tr>
           <td bgcolor="#CCCCCC">
-             Group Name:&nbsp;
+              Group Label:&nbsp;
+          </td>
+          <td bgcolor="WHITE">
+             <%=aclManagerBean.getGroupName()%>
+          </td>
+        </tr>
+        <tr>
+          <td bgcolor="#CCCCCC">
+              Group Description:&nbsp;
           </td>
           <td bgcolor="WHITE">
              <%=aclManagerBean.getGroupName()%>
@@ -81,40 +212,43 @@
     <td>
       <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
         <tr>
-          <td bgcolor="#CCCCCC">
-            <input type="button"
-                   name="<%=AccessControllerBean.ACTION_GROUP_VIEW%>"
-                   value="Add Users"
-                   onClick="javascript:AccessContollerPortlet_addUsers_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
-                   name="<%=AccessControllerBean.ACTION_GROUP_VIEW%>"
-                   value="Remove Users"
-                   onClick="javascript:AccessContollerPortlet_removeUsers_onClick()"/>
+          <td bgcolor="#6666FF">
+            <font color="WHITE">
+              User
+            </font>
+          </td>
+          <td bgcolor="#6666FF">
+            <font color="WHITE">
+              Full Name
+            </font>
+          </td>
+          <td bgcolor="#6666FF">
+            <font color="WHITE">
+              Role
+            </font>
           </td>
         </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+<% Iterator groupEntries = aclManagerBean.getGroupEntryList().iterator();
+    if (groupEntries.hasNext()) {
+        while (groupEntries.hasNext()) {
+            GroupEntry groupEntry = (GroupEntry)groupEntries.next();
+            User groupEntryUser = groupEntry.getUser();
+            PortletRole groupEntryRole = groupEntry.getRole(); %>
         <tr>
-          <td bgcolor="#CCCCCC">
-            ID
+          <td bgcolor="WHITE">
+            <a href="javascript:AccessControllerPortlet_viewGroupEntry_onClick('<%=groupEntryUser.getID()%>')">
+              <%=groupEntryUser.getUserID()%>
+            </a>
           </td>
-          <td bgcolor="#CCCCCC">
-            User Name
+          <td bgcolor="WHITE">
+            <%=groupEntryUser.getFullName()%>
           </td>
-          <td bgcolor="#CCCCCC">
-            Full Name
-          </td>
-          <td bgcolor="#CCCCCC">
-            Group Role
+          <td bgcolor="WHITE">
+            <%=groupEntryRole%>
           </td>
         </tr>
-<% List groupEntryList = aclManagerBean.getGroupEntryList();
-   int numEntries = groupEntryList.size();
-   if (numEntries == 0) { %>
+<%     }
+    } else { %>
         <tr>
           <td bgcolor="WHITE" colspan="4">
             <font color="DARKRED">
@@ -122,29 +256,7 @@
             </font>
           </td>
         </tr>
-<% } else {
-      for (int ii = 0; ii < numEntries; ++ii) {
-        GroupEntry groupEntry = (GroupEntry)groupEntryList.get(ii);
-        User user = groupEntry.getUser();
-        PortletRole role = groupEntry.getRole(); %>
-        <tr>
-          <td bgcolor="WHITE">
-            <a href="javascript:UserManagerPortlet_viewUser_onClick('<%=user.getID()%>')">
-              <%=user.getID()%>
-            </a>
-          </td>
-          <td bgcolor="WHITE">
-            <%=user.getUserID()%>
-          </td>
-          <td bgcolor="WHITE">
-            <%=user.getFullName()%>
-          </td>
-          <td bgcolor="WHITE">
-            <%=role%>
-          </td>
-        </tr>
-<%   }
-    } %>
+<%  } %>
       </table>
     </td>
   </tr>

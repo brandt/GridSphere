@@ -32,10 +32,17 @@
     <td>
       <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
         <tr>
+          <td align="center" bgcolor="#6666FF">
+            <font color="WHITE"><strong>
+              List Groups
+            </strong></font>
+          </td>
+        </tr>
+        <tr>
           <td bgcolor="#CCCCCC">
             <input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_LIST%>"
-                   value="Refresh List"
+                   value="List Groups"
                    onClick="javascript:AccessControlManagerPortlet_listGroup_onClick()"/>
             &nbsp;&nbsp;<input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_EDIT%>"
@@ -50,18 +57,27 @@
     <td>
       <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
         <tr>
-          <td bgcolor="#CCCCCC">
-            ID
+          <td width="200" bgcolor="#6666FF">
+            <font color="WHITE">
+              Name
+            </font>
           </td>
-          <td bgcolor="#CCCCCC">
-            Group Name
+          <td width="200" bgcolor="#6666FF">
+            <font color="WHITE">
+              Label
+            </font>
+          </td>
+          <td width="*" bgcolor="#6666FF">
+            <font color="WHITE">
+              Description
+            </font>
           </td>
         </tr>
 <% List groupList = aclManagerBean.getGroupList();
    int numGroups = groupList.size();
    if (numGroups == 0) { %>
         <tr>
-          <td bgcolor="WHITE" colspan="4">
+          <td bgcolor="WHITE" colspan="3">
             <font color="DARKRED">
               No group accounts in database.
             </font>
@@ -73,8 +89,11 @@
         <tr>
           <td bgcolor="WHITE">
             <a href="javascript:AccessControlManagerPortlet_viewGroup_onClick('<%=group.getID()%>')">
-              <%=group.getID()%>
+              <%=group.getName()%>
             </a>
+          </td>
+          <td bgcolor="WHITE">
+            <%=group.getName()%>
           </td>
           <td bgcolor="WHITE">
             <%=group.getName()%>

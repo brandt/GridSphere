@@ -70,6 +70,7 @@ public class AccessControllerBean extends PortletBean {
     public static final String ACTION_GROUP_ENTRY_REMOVE = "groupEntryRemove";
     public static final String ACTION_GROUP_ENTRY_REMOVE_CONFIRM = "groupEntryRemoveConfirm";
     public static final String ACTION_GROUP_ENTRY_REMOVE_CANCEL = "groupEntryRemoveCancel";
+
     // Portlet action
     private String actionPerformed = null;
     private String nextPage = PAGE_GROUP_LIST;
@@ -234,6 +235,8 @@ public class AccessControllerBean extends PortletBean {
 
     public void doViewGroupEntry()
             throws PortletException {
+        // Load group
+        loadGroup();
         // Load access right
         loadGroupEntry();
         // Set next page attribute
@@ -242,6 +245,8 @@ public class AccessControllerBean extends PortletBean {
 
     public void doEditGroupEntry()
             throws PortletException {
+        // Load group so we can edit attributes
+        loadGroup();
         // Load access right
         loadGroupEntry();
         // Set next page attribute
@@ -250,6 +255,8 @@ public class AccessControllerBean extends PortletBean {
 
     public void doConfirmEditGroupEntry()
             throws PortletException {
+        // Load group
+        loadGroup();
         // Load access right
         loadGroupEntry();
         // Edit access right
@@ -262,6 +269,8 @@ public class AccessControllerBean extends PortletBean {
 
     public void doAddGroupEntry()
             throws PortletException {
+        // Load group
+        loadGroup();
         // Load users not in group
         loadUserNotGroupList();
         // Set next page attribute
@@ -270,12 +279,16 @@ public class AccessControllerBean extends PortletBean {
 
     public void doConfirmAddGroupEntry()
             throws PortletException {
+        // Load group
+        loadGroup();
         addGroupEntries();
         doViewGroupEntry();
     }
 
     public void doRemoveGroupEntry()
             throws PortletException {
+        // Load group
+        loadGroup();
         // Load access rights
         loadGroupEntryList();
         // Set next page attribute
@@ -284,6 +297,8 @@ public class AccessControllerBean extends PortletBean {
 
     public void doConfirmRemoveGroupEntry()
             throws PortletException {
+        // Load group
+        loadGroup();
         removeGroupEntries();
         doViewGroupEntry();
     }
@@ -333,6 +348,8 @@ public class AccessControllerBean extends PortletBean {
     }
 
     public String getNextTitle() {
+        return "Access Control Manager";
+        /***
         if (this.actionPerformed == null) {
             return "Access Control Manager: List portlet groups";
         } else if (this.actionPerformed.equals(ACTION_GROUP_LIST)) {
@@ -364,6 +381,7 @@ public class AccessControllerBean extends PortletBean {
         } else {
             return "Access Control Manager: List portlet groups";
         }
+        ***/
     }
 
     public String getNextPage() {

@@ -232,6 +232,8 @@ public class UserManagerBean extends PortletBean {
     }
 
     public String getNextTitle() {
+        return "User Account Manager";
+        /***
         if (this.actionPerformed == null) {
             return "User Account Manager: List user accounts";
         } else if (this.actionPerformed.equals(ACTION_USER_LIST)) {
@@ -249,6 +251,7 @@ public class UserManagerBean extends PortletBean {
         } else {
             return "User Account Manager: List user accounts";
         }
+        ***/
     }
 
     public String getNextPage() {
