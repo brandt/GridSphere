@@ -181,8 +181,22 @@ public class PortletLayoutEngine {
         } catch (IOException e) {
             log.error("in doRenderError: ", e);
         }
-        out.println("<h>Portlet PortletLayout Engine unable to render!</h>");
-        out.println("<b>" + error + "</b>");
+        out.println("<html><body>");
+        out.println("<b>An error occurred: " + t.getMessage() + "</b>");
+        t.printStackTrace(out);
+        out.println("</body></html>");
+    }
+
+    public void doRenderError(GridSphereEvent event, Throwable t) {
+        PortletRequest req = event.getPortletRequest();
+        PortletPage errorpage = pageFactory.createErrorPage(req);
+        req.setAttribute("error", t);
+        try {
+            errorpage.doRender(event);
+        } catch (Exception e) {
+            log.error("in doRenderError: ", e);
+        }
+
     }
 
     /**
