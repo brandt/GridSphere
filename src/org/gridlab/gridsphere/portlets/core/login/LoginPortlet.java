@@ -5,21 +5,18 @@
 package org.gridlab.gridsphere.portlets.core.login;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.FrameBean;
-import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
-import org.gridlab.gridsphere.provider.portletui.beans.HiddenFieldBean;
-import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
-import org.gridlab.gridsphere.services.core.user.LoginService;
+import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.services.core.user.AccountRequest;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 
@@ -222,10 +219,21 @@ public class LoginPortlet extends ActionPortlet {
             return true;
             // If they do match, then validate password with our service
         } else {
-            try {
-                this.passwordManagerService.validatePassword(passwordValue);
-            } catch (InvalidPasswordException e) {
-                message.append(e.getMessage());
+            String msg = null;
+            if (passwordValue == null) {
+                msg = "Password is not set.";
+
+            }
+            passwordValue = passwordValue.trim();
+            if (passwordValue.length() == 0) {
+                msg = "Password is blank.";
+            }
+            if (passwordValue.length() < 5) {
+                msg = "Password must be longer than 5 characters.";
+
+            }
+            if (msg != null) {
+                message.append(msg);
                 return true;
             }
         }
@@ -236,38 +244,42 @@ public class LoginPortlet extends ActionPortlet {
             throws PortletException {
         log.debug("Entering saveUser()");
         // Account request
-        AccountRequest accountRequest = null;
 
         // Create edit account request
 
-        accountRequest = this.userManagerService.createAccountRequest();
+        SportletUser newuser = this.userManagerService.createUser();
 
 
         // Edit account attributes
-        editAccountRequest(event, accountRequest);
+        editSportletUser(event, newuser);
         // Submit changes
-        this.userManagerService.submitAccountRequest(accountRequest);
-        User newuser = this.userManagerService.approveAccountRequest(accountRequest);
+        this.userManagerService.saveUser(newuser);
+
+        PasswordEditor editor = passwordManagerService.editPassword(newuser);
+        String password = event.getPasswordBean("password").getValue();
+        editor.setValue(password);
+        passwordManagerService.savePassword(editor);
+
         // Save user role
         saveUserRole(newuser);
         log.debug("Exiting saveUser()");
         return newuser;
     }
 
-    private void editAccountRequest(FormEvent event, AccountRequest accountRequest) {
-        log.debug("Entering editAccountRequest()");
-        accountRequest.setUserName(event.getTextFieldBean("userName").getValue());
-        accountRequest.setFamilyName(event.getTextFieldBean("familyName").getValue());
-        accountRequest.setGivenName(event.getTextFieldBean("givenName").getValue());
-        accountRequest.setFullName(event.getTextFieldBean("fullName").getValue());
-        accountRequest.setEmailAddress(event.getTextFieldBean("emailAddress").getValue());
-        accountRequest.setOrganization(event.getTextFieldBean("organization").getValue());
+    private void editSportletUser(FormEvent event, SportletUser SportletUser) {
+        log.debug("Entering editSportletUser()");
+        SportletUser.setUserName(event.getTextFieldBean("userName").getValue());
+        SportletUser.setFamilyName(event.getTextFieldBean("familyName").getValue());
+        SportletUser.setGivenName(event.getTextFieldBean("givenName").getValue());
+        SportletUser.setFullName(event.getTextFieldBean("fullName").getValue());
+        SportletUser.setEmailAddress(event.getTextFieldBean("emailAddress").getValue());
+        SportletUser.setOrganization(event.getTextFieldBean("organization").getValue());
         String passwordValue = event.getPasswordBean("password").getValue();
         // Save password parameters if password was altered
-        if (passwordValue.length() > 0) {
-            accountRequest.setPasswordValue(passwordValue);
-        }
-        log.debug("Exiting editAccountRequest()");
+        //if (passwordValue.length() > 0) {
+        //    SportletUser.setPasswordValue(passwordValue);
+        //}
+        log.debug("Exiting editSportletUser()");
     }
 
     private void saveUserRole(User user)

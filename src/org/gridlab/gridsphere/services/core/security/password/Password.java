@@ -28,9 +28,4 @@ public interface Password {
 
     public Date getDateLastModified();
 
-    public boolean getValidation();
-
-    public void setValidation(boolean flag);
-
-    public boolean equals(String password);
 }

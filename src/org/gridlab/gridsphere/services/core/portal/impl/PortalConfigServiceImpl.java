@@ -54,7 +54,6 @@ public class PortalConfigServiceImpl implements PortletServiceProvider, PortalCo
     }
 
     public void savePortalConfigSettings(PortalConfigSettings configSettings) {
-
         try {
             if (configSettings.getOid() == null) {
                 pm.create(configSettings);

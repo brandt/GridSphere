@@ -5,13 +5,12 @@
 package org.gridlab.gridsphere.portlets.core.layout;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
-import org.gridlab.gridsphere.services.core.user.AccountRequest;
-import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.layout.*;
 
@@ -159,14 +158,12 @@ public class LayoutManagerPortlet extends ActionPortlet {
         String theme = themeLB.getSelectedValue();
 
         User user = req.getUser();
-        AccountRequest acctReq = userManagerService.createAccountRequest(user);
+        SportletUser acctReq = userManagerService.editUser(user);
+        if (user != null) {
         acctReq.setAttribute(User.THEME, theme);
-        try {
-            userManagerService.submitAccountRequest(acctReq);
-        } catch (InvalidAccountRequestException e) {
-            log.error("in ProfileManagerPortlet invalid account request", e);
+        userManagerService.saveUser(acctReq);
         }
-        user = userManagerService.approveAccountRequest(acctReq);
+
         PortletPage page = layoutMgr.getPortletPage(req);
         page.setTheme(theme);
         layoutMgr.reloadPage(req);       

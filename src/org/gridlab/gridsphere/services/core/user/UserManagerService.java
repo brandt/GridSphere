@@ -4,77 +4,39 @@
 package org.gridlab.gridsphere.services.core.user;
 
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.impl.SportletUser;
 
 import java.util.List;
 
 public interface UserManagerService  extends LoginUserModule {
 
     /**
-      * Administrators can retrieve all pending account request
-      *
-      * @return a list of pending account requests
-      */
-    public List getAccountRequests();
-
-    /**
-     * Returns the account request for the given user id
+     * Creates a new user
      *
-     * @param oid the user id of account request
-     * @return account request for given user id
+     * @return a blank user
      */
-    public AccountRequest getAccountRequest(String oid);
+    public SportletUser createUser();
 
     /**
-      * Create a new account request. An internal ID is assigned the request
-      *
-      * @return a new AccountRequest
-      */
-    public AccountRequest createAccountRequest();
-
-    /**
-      * Create a change account request. An internal ID is assigned the request
-      *
-      * @return a new AccountRequest
-      */
-    public AccountRequest createAccountRequest(User user);
-
-    /**
-     * Validate account request.
+     * Edits an exising user
      *
-     * @param request the <code>AccountRequest</code> to submit
+     * @return existing user
      */
-    public void validateAccountRequest(AccountRequest request)
-            throws InvalidAccountRequestException;
+    public SportletUser editUser(User user);
 
     /**
-     * Submit the account request to the queue for administrative approval
+     * Adds a user
      *
-     * @param request the <code>AccountRequest</code> to submit
+     * @param user a supplied User object
      */
-    public void submitAccountRequest(AccountRequest request)
-            throws InvalidAccountRequestException;
+    public void saveUser(User user);
 
     /**
-      * Approve a new or modified account request.
-      * If mailMessage is non-null, a mail message will be sent out to the account requestor
-      *
-      * @param request the <code>AccountRequest</code> to approve
-      */
-    public User approveAccountRequest(AccountRequest request);
-
-    /**
-      * Deny a new or modified account request.
-      *
-      * @param request the <code>AccountRequest</code> to approve
-      */
-    public void denyAccountRequest(AccountRequest request);
-
-    /**
-      * Delete an account
+      * Delete a user
       *
       * @param user the user
       */
-    public void deleteAccount(User user);
+    public void deleteUser(User user);
 
     /**
       * Administrators can retrieve all pending account request

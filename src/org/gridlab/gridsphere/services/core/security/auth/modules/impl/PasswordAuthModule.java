@@ -12,6 +12,7 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
+import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -80,7 +81,9 @@ public class PasswordAuthModule extends BaseAuthModule {
             throw ex;
         }
         // Check that password maps to the given user
-        if (!this.passwordManager.isPasswordCorrect(user, password)) {
+        try {
+            this.passwordManager.validateSuppliedPassword(user, password);
+        } catch (InvalidPasswordException e) {
             String msg = "Incorrect password provided.";
             log.debug(msg);
             AuthorizationException ex = new AuthorizationException(msg);

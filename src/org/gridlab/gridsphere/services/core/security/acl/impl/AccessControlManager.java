@@ -21,7 +21,7 @@ import org.gridlab.gridsphere.services.core.security.acl.*;
 import org.gridlab.gridsphere.services.core.user.impl.*;
 import org.gridlab.gridsphere.services.core.user.impl.GroupEntryImpl;
 import org.gridlab.gridsphere.services.core.user.impl.GroupRequestImpl;
-import org.gridlab.gridsphere.services.core.user.impl.UserManager;
+import org.gridlab.gridsphere.services.core.user.impl.UserManagerServiceImpl;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 
 import java.util.*;
@@ -30,7 +30,7 @@ public class AccessControlManager implements AccessControlManagerService {
 
     private static PortletLog log = SportletLog.getInstance(AccessControlManager.class);
     private static AccessControlManager instance = null;
-    private static UserManager userManager = null;
+    private static UserManagerServiceImpl userManager = null;
     private PortletManager pms = null;
     private PortletRegistry registry = null;
     private PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
@@ -44,7 +44,7 @@ public class AccessControlManager implements AccessControlManagerService {
     private AccessControlManager() {
         registry = PortletRegistry.getInstance();
         pms = PortletManager.getInstance();
-        userManager = UserManager.getInstance();
+        userManager = UserManagerServiceImpl.getInstance();
     }
 
     public static void main(String[] args) throws Exception  {

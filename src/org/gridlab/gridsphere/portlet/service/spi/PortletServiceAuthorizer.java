@@ -15,6 +15,13 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceAuthorizationExcepti
 public interface PortletServiceAuthorizer {
 
     /**
+     * Returns the internal user associated with this user
+     *
+     * @return the internal user
+     */
+    public User getInternalUser();
+
+    /**
      * Authorizes operations that require super user access
      *
      * @throws PortletServiceAuthorizationException if supplied user is not a super user

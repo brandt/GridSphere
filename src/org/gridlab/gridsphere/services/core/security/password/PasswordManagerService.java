@@ -9,29 +9,20 @@
 package org.gridlab.gridsphere.services.core.security.password;
 
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.services.core.user.AccountRequest;
 
 public interface PasswordManagerService {
 
     public Password getPassword(User user);
 
-    public void validatePassword(String password)
+    public void validateSuppliedPassword(User user, String suppliedPassword)
           throws InvalidPasswordException;
 
-    public void validatePassword(User user, String password)
-          throws InvalidPasswordException;
-
-    public void savePassword(Password passwordBean)
-            throws InvalidPasswordException;
+    public void savePassword(Password passwordBean);
 
     public void deletePassword(User user);
 
-    public void activatePassword(AccountRequest request, User user)
-            throws InvalidPasswordException;
+    public PasswordEditor editPassword(User user);
 
     public boolean hasPassword(User user);
 
-    public boolean isPasswordCorrect(User user, String password);
-
-    public long getDefaultPasswordLifetime();
 }

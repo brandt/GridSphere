@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.portlets.core.user;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
@@ -18,8 +19,6 @@ import org.gridlab.gridsphere.services.core.security.acl.GroupAction;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.services.core.user.AccountRequest;
-import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridlab.gridsphere.services.core.utils.DateUtil;
@@ -359,14 +358,10 @@ public class ProfileManagerPortlet extends ActionPortlet {
         User user = req.getUser();
 
         // validate user entries to create an account request
-        AccountRequest acctReq = validateUser(event);
+        SportletUser acctReq = validateUser(event);
         if (acctReq != null) {
-            try {
-                userManagerService.submitAccountRequest(acctReq);
-            } catch (InvalidAccountRequestException e) {
-                log.error("in ProfileManagerPortlet invalid account request", e);
-            }
-            user = userManagerService.approveAccountRequest(acctReq);
+            log.debug("approve account request for user: " + user.getID());
+            userManagerService.saveUser(acctReq);
         }
 
 
@@ -475,7 +470,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
     }
 
-    private AccountRequest validateUser(FormEvent event) {
+    private SportletUser validateUser(FormEvent event) {
         log.debug("Entering validateUser()");
         PortletRequest req = event.getPortletRequest();
         User user = req.getUser();
@@ -528,7 +523,8 @@ public class ProfileManagerPortlet extends ActionPortlet {
             return null;
         }
 
-        AccountRequest acctReq = userManagerService.createAccountRequest(user);
+        log.debug("creating account request for user: " + user.getID());
+        SportletUser acctReq = userManagerService.editUser(user);
         acctReq.setEmailAddress(eMail);
         acctReq.setUserName(userName);
         acctReq.setFullName(fullName);
@@ -536,12 +532,14 @@ public class ProfileManagerPortlet extends ActionPortlet {
         if (timeZone!=null) acctReq.setAttribute(User.TIMEZONE, timeZone);
         if (organization != null) acctReq.setOrganization(organization);
 
-        acctReq.setPasswordValidation(false);
+
         // Save password parameters if password was altered
+        /*
         String passwordValue = event.getPasswordBean("password").getValue();
         if (passwordValue.length() > 0) {
             acctReq.setPasswordValue(passwordValue);
         }
+        */
 
         log.debug("Exiting validateUser()");
         return acctReq;
@@ -562,12 +560,22 @@ public class ProfileManagerPortlet extends ActionPortlet {
         if (!passwordValue.equals(confirmPasswordValue)) {
             message.append(this.getLocalizedText(req, "USER_PASSWORD_MISMATCH") + "<br>");
             return true;
-        // If they do match, then validate password with our service
+            // If they do match, then validate password with our service
         } else {
-            try {
-                this.passwordManagerService.validatePassword(passwordValue);
-            } catch (InvalidPasswordException e) {
-                message.append(e.getMessage());
+            String msg = null;
+            if (passwordValue == null) {
+                msg = "Password is not set.";
+            }
+            passwordValue = passwordValue.trim();
+            if (passwordValue.length() == 0) {
+                msg = "Password is blank.";
+
+            }
+            if (passwordValue.length() < 5) {
+                msg = "Password must be longer than 5 characters.";
+            }
+            if (msg != null) {
+                message.append(msg);
                 return true;
             }
         }

@@ -40,6 +40,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
 
     public void reloadPage(PortletRequest req) {
         PortletPage page = pageFactory.createPortletPage(req);
+        
         page.init(req, new Vector());
     }
 

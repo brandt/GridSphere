@@ -1,9 +1,9 @@
 /*
  * Created by IntelliJ IDEA.
  * User: russell
- * Date: Jan 18, 2003
- * Time: 7:12:18 PM
- * To change template for new class use 
+ * Date: Jan 8, 2003
+ * Time: 11:30:04 AM
+ * To change template for new interface use 
  * Code Style | Class Templates options (Tools | IDE Options).
  */
 package org.gridlab.gridsphere.services.core.security.password;
@@ -12,110 +12,22 @@ import org.gridlab.gridsphere.portlet.User;
 
 import java.util.Date;
 
-public class PasswordEditor implements Password {
+public interface PasswordEditor extends Password {
 
-    private User user = null;
-    private long lifetime = -1;
-    private Date dateExpires = null;
-    private Date dateCreated = null;
-    private Date dateLastModified = null;
+    public void setUser(User user);
 
-    private transient String hint = "";
-    private transient String value = "";
-    private transient boolean validation = true;
+    public void setHint(String hint);
 
-    private transient boolean isDirty = false;
+    public void setValue(String passwordValue);
 
-    public PasswordEditor() {
-    }
+    public void setLifetime(long lifetime);
 
-    public PasswordEditor(User user) {
-        // Save user
-        this.user = user;
-    }
+    public void setDateExpires(Date expires);
 
-    public User getUser() {
-        return this.user;
-    }
+    public void setDateCreated(Date created);
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+    public void setDateLastModified(Date date);
 
-    public String getHint() {
-        return this.hint;
-    }
 
-    public void setHint(String hint) {
-        this.hint = hint;
-    }
 
-    public long getLifetime() {
-        return this.lifetime;
-    }
-
-    public void setLifetime(long lifetime) {
-        this.lifetime = lifetime;
-        resetDateExpires();
-    }
-
-    public Date getDateExpires() {
-        return this.dateExpires;
-    }
-
-    public void setDateExpires(Date dateExpires) {
-        this.dateExpires = dateExpires;
-        resetLifetime();
-    }
-
-    public Date getDateCreated() {
-        return this.dateCreated;
-    }
-
-    public Date getDateLastModified() {
-        return this.dateLastModified;
-    }
-
-    public String getValue() {
-        return this.value;
-    }
-
-    public void setPassword(String value) {
-        this.value = value;
-        this.isDirty = true;
-    }
-
-    public boolean isDirty() {
-        return this.isDirty;
-    }
-
-    public boolean equals(String value) {
-        return this.value.equals(value);
-    }
-
-    public void resetDateExpires() {
-        if (this.lifetime > -1) {
-            long now = (new Date()).getTime();
-            this.dateExpires = new Date(now + this.lifetime);
-        } else {
-            this.dateExpires = null;
-        }
-    }
-
-    private void resetLifetime() {
-        if (this.dateExpires == null) {
-            this.lifetime = -1;
-        } else {
-            long now = (new Date()).getTime();
-            this.lifetime = dateExpires.getTime() - now;
-        }
-    }
-
-    public boolean getValidation() {
-        return this.validation;
-    }
-
-    public void setValidation(boolean flag) {
-        this.validation = flag;
-    }
 }
