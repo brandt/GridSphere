@@ -36,6 +36,77 @@
     </example>
     </sect1>
 
+    <sect1 id="basictag"><title>Base Tag Attributes</title>
+        <para>
+            In general all UI tags inherit from a <classname>BaseComponentTag</classname> which
+            provides various attributes for setting the look and feel, labels and values. Below is a list
+            of the basic tag attributes, however not all are used for every UI tag. The beanID tag attribute
+            can be used in every UI tag and provides a label for accessing the tag as a visual bean from
+            the portlet. See the section on <link linkend="uibeans">visual beans</link> for more details.
+        </para>
+        <table>
+            <title>Attributes to actionlink</title>
+            <tgroup cols="3">
+                <thead>
+                    <row>
+                        <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>beanID</entry><entry>no</entry><entry>string: a label used to express this component
+                            as a visual bean that can be made available to the portlet.</entry>
+                    </row>
+                </tbody>
+                <tbody>
+                    <row>
+                        <entry>name</entry><entry>no</entry><entry>string: a name for this component. Generally this
+                            uses the underlying name attribute of the corresponding HTML element</entry>
+                    </row>
+                </tbody>
+                <tbody>
+                    <row>
+                        <entry>value</entry><entry>no</entry><entry>string: the value of this component. Generally this
+                            uses the underlying value attribute of the corresponding HTML element</entry>
+                    </row>
+                </tbody>
+                <tbody>
+                    <row>
+                        <entry>readonly</entry><entry>no</entry><entry>boolean: true if this component is intended to be
+                        read-only, false otherwise</entry>
+                    </row>
+                </tbody>
+                <tbody>
+                    <row>
+                        <entry>disabled</entry><entry>no</entry><entry>boolean: true if this component is intended to be
+                        disabled, false otherwise</entry>
+                    </row>
+                </tbody>
+                <tbody>
+                    <row>
+                        <entry>color</entry><entry>no</entry><entry>string: the foreground color of this component</entry>
+                    </row>
+                </tbody>
+                <tbody>
+                    <row>
+                        <entry>bgcolor</entry><entry>no</entry><entry>string: the background color of this component</entry>
+                    </row>
+                </tbody>
+                <tbody>
+                    <row>
+                        <entry>cssStyle</entry><entry>no</entry><entry>string: the CSS style to use for rendering this
+                        component</entry>
+                    </row>
+                </tbody>
+                <tbody>
+                    <row>
+                        <entry>font</entry><entry>no</entry><entry>string: the font to use when rendering text for this
+                        component</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+    </sect1>
 
     <sect1 id="actiontags"><title>Action Tags</title>
         <para>
@@ -56,7 +127,7 @@
                 <tgroup cols="3">
                     <thead>
                         <row>
-                            <entry>attribute name</entry><entry>required?</entry><entry>description</entry>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
                         </row>
                     </thead>
                     <tbody>
@@ -83,13 +154,15 @@
             <example>
                 <title>Usage of actionlink</title>
                 <screen>
-                    <![CDATA[<ui:actionlink action="doActionLink" key="DOIT"/>]]>
+<![CDATA[
+<ui:actionlink action="doActionLink" key="DOIT"/>]]>
                 </screen>
                 This example would create an html hyperlink pointing to the current portlet with a clickable
                 a localized text value DOIT that will trigger the doActionLink method to be performed in the
                 portlet.
                 <screen>
-                    <![CDATA[<ui:actionlink beanId="myAction" action="doActionLink" key="DOIT"/>]]>
+<![CDATA[
+<ui:actionlink beanId="myAction" action="doActionLink" key="DOIT"/>]]>
                 </screen>
                 By providing a beanId, the tag will first check for the existence of a myAction ActionLinkBean
                 that would have been created by the portlet and uses that first. Otherwise one is created using the
@@ -106,7 +179,7 @@
                 <tgroup cols="3">
                     <thead>
                         <row>
-                            <entry>attribute name</entry><entry>required?</entry><entry>description</entry>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
                         </row>
                     </thead>
                     <tbody>
@@ -155,7 +228,7 @@
                 <tgroup cols="3">
                     <thead>
                         <row>
-                            <entry>attribute name</entry><entry>required?</entry><entry>description</entry>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
                         </row>
                     </thead>
                     <tbody>
@@ -210,7 +283,9 @@
                 The file form tag is used to create a form that is used to accept multi-part mime encoded
                 upload files. Generally, a fileinput tag is nested inside a fileform tag to allow access to
                 the uploaded file from a fileinput bean. Please see <link linkend="fileinputtag">fileinput tag</link>
-                for more information.
+                for more information. Currently since files are uploaded as part of the servlet request,
+                it's not possible to embed other tag elements inside of a fileform tag. We are hoping to remedy this
+                shortcoming soon!
             </para>
             <example>
                 <title>Usage of fileform</title>
@@ -284,7 +359,7 @@
                 <tgroup cols="3">
                     <thead>
                         <row>
-                            <entry>attribute name</entry><entry>required?</entry><entry>description</entry>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
                         </row>
                     </thead>
                     <tbody>
@@ -326,29 +401,23 @@
             </example>
         </sect2>
 
-                <sect2 id="tabletag">
+        <sect2 id="tabletag">
             <title>Table</title>
             <para>
-                A table is a
+                A table tag is a wrapper for a standard HTML table. A table tag may contain nested
+                <link linkend="tablerowtag">table row tags</link> that themselves may contain
+                <link linkend="tablecelltag">table cell tags</link>. In general the
+                <link linkend="frametag">frame tag</link> should be used instead of the table tag
+                to create a common look and feel.
             </para>
             <table>
-                <title>Attributes to panel</title>
+                <title>Attributes to table</title>
                 <tgroup cols="3">
                     <thead>
                         <row>
-                            <entry>attribute name</entry><entry>required?</entry><entry>description</entry>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
                         </row>
                     </thead>
-                    <tbody>
-                        <row>
-                            <entry>rows</entry><entry>no</entry><entry>integer: the number of rows</entry>
-                        </row>
-                    </tbody>
-                    <tbody>
-                        <row>
-                            <entry>cols</entry><entry>no</entry><entry>integer: the number of columns</entry>
-                        </row>
-                    </tbody>
                     <tbody>
                         <row>
                             <entry>width</entry><entry>no</entry><entry>integer: the width of the panel</entry>
@@ -362,20 +431,207 @@
                 </tgroup>
             </table>
             <example>
-                <title>Usage of panel</title>
+                <title>Usage of table</title>
                 <screen>
 <![CDATA[
-<ui:panel rows="2" cols="1">
-    <ui:frame>
-        ...
-    </ui:frame>
-    <ui:frame>
-        ...
-    </ui:frame>
-</ui:panel>
+<ui:table>
+    <ui:tablerow>
+        <ui:tablecell>
+            <ui:text value="Something"/>
+        </ui:tablecell>
+        <ui:tablecell>
+            <ui:text value="And.."/>
+            <ui:text value="  more Nothing"/>
+        </ui:tablecell>
+    </ui:tablerow>
+</ui:table>
  ]]>
                 </screen>
-                This creates a panel with two frames one on top of the other.
+                This creates a table consisting of a table row with two table cells displaying text messages
+            </example>
+        </sect2>
+
+        <sect2 id="tablerowtag">
+            <title>Table Row</title>
+            <para>
+                A table row tag may contain nested <link linkend="tablecelltag">table cell tags</link>
+                and is used within a <link linkend="tabletag">table</link> or
+                <link linkend="frametag">frame</link> tag.
+            </para>
+            <table>
+                <title>Attributes to table row</title>
+                <tgroup cols="3">
+                    <thead>
+                        <row>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
+                        </row>
+                    </thead>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of table row</title>
+                <screen>
+<![CDATA[
+<ui:table>
+    <ui:tablerow>
+        <ui:tablecell>
+            <ui:text value="Something"/>
+        </ui:tablecell>
+        <ui:tablecell>
+            <ui:text value="And.."/>
+            <ui:text value="  more Nothing"/>
+        </ui:tablecell>
+    </ui:tablerow>
+</ui:table>
+ ]]>
+                </screen>
+                This creates a table consisting of a table row with two table cells displaying text messages
+            </example>
+        </sect2>
+
+                <sect2 id="tablecelltag">
+            <title>Table Cell</title>
+            <para>
+                A table cell tag is used inside of a table row tag. One or more table cell tags can
+                be included in a table row tag. Any other tag may be contained inside a table cell tag.
+            </para>
+            <table>
+                <title>Attributes to table cell</title>
+                <tgroup cols="3">
+                    <thead>
+                        <row>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>width</entry><entry>no</entry><entry>integer: the width of the panel</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>cellspacing</entry><entry>no</entry><entry>integer: the cellspacing table width</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of table cell</title>
+                <screen>
+<![CDATA[
+<ui:table>
+    <ui:tablerow>
+        <ui:tablecell>
+            <ui:text value="Something"/>
+        </ui:tablecell>
+        <ui:tablecell>
+            <ui:text value="And.."/>
+            <ui:text value="  more Nothing"/>
+        </ui:tablecell>
+    </ui:tablerow>
+</ui:table>
+ ]]>
+                </screen>
+                This creates a table consisting of a table row with two table cells displaying text messages
+            </example>
+        </sect2>
+
+        <sect2 id="frametag">
+            <title>Frame</title>
+            <para>
+                A frame tag is a stylized table tag that performs the same purpose, but provides
+                a default CSS look and feel. In general the frame tag should be used instead of the table tag
+                to create a common look and feel. A table tag may contain nested
+                <link linkend="tablerowtag">table row tags</link> that themselves may contain
+                <link linkend="tablecelltag">table cell tags</link>.
+            </para>
+            <table>
+                <title>Attributes to frame</title>
+                <tgroup cols="3">
+                    <thead>
+                        <row>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>width</entry><entry>no</entry><entry>integer: the width of the panel</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>cellspacing</entry><entry>no</entry><entry>integer: the cellspacing table width</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of frame</title>
+                <screen>
+<![CDATA[<ui:panel>
+    <ui:frame>
+        <ui:tablerow>
+            <ui:tablecell>
+                <ui:text value="Something"/>
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:text value="And.."/>
+                <ui:text value="  more Nothing"/>
+            </ui:tablecell>
+        </ui:tablerow>
+    </ui:frame>
+</ui:panel>]]>
+                </screen>
+                This creates a frame consisting of a table row with two table cells displaying text messages
+            </example>
+        </sect2>
+
+        <sect2 id="errframetag">
+            <title>Error Frame</title>
+            <para>
+                The Error Frame tag is used to provide a frame used for displaying errors. In general,
+                this tag may be nested inside a panel tag.
+            </para>
+            <table>
+                <title>Attributes to error frame</title>
+                <tgroup cols="3">
+                    <thead>
+                        <row>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>width</entry><entry>no</entry><entry>integer: the width of the panel</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>cellspacing</entry><entry>no</entry><entry>integer: the cellspacing table width</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>key</entry><entry>no</entry><entry>string: name of the key to lookup localized text from
+                            the <filename>WEB-INF/classes/Portlet_XX.properties</filename> localized properties file</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>value</entry><entry>no</entry><entry>string: actual text to display</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of frame</title>
+                <screen>
+<![CDATA[<ui:panel>
+    <ui:errorframe beanID="errmsg"/>
+</ui:panel>]]>
+                </screen>
+                This creates a panel with an error frame that displays a message
+                using the errmsg error frame bean.
             </example>
         </sect2>
 
@@ -389,7 +645,7 @@
                 <tgroup cols="3">
                     <thead>
                         <row>
-                            <entry>attribute name</entry><entry>required?</entry><entry>description</entry>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
                         </row>
                     </thead>
                     <tbody>
@@ -425,7 +681,41 @@
             </example>
         </sect2>
 
-
+        <sect2 id="hiddenfieldtag">
+            <title>HiddenField</title>
+            <para>
+                This tag renders a hidden field that can be used to provide a form with additional
+                name/value attributes.
+            </para>
+            <table>
+                <title>Attributes to hiddenfield</title>
+                <tgroup cols="3">
+                    <thead>
+                        <row>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>name</entry><entry>no</entry><entry>string: name of the hiddenfield</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>value</entry><entry>no</entry><entry>string: the value of the hiddenfield</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of hiddenfield</title>
+                <screen>
+<![CDATA[<ui:textfield beanId="myHiddenField" name="fruit" value="orange"/>]]>
+                </screen>
+                This example creates a hiddenfield with a name and value. The beanId label can be used to
+                retrieve the bean from a portlet.
+            </example>
+        </sect2>
 
         <sect2 id="fileinputtag">
             <title>FileInput</title>
@@ -437,7 +727,7 @@
                 <tgroup cols="3">
                     <thead>
                         <row>
-                            <entry>attribute name</entry><entry>required?</entry><entry>description</entry>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
                         </row>
                     </thead>
 
@@ -489,7 +779,7 @@
                 <tgroup cols="3">
                     <thead>
                         <row>
-                            <entry>attribute name</entry><entry>required?</entry><entry>description</entry>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
                         </row>
                     </thead>
 
@@ -545,7 +835,7 @@
                 <tgroup cols="3">
                     <thead>
                         <row>
-                            <entry>attribute name</entry><entry>required?</entry><entry>description</entry>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
                         </row>
                     </thead>
 
@@ -602,7 +892,7 @@
                 <tgroup cols="3">
                     <thead>
                         <row>
-                            <entry>attribute name</entry><entry>required?</entry><entry>description</entry>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
                         </row>
                     </thead>
                     <tbody>
@@ -644,6 +934,11 @@
             <table>
                 <title>Attributes to textarea</title>
                 <tgroup cols="3">
+                    <thead>
+                        <row>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
+                        </row>
+                    </thead>
                     <tbody>
                         <row>
                             <entry>rows</entry><entry>no</entry><entry>integer: the maximum number of rows to display</entry>
@@ -693,6 +988,11 @@
             <table>
                 <title>Attributes to text</title>
                 <tgroup cols="3">
+                    <thead>
+                        <row>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
+                        </row>
+                    </thead>
                     <tbody>
                         <row>
                             <entry>key</entry><entry>no</entry><entry>string: name of the key to lookup localized text from
@@ -704,116 +1004,77 @@
                             <entry>value</entry><entry>no</entry><entry>string: actual text to display</entry>
                         </row>
                     </tbody>
+                    <tbody>
+                        <row>
+                            <entry>error</entry><entry>no</entry><entry>boolean: if true the text is rendered in the
+                            default look and feel used to present errors and warnings</entry>
+                        </row>
+                    </tbody>
                 </tgroup>
             </table>
             <example>
                 <title>Usage of text</title>
                 <screen>
-<![CDATA[<ui:text value="text"/>]]>
+<![CDATA[<ui:text key="GREETING_MSG"/>
+<ui:text value="something bad happened" error="true"/>]]>
                 </screen>
-                Just prints out "text"
+                The first example prints a localized message using the GREETING_MSG as a key. The
+                second example displays a message using the error look and feel.
             </example>
         </sect2>
-
-        <sect2 id="dropdownlist">
-            <title>DropDownList</title>
-            <para>
-                This tag creates a dropdownlist. You need to pass in a see dropdownlistbean.
-            </para>
-            <table>
-                <title>Attributes to dropdownlist</title>
-                <tgroup cols="1">
-                    <tbody>
-                        <row>
-                            <entry>bean (DropDownListBean)</entry>
-                        </row>
-                    </tbody>
-                </tgroup>
-            </table>
-            <example>
-                <title>Usage of dropdownlist</title>
-                <screen>
-<![CDATA[<gs:dropdownlist  bean="name of dropdownlistbean"/>]]>
-                </screen>
-                This example creates a dropdownlist from the bean.
-            </example>
-        </sect2>
-
 
         <sect2 id="listbox">
             <title>ListBox</title>
             <para>
-                This tag creates a listbox. You need to pass in a see listboxbean.
+                This tag creates a listbox. A listbox can contain listbox item tags.
             </para>
             <table>
                 <title>Attributes to listbox</title>
-                <tgroup cols="1">
-                    <tbody>
+                <tgroup cols="3">
+                    <thead>
                         <row>
-                            <entry>bean (ListBoxBean)</entry>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
                         </row>
-                    </tbody>
+                    </thead>
+
                 </tgroup>
             </table>
             <example>
                 <title>Usage of listbox</title>
                 <screen>
-<![CDATA[<gs:listbox  bean="name of listboxbean"/>]]>
+<![CDATA[<ui:listbox bean="name of listboxbean"/>]]>
                 </screen>
                 This example creates a listbox from the bean.
             </example>
         </sect2>
 
-
-        <sect2 id="checkboxlist">
-            <title>CheckBoxList</title>
+        <sect2 id="listboxitem">
+            <title>ListBox Item</title>
             <para>
-                This tag creates a list of checkboxes with associated labels.  You need to pass in a see checkboxlistbean.
+                This tag creates an item in a listbox. You need to pass in a see listboxbean.
             </para>
             <table>
-                <title>Attributes to checkboxlist</title>
-                <tgroup cols="1">
-                    <tbody>
+                <title>Attributes to listboxitem</title>
+                <tgroup cols="3">
+                    <thead>
                         <row>
-                            <entry>bean (CheckBoxListBean)</entry>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
                         </row>
-                    </tbody>
+                    </thead>
                 </tgroup>
             </table>
             <example>
-                <title>Usage of checkboxlist</title>
+                <title>Usage of listboxitem</title>
                 <screen>
-<![CDATA[<gs:checkboxlist  bean="name of checkboxlistbean"/>]]>
+<![CDATA[<ui:listbox>
+    <ui:listboxitem value="hello" selected="true"/>
+    <ui:listboxitem value="goodbye"/>
+</ui:listbox>]]>
                 </screen>
-                This example creates a list of checkboxes (with labels) from the bean.
+                This example creates a listbox containing two listbox item elements, one of which
+                is initially selected.
             </example>
         </sect2>
-
-
-        <sect2 id="radiobuttonlist">
-            <title>RadioButtonList</title>
-            <para>
-                This tag creates a list of radiobuttons with associated labels.
-            </para>
-            <table>
-                <title>Attributes to radiobuttonlist</title>
-                <tgroup cols="1">
-                    <tbody>
-                        <row>
-                            <entry>bean (RadioButtonListBean)</entry>
-                        </row>
-                    </tbody>
-                </tgroup>
-            </table>
-            <example>
-                <title>Usage of radiobuttonlist</title>
-                <screen>
-<![CDATA[<gs:checkboxlist  bean="name of radiobuttonlistbean"/>]]>
-                </screen>
-                This creates a list of radiobuttons (with labels) from the bean.
-            </example>
-        </sect2>
-
 
     </sect1>
 
