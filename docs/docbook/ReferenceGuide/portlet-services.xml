@@ -19,6 +19,9 @@ a reusable library to other portlets. In addition, portlet services offer the fo
         <member>Integration with testing framework makes it easy to write JUnit tests</member>
     </simplelist>
 </para>
+    Portlet services can be easily used within the WebSphere portlet development model. Because JSR 168 specification does
+    not have any concept of portlet services, a developer must use the JSR "ActionPortlet" subclass in order to get a
+    portlet service instance.
 <sect1>
     <title>Portlet Service Architecture</title>
 <para>
@@ -40,7 +43,7 @@ shutdown. A <link linkend='portlet-services-descriptor'>portlet services descrip
 &PortletServiceConfig;.
 </para>
 <para>
-    A portlet service can be obtained  from a portlet using the &PortletContext; object
+    Under the WebSphere portlet model, a portlet service can be obtained  from a portlet using the &PortletContext; object
     <link linkend='portlet.objects.config' endterm='portlet.context'/>. Because the method
     <methodname>getService()</methodname> returns a &PortletService;, it must be typecast to the approriate
     service instance:
@@ -56,12 +59,24 @@ shutdown. A <link linkend='portlet-services-descriptor'>portlet services descrip
     implementation specified in the services descriptor.
 </para>
     <para>
-    A <emphasis>User Service</emphasis> allows a service to provide logic appropriate for the user's request. For exaple,
+        In JSR 168 portlet development, the &ActionPortlet; subclass of &GenericPortlet; must be used as it provides the
+        necessary createPortletService method:
+    </para>
+    <para>
+        <programlisting>
+         ExampleService =
+           (ExampleService)createPortletService(ExampleService.class);
+        </programlisting>
+    </para>
+    <para>
+    A <emphasis>User Service</emphasis> provides two possibilities. In the first case, a service can provide logic appropriate for the user's request. For exaple,
     the method <methodname>deleteUser(User <varname>user</varname>)</methodname> in the <classname>UserManagerService</classname>
     requires that a user with the role <constant>SUPER</constant> requested the service instance. For any other service
     instance, the method will fail with a <classname>PortletServiceAuthorizationException</classname>. User services not only help
     provide a library that will "do the right thing" based on a client's role, but it makes the services much more
     robust and secure for other portlet developers to take advantage of.
+        In the second case, a <emphasis>User Service</emphasis> simply provides a per user service instance. This can be useful
+        for associating an independent service with a particular user.
 </para>
 </sect1>
 
@@ -70,7 +85,7 @@ shutdown. A <link linkend='portlet-services-descriptor'>portlet services descrip
     <title>Portlet Services Descriptor</title>
     <para>
 The portlet services descriptor file located in <filename>WEB-INF/PortletServices.xml</filename> specifies
-the services provided by this portlet web application. The following example shows the actual service definitions for
+the services provided by this portlet web application. The following example shows service definitions for
     the login and access control manager services.
     </para>
    <informalexample id="services.def"><programlisting>
@@ -155,9 +170,7 @@ the services provided by this portlet web application. The following example sho
 <sect1>
     <title id="core-portlet-services">Core Portlet Services</title>
 GridSphere includes several core services that are used by the gridsphere portlets and may be used
-by other external portlets. Only the Login Service by necessity is not a user service.
-The <classname>UserManagerService</classname> and <classname>AccessControlService</classname> require
-a User object for creation.
+by other external portlets.
 For more details on methods provided by the services, consult the Javadoc API
 <variablelist>
     <title>Core Portlet Services</title>
@@ -171,14 +184,63 @@ For more details on methods provided by the services, consult the Javadoc API
     <varlistentry><term>AccessControlManagerService</term>
         <listitem>
             <para>
-                Provides Authorization Capabilities to Portal Users
+                Provides authorization capabilities to portal users
             </para>
         </listitem>
     </varlistentry>
     <varlistentry><term>UserManagerService</term>
         <listitem>
             <para>
-                Provides User Administration Capabilities
+                Provides user administration capabilities
+            </para>
+        </listitem>
+    </varlistentry>
+    <varlistentry><term>LayoutManagerService</term>
+        <listitem>
+            <para>
+                Provides layout modification capabilities
+            </para>
+        </listitem>
+    </varlistentry>
+    <varlistentry><term>LocaleService</term>
+        <listitem>
+            <para>
+                Provides a list of supported locales.
+            </para>
+        </listitem>
+    </varlistentry>
+    <varlistentry><term>PortletManagerService</term>
+        <listitem>
+            <para>
+                Provides portlet loading and unloading capabilities.
+            </para>
+        </listitem>
+    </varlistentry>
+    <varlistentry><term>TextMessagingService</term>
+        <listitem>
+            <para>
+                Provides text messaging capabilities.
+            </para>
+        </listitem>
+    </varlistentry>
+    <varlistentry><term>MailService</term>
+        <listitem>
+            <para>
+                Provides e-mail capabilities.
+            </para>
+        </listitem>
+    </varlistentry>
+    <varlistentry><term>PortalConfigService</term>
+        <listitem>
+            <para>
+                Provides a simple service for persistencing global gridsphere portal configuration settings.
+            </para>
+        </listitem>
+    </varlistentry>
+    <varlistentry><term>RequestService</term>
+        <listitem>
+            <para>
+                Provides asimple service for tracking requests nad providing persistence.
             </para>
         </listitem>
     </varlistentry>
@@ -568,7 +630,6 @@ For more details on methods provided by the services, consult the Javadoc API
     The GridSphere testing framework relies on the &JUnit; and Jakarta &Cactus; testing frameworks to
     test portlet services that are deployed to a &Tomcat; container where they are tested.
     Check the <filename>tests</filename> directory in GridSphere to see how unit tests are created for services.
-    Once a new test is created, it must be added to the AllJunitTests.java file.
     </para>
 
 </sect1>
