@@ -157,6 +157,17 @@
  }
 
 
+ function GridSphere_popup(mylink, windowname) {
+    if (! window.focus)return true;
+    var href;
+    if (typeof(mylink) == 'string')
+        href=mylink;
+    else
+        href=mylink.href;
+        window.open(href, windowname, 'width=800,height=600,scrollbars=yes,resizable=yes');
+    return false;
+ }
+
 
 // This code made publicly available from 
 // http://www.kryogenix.org/code/browser/sorttable/sorttable.js 
