@@ -55,15 +55,6 @@ public class UserManagerServiceImpl implements UserManagerService, PortletServic
       *
       * @return a list of pending account requests
       */
-    public List selectAccountRequests(String criteria) {
-        return userManager.selectAccountRequests(criteria);
-    }
-
-    /**
-      * Administrators can retrieve all pending account request
-      *
-      * @return a list of pending account requests
-      */
     public List getAccountRequests() {
         return userManager.getAccountRequests();
     }
@@ -193,15 +184,6 @@ public class UserManagerServiceImpl implements UserManagerService, PortletServic
     }
 
     /**
-     * Return a list of all portal users
-     *
-     * @return a list containing all Role objects
-     */
-    public List selectUsers(String criteria) {
-        return userManager.selectUsers(criteria);
-    }
-
-    /**
       * Administrators can retrieve all pending account request
       *
       * @return a list of pending account requests
@@ -230,8 +212,8 @@ public class UserManagerServiceImpl implements UserManagerService, PortletServic
       * @param User The super user requesting the user object
       * @param String The user name or login id of the user in question
       */
-    public User getUserByLoginName(String loginName) {
-        return userManager.getUserByLoginName(loginName);
+    public User getUserByUserName(String loginName) {
+        return userManager.getUserByUserName(loginName);
     }
 
     /**
@@ -240,8 +222,8 @@ public class UserManagerServiceImpl implements UserManagerService, PortletServic
       * @param userID the user login ID
       * @return true if the user exists, false otherwise
       */
-    public boolean existsUserWithLoginName(String loginName) {
-        return userManager.existsUserWithLoginName(loginName);
+    public boolean existsUserName(String loginName) {
+        return userManager.existsUserName(loginName);
     }
 
 }

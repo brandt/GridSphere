@@ -95,7 +95,7 @@ public class UserManagerBean extends PortletBean {
     protected void initServices()
             throws PortletException {
         _log.debug("Entering initServices()");
-        this.userManagerService = (UserManagerService)getPortletService(UserManagerService.class;
+        this.userManagerService = (UserManagerService)getPortletService(UserManagerService.class);
         this.aclManagerService = (AccessControlManagerService)getPortletService(AccessControlManagerService.class);
         this.passwordManagerService = (PasswordManagerService)getPortletService(PasswordManagerService.class);
         _log.debug("Exiting initServices()");

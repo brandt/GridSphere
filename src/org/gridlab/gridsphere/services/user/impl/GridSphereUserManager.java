@@ -138,7 +138,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         String loginName = config.getInitParameter("loginName", "root").trim();
         log.info("Root user login name = " + loginName);
         /** 2. Create root user account if doesn't exist **/
-        User rootUser = getUserByLoginName(loginName);
+        User rootUser = getUserByUserName(loginName);
         if (rootUser == null) {
             /* Retrieve root user properties */
             log.info("Retrieving root user properties");
@@ -181,7 +181,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
                 throw new PortletServiceUnavailableException(e.getMessage());
             }
             /* Retrieve root user object */
-            rootUser = getUserByLoginName(loginName);
+            rootUser = getUserByUserName(loginName);
             /* Grant super role to root user */
             log.info("Granting super role to root user.");
             grantSuperRole(rootUser);
@@ -256,7 +256,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
             ex.putInvalidParameter("username", "No username provided.");
             throw ex;
         }
-        User user = getUserByLoginName(loginName);
+        User user = getUserByUserName(loginName);
         if (user == null) {
             log.debug("Unable to retrieve user " + loginName);
             AuthenticationException ex = new AuthenticationException();
@@ -305,7 +305,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     public AccountRequest createAccountRequest(User user) {
         AccountRequestImpl request = new AccountRequestImpl();
         request.setID(user.getID());
-        request.setLoginName(user.getLoginName());
+        request.setUserName(user.getUserName());
         request.setFamilyName(user.getFamilyName());
         request.setGivenName(user.getGivenName());
         request.setFullName(user.getFullName());
@@ -502,7 +502,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         return getSportletUserImpl(id);
     }
 
-    public User getUserByLoginName(String loginName) {
+    public User getUserByUserName(String loginName) {
         return getSportletUserImplByLoginName(loginName);
     }
 
@@ -536,7 +536,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
             user = new SportletUserImpl();
             user.setID(userID);
         }
-        user.setLoginName(request.getLoginName());
+        user.setUserName(request.getUserName());
         user.setFamilyName(request.getFamilyName());
         user.setGivenName(request.getGivenName());
         user.setFullName(request.getFullName());
@@ -578,7 +578,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         return existsSportletUserImpl(criteria);
     }
 
-    public boolean existsUserWithLoginName(String loginName) {
+    public boolean existsUserName(String loginName) {
         String criteria = "where user.UserID=\"" + loginName + "\"";
         return existsSportletUserImpl(criteria);
     }
@@ -615,6 +615,16 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     public List getGroupRequests(PortletGroup group) {
         String criteria = "where groupRequest.group=\"" + group.getID() + "\"";
         return selectGroupRequests(criteria);
+    }
+
+    public List getGroupRequestsForGroups(List groups) {
+        List sumGroupRequests = null;
+        for (int ii = 0; ii < groups.size(); ++ii) {
+            PortletGroup group = (PortletGroup)groups.get(ii);
+            List groupRequests = getGroupRequests(group);
+            sumGroupRequests.add(groupRequests);
+        }
+        return sumGroupRequests;
     }
 
     public List selectGroupRequests(String criteria) {
@@ -790,6 +800,16 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     public List getGroupEntries(PortletGroup group) {
         String criteria = "where groupEntry.group=\"" + group.getID() + "\"";
         return selectGroupEntries(criteria);
+    }
+
+    public List getGroupEntriesForGroups(List groups) {
+        List sumGroupEntries = null;
+        for (int ii = 0; ii < groups.size(); ++ii) {
+            PortletGroup group = (PortletGroup)groups.get(ii);
+            List groupEntries = getGroupEntries(group);
+            sumGroupEntries.add(groupEntries);
+        }
+        return sumGroupEntries;
     }
 
     public List selectGroupEntries(String criteria) {

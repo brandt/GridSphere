@@ -54,10 +54,6 @@ public class AccessControlManagerServiceImpl implements AccessControlManagerServ
 
     /*** PORTLET GROUP METHODS ***/
 
-    public List selectGroups(String criteria) {
-        return aclManager.selectGroups(criteria);
-    }
-
     public List getGroups() {
         return aclManager.getGroups();
     }
@@ -92,8 +88,8 @@ public class AccessControlManagerServiceImpl implements AccessControlManagerServ
         return aclManager.getGroupRequests(group);
     }
 
-    public List selectGroupRequests(String criteria) {
-        return aclManager.selectGroupRequests(criteria);
+    public List getGroupRequestsForGroups(List groups) {
+        return aclManager.getGroupRequestsForGroups(groups);
     }
 
     public GroupRequest getGroupRequest(String id) {
@@ -149,8 +145,8 @@ public class AccessControlManagerServiceImpl implements AccessControlManagerServ
         return aclManager.getGroupEntries(group);
     }
 
-    public List selectGroupEntries(String criteria) {
-        return aclManager.selectGroupEntries(criteria);
+    public List getGroupEntriesForGroups(List groups) {
+        return aclManager.getGroupEntriesForGroups(groups);
     }
 
     public GroupEntry getGroupEntry(String id) {

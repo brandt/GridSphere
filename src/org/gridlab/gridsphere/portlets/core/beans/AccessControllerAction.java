@@ -35,9 +35,6 @@ public class AccessControllerAction extends PortletActionConstant {
     public static final AccessControllerAction ACTION_GROUP_ENTRY_REMOVE_CONFIRM = new AccessControllerAction("groupEntryRemoveConfirm");
     public static final AccessControllerAction ACTION_GROUP_ENTRY_REMOVE_CANCEL = new AccessControllerAction("groupEntryRemoveCancel");
 
-    private AccessControllerAction() {
-    }
-
     protected AccessControllerAction(String name) {
         super(name);
     }
