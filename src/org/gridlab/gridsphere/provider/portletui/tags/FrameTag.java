@@ -100,9 +100,9 @@ public class FrameTag extends TableTag {
         } else {
             tableBean = new FrameBean();
             tableBean.setWidth(width);
-            if (cellSpacing == null) tableBean.setCellSpacing(cellSpacing);
-            if (cellPadding == null) tableBean.setCellPadding(cellPadding);
-            if (border == null) tableBean.setBorder(border);
+            if (cellSpacing != null) tableBean.setCellSpacing(cellSpacing);
+            if (cellPadding != null) tableBean.setCellPadding(cellPadding);
+            if (border != null) tableBean.setBorder(border);
             tableBean.setCssClass(cssClass);
             tableBean.setCssStyle(cssStyle);
             this.setBaseComponentBean(tableBean);
