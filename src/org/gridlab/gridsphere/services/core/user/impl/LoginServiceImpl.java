@@ -60,14 +60,16 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     }
 
     public void addActiveAuthModule(User user, LoginAuthModule authModule) {
-        AuthModuleEntry entry = new AuthModuleEntry();
-        entry.setUserId(user.getUserID());
-        entry.setModuleClassName(authModule.getClass().getName());
-        entry.setAttributes(authModule.getAttributes());
-        try {
-            pm.create(entry);
-        } catch (PersistenceManagerException e) {
-            e.printStackTrace();
+        if (!hasActiveAuthModule(user, authModule.getClass().getName())) {
+            AuthModuleEntry entry = new AuthModuleEntry();
+            entry.setUserId(user.getID());
+            entry.setModuleClassName(authModule.getClass().getName());
+            entry.setAttributes(authModule.getAttributes());
+            try {
+                pm.create(entry);
+            } catch (PersistenceManagerException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -112,8 +114,10 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         while (it.hasNext()) {
             AuthModuleEntry entry = (AuthModuleEntry)it.next();
             String className = entry.getModuleClassName();
+            System.err.println("trying to create a new login auth module:" + className);
             try {
                 LoginAuthModule authModule  = (LoginAuthModule)Class.forName(className).newInstance();
+                authModule.setAttributes(entry.getAttributes());
                 mods.add(authModule);
             } catch (Exception e) {
                 log.error("Unable to create auth module: " + className, e);
@@ -243,10 +247,10 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         List modules = this.getActiveAuthModules(user);
         if (modules.isEmpty()) modules.add(passwdModule);
 
-        Collections.sort(activeAuthModules);
+        Collections.sort(modules);
         AuthorizationException authEx = null;
 
-        Iterator it = activeAuthModules.iterator();
+        Iterator it = modules.iterator();
         log.debug("Active modules are: ");
         boolean success = false;
         while (it.hasNext()) {
