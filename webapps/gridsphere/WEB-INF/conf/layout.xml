@@ -34,11 +34,11 @@
                         </portlet-frame>
                         <portlet-frame>
                             <name>HelloWorld</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.4</portlet-class>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.1</portlet-class>
                         </portlet-frame>
                         <portlet-frame>
                             <name>HelloWorld</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.4</portlet-class>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.2</portlet-class>
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>
@@ -49,11 +49,11 @@
                     <grid-layout>
                         <portlet-frame>
                             <name>HelloWorld</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.2</portlet-class>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.1</portlet-class>
                         </portlet-frame>
                         <portlet-frame>
                             <name>HelloWorld</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.4</portlet-class>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.2</portlet-class>
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>
@@ -68,7 +68,7 @@
                         </portlet-frame>
                         <portlet-frame>
                             <name>HelloWorld</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.4</portlet-class>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.2</portlet-class>
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>
@@ -83,7 +83,7 @@
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
-                            <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.624.2</portlet-class>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>
@@ -98,7 +98,7 @@
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
-                            <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.624.2</portlet-class>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>
