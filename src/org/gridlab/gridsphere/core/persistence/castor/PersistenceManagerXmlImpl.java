@@ -131,8 +131,8 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
 
             Mapping mapping = new Mapping();
 
-            mapping.loadMapping(mappingPath);
             log.debug("Using  getMappingFile()" + mappingPath);
+            mapping.loadMapping(mappingPath);
 
             Unmarshaller unmarshal = new Unmarshaller(mapping);
             unmarshal.setValidation(true);
@@ -143,11 +143,11 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
             log.error("MappingException using " + descriptorPath + ": " + e.getException().toString());
             throw new PersistenceManagerException("Mapping Error" + e.getException().toString());
         } catch (MarshalException e) {
-            log.error("MarshalException " + descriptorPath + "" + e.getException().toString());
-            throw new PersistenceManagerException("Marshal Error" + e.getException().toString());
+            log.error("MarshalException " + descriptorPath + "" + e.getMessage());
+            throw new PersistenceManagerException("Marshal Error" + e.getMessage());
         } catch (ValidationException e) {
-            log.error("ValidationException " + descriptorPath + "" + e.getException().toString());
-            throw new PersistenceManagerException("Validation Error" + e.getException().toString());
+            log.error("ValidationException " + descriptorPath + "" + e.getMessage());
+            throw new PersistenceManagerException("Validation Error" + e.getMessage());
         }
         return object;
     }
