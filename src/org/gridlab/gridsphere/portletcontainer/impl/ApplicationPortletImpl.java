@@ -6,6 +6,8 @@ package org.gridlab.gridsphere.portletcontainer.impl;
 
 import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
@@ -14,6 +16,7 @@ import org.gridlab.gridsphere.portletcontainer.PortletDispatcher;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletDefinition;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.PortletDeploymentDescriptor;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.SportletDefinition;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -36,7 +39,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
     private String portletName = "";
     private String servletName = "";
     private List concretePortlets = new ArrayList();
-    private ApplicationPortletConfig appPortletConfig = null;
+    private ApplicationSportletConfig appPortletConfig = null;
     private String webAppName = null;
     private PortletDispatcher portletDispatcher = null;
 
@@ -97,7 +100,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
             log.error(msg);
             throw new PortletException(msg);
         }
-        portletDispatcher = new PortletDispatcher(rd, appPortletConfig);
+        portletDispatcher = new SportletDispatcher(rd, appPortletConfig);
     }
 
     /**
@@ -124,7 +127,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
      * @param appPortletConfig the PortletApplication
      */
     public void setApplicationPortletConfig(ApplicationPortletConfig appPortletConfig) {
-        this.appPortletConfig = appPortletConfig;
+        this.appPortletConfig = (ApplicationSportletConfig)appPortletConfig;
     }
 
     /**
@@ -132,7 +135,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
      *
      * @return PortletDispatcher the proxy portlet for this ApplicationPortlet
      */
-    public PortletDispatcher getPortletDispatcher() {
+    public PortletDispatcher getPortletDispatcher(PortletRequest req, PortletResponse res) {
         return portletDispatcher;
     }
 
@@ -192,14 +195,15 @@ class ApplicationPortletImpl implements ApplicationPortlet {
 
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("Application Portlet:\n");
-        sb.append("Portlet Name: " + portletName + "\n");
-        sb.append("Servlet Name: " + servletName + "\n");
-        sb.append("App Portlet ID: " + applicationPortletID + "\n");
+        sb.append("\t Application Portlet:\n");
+        sb.append("\t Portlet Name: " + portletName + "\n");
+        sb.append("\t Servlet Name: " + servletName + "\n");
+        sb.append("\t Web App Name: " + webAppName + "\n");
+        sb.append("\t App Portlet ID: " + applicationPortletID + "\n");
         if (portletDispatcher == null) {
-            sb.append("Portlet dispatcher: NULL");
+            sb.append("\t Portlet dispatcher: NULL");
         } else {
-            sb.append("Portlet dispatcher: OK");
+            sb.append("\t Portlet dispatcher: OK");
         }
         return sb.toString();
     }

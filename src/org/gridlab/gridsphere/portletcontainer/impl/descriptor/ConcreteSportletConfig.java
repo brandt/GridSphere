@@ -14,6 +14,7 @@ import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * The <code>ConcreteSportletConfig</code> provides an implementation of
@@ -54,6 +55,13 @@ public class ConcreteSportletConfig implements ConcretePortletConfig {
     public void setDefaultLocale(String defaultLocale) {
         this.defaultLocale = defaultLocale;
     }
+
+    public Locale[] getSupportedLocales() {
+        Locale[] locales = new Locale[1];
+        locales[0] = new Locale(defaultLocale, "", "");
+        return locales;
+    }
+
 
     /**
      * Returns the language info of a portlet

@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.portlet.PortletRole;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * The <code>ConcretePortletConfig</code> provides concrete portlet
@@ -101,76 +102,6 @@ public interface ConcretePortletConfig {
         }
 
     }
-
-    /**
-     * Returns the default locale of a portlet
-     *
-     * @return the default locale of the portlet
-     */
-    public String getDefaultLocale();
-
-    /**
-     * Sets the default locale of a portlet
-     *
-     * @param defaultLocale the default locale of the portlet
-     */
-    public void setDefaultLocale(String defaultLocale);
-
-    /**
-     * Returns the language info of a portlet
-     *
-     * @return language info of the portlet
-     */
-    public List getLanguageList();
-
-    /**
-     * Sets the language info of a portlet
-     *
-     * @param languageList the language info of the portlet
-     */
-    public void setLanguageList(ArrayList languageList);
-
-    /**
-     * Returns the name of the portlet
-     *
-     * @return the name of the portlet
-     */
-    public String getName();
-
-    /**
-     * sets the name of the portlet
-     *
-     * @param name the name of the portlet
-     */
-    public void setName(String name);
-
-    /**
-     * Returns the configuration attributes of the portlet
-     *
-     * @return the configuration attributes of the portlet
-     */
-    public Hashtable getConfigAttributes();
-
-    /**
-     * Sets the configuration attributes of the portlet
-     *
-     * @param configAttrs the configuration attributes of the portlet
-     */
-    public void setConfigAttributes(Hashtable configAttrs);
-
-    /**
-     * Returns the accessibility scope of this portlet
-     *
-     * @return the accessibility scope of this portlet
-     */
-    public ConcretePortletConfig.Scope getConcretePortletScope();
-
-    /**
-     * Sets the accessibility scope of this portlet
-     *
-     * @param scope the accessibility scope of this portlet
-     */
-    public void setConcretePortletScope(ConcretePortletConfig.Scope scope);
 
     /**
      * Returns the required portlet role necessary to access this portlet

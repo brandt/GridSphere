@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
+import org.gridlab.gridsphere.portletcontainer.impl.ConcreteSportlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,14 +62,14 @@ public class PortletDeploymentDescriptor implements Cloneable {
      *
      * @param concPortlet the <code>ConcretePortlet</code>
      */
-    public void setConcretePortlet(ConcretePortlet concPortlet) {
+    public void setConcreteSportlet(ConcreteSportlet concPortlet) {
         String concID = concPortlet.getConcretePortletID();
         // see if an application portlet exists
         List defList = sportletCollection.getPortletDefinitionList();
         Iterator it = defList.iterator();
         while (it.hasNext()) {
             SportletDefinition portletDef = (SportletDefinition) it.next();
-            ApplicationPortletConfig portletAppConfig = portletDef.getApplicationSportletConfig();
+            ApplicationSportletConfig portletAppConfig = portletDef.getApplicationSportletConfig();
             if (concID.startsWith(portletAppConfig.getApplicationPortletID())) {
                 List concSportletsList = portletDef.getConcreteSportletList();
                 Iterator concIt = concSportletsList.iterator();
@@ -76,7 +77,7 @@ public class PortletDeploymentDescriptor implements Cloneable {
                     ConcreteSportletDefinition concSportlet = (ConcreteSportletDefinition) concIt.next();
                     if (concID.equals(concSportlet.getConcretePortletID())) {
                         concSportlet.setContextAttributes(concPortlet.getContextAttributes());
-                        concSportlet.setConcreteSportletConfig(concSportlet.getConcreteSportletConfig());
+                        concSportlet.setConcreteSportletConfig((ConcreteSportletConfig)concPortlet.getConcretePortletConfig());
                     }
                 }
             }

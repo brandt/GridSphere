@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.portlet.PortletSettings;
 
 import java.io.IOException;
 import java.util.Hashtable;
+import java.util.Locale;
 
 /**
  * A <code>ConcretePortlet</code> provides the portlet container with
@@ -20,20 +21,6 @@ import java.util.Hashtable;
  * @see org.gridlab.gridsphere.portlet.PortletSettings
  */
 public interface ConcretePortlet {
-
-    /**
-     * Returns the portlet context attributes
-     *
-     * @return the portlet context attributes
-     */
-    public Hashtable getContextAttributes();
-
-    /**
-     * Sets the portlet context attributes
-     *
-     * @param contextHash the portlet context attributes
-     */
-    public void setContextAttributes(Hashtable contextHash);
 
     /**
      * Returns the concrete portlet application ID
@@ -70,11 +57,17 @@ public interface ConcretePortlet {
      */
     public String getPortletName();
 
+    public String getDescription(Locale locale);
+
+    public String getDisplayName(Locale locale);
+
     /**
      * Saves any concrete portlet changes to the descriptor
      *
      * @throws IOException if an I/O error occurs
      */
     public void save() throws IOException;
+
+    public String toString();
 
 }

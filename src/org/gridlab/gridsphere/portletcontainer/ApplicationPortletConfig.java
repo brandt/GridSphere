@@ -21,27 +21,6 @@ public interface ApplicationPortletConfig {
     public String getApplicationPortletID();
 
     /**
-     * Sets the  portlet application id
-     *
-     * @param id the portlet application id
-     */
-    public void setApplicationPortletID(String id);
-
-    /**
-     * Returns the name of a servlet associated with this portlet defined in ui.xml as <servlet-name>
-     *
-     * @return the servlet name
-     */
-    public String getServletName();
-
-    /**
-     * Sets the servlet name associated with this portlet defined in ui.xml as <servlet-name>
-     *
-     * @param servletName the servlet name
-     */
-    public void setServletName(String servletName);
-
-    /**
      * Returns the portlet application name
      *
      * @return name portlet application name
@@ -54,13 +33,6 @@ public interface ApplicationPortletConfig {
      * @param portletName the portlet application name
      */
     public void setPortletName(String portletName);
-
-    /**
-     * Returns the configuration parameter <code>Hashtable</code>
-     *
-     * @return the configuration parameter <code>Hashtable</code>
-     */
-    public Hashtable getConfigParams();
 
     /**
      * Returns the allowed window states supported by this portlet

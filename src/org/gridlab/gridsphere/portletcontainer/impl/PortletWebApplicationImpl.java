@@ -35,7 +35,6 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
     private PortletDeploymentDescriptor pdd = null;
     protected String webApplicationName = null;
     protected Map appPortlets = new Hashtable();
-    protected RequestDispatcher rd = null;
     protected String webAppDescription;
 
     // PortletLayout engine handles layout.xml
@@ -64,6 +63,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
             contextURIPath = "/" + webApplicationName;
         }
 
+        // Get the cross context servlet context
         ServletContext ctx = context.getContext(contextURIPath);
         //System.err.println("contextURIPath: " + contextURIPath);
         //System.err.println("contextName: " + ctx.getServletContextName());
@@ -85,7 +85,6 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         log.debug("context path: " + ctx.getRealPath(""));
         this.webAppDescription = ctx.getServletContextName();
 
-        rd = ctx.getNamedDispatcher(webApplicationName);
         // load portlet.xml
         loadPortlets(ctx);
         // load layout.xml

@@ -12,12 +12,15 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Vector;
 
 /**
  * The <code>PortletInvoker</code> provides static lifecycle routines for performing portlet operations on
  * concrete portlets.
  *
- * @see org.gridlab.gridsphere.portletcontainer.PortletDispatcher
+ * @see org.gridlab.gridsphere.portletcontainer.impl.SportletDispatcher
  */
 public class PortletInvoker {
 
@@ -40,7 +43,7 @@ public class PortletInvoker {
         if (appPortlet != null) {
             // really want to try with a new dispatcher to see
             //PortletDispatcher(RequestDispatcher rd, ApplicationPortletConfig portletApp)
-            PortletDispatcher portletDispatcher = appPortlet.getPortletDispatcher();
+            PortletDispatcher portletDispatcher = appPortlet.getPortletDispatcher(req, res);
             // init the application portlet
             portletDispatcher.init(req, res);
         } else {
@@ -62,11 +65,15 @@ public class PortletInvoker {
         String appID = getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
-            PortletDispatcher portletDispatcher = appPortlet.getPortletDispatcher();
+            PortletDispatcher portletDispatcher = appPortlet.getPortletDispatcher(req, res);
             ConcretePortlet concPortlet = appPortlet.getConcretePortlet(concretePortletID);
             PortletSettings settings = concPortlet.getPortletSettings();
             // init the concrete portlet
-            portletDispatcher.initConcrete(settings, req, res);
+            if (settings != null) {
+                portletDispatcher.initConcrete(settings, req, res);
+            } else {
+                log.info("not invoking initConcrete on portlet " + concPortlet.getConcretePortletID());
+            }
         } else {
             log.info("in initConcrete: Unable to find portlet in registry: " + concretePortletID);
         }
@@ -86,7 +93,7 @@ public class PortletInvoker {
         String appID = getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
-            PortletDispatcher dispatcher = appPortlet.getPortletDispatcher();
+            PortletDispatcher dispatcher = appPortlet.getPortletDispatcher(req, res);
             // destroy the application portlet
             dispatcher.destroy(req, res);
         } else {
@@ -108,11 +115,15 @@ public class PortletInvoker {
         String appID = getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
-            PortletDispatcher dispatcher = appPortlet.getPortletDispatcher();
+            PortletDispatcher dispatcher = appPortlet.getPortletDispatcher(req, res);
             ConcretePortlet concPortlet = appPortlet.getConcretePortlet(concretePortletID);
             PortletSettings settings = concPortlet.getPortletSettings();
             // destroy the concrete portlet
-            dispatcher.destroyConcrete(settings, req, res);
+            if (settings != null) {
+                dispatcher.destroyConcrete(settings, req, res);
+            } else {
+                log.info("not invoking destroyConcrete on portlet " + concPortlet.getConcretePortletID());
+            }
         } else {
             log.info("in destroyConcrete: Unable to find portlet in registry: " + concretePortletID);
         }
@@ -132,7 +143,7 @@ public class PortletInvoker {
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
-            PortletDispatcher dispatcher = appPortlet.getPortletDispatcher();
+            PortletDispatcher dispatcher = appPortlet.getPortletDispatcher(req, res);
             dispatcher.login(req, res);
         } else {
             log.info("in login: Unable to find portlet in registry: " + concretePortletID);
@@ -153,7 +164,7 @@ public class PortletInvoker {
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
-            PortletDispatcher dispatcher = appPortlet.getPortletDispatcher();
+            PortletDispatcher dispatcher = appPortlet.getPortletDispatcher(req, res);
             dispatcher.logout(req, res);
         } else {
             log.info("in logout: Unable to find portlet in registry: " + concretePortletID);
@@ -174,7 +185,7 @@ public class PortletInvoker {
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
-            PortletDispatcher dispatcher = appPortlet.getPortletDispatcher();
+            PortletDispatcher dispatcher = appPortlet.getPortletDispatcher(req, res);
             dispatcher.service(req, res);
         } else {
             log.info("in service: Unable to find portlet in registry: " + concretePortletID);
@@ -195,7 +206,7 @@ public class PortletInvoker {
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
-            PortletDispatcher dispatcher = appPortlet.getPortletDispatcher();
+            PortletDispatcher dispatcher = appPortlet.getPortletDispatcher(req, res);
             dispatcher.actionPerformed(action, req, res);
         } else {
             log.info("in actionPerformed: Unable to find portlet in registry: " + concretePortletID);
@@ -216,7 +227,7 @@ public class PortletInvoker {
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
-            PortletDispatcher dispatcher = appPortlet.getPortletDispatcher();
+            PortletDispatcher dispatcher = appPortlet.getPortletDispatcher(req, res);
             dispatcher.doTitle(req, res);
         } else {
             log.info("in doTitle: Unable to find portlet in registry: " + concretePortletID);
@@ -238,7 +249,7 @@ public class PortletInvoker {
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
-            PortletDispatcher dispatcher = appPortlet.getPortletDispatcher();
+            PortletDispatcher dispatcher = appPortlet.getPortletDispatcher(req, res);
             dispatcher.windowEvent(winEvent, req, res);
         } else {
             log.info("in windowEvent: Unable to find portlet in registry: " + concretePortletID);
@@ -259,7 +270,7 @@ public class PortletInvoker {
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
-            PortletDispatcher dispatcher = appPortlet.getPortletDispatcher();
+            PortletDispatcher dispatcher = appPortlet.getPortletDispatcher(req, res);
             dispatcher.messageEvent(concretePortletID, msgEvent, req, res);
         } else {
             log.info("in messageEvent: Unable to find portlet in registry: " + concretePortletID);
@@ -274,14 +285,21 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static void initAllPortlets(PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public final static synchronized void initAllPortlets(PortletRequest req, PortletResponse res) throws IOException, PortletException {
         // Initialize all concrete portlets for each application portlet
         Collection appPortlets = registry.getAllApplicationPortlets();
         PortletDispatcher portletDispatcher = null;
-        Iterator it = appPortlets.iterator();
+
+        // make a clone of appPortlets since JSR PortletServlet will add more portlets to the
+        // registry causing ConcurrentModificationExceptions to be thrown!
+
+        List appPortletsCopy = new Vector(appPortlets);
+
+        Iterator it = appPortletsCopy.iterator();
         while (it.hasNext()) {
             ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
-            portletDispatcher = appPortlet.getPortletDispatcher();
+            log.debug("init app portlet" + appPortlet.getApplicationPortletID());
+            portletDispatcher = appPortlet.getPortletDispatcher(req, res);
             if (portletDispatcher == null) {
                 throw new PortletException("Unable to get a dispatcher for application portlet: " + appPortlet);
             }
@@ -296,9 +314,14 @@ public class PortletInvoker {
                 settings = concPortlet.getPortletSettings();
                 // initialize the concrete portlet
                 log.info("initializing concrete portlet " + concPortlet.getConcretePortletID());
-                portletDispatcher.initConcrete(settings, req, res);
+                if (settings != null) {
+                    portletDispatcher.initConcrete(settings, req, res);
+                } else {
+                    log.info("not invoking initConcrete on portlet " + concPortlet.getConcretePortletID());
+                }
             }
         }
+        registry.logRegistry();
     }
 
     /**
@@ -317,7 +340,7 @@ public class PortletInvoker {
         Iterator it = appPortlets.iterator();
         while (it.hasNext()) {
             ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
-            portletDispatcher = appPortlet.getPortletDispatcher();
+            portletDispatcher = appPortlet.getPortletDispatcher(req, res);
             List concPortlets = appPortlet.getConcretePortlets();
             Iterator concIt = concPortlets.iterator();
             PortletSettings settings = null;
@@ -329,7 +352,11 @@ public class PortletInvoker {
                 settings = concPortlet.getPortletSettings();
                 // initialize the concrete portlet
                 log.info("initializing concrete portlet " + concPortlet.getConcretePortletID());
-                portletDispatcher.initConcrete(settings, req, res);
+                if (settings != null) {
+                    portletDispatcher.initConcrete(settings, req, res);
+                } else {
+                    log.info("not invoking initConcrete on portlet " + concPortlet.getConcretePortletID());
+                }
             }
         }
     }
@@ -349,7 +376,7 @@ public class PortletInvoker {
         Iterator it = appPortlets.iterator();
         while (it.hasNext()) {
             ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
-            portletDispatcher = appPortlet.getPortletDispatcher();
+            portletDispatcher = appPortlet.getPortletDispatcher(req, res);
             List concPortlets = appPortlet.getConcretePortlets();
             Iterator concIt = concPortlets.iterator();
             PortletSettings settings = null;
@@ -359,7 +386,11 @@ public class PortletInvoker {
                 settings = concPortlet.getPortletSettings();
                 // destroy the concrete portlet
                 log.info("destroying concrete portlet " + concPortlet.getConcretePortletID());
-                portletDispatcher.destroyConcrete(settings, req, res);
+                if (settings != null) {
+                    portletDispatcher.destroyConcrete(settings, req, res);
+                } else {
+                    log.info("not invoking destroyConcrete on portlet " + concPortlet.getConcretePortletID());
+                }
             }
         }
         // destroy the application portlet
@@ -383,7 +414,7 @@ public class PortletInvoker {
         Iterator it = appPortlets.iterator();
         while (it.hasNext()) {
             ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
-            portletDispatcher = appPortlet.getPortletDispatcher();
+            portletDispatcher = appPortlet.getPortletDispatcher(req, res);
             List concPortlets = appPortlet.getConcretePortlets();
             Iterator concIt = concPortlets.iterator();
             PortletSettings settings = null;
@@ -393,7 +424,11 @@ public class PortletInvoker {
                 settings = concPortlet.getPortletSettings();
                 // destroy the concrete portlet
                 log.info("destroying concrete portlet " + concPortlet.getConcretePortletID());
-                portletDispatcher.destroyConcrete(settings, req, res);
+                if (settings != null) {
+                    portletDispatcher.destroyConcrete(settings, req, res);
+                } else {
+                    log.info("not invoking destroyConcrete on portlet " + concPortlet.getConcretePortletID());
+                }
             }
             // destroy the application portlet
             portletDispatcher.destroy(req, res);

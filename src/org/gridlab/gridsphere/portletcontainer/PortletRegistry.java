@@ -5,6 +5,8 @@
 package org.gridlab.gridsphere.portletcontainer;
 
 import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 import java.util.*;
 
@@ -15,6 +17,7 @@ import java.util.*;
 public class PortletRegistry {
 
     private static PortletRegistry instance = new PortletRegistry();
+    private static PortletLog log = SportletLog.getInstance(PortletRegistry.class);
 
     private static Map allApplicationPortlets = new Hashtable();
 
@@ -113,11 +116,41 @@ public class PortletRegistry {
      * Returns the application portlet id given a concrete portlet id
      *
      * @param concretePortletID the concrete portlet id
-     * @return the application portlet id
+     * @return the application portlet id or an empty string
      */
     public static final String getApplicationPortletID(String concretePortletID) {
         int i = concretePortletID.lastIndexOf(".");
         if (i < 0) return "";
-        return concretePortletID.substring(0, i);
+        // check to see if it has number at the end
+        String numStr = concretePortletID.substring(i+1);
+        String appID = "";
+        try {
+            Integer.parseInt(numStr);
+            appID = concretePortletID.substring(0, i);
+        }  catch (NumberFormatException e) {
+            appID = concretePortletID;
+        }
+        System.err.println("app ID is " + appID);
+        return appID;
+    }
+
+    public static final void logRegistry() {
+        log.debug("Displaying Portlet registry contents:\n");
+        Iterator it = allApplicationPortlets.keySet().iterator();
+        while (it.hasNext()) {
+            String appID = (String)it.next();
+            ApplicationPortlet appPortlet = (ApplicationPortlet)allApplicationPortlets.get(appID);
+            log.debug("\tApplication portlet : " + appPortlet.getApplicationPortletID() + "\n");
+            log.debug("\t" + appPortlet + "\n");
+            List concPortlets = appPortlet.getConcretePortlets();
+            Iterator concIt = concPortlets.iterator();
+            while (concIt.hasNext()) {
+                ConcretePortlet conc = (ConcretePortlet)concIt.next();
+                log.debug("\t\tConcrete portlet : " + conc.getConcretePortletID() + "\n");
+                log.debug("\t" + conc + "\n");
+            }
+        }
+
+
     }
 }

@@ -4,6 +4,9 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletResponse;
+
 import java.util.List;
 
 /**
@@ -65,7 +68,7 @@ public interface ApplicationPortlet {
      *
      * @return PortletDispatcher the proxy portlet for this ApplicationPortlet
      */
-    public PortletDispatcher getPortletDispatcher();
+    public PortletDispatcher getPortletDispatcher(PortletRequest req, PortletResponse res);
 
     /**
      * Return the PortletApplication, the portlet descriptor class that defines the portlet application

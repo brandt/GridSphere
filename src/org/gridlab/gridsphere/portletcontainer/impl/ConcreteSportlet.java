@@ -15,23 +15,25 @@ import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletDefinition;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.PortletDeploymentDescriptor;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletConfig;
 
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * The <code>ConcreteSportlet</code> is an implementation of the <code>ConcretePortlet</code> that provides methods
  * for accessing concrete portlet objects obtained from the portlet deployment descriptors.
  */
-class ConcreteSportlet implements ConcretePortlet {
+public class ConcreteSportlet implements ConcretePortlet {
 
     private static PortletLog log = SportletLog.getInstance(ConcreteSportlet.class);
 
     private PortletDeploymentDescriptor portletDD = null;
-    private ConcretePortletConfig concSportletConfig = null;
+    private ConcreteSportletConfig concSportletConfig = null;
     private Hashtable contextHash = null;
-    private String portletName = "Undefined PortletInfo";
+    private String portletName = "Undefined Portlet Name";
     private String concreteID = null;
     private List languageList = null;
     private String defaultLocale = "en_US";
@@ -53,6 +55,7 @@ class ConcreteSportlet implements ConcretePortlet {
         // Get PortletApplication UID  e.g. classname.number
         appID = appPortletConfig.getApplicationPortletID();
 
+        portletName = appPortletConfig.getPortletName();
         concreteID = concSportletDef.getConcretePortletID();
         index = concreteID.lastIndexOf(".");
         cappID = concreteID.substring(0, index);
@@ -96,7 +99,7 @@ class ConcreteSportlet implements ConcretePortlet {
      * @param concPortletConfig the concrete portlet configuration
      */
     public void setConcretePortletConfig(ConcretePortletConfig concPortletConfig) {
-        this.concSportletConfig = concPortletConfig;
+        this.concSportletConfig = (ConcreteSportletConfig)concPortletConfig;
     }
 
     /**
@@ -155,6 +158,14 @@ class ConcreteSportlet implements ConcretePortlet {
         return languageList;
     }
 
+    public String getDescription(Locale locale) {
+        return portletSettings.getDescription(locale, null);
+    }
+
+    public String getDisplayName(Locale locale) {
+        return portletName;
+    }
+
     /**
      * Saves any concrete portlet changes to the descriptor
      *
@@ -162,11 +173,17 @@ class ConcreteSportlet implements ConcretePortlet {
      */
     public void save() throws IOException {
         try {
-            portletDD.setConcretePortlet(this);
+            portletDD.setConcreteSportlet(this);
             portletDD.save();
         } catch (PersistenceManagerException e) {
             log.error("Unable to save concrete portlet descriptor! " + concreteID, e);
         }
     }
 
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("\t name: " + portletName + "\n");
+        sb.append("\t concrete ID: " + concreteID + "\n");
+        return sb.toString();
+    }
 }
