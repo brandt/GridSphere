@@ -28,7 +28,7 @@ public class TablePaneTag extends ContainerTag {
     }
 
     public int doStartTag() throws JspException {
-        super.doStartTag();
+        //super.doStartTag();
         tablePaneBean = new TablePaneBean();
         if (!beanId.equals("")) {
             TablePaneBean tpb = (TablePaneBean)pageContext.getSession().getAttribute(getBeanKey());

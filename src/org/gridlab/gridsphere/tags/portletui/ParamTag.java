@@ -44,7 +44,7 @@ public class ParamTag extends TagSupport {
         ActionTag actionTag = (ActionTag)getParent();
         if (actionTag != null) {
             paramBean = new ParamBean(name, value);
-            actionTag.addParamBean(paramBean);
+            //actionTag.addParamBean(paramBean);
         }
         return SKIP_BODY;
     }
