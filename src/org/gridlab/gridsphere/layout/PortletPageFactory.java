@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 
 import java.io.*;
 import java.util.*;
+import java.net.URLEncoder;
 
 /**
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
@@ -370,13 +371,13 @@ public class PortletPageFactory implements PortletSessionListener {
             topTab.setPortletComponent(childPane);
             pane.addTab(topTab);
             topTab.setName(tabName);
-            topTab.setLabel(tabName + "Tab");
+            topTab.setLabel(URLEncoder.encode(tabName) + "Tab");
             //pane.save(userLayout);
 
             PortletTableLayout table = new PortletTableLayout();
 
             table.setCanModify(true);
-            table.setLabel(tabName + "TL");
+            table.setLabel(URLEncoder.encode(tabName) + "TL");
 
 
             PortletRowLayout row = new PortletRowLayout();
