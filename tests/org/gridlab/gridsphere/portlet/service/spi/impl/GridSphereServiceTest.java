@@ -6,7 +6,8 @@ package org.gridlab.gridsphere.portlet.service.spi.impl;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.gridlab.gridsphere.portletcontainer.GridSphereServletTest;
+import org.gridlab.gridsphere.servlets.GridSphereServletTest;
+import org.gridlab.gridsphere.servlets.GridSphereServletTest;
 
 /**
  * Simple class to build a TestSuite out of the individual test classes.

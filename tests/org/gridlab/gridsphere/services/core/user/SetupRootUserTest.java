@@ -6,10 +6,9 @@ package org.gridlab.gridsphere.services.core.user;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portletcontainer.GridSphereServletTest;
+import org.gridlab.gridsphere.servlets.GridSphereServletTest;
 
 public class SetupRootUserTest extends GridSphereServletTest {
 
@@ -32,10 +31,13 @@ public class SetupRootUserTest extends GridSphereServletTest {
     }
 
     public void testLoginRootUser() throws PortletServiceException {
+
+        // create a root user if none available
+        UserManagerService userManagerService = (UserManagerService)factory.createPortletService(UserManagerService.class, context, true);
+        userManagerService.initRootUser();
         LoginService loginService = (LoginService) factory.createPortletService(LoginService.class, context, true);
         rootUser = loginService.login("root", "");
         assertNotNull(rootUser);
-
     }
 
     protected void tearDown() {

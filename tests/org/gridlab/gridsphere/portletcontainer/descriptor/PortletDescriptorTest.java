@@ -12,8 +12,9 @@ import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.PortletWindow;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.portletcontainer.GridSphereServletTest;
+import org.gridlab.gridsphere.servlets.GridSphereServletTest;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.*;
+import org.gridlab.gridsphere.servlets.GridSphereServletTest;
 
 import java.io.IOException;
 import java.util.Hashtable;
