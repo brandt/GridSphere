@@ -48,7 +48,7 @@
                     <description>Hier ist ein gleicht portlet</description>
                     <keywords>portlet hallo welt</keywords>
                 </language>
-                <allowed-access visibility="PRIVATE" role="ADMIN"/>
+                <access-restrictions visibility="PRIVATE" role="ADMIN"/>
                 <config-param>
                     <param-name>Portlet Mistress</param-name>
                     <param-value>mistress@domain.com</param-value>
