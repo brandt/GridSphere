@@ -53,19 +53,23 @@
 <ui:text style="bold" key="LOGIN_AUTHMODULES_MSG"/>
 <p>
 
+<% if (authModules.size() == 1) { %>
+    <ui:messagebox value="One active authentication module is required !"/>
+<% } %>
+
 <ui:frame>
     <ui:tablerow header="true" zebra="true">
         <ui:tablecell>
             <ui:text key="LOGIN_MODULE_NAME"/>
         </ui:tablecell>
         <ui:tablecell>
-            <ui:text key="LOGIN_MODULE_DESC"/>
-        </ui:tablecell>
-        <ui:tablecell>
             <ui:text key="LOGIN_MODULE_ISACTIVE"/>
         </ui:tablecell>
         <ui:tablecell>
             <ui:text key="LOGIN_MODULE_PRIORITY"/>
+        </ui:tablecell>
+        <ui:tablecell>
+            <ui:text key="LOGIN_MODULE_DESC"/>
         </ui:tablecell>
     </ui:tablerow>
 
@@ -77,14 +81,20 @@
         <ui:tablecell>
             <ui:text value="<%= authModule.getModuleName() %>"/>
         </ui:tablecell>
+        <% if (authModules.size() == 1) { %>
         <ui:tablecell>
-            <ui:text value="<%= authModule.getModuleDescription() %>"/>
+            <ui:checkbox beanId="authModCB" disabled="true" selected="true" value="<%= authModule.getModuleName() %>"/>
         </ui:tablecell>
+        <% } else { %>
         <ui:tablecell>
             <ui:checkbox beanId="authModCB" selected="<%= authModule.isModuleActive() %>" value="<%= authModule.getModuleName() %>"/>
         </ui:tablecell>
+        <% } %>
         <ui:tablecell>
-            <ui:textfield name="<%= authModule.getModuleName() %>" value="<%= String.valueOf(authModule.getModulePriority()) %>"/>
+            <ui:textfield name="<%= authModule.getModuleName() %>" value="<%= String.valueOf(authModule.getModulePriority()) %>" size="3"/>
+        </ui:tablecell>
+         <ui:tablecell>
+            <ui:text value="<%= authModule.getModuleDescription() %>"/>
         </ui:tablecell>
     </ui:tablerow>
 

@@ -13,12 +13,26 @@
 
 <ui:hasrole role="super">
 
+<ui:table  cellpadding="5">
+<ui:tablerow>
+<ui:tablecell>
 <h3><ui:text key="LAYOUTMGR_EDIT_BANNER" style="nostyle"/></h3>
 <ui:text key="LAYOUTMGR_EDIT_MSG"/>
 <p>
-<ui:textarea beanId="bannerTA" rows="3" cols="80"/>
+<ui:textarea beanId="bannerTA" rows="3" cols="70"/>
 <p>
 <ui:actionsubmit action="saveBanner" key="SAVE"/>
+</ui:tablecell>
+<ui:tablecell>
+<h3><ui:text key="LAYOUTMGR_EDIT_FOOTER" style="nostyle"/></h3>
+<ui:text key="LAYOUTMGR_EDIT_FOOTER_MSG"/>
+<p>
+<ui:textarea beanId="footerTA" rows="3" cols="70"/>
+<p>
+<ui:actionsubmit action="saveFooter" key="SAVE"/>
+</ui:tablecell>
+</ui:tablerow>
+</ui:table>
 
 <h3><ui:text key="LAYOUTMGR_EDIT_THEME" style="nostyle"/></h3>
 <ui:text key="LAYOUTMGR_THEME_MSG"/>&nbsp;
