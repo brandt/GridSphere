@@ -28,7 +28,6 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
 
     protected transient static PortletLog log = SportletLog.getInstance(PersistenceManagerXml.class);
 
-
     private static PersistenceManagerXml instance;
 
     private String URL = null;
@@ -50,7 +49,7 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
     }
 
     /**
-     * checks if all setting for marshalling xml data are done
+     * Checks if all setting for marshalling xml data are done
      *
      * @throws ConfigurationException if one variable is not set
      */
@@ -62,7 +61,7 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
     }
 
     /**
-     * return the connectionURL, which is here the XMLFilename
+     * Return the connectionURL, which is here the XMLFilename
      *
      * @return filename
      */
@@ -71,7 +70,7 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
     }
 
     /**
-     * sets the xml outputfile
+     * Sets the xml outputfile
      *
      * @param url where to write the file
      *
@@ -81,7 +80,7 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
     }
 
     /**
-     * sets the mapping file
+     * Sets the mapping file
      *
      * @param mappingFile file containing the mapping
      */
@@ -91,7 +90,7 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
 
 
     /**
-     * gets the filename of the mappingfile
+     * Returns the filename of the mappingfile
      *
      * @return name of the mappingfile
      */
@@ -100,30 +99,23 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
     }
 
     /**
-     * updates an object in the xml file (same as create)
+     * Updates an object in the xml file (same as create)
      *
      * @throws UpdateException if the update failed
      * @param object update 'object'
      */
-    public void update(Object object) throws UpdateException {
-
-        try {
-            create(object);
-        } catch (CreateException e) {
-            throw new UpdateException("Update Error");
-        } catch (ConfigurationException e) {
-            throw new UpdateException("ConfigurationExcpetion");
-        }
+    public void update(Object object) throws IOException, PersistenceException {
+        create(object);
     }
 
     /**
-     * marshals the given object to an xml file
+     * Marshals the given object to an xml file
      *
      * @throws CreateException if the creation failed
      * @throws ConfigurationException if the configuration was wrong
      * @param object object to be marshalled
      */
-    public void create(Object object) throws CreateException, ConfigurationException {
+    public void create(Object object) throws IOException, PersistenceException {
 
         checkSetting();
 
@@ -140,19 +132,18 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
             filewriter.close();
             Class cl = object.getClass();
             log.debug("Wrote object of type " + cl.getName() + " to XMLFile " + getConnectionURL());
-
         } catch (IOException e) {
             log.error("Exception " + e);
             throw new CreateException("IO Error");
         } catch (ValidationException e) {
-            log.error("Exception " + e);
-            throw new CreateException("Validation Error");
+            log.error("Unable to marshal object: ", e);
+            throw new PersistenceException("Validation Error", e);
         } catch (MarshalException e) {
-            log.error("Exception " + e);
-            throw new CreateException("Marshal Error");
+            log.error("Unable to marshal object: ", e);
+            throw new PersistenceException("Marshal Error", e);
         } catch (MappingException e) {
-            log.error("Exception " + e);
-            throw new CreateException("Mapping Error");
+            log.error("Unable to marshal object: ", e);
+            throw new PersistenceException("Mapping Error", e);
         }
 
     }
@@ -164,7 +155,7 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
      * @throws ConfigurationException if there was a configurationerror
      * @return object which was unmarshalled
      */
-    public Object restoreObject() throws RestoreException, ConfigurationException {
+    public Object restoreObject() throws IOException, PersistenceException {
 
         checkSetting();
 
@@ -177,33 +168,28 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
 
             Unmarshaller unmarshal = new Unmarshaller(mapping);
             object = unmarshal.unmarshal(filereader);
-        } catch (IOException e) {
-            log.debug("Exception " + e);
-            throw new RestoreException("IO Error");
         } catch (MappingException e) {
-            log.debug("Exception " + e);
-            throw new RestoreException("Mapping Error");
+            log.error("Exception ", e);
+            throw new PersistenceException("Mapping Error", e);
         } catch (MarshalException e) {
-            log.debug("Exception " + e);
-            throw new RestoreException("Marshal Error");
+            log.error("MarshalException ", e);
+            throw new PersistenceException("Marshal Error", e);
         } catch (ValidationException e) {
-            log.debug("Exception " + e);
-            throw new RestoreException("Validation Error");
+            log.error("ValidationException ", e);
+            throw new PersistenceException("Validation Error", e);
         }
-
         return object;
     }
 
     /**
-     * restore objects from xml file, just here to justify interface could be empty
+     * Restore objects from xml file, just here to justify interface could be empty
      * since it makes no sense in xml files
      *
-     * @throws RestoreException if restore failed
-     * @throws ConfigurationException if config was wrong
-     * @return list of objects (here just with one object)
+     * @returns list of objects (here just with one object)
+     * @throws IOException if an I/O error occured
+     * @throws PersistenceException if config was wrong
      */
-    public List restoreList() throws RestoreException, ConfigurationException {
-
+    public List restoreList() throws IOException, PersistenceException {
         List list = new ArrayList();
         list.add(restoreObject());
         return list;
@@ -216,7 +202,7 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
      *
      * @param object object to be deleted
      */
-    public void delete(Object object) {
+    public void delete(Object object) throws IOException, PersistenceException {
 
 
     }

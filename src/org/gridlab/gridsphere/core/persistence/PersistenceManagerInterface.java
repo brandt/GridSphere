@@ -2,56 +2,54 @@ package org.gridlab.gridsphere.core.persistence;
 
 /*
  * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
- * @team sonicteam
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-
-
 import java.util.List;
+import java.io.IOException;
 
 public interface PersistenceManagerInterface {
 
     /**
-     * set connection
+     * Set the URL connection
+     *
      * @param url containing information
      */
-
-    void setConnectionURL(String url) throws Exception;
+    void setConnectionURL(String url) throws PersistenceException;
 
     /**
-     * creates the given object
+     * Creates the given object
      *
      * @param object object to be created
      */
-    void create(Object object) throws Exception ;
+    void create(Object object) throws IOException, PersistenceException;
 
     /**
-     * updates the given object
+     * Updates the given object
      *
      * @param object object to be updated
      */
-    void update(Object object) throws Exception ;
+    void update(Object object) throws IOException, PersistenceException;
 
     /**
-     * restores a list of objects from connection URL
+     * Restores a list of objects from connection URL
      *
      * @returns a Listobject containing the resultobjects
      */
-    List restoreList() throws Exception ;
+    List restoreList() throws IOException, PersistenceException;
 
 
     /**
-     * restores the first object (matching a query) from storage
+     * Restores the first object (matching a query) from storage
      *
      * @returns the queried object
      */
-
-    Object restoreObject() throws Exception ;
+    Object restoreObject() throws IOException, PersistenceException;
 
     /**
-     * deletes an object from storage
+     * Deletes an object from storage
      *
      * @param object to be deleted
      */
-    void delete(Object object) throws Exception ;
+    void delete(Object object) throws IOException, PersistenceException;
 }
