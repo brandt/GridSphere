@@ -20,7 +20,7 @@ import javax.servlet.ServletRequest;
 
 public class BaseTag extends TagSupport {
 
-    protected PortletLog portletLog = SportletLog.getInstance(BaseTag.class);
+    protected transient static PortletLog log = SportletLog.getInstance(BaseTag.class);
 
     protected String type;
     protected String value = "";
@@ -171,33 +171,37 @@ public class BaseTag extends TagSupport {
     }
 
     public int doStartTag() throws JspException {
+        log.debug("------------ START ");
         if (!bean.equals("")) {
             Object beanElement = pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID)+":"+bean);
-            portletLog.debug("GET: "+GridSphereProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID)+":"+bean);
+            log.debug("GET: "+GridSphereProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID)+":"+bean);;
             try {
                 this.htmlelement = (TagBean) beanElement;
             } catch (Exception e) {
+                log.debug("This is an error retrieving tag bean with name: " + GridSphereProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID)+bean);
                 if (beanElement == null) {
-                    System.err.println("Tag bean attribute with given name is not set!");
+                    log.debug("Tag bean attribute with given name is not set!");
                 } else {
-                    System.err.println("Tag bean attribute has invalid type: "
+                    log.debug("Tag bean attribute has invalid type: "
                                        + beanElement.getClass().getName());
                 }
                 System.err.println(e.getMessage());
            }
         }
+
         if (this.htmlelement == null) {
-            System.err.println("Html bean is null!");
+            log.debug("Html bean is null!");
         } else {
-            portletLog.debug("Tag bean equals  " + this.htmlelement.toString());
             try {
                 JspWriter out = pageContext.getOut();
                 out.print(htmlelement.toString());
+                //log.debug("Jup we got content :"+htmlelement.toString()+" for "+GridSphereProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID)+":"+bean);
             } catch (Exception e) {
                 System.err.println("Error printing tag bean");
                 throw new JspTagException(e.getMessage());
             }
         }
+         log.debug("------------ END");
         return EVAL_BODY_INCLUDE;
     }
 
