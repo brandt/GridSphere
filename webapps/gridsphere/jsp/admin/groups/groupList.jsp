@@ -1,23 +1,46 @@
-<%@ taglib uri="/portletWidgets" prefix="gs" %>
+<%@ page import="java.util.Iterator,
+                 org.gridlab.gridsphere.portlet.PortletGroup"%>
+<%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
-<gs:form action="doViewListGroup">
-<table class="portlet-pane" cellspacing="1">
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1">
-        <tr>
-          <td class="portlet-frame-actions">
-            <gs:submit name="doViewListGroup" value="List Groups"/>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <gs:table bean="groupList"/>
-    </td>
-  </tr>
-</table>
-</gs:form>
+
+<jsp:useBean id="groupList" class="java.util.List" scope="request"/>
+<jsp:useBean id="groupDescs" class="java.util.List" scope="request"/>
+
+<ui:form>
+<ui:panel>
+
+    <ui:frame>
+        <ui:tablerow header="true">
+            <ui:tablecell>
+                Group Name
+            </ui:tablecell>
+            <ui:tablecell>
+                Group Description
+            </ui:tablecell>
+        </ui:tablerow>
+
+<%
+                Iterator groupIterator = groupList.iterator();
+                Iterator descsIterator = groupDescs.iterator();
+                while ((groupIterator.hasNext() && descsIterator.hasNext())) {
+                    // Get next user
+                    PortletGroup group = (PortletGroup)groupIterator.next();
+
+%>
+                <ui:tablerow>
+                        <ui:tablecell>
+                            <ui:actionlink action="doViewViewGroup" value="<%=group.getName() %>">
+                                <ui:actionparam name="groupID" value="<%= group.getID() %>"/>
+                            </ui:actionlink>
+                        </ui:tablecell>
+                        <ui:tablecell>
+                            <%= descsIterator.next() %>
+                        </ui:tablecell>
+                </ui:tablerow>
+
+<%              } %>
+    </ui:frame>
+
+</ui:panel>
+</ui:form>

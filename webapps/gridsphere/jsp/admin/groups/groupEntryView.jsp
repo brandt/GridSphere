@@ -1,68 +1,67 @@
-<%@ taglib uri="/portletWidgets" prefix="gs" %>
+<%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
-<gs:form action="doViewViewGroup">
-<gs:hiddenfield bean="groupID"/>
-<gs:hiddenfield bean="groupEntryID"/>
-<table class="portlet-pane" cellspacing="1" width="100%">
-  <tr>
-    <td>
-       <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-actions">
-            <gs:submit name="doViewViewGroup" value="Back To Group"/>
-            <gs:submit name="doViewEditGroupEntry" value="Change User Role"/>
-            <gs:submit name="doViewDeleteGroupEntry" value="Remove User From Group"/>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-label" width="200">
-             Group Name:
-          </td>
-          <td class="portlet-frame-text">
-             <gs:text bean="groupName"/>
-          </td>
-        </tr>
-        <tr>
-          <td class="portlet-frame-label">
-             Group Label:
-          </td>
-          <td class="portlet-frame-text">
-             <gs:text bean="groupLabel"/>
-          </td>
-        </tr>
-        <tr>
-          <td class="portlet-frame-label">
-             User Name:
-          </td>
-          <td class="portlet-frame-text">
-             <gs:text bean="groupEntryUserName"/>
-          </td>
-        </tr>
-        <tr>
-          <td class="portlet-frame-label">
-             Full Name:
-          </td>
-          <td class="portlet-frame-text">
-             <gs:text bean="groupEntryUserFullName"/>
-          </td>
-        </tr>
-        <tr>
-          <td class="portlet-frame-label">
-             Role In Group:
-          </td>
-          <td class="portlet-frame-text">
-             <gs:text bean="groupEntryRole"/>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-</gs:form>
+<ui:form>
+<ui:hiddenfield bean="groupID"/>
+<ui:hiddenfield bean="groupEntryID"/>
+<ui:panel>
+
+    <ui:frame>
+        <ui:tablerow>
+            <ui:tablecell cssStyle="portlet-frame-actions">
+                    <ui:actionsubmit action="doViewViewGroup" value="Back To Group"/>
+                    <ui:actionsubmit action="doViewEditGroupEntry" value="Change User Role"/>
+                    <ui:actionsubmit action="doViewDeleteGroupEntry" value="Remove User From Group"/>
+            </ui:tablecell>
+        </ui:tablerow>
+    </ui:frame>
+
+    <ui:frame>
+         <ui:tablerow>
+                <ui:tablecell cssStyle="portlet-frame-label" width="200">
+                Group Name:
+                </ui:tablecell>
+                <ui:tablecell>
+                    <ui:text beanId="groupName"/>
+                </ui:tablecell>
+          </ui:tablerow>
+
+            <ui:tablerow>
+                <ui:tablecell>
+                Group Label:
+                </ui:tablecell>
+                <ui:tablecell>
+                    <ui:text beanId="groupLabel"/>
+                </ui:tablecell>
+            </ui:tablerow>
+    </ui:frame>
+
+    <ui:frame>
+            <ui:tablerow header="true">
+                <ui:tablecell>
+                User Name:
+                </ui:tablecell>
+                <ui:tablecell>
+                Full Name:
+                </ui:tablecell>
+                <ui:tablecell>
+                Role In Group:
+                </ui:tablecell>
+            </ui:tablerow>
+
+            <ui:tablerow>
+                <ui:tablecell>
+                    <gs:text beanId="groupEntryUserName"/>
+                </ui:tablecell>
+                <ui:tablecell>
+                    <ui:text beanId="groupEntryUserFullName"/>
+                </ui:tablecell>
+                <ui:tablecell>
+                    <ui:text beanId="groupEntryRole"/>
+                </ui:tablecell>
+            </ui:tablerow>
+
+        </ui:frame>
+
+</ui:panel>
+</ui:form>

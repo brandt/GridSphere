@@ -1,48 +1,89 @@
-<%@ taglib uri="/portletWidgets" prefix="gs" %>
+<%@ page import="java.util.Iterator,
+                 org.gridlab.gridsphere.services.core.security.acl.GroupEntry"%>
+<%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
-<gs:form action="doViewViewGroup">
-<gs:hiddenfield bean="groupID"/>
-<table class="portlet-pane" cellspacing="1" width="100%">
-  <tr>
-    <td>
-       <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-actions">
-            <gs:submit name="doViewListGroup" value="List Groups"/>
-            &nbsp;&nbsp;<gs:submit name="doViewAddGroupEntry" value="Add Users"/>
-            &nbsp;&nbsp;<gs:submit name="doViewRemoveGroupEntry" value="Remove Users"/>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-label" width="200">
-             Group Name:
-          </td>
-          <td class="portlet-frame-text">
-             <gs:text bean="groupName"/>
-          </td>
-        </tr>
-        <tr>
-          <td class="portlet-frame-label">
-             Group Label:
-          </td>
-          <td class="portlet-frame-text">
-             <gs:text bean="groupLabel"/>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <gs:table bean="groupEntryList"/>
-    </td>
-  </tr>
-</table>
-</gs:form>
+
+<jsp:useBean id="groupEntryList" class="java.util.List" scope="request"/>
+
+<ui:form>
+<ui:hiddenfield beanId="groupID"/>
+<ui:panel>
+
+    <ui:frame>
+        <ui:tablerow>
+            <ui:tablecell cssStyle="portlet-frame-actions">
+                <ui:actionsubmit action="doViewListGroup" value="List Groups"/>
+                &nbsp;&nbsp;
+                <ui:actionsubmit action="doViewAddGroupEntry" value="Add Users"/>
+                &nbsp;&nbsp;
+                <ui:actionsubmit action="doViewRemoveGroupEntry" value="Remove Users"/>
+            </ui:tablecell>
+        </ui:tablerow>
+    </ui:frame>
+
+    <ui:frame>
+        <ui:tablerow>
+            <ui:tablecell width="200">
+                Group Name:
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:text beanId="groupName"/>
+            </ui:tablecell>
+        </ui:tablerow>
+
+        <ui:tablerow>
+            <ui:tablecell>
+                Group Description:
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:text beanId="groupDescription"/>
+            </ui:tablecell>
+        </ui:tablerow>
+    </ui:frame>
+
+
+
+<% if (groupEntryList.size() > 0) { %>
+
+    <ui:frame>
+        <ui:tablerow header="true">
+            <ui:tablecell>
+            Login Name
+            </ui:tablecell>
+            <ui:tablecell>
+            Full Name
+            </ui:tablecell>
+            <ui:tablecell>
+            Role In Group
+            </ui:tablecell>
+        </ui:tablerow>
+
+<%  Iterator groupIterator = groupEntryList.iterator();
+    while (groupIterator.hasNext()) {
+        GroupEntry groupEntry = (GroupEntry)groupIterator.next();
+%>
+                <ui:tablerow>
+                        <ui:tablecell>
+                            <ui:actionlink action="doViewViewGroupEntry" value="<%= groupEntry.getUser().getUserName() %>">
+                                <ui:actionparam name="groupEntryID" value="<%= groupEntry.getID() %>"/>
+                            </ui:actionlink>
+                        </ui:tablecell>
+                        <ui:tablecell>
+                            <%= groupEntry.getUser().getFullName() %>
+                        </ui:tablecell>
+                        <ui:tablecell>
+                            <%= groupEntry.getRole() %>
+                        </ui:tablecell>
+                </ui:tablerow>
+
+     <%              } %>
+
+      </ui:frame>
+
+    <%              } %>
+
+
+  </ui:panel>
+
+</ui:form>
