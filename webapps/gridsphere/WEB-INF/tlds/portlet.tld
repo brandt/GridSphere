@@ -6,7 +6,7 @@
     <tlib-version>1.0</tlib-version>
     <jsp-version>1.2</jsp-version>
     <short-name>portlet</short-name>
-    <uri>/portlet</uri>
+    <uri>http://java.sun.com/portlet</uri>
     <display-name>Portlet API</display-name>
     <description>GridSphere Portlet API Tag library</description>
 
