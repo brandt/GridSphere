@@ -66,6 +66,7 @@ public class ActionPortlet extends AbstractPortlet {
         String id = request.getPortletSettings().getConcretePortletID();
         String state = (String)request.getAttribute(id+".page");
         if (state == null) {
+            log.debug("no page was set!!");
             Portlet.Mode m = request.getMode();
             if (m.equals(Portlet.Mode.VIEW)) {
                 state = DEFAULT_VIEW_PAGE;
@@ -79,6 +80,8 @@ public class ActionPortlet extends AbstractPortlet {
                 state = DEFAULT_VIEW_PAGE;
                 log.error("in ActionPortlet: couldn't get portlet mode in getNextpage()");
             }
+        } else {
+            log.debug("a page has been set to:" + state);
         }
         return state;
     }
@@ -140,7 +143,7 @@ public class ActionPortlet extends AbstractPortlet {
      * @throws PortletException if a portlet exception occurs
      */
     public void actionPerformed(ActionEvent event) throws PortletException {
-
+        log.debug("in ActionPortlet: actionPerformed");
         FormEvent formEvent = new NewFormEventImpl(event);
 
         Class[] parameterTypes = new Class[] { FormEvent.class };
@@ -172,19 +175,19 @@ public class ActionPortlet extends AbstractPortlet {
                 }
 
                 Method method = thisClass.getMethod(methodName, parameterTypes);
-                this.log.debug("Invoking action method");
+                this.log.debug("Invoking action method: " + methodName);
 
                 method.invoke(thisObject, arguments);
             } catch (NoSuchMethodException e) {
-                this.log.error("Error invoking action method", e);
+                this.log.error("Error invoking action method: " + methodName, e);
                 // If action is not illegal do error undefined action
                 doErrorInvalidAction(request, methodName);
             } catch (IllegalAccessException e) {
-                this.log.error("Error invoking action method", e);
+                this.log.error("Error invoking action method: " + methodName, e);
                 // If action is not illegal do error undefined action
                 doErrorInvalidAction(request, methodName);
             } catch (InvocationTargetException e) {
-                this.log.error("Error invoking action method", e);
+                this.log.error("Error invoking action method: " + methodName, e);
                 // If action is not illegal do error undefined action
                 doErrorInvalidAction(request, methodName);
             }
@@ -228,7 +231,7 @@ public class ActionPortlet extends AbstractPortlet {
      */
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         String next = getNextPage(request);
-        log.debug("in doView: next page is= " + next);
+        log.debug("in ActionPortlet:doView next page is= " + next);
         if (next.endsWith(".jsp"))  {
             doViewJSP(request, response, next);
         } else {
@@ -254,6 +257,7 @@ public class ActionPortlet extends AbstractPortlet {
      * @throws IOException if an I/O error occurs
      */
     public void doEdit(PortletRequest request, PortletResponse response) throws PortletException, IOException {
+        log.debug("in doEdit");
         doView(request, response);
     }
 
@@ -266,6 +270,7 @@ public class ActionPortlet extends AbstractPortlet {
      * @throws IOException if an I/O error occurs
      */
     public void doConfigure(PortletRequest request, PortletResponse response) throws PortletException, IOException {
+        log.debug("in doConfigure");
         doView(request, response);
     }
 
@@ -278,6 +283,7 @@ public class ActionPortlet extends AbstractPortlet {
      * @throws IOException if an I/O error occurs
      */
     public void doHelp(PortletRequest request, PortletResponse response) throws PortletException, IOException {
+        log.debug("in doHelp");
         doView(request, response);
     }
 

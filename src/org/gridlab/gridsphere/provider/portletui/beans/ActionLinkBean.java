@@ -16,11 +16,15 @@ import java.util.Iterator;
 
 public class ActionLinkBean extends BaseComponentBean implements TagBean {
 
+    public static final String ACTION_STYLE = "portlet-frame-label";
+
     protected String action = "no action specified";
     protected PortletURI portletURI = null;
     protected List paramBeanList = new ArrayList();
 
-    public ActionLinkBean() {}
+    public ActionLinkBean() {
+        this.cssStyle = ACTION_STYLE;
+    }
 
     /**
      * Sets the uri for the link.
@@ -86,7 +90,7 @@ public class ActionLinkBean extends BaseComponentBean implements TagBean {
     }
 
     public String toString() {
-        if (value == null) createLink();
+        //if (value == null) createLink();
         return "<a href=\"" + action + "\"/>" + value + "</a>";
     }
 

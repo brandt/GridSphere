@@ -9,10 +9,13 @@ import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 public class ActionSubmitBean extends BaseComponentBean implements TagBean {
 
+    public static final String SUBMIT_STYLE = "portlet-frame-text";
+
     protected String key = "";
     protected String action = "";
 
     public ActionSubmitBean() {
+        this.cssStyle = SUBMIT_STYLE;
     }
 
     public String getKey() {
