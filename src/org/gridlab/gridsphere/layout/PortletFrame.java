@@ -144,6 +144,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             req.setAttribute(GridSphereProperties.PORTLETDATA, data);
         }
 
+
         // now perform actionPerformed on Portlet if it has an action
         DefaultPortletAction action = event.getAction();
         if (action.getName() != "") {
@@ -185,6 +186,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
                 } else {
                     out.println("<tr><td>");
                 }
+
                 try {
                     PortletInvoker.service(portletClass, req, res);
                 } catch (PortletException e) {

@@ -62,12 +62,11 @@ public class PortletContainer {
     }
 
     public void loginPortlets(GridSphereEvent event) throws PortletException {
-        //PortletInvoker dispatcher = event.getPortletEventDispatcher();
-        PortletRequest req = event.getPortletRequest();
-        PortletResponse res = event.getPortletResponse();
         Iterator it = componentIdentifiers.iterator();
         ComponentIdentifier cid = null;
         PortletFrame f = null;
+        PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
         while (it.hasNext()) {
             cid = (ComponentIdentifier) it.next();
             System.err.println(cid.getClassName());
@@ -80,12 +79,11 @@ public class PortletContainer {
     }
 
     public void logoutPortlets(GridSphereEvent event) throws PortletException {
-        PortletRequest req = event.getPortletRequest();
-        PortletResponse res = event.getPortletResponse();
-        //PortletInvoker dispatcher = event.getPortletEventDispatcher();
         Iterator it = componentIdentifiers.iterator();
         ComponentIdentifier cid = null;
         PortletFrame f = null;
+        PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
         while (it.hasNext()) {
             cid = (ComponentIdentifier) it.next();
             if (cid.getPortletClass().equals("org.gridlab.gridsphere.layout.PortletFrame")) {
