@@ -30,8 +30,7 @@ public class PortletTitleBar extends BasePortletComponent {
     private String portletClass = null;
     private PortletWindow.State windowState = PortletWindow.State.NORMAL;
 
-    private List supportedModes = null;
-    private String[] portletModes = null;
+    private List supportedModes = new ArrayList();
     private Portlet.Mode portletMode = Portlet.Mode.VIEW;
     private Portlet.Mode previousMode = null;
 
@@ -39,8 +38,8 @@ public class PortletTitleBar extends BasePortletComponent {
 
     private PortletSettings settings;
 
-    private List allowedWindowStates = null;
-    private String[] windowStates = null;
+    private List allowedWindowStates = new ArrayList();
+
     private String errorMessage = "";
     private boolean hasError = false;
 
@@ -350,11 +349,13 @@ public class PortletTitleBar extends BasePortletComponent {
         PortletURI portletURI;
         PortletResponse res = event.getPortletResponse();
 
-        windowStates = new String[allowedWindowStates.size()];
-            for (int i = 0; i < allowedWindowStates.size(); i++) {
-                PortletWindow.State state = (PortletWindow.State)allowedWindowStates.get(i);
-                windowStates[i] = state.toString();
-            }
+        if (allowedWindowStates.isEmpty()) return null;
+
+        String[] windowStates = new String[allowedWindowStates.size()];
+        for (int i = 0; i < allowedWindowStates.size(); i++) {
+            PortletWindow.State state = (PortletWindow.State)allowedWindowStates.get(i);
+            windowStates[i] = state.toString();
+        }
 
         for (int i = 0; i < windowStates.length; i++) {
             // remove current state from list
@@ -410,7 +411,10 @@ public class PortletTitleBar extends BasePortletComponent {
         int i;
         PortletResponse res = event.getPortletResponse();
         // make modes from supported modes
-        portletModes = new String[supportedModes.size()];
+
+        if (supportedModes.isEmpty()) return null;
+
+        String[] portletModes = new String[supportedModes.size()];
         for (i = 0; i < supportedModes.size(); i++) {
             Portlet.Mode mode = (Portlet.Mode)supportedModes.get(i);
             portletModes[i] = mode.toString();

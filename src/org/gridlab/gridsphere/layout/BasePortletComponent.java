@@ -6,6 +6,8 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import java.io.IOException;
@@ -19,7 +21,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected String width = "";
     protected String height = "";
     protected String name = new String();
-    protected String theme = "xp";
+    protected String theme = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_DEFAULT_THEME);
     protected boolean isVisible = true;
 
     /**

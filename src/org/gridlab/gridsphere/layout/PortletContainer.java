@@ -9,6 +9,8 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -35,7 +37,7 @@ public class PortletContainer {
     protected List portlets = new ArrayList();
 
     protected String name = "";
-    protected String uiTheme = "xp";
+    protected String uiTheme = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_DEFAULT_THEME);
 
     /**
      * Constructs an instance of PortletContainer
@@ -165,8 +167,6 @@ public class PortletContainer {
         Iterator it = componentIdentifiers.iterator();
         ComponentIdentifier cid = null;
         PortletFrame f = null;
-        PortletRequest req = event.getPortletRequest();
-        PortletResponse res = event.getPortletResponse();
         while (it.hasNext()) {
             cid = (ComponentIdentifier) it.next();
             System.err.println(cid.getClassName());
@@ -178,7 +178,7 @@ public class PortletContainer {
     }
 
     /**
-     * Performs {@link org.gridlab.gridsphere.portlet.Portlet#logout(PortletSession) logout}
+     * Performs {@link org.gridlab.gridsphere.portlet.Portlet#logout}
      * on all the portlets conatined by this PortletContainer
      *
      * @param event a gridsphere event
