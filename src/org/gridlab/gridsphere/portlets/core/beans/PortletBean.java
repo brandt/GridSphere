@@ -85,7 +85,7 @@ public class PortletBean {
             throws PortletException {
         PortletService service = (PortletService)this.session.getAttribute(serviceClass.getName());
         if (service == null) {
-            service = this.context.getService(serviceClass, user);
+            service = this.context.getService(serviceClass, this.user);
             this.session.setAttribute(serviceClass.getName(), service);
         }
         return service;

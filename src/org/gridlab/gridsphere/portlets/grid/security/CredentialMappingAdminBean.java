@@ -68,7 +68,6 @@ public class CredentialMappingAdminBean extends PortletBean {
 
     protected void initServices()
             throws PortletException {
-        initServices();
         this.log.debug("Entering initServices()");
         this.credentialManagerService = (CredentialManagerService)getPortletService(CredentialManagerService.class);
         this.userManagerService = (UserManagerService)getPortletService(UserManagerService.class);
