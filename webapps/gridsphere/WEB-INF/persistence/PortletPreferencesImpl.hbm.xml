@@ -22,6 +22,7 @@
 
         <property name="userId" type="string" column="userid"/>
         <property name="portletId" type="string" column="portletid"/>
+        <property name="validator" type="string" column="validator"/>
 
         <map name="attributes" table="portletprefattr" cascade="all">
             <key column="attribute_oid"/>
