@@ -14,7 +14,6 @@ public class GridSphereProperties {
     public static final String ACTION = "action";
     public static final String MESSAGE = "message";
     public static final String PORTLETID = "PortletID";
-    public static final String PORTLETTAB = "tab";
     public static final String ERROR = "error";
 
     // Portlet API objects

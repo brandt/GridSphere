@@ -61,6 +61,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private PortletContext context = null;
     private static Boolean firstDoGet = Boolean.TRUE;
 
+    private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
+
     /**
      * Initializes the GridSphere portlet container
      *
@@ -165,6 +167,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletRequest req = event.getPortletRequest();
         PortletSession session = req.getPortletSession(true);
 
+        //SportletRequestImpl sreq = (SportletRequestImpl)req;
+        //sreq.logRequest();
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
@@ -207,7 +211,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletSession session = req.getPortletSession();
         session.invalidate();
         log.debug("in logout of GridSphere Servlet");
-        //layoutEngine.logoutPortlets(event);
     }
 
     /**
@@ -306,6 +309,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public void sessionCreated(HttpSessionEvent event) {
         log.debug("sessionCreated('" + event.getSession().getId() + "')");
+        sessionManager.sessionCreated(event);
     }
 
 
@@ -315,6 +319,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event The session event
      */
     public void sessionDestroyed(HttpSessionEvent event) {
+        sessionManager.sessionDestroyed(event);
         //loginService.sessionDestroyed(event.getSession());
         log.debug("sessionDestroyed('" + event.getSession().getId() + "')");
         //HttpSession session = event.getSession();
