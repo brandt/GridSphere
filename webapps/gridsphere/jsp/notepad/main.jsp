@@ -29,8 +29,8 @@
 
 %>
     <ui:textfield beanId="search"/><ui:actionsubmit action="doSearch" value="Search"/>
-    <ui:actionsubmit action="doShowNew" value="New Sheet"/>
-    <ui:actionsubmit action="showList" value="Show all Sheets"/>
+    <ui:actionsubmit action="doShowNew" value="New Note"/>
+    <ui:actionsubmit action="showList" value="Show all Notes"/>
     </ui:frame>
 
 </ui:form>
