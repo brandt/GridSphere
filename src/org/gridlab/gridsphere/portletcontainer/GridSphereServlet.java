@@ -83,6 +83,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         GridSphereEvent event = new GridSphereEventImpl(getServletConfig(), req, res);
 
+        res.setContentType("text/html");
+
         // Render layout
         try {
             layoutEngine.service(event);
