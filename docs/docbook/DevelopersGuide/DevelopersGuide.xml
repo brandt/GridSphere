@@ -11,6 +11,7 @@
 <!-- Each chapter is in its own file -->
   
 <!ENTITY chap-intro SYSTEM "intro.xml">
+<!ENTITY chap-descriptor SYSTEM "portletdescriptor.xml">
 
 <!-- Application, page, library, component specification entities  -->
 ]>
@@ -34,5 +35,6 @@
   </bookinfo>
   
   &chap-intro;
+  &chap-descriptor;
 
 </book>
