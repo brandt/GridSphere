@@ -169,7 +169,7 @@ Copyright:
     <target name="compile-projects" depends="compile" description="Compile all portlet subprojects">
         <foreach target="compile-project" param="thisEnv">
         <path>
-            <dirset dir="${project.dir}" includes="*"/>
+            <dirset dir="${projects.dir}" includes="*"/>
         </path>
         </foreach>
     </target>
@@ -371,7 +371,7 @@ Copyright:
     <target name="clean-projects" description="Compile all portlet subprojects">
         <foreach target="clean-project" param="thisEnv">
             <path>
-                <dirset dir="${project.dir}" includes="*"/>
+                <dirset dir="${projects.dir}" includes="*"/>
             </path>
         </foreach>
     </target>
@@ -594,7 +594,7 @@ Copyright:
     <target name="deploy-all" depends="deploy" description="Compile all portlet subprojects">
         <foreach target="deploy-project" param="thisEnv">
             <path>
-                <dirset dir="${project.dir}" includes="*"/>
+                <dirset dir="${projects.dir}" includes="*"/>
             </path>
         </foreach>
     </target>

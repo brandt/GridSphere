@@ -118,7 +118,7 @@ public class PortletLayoutEngine {
         }
     }
 
-    public PortletContainer getPortletContainer(User user) throws PortletLayoutException {
+    public PortletContainer getPortletContainer(User user)  {
           return null;
     }
 
