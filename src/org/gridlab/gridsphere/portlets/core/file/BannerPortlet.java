@@ -185,16 +185,22 @@ public class BannerPortlet extends ActionPortlet {
         PortletResponse response = event.getPortletResponse();
         User user = request.getUser();
         String title = getTitle();
-        String fileURL = getFileURL();
+        String fileURL = null;
         if (!(user instanceof GuestUser)) {
             PortletData data = request.getData();
             fileURL = data.getAttribute(FILE);
 
             // if user hasn't configured banner, show them help
+            /*
             if (fileURL == null) {
                 setNextState(request, HELP_JSP);
                 return;
             }
+            */
+        }
+
+        if (fileURL == null) {
+            fileURL = getFileURL();
         }
 
         //setNextState(request, fileURL);
