@@ -336,6 +336,7 @@ Copyright:
             <exclude name="org/gridlab/gridsphere/event/**"/>
             <!-- don't include portlet widgets tag library -->
             <exclude name="org/gridlab/gridsphere/provider/**"/>
+
             <exclude name="org/gridlab/gridsphere/tags/**"/>
             <!-- don't include GridSphere portlets  -->
             <exclude name="org/gridlab/gridsphere/portlets/**"/>
@@ -714,6 +715,9 @@ Copyright:
         <copy overwrite="true" todir="${env.CATALINA_HOME}/webapps/gridsphere">
             <fileset dir="${build.webapps}/gridsphere"/>
         </copy>
+
+        <copy file="docs/design.pdf" todir="build/docs"/>
+        <copy file="docs/jetspeed-eval.pdf" todir="build/docs"/>
 
         <copy overwrite="true" file="lib/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
         <copy overwrite="true" file="lib/coreportlets.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
