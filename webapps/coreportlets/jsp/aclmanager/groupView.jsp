@@ -172,12 +172,12 @@
                    name="<%=AccessControllerBean.ACTION_GROUP_DELETE%>"
                    value="Delete Group"
                    onClick="javascript:AccessControllerPortlet_deleteGroup_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
+            &nbsp;&nbsp;<input type="submit"
                    name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_ADD%>"
                    value="Add Users"
                    onClick="javascript:AccessControllerPortlet_addGroupEntry_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
-                   name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_ADD%>"
+            &nbsp;&nbsp;<input type="submit"
+                   name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_REMOVE%>"
                    value="Remove Users"
                    onClick="javascript:AccessControllerPortlet_removeGroupEntry_onClick()"/>
           </td>

@@ -12,7 +12,7 @@
 <jsp:useBean id="aclManagerBean"
              class="org.gridlab.gridsphere.portlets.core.beans.AccessControllerBean"
              scope="request"/>
-<form name="AccessContollerPortlet" method="POST" action="<%=aclManagerBean.getGroupViewURI()%>">
+<form name="AccessContollerPortlet" method="POST" action="<%=aclManagerBean.getGroupEditURI()%>">
   <input type="hidden" name="groupID" value="<%=aclManagerBean.getGroupID()%>"/>
   <script language="JAVASCRIPT">
 

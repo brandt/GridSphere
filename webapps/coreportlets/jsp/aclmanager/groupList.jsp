@@ -7,23 +7,24 @@
 <jsp:useBean id="aclManagerBean"
              class="org.gridlab.gridsphere.portlets.core.beans.AccessControllerBean"
              scope="request"/>
-<form name="AccessControlManagerPortlet" method="POST" action="<%=aclManagerBean.getGroupListURI()%>">
+<form name="AccessControlManagerPortlet" method="POST"
+      action="<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_LIST)%>">
   <input type="hidden" name="groupID" value=""/>
   <script language="JAVASCRIPT">
     function AccessControlManagerPortlet_listGroup_onClick() {
-      document.AccessControlManagerPortlet.action="<%=aclManagerBean.getGroupListURI()%>";
+      document.AccessControlManagerPortlet.action="<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_LIST)%>";
       document.AccessControlManagerPortlet.submit();
     }
 
     function AccessControlManagerPortlet_newGroup_onClick() {
       document.AccessControlManagerPortlet.groupID.value="";
-      document.AccessControlManagerPortlet.action="<%=aclManagerBean.getGroupEditURI()%>";
+      document.AccessControlManagerPortlet.action="<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_EDIT)%>";
       document.AccessControlManagerPortlet.submit();
     }
 
     function AccessControlManagerPortlet_viewGroup_onClick(groupID) {
       document.AccessControlManagerPortlet.groupID.value=groupID;
-      document.AccessControlManagerPortlet.action="<%=aclManagerBean.getGroupViewURI()%>";
+      document.AccessControlManagerPortlet.action="<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_VIEW)%>";
       document.AccessControlManagerPortlet.submit();
     }
   </script>

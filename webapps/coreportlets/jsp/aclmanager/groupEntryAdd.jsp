@@ -12,9 +12,11 @@
 <jsp:useBean id="aclManagerBean"
              class="org.gridlab.gridsphere.portlets.core.beans.AccessControllerBean"
              scope="request"/>
-<form name="AccessControllerPortlet" method="POST" action="">
+<form name="AccessControllerPortlet" method="POST"
+      action="<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_ADD)%>">
   <input type="hidden" name="groupID" value="<%=aclManagerBean.getGroupID()%>"/>
-  <input type="hidden" name="groupEntryID" value=""/>
+  <input type="hidden" name="groupEntryUserID" value=""/>
+  <input type="hidden" name="groupEntryUserIDCheckAll" value="false"/>
   <script language="JAVASCRIPT">
 
     function AccessControllerPortlet_listGroup_onClick() {
@@ -112,9 +114,17 @@
     }
 
     function AccessControllerPortlet_confirmAddGroupEntry_onClick() {
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_ADD_CONFIRM)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessControllerPortlet.submit();
+      var validate = GridSphere_CheckBoxList_validateCheckOneOrMore(document.AccessControllerPortlet.groupEntryUserIDs,
+                                                                    document.AccessControllerPortlet.groupEntryUserID,
+                                                                    document.AccessControllerPortlet.groupEntryUserIDCheckAll);
+      // Validate remove action
+      if (validate == false) {
+        alert("Please select the users you would like to add to this group.");
+      } else {
+        var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_ADD_CONFIRM)%>";
+        document.AccessControllerPortlet.action=action;
+        document.AccessControllerPortlet.submit();
+      }
     }
 
     function AccessControllerPortlet_cancelAddGroupEntry_onClick() {
@@ -124,15 +134,28 @@
     }
 
     function AccessControllerPortlet_removeGroupEntry_onClick(groupID) {
+      // Go to add confirmed page
       var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_REMOVE)%>";
       document.AccessControllerPortlet.action=action;
       document.AccessControllerPortlet.submit();
     }
 
     function AccessControllerPortlet_confirmRemoveGroupEntry_onClick() {
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_REMOVE_CONFIRM)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessControllerPortlet.submit();
+      var validate = GridSphere_CheckBoxList_validateCheckOneOrMore(document.AccessControllerPortlet.groupEntryIDs,
+                                                                    document.AccessControllerPortlet.groupEntryID,
+                                                                    document.AccessControllerPortlet.groupEntryIDCheckAll);
+      // Validate remove action
+      if (validate == false) {
+        alert("Please select the users you would like to remove from this group.");
+      } else {
+        validate = confirm("Are you sure wish to remove the selected entries from this group?");
+      }
+      // Validate user intention
+      if (validate == true) {
+        var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_REMOVE_CONFIRM)%>";
+        document.AccessControllerPortlet.action=action;
+        document.AccessControllerPortlet.submit();
+      }
     }
 
     function AccessControllerPortlet_cancelRemoveGroupEntry_onClick() {
@@ -186,9 +209,11 @@
           <td bgcolor="#6666FF" align="center" valign="middle" width="12">
             <font size="-1">
               <input type="checkbox"
-                     name="groupEntryUserIDs"
-                     value="0"
-                     onClick="javascript:AccessControllerPortlet_userIDs_checkAll()">
+               name="groupEntryUserIDs"
+               value=""
+               onClick="javascript:GridSphere_CheckBoxList_checkAll(document.AccessControllerPortlet.groupEntryUserIDs,
+                                                                    document.AccessControllerPortlet.groupEntryUserID,
+                                                                    document.AccessControllerPortlet.groupEntryUserIDCheckAll)"/>
             </font>
           </td>
           <td bgcolor="#6666FF">
@@ -213,9 +238,13 @@
         <tr>
           <td bgcolor="#CCCCCC" align="center" valign="middle" width="12">
             <font size="-1">
-              <input type="checkbox" name="groupEntryUserIDs"
-                     value="<%=user.getID()%>"
-                     onClick="javascript:AccessControllerPortlet_userIDs_check(this)"/>
+              <input type="checkbox"
+               name="groupEntryUserIDs"
+               value="<%=user.getID()%>"
+               onClick="javascript:GridSphere_CheckBoxList_onClick(this,
+                                                                   document.AccessControllerPortlet.groupEntryUserIDs,
+                                                                   document.AccessControllerPortlet.groupEntryUserID,
+                                                                   document.AccessControllerPortlet.groupEntryUserIDCheckAll)"/>
             </font>
           </td>
           <td bgcolor="WHITE">
@@ -240,4 +269,127 @@
     </td>
   </tr>
 </table>
+<script>
+
+  function GridSphere_CheckBoxList_checkAll(list, selection, checkAllFlag) {
+
+    // alert("GridSphere CheckBoxList Check All Current: " + checkAllFlag.value);
+
+    if (checkAllFlag.value == "false") {
+
+      // alert("GridSphere CheckBoxList Check All True");
+
+      for (i = 0; i < list.length; i++) {
+
+        list[i].checked = true;
+      }
+
+      checkAllFlag.value = "true";
+
+      // Select first list value if none selected yet
+      if (selection.value == "") {
+
+        if (list.length > 0) {
+
+          selection.value = list[1].value;
+        }
+      }
+
+    } else {
+
+      // alert("GridSphere CheckBoxList Check All False");
+
+      GridSphere_CheckBoxList_clear(list, selection, checkAllFlag);
+    }
+  }
+
+  function GridSphere_CheckBoxList_clear(list, selection, checkAllFlag) {
+
+    // alert("GridSphere CheckBoxList Clear");
+
+    for (i = 0; i < list.length; i++) {
+
+      list[i].checked = false;
+    }
+
+    // Clear selected value
+    selection.value = "0";
+
+    checkAllFlag.value = "false";
+  }
+
+  function GridSphere_CheckBoxList_checkOne(list, selection, checkAllFlag)
+  {
+    // alert("GridSphere CheckBoxList Check One");
+
+    checkAllFlag.value = "false";
+
+    // Uncheck "all" option
+    list[0].checked = false;
+
+    // Uncheck those that don't match selection
+    for (i = 1; i < list.length; i++) {
+
+      if (list[i].value != selection.value) {
+
+        list[i].checked = false;
+      }
+    }
+  }
+
+  function GridSphere_CheckBoxList_onClick(newSelection, list, selection, checkAllFlag)
+  {
+    // alert("GridSphere CheckBoxList On Click");
+
+    // alert("GridSphere CheckBoxList current selection: " + selection.value);
+
+    if (newSelection.checked == true) {
+
+      // Save selection only if none made yet
+      if (selection.value == "") {
+
+        selection.value = newSelection.value;
+      }
+
+    } else {
+
+      // If saved selection was this one
+      if (selection.value == newSelection.value) {
+
+        var found = false;
+
+        // Set selection to first checked item other than this
+        for (i = 1; i < list.length && !found; i++) {
+
+          if (list[i].checked == true) {
+
+            if (list[i].value != item.value) {
+
+              selection.value = list[i].value;
+
+              found = true;
+            }
+          }
+        }
+
+        // If we didn't find a checked value
+        if (!found) {
+
+          // Set selection to none
+          selection.value = "";
+        }
+      }
+    }
+
+    // alert("GridSphere CheckBoxList new selection: " + selection.value);
+  }
+
+  function GridSphere_CheckBoxList_validateCheckOneOrMore(list, selection, checkAllFlag)
+  {
+    // alert("GridSphere CheckBoxList Validate Check One Or More");
+
+    return (selection.value != "");
+  }
+
+</script>
 </form>
