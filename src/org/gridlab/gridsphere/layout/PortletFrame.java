@@ -68,6 +68,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
     public List init(List list) {
         System.err.println("portlet class is: " + portletClass);
         COMPONENT_ID = list.size();
+        componentIDStr = String.valueOf(COMPONENT_ID);
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletLifecycle(this);
         compId.setPortletClass(portletClass);
