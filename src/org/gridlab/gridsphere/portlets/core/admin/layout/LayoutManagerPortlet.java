@@ -80,8 +80,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         Map groups = PortletTabRegistry.getGroupTabs();
         it = groups.keySet().iterator();
-        List groupNames = new ArrayList();
-        List groupDescs = new ArrayList();
+        Map groupNames = new HashMap();
+
         User user = req.getUser();
 
         AccessControlManagerService aclService = getACLService(user);
@@ -90,12 +90,12 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletGroup group;
         while (it.hasNext()) {
             name = (String)it.next();
-            groupNames.add(name);
             group = aclService.getGroupByName(name);
-            if (group != null) groupDescs.add(group.getDescription());
+            if (group != null) {
+                groupNames.put(name, group.getDescription());
+            }
         }
         req.setAttribute("groupNames", groupNames);
-        req.setAttribute("groupDescs", groupDescs);
 
         setNextState(req, VIEW_JSP);
     }
