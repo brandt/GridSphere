@@ -1,0 +1,92 @@
+/*
+ * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
+ * @version $Id$
+ */
+package org.gridlab.gridsphere.layout;
+
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+import java.util.Collections;
+
+/**
+ * The <code>PortletColumnLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>
+ * that organizes portlets into a column.
+ */
+public class PortletVariableColumnLayout extends PortletFrameLayout implements Cloneable {
+
+    protected String variant = "";
+
+    public PortletVariableColumnLayout() {
+    }
+
+    /**
+     * Initializes the portlet component. Since the components are isolated
+     * after Castor unmarshalls from XML, the ordering is determined by a
+     * passed in List containing the previous portlet components in the tree.
+     *
+     * @param list a list of component identifiers
+     * @return a list of updated component identifiers
+     * @see ComponentIdentifier
+     */
+    public List init(PortletRequest req, List list) {
+        return  super.init(req, list);
+    }
+
+    public void setVariant(String variant) {
+        this.variant = variant;
+    }
+
+    public String getVariant() {
+        return variant;
+    }
+
+    /**
+     * Renders the component
+     */
+    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+        PortletResponse res = event.getPortletResponse();
+        PortletRequest req = event.getPortletRequest();
+        PrintWriter out = res.getWriter();
+
+        PortletComponent p = null;
+
+        // starting of the gridtable
+
+        if (!components.isEmpty()) {
+            out.println("<table width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"> <!-- START COLUMN -->");
+
+            out.println("<tbody>");
+            List scomponents = Collections.synchronizedList(components);
+            synchronized(scomponents) {
+            for (int i=0;i<scomponents.size();i++) {
+                out.print("<tr><td valign=\"top\">");
+
+                p = (PortletComponent) scomponents.get(i);
+
+                if (p.getVisible()) {
+                    p.doRender(event);
+                    //out.println("comp: "+i);
+                }
+
+                out.println("</td></tr>");
+            }
+            }
+            out.println("</tbody>");
+            out.println("</table> <!-- END COLUMN -->");
+        }
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        PortletVariableColumnLayout g = (PortletVariableColumnLayout)super.clone();
+        return g;
+    }
+
+}
+
+
+
