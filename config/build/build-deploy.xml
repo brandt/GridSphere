@@ -65,18 +65,6 @@ Build include file for the GridSphere Portal source code, see build.xml
 
         <!-- if there is no start.jar in appserver.home install jetty -->
 
-        <if>
-            <available file="${appserver.home}/start.jar" type="file" property="jetty"/>
-            <then>
-                <echo message="Found jetty."/>
-            </then>
-            <else>
-                <echo message="No Jetty in install dir detected. Installing jetty."/>
-                <antcall target="install-jetty"/>
-            </else>
-        </if>
-
-
         <copy todir="${build.webapps}/gridsphere">
             <fileset dir="${gswebapp.dir}"/>
         </copy>
@@ -99,18 +87,6 @@ Build include file for the GridSphere Portal source code, see build.xml
         <copy overwrite="true" file="${build.lib}/coreportlets.jar" todir="${appserver.home}/webapps/gridsphere/WEB-INF/lib"/>
 
     </target>
-
-    <!-- deploys jetty to appserver.home -->
-    <target name="install-jetty" depends="setenv" description="Deploys jetty to jetty.home">
-        <mkdir dir="${appserver.home}"/>
-        <mkdir dir="${appserver.home}/webapps"/>
-        <mkdir dir="${appserver.home}/logs"/>
-        <copy todir="${appserver.home}">
-            <fileset dir="lib/jetty/"/>
-        </copy>
-
-    </target>
-
 
     <!-- ========================================================= -->
     <!-- =          TOMCAT                                       = -->
@@ -140,17 +116,14 @@ Build include file for the GridSphere Portal source code, see build.xml
                 <exclude name="gridsphere-ui-tags.jar"/>
                 <exclude name="gridsphere-provider.jar"/>
                 <exclude name="coreportlets.jar"/>
-
             </fileset>
         </copy>
 
         <copy file="webapps/log4j.xml" todir="${appserver.home}/common/classes"/>
 
-
         <copy overwrite="true" file="${build.lib}/gridsphere-provider.jar" todir="${appserver.home}/shared/lib"/>
         <copy overwrite="true" file="${build.lib}/gridsphere-ui-tags.jar" todir="${appserver.home}/webapps/gridsphere/WEB-INF/lib"/>
         <copy overwrite="true" file="${build.lib}/coreportlets.jar" todir="${appserver.home}/webapps/gridsphere/WEB-INF/lib"/>
-
 
     </target>
 
