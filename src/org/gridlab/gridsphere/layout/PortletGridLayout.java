@@ -4,22 +4,13 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletResponse;
-import org.gridlab.gridsphere.event.WindowListener;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
-import java.util.List;
 
 public class PortletGridLayout extends BaseLayoutManager {
-
-    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletGridLayout.class);
 
     private int rows = 1;
     private int cols = 1;

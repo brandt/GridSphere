@@ -4,23 +4,15 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletContext;
-import org.gridlab.gridsphere.portlet.impl.SportletResponse;
+import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.impl.SportletRequest;
+import org.gridlab.gridsphere.portlet.impl.SportletResponse;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 public class PortletText extends BasePortletComponent {
-
-    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletText.class);
 
     private String text;
 
@@ -45,8 +37,7 @@ public class PortletText extends BasePortletComponent {
         SportletResponse res = event.getSportletResponse();
         try {
             ctx.include(text, req, res);
-        } catch (ServletException e) {
-            log.error("Unable to include text: " + text, e);
+        } catch (PortletException e) {
             throw new PortletLayoutException("Unable to include text: " + text, e);
         }
     }

@@ -6,10 +6,10 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
-import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -39,9 +39,9 @@ public abstract class BaseLayoutManager implements LayoutManager, PortletFrameLi
         return list;
     }
 
-    public void login() {}
+    public void login(GridSphereEvent event) {}
 
-    public void logout() {}
+    public void logout(GridSphereEvent event) {}
 
     public void destroy() {}
 

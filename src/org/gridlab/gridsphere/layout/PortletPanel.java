@@ -4,19 +4,12 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.Iterator;
 
 public class PortletPanel extends BasePortletComponent {
-
-    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletPanel.class);
 
     private LayoutManager layoutManager;
 
@@ -27,7 +20,6 @@ public class PortletPanel extends BasePortletComponent {
     }
 
     public List init(List list) {
-        log.info("in init()");
         list = super.init(list);
         PortletLifecycle cycle = (PortletLifecycle)layoutManager;
         list.add(cycle);

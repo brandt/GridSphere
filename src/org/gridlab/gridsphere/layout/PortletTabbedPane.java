@@ -4,30 +4,18 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletURI;
-import org.gridlab.gridsphere.portlet.PortletException;
-import org.gridlab.gridsphere.portlet.impl.SportletURI;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletResponse;
 import org.gridlab.gridsphere.portlet.impl.SportletRequest;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletResponse;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.event.WindowListener;
-import org.gridlab.gridsphere.event.WindowEvent;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
-import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PortletTabbedPane extends BasePortletComponent {
-
-    private static PortletLog log = SportletLog.getInstance(PortletTabbedPane.class);
 
     protected String name = PortletTabbedPane.class.getName();
 
@@ -221,7 +209,6 @@ public class PortletTabbedPane extends BasePortletComponent {
     }
 
     public List init(List list) {
-        log.info("in init()");
         list = super.init(list);
         selectedPanel = getSelectedPortletPanel();
         PortletPanel panel = null;
@@ -260,14 +247,14 @@ public class PortletTabbedPane extends BasePortletComponent {
         String modeString;
         for (i = 0; i < tabs.size(); i++) {
             sportletURI = event.createNewAction(GridSphereEvent.Action.LAYOUT_ACTION, COMPONENT_ID, null);
-            try {
+            //try {
                 // Create portlet link Href
                 PortletTab tab = (PortletTab)tabs.get(i);
                 sportletURI.addParameter(GridSphereProperties.PORTLETTAB, tab.getTitle());
                 tabLinks[i] = sportletURI.toString();
-            } catch (Exception e) {
-                log.error("Unable to create portlet tab link: " + e.getMessage());
-            }
+            //} catch (Exception e) {
+                //log.error("Unable to create portlet tab link: " + e.getMessage());
+            //}
         }
         req.setAttribute(LayoutProperties.TABLINKS, tabLinks);
 

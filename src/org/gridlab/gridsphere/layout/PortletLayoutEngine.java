@@ -4,25 +4,20 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.GuestUser;
-import org.gridlab.gridsphere.portlet.impl.PortletProperties;
-import org.gridlab.gridsphere.portlet.impl.SportletResponse;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.portletcontainer.descriptor.PortletCollection;
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PortletLayoutEngine {
 
@@ -62,10 +57,12 @@ public class PortletLayoutEngine {
     }
 
 
-    public PortletContainer getPortletContainer(User user) throws PortletLayoutException {
+    public PortletContainer getPortletContainer(GridSphereEvent event) throws PortletLayoutException {
         // if user is guest then use guest template
         PortletLayoutDescriptor pld = null;
         PortletContainer pc = null;
+
+        User user = event.getSportletRequest().getUser();
 
         if (user instanceof GuestUser) {
             return guestContainer;
@@ -82,7 +79,7 @@ public class PortletLayoutEngine {
                 pld = loadUserLayout(user);
                 pc = pld.getPortletContainer();
                 pc.init(new ArrayList());
-                pc.login();
+                pc.login(event);
             } catch (Exception e) {
                 log.error("Unable to loadUserLayout for user: " + user, e);
                 throw new PortletLayoutException("Unable to deserailize user layout from layout descriptor: " + e.getMessage());
@@ -97,8 +94,7 @@ public class PortletLayoutEngine {
         boolean doLayoutAction = false;
         PortletContainer pc = null;
 
-        User user = event.getSportletRequest().getUser();
-        pc = getPortletContainer(user);
+        pc = getPortletContainer(event);
 
         // XXX: How do we signal a user has logged out so we can userLayouts.remove(user)???
         try {

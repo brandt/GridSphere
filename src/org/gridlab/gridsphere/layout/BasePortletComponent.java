@@ -4,20 +4,13 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletRequest;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 
 public abstract class BasePortletComponent implements PortletComponent {
-
-    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(BasePortletComponent.class);
 
     protected int COMPONENT_ID = -1;
     protected String width;
@@ -28,22 +21,17 @@ public abstract class BasePortletComponent implements PortletComponent {
     protected PortletBorder border;
     protected PortletInsets insets;
     protected boolean isVisible = true;
-    protected String className = BasePortletComponent.class.getName();
 
     public List init(List list) {
         COMPONENT_ID = list.size();
         return list;
     }
 
-    public void login() {}
+    public void login(GridSphereEvent event) {}
 
-    public void logout() {}
+    public void logout(GridSphereEvent event) {}
 
     public void destroy() {}
-
-    public String getClassName() {
-        return className;
-    }
 
     public int getComponentID() {
         return COMPONENT_ID;

@@ -4,12 +4,8 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.event.WindowListener;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -17,9 +13,9 @@ public interface PortletLifecycle extends PortletRender {
 
     public List init(List list);
 
-    public void login();
+    public void login(GridSphereEvent event);
 
-    public void logout();
+    public void logout(GridSphereEvent event);
 
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException;
 

@@ -4,37 +4,30 @@
  */
 package org.gridlab.gridsphere.layout;
 
+import org.gridlab.gridsphere.layout.impl.PortletTitleBarEventImpl;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.*;
-import org.gridlab.gridsphere.services.container.registry.UserPortletManager;
-import org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryManager;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
+import org.gridlab.gridsphere.portlet.impl.GuestUser;
+import org.gridlab.gridsphere.portlet.impl.SportletRequest;
+import org.gridlab.gridsphere.portlet.impl.SportletResponse;
+import org.gridlab.gridsphere.portlet.impl.SportletURI;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portletcontainer.descriptor.AllowsWindowStates;
 import org.gridlab.gridsphere.portletcontainer.descriptor.Markup;
 import org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes;
-import org.gridlab.gridsphere.portletcontainer.descriptor.AllowsWindowStates;
-import org.gridlab.gridsphere.layout.impl.PortletTitleBarEventImpl;
+import org.gridlab.gridsphere.services.container.registry.UserPortletManager;
+import org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryManager;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-import java.util.Iterator;
-import java.util.ArrayList;
 
 public class PortletTitleBar extends BasePortletComponent {
-
-    private static PortletLog log = SportletLog.getInstance(PortletTitleBar.class);
-
-    private PortletRegistryManager registryManager = PortletRegistryManager.getInstance();
-    private UserPortletManager userManager = UserPortletManager.getInstance();
 
     private String title = "";
     private String titleColor = "#FFFFFF";
@@ -141,8 +134,8 @@ public class PortletTitleBar extends BasePortletComponent {
     }
 
     public List init(List list) {
-        log.info("in init()");
         list = super.init(list);
+        PortletRegistryManager registryManager = PortletRegistryManager.getInstance();
         String appID = registryManager.getApplicationPortletID(portletClass);
         ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
 
@@ -205,7 +198,6 @@ public class PortletTitleBar extends BasePortletComponent {
                 stateLink.setStateHref(sportletURI.toString());
                 stateLinks.add(stateLink);
             } catch (Exception e) {
-                log.error("Unable to create window state link: " + e.getMessage());
                 ErrorMessage += "Unable to create window state link: " + winState + "\n";
             }
         }
@@ -267,7 +259,6 @@ public class PortletTitleBar extends BasePortletComponent {
                 modeLink.setModeHref(sportletURI.toString());
                 portletLinks.add(modeLink);
             } catch (Exception e) {
-                log.error("Unable to create portlet link: " + e.getMessage());
                 ErrorMessage += "Unable to create portlet mode link: " + portletModes[i] + "\n";
             }
         }
@@ -314,15 +305,15 @@ public class PortletTitleBar extends BasePortletComponent {
             req.setAttribute(LayoutProperties.TITLECOLOR, titleColor);
             ctx.include("/WEB-INF/conf/layout/portlet-border-first.jsp", req, res);
         } catch (ServletException e) {
-            log.error("Unable to include JSP", e);
             ErrorMessage += "Unable to include JSP\n";
         }
 
 
         // Invoke doTitle of portlet whose action was perfomed
         if ((getComponentID() == event.getPortletComponentID()) && (portletClass != null)) {
+            UserPortletManager userManager = event.getUserPortletManager();
+            req.setPortletSettings(settings);
             try {
-                req.setPortletSettings(settings);
                 userManager.doTitle(portletClass, req, res);
                 title = "";
             } catch (PortletException e) {
@@ -343,7 +334,6 @@ public class PortletTitleBar extends BasePortletComponent {
             req.setAttribute(LayoutProperties.TITLECOLOR, titleColor);
             ctx.include("/WEB-INF/conf/layout/portlet-border-last.jsp", req, res);
         } catch (ServletException e) {
-            log.error("Unable to include component JSP", e);
             ErrorMessage += "Unable to include JSP\n";
         }
     }

@@ -4,34 +4,26 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletWindow;
-import org.gridlab.gridsphere.portlet.impl.SportletMode;
-import org.gridlab.gridsphere.portlet.impl.SportletResponse;
-import org.gridlab.gridsphere.portlet.impl.SportletRequest;
-import org.gridlab.gridsphere.portletcontainer.*;
-import org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes;
-import org.gridlab.gridsphere.portletcontainer.descriptor.AllowsWindowStates;
-import org.gridlab.gridsphere.portletcontainer.descriptor.Markup;
-import org.gridlab.gridsphere.services.container.registry.UserPortletManager;
-import org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryManager;
-import org.gridlab.gridsphere.event.WindowListener;
 import org.gridlab.gridsphere.layout.impl.PortletFrameEventImpl;
+import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.portlet.impl.SportletRequest;
+import org.gridlab.gridsphere.portlet.impl.SportletResponse;
+import org.gridlab.gridsphere.portlet.impl.SportletWindow;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portletcontainer.PortletErrorMessage;
+import org.gridlab.gridsphere.services.container.registry.UserPortletManager;
+import org.gridlab.gridsphere.services.user.UserManagerService;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
-import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class PortletFrame extends BasePortletComponent implements PortletTitleBarListener {
-
-    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletFrame.class);
-
-    protected String name = PortletFrame.class.getName();
 
     // renderPortlet is true in doView and false on minimized
     private boolean renderPortlet = true;
@@ -64,10 +56,6 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         return portletWindow.toString();
     }
 
-    public String getClassName() {
-        return PortletFrame.class.getName();
-    }
-
     public List init(List list) {
         list = super.init(list);
         componentIDStr = String.valueOf(COMPONENT_ID);
@@ -75,6 +63,16 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         list = titleBar.init(list);
         titleBar.addTitleBarListener(this);
         return list;
+    }
+
+    public void login(GridSphereEvent event) {
+        UserPortletManager userPortletManager = event.getUserPortletManager();
+        //userPortletManager.initUserPortlet(titleBar.getPortletClass(), event.getSportletRequest(), event.getSportletResponse());
+    }
+
+    public void logout(GridSphereEvent event) {
+        UserPortletManager userPortletManager = event.getUserPortletManager();
+        //userPortletManager.destroyUserPortlet(titleBar.getPortletClass(), event.getSportletRequest(), event.getSportletResponse());
     }
 
     public void addFrameListener(PortletFrameListener listener) {
@@ -124,15 +122,25 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         // process events
         SportletRequest req = event.getSportletRequest();
         SportletResponse res = event.getSportletResponse();
+        PortletContext ctx = event.getPortletContext();
+
         req.setAttribute(GridSphereProperties.COMPONENT_ID, componentIDStr);
-        UserPortletManager userPortletManager = UserPortletManager.getInstance();
+
+        // Set the portlet data
+        PortletData data = null;
+        try {
+            UserManagerService userManager = (UserManagerService)ctx.getService(UserManagerService.class);
+            data = userManager.getPortletData(req.getUser(), titleBar.getPortletClass());
+        } catch (PortletServiceException e) {}
+        req.setData(data);
 
         // now perform actionPerformed on Portlet if it has an action
         String actionStr = req.getParameter(GridSphereProperties.ACTION);
         if (actionStr != null) {
             DefaultPortletAction action = new DefaultPortletAction(actionStr);
             try {
-            userPortletManager.actionPerformed(titleBar.getPortletClass(), action, req, res);
+                UserPortletManager userPortletManager = event.getUserPortletManager();
+                userPortletManager.actionPerformed(titleBar.getPortletClass(), action, req, res);
             } catch (PortletException e) {
                 System.err.println("titleBar.getPortletClass()= " + titleBar.getPortletClass() + "  " + actionStr);
             }
@@ -165,8 +173,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             out.println(error.getMessage());
         } else {
             if (renderPortlet) {
-                PortletRegistryManager registryManager = PortletRegistryManager.getInstance();
-                UserPortletManager userPortletManager = UserPortletManager.getInstance();
+                UserPortletManager userPortletManager = event.getUserPortletManager();
                 try {
                     userPortletManager.service(titleBar.getPortletClass(), req, res);
                 } catch (PortletException e) {
