@@ -23,25 +23,6 @@
       document.AccessControllerPortlet.submit();
     }
 
-    function AccessControllerPortlet_newGroup_onClick() {
-      document.AccessControllerPortlet.groupID.value="";
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_EDIT)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessControllerPortlet.submit();
-    }
-
-    function AccessControllerPortlet_editGroup_onClick() {
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_EDIT)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessControllerPortlet.submit();
-    }
-
-    function AccessControllerPortlet_deleteGroup_onClick() {
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_DELETE)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessControllerPortlet.submit();
-    }
-
     function AccessControllerPortlet_viewGroupEntry_onClick(groupEntryID) {
       document.AccessControllerPortlet.groupEntryID.value=groupEntryID;
       var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_VIEW)%>";
@@ -98,18 +79,6 @@
                    name="<%=AccessControllerBean.ACTION_GROUP_LIST%>"
                    value="List Groups"
                    onClick="javascript:AccessControllerPortlet_listGroup_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
-                   name="<%=AccessControllerBean.ACTION_GROUP_EDIT%>"
-                   value="New Group"
-                   onClick="javascript:AccessControllerPortlet_newGroup_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
-                   name="<%=AccessControllerBean.ACTION_GROUP_EDIT%>"
-                   value="Edit Group"
-                   onClick="javascript:AccessControllerPortlet_editGroup_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
-                   name="<%=AccessControllerBean.ACTION_GROUP_DELETE%>"
-                   value="Delete Group"
-                   onClick="javascript:AccessControllerPortlet_deleteGroup_onClick()"/>
             &nbsp;&nbsp;<input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_ADD%>"
                    value="Add Users"

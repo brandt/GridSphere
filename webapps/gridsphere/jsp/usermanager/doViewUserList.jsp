@@ -1,7 +1,7 @@
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
-<gs:form action="doListUser">
+<gs:form action="doViewListUser">
 <table class="portlet-pane" cellspacing="1">
   <tr>
     <td>

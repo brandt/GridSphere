@@ -4,7 +4,7 @@
 <jsp:useBean id="userManagerBean"
              class="org.gridlab.gridsphere.portlets.core.user.UserManagerBean"
              scope="request"/>
-<gs:form action="doEditUser">
+<gs:form action="doConfigureEditUser">
 <gs:hiddenfield bean="userID"/>
 <table class="portlet-pane" cellspacing="1" width="100%">
   <tr>

@@ -17,12 +17,6 @@
       document.AccessControllerPortlet.submit();
     }
 
-    function AccessControllerPortlet_newGroup_onClick() {
-      document.AccessControllerPortlet.groupID.value="";
-      document.AccessControllerPortlet.action="<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_EDIT)%>";
-      document.AccessControllerPortlet.submit();
-    }
-
     function AccessControllerPortlet_viewGroup_onClick(groupID) {
       document.AccessControllerPortlet.groupID.value=groupID;
       document.AccessControllerPortlet.action="<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_VIEW)%>";
@@ -39,10 +33,6 @@
                    name="<%=AccessControllerBean.ACTION_GROUP_LIST%>"
                    value="List Groups"
                    onClick="javascript:AccessControllerPortlet_listGroup_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
-                   name="<%=AccessControllerBean.ACTION_GROUP_EDIT%>"
-                   value="New Group"
-                   onClick="javascript:AccessControllerPortlet_newGroup_onClick()"/>
           </td>
         </tr>
       </table>
