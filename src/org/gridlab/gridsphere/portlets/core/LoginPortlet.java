@@ -16,7 +16,6 @@ import org.gridlab.gridsphere.services.user.AccountRequest;
 import org.gridlab.gridsphere.services.container.registry.PortletUserRegistryService;
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-import org.gridlab.gridsphere.core.beans.Token;
 
 
 import javax.servlet.UnavailableException;
