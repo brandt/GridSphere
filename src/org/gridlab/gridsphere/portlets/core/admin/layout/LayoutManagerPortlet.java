@@ -142,7 +142,9 @@ public class LayoutManagerPortlet extends ActionPortlet {
         groupPane.save();
 
         PortletTabRegistry.reloadTab(val, thisFile);
-        
+
+        saveLayout(event);
+
         editGroup(event, thisgroup);
 
     }
@@ -242,10 +244,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         out.close();
 
         PortletTabRegistry.reloadTab(groupHF.getValue(), groupFile);
-        //PortletTabRegistry.addApplicationTab(group.getName(), groupFile);
-        //userStorage.storeFile(user, tmpFile, fname);
-        //tmpFile.delete();
-
+       
     }
 
     public void editGuestLayout(FormEvent event)  throws PortletException, IOException {
