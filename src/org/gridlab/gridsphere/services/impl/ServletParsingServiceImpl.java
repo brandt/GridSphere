@@ -4,16 +4,14 @@
  */
 package org.gridlab.gridsphere.services.impl;
 
-import org.gridlab.gridsphere.portlet.service.PortletService;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletResponseImpl;
-import org.gridlab.gridsphere.portlet.impl.SportletRequestImpl;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletRequestImpl;
+import org.gridlab.gridsphere.portlet.impl.SportletResponseImpl;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.ServletParsingService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +26,7 @@ public class ServletParsingServiceImpl implements PortletServiceProvider, Servle
     }
 
     public void destroy() {
-       log.info("in destroy()");
+        log.info("in destroy()");
     }
 
     public PortletRequest getPortletRequest(HttpServletRequest request) {
@@ -48,12 +46,12 @@ public class ServletParsingServiceImpl implements PortletServiceProvider, Servle
 
         }
         */
-        return (PortletRequest)req;
+        return (PortletRequest) req;
     }
 
     public PortletResponse getPortletResponse(HttpServletResponse res) {
         SportletResponseImpl sportletResponse = new SportletResponseImpl(res);
-        return (PortletResponse)sportletResponse;
+        return (PortletResponse) sportletResponse;
     }
 
     public void putPortletRequest(PortletRequest req) {
