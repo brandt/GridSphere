@@ -110,7 +110,7 @@ public class CredentialManagerBean extends PortletBean {
     }
 
     /******************************************
-     * Credential permission actions
+     * Credential permission methods
      ******************************************/
 
     public void doListCredentialPermission()
@@ -158,8 +158,39 @@ public class CredentialManagerBean extends PortletBean {
         setNextPage(PAGE_CREDENTIAL_PERMISSION_DELETE_CONFIRM);
     }
 
+    public List getCredentialPermissionList() {
+        return this.credentialPermissionList;
+    }
+
+    public CredentialPermission getCredentialPermission() {
+        return this.credentialPermission;
+    }
+
+    public void loadCredentialPermissionList()
+            throws PortletException {
+        this.credentialPermissionList = this.credentialManagerService.getCredentialPermissions();
+    }
+
+    public void loadCredentialPermission()
+            throws PortletException {
+        String credentialPermissionID = getParameter("credentialPermissionID");
+        this.credentialPermission = this.credentialManagerService.getCredentialPermission(credentialPermissionID);
+    }
+
+    public void editCredentialPermission()
+            throws PortletException {
+    }
+
+    public void saveCredentialPermission()
+            throws PortletException {
+    }
+
+    public void deleteCredentialPermission()
+            throws PortletException {
+    }
+
     /******************************************
-     * Credential mapping actions
+     * Credential mapping methods
      ******************************************/
 
     public void doListCredentialMapping()
@@ -206,52 +237,13 @@ public class CredentialManagerBean extends PortletBean {
         setNextPage(PAGE_CREDENTIAL_MAPPING_DELETE_CONFIRM);
     }
 
-    /******************************************
-     * Active credential actions
-     ******************************************/
-
-    public void doListActiveCredentials()
-            throws PortletException {
-        loadActiveCredentialList();
-        setNextPage(PAGE_ACTIVE_CREDENTIAL_LIST);
+    public List getCredentialMappingList() {
+        return this.credentialMappingList;
     }
 
-    public void doViewActiveCredential()
-            throws PortletException {
-        loadActiveCredential();
-        setNextPage(PAGE_ACTIVE_CREDENTIAL_VIEW);
+    public CredentialMapping getCredentialMapping() {
+        return this.credentialMapping;
     }
-
-    /******************************************
-     * Credential permission methods
-     ******************************************/
-
-    public void loadCredentialPermissionList()
-            throws PortletException {
-        this.credentialPermissionList = this.credentialManagerService.getCredentialPermissions();
-    }
-
-    public void loadCredentialPermission()
-            throws PortletException {
-        String credentialPermissionID = getParameter("credentialPermissionID");
-        this.credentialPermission = this.credentialManagerService.getCredentialPermission(credentialPermissionID);
-    }
-
-    public void editCredentialPermission()
-            throws PortletException {
-    }
-
-    public void saveCredentialPermission()
-            throws PortletException {
-    }
-
-    public void deleteCredentialPermission()
-            throws PortletException {
-    }
-
-    /******************************************
-     * Credential mapping methods
-     ******************************************/
 
     public void loadCredentialMappingList()
             throws PortletException {
@@ -290,6 +282,26 @@ public class CredentialManagerBean extends PortletBean {
     /******************************************
      * Active credential methods
      ******************************************/
+
+    public void doListActiveCredential()
+            throws PortletException {
+        loadActiveCredentialList();
+        setNextPage(PAGE_ACTIVE_CREDENTIAL_LIST);
+    }
+
+    public void doViewActiveCredential()
+            throws PortletException {
+        loadActiveCredential();
+        setNextPage(PAGE_ACTIVE_CREDENTIAL_VIEW);
+    }
+
+    public List getActiveCredentialList() {
+        return this.activeCredentialList;
+    }
+
+    public Credential getActiveCredential() {
+        return this.activeCredential;
+    }
 
     public void loadActiveCredentialList()
             throws PortletException {

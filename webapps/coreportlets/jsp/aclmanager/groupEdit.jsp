@@ -58,11 +58,11 @@
         </tr>
         <tr>
           <td class="portlet-frame-actions">
-            <input type="submit"
+            <input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_EDIT_CONFIRM%>"
                    value="Save Group"
                    onClick="javascript:AccessControllerPortlet_confirmEditGroup_onClick()"/>
-            &nbsp;&nbsp;<input type="submit"
+            &nbsp;&nbsp;<input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_EDIT_CANCEL%>"
                    value="Cancel Edit"
                    onClick="javascript:AccessControllerPortlet_cancelEditGroup_onClick()"/>

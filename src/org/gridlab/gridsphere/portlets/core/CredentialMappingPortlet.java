@@ -16,7 +16,7 @@ import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class CredentialManagerPortlet extends AbstractPortlet {
+public class CredentialMappingPortlet extends AbstractPortlet {
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         getPortletLog().info("Exiting init()");
@@ -47,7 +47,7 @@ public class CredentialManagerPortlet extends AbstractPortlet {
         CredentialManagerBean credentialManagerBean = getCredentialManagerBean(request, response);
         // If no action performed, then perform list users
         if (credentialManagerBean.getActionPerformed() == null) {
-            credentialManagerBean.doDefaultViewAction();
+            credentialManagerBean.doListCredentialMapping();
         }
         // Get next page to display
         String nextPage = credentialManagerBean.getNextPage();

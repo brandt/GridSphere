@@ -70,7 +70,7 @@
 
   function GridSphere_CheckBoxList_clear(list) {
 
-    alert("GridSphere CheckBoxList Clear");
+    // alert("GridSphere CheckBoxList Clear");
 
       for (i = 0; i < list.length; i++) {
 

@@ -34,7 +34,7 @@
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-message">
-            The following entries were <span style="portlet-text-bold">added</span> tp this group.
+            The following entries were <span style="portlet-text-bold">added</span> to this group.
           </td>
         </tr>
       </table>

@@ -8,16 +8,17 @@
 <jsp:useBean id="userManagerBean"
              class="org.gridlab.gridsphere.portlets.core.beans.UserManagerBean"
              scope="request"/>
-<form name="UserManagerPortlet" method="POST" action="<%=userManagerBean.getUserEditURI()%>">
+<form name="UserManagerPortlet" method="POST"
+      action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_EDIT)%>">
   <input type="hidden" name="userID" value="<%=userManagerBean.getUserID()%>"/>
   <script type="text/javascript">
     function UserManagerPortlet_confirmEditUser_onClick() {
-      document.UserManagerPortlet.action="<%=userManagerBean.getUserEditConfirmURI()%>";
+      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_EDIT_CONFIRM)%>";
       document.UserManagerPortlet.submit();
     }
 
     function UserManagerPortlet_cancelEditUser_onClick() {
-      document.UserManagerPortlet.action="<%=userManagerBean.getUserEditCancelURI()%>";
+      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_EDIT_CANCEL)%>";
       document.UserManagerPortlet.submit();
     }
   </script>

@@ -7,16 +7,17 @@
 <jsp:useBean id="userManagerBean"
              class="org.gridlab.gridsphere.portlets.core.beans.UserManagerBean"
              scope="request"/>
-<form name="UserManagerPortlet" method="POST" action="<%=userManagerBean.getUserDeleteURI()%>">
+<form name="UserManagerPortlet" method="POST"
+      action="userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_DELETE)%>">
   <input type="hidden" name="userID" value="<%=userManagerBean.getUserID()%>"/>
   <script type="text/javascript">
     function UserManagerPortlet_confirmDeleteUser_onClick() {
-      document.UserManagerPortlet.action="<%=userManagerBean.getUserDeleteConfirmURI()%>";
+      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_DELETE_CONFIRM)%>";
       document.UserManagerPortlet.submit();
     }
 
     function UserManagerPortlet_cancelDeleteUser_onClick() {
-      document.UserManagerPortlet.action="<%=userManagerBean.getUserDeleteCancelURI()%>";
+      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_DELETE_CANCEL)%>";
       document.UserManagerPortlet.submit();
     }
   </script>

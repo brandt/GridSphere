@@ -7,23 +7,24 @@
 <jsp:useBean id="userManagerBean"
              class="org.gridlab.gridsphere.portlets.core.beans.UserManagerBean"
              scope="request"/>
-<form name="UserManagerPortlet" method="POST" action="<%=userManagerBean.getUserListURI()%>">
+<form name="UserManagerPortlet" method="POST"
+      action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_LIST)%>">
   <input type="hidden" name="userID" value=""/>
   <script type="text/javascript">
     function UserManagerPortlet_listUser_onClick() {
-      document.UserManagerPortlet.action="<%=userManagerBean.getUserListURI()%>";
+      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_LIST)%>";
       document.UserManagerPortlet.submit();
     }
 
     function UserManagerPortlet_newUser_onClick(userID) {
       document.UserManagerPortlet.userID.value="";
-      document.UserManagerPortlet.action="<%=userManagerBean.getUserEditURI()%>";
+      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_EDIT)%>";
       document.UserManagerPortlet.submit();
     }
 
     function UserManagerPortlet_viewUser_onClick(userID) {
       document.UserManagerPortlet.userID.value=userID;
-      document.UserManagerPortlet.action="<%=userManagerBean.getUserViewURI()%>";
+      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_VIEW)%>";
       document.UserManagerPortlet.submit();
     }
   </script>
@@ -59,7 +60,7 @@
    if (numUsers == 0) { %>
         <tr>
           <td class="portlet-frame-text-alert">
-              No user accounts in database.
+            There are no user accounts in the database.
           </td>
         </tr>
 <% } else { %>

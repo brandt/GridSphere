@@ -60,6 +60,21 @@
         <servlet-class>org.gridlab.gridsphere.portlets.core.AccessControllerPortlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>CredentialMappingPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.CredentialMappingPortlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>CredentialPermissionPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.CredentialPermissionPortlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ActiveCredentialPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.ActiveCredentialPortlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
        <servlet-name>HelloWorld</servlet-name>
        <url-pattern>/hello</url-pattern>
@@ -76,6 +91,11 @@
     </servlet-mapping>
 
     <servlet-mapping>
+       <servlet-name>LogoutPortlet</servlet-name>
+       <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
        <servlet-name>SubscriptionPortlet</servlet-name>
        <url-pattern>/subscription</url-pattern>
     </servlet-mapping>
@@ -83,6 +103,11 @@
     <servlet-mapping>
        <servlet-name>DemoPortlet</servlet-name>
        <url-pattern>/demo</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+       <servlet-name>RSSPortlet</servlet-name>
+       <url-pattern>/rss</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -96,8 +121,18 @@
     </servlet-mapping>
 
     <servlet-mapping>
-       <servlet-name>RSSPortlet</servlet-name>
-       <url-pattern>/rss</url-pattern>
+       <servlet-name>CredentialMappingPortlet</servlet-name>
+       <url-pattern>/adminstration/credential/mapping</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+       <servlet-name>CredentialPermissionPortlet</servlet-name>
+       <url-pattern>/adminstration/credential/permission</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+       <servlet-name>ActiveCredentialPortlet</servlet-name>
+       <url-pattern>/adminstration/credential/active`</url-pattern>
     </servlet-mapping>
 
     <mime-mapping>

@@ -89,7 +89,7 @@
         <title>Administration</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab>
-                <title>User Account</title>
+                <title>Accounts</title>
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
@@ -100,12 +100,31 @@
                 </portlet-panel>
             </portlet-tab>
             <portlet-tab>
-                <title>Access Control</title>
+                <title>Access</title>
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
                             <name>AccessControlManagerPortlet</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.AccessControllerPortlet.1</portlet-class>
+                        </portlet-frame>
+                    </grid-layout>
+                </portlet-panel>
+            </portlet-tab>
+            <portlet-tab>
+                <title>Credentials</title>
+                <portlet-panel>
+                    <grid-layout>
+                        <portlet-frame>
+                            <name>CredentialPermissionPortlet</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.CredentialPermissionPortlet.1</portlet-class>
+                        </portlet-frame>
+                        <portlet-frame>
+                            <name>CredentialMappingPortlet</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.CredentialMappingPortlet.1</portlet-class>
+                        </portlet-frame>
+                        <portlet-frame>
+                            <name>ActiveCredentialPortlet</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.ActiveCredentialPortlet.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>

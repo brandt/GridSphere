@@ -7,17 +7,18 @@
 <jsp:useBean id="userManagerBean"
              class="org.gridlab.gridsphere.portlets.core.beans.UserManagerBean"
              scope="request"/>
-<form name="UserManagerPortlet" action="<%=userManagerBean.getUserListURI()%>">
+<form name="UserManagerPortlet"
+      action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_LIST)%>">
   <input type="hidden" name="userID" value="<%=userManagerBean.getUserID()%>"/>
   <script type="text/javascript">
     function UserManagerPortlet_listUser_onClick() {
-      document.UserManagerPortlet.action="<%=userManagerBean.getUserListURI()%>";
+      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_LIST)%>";
       document.UserManagerPortlet.submit();
     }
 
     function UserManagerPortlet_newUser_onClick() {
       document.UserManagerPortlet.userID.value="";
-      document.UserManagerPortlet.action="<%=userManagerBean.getUserEditURI()%>";
+      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_EDIT)%>";
       document.UserManagerPortlet.submit();
     }
   </script>

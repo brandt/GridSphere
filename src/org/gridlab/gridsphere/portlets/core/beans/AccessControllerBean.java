@@ -112,10 +112,8 @@ public class AccessControllerBean extends PortletBean {
     public void doAction(PortletAction action)
             throws PortletException {
         super.doAction(action);
-        this.log.debug("Entering doAction");
         // Get name of action performed
         String actionName = getActionPerformedName();
-        this.log.debug("actionName = " + actionName);
         // Perform appropriate action
         if (actionName.equals(ACTION_GROUP_LIST)) {
             doListGroup();
@@ -280,42 +278,6 @@ public class AccessControllerBean extends PortletBean {
         removeGroupEntries();
         setNextPage(PAGE_GROUP_ENTRY_REMOVE_CONFIRM);
         this.log.debug("Exiting doConfirmRemoveGroupEntry");
-    }
-
-    public PortletURI getActionURI(String name) {
-        return getPortletActionURI(name);
-    }
-
-    public PortletURI getGroupListURI() {
-        return getPortletActionURI(ACTION_GROUP_LIST);
-    }
-
-    public PortletURI getGroupViewURI() {
-        return getPortletActionURI(ACTION_GROUP_VIEW);
-    }
-
-    public PortletURI getGroupEditURI() {
-        return getPortletActionURI(ACTION_GROUP_EDIT);
-    }
-
-    public PortletURI getGroupEditConfirmURI() {
-        return getPortletActionURI(ACTION_GROUP_EDIT_CONFIRM);
-    }
-
-    public PortletURI getGroupEditCancelURI() {
-        return getPortletActionURI(ACTION_GROUP_EDIT_CANCEL);
-    }
-
-    public PortletURI getGroupDeleteURI() {
-        return getPortletActionURI(ACTION_GROUP_DELETE);
-    }
-
-    public PortletURI getGroupDeleteConfirmURI() {
-        return getPortletActionURI(ACTION_GROUP_DELETE_CONFIRM);
-    }
-
-    public PortletURI getGroupDeleteCancelURI() {
-        return getPortletActionURI(ACTION_GROUP_DELETE_CANCEL);
     }
 
     public List getAllRolesInBaseGroup() {

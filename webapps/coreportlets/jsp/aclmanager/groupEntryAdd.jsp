@@ -52,6 +52,17 @@
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
+          <td class="portlet-frame-message">
+            Select the users you want to add to this group and specify the role each user plays within this group.
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="100%">
+        <tr>
           <td class="portlet-frame-title">
               Add Users To Group [<%=aclManagerBean.getGroupName()%>]
           </td>
@@ -60,17 +71,6 @@
     </td>
   </tr>
 <%  if (usersNotInGroup.size() == 0) { %>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-message-alert">
-            There are no users to add to this group.
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
@@ -89,18 +89,18 @@
       </table>
     </td>
   </tr>
-<%  } else { %>
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td class="portlet-frame-message">
-            Select the users you want to add to this group and specify the role each user plays within this group.
+          <td class="portlet-frame-message-alert">
+            There are no users to add to this group.
           </td>
         </tr>
       </table>
     </td>
   </tr>
+<%  } else { %>
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">

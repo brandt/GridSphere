@@ -10,27 +10,28 @@
 <jsp:useBean id="userManagerBean"
              class="org.gridlab.gridsphere.portlets.core.beans.UserManagerBean"
              scope="request"/>
-<form name="UserManagerPortlet" method="POST" action="<%=userManagerBean.getUserViewURI()%>">
+<form name="UserManagerPortlet" method="POST"
+      action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_VIEW)%>">
   <input type="hidden" name="userID" value="<%=userManagerBean.getUserID()%>"/>
   <script type="text/javascript">
     function UserManagerPortlet_listUser_onClick() {
-      document.UserManagerPortlet.action="<%=userManagerBean.getUserListURI()%>";
+      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_LIST)%>";
       document.UserManagerPortlet.submit();
     }
 
     function UserManagerPortlet_newUser_onClick(userID) {
       document.UserManagerPortlet.userID.value="";
-      document.UserManagerPortlet.action="<%=userManagerBean.getUserEditURI()%>";
+      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_EDIT)%>";
       document.UserManagerPortlet.submit();
     }
 
     function UserManagerPortlet_editUser_onClick() {
-      document.UserManagerPortlet.action="<%=userManagerBean.getUserEditURI()%>";
+      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_EDIT)%>";
       document.UserManagerPortlet.submit();
     }
 
     function UserManagerPortlet_deleteUser_onClick() {
-      document.UserManagerPortlet.action="<%=userManagerBean.getUserDeleteURI()%>";
+      document.UserManagerPortlet.action="<%=userManagerBean.getPortletActionURI(UserManagerBean.ACTION_USER_DELETE)%>";
       document.UserManagerPortlet.submit();
     }
   </script>

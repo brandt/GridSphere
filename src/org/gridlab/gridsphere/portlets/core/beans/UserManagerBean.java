@@ -170,53 +170,6 @@ public class UserManagerBean extends PortletBean {
         doListUser();
     }
 
-    public PortletURI getUserListURI() {
-        return getPortletActionURI(ACTION_USER_LIST);
-    }
-
-    public PortletURI getUserViewURI() {
-        return getPortletActionURI(ACTION_USER_VIEW);
-    }
-
-    public PortletURI getUserEditURI() {
-        return getPortletActionURI(ACTION_USER_EDIT);
-    }
-    public PortletURI getUserEditConfirmURI() {
-        return getPortletActionURI(ACTION_USER_EDIT_CONFIRM);
-    }
-
-    public PortletURI getUserEditCancelURI() {
-        return getPortletActionURI(ACTION_USER_EDIT_CANCEL);
-    }
-
-    public PortletURI getUserDeleteURI() {
-        return getPortletActionURI(ACTION_USER_DELETE);
-    }
-
-    public PortletURI getUserDeleteConfirmURI() {
-        return getPortletActionURI(ACTION_USER_DELETE_CONFIRM);
-    }
-
-    public PortletURI getUserDeleteCancelURI() {
-        return getPortletActionURI(ACTION_USER_DELETE_CANCEL);
-    }
-
-    public boolean isFormInvalid() {
-        return this.isFormInvalid;
-    }
-
-    public void setIsFormInvalid(boolean flag) {
-        this.isFormInvalid = flag;
-    }
-
-    public String getFormInvalidMessage() {
-        return this.formInvalidMessage;
-    }
-
-    public void setFormInvalidMessage(String message) {
-        this.formInvalidMessage = message;
-    }
-
     public List getUserList() {
         return this.userList;
     }

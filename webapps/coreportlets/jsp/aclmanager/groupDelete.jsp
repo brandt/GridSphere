@@ -12,7 +12,8 @@
 <jsp:useBean id="aclManagerBean"
              class="org.gridlab.gridsphere.portlets.core.beans.AccessControllerBean"
              scope="request"/>
-<form name="AccessControllerPortlet" method="POST" action="<%=aclManagerBean.getGroupDeleteURI()%>">
+<form name="AccessControllerPortlet" method="POST"
+      action="<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_DELETE)%>">
   <input type="hidden" name="groupID" value="<%=aclManagerBean.getGroupID()%>"/>
   <script type="text/javascript">
 
@@ -58,11 +59,11 @@
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-actions">
-            <input type="submit"
+            <input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_DELETE_CONFIRM%>"
                    value="Confirm Delete"
                    onClick="javascript:AccessControllerPortlet_confirmDeleteGroup_onClick()"/>
-            &nbsp;&nbsp;<input type="submit"
+            &nbsp;&nbsp;<input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_DELETE_CANCEL%>"
                    value="Cancel Delete"
                    onClick="javascript:AccessControllerPortlet_cancelDeleteGroup_onClick()"/>

@@ -484,6 +484,9 @@
         <owner>
             <role-name>SUPER</role-name>
         </owner>
+        <group>
+            <group-name>BASE</group-name>
+        </group>
         <role>
             <role-name>ADMIN</role-name>
         </role>
@@ -543,6 +546,193 @@
         <owner>
             <role-name>SUPER</role-name>
         </owner>
+        <group>
+            <group-name>BASE</group-name>
+        </group>
+        <role>
+            <role-name>ADMIN</role-name>
+        </role>
+    </concrete-portlet>
+</concrete-portlet-app>
+
+</portlet-app-def>
+
+<portlet-app-def>
+
+<portlet-app id="org.gridlab.gridsphere.portlets.core.CredentialMappingPortlet">
+    <portlet-name>Credential Mapping Manager</portlet-name>
+    <servlet-name>CredentialMappingPortlet</servlet-name>
+    <portlet-config>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </portlet-config>
+    <cache>
+        <expires>120</expires>
+        <shared>false</shared>
+    </cache>
+    <allows>
+        <maximized/>
+        <minimized/>
+        <resizing/>
+    </allows>
+    <supports>
+        <markup name="html">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+        <markup name="wml">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+    </supports>
+</portlet-app>
+
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.CredentialMappingPortlet.1">
+    <context-param>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </context-param>
+    <concrete-portlet>
+        <portlet-name>Credential Mapping Manager</portlet-name>
+        <default-locale>en</default-locale>
+        <language locale="en_US">
+            <title>Credential Mapping Manager</title>
+            <title-short>CredentialMappingManager</title-short>
+            <description>Enables administrators to map credentials to users.</description>
+            <keywords>credential mapping user administration</keywords>
+        </language>
+        <owner>
+            <role-name>SUPER</role-name>
+        </owner>
+        <group>
+            <group-name>BASE</group-name>
+        </group>
+        <role>
+            <role-name>ADMIN</role-name>
+        </role>
+    </concrete-portlet>
+</concrete-portlet-app>
+
+</portlet-app-def>
+
+<portlet-app-def>
+
+<portlet-app id="org.gridlab.gridsphere.portlets.core.CredentialPermissionPortlet">
+    <portlet-name>Credential Permission Manager</portlet-name>
+    <servlet-name>CredentialPermissionPortlet</servlet-name>
+    <portlet-config>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </portlet-config>
+    <cache>
+        <expires>120</expires>
+        <shared>false</shared>
+    </cache>
+    <allows>
+        <maximized/>
+        <minimized/>
+        <resizing/>
+    </allows>
+    <supports>
+        <markup name="html">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+        <markup name="wml">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+    </supports>
+</portlet-app>
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.CredentialPermissionPortlet.1">
+    <context-param>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </context-param>
+    <concrete-portlet>
+        <portlet-name>Credential Permission Manager</portlet-name>
+        <default-locale>en</default-locale>
+        <language locale="en_US">
+            <title>Credential Permission Manager</title>
+            <title-short>CredentialPermissionManager</title-short>
+            <description>Enables administrators to specify what credentials are permitted for use in GridSphere.</description>
+            <keywords>credential permission user administration</keywords>
+        </language>
+        <owner>
+            <role-name>SUPER</role-name>
+        </owner>
+        <group>
+            <group-name>BASE</group-name>
+        </group>
+        <role>
+            <role-name>ADMIN</role-name>
+        </role>
+    </concrete-portlet>
+</concrete-portlet-app>
+
+</portlet-app-def>
+
+<portlet-app-def>
+
+<portlet-app id="org.gridlab.gridsphere.portlets.core.ActiveCredentialPortlet">
+    <portlet-name>Active Credential Manager</portlet-name>
+    <servlet-name>ActiveCredentialPortlet</servlet-name>
+    <portlet-config>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </portlet-config>
+    <cache>
+        <expires>120</expires>
+        <shared>false</shared>
+    </cache>
+    <allows>
+        <maximized/>
+        <minimized/>
+        <resizing/>
+    </allows>
+    <supports>
+        <markup name="html">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+        <markup name="wml">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+    </supports>
+</portlet-app>
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.ActiveCredentialPortlet.1">
+    <context-param>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </context-param>
+    <concrete-portlet>
+        <portlet-name>Active Credential Manager</portlet-name>
+        <default-locale>en</default-locale>
+        <language locale="en_US">
+            <title>Active Credential Manager</title>
+            <title-short>ActiveCredentialManager</title-short>
+            <description>Enables administrators to see what credentials are in use.</description>
+            <keywords>active credential user administration</keywords>
+        </language>
+        <owner>
+            <role-name>SUPER</role-name>
+        </owner>
+        <group>
+            <group-name>BASE</group-name>
+        </group>
         <role>
             <role-name>ADMIN</role-name>
         </role>

@@ -12,7 +12,8 @@
 <jsp:useBean id="aclManagerBean"
              class="org.gridlab.gridsphere.portlets.core.beans.AccessControllerBean"
              scope="request"/>
-<form name="AccessControllerPortlet" method="POST" action="<%=aclManagerBean.getGroupListURI()%>">
+<form name="AccessControllerPortlet" method="POST"
+      action="<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_LIST)%>">
   <input type="hidden" name="groupID" value=""/>
   <script type="text/javascript">
 
@@ -57,11 +58,11 @@
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-actions">
-            <input type="submit"
+            <input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_LIST%>"
                    value="List Groups"
                    onClick="javascript:AccessControlManagerPortlet_listGroup_onClick()"/>
-            &nbsp;&nbsp;<input type="submit"
+            &nbsp;&nbsp;<input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_EDIT%>"
                    value="New Group"
                    onClick="javascript:AccessControlManagerPortlet_newGroup_onClick()"/>

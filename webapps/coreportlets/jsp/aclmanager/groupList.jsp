@@ -72,7 +72,7 @@
    if (numGroups == 0) { %>
         <tr>
           <td id="portlet-frame-text-alert" colspan="3">
-              No groups in database.
+            No groups have been defined yet.
           </td>
         </tr>
 <% } else {
