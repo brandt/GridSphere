@@ -122,7 +122,11 @@ public class TableRowTag extends BaseComponentTag {
 
             // logic to determine if alternate (darkened row) should be set
             if (tableTag.getZebra()) {
-                if ((tableTag.getRowCount() % 2) == 0) isZebra = true;
+                if ((tableTag.getRowCount() % 2) == 0) {
+                    isZebra = true;
+                } else {
+                    isZebra = false;
+                }
             }
 
             // logic to determine what rows to display if table is broken into pages
@@ -150,10 +154,12 @@ public class TableRowTag extends BaseComponentTag {
             rowBean.setHeader(isHeader);
             if (align != null) rowBean.setAlign(align);
             if (valign != null) rowBean.setValign(valign);
-            rowBean.setCssClass(this.cssClass);
-            rowBean.setCssStyle(this.cssStyle);
+            rowBean.setZebra(isZebra);
+            //rowBean.setCssClass(this.cssClass);
+            //rowBean.setCssStyle(this.cssStyle);
         }
-        rowBean.setZebra(isZebra);
+
+
 
         try {
             JspWriter out = pageContext.getOut();

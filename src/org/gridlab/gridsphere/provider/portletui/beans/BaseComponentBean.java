@@ -194,6 +194,7 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
 
     /**
      * Returns the current css style
+     *
      * @return css style of the element
      */
     public String getCssStyle() {
@@ -201,11 +202,11 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
     }
 
     /**
-     * Sets the css style of the element. If it is null nothing will be changed
+     * Sets the css style of the element.
+     *
      * @param cssStyle
      */
     public void setCssStyle(String cssStyle) {
-
         if (cssStyle != null) this.cssStyle = cssStyle;
     }
 
@@ -237,7 +238,7 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
         if (this.cssClass != null) {
             result = result + " class=\"" + this.cssClass + "\"";
         }
-        return result + " ";
+        return result;
     }
 
     /**

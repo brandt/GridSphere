@@ -180,7 +180,10 @@ public class TableCellTag extends BaseComponentTag {
         TableRowTag rowTag = (TableRowTag) getParent();
         if (rowTag.getHeader()) {
             cellBean.setCssClass(TableRowBean.TABLE_HEADER_STYLE);
+        } else if (rowTag.getZebra()) {
+            cellBean.setCssClass(TableRowBean.TABLE_ALTERNATE_STYLE);   
         }
+
         try {
             JspWriter out = pageContext.getOut();
             out.print(cellBean.toStartString());

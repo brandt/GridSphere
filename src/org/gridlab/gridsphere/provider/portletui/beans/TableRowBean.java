@@ -110,26 +110,29 @@ public class TableRowBean extends BeanContainer implements TagBean {
 
     private void setBeanStyles(String style) {
         Iterator it = container.iterator();
-            while (it.hasNext()) {
-                BaseComponentBean tagBean = (BaseComponentBean) it.next();
-                tagBean.setCssClass(style);
-            }
+        while (it.hasNext()) {
+            BaseComponentBean tagBean = (BaseComponentBean) it.next();
+            tagBean.setCssClass(style);
+        }
     }
+
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         sb.append("<tr");
         if (align != null) sb.append(" layout=\"" + align + "\"");
         if (valign != null) sb.append(" valign=\"" + valign + "\"");
+
         sb.append(">");
         if (isHeader) {
             setBeanStyles(TABLE_HEADER_STYLE);
-        } else {
+        }  else {
             if (isZebra) {
                 setBeanStyles(TABLE_ALTERNATE_STYLE);
             } else {
                 setBeanStyles(TABLE_NORMAL_STYLE);
             }
         }
+
         Iterator it = container.iterator();
         while (it.hasNext()) {
             TableCellBean cellBean = (TableCellBean) it.next();

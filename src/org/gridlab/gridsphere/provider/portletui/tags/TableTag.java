@@ -259,11 +259,11 @@ public class TableTag extends BaseComponentTag {
                 tableBean.setSortableID("td" + this.getUniqueId("gs_tableNum"));
             }
             tableBean.setMaxRows(maxRows);
+            tableBean.setZebra(isZebra);
         }
         tableBean.setCurrentPage(currentPage);
         tableBean.setRowCount(0);
         tableBean.setShowall(isShowAll);
-
 
         try {
             JspWriter out = pageContext.getOut();

@@ -27,6 +27,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
     protected String align = null;
     protected int currentPage;
     protected boolean isSortable = false;
+    protected boolean isZebra = false;
     protected String sortableId = "t1";
     private int rowCount = 0;
     private int maxRows = -1;
@@ -176,6 +177,14 @@ public class TableBean extends BaseComponentBean implements TagBean {
         return border;
     }
 
+    public void setZebra(boolean isZebra) {
+        this.isZebra = isZebra;
+    }
+
+    public boolean getZebra() {
+        return isZebra;
+    }
+
     public void setSortable(boolean isSortable) {
         this.isSortable = isSortable;
     }
@@ -228,7 +237,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
         if (isSortable) {
             sb.append("<table class=\"sortable\" id=\" " + sortableId + "\" ");
         } else {
-            sb.append("<table " + getFormattedCss() + " ");
+            sb.append("<table" + getFormattedCss());
         }
         if (cellSpacing != null) sb.append(" cellspacing=\"" + cellSpacing + "\" ");
         if (cellPadding != null) sb.append(" cellpadding=\"" + cellPadding + "\" ");
