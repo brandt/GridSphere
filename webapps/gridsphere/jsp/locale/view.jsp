@@ -7,6 +7,7 @@
 <jsp:useBean id="curLoc" class="java.util.Locale" scope="request"/>
 
 <% String disp = ""; %>
+
 <table>
 <tr>
 <td>
