@@ -298,7 +298,12 @@ public class PortletPage implements Serializable, Cloneable {
                 // try converting to integer
                 try {
                     compIntId = Integer.parseInt(cid);
-                    compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
+                    // number can't exceed available components
+                    if (compIntId > componentIdentifiers.size()) {
+                        compIntId = -1;
+                    } else {
+                        compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
+                    }
                 } catch (NumberFormatException e) {
                     compIntId = -1;
                 }
