@@ -5,58 +5,36 @@
 
 package org.gridlab.gridsphere.provider.portletui.model;
 
-import org.gridlab.gridsphere.provider.ui.beans.Selectable;
+import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
 
 import java.util.Iterator;
+import java.util.List;
+import java.util.ArrayList;
 
 public class SelectListModel extends DefaultListModel {
 
-    public void add(int index, Selectable item) {
-        list.add(index, item);
-    }
-
-    public void addElement(Selectable item) {
-        list.add(item);
-    }
-
     public void setSelected(int index, boolean flag) {
-        ((Selectable)list.get(index)).setSelected(flag);
+        ((ListBoxItemBean)list.get(index)).setSelected(flag);
     }
 
     public void unselectAll() {
         Iterator it = list.iterator();
         while (it.hasNext()) {
-            ((Selectable)it.next()).setSelected(false);
+            ((ListBoxItemBean)it.next()).setSelected(false);
         }
     }
 
-    private Selectable getSelectedItem() {
+    public List getSelectedItems() {
         Iterator it = list.iterator();
+        List selectedList = new ArrayList();
         while (it.hasNext()) {
-            Selectable item = (Selectable)it.next();
+            ListBoxItemBean item = (ListBoxItemBean)it.next();
             if (item.isSelected()) {
-                return item;
+                selectedList.add(item);
             }
         }
-        return null;
+        return selectedList;
     }
 
-    /**
-     *
-     */
-    public void setSelected(String value, boolean flag) {
-        Selectable item = getSelectedItem(value);
-        item.setSelected(flag);
-    }
 
-    private Selectable getSelectedItem(String value) {
-        Iterator it = list.iterator();
-        while (it.hasNext()) {
-            Selectable item = (Selectable)it.next();
-            if (item.getValue().equals(value)) {
-                return item;
-            }
-        }
-        return null;
-    }
 }

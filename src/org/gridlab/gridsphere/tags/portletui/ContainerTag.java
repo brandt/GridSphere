@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.ArrayList;
 
-public abstract class ContainerTag extends BaseBeanTag {
+public abstract class ContainerTag extends BaseComponentTag {
 
     protected List list = null;
 

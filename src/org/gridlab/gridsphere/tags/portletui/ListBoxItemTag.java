@@ -5,7 +5,6 @@
  */
 package org.gridlab.gridsphere.tags.portletui;
 
-import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
 
 import javax.servlet.jsp.JspException;
@@ -15,19 +14,24 @@ import javax.servlet.jsp.PageContext;
 public class ListBoxItemTag extends BaseComponentTag {
 
     protected ListBoxItemBean listboxitem = null;
+    protected boolean selected = false;
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public boolean getSelected() {
+        return selected;
+    }
 
     public int doEndTag() throws JspException {
 
         if (!beanId.equals("")) {
             listboxitem = (ListBoxItemBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (listboxitem == null) {
-                System.err.println("did not find checkbox bean!! " + getBeanKey());
                 listboxitem = new ListBoxItemBean();
-
                 this.setBaseComponentBean(listboxitem);
             } else {
-                System.err.println("found checkbox bean!! " + getBeanKey());
-                System.err.println("name = " + listboxitem.getName());
                 this.updateBaseComponentBean(listboxitem);
             }
         } else {

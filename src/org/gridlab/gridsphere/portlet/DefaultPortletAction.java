@@ -47,6 +47,15 @@ public final class DefaultPortletAction implements PortletAction {
      *
      * @return all parameters as a map
      */
+    public String getParameter(String name) {
+        return (String)store.get(name);
+    }
+
+    /**
+     * Returns all parameters
+     *
+     * @return all parameters as a map
+     */
     public Map getParameters() {
         return store;
     }

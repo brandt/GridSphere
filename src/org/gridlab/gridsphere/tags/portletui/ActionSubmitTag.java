@@ -39,6 +39,7 @@ public class ActionSubmitTag extends ActionTag {
 
     public int doEndTag() throws JspException {
 
+        actionSubmitBean.setName(createActionURI());
         if (!key.equals("")) {
             actionSubmitBean.setKey(key);
             Locale locale = pageContext.getRequest().getLocale();

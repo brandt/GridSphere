@@ -9,6 +9,10 @@ import org.gridlab.gridsphere.portlet.User;
  */
 public interface LoginAuthModule extends Comparable {
 
+    public void setEnvironmentVariable(String name, String value);
+
+    public String getEnvironmentVariable(String name);
+
     public String getModuleName();
 
     public int getModulePriority();

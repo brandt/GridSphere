@@ -55,20 +55,20 @@
        </para>
        <para>
         The &ActionPortlet; provides a few additional helper methods that are used for portlet navigation.
-        The <methodname>getNextPage</methodname> and <methodname>setNextPage</methodname> methods are used
+        The <methodname>getNextPresentation</methodname> and <methodname>setNextPresentation</methodname> methods are used
         after the completion of an action method to set the next presentation page that should be rendered.
         The page can be specified as either a JSP file or another render method that will get invoked (which
-        can then call setNextPage with a supplied JSP page to perform an include of a JSP page upon completion.)
+        can then call setNextPresentation with a supplied JSP page to perform an include of a JSP page upon completion.)
         The following sample code illustrates how this works:
            <programlisting>
                public void doThis(FormEvent event)
                     // perform some business logic
                     Portlet req = event.getPortletRequest();
-                    setNextPage(req, "dothis.jsp");
+                    setNextPresentation(req, "dothis.jsp");
 
                     // OR
 
-                    setNextPage(req, "renderThis");
+                    setNextPresentation(req, "renderThis");
                }
 
                public void renderThis(PortletRequest req, PortletResponse res) {

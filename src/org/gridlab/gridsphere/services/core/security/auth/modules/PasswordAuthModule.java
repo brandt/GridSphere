@@ -13,6 +13,9 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class PasswordAuthModule implements LoginAuthModule {
 
     private static final int PASSWORD_MODULE_PRIORITY = 100;
@@ -20,7 +23,7 @@ public class PasswordAuthModule implements LoginAuthModule {
     private PasswordManagerService passwordManager = null;
 
     private PortletLog log = SportletLog.getInstance(PasswordAuthModule.class);
-
+    private Map env = new HashMap();
 
     public PasswordAuthModule(String moduleName) {
         this.moduleName = moduleName;
@@ -33,6 +36,14 @@ public class PasswordAuthModule implements LoginAuthModule {
         } catch (Exception e) {
             log.error("Unable to get instance of password manager service!", e);
         }
+    }
+
+    public void setEnvironmentVariable(String name, String value) {
+        env.put(name, value);
+    }
+
+    public String getEnvironmentVariable(String name) {
+        return (String)env.get(name);
     }
 
     public String getModuleName() {
