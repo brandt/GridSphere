@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
@@ -16,20 +17,17 @@ import org.gridlab.gridsphere.services.container.registry.PortletRegistryService
 import org.gridlab.gridsphere.services.container.registry.UserPortletManager;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.*;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 
 
-public class GridSphereServlet extends HttpServlet {
+public class GridSphereServlet extends HttpServlet implements ServletContextListener,
+        HttpSessionAttributeListener, HttpSessionListener {
 
     /* GridSphere logger */
-    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(GridSphereServlet.class);
+    private static PortletLog log = SportletLog.getInstance(GridSphereServlet.class);
 
     /* GridSphere service factory */
     private static SportletServiceFactory factory = SportletServiceFactory.getInstance();
@@ -129,6 +127,95 @@ public class GridSphereServlet extends HttpServlet {
         // Shutdown services
         SportletServiceFactory.getInstance().shutdownServices();
         System.gc();
+    }
+
+    /**
+     * Record the fact that a servlet context attribute was added.
+     *
+     * @param event The session attribute event
+     */
+    public void attributeAdded(HttpSessionBindingEvent event) {
+
+        System.err.println("attributeAdded('" + event.getSession().getId() + "', '" +
+                event.getName() + "', '" + event.getValue() + "')");
+
+    }
+
+
+    /**
+     * Record the fact that a servlet context attribute was removed.
+     *
+     * @param event The session attribute event
+     */
+    public void attributeRemoved(HttpSessionBindingEvent event) {
+
+        System.err.println("attributeRemoved('" + event.getSession().getId() + "', '" +
+                event.getName() + "', '" + event.getValue() + "')");
+
+    }
+
+
+    /**
+     * Record the fact that a servlet context attribute was replaced.
+     *
+     * @param event The session attribute event
+     */
+    public void attributeReplaced(HttpSessionBindingEvent event) {
+
+        System.err.println("attributeReplaced('" + event.getSession().getId() + "', '" +
+                event.getName() + "', '" + event.getValue() + "')");
+
+    }
+
+
+    /**
+     * Record the fact that this web application has been destroyed.
+     *
+     * @param event The servlet context event
+     */
+    public void contextDestroyed(ServletContextEvent event) {
+
+        log.info("contextDestroyed()");
+        //this.context = null;
+
+    }
+
+
+    /**
+     * Record the fact that this web application has been initialized.
+     *
+     * @param event The servlet context event
+     */
+    public void contextInitialized(ServletContextEvent event) {
+
+        //this.context = event.getServletContext();
+        log.info("contextInitialized()");
+
+    }
+
+    /**
+     * Record the fact that a session has been created.
+     *
+     * @param event The session event
+     */
+    public void sessionCreated(HttpSessionEvent event) {
+        System.err.println("sessionCreated('" + event.getSession().getId() + "')");
+    }
+
+
+    /**
+     * Record the fact that a session has been destroyed.
+     *
+     * @param event The session event
+     */
+    public void sessionDestroyed(HttpSessionEvent event) {
+
+        System.err.println("sessionDestroyed('" + event.getSession().getId() + "')");
+        //HttpSession session = event.getSession();
+        //User user = (User)session.getAttribute(GridSphereProperties.USER);
+        //PortletLayoutEngine engine = PortletLayoutEngine.getInstance();
+        //PortletContainer pc = engine.getPortletContainer(user);
+        //pc.logout();
     }
 
     private final void handleException(HttpServletResponse res, Throwable t) {
