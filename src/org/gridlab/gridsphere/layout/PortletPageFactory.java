@@ -78,6 +78,8 @@ public class PortletPageFactory implements PortletSessionListener {
     public void logout(PortletSession session) {
         log.debug("in logout PortletPageFactory");
         String sessionId = session.getId();
+
+
         log.debug("in logout PortletPageFactory for session: " + sessionId);
         if (guests.containsKey(sessionId)) {
             log.debug("Removing guest container for:" + sessionId);

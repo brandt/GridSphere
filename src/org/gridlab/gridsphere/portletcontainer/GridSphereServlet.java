@@ -132,9 +132,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
         }
 
-        System.err.println("Server name= " + req.getServerName());
-        System.err.println("Server port= " + req.getServerPort());
-
         setUserAndGroups(portletReq);
 
         // Handle user login and logout
@@ -212,12 +209,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         } else {
             groups = aclService.getGroups(user);
             role = aclService.getRoleInGroup(user, SportletGroup.CORE);
-
-            System.err.println("SETTING ROLE=" + role);
         }
+
+        // set user, role and groups in request
         req.setAttribute(SportletProperties.PORTLET_USER, user);
-
-
         req.setAttribute(SportletProperties.PORTLETGROUPS, groups);
         req.setAttribute(SportletProperties.PORTLET_ROLE, role);
     }
@@ -272,17 +267,13 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      *
      * @param event a <code>GridSphereEvent</code>
      */
-    protected void logout(GridSphereEvent event)  {
+    protected void logout(GridSphereEvent event) {
         log.debug("in logout of GridSphere Servlet");
         PortletRequest req = event.getPortletRequest();
         PortletSession session = req.getPortletSession();
         session.removeAttribute(SportletProperties.PORTLET_USER);
         userSessionManager.removeSessions(req.getUser());
-        try {
-            layoutEngine.logoutPortlets(event);
-        } catch (IOException e) {
-            log.error("Logout failed!"+e);
-        }
+        layoutEngine.logoutPortlets(event);
     }
 
     /**

@@ -88,11 +88,11 @@ public class PortletLayoutEngine {
             int numcomps = page.getComponentIdentifierList().size();
             /*
             if (event.getPortletComponentID() < 0 || event.getPortletComponentID() > numcomps) {
-                event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, "-1");
+            event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, "-1");
             }
             */
             //if (!event.getPortletComponentID().equals("")) {
-                page.doRender(event);
+            page.doRender(event);
             //}
         } catch (PortletLayoutException e) {
             log.error("Caught LayoutException: ", e);
@@ -109,9 +109,8 @@ public class PortletLayoutEngine {
     public void loginPortlets(GridSphereEvent event) {
         log.debug("in loginPortlets()");
         PortletRequest req = event.getPortletRequest();
-        PortletPage page = null;
         try {
-            page = getPortletPage(event);
+            PortletPage page = getPortletPage(event);
             page.loginPortlets(event);
         } catch (Exception e) {
             log.error("Unable to loadUserLayout for user: " + req.getUser().getUserName(), e);
@@ -127,12 +126,12 @@ public class PortletLayoutEngine {
      * @param event the gridsphere event
      * @see PortletPage#logoutPortlets
      */
-    public void logoutPortlets(GridSphereEvent event) throws IOException {
+    public void logoutPortlets(GridSphereEvent event) {
         log.debug("in logoutPortlets()");
         try {
-            PortletPage pc = getPortletPage(event);
-            pc.logoutPortlets(event);
-        } catch (PortletException e) {
+            PortletPage page = getPortletPage(event);
+            page.logoutPortlets(event);
+        } catch (Exception e) {
             log.error("Unable to logout portlets", e);
         }
     }
@@ -156,7 +155,7 @@ public class PortletLayoutEngine {
             //int numcomps = page.getComponentIdentifierList().size();
             /*
             if (event.getPortletComponentID() < 0 || event.getPortletComponentID() > numcomps) {
-                event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, "-1");
+            event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, "-1");
             }
             */
             if (!event.getPortletComponentID().equals("")) {
@@ -180,26 +179,25 @@ public class PortletLayoutEngine {
         out.println("<b>" + error + "</b>");
     }
 
-/**
- * Delivers a message to a specified concrete portlet on the current portlet page.
- * The method delegates the message delivery to the PortletPage implementation.
- * @param concPortletID The concrete portlet ID of the target portlet
- * @param msg The message to deliver
- * @param event The event associated with the delivery
- */
-public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) throws PortletException {
+    /**
+     * Delivers a message to a specified concrete portlet on the current portlet page.
+     * The method delegates the message delivery to the PortletPage implementation.
+     * @param concPortletID The concrete portlet ID of the target portlet
+     * @param msg The message to deliver
+     * @param event The event associated with the delivery
+     */
+    public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) throws PortletException {
         log.debug("in messageEvent()");
         PortletPage page = null;
         try {
             page = getPortletPage(event);
-                page.messageEvent(concPortletID, msg, event);
+            page.messageEvent(concPortletID, msg, event);
         } catch (PortletLayoutException e) {
             doRenderError(event.getPortletRequest(), event.getPortletResponse(), e);
             log.error("Caught LayoutException: ", e);
         }
         log.debug("Exiting messageEvent()");
-        
-}
 
+    }
 
 }
