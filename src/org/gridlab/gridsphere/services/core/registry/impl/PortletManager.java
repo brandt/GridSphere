@@ -60,6 +60,7 @@ public class PortletManager implements PortletManagerService {
      */
     public synchronized void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.debug("in init()");
+
         if (!isInitialized) {
             context = config.getServletContext();
             String webapps = config.getInitParameter(CORE_CONTEXT);

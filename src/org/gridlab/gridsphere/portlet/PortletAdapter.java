@@ -7,6 +7,9 @@ package org.gridlab.gridsphere.portlet;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
+import org.gridlab.gridsphere.portletcontainer.PortletDataManager;
+import org.gridlab.gridsphere.portletcontainer.impl.SportletDataManager;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
@@ -31,6 +34,9 @@ public abstract class PortletAdapter extends Portlet {
     /* require an acl service to get role info */
     private AccessControlManagerService aclService = null;
 
+    /* the datamanger injects PortletData into the request */
+    private transient PortletDataManager dataManager = null;
+
     public PortletAdapter() {
     }
 
@@ -53,6 +59,7 @@ public abstract class PortletAdapter extends Portlet {
     public void init(PortletConfig config) throws UnavailableException {
         this.portletConfig = config;
         PortletContext ctx = portletConfig.getContext();
+        dataManager = SportletDataManager.getInstance();
         try {
             aclService = (AccessControlManagerService)ctx.getService(AccessControlManagerService.class, GuestUser.getInstance());
         } catch (PortletServiceException e) {
@@ -129,6 +136,17 @@ public abstract class PortletAdapter extends Portlet {
             if (portletID == null) {
                 log.error("in PortletAdapter: No PortletID found in request attribute");
                 return;
+            }
+        }
+
+        PortletData data = null;
+        User user = request.getUser();
+        if (!(user instanceof GuestUser)) {
+            try {
+                data = dataManager.getPortletData(user, portletID);
+                request.setAttribute(SportletProperties.PORTLET_DATA, data);
+            } catch (PersistenceManagerException e) {
+                log.error("in PortletAdapter: Unable to obtain PortletData for user");
             }
         }
 
@@ -318,10 +336,7 @@ public abstract class PortletAdapter extends Portlet {
      */
     public void doHelp(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
-        PrintWriter out = response.getWriter();
-        //PortletSettings settings = (PortletSettings)request.getAttribute(SportletProperties.PORTLETSETTINGS);
-        //out.println(settings.getDescription(request.getLocale(), request.getClient()));
-
+        // default doView
         doView(request, response);
     }
 

@@ -47,11 +47,9 @@ public class SportletData implements PortletData {
     private String PortletID = new String();
 
     /**
-     * Constructs an instance of SportletData that uses the GridSphere database
+     * Default constructor cannot be instantiated
      */
-    public SportletData() {
-        super();
-    }
+    public SportletData() {}
 
     /**
      * Constructs an instance of SportletData that uses the given persistencemanager
@@ -115,9 +113,6 @@ public class SportletData implements PortletData {
      */
     public void store() throws IOException {
         try {
-            if (pm==null) {
-                pm = PersistenceManagerFactory.createGridSphereRdbms();
-            }
             pm.update(this);
         } catch (PersistenceManagerException e) {
             throw new IOException(e.getMessage());
