@@ -9,9 +9,9 @@
     $Id$
 -->
 
-<portlet-layout>
+<container-layout theme="xp">
 
-<container-name theme="xp">GridSphere Portal</container-name>
+<container-name>GridSphere Portal</container-name>
 
 <!-- Title -->
 <!--
@@ -193,4 +193,4 @@
     </portlet-tab>
 </portlet-tabbed-pane>
 
-</portlet-layout>
+</container-layout>
