@@ -30,6 +30,11 @@
         <servlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialManagerAdminPortlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>CredentialRetrievalUserPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialRetrievalUserPortlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
        <servlet-name>CredentialMappingAdminPortlet</servlet-name>
        <url-pattern>/adminstration/credential/mapping</url-pattern>
@@ -43,6 +48,11 @@
     <servlet-mapping>
        <servlet-name>CredentialManagerAdminPortlet</servlet-name>
        <url-pattern>/adminstration/credential/active`</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+       <servlet-name>CredentialRetrievalUserPortlet</servlet-name>
+       <url-pattern>/grid/credential/retrieve`</url-pattern>
     </servlet-mapping>
 
     <mime-mapping>

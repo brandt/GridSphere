@@ -43,4 +43,12 @@ public interface CredentialMapping {
     /**
      */
     public boolean hasHost(String host);
+
+    /**
+     */
+    public boolean isCredentialActive();
+
+    /**
+     */
+    public Credential getCredential();
 }

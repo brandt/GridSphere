@@ -27,58 +27,32 @@
   <!--  <selected>0</selected>
     <style>menu</style>      -->
     <portlet-tab>
-        <title>Configuration</title>
+        <title>Home</title>
         <portlet-tabbed-pane selected="0" style="sub-menu">
             <!--<selected>0</selected>
             <style>sub-menu</style>     -->
             <portlet-tab>
-                <title>Login</title>
+                <title>Welcome</title>
                 <portlet-panel>
-                    <grid-layout columns="40,30,30">
+                    <grid-layout columns="40,60">
                         <portlet-frame>
-                            <width>60</width>
+                            <name>Login</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.LoginPortlet.1</portlet-class>
                         </portlet-frame>
                         <portlet-frame>
                             <name>RSS</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.RSSPortlet.1</portlet-class>
                         </portlet-frame>
-                        <portlet-frame>
-                            <name>DemoPortlet</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.examples.DemoPortlet.1</portlet-class>
-                        </portlet-frame>
-                        <portlet-frame>
-                            <portlet-class>org.gridlab.gridsphere.portlets.manager.PortletApplicationManager.1</portlet-class>
-                        </portlet-frame>
                     </grid-layout>
                 </portlet-panel>
             </portlet-tab>
             <portlet-tab>
-                <title>Whatever</title>
+                <title>News</title>
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
-                            <name>HelloWorld</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.examples.HelloWorld.1</portlet-class>
-                        </portlet-frame>
-                        <portlet-frame>
-                            <name>HelloWorld</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.examples.HelloWorld.2</portlet-class>
-                        </portlet-frame>
-                    </grid-layout>
-                </portlet-panel>
-            </portlet-tab>
-            <portlet-tab>
-                <title>New Stuff</title>
-                <portlet-panel>
-                    <grid-layout columns="70,30">
-                        <portlet-frame>
                             <name>RSS</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.RSSPortlet.1</portlet-class>
-                        </portlet-frame>
-                        <portlet-frame>
-                            <name>HelloWorld</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.examples.HelloWorld.2</portlet-class>
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>
@@ -88,6 +62,17 @@
    <portlet-tab>
         <title>Administration</title>
         <portlet-tabbed-pane style="sub-menu">
+            <portlet-tab>
+                <title>Portlets</title>
+                <portlet-panel>
+                    <grid-layout>
+                        <portlet-frame>
+                            <name>PortletApplicationManager</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.manager.PortletApplicationManager.1</portlet-class>
+                        </portlet-frame>
+                    </grid-layout>
+                </portlet-panel>
+            </portlet-tab>
             <portlet-tab>
                 <title>Accounts</title>
                 <portlet-panel>
@@ -132,29 +117,54 @@
         </portlet-tabbed-pane>
    </portlet-tab>
    <portlet-tab>
-        <title>Cactus</title>
+        <title>Grid</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab>
-                <title>Cactus</title>
+                <title>Welcome</title>
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
-                            <portlet-class>org.gridlab.gridsphere.portlets.examples.HalloWelt.1</portlet-class>
+                            <name>CredentialRetrievalUserPortlet</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialRetrievalUserPortlet.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>
             </portlet-tab>
         </portlet-tabbed-pane>
-    </portlet-tab>
-    <portlet-tab>
-        <title>ASC</title>
+   </portlet-tab>
+   <portlet-tab>
+        <title>Examples</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab>
-                <title>ASC</title>
+                <title>Demos</title>
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
+                            <name>DemoPortlet</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.examples.DemoPortlet.1</portlet-class>
+                        </portlet-frame>
+                    </grid-layout>
+                </portlet-panel>
+            </portlet-tab>
+            <portlet-tab>
+                <title>Hello</title>
+                <portlet-panel>
+                    <grid-layout>
+                        <portlet-frame>
+                            <name>HalloWelt</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.examples.HalloWelt.1</portlet-class>
+                        </portlet-frame>
+                        <portlet-frame>
+                            <name>HalloWelt</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.examples.HalloWelt.1</portlet-class>
+                        </portlet-frame>
+                        <portlet-frame>
+                            <name>HelloWorld</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.examples.HelloWorld.1</portlet-class>
+                        </portlet-frame>
+                        <portlet-frame>
+                            <name>HelloWorld</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.examples.HelloWorld.2</portlet-class>
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>

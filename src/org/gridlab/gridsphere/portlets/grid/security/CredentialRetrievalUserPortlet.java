@@ -76,7 +76,7 @@ public class CredentialRetrievalUserPortlet extends AbstractPortlet {
             throws PortletException {
         getPortletLog().debug("Entering getCredentialRetrievalUserBean()");
         CredentialRetrievalUserBean credentialRetrievalUserBean =
-                (CredentialRetrievalUserBean)request.getAttribute("CredentialRetrievalUserBean");
+                (CredentialRetrievalUserBean)request.getAttribute("credentialRetrievalUserBean");
         if (credentialRetrievalUserBean == null) {
             getPortletLog().debug("Creating instance of CredentialRetrievalUserBean");
             PortletConfig config = getPortletConfig();

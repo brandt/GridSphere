@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.services.grid.security.credential.CredentialMapping;
+import org.gridlab.gridsphere.services.grid.security.credential.Credential;
 
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +22,9 @@ import java.util.Vector;
 public class GlobusCredentialMapping extends BaseObject implements CredentialMapping {
 
     private transient static PortletLog _log = SportletLog.getInstance(GlobusCredentialMapping.class);
+    private transient static GlobusCredentialManager _credentialManager = GlobusCredentialManager.getInstance();
     private transient Integer lock = new Integer(0);
+    private transient GlobusCredential credential = null;
 
     /**
      * @sql-size 256
@@ -207,5 +210,24 @@ public class GlobusCredentialMapping extends BaseObject implements CredentialMap
             }
         }
         return false;
+    }
+
+    /**
+     */
+    public Credential getCredential() {
+        if (this.credential == null) {
+            if (_credentialManager.isActiveCredential(subject)) {
+                this.credential = (GlobusCredential)_credentialManager.getActiveCredential(subject);
+            }
+        } else if (this.credential.isExpired()) {
+            this.credential = null;
+        }
+        return this.credential;
+    }
+
+    /**
+     */
+    public boolean isCredentialActive() {
+        return _credentialManager.isActiveCredential(subject);
     }
 }

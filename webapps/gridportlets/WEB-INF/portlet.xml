@@ -179,4 +179,64 @@
 
 </portlet-app-def>
 
+<portlet-app-def>
+
+<portlet-app id="org.gridlab.gridsphere.portlets.grid.security.CredentialRetrievalUserPortlet">
+    <portlet-name>Credential Retrieval</portlet-name>
+    <servlet-name>CredentialRetrievalUserPortlet</servlet-name>
+    <portlet-config>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </portlet-config>
+    <cache>
+        <expires>120</expires>
+        <shared>false</shared>
+    </cache>
+    <allows>
+        <maximized/>
+        <minimized/>
+        <resizing/>
+    </allows>
+    <supports>
+        <markup name="html">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+        <markup name="wml">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+    </supports>
+</portlet-app>
+
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.grid.security.CredentialRetrievalUserPortlet.1">
+    <context-param>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </context-param>
+    <concrete-portlet>
+        <portlet-name>Credential Retrieval</portlet-name>
+        <default-locale>en</default-locale>
+        <language locale="en_US">
+            <title>Credential Retrieval</title>
+            <title-short>CredentialRetrieval</title-short>
+            <description>
+               Enables portal users to retrieve their credentials from a credential retrieval service.
+               These credentials may then be used on behalf of portal users to authenticate and gain
+               authorized access to Grid services made available within the portal.
+            </description>
+            <keywords>credential retrieval user</keywords>
+        </language>
+        <allowed-access visibility="public">
+            <role>ANY</role>
+        </allowed-access>
+    </concrete-portlet>
+</concrete-portlet-app>
+
+</portlet-app-def>
+
 </portlet-app-collection>
