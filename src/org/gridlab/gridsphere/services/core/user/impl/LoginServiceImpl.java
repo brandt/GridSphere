@@ -34,8 +34,8 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     private UserSessionManager userSessionManager = UserSessionManager.getInstance();
     private PortletLog log = SportletLog.getInstance(LoginServiceImpl.class);
     private static boolean inited = false;
-    private Map authModules = new HashMap();
-    private List activeModules = new ArrayList();
+    private static Map authModules = new HashMap();
+    private static List activeModules = new ArrayList();
     PortletServiceAuthorizer authorizer = null;
 
     public LoginServiceImpl(PortletServiceAuthorizer authorizer) {
