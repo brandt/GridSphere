@@ -4,30 +4,32 @@
  */
 package org.gridlab.gridsphere.services.core.user.impl;
 
+import java.util.Calendar;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Vector;
+
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
+import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManager;
-import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
-import org.gridlab.gridsphere.services.core.security.acl.InvalidGroupRequestException;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
-import org.gridlab.gridsphere.services.core.security.password.impl.DbmsPasswordManagerService;
 import org.gridlab.gridsphere.services.core.user.AccountRequest;
 import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
-
-import java.util.*;
 
 public class UserManager implements UserManagerService {
 
@@ -35,7 +37,7 @@ public class UserManager implements UserManagerService {
     private static UserManager instance = new UserManager();
 
     private PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
-    private PasswordManagerService passwordManagerService = DbmsPasswordManagerService.getInstance();
+    private PasswordManagerService passwordManagerService = null;
     private AccessControlManager aclManager = null;
 
     private static boolean isInitialized = false;
@@ -43,9 +45,10 @@ public class UserManager implements UserManagerService {
     private String jdoUser = SportletUserImpl.class.getName();
     private String jdoAccountRequest = AccountRequestImpl.class.getName();
 
-    private UserManager() {}
+    protected UserManager() {
+    }
 
-    public static UserManager getInstance() {
+    public static UserManager getInstance() {            
         return instance;
     }
 
@@ -53,6 +56,14 @@ public class UserManager implements UserManagerService {
         log.info("Entering init()");
         if (!isInitialized) {
             aclManager = AccessControlManager.getInstance();
+            PortletServiceFactory factory = SportletServiceFactory.getInstance();
+            try {
+                passwordManagerService = (PasswordManagerService) factory.createPortletService(PasswordManagerService.class, config.getServletContext(), true);
+        } catch (PortletServiceUnavailableException e) {
+                throw new PortletServiceUnavailableException("Cannot initialize usermanager service", e);
+        } catch (PortletServiceNotFoundException e) {
+                throw new PortletServiceUnavailableException("Cannot initialize usermanager service", e);
+        }
             initRootUser(config);
             log.info("Entering init()");
             isInitialized = true;
