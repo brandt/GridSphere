@@ -34,12 +34,6 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     private final static int CMD_UPDATE = 5;
     private final static int CMD_CREATE = 6;
 
-
-    private String getPropertiesFile() {
-        ServletContext ctx = GridSphereConfig.getServletContext();
-        return ctx.getRealPath("/WEB-INF/persistence/hibernate.properties");
-    }
-
     public PersistenceManagerRdbmsImpl() {
         ServletContext ctx = GridSphereConfig.getServletContext();
         String persistenceConfigDir = ctx.getRealPath("/WEB-INF/persistence/");
