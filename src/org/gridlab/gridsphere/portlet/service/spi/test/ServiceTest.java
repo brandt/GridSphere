@@ -17,9 +17,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.File;
 
-import com.mockobjects.servlet.MockServletConfig;
-import com.mockobjects.servlet.MockServletContext;
-
 /**
  * This is the base fixture for service testing. Provides a service factory and the
  * properties file.
@@ -39,11 +36,6 @@ public class ServiceTest extends TestCase {
 
         // create factory
         factory = SportletServiceFactory.getInstance();
-
-        // create a few Mock objects
-        //MockServletConfig mockConfig = new MockServletConfig();
-        //MockServletContext mockContext = new MockServletContext();
-        //mockContext.addRealPath("");
 
         // create properties
         props = new Properties();
