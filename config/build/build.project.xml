@@ -21,8 +21,9 @@ Copyright:
 
 <project default="help" basedir=".">
 
-
     <property file="build.properties"/>
+
+    <import file="userbuild.xml" optional="true"/>
 
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
