@@ -27,8 +27,7 @@ import javax.servlet.http.HttpServletRequest;
  * @see PortletRequest
  * @see ActionRequest
  */
-public class RenderRequestImpl extends PortletRequestImpl implements RenderRequest
-{
+public class RenderRequestImpl extends PortletRequestImpl implements RenderRequest {
 
     /**
      * Constructor creates a proxy for a HttpServletRequest

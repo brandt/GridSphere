@@ -23,6 +23,7 @@ import java.util.*;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.UnsupportedEncodingException;
+import java.io.File;
 
 
 /**
@@ -67,7 +68,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         this.portalContext = portalContext;
         this.portletContext = portletContext;
         contextPath = this.portletContext.getRealPath("");
-        int l = contextPath.lastIndexOf("/");
+        int l = contextPath.lastIndexOf(File.separator);
         contextPath = contextPath.substring(l);
         this.supports = supports;
         props = new HashMap();
