@@ -23,12 +23,11 @@ public class LocalePortlet extends ActionPortlet {
     }
 
 
-    private ListBoxItemBean makeLocaleBean(String language, String name, String def, String extra) {
+    private ListBoxItemBean makeLocaleBean(String language, String name, String def) {
         ListBoxItemBean bean = new ListBoxItemBean();
         String display = language;
-        if (extra!=null) {
-            display = language+"("+extra+")";
-        }
+        display = language.substring(0, 1).toUpperCase() + language.substring(1);
+
         bean.setValue(display);
         bean.setName(name);
 
@@ -49,22 +48,21 @@ public class LocalePortlet extends ActionPortlet {
         Locale loc = new Locale(locale, "", "");
         request.setAttribute("locale", loc);
 
-        ListBoxBean localeSelector = event.getListBoxBean("localeSelector");
+        ListBoxBean localeSelector = event.getListBoxBean("localeLB");
         localeSelector.clear();
         localeSelector.setOnChange("GridSphere_SelectLocale(this)");
         localeSelector.setSize(1);
 
-        ListBoxItemBean bean_uk = makeLocaleBean(Locale.UK.getDisplayLanguage(new Locale("en","","")), "en_UK", locale, "UK");
-        ListBoxItemBean bean_us = makeLocaleBean(Locale.US.getDisplayLanguage(new Locale("en","","")), "en_US", locale, "US");
-        ListBoxItemBean bean_cz = makeLocaleBean(new Locale("cs","","").getDisplayLanguage(new Locale("cs","","")), "cs", locale, null);
-        ListBoxItemBean bean_ge = makeLocaleBean(Locale.GERMAN.getDisplayLanguage(new Locale("de","","")), "de", locale, null);
-        ListBoxItemBean bean_fr = makeLocaleBean(Locale.FRENCH.getDisplayLanguage(new Locale("fr","","")), "fr", locale, null);
-        ListBoxItemBean bean_hu = makeLocaleBean(new Locale("hu","","").getDisplayLanguage(new Locale("hu","","")), "hu", locale, null);
-        ListBoxItemBean bean_pl = makeLocaleBean(new Locale("pl","","").getDisplayLanguage(new Locale("pl","","")), "pl", locale, null);
-        ListBoxItemBean bean_it = makeLocaleBean(Locale.ITALIAN.getDisplayLanguage(new Locale("it","","")), "it", locale, null);
 
-        localeSelector.addBean(bean_uk);
-        localeSelector.addBean(bean_us);
+        ListBoxItemBean bean_en = makeLocaleBean(Locale.US.getDisplayLanguage(new Locale("en","","")), "en_US", locale);
+        ListBoxItemBean bean_cz = makeLocaleBean(new Locale("cs","","").getDisplayLanguage(new Locale("cs","","")), "cs", locale);
+        ListBoxItemBean bean_ge = makeLocaleBean(Locale.GERMAN.getDisplayLanguage(new Locale("de","","")), "de", locale);
+        ListBoxItemBean bean_fr = makeLocaleBean(Locale.FRENCH.getDisplayLanguage(new Locale("fr","","")), "fr", locale);
+        ListBoxItemBean bean_hu = makeLocaleBean(new Locale("hu","","").getDisplayLanguage(new Locale("hu","","")), "hu", locale);
+        ListBoxItemBean bean_pl = makeLocaleBean(new Locale("pl","","").getDisplayLanguage(new Locale("pl","","")), "pl", locale);
+        ListBoxItemBean bean_it = makeLocaleBean(Locale.ITALIAN.getDisplayLanguage(new Locale("it","","")), "it", locale);
+
+        localeSelector.addBean(bean_en);
         localeSelector.addBean(bean_cz);
         localeSelector.addBean(bean_ge);
         localeSelector.addBean(bean_fr);
@@ -72,7 +70,7 @@ public class LocalePortlet extends ActionPortlet {
         localeSelector.addBean(bean_pl);
         localeSelector.addBean(bean_it);
 
-        localeSelector.sortByValue();
+       // localeSelector.sortByValue();
 
         setNextState(request, "locale/viewlocale.jsp");
 

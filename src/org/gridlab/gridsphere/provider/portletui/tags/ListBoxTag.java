@@ -100,7 +100,7 @@ public class ListBoxTag extends ContainerTag {
             } else {
                 if (size != 1) listbox.setSize(size);
                 this.updateBaseComponentBean(listbox);
-                listbox.setOnChange(onChange);
+                if (onChange != null) listbox.setOnChange(onChange);
             }
         } else {
             listbox = new ListBoxBean();
