@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.services.container.registry.impl;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.AbstractPortlet;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
@@ -105,6 +106,12 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
         return allPortlets.keySet();
     }
 
+    public AbstractPortlet getActivePortlet(String portletID) {
+        RegisteredPortlet rp = (RegisteredPortlet) allPortlets.get(portletID);
+        return rp.getActivePortlet();
+    }
+
+
     /**
      * Return a registered portlet given its identifier
      *
@@ -139,11 +146,12 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
     /**
      * Returns a unique ID used in tagging a RegisteredPortlet
      *
-     * @return a unique ID expressed as a String
+     * @return a unique ID expressed as a String  (currently this is the portlet class name)
      */
     protected String getUniqueID(RegisteredPortlet portlet) {
         portletCount++;
-        return "portal id - " + portletCount;
+        //return "portal id - " + portletCount;
+        return portlet.getPortletName();
     }
 
 }
