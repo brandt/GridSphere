@@ -54,6 +54,6 @@ public abstract class SelectElementBean extends NameValueDisableBean implements 
      * @param values array containing updated values for the element
      */
     public void update(String[] values) {
-        this.selected = (values == null) ? true : false;
+        this.selected = (values == null) ? false : true;
     }
 }
