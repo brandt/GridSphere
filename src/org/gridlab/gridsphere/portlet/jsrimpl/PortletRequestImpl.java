@@ -6,6 +6,8 @@ package org.gridlab.gridsphere.portlet.jsrimpl;
 
 import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletWindow;
+import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
 
@@ -730,8 +732,24 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @return the prefered Locale in which the portal will accept content.
      */
     public java.util.Locale getLocale() {
+        /*
         Locale locale = (Locale) this.getPortletSession(true).getAttribute(SportletProperties.LOCALE);
         if (locale != null) return locale;
+        locale = this.getHttpServletRequest().getLocale();
+        if (locale != null) return locale;
+        return Locale.ENGLISH;
+        */
+        Locale locale = (Locale) this.getPortletSession(true).getAttribute(User.LOCALE);
+        if (locale != null) return locale;
+        User user = (User) this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_USER);
+        if (user != null) {
+            String loc = (String) user.getAttribute(User.LOCALE);
+            if (loc != null) {
+                locale = new Locale(loc, "", "");
+                this.getPortletSession(true).setAttribute(User.LOCALE, locale);
+                return locale;
+            }
+        }
         locale = this.getHttpServletRequest().getLocale();
         if (locale != null) return locale;
         return Locale.ENGLISH;
