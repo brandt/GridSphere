@@ -9,4 +9,8 @@ INSTALL
                  prefix="localhost_gridsphere_log." suffix=".txt"
                  timestamp="true"/>
 </Context>
- 
+
+2) Edit $CATALINA_HOME/conf/tomcat-users.xml and make sure you have the following line:
+
+
+<user username="tomcat" password="tomcat" roles="tomcat,manager"/>

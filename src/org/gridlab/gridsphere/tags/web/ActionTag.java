@@ -8,6 +8,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.TagSupport;
+import java.util.HashMap;
 
 /**
  * Created by IntelliJ IDEA.
@@ -37,26 +38,32 @@ public class ActionTag extends TagSupport {
         return label;
     }
 
-    public String makeActionURI() {
+    public void createActionURI() {
         PortletResponse res = (PortletResponse)pageContext.getAttribute("portletResponse");
         PortletURI someURI = res.createURI();
         DefaultPortletAction anAction = new DefaultPortletAction(action);
         someURI.addAction(anAction);
-        return someURI.toString();
+        pageContext.setAttribute("_uri", someURI);
     }
 
     public int doStartTag() throws JspException {
+        createActionURI();
+        return EVAL_BODY_INCLUDE;
+    }
+
+    public int doEndTag() throws JspTagException {
         try {
             JspWriter out = pageContext.getOut();
             out.print("<a href= \"");
-            out.print(makeActionURI());
+            PortletURI someURI = (PortletURI)pageContext.getAttribute("_uri");
+            if (someURI != null) out.print(someURI.toString());
             out.print("\">");
             out.print(label);
             out.print("</a>");
         } catch (Exception e) {
             throw new JspTagException(e.getMessage());
         }
-        return EVAL_BODY_INCLUDE;
+        return EVAL_PAGE;
     }
 
 }

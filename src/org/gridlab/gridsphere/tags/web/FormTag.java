@@ -46,29 +46,36 @@ public class FormTag extends TagSupport {
         return isMultipart;
     }
 
-    public String makeActionURI() {
+    public String createActionURI() {
         PortletResponse res = (PortletResponse)pageContext.getAttribute("portletResponse");
         PortletURI someURI = res.createURI();
         DefaultPortletAction anAction = new DefaultPortletAction(action);
         someURI.addAction(anAction);
+        pageContext.setAttribute("_uri", someURI);
         return someURI.toString();
-
     }
 
     public int doStartTag() throws JspException {
+        createActionURI();
         try {
             JspWriter out = pageContext.getOut();
+
+            //out.print("<script language=\"JavaScript\">");
+            //out.print("function hello() {");
+            //out.print("    alert(\"How's it going?\")");
+            //out.print("}");
+            //out.print("</script>");
+
             out.print("<form ");
             out.print("action=\"");
-            out.print(makeActionURI());
+            out.print(createActionURI());
             out.print("\" method=\"");
             out.print(method);
-
+            out.print("\"");
             if (isMultipart) {
                 out.print(" enctype=\"multipart/form-data\"");
             }
-
-            out.print("\">");
+            //out.print(" onSubmit=\"hello()\" >");
         } catch (Exception e) {
             throw new JspTagException(e.getMessage());
         }
@@ -78,7 +85,6 @@ public class FormTag extends TagSupport {
     public int doEndTag() throws JspTagException {
         try {
             JspWriter out = pageContext.getOut();
-
             out.print("</form>");
         } catch (Exception e) {
             throw new JspTagException(e.getMessage());

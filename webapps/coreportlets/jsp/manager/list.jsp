@@ -2,6 +2,10 @@
                  java.util.Iterator,
                  org.gridlab.gridsphere.portlets.core.beans.TomcatWebAppResult"%>
 
+<%@ taglib uri="/portletWidgets" prefix="gs" %>
+<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
+
+<portletAPI:init/>
 
 <jsp:useBean id="result" class="org.gridlab.gridsphere.portlets.core.beans.TomcatWebAppResult" scope="request"/>
 
@@ -24,7 +28,24 @@
     <td><%= description.getContextPath() %></td>
     <td><%= description.getRunning() %></td>
     <td><%= description.getSessions() %></td>
-    <td><%= description.getActions() %></td>
+    <td>
+        <gs:actionlink action="manager" label="start">
+            <gs:actionparam name="operation" value="start"/>
+            <gs:actionparam name="context" value="<%= description.getContextPath() %>"/>
+        </gs:actionlink>
+        <gs:actionlink action="manager" label="stop">
+            <gs:actionparam name="operation" value="stop"/>
+            <gs:actionparam name="context" value="<%= description.getContextPath() %>"/>
+        </gs:actionlink>
+        <gs:actionlink action="manager" label="reload">
+            <gs:actionparam name="operation" value="reload"/>
+            <gs:actionparam name="context" value="<%= description.getContextPath() %>"/>
+        </gs:actionlink>
+        <gs:actionlink action="manager" label="remove">
+            <gs:actionparam name="operation" value="remove"/>
+            <gs:actionparam name="context" value="<%= description.getContextPath() %>"/>
+        </gs:actionlink>
+    </td>
     </tr>
 
 <% } %>
