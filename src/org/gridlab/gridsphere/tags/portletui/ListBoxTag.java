@@ -36,13 +36,6 @@ public class ListBoxTag extends ContainerTag {
         this.size = size;
     }
 
-    public int doStartTag() throws JspException {
-        list = new Vector();
-        ContainerTag rowTag = (ContainerTag)getParent();
-        if (rowTag == null) return SKIP_BODY;
-        return EVAL_BODY_INCLUDE;
-    }
-
     public int doEndTag() throws JspException {
         if (!beanId.equals("")) {
             listbox = (ListBoxBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
