@@ -21,7 +21,7 @@
         <title>Initialized Portlet Web Applications</title>
         When deployed, GridSphere requires access to deployed portlet web applications. Since portlets are packaged according
         to the web application repository (WAR) format defined in the Java 2.3 Servlet Specification, the names of the
-        WAR files or web applications needs to be added to the <filename>PortletMaster.xml</filename> file.
+        WAR files or web applications needs to be added to the <filename>webapps/gridsphere/WEB-INF/PortletMaster.xml</filename> file.
         <example><title>The PortletMaster Descriptor</title>
         <programlisting><literallayout>
             <![CDATA[
@@ -52,7 +52,7 @@
 
     <sect1>
         <title>Portal Layout Configuration</title>
-        The defined layouts used in GridSphere are found in <filename>config/layouts</filename> of your GridSphere
+        The defined layouts used in GridSphere are found in <filename>webapps/gridpshere/WEB-INF/layouts</filename> of your GridSphere
         distribution and contain the <filename>GuestUserLayout.xml</filename>
         which defines the guest layout. Initially before a user has logged in, they will see
         the layout as presented in <filename>GuestUserLayout.xml</filename>. The guest layout contains the Login portlet

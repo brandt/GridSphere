@@ -158,8 +158,14 @@
 <ui:actionlink action="doActionLink" key="DOIT"/>]]>
                 </screen>
                 This example would create an html hyperlink pointing to the current portlet with a clickable
-                a localized text value DOIT that will trigger the doActionLink method to be performed in the
+                localized text value DOIT that will trigger the doActionLink method to be performed in the
                 portlet.
+                <screen>
+<![CDATA[
+<ui:actionlink action="doActionLink">Click Me</>]]>
+                </screen>
+                This example would create an html hyperlink pointing to the current portlet with a clickable
+                text value of "Click Me" as specified in the body of the tag.
                 <screen>
 <![CDATA[
 <ui:actionlink beanId="myAction" action="doActionLink" key="DOIT"/>]]>
