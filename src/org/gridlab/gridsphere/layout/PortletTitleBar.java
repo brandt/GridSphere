@@ -591,11 +591,21 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         String stitle = null;
         if (settings != null) {
+
             Enumeration enum = req.getLocales();
-            while (enum.hasMoreElements() && (stitle == null)) {
-                stitle = settings.getTitle(req.getLocale(), client);
+
+            while (enum.hasMoreElements()) {
+                Locale locale = (Locale)enum.nextElement();
+                stitle = settings.getTitle(locale, client);
             }
-            if (stitle != null) title = stitle;
+
+            if (stitle != null) {
+                title = stitle;
+            }  else {
+                Locale deflocale = settings.getDefaultLocale();
+                String deftitle =  settings.getTitle(deflocale, client);
+                title = deftitle;
+            }
         }
 
         List modeLinks = null, windowLinks = null;
