@@ -76,6 +76,29 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
     }
 
     /**
+     * Return the appropriate <code>PortletRole</code> obtained by parsing
+     * the <code>int</code> portlet role priority
+     *
+     * @param portletRole a portlet role name
+     * @throws IllegalArgumentException if the <code>int</code> does
+     *                                  not match any of the pre-defined roles
+     */
+    public static PortletRole toPortletRole(int priority)
+            throws IllegalArgumentException {
+        if (priority == GUEST_ROLE) {
+            return GUEST;
+        } else if (priority == USER_ROLE) {
+            return USER;
+        } else if (priority == ADMIN_ROLE) {
+            return ADMIN;
+        } else if (priority == SUPER_ROLE) {
+            return SUPER;
+        } else {
+            throw new IllegalArgumentException("Unable to create PortletRole corresponding to: " + priority);
+        }
+    }
+
+    /**
      * Returns a locale-specific <code>String</code> representation of
      * the portlet role
      *
