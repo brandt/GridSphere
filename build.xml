@@ -24,6 +24,12 @@ Copyright:
     <!-- Needed to import ant-contrib tasks -->
     <taskdef resource="net/sf/antcontrib/antcontrib.properties" />
 
+    <taskdef resource="cactus.tasks">
+        <classpath>
+            <pathelement location="lib/ext/cactus-integration-ant-20030401.jar"/>
+        </classpath>
+    </taskdef>
+
     <property file="build.properties"/>
 
     <property name="optimize"    value="false"/>
@@ -246,16 +252,17 @@ Copyright:
         <echo message="Replaced GRIDSPHERE_RELEASE with : ${release}"/>
         <echo message="Replaced DB implementation with : ${DATABASE_TYPE}"/>
 
-        <jar jarfile="lib/gridsphere.jar" basedir="${build.classes}">
+        <jar jarfile="lib/gridsphere.jar" basedir="${build.classes}" defaultexcludes="yes">
             <include name="org/**" />
             <include name="gridsphere/**" />
             <!-- don't include portlet API -->
             <exclude name="org/gridlab/gridsphere/portlet/**"/>
             <exclude name="org/gridlab/gridsphere/event/**"/>
-            <!-- don't include grid portlets or serivces -->
+            <!-- don't include grid portlets or services -->
             <exclude name="org/gridlab/gridsphere/portlets/grid/**"/>
             <exclude name="org/gridlab/gridsphere/services/grid/**"/>
             <!-- don't include portlet widgets tag library -->
+            <exclude name="org/gridlab/gridsphere/provider/**"/>
             <exclude name="org/gridlab/gridsphere/tags/**"/>
         </jar>
      </target>
@@ -267,25 +274,45 @@ Copyright:
         <jar jarfile="lib/portlet-api.jar" basedir="${build.classes}" >
             <include name="org/gridlab/gridsphere/portlet/**"/>
             <include name="org/gridlab/gridsphere/event/**"/>
-            <include name="config/log4j.properties"/>
+            <include name="gridsphere/log4j.properties"/>
         </jar>
     </target>
 
     <!-- =================================================================== -->
-    <!-- Creates the Portlet Widgets Tag Library                             -->
+    <!-- Creates the GridSphere test JAR                                     -->
     <!-- =================================================================== -->
-    <target name="portlet-widgets-jar" depends="compile" description="Create lib/portlet-widget-tags.jar">
+    <target name="portlet-widget-tags-jar" depends="compile" description="Create lib/gridsphere-provider.jar">
         <jar jarfile="lib/portlet-widget-tags.jar" basedir="${build.classes}" >
-            <include name="org/gridlab/gridsphere/provider/**" />
-            <include name="org/gridlab/gridsphere/tags/**" />
+            <include name="org/gridlab/gridsphere/tags/**"/>
             <metainf dir="${gswebapp.dir}/WEB-INF/tlds"/>
+        </jar>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates the GridSphere test JAR                                     -->
+    <!-- =================================================================== -->
+    <target name="gridsphere-provider-jar" depends="compile" description="Create lib/gridsphere-provider.jar">
+        <jar jarfile="lib/gridsphere-provider.jar" basedir="${build.classes}" >
+            <include name="org/gridlab/gridsphere/provider/**"/>
+        </jar>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates the GridSphere test JAR                                     -->
+    <!-- =================================================================== -->
+    <target name="gridsphere-test-jar" depends="compile-tests" description="Create lib/gridsphere-test.jar">
+        <copy file="config/test/cactus.properties"
+                  tofile="${build.classes}/gridsphere/cactus.properties"/>
+        <jar jarfile="lib/gridsphere-test.jar" basedir="${build.classes}" >
+            <include name="**/*Test.class"/>
+            <include name="gridsphere/cactus.properties"/>
         </jar>
     </target>
 
     <!-- =================================================================== -->
     <!-- Creates all JAR's                                                   -->
     <!-- =================================================================== -->
-    <target name="jar" depends="gridsphere-jar, portlet-jar, portlet-widgets-jar" description="Creates all jars"/>
+    <target name="jar" depends="gridsphere-jar, portlet-widget-tags-jar, gridsphere-provider-jar" description="Creates all jars"/>
 
     <!-- =================================================================== -->
     <!-- Cleans everything                                                   -->
@@ -542,7 +569,7 @@ Copyright:
         <copy todir="${env.CATALINA_HOME}/shared/lib">
             <fileset dir="lib/ext"/>
             <fileset dir="lib">
-                <exclude name="portlet-widgets.jar"/>
+                <exclude name="portlet-widget-tags.jar"/>
                 <exclude name="ext/**"/>
             </fileset>
         </copy>
@@ -554,6 +581,19 @@ Copyright:
         </copy>
 
         <copy file="lib/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
+
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Deploys GridSphere to Tomcat                                        -->
+    <!-- =================================================================== -->
+    <target name="deploy-test" depends="gridsphere-test-jar" description="Deploys GridSphere test to a local server">
+
+        <copy todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF">
+            <fileset dir="config/test"/>
+        </copy>
+
+        <copy file="lib/gridsphere-test.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
 
     </target>
 
@@ -580,7 +620,7 @@ Copyright:
                 <path refid="classpath"/>
                 <pathelement location="${gridsphere.build}/lib/gridsphere.jar"/>
             </classpath>
-            <test name="org.gridlab.gridsphere.GridSphereTests" todir="${gridsphere.build}/reports">
+            <test name="org.gridlab.gridsphere.GridSphereTest" todir="${gridsphere.build}/reports">
                 <formatter type="xml"/>
             </test>
         </junit>
@@ -608,7 +648,7 @@ Copyright:
                 <path refid="classpath"/>
                 <pathelement location="${gridsphere.build}/lib/gridsphere.jar"/>
             </classpath>
-            <test name="org.gridlab.gridsphere.GridSphereTests" todir="${gridsphere.build}/reports">
+            <test name="org.gridlab.gridsphere.GridSphereTest" todir="${gridsphere.build}/reports">
                 <formatter type="xml"/>
             </test>
         </junit>
@@ -659,6 +699,88 @@ Copyright:
                 <exclude name="build/build.deploy.xml"/>
             </fileset>
         </copy>
+    </target>
+
+    <!--
+    ========================================================================
+    Run Tomcat 4.0 tests
+    ========================================================================
+        -->
+    <target name="test.tomcat" depends="deploy"
+        if="catalina.exists" description="Run tests on Tomcat">
+
+        <!-- Start the servlet engine, wait for it to be started, run the
+        unit tests, stop the servlet engine, wait for it to be stopped.
+        The servlet engine is stopped if the tests fail for any reason -->
+
+        <runservertests
+            testURL="http://127.0.0.1:8080/gridsphere/ServletRedirector?Cactus_Service=RUN_TEST"
+            startTarget="start.tomcat"
+            stopTarget="stop.tomcat"
+            testTarget="test"/>
+
+    </target>
+
+
+    <!--
+       ========================================================================
+         Start Tomcat 4.0
+       ========================================================================
+    -->
+    <target name="start.tomcat">
+
+        <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
+            <jvmarg value="-Dcatalina.home=${env.CATALINA_HOME}"/>
+            <arg value="start"/>
+            <classpath>
+                <pathelement path="${java.home}/../lib/tools.jar"/>
+                <fileset dir="${env.CATALINA_HOME}">
+                    <include name="bin/bootstrap.jar"/>
+                </fileset>
+            </classpath>
+        </java>
+
+    </target>
+
+    <!--
+    ========================================================================
+    Stop Tomcat
+    ========================================================================
+    -->
+    <target name="stop.tomcat">
+        <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
+            <jvmarg value="-Dcatalina.home=${env.CATALINA_HOME}"/>
+            <arg value="stop"/>
+            <classpath>
+                <fileset dir="${env.CATALINA_HOME}">
+                    <include name="bin/bootstrap.jar"/>
+                </fileset>
+            </classpath>
+        </java>
+    </target>
+
+    <!--
+       ========================================================================
+         Run the client JUnit test cases.
+       ========================================================================
+    -->
+    <target name="test">
+
+        <junit printsummary="yes" haltonfailure="yes" haltonerror="yes"
+            fork="yes">
+
+            <sysproperty key="cactus.contextURL" value="http://localhost:8080/gridsphere"/>
+
+            <classpath>
+                <path refid="classpath"/>
+                <pathelement location="${env.CATALINA_HOME}/webapps/gridsphere"/>
+            </classpath>
+
+            <formatter type="plain" usefile="false"/>
+            <test name="org.gridlab.gridsphere.GridSphereTest"/>
+
+        </junit>
+
     </target>
 
 </project>

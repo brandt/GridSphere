@@ -94,7 +94,7 @@ public class TomcatManagerWrapper {
     }
 
     /**
-     * Return the list of web applications.
+     * Return the list of ui applications.
      */
     public TomcatWebAppResult getWebAppList() {
         return doCommand("/list");

@@ -20,7 +20,7 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.ActionEventHandler;
 import org.gridlab.gridsphere.provider.PortletBean;
-import org.gridlab.gridsphere.tags.web.element.*;
+import org.gridlab.gridsphere.provider.ui.beans.*;
 
 import javax.servlet.UnavailableException;
 import java.util.Date;

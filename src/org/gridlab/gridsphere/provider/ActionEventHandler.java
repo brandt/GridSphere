@@ -8,9 +8,9 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.event.ActionEvent;
-import org.gridlab.gridsphere.tags.event.FormEvent;
-import org.gridlab.gridsphere.tags.event.impl.FormEventImpl;
-import org.gridlab.gridsphere.tags.web.element.*;
+import org.gridlab.gridsphere.provider.event.FormEvent;
+import org.gridlab.gridsphere.provider.event.impl.FormEventImpl;
+import org.gridlab.gridsphere.provider.ui.beans.*;
 
 import java.util.*;
 import java.lang.reflect.Method;

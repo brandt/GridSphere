@@ -11,9 +11,9 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 import org.gridlab.gridsphere.portlets.manager.tomcat.TomcatManagerWrapper;
 import org.gridlab.gridsphere.portlets.manager.tomcat.TomcatWebAppResult;
-import org.gridlab.gridsphere.tags.event.FileFormEvent;
-import org.gridlab.gridsphere.tags.event.FileFormException;
-import org.gridlab.gridsphere.tags.event.impl.FileFormEventImpl;
+import org.gridlab.gridsphere.provider.event.FileFormEvent;
+import org.gridlab.gridsphere.provider.event.FileFormException;
+import org.gridlab.gridsphere.provider.event.impl.FileFormEventImpl;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.FileUpload;
@@ -27,7 +27,7 @@ import java.util.Iterator;
 
 /**
  * The PortletApplicationManager is a wrapper for the Tomcat manager webapp in 4.1.X which allows dynamic
- * web application management and hence dynamic portlet management. This class needs to be adapted for
+ * ui application management and hence dynamic portlet management. This class needs to be adapted for
  * other servlet containers.
  */
 public class PortletApplicationManager extends AbstractPortlet {
@@ -73,7 +73,7 @@ public class PortletApplicationManager extends AbstractPortlet {
 
 
 
-                /* Remove old portlet web app if it exists */
+                /* Remove old portlet ui app if it exists */
                 int idx = -1;
                 String webAppContext = null;
                 String webAppName = null;
