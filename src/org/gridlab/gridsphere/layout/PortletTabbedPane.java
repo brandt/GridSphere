@@ -336,78 +336,63 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         out.println("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
         //      out.println("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
         out.println("<tr >");
-        // if (!themeReg.isGfxTheme(theme)) out.println("<td class=\"tab-empty\">&nbsp;</td>");
 
-        boolean badrole = false;
         PortletTab tab;
-        //List stabs = Collections.synchronizedList(tabs);
-        //synchronized (stabs) {
-            for (int i = 0; i < tabs.size(); i++) {
+        for (int i = 0; i < tabs.size(); i++) {
 
-                tab = (PortletTab) tabs.get(i);
-                PortletRole tabRole = tab.getRequiredRole();
-                if (userRole.compare(userRole, tabRole) >= 0) {
+            tab = (PortletTab) tabs.get(i);
+            PortletRole tabRole = tab.getRequiredRole();
+            if (userRole.compare(userRole, tabRole) >= 0) {
 
-                    String lang = req.getLocale().getLanguage();
-                    String title = tab.getTitle(lang);
+                String lang = req.getLocale().getLanguage();
+                String title = tab.getTitle(lang);
 
+                String path = "themes" + File.separator + theme + File.separator + "images" + File.separator;
+                if (tab.isSelected()) {
+                    out.println("<td height=\"24\" width=\"6\" background=\"" + path + "tab-active-left.gif\">");
+                    out.println("&nbsp;");
+                    out.println("</td>");
+                    out.println("<td height=\"24\" background=\"" + path + "tab-active-middle.gif\">");
+                    out.println("<span class=\"tab-active\">" + replaceBlanks(title) + "</span>");
+                    out.println("<td height=\"24\" width=\"6\" background=\"" + path + "tab-active-right.gif\">");
+                    out.println("&nbsp;");
+                    out.println("</td>");
 
-                    String path = "themes" + File.separator + theme + File.separator + "images" + File.separator;
-                    if (tab.isSelected()) {
-                        out.println("<td height=\"24\" width=\"6\" background=\"" + path + "tab-active-left.gif\">");
-                        out.println("&nbsp;");
-                        out.println("</td>");
-                        out.println("<td height=\"24\" background=\"" + path + "tab-active-middle.gif\">");
-                        out.println("<span class=\"tab-active\">" + replaceBlanks(title) + "</span>");
-                        out.println("<td height=\"24\" width=\"6\" background=\"" + path + "tab-active-right.gif\">");
-                        out.println("&nbsp;");
-                        out.println("</td>");
-
-                    } else {
-                        out.println("<td height=\"24\" width=\"6\" background=\"" + path + "tab-inactive-left.gif\">");
-                        out.println("&nbsp;");
-                        out.println("</td>");
-                        out.println("<td height=\"24\"   background=\"" + path + "tab-inactive-middle.gif\">");
-                        out.println("<a class=\"tab-menu\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\">" + replaceBlanks(title) + "</a>");
-                        out.println("<td height=\"24\" width=\"6\" background=\"" + path + "tab-inactive-right.gif\">");
-                        out.println("&nbsp;");
-                        out.println("</td>");
-                    }
-
-
-
-                    //out.println("<td class=\"tab-empty\"></td>");
                 } else {
-                    // if role is < required role we try selecting the next possible tab
-                    //System.err.println("in PortletTabbedPane menu: role is < required role we try selecting the next possible tab");
+                    out.println("<td height=\"24\" width=\"6\" background=\"" + path + "tab-inactive-left.gif\">");
+                    out.println("&nbsp;");
+                    out.println("</td>");
+                    out.println("<td height=\"24\"   background=\"" + path + "tab-inactive-middle.gif\">");
+                    out.println("<a class=\"tab-menu\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\">" + replaceBlanks(title) + "</a>");
+                    out.println("<td height=\"24\" width=\"6\" background=\"" + path + "tab-inactive-right.gif\">");
+                    out.println("&nbsp;");
+                    out.println("</td>");
+                }
 
-                    badrole = true;
-
+                //out.println("<td class=\"tab-empty\"></td>");
+            } else {
+                // if role is < required role we try selecting the next possible tab
+                //System.err.println("in PortletTabbedPane menu: role is < required role we try selecting the next possible tab");
+                if (tab.isSelected()) {
+                    int index = (i + 1);
+                    PortletTab newtab = (PortletTab) tabs.get(index);
+                    if (index < tabs.size()) {
+                        this.setSelectedPortletTab(newtab);
+                    }
                 }
             }
+        }
 
-            if (badrole) {
-                // try to use first tab with ok role
-                tab = (PortletTab)tabs.get(0);
-                PortletRole tabRole = tab.getRequiredRole();
-                if (tabRole.compare(userRole, tabRole) >= 0) {
-                    this.setSelectedPortletTab(tab);
-                }
+        out.println("<td class=\"tab-fillup\">&nbsp;</td>");
+        out.println("</tr></table>");
+
+        if (!tabs.isEmpty()) {
+            PortletTab selectedTab = getSelectedTab();
+            if (selectedTab != null) {
+                selectedTab.doRender(event);
             }
+        }
 
-//            if (themeReg.isGfxTheme(theme)) {
-            //               out.println("<td witdh=\"100%\" >&nbsp;</td>");
-            //          }
-            out.println("<td class=\"tab-fillup\">&nbsp;</td>");
-            out.println("</tr></table>");
-
-            if (!tabs.isEmpty()) {
-                PortletTab selectedTab = getSelectedTab();
-                if (selectedTab != null) {
-                    selectedTab.doRender(event);
-                }
-            }
-        //}
     }
 
     /**

@@ -399,6 +399,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         doViewAddGroupEntry(evt);
 
         List groupEntries = aclManagerService.getGroupEntries(group);
+
         req.setAttribute("groupEntryList", groupEntries);
         setNextState(req, DO_VIEW_GROUP_VIEW);
         log.debug("Exiting doViewViewGroup");

@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
+import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
@@ -292,6 +293,7 @@ public class UserManagerPortlet extends ActionPortlet {
             //newuser.setPasswordValidation(false);
         }
 
+
         PasswordEditor editor = passwordManagerService.editPassword(newuser);
         String password = event.getPasswordBean("password").getValue();
         boolean isgood = this.isInvalidPassword(event, newuserflag);
@@ -299,8 +301,10 @@ public class UserManagerPortlet extends ActionPortlet {
             setNextState(event.getPortletRequest(), DO_VIEW_USER_EDIT);
             return newuser;
         } else {
-            editor.setValue(password);
-            passwordManagerService.savePassword(editor);
+            if (!password.equals("")) {
+                editor.setValue(password);
+                passwordManagerService.savePassword(editor);
+            }
         }
 
         // Edit account attributes
@@ -347,9 +351,15 @@ public class UserManagerPortlet extends ActionPortlet {
             // Create appropriate access request
             Set groups = portalConfigService.getPortalConfigSettings().getDefaultGroups();
             Iterator it = groups.iterator();
+            GroupRequest groupRequest = null;
             while (it.hasNext()) {
                 PortletGroup group = (PortletGroup) it.next();
-                GroupRequest groupRequest = this.aclManagerService.createGroupEntry();
+                GroupEntry ge = aclManagerService.getGroupEntry(user, group);
+                if (ge != null) {
+                    groupRequest = this.aclManagerService.editGroupEntry(ge);
+                }  else {
+                    groupRequest = this.aclManagerService.createGroupEntry();
+                }
                 groupRequest.setUser(user);
                 groupRequest.setRole(selectedRole);
                 groupRequest.setGroup(group);

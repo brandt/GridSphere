@@ -286,8 +286,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletRequest req = event.getPortletRequest();
         PortletSession session = req.getPortletSession(true);
 
-        String username = req.getParameter("ui_tf_username_");
-        String password = req.getParameter("ui_pb_password_");
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
 
         try {
 

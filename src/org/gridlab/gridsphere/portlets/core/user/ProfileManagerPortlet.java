@@ -429,9 +429,8 @@ public class ProfileManagerPortlet extends ActionPortlet {
             PortletGroup g = this.aclManagerService.getGroupByName(groupStr);
             GroupEntry entry = this.aclManagerService.getGroupEntry(user, g);
             GroupRequest groupRequest = this.aclManagerService.editGroupEntry(entry);
-
-            createSuccessMessage(event, this.getLocalizedText(req, "USER_GROUPS_SUCCESS"));
             this.aclManagerService.deleteGroupEntry(groupRequest);
+            createSuccessMessage(event, this.getLocalizedText(req, "USER_GROUPS_SUCCESS"));
 
             this.layoutMgr.refreshPage(req);
             /*

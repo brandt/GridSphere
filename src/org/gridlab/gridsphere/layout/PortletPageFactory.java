@@ -149,6 +149,7 @@ public class PortletPageFactory implements PortletSessionListener {
             } catch (Exception e) {
                 log.error("Unable to copy application tabs for webapp: " + groupName);
             }
+        
             page.setPortletTabbedPane(pagePane);
             page.init(req, new ArrayList());
         }

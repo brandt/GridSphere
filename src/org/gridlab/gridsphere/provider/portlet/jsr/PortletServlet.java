@@ -386,13 +386,16 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
 
     protected void doTitle(Portlet portlet, RenderRequest request, RenderResponse response) throws PortletException {
         try {
-            GenericPortlet genPortlet = ((GenericPortlet) portlet);
-            if (genPortlet.getPortletConfig() == null) throw new PortletException("Unable to get PortletConfig from Porltlet");
-            ResourceBundle resBundle = genPortlet.getPortletConfig().getResourceBundle(request.getLocale());
-            String title = resBundle.getString("javax.portlet.title");
-            response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
-            out.println(title);
+            Portlet por = (Portlet)portlet;
+            if (por instanceof GenericPortlet) {
+                GenericPortlet genPortlet = ((GenericPortlet) portlet);
+                if (genPortlet.getPortletConfig() == null) throw new PortletException("Unable to get PortletConfig from Porltlet");
+                ResourceBundle resBundle = genPortlet.getPortletConfig().getResourceBundle(request.getLocale());
+                String title = resBundle.getString("javax.portlet.title");
+                response.setContentType("text/html");
+                PrintWriter out = response.getWriter();
+                out.println(title);
+            }
         } catch (IOException e) {
             log.error("printing title failed", e);
         }
