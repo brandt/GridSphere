@@ -108,6 +108,9 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
             "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g where g.Oid="+group.getID();
         delete(command);
 
+        // @todo delete all acls here!!!
+
+
     }
 
     /**
@@ -117,37 +120,38 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
      * @param user the User object
      * @param group the PortletGroup
      */
-    public void addRoleInGroup(User user, PortletGroup group) throws PortletServiceException {
+    public void approveUserInGroup(User user, PortletGroup group) throws PortletServiceException {
         // all users need to make an accountrequest to get in groups, without it ... no
 
+        String command2 = "select acl from org.gridlab.gridsphere.services.security.acl.impl2.UserACL acl where "+
+                "UserID=\""+user.getID()+"\" and GroupID=\""+group.getID()+"\" and Status="+UserACL.STATUS_APPROVED;
         String command = "select acl from org.gridlab.gridsphere.services.security.acl.impl2.UserACL acl where "+
-                "UserID=\""+user.getID()+"\" and GroupID=\""+group.getID()+"\"";
+                "UserID=\""+user.getID()+"\" and GroupID=\""+group.getID()+"\" and Status="+UserACL.STATUS_NOT_APPROVED;
 
-        UserACL useracl = null;
+        UserACL notapproved = null;
         try {
-            useracl = (UserACL)pm.restoreObject(command);
-            if (useracl==null) {
+            notapproved = (UserACL)pm.restoreObject(command);
+            if (notapproved==null) {
                 log.error("User "+user.getFullName()+" did not requested a role with an accountrequest change");
             } else {
-                useracl.setStatus(useracl.STATUS_APPROVED);
-                pm.update(useracl);
-                log.info("Approved ACL for user "+user.getFullName()+" in group "+group.getName());
+                // we don't want to approve a superuserrole by an admin!
+                if (notapproved.getRoleID()!=SportletRole.ADMIN) {
+                    // delete the status the user has until now
+                    UserACL approved = (UserACL)pm.restoreObject(command2);
+                    if (approved!=null) {
+                        pm.delete(approved);
+                    }
+                    notapproved.setStatus(notapproved.STATUS_APPROVED);
+                    pm.update(notapproved);
+                    log.info("Approved ACL for user "+user.getGivenName()+" in group "+group.getName());
+                }
+                log.info("Can not approve superuserrole!");
             }
 
         } catch (PersistenceException e) {
             log.error("TransactionException "+e);
             throw new PortletServiceException(e.toString());
         }
-    }
-
-    /**
-     * Add a user to a group with the user role
-     *
-     * @param user the User object
-     * @param group the PortletGroup
-     */
-    public void addUserToGroup(User user, PortletGroup group) throws PortletServiceException {
-        addRoleInGroup(user, group);
     }
 
 
@@ -160,8 +164,21 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     public void removeUserFromGroup(User user, PortletGroup group) throws PortletServiceException {
         String command =
             "select r from org.gridlab.gridsphere.services.security.acl.impl2.UserACL r where r.UserID="+user.getID()+
-            " and r r.GroupID="+group.getID();
+            " and r.GroupID="+group.getID()+" and r.Status="+UserACL.STATUS_APPROVED;
         delete(command);
+    }
+
+    /**
+     * Removes a user from the grouprequest for a group
+     * @param user user object
+     * @param group the group
+     */
+    public void removeUserGroupRequest(User user, PortletGroup group) throws PortletServiceException {
+        String command =
+            "select r from org.gridlab.gridsphere.services.security.acl.impl2.UserACL r where r.UserID="+user.getID()+
+            " and r.GroupID="+group.getID()+" and r.Status="+UserACL.STATUS_NOT_APPROVED;
+        delete(command);
+
     }
 
 }

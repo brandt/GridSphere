@@ -272,9 +272,9 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public void approveGroupRequest(User approver, User user, PortletGroup group, MailMessage mailMessage)
             throws PermissionDeniedException {
-        if (isAdminuser(approver, group) || isSuperuser(user)) {
+        if (isAdminuser(approver, group) || isSuperuser(approver)) {
             try {
-                aclManagerService.addUserToGroup(user, group);
+                aclManagerService.approveUserInGroup(user, group);
             } catch (PortletServiceException e) {
                 log.error("PortletService Exeption "+e);
             }
@@ -286,7 +286,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 log.error("Unable to send mail: ", e);
             }
         } else {
-            throw new PermissionDeniedException("User "+approver.getFullName()+" is not allowed to approve the "+
+            throw new PermissionDeniedException("User "+approver.getGivenName()+" is not allowed to approve the "+
                     group.getName()+" group");
         }
     }
@@ -304,7 +304,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
         if (isAdminuser(denier, group) || (isSuperuser(denier))) {
             try {
-                aclManagerService.removeUserFromGroup(user, group);
+                aclManagerService.removeUserGroupRequest(user, group);
                 // Mail the user
                 if (mailMessage != null) {
                     MailUtils.sendMail(mailMessage, "localhost");
@@ -362,6 +362,18 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     }
 
     /**
+     * Gets a user by his loginname
+     * @param name loginname
+     * @return requested user object
+     */
+    private User getUserByName(String name) {
+        String command =
+            "select u from org.gridlab.gridsphere.portlet.impl.SportletUserImpl u where UserID=\""+name+"\"";
+        return getUser(command);
+
+    }
+
+    /**
      * loginUser retrieves a new user
      *
      * @param userName
@@ -394,6 +406,26 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public void removeUser(User approver, String userName) throws PermissionDeniedException {
 
+        if (isSuperuser(approver)) {
+            if (existsUser(userName)) {
+                User user = loginUser(userName);
+                try {
+                    List result = aclService.getGroups(user);
+                    if (result.size()>0) {
+                        for (int i=0;i<result.size();i++) {
+                            aclManagerService.removeUserFromGroup(user, ((PortletGroup)result.get(i)));
+                        }
+                    }
+                    pm.delete(user);
+                } catch (PortletServiceException e) {
+                    log.error("Could not delete the ACL of the user " + e);
+                } catch (PersistenceException e) {
+                    log.error("Could not delete User "+e);
+                }
+            }
+        }   else {
+            throw new PermissionDeniedException("User "+approver.getGivenName()+" wanted to delete "+userName+" (denied)");
+        }
     }
 
     /**
@@ -512,7 +544,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         // @TODO howto get rid of the long select from name, since there is this impl2 thing in there
 
         String command = "select ua from org.gridlab.gridsphere.services.security.acl.impl2.UserACL ua where "+
-            "UserID=\""+user.getID()+"\" and RoleID="+SportletRole.SUPER;
+            "UserID=\""+user.getID()+"\" and RoleID="+SportletRole.SUPER+" and Status="+UserACL.STATUS_APPROVED;
 
         return queryACL(command);
 

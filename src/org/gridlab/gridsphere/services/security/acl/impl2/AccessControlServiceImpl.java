@@ -128,7 +128,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
 
         String command =
             "select u from org.gridlab.gridsphere.services.security.acl.impl2.UserACL u where u.RoleID=\""+role.getID()+
-            " and u.GroupID="+group.getID();
+            " and u.GroupID="+group.getID()+" and u.Status="+UserACL.STATUS_APPROVED;
         return listACL(command);
     }
 
@@ -163,6 +163,20 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
         return result;
     }
 
+    private PortletGroup getGroupByID(String id) throws PortletServiceException {
+        String command =
+            "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g where g.Oid=\""+id+"\"";
+        PortletGroup g = null;
+        try {
+            g = (PortletGroup)pm.restoreObject(command);
+        } catch (PersistenceException e) {
+            log.error("Exception " + e);
+            throw new PortletServiceException("Could ot get group "+id);
+        }
+
+        return g;
+    }
+
     /**
      * Returns a list of PortletGroup objects associated with a user
      *
@@ -171,11 +185,28 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
      */
     public List getGroups(User user) throws PortletServiceException{
 
+        Vector result = new Vector();
+
+        log.info("ID "+user.getID());
+
         String command =
-            "select u from org.gridlab.gridsphere.services.security.acl.impl2.UserACL u where u.ID='"+user.getID()+"'";
+            "select u from org.gridlab.gridsphere.services.security.acl.impl2.UserACL u where u.UserID=\""+user.getID()+
+                "\" and u.Status="+UserACL.STATUS_APPROVED;
+        List acl = new Vector();
 
+        try {
+            acl=pm.restoreList(command);
+        } catch (PersistenceException e) {
+            log.error("Exception " + e);
+            throw new PortletServiceException("Could not get ACLs "+e);
+        }
 
-        return null;
+        PortletGroup g = null;
+        for (int i=0; i<acl.size();i++) {
+            g = getGroupByID(((UserACL)acl.get(i)).getGroupID());
+            result.add(g);
+        }
+        return result;
     }
 
     /**
