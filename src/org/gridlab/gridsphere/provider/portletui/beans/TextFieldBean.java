@@ -1,5 +1,5 @@
 /**
- * @author <a href="novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
@@ -13,15 +13,12 @@ public class TextFieldBean extends InputBean implements TagBean  {
 
     public static final String NAME = "tf";
 
-    public static final String TEXTFIELD_STYLE = "portlet-form-input-field";
-
     /**
      * Constructs a default text field bean
      */
     public TextFieldBean() {
         super(NAME);
         this.inputtype = "text";
-        this.cssStyle = TEXTFIELD_STYLE;
     }
 
     /**
@@ -32,7 +29,6 @@ public class TextFieldBean extends InputBean implements TagBean  {
     public TextFieldBean(String name) {
         super(name);
         this.inputtype = "text";
-        this.cssStyle = TEXTFIELD_STYLE;
     }
 
     /**
@@ -45,7 +41,6 @@ public class TextFieldBean extends InputBean implements TagBean  {
         super(name);
         this.inputtype = "text";
         this.beanId = beanId;
-        this.cssStyle = TEXTFIELD_STYLE;
     }
 
     /**
@@ -57,7 +52,6 @@ public class TextFieldBean extends InputBean implements TagBean  {
      public TextFieldBean(PortletRequest req, String beanId) {
         super(NAME);
         this.inputtype = "text";
-        this.cssStyle = TEXTFIELD_STYLE;
         this.request = req;
         this.beanId = beanId;
     }

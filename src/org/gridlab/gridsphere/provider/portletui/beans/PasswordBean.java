@@ -1,5 +1,5 @@
 /**
- * @author <a href="novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
 
@@ -19,15 +19,6 @@ public class PasswordBean extends TextFieldBean {
      */
     public PasswordBean() {
         super(NAME);
-    }
-
-    /**
-     * Constructs a password bean using a supplied bean identifier
-     *
-     * @param beanId the bean identifier
-     */
-    public PasswordBean(String beanId) {
-        super(NAME, beanId);
     }
 
     /**

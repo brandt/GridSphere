@@ -1,5 +1,5 @@
 /*
- * @author <a href="novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
 
@@ -90,14 +90,6 @@ public class TextBean extends BaseComponentBean implements TagBean {
     }
 
     public String toEndString() {
-        /*
-        if (cssStyle.equalsIgnoreCase(MSG_SUCCESS)) {
-            value = "<b>" + value + "</b>";
-        } else if (style.equalsIgnoreCase(ITALIC)) {
-            value = "<i>" + value + "</i>";
-        }
-        */
-        System.err.println("in TextBean: doEndString");
         if (style.equalsIgnoreCase("error") || (style.equalsIgnoreCase("err"))) {
             this.cssStyle = MSG_ERROR;
         } else if (style.equalsIgnoreCase("status")) {

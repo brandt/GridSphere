@@ -1,5 +1,5 @@
 /**
- * @author <a href="oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
@@ -9,6 +9,8 @@ package org.gridlab.gridsphere.provider.portletui.beans;
  */
 public abstract class InputBean extends BaseComponentBean implements TagBean {
 
+    public static final String INPUT_STYLE = "portlet-form-input-field";
+
     protected String inputtype = "";
     protected int size = 0;
     protected int maxlength = 0;
@@ -16,7 +18,9 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
     /**
      * Constructs a default input bean
      */
-    public InputBean() {}
+    public InputBean() {
+        this.cssStyle = INPUT_STYLE;
+    }
 
     /**
      * Constructs an input bean with a supplied name
@@ -25,6 +29,7 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
      */
     public InputBean(String name) {
         super(name);
+        this.cssStyle = INPUT_STYLE;
     }
 
     /**

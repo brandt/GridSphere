@@ -1,16 +1,11 @@
 /*
- * @author <a href="novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletURI;
-
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * An <code>ActionSubmitBean</code> is a visual bean that represents an HTML button and
