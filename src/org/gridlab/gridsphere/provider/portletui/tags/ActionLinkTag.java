@@ -154,8 +154,6 @@ public class ActionLinkTag extends ActionTag {
 
         actionlink.setPortletURI(createActionURI());
 
-        System.err.println("value= " + value);
-        if (bodyContent != null) System.err.println("body content=" + bodyContent.getString());
         if ((bodyContent != null) && (value == null)) {
             actionlink.setValue(bodyContent.getString());
         }
