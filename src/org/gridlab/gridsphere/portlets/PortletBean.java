@@ -2,7 +2,7 @@
  * @author <a href="mailto:michael.russell@aei.mpg.de">Michael Russell</a>
  * @version $Id$
  */
-package org.gridlab.gridsphere.portlets.core.beans;
+package org.gridlab.gridsphere.portlets;
 
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletService;
