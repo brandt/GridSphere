@@ -348,7 +348,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
             GroupRequest groupRequest = this.aclManagerService.createGroupRequest(ge);
             groupRequest.setUser(user);
-
             groupRequest.setGroup(g);
             groupRequest.setRole(PortletRole.USER);
             groupRequest.setGroupAction(GroupAction.ADD);
@@ -363,6 +362,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 usergroups.remove(g.getName());
             }
             this.layoutMgr.addApplicationTab(req, g.getName());
+
             this.layoutMgr.reloadPage(req);
         }
 
@@ -375,7 +375,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             GroupEntry entry = this.aclManagerService.getGroupEntry(user, g);
             GroupRequest groupRequest = this.aclManagerService.createGroupRequest(entry);
             groupRequest.setGroupAction(GroupAction.REMOVE);
-
+            groupRequest.setRole(PortletRole.USER);
             // Create access right
             try {
                 this.aclManagerService.submitGroupRequest(groupRequest);
