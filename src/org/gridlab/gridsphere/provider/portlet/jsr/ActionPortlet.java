@@ -74,7 +74,7 @@ public class ActionPortlet extends GenericPortlet {
      */
     protected void setNextState(PortletRequest request, String state) {
         String id = getUniqueId();
-        request.getPortletSession(true).setAttribute(id + ".state", state);
+        request.setAttribute(id + ".state", state);
         log.debug("in ActionPortlet in setNextState: setting state to " + state);
     }
 
@@ -87,7 +87,7 @@ public class ActionPortlet extends GenericPortlet {
      */
     protected String getNextState(PortletRequest request) {
         String id = getUniqueId();
-        String state = (String)request.getPortletSession(true).getAttribute(id+".state");
+        String state = (String)request.getAttribute(id+".state");
         if (state == null) {
             state = DEFAULT_VIEW_PAGE;
         } else {
