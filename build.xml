@@ -593,6 +593,9 @@ Copyright:
 
         <antcall target="configure-database"/>
 
+        <!-- always overwrite persistence directory -->
+        <delete dir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence"/>
+
         <copy todir="${env.CATALINA_HOME}/webapps">
             <fileset dir="${build.webapps}"/>
         </copy>
@@ -613,7 +616,7 @@ Copyright:
     <target name="deploy-install">
 
         <!-- Copy the gridsphere web app to build directory -->
-        <copy todir="${build.webapps}/gridsphere">
+        <copy overwrite="true" todir="${build.webapps}/gridsphere">
             <fileset dir="${gswebapp.dir}"/>
         </copy>
 
