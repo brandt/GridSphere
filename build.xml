@@ -22,7 +22,11 @@ Copyright:
 <project name="GridSphere" default="help" basedir=".">
 
     <!-- Needed to import ant-contrib tasks -->
-    <taskdef resource="net/sf/antcontrib/antcontrib.properties" />
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="lib/ext/ant-contrib-0.3.jar"/>
+        </classpath>
+    </taskdef>
 
     <taskdef resource="cactus.tasks">
         <classpath>
@@ -107,11 +111,14 @@ Copyright:
     <!-- Functions                                                           -->
     <!-- =================================================================== -->
     <target name="setenv" depends="check-catalina" description="Check for libraries and print out config information">
+
         <mkdir dir="${gridsphere.build}"/>
         <mkdir dir="${projects.dir}"/>
         <mkdir dir="${build.classes}"/>
         <mkdir dir="${build.webapps}"/>
         <mkdir dir="${build.docs}"/>
+
+        <property name="GRIDSPHERE_HOME" value="${env.CATALINA_HOME}/gridsphere"/>
 
         <echo message="--- Build environment for ${gridsphere.name} ---" />
         <echo message="--- Flags (Note: If the {property name} is displayed,"/>
@@ -121,6 +128,8 @@ Copyright:
         <echo message="ANT_HOME is set to = ${env.ANT_HOME}"/>
         <echo message="JAVA_HOME is set to = ${env.JAVA_HOME}"/>
         <echo message="CATALINA_HOME is set to = ${env.CATALINA_HOME}"/>
+        <echo message="TEST_HOME is set to = ${TEST_HOME}"/>
+        <echo message="GRIDSPHERE_HOME is set to = ${GRIDSPHERE_HOME}"/>
 
         <echo message=""/>
         <echo message="--- Property values ---"/>
@@ -210,39 +219,53 @@ Copyright:
     <!-- Internal target to create the GridSphere JAR library archive        -->
     <!-- =================================================================== -->
     <target name="gridsphere-jar" depends="compile" description="Makes gridsphere JAR">
+        <echo message="Configuring Database"/>
+        <property name="TEST_HOME" value="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/test"/>
 
+        <property name="DATABASE_CONFIG" value="${GRIDSPHERE_HOME}/database/${DATABASE_TYPE}db.xml"/>
+        <property name="DATABASE_NAME" value="gridsphere"/>
+
+        <ant target="make-gridsphere-jar"/>
+    </target>
+
+    <target name="make-gridsphere-jar">
+        <echo message="DATABASE_NAME is set to = ${DATABASE_NAME}"/>
+        <echo message="DATABASE_CONFIG is set to = ${DATABASE_CONFIG}"/>
         <mkdir dir="${build.classes}/gridsphere"/>
         <copy file="config/gridsphere.properties"
-                  tofile="${build.classes}/gridsphere/gridsphere.properties"/>
+            tofile="${build.classes}/gridsphere/gridsphere.properties"/>
         <copy file="config/log4j.properties"
-                  tofile="${build.classes}/gridsphere/log4j.properties"/>
+            tofile="${build.classes}/gridsphere/log4j.properties"/>
 
         <!-- gridsphere.properties location in build dir -->
         <property name="gridsphere.properties"
-                  value="${build.classes}/gridsphere/gridsphere.properties"/>
-
-        <property name="GRIDSPHERE_HOME" value="${env.CATALINA_HOME}/gridsphere"/>
-        <property name="TEST_HOME" value="${basedir}/${gridsphere.build}/home"/>
+            value="${build.classes}/gridsphere/gridsphere.properties"/>
 
         <!-- Fills in appropriate configuration values for Tomcat -->
         <replace file="${gridsphere.properties}"
-                 token="@CATALINA_HOME@"
-                 value="${env.CATALINA_HOME}"/>
+            token="@CATALINA_HOME@"
+            value="${env.CATALINA_HOME}"/>
         <replace file="${gridsphere.properties}"
-                 token="@GRIDSPHERE_HOME@"
-                 value="${GRIDSPHERE_HOME}"/>
+            token="@GRIDSPHERE_HOME@"
+            value="${GRIDSPHERE_HOME}"/>
         <replace file="${gridsphere.properties}"
-                 token="@TEST_HOME@"
-                 value="${TEST_HOME}"/>
+            token="@TEST_HOME@"
+            value="${TEST_HOME}"/>
         <replace file="${gridsphere.properties}"
-                 token="@DATABASE_TYPE@"
-                 value="${DATABASE_TYPE}"/>
+            token="@DATABASE_TYPE@"
+            value="${DATABASE_TYPE}"/>
         <replace file="${gridsphere.properties}"
-                 token="@GRIDSPHERE_VERSION@"
-                 value="${version}"/>
+            token="@DATABASE_CONFIG@"
+            value="${DATABASE_CONFIG}"/>
         <replace file="${gridsphere.properties}"
-                 token="@GRIDSPHERE_RELEASE@"
-                 value="${release}"/>
+            token="@DATABASE_NAME@"
+            value="${DATABASE_NAME}"/>
+        <replace file="${gridsphere.properties}"
+            token="@GRIDSPHERE_VERSION@"
+            value="${version}"/>
+        <replace file="${gridsphere.properties}"
+            token="@GRIDSPHERE_RELEASE@"
+            value="${release}"/>
 
         <echo message="Configuring GridSphere jar settings:"/>
         <echo message="GridSphere Release  ${version.release}"/>
@@ -265,8 +288,27 @@ Copyright:
             <exclude name="org/gridlab/gridsphere/provider/**"/>
             <exclude name="org/gridlab/gridsphere/tags/**"/>
         </jar>
-     </target>
+    </target>
 
+    <!-- =================================================================== -->
+    <!-- Internal target to create the GridSphere JAR library archive        -->
+    <!-- =================================================================== -->
+    <target name="gridsphere-test-jar" depends="compile-tests" description="Makes gridsphere test JAR">
+
+        <echo message="Configuring Test Database"/>
+
+        <property name="TEST_HOME" value="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/test"/>
+
+        <property name="DATABASE_CONFIG" value="${GRIDSPHERE_HOME}/database/${DATABASE_TYPE}db-test.xml"/>
+        <property name="DATABASE_NAME" value="gridsphere-test"/>
+
+        <jar jarfile="lib/gridsphere-test.jar" basedir="${build.classes}" >
+            <include name="**/*Test.class"/>
+        </jar>
+
+        <ant target="make-gridsphere-jar"/>
+
+     </target>
     <!-- =================================================================== -->
     <!-- Creates a Portlet API JAR library archive                           -->
     <!-- =================================================================== -->
@@ -298,21 +340,9 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Creates the GridSphere test JAR                                     -->
-    <!-- =================================================================== -->
-    <target name="gridsphere-test-jar" depends="compile-tests" description="Create lib/gridsphere-test.jar">
-        <copy file="config/test/cactus.properties"
-                  tofile="${build.classes}/gridsphere/cactus.properties"/>
-        <jar jarfile="lib/gridsphere-test.jar" basedir="${build.classes}" >
-            <include name="**/*Test.class"/>
-            <include name="gridsphere/cactus.properties"/>
-        </jar>
-    </target>
-
-    <!-- =================================================================== -->
     <!-- Creates all JAR's                                                   -->
     <!-- =================================================================== -->
-    <target name="jar" depends="gridsphere-jar, portlet-widget-tags-jar, gridsphere-provider-jar" description="Creates all jars"/>
+    <target name="jar" depends="portlet-widget-tags-jar, gridsphere-provider-jar" description="Creates all jars"/>
 
     <!-- =================================================================== -->
     <!-- Cleans everything                                                   -->
@@ -358,7 +388,7 @@ Copyright:
 
     <target name="configure-test-database" depends="doclet-mapping">
         <property name="DATABASE_FILE"
-            value="${TEST_HOME}/database/${DATABASE_TYPE}db-test.xml"/>
+            value="${GRIDSPHERE_HOME}/database/${DATABASE_TYPE}db-test.xml"/>
         <echo message="Preprocessing Database file: ${DATABASE_FILE}"/>
         <replace file="${DATABASE_FILE}"
             token="@GRIDSPHERE_HOME@"
@@ -431,7 +461,7 @@ Copyright:
 
     <target name="create-test-database" depends="configure-test-database, check-test-database-exists" if="var_force_database">
         <echo message="Creating Database at: ${TEST_HOME}/database/gridsphere-test"/>
-        <echo message="Using script: ${TEST_HOME}/database/dbcreate.sql"/>
+        <echo message="Using script: ${GRIDSPHERE_HOME}/database/dbcreate.sql"/>
         <sql driver="org.hsqldb.jdbcDriver"
            url="jdbc:hsqldb:${TEST_HOME}/database/gridsphere-test"
            userid="sa"
@@ -517,7 +547,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates the GridSphere WAR file                                  -->
     <!-- =================================================================== -->
-    <target name="war" depends="jar" description="Create GridSphere WAR">
+    <target name="war" depends="jar, gridsphere-jar" description="Create GridSphere WAR">
         <war warfile="${build.webapps}/gridsphere.war" update="true"
             webxml="${gswebapp.dir}/WEB-INF/web.xml">
             <fileset dir="${gswebapp.dir}">
@@ -541,10 +571,13 @@ Copyright:
         <ant dir="${thisEnv}" target="deploy"/>
     </target>
 
+    <target name="deploy" depends="gridsphere-jar, jar" description="Deploys GridSphere to a local server">
+        <ant target="deploy-install"/>
+    </target>
     <!-- =================================================================== -->
     <!-- Deploys GridSphere to Tomcat                                        -->
     <!-- =================================================================== -->
-    <target name="deploy" depends="jar" description="Deploys GridSphere to a local server">
+    <target name="deploy-install">
 
         <!-- Make core gridsphere directory if necessary -->
         <echo message="Deploying GridSphere to Tomcat servlet container at ${env.CATALINA_HOME}"/>
@@ -587,9 +620,15 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Deploys GridSphere to Tomcat                                        -->
     <!-- =================================================================== -->
-    <target name="deploy-test" depends="gridsphere-test-jar" description="Deploys GridSphere test to a local server">
+    <target name="deploy-test" depends="jar, gridsphere-test-jar" description="Deploys GridSphere test to a local server">
 
-        <copy todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF">
+        <ant target="deploy-install"/>
+
+        <antcall target="gridsphere-test-jar"/>
+
+        <antcall target="create-test-database"/>
+
+        <copy todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/test">
             <fileset dir="config/test"/>
         </copy>
 
@@ -597,45 +636,8 @@ Copyright:
 
     </target>
 
-    <!-- =================================================================== -->
-    <!-- Runs all JUnit tests: needs optional.jar and junit in classpath     -->
-    <!-- =================================================================== -->
-    <target name="run-tests" depends="compile-tests, deploy" description="Runs all JUnit tests">
-        <echo message="Running the GridSphere Junit Tests"/>
 
-        <copy file="config/test/cactus.properties"
-            tofile="${build.classes}/gridsphere/cactus.properties"/>
-
-        <mkdir dir="${gridsphere.build}/reports"/>
-
-        <mkdir dir="${TEST_HOME}"/>
-        <copy todir="${TEST_HOME}">
-            <fileset dir="config"/>
-        </copy>
-
-        <antcall target="create-test-database"/>
-
-        <junit printsummary="yes" fork="yes" haltonfailure="no">
-            <classpath>
-                <path refid="classpath"/>
-                <pathelement location="${gridsphere.build}/lib/gridsphere.jar"/>
-            </classpath>
-            <test name="org.gridlab.gridsphere.GridSphereTest" todir="${gridsphere.build}/reports">
-                <formatter type="xml"/>
-            </test>
-        </junit>
-    </target>
-
-    <target name="make-test-reports" depends="run-tests" description="Execute Unit Tests">
-       <echo message="Making GridSphere Junit Test Reports"/>
-       <mkdir dir="${gridsphere.build}/reports/html"/>
-       <junitreport todir="${gridsphere.build}/reports">
-            <fileset dir="${gridsphere.build}/reports">
-                <include name="TEST-*.xml"/>
-            </fileset>
-            <report format="noframes" todir="${gridsphere.build}/reports/html"/>
-        </junitreport>
-    </target>
+    <target name="make-test-reports" depends="run-tests" description="Execute Unit Tests"/>
 
 <!-- +++++++++++++++ END TESTS +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
@@ -706,7 +708,7 @@ Copyright:
     Run Tomcat 4.0 tests
     ========================================================================
         -->
-    <target name="test.tomcat" depends="deploy"
+    <target name="run-tests" depends="deploy-test"
         if="catalina.exists" description="Run tests on Tomcat">
 
         <!-- Start the servlet engine, wait for it to be started, run the
@@ -715,9 +717,9 @@ Copyright:
 
         <runservertests
             testURL="http://127.0.0.1:8080/gridsphere/ServletRedirector?Cactus_Service=RUN_TEST"
-            startTarget="start.tomcat"
-            stopTarget="stop.tomcat"
-            testTarget="test"/>
+            startTarget="start-tomcat"
+            stopTarget="stop-tomcat"
+            testTarget="tests"/>
 
     </target>
 
@@ -727,7 +729,7 @@ Copyright:
          Start Tomcat 4.0
        ========================================================================
     -->
-    <target name="start.tomcat">
+    <target name="start-tomcat">
 
         <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
             <jvmarg value="-Dcatalina.home=${env.CATALINA_HOME}"/>
@@ -747,7 +749,7 @@ Copyright:
     Stop Tomcat
     ========================================================================
     -->
-    <target name="stop.tomcat">
+    <target name="stop-tomcat">
         <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
             <jvmarg value="-Dcatalina.home=${env.CATALINA_HOME}"/>
             <arg value="stop"/>
@@ -761,26 +763,46 @@ Copyright:
 
     <!--
        ========================================================================
-         Run the client JUnit test cases.
+       Run the client JUnit test cases.
        ========================================================================
     -->
-    <target name="test">
+    <target name="tests">
 
-        <junit printsummary="yes" haltonfailure="yes" haltonerror="yes"
-            fork="yes">
+        <mkdir dir="${gridsphere.build}/reports"/>
+
+        <antcall target="create-test-database"/>
+
+        <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" fork="yes">
 
             <sysproperty key="cactus.contextURL" value="http://localhost:8080/gridsphere"/>
-
             <classpath>
                 <path refid="classpath"/>
                 <pathelement location="${env.CATALINA_HOME}/webapps/gridsphere"/>
             </classpath>
-
-            <formatter type="plain" usefile="false"/>
-            <test name="org.gridlab.gridsphere.GridSphereTest"/>
-
+            <test name="org.gridlab.gridsphere.GridSphereTest" todir="${gridsphere.build}/reports">
+                <formatter type="xml"/>
+            </test>
         </junit>
 
+        <echo message="Making GridSphere Junit Test Reports"/>
+        <mkdir dir="${gridsphere.build}/reports/html"/>
+        <junitreport todir="${gridsphere.build}/reports">
+            <fileset dir="${gridsphere.build}/reports">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="noframes" todir="${gridsphere.build}/reports/html"/>
+        </junitreport>
+    </target>
+
+    <target name="test-reports">
+        <echo message="Making GridSphere Junit Test Reports"/>
+        <mkdir dir="${gridsphere.build}/reports/html"/>
+        <junitreport todir="${gridsphere.build}/reports">
+            <fileset dir="${gridsphere.build}/reports">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="noframes" todir="${gridsphere.build}/reports/html"/>
+        </junitreport>
     </target>
 
 </project>
