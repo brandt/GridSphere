@@ -4,8 +4,12 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
+import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
 
 import java.util.Map;
+import java.util.List;
+import java.util.Iterator;
+import java.util.HashMap;
 
 /**
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
@@ -13,11 +17,17 @@ import java.util.Map;
  */
 public abstract class BaseAuthModule {
 
-    protected Map attributes = null;
+    protected Map attributes = new HashMap();
     protected AuthModuleDefinition moduleDef = null;
 
     public BaseAuthModule(AuthModuleDefinition moduleDef) {
         this.moduleDef = moduleDef;
+        List configList = moduleDef.getConfigParamList();
+        Iterator it = configList.iterator();
+        while (it.hasNext()) {
+            ConfigParam param = (ConfigParam)it.next();
+            attributes.put(param.getParamName(), param.getParamValue());
+        }        
     }
 
     public String getAttribute(String name) {
