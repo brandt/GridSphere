@@ -111,13 +111,15 @@ public class PortletPageFactory implements PortletSessionListener {
     public void destroy() {
         Iterator it = guests.keySet().iterator();
         while (it.hasNext()) {
-            String key = (String) it.next();
-            guests.remove(key);
+            //String key = (String) it.next();
+            it.remove();
+            //guests.remove(key);
         }
         it = userLayouts.keySet().iterator();
         while (it.hasNext()) {
-            String key = (String) it.next();
-            userLayouts.remove(key);
+            //String key = (String) it.next();
+            it.remove();
+            //userLayouts.remove(key);
         }
     }
     
