@@ -231,13 +231,13 @@ public abstract class ActionTag extends BaseComponentTag {
         }
         if (!paramBeans.isEmpty()) {
             String id = createUniquePrefix(2);
-            //portletAction.addParameter(SportletProperties.PREFIX, id);
-            //actionURL.setParameter(SportletProperties.PREFIX, id);
+
             Iterator it = paramBeans.iterator();
-            actionURL.setParameter(SportletProperties.PREFIX, id);
+            //actionURL.setParameter(SportletProperties.PREFIX, id);
             while (it.hasNext()) {
                 ActionParamBean pbean = (ActionParamBean) it.next();
-                actionURL.setParameter(id + "_" + pbean.getName(), pbean.getValue());
+                //actionURL.setParameter(id + "_" + pbean.getName(), pbean.getValue());
+                actionURL.setParameter(pbean.getName(), pbean.getValue());
             }
         }
         
