@@ -101,6 +101,11 @@
         <portlet-app id="org.gridlab.gridsphere.portlets.core.login.LoginPortlet">
             <portlet-name>Login</portlet-name>
             <servlet-name>LoginPortlet</servlet-name>
+<!-- Uncomment the following to disallow the account creation procedure for normal users -->
+<!--          <portlet-config>
+                <param-name>canUserCreateAccount</param-name>
+                <param-value>false</param-value> 
+            </portlet-config> -->
             <supports>
                  <view/>
                 <help/>
