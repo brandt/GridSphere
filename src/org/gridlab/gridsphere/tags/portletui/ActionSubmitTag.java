@@ -17,9 +17,7 @@ public class ActionSubmitTag extends ActionTag {
 
     public static final String SUBMIT_STYLE = "portlet-frame-text";
 
-    protected String name = "";
     protected String key = "";
-    protected String value = "";
 
     protected ActionSubmitBean actionSubmitBean = null;
 
@@ -31,13 +29,7 @@ public class ActionSubmitTag extends ActionTag {
         return actionSubmitBean;
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getKey() {
         return key;
@@ -47,21 +39,6 @@ public class ActionSubmitTag extends ActionTag {
         this.key = key;
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
-    }
 
     public int doStartTag() throws JspException {
         actionSubmitBean = new ActionSubmitBean();
@@ -76,10 +53,7 @@ public class ActionSubmitTag extends ActionTag {
 
     public int doEndTag() throws JspException {
 
-        actionSubmitBean.setAction(action);
-        actionSubmitBean.setKey(key);
-        actionSubmitBean.setName(name);
-        actionSubmitBean.setValue(value);
+
 
         /*
         ActionFormTag formTag = (ActionFormTag)findAncestorWithClass(this, ActionFormTag.class);
@@ -88,7 +62,9 @@ public class ActionSubmitTag extends ActionTag {
         }
         */
 
-        if (!actionSubmitBean.getKey().equals("")) {
+        if (!key.equals("")) {
+            actionSubmitBean.setKey(key);
+
             Locale locale = pageContext.getRequest().getLocale();
             ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
             String localizedText = bundle.getString(actionSubmitBean.getKey());
@@ -96,6 +72,9 @@ public class ActionSubmitTag extends ActionTag {
                 actionSubmitBean.setValue(localizedText);
             }
         }
+
+        actionSubmitBean.setAction(action);
+        this.setBaseComponentBean(actionSubmitBean);
 
         Object parentTag = getParent();
         if (parentTag instanceof ContainerTag) {

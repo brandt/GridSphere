@@ -16,18 +16,20 @@ import java.util.*;
 public class ActionLinkTag extends ActionTag {
 
     protected ActionLinkBean actionlink = null;
-    protected String value = "";
+    protected String key = null;
 
-    public void setValue(String value) {
-        this.value = value;
+    public static final String ACTION_STYLE = "portlet-frame-label";
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     /**
      * Returns the label of the beans.
      * @return label of the beans
      */
-    public String getValue() {
-        return value;
+    public String getKey() {
+        return key;
     }
 
     public void setActionLinkBean(ActionLinkBean actionlink) {
@@ -39,21 +41,22 @@ public class ActionLinkTag extends ActionTag {
     }
 
     public int doStartTag() throws JspException {
+        this.cssStyle = ACTION_STYLE;
         paramBeans = new ArrayList();
         createActionURI();
         return EVAL_BODY_INCLUDE;
     }
 
     public int doEndTag() throws JspTagException {
-
         if (!beanId.equals("")) {
             actionlink = (ActionLinkBean)pageContext.getSession().getAttribute(getBeanKey());
-            //System.err.println("storing bean in the session");
-            store(getBeanKey(), actionlink);
-        }
-        if (actionlink == null) {
+            if (actionlink == null) {
+                actionlink = new ActionLinkBean();
+            }
+        } else {
             actionlink = new ActionLinkBean();
         }
+
         Iterator it = paramBeans.iterator();
         while (it.hasNext()) {
             ActionParamBean pbean = (ActionParamBean)it.next();
@@ -61,12 +64,37 @@ public class ActionLinkTag extends ActionTag {
         }
 
         actionlink.setAction(createActionURI());
-        actionlink.setValue(value);
-        try {
-            JspWriter out = pageContext.getOut();
-            out.println(actionlink);
-        } catch (Exception e) {
-            throw new JspTagException(e.getMessage());
+        //actionlink.setValue(value);
+
+        this.setBaseComponentBean(actionlink);
+
+        if (getKey() != null) {
+            actionlink.setKey(key);
+            Locale locale = pageContext.getRequest().getLocale();
+            ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
+            actionlink.setValue(bundle.getString(actionlink.getKey()));
+        }
+        //actionlink.setAction(action);
+
+
+        if (!beanId.equals("")) {
+            store(getBeanKey(), actionlink);
+        }
+
+        Object parentTag = getParent();
+        if (parentTag instanceof ContainerTag) {
+            ContainerTag containerTag = (ContainerTag)parentTag;
+            containerTag.addTagBean(actionlink);
+            //System.err.println("inTextTag: adding " + textBean.toString());
+        } else {
+
+            try {
+                JspWriter out = pageContext.getOut();
+                out.println(actionlink);
+            } catch (Exception e) {
+                throw new JspTagException(e.getMessage());
+            }
+
         }
         return EVAL_PAGE;
     }

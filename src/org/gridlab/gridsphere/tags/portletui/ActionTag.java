@@ -13,7 +13,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 import java.util.*;
 
-public abstract class ActionTag extends BaseBeanTag {
+public abstract class ActionTag extends BaseComponentTag {
 
     protected String action = null;
     protected PortletURI actionURI = null;

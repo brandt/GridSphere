@@ -10,15 +10,6 @@ public class ActionFormTag extends ActionTag {
 
     protected boolean isMultipart = false;
     protected String method = "POST";
-    protected String name = "";
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public void setMethod(String method) {
         this.method = method;
@@ -54,7 +45,7 @@ public class ActionFormTag extends ActionTag {
             if (isMultipart) {
                 out.print(" enctype=\"multipart/form-data\"");
             }
-            if (!name.equals("")) {
+            if (name != null) {
                 out.print(" name=\""+name+"\"");
             }
             out.println(">");

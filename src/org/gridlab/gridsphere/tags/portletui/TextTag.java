@@ -29,7 +29,7 @@ public class TextTag extends BaseComponentTag {
     }
 
     public int doStartTag() throws JspException {
-        if (this.cssStyle.equals("")) this.cssStyle = TEXT_STYLE;
+        this.cssStyle = TEXT_STYLE;
         textBean = new TextBean();
         if (!beanId.equals("")) {
            //System.err.println("in TextTag: gettung text bean from session");

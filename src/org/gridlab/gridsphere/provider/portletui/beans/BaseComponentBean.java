@@ -15,6 +15,7 @@ public abstract class BaseComponentBean extends BaseBean {
     protected String backgroundcolor = "";
     protected String cssStyle = "";
     protected String font = "";
+    protected String key = null;
 
     /**
      * Sets the name of the bean.
@@ -35,6 +36,14 @@ public abstract class BaseComponentBean extends BaseBean {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     /**

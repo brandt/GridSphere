@@ -15,6 +15,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 public class RequiredRoleTag extends TagSupport {
 
     protected PortletRole role = PortletRole.GUEST;
+    protected boolean exclusive = false;
 
     public void setRole(String role) {
         try {
@@ -29,13 +30,28 @@ public class RequiredRoleTag extends TagSupport {
         return role.toString();
     }
 
+    public void setExclusive(boolean exclusive) {
+        this.exclusive = exclusive;
+    }
+
+    public boolean getExclusive() {
+        return exclusive;
+    }
+
     public int doStartTag() throws JspException {
         PortletRequest req = (PortletRequest)pageContext.getAttribute("portletRequest");
         PortletRole userRole = req.getRole();
+
         if (userRole != null) {
-            //System.err.println(userRole);
-            if ((userRole.getID()) >= role.getID()) {
-                return EVAL_BODY_INCLUDE;
+            System.err.println(userRole);
+            if (exclusive) {
+                if ((userRole.getID()) == role.getID()) {
+                    return EVAL_BODY_INCLUDE;
+                }
+            } else {
+                if ((userRole.getID()) >= role.getID()) {
+                    return EVAL_BODY_INCLUDE;
+                }
             }
         }
         return SKIP_BODY;

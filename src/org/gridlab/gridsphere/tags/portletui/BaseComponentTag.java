@@ -13,10 +13,10 @@ public abstract class BaseComponentTag extends BaseBeanTag   {
     protected String value = null;
     protected boolean readonly = false;
     protected boolean disabled = false;
-    protected String color = "";
-    protected String backgroundcolor = "";
-    protected String cssStyle = "";
-    protected String font = "";
+    protected String color = null;
+    protected String backgroundcolor = null;
+    protected String cssStyle = null;
+    protected String font = null;
 
     /**
      * Sets the name of the bean.
@@ -173,13 +173,13 @@ public abstract class BaseComponentTag extends BaseBeanTag   {
     }
 
     protected void setBaseComponentBean(BaseComponentBean componentBean) {
-        componentBean.setBackgroundColor(backgroundcolor);
-        componentBean.setColor(color);
-        componentBean.setCssStyle(cssStyle);
+        if (backgroundcolor != null) componentBean.setBackgroundColor(backgroundcolor);
+        if (color != null) componentBean.setColor(color);
+        if (cssStyle != null) componentBean.setCssStyle(cssStyle);
         componentBean.setDisabled(disabled);
-        componentBean.setFont(font);
-        componentBean.setName(name);
-        componentBean.setValue(value);
+        if (font != null) componentBean.setFont(font);
+        if (name != null) componentBean.setName(name);
+        if (value != null) componentBean.setValue(value);
         componentBean.setReadonly(readonly);
     }
 

@@ -51,7 +51,7 @@ public class TextAreaTag extends BaseComponentTag {
 
     public int doEndTag() throws JspException {
         //textAreaBean.setCssStyle(TEXTAREA_STYLE);
-
+        this.cssStyle = TEXTAREA_STYLE;
         textAreaBean = (TextAreaBean)pageContext.getSession().getAttribute(getBeanKey());
         if (textAreaBean == null) {
             textAreaBean = new TextAreaBean();

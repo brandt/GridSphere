@@ -16,7 +16,7 @@ import java.util.Iterator;
 
 public class ActionLinkBean extends BaseComponentBean implements TagBean {
 
-    protected String action = null;
+    protected String action = "no action specified";
     protected PortletURI portletURI = null;
     protected List paramBeanList = new ArrayList();
 
