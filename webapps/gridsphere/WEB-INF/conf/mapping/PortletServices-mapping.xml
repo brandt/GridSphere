@@ -22,9 +22,6 @@
         <field name="UserRequired" type="boolean">
             <bind-xml name="user-required"/>
         </field>
-        <field name="SecureWrapper" type="string">
-            <bind-xml name="secure-wrapper"/>
-        </field>
         <field name="Implementation" type="string">
             <bind-xml name="implementation"/>
         </field>
