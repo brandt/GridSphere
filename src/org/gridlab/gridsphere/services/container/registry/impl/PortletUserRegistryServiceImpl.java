@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.services.container.registry.impl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletSettings;
 import org.gridlab.gridsphere.portlet.impl.SportletData;
+import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
@@ -16,7 +17,7 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
 import org.gridlab.gridsphere.services.container.registry.PortletUserRegistryService;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
-import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.descriptor.Owner;
 
 import java.util.Iterator;
@@ -89,7 +90,7 @@ public class PortletUserRegistryServiceImpl implements PortletUserRegistryServic
         }
 
         public void removePortlet(String portletID) {
-
+            portlets.remove(portletID);
         }
 
         public void removePortlet(UserPortletInfo userPortletInfo) {
@@ -99,7 +100,7 @@ public class PortletUserRegistryServiceImpl implements PortletUserRegistryServic
     }
 
     /**
-     * The init method is responsible for parsing portlet.xml and creating RegisteredPortlet objects based on the
+     * The init method is responsible for parsing portlet.xml and creating ConcretePortlet objects based on the
      * entries. The RegisteredPortlets are managed by the PortletRegistryService.
      */
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
@@ -172,7 +173,7 @@ public class PortletUserRegistryServiceImpl implements PortletUserRegistryServic
     public PortletSettings getPortletSettings(PortletRequest request, String concretePortletID) {
         User user = request.getUser();
         SportletSettings sportletSettings = null;
-        RegisteredPortlet regPortlet = registryService.getRegisteredPortlet(concretePortletID);
+        ConcretePortlet regPortlet = registryService.getConcretePortlet(concretePortletID);
 
         Owner owner = regPortlet.getPortletOwner();
 
@@ -209,5 +210,25 @@ public class PortletUserRegistryServiceImpl implements PortletUserRegistryServic
         return data;
     }
 
+    public List getSupportedModes(PortletRequest request, String concretePortletID) {
+        User user = request.getUser();
+        // Get supported modes from portlet registry
+        ConcretePortlet regPortlet = registryService.getConcretePortlet(concretePortletID);
+        List modeList = regPortlet.getSupportedPortletModes();
+
+        // Perform checks
+        Owner owner = regPortlet.getPortletOwner();
+        PortletRole ownerRole = owner.getRole();
+        PortletGroup ownerGroup = owner.getGroup();
+        if (modeList.contains(Portlet.Mode.CONFIGURE)) {
+            try {
+                if (!aclService.hasRoleInGroup(user, ownerGroup, ownerRole))
+                    modeList.remove(Portlet.Mode.CONFIGURE);
+            } catch (PortletServiceException e) {
+                log.error("Unable to get access control service", e);
+            }
+        }
+        return modeList;
+    }
 
 }

@@ -6,7 +6,7 @@ package org.gridlab.gridsphere.services.container.registry;
 
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 
 import java.util.Collection;
 import java.util.Set;
@@ -15,9 +15,9 @@ import java.util.List;
 /**
  * The PortletRegistryService acts as a repository for portlets and makes them available to the portlet
  * container. The PortletRegistry service is responsible for reading in the associated portlet.xml file and
- * creating a RegisteredPortlet object which represents the portlet. The PortletRegistryService maintains
+ * creating a ConcretePortlet object which represents the portlet. The PortletRegistryService maintains
  * a Set of RegisteredPortlets and provides operations for the registration, unregistration and querying
- * of RegisteredPortlet objects.
+ * of ConcretePortlet objects.
  */
 public interface PortletRegistryService extends PortletService {
 
@@ -26,14 +26,14 @@ public interface PortletRegistryService extends PortletService {
      *
      * @return the registered portlets
      */
-    public List getRegisteredPortlets();
+    public List getConcretePortlets();
 
     /**
      * Return a registered portlet given its identifier
      *
      * @return the registered portlet
      */
-    public RegisteredPortlet getRegisteredPortlet(String concretePortletID);
+    public ConcretePortlet getConcretePortlet(String concretePortletID);
 
 
     public AbstractPortlet getActivePortlet(String concretePortletID);
@@ -44,7 +44,7 @@ public interface PortletRegistryService extends PortletService {
      * @param registeredPortlet the registered portlet
      * @return the portletID
      */
-    public String registerPortlet(RegisteredPortlet registeredPortlet);
+    public String registerPortlet(ConcretePortlet registeredPortlet);
 
     /**
      * Unregisters a portlet with the PortletRegistryService

@@ -14,9 +14,9 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.RegisteredPortletException;
-import org.gridlab.gridsphere.portletcontainer.impl.RegisteredSportlet;
+import org.gridlab.gridsphere.portletcontainer.impl.ConcreteSportlet;
 import org.gridlab.gridsphere.portletcontainer.descriptor.*;
 import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
@@ -24,15 +24,16 @@ import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 /**
  * The PortletRegistryService acts as a repository for portlets and makes them available to the portlet
  * container, layout manager and any other services that require an active portlet.
  * The PortletInfo base class is responsible for reading in the associated portlet.xml file and
- * creating a RegisteredPortlet object which represents the portlet. The PortletRegistryService maintains
+ * creating a ConcretePortlet object which represents the portlet. The PortletRegistryService maintains
  * a Set of RegisteredPortlets and provides operations for the registration, unregistration and querying
- * of RegisteredPortlet objects.
+ * of ConcretePortlet objects.
  */
 public class PortletRegistryServiceImpl implements PortletRegistryService, PortletServiceProvider {
 
@@ -42,7 +43,7 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
     private static Map allPortlets = new Hashtable();
 
     /**
-     * The init method is responsible for parsing portlet.xml and creating RegisteredPortlet objects based on the
+     * The init method is responsible for parsing portlet.xml and creating ConcretePortlet objects based on the
      * entries. The RegisteredPortlets are managed by the PortletRegistryService.
      */
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
@@ -63,6 +64,8 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
             pdd = new PortletDeploymentDescriptor(config.getServletConfig());
         } catch (PortletDeploymentDescriptorException e) {
             throw new PortletServiceUnavailableException("Unable to create PortletDeploymentDescriptor: " + e.getMessage());
+        } catch (IOException e) {
+            throw new PortletServiceUnavailableException("Unable to create PortletDeploymentDescriptor: " + e.getMessage());
         }
 
         // Every PortletDefinition has a PortletApplication and possibly multiple ConcretePortletApplication's
@@ -73,7 +76,7 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
             PortletApplication portletApp = portletDef.getPortletApp();
             Iterator concreteIt = portletDef.getConcreteApps().iterator();
             while (concreteIt.hasNext()) {
-                RegisteredPortlet registeredPortlet = new RegisteredSportlet(pdd, portletApp, (ConcretePortletApplication)concreteIt.next(), aclService);
+                ConcretePortlet registeredPortlet = new ConcreteSportlet(pdd, portletApp, (ConcretePortletApplication)concreteIt.next(), aclService);
 
                 // use the portlet app ID as the portlet ID
                 String portletID = registeredPortlet.getPortletAppID();
@@ -102,11 +105,11 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
     }
 
     /**
-     * Returns the collection of registered portlets
+     * Returns the collection of concrete portlets
      *
-     * @return the registered portlets
+     * @return the concrete portlets
      */
-    public List getRegisteredPortlets() {
+    public List getConcretePortlets() {
         List r = new Vector();
         Iterator it = allPortlets.keySet().iterator();
         while (it.hasNext()) {
@@ -125,7 +128,7 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
             List l = (Vector)allPortlets.get(appID);
             Iterator it = l.iterator();
             while (it.hasNext()) {
-                RegisteredPortlet p = (RegisteredPortlet)it.next();
+                ConcretePortlet p = (ConcretePortlet)it.next();
                 if (p.getConcretePortletAppID().equals(concretePortletID)) {
                     return p.getActivePortlet();
                 }
@@ -169,13 +172,13 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
      *
      * @return the portletID
      */
-    public RegisteredPortlet getRegisteredPortlet(String concreteID) {
+    public ConcretePortlet getConcretePortlet(String concreteID) {
         int index = concreteID.lastIndexOf(".");
         String appID = concreteID.substring(0, index);
         if (allPortlets.containsKey(appID)) {
             List v = (Vector)allPortlets.get(appID);
             while (v.iterator().hasNext()) {
-                RegisteredPortlet p = (RegisteredPortlet)v.iterator().next();
+                ConcretePortlet p = (ConcretePortlet)v.iterator().next();
                 if (p.getConcretePortletAppID().equals(concreteID)) {
                     return p;
                 }
@@ -190,7 +193,7 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
      * @param registeredPortlet the registered portlet
      * @return  the concrete portlet ID of the registered portlet
      */
-    public String registerPortlet(RegisteredPortlet registeredPortlet) {
+    public String registerPortlet(ConcretePortlet registeredPortlet) {
         String portletAppID = registeredPortlet.getPortletAppID();
         if (allPortlets.containsKey(portletAppID)) {
             List v = (Vector)allPortlets.get(portletAppID);
@@ -218,7 +221,7 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
             List l = (Vector)allPortlets.get(portletAppID);
             Iterator it = l.iterator();
             while (it.hasNext()) {
-                RegisteredPortlet p = (RegisteredPortlet)it.next();
+                ConcretePortlet p = (ConcretePortlet)it.next();
                 if (p.getConcretePortletAppID().equals(concretePortletID)) {
                     l.remove(p);
                     break;

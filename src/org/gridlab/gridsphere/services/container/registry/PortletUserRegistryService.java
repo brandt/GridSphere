@@ -6,7 +6,7 @@ package org.gridlab.gridsphere.services.container.registry;
 
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -17,9 +17,9 @@ import java.util.List;
 /**
  * The PortletRegistryService acts as a repository for portlets and makes them available to the portlet
  * container. The PortletRegistry service is responsible for reading in the associated portlet.xml file and
- * creating a RegisteredPortlet object which represents the portlet. The PortletRegistryService maintains
+ * creating a ConcretePortlet object which represents the portlet. The PortletRegistryService maintains
  * a Set of RegisteredPortlets and provides operations for the registration, unregistration and querying
- * of RegisteredPortlet objects.
+ * of ConcretePortlet objects.
  */
 public interface PortletUserRegistryService extends PortletService {
 
@@ -42,5 +42,6 @@ public interface PortletUserRegistryService extends PortletService {
 
     public PortletSettings getPortletSettings(PortletRequest request, String concretePortletID);
 
+    public List getSupportedModes(PortletRequest request, String concretePortletID);
 
 }
