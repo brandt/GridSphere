@@ -119,6 +119,10 @@ public class PortletFrame extends BasePortletComponent {
         } else {
             String appID = registryManager.getApplicationPortletID(portletClass);
             ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
+            appPortlet.getPortletApplicationDescriptor().getAllowsWindowStates();
+
+            appPortlet.getPortletApplicationDescriptor().getSupportsModes();
+
             ConcretePortlet concPortlet = appPortlet.getConcretePortlet(portletClass);
             PortletSettings settings = concPortlet.getSportletSettings();
             Client client = (Client)req.getAttribute(GridSphereProperties.CLIENT);
