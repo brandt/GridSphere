@@ -110,7 +110,9 @@ public class UserSessionManager implements PortletSessionListener {
                 }
             }
         }
-        userSessions.remove(user.getID());
+        if (user != null) {
+            if (user.getID() != null) userSessions.remove(user.getID());
+        }
     }
 
     public void dumpSessions() {
