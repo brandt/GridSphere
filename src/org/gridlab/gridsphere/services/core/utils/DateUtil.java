@@ -18,9 +18,11 @@ public class DateUtil {
      * @param user User
      * @param locale locale of the resulting output
      * @param milisec time to convert in milisec
+     * @param dateFormat the format for the date (DateFormat.{FULL|LONG|MEDIUM|SHORT}) @see DateFormat
+     * @param timeFormat the format for the time (DateFormat.{FULL|LONG|MEDIUM|SHORT}) @see DateFormat
      * @return localized time string with timezones offset
      */
-    public static String getLocalizedLongDate(User user, Locale locale, long milisec) {
+    public static String getLocalizedDate(User user, Locale locale, long milisec, int dateFormat, int timeFormat) {
 
         TimeZone tz = TimeZone.getTimeZone((String)user.getAttribute(User.TIMEZONE));
         if (tz==null) {
@@ -32,7 +34,7 @@ public class DateUtil {
         Calendar cal = Calendar.getInstance(tz, locale);
         cal.setTimeInMillis(milisec);
 
-        DateFormat uformatter = DateFormat.getDateTimeInstance(DateFormat.FULL,DateFormat.FULL,locale);
+        DateFormat uformatter = DateFormat.getDateTimeInstance(timeFormat,dateFormat,locale);
         uformatter.setCalendar(cal);
 
         return uformatter.format(cal.getTime());
