@@ -282,7 +282,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         if ((titleBarEvent != null) && (titleBarEvent instanceof PortletTitleBarEvent)) {
             PortletTitleBarEvent tbEvt = (PortletTitleBarEvent) titleBarEvent;
-            if (titleBarEvent.getAction() == PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY) {
+            if (tbEvt.hasWindowStateAction()) {
 
                 PortletWindow.State state = tbEvt.getState();
                 PortletFrameEventImpl frameEvent = null;
@@ -327,10 +327,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             }
 
         } else {
+             System.err.println("\t\t\tin frame action before titel.action!!\t\t" + request.getWindowState());
 
             // now perform actionPerformed on Portlet if it has an action
             titleBar.actionPerformed(event);
-
+             System.err.println("\t\t\tin frame action after titel.action!!\t\t");
             request.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
 
             //PortletRole role = req.getRole();

@@ -52,6 +52,20 @@ public interface PortletTitleBarEvent extends PortletComponentEvent {
     public PortletWindow.State getState();
 
     /**
+     * Returns true if this title bar event signals a window state change
+     *
+     * @return true if this title bar event signals a window state change
+     */
+    public boolean hasWindowStateAction();
+
+    /**
+     * Returns true if this title bar event signals a portlet mode change
+     *
+     * @return true if this title bar event signals a portlet mode change
+     */
+    public boolean hasPortletModeAction();
+
+    /**
      * Returns the portlet title bar component id
      *
      * @return the portlet title bar component id
