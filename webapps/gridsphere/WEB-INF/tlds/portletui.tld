@@ -639,6 +639,45 @@
     </tag>
 
     <tag>
+        <name>messagebox</name>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.MessageBoxTag</tag-class>
+        <body-content>JSP</body-content>
+        <description>
+            Creates an message box
+        </description>
+        <attribute>
+            <name>beanId</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>width</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>height</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>key</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>value</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>style</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
         <name>panel</name>
         <tag-class>org.gridlab.gridsphere.provider.portletui.tags.PanelTag</tag-class>
         <body-content>JSP</body-content>
@@ -1329,40 +1368,6 @@
         </attribute>
         <attribute>
             <name>key</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-    </tag>
-
-    <tag>
-        <name>messagebox</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.MessageBoxTag</tag-class>
-        <body-content>JSP</body-content>
-        <description>
-            Creates an message box
-        </description>
-        <attribute>
-            <name>beanId</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>width</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>height</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>key</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>value</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

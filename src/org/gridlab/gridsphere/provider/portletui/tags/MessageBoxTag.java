@@ -1,6 +1,7 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.MessageBoxBean;
+import org.gridlab.gridsphere.provider.portletui.beans.MessageStyle;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -15,6 +16,7 @@ public class MessageBoxTag extends BaseComponentTag {
 
     protected MessageBoxBean messageBoxBean = null;
     protected String key = null;
+    protected String style = MessageStyle.MSG_INFO;
 
     /**
      * Returns the key used to identify localized text
@@ -32,6 +34,41 @@ public class MessageBoxTag extends BaseComponentTag {
      */
     public void setKey(String key) {
         this.key = key;
+    }
+
+    /**
+     * Sets the style of the text: Available styles are
+     * <ul>
+     * <li>nostyle</li>
+     * <li>error</li>
+     * <li>info</li>
+     * <li>status</li>
+     * <li>alert</li>
+     * <li>success</li>
+     *
+     * @param style the text style
+     */
+    public void setStyle(String style) {
+        this.style = style;
+    }
+
+    /**
+     * Returns the style of the text: Available styles are
+     * <ul>
+     * <li>nostyle</li>
+     * <li>error</li>
+     * <li>info</li>
+     * <li>status</li>
+     * <li>alert</li>
+     * <li>success</li>
+     * <li>bold</li>
+     * <li>italic</li>
+     * <li>underline</li>
+     *
+     * @return the text style
+     */
+    public String getStyle() {
+        return style;
     }
 
     public int doStartTag() throws JspException {
@@ -52,7 +89,9 @@ public class MessageBoxTag extends BaseComponentTag {
             messageBoxBean = new MessageBoxBean();
             this.setBaseComponentBean(messageBoxBean);
         }
-
+        if (style != null) {
+            messageBoxBean.setMessageType(style);    
+        }
         if (key != null) {
             messageBoxBean.setValue(getLocalizedText(key));
         }
