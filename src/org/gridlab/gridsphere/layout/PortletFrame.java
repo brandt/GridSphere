@@ -8,7 +8,7 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletWindow;
 import org.gridlab.gridsphere.portlet.impl.SportletURI;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
 import org.gridlab.gridsphere.event.ActionEvent;
@@ -66,7 +66,7 @@ public class PortletFrame extends BasePortletComponent {
         if (border == null) border = new PortletBorder();
 
         System.err.println("contacting registry for portlet: " + portletClass);
-        RegisteredPortlet registeredPortlet = registryService.getRegisteredPortlet(portletClass);
+        ConcretePortlet registeredPortlet = registryService.getConcretePortlet(portletClass);
         AbstractPortlet abstractPortlet = registeredPortlet.getActivePortlet();
         PortletSettings settings = registeredPortlet.getPortletSettings(false);
 
