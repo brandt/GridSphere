@@ -13,10 +13,6 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.services.user.UserManagerService;
-import org.gridlab.gridsphere.tags.web.model.ListBoxModel;
-import org.gridlab.gridsphere.tags.web.model.ListSelectItem;
-import org.gridlab.gridsphere.tags.web.model.CheckBoxModel;
-import org.gridlab.gridsphere.tags.web.model.CheckBoxItem;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -43,26 +39,10 @@ public class RSSPortlet extends AbstractPortlet {
     long _lastFetched = 0;
     int _fetch_interval = 5*6000;        // in millisec
     Document RSSFeed = new Document(new Element("rss"));
-    ListBoxModel model = new ListBoxModel();
-    CheckBoxModel cbmodel = new CheckBoxModel();
-    String selectedcheckboxes = new String();
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         System.err.println("init() in RSSPortlet");
-        model.setName("Labeltest");
-        cbmodel.setName("checkboxtest");
-        for (int i=1;i<9;i++) {
-            ListSelectItem item = new ListSelectItem("label "+i,"value "+i);
-            if (i==4) { item.setSelected(true); }
-            model.addItem(item);
-            CheckBoxItem cbitem = new CheckBoxItem("label "+i,"value "+i,true);
-            if (i==4) { cbitem.disable(); cbitem.setSelected(false);}
-            cbmodel.addItem(cbitem);
-
-        }
-        model.setListboxsize(6);
-        model.setMultipleSelection(true);
     }
 
     private Document getRSSFeed(String url) {
@@ -118,10 +98,7 @@ public class RSSPortlet extends AbstractPortlet {
                 req.setMode(Portlet.Mode.VIEW);
             }
             if (button.equals("delete")) {
-                String[] result = form.getSelectedListBoxValues("Labeltest");
-                for (int i=0;i<result.length;i++) {
-                    model.removeItem(result[i]);
-                }
+
             }
             if (button.equals("ok")) {
                 String[] result = form.getSelectedListBoxValues("Labeltest");
@@ -131,25 +108,8 @@ public class RSSPortlet extends AbstractPortlet {
             if (button.equals("add")) {
                 String name = req.getParameter("rss_name");
                 String url = req.getParameter("rss_url");
-                model.addItem(new ListSelectItem(name, url, true));
-                model.unselectAll();
-
-                String result[] = form.getSelectedCheckBoxValues(cbmodel.getName());
-                selectedcheckboxes = "";
-                for (int i=0;i<result.length;i++) {
-                    selectedcheckboxes = selectedcheckboxes+" "+result[i];
-                }
-
-                model = form.adjustListBoxModel(model);
-
-/*                cbmodel.unselectAll();
-                for (int i=0;i<result.length;i++) {
-                    ((CheckBoxItem)cbmodel.getItem(result[i])).setSelected(true);
-                }*/
             }
-
         }
-
     }
 
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
@@ -207,9 +167,6 @@ public class RSSPortlet extends AbstractPortlet {
         DefaultPortletAction defAction = new DefaultPortletAction("rss_configure");
         returnURI.addAction(defAction);
         request.setAttribute("rss_url", returnURI.toString());
-        request.setAttribute("rss_listbox", model);
-        request.setAttribute("rss_checkboxlist", cbmodel);
-        request.setAttribute("rss_selcheckboxes", selectedcheckboxes);
 
         getPortletConfig().getContext().include("/jsp/rss/configure.jsp", request, response);
     }

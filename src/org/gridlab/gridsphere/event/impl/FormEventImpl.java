@@ -9,9 +9,6 @@ import org.gridlab.gridsphere.event.FormEvent;
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 
-import org.gridlab.gridsphere.tags.web.model.CheckBoxItem;
-import org.gridlab.gridsphere.tags.web.model.CheckBoxModel;
-import org.gridlab.gridsphere.tags.web.model.ListBoxModel;
 
 import java.util.*;
 
@@ -83,30 +80,5 @@ public class FormEventImpl implements FormEvent {
         return req.getParameterValues(checkboxgroupname);
     }
 
-    /**
-     * Modifies the passed in checkboxmodel to reflect the changes on the checkboxes
-     * @model the model
-     */
-    public CheckBoxModel adjustCheckBoxModel(CheckBoxModel model) {
-
-        model.unselectAll();
-
-        /*CheckBoxModel model = new CheckBoxModel();
-
-
-        String result[] = getSelectedCheckBoxValues(modelname);
-
-        model.unselectAll();
-        for (int i=0;i<result.length;i++) {
-            ((CheckBoxItem)model.getItem(result[i])).setSelected(true);
-        } */
-
-        return model;
-    }
-
-    public ListBoxModel adjustListBoxModel(ListBoxModel model) {
-        //model.unselectAll();
-        return model;
-    }
 
 }
