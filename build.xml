@@ -306,9 +306,23 @@ Copyright:
         <property name="var_force_mapping" value="goforit"/>
     </target>
 
+    <target name="check-mapping" description="checks if a mapping file exists and set var if not (will force then to create one)">
+        <echo message="force mapping: ${var_force_mapping}"/>
+        <condition property="var_force_mapping">
+            <not>
+                <available file="webapps/gridsphere/WEB-INF/conf/mapping/docletmapping.xml"/>
+            </not>
+        </condition>
+        <condition property="var_force_mapping">
+            <not>
+                <available file="conf/dbcreate.sql"/>
+            </not>
+        </condition>
+    </target>
+
     <target name="force-mapping" depends="mapping-internal, mapping" description="forces the execution of the mapping target"/>
 
-    <target name="mapping" depends="compile" description="creates the mapping files for castor" if="var_force_mapping">
+    <target name="mapping" depends="check-mapping" description="creates the mapping files for castor" if="var_force_mapping">
 
         <javadoc packagenames="org.gridlab.gridsphere.*"
             sourcepath="src"
@@ -334,10 +348,26 @@ Copyright:
     <!-- =================================================================== -->
 
     <target name="force-database-internal"  description="forces to rebuild the database in the deployed gs">
-        <property name="force-database" value="goforit"/>
+        <property name="var_force_database" value="goforit"/>
     </target>
 
     <target name="force-database" depends="force-database-internal, db-hsqldb" description="forces to rebuild the database in the deployed gs"/>
+
+    <target name="check-database-hsqldb" description="checks if databasefile for hsqldb is there">
+        <echo message="FORCE: ${var_force_database}"/>
+        <condition property="var_force_database">
+            <not>
+                <available file="conf/gridsphere-db.script"/>
+            </not>
+        </condition>
+        <echo message="FORCE 1: ${var_force_database}"/>
+        <condition property="var_force_database">
+            <not>
+                <available file="conf/gridsphere-db.properties"/>
+            </not>
+        </condition>
+        <echo message="FORCE 2: ${var_force_database}"/>
+    </target>
 
     <target name="db-mysql" depends="mapping" description="create the mysql tables (not working)">
       <sql
@@ -363,7 +393,7 @@ Copyright:
         </sql>
     </target>
 
-    <target name="db-hsqldb" depends="mapping" description="creates hsqldb tables" if="var_force_database">
+    <target name="db-hsqldb" depends="check-database-hsqldb,mapping" description="creates hsqldb tables" if="var_force_database">
       <sql
           driver="org.hsqldb.jdbcDriver"
           url="jdbc:hsqldb:conf/gridsphere-db"
