@@ -16,10 +16,10 @@ import java.util.List;
 
 
 /**
- * The abstract PortletFrameLayout acts a container for the layout of portlet frame
+ * The abstract <code>PortletFrameLayout</code> acts a container for the layout of portlet frame
  * components and handles PortletFrame events.
  * <p>
- * The PortletGridLayout is a concrete implementation of the PortletFrameLayout
+ * The <code>PortletGridLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>
  * that organizes portlets into a grid with a provided number of rows and columns.
  *
  * @see PortletFrame

@@ -11,9 +11,10 @@ import org.gridlab.gridsphere.portlet.PortletWindow;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
+
 /**
- * A PortletTitleBarEvent is created by a PortletTitleBar when a title
- * bar event has been triggered.
+ * A <code>PortletTitleBarEventImpl</code> is the concrete implementation of
+ * <code>PortletTitleBarEvent</code>
  */
 public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
 

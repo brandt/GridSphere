@@ -10,6 +10,11 @@ import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorExcep
 
 import java.io.IOException;
 
+/**
+ * The <code>PortletLayoutDescriptor</code> is responsible for marshalling and
+ * unmarshalling a container of portlet components into/from an XML descriptor
+ * using Castor XML data binding capabilities.
+ */
 public class PortletLayoutDescriptor extends Descriptor {
 
     private static PortletLayoutDescriptor instance = new PortletLayoutDescriptor();
@@ -71,8 +76,8 @@ public class PortletLayoutDescriptor extends Descriptor {
      * @param descriptorPath location of the layout.xml
      * @param mappingPath location of the mapping file
      *
-     * @throws IOException if an I/O error occurs
-     * @throws DescriptorException if a descriptor error occurs
+     * @throws <code>IOException</code> if an I/O error occurs
+     * @throws <code>DescriptorException</code> if a descriptor error occurs
      */
     public static void savePortletTab(PortletTab tab, String descriptorPath, String mappingPath) throws IOException, DescriptorException {
         save(descriptorPath, mappingPath, tab);

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * The PortletGridLayout is a concrete implementation of the PortletFrameLayout
+ * The <code>PortletGridLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>
  * that organizes portlets into a grid with a provided number of columns.
  * Portlets are arranged in column-wise order starting from the left most column.
  */

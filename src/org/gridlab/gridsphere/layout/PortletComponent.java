@@ -5,7 +5,7 @@
 package org.gridlab.gridsphere.layout;
 
 /**
- * PortletComponent defines the interfaces provided by a portlet component.
+ * The <code>PortletComponent</code> defines the interfaces provided by a portlet component.
  */
 public interface PortletComponent extends ComponentLifecycle {
 

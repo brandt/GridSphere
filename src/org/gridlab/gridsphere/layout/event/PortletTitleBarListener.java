@@ -8,7 +8,7 @@ package org.gridlab.gridsphere.layout.event;
 import org.gridlab.gridsphere.layout.PortletLayoutException;
 
 /**
- * The PortletTitleBarListener is an interface for an observer to register to
+ * The <code>PortletTitleBarListener</code> is an interface for an observer to register to
  * receive notifications of changes to a portlet title bar component.
  */
 public interface PortletTitleBarListener {

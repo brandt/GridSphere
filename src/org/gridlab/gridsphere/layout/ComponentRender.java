@@ -9,7 +9,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import java.io.IOException;
 
 /**
- * ComponentRender interface required by all PortletComponets to be displayed
+ * The <code>ComponentRender</code> interface required by all PortletComponets to be displayed
  */
 public interface ComponentRender {
 

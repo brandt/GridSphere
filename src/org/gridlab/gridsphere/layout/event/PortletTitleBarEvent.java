@@ -8,8 +8,8 @@ import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletWindow;
 
 /**
- * A PortletTitleBarEvent is created by a PortletTitleBar when a title
- * bar event has been triggered.
+ * A <code>PortletTitleBarEvent</code> is created by a <code>PortletTitleBar</code>
+ * when a title bar event has been triggered.
  */
 public interface PortletTitleBarEvent {
 

@@ -7,8 +7,8 @@ package org.gridlab.gridsphere.layout.event.impl;
 import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
 
 /**
- * A PortletFrameEvent is created by a PortletFrame when a window event has been
- * triggered.
+ * A <code>PortletFrameEventImpl</code> is the concrete implementation of
+ * <code>PortletFrameEvent</code>
  */
 public class PortletFrameEventImpl implements PortletFrameEvent {
 

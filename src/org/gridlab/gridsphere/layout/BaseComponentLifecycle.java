@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * BaseComponentLifecycle provides an abstract implemetation of the
- * ComponentLifecycle lifecyle methods and is subclasses by the
+ * The <code>BaseComponentLifecycle</code> provides an abstract implemetation of the
+ * <code>ComponentLifecycle</code> lifecyle methods and is subclasses by the
  * {@link BasePortletComponent}.
  */
 public abstract class BaseComponentLifecycle implements ComponentLifecycle {

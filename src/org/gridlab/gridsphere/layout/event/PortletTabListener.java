@@ -2,7 +2,7 @@ package org.gridlab.gridsphere.layout.event;
 
 
 /**
- * The PortletTabListener is an interface for an observer to register to
+ * The <code>PortletTabListener</code> is an interface for an observer to register to
  * receive notifications of changes to a portlet tab component.
  */
 public interface PortletTabListener {

@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * A PortletPanel is used to compose a collection of portlet components
+ * A <code>PortletPanel</code> is used to compose a collection of portlet components
  * in a specified layout.
  */
 public class PortletPanel extends BasePortletComponent {

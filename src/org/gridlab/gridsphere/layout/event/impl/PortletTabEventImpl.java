@@ -8,7 +8,8 @@ import org.gridlab.gridsphere.layout.PortletTab;
 import org.gridlab.gridsphere.layout.event.PortletTabEvent;
 
 /**
- * A PortletTabEvent is triggered by a PortletTab when a tab has been selected.
+ * A <code>PortletTabEventImpl</code> is the concrete implementation of
+ * <code>PortletTabEvent</code>
  */
 public class PortletTabEventImpl implements PortletTabEvent {
 

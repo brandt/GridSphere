@@ -8,7 +8,7 @@ package org.gridlab.gridsphere.layout;
 import org.gridlab.gridsphere.portlet.PortletException;
 
 /**
- * A PortletLayoutException is thrown when the portlet rendering process
+ * A <code>PortletLayoutException</code> is thrown when the portlet rendering process
  * should fail for any non-I/O related reason
  */
 public class PortletLayoutException extends PortletException {

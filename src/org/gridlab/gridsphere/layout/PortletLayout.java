@@ -9,12 +9,12 @@ import java.util.List;
 
 
 /**
- * The PortletLayout is responsible for constructing a layout appropriate
+ * The <code>PortletLayout</code> is responsible for constructing a layout appropriate
  * to the user's layout preferences.
  * <p>
- * The PortletFrameLayout provides an abstract implementation of a generic
+ * The <code>PortletFrameLayout</code> provides an abstract implementation of a generic
  * container
- * The PortletGridLayout is a concrete implementation of the PortletFrameLayout
+ * The <code>PortletGridLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>
  * that organizes portlets into a grid with a provided number of rows and columns.
  */
 public interface PortletLayout extends ComponentLifecycle {

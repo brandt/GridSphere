@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * ComponentLifecycle represents the lifecycle methods required by any
+ * The <code>ComponentLifecycle</code> represents the lifecycle methods required by any
  * PortletComponent.
  */
 public interface ComponentLifecycle extends ComponentRender {

@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The portlet layout engine is a singleton that is responsible for managing
+ * The <code>PortletLayoutEngine</code> is a singleton that is responsible for managing
  * user's layouts. It also manages portlet web application default layout
  * configurations that can be potentially added to a user layout
  * via the PortletLayout Service.
