@@ -465,8 +465,7 @@ Copyright:
             doctitle="${gridsphere.api}"
             bottom="Copyright &#169; 2002,2003 GridLab Project. All Rights Reserved.">
 
-            <link href="http://java.sun.com/j2se/1.4.1/docs/api/"/>
-            <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
+            <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
 
             <link href="http://jakarta.apache.org/log4j/docs/api/"/>
 
