@@ -13,7 +13,7 @@ import org.gridlab.gridsphere.core.persistence.QueryException;
 import org.gridlab.gridsphere.core.persistence.QueryInterface;
 
 public class Query implements QueryInterface {
-    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(Query.class.getName());
+
 
     OQLQuery query = null;
 

@@ -10,9 +10,13 @@ import org.exolab.castor.jdo.*;
 import org.exolab.castor.mapping.MappingException;
 import org.gridlab.gridsphere.core.persistence.ConfigurationException;
 import org.gridlab.gridsphere.core.persistence.TransactionException;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.PortletLog;
 
 public class Transaction {
-    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(Transaction.class.getName());
+
+    protected transient static PortletLog log = SportletLog.getInstance(Transaction.class);
+
 
     private Database db = null;
 
@@ -22,7 +26,7 @@ public class Transaction {
      */
     public Transaction(Database database) {
         super();
-        cat.info("init transaction ");
+        log.info("init transaction ");
 
         db = database;
     }
@@ -34,7 +38,7 @@ public class Transaction {
     public void begin() throws TransactionException {
         try {
             db.begin();
-            cat.info(" Tx begin ");
+            log.info(" Tx begin ");
         } catch (Exception e) {
             throw new TransactionException("Exception in begin "+e);
         }
@@ -47,7 +51,7 @@ public class Transaction {
     public void commit() throws TransactionException {
         try {
             db.commit();
-            cat.info(" Tx commit");
+            log.info(" Tx commit");
             //db.close();
 //        } catch (PersistenceException e) {
 //            throw new TransactionException("Exception in commit (not in progress) "+e);
@@ -77,10 +81,10 @@ public class Transaction {
     public boolean close() {
         try {
             db.close();
-            cat.info( " Tx close ");
+            log.info( " Tx close ");
             return true;
         } catch (PersistenceException e) {
-            cat.error("Problem with Tx close "+e);
+            log.error("Problem with Tx close "+e);
             return false;
         }
     }

@@ -15,6 +15,9 @@ import org.exolab.castor.jdo.PersistenceException;
 import org.exolab.castor.mapping.MappingException;
 import org.gridlab.gridsphere.core.persistence.*;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
+import org.gridlab.gridsphere.portlet.impl.SportletGroup;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.PortletLog;
 
 //import org.gridlab.gridsphere.core.persistence.*;
 
@@ -28,7 +31,7 @@ import java.util.NoSuchElementException;
 
 public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
 
-    static Category cat = Category.getInstance(PersistenceManagerRdbms.class.getName());
+    protected transient static PortletLog log = SportletLog.getInstance(PersistenceManagerRdbms.class);
 
 
     String ConnectionURL = null;
@@ -137,6 +140,10 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
     public void  create(Object object) throws ConfigurationException, CreateException {
         checkSettings();
         Database db = null;
+
+        //SportletGroup sa = (SportletGroup)object;
+        //log.info("Name: "+sa.getName());
+
         try {
             db = getDatabase();
             db.begin();
@@ -144,10 +151,10 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
             db.commit();
             db.close();
         } catch (PersistenceException e) {
-            cat.error("PersistenceException " + e);
+            log.error("PersistenceException " + e);
             throw new CreateException("Persistence Error "+e);
         } catch (MappingException e) {
-            cat.error("MappingException " + e);
+            log.error("MappingException " + e);
             throw new CreateException("Mapping Error "+e);
         }
 
@@ -175,10 +182,10 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
             db.commit();
             db.close();
         } catch (PersistenceException e) {
-            cat.error("PersistenceException " + e);
+            log.error("PersistenceException " + e);
             throw new UpdateException("Persistence Error: "+e);
         } catch (MappingException e) {
-            cat.error("MappingException " + e);
+            log.error("MappingException " + e);
             throw new UpdateException("Mapping Error: "+e);
         }
     }
@@ -220,16 +227,16 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
             db.commit();
             db.close();
         } catch (DatabaseNotFoundException e) {
-            cat.error("Exception! " + e);
+            log.error("Exception! " + e);
             throw new RestoreException("Database not found: "+e);
         } catch (PersistenceException e) {
-            cat.error("PersistenceException!" + e);
+            log.error("PersistenceException!" + e);
             throw new RestoreException("Persistence Error: "+e);
         } catch (NoSuchElementException e) {
-            cat.error("NoSuchElementException!" + e);
+            log.error("NoSuchElementException!" + e);
             throw new RestoreException("No such element error: "+e);
         } catch (MappingException e) {
-            cat.error("MappingException!" + e);
+            log.error("MappingException!" + e);
             throw new RestoreException("Mapping Error: "+e);
 
         }
@@ -245,14 +252,17 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
      * @return requested object defined by setQuery()
      */
     public Object restoreObject() throws ConfigurationException, RestoreException {
-
-        return restoreList().get(0);
-
+        List resultList = restoreList();
+        if (resultList.size()>0) {
+            return resultList.get(0);
+        } else {
+            return null;
+        }
     }
 
     public Object restoreObject(String oql) throws ConfigurationException, RestoreException {
         this.setQuery(oql);
-        return restoreList().get(0);
+        return restoreObject();
 
     }
 
@@ -281,17 +291,17 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
                 Method m = cl.getMethod("getOid", null);
 
                 Oid = (String) m.invoke(object, null);
-                cat.debug("got " + Oid + " from object via reflection");
+                log.debug("got " + Oid + " from object via reflection");
             } catch (NoSuchMethodException e) {
-                cat.info("Exception " + e);
+                log.info("Exception " + e);
             } catch (SecurityException e) {
-                cat.info("Exception " + e);
+                log.info("Exception " + e);
             } catch (IllegalAccessException e) {
-                cat.info("Exception " + e);
+                log.info("Exception " + e);
             } catch (IllegalArgumentException e) {
-                cat.info("Exception " + e);
+                log.info("Exception " + e);
             } catch (InvocationTargetException e) {
-                cat.info("Exception " + e);
+                log.info("Exception " + e);
             }
             Object deleteObject = db.load(object.getClass(), Oid);
 
@@ -300,19 +310,19 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
             db.close();
 
         } catch (DatabaseNotFoundException e) {
-            cat.error("Database not found " + e);
+            log.error("Database not found " + e);
             throw new DeleteException("Database not found :"+e);
         } catch (ObjectNotPersistentException e) {
-            cat.error("object not persistent " + e);
+            log.error("object not persistent " + e);
             throw new DeleteException("Object not persistent Error :"+e);
         } catch (TransactionNotInProgressException e) {
-            cat.error("Transation not in progress " + e);
+            log.error("Transation not in progress " + e);
             throw new DeleteException("Transaction not in progress Error :"+e);
         } catch (PersistenceException e) {
-            cat.error("Persistent error " + e);
+            log.error("Persistent error " + e);
             throw new DeleteException("Persistence Error :"+e);
         } catch (MappingException e) {
-            cat.error("Mapping Exception " + e);
+            log.error("Mapping Exception " + e);
             throw new DeleteException("Mapping Error :"+e);
         }
 
@@ -335,9 +345,9 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
             object = db.load(cl, Oid);
             db.commit();
         } catch (PersistenceException e) {
-            cat.error("Exception " + e);
+            log.error("Exception " + e);
         } catch (MappingException e) {
-            cat.error("Exception " + e);
+            log.error("Exception " + e);
         }
 
         return object;
@@ -371,16 +381,16 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
             db.commit();
             db.close();
         } catch (DatabaseNotFoundException e) {
-            cat.error("Exception! " + e);
+            log.error("Exception! " + e);
             throw new DeleteException("Database not found: "+e);
         } catch (PersistenceException e) {
-            cat.error("PersistenceException!" + e);
+            log.error("PersistenceException!" + e);
             throw new DeleteException("Persistence Error: "+e);
         } catch (NoSuchElementException e) {
-            cat.error("NoSuchElementException!" + e);
+            log.error("NoSuchElementException!" + e);
             throw new DeleteException("No such element error: "+e);
         } catch (MappingException e) {
-            cat.error("MappingException!" + e);
+            log.error("MappingException!" + e);
             throw new DeleteException("Mapping Error: "+e);
 
         }
@@ -415,15 +425,15 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
             db.close();
         } catch (PersistenceException e) {
             //db.rollback();
-            cat.error("PersistenceException!" + e);
+            log.error("PersistenceException!" + e);
             throw new DeleteException("Persistence Error: "+e);
         } catch (MappingException e) {
             //db.rollback();
-            cat.error("MappingException!" + e);
+            log.error("MappingException!" + e);
             throw new DeleteException("Mapping Error: "+e);
         } catch (NoSuchElementException e) {
             //db.rollback();
-            cat.error("NoSuchElementException!" + e);
+            log.error("NoSuchElementException!" + e);
             throw new DeleteException("NoSuchElement Error: "+e);
         }
     }

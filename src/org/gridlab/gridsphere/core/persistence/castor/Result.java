@@ -15,7 +15,7 @@ import org.gridlab.gridsphere.core.persistence.ResultInterface;
 import java.util.NoSuchElementException;
 
 public class Result implements ResultInterface {
-    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(Result.class.getName());
+
 
     private  QueryResults qr = null;
 

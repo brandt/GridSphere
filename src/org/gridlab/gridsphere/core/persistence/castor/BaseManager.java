@@ -9,9 +9,13 @@ package org.gridlab.gridsphere.core.persistence.castor;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerInterface;
 import org.gridlab.gridsphere.core.persistence.ConfigurationException;
 import org.gridlab.gridsphere.core.persistence.PersistenceInterface;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.PortletLog;
 
 public class BaseManager {
-    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(BaseManager.class.getName());
+
+    protected transient static PortletLog log = SportletLog.getInstance(BaseManager.class);
+
 
     public BaseManager() {
         super();

@@ -13,6 +13,8 @@ import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.Unmarshaller;
 import org.exolab.castor.xml.ValidationException;
 import org.gridlab.gridsphere.core.persistence.*;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.PortletLog;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -25,7 +27,8 @@ import java.util.ArrayList;
  */
 public class PersistenceManagerXml implements PersistenceManagerInterface  {
 
-    static Category cat = Category.getInstance(PersistenceManagerXml.class.getName());
+    protected transient static PortletLog log = SportletLog.getInstance(PersistenceManagerXml.class);
+
 
     private static PersistenceManagerXml instance;
 
@@ -137,19 +140,19 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
             marshal.marshal(object);
             filewriter.close();
             Class cl = object.getClass();
-            cat.debug("Wrote object of type " + cl.getName() + " to XMLFile " + getConnectionURL());
+            log.debug("Wrote object of type " + cl.getName() + " to XMLFile " + getConnectionURL());
 
         } catch (IOException e) {
-            cat.error("Exception " + e);
+            log.error("Exception " + e);
             throw new CreateException("IO Error");
         } catch (ValidationException e) {
-            cat.error("Exception " + e);
+            log.error("Exception " + e);
             throw new CreateException("Validation Error");
         } catch (MarshalException e) {
-            cat.error("Exception " + e);
+            log.error("Exception " + e);
             throw new CreateException("Marshal Error");
         } catch (MappingException e) {
-            cat.error("Exception " + e);
+            log.error("Exception " + e);
             throw new CreateException("Mapping Error");
         }
 
@@ -177,16 +180,16 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
             Unmarshaller unmarshal = new Unmarshaller(mapping);
             object = unmarshal.unmarshal(filereader);
         } catch (IOException e) {
-            cat.debug("Exception " + e);
+            log.debug("Exception " + e);
             throw new RestoreException("IO Error");
         } catch (MappingException e) {
-            cat.debug("Exception " + e);
+            log.debug("Exception " + e);
             throw new RestoreException("Mapping Error");
         } catch (MarshalException e) {
-            cat.debug("Exception " + e);
+            log.debug("Exception " + e);
             throw new RestoreException("Marshal Error");
         } catch (ValidationException e) {
-            cat.debug("Exception " + e);
+            log.debug("Exception " + e);
             throw new RestoreException("Validation Error");
         }
 

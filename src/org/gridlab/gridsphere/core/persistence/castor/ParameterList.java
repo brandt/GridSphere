@@ -6,10 +6,15 @@
 
 package org.gridlab.gridsphere.core.persistence.castor;
 
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.PortletLog;
+
 import java.util.List;
 
 public class ParameterList {
-    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(ParameterList.class.getName());
+
+    protected transient static PortletLog log = SportletLog.getInstance(ParameterList.class);
+
 
     private List parameters = null;
     private int counter = 0;

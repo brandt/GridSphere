@@ -8,7 +8,7 @@ package org.gridlab.gridsphere.core.persistence.castor;
 
 
 public class Parameter {
-    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(Parameter.class.getName());
+
 
     private String Action = null;
     private String Table = null;

@@ -10,9 +10,13 @@ import org.exolab.castor.jdo.*;
 import org.exolab.castor.jdo.PersistenceException;
 import org.exolab.castor.mapping.MappingException;
 import org.gridlab.gridsphere.core.persistence.*;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.PortletLog;
 
 public class PersistenceManager implements PersistenceInterface {
-    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(PersistenceInterface.class.getName());
+
+    protected transient static PortletLog log = SportletLog.getInstance(PersistenceManager.class);
+
 
     //Transaction tx = null;
     private Database db = null;
@@ -37,8 +41,8 @@ public class PersistenceManager implements PersistenceInterface {
             throw new ConfigurationException("Error in configuration " + e);
         }
 
-        cat.info("PM init done");
-        cat.info("config: "+Configfile+" Database "+Databasename);
+        log.info("PM init done");
+        log.info("config: "+Configfile+" Database "+Databasename);
     }
 
     /**
@@ -94,7 +98,7 @@ public class PersistenceManager implements PersistenceInterface {
             db.close();
             //db = null;
         } catch (PersistenceException e) {
-            cat.error("Persistence Exception ");
+            log.error("Persistence Exception ");
             e.printStackTrace();
         }
     }
@@ -107,7 +111,7 @@ public class PersistenceManager implements PersistenceInterface {
     public void update(Object object) throws UpdateException {
         try {
             db.update(object);
-            cat.info("update success");
+            log.info("update success");
         } catch (PersistenceException e) {
             throw new UpdateException("Problem with update " + e);
         }
@@ -122,7 +126,7 @@ public class PersistenceManager implements PersistenceInterface {
 
         try {
             db.create(object);
-            cat.info("create success");
+            log.info("create success");
         } catch (PersistenceException e) {
             throw new CreateException("Problem with creation of the object " + e);
         }
@@ -136,7 +140,7 @@ public class PersistenceManager implements PersistenceInterface {
     public void delete(Object object) throws DeleteException {
         try {
             db.remove(object);
-            cat.info("delete success");
+            log.info("delete success");
         } catch (PersistenceException e) {
             throw new DeleteException("Problem with deletion of the object " + e);
         }
@@ -149,7 +153,7 @@ public class PersistenceManager implements PersistenceInterface {
      */
     public Query getQuery() {
         if (db.equals(null)) {
-            cat.error("ALERT!\n\n\n\n\n\n--------------");
+            log.error("ALERT!\n\n\n\n\n\n--------------");
         }
         Query query = new Query(db);
         return query;
