@@ -82,11 +82,8 @@ public class PortletStaticContent extends BasePortletComponent implements Serial
             try {
                 Client client = req.getClient();
                 
-                String localeStr = (String) req.getPortletSession(true).getAttribute(User.LOCALE);
-                Locale locale = null;
-                if (localeStr != null) {
-                        locale = new Locale(localeStr,"","");                
-                }
+                
+                Locale locale = req.getLocale();
                 InputStream resourceStream = ctx.getResourceAsStream(textFile, client, locale);
                 if (resourceStream != null) {
                     Reader reader;
