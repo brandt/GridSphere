@@ -47,8 +47,20 @@ public class ActionComponentTag extends IncludeTag {
             //log.debug("Using request component id ");
             activeCompId = (String) request.getAttribute(SportletProperties.GP_COMPONENT_ID);
         }
+
         //log.debug("Changing component id from " + baseCompId + " to " + activeCompId);
         request.setAttribute(SportletProperties.GP_COMPONENT_ID, activeCompId);
+
+        // Include message box tag automagically
+        MessageBoxTag messageBoxTag = new MessageBoxTag();
+        messageBoxTag.setBeanId("messageBox");
+        messageBoxTag.setPageContext(pageContext);
+        try {
+            messageBoxTag.doEndTag();
+        } catch (Exception e) {
+            log.error("Unable to include message box bean ", e);
+        }
+
         try {
 
             // Very important here... must pass it the appropriate jsp writer!!!
