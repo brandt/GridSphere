@@ -422,10 +422,10 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                     out.println("<td background=\"" + path + "subtab-middle.gif\" height=\"24\">");
                     if (tab.isSelected()) {
                         out.println("<span class=\"tab-sub-active\">");
-                        out.println("<a class=\"tab-sub-menu-active\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\">" + title + "</a></span>");
+                        out.println("<a class=\"tab-sub-menu-active\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\">" + replaceBlanks(title) + "</a></span>");
                     } else {
                         out.println("<span class=\"tab-sub-inactive\">");
-                        out.println("<a class=\"tab-sub-menu\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\">" + title + "</a>");
+                        out.println("<a class=\"tab-sub-menu\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\">" + replaceBlanks(title) + "</a>");
                         out.println("</span>");
                     }
                     out.println("</td>");
