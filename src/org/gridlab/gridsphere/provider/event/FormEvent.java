@@ -173,6 +173,10 @@ public interface FormEvent extends ActionEvent {
      */
     public Map getTagBeans();
 
+    public ActionMenuBean getActionMenuBean(String beanId);
+
+    public ActionMenuItemBean getActionMenuItemBean(String beanId);
+
     /**
      * Stores any created beans into the request
      */

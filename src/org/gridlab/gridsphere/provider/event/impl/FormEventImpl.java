@@ -720,4 +720,24 @@ public class FormEventImpl implements FormEvent {
         }
     }
 
+    public ActionMenuItemBean getActionMenuItemBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (ActionMenuItemBean)tagBeans.get(beanKey);
+        }
+        ActionMenuItemBean ami = new ActionMenuItemBean(request, beanId);
+        tagBeans.put(beanKey, ami);
+        return ami;
+    }
+
+    public ActionMenuBean getActionMenuBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (ActionMenuBean)tagBeans.get(beanKey);
+        }
+        ActionMenuBean am = new ActionMenuBean(request, beanId);
+        tagBeans.put(beanKey, am);
+        return am;
+    }
+
 }
