@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridlab.gridsphere.tmf.TmfConfig;
 import org.gridlab.gridsphere.tmf.TmfCore;
 import org.gridlab.gridsphere.tmf.TmfMessage;
+import org.gridlab.gridsphere.tmf.TextMessagingException;
 import org.gridlab.gridsphere.tmf.config.TmfUser;
 
 import java.util.List;
@@ -37,7 +38,12 @@ public class TextMessagingServiceImpl implements TextMessagingService, PortletSe
 
         log.info("Starting up TextMessagingService with config " + configfile);
 
-        core = TmfCore.getInstance(configfile);
+        core = TmfCore.getInstance();
+        try {
+            core.loadConfig(configfile);
+        } catch (TextMessagingException e) {
+           log.info("Could not load configfile."+e);
+        }
         core.startupServices();
     }
 
@@ -55,14 +61,18 @@ public class TextMessagingServiceImpl implements TextMessagingService, PortletSe
         return config.getUserlist().getUserlist();
     }
 
-    public List getServices() {
+    public List getActiveServices() {
         TmfConfig config = core.getTmfConfig();
-        return config.getActiveservices();
+        return config.getActiveServices();
     }
 
     public void saveUser(TmfUser user) {
         TmfConfig config = core.getTmfConfig();
-        config.setUser(user);
+        try {
+            config.setUser(user);
+        } catch (TextMessagingException e) {
+            log.error("Error saving users."+e);
+        }
     }
 
     public TmfUser getUser(String userid) {

@@ -38,9 +38,10 @@ public interface TextMessagingService extends PortletService {
     /**
      * Returns a list of the messaging services available.
      *
+     * @see org.gridlab.gridsphere.tmf.config.TmfService
      * @return list of textmessaging services
      */
-    public List getServices();
+    public List getActiveServices();
 
     /**
      * Returns the textmessaging userobject for a given userid.
