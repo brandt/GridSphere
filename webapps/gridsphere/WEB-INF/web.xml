@@ -16,6 +16,10 @@
         GridSphere Portlet Container
     </description>
 
+    <listener>
+        <listener-class>org.gridlab.gridsphere.portletcontainer.GridSphereServlet</listener-class>
+    </listener>
+
     <servlet>
         <servlet-name>gridsphere</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portletcontainer.GridSphereServlet</servlet-class>
