@@ -34,7 +34,7 @@ Copyright:
     <property name="gridsphere.name" value="GridSphere Portal Framework API ${version.release}" />
 
     <!-- GridSphere build and dist directories -->
-    <property name="gridsphere.build" value="/tmp/build"/>
+    <property name="gridsphere.build" value="build"/>
     <property name="gridsphere.dist"  value="dist"/>
 
 
