@@ -14,10 +14,7 @@ import org.gridlab.gridsphere.portletcontainer.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * A <code>PortletTitleBar</code> represents the visual display of the portlet title bar
@@ -329,16 +326,37 @@ public class PortletTitleBar extends BasePortletComponent {
             ApplicationPortletConfig appConfig = appPortlet.getApplicationPortletConfig();
 
             // get supported modes from application portlet config
-            supportedModes = appConfig.getSupportedModes();
+            supportedModes = sort(appConfig.getSupportedModes());
 
             ConcretePortlet concPortlet = appPortlet.getConcretePortlet(portletClass);
             settings = concPortlet.getPortletSettings();
 
             // get window states from application portlet config
-            allowedWindowStates = appConfig.getAllowedWindowStates();
+            allowedWindowStates = sort(appConfig.getAllowedWindowStates());
+
         }
     }
 
+    public List sort(List list) {
+        int n = list.size();
+        for (int i=0; i < n-1; i++) {
+            for (int j=0; j < n-1-i; j++) {
+                Comparator c = (Comparator)list.get(j);
+                Comparator d = (Comparator)list.get(j+1);
+                if (c.compare(c, d) == 1) {
+                    Object tmp = list.get(j);         /* swap a[j] and a[j+1]      */
+                    list.set(j, d);
+                    list.set(j+1, tmp);
+                }
+            }
+        }
+        return list;
+    }
+    /**
+     private boolean greaterThan(Comparator c, Object left, Object right) {
+         return c.compare(left, right) == 1;
+     }
+     **/
     /**
      * Creates the portlet window state hyperlinks displayed in the title bar
      *
