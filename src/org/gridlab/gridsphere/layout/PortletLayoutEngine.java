@@ -139,14 +139,14 @@ public class PortletLayoutEngine {
                 System.err.println("creating new conatiner for:" + id);
                 String guestLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_GUEST_USER_LAYOUT);
                 PortletContainer newcontainer = null;
-               // try {
-               // newcontainer = PortletLayoutDescriptor.loadPortletContainer(guestLayoutFile, layoutMappingFile);
-                newcontainer = new PortletContainer(guestContainer);
-                newcontainer.init(new ArrayList());
+                try {
+                 newcontainer = PortletLayoutDescriptor.loadPortletContainer(guestLayoutFile, layoutMappingFile);
+                //newcontainer = new PortletContainer(guestContainer);
+                    newcontainer.init(new ArrayList());
                     guests.put(id, newcontainer);
-                //} catch (Exception e) {
+                } catch (Exception e) {
 
-                //}
+                }
 
 
                 return newcontainer;
