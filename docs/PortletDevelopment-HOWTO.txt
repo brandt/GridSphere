@@ -5,12 +5,12 @@
 Developing Portlets in the GridSphere Framework
 
 1) Portlet Concepts
-2) Portlet Deployment Descriptors
-3) Basic Portlet Objects
-4) Portlet Lifecycle
-4) Portlet Packaging
-5) Writing a Hello World Portlet
-5) Other Resources
+2) Portlet Lifecycle
+3) Portlet Deployment Descriptors
+4) Basic Portlet Objects
+5) Portlet Packaging
+6) Writing a Hello World Portlet
+7) Other Resources
 
 
 1. Portlet Concepts
@@ -45,8 +45,40 @@ javax.servlet.http.HttpServlet
 
 2. Portlet Lifecycle
 
+Application portlets are defined to be the portlets as servlets where a single instance exists for the duration
+of the portlet container. A concrete portlet instance is an application portlet parametrized with additional data
+found in the portlets's deployment descriptor (see next section). For instance, it's possible to provide access to
+multiple Stock Quote Portlets that may have different configuration settings or allow access to a different set of
+groups, etc.
 
-2. Portlet Deployment Descriptors
+The following lifecycle methods are implemented or subclassed by the Portlet classes:
+
+void init(PortletConfig config) -- the first phase of startup. The portlet is instantiated with the PortletConfig
+                                   information (see Basic Portlet Objects section)
+
+void initConcrete(PortletSettings settings) -- a concrete portlet is placed into service, parametrized with a
+                                               PortletSettings object (see Basic Portlet Objects section)
+
+void destroyConcrete() -- a concrete portlet is taken out of service
+
+void destroy() -- an application portlet is taken out of service
+
+void service(PortletRequest req, PortletResponse res) -- service gets invoked for every client request, based on the
+                                                         portlet mode or portlet action, it invokes the appropriate
+                                                         actionPerformed, doView, doEdit, etc, method.
+
+void actionPeformed(ActionEvent evt) -- this method is invoked when the portlet receives an action and must be
+                                        implemented by the portlet developer. This method is performed before any
+                                        rendering is done via doView, doEdit, etc.
+
+void do{View,Config,Edit,Help}(PortletRequest req, PortletResponse res) -- renders the portlet  mode and is generally
+                                                                           implemented by the portlet developer.
+
+void window{Maximized,Minimized,Closed,Resizing,...}(WindowEvent event) -- method is invoked when the portlet window
+                                                                           state changes.
+
+
+3. Portlet Deployment Descriptors
 
 Because portlets inherit from servlets and are also managed in part by the servlet container, the standard web.xml
 file must be augmented to include the names and mappings of portlets as shown in the following sample web.xml snippet:
@@ -219,13 +251,28 @@ The concrete portlet description defines the following properties:
     <role-name>                    allows users in any role to add this portlet to their subscription list.
 
 
-3. Basic Portlet Objects
+4. Basic Portlet Objects
+
+PortletConfig and PortletContext
+
+The PortletConfig and PortletContext objects are wrappers around the standard ServletConfig and ServletContext
+objects. In addition the PortletConfig contains information found in the portlet descriptor discussed in the next
+section. The PortletContext offers the following addtional methods:
+
+ + String getContainerInfo() -- returns information about the GridSphere portlet container
+ + PortletLog getLog() -- returns a logger for the portlet to use
+ + int getMajorVersion() -- returns the major version of GridSphere
+ + int getMinorVersion() -- returns the minor version of GridSphere
+ + PortletService getService(Class service) -- return a portlet service instance (see PortletService-HOWTO)
+ + String getText(String bundle, String key, Locale locale) --return localized text. Not implemented yet.
+ + void include(String path, PortletRequest request, PortletResponse response) -- used for forwarding control to a
+                                                                                  JSP page located at path.
 
 PortletRequest and PortletResponse
 
-The two most funadamental interfaces in the Portlet API  are the PortletRequest and PortletResponse objects.
-These two mirror closely the HttpServletRequest and HttpServletResponse counterparts and offer all the previous methods
-and some additional portlet specific ones. The following methods are defined by the PortletRequest:
+The PortletRequest and PortletResponse objects mirror closely the HttpServletRequest and HttpServletResponse
+counterparts and offer all the previous methods and some additional portlet specific ones. The following methods
+are defined by the PortletRequest:
 
  + Client getClient() -- returns a Client object representing the browser device being used by the client
  + PortletData getData() -- returns the user-specific persistent data for the active portlet
@@ -271,23 +318,6 @@ PortletResponse
 Like the PortletRequest, the PortletResponse is a wrapper for HttpServletResponse and offers all the same methods via
 an actual proxy HttpServletResponse object. In addition, the PortletResponse provides support for creating customized
 URI's (Uniform Resource Identifiers) used to construct portlet links.
-
-
-PortletConfig:
-
-PortletContext:
-
-PortletSettings:
-
-PortletApplicationSettings:
-
-User:
-
-Client:
-
-PortletData:
-
-4. Portlet Lifecycle
 
 
 5. Portlet Packaging
