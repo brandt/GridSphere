@@ -2,7 +2,10 @@
  * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
  * @team sonicteam
  * @version $Id$
+ *
+ * Generates a JavaVM wide unique ID.
  */
+
 
 package org.gridlab.gridsphere.core.persistence;
 

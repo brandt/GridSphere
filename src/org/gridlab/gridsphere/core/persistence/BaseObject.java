@@ -25,6 +25,8 @@ public class BaseObject implements TimeStampable, Persistent {
     protected transient static PortletLog log = SportletLog.getInstance(BaseObject.class);
 
     /**
+     * ObjectID an object is refrenced by.
+     *
      * @primary-key
      * @sql-size 128
      * @get-method getOid
@@ -33,8 +35,9 @@ public class BaseObject implements TimeStampable, Persistent {
      */
     private String ObjectID;
 
-    // timestamp
     /**
+     * Timestamp for long transaction as we have it in castor.
+     *
      * @get-method jdoGetTimeStamp
      * @set-method jdoSetTimeStamp
      * @sql-name timestamp
@@ -47,14 +50,15 @@ public class BaseObject implements TimeStampable, Persistent {
     }
 
     /**
-     * init the object
+     * Init the object.
      */
     public void init() {
         timestamp = 0;
     }
 
     /**
-     * returns the timestamp
+     * Returns the timestamp
+     * @return the timestamp
      */
     public long jdoGetTimeStamp() {
         return timestamp;

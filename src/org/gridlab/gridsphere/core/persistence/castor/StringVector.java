@@ -2,6 +2,7 @@
  * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
  * @team sonicteam
  * @version $Id$
+ *
  * Helperobject for storing a Vector of Strings
  */
 

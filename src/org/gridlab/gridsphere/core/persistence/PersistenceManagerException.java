@@ -2,6 +2,8 @@
  * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
+ *
+ * Is thrown if an RDBMS Exception occurs.
  */
 
 package org.gridlab.gridsphere.core.persistence;

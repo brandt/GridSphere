@@ -5,7 +5,7 @@ package org.gridlab.gridsphere.core.persistence.castor;
  * @team sonicteam
  * @version $Id$
  *
- * Implementation for castor mysql
+ * RDBMS Implementation for castor.
  *
  */
 
@@ -32,6 +32,9 @@ import java.io.PrintWriter;
 import java.net.URL;
 
 
+/**
+ * This class provides methods for storing/getting data to/from rdbms storage.
+ */
 public class PersistenceManagerRdbms {
 
     protected transient static PortletLog log = SportletLog.getInstance(PersistenceManagerRdbms.class);
