@@ -4,14 +4,13 @@ Author: Oliver Wehrens (wehrens@aei.mpg.de)
 Version: $Id$
 */
 
-
 #page-logo {
   font-family:Franklin Gothic Medium, verdana, arial, sans-serif;
-  color: #e6e6e6;
-  font-size: 30px;
+  color: #FFFFFF;
+  font-size: 36px;
   font-weight: normal;
   background:#d6d6d6;
-  padding-top: 15px;
+  padding-top: 3px;
   padding-left: 15px;
   padding-right: 15px;
   padding-bottom: 1px;

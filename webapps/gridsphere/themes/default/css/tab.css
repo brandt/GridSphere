@@ -5,11 +5,9 @@ Version: $Id$
 */
 
 .tab-pane {
-   font-family: verdana, arial, sans-serif;
-   font-size:12px;
+   font-family: 'Lucida Grande', Geneva, Verdana, Arial, sans-serif;
    font-weight:normal;
-   background-color:#d6d6d6;
-   padding-top: 0px;
+   border-bottom: 1px solid #0B54B0;
 }
 
 .tab-empty {
@@ -18,27 +16,21 @@ Version: $Id$
 }
 
 .tab-fillup {
-    width: 100%;
-    border-bottom: 1px solid black;
+    width: 90%;
+    background: #d6d6d6;
+    border-bottom: 1px solid #0B54B0;
 }
 
 .tab-bar {
    width: 100%;
-   background-color: #397df3;
+   background-color: #d6d6d6;
    height: 1px;
    border: none;
 }
 
 .tab-active {
-   padding: 0px;
-   padding-bottom: 3px;
-   padding-top: 3px;
-   margin-bottom: 3px;
-   color:white;
-   background-color: #397df3;
-   font-size:10px;
-   border-top: 1px solid black;
-   border-right: 1px solid black;
+   color:black;
+   font-size: 10px;
 }
 
 
@@ -76,33 +68,21 @@ a.tab-menu:active {
 /*  subpane */
 
 .tab-sub-active {
-    border: 1px solid #397df3;
     font-weight: normal;
     color: white;
     font-size: 10px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-top: 0px;
-    padding-left: 0px;
+    margin-left: 5px;
 }
 
 .tab-sub-inactive {
     color: #000000;
-    padding-right: 2px;
-    padding-bottom: 1px;
-    padding-top: 0px;
-    padding-left: 2px;
-    border: 1px solid #397df3;
+    margin-left: 5px;
 }
 
 .tab-sub-pane {
-   background-color: #397df3;
+   height: 15px;
    margin: 0px;
    padding: 0px;
-   height: 15px;
-   border-bottom: 1px solid black;
-   border-right: 1px solid black;
-   border-left: 1px solid black;
 }
 
 a.tab-sub-menu {
@@ -112,15 +92,14 @@ a.tab-sub-menu {
 }
 
 a.tab-sub-menu:link {
-  border: 1px solid #397df3;
+    font-size: 10px;
 }
 
 a.tab-sub-menu:visited {
-  border: 1px solid #397df3;
 }
 
 a.tab-sub-menu:hover {
-  border: 1px dashed black;
+  color: blue;
 }
 
 a.tab-sub-menu:active {
@@ -128,21 +107,18 @@ a.tab-sub-menu:active {
 }
 
 a.tab-sub-menu-active {
-    text-decoration:none;
-    font-size:10px;
+    font-size:inherit;
     color: white;
 }
 
 a.tab-sub-menu-active:link {
-  border: 1px solid #397df3;
 }
 
 a.tab-sub-menu-active:visited {
-  border: 1px solid #397df3;
 }
 
 a.tab-sub-menu-active:hover {
-  border: 1px dashed black;
+    color: blue;
 }
 
 a.tab-sub-menu-active:active {
@@ -150,107 +126,3 @@ a.tab-sub-menu-active:active {
 }
 
 
-/*
-
-COMPONENTTHEMES
-
-*/
-
-.tab-active-grey {
-   padding: 0px;
-   padding-bottom: 3px;
-   padding-top: 3px;
-   margin-bottom: 3px;
-   color:white;
-   background-color: grey;
-   font-size:10px;
-   border-top: 1px solid black;
-   border-right: 1px solid black;
-   border-left: 1px solid black;
-}
-
-
-.tab-inactive-grey {
-   margin-bottom: 3px;
-   padding-bottom: 3px;
-   padding-top: 3px;
-   background-color: grey;
-   color: black;
-   font-size:10px;
-   margin-left: 10px;
-   border: 1px solid black;
-}
-
-.tab-sub-pane-grey {
-   background-color: grey;
-   margin: 0px;
-   padding: 0px;
-   height: 15px;
-   border-bottom: 1px solid black;
-   border-right: 1px solid black;
-   border-left: 1px solid black;
-}
-
-.tab-sub-active-grey {
-    border: 1px solid grey;
-    font-weight: normal;
-    color: grey;
-    font-size: 10px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-top: 0px;
-    padding-left: 0px;
-}
-
-.tab-sub-inactive-grey {
-    color: grey;
-    padding-right: 2px;
-    padding-bottom: 1px;
-    padding-top: 0px;
-    padding-left: 2px;
-    border: 1px solid grey;
-}
-
-a.tab-sub-menu-grey {
-    text-decoration:none;
-    font-size:10px;
-    color: #000000;
-}
-
-a.tab-sub-menu-grey:link {
-  border: 1px solid grey;
-}
-
-a.tab-sub-menu-grey:visited {
-  border: 1px solid grey;
-}
-
-a.tab-sub-menu-grey:hover {
-  border: 1px dashed black;
-}
-
-a.tab-sub-menu-grey:active {
-  color: #ebebeb;
-}
-
-a.tab-sub-menu-active-grey {
-    text-decoration:none;
-    font-size:10px;
-    color: white;
-}
-
-a.tab-sub-menu-active-grey:link {
-  border: 1px solid grey;
-}
-
-a.tab-sub-menu-active-grey:visited {
-  border: 1px solid grey;
-}
-
-a.tab-sub-menu-active-grey:hover {
-  border: 1px dashed black;
-}
-
-a.tab-sub-menu-active-grey:active {
-  color: #ebebeb;
-}

@@ -23,10 +23,10 @@ a:visited       {
   text-decoration: none;
 }
 a:active {
-  color: #FFCC66;
+  color: blue;
 }
 a:hover {
-  color: #FFCC66;
+  color: blue;
 }
 
 
@@ -61,6 +61,6 @@ input[type=submit] {
 
 input, select, textarea {
   font-size: inherit;
-  font-family: courier, courier new, monospaced;
+  font-family: 'Lucida Grande', Geneva, Verdana, Arial, sans-serif;
 }
 

@@ -12,21 +12,19 @@ Version: $Id$
 }
 
 .window-title-inactive {
-  background-color: #0053e2;
+  background-color: #69a8e7;
   color: #000000;
   font-size: 12px;
-  height: 15px;
   width: 100%;
   border-top: 1px solid #0053e2;
   border-right: 1px solid #0053e2;
-  border-left: 1px solid #0053e2;
+  border-left: 1px solid #0053e2;                                                                                         ¤ 
 }
 
 .window-title-active {
-  background-color: #7997de;
+  background-color: #0023B2;
   color: #000000;
   font-size: 12px;
-  height: 15px;
   width: 100%;
   border-top: 1px solid #0053e2;
   border-right: 1px solid #0053e2;
@@ -35,7 +33,7 @@ Version: $Id$
 
 .window-title-name {
   color: white;
-  font-family:Franklin Gothic Medium, verdana, arial, sans-serif;
+  font-family: 'Lucida Grande', Geneva, Verdana, Arial, sans-serif;;
   text-align: center;
   font-weight: bold;
 }
@@ -65,52 +63,3 @@ Version: $Id$
   height: 100%;
 }
 
-/*
-
-component themes
-
-*/
-
-.window-title-inactive-grey {
-  background-color: grey;
-  color: #000000;
-  font-size: 12px;
-  height: 15px;
-  width: 100%;
-  border-top: 1px solid grey;
-  border-right: 1px solid grey;
-  border-left: 1px solid grey;
-}
-
-.window-title-active-grey {
-  background-color: grey;
-  color: #000000;
-  font-size: 12px;
-  height: 15px;
-  width: 100%;
-  border-top: 1px solid grey;
-  border-right: 1px solid grey;
-  border-left: 1px solid grey;
-}
-
-.window-title-name-grey {
-  color: white;
-  font-family:Franklin Gothic Medium, verdana, arial, sans-serif;
-  text-align: center;
-  font-weight: bold;
-}
-
-.window-content-minimize-grey {
-
-}
-
-.window-content-grey {
-  background-color: #eeeeee;
-  padding: 5px;
-  border-right: 1px solid grey;
-  border-left: 1px solid grey;
-  border-bottom: 1px solid grey;
-  spacing-top: 5px;
-  spacing-right: 2px;
-  height: 100%;
-}
