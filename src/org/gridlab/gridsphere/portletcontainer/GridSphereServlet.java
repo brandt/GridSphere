@@ -16,7 +16,6 @@ import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletMessageManager;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
-import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.security.AuthenticationException;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
@@ -51,9 +50,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private static AccessControlManagerService aclService = null;
 
     private static LoginService loginService = null;
-
-    /* GridSphere User Portlet Manager handles portlet lifecycle */
-    //private static UserPortletManager userPortletManager = null;
 
     private PortletMessageManager messageManager = SportletMessageManager.getInstance();
 

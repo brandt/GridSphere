@@ -339,8 +339,6 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             //out.print("cellpadding=\""+getOuterPadding()+"\" class=\"window-main\" ");        // this is the main table around one portlet
         }
 
-
-
         out.println(">");
 
         // Render title bar
