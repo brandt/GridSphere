@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceAuthorizer;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortletManager;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistryManager;
@@ -47,6 +48,12 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
     // A multi-valued hashtable with a webapp key and a List value containing portletAppID's
     private Map webapps = new Hashtable();
     //private UserPortletManager userPortletManager = UserPortletManager.getInstance();
+
+    private PortletServiceAuthorizer authorizer = null;
+
+    public PortletManagerServiceImpl(PortletServiceAuthorizer authorizer) {
+        this.authorizer = authorizer;
+    }
 
     /**
      * The init method is responsible for parsing portlet.xml and creating ConcretePortlet objects based on the
@@ -115,27 +122,11 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
     }
 
     public void initAllPortletWebApplications(PortletRequest req, PortletResponse res) throws PortletException {
-
-        // Can do authorization check on user here
-        //User user = req.getUser();
-        //List userRoles = req.getRoles(PortletGroup.SUPER);
-        // if (userRoles != null) {
-        //if (userRoles.contains(PortletRole.SUPER)) {
         concPortletMgr.initAllConcretePortlets(req, res);
-        //}
-        // }
     }
 
     public void initPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws PortletException {
-
-        // Can do authorization check on user here
-        //User user = req.getUser();
-        //List userRoles = req.getRoles(PortletGroup.SUPER);
-        // if (userRoles != null) {
-        //if (userRoles.contains(PortletRole.SUPER)) {
         concPortletMgr.initConcretePortlets(webApplicationName, req, res);
-        //}
-        // }
     }
 
     public void destroyAllPortletWebApplications(PortletRequest req, PortletResponse res) throws PortletException {
@@ -160,5 +151,7 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
         }
         return l;
     }
+
+
 
 }
