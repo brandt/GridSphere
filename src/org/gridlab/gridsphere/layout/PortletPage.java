@@ -265,10 +265,12 @@ public class PortletPage implements Serializable, Cloneable {
             PortletComponent pc = cid.getPortletComponent();
             if (pc instanceof PortletFrame) {
                 f = (PortletFrame) pc;
+                String pid = f.getPortletClass();
+
                 // remove any cached portlet
-                cacheService.removeCached(f.getPortletClass() + id);
-                //portlets.add(f.getPortletClass());
-                PortletInvoker.login(f.getPortletClass(), event.getPortletRequest(), event.getPortletResponse());
+                cacheService.removeCached(pid + id);
+                //portlets.add(f.getPortletID());
+                PortletInvoker.login(pid, event.getPortletRequest(), event.getPortletResponse());
             }
         }
     }
@@ -292,9 +294,11 @@ public class PortletPage implements Serializable, Cloneable {
             cid = (ComponentIdentifier) it.next();
             if (cid.getPortletComponent() instanceof PortletFrame) {
                 f = (PortletFrame) cid.getPortletComponent();
+                String pid = f.getPortletClass();
+
                 // remove any cached portlet
-                cacheService.removeCached(f.getPortletClass() + id);
-                PortletInvoker.logout(f.getPortletClass(), req, res);
+                cacheService.removeCached(pid + id);
+                PortletInvoker.logout(pid, req, res);
             }
         }
     }
@@ -360,7 +364,12 @@ public class PortletPage implements Serializable, Cloneable {
                             // do role checking if user is logged in
                             if (!(user instanceof GuestUser)) {
                                 String portletClass = ((PortletFrame)comp).getPortletClass();
-                                boolean hasrole = aclService.hasRequiredRole(req, portletClass, false);
+
+                                boolean hasrole = false;
+
+                                    hasrole = aclService.hasRequiredRole(req, portletClass, false);
+
+
                                 //boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
                                 if (!hasrole) {
                                     System.err.println("User " + user + " does not have required role!");
@@ -371,7 +380,11 @@ public class PortletPage implements Serializable, Cloneable {
                         } else if (comp instanceof PortletTitleBar) {
                             if (!(user instanceof GuestUser)) {
                                 String portletClass = ((PortletTitleBar)comp).getPortletClass();
-                                boolean hasrole = aclService.hasRequiredRole(req, portletClass, false);
+
+                                boolean hasrole = false;
+
+                                    hasrole = aclService.hasRequiredRole(req, portletClass, false);
+                             
                                 //boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
                                 System.err.println("hasRole = " + hasrole);
                                 if (!hasrole) {

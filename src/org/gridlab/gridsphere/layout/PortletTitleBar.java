@@ -31,6 +31,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
     private String title = "unknown title";
     private String portletClass = null;
+
     private transient PortletWindow.State windowState = PortletWindow.State.NORMAL;
     //private List supportedModes = new Vector();
     private transient Portlet.Mode portletMode = Portlet.Mode.VIEW;
@@ -414,6 +415,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     protected void doConfig() {
         PortletRegistry registryManager = PortletRegistry.getInstance();
         String appID = PortletRegistry.getApplicationPortletID(portletClass);
+
         ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
         if (appPortlet != null) {
             ApplicationPortletConfig appConfig = appPortlet.getApplicationPortletConfig();
@@ -528,6 +530,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         // set portlet modes
         PortletRegistry registryManager = PortletRegistry.getInstance();
         String appID = PortletRegistry.getApplicationPortletID(portletClass);
+
         ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
         if (appPortlet != null) {
             ApplicationPortletConfig appConfig = appPortlet.getApplicationPortletConfig();
@@ -544,6 +547,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         User user = req.getUser();
         boolean hasrole = aclService.hasRequiredRole(req, portletClass, true);
+
         //boolean hasrole = aclService.hasRequiredRole(user, portletClass, true);
         if (hasrole) hasConfigurePermission = true;
 
@@ -601,6 +605,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         isActive = true;
 
         PortletRequest req = event.getPortletRequest();
+
         req.setAttribute(SportletProperties.PORTLETID, portletClass);
 
         PortletComponentEvent lastEvent = event.getLastRenderEvent();
@@ -629,7 +634,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                     }
                     if (winEvent != null) {
                         try {
-                            PortletInvoker.windowEvent(portletClass, winEvent, req, res);
+                            PortletInvoker.windowEvent((String)req.getAttribute(SportletProperties.PORTLETID), winEvent, req, res);
                         } catch (PortletException e) {
                             hasError = true;
                             errorMessage += "Failed to invoke window event method of portlet: " + portletClass;
@@ -639,7 +644,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
                     if (titleBarEvent.getMode().equals(Portlet.Mode.CONFIGURE)) {
                         boolean hasrole = aclService.hasRequiredRole(req, portletClass, true);
-                        //boolean hasrole = aclService.hasRequiredRole(user, portletClass, true);
                         if (!hasrole) return;
                     }
                     previousMode = portletMode;
@@ -762,7 +766,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         try {
             //System.err.println("invoking  doTitle:" + title);
-            PortletInvoker.doTitle(portletClass, req, wrappedResponse);
+            PortletInvoker.doTitle((String)req.getAttribute(SportletProperties.PORTLETID), req, wrappedResponse);
             //out.println(" (" + portletMode.toString() + ") ");
             title = storedWriter.toString();
         } catch (PortletException e) {
@@ -861,7 +865,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         try {
             //System.err.println("invoking  doTitle:" + title);
-            PortletInvoker.doTitle(portletClass, req, wrappedResponse);
+            PortletInvoker.doTitle((String)req.getAttribute(SportletProperties.PORTLETID), req, wrappedResponse);
             //out.println(" (" + portletMode.toString() + ") ");
             title = storedWriter.toString();
         } catch (PortletException e) {

@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
+import org.gridlab.gridsphere.provider.portlet.jsr.PortletServlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
@@ -22,12 +23,10 @@ import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
-import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
 import javax.servlet.UnavailableException;
 import java.util.*;
-import java.io.IOException;
 
 public class GroupManagerPortlet extends ActionPortlet {
 
@@ -173,6 +172,9 @@ public class GroupManagerPortlet extends ActionPortlet {
                     ConcretePortlet conc = (ConcretePortlet) cit.next();
                     String concID = conc.getConcretePortletID();
 
+                    // we don't want to list PortletServlet loader!
+                    if (concID.startsWith(PortletServlet.class.getName())) continue;
+
                     PortletRole reqrole = conc.getConcretePortletConfig().getRequiredRole();
                     //log.debug("subscribed to portlet: " + concID + " " + reqrole);
                     if (role.compare(role, reqrole) >= 0) {
@@ -278,7 +280,7 @@ public class GroupManagerPortlet extends ActionPortlet {
 
     public void doMakeGroup(FormEvent evt) throws PortletException {
         PortletRequest req = evt.getPortletRequest();
-        AccessControlManagerServiceImpl aclService = AccessControlManagerServiceImpl.getInstance();
+
         List webappNames = portletMgr.getWebApplicationNames();
         Iterator it = webappNames.iterator();
         Set portletRoles = new HashSet();
@@ -324,7 +326,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         if (!gid.getValue().equals("")) {
             newgroup.setOid(gid.getValue());
 
-            PortletGroup oldgroup = aclService.getGroup(gid.getValue());
+            PortletGroup oldgroup = aclManagerService.getGroup(gid.getValue());
             newgroup.setCore(oldgroup.isCore());
             // if group name has been modified update group tab
             if (!oldgroup.getName().equals(groupTF.getValue())) {
@@ -365,12 +367,12 @@ public class GroupManagerPortlet extends ActionPortlet {
                 newgroup.setPublic(true);
             }
 
-            aclService.createGroup(newgroup);
+            aclManagerService.createGroup(newgroup);
 
             req.setAttribute("groupId", newgroup.getID());
             createSuccessMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_NEWGROUP_SUCCESS"));
             if (!newgroup.getPublic()) {
-                createSuccessMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_VISIBILITY_MOREDESC") + " " + newgroup.getName());
+                createSuccessMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_VISIBILITY_MOREDESC"));
             }
             PortletTabRegistry.newEmptyGroupTab(groupTF.getValue());
         } catch (Exception e) {
@@ -383,15 +385,14 @@ public class GroupManagerPortlet extends ActionPortlet {
 
         String groupId = evt.getAction().getParameter("groupId");
 
-        AccessControlManagerServiceImpl aclService = AccessControlManagerServiceImpl.getInstance();
-        PortletGroup group = aclService.getGroup(groupId);
+        PortletGroup group = aclManagerService.getGroup(groupId);
         if (group != null) {
             Set portletRoles = group.getPortletRoleList();
             try {
                 // now create new group layout
                 PortletTabRegistry.newTemplateGroupTab(group.getName(), portletRoles);
                 User user = evt.getPortletRequest().getUser();
-                if (aclService.isUserInGroup(user, group)) layoutMgr.refreshPage(evt.getPortletRequest());
+                if (aclManagerService.isUserInGroup(user, group)) layoutMgr.refreshPage(evt.getPortletRequest());
             } catch (Exception e) {
                 log.error("Unable to save new group layout: ", e);
             }
