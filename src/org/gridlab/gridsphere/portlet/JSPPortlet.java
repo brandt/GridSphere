@@ -4,20 +4,14 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.*;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.Enumeration;
 
 /**
  *
  */
 public abstract class JSPPortlet extends AbstractPortlet implements PortletActionCommand {
 
-    public JSPPortlet() {}
+    public JSPPortlet() {
+    }
 
 
     /**

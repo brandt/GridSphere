@@ -4,24 +4,14 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import org.gridlab.gridsphere.portlet.impl.SportletConfig;
-import org.gridlab.gridsphere.portlet.impl.SportletSettings;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.services.PortletRegistryService;
-import org.gridlab.gridsphere.portletcontainer.impl.RegisteredSportlet;
-import org.gridlab.gridsphere.portletcontainer.impl.RegisteredSportletImpl;
-import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
-import org.apache.log4j.Logger;
+import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
 
+import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.*;
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Enumeration;
 
 /**
@@ -91,7 +81,7 @@ public abstract class Portlet extends HttpServlet
         }
 
         public Object readResolve() {
-           // XXX: FILL ME IN
+            // XXX: FILL ME IN
             return null;
         }
 
@@ -142,7 +132,8 @@ public abstract class Portlet extends HttpServlet
 
     }
 
-    public Portlet() {}
+    public Portlet() {
+    }
 
     /**
      * Called by the portlet container to indicate to this portlet that it is put into service.
@@ -323,33 +314,33 @@ public abstract class Portlet extends HttpServlet
     }
 
     public final void service(ServletRequest request, ServletResponse response)
-                       throws ServletException, IOException {
+            throws ServletException, IOException {
 
         // redirect to GridSphere
     }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-                  throws ServletException, IOException {
+            throws ServletException, IOException {
         // redirect to gridsphere
     }
 
     protected void doPut(HttpServletRequest req, HttpServletResponse resp)
-                      throws ServletException, IOException {
+            throws ServletException, IOException {
         super.doPut(req, resp);
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-                      throws ServletException, IOException {
+            throws ServletException, IOException {
         super.doPost(req, resp);
     }
 
     protected void doTrace(HttpServletRequest req, HttpServletResponse resp)
-                      throws ServletException, IOException {
+            throws ServletException, IOException {
         super.doTrace(req, resp);
     }
 
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
-                      throws ServletException, IOException {
+            throws ServletException, IOException {
         super.doDelete(req, resp);
     }
 

@@ -5,8 +5,6 @@
 package org.gridlab.gridsphere.portlet;
 
 import javax.servlet.ServletConfig;
-import java.util.Enumeration;
-import java.util.Locale;
 
 /**
  * The PortletConfig interface provides the portlet with its configuration.

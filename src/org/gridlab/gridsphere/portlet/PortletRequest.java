@@ -4,13 +4,13 @@
  */
 package org.gridlab.gridsphere.portlet;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.ServletInputStream;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
-import java.io.IOException;
 
 /**
  * The PortletRequest encapsulates the request sent by the client to the portlet.

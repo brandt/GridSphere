@@ -13,7 +13,8 @@ public class PortletServiceNotFoundException extends PortletServiceException {
     /**
      * Constructs a new portlet service unavailable exception.
      */
-    public PortletServiceNotFoundException() {}
+    public PortletServiceNotFoundException() {
+    }
 
     /**
      * Creates a new exception with the sepcified detail message.

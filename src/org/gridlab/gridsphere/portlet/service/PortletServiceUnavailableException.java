@@ -13,7 +13,8 @@ public class PortletServiceUnavailableException extends PortletServiceException 
     /**
      * Constructs a new portlet service unavailable exception.
      */
-    public PortletServiceUnavailableException() {}
+    public PortletServiceUnavailableException() {
+    }
 
     /**
      * Creates a new exception with the sepcified detail message.

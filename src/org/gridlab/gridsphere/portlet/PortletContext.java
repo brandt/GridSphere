@@ -5,15 +5,14 @@
 package org.gridlab.gridsphere.portlet;
 
 import org.gridlab.gridsphere.portlet.service.PortletService;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletConfig;
-import java.util.Enumeration;
-import java.util.Locale;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.Locale;
 
 /**
  * The PortletContext interface defines a portlet's view of the portlet container

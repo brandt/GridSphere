@@ -18,9 +18,11 @@ public interface PortletWindow {
      */
     public static class State {
         private int state = NORMAL;
+
         public State(int state) {
             this.state = state;
         }
+
         public static final int NORMAL = 0;
         public static final int MAXIMIZED = 1;
         public static final int MINIMIZED = 2;

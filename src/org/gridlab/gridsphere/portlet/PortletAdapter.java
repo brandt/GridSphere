@@ -6,13 +6,8 @@ package org.gridlab.gridsphere.portlet;
 
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.*;
+import javax.servlet.UnavailableException;
 import java.io.IOException;
-import java.io.Serializable;
-import java.util.Enumeration;
 import java.util.Hashtable;
 
 /**
@@ -121,7 +116,7 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
             throws PortletException, IOException {
 
         // Forward to appropriate do... method
-        Portlet.Mode mode = (Portlet.Mode)request.getAttribute(GridSphereProperties.PortletMode);
+        Portlet.Mode mode = (Portlet.Mode) request.getAttribute(GridSphereProperties.PortletMode);
         if (mode != null) {
             switch (mode.getMode()) {
                 case Portlet.Mode.VIEW:
@@ -232,7 +227,7 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      */
     public void doHelp(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
-         // XXX: FILL ME IN
+        // XXX: FILL ME IN
     }
 
     /**
@@ -246,7 +241,7 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      */
     public void doView(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
-         // XXX: FILL ME IN
+        // XXX: FILL ME IN
     }
 
     /**
@@ -265,9 +260,9 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      * @param name the variable name
      */
     public void removeVariable(String name) {
-         if (storeVars.containsKey(name)) {
-             storeVars.remove(name);
-         }
+        if (storeVars.containsKey(name)) {
+            storeVars.remove(name);
+        }
     }
 
     /**

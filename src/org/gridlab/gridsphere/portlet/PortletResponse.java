@@ -6,8 +6,8 @@ package org.gridlab.gridsphere.portlet;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public interface PortletResponse extends HttpServletResponse {
 

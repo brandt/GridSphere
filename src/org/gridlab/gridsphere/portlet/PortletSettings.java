@@ -4,8 +4,6 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import org.gridlab.gridsphere.portlet.Client;
-
 import java.util.Enumeration;
 import java.util.Locale;
 
