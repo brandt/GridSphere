@@ -89,23 +89,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
         setNextState(req, CONFIGURE_JSP);
     }
 
-    public void doSaveLocales(FormEvent event) {
-        TextFieldBean tf = event.getTextFieldBean("localesTF");
-        String locales = tf.getValue();
-        if (locales != null) {
-            FrameBean msg = event.getFrameBean("msgFrame");
-            getPortletSettings().setAttribute("supported-locales", locales);
-            try {
-                getPortletSettings().store();
-            } catch (IOException e) {
-                msg.setKey("PROFILE_SAVE_ERROR");
-                msg.setStyle("error");
-            }
-            msg.setKey("PROFILE_SAVE_SUCCESS");
-            msg.setStyle("success");
-        }
-    }
-
     public DefaultTableModel setUserTable(FormEvent event, boolean disable) {
         PortletRequest req = event.getPortletRequest();
         User user = req.getUser();
@@ -543,7 +526,12 @@ public class ProfileManagerPortlet extends ActionPortlet {
         acctReq.setEmailAddress(eMail);
         acctReq.setUserName(userName);
         acctReq.setFullName(fullName);
-        if (locale!=null) acctReq.setAttribute(User.LOCALE, locale);
+        if (locale!=null) {
+            Locale loc = new Locale(locale, "", "");
+            acctReq.setAttribute(User.LOCALE, locale);
+            req.getPortletSession(true).setAttribute(User.LOCALE, loc);
+        }
+
         if (timeZone!=null) acctReq.setAttribute(User.TIMEZONE, timeZone);
         if (organization != null) acctReq.setOrganization(organization);
 
