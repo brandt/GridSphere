@@ -282,30 +282,33 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         //return Collections.unmodifiableList(portlets);
     }
 
-    public String[] getTabNames(PortletRequest req) {
+    public List getTabNames(PortletRequest req) {
         PortletPage page = pageFactory.createPortletPage(req);
         PortletTabbedPane pane = page.getPortletTabbedPane();
+        PortletRole userRole = req.getRole();
         List tabs = pane.getPortletTabs();
-        String[] tabnames = new String[tabs.size()];
+        List tabnames = new ArrayList();
         int i;
         for (i = 0; i < tabs.size(); i++) {
             PortletTab tab = (PortletTab)tabs.get(i);
             String lang = req.getLocale().getLanguage();
-            tabnames[i] = tab.getTitle(lang);
-
+            PortletRole tabRole = tab.getRequiredRole();
+            if (userRole.compare(userRole, tabRole) >= 0) {
+                tabnames.add(tab.getTitle(lang));
+            }
         }
         return tabnames;
     }
 
-    public void setTabNames(PortletRequest req, String[] tabNames) {
+    public void setTabNames(PortletRequest req, List tabNames) {
         PortletPage page = pageFactory.createPortletPage(req);
         PortletTabbedPane pane = page.getPortletTabbedPane();
         List tabs = pane.getPortletTabs();
         String lang = req.getLocale().getLanguage();
-        if (tabNames.length == tabs.size()) {
+        if (tabNames.size() == tabs.size()) {
             for (int i = 0; i < tabs.size(); i++) {
                 PortletTab tab = (PortletTab)tabs.get(i);
-                tab.setTitle(lang, tabNames[i]);
+                tab.setTitle(lang, (String)tabNames.get(i));
             }
         } else {
             log.debug("Passed in tab names size does not match exist");
@@ -325,28 +328,30 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
     }
 
 
-    public String[] getSubTabNames(PortletRequest req, String tabName) {
+    public List getSubTabNames(PortletRequest req, String tabName) {
         PortletTab tab = findPortletTab(req, tabName);
+        PortletRole userRole = req.getRole();
         if (tab != null) {
             PortletComponent pc = tab.getPortletComponent();
             if (pc instanceof PortletTabbedPane) {
                 PortletTabbedPane np = (PortletTabbedPane)pc;
                 List subtabs = np.getPortletTabs();
-                String[] newtabs = new String[subtabs.size()];
+                List newtabs = new ArrayList();
                 String lang = req.getLocale().getLanguage();
                 for (int j = 0; j < subtabs.size(); j++) {
                     PortletTab t = (PortletTab)subtabs.get(j);
-
-                        newtabs[j] = t.getTitle(lang);
-
+                    PortletRole tabRole = t.getRequiredRole();
+                    if (userRole.compare(userRole, tabRole) >= 0) {
+                        newtabs.add(t.getTitle(lang));
+                    }
                 }
                 return newtabs;
             }
         }
-        return new String[]{""};
+        return new ArrayList();
     }
 
-    public void setSubTabNames(PortletRequest req, String tabName, String[] subTabNames) {
+    public void setSubTabNames(PortletRequest req, String tabName, List subTabNames) {
         PortletTab tab = findPortletTab(req, tabName);
         if (tab != null) {
             String lang = req.getLocale().getLanguage();
@@ -354,10 +359,10 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
             if (pc instanceof PortletTabbedPane) {
                 PortletTabbedPane np = (PortletTabbedPane)pc;
                 List subtabs = np.getPortletTabs();
-                if (subtabs.size() == subTabNames.length) {
+                if (subtabs.size() == subTabNames.size()) {
                     for (int j = 0; j < subtabs.size(); j++) {
                         PortletTab t = (PortletTab)subtabs.get(j);
-                        t.setTitle(lang, subTabNames[j]);
+                        t.setTitle(lang, (String)subTabNames.get(j));
                     }
                 }
             }

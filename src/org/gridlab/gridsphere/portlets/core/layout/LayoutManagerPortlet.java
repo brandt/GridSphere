@@ -69,10 +69,10 @@ public class LayoutManagerPortlet extends ActionPortlet {
         }
 
         // put tab configuration in request
-        String[] tabNames = layoutMgr.getTabNames(req);
+        List tabNames = layoutMgr.getTabNames(req);
         String tabName = event.getHiddenFieldBean("tabHF").getValue();
         if (tabName == null) {
-            tabName = tabNames[0];
+            tabName = (String)tabNames.get(0);
             System.err.println("Set tab: " + tabName);
             event.getHiddenFieldBean("tabHF").setValue(tabName);
         } else {
@@ -81,55 +81,55 @@ public class LayoutManagerPortlet extends ActionPortlet {
         ListBoxBean seltabsLB = event.getListBoxBean("seltabsLB");
         seltabsLB.clear();
         TableCellBean tabsTC = event.getTableCellBean("tabsTC");
-        for (int i = 0; i < tabNames.length; i++) {
+        for (int i = 0; i < tabNames.size(); i++) {
             ListBoxItemBean item = new ListBoxItemBean();
-            item.setValue(tabNames[i]);
+            item.setValue((String)tabNames.get(i));
             item.setName(String.valueOf(i));
             seltabsLB.addBean(item);
             TextFieldBean tf = new TextFieldBean();
             tf.setBeanId("tab" + i);
-            tf.setValue(tabNames[i]);
+            tf.setValue((String)tabNames.get(0));
             tabsTC.addBean(tf);
-            if (tabNames[i].equals(tabName)) item.setSelected(true);
+            if ((tabNames.get(i)).equals(tabName)) item.setSelected(true);
         }
 
         ListBoxBean deltabsLB = event.getListBoxBean("deltabsLB");
         deltabsLB.clear();
-        for (int i = 0; i < tabNames.length; i++) {
+        for (int i = 0; i < tabNames.size(); i++) {
             ListBoxItemBean item = new ListBoxItemBean();
-            item.setValue(tabNames[i]);
+            item.setValue((String)tabNames.get(i));
             item.setName(String.valueOf(i));
             deltabsLB.addBean(item);
         }
         //req.setAttribute("tabNames", tabNames);
 
         // put sub tab configuration in request
-        String[] subtabNames = layoutMgr.getSubTabNames(req, tabName);
+        List subtabNames = layoutMgr.getSubTabNames(req, tabName);
         String subtabName = event.getHiddenFieldBean("subtabHF").getValue();
         if (subtabName == null) {
-            subtabName = subtabNames[0];
+            subtabName = (String)subtabNames.get(0);
             event.getHiddenFieldBean("subtabHF").setValue(subtabName);
         }
         ListBoxBean selsubtabsLB = event.getListBoxBean("selsubtabsLB");
         selsubtabsLB.clear();
         TableCellBean subtabsTC = event.getTableCellBean("subtabsTC");
-        for (int i = 0; i < subtabNames.length; i++) {
+        for (int i = 0; i < subtabNames.size(); i++) {
             ListBoxItemBean item = new ListBoxItemBean();
-            item.setValue(subtabNames[i]);
+            item.setValue((String)subtabNames.get(i));
             //item.setName(String.valueOf(i));
             selsubtabsLB.addBean(item);
             TextFieldBean tf = new TextFieldBean();
             tf.setBeanId("subtab" + i);
-            tf.setValue(subtabNames[i]);
+            tf.setValue((String)subtabNames.get(i));
             subtabsTC.addBean(tf);
-            if (subtabNames[i].equals(subtabName)) item.setSelected(true);
+            if ((subtabNames.get(i)).equals(subtabName)) item.setSelected(true);
         }
 
         ListBoxBean delsubtabsLB = event.getListBoxBean("delsubtabsLB");
         delsubtabsLB.clear();
-        for (int i = 0; i < subtabNames.length; i++) {
+        for (int i = 0; i < subtabNames.size(); i++) {
             ListBoxItemBean item = new ListBoxItemBean();
-            item.setValue(subtabNames[i]);
+            item.setValue((String)subtabNames.get(i));
             item.setName(String.valueOf(i));
             delsubtabsLB.addBean(item);
         }
@@ -264,7 +264,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
             frame.setTableModel(model);
         } else {
-            log.error("Unable to find a <table-layout> beneath the <portlet-tab title=" + subtabNames[0] + " in descriptor");
+            log.error("Unable to find a <table-layout> beneath the <portlet-tab title=" + (String)subtabNames.get(0) + " in descriptor");
         }
 
         setNextState(req, VIEW_JSP);
@@ -281,13 +281,13 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     public void saveTabs(FormEvent event) {
         PortletRequest req = event.getPortletRequest();
-        String[] tabNames = layoutMgr.getTabNames(req);
-        for (int i = 0; i < tabNames.length; i++) {
+        List tabNames = layoutMgr.getTabNames(req);
+        for (int i = 0; i < tabNames.size(); i++) {
             TextFieldBean tf = event.getTextFieldBean("tab" + i);
             String newtitle = tf.getValue();
             if (newtitle == null) newtitle = "Untitled " + i + 1;
-            tabNames[i] = newtitle;
-            System.err.println("settng " + tabNames[i]);
+            tabNames.set(i, newtitle);
+            System.err.println("settng " + (String)tabNames.get(i));
         }
 
         layoutMgr.setTabNames(req, tabNames);
@@ -297,7 +297,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     public void deleteTab(FormEvent event) {
         PortletRequest req = event.getPortletRequest();
-        String[] tabNames = null;
+        List tabNames = null;
         ListBoxBean tabsLB = event.getListBoxBean("deltabsLB");
         String tabnum = "";
         if (tabsLB.getSelectedValue() != null) {
@@ -308,7 +308,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         if (tabNames != null) {
             int tabNum = Integer.parseInt(tabnum);
-            String tabName = tabNames[tabNum];
+            String tabName = (String)tabNames.get(tabNum);
             System.err.println("removing tab:" + tabName);
             layoutMgr.removeTab(req, tabName);
             layoutMgr.reloadPage(req);
@@ -322,7 +322,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         ListBoxBean tabsLB = event.getListBoxBean("delsubtabsLB");
         HiddenFieldBean hf = event.getHiddenFieldBean("tabHF");
         String tabNameHF = hf.getValue();
-        String[] tabNames = null;
+        List tabNames = null;
         String tabnum = "";
         System.err.println("in delete sub tab");
         if (tabsLB.getSelectedValue() != null) {
@@ -331,11 +331,11 @@ public class LayoutManagerPortlet extends ActionPortlet {
             tabNames = layoutMgr.getSubTabNames(req, tabNameHF);
             if (tabNames != null) {
                 int tabNum = Integer.parseInt(tabnum);
-                String tabName = tabNames[tabNum];
+                String tabName = (String)tabNames.get(tabNum);
                 System.err.println("removing sub tab:" + tabName);
 
                 // must have at least one sub tab
-                if (tabNames.length > 1) {
+                if (tabNames.size() > 1) {
                     layoutMgr.removeTab(req, tabName);
                     layoutMgr.reloadPage(req);
                 }
@@ -411,13 +411,13 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         String selTab = tabsLB.getSelectedValue();
 
-        String[] tabNames = layoutMgr.getTabNames(req);
-        String tabname = tabNames[Integer.parseInt(selTab)];
+        List tabNames = layoutMgr.getTabNames(req);
+        String tabname = (String)tabNames.get(Integer.parseInt(selTab));
         tabsHF.setValue(tabname);
 
         HiddenFieldBean subtabHF = event.getHiddenFieldBean("subtabHF");
-        String[] subtabNames = layoutMgr.getSubTabNames(req, tabname);
-        selTab = subtabNames[0];
+        List subtabNames = layoutMgr.getSubTabNames(req, tabname);
+        selTab = (String)subtabNames.get(0);
 
         subtabHF.setValue(selTab);
 
@@ -436,14 +436,14 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         String tabName = event.getHiddenFieldBean("tabHF").getValue();
 
-        String[] tabNames = layoutMgr.getSubTabNames(req, tabName);
-        for (int i = 0; i < tabNames.length; i++) {
+        List tabNames = layoutMgr.getSubTabNames(req, tabName);
+        for (int i = 0; i < tabNames.size(); i++) {
             TextFieldBean tf = event.getTextFieldBean("subtab" + i);
             String newtitle = tf.getValue();
             String title = this.getLocalizedText(req, "LAYOUT_UNTITLED_TAB");
             if (newtitle == null) newtitle = title + " " + i + 1;
-            tabNames[i] = newtitle;
-            System.err.println("setting " + tabNames[i]);
+            tabNames.set(i, newtitle);
+            System.err.println("setting " + (String)tabNames.get(i));
         }
 
         layoutMgr.setSubTabNames(req, tabName, tabNames);
@@ -455,9 +455,9 @@ public class LayoutManagerPortlet extends ActionPortlet {
         TextFieldBean tabTF = event.getTextFieldBean("tabTF");
         String tabName = tabTF.getValue();
         HiddenFieldBean hf = event.getHiddenFieldBean("tabNumHF");
-        String[] tabs = layoutMgr.getTabNames(req);
+        List tabs = layoutMgr.getTabNames(req);
         int tabNum = Integer.parseInt(hf.getValue());
-        tabs[tabNum] = tabName;
+        tabs.set(tabNum, tabName);
         layoutMgr.setTabNames(req, tabs);
         applyChanges(event);
         setNextState(req, "editTab");
@@ -571,13 +571,13 @@ public class LayoutManagerPortlet extends ActionPortlet {
         TextFieldBean tabTF = event.getTextFieldBean("subtabTF");
         String subtabName = tabTF.getValue();
         HiddenFieldBean hf = event.getHiddenFieldBean("tabNumHF");
-        String[] tabs = layoutMgr.getTabNames(req);
+        List tabs = layoutMgr.getTabNames(req);
         int tabNum = Integer.parseInt(hf.getValue());
-        String tabName = tabs[tabNum];
+        String tabName = (String)tabs.get(tabNum);
         HiddenFieldBean subhf = event.getHiddenFieldBean("subtabNumHF");
-        String[] subtabs = layoutMgr.getSubTabNames(req, tabName);
+        List subtabs = layoutMgr.getSubTabNames(req, tabName);
         int subtabNum = Integer.parseInt(subhf.getValue());
-        subtabs[subtabNum] = subtabName;
+        subtabs.set(subtabNum, subtabName);
         layoutMgr.setSubTabNames(req, tabName, subtabs);
         applyChanges(event);
         setNextState(req, "editSubTab");

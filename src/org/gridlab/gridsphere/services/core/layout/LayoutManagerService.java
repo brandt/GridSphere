@@ -57,13 +57,13 @@ public interface LayoutManagerService extends PortletService {
 
     public void reloadPage(PortletRequest req);
 
-    public String[] getTabNames(PortletRequest req);
+    public List getTabNames(PortletRequest req);
 
-    public void setTabNames(PortletRequest req, String[] tabNames);
+    public void setTabNames(PortletRequest req, List tabNames);
 
-    public String[] getSubTabNames(PortletRequest req, String tabName);
+    public List getSubTabNames(PortletRequest req, String tabName);
 
-    public void setSubTabNames(PortletRequest req, String tabName, String[] subTabNames);
+    public void setSubTabNames(PortletRequest req, String tabName, List subTabNames);
 
     public String[] getFrameClassNames(PortletRequest req, String subTabName);
 
