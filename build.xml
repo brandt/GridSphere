@@ -223,7 +223,7 @@ Copyright:
             private="true"
             doclet="org.castor.doclet.jdo.JDO"
             docletpath="lib/jdom.jar;lib/castor-doclet.jar"
-            additionalparam="-J-DFILE=webapps/WEB-INF/conf/mapping/docletmapping.xml -J-DLOG=1">
+            additionalparam="-J-DFILE=webapps/gridsphere/WEB-INF/conf/mapping/docletmapping.xml -J-DLOG=1">
         <classpath refid="classpath"/>
         </javadoc>
     </target>
@@ -370,7 +370,7 @@ Copyright:
     <!-- =================================================================== -->
     <target name="compiletests" if="junit.present" depends="compile" description="Compiles all JUnit tests">
         <mkdir dir = "${reports.tests}"/>
-        <copy file="${webapp.dir}/WEB-INF/conf/PortletServices.properties" todir="${classes.dir}"/>
+        <copy file="${gswebapp.dir}/WEB-INF/conf/PortletServices.properties" todir="${classes.dir}"/>
         <javac  srcdir="${test.dir}"
 		    destdir="${classes.dir}"
 		    classpathref="classpath"
