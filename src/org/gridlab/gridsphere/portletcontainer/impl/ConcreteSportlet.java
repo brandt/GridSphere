@@ -287,9 +287,9 @@ public class ConcreteSportlet implements ConcretePortlet {
      * expires: -1 = never expires 0 = always expires # = number of seconds until expiration
      * shared: true if portlet output shared among all users or false if not
      */
-    public Cacheable getCacheablePortletInfo() {
-        return null; //cacheable;
-    }
+    //public Cacheable getCacheablePortletInfo() {
+    //    return null; //cacheable;
+    //}
 
 
 }
