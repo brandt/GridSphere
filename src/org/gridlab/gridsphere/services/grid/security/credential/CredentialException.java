@@ -21,6 +21,6 @@ public class CredentialException extends PortletServiceException {
     }
 
     public CredentialException(String message, Throwable ex) {
-        super(message + ";" + ex.getMessage());
+        super(message + " " + ex.getMessage());
     }
 }

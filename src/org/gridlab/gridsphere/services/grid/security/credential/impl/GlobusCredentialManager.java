@@ -37,7 +37,7 @@ public final class GlobusCredentialManager
 
     private static PortletLog _log = SportletLog.getInstance(GlobusCredentialManager.class);
     private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
-    private CredentialRetrievalClient retrievalClient = null;
+    private GlobusCredentialRetrievalClient retrievalClient = null;
     private Map activeCredentialMaps = Collections.synchronizedSortedMap(new TreeMap());
     private String credentialPermissionImpl = GlobusCredentialPermission.class.getName();
     private String credentialMappingImpl = GlobusCredentialMapping.class.getName();
@@ -61,6 +61,7 @@ public final class GlobusCredentialManager
         _log.info("Entering init()");
         initServices();
         initCredentialRetrievalClient(config);
+        initPortalCredential(config);
         _log.info("Exiting init()");
     }
 
@@ -72,14 +73,8 @@ public final class GlobusCredentialManager
 
     private void initCredentialRetrievalClient(PortletServiceConfig config) {
         // Hostname init parameter
-        String host = config.getInitParameter("retrievalHost");
-        if (host == null) {
-            host = "";
-        }
-        if (host.equals("")) {
-            host = GlobusCredentialRetrievalClient.DEFAULT_HOST;
-            _log.warn("Credential retrieval host not set. Using default value " + host);
-        }
+        String host = config.getInitParameter("retrievalHost", GlobusCredentialRetrievalClient.DEFAULT_HOST);
+        _log.info("Credential retrieval hostname = " + host);
         // Port init parameter
         int port = GlobusCredentialRetrievalClient.DEFAULT_PORT;
         try {
@@ -87,18 +82,33 @@ public final class GlobusCredentialManager
         } catch (Exception e) {
             _log.warn("Credential retrieval port not valid. Using default value " + port);
         }
-        // Lifetime init parameter
+        _log.info("Credential retrieval port = " + port);
+        // Credential lifetime init parameter
         long lifetime =  GlobusCredentialRetrievalClient.DEFAULT_LIFETIME;
         try {
             lifetime = (new Long(config.getInitParameter("retrievalLifetime"))).longValue();
         } catch (Exception e) {
           _log.warn("Credential retrieval lifetime not valid. Using default value " + lifetime);
         }
-        _log.info("Credential retrieval hostname = " + host);
-        _log.info("Credential retrieval port = " + port);
         _log.info("Credential default lifetime = " + lifetime);
         // Save credential retrieval client
         this.retrievalClient = new GlobusCredentialRetrievalClient(host, port, lifetime);
+    }
+
+    private void initPortalCredential(PortletServiceConfig config) {
+        // x509 user certificate parameter
+        String x509UserCertificate = config.getInitParameter("x509UserCertificate", "");
+        // x509 user key parameter
+        String x509UserKey = config.getInitParameter("x509UserKey", "");
+        // x509 certificates path
+        String x509CertificatesPath = config.getInitParameter("x509CertificatesPath", "");
+        if (!x509UserCertificate.equals("") && !x509UserKey.equals("") && !x509CertificatesPath.equals("")) {
+            _log.info("Initializing portal credential with given x509 parameters...");
+            _log.info("X509 user certificate = " + x509UserCertificate);
+            _log.info("X509 user key = " + x509UserKey);
+            _log.info("X509 certificates path = " + x509CertificatesPath);
+            this.retrievalClient.setPortalCredential(x509UserCertificate, x509UserKey, x509CertificatesPath);
+        }
     }
 
     public void destroy() {
@@ -202,6 +212,7 @@ public final class GlobusCredentialManager
     }
 
     public boolean isCredentialPermitted(String subject) {
+        _log.info("Testing if [" + subject + "] is permitted");
         boolean answer = false;
         Iterator permissions = getCredentialPermissions().iterator();
         while (permissions.hasNext()) {
@@ -287,17 +298,17 @@ public final class GlobusCredentialManager
             // Instantiate credential mapping
             credentialMapping = new GlobusCredentialMapping();
             credentialMapping.setUser(mappingRequest.getUser());
-            credentialMapping.setSubject(mappingRequest.getSubject());
-            credentialMapping.setLabel(mappingRequest.getLabel());
-            credentialMapping.setTag(mappingRequest.getTag());
+            credentialMapping.setSubject(mappingRequest.getSubject().trim());
+            credentialMapping.setLabel(mappingRequest.getLabel().trim());
+            credentialMapping.setTag(mappingRequest.getTag().trim());
             // Create credential mapping
             createGlobusCredentialMapping(credentialMapping);
         } else if (mappingAction.equals(CredentialMappingAction.EDIT)) {
             // Retrieve associated credential mapping
             credentialMapping = getGlobusCredentialMapping(mappingRequest.getID());
-            credentialMapping.setSubject(mappingRequest.getSubject());
-            credentialMapping.setLabel(mappingRequest.getLabel());
-            credentialMapping.setTag(mappingRequest.getTag());
+            credentialMapping.setSubject(mappingRequest.getSubject().trim());
+            credentialMapping.setLabel(mappingRequest.getLabel().trim());
+            credentialMapping.setTag(mappingRequest.getTag().trim());
             // Update credential mapping
             updateCredentialMapping(credentialMapping);
         } else if (mappingAction.equals(CredentialMappingAction.REMOVE)) {
@@ -345,10 +356,11 @@ public final class GlobusCredentialManager
     }
 
     private GlobusCredentialMapping getGlobusCredentialMapping(String subject) {
+        String dn = GlobusCredential.retrieveDN(subject);
         try {
             String query = "select cm from "
                          + this.credentialMappingImpl
-                         + " cm where cm.subject=\"" + subject + "\"";
+                         + " cm where cm.subject=\"" + dn + "\"";
             _log.debug(query);
             return (GlobusCredentialMapping)this.pm.restoreObject(query);
         } catch (PersistenceManagerException e) {
@@ -359,23 +371,23 @@ public final class GlobusCredentialManager
 
     public CredentialMapping createCredentialMapping(String subject, User user)
             throws CredentialNotPermittedException {
-        return createCredentialMapping(subject, user, null);
+        return createCredentialMapping(subject.trim(), user, null);
     }
 
     public CredentialMapping createCredentialMapping(String subject, User user, String tag)
             throws CredentialNotPermittedException {
         // Instantiate mapping and set properties
         GlobusCredentialMapping mapping = new GlobusCredentialMapping();
-        mapping.setSubject(subject);
+        mapping.setSubject(subject.trim());
         mapping.setUser(user);
-        mapping.setTag(tag);
+        mapping.setTag(tag.trim());
         // Create record in database
         createCredentialMapping(mapping);
         return mapping;
     }
 
 
-    public void createCredentialMapping(CredentialMapping mapping)
+    private void createCredentialMapping(CredentialMapping mapping)
             throws CredentialNotPermittedException {
         String subject = mapping.getSubject();
         // Check that mapping is of right type
@@ -471,18 +483,7 @@ public final class GlobusCredentialManager
 
     public boolean existsCredentialMapping(String subject) {
         _log.debug("Testing if mapping for " + subject + " exists");
-        String value = null;
-        try {
-            String query = "select cm.subject from "
-                         + this.credentialMappingImpl
-                         + " cm where cm.subject=\"" + subject + "\"";
-            _log.debug(query);
-            value = (String)this.pm.restoreObject(query);
-        } catch (PersistenceManagerException e) {
-            _log.error("Error checking if credential mapping exists", e);
-            return false;
-        }
-        return (value != null);
+        return (getCredentialMapping(subject) != null);
     }
 
     public User getCredentialUser(String subject) {
@@ -526,17 +527,11 @@ public final class GlobusCredentialManager
 
     public String getCredentialTag(String subject)
             throws CredentialMappingNotFoundException {
-        String tag = null;
-        String query = "select cm.tag from "
-                     + this.credentialMappingImpl
-                     + " cm where cm.subject=\"" + subject + "\"";
-        _log.debug(query);
-        try {
-            tag = (String)this.pm.restoreObject(query);
-        } catch (PersistenceManagerException e) {
-            throw new CredentialMappingNotFoundException("No credential mapping exists for " + subject);
+        GlobusCredentialMapping mapping = getGlobusCredentialMapping(subject);
+        if (mapping == null) {
+            return null;
         }
-        return tag;
+        return mapping.getTag();
     }
 
     public void setCredentialTag(String subject, String tag)
@@ -555,17 +550,11 @@ public final class GlobusCredentialManager
 
     public String getCredentialLabel(String subject)
             throws CredentialMappingNotFoundException {
-        String label = null;
-        String query = "select cm.label from "
-                     + this.credentialMappingImpl
-                     + " cm where cm.subject=\"" + subject + "\"";
-        _log.debug(query);
-        try {
-            label = (String)this.pm.restoreObject(query);
-        } catch (PersistenceManagerException e) {
-            throw new CredentialMappingNotFoundException("No credential mapping exists for " + subject);
+        GlobusCredentialMapping mapping = getGlobusCredentialMapping(subject);
+        if (mapping == null) {
+            return null;
         }
-        return label;
+        return mapping.getLabel();
     }
 
     public void setCredentialLabel(String subject, String tag)
@@ -574,7 +563,6 @@ public final class GlobusCredentialManager
         GlobusCredentialMapping mapping = getGlobusCredentialMapping(subject);
         if (mapping == null) {
             throw new CredentialMappingNotFoundException("No credential mapping for " + subject);
-
         }
         // Set mapping label
         mapping.setLabel(tag);
@@ -584,17 +572,11 @@ public final class GlobusCredentialManager
 
     public List getCredentialHosts(String subject)
             throws CredentialMappingNotFoundException {
-        List hosts = null;
-        String query = "select cm.hosts from "
-                     + this.credentialMappingImpl
-                     + " cm where cm.subject=\"" + subject + "\"";
-        _log.debug(query);
-        try {
-            hosts = this.pm.restoreList(query);
-        } catch (PersistenceManagerException e) {
-            throw new CredentialMappingNotFoundException("No credential mapping exists for " + subject);
+        GlobusCredentialMapping mapping = getGlobusCredentialMapping(subject);
+        if (mapping == null) {
+            return new Vector();
         }
-        return hosts;
+        return mapping.getHosts();
     }
 
     public void addCredentialHost(String subject, String host)
@@ -746,11 +728,15 @@ public final class GlobusCredentialManager
 
     public void storeCredential(Credential credential)
         throws CredentialNotPermittedException {
-        String subject = credential.getSubject();
-        // Check if credential is permitted
-        if (isCredentialPermitted(subject)) {
-            throw new CredentialNotPermittedException("Credential subject pattern not permitted!");
+        if (! (credential instanceof GlobusCredential) ) {
+            throw new CredentialNotPermittedException("Wrong type of credential provided!");
         }
+        storeCredential((GlobusCredential)credential);
+    }
+
+    private void storeCredential(GlobusCredential credential)
+        throws CredentialNotPermittedException {
+        String subject = credential.getSubject();
         // Check if mapping exists
         User user = getCredentialUser(subject);
         if (user == null) {
@@ -759,7 +745,7 @@ public final class GlobusCredentialManager
         // Get user's credential collection
         Map userCredentials = getActiveCredentialMap(user);
         // Add this credential to that collection
-        userCredentials.put(user.getID(), credential);
+        userCredentials.put(subject, credential);
     }
 
     public void storeCredentials(List credentials)
@@ -778,7 +764,7 @@ public final class GlobusCredentialManager
         // If user mapping exists
         if (user != null) {
             // Get user's credential collection
-            Map userCredentials = (Map)this.activeCredentialMaps.get(user);
+            Map userCredentials = (Map)this.activeCredentialMaps.get(user.getID());
             // If user collection exists
             if (userCredentials != null) {
                 // Remove the credential from the collection
@@ -798,7 +784,7 @@ public final class GlobusCredentialManager
             while (users.hasNext()) {
                 User user = (User)users.next();
                 // Get user's credential collection
-                Map userCredentials = (Map)this.activeCredentialMaps.get(user);
+                Map userCredentials = (Map)this.activeCredentialMaps.get(user.getID());
                 // Just being safe...
                 if (userCredentials != null) {
                     synchronized (userCredentials) {
@@ -818,7 +804,7 @@ public final class GlobusCredentialManager
 
     public void destroyCredentials(User user) {
         // Remove mapping associated with user
-        Map userCredentials = (Map)this.activeCredentialMaps.remove(user);
+        Map userCredentials = (Map)this.activeCredentialMaps.remove(user.getID());
         // If not null, then destroy each credential in the mapping
         if (userCredentials != null) {
             synchronized (userCredentials) {
@@ -836,44 +822,27 @@ public final class GlobusCredentialManager
 
     public List getActiveCredentials() {
         List activeCredentials = new Vector();
-        Iterator users = this.activeCredentialMaps.keySet().iterator();
-        while (users.hasNext()) {
-            User user = (User)users.next();
-            List userCredentials = getActiveCredentials(user);
-            activeCredentials.addAll(userCredentials);
+        // Iterate through user credential collections
+        Iterator userCredentialMaps = this.activeCredentialMaps.values().iterator();
+        synchronized (this.activeCredentialMaps) {
+            while (userCredentialMaps.hasNext()) {
+                // Get next user's credential collection
+                Map userCredentialMap = (Map)userCredentialMaps.next();
+                // Insert credentials from map into list
+                insertActiveCredentialsIntoList(userCredentialMap, activeCredentials);
+            }
         }
-
         return activeCredentials;
     }
 
     public List getActiveCredentials(User user) {
         List activeCredentials = new Vector();
         // Get user's credential collection
-        Map userCredentials = (Map)this.activeCredentialMaps.get(user);
+        Map userCredentialMap = (Map)this.activeCredentialMaps.get(user.getID());
         // If not null...
-        if (userCredentials != null) {
-            synchronized (userCredentials) {
-                // Iterate through the subjects in user's credential collection
-                Iterator iterator = userCredentials.keySet().iterator();
-                while (iterator.hasNext()) {
-                    String subject = (String)iterator.next();
-                    // Get the credential associated with subject
-                    Credential credential = (Credential)userCredentials.get(subject);
-                    // Just being safe...
-                    if (credential == null) {
-                        _log.debug("Credential not active " + subject);
-                        continue;
-                    }
-                    // If expired then remove credential from collection
-                    if (credential.isExpired()) {
-                        _log.debug("Credential has expired " + credential.toString());
-                        userCredentials.remove(subject);
-                    // Otherwise, add to list of active credentials
-                    } else {
-                        activeCredentials.add(credential);
-                    }
-                }
-            }
+        if (userCredentialMap != null) {
+            // Add active credentials to the list
+            insertActiveCredentialsIntoList(userCredentialMap, activeCredentials);
         }
         return activeCredentials;
     }
@@ -883,7 +852,7 @@ public final class GlobusCredentialManager
         // Get subjects mapped to user and host
         List userSubjects = getCredentialSubjectsForHost(user, host);
         // Get user's credential collection
-        Map userCredentials = (Map)this.activeCredentialMaps.get(user);
+        Map userCredentials = (Map)this.activeCredentialMaps.get(user.getID());
         if (userCredentials != null) {
             synchronized (userCredentials) {
                 // Iterate through user's mapped subjects
@@ -911,6 +880,31 @@ public final class GlobusCredentialManager
         return activeCredentials;
     }
 
+    private void insertActiveCredentialsIntoList(Map credentialMap, List credentialList) {
+        synchronized (credentialMap) {
+            // Iterate through the subjects in user's credential collection
+            Iterator iterator = credentialMap.keySet().iterator();
+            while (iterator.hasNext()) {
+                String subject = (String)iterator.next();
+                // Get the credential associated with subject
+                Credential credential = (Credential)credentialMap.get(subject);
+                // Just being safe...
+                if (credential == null) {
+                    _log.debug("Credential not active " + subject);
+                    continue;
+                }
+                // If expired then remove credential from collection
+                if (credential.isExpired()) {
+                    _log.debug("Credential has expired " + credential.toString());
+                    credentialMap.remove(subject);
+                // Otherwise, add to list of active credentials
+                } else {
+                    credentialList.add(credential);
+                }
+            }
+        }
+    }
+
     public Credential getActiveCredential(String subject) {
         Credential credential = null;
         // Get user mapping for subject
@@ -918,7 +912,7 @@ public final class GlobusCredentialManager
         // If mapping exists
         if (user != null) {
             // Get user's credential collection
-            Map userCredentials = (Map)this.activeCredentialMaps.get(user);
+            Map userCredentials = (Map)this.activeCredentialMaps.get(user.getID());
             // If collection exists
             if (userCredentials != null) {
                 // Get credential from collection
@@ -981,7 +975,7 @@ public final class GlobusCredentialManager
     public List getActiveCredentialSubjects(User user) {
         List subjectList = new Vector();
         // Get user's credential collection
-        Map userCredentials = (Map)this.activeCredentialMaps.get(user);
+        Map userCredentials = (Map)this.activeCredentialMaps.get(user.getID());
         if (userCredentials != null) {
             synchronized (userCredentials) {
                 Iterator iterator = userCredentials.keySet().iterator();
@@ -1018,7 +1012,7 @@ public final class GlobusCredentialManager
     public List getActiveCredentialMappings(User user) {
         List mapppingList = new Vector();
         // Get user's credential collection
-        Map activeCredentialMap = (Map)this.activeCredentialMaps.get(user);
+        Map activeCredentialMap = (Map)this.activeCredentialMaps.get(user.getID());
         if (activeCredentialMap != null) {
             synchronized (activeCredentialMap) {
                 Iterator iterator = activeCredentialMap.keySet().iterator();
@@ -1033,13 +1027,12 @@ public final class GlobusCredentialManager
     }
 
     private Map getActiveCredentialMap(User user) {
-        String userID = user.getID();
         // Get user's credentials
-        Map userCredentials = (Map)this.activeCredentialMaps.get(userID);
+        Map userCredentials = (Map)this.activeCredentialMaps.get(user.getID());
         // If mapping is empty, create new mapping
         if (userCredentials == null) {
             userCredentials = Collections.synchronizedSortedMap(new TreeMap());
-            activeCredentialMaps.put(userID, userCredentials);
+            activeCredentialMaps.put(user.getID(), userCredentials);
         }
         return userCredentials;
     }

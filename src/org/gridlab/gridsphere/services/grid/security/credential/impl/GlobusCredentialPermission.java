@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.services.grid.security.credential.CredentialPermission;
+import org.gridlab.gridsphere.services.grid.security.credential.Credential;
 
 import java.util.Date;
 import java.util.Iterator;

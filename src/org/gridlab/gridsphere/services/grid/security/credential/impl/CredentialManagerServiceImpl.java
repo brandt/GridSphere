@@ -166,16 +166,16 @@ public class CredentialManagerServiceImpl
     }
 
     /*
-     * Must be super user
+     * Must be super user or same user (TEMPORARILY MPR 25/02/03)
      */
     public CredentialMapping approveCredentialMappingRequest(CredentialMappingRequest mappingRequest) {
-        this.authorizer.authorizeSuperUser();
+        this.authorizer.authorizeSuperOrSameUser(mappingRequest.getUser());
         return this.credentialManager.approveCredentialMappingRequest(mappingRequest);
     }
+
     /*
      * Must be super user
      */
-
     public void denyCredentialMappingRequest(CredentialMappingRequest mappingRequest) {
         this.authorizer.authorizeSuperUser();
         this.credentialManager.denyCredentialMappingRequest(mappingRequest);
@@ -201,28 +201,32 @@ public class CredentialManagerServiceImpl
     }
 
     /*
-     * Must be super user
+     * Must be super user or same user (TEMPORARILY MPR 25/02/03)
      */
     public CredentialMapping createCredentialMapping(String subject, User user)
             throws CredentialNotPermittedException {
-        this.authorizer.authorizeSuperUser();
+        this.authorizer.authorizeSuperOrSameUser(user);
         return this.credentialManager.createCredentialMapping(subject, user);
     }
 
     /*
-     * Must be super user
+     * Must be super user or same user (TEMPORARILY MPR 25/02/03)
      */
     public CredentialMapping createCredentialMapping(String subject, User user, String tag)
             throws CredentialNotPermittedException {
-        this.authorizer.authorizeSuperUser();
+        this.authorizer.authorizeSuperOrSameUser(user);
         return this.credentialManager.createCredentialMapping(subject, user, tag);
     }
 
     /*
-     * Must be super user
+     * Must be super or same user
      */
     public void deleteCredentialMapping(String subject) {
-        this.authorizer.authorizeSuperUser();
+        User user = this.credentialManager.getCredentialUser(subject);
+        if (user == null) {
+            return;
+        }
+        this.authorizer.authorizeSuperOrSameUser(user);
         this.credentialManager.deleteCredentialMapping(subject);
     }
 

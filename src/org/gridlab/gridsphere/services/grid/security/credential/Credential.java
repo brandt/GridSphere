@@ -9,6 +9,8 @@ import java.util.Date;
 
 public interface Credential {
 
+    public String getDN();
+
     public String getSubject();
 
     public String getIssuer();

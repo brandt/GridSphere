@@ -62,6 +62,18 @@
             <param-name>retrievalHost</param-name>
             <param-value>supergrid.aei.mpg.de</param-value>
         </service-config>
+        <service-config>
+            <param-name>x509UserCertificate</param-name>
+            <param-value></param-value>
+        </service-config>
+        <service-config>
+            <param-name>x509UserKey</param-name>
+            <param-value></param-value>
+        </service-config>
+        <service-config>
+            <param-name>x509CertificatesPath</param-name>
+            <param-value></param-value>
+        </service-config>
     </service>
 
     <service>
