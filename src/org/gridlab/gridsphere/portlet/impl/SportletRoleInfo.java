@@ -10,7 +10,7 @@ public class SportletRoleInfo {
 
     private String portletRole = new String();
     private String portletClass = new String();
-    private String oid = new String();
+    private String oid = null;
 
     public String getOid() {
         return oid;
