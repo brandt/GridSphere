@@ -18,15 +18,15 @@ Version: $Id$
 
 .portlet-pane {
   background-color: #FFFFFF;
-  border: 0;
+  border: none;
   padding: 0;
   spacing: 0;
   width: 100%;
 }
 
 .portlet-frame {
-  background-color: #397DF3;
-  border: 0;
+  background-color: white;
+  border: none;
   padding: 0;
   spacing: 0;
   width: 100%;
@@ -80,7 +80,7 @@ Version: $Id$
 
 .portlet-frame-header {
   background-color: #CCCCFF;
-  border-none;
+  border: none;
   color: #000000;
   font-family: inherit;
   font-size: 10px;
@@ -90,7 +90,7 @@ Version: $Id$
 
 .portlet-frame-header-checkbox {
   background-color: #CCCCFF;
-  border-none;
+  border: none;
   color: #FFFFFF;
   font-family: inherit;
   font-size: -1;
