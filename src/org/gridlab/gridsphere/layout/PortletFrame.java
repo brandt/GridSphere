@@ -482,7 +482,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 postframe.append("<tr><td >");
             }
 
-
             // TODO try to cache portlet's rendering---
             storedWriter = new StringWriter();
             writer = new PrintWriter(storedWriter);
@@ -551,23 +550,18 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         // piece together portlet frame + title depending on whether title was set during doXXX method
         // or not
+        frame.append(preframe);
         if (!transparent) {
             String titleStr = (String) req.getAttribute(SportletProperties.PORTLET_TITLE);
             if (titleStr == null) {
                 titleStr = titleBar.getTitle();
                 req.removeAttribute(SportletProperties.PORTLET_TITLE);
             }
-
-            frame.append(preframe);
             frame.append(titleBar.getPreBufferedTitle());
             frame.append(titleStr);
             frame.append(titleBar.getPostBufferedTitle());
         }
         frame.append(postframe);
-
-        //out = res.getWriter();
-
-        //out.println(frame.toString());
 
         if (cacheExpiration > 0) {
             cacheService.cache(this.getComponentID() + portletClass + id, frame, cacheExpiration);
