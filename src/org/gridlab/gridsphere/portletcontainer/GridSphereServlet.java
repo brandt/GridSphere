@@ -21,6 +21,7 @@ import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerSer
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
+import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -49,6 +50,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     /* GridSphere Access Control Service */
     private static AccessControlManagerService aclService = null;
+
+    private static UserManagerService userManagerService = null;
 
     private static LoginService loginService = null;
 
@@ -83,6 +86,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     public synchronized void initializeServices() throws PortletServiceException {
         portletManager = (PortletManagerService) factory.createUserPortletService(PortletManagerService.class, GuestUser.getInstance(), getServletConfig(), true);
+        userManagerService = (UserManagerService) factory.createUserPortletService(UserManagerService.class, GuestUser.getInstance(), getServletConfig(), true);
         aclService = (AccessControlManagerService) factory.createUserPortletService(AccessControlManagerService.class, GuestUser.getInstance(), getServletConfig(), true);
         loginService = (LoginService) factory.createUserPortletService(LoginService.class, GuestUser.getInstance(), getServletConfig(), true);
     }
@@ -123,8 +127,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
         }
 
-        List groups = aclService.getGroups(portletReq.getUser());
-        portletReq.setAttribute(SportletProperties.PORTLETGROUPS, groups);
+        setUserAndGroups(portletReq);
 
         // Handle user login and logout
         if (event.hasAction()) {
@@ -162,8 +165,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         }
 
-        groups = aclService.getGroups(portletReq.getUser());
-        portletReq.setAttribute(SportletProperties.PORTLETGROUPS, groups);
+        setUserAndGroups(portletReq);
 
         layoutEngine.service(event);
 
@@ -175,6 +177,22 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
 
     }
+
+    public void setUserAndGroups(PortletRequest req) {
+        // Retrieve user if there is one
+        User user = null;
+        if (req.getSession(false) != null) {
+            String uid = (String)req.getSession().getAttribute(SportletProperties.PORTLET_USER);
+            if (uid != null) {
+                user = userManagerService.getUser(uid);
+            }
+        }
+        if (user == null) user = GuestUser.getInstance();
+        req.setAttribute(SportletProperties.PORTLET_USER, user);
+        List groups = aclService.getGroups(user);
+        req.setAttribute(SportletProperties.PORTLETGROUPS, groups);
+    }
+
     /**
      * Handles login requests
      *
@@ -194,7 +212,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         try {
             User user = loginService.login(username, password);
-            session.setAttribute(SportletProperties.PORTLET_USER, user);
+            req.setAttribute(SportletProperties.PORTLET_USER, user);
+            req.getSession(true).setAttribute(SportletProperties.PORTLET_USER, user.getID());
             if (aclService.hasSuperRole(user)) {
                 log.debug("User: " + user.getUserName() + " logged in as SUPER");
                 req.setAttribute(SportletProperties.PORTLET_ROLE, PortletRole.SUPER);
