@@ -20,7 +20,10 @@ import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.AccountRequest;
 import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
+import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
+import org.gridlab.gridsphere.tmf.config.TmfService;
+import org.gridlab.gridsphere.tmf.config.TmfUser;
 
 import javax.servlet.UnavailableException;
 import java.util.*;
@@ -41,6 +44,8 @@ public class ProfileManagerPortlet extends ActionPortlet {
     private LayoutManagerService layoutMgr = null;
     private List supportedLocales = null;
     private PortletRegistry portletRegistry = null;
+    private TextMessagingService tms = null;
+
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
@@ -50,6 +55,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             this.aclManagerService = (AccessControlManagerService)config.getContext().getService(AccessControlManagerService.class);
             this.portletRegistry = PortletRegistry.getInstance();
             this.layoutMgr = (LayoutManagerService)config.getContext().getService(LayoutManagerService.class);
+            this.tms = (TextMessagingService) config.getContext().getService(TextMessagingService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
@@ -76,16 +82,22 @@ public class ProfileManagerPortlet extends ActionPortlet {
     public void doViewUser(FormEvent event) {
         PortletRequest req = event.getPortletRequest();
         DefaultTableModel model = setUserTable(event, true);
+        DefaultTableModel messaging = getMessagingFrame(event, true);
+        FrameBean messagingFrame = event.getFrameBean("messagingFrame");
         FrameBean groupsFrame = event.getFrameBean("groupsFrame");
         groupsFrame.setTableModel(model);
+        messagingFrame.setTableModel(messaging);
         setNextState(req, VIEW_USER_JSP);
     }
 
     public void doEditUser(FormEvent event) {
         PortletRequest req = event.getPortletRequest();
         DefaultTableModel model = setUserTable(event, false);
+        DefaultTableModel messaging = getMessagingFrame(event, false);
+        FrameBean messagingFrame = event.getFrameBean("messagingFrame");
         FrameBean groupsFrame = event.getFrameBean("groupsFrame");
         groupsFrame.setTableModel(model);
+        messagingFrame.setTableModel(messaging);
         setNextState(req, EDIT_USER_JSP);
     }
 
@@ -175,6 +187,8 @@ public class ProfileManagerPortlet extends ActionPortlet {
             localeLB.addBean(item);
         }
 
+        DefaultTableModel model = new DefaultTableModel();
+
         // fill in groups model
 
         TableRowBean tr = new TableRowBean();
@@ -194,7 +208,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
         tcGroupsDesc.addBean(tbGroupsDesc);
         tr.addBean(tcGroups);
         tr.addBean(tcGroupsDesc);
-        DefaultTableModel model = new DefaultTableModel();
         model.addTableRowBean(tr);
 
         List groups = aclManagerService.getGroups();
@@ -244,6 +257,66 @@ public class ProfileManagerPortlet extends ActionPortlet {
             groupsTR.addBean(groupsTC);
             groupsTR.addBean(groupsDescTC);
             model.addTableRowBean(groupsTR);
+        }
+
+
+        return model;
+    }
+
+
+    private DefaultTableModel getMessagingFrame(FormEvent event, boolean readonly) {
+        DefaultTableModel model = new DefaultTableModel();
+        PortletRequest req = event.getPortletRequest();
+
+        TableRowBean trMessaging = new TableRowBean();
+
+        TableCellBean tcMessagingDesc = new TableCellBean();
+        TableCellBean tcMessagingUserid = new TableCellBean();
+
+
+        TextBean tbMessagingDesc = event.getTextBean("tbMessagingDesc");
+        TextBean tbMessagingUserid = event.getTextBean("tbMessagingUserid");
+        String text = this.getLocalizedText(req, "PROFILE_MESSAGING_SERVICE");
+        tbMessagingDesc.setValue(text);
+        tcMessagingDesc.addBean(tbMessagingDesc);
+        tbMessagingUserid = event. getTextBean("tbMessagingUserid");
+        text = this.getLocalizedText(req, "PROFILE_MESSAGING_USERID");
+        tbMessagingUserid.setValue(text);
+        tcMessagingUserid.addBean(tbMessagingUserid);
+
+        trMessaging.addBean(tcMessagingDesc);
+        trMessaging.addBean(tcMessagingUserid);
+        // add the header to the model
+        trMessaging.setHeader(true);
+
+        model.addTableRowBean(trMessaging);
+
+        List services = tms.getServices();
+        for (int i=0;i<services.size();i++) {
+            TmfService tmfservice = (TmfService) services.get(i);
+
+            // tablerow
+            TableRowBean trService = event.getTableRowBean("TRSERVICE"+tmfservice.getMessageType());
+
+            // NAME
+            TableCellBean tcServiceName = event.getTableCellBean("TCSERVICENAME"+tmfservice.getMessageType());
+            // make text
+            TextBean servicename = event.getTextBean("TSERVICENAME"+tmfservice.getMessageType());
+            servicename.setValue(tmfservice.getDescription());
+            tcServiceName.addBean(servicename);
+            trService.addBean(tcServiceName);
+
+            // INPUT
+            TableCellBean tcServiceInput = event.getTableCellBean("TCSERVCIEINPUT_"+tmfservice.getMessageType());
+            // make inputfield
+            TextFieldBean servicename_input = event.getTextFieldBean("TFSERVICENAME"+tmfservice.getMessageType());
+            TmfUser user = tms.getUser(req.getUser().getUserID());
+            servicename_input.setValue(user.getUserNameForMessagetype(tmfservice.getMessageType()));
+            servicename_input.setDisabled(readonly);
+            tcServiceInput.addBean(servicename_input);
+            trService.addBean(tcServiceInput);
+
+            model.addTableRowBean(trService);
         }
         return model;
     }
@@ -348,6 +421,26 @@ public class ProfileManagerPortlet extends ActionPortlet {
             this.layoutMgr.reloadPage(req);
         }
 
+        // now do the messaging stuff
+
+        TmfUser tmfuser = tms.getUser(req.getUser().getUserID());
+        // if the user does not exist yet
+        if (tmfuser==null) {
+            tmfuser = new TmfUser();
+            tmfuser.setName(event.getPortletRequest().getUser().getFullName());
+            tmfuser.setUserid(req.getUser().getUserID());
+            //tmfuser.setPreferred(h_service.getValue());
+        }
+
+        List services = tms.getServices();
+        for (int i=0;i<services.size();i++) {
+            TmfService tmfservice = (TmfService) services.get(i);
+
+            TextFieldBean tfb = event.getTextFieldBean("TFSERVICENAME"+tmfservice.getMessageType());
+            tmfuser.setMessageType(tmfservice.getMessageType(), tfb.getValue());
+        }
+
+        tms.saveUser(tmfuser);
 
     }
 

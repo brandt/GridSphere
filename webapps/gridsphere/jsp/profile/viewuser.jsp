@@ -35,6 +35,8 @@
     </ui:tablerow>
 </ui:frame>
 
+<ui:frame beanId="messagingFrame"/>
+
 <ui:frame beanId="groupsFrame"/>
 
 </ui:panel>

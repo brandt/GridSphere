@@ -9,7 +9,7 @@
 <ui:form>
 <ui:panel>
 
-<ui:text key="PROFILE_EDIT"/>  <b><%= username %></b>
+<ui:text key="PROFILE_EDIT"/>  <b> <%= username %></b>
 
 <br>
 <ui:text key="PROFILE_LASTLOGIN"/>  <b><%= logintime %></b>
@@ -35,6 +35,8 @@
         <ui:tablecell><ui:listbox beanId="userLocale"/></ui:tablecell>
     </ui:tablerow>
 </ui:frame>
+
+<ui:frame beanId="messagingFrame"/>
 
 <ui:frame beanId="groupsFrame"/>
 
