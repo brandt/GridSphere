@@ -37,7 +37,7 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
      */
     public SportletApplicationSettings(ConcretePortlet concPortlet) {
         this.concPortlet = concPortlet;
-        store = concPortlet.getPortletContext();
+        store = concPortlet.getPortletContextHash();
     }
 
     /**

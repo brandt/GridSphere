@@ -40,7 +40,7 @@ public interface ConcretePortlet {
      *
      * @return the map of portlet context parameters keys are variable name and values are variable values
      */
-    public Hashtable getPortletContext();
+    public Hashtable getPortletContextHash();
 
 
     /**
@@ -48,7 +48,7 @@ public interface ConcretePortlet {
      *
      * @return the map of portlet config parameters keys are variable name and values are variable values
      */
-    public Hashtable getPortletConfig();
+    public Hashtable getPortletConfigHash();
 
     /**
      * Returns the sportlet settings for this concrete portlet

@@ -234,7 +234,7 @@ public class ConcretePortletImpl implements ConcretePortlet {
      *
      * @return the portlet config
      */
-    public Hashtable getPortletConfig() {
+    public Hashtable getPortletConfigHash() {
         return configHash;
     }
 
@@ -243,7 +243,7 @@ public class ConcretePortletImpl implements ConcretePortlet {
      *
      * @return the map of portlet context parameters keys are variable name and values are variable values
      */
-    public Hashtable getPortletContext() {
+    public Hashtable getPortletContextHash() {
         return contextHash;
     }
 

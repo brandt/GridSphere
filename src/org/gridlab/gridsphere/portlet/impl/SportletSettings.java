@@ -52,7 +52,7 @@ public class SportletSettings implements PortletSettings {
         langList = concretePortletInfo.getLanguageList();
 
         // Stick <config-param> in store
-        store = concPortlet.getPortletContext();
+        store = concPortlet.getPortletContextHash();
         Iterator configParamsIt = concretePortletInfo.getConfigParamList().iterator();
         while (configParamsIt.hasNext()) {
             ConfigParam configParam = (ConfigParam)configParamsIt.next();
