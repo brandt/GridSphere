@@ -313,9 +313,11 @@ public class PortletPageFactory implements PortletSessionListener {
                 PortletTabbedPane portletTabs = PortletTabRegistry.getGroupTabs(g.getName());
                 if (portletTabs != null) {
                     tabs = portletTabs.getPortletTabs();
+
                     for (int j = 0; j < tabs.size(); j++) {
                         PortletTab tab = (PortletTab) tabs.get(j);
                         log.debug("adding tab: " + tab.getTitle("en"));
+
                         //pane.addTab(g.getName(), (PortletTab)tab.clone());
                         pane.addTab((PortletTab) deepCopy(tab));
                     }
@@ -376,14 +378,20 @@ public class PortletPageFactory implements PortletSessionListener {
         try {
 
             pane = getUserTabbedPane(req);
+            int tabNum = PortletTab.DEFAULT_USERTAB_ORDER;
             if (pane == null) {
                 pane = new PortletTabbedPane();
                 User user = req.getUser();
                 String userLayout = userLayoutDir + File.separator + user.getID();
                 pane.setLayoutDescriptor(userLayout);
+            } else {
+                tabNum = pane.getLastPortletTab().getTabOrder() + 1;
             }
 
             PortletTab topTab = new PortletTab();
+            System.err.println("setting tab num to " + tabNum);
+            topTab.setTabOrder(tabNum);
+
             topTab.setCanModify(true);
             topTab.setTitle(req.getLocale().getLanguage(), tabName);
             PortletTabbedPane childPane = new PortletTabbedPane();
@@ -507,7 +515,6 @@ public class PortletPageFactory implements PortletSessionListener {
             }
 
             page = createFromGroups(req);
-
 
             userLayouts.put(sessionId, page);
             sessionManager.addSessionListener(sessionId, this);

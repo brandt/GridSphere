@@ -142,6 +142,12 @@ double-tabbed pane. An example illustration is shown:
                 for localization support.
             </para>
             </callout>
+            <callout arearefs="tab.order">
+            <para>
+                The tab order is a number generally between 0 and 100 that specifies the order of the tab in this tab pane.
+                If the tab number is undefined it will have a default of 20 applied to it.
+            </para>
+            </callout>
             <callout arearefs="tab.pane2">
             <para>
                 Although not required, in general a tab contains either a sub-level tabbed pane or a

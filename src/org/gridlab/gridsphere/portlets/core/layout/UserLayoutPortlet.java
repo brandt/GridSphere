@@ -18,10 +18,7 @@ import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class UserLayoutPortlet extends ActionPortlet {
 
@@ -66,19 +63,17 @@ public class UserLayoutPortlet extends ActionPortlet {
         log.debug("creating tab " + tabName + " cols= " + cols);
         PortletTabbedPane pane = layoutMgr.getUserTabbedPane(event.getPortletRequest());
         if (pane != null) {
-        Iterator it = pane.getPortletTabs().iterator();
-        while (it.hasNext()) {
-            PortletTab tab = (PortletTab)it.next();
-            if (tab.getLabel().equals(tabName + "Tab")) {
-                createErrorMessage(event, this.getLocalizedText(event.getPortletRequest(), "LAYOUT_SAMETAB_ERROR"));
-                return;
+            Iterator it = pane.getPortletTabs().iterator();
+            while (it.hasNext()) {
+                PortletTab tab = (PortletTab)it.next();
+                if (tab.getLabel().equals(tabName + "Tab")) {
+                    createErrorMessage(event, this.getLocalizedText(event.getPortletRequest(), "LAYOUT_SAMETAB_ERROR"));
+                    return;
+                }
             }
         }
-        }
-
 
         pane = layoutMgr.createUserTabbedPane(event.getPortletRequest(), cols, tabName);
-
 
         PortletTab tab = pane.getLastPortletTab();
 
@@ -86,7 +81,8 @@ public class UserLayoutPortlet extends ActionPortlet {
         PortletPage page = layoutMgr.getPortletPage(event.getPortletRequest());
         PortletTabbedPane mypane = page.getPortletTabbedPane();
         List tabs = mypane.getPortletTabs();
-        tabs.add(0, tab);
+        tabs.add(tab);
+        Collections.sort(tabs, new PortletTab());
         layoutMgr.reloadPage(event.getPortletRequest());
     }
 

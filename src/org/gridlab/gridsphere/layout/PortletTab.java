@@ -26,11 +26,12 @@ import java.util.*;
  */
 public class PortletTab extends BasePortletComponent implements Serializable, Cloneable, Comparator {
 
+    public static final int DEFAULT_USERTAB_ORDER = 20;
     private String title = "?";
     private List titles = new ArrayList();
     private transient boolean selected = false;
     private PortletComponent portletComponent = null;
-    private int tabOrder = -1;
+    private int tabOrder = 50;
 
     /**
      * Constructs an instance of PortletTab
