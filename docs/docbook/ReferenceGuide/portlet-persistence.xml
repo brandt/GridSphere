@@ -30,14 +30,6 @@ initial GridSphere database.
     portlet service for this management. See <link linkend='portlet-service-example' endterm="portlet-service-example-title"/>
 </para>
 
-<sect1>
-    <title>Creating Persistent Objects</title>
-    <para>
-        I know I have to use castor doclet tags-- but which ones and why?
-
-    </para>
-</sect1>
-
 
 <sect1>
     <title>The Persistence Manager</title>

@@ -1,3 +1,13 @@
+
+<!--
+
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+    Author:     Jason Novotny, Oliver Wehrens
+    Version:    $Id$
+-->
+
 <chapter id="thirdparty">
     <title>Third-Party Portlets</title>
     <para>
@@ -292,162 +302,4 @@ public class HelloWorld  extends AbstractPortlet {
         </sect2>
 
     </sect1>
-
-    <sect1 id="persistence">
-        <title>Using persistence in a portlet</title>
-        This Tutorial will show how you can make objects persistent to a database. Since Gridsphere comes
-        with hsqldb preinstalled it will use this for the examples. Furthermore Gridsphere uses
-        castor to store/retrieve objects from the database.
-
-        <sect2 id="castorpersistence">
-            <title>Making your own objects peristent</title>
-            The recommended way of makeing your own objects easily persistent is to create a PortletService
-            which takes care of this operation. The reason for that is that this operation is potentially
-            useful to other portlets as well. Furthermore this is needed due to classloading issues.
-            After creating a new project we first create the service. The PortletService has to
-            be in a package called <filename>services</filename> (e.g. <filename>org.gridlab.gridsphere.portlets.tutorial.pmdemo.services</filename>).
-            All object which need to make persistent have to be in the same package as well.
-            In our case we want to create a very simple 'NameService' which will store 'Name' objects and returns
-            a list of all the objects when requested.
-            <example>
-                <title>Name.java - Persistence </title>
-                <programlisting>
-<![CDATA[
-package org.gridlab.gridsphere.portlets.tutorial.pmdemo.services;
-
-import org.gridlab.gridsphere.core.persistence.BaseObject;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-
-/**
- * @table pmdemo
- */
-public class Name extends BaseObject {
-    private static PortletLog log = SportletLog.getInstance(Name.class);
-
-    /**
-     * @sql-size 50
-     * @sql-name fname
-     */
-    String firstname = new String();
-
-    /**
-     * @sql-size 50
-     * @sql-name lname
-     */
-    String lastname = new String();
-
-    public String getFirstname() {
-        return firstname;
-    }
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-    public String getLastname() {
-        return lastname;
-    }
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-}
-]]>
-
-                </programlisting>
-            </example>
-            <para>
-                To generate mapping files for castor we use castordoclet. This packages creates the corresponding
-                mapping and database files from the sourcecode. However it is possible to create this mappings
-                by hand but it is not recommended to do so. For further information on the syntax off the
-                castordocletsmapping refer to the homepage of the project.
-            </para>
-            <para>
-                Now we need to create the actual service which will take care of the creation/update/deletion
-                of the object. We need to define an interface and an implementation for that.
-                <example>
-                    <title>NameService.java - Persistence</title>
-                    <screen>
-<![CDATA[
-package org.gridlab.gridsphere.portlets.tutorial.pmdemo.services;
-
-import org.gridlab.gridsphere.portlet.service.PortletService;
-
-import java.util.List;
-
-public interface NameService extends PortletService {
-    public void storeName(Name name);
-    public List getNames();
-}
-]]>
-                    </screen>
-                </example>
-                <para>
-                    This defines two methods of which one stores a nameobject the other returns a list of these
-                    objects.
-                </para>
-                <example>
-                    <title>NameServiceImpl.java - Persistence</title>
-                    <screen>
-<![CDATA[
-package org.gridlab.gridsphere.portlets.tutorial.pmdemo.services;
-
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-
-import java.util.List;
-public class NameServiceImpl implements NameService, PortletServiceProvider {
-    private PersistenceManagerRdbms pm = PersistenceManagerFactory.createProjectPersistenceManagerRdbms("pmdemo");
-    public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-    }
-
-    public void destroy() {
-    }
-
-    public void storeName(Name name) {
-        try {
-            pm.create(name);
-        } catch (PersistenceManagerException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public List getNames() {
-        try {
-            List result = pm.restoreList("select n from org.gridlab.gridsphere.portlets.tutorial.pmdemo.services.Name n");
-            return result;
-        } catch (PersistenceManagerException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-}
-]]>
-
-                    </screen>
-                </example>
-                <para>
-                    The class needs to implement the NameService interface as well as the PortletServiceProviderinterface.
-                    Serveral steps are needed to make the service work.
-                    <para>
-                        We need to get an instance of the PersistenceManager which will take care
-                        of the database handling. The argument you pass into the <classname>PersistenceManagerFactory</classname>
-                        is the name of the project you were building.
-                    </para>
-                    <para>
-                        In the storeName() method all we need to save an object to the database is to call
-                        the create() method of the persistencemanager.
-                    </para>
-                    <para>
-                        The method restoreList() will return a list with results according to the query. To retrieve the list of objects we need some knowledge of OQL. Please refer to the castordocumentaion
-                        on howto use that or send e-mail to the GridSphere users list for more assistance.
-                    </para>
-                </para>
-            </para>
-
-        </sect2>
-    </sect1>
-
 </chapter>
