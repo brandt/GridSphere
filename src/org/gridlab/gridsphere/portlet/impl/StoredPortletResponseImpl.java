@@ -1,0 +1,31 @@
+
+package org.gridlab.gridsphere.portlet.impl;
+
+import org.gridlab.gridsphere.portlet.PortletResponse;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+public class StoredPortletResponseImpl extends SportletResponse
+{
+    private PrintWriter writer;
+
+    public StoredPortletResponseImpl(PortletResponse response, PrintWriter writer)
+    {
+        super(response);
+        this.writer = writer;
+    }
+
+    public PrintWriter getWriter()
+        throws IOException
+    {
+        return writer;
+    }
+
+    public void flushBuffer()
+        throws IOException
+    {
+        writer.flush();
+    }
+
+}
