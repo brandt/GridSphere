@@ -286,7 +286,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
         List services = tms.getServices();
 
-
         if (services.size()==0) {
             TableRowBean noServiceRow = new TableRowBean();
             TableCellBean noServiceCell1 = new TableCellBean();
@@ -305,7 +304,9 @@ public class ProfileManagerPortlet extends ActionPortlet {
         } else {
 
             for (int i=0;i<services.size();i++) {
-                TmfService tmfservice = (TmfService) services.get(i);
+                Object o = services.get(i);
+
+                org.gridlab.gridsphere.tmf.config.TmfService tmfservice = (org.gridlab.gridsphere.tmf.config.TmfService) services.get(i);
 
                 // tablerow
                 TableRowBean trService = new TableRowBean();
@@ -323,7 +324,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 // INPUT
                 TableCellBean tcServiceInput = new TableCellBean();
                 // make inputfield
-                TextFieldBean servicename_input = new TextFieldBean();
+                TextFieldBean servicename_input = event.getTextFieldBean("TFSERVICENAME"+tmfservice.getMessageType());
                 TmfUser user = tms.getUser(req.getUser().getUserID());
                 if (user!=null) {
                     servicename_input.setValue(user.getUserNameForMessagetype(tmfservice.getMessageType()));
