@@ -18,9 +18,13 @@ import java.util.ResourceBundle;
  */
 public class FrameTag extends TableTag {
 
-    protected String style = "info";
+    protected String style = null;
     protected String key = null;
     protected String value = null;
+
+    public FrameTag() {
+        cssClass = FrameBean.TABLE_FRAME_STYLE;
+    }
 
     /**
      * Sets the key used to locate localized text
@@ -71,16 +75,18 @@ public class FrameTag extends TableTag {
     }
 
     public int doStartTag() throws JspException {
-        if (style.equalsIgnoreCase("error") || (style.equalsIgnoreCase("err"))) {
-            this.cssClass = TextBean.MSG_ERROR;
-        } else if (style.equalsIgnoreCase("status")) {
-            this.cssClass = TextBean.MSG_STATUS;
-        } else if (style.equalsIgnoreCase("info")) {
-            this.cssClass = TextBean.MSG_INFO;
-        } else if (style.equalsIgnoreCase("alert")) {
-            this.cssClass = TextBean.MSG_ALERT;
-        } else if (style.equalsIgnoreCase("success")) {
-            this.cssClass = TextBean.MSG_SUCCESS;
+        if (style != null) {
+            if (style.equalsIgnoreCase("error") || (style.equalsIgnoreCase("err"))) {
+                this.cssClass = TextBean.MSG_ERROR;
+            } else if (style.equalsIgnoreCase("status")) {
+                this.cssClass = TextBean.MSG_STATUS;
+            } else if (style.equalsIgnoreCase("info")) {
+                this.cssClass = TextBean.MSG_INFO;
+            } else if (style.equalsIgnoreCase("alert")) {
+                this.cssClass = TextBean.MSG_ALERT;
+            } else if (style.equalsIgnoreCase("success")) {
+                this.cssClass = TextBean.MSG_SUCCESS;
+            }
         }
         if (!beanId.equals("")) {
             tableBean = (FrameBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
@@ -124,7 +130,7 @@ public class FrameTag extends TableTag {
                 if ((thiscol % numCols) == 0) {
                     out.println("<tr>");
                 }
-                out.println("<td width=\"" + "50%" + "\">");
+                out.println("<td width=\"" + "100%" + "\">");
             } catch (Exception e) {
                 throw new JspException(e.getMessage());
             }
