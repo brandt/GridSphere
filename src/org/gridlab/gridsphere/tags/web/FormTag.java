@@ -2,6 +2,7 @@ package org.gridlab.gridsphere.tags.web;
 
 import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
+import org.gridlab.gridsphere.portlet.PortletResponse;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -17,6 +18,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  */
 public class FormTag extends TagSupport {
 
+    private boolean isMultipart = false;
     private String action;
     private String method = "POST";
 
@@ -36,14 +38,21 @@ public class FormTag extends TagSupport {
         return method;
     }
 
+    public void setMultiPartFormData(boolean isMultipart) {
+        this.isMultipart = isMultipart;
+    }
+
+    public boolean getMultiPartFormData() {
+        return isMultipart;
+    }
+
     public String makeActionURI() {
-        /*
-        PortletURI someURI = pageContext.getResponse().createURI();
+        PortletResponse res = (PortletResponse)pageContext.getAttribute("portletResponse");
+        PortletURI someURI = res.createURI();
         DefaultPortletAction anAction = new DefaultPortletAction(action);
         someURI.addAction(anAction);
-        return someURI.toString());
-        */
-        return "h";
+        return someURI.toString();
+
     }
 
     public int doStartTag() throws JspException {
@@ -51,9 +60,14 @@ public class FormTag extends TagSupport {
             JspWriter out = pageContext.getOut();
             out.print("<form ");
             out.print("action=\"");
-            out.print(action);
+            out.print(makeActionURI());
             out.print("\" method=\"");
             out.print(method);
+
+            if (isMultipart) {
+                out.print(" enctype=\"multipart/form-data\"");
+            }
+
             out.print("\">");
         } catch (Exception e) {
             throw new JspTagException(e.getMessage());
