@@ -16,6 +16,8 @@ public class FrameBean extends TableBean implements TagBean {
     public static final String TABLE_FRAME_STYLE = "portlet-frame";
     public static final String TABLE_FRAME_WIDTH = "100%";
     public static final String TABLE_FRAME_SPACING = "1";
+    public static final String TABLE_FRAME_PADDING = "1";
+    public static final String TABLE_FRAME_BORDER = "1";
 
     public static final String ERROR_TYPE = "error";
     public static final String MESSAGE_TYPE = "message";
@@ -29,6 +31,8 @@ public class FrameBean extends TableBean implements TagBean {
         super(TABLE_FRAME_STYLE);
         this.width = TABLE_FRAME_WIDTH;
         this.cellSpacing = TABLE_FRAME_SPACING;
+        this.cellPadding = TABLE_FRAME_PADDING;
+        this.border = TABLE_FRAME_BORDER;
     }
 
     /**
@@ -41,6 +45,8 @@ public class FrameBean extends TableBean implements TagBean {
         this.beanId = beanId;
         this.width = TABLE_FRAME_WIDTH;
         this.cellSpacing = TABLE_FRAME_SPACING;
+        this.cellPadding = TABLE_FRAME_PADDING;
+        this.border = TABLE_FRAME_BORDER;
     }
 
     /**
@@ -53,6 +59,8 @@ public class FrameBean extends TableBean implements TagBean {
         super(TABLE_FRAME_STYLE);
         this.width = TABLE_FRAME_WIDTH;
         this.cellSpacing = TABLE_FRAME_SPACING;
+        this.cellPadding = TABLE_FRAME_PADDING;
+        this.border = TABLE_FRAME_BORDER;
         this.beanId = beanId;
         this.request = req;
     }
@@ -101,6 +109,8 @@ public class FrameBean extends TableBean implements TagBean {
         if ((key != null) || (value != null)) createMessage();
         sb.append("<table class=\"" + TABLE_FRAME_STYLE + "\" ");
         if (cellSpacing != null) sb.append(" cellspacing=\"" + cellSpacing + "\" ");
+        if (cellPadding != null) sb.append(" cellpadding=\"" + cellPadding + "\" ");
+        if (border != null) sb.append(" border=\"" + border + "\" ");
         if (width != null) sb.append(" width=\"" + width + "\" >");
         if (defaultModel != null) sb.append(defaultModel.toStartString());
         return sb.toString();

@@ -14,9 +14,14 @@ public class PanelBean extends BeanContainer implements TagBean {
 
     public static final String PANEL_STYLE = "portlet-pane";
     public static final String PANEL_WIDTH = "100%";
-    public static final String PANEL_SPACING = "0";
+    public static final String PANEL_SPACING = "2";
+    public static final String PANEL_PADDING = "2";
+    public static final String PANEL_BORDER = "2";
 
     protected String cellSpacing = PANEL_SPACING;
+    protected String cellPadding = PANEL_PADDING;
+    protected String border = PANEL_BORDER;
+
     protected String width = PANEL_WIDTH;
 
     private String cols = "100%";
@@ -132,10 +137,48 @@ public class PanelBean extends BeanContainer implements TagBean {
         return cellSpacing;
     }
 
+    /**
+     * Sets the panel (table) cell spacing
+     *
+     * @param cellPadding the panel cell padding
+     */
+    public void setCellPadding(String cellPadding) {
+        this.cellPadding = cellPadding;
+    }
+
+    /**
+     * Returns the panel (table) cell padding
+     *
+     * @return  the panel cell padding
+     */
+    public String getCellPadding() {
+        return cellPadding;
+    }
+
+    /**
+     * Sets the table border
+     *
+     * @param border the panel border
+     */
+    public void setBorder(String border) {
+        this.border = border;
+    }
+
+    /**
+     * Returns the panel border
+     *
+     * @return  the panel border
+     */
+    public String getBorder() {
+        return border;
+    }
+
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         sb.append("<table class=\"" + cssStyle + "\" ");
         sb.append(" cellspacing=\"" + cellSpacing + "\" ");
+        sb.append(" cellpadding=\"" + cellPadding + "\" ");
+        sb.append(" border=\"" + border + "\" ");
         sb.append(" width=\"" + width + "\" ");
         sb.append(">");
         return sb.toString();

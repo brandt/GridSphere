@@ -19,11 +19,49 @@ public class PanelTag extends BaseComponentTag {
 
     protected String width = PanelBean.PANEL_WIDTH;
     protected String cellSpacing = PanelBean.PANEL_SPACING;
+    protected String cellPadding = PanelBean.PANEL_PADDING;
+    protected String border = PanelBean.PANEL_BORDER;
     protected String cols = "100%";
     protected String[] colArray;
     protected int numCols = 1;
     protected PanelBean panelBean = null;
     protected int counter = 0;
+
+    /**
+     * Sets the panel (table) cell spacing
+     *
+     * @param cellPadding the panel cell padding
+     */
+    public void setCellPadding(String cellPadding) {
+        this.cellPadding = cellPadding;
+    }
+
+    /**
+     * Returns the panel (table) cell padding
+     *
+     * @return  the panel cell padding
+     */
+    public String getCellPadding() {
+        return cellPadding;
+    }
+
+    /**
+     * Sets the table border
+     *
+     * @param border the panel border
+     */
+    public void setBorder(String border) {
+        this.border = border;
+    }
+
+    /**
+     * Returns the panel border
+     *
+     * @return  the panel border
+     */
+    public String getBorder() {
+        return border;
+    }
 
     /**
      * Sets the panel width
@@ -136,6 +174,8 @@ public class PanelTag extends BaseComponentTag {
             panelBean.setColArray(colArray);
             panelBean.setNumCols(numCols);
             panelBean.setCellSpacing(cellSpacing);
+            panelBean.setCellPadding(cellPadding);
+            panelBean.setBorder(border);
         }
 
         try {

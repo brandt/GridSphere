@@ -18,6 +18,8 @@ public class TableTag extends BaseComponentTag {
 
     protected TableBean tableBean = null;
     protected String cellSpacing = null;
+    protected String cellPadding = null;
+    protected String border = null;
     protected String width = null;
 
     /**
@@ -75,6 +77,42 @@ public class TableTag extends BaseComponentTag {
     }
 
     /**
+     * Sets the panel (table) cell spacing
+     *
+     * @param cellPadding the panel cell padding
+     */
+    public void setCellPadding(String cellPadding) {
+        this.cellPadding = cellPadding;
+    }
+
+    /**
+     * Returns the panel (table) cell padding
+     *
+     * @return  the panel cell padding
+     */
+    public String getCellPadding() {
+        return cellPadding;
+    }
+
+    /**
+     * Sets the table border
+     *
+     * @param border the panel border
+     */
+    public void setBorder(String border) {
+        this.border = border;
+    }
+
+    /**
+     * Returns the panel border
+     *
+     * @return  the panel border
+     */
+    public String getBorder() {
+        return border;
+    }
+
+    /**
      * Sets the table width
      *
      * @param width the table width
@@ -108,6 +146,8 @@ public class TableTag extends BaseComponentTag {
 
             if (width != null) tableBean.setWidth(width);
             if (cellSpacing != null) tableBean.setCellSpacing(cellSpacing);
+            if (cellPadding != null) tableBean.setCellPadding(cellPadding);
+            if (border != null) tableBean.setBorder(border);
         }
 
         try {

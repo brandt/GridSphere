@@ -14,7 +14,6 @@ import java.util.Iterator;
  */
 public class TableCellBean extends BeanContainer implements TagBean {
 
-    protected String cellSpacing = null;
     protected String width = null;
     protected String TABLE_CELL_STYLE = "portlet-section-body";
 
@@ -29,6 +28,7 @@ public class TableCellBean extends BeanContainer implements TagBean {
     public TableCellBean(BaseComponentBean compBean) {
         super();
         this.addBean(compBean);
+        this.cssStyle = TABLE_CELL_STYLE;
     }
 
     /**
@@ -41,6 +41,7 @@ public class TableCellBean extends BeanContainer implements TagBean {
         super();
         this.request = req;
         this.beanId = beanId;
+        this.cssStyle = TABLE_CELL_STYLE;
     }
 
     /**
@@ -61,29 +62,10 @@ public class TableCellBean extends BeanContainer implements TagBean {
         return width;
     }
 
-    /**
-     * Sets the table cell spacing
-     *
-     * @param cellSpacing the table cell spacing
-     */
-    public void setCellSpacing(String cellSpacing) {
-        this.cellSpacing = cellSpacing;
-    }
-
-    /**
-     * Returns the table cell spacing
-     *
-     * @return the table cell spacing
-     */
-    public String getCellSpacing() {
-        return cellSpacing;
-    }
-
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         sb.append("<td ");
         if (!cssStyle.equals("")) sb.append("class=\"" + cssStyle + "\"");
-        if (cellSpacing != null) sb.append(" cellspacing=\"" + cellSpacing + "\"");
         if (width != null) sb.append(" width=\"" + width + "\"");
         sb.append(">");
         Iterator it = container.iterator();

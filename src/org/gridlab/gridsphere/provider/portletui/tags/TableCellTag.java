@@ -18,7 +18,6 @@ public class TableCellTag extends BaseComponentTag {
 
     protected TableCellBean cellBean = null;
     protected String width = null;
-    protected String cellSpacing = null;
 
     /**
      * Sets the table cell width
@@ -36,24 +35,6 @@ public class TableCellTag extends BaseComponentTag {
      */
     public String getWidth() {
         return width;
-    }
-
-    /**
-     * Sets the table cell cell spacing
-     *
-     * @param cellSpacing the table cell cell spacing
-     */
-    public void setCellspacing(String cellSpacing) {
-        this.cellSpacing = cellSpacing;
-    }
-
-    /**
-     * Returns the table cell cell spacing
-     *
-     * @return the table cell cell spacing
-     */
-    public String getCellspacing() {
-        return cellSpacing;
     }
 
     /**
@@ -80,7 +61,6 @@ public class TableCellTag extends BaseComponentTag {
             if (cellBean == null) cellBean = new TableCellBean();
         } else {
             cellBean = new TableCellBean();
-            if (cellSpacing != null) cellBean.setCellSpacing(cellSpacing);
             if (width != null) cellBean.setWidth(width);
         }
 

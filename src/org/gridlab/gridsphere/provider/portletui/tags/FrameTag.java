@@ -98,7 +98,10 @@ public class FrameTag extends TableTag {
             }
         } else {
             tableBean = new FrameBean();
-
+            tableBean.setWidth(width);
+            if (cellSpacing == null) tableBean.setCellSpacing(FrameBean.TABLE_FRAME_SPACING);
+            if (cellPadding == null) tableBean.setCellPadding(FrameBean.TABLE_FRAME_PADDING);
+            if (border == null) tableBean.setBorder(FrameBean.TABLE_FRAME_BORDER);
             this.setBaseComponentBean(tableBean);
             if (key != null) {
                 tableBean.setKey(key);

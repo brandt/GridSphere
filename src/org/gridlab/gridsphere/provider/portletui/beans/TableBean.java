@@ -13,7 +13,9 @@ import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 public class TableBean extends BaseComponentBean implements TagBean {
 
     protected DefaultTableModel defaultModel = null;
-    protected String cellSpacing = "0";
+    protected String cellSpacing = null;
+    protected String cellPadding = null;
+    protected String border = null;
     protected String width = null;
 
     /**
@@ -98,10 +100,48 @@ public class TableBean extends BaseComponentBean implements TagBean {
         return cellSpacing;
     }
 
+    /**
+     * Sets the table cell spacing
+     *
+     * @param cellPadding the table cell padding
+     */
+    public void setCellPadding(String cellPadding) {
+        this.cellPadding = cellPadding;
+    }
+
+    /**
+     * Returns the table cell padding
+     *
+     * @return  the table cell padding
+     */
+    public String getCellPadding() {
+        return cellPadding;
+    }
+
+    /**
+     * Sets the table border
+     *
+     * @param border the table border
+     */
+    public void setBorder(String border) {
+        this.border = border;
+    }
+
+    /**
+     * Returns the tableborder
+     *
+     * @return  the table border
+     */
+    public String getBorder() {
+        return border;
+    }
+
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         sb.append("<table");
         if (cellSpacing != null) sb.append(" cellspacing=\"" + cellSpacing + "\" ");
+        if (cellPadding != null) sb.append(" cellpadding=\"" + cellPadding + "\" ");
+        if (border != null) sb.append(" border=\"" + border + "\" ");
         if (width != null) sb.append(" width=\"" + width + "\" >");
         if (defaultModel != null) sb.append(defaultModel.toStartString());
         return sb.toString();
