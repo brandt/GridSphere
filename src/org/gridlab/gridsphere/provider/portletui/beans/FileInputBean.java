@@ -114,7 +114,19 @@ public class FileInputBean extends InputBean implements TagBean {
     public void saveFile(String filePath) throws IOException {
 
         String pathChar = File.separator;
-        if (!filePath.endsWith(pathChar)) filePath += pathChar;
+
+        // Added by Chrono to check if directory needs creating
+        int ddx = filePath.lastIndexOf(pathChar);
+        String dirPath = filePath.substring(0,ddx);
+        try {
+            File dirCreate = new File(dirPath);
+            dirCreate.mkdirs();
+        } catch(Exception e) {
+            System.err.println("Unable to create directory: " + dirPath);
+        }
+
+        // Chrono commented out necessary for windows usage (?)
+        //if (!filePath.endsWith(pathChar)) filePath += pathChar;
 
         File file = new File(filePath);
 
