@@ -25,6 +25,8 @@ public interface LoginService extends PortletService {
 
     public List getSupportedAuthModules();
 
+    public void loadAuthModules(String authModsPath, ClassLoader classloader);
+
     public void addActiveAuthModule(User user, LoginAuthModule authModule);
 
     public void removeActiveAuthModule(User user, String moduleClassName);
@@ -33,6 +35,8 @@ public interface LoginService extends PortletService {
 
     public boolean hasActiveAuthModule(User user, String moduleClassName);
 
+    public LoginAuthModule getAuthModule(String moduleClassName);
+    
     public LoginUserModule getActiveLoginModule();
 
     /**

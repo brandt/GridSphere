@@ -69,6 +69,10 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         }
     }
 
+    public LoginAuthModule getAuthModule(String moduleClassName) {
+        return (LoginAuthModule)authModules.get(moduleClassName);
+    }
+
     public boolean hasActiveAuthModule(User user, String moduleClassName) {
         AuthModuleEntry authMod = null;
         try {
@@ -174,7 +178,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
             }
             log.debug("Created a login module service: " + loginClassName);
 
-            loadAuthModules();
+            loadAuthModules(authModulesPath, Thread.currentThread().getContextClassLoader());
 
             /*
             passwdModule = new PasswordAuthModule("PASSWORD_AUTH_MODULE");
@@ -208,11 +212,11 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         }
     }
 
-    private void loadAuthModules() {
+    public void loadAuthModules(String authModsPath, ClassLoader classloader) {
 
         AuthModulesDescriptor desc = null;
         try {
-            desc = new AuthModulesDescriptor(authModulesPath, authMappingPath);
+            desc = new AuthModulesDescriptor(authModsPath, authMappingPath);
 
             AuthModuleCollection coll = desc.getCollection();
             List modList = coll.getAuthModulesList();
@@ -222,18 +226,19 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
                 AuthModuleDefinition def = (AuthModuleDefinition)it.next();
                 log.info(def.toString());
                 String modClassName = def.getModuleImplementation();
-                Class c = Class.forName(modClassName);
+                Class c = Class.forName(modClassName, true, classloader);
                 Class[] parameterTypes = new Class[]{AuthModuleDefinition.class};
                 Object[] obj = new Object[]{def};
                 Constructor con = c.getConstructor(parameterTypes);
                 LoginAuthModule authModule = (LoginAuthModule) con.newInstance(obj);
-                authModules.put(def.getModuleName(), authModule);
+                authModules.put(modClassName, authModule);
                 if (authModule.isModuleActive()) activeAuthModules.put(modClassName, authModule);
             }
         } catch (Exception e) {
             log.error("Error loading auth module!", e);
         }
     }
+
 
     /**
      * The destroy method is invoked by the portlet container to destroy a portlet service.
