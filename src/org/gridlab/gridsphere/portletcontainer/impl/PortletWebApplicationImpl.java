@@ -28,7 +28,7 @@ import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
 /**
- * The <code>PortletWebApplicationImpl</code> ia an implementation of a <code>PortletWebApplication</code> that
+ * The <code>PortletWebApplicationImpl</code> is an implementation of a <code>PortletWebApplication</code> that
  * represents a collection of portlets contained in a packaged WAR file. Currently
  * under development is the notion of dynamically managing portlet web applications.
  */
@@ -104,9 +104,10 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
      */
     protected void loadPortlets(ServletContext ctx) throws PortletException {
         // load in the portlet.xml file
-        String portletXMLfile = ctx.getRealPath("") + "/WEB-INF/portlet.xml";
-        String portletMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING);
+        String portletXMLfile = ctx.getRealPath("/WEB-INF/portlet.xml");
+        //String portletMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING);
 
+        String portletMappingFile = GridSphereConfig.getServletContext().getRealPath("") + "/WEB-INF/mapping/portlet-mapping.xml";
         pdd = null;
         try {
             pdd = new PortletDeploymentDescriptor(portletXMLfile, portletMappingFile);

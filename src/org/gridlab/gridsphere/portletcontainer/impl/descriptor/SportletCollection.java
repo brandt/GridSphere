@@ -4,9 +4,6 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl.descriptor;
 
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -4,6 +4,8 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletConfig;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -14,9 +16,21 @@ import java.util.ResourceBundle;
 public class GridSphereConfig implements GridSphereConfigProperties {
 
     public static final String pathtype = System.getProperty("file.separator");
-
+    protected static ServletConfig config = null;
     protected static ResourceBundle configBundle = null;
     public static final String PROJECT_NAME = "gridsphere";
+
+    public static void setServletConfig(ServletConfig servletConfig) {
+        config = servletConfig;
+    }
+
+    public static ServletConfig getServletConfig() {
+        return config;
+    }
+
+    public static ServletContext getServletContext() {
+        return config.getServletContext();
+    }
 
     static {
         try {

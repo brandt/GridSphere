@@ -37,7 +37,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private static PortletLog log = SportletLog.getInstance(GridSphereServlet.class);
 
     /* GridSphere service factory */
-    private static SportletServiceFactory factory = SportletServiceFactory.getInstance();
+    private static SportletServiceFactory factory = null;
 
     /* GridSphere Portlet Registry Service */
     private static PortletManagerService portletManager = null;
@@ -70,7 +70,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public final void init(ServletConfig config) throws ServletException {
         super.init(config);
+        GridSphereConfig.setServletConfig(config);
         this.context = new SportletContext(config);
+        factory = SportletServiceFactory.getInstance();
         log.debug("in init of GridSphereServlet");
     }
 
@@ -114,7 +116,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
         }
 
-        List groups = aclService.getGroups(portletReq.getUser());
+        //List groups = aclService.getGroups(portletReq.getUser());
         //portletReq.setAttribute(SportletProperties.PORTLETGROUPS, groups);
 
         // Handle user login and logout
@@ -176,7 +178,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 log.debug("User: " + user.getUserName() + " logged in as SUPER");
                 req.setAttribute(SportletProperties.PORTLET_ROLE, PortletRole.SUPER);
             }
-            userSessionManager.setSession(user, session);
+            userSessionManager.addSession(user, session);
         } catch (AuthorizationException err) {
             if(log.isDebugEnabled()) log.debug(err.getMessage());
             req.setAttribute(LOGIN_ERROR_FLAG, LOGIN_ERROR_FLAG);
@@ -194,8 +196,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     protected void logout(GridSphereEvent event) {
         PortletRequest req = event.getPortletRequest();
-        PortletSession session = req.getPortletSession();
-        userSessionManager.removeSession(req.getUser());
+        userSessionManager.removeSessions(req.getUser());
         log.debug("in logout of GridSphere Servlet");
     }
 
