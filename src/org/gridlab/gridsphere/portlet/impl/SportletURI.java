@@ -33,9 +33,7 @@ import java.util.*;
 public class SportletURI implements PortletURI {
 
     private HttpServletResponse res = null;
-    private PortletRequest req = null;
     private PortletSettings portletSettings = null;
-    private String url;
 
 
     private Map store = new HashMap();
@@ -44,11 +42,9 @@ public class SportletURI implements PortletURI {
 
     public SportletURI() {}
 
-    public SportletURI(HttpServletResponse res, PortletRequest req) {
+    public SportletURI(HttpServletResponse res) {
         store = new HashMap();
         this.res = res;
-        this.req = req;
-        url = req.getServerName();
     }
 
     public void setReturn(boolean redirect) {
@@ -78,15 +74,14 @@ public class SportletURI implements PortletURI {
     public void addAction(PortletAction action) {
         if (action instanceof DefaultPortletAction) {
             DefaultPortletAction dpa = (DefaultPortletAction)action;
-            store.put(GridSphereProperties.PORTLETNAME, dpa.getName());
-            store.put(GridSphereProperties.PORTLETID, dpa.getPortletID());
+            store.put(GridSphereProperties.ACTION, dpa.getName());
             Map actionParams = dpa.getParameters();
             Set set = actionParams.keySet();
             Iterator it = set.iterator();
             while (it.hasNext()) {
                 String name = (String)it.next();
-                String value = (String)store.get(name);
-                url += name + "&" + value;
+                String value = (String)actionParams.get(name);
+                store.put(name, value);
             }
         }
     }
@@ -103,17 +98,24 @@ public class SportletURI implements PortletURI {
      * @return the URI as a string
      */
     public String toString() {
+        String url = "";
         String newURL;
         Set set = store.keySet();
         if (!set.isEmpty()) {
             // add question mark
-            url += "?";
+            url = "?";
+        } else {
+            return url;
         }
+        boolean firstParam = true;
         Iterator it = set.iterator();
         while (it.hasNext()) {
+            if (!firstParam)
+                url += "&";
             String name = (String)it.next();
             String value = (String)store.get(name);
-            url += name + "&" + value;
+            url += name + "=" + value;
+            firstParam = false;
         }
         if (redirect) {
             newURL = res.encodeRedirectURL(url);
