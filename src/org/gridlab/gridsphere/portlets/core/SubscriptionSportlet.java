@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 
 import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
+import org.gridlab.gridsphere.event.ActionEvent;
 
 
 import javax.servlet.UnavailableException;
@@ -32,8 +33,10 @@ public class SubscriptionSportlet extends AbstractPortlet {
         }
     }
 
+    public void actionPerformed(ActionEvent evt) { }
+
     public void execute(PortletRequest request) throws PortletException {
-        // Convert Portlet Registry information into bean
+        // Convert PortletInfo Registry information into bean
 
     }
 

@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.services.user.UserManagerService;
 import org.gridlab.gridsphere.services.user.AccountRequest;
+import org.gridlab.gridsphere.event.ActionEvent;
 
 
 import javax.servlet.UnavailableException;
@@ -33,6 +34,8 @@ public class LoginPortlet extends AbstractPortlet {
         }
         System.err.println("init() in LoginPortlet");
     }
+
+    public void actionPerformed(ActionEvent evt) { }
 
     public void execute(PortletRequest request) throws PortletException {
 
