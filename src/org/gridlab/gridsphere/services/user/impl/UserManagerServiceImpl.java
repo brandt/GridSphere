@@ -252,7 +252,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         while (it.hasNext()) {
             AccountRequestImpl a = (AccountRequestImpl) it.next();
             if (a.getID() == userid) {
-                a.addApprovedGroup(group);
+               // a.addApprovedGroup(group);
             }
         }
 
@@ -282,7 +282,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         while (it.hasNext()) {
             AccountRequestImpl a = (AccountRequestImpl)it.next();
             if (a.getID() == userid) {
-                a.addApprovedGroup(group);
+               // a.addApprovedGroup(group);
             }
         }
 

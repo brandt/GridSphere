@@ -56,6 +56,10 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
         return null;
     }
 
+    public boolean isSuperUser(User user) {
+        return true; // needs to be saved somewhere
+    }
+
     /**
      * Checks if a user has a particular role in a group
      *
