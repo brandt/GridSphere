@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.service.PortletService;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public interface AccessControlService extends PortletService {
     /**
      * Returns list of super users
      */
-    public List getSuperUsers();
+    public List getSuperUsers() throws PortletServiceException ;
 
     /**
      * Checks if a user has a particular role in a group
@@ -32,7 +33,7 @@ public interface AccessControlService extends PortletService {
      * @param role the PortletRole
      * @return true if the user has the specified role in the specified group, false otherwise
      */
-    public boolean hasRoleInGroup(User user, PortletGroup group, PortletRole role);
+    public boolean hasRoleInGroup(User user, PortletGroup group, PortletRole role) throws PortletServiceException ;
 
     /**
      * Return the list of users associated with a particular group and possessing the specified role
@@ -41,7 +42,7 @@ public interface AccessControlService extends PortletService {
      * @param group the PortletGroup
      * @return the list of users associated with a particular group and possessing the specified role
      */
-    public List getUsersInGroup(PortletRole role, PortletGroup group);
+    public List getUsersInGroup(PortletRole role, PortletGroup group) throws PortletServiceException ;
 
     /**
      * Return a list of PortletRole objects for a user in a group
@@ -50,14 +51,14 @@ public interface AccessControlService extends PortletService {
      * @param group the PortletGroup
      * @return a list of PortletRole objects
      */
-    public List getRolesInGroup(User user, PortletGroup group);
+    public List getRolesInGroup(User user, PortletGroup group) throws PortletServiceException ;
 
     /**
      * Return a list of PortletGroup objects
      *
      * @return a list of PortletGroup objects
      */
-    public List getAllGroups();
+    public List getAllGroups() throws PortletServiceException ;
 
     /**
      * Return a list of PortletRole objects
@@ -73,7 +74,7 @@ public interface AccessControlService extends PortletService {
      * @param user the Role object
      * @return the list of PortletGroup objects
      */
-    public List getGroups(User user);
+    public List getGroups(User user) throws PortletServiceException ;
 
     /**
      * Check to see if a user is in a group
@@ -82,7 +83,7 @@ public interface AccessControlService extends PortletService {
      * @param group the PortletGroup
      * @return true if the user in the PortletGroup, false otherwise
      */
-    public boolean isUserInGroup(User user, PortletGroup group);
+    public boolean isUserInGroup(User user, PortletGroup group) throws PortletServiceException ;
 
 
 }

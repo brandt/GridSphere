@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.service.PortletService;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 
 public interface AccessControlManagerService extends PortletService {
 
@@ -16,14 +17,14 @@ public interface AccessControlManagerService extends PortletService {
      *
      * @param user the Role object
      */
-    public void addUserToSuperRole(User user);
+    public void addUserToSuperRole(User user) throws PortletServiceException ;
 
     /**
      * Creates a new group
      *
      * @param groupName the name of the new group
      */
-    public void createNewGroup(String groupName);
+    public void createNewGroup(String groupName) throws PortletServiceException ;
 
     /**
      * Rename an existing group
@@ -31,14 +32,14 @@ public interface AccessControlManagerService extends PortletService {
      * @param group the PortletGroup to modify
      * @param newGroupName the name of the new group
      */
-    public void renameGroup(PortletGroup group, String newGroupName);
+    public void renameGroup(PortletGroup group, String newGroupName) throws PortletServiceException ;
 
     /**
      * Removes a group
      *
      * @param group the PortletGroup
      */
-    public void removeGroup(PortletGroup group);
+    public void removeGroup(PortletGroup group) throws PortletServiceException ;
 
     /**
      * Add a role to a user in a group
@@ -47,7 +48,7 @@ public interface AccessControlManagerService extends PortletService {
      * @param group the PortletGroup
      * @param role the PortletRole
      */
-    public void addRoleInGroup(User user, PortletGroup group, PortletRole role);
+    public void addRoleInGroup(User user, PortletGroup group, PortletRole role) throws PortletServiceException ;
 
     /**
      * Add a user to a group with a specified role
@@ -56,7 +57,7 @@ public interface AccessControlManagerService extends PortletService {
      * @param group the PortletGroup
      * @param role the PortletRole
      */
-    public void addUserToGroup(User user, PortletGroup group, PortletRole role);
+    public void addUserToGroup(User user, PortletGroup group, PortletRole role) throws PortletServiceException ;
 
     /**
      * Removes a user from a group
@@ -64,7 +65,7 @@ public interface AccessControlManagerService extends PortletService {
      * @param user the Role object
      * @param group the PortletGroup
      */
-    public void removeUserFromGroup(User user, PortletGroup group);
+    public void removeUserFromGroup(User user, PortletGroup group) throws PortletServiceException ;
 
     /**
      * Remove a specified user role from a group
@@ -73,6 +74,6 @@ public interface AccessControlManagerService extends PortletService {
      * @param group the PortletGroup
      * @param role the PortletRole
      */
-    public void removeUserRoleFromGroup(User user, PortletGroup group, PortletRole role);
+    public void removeUserRoleFromGroup(User user, PortletGroup group, PortletRole role) throws PortletServiceException ;
 
 }
