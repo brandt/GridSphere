@@ -4,12 +4,10 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
-import org.gridlab.gridsphere.event.MessageEvent;
 import org.gridlab.gridsphere.event.WindowEvent;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -58,9 +56,10 @@ public class PortletDispatcher {
      * 1. throws UnavailableException
      * 2. does not return within a time period defined by the portlet container.
      *
-     * @param config the portlet configuration
-     * @throws UnavailableException if an exception has occurrred that interferes with the portlet's
-     * normal initialization
+     * @param req the servlet request
+     * @param res the servlet response
+     * @throws IOException if an I/O errors occurs
+     * @throws PortletException if an exception has occurrred during dispatching
      */
     public void init(HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
         req.setAttribute(SportletProperties.PORTLET_APPLICATION, appPortletConfig);
@@ -82,7 +81,8 @@ public class PortletDispatcher {
      * This method gives the portlet an opportunity to clean up any resources that are
      * being held (for example, memory, file handles, threads).
      *
-     * @param config the portlet configuration
+     * @param req the portlet request
+     * @param res the portlet response
      */
     public void destroy(HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.DESTROY);
@@ -147,8 +147,8 @@ public class PortletDispatcher {
      * the markup will be different. Also, the portlet can take language preferences and/or
      * personalized settings into account.
      *
-     * @param request the portlet request
-     * @param response the portlet response
+     * @param req the portlet request
+     * @param res the portlet response
      *
      * @throws PortletException if the portlet has trouble fulfilling the rendering request
      * @throws IOException if the streaming causes an I/O problem
@@ -164,12 +164,10 @@ public class PortletDispatcher {
     }
 
     /**
-     * Description copied from interface: PortletSessionListener
-     * Called by the portlet container to ask the portlet to initialize a personalized user experience.
-     * In addition to initializing the session this method allows the portlet to initialize the
-     * concrete portlet instance, for example, to store attributes in the session.
+     * Performs a portlet login dispatch request.
      *
-     * @param request the portlet request
+     * @param req the portlet request
+     * @param res the portlet response
      */
     public void login(HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.LOGIN);
@@ -182,13 +180,12 @@ public class PortletDispatcher {
     }
 
     /**
-     * Description copied from interface: PortletSessionListener
-     * Called by the portlet container to indicate that a concrete portlet instance is being removed.
-     * This method gives the concrete portlet instance an opportunity to clean up any resources
-     * (for example, memory, file handles, threads), before it is removed.
-     * This happens if the user logs out, or decides to remove this portlet from a page.
+     * Performs a portlet logout dispatch request.
      *
-     * @param session the portlet session
+     * @param req the servlet request
+     * @param res the servlet response
+     * @throws IOException if an I/O error occurs
+     * @throws PortletException is an error occurs dispatching the request
      */
     public void logout(HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.LOGOUT);
@@ -205,7 +202,10 @@ public class PortletDispatcher {
      * using the given portlet request.
      * Notifies this listener that the action which the listener is watching for has been performed.
      *
-     * @param event the action event
+     * @param action the default portlet action
+     * @param req the servlet request
+     * @param res the servlet response
+     * @throws IOException if an I/O error occurs
      * @throws PortletException if the listener has trouble fulfilling the request
      */
     public void actionPerformed(DefaultPortletAction action, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
@@ -213,7 +213,6 @@ public class PortletDispatcher {
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.ACTION_PERFORMED);
 
-        PortletData data = (PortletData)req.getAttribute(GridSphereProperties.PORTLETDATA);
         try {
             include(req, res);
         } catch (ServletException e) {
@@ -225,8 +224,10 @@ public class PortletDispatcher {
     /**
      * Notifies this listener that the message which the listener is watching for has been performed.
      *
-     * @param event the message event
-     *
+     * @param message the default portlet message
+     * @param req the servlet request
+     * @param res the servlet response
+     * @throws IOException if an I/O error occurs during dispatching
      * @throws PortletException if the listener has trouble fulfilling the request
      */
     public void messageEvent(DefaultPortletMessage message, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
@@ -251,10 +252,11 @@ public class PortletDispatcher {
      * the number of messages in a mailbox portlet
      * The session may be null, if the user is not logged in.
      *
-     * @param request the portlet request
-     * @param response the portlet response
+     * @param req the servlet request
+     * @param res the servlet response
      *
-     * @throws <code>PortletException</code>if the portlet title has trouble fulfilling the rendering request
+     * @throws IOException if an I/O error occurs during dispatching
+     * @throws PortletException if the portlet title has trouble fulfilling the rendering request
      */
     public void doTitle(HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
@@ -271,6 +273,9 @@ public class PortletDispatcher {
      * Notifies this listener that a portlet window has been maximized.
      *
      * @param event the window event
+     * @param req the servlet request
+     * @param res the servlet response
+     * @throws IOException if an
      */
     public void windowEvent(WindowEvent event, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
         req.setAttribute(SportletProperties.WINDOW_EVENT, event);

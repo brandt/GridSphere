@@ -25,13 +25,10 @@ import java.util.List;
  */
 public class ConcreteSportletConfig implements ConcretePortletConfig {
 
-    private String id = new String();
     private String defaultLocale = new String();
     private List languageList = new ArrayList();
     private String name = new String();
-    private String Description = new String();
     private AccessRestrictions accessRestrictions = new AccessRestrictions();
-    private ConfigParamList contextParamList = new ConfigParamList();
     private ConfigParamList configParamList = new ConfigParamList();
 
     /**
@@ -68,9 +65,9 @@ public class ConcreteSportletConfig implements ConcretePortletConfig {
     }
 
     /**
-     * sets the language info of a portlet
+     * sets the language info list of a portlet
      *
-     * @param languageInfo the language info of the portlet
+     * @param languageList the language info list of the portlet
      */
     public void setLanguageList(ArrayList languageList) {
         this.languageList = languageList;
@@ -79,7 +76,7 @@ public class ConcreteSportletConfig implements ConcretePortletConfig {
     /**
      * gets the name of the portlet
      *
-     * @returns name of the portlet
+     * @return the name of the portlet
      */
     public String getName() {
         return name;
@@ -100,7 +97,7 @@ public class ConcreteSportletConfig implements ConcretePortletConfig {
      * <p>
      * Returns the configuration parameters of the portlet
      *
-     * @returns the configuration parameters of the portlet
+     * @return the configuration parameters of the portlet
      */
     public List getConfigParamList() {
         return configParamList.getConfigParamList();
@@ -111,7 +108,7 @@ public class ConcreteSportletConfig implements ConcretePortletConfig {
      * <p>
      * Sets the configuration parameters of the portlet
      *
-     * @param the configuration parameters of the portlet
+     * @param configParamList the configuration parameters of the portlet
      */
     public void setConfigParamList(ArrayList configParamList) {
         this.configParamList.setConfigParamList(configParamList);
@@ -120,16 +117,16 @@ public class ConcreteSportletConfig implements ConcretePortletConfig {
     /**
      * Returns the configuration parameters of the portlet
      *
-     * @returns the configuration parameters of the portlet
+     * @return the configuration parameters of the portlet
      */
     public Hashtable getConfigAttributes() {
         return configParamList.getConfigParams();
     }
 
     /**
-     * Returns the configuration parameters of the portlet
+     * Sets the configuration parameters of the portlet
      *
-     * @returns the configuration parameters of the portlet
+     * @param configAttrs the configuration parameters of the portlet
      */
     public void setConfigAttributes(Hashtable configAttrs) {
         this.configParamList.setConfigParams(configAttrs);

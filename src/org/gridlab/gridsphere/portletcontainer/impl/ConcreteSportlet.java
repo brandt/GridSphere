@@ -4,7 +4,6 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl;
 
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
@@ -13,13 +12,11 @@ import org.gridlab.gridsphere.portlet.impl.SportletSettings;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
-import org.gridlab.gridsphere.portletcontainer.impl.descriptor.AccessRestrictions;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.PortletDeploymentDescriptor;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletDefinition;
 
 import java.io.IOException;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -32,9 +29,9 @@ class ConcreteSportlet implements ConcretePortlet {
     private static PortletLog log = SportletLog.getInstance(ConcreteSportlet.class);
 
     private PortletDeploymentDescriptor portletDD = null;
-    private ConcreteSportletDefinition concSportlet = null;
+
     private ConcretePortletConfig concSportletConfig = null;
-    private AbstractPortlet abstractPortlet = null;
+    //private AbstractPortlet abstractPortlet = null;
     private Hashtable configHash = null;
     private Hashtable contextHash = null;
     private String servletName = "Undefined Servlet";
@@ -42,28 +39,26 @@ class ConcreteSportlet implements ConcretePortlet {
     private String portletClass = "Unknown Portlet Class";
     private String appID = null;
     private String concreteID = null;
-    private AccessRestrictions access = null;
+   // private AccessRestrictions access = null;
     private List languageList = new Vector();
     private String defaultLocale = "en_US";
     private PortletGroup ownerGroup = SportletGroup.BASE;
     private PortletRole ownerRole = PortletRole.GUEST;
     private SportletSettings portletSettings = null;
-    private ApplicationPortletConfig portletApp = null;
+    private ApplicationPortletConfig appConfig = null;
 
     /**
      * Constructs an instance of ConcreteSportlet
      *
-     * @param pdd a portlet deployment descriptor
      * @param appPortletConfig an application portlet configuration
      * @param concSportlet a concrete portlet descriptor
      */
-    public ConcreteSportlet(PortletDeploymentDescriptor pdd, ApplicationPortletConfig appPortletConfig, ConcreteSportletDefinition concSportlet) {
-        this.portletApp = appPortletConfig;
-        this.concSportlet = concSportlet;
+    public ConcreteSportlet(ApplicationPortletConfig appPortletConfig, ConcreteSportletDefinition concSportlet) {
+        this.appConfig = appPortletConfig;
         this.concSportletConfig = concSportlet.getConcreteSportletConfig();
 
         int index;
-        Iterator it;
+
         String appname, cappname;
 
         // Get PortletApplication UID  e.g. classname.number
@@ -77,7 +72,6 @@ class ConcreteSportlet implements ConcretePortlet {
 
         // Get ConcretePortletConfig UID e.g. classname.number.number
         index = concreteID.lastIndexOf(".");
-        String concreteNo = concreteID.substring(index + 1);
         String cappNo = concreteID.substring(0, index);
         index = cappNo.lastIndexOf(".");
         cappNo = cappNo.substring(index + 1);

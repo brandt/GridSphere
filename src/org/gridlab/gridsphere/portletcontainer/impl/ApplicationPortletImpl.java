@@ -4,18 +4,12 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl;
 
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
-import org.gridlab.gridsphere.portlet.PortletConfig;
 import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.AbstractPortlet;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.*;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -31,16 +25,11 @@ class ApplicationPortletImpl implements ApplicationPortlet {
 
     private PortletLog log = SportletLog.getInstance(ApplicationPortletImpl.class);
 
-    private PortletDeploymentDescriptor portletDD = null;
     private String applicationPortletID = "";
     private String portletName = "";
     private String servletName = "";
-    private Cacheable cacheable = null;
-    private SupportsModes supportedModes = null;
-    private List allowedStates = null;
     private List concretePortlets = null;
     private ApplicationPortletConfig appPortletConfig = null;
-    private ServletContext context;
     private String webAppName = null;
     private PortletDispatcher portletWrapper = null;
 
@@ -59,8 +48,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
      */
     public ApplicationPortletImpl(PortletDeploymentDescriptor pdd, SportletDefinition portletDef,
                                   String webApplication, ServletContext context) {
-        this.portletDD = pdd;
-        this.context = context;
+
         this.webAppName = webApplication;
         this.appPortletConfig = portletDef.getApplicationSportletConfig();
 
@@ -123,9 +111,9 @@ class ApplicationPortletImpl implements ApplicationPortlet {
     }
 
     /**
-     * Return the PortletApplication, the portlet descriptor class that defines the portlet application
+     * Sets the PortletApplication, the portlet descriptor class that defines the portlet application
      *
-     * @return the PortletApplication
+     * @param appPortletConfig the PortletApplication
      */
     public void setApplicationPortletConfig(ApplicationPortletConfig appPortletConfig) {
         this.appPortletConfig = appPortletConfig;
@@ -170,7 +158,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
     /**
      * Returns the id of a PortletApplication
      *
-     * @returns the id of the PortletApplication
+     * @return the id of the PortletApplication
      */
     public String getApplicationPortletID() {
         return applicationPortletID;
@@ -179,7 +167,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
     /**
      * Returns the name of a PortletApplication
      *
-     * @returns name of the PortletApplication
+     * @return name of the PortletApplication
      */
     public String getApplicationPortletName() {
         return portletName;
@@ -188,7 +176,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
     /**
      * Returns the name of a servlet associated with this portlet defined in web.xml as <servlet-name>
      *
-     * @returns the servlet name
+     * @return the servlet name
      */
     public String getServletName() {
         return servletName;

@@ -69,7 +69,7 @@ public class PortletRegistry {
     /**
      * Returns all application portlets from the supplied portlet web application
      *
-     * @param webApplicatioName the portlet web application name
+     * @param webApplicationName the portlet web application name
      * @return the collection of application portlets
      */
     public Collection getApplicationPortlets(String webApplicationName) {

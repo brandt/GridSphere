@@ -4,9 +4,6 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
-import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig;
-
-import java.io.IOException;
 import java.util.List;
 
 /**

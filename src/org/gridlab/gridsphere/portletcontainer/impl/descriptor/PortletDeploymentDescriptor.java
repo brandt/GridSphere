@@ -5,21 +5,15 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl.descriptor;
 
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerXml;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.Descriptor;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
-import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.net.URL;
 
 /**
  *  The <code>PortletDeploymentDescriptor</code> is responsible for
@@ -28,9 +22,6 @@ import java.net.URL;
  */
 public class PortletDeploymentDescriptor extends Descriptor {
 
-    private static PortletLog log = SportletLog.getInstance(PortletDeploymentDescriptor.class);
-    private PersistenceManagerXml pmx = PersistenceManagerXml.getInstance();
-    private List portletDefList = new ArrayList();
     private SportletCollection sportletCollection = null;
     private String mappingFilePath = null;
     private String portletFilePath = null;
@@ -59,7 +50,7 @@ public class PortletDeploymentDescriptor extends Descriptor {
     /**
      * Returns a list of portelt definitions
      *
-     * @return a list of portlet definitions
+     * @param defs a list of portlet definitions
      */
     public void setPortletDefinitionList(ArrayList defs) {
         sportletCollection.setPortletDefinitionList(defs);

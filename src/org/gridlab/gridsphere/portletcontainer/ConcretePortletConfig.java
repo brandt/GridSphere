@@ -127,14 +127,14 @@ public interface ConcretePortletConfig {
     /**
      * Sets the language info of a portlet
      *
-     * @param languageInfo the language info of the portlet
+     * @param languageList the language info of the portlet
      */
     public void setLanguageList(ArrayList languageList);
 
     /**
      * Returns the name of the portlet
      *
-     * @returns the name of the portlet
+     * @return the name of the portlet
      */
     public String getName();
 
@@ -148,14 +148,14 @@ public interface ConcretePortletConfig {
     /**
      * Returns the configuration attributes of the portlet
      *
-     * @returns the configuration attributes of the portlet
+     * @return the configuration attributes of the portlet
      */
     public Hashtable getConfigAttributes();
 
     /**
      * Sets the configuration attributes of the portlet
      *
-     * @param the configuration attributes of the portlet
+     * @param configAttrs the configuration attributes of the portlet
      */
     public void setConfigAttributes(Hashtable configAttrs);
 

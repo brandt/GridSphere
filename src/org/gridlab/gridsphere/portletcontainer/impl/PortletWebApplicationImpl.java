@@ -19,7 +19,6 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
-import java.net.URL;
 
 /**
  * The <code>PortletWebApplicationImpl</code> ia an implementation of a <code>PortletWebApplication</code> that
@@ -162,8 +161,8 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
      * @param applicationPortletID an application portlet id
      * @return an application portlet
      */
-    public ApplicationPortlet getApplicationPortlet(String portletApplicationID) {
-        return (ApplicationPortlet) appPortlets.get(portletApplicationID);
+    public ApplicationPortlet getApplicationPortlet(String applicationPortletID) {
+        return (ApplicationPortlet) appPortlets.get(applicationPortletID);
     }
 
     /**

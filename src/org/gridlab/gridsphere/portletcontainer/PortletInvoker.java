@@ -5,11 +5,9 @@
 package org.gridlab.gridsphere.portletcontainer;
 
 import org.gridlab.gridsphere.event.WindowEvent;
-import org.gridlab.gridsphere.event.MessageEvent;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
-import javax.servlet.RequestDispatcher;
 import java.util.Iterator;
 import java.util.Collection;
 import java.util.List;

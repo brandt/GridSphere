@@ -19,7 +19,7 @@ public class LanguageInfo {
     /**
      * Returns the description of the portlet
      *
-     * @returns description of the portlet
+     * @return the description of the portlet
      */
     public String getDescription() {
         return description;
@@ -37,7 +37,7 @@ public class LanguageInfo {
     /**
      * Returns the keywords of the portlet
      *
-     * @returns keywords of the portlet
+     * @return the keywords of the portlet
      */
     public String getKeywords() {
         return keywords;
@@ -55,7 +55,7 @@ public class LanguageInfo {
     /**
      * Returns the locale of the portlet
      *
-     * @returns locale of the portlet
+     * @return the locale of the portlet
      */
     public String getLocale() {
         return locale;
@@ -73,7 +73,7 @@ public class LanguageInfo {
     /**
      * gets the title
      *
-     * @returns the title
+     * @return the title
      */
     public String getTitle() {
         return title;
@@ -91,7 +91,7 @@ public class LanguageInfo {
     /**
      * gets the title
      *
-     * @returns the title
+     * @return the title
      */
     public String getTitleShort() {
         return titleShort;
@@ -100,7 +100,7 @@ public class LanguageInfo {
     /**
      * sets the title
      *
-     * @param title the title
+     * @param titleShort the title
      */
     public void setTitleShort(String titleShort) {
         this.titleShort = titleShort;

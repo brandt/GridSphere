@@ -4,13 +4,9 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl;
 
-import org.gridlab.gridsphere.portlet.AccessDeniedException;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletMessage;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portletcontainer.PortletMessageManager;
 
 import java.util.ArrayList;
@@ -61,7 +57,7 @@ public class SportletMessageManager implements PortletMessageManager {
     /**
      * Retrieves the messages for the given portlet name and removes them from the queue
      *
-     * @para portletName the name of the portlet(s) to send the message to
+     * @param concretePortletID the name of the portlet(s) to send the message to
      * @return a list of <code>PortletMessage</code> objects
      */
     public List retrieveMessages(String concretePortletID) {

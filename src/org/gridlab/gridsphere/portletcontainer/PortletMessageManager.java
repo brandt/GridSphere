@@ -4,12 +4,7 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
-import org.gridlab.gridsphere.portlet.service.PortletService;
-import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.AccessDeniedException;
 import org.gridlab.gridsphere.portlet.PortletMessage;
-import org.gridlab.gridsphere.layout.PortletLayoutException;
-import org.gridlab.gridsphere.layout.PortletContainer;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +23,7 @@ public interface PortletMessageManager {
      * @param concretePortletID the concrete portlet id
      * @param message the portlet message to be sent
      */
-    public void send(String portletName, PortletMessage message);
+    public void send(String concretePortletID, PortletMessage message);
 
     /**
      * Retrieves the messages for the given portlet name and removes them from the queue

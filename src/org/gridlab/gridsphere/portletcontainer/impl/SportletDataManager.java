@@ -43,7 +43,7 @@ public class SportletDataManager implements PortletDataManager {
     /**
      * Returns the users portlet data for the specified portlet
      *
-     * @param User the user
+     * @param user the <code>User</code>
      * @param portletID the concrete portlet id
      * @return the PortletData for this portlet or null if none exists.
      */
@@ -70,7 +70,7 @@ public class SportletDataManager implements PortletDataManager {
     /**
      * Makes the users persistent portlet data persistent
      *
-     * @param User the user
+     * @param user the <code>User</code>
      * @param portletID the concrete portlet id
      * @param data the PortletData
      */

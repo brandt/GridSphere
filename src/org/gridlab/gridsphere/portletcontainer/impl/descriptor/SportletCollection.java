@@ -33,7 +33,7 @@ public class SportletCollection {
     /**
      * Sets the list of portlet definitions
      *
-     * @param an <code>ArrayList</code> containing the portlet definitions
+     * @param portletDefList an <code>ArrayList</code> containing the portlet definitions
      */
     public void setPortletDefinitionList(ArrayList portletDefList) {
         this.portletDefList = portletDefList;

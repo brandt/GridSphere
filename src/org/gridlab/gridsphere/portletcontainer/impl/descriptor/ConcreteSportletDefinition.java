@@ -102,7 +102,7 @@ public class ConcreteSportletDefinition {
     /**
      * Sets the concrete portlet configuration
      *
-     * @param concPortletConfig the concrete portlet configuration
+     * @param concSportletConfig the concrete portlet configuration
      */
     public void setConcreteSportletConfig(ConcreteSportletConfig concSportletConfig) {
         this.concSportletConfig = concSportletConfig;

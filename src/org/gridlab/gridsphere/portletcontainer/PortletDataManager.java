@@ -17,7 +17,7 @@ public interface PortletDataManager {
     /**
      * Returns the users portlet data for the specified portlet
      *
-     * @param User the user
+     * @param user the <code>User</code>
      * @param portletID the concrete portlet id
      * @return the PortletData for this portlet or null if none exists
      * @throws PersistenceManagerException if a persistence error occurs
@@ -27,7 +27,7 @@ public interface PortletDataManager {
     /**
      * Makes the users persistent portlet data persistent
      *
-     * @param User the user
+     * @param user the <code>User</code>
      * @param portletID the concrete portlet id
      * @param data the PortletData
      * @throws PersistenceManagerException if a persistence error occurs

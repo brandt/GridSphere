@@ -5,12 +5,9 @@
 package org.gridlab.gridsphere.portletcontainer;
 
 import org.gridlab.gridsphere.portlet.PortletSettings;
-import org.gridlab.gridsphere.portletcontainer.impl.descriptor.AccessRestrictions;
 
 import java.io.IOException;
 import java.util.Hashtable;
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * A <code>ConcretePortlet</code> provides the portlet container with
@@ -27,7 +24,7 @@ public interface ConcretePortlet {
     /**
      * Returns the portlet context attributes
      *
-     * @returns the portlet context attributes
+     * @return the portlet context attributes
      */
     public Hashtable getContextAttributes();
 

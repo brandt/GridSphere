@@ -42,7 +42,7 @@ public class SportletDefinition {
      * <p>
      * Sets a list of concrete portlet definitions
      *
-     * @param concPortDefList a <code>ArrayList</code> of concrete portlet definitions
+     * @param concSportletList a <code>ArrayList</code> of concrete portlet definitions
      * @see org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletDefinition
      */
     public void setConcreteSportletList(ArrayList concSportletList) {
@@ -52,7 +52,7 @@ public class SportletDefinition {
     /**
      * Sets the application portlet definition
      *
-     * @param appPortletDef the application portlet definition
+     * @param appSportletConfig the application portlet definition
      */
     public void setApplicationSportletConfig(ApplicationSportletConfig appSportletConfig) {
         this.appSportletConfig = appSportletConfig;
