@@ -433,6 +433,24 @@ public class FormEventImpl implements FormEvent {
     }
 
     /**
+     * Return an existing <code>IncludeBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a IncludeBean
+     */
+    public IncludeBean getIncludeBean(String beanId) {
+        log.debug("Getting include bean from request");
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (IncludeBean)tagBeans.get(beanKey);
+        }
+        IncludeBean includeBean = new IncludeBean(request, response, beanId);
+        log.debug("Putting include bean in request");
+        tagBeans.put(beanKey, includeBean);
+        return includeBean;
+    }
+
+    /**
      * Prints the request parameters to stdout. Generally used for debugging
      */
     public void printRequestParameters() {
@@ -707,7 +725,7 @@ public class FormEventImpl implements FormEvent {
         Iterator it = tagBeans.values().iterator();
         while (it.hasNext()) {
             TagBean tagBean = (TagBean)it.next();
-            //log.debug("storing bean id: " + tagBean.getBeanId());
+            log.debug("storing bean id: " + tagBean.getBeanId());
             tagBean.store();
         }
         //printRequestAttributes();

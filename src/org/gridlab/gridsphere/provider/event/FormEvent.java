@@ -179,6 +179,8 @@ public interface FormEvent extends ActionEvent {
 
     public DataGridBean getDataGridBean(String beanId);
 
+    public IncludeBean getIncludeBean(String beanId);
+
     /**
      * Stores any created beans into the request
      */

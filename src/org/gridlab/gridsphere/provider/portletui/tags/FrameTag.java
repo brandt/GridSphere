@@ -23,7 +23,7 @@ public class FrameTag extends TableTag {
     protected String value = null;
 
     public FrameTag() {
-        cssClass = FrameBean.TABLE_FRAME_STYLE;
+        cssClass = FrameBean.FRAME_TABLE;
     }
 
     /**
@@ -77,15 +77,20 @@ public class FrameTag extends TableTag {
     public int doStartTag() throws JspException {
         if (style != null) {
             if (style.equalsIgnoreCase("error") || (style.equalsIgnoreCase("err"))) {
-                this.cssClass = TextBean.MSG_ERROR;
+                this.cssClass = FrameBean.FRAME_ERROR_MESSAGE;
+                //this.cssClass = TextBean.MSG_ERROR;
             } else if (style.equalsIgnoreCase("status")) {
-                this.cssClass = TextBean.MSG_STATUS;
+                this.cssClass = FrameBean.FRAME_ERROR_MESSAGE;
+                //this.cssClass = TextBean.MSG_STATUS;
             } else if (style.equalsIgnoreCase("info")) {
-                this.cssClass = TextBean.MSG_INFO;
+                this.cssClass = FrameBean.FRAME_INFO_MESSAGE;
+                //this.cssClass = TextBean.MSG_INFO;
             } else if (style.equalsIgnoreCase("alert")) {
-                this.cssClass = TextBean.MSG_ALERT;
+                this.cssClass = FrameBean.FRAME_ALERT_MESSAGE;
+                //this.cssClass = TextBean.MSG_ALERT;
             } else if (style.equalsIgnoreCase("success")) {
-                this.cssClass = TextBean.MSG_SUCCESS;
+                this.cssClass = FrameBean.FRAME_INFO_MESSAGE;
+                //this.cssClass = TextBean.MSG_SUCCESS;
             }
         }
         if (!beanId.equals("")) {

@@ -13,8 +13,10 @@ import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
  */
 public class FrameBean extends TableBean implements TagBean {
 
-    public static final String TABLE_FRAME_STYLE = "portlet-frame";
-    public static final String TABLE_FRAME_WIDTH = "100%";
+    public static final String FRAME_TABLE = "portlet-frame";
+    public static final String FRAME_INFO_MESSAGE = "portlet-frame-info";
+    public static final String FRAME_ALERT_MESSAGE = "portlet-frame-alert";
+    public static final String FRAME_ERROR_MESSAGE = "portlet-frame-error";
 
     public static final String ERROR_TYPE = "error";
     public static final String MESSAGE_TYPE = "message";
@@ -25,7 +27,7 @@ public class FrameBean extends TableBean implements TagBean {
      * Constructs a default frame bean
      */
     public FrameBean() {
-        super(TABLE_FRAME_STYLE);
+        super(FRAME_TABLE);
     }
 
     /**
@@ -34,7 +36,7 @@ public class FrameBean extends TableBean implements TagBean {
      * @param beanId the frame bean identifier
      */
     public FrameBean(String beanId) {
-        super(TABLE_FRAME_STYLE);
+        super(FRAME_TABLE);
         this.beanId = beanId;
     }
 
@@ -45,7 +47,7 @@ public class FrameBean extends TableBean implements TagBean {
      * @param beanId the bean identifier
      */
     public FrameBean(PortletRequest req, String beanId) {
-        super(TABLE_FRAME_STYLE);
+        super(FRAME_TABLE);
         this.beanId = beanId;
         this.request = req;
     }
