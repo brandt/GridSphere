@@ -101,9 +101,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
         String colStr = req.getParameter("col");
         int col = Integer.valueOf(colStr).intValue();
 
-        PortletFrame frame = new PortletFrame();
-        System.err.println("adding portlet " + portletClass);
-        frame.setPortletClass(portletClass);
+
 
         boolean done = false;
         // first loop thru rows to see if one is empty for the requested column
@@ -119,9 +117,14 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
                         if (c instanceof PortletColumnLayout) {
                             PortletColumnLayout existingColumn = (PortletColumnLayout)c;
                             if (existingColumn.getPortletComponents().isEmpty()) {
-                                System.err.println("column is empty");
-                                existingColumn.addPortletComponent(frame);
-                                done = true;
+                                if (!portletClass.equals("")) {
+                                    PortletFrame frame = new PortletFrame();
+                                    System.err.println("adding portlet " + portletClass);
+                                    frame.setPortletClass(portletClass);
+                                    System.err.println("column is empty");
+                                    existingColumn.addPortletComponent(frame);
+                                    done = true;
+                                }
                             } else{
                                 System.err.println("column not empty");
                             }
@@ -141,7 +144,12 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
                 PortletColumnLayout existingColumn = (PortletColumnLayout)l.get(i);
                 if (i == col) {
                     newcol = new PortletColumnLayout();
-                    newcol.addPortletComponent(frame);
+                    if (!portletClass.equals("")) {
+                        PortletFrame frame = new PortletFrame();
+                        System.err.println("adding portlet " + portletClass);
+                        frame.setPortletClass(portletClass);
+                        newcol.addPortletComponent(frame);
+                    }
                     newcol.setWidth(existingColumn.getWidth());
                 } else {
                     newcol = new PortletColumnLayout();
@@ -286,6 +294,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
 
     public void renderAddPortlets(GridSphereEvent event, int col) throws IOException {
 
+        System.err.println("in renderAddPortlets");
         PortletRequest req = event.getPortletRequest();
 
         req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
@@ -331,6 +340,9 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
         out.println("<b>Add portlets: </b>");
         out.println("<select name=\"" + PORTLET_ADD_ACTION + "\">");
 
+        if (availPortlets.isEmpty()) {
+            out.println("<option disabled=\"true\">No portlets available</option>");
+        }
         it = availPortlets.keySet().iterator();
         while (it.hasNext()) {
             String pclass = (String)it.next();
@@ -339,8 +351,6 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
         }
 
         out.println("</select>");
-
-
         out.println("<input type=\"submit\" name=\"gs_action=addportlet\" value=\"Add\"");
         out.println("</form>");
     }

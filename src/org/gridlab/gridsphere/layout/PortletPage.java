@@ -453,7 +453,7 @@ public class PortletPage implements Serializable, Cloneable {
             PortletTabbedPane myPane = new PortletTabbedPane();
             for (int i = 0; i < tabbedPane.getTabCount(); i++) {
                 PortletTab tab = tabbedPane.getPortletTabAt(i);
-                if (tab.isCustomizable()) {
+                if (tab.getCanModify()) {
                     myPane.addTab(tab);
                 }
             }
