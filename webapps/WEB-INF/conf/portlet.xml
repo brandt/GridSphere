@@ -7,6 +7,32 @@
     <portlet-app-name>Hello World Portlet Application</portlet-app-name>
     <portlet href="WEB-INF/web.xml#Servlet_1902648613" id="Portlet_1">
         <portlet-name>Hello World</portlet-name>
+        <portlet-config>
+            <param-name>Portlet Master</param-name>
+            <param-value>yourid@yourdomain.com</param-value>
+        </portlet-config>
+        <cache>
+            <expires>120</expires>
+            <shared>true</shared>
+        </cache>
+        <allows>
+            <maximized/>
+            <minimized/>
+        </allows>
+        <supports>
+            <markup name="html">
+                <view/>
+                <edit/>
+                <help/>
+                <configure/>
+            </markup>
+            <markup name="wml">
+                <view/>
+                <edit/>
+                <help/>
+                <configure/>
+            </markup>
+        </supports>
     </portlet>
 </portlet-app>
 
@@ -57,6 +83,10 @@
             <description>Hello World - Sample Portlet #2</description>
             <keywords>portlet hello world</keywords>
         </language>
+        <config-param>
+            <param-name>Portlet Master</param-name>
+            <param-value>yourid@yourdomain.com</param-value>
+        </config-param>
         <owner>
             <group-name>CACTUS</group-name>
             <role-name>ADMIN</role-name>

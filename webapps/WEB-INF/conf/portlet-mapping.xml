@@ -102,6 +102,48 @@
         <field name="Name" type="string">
             <bind-xml name="portlet-name"/>
         </field>
+        <field name="ConfigParamList" type="org.gridlab.gridsphere.portletcontainer.descriptor.ConfigParam" collection="vector">
+            <bind-xml name="portlet-config"/>
+        </field>
+        <field name="CacheInfo" type="org.gridlab.gridsphere.portletcontainer.descriptor.CacheInfo">
+            <bind-xml name="cache"/>
+        </field>
+        <field name="AllowsWindowStates" type="org.gridlab.gridsphere.portletcontainer.descriptor.AllowsWindowStates">
+            <bind-xml name="allows"/>
+        </field>
+        <field name="SupportsModes" type="org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes">
+            <bind-xml name="supports"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.CacheInfo">
+        <field name="Expires" type="long">
+            <bind-xml name="expires"/>
+        </field>
+        <field name="Shared" type="string">
+            <bind-xml name="shared"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.AllowsWindowStates">
+        <field name="WindowStates" type="org.exolab.castor.types.AnyNode" collection="vector">
+            <bind-xml matches="*"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes">
+        <field name="MarkupList" type="org.gridlab.gridsphere.portletcontainer.descriptor.Markup" collection="vector">
+            <bind-xml name="markup"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.Markup">
+        <field name="Name" type="string">
+            <bind-xml name="name" node="attribute"/>
+        </field>
+        <field name="PortletModes" type="org.exolab.castor.types.AnyNode" collection="vector" container="false">
+            <bind-xml matches="*"/>
+        </field>
     </class>
 
     <class name="org.gridlab.gridsphere.portletcontainer.descriptor.ConfigParam">
