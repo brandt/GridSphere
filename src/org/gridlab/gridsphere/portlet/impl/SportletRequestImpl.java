@@ -188,7 +188,7 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
         User user = getUser();
         if (!(user instanceof GuestUser)) {
             String loc = (String)user.getAttribute(User.LOCALE);
-            if (loc != null) {
+            if (loc == null) {
                 locale = new Locale(loc, "", "");
                 this.getPortletSession(true).setAttribute(User.LOCALE, locale);
                 return locale;

@@ -357,13 +357,12 @@ public class PortletManager implements PortletManagerService {
             String webappName = webapp.getWebApplicationName();
             if (!l.contains(webappName)) l.add(webappName);
         }
-        for (int i = 0; i < l.size(); i++) {
-            String s = (String)l.get(i);
+        Iterator it = l.iterator();
+        while (it.hasNext()) {
+            String s = (String)it.next();
             int idx = s.indexOf(".");
-            if ((idx > 0) && s.endsWith(".1")) {
-                String n = s.substring(0,idx);
-                System.err.println("n = " + n);
-                l.remove(n);
+            if (idx < 0) {
+                if (l.contains(s + ".1")) it.remove();
             }
         }
         return l;

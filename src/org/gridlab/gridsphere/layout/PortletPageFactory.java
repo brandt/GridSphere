@@ -164,9 +164,6 @@ public class PortletPageFactory implements PortletSessionListener {
             return (!pane.getPortletTabs().isEmpty() ? pane : null);
         }
 
-
-
-
         File f = new File(userLayout);
         PortletTabbedPane pane = null;
 
@@ -183,6 +180,10 @@ public class PortletPageFactory implements PortletSessionListener {
             }
         }
         return pane;
+    }
+
+    public void checkPortletsInUserPane() {
+
     }
 
     public PortletPage createFromGroups(PortletRequest req) {

@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
+import org.gridlab.gridsphere.provider.portlet.jsr.PortletServlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
@@ -130,7 +131,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         PanelBean panel = event.getPanelBean("panel");
         FrameBean frame = new FrameBean();
         DefaultTableModel model = new DefaultTableModel();
-        //if (group == null) {
+
         List webappNames = portletMgr.getWebApplicationNames();
 
         Iterator it = webappNames.iterator();
@@ -141,10 +142,9 @@ public class GroupManagerPortlet extends ActionPortlet {
 
 
             String g = (String)it.next();
-            System.err.println("listing group = " + g);
-            if (g.equals(PortletGroupFactory.GRIDSPHERE_GROUP.toString())) {
-                continue;
-            }
+
+            if (g.equals(PortletGroupFactory.GRIDSPHERE_GROUP.toString())) continue;
+
             TableRowBean tr = new TableRowBean();
             tr.setHeader(true);
             TableCellBean tc3 = new TableCellBean();
@@ -236,13 +236,7 @@ public class GroupManagerPortlet extends ActionPortlet {
 
                         // set 2nd column to portlet display name from concrete portlet
                         Locale loc = req.getLocale();
-                        /*
-                        int li = concID.lastIndexOf(".");
-                        concID = concID.substring(0, li);
-                        li = concID.lastIndexOf(".");
-                        concID = concID.substring(li+1);
-                        tb.setValue(concID);
-                        */
+
                         String dispName = conc.getDisplayName(loc);
                         tb.setValue(dispName);
                         newtc2.addBean(tb);

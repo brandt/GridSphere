@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.Tag;
+import javax.portlet.RenderRequest;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -210,18 +211,26 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         return getLocalizedText(key, "Portlet");
     }
 
-    protected String getLocalizedText(String key, String base) {
+    protected Locale getLocale() {
+        Locale locale = Locale.ENGLISH;
         PortletRequest req = (PortletRequest)pageContext.getAttribute("portletRequest");
-        if (req!=null) {
-            Locale locale = req.getLocale();
-            try {
-                ResourceBundle bundle = ResourceBundle.getBundle(base, locale);
-                return bundle.getString(key);
-            } catch (Exception e) {
-                return key;
-            }
+        if (req != null) {
+            locale = req.getLocale();
+        } else {
+            RenderRequest renderReq = (RenderRequest)pageContext.getAttribute("renderRequest");
+            locale = renderReq.getLocale();
         }
-        return key;
+        return locale;
+    }
+
+    protected String getLocalizedText(String key, String base) {
+        Locale locale = getLocale();
+        try {
+            ResourceBundle bundle = ResourceBundle.getBundle(base, locale);
+            return bundle.getString(key);
+        } catch (Exception e) {
+            return key;
+        }
     }
 
     public int doStartTag() throws JspException {
