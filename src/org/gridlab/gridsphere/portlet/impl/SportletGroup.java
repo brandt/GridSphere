@@ -37,6 +37,7 @@ public class SportletGroup implements Serializable, Cloneable, PortletGroup {
     public static final PortletGroup CORE = new SportletGroup(SportletGroup.CORE_GROUP);
 
     private String Name = new String();
+    private boolean isPublic = true;
 
     /**
      * Constructs an instance of SportletGroup
@@ -135,6 +136,18 @@ public class SportletGroup implements Serializable, Cloneable, PortletGroup {
         SportletGroup s = (SportletGroup)super.clone();
         s.Name = this.Name;
         return s;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
+    }
+
+    public boolean getPublic() {
+        return isPublic;
     }
 
     /**

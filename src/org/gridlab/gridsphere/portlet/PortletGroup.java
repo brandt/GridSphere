@@ -51,4 +51,6 @@ public interface PortletGroup extends Cloneable {
      */
     public String toString();
 
+    public boolean isPublic();
+
 }
