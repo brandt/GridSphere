@@ -390,9 +390,9 @@ public class UserManager implements UserManagerService {
     }
 
     public List selectUsers(String criteria) {
-        String oql = "select user from "
+        String oql = "select uzer from "
                    + this.jdoUser
-                   + " user "
+                   + " uzer "
                    + criteria;
         try {
             return pm.restoreList(oql);
@@ -433,22 +433,23 @@ public class UserManager implements UserManagerService {
     }
 
     private SportletUserImpl getSportletUserImpl(String id) {
-        return selectSportletUserImpl("where user.oid='" + id + "'");
+        return selectSportletUserImpl("where uzer.oid='" + id + "'");
     }
 
     private SportletUserImpl getSportletUserImplByLoginName(String loginName) {
         log.debug("Attempting to retrieve user by login name " + loginName);
-        return selectSportletUserImpl("where user.UserID='" + loginName + "'");
+        return selectSportletUserImpl("where uzer.UserID='" + loginName + "'");
     }
 
     private SportletUserImpl selectSportletUserImpl(String criteria) {
-        String oql = "select user from "
+        String oql = "select uzer from "
                    + jdoUser
-                   + " user "
+                   + " uzer "
                    + criteria;
+        log.debug("Retrieving user with OQL: "+oql);
         try {
             SportletUserImpl sui = (SportletUserImpl)pm.restore(oql);
-            log.debug("Retrieved user with OQL: "+oql);
+            //log.debug("Retrieved user with OQL: "+oql);
             return sui;
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving user with criteria " + criteria;
@@ -460,7 +461,7 @@ public class UserManager implements UserManagerService {
     private SportletUserImpl editSportletUserImpl(AccountRequest request) {
         /* TODO: Account request id should not be same as user id */
         String userID = request.getID();
-        log.debug("in  editSportletUser userID: " + userID);
+        log.debug("in editSportletUser userID: " + userID);
         String userName = request.getUserName();
         SportletUserImpl user = getSportletUserImplByLoginName(userName);
         if (user == null) {
@@ -530,24 +531,24 @@ public class UserManager implements UserManagerService {
     }
 
     public boolean existsUserWithID(String userID) {
-        String criteria = "where user.oid='" + userID + "'";
+        String criteria = "where uzer.oid='" + userID + "'";
         return existsSportletUserImpl(criteria);
     }
 
     public boolean existsUserName(String loginName) {
-        String criteria = "where user.UserID='" + loginName + "'";
+        String criteria = "where uzer.UserID='" + loginName + "'";
         return existsSportletUserImpl(criteria);
     }
 
     private boolean existsSportletUserImpl(SportletUserImpl user) {
-        String criteria = "where user.oid='" + user.getOid() + "'";
+        String criteria = "where uzer.oid='" + user.getOid() + "'";
         return existsSportletUserImpl(criteria);
     }
 
     private boolean existsSportletUserImpl(String criteria) {
-        String oql = "select user from "
+        String oql = "select uzer from "
                    + jdoUser
-                   + " user "
+                   + " uzer "
                    + criteria;
         try {
             SportletUserImpl sui = (SportletUserImpl) pm.restore(oql);
