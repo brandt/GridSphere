@@ -7,9 +7,9 @@ package org.gridlab.gridsphere.portletcontainer.descriptor;
 
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerXml;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
+import org.gridlab.gridsphere.core.persistence.castor.descriptor.Descriptor;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.Descriptor;
 
 import java.io.IOException;
 import java.util.ArrayList;

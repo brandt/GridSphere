@@ -6,11 +6,10 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
-import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.Descriptor;
 
 import java.io.IOException;
 
-public class PortletLayoutDescriptor extends Descriptor {
+public class PortletLayoutDescriptor extends org.gridlab.gridsphere.core.persistence.castor.descriptor.Descriptor {
 
     private static PortletLayoutDescriptor instance = new PortletLayoutDescriptor();
 

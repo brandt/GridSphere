@@ -2,7 +2,7 @@
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-package org.gridlab.gridsphere.portlet.service.spi.impl.descriptor;
+package org.gridlab.gridsphere.core.persistence.castor.descriptor;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;

@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.portlet.service.spi.impl.descriptor;
 
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
+import org.gridlab.gridsphere.core.persistence.castor.descriptor.Descriptor;
 
 import java.io.IOException;
 
