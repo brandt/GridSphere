@@ -20,6 +20,7 @@ import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
+import javax.portlet.PortletMode;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -260,19 +261,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         User user = event.getPortletRequest().getUser();
         PortletRequest request = event.getPortletRequest();
 
-        /*
-        if ((titleBar != null) && (!hasTitleBarEvent)) {
-            titleBar.setActive(true);
-            PortletTitleBarEvent tbEvent = new PortletTitleBarEventImpl(titleBar, event, COMPONENT_ID);
-            if (tbEvent.getAction() != null) {
-                hasTitleBarEvent = true;
-
-                System.err.println("what am i doing here???");
-                titleBar.actionPerformed(event);
-            }
-        }
-        */
-
         hasTitleBarEvent = false;
 
         PortletComponentEvent titleBarEvent = event.getLastRenderEvent();
@@ -338,7 +326,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
             PortletResponse res = event.getPortletResponse();
 
-
             req.setAttribute(SportletProperties.PORTLETID, portletClass);
 
             // Override if user is a guest
@@ -348,29 +335,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             } else {
                 if (titleBar != null) {
                     Portlet.Mode mode = titleBar.getPortletMode();
-
-                    //System.err.println("in portlet frame: setting mode in " + portletClass + " to " + mode.toString());
                     req.setMode(mode);
                 } else {
                     req.setMode(Portlet.Mode.VIEW);
                 }
             }
-
-
-
-
-            // Set the portlet data
-            /*
-            PortletData data = null;
-            if (!(user instanceof GuestUser)) {
-                try {
-                    data = dataManager.getPortletData(req.getUser(), portletClass);
-                    req.setAttribute(SportletProperties.PORTLET_DATA, data);
-                } catch (PersistenceManagerException e) {
-                    errorFrame.setError("Unable to retrieve user's portlet data!", e);
-                }
-            }
-            */
 
             // now perform actionPerformed on Portlet if it has an action
 
@@ -386,20 +355,20 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     && (!event.getAction().getName().equals(FRAME_CLOSE_OK_ACTION))
                     && (!event.getAction().getName().equals(FRAME_CLOSE_CANCEL_ACTION))) {
                 DefaultPortletAction action = event.getAction();
-                //if (!action.getName().equals("")) {
-
-                // role checking
-                // given a portlet class, we get groups with that class
-
-                
 
                 try {
                     PortletInvoker.actionPerformed(portletClass, action, req, res);
                 } catch (PortletException e) {
                     // catch it and keep processing
-
                 }
+            }
 
+            // see if mode has been set
+            Portlet.Mode mymode = (Portlet.Mode)req.getAttribute(SportletProperties.PORTLET_MODE);
+            if (mymode != null) {
+                if (titleBar != null) {
+                    titleBar.setPortletMode(mymode);
+                }
             }
 
             List slisteners = Collections.synchronizedList(listeners);
@@ -457,25 +426,10 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             return;
         }
 
-
-
         frame = new StringBuffer();
 
         req.setAttribute(SportletProperties.PORTLETID, portletClass);
 
-        // Set the portlet data
-        /*
-        User user = req.getUser();
-        PortletData data = null;
-        if (!(user instanceof GuestUser)) {
-            try {
-                data = dataManager.getPortletData(req.getUser(), portletClass);
-                req.setAttribute(SportletProperties.PORTLET_DATA, data);
-            } catch (PersistenceManagerException e) {
-                errorFrame.setError("Unable to retrieve user's portlet data", e);
-            }
-        }
-        */
 
         // TODO try to cache portlet's rendering---
         StringWriter storedWriter = new StringWriter();

@@ -635,8 +635,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         req.setMode(portletMode);
         req.setAttribute(SportletProperties.PREVIOUS_MODE, previousMode);
 
-        //System.err.println("in title bar action portletclass=" + portletClass + " : setting prev mode= " + previousMode + " cur mode= " + portletMode);
-
         Iterator it = listeners.iterator();
         PortletComponent comp;
         while (it.hasNext()) {

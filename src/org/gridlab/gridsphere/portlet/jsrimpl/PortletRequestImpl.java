@@ -196,6 +196,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @return the portlet mode
      */
     public PortletMode getPortletMode() {
+        /*
         Portlet.Mode mode = (Portlet.Mode) getAttribute(SportletProperties.PORTLET_MODE);
         PortletMode m = PortletMode.VIEW;
         if (mode == Portlet.Mode.VIEW) {
@@ -210,6 +211,8 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
             m = new PortletMode(mode.toString());
         }
         return m;
+        */
+        return (PortletMode)getAttribute(SportletProperties.PORTLET_MODE_JSR);
     }
 
     /**

@@ -129,15 +129,16 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
             throw new IllegalStateException("it is not allowed to invoke setPortletMode after sendRedirect has been called");
         }
 
-        Portlet.Mode mode = Portlet.Mode.VIEW;
+        //Portlet.Mode mode = Portlet.Mode.VIEW;
 
         List allowedModes = (List) req.getAttribute(SportletProperties.ALLOWED_MODES);
 
 
         if (!allowedModes.contains(portletMode.toString())) throw new PortletModeException("Unsupported portlet mode!", portletMode);
-        //}
+
         this.portletMode = portletMode;
-        req.setAttribute(SportletProperties.PORTLET_MODE, mode);
+        String thismode = SportletProperties.PORTLET_MODE_JSR;
+        req.setAttribute(thismode, portletMode);
         isRedirectAllowed = false;
     }
 

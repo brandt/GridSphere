@@ -32,9 +32,6 @@ public abstract class PortletAdapter extends Portlet {
     /* keep track of all PortletSettings per concrete portlet (concreteID, PortletSettings) */
     private Map allPortletSettings = new Hashtable();
 
-    /* require an acl service to get role info */
-    //private transient AccessControlManagerService aclService = null;
-
     /* the datamanger injects PortletData into the request */
     private transient PortletDataManager dataManager = null;
 
@@ -59,16 +56,7 @@ public abstract class PortletAdapter extends Portlet {
      */
     public void init(PortletConfig config) throws UnavailableException {
         this.portletConfig = config;
-        PortletContext ctx = portletConfig.getContext();
         dataManager = SportletDataManager.getInstance();
-        /*
-        try {
-            aclService = (AccessControlManagerService) ctx.getService(AccessControlManagerService.class);
-        } catch (PortletServiceException e) {
-            log.error("Unable to get an instance of AccessControlManagerService");
-            throw new UnavailableException("Unable to get an instance of AccessControlManagerService");
-        }
-        */
     }
 
     /**
@@ -157,31 +145,9 @@ public abstract class PortletAdapter extends Portlet {
             request.setAttribute(SportletProperties.PORTLET_SETTINGS, portletSettings);
         }
 
-        //if (this.getPortletConfig() == null) System.err.println("portletconfig is null!");
 
-        /*
-        String groupName = this.getPortletConfig().getGroupName();
-        String portletName = portletConfig.getName();
-        PortletGroup group = aclService.getGroupByName(groupName);
-        if (group == null)
-            group = PortletGroupFactory.createPortletGroup(groupName);
-        PortletRole role = aclService.getRoleInGroup(request.getUser(), group);
+        user = request.getUser();
 
-        log.debug("Setting Group: " + group.toString() + " Role: " + role.toString());
-
-
-        request.setAttribute(SportletProperties.PORTLET_GROUP, group);
-        request.setAttribute(SportletProperties.PORTLET_ROLE, role);
-        */
-        //List groups = aclService.getGroupsWithPortlet(portletID);
-        //if (groups != null) {
-            user = request.getUser();
-        
-        //}
-
-
-        //request.getAttribute(SportletProperties.PO)
-        //PortletRole role = request.getRole();
         String method = (String) request.getAttribute(SportletProperties.PORTLET_ACTION_METHOD);
         if (method != null) return;
 
@@ -190,7 +156,7 @@ public abstract class PortletAdapter extends Portlet {
             mode = Portlet.Mode.VIEW;
             request.setMode(mode);
         }
-        log.debug("Displaying mode: " + mode);
+        log.debug("in PortletAdapter: Displaying mode: " + mode + " for portlet: " + portletID);
         try {
 
             switch (mode.getMode()) {
