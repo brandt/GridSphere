@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portlet.PortletAction;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 
 import java.util.EventObject;
 
@@ -16,11 +17,11 @@ import java.util.EventObject;
  */
 public class ActionEventImpl extends EventObject implements ActionEvent {
 
-    private PortletAction action;
+    private DefaultPortletAction action;
     private PortletRequest request;
     private PortletResponse response;
 
-    public ActionEventImpl(PortletAction action, PortletRequest request, PortletResponse response) {
+    public ActionEventImpl(DefaultPortletAction action, PortletRequest request, PortletResponse response) {
         super(action);
         this.action = action;
         this.request = request;
@@ -32,7 +33,7 @@ public class ActionEventImpl extends EventObject implements ActionEvent {
      *
      * @return the portlet action
      */
-    public PortletAction getAction() {
+    public DefaultPortletAction getAction() {
         return action;
     }
 

@@ -4,16 +4,17 @@
  */
 package org.gridlab.gridsphere.services.registry.impl;
 
+import org.gridlab.gridsphere.layout.PortletLayoutEngine;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
-import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistryManager;
+import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridlab.gridsphere.services.registry.PortletRegistryService;
-import org.gridlab.gridsphere.layout.PortletLayoutEngine;
 
 import javax.servlet.ServletContext;
 import java.util.*;
@@ -30,8 +31,8 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
 
     public final static String CORE_CONTEXT = "coreContext";
 
-    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletRegistryServiceImpl.class);
-    private static org.gridlab.gridsphere.services.registry.PortletRegistryService registryService = null;
+    private static PortletLog log = SportletLog.getInstance(PortletRegistryServiceImpl.class);
+    private static PortletRegistryService registryService = null;
     private ServletContext context = null;
 
     private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
@@ -47,8 +48,22 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.info("in init()");
         this.context = config.getServletConfig().getServletContext();
-        String webapp = config.getInitParameter(CORE_CONTEXT);
-        addWebApp(webapp);
+        String webapps = config.getInitParameter(CORE_CONTEXT);
+        if (webapps != null) {
+            String webapp;
+            StringTokenizer st = new StringTokenizer(webapps, ",");
+            if (st.countTokens() == 0) {
+                webapp = webapps.trim();
+                System.err.println("adding webapp:" + webapp);
+                addWebApp(webapp);
+            } else {
+                while (st.hasMoreTokens()) {
+                    webapp = (String) st.nextToken().trim();
+                    System.err.println("adding webapp:" + webapp);
+                    addWebApp(webapp);
+                }
+            }
+        }
     }
 
     public void destroy() {
@@ -72,7 +87,7 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
         Collection appPortlets = portletWebApp.getAllApplicationPortlets();
         Iterator it = appPortlets.iterator();
         while (it.hasNext()) {
-            ApplicationPortlet appPortlet = (ApplicationPortlet)it.next();
+            ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
             webapps.put(webApplicationName, appPortlet);
             manager.addApplicationPortlet(appPortlet);
         }
@@ -85,8 +100,8 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
      * @param the web application name
      */
     public void removePortletWebApplication(User user, String webApplicationName) {
-        ApplicationPortlet appPortlet = (ApplicationPortlet)webapps.get(webApplicationName);
-        manager.removeApplicationPortlet((String)appPortlet.getPortletAppID());
+        ApplicationPortlet appPortlet = (ApplicationPortlet) webapps.get(webApplicationName);
+        manager.removeApplicationPortlet((String) appPortlet.getPortletAppID());
         webapps.remove(webApplicationName);
     }
 
@@ -110,7 +125,7 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
         Set set = webapps.keySet();
         Iterator it = set.iterator();
         while (it.hasNext()) {
-            l.add((String)it.next());
+            l.add((String) it.next());
         }
         return l;
     }

@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException
 import org.gridlab.gridsphere.services.registry.PortletRegistryService;
 import org.gridlab.gridsphere.portlets.manager.tomcat.TomcatManagerWrapper;
 import org.gridlab.gridsphere.portlets.manager.tomcat.TomcatWebAppResult;
+import org.gridlab.gridsphere.portletcontainer.UserPortletManager;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
@@ -55,6 +56,8 @@ public class PortletApplicationManager extends AbstractPortlet {
             } else if (operation.equals("reload")) {
                 result = manager.reloadWebApp(appName);
                 registryService.reloadPortletWebApplication(user, appName);
+                UserPortletManager userPortletManager = UserPortletManager.getInstance();
+                userPortletManager.init(event.getPortletRequest(), event.getPortletResponse());
             } else if (operation.equals("remove")) {
                 result = manager.removeWebApp(appName);
                 registryService.removePortletWebApplication(user, appName);

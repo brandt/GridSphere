@@ -41,7 +41,7 @@ public class ConcretePortletManager {
 
         // Second initialize all concrete portlets for each application portlet
         Collection appPortlets = registry.getAllApplicationPortlets();
-        org.gridlab.gridsphere.portletcontainer.PortletWrapper portletWrapper = null;
+        PortletWrapper portletWrapper = null;
         try {
             Iterator it = appPortlets.iterator();
             while (it.hasNext()) {

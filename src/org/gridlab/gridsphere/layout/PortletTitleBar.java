@@ -94,11 +94,13 @@ public class PortletTitleBar extends BasePortletComponent {
         PortletRegistryManager registryManager = PortletRegistryManager.getInstance();
         String appID = registryManager.getApplicationPortletID(portletClass);
         ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
-        SupportsModes supportedModes = appPortlet.getPortletApplicationDescriptor().getSupportsModes();
-        modeList = supportedModes.getMarkupList();
-        ConcretePortlet concPortlet = appPortlet.getConcretePortlet(portletClass);
-        settings = concPortlet.getSportletSettings();
-
+        System.err.println("Trying to get info for: " + appID);
+        if (appPortlet != null) {
+            SupportsModes supportedModes = appPortlet.getPortletApplicationDescriptor().getSupportsModes();
+            modeList = supportedModes.getMarkupList();
+            ConcretePortlet concPortlet = appPortlet.getConcretePortlet(portletClass);
+            settings = concPortlet.getSportletSettings();
+        }
         // Get window state settings
         AllowsWindowStates allowedWindowStates = appPortlet.getPortletApplicationDescriptor().getAllowsWindowStates();
         allowsWindowStates = allowedWindowStates.getWindowStatesAsStrings();
