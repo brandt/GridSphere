@@ -5,19 +5,16 @@
  */
 package org.gridlab.gridsphere.services.user.impl;
 
-import org.gridlab.gridsphere.services.user.AccountRequest;
-import org.gridlab.gridsphere.services.security.acl.impl2.UserACL;
+import org.gridlab.gridsphere.core.persistence.BaseObject;
+import org.gridlab.gridsphere.core.persistence.PersistenceException;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletRole;
-import org.gridlab.gridsphere.portlet.impl.*;
-import org.gridlab.gridsphere.core.persistence.BaseObject;
-import org.gridlab.gridsphere.core.persistence.ConfigurationException;
-import org.gridlab.gridsphere.core.persistence.CreateException;
-import org.gridlab.gridsphere.core.persistence.PersistenceException;
-import org.gridlab.gridsphere.core.persistence.castor.StringVector;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.services.security.acl.impl2.UserACL;
+import org.gridlab.gridsphere.services.user.AccountRequest;
 
 import java.util.List;
 import java.util.Vector;
@@ -31,7 +28,7 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
     protected transient static PortletLog log = SportletLog.getInstance(AccountRequestImpl.class);
 
     /**
-     * @sq-size 32
+     * @sql-size 32
      * @sql-name userid
      */
     private String UserID = "";
@@ -69,13 +66,15 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
      * @sql-name userdnssv
      * @many-key reference
      */
-    private transient Vector UserdnsSV = new Vector();            // ready
+    private transient Vector UserdnsSV = new Vector();
+    //@todo needs to be saved
     /**
      * @field-type org.gridlab.gridsphere.services.user.impl.AccountRequestImplMyproxyUserNames
      * @sql-name myproxyusernamessv
      * @many-key reference
      */
-    private transient Vector MyproxyUserNamesSV = new Vector();   // ready
+    private transient Vector MyproxyUserNamesSV = new Vector();
+    //@todo needs to be saved
 
 
     public AccountRequestImpl() {
@@ -277,8 +276,8 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
     }
 
     public void setUserdnsSV(Vector userdnsSV) {
-        UserdnsSV  =  userdnsSV;
-        Userdns =  this.convertToVector(UserdnsSV);
+        UserdnsSV = userdnsSV;
+        Userdns = this.convertToVector(UserdnsSV);
     }
 
     //@todo should be done using the aclmanager service!
@@ -287,9 +286,9 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
      *
      * @param group
      */
-    public void addToGroup(PortletGroup group, PortletRole role){
+    public void addToGroup(PortletGroup group, PortletRole role) {
         UserACL acl;
-        acl = new UserACL(this.getID(),role.getRole() ,group.getID());
+        acl = new UserACL(this.getID(), role.getRole(), group.getID());
         PersistenceManagerRdbms pm = new PersistenceManagerRdbms();
         try {
             pm.create(acl);

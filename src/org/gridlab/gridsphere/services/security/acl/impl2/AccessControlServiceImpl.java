@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletRole;
+import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
@@ -97,8 +98,9 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
         return listACL(command);
     }
 
+    //@todo fillin issuperuser , see usermanagerserviceimpl!
     public boolean isSuperUser(User user) {
-        return true; // needs to be saved somewhere
+        return true;
     }
 
     /**
@@ -217,6 +219,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
 
     }
 
+    //@todo fillin getalroles
     public List getAllRoles() {
         return null;
     }

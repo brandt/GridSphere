@@ -6,20 +6,19 @@
 
 package org.gridlab.gridsphere.services.security.acl.impl2;
 
-import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
-import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.core.persistence.PersistenceException;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.impl.*;
+import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.impl.SportletGroup;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletRole;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.core.persistence.*;
-import org.gridlab.gridsphere.core.persistence.castor.*;
-
-import java.util.Random;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
 
 
 public class AccessControlManagerServiceImpl implements PortletServiceProvider, AccessControlManagerService {
@@ -48,8 +47,8 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         try {
             pm.deleteList(command);
         } catch (PersistenceException e) {
-            log.equals("Delete error "+e);
-            throw new PortletServiceException("Delete Exception "+e);
+            log.equals("Delete error " + e);
+            throw new PortletServiceException("Delete Exception " + e);
         }
     }
 
@@ -84,7 +83,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         try {
             pm.create(ga);
         } catch (PersistenceException e) {
-            log.error("Transaction Exception "+e);
+            log.error("Transaction Exception " + e);
             throw new PortletServiceException(e.toString());
         }
     }
@@ -98,13 +97,13 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
      */
     public void renameGroup(PortletGroup group, String newGroupName) throws PortletServiceException {
         String command =
-                "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g where g.ObjectID="+group.getID();
+                "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g where g.ObjectID=" + group.getID();
         try {
-            SportletGroup pg = (SportletGroup)pm.restoreObject(command);
+            SportletGroup pg = (SportletGroup) pm.restoreObject(command);
             pg.setName(newGroupName);
             pm.update(pg);
         } catch (PersistenceException e) {
-            throw new  PortletServiceException("Persistence Error:"+e.toString());
+            throw new PortletServiceException("Persistence Error:" + e.toString());
         }
     }
 
@@ -116,10 +115,12 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     public void removeGroup(PortletGroup group) throws PortletServiceException {
         String groupid = group.getID();
         String command =
-            "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g where g.ObjectID="+groupid;
+                "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g where g.ObjectID=" + groupid;
         delete(command);
 
-        // @todo delete all acls here!!!
+        command =
+                "select g from org.gridlab.gridsphere.services.security.acl.impl2 g where g.GroupID=" + groupid;
+        delete(command);
     }
 
     /**
@@ -132,34 +133,34 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     public void approveUserInGroup(User user, PortletGroup group) throws PortletServiceException {
         // all users need to make an accountrequest to get in groups, without it ... no
 
-        String command2 = "select acl from org.gridlab.gridsphere.services.security.acl.impl2.UserACL acl where "+
-                "UserID=\""+user.getID()+"\" and GroupID=\""+group.getID()+"\" and Status="+UserACL.STATUS_APPROVED;
-        String command = "select acl from org.gridlab.gridsphere.services.security.acl.impl2.UserACL acl where "+
-                "UserID=\""+user.getID()+"\" and GroupID=\""+group.getID()+"\" and Status="+UserACL.STATUS_NOT_APPROVED;
+        String command2 = "select acl from org.gridlab.gridsphere.services.security.acl.impl2.UserACL acl where " +
+                "UserID=\"" + user.getID() + "\" and GroupID=\"" + group.getID() + "\" and Status=" + UserACL.STATUS_APPROVED;
+        String command = "select acl from org.gridlab.gridsphere.services.security.acl.impl2.UserACL acl where " +
+                "UserID=\"" + user.getID() + "\" and GroupID=\"" + group.getID() + "\" and Status=" + UserACL.STATUS_NOT_APPROVED;
 
         UserACL notapproved = null;
         try {
-            notapproved = (UserACL)pm.restoreObject(command);
-            if (notapproved==null) {
-                log.error("User "+user.getFullName()+" did not requested a role with an accountrequest change");
+            notapproved = (UserACL) pm.restoreObject(command);
+            if (notapproved == null) {
+                log.error("User " + user.getFullName() + " did not requested a role with an accountrequest change");
             } else {
                 // we don't want to approve a superuserrole by an admin!
-                if (notapproved.getRoleID()!=SportletRole.SUPER) {
+                if (notapproved.getRoleID() != SportletRole.SUPER) {
                     // delete the status the user has until now
-                    UserACL approved = (UserACL)pm.restoreObject(command2);
-                    if (approved!=null) {
+                    UserACL approved = (UserACL) pm.restoreObject(command2);
+                    if (approved != null) {
                         pm.delete(approved);
                     }
                     notapproved.setStatus(notapproved.STATUS_APPROVED);
                     pm.update(notapproved);
-                    log.info("Approved ACL for user "+user.getGivenName()+" in group "+group.getName());
+                    log.info("Approved ACL for user " + user.getGivenName() + " in group " + group.getName());
                 } else {
                     log.info("User can not approve superuserrole!");
                 }
             }
 
         } catch (PersistenceException e) {
-            log.error("TransactionException "+e);
+            log.error("TransactionException " + e);
             throw new PortletServiceException(e.toString());
         }
     }
@@ -172,8 +173,8 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
      */
     public void removeUserFromGroup(User user, PortletGroup group) throws PortletServiceException {
         String command =
-            "select r from org.gridlab.gridsphere.services.security.acl.impl2.UserACL r where r.UserID="+user.getID()+
-            " and r.GroupID="+group.getID()+" and r.Status="+UserACL.STATUS_APPROVED;
+                "select r from org.gridlab.gridsphere.services.security.acl.impl2.UserACL r where r.UserID=" + user.getID() +
+                " and r.GroupID=" + group.getID() + " and r.Status=" + UserACL.STATUS_APPROVED;
         delete(command);
     }
 
@@ -184,8 +185,8 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
      */
     public void removeUserGroupRequest(User user, PortletGroup group) throws PortletServiceException {
         String command =
-            "select r from org.gridlab.gridsphere.services.security.acl.impl2.UserACL r where r.UserID="+user.getID()+
-            " and r.GroupID="+group.getID()+" and r.Status="+UserACL.STATUS_NOT_APPROVED;
+                "select r from org.gridlab.gridsphere.services.security.acl.impl2.UserACL r where r.UserID=" + user.getID() +
+                " and r.GroupID=" + group.getID() + " and r.Status=" + UserACL.STATUS_NOT_APPROVED;
         delete(command);
 
     }

@@ -7,32 +7,30 @@ package org.gridlab.gridsphere.services.user.impl;
 
 import org.gridlab.gridsphere.core.mail.MailMessage;
 import org.gridlab.gridsphere.core.mail.MailUtils;
+import org.gridlab.gridsphere.core.persistence.ConfigurationException;
+import org.gridlab.gridsphere.core.persistence.CreateException;
+import org.gridlab.gridsphere.core.persistence.PersistenceException;
+import org.gridlab.gridsphere.core.persistence.RestoreException;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManager;
-import org.gridlab.gridsphere.core.persistence.*;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.*;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
-import org.gridlab.gridsphere.services.security.acl.impl2.UserACL;
-import org.gridlab.gridsphere.services.security.acl.impl2.Groups;
 import org.gridlab.gridsphere.services.user.AccountRequest;
-import org.gridlab.gridsphere.services.user.UserManagerService;
 import org.gridlab.gridsphere.services.user.PermissionDeniedException;
-import org.gridlab.gridsphere.portletcontainer.descriptor.Role;
+import org.gridlab.gridsphere.services.user.UserManagerService;
 
 import javax.mail.MessagingException;
-import java.util.*;
+import java.util.List;
 
 /**
  * The UserManagerService manages users and account requests. Thru the UserManagerService
@@ -110,9 +108,9 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         try {
             pm.create(request);
         } catch (ConfigurationException e) {
-            log.info("conf error "+e);
+            log.info("conf error " + e);
         } catch (CreateException e) {
-            log.info("create error "+e);
+            log.info("create error " + e);
         }
 
         // mail the super user
@@ -148,14 +146,14 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public List getAccountRequests() {
         String command =
-            "select ar from org.gridlab.gridsphere.services.user.impl.AccountRequestImpl ar";
+                "select ar from org.gridlab.gridsphere.services.user.impl.AccountRequestImpl ar";
         List requests = null;
         try {
             requests = pm.restoreList(command);
         } catch (ConfigurationException e) {
-            log.info("Config error "+e);
+            log.info("Config error " + e);
         } catch (RestoreException e) {
-            log.info("Restore error "+e);
+            log.info("Restore error " + e);
         }
         return requests;
     }
@@ -176,32 +174,32 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             String userid = request.getID();
             AccountRequestImpl requestImpl = null;
             String command =
-                "select ar from org.gridlab.gridsphere.services.user.impl.AccountRequestImpl ar where ar.ObjectID="+userid;
+                    "select ar from org.gridlab.gridsphere.services.user.impl.AccountRequestImpl ar where ar.ObjectID=" + userid;
             try {
-                requestImpl = (AccountRequestImpl)pm.restoreObject(command);
+                requestImpl = (AccountRequestImpl) pm.restoreObject(command);
             } catch (PersistenceException e) {
-                log.error("PM Exception :"+e);
+                log.error("PM Exception :" + e);
             }
 
             SportletUserImpl user = null;
 
             // now need to check wheter new account or an existing should be modified
             if (existsUserID(userid)) {
-                user = (SportletUserImpl)modifyExistingUser(requestImpl, (SportletUser)getUserByID(userid));
+                user = (SportletUserImpl) modifyExistingUser(requestImpl, (SportletUser) getUserByID(userid));
             } else {
                 // make a new user
-                user = (SportletUserImpl)makeNewUser(requestImpl);
+                user = (SportletUserImpl) makeNewUser(requestImpl);
             }
             // now delete the request and create/update the user
             try {
                 if (existsUserID(userid)) {
                     pm.update(user);
-                }   else {
+                } else {
                     pm.create(user);
                 }
                 pm.delete(requestImpl);
             } catch (PersistenceException e) {
-                log.error("PM Exception :"+e);
+                log.error("PM Exception :" + e);
             }
             // Mail the user
             try {
@@ -211,7 +209,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 log.error("Unable to send mail: ", e);
             }
         } else {
-            log.info("User '"+approver.getGivenName()+"' tried to approve User '"+request.getGivenName()+"' (denied) ");
+            log.info("User '" + approver.getGivenName() + "' tried to approve User '" + request.getGivenName() + "' (denied) ");
             throw new PermissionDeniedException("Permission denied ");
         }
     }
@@ -228,26 +226,24 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             throws PermissionDeniedException {
         if (isSuperuser(denier)) {
             // @TODO share code with approveAccountrequest
-            // @TODO deleting of ACL needs to be in sync, can not be depened (the useracl) from AccountRequestImpl since it should be depened from SportletUserImpl
-            // @todo solution: seperate table for accouuntrequest useracl and mapping and the depeneded
 
             String userid = request.getID();
             AccountRequestImpl requestImpl = null;
             String command =
-                "select ar from org.gridlab.gridsphere.services.user.impl.AccountRequestImpl ar where ar.ObjectID="+userid;
+                    "select ar from org.gridlab.gridsphere.services.user.impl.AccountRequestImpl ar where ar.ObjectID=" + userid;
             String command2 =
-                "select acl from org.gridlab.gridsphere.services.security.acl.impl2.UserACL acl where "+
-                "UserID=\""+request.getID()+"\"";
+                    "select acl from org.gridlab.gridsphere.services.security.acl.impl2.UserACL acl where " +
+                    "UserID=\"" + request.getID() + "\"";
 
             try {
-                requestImpl = (AccountRequestImpl)pm.restoreObject(command);
+                requestImpl = (AccountRequestImpl) pm.restoreObject(command);
                 pm.delete(requestImpl);
-                // only delete the requested groups when the user did not exists before!
+                // only delete the requested groups when the user did not exist before!
                 if (!existsUser(userid)) {
                     pm.deleteList(command2);
                 }
             } catch (PersistenceException e) {
-                log.error("PM Exception :"+e);
+                log.error("PM Exception :" + e);
             }
             // Mail the user
             try {
@@ -257,7 +253,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 log.error("Unable to send mail: ", e);
             }
         } else {
-            throw new PermissionDeniedException("Permission denied to deny Accounrequest for user "+request.getGivenName());
+            throw new PermissionDeniedException("Permission denied to deny Accounrequest for user " + request.getGivenName());
         }
     }
 
@@ -275,7 +271,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             try {
                 aclManagerService.approveUserInGroup(user, group);
             } catch (PortletServiceException e) {
-                log.error("PortletService Exeption "+e);
+                log.error("PortletService Exeption " + e);
             }
             // Mail the user
             try {
@@ -285,8 +281,8 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 log.error("Unable to send mail: ", e);
             }
         } else {
-            throw new PermissionDeniedException("User "+approver.getGivenName()+" is not allowed to approve the "+
-                    group.getName()+" group");
+            throw new PermissionDeniedException("User " + approver.getGivenName() + " is not allowed to approve the " +
+                    group.getName() + " group");
         }
     }
 
@@ -342,9 +338,9 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     private User getUser(String command) {
         SportletUserImpl user = null;
         try {
-            user = (SportletUserImpl)pm.restoreObject(command);
+            user = (SportletUserImpl) pm.restoreObject(command);
         } catch (PersistenceException e) {
-            log.error("PM Exception :"+e.toString());
+            log.error("PM Exception :" + e.toString());
         }
         return user;
     }
@@ -356,7 +352,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     private User getUserByID(String ID) {
         String command =
-            "select u from org.gridlab.gridsphere.portlet.impl.SportletUserImpl u where ObjectID=\""+ID+"\"";
+                "select u from org.gridlab.gridsphere.portlet.impl.SportletUserImpl u where ObjectID=\"" + ID + "\"";
         return getUser(command);
     }
 
@@ -367,7 +363,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     private User getUserByName(String name) {
         String command =
-            "select u from org.gridlab.gridsphere.portlet.impl.SportletUserImpl u where UserID=\""+name+"\"";
+                "select u from org.gridlab.gridsphere.portlet.impl.SportletUserImpl u where UserID=\"" + name + "\"";
         return getUser(command);
 
     }
@@ -382,10 +378,11 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     public User loginUser(String userName) {
         // same as getUser, we do add the user somewhere to the active users
         String command =
-            "select u from org.gridlab.gridsphere.portlet.impl.SportletUserImpl u where UserID=\""+userName+"\"";
+                "select u from org.gridlab.gridsphere.portlet.impl.SportletUserImpl u where UserID=\"" + userName + "\"";
         return getUser(command);
     }
 
+    //@todo fill in logoffuser
     /**
      * logoffUser release user information and serializes to DB
      */
@@ -393,6 +390,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
     }
 
+    //@todo fill in saveuser
     /**
      * Save user to DB
      */
@@ -401,7 +399,10 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     }
 
     /**
-     * Remove a user permanently!
+     * Remove a user permanently.
+     * @param approver
+     * @param userName
+     * @throws PermissionDeniedException
      */
     public void removeUser(User approver, String userName) throws PermissionDeniedException {
 
@@ -410,20 +411,20 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 User user = loginUser(userName);
                 try {
                     List result = aclService.getGroups(user);
-                    if (result.size()>0) {
-                        for (int i=0;i<result.size();i++) {
-                            aclManagerService.removeUserFromGroup(user, ((PortletGroup)result.get(i)));
+                    if (result.size() > 0) {
+                        for (int i = 0; i < result.size(); i++) {
+                            aclManagerService.removeUserFromGroup(user, ((PortletGroup) result.get(i)));
                         }
                     }
                     pm.delete(user);
                 } catch (PortletServiceException e) {
                     log.error("Could not delete the ACL of the user " + e);
                 } catch (PersistenceException e) {
-                    log.error("Could not delete User "+e);
+                    log.error("Could not delete User " + e);
                 }
             }
-        }   else {
-            throw new PermissionDeniedException("User "+approver.getGivenName()+" wanted to delete "+userName+" (denied)");
+        } else {
+            throw new PermissionDeniedException("User " + approver.getGivenName() + " wanted to delete " + userName + " (denied)");
         }
     }
 
@@ -434,14 +435,14 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public boolean existsUser(String userName) {
         String command =
-                "select user from org.gridlab.gridsphere.portlet.impl.SportletUserImpl user where UserID=\""+userName+"\"";
+                "select user from org.gridlab.gridsphere.portlet.impl.SportletUserImpl user where UserID=\"" + userName + "\"";
         SportletUser user = null;
         try {
-            user = (SportletUser)pm.restoreObject(command);
+            user = (SportletUser) pm.restoreObject(command);
         } catch (PersistenceException e) {
             log.error("Exception " + e);
         }
-        return !(user==null);
+        return !(user == null);
     }
 
     /**
@@ -450,16 +451,16 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @param ID the unique ID
      * @return true/false if the user exists
      */
-    public boolean existsUserID(String ID){
+    public boolean existsUserID(String ID) {
         String command =
-                "select user from org.gridlab.gridsphere.portlet.impl.SportletUserImpl user where ObjectID=\""+ID+"\"";
+                "select user from org.gridlab.gridsphere.portlet.impl.SportletUserImpl user where ObjectID=\"" + ID + "\"";
         SportletUser user = null;
         try {
-            user = (SportletUser)pm.restoreObject(command);
+            user = (SportletUser) pm.restoreObject(command);
         } catch (PersistenceException e) {
             log.error("Exception " + e);
         }
-        return !(user==null);
+        return !(user == null);
     }
 
     /**
@@ -469,7 +470,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     public List getAllUsers() {
 
         String command =
-            "select user from org.gridlab.gridsphere.portlet.impl.SportletUserImpl user";
+                "select user from org.gridlab.gridsphere.portlet.impl.SportletUserImpl user";
         List result = null;
         try {
             result = pm.restoreList(command);
@@ -479,6 +480,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         return result;
     }
 
+    //@todo fill in getActiveUser
     /**
      * Return a list of users currently logged in
      */
@@ -495,12 +497,13 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         modifyExistingUser(requestImpl, newuser);
         return newuser;
     }
-   /**
-    * Changes a SportletUser to the values of an accountrequest
-    * @param requestImpl
-    * @param user
-    * @return the changes portletuser
-    */
+
+    /**
+     * Changes a SportletUser to the values of an accountrequest
+     * @param requestImpl
+     * @param user
+     * @return the changes portletuser
+     */
     protected SportletUser modifyExistingUser(AccountRequestImpl requestImpl, SportletUser user) {
         user.setEmailAddress(requestImpl.getEmailAddress());
         user.setFamilyName(requestImpl.getFamilyName());

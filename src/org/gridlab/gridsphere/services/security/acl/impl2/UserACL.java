@@ -7,15 +7,13 @@
 package org.gridlab.gridsphere.services.security.acl.impl2;
 
 import org.gridlab.gridsphere.core.persistence.BaseObject;
-import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 /**
  * @table useracl
  */
-public class UserACL extends BaseObject  {
+public class UserACL extends BaseObject {
 
     protected transient static PortletLog cat = SportletLog.getInstance(UserACL.class);
 
@@ -28,12 +26,12 @@ public class UserACL extends BaseObject  {
      * @sql-size 50
      * @sql-name userid
      */
-    private String UserID  = new String();
+    private String UserID = new String();
     /**
      * @sql-size 50
      * @sql-name groupid
      */
-    private String GroupID  = new String();
+    private String GroupID = new String();
     /**
      * @sql-name status
      */
