@@ -562,6 +562,28 @@
         </concrete-portlet-app>
     </portlet-app-def>
 
+    <portlet-app-def>
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.date.DatePortlet">
+            <portlet-name>DatePortlet</portlet-name>
+            <servlet-name>DatePortlet</servlet-name>
+
+    </portlet-app>
+
+   <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.date.DatePortlet.1">
+            <concrete-portlet>
+                <portlet-name>DatePortlet</portlet-name>
+                <default-locale>en</default-locale>
+                <language locale="en">
+                    <title>Date</title>
+                    <title-short>Date</title-short>
+                    <description>Portlet provides date capabilities</description>
+                    <keywords>portlet date</keywords>
+                </language>
+            </concrete-portlet>
+        </concrete-portlet-app>
+  </portlet-app-def>
+
+
 
 
 
