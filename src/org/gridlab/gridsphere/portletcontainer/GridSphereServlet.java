@@ -85,9 +85,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     }
 
     public synchronized void initializeServices() throws PortletServiceException {
+        // discover portlets
         portletManager = (PortletManagerService) factory.createUserPortletService(PortletManagerService.class, GuestUser.getInstance(), getServletConfig(), true);
-        userManagerService = (UserManagerService) factory.createUserPortletService(UserManagerService.class, GuestUser.getInstance(), getServletConfig(), true);
+        // create groups from portlet web apps
         aclService = (AccessControlManagerService) factory.createUserPortletService(AccessControlManagerService.class, GuestUser.getInstance(), getServletConfig(), true);
+        // create root user in default group if necessary
+        userManagerService = (UserManagerService) factory.createUserPortletService(UserManagerService.class, GuestUser.getInstance(), getServletConfig(), true);
         loginService = (LoginService) factory.createUserPortletService(LoginService.class, GuestUser.getInstance(), getServletConfig(), true);
     }
 
@@ -245,6 +248,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     protected void logout(GridSphereEvent event) {
         log.debug("in logout of GridSphere Servlet");
         PortletRequest req = event.getPortletRequest();
+        PortletSession session = req.getPortletSession();
+        session.removeAttribute(SportletProperties.PORTLET_USER);
         userSessionManager.removeSessions(req.getUser());
     }
 
@@ -306,10 +311,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * Shuts down the GridSphere portlet container
      */
     public final void destroy() {
+        log.debug("in destroy: Shutting down services");
+        userSessionManager.destroy();
+        // Shutdown services
+        factory.shutdownServices();
         // shutdown the persistencemanagers
         PersistenceManagerFactory.shutdown();
-        // Shutdown services
-        SportletServiceFactory.getInstance().shutdownServices();
         System.gc();
     }
 

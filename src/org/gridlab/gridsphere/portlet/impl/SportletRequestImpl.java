@@ -161,7 +161,7 @@ public class SportletRequestImpl implements SportletRequest {
     }
 
     /**
-     * Clears all of the request parameters associated with this request
+     * Clears all of the request attributes associated with this request
      */
     public void invalidate() {
         // clear request attributes
@@ -170,13 +170,6 @@ public class SportletRequestImpl implements SportletRequest {
             String name = (String)attrnames.nextElement();
             req.getAttribute(name);
             req.setAttribute(name, null);
-        }
-        // clear request parameters
-        Enumeration paramnames = req.getParameterNames();
-        while (paramnames.hasMoreElements()) {
-            String name = (String)paramnames.nextElement();
-            req.getParameter(name);
-            // how do i clear a request parameter ???
         }
     }
 

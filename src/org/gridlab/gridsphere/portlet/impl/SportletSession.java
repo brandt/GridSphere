@@ -43,8 +43,8 @@ public class SportletSession implements PortletSession {
      * @param request the <code>PortletRequest</code> used to get ConcretePortletID
      * @param session the <code>HttpSession</code>
      */
-    public SportletSession(PortletRequest request,HttpSession session) {
-	this.request = request;
+    public SportletSession(PortletRequest request, HttpSession session) {
+	    this.request = request;
         this.session = session;
     }
 
@@ -83,10 +83,10 @@ public class SportletSession implements PortletSession {
      * are not available, returns empty string.
      */
     private String getCpid() {
-	if(request==null) return "";
-	PortletSettings ps = request.getPortletSettings();
-	if(ps==null) return "";
-	return ps.getConcretePortletID()+":";
+        if(request == null) return "";
+        PortletSettings ps = request.getPortletSettings();
+        if(ps == null) return "";
+        return ps.getConcretePortletID()+":";
     }
 
     /**
@@ -109,16 +109,16 @@ public class SportletSession implements PortletSession {
      * Returns an enumeration of names of all attributes available to this session. Names are striped of ConcretePortletID prefix.
      */
     public Enumeration getAttributeNames() {
-	if(request==null) return session.getAttributeNames();
-	String cpid = getCpid();
-	if("".equals(cpid))  return session.getAttributeNames();
-	Vector s = new Vector();
-	for(Enumeration en = session.getAttributeNames();en.hasMoreElements();) {
-	    String name = (String) en.nextElement();
-	    if(name.startsWith(cpid)) {
-		s.add(name.substring(cpid.length()));
-	    }
-	}
+        if(request==null) return session.getAttributeNames();
+        String cpid = getCpid();
+        if("".equals(cpid))  return session.getAttributeNames();
+        Vector s = new Vector();
+        for(Enumeration en = session.getAttributeNames();en.hasMoreElements();) {
+            String name = (String) en.nextElement();
+            if(name.startsWith(cpid)) {
+                s.add(name.substring(cpid.length()));
+            }
+        }
         return s.elements();
     }
 
