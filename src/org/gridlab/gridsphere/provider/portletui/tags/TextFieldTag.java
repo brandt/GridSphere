@@ -76,13 +76,13 @@ public class TextFieldTag extends BaseComponentTag {
         if (!beanId.equals("")) {
             textFieldBean = (TextFieldBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (textFieldBean == null) {
-                log.debug("Creating new text field bean");
+                //log.debug("Creating new text field bean");
                 textFieldBean = new TextFieldBean((HttpServletRequest) pageContext.getRequest(), beanId);
                 if (maxlength != 0) textFieldBean.setMaxLength(maxlength);
                 if (size != 0) textFieldBean.setSize(size);
                 this.setBaseComponentBean(textFieldBean);
             } else {
-                log.debug("Using existing text field bean");
+                //log.debug("Using existing text field bean");
                 if (maxlength != 0) textFieldBean.setMaxLength(maxlength);
                 if (size != 0) textFieldBean.setSize(size);
                 this.updateBaseComponentBean(textFieldBean);
