@@ -106,6 +106,8 @@ public class LoginPortlet extends ActionPortlet {
 
     public void doNewUser(FormEvent evt)
             throws PortletException {
+        if (!canUserCreateAccount) return;
+
         PortletRequest req = evt.getPortletRequest();
 
         setNextTitle(req, "User Account Manager [New User]");
@@ -117,6 +119,8 @@ public class LoginPortlet extends ActionPortlet {
             throws PortletException {
         PortletRequest req = evt.getPortletRequest();
         //User user = loadUser(evt);
+        if (!canUserCreateAccount) return;
+
         try {
             //check if the user is new or not
             validateUser(evt);
