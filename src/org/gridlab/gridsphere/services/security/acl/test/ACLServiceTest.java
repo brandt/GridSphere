@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.portlet.service.spi.test.ServiceTest;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
@@ -36,11 +37,11 @@ public class ACLServiceTest extends ServiceTest {
     private static AccessControlService aclService = null;
     private static AccessControlManagerService aclManagerService = null;
 
-    private List susers = null;
-    private List groups = null;
+    public static final String[] GROUPS = {"cactus", "portals", "triana"};
+    public static final String[] USERS = {"hans", "franz", "josef"};
 
-    public static final int NUMGROUPS = 10;
-    public static final int NUMPEOPLE = 10;
+    private SportletUser hans, franz, josef;
+    private PortletGroup cactus, portals, triana;
 
     public ACLServiceTest(String name) {
         super(name);
@@ -55,186 +56,192 @@ public class ACLServiceTest extends ServiceTest {
 
         int i;
         log.info("setting up services");
-        // Create both services using mock ServletConfig
+        // create services
         try {
             aclService = (AccessControlService)factory.createPortletService(AccessControlService.class, props, null, true);
             aclManagerService = (AccessControlManagerService)factory.createPortletService(AccessControlManagerService.class, props, null, true);
         } catch (Exception e) {
-            log.error("Unable to initailize access services: ", e);
-        }
-
-        // Create fake groups
-        log.info("creating fake groups");
-        groups = new Vector(NUMGROUPS);
-        for (i = 0; i < NUMGROUPS; i++) {
-            SportletGroupImpl group = new SportletGroupImpl(i, "group" + i);
-            groups.add("group" + i);
+            log.error("Unable to initialize access services: ", e);
         }
 
         // Create fake users--  ACL only assumes ID from Users
-        susers = new Vector(NUMPEOPLE);
-        for (i = 0; i < NUMPEOPLE; i++) {
-            SportletUserImpl suser = new SportletUserImpl();
-            suser.setFullName("Person: " + i);
-            suser.setID("" + i);
-            susers.add(suser);
-        }
+        hans = new SportletUserImpl();
+        hans.setGivenName(USERS[0]);
+        hans.setUserID(USERS[0]);
+
+        franz = new SportletUserImpl();
+        franz.setGivenName(USERS[1]);
+        franz.setUserID(USERS[1]);
+
+        josef = new SportletUserImpl();
+        josef.setGivenName(USERS[2]);
+        josef.setUserID(USERS[2]);
+
     }
 
     public static Test suite ( ) {
         return new TestSuite(ACLServiceTest.class);
     }
 
-    public void testGroups() {
+    public void testCreateNewGroups() {
+        int i;
+        makeNewGroups();
+    }
+
+    public void testRenameGroups() {
+
+        makeNewGroups();
+
         int i;
         String newgroup;
         List allgroups = null;
-        List allgroupnames = null;
+        List allgroupnames = new Vector();
         List newgroupnames = null;
 
-        // Create a bunch of groups
-        for (i = 0; i < NUMGROUPS; i++) {
-            newgroup = "group" + i;
-            newgroupnames.add(newgroup);
-            aclManagerService.createNewGroup(newgroup);
-        }
+        String newname = "flobbery";
+        // rename cactus group to "flobbery"
+        aclManagerService.renameGroup(cactus, newname);
 
-        // Retrieve groups
         allgroups = aclService.getAllGroups();
-
-        // They should be equal
-        for (i = 0; i < NUMGROUPS; i++) {
-            PortletGroup pg = (PortletGroup)allgroups.get(i);
-            allgroupnames.add(pg.getName());
+        Iterator it = allgroups.iterator();
+        while (it.hasNext()) {
+            PortletGroup g = (PortletGroup)it.next();
+            allgroupnames.add(g.getName());
         }
-        assertEquals(allgroupnames, newgroupnames);
+        // make sure no cactus group name is there
+        assertTrue(!allgroupnames.contains(cactus.getName()));
 
-        // Rename groups
-        //newgroups = new Vector(NUMGROUPS);
-
-        for (i = 0; i < NUMGROUPS; i++) {
-            //newgroups.add(i, "newgroup" + i);
-            //aclManagerService.renameGroup((String)groups.get(i), (String)newgroups.get(i));
-        }
-
-        // Retrieve groups
-        allgroupnames = aclService.getAllGroups();
-
-        // They should be equal
-        //assertEquals(newgroups, allgroupnames);
-
-        // Remove the third group
-        //aclManagerService.removeGroup((PortletGroup)newgroups.get(3));
-        //newgroups.remove(3);
-        //allgroupnames = aclService.getAllGroupNames();
-
-        // They should be equal
-        //assertEquals(newgroups, allgroupnames);
-
+        // make sure newname group name is there
+        assertTrue(allgroupnames.contains(newname));
     }
 
-    public void testUsers() {
-        int i, j;
+    // Tests removal of a group
+    public void testRemoveGroup() {
 
-        // In first group add all 10 users and make them USER
-        for (i = 0; i < NUMPEOPLE; i++) {
-            //aclManagerService.addUserToGroup((User)susers.get(i), (String)groups.get(0), PortletRoles.getUserRole());
-        }
+        makeNewGroups();
+        addUsersToGroups();
 
-        // Test that users are in group
-        for (i = 0; i < NUMPEOPLE; i++) {
-            //assertTrue(aclService.isUserInGroup((User)susers.get(i), (String)groups.get(0)));
-        }
+        List allgroups = aclService.getAllGroups();
+        PortletGroup lastgroup = (PortletGroup)allgroups.get(allgroups.size() - 1);
+        String lastgroupname = lastgroup.getName();
 
-        // Get users
+        // remove last group
+        aclManagerService.removeGroup(lastgroup);
+        allgroups = aclService.getAllGroups();
 
-        //List users = aclService.getUsersInGroup(PortletRoles.getUserRole(), String groupName);
+        // should not contain last group
+        assertTrue(!allgroups.contains(lastgroup));
+    }
 
-        //List aclService.getGroupNames(User user);
+    public void testAddUsers() {
 
-        //aclManagerService.removeUserFromGroup(User user, String groupName);
+        makeNewGroups();
+        addUsersToGroups();
 
-        //aclManagerService.removeUserRoleFromGroup(User user, String groupName, int roleName);
+        // test getUsersInGroup
+        List users = aclService.getUsersInGroup(PortletRole.getUserRole(), cactus);
+        assertEquals(users.size(), 1);
 
-        // Make sure we have
+        User user = (User)users.get(0);
+        assertEquals(user.getUserID(), hans.getUserID());
 
-        //List aclService.getAllUserNames();
+        List groups = aclService.getGroups(franz);
+        assertEquals(groups.size(), 1);
+        PortletGroup g = (PortletGroup)groups.get(0);
+        assertEquals(g.getName(), triana.getName());
+
+        // remove hans from cactus -- also move franz which should do nothing
+        aclManagerService.removeUserFromGroup(hans, cactus);
+        aclManagerService.removeUserFromGroup(franz, cactus);
+
+        groups = aclService.getGroups(hans);
+        assertTrue(!groups.contains(cactus));
+        assertTrue(!aclService.isUserInGroup(hans, cactus));
     }
 
     public void testRoles() {
 
-    //boolean aclService.hasRoleInGroup(User user, String groupName, int roleName);
+        makeNewGroups();
+        addUsersToGroups();
 
-    //List aclService.getRolesInGroup(User user, String groupName);
+        List roles;
+        aclManagerService.addRoleInGroup(hans, cactus, PortletRole.getAdminRole());
+        assertTrue(aclService.hasRoleInGroup(hans, cactus, PortletRole.getAdminRole()));
 
-    //List aclService.getAllRoles();
+        roles = aclService.getRolesInGroup(hans, cactus);
+        // should have user and admin role
+        assertEquals(roles.size(), 2);
 
-    //List aclService.getSuperRoles();
+        aclManagerService.removeUserRoleFromGroup(hans, cactus, PortletRole.getUserRole());
+        roles = aclService.getRolesInGroup(hans, cactus);
+        // should have user role
+        assertEquals(roles.size(), 1);
+        PortletRole role = (PortletRole)roles.get(0);
+        assertEquals(role.getRole(), PortletRole.USER);
 
-    //aclManagerService.addUserToSuperRole(User user);
+        // remove josef from user role hence he has no roles
+        aclManagerService.removeUserRoleFromGroup(josef, portals, PortletRole.getUserRole());
+        List group = aclService.getGroups(josef);
+        assertTrue(!aclService.isUserInGroup(josef, portals));
+        assertTrue(!group.contains(portals));
 
-    //aclManagerService.addRoleInGroup(User user, String groupName, int roleName);
-
-    }
-
-
-    public void testOtherCrap() {
-        int i, j;
-        Iterator it = null;
-
-        // Create a bunch of people in groups
-        SportletUser[] user = new SportletUserImpl[NUMPEOPLE*NUMGROUPS];
-        for (j = 0; j < NUMGROUPS; j++) {
-            for (i = 0; i < NUMPEOPLE; i++) {
-                user[10*j+i] = new SportletUserImpl();
-                user[10*j+i].setFullName("person " + (10*j+i));
-                user[10*j+i].setID("uid: " + (10*j+i));
-            }
-        }
-
-        for (j = 0; j < NUMGROUPS; j++) {
-            for (i = 0; i < NUMPEOPLE; i++) {
-      //          aclManagerService.addUserToGroup(user[10*j+i], "group " + j, PortletRoles.USER);
-            }
-        }
-
-        // Print out all users in each group
-        for (j = 0; j < NUMGROUPS; j++) {
-            //it = aclService.getUsersInGroup(PortletRoles.getUserRole(), "group " + j);
-            System.err.println("users in group " + j);
-            while (it.hasNext()) {
-                System.err.println(it.next());
-            }
-        }
-
-        // Give more roles
-
-        for (j = 0; j < NUMGROUPS; j++) {
-            for (i = 0; i < NUMPEOPLE; i=i+2) {
-        //        aclManagerService.addRoleInGroup(user[10*j+i], "group " + j, PortletRoles);
-            }
-        }
-
-        // Check roles
-        int num = 0;
-        for (j = 0; j < NUMGROUPS; j++) {
-            for (i = 0; i < NUMPEOPLE; i++) {
-     //           if (aclService.hasRoleInGroup(user[10*j+i], "group " + j, PortletRoles.ADMIN)) num++;
-            }
-        }
-        System.err.println("number = " + num);
-
-        //it = aclService.getAllGroupNames();
-        while (it.hasNext()) {
-            System.err.println(it.next());
-        }
-
-        //it = aclService.getAllUserNames();
-        while (it.hasNext()) {
-            System.err.println(it.next());
-        }
+        // should do nothing
+        aclManagerService.removeUserRoleFromGroup(josef, portals, PortletRole.getAdminRole());
 
     }
 
+
+    public void testSuperRole() {
+
+        makeNewGroups();
+        addUsersToGroups();
+
+        aclManagerService.addUserToSuperRole(hans);
+        aclManagerService.addUserToSuperRole(franz);
+        List supers = aclService.getSuperUsers();
+        assertEquals(supers.size(), 2);
+        User user = (User)supers.get(0);
+        assertEquals(user.getUserID(), hans.getUserID());
+    }
+
+    // Creates the cactus, triana and portals groups
+    protected void makeNewGroups() {
+         // First we need to create some groups
+        int i;
+        List groups = new Vector(GROUPS.length);
+        for (i = 0; i < GROUPS.length; i++) {
+            groups.set(i, GROUPS[i]);
+            aclManagerService.createNewGroup(GROUPS[i]);
+        }
+        // retrieve all groups
+        List portletGroups = aclService.getAllGroups();
+
+        // should only have three groups
+        assertEquals(portletGroups.size(), 3);
+
+        cactus = (PortletGroup)portletGroups.get(0);
+        portals = (PortletGroup)portletGroups.get(1);
+        triana = (PortletGroup)portletGroups.get(2);
+
+        // Make sure we have proper ordering
+        assertEquals(cactus.getName(), GROUPS[0]);
+        assertEquals(portals.getName(), GROUPS[1]);
+        assertEquals(triana.getName(), GROUPS[2]);
+    }
+
+    /**
+     * Add hans to cactus, franz to triana and josef to portals
+     */
+    protected void addUsersToGroups() {
+
+        aclManagerService.addUserToGroup(hans, cactus, PortletRole.getUserRole());
+        aclManagerService.addUserToGroup(franz, triana, PortletRole.getUserRole());
+        aclManagerService.addUserToGroup(josef, portals, PortletRole.getUserRole());
+
+        assertTrue(aclService.isUserInGroup(hans, cactus));
+        assertTrue(aclService.isUserInGroup(franz, triana));
+        assertTrue(aclService.isUserInGroup(josef, portals));
+        assertTrue(!aclService.isUserInGroup(josef, cactus));
+    }
 
 }
