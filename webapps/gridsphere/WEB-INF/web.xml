@@ -26,8 +26,43 @@
     </servlet>
 
     <servlet>
+        <servlet-name>ManagerPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.PortletApplicationManager</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>LoginPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.LoginPortlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>LogoutPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.LogoutPortlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>SubscriptionPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.SubscriptionPortlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>UserManagerPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.UserManagerPortlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>AccessControllerPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.AccessControllerPortlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>Redirect</servlet-name>
         <jsp-file>/jsp/redirect.jsp</jsp-file>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ServletRedirector</servlet-name>
+        <servlet-class>org.apache.commons.cactus.server.ServletTestRedirector</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -36,8 +71,48 @@
     </servlet-mapping>
 
     <servlet-mapping>
+        <servlet-name>ManagerPortlet</servlet-name>
+        <url-pattern>/appmanager</url-pattern>
+    </servlet-mapping>
+
+     <servlet-mapping>
+       <servlet-name>LoginPortlet</servlet-name>
+       <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+       <servlet-name>LogoutPortlet</servlet-name>
+       <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+       <servlet-name>SubscriptionPortlet</servlet-name>
+       <url-pattern>/subscription</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+       <servlet-name>UserManagerPortlet</servlet-name>
+       <url-pattern>/adminstration/accounts</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+       <servlet-name>AccessControllerPortlet</servlet-name>
+       <url-pattern>/adminstration/access</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
        <servlet-name>Redirect</servlet-name>
        <url-pattern>/servlet/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ServletRedirector</servlet-name>
+        <url-pattern>/ServletRedirector</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>JspRedirector</servlet-name>
+        <url-pattern>/JspRedirector</url-pattern>
     </servlet-mapping>
 
     <mime-mapping>
