@@ -1,10 +1,12 @@
 /*
  * @author <a href="wehrens@aei.mpg.de">Oliver Wehrens</a>
  *
- * The Class provides methods for getting data out of a portletrequest.
  * @version $Id$
  */
 
+/*
+ * <code>FormEventImpl</code> provides methods for getting data out of a portletrequest.
+ */
 package org.gridlab.gridsphere.provider.event.impl;
 
 import org.gridlab.gridsphere.event.ActionEvent;
@@ -12,6 +14,8 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.ui.beans.*;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
@@ -21,6 +25,8 @@ import java.util.Enumeration;
 import java.util.Iterator;
 
 public class FormEventImpl implements FormEvent {
+
+    protected transient static PortletLog log = SportletLog.getInstance(FormEventImpl.class);
 
     protected ActionEvent event;
     protected PortletRequest request;
@@ -96,7 +102,7 @@ public class FormEventImpl implements FormEvent {
         NameBean bean = (NameBean) getBean(name, request);
         //System.out.println("Getting Bean " + name + " from Session");
         //if (checkParameterName("gstag:"+bean.getName())) {
-        System.out.println("Getting Bean '" + GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name + "' from Session");
+        log.debug("Getting Bean '" + GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name + "' from Session");
 
         if (bean instanceof TableBean) {
             // has to be that hack since the individal components of a table
@@ -117,7 +123,7 @@ public class FormEventImpl implements FormEvent {
                         if (basebean instanceof NameBean) {
                             bean = (NameBean)basebean;
                             String[] values = request.getParameterValues("gstag:" + bean.getName());
-                            System.out.println("Updated bean: " + bean.getName());
+                            log.debug("Updated bean: " + bean.getName());
                             bean.update(values);
                         }
                     }
@@ -127,7 +133,7 @@ public class FormEventImpl implements FormEvent {
             return tbean;
         } else {
             String[] values = request.getParameterValues("gstag:" + bean.getName());
-            System.out.println("Updated bean: " + bean.getName());
+            log.debug("Updated bean: " + bean.getName());
             bean.update(values);
             session.setAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name, bean);
             return bean;
@@ -188,7 +194,7 @@ public class FormEventImpl implements FormEvent {
      * @return bean
      */
     public Object getStoredTagBean(String beanname) {
-        System.out.println("GET FROM SESSION FOR STORED TAG : "+GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+beanname);
+        log.debug("GET FROM SESSION FOR STORED TAG : "+GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+beanname);
         Object ob = request.getSession().getAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+beanname);
         return ob;
     }
