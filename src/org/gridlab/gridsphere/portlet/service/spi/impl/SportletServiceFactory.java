@@ -296,7 +296,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         }
 
         PortletSession session = userSessionManager.getSession(user);
-        portletSessionManager.addSessionListener(session.getId(), this);
+        if (session != null) portletSessionManager.addSessionListener(session.getId(), this);
 
         return psp;
     }

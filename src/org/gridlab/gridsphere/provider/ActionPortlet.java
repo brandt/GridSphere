@@ -20,8 +20,11 @@ import java.util.Map;
  */
 public class ActionPortlet extends AbstractPortlet {
 
+    public static String ACTION_PORTLET_ERROR = "org.gridlab.gridsphere.provider.ACTION_PORTLET_ERROR";
+    public static String ACTION_PORTLET_PAGE = "org.gridlab.gridsphere.provider.ACTION_PORTLET_PAGE";
+
     // Default error page
-    protected String ERROR_PAGE = "error.jsp";
+    protected String ERROR_PAGE = "doError";
 
     // Default VIEW mode
     protected String DEFAULT_VIEW_PAGE = "view.jsp";
@@ -203,6 +206,7 @@ public class ActionPortlet extends AbstractPortlet {
                             + "."
                             + action
                             + "()";
+        req.setAttribute(ACTION_PORTLET_ERROR, errorMessage);
         setNextPresentation(req, ERROR_PAGE);
         this.log.error(errorMessage);
     }
@@ -213,12 +217,15 @@ public class ActionPortlet extends AbstractPortlet {
      * @param request the portlet request
      * @param response the portlet response
      * @param jsp the JSP page to include
-     * @throws PortletException if a portlet exception occurs
-     * @throws IOException if an I/O error occurs
      */
-    public void doViewJSP(PortletRequest request, PortletResponse response, String jsp) throws PortletException, IOException {
+    public void doViewJSP(PortletRequest request, PortletResponse response, String jsp)  {
         log.debug("Forward to JSP page:" + jsp);
-        getPortletConfig().getContext().include("/jsp/" + jsp, request, response);
+        try {
+            getPortletConfig().getContext().include("/jsp/" + jsp, request, response);
+        } catch (Exception e) {
+            log.error("Unable to include resource : " + e.getMessage());
+        }
+
     }
 
     /**
@@ -285,6 +292,15 @@ public class ActionPortlet extends AbstractPortlet {
     public void doHelp(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         log.debug("in doHelp");
         doView(request, response);
+    }
+
+    public void doError(FormEvent formEvent) throws PortletException, IOException {
+        log.debug("in doError");
+        PortletResponse response = formEvent.getPortletResponse();
+        PortletRequest request = formEvent.getPortletRequest();
+        PrintWriter out = response.getWriter();
+        String message = (String)request.getAttribute(ACTION_PORTLET_ERROR);
+        out.println(message);
     }
 
 }
