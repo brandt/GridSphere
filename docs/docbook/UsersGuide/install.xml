@@ -44,6 +44,16 @@ in the lib/ dir of gridsphere source before deploying. You are also requiered to
 </sect1>
 
 <sect1>
+    <title>Updating from earlier GridSphere</title>
+    <para>
+       To update to a recent version of GridSphere, you should issue the following two commands (make sure Tomcat is shutdown):
+          <programlisting>ant deploy</programlisting> which will deploy GS to the Tomcat container followed by:
+             <programlisting>ant update-database</programlisting> which will update the GridSphere database if any new data fields
+        were added.
+    </para>
+</sect1>
+
+<sect1>
     <title>GridSphere Web Application</title>
 GridSphere exists like any other web application and is packaged according to the Java Servlet specification.
 The directory structure is as follows:
