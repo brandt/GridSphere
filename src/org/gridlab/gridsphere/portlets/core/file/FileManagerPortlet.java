@@ -11,8 +11,6 @@ import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.services.core.file.FileManagerService;
 
-import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
 import javax.servlet.UnavailableException;
 import java.io.*;
 import java.util.Iterator;
@@ -67,15 +65,16 @@ public class FileManagerPortlet extends ActionPortlet {
         try {
             FileInputBean fi = event.getFileInputBean("userfile");
             User user = event.getPortletRequest().getUser();
-            File f = fi.getFile();
-            if (f == null) return;
             String fileName = fi.getFileName();
             if (fileName.equals("")) return;
-            userStorage.storeFile(user, f, fileName);
+            userStorage.storeFile(user, fi, fileName);
+
             //String location = userStorage.getLocationPath(user, "myfile");
             //log.debug("fileinputbean value=" + fi.getValue() + " location to store=" + location);
             //fi.saveFile(location);
         } catch (IOException e) {
+            log.error("Unable to store uploaded file " + e.getMessage());
+        } catch (Exception e) {
             log.error("Unable to store uploaded file " + e.getMessage());
         }
         setNextState(event.getPortletRequest(), DEFAULT_VIEW_PAGE);
@@ -110,7 +109,7 @@ public class FileManagerPortlet extends ActionPortlet {
     public void saveFile(FormEvent event) throws PortletException {
         log.debug("in FileManagerPortlet: saveFile");
         User user = event.getPortletRequest().getUser();
-        PortletRequest req = event.getPortletRequest();
+        //PortletRequest req = event.getPortletRequest();
         //String fname = event.getPortletAction().getParameter("fileName");
 
         HiddenFieldBean hf = event.getHiddenFieldBean("fileName");

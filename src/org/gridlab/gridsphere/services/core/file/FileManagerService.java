@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.services.core.file;
 
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletService;
+import org.gridlab.gridsphere.provider.portletui.beans.FileInputBean;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,7 +20,7 @@ public interface FileManagerService extends PortletService {
 
     public String getLocationPath(User user, String fileName);
 
-    public void storeFile(User user, File file, String fileName) throws IOException;
+    public void storeFile(User user, FileInputBean file, String fileName) throws IOException, Exception;
 
     public void deleteFile(User user, String fileName);
 

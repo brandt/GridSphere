@@ -5,8 +5,8 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.DiskFileUpload;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 
 import java.io.File;
@@ -61,7 +61,7 @@ public class FileInputBean extends InputBean implements TagBean {
     protected void createFileUpload() throws IOException {
 
         // Create a new file upload handler
-        FileUpload upload = new FileUpload();
+        DiskFileUpload upload = new DiskFileUpload();
 
         // Set upload parameters
         upload.setSizeMax(MAX_UPLOAD_SIZE);
@@ -92,21 +92,18 @@ public class FileInputBean extends InputBean implements TagBean {
         if (savedFileItem == null) throw new IOException("No file has been saved!");
 
         value = savedFileItem.getName();
-        savedFileItem.getStoreLocation();
+        //savedFileItem.getStoreLocation();
 
         System.err.println("saved file :" + value);
     }
 
     /**
-     * Returns the uploaded file
+     * store Uploded file into file
      *
-     * @return the uploaded file
      */
-    public File getFile() {
+    public void storeFile(File file) throws Exception{
         if (savedFileItem != null) {
-            return savedFileItem.getStoreLocation();
-        } else {
-            return null;
+            savedFileItem.write(file);
         }
     }
 
