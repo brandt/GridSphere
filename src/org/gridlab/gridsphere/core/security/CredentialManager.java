@@ -14,12 +14,14 @@ package org.gridlab.gridsphere.core.security;
 
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.core.security.Credential;
+import org.gridlab.gridsphere.core.security.CredentialNotActiveException;
 import org.gridlab.gridsphere.core.security.CredentialPermission;
 import org.gridlab.gridsphere.core.security.CredentialPermissionNotFoundException;
 import org.gridlab.gridsphere.core.security.CredentialMap;
 import org.gridlab.gridsphere.core.security.CredentialMapNotFoundException;
 import org.gridlab.gridsphere.core.security.CredentialExpiredException;
-import org.gridlab.gridsphere.core.security.CredentialNotActiveException;
+import org.gridlab.gridsphere.core.security.CredentialRetrievalClient;
+import org.gridlab.gridsphere.core.security.CredentialRetrievalException;
 
 import java.util.List;
 
@@ -218,6 +220,72 @@ public interface CredentialManager {
      */
     public boolean isSubjectMappedToHostName(String subject, String hostName);
 
+    /**
+     * Returns the retrieval id mapped to the given credential subject.
+     *
+     * @param <code>String<code> The credential subject.
+     *
+     * @return <code>String</code> The retrieval id to which the given subject maps.
+     */
+    public String getRetrievalIDMappedToSubject(String subject)
+        throws CredentialMapNotFoundException;
+
+    /****** CREDENTIAL RETRIEVAL METHODS *******/
+
+    /**
+     * Returns the client to the online credential retrieval service this
+     * credential manager uses.
+     *
+     * @return <code>String<code> The online credential retrieval serviced protocol.
+     */
+    public CredentialRetrievalClient getCredentialRetrievalClient();
+
+    /**
+     * Returns the protocol of the online credential retrieval service this
+     * credential manager uses.
+     *
+     * @return <code>String<code> The online credential retrieval serviced protocol.
+     */
+    public String getCredentialRetrievalProtocol();
+
+    /**
+     * Returns the hostname of the online credential retrieval service this
+     * credential manager uses.
+     *
+     * @return <code>String<code> The online credential retrieval service hostname.
+     */
+    public String getCredentialRetrievalHostname();
+
+    /**
+     * Returns the port of the online credential retrieval service this
+     * credential manager uses.
+     *
+     * @return <code>ing<code> The online credential retrieval service port.
+     */
+    public int getCredentialRetrievalPort();
+
+    /**
+     * Returns the credential lifetime of the online credential retrieval service this
+     * credential manager uses.
+     *
+     * @return <code>long<code> The online credential retrieval service credential lifetime.
+     */
+    public long getCredentialRetrievalLifetime();
+
+    /**
+     * Attempts to retrieve credentials for each subject that is mapped to a 
+     * retrieval id from an online credential retrieval client for the given user
+     * and passphrase. These credentials are stored in the vault and can then be 
+     * used as required on behalf of the user.
+     *
+     * @param <code>User<code> The user whose credentials to retrieve.
+     *
+     * @param <code>String<code> The retrieval client passphrase.
+     */
+    public void retrieveCredentials(User user, String passphrase)
+        throws CredentialMapNotFoundException,
+               CredentialRetrievalException;
+
     /****** CREDENTIAL "VAULT" METHODS *******/
 
     /**
@@ -234,7 +302,7 @@ public interface CredentialManager {
     public List getCredentials(User user);
     
     /**
-     * Retrieves the credential with the given subject from the vault.
+     * Returns the credential with the given subject from the vault.
      *
      * @param <code>String<code> The credential subject.
      *

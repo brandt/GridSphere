@@ -17,20 +17,24 @@
  * and all credentials retrieved with this service should be maintined in memory only, and destroyed
  * either when a user logs out or when GridSphere is shutdown.
  */
-package org.gridlab.gridsphere.services.security.credential;
+package org.gridlab.gridsphere.core.security;
 
 /** GridSphere portlet imports **/
-import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.core.security.Credential;
-
-/** GridSphere service imports **/
-import org.gridlab.gridsphere.services.security.credential.CredentialRetrievalException;
+import org.gridlab.gridsphere.core.security.CredentialRetrievalException;
 
 /** Java imports **/
 import java.util.List;
 
-public interface CredentialRetrievalService extends PortletService {
+public interface CredentialRetrievalClient {
+
+    /**
+     * Returns the protocol for the credential retrieval service.
+     * 
+     * @return <code>String</code> describing protocol.
+     */
+    public String getProtocol();
 
     /**
      * Returns the hostname for the credential retrieval service.
@@ -40,13 +44,6 @@ public interface CredentialRetrievalService extends PortletService {
     public String getHostname();
 
     /**
-     * Set the hostname for the credential retrieval service.
-     * 
-     * @param <code>String</code> describing hostname.
-     */
-    public void setHostname(String hostname);
-
-    /**
      * Returns the port for the credential retrieval service.
      * 
      * @return <code>int</code> describing port.
@@ -54,25 +51,18 @@ public interface CredentialRetrievalService extends PortletService {
     public int getPort();
 
     /**
-     * Set the hostname for the credential retrieval service.
-     * 
-     * @param <code>int</code> describing port.
-     */
-    public void setPort(int port);
-
-    /**
-     * Returns the default lifetime, in milliseconds, to set for retrieved credentials.
+     * Returns the default credential lifetime, in milliseconds, to set for retrieved credentials.
      * 
      * @return <code>long</code> describing lifetime in milliseconds.
      */
-    public long getDefaultCredentialLifetime();
+    public long getCredentialLifetime();
 
     /**
-     * Set the hostname for the credential retrieval service.
+     * Set the default credential lifetime, in milliseconds, for the credential retrieval service.
      * 
      * @param <code>long</code> describing lifetime in milliseconds.
      */
-    public void setDefaultCredentialLifetime(long lifetime);
+    public void setCredentialLifetime(long lifetime);
 
     /**
      * Retrieve the list of credentials associated with the given username and passphrase from 
@@ -100,7 +90,6 @@ public interface CredentialRetrievalService extends PortletService {
      */
     public Credential retrieveCredential(String username, String passphrase, String subject)
         throws CredentialRetrievalException;
-
 
     /**
      * Retrieve the credential identified by the given username, passphrase and subject 

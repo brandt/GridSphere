@@ -6,7 +6,7 @@
  * online credential retrieval service.
  */
  
-package org.gridlab.gridsphere.services.security.credential;
+package org.gridlab.gridsphere.core.security;
 
 import org.gridlab.gridsphere.core.security.CredentialException;
 

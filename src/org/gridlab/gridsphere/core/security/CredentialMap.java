@@ -22,6 +22,7 @@ public class CredentialMap extends BaseObject {
 
     private String subject= null;
     private String userID = null;
+    private String retrievalID = null;
     private Vector hostNames = null;
     private String description = null;
 
@@ -46,6 +47,7 @@ public class CredentialMap extends BaseObject {
     public CredentialMap(String subject, String userID) {
         this.subject = subject;
         this.userID = userID;
+        this.retrievalID = null;
         this.hostNames = new Vector();
         this.description = "";
     }
@@ -68,6 +70,26 @@ public class CredentialMap extends BaseObject {
         return this.userID;
     }
     
+    /** 
+     * Returns the id used to retrieve the credential from a credential retrieval service.
+     *
+     * @return <code>String</code> The retrieval id.
+     */
+    public String getRetrievalID() {
+        return this.retrievalID;
+    }
+
+    /** 
+     * Sets the id used to retrieve the credential from a credential retrieval service.
+     *
+     * @param <code>String</code> The retrieval id.
+     */
+    public void setRetrievalID(String id) {
+        this.retrievalID = id;
+    }
+
+    /** 
+     * Returns the list of hostnames to which this credential subject is mapped.
     /** 
      * Returns the list of hostnames to which this credential subject is mapped.
      *

@@ -24,7 +24,10 @@ import org.gridlab.gridsphere.core.security.CredentialPermission;
 import org.gridlab.gridsphere.core.security.CredentialPermissionNotFoundException;
 import org.gridlab.gridsphere.core.security.CredentialMap;
 import org.gridlab.gridsphere.core.security.CredentialMapNotFoundException;
+import org.gridlab.gridsphere.core.security.CredentialRetrievalClient;
+import org.gridlab.gridsphere.core.security.CredentialRetrievalException;
 import org.gridlab.gridsphere.core.security.impl.GlobusCredential;
+import org.gridlab.gridsphere.core.security.impl.GlobusCredentialRetrievalClient;
 
 /** Globus imports **/
 import org.globus.security.GlobusProxy;
@@ -37,10 +40,43 @@ public class GlobusCredentialManagerServiceImpl
     implements PortletServiceProvider, CredentialManagerService {
 
     private static PortletLog _log = SportletLog.getInstance(GlobusCredentialManagerServiceImpl.class);
+    private GlobusCredentialRetrievalClient retrievalClient = null;
 
     /****** PORTLET SERVICE METHODS *******/
 
     public void init(PortletServiceConfig config) {
+        _log.info("Entering init()");
+        /** Get init parameters **/
+        // Hostname init parameter
+        String hostname = config.getInitParameter("CredentialManagerService.retrievalHostname");
+        if (hostname == null) {
+            hostname = "";
+        } 
+        if (hostname.equals("")) {
+            hostname = GlobusCredentialRetrievalClient.DEFAULT_HOSTNAME;
+            _log.warn("Credential retrieval hostname not set. Using default value " + hostname);
+        }
+        // Port init parameter
+        int port = GlobusCredentialRetrievalClient.DEFAULT_PORT;
+        try {
+            port = (new Integer(config.getInitParameter("CredentialManagerService.retrievalPort"))).intValue();
+        } catch (Exception e) {
+            _log.warn("Credential retrieval port not valid. Using default value " + port);
+        }
+        // Lifetime init parameter
+        long lifetime =  GlobusCredentialRetrievalClient.DEFAULT_LIFETIME;
+        try {
+            lifetime = (new Long(config.getInitParameter("CredentialManagerService.retrievalLifetime"))).longValue();
+        } catch (Exception e) {
+          _log.warn("Credential retrieval lifetime not valid. Using default value " + lifetime);
+        }
+        _log.info("Credential retrieval hostname = " + hostname);
+        _log.info("Credential retrieval port = " + port);
+        _log.info("Credential default lifetime = " + lifetime);
+        /** Apply init parameters **/
+        // MyProxy instance
+        this.retrievalClient = new GlobusCredentialRetrievalClient(hostname, port, lifetime);
+        _log.info("Entering init()");
     }
 
     public void destroy() {
@@ -138,6 +174,38 @@ public class GlobusCredentialManagerServiceImpl
     public boolean isSubjectMappedToHostName(String subject, String hostName) {
         return false;
     }
+
+    public String getRetrievalIDMappedToSubject(String subject)
+        throws CredentialMapNotFoundException {
+        return null;
+    }
+
+    /****** CREDENTIAL RETRIEVAL METHODS *******/
+
+    public CredentialRetrievalClient getCredentialRetrievalClient() {
+        return this.retrievalClient;
+    }
+
+    public String getCredentialRetrievalProtocol() {
+        return this.retrievalClient.getProtocol();
+    }
+
+    public String getCredentialRetrievalHostname() {
+        return this.retrievalClient.getHostname();
+    }
+
+    public int getCredentialRetrievalPort() {
+        return this.retrievalClient.getPort();
+    }
+
+    public long getCredentialRetrievalLifetime() {
+        return this.retrievalClient.getCredentialLifetime();
+    }
+
+    public void retrieveCredentials(User user, String passphrase)
+        throws CredentialMapNotFoundException,
+               CredentialRetrievalException {
+   }
 
     /****** CREDENTIAL "VAULT" METHODS *******/
 

@@ -3,20 +3,16 @@
  * @version $Id$
  * <p>
  */
-package org.gridlab.gridsphere.services.security.credential.impl;
+package org.gridlab.gridsphere.core.security.impl;
 
 /** GridSphere portlet imports **/
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
-/** GridSphere service imports **/
-import org.gridlab.gridsphere.services.security.credential.CredentialRetrievalService;
-import org.gridlab.gridsphere.services.security.credential.CredentialRetrievalException;
-
 /** Security imports **/
 import org.gridlab.gridsphere.core.security.Credential;
+import org.gridlab.gridsphere.core.security.CredentialRetrievalClient;
+import org.gridlab.gridsphere.core.security.CredentialRetrievalException;
 import org.gridlab.gridsphere.core.security.impl.GlobusCredential;
 
 /** Globus imports **/
@@ -28,77 +24,65 @@ import org.globus.security.GlobusProxy;
 import java.util.List;
 import java.util.Vector;
 
-public class MyProxyServiceImpl implements PortletServiceProvider, CredentialRetrievalService {
+public class GlobusCredentialRetrievalClient implements CredentialRetrievalClient {
 
-    public static final String PROTOCOL_VERSION = MyProxy.MYPROXY_PROTOCOL_VERSION;
+    public static final String DEFAULT_HOSTNAME = "localhost";
     public static final int DEFAULT_PORT = MyProxy.DEFAULT_PORT;
     public static final long DEFAULT_LIFETIME = 36000;
 
-    private static PortletLog _log = SportletLog.getInstance(MyProxyServiceImpl.class);
+    private static PortletLog _log = SportletLog.getInstance(GlobusCredentialRetrievalClient.class);
 
     private MyProxy myProxy = null;
     private long lifetime = 0;
+
+    private GlobusCredentialRetrievalClient() {
+      // Force explicit setting of hostname and port
+    }
     
-    public void init(PortletServiceConfig config) {
-        _log.info("Entering init()");
-        /** Get init parameters **/
-        // Hostname init parameter
-        String hostname = config.getInitParameter("hostname");
-        if (hostname == null) {
-            hostname = "";
-        } else if (hostname.equals("")) {
-        }
-        // Port init parameter
-        int port = DEFAULT_PORT;
-        try {
-            port = (new Integer(config.getInitParameter("port"))).intValue();
-        } catch (Exception e) {
-            _log.warn("Port not a valid. Using default value " + port);
-        }
-        // Lifetime init parameter
-        long lifetime = DEFAULT_LIFETIME;
-        try {
-            lifetime = (new Long(config.getInitParameter("port"))).longValue();
-        } catch (Exception e) {
-          _log.warn("Lifetime not a valid. Using default value " + DEFAULT_LIFETIME);
-        }
+    public GlobusCredentialRetrievalClient(String hostname, int port) {
+        _log.info("Entering GlobusCredentialRetrievalClient(hostname, port)");
         _log.info("MyProxy hostname = " + hostname);
         _log.info("MyProxy port = " + port);
-        _log.info("Credential lifetime = " + lifetime);
+        long lifetime = DEFAULT_LIFETIME;
+        _log.info("MyProxy lifetime = " + lifetime);
         /** Apply init parameters **/
         // MyProxy instance
         this.myProxy = new MyProxy(hostname, port);
         // Default lifetime
         this.lifetime = lifetime;
+        _log.info("Exiting GlobusCredentialRetrievalClient(hostname, port)");
     }
 
-    public void destroy() {
-        _log.info("Entering destroy()");
-        // Nullify MyProxy instance
-        this.myProxy = null;
+    public GlobusCredentialRetrievalClient(String hostname, int port, long lifetime) {
+        _log.info("Entering GlobusCredentialRetrievalClient(hostname, port, lifetime)");
+        _log.info("MyProxy hostname = " + hostname);
+        _log.info("MyProxy port = " + port);
+        _log.info("MyProxy lifetime = " + lifetime);
+        /** Apply init parameters **/
+        // MyProxy instance
+        this.myProxy = new MyProxy(hostname, port);
+        // Default lifetime
+        this.lifetime = lifetime;
+        _log.info("Exiting GlobusCredentialRetrievalClient(hostname, port, lifetime)");
     }
-    
+
+    public String getProtocol() {
+        return MyProxy.MYPROXY_PROTOCOL_VERSION;
+    }
+
     public String getHostname() {
         return this.myProxy.getHost();
-    }
-
-    public void setHostname(String hostname) {
-        this.myProxy.setHost(hostname);
     }
 
     public int getPort() {
         return this.myProxy.getPort();
     }
 
-    public void setPort(int port) {
-        this.myProxy.setPort(port);
-    }
-
-    public long getDefaultCredentialLifetime() {
+    public long getCredentialLifetime() {
         return this.lifetime;
     }
 
-    public void setDefaultCredentialLifetime(long lifetime) {
+    public void setCredentialLifetime(long lifetime) {
         this.lifetime = lifetime;
     }
 
@@ -109,13 +93,13 @@ public class MyProxyServiceImpl implements PortletServiceProvider, CredentialRet
 
     public List retrieveCredentials(String username, String passphrase, long lifetime)
         throws CredentialRetrievalException {
-        _log.info("Entering retrieveCredentials(username, passphrase, lifetime)");
+        _log.info("Entering retrieveCredentials(user, passphrase, lifetime)");
         // Retrieve credential from MyProxy
         GlobusCredential credential = myProxyGet(username, passphrase, this.lifetime);
         // Insert credential into a list and return
         List credentials = new Vector();
         credentials.add(credential);
-        _log.info("Exiting retrieveCredentials(username, passphrase, lifetime)");
+        _log.info("Exiting retrieveCredentials(user, passphrase, lifetime)");
         return credentials;
     }
 
