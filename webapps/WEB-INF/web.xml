@@ -13,6 +13,10 @@
         <servlet-name>gridsphere</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portletcontainer.GridSphere</servlet-class>
         <init-param>
+            <param-name>gridsphere.properties</param-name>
+            <param-value>WEB-INF/conf/gridsphere.properties</param-value>
+        </init-param>
+        <init-param>
             <param-name>PortletServices.properties</param-name>
             <param-value>WEB-INF/conf/PortletServices.properties</param-value>
         </init-param>
@@ -47,48 +51,6 @@
         <servlet-name>Redirect</servlet-name>
         <jsp-file>/jsp/redirect.jsp</jsp-file>
     </servlet>
-
-    <servlet>
-        <servlet-name>HelloWorld</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld</servlet-class>
-        <init-param>
-            <param-name>foo</param-name>
-            <param-value>bar</param-value>
-        </init-param>
-        <load-on-startup>2</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>HalloWelt</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt</servlet-class>
-        <load-on-startup>3</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>Login</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.LoginPortlet</servlet-class>
-        <init-param>
-            <param-name>portletID</param-name>
-            <param-value>org.gridlab.gridsphere.portlets.core.LoginPortlet.129</param-value>
-        </init-param>
-        <load-on-startup>3</load-on-startup>
-    </servlet>
-
-    <servlet-mapping>
-       <servlet-name>HelloWorld</servlet-name>
-       <url-pattern>/HelloWorld</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-       <servlet-name>HalloWelt</servlet-name>
-       <url-pattern>/HalloWelt</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-       <servlet-name>Login</servlet-name>
-       <url-pattern>/Login</url-pattern>
-    </servlet-mapping>
-
 
     <servlet-mapping>
        <servlet-name>gridsphere</servlet-name>
