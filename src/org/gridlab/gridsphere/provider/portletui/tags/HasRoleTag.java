@@ -95,7 +95,7 @@ public class HasRoleTag extends TagSupport {
                     PortletGroup g = (PortletGroup)it.next();
                     if (g.getName().equals(group)) {
                         userRole = (PortletRole)groups.get(g);
-                        System.err.println("my role is " + userRole + " group is " + group);
+                        //System.err.println("my role is " + userRole + " group is " + group);
                         break;
                     }
                 }
