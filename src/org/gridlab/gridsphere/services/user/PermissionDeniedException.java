@@ -9,7 +9,7 @@ import org.gridlab.gridsphere.portlet.PortletException;
 /**
  * The base class of all checked exceptions thrown by portlet services.
  */
-public class PermissionDeniedException extends PortletException {
+public class PermissionDeniedException extends RuntimeException {
 
     /**
      * Constructs a new permission denied exception.
