@@ -248,7 +248,7 @@
                  </language>
                  <config-param>
                     <param-name>supported-themes</param-name>
-                    <param-value>xp</param-value>
+                    <param-value>xp, swamp</param-value>
                 </config-param>
              </concrete-portlet>
          </concrete-portlet-app>
