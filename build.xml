@@ -276,6 +276,7 @@ Copyright:
     <!-- =================================================================== -->
     <target name="portlet-widgets-jar" depends="compile" description="Create lib/portlet-widget-tags.jar">
         <jar jarfile="lib/portlet-widget-tags.jar" basedir="${build.classes}" >
+            <include name="org/gridlab/gridsphere/provider/**" />
             <include name="org/gridlab/gridsphere/tags/**" />
             <metainf dir="${gswebapp.dir}/WEB-INF/tlds"/>
         </jar>
