@@ -1,0 +1,18 @@
+<tfmservice>
+    <name>Mail</name>
+    <security>insecure</security>
+    <messagetype>mail</messagetype>
+    <description>Gateway to Email.</description>
+    <param>
+        <key>MailServer</key>
+        <value></value>
+    </param>
+    <param>
+        <key>Port</key>
+        <value></value>
+    </param>
+    <param>
+        <key>Sender</key>
+        <value></value>
+    </param>
+</tfmservice>
