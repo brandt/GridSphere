@@ -106,17 +106,19 @@ public class SportletURI implements PortletURI {
     public void addAction(PortletAction action) {
         if (action instanceof DefaultPortletAction) {
             DefaultPortletAction dpa = (DefaultPortletAction) action;
-            store.put(GridSphereProperties.ACTION, dpa.getName());
+            if (!dpa.getName().equals("")) {
+                store.put(GridSphereProperties.ACTION, dpa.getName());
 
-            Map actionParams = dpa.getParameters();
-            if (!actionParams.isEmpty()) store.put(GridSphereProperties.PREFIX, id);
-            Set set = actionParams.keySet();
-            Iterator it = set.iterator();
-            while (it.hasNext()) {
-                String name = (String) it.next();
-                String newname = id + "_" + name;
-                String value = (String) actionParams.get(name);
-                store.put(newname, value);
+                Map actionParams = dpa.getParameters();
+                if (!actionParams.isEmpty()) store.put(GridSphereProperties.PREFIX, id);
+                Set set = actionParams.keySet();
+                Iterator it = set.iterator();
+                while (it.hasNext()) {
+                    String name = (String) it.next();
+                    String newname = id + "_" + name;
+                    String value = (String) actionParams.get(name);
+                    store.put(newname, value);
+                }
             }
         }
     }

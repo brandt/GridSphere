@@ -12,9 +12,7 @@ import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerSer
 import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.List;
+import java.util.*;
 
 /**
  * The <code>PortletAdapter</code> provides a default implementation for the
@@ -172,6 +170,7 @@ public abstract class PortletAdapter extends Portlet {
                     throw new IllegalArgumentException("Received invalid PortletMode command: " + mode);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("in PortletAdapter: service()", e);
             doError(request, response, e);
         }
@@ -304,6 +303,10 @@ public abstract class PortletAdapter extends Portlet {
      */
     public void doHelp(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
+        PrintWriter out = response.getWriter();
+        //PortletSettings settings = (PortletSettings)request.getAttribute(GridSphereProperties.PORTLETSETTINGS);
+        //out.println(settings.getDescription(request.getLocale(), request.getClient()));
+
         doView(request, response);
     }
 
