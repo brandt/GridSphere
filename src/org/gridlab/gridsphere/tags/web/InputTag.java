@@ -28,6 +28,8 @@ public class InputTag extends TagSupport {
     protected int maxLength = 20;
     protected Element htmlelement;
     protected String element;
+    protected int rows = 10;
+    protected int cols = 40;
 
     public static final String TEXT = "text";
     public static final String PASSWORD = "password";
@@ -132,6 +134,22 @@ public class InputTag extends TagSupport {
 
     public void setElement(String element) {
         this.element = element;
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public void setRows(int rows) {
+        this.rows = rows;
+    }
+
+    public int getCols() {
+        return cols;
+    }
+
+    public void setCols(int cols) {
+        this.cols = cols;
     }
 
     public void setValidator(String validatorClass) {

@@ -14,8 +14,4 @@ public interface TAElement extends ReadOnly {
 
     public int getRows();
 
-    public void setText(String text);
-
-    public String getText();
-
 }

@@ -9,7 +9,12 @@ public class TextArea extends ReadOnlyBase implements TAElement {
 
     private int cols;
     private int rows;
-    private String text;
+
+    public TextArea(String name, String value, boolean disabled, boolean readonly, int rows, int cols) {
+        super(name, value, disabled, readonly);
+        this.cols = cols;
+        this.rows = rows;
+    }
 
     public int getCols() {
         return cols;
@@ -27,13 +32,10 @@ public class TextArea extends ReadOnlyBase implements TAElement {
         this.rows = rows;
     }
 
-    public String getText() {
-        return text;
-    }
+    public String toString() {
+        return "<textarea name='"+name+"' cols='"+cols+"' rows='"+rows+"' "+checkDisabled()+" "+checkReadonly()+">"+
+            value+"</textarea>";
 
-    public void setText(String text) {
-        this.text = text;
     }
-
 
 }

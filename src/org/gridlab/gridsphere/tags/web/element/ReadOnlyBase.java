@@ -25,4 +25,12 @@ public abstract class ReadOnlyBase extends BaseNameValue implements ReadOnly {
         return readonly;
     }
 
+    public String checkReadonly() {
+        if (readonly) {
+            return " disabled='disabled' ";
+        } else {
+            return "";
+        }
+    }
+
 }
