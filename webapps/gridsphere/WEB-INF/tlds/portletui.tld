@@ -30,6 +30,25 @@
     </tag>
 
     <tag>
+        <name>hasrole</name>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.HasRoleTag</tag-class>
+        <body-content>JSP</body-content>
+        <description>
+                requires the user have the minimum role specified  to display content
+        </description>
+        <attribute>
+            <name>exclusive</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>role</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
         <name>actionparam</name>
         <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ActionParamTag</tag-class>
         <body-content>empty</body-content>

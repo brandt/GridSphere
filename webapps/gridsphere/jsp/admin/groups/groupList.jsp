@@ -15,15 +15,23 @@
 
 <ui:panel>
 
-    <% if (request.getAttribute("create") != null) { %>
+<ui:hasrole role="super">
+
+
     <ui:frame>
         <ui:tablerow>
+        <% if (request.getAttribute("create") != null) { %>
             <ui:tablecell>
                 <ui:actionsubmit action="doCreateNewGroup" value="Create new group"/>
             </ui:tablecell>
+            <% } %>
+            <ui:tablecell>
+                <ui:actionsubmit action="doEditDefaultGroups" value="Edit default groups"/>
+            </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
-    <% } %>
+
+</ui:hasrole>
 
     <ui:frame>
         <ui:tablerow header="true">

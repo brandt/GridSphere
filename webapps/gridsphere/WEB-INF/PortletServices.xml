@@ -21,6 +21,17 @@
     </service>
 
     <service>
+        <name>Portal Config Service</name>
+        <description>Provides GridSphere portal configuration settings</description>
+        <interface>org.gridlab.gridsphere.services.core.portal.PortalConfigService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.portal.impl.PortalConfigServiceImpl</implementation>
+        <service-config>
+            <param-name>canUserCreateNewAccount</param-name>
+            <param-value>false</param-value>
+        </service-config>
+    </service>
+
+    <service>
         <name>Access Control Manager Service</name>
         <user-required>true</user-required>
         <description>Provides Authorization Capabilities to Portal Users</description>
@@ -41,10 +52,6 @@
         <service-config>
             <param-name>password</param-name>
             <param-value></param-value>
-        </service-config>
-        <service-config>
-            <param-name>canUserCreateNewAccount</param-name>
-            <param-value>false</param-value>
         </service-config>
     </service>
 
@@ -110,10 +117,10 @@
     </service>
 
     <service>
-	<name>Secure Directory Service</name>
-	<description>Provides Secure Directory Capabilities</description>
-	<interface>org.gridlab.gridsphere.services.core.secdir.SecureDirectoryService</interface>
-	<implementation>org.gridlab.gridsphere.services.core.secdir.impl.SecureDirectoryServiceImpl</implementation>
+        <name>Secure Directory Service</name>
+        <description>Provides Secure Directory Capabilities</description>
+        <interface>org.gridlab.gridsphere.services.core.secdir.SecureDirectoryService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.secdir.impl.SecureDirectoryServiceImpl</implementation>
     </service>
 
 </portlet-services>

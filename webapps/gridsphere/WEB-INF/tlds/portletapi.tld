@@ -19,24 +19,4 @@
     </description>
   </tag>
 
-
-    <tag>
-        <name>required</name>
-        <tag-class>org.gridlab.gridsphere.provider.portlet.tags.gs.RequiredRoleTag</tag-class>
-        <body-content>JSP</body-content>
-        <description>
-            requires the user have the minimum role specified  to display content
-        </description>
-        <attribute>
-            <name>exclusive</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-         </attribute>
-        <attribute>
-            <name>role</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-         </attribute>
-      </tag>
-
 </taglib>
