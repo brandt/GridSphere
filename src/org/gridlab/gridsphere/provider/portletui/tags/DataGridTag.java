@@ -5,6 +5,8 @@ import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.provider.portletui.beans.DataGridBean;
 import org.gridlab.gridsphere.provider.portletui.beans.DataGridColumnBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TagBean;
+import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -122,7 +124,7 @@ public class DataGridTag extends ContainerTag {
             List beans = getTagBeans();
             Iterator it = beans.iterator();
             while (it.hasNext()) {
-                dataGridBean.addBean((DataGridColumnBean) it.next());
+                dataGridBean.addBean((BaseComponentBean) it.next());
             }
 
             JspWriter out = pageContext.getOut();

@@ -2,6 +2,7 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Set;
 
 /*
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
@@ -12,9 +13,18 @@ public class DataGridColumnBean extends BeanContainer {
 
     private String header = null;
     private Object data = null;
-    private String source = null;
+    private String var = null;
     private String paramName = null;
     private String paramValue = null;
+    private DataGridAttributes attributes = null;
+
+    public DataGridAttributes getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(DataGridAttributes attributes) {
+        this.attributes = attributes;
+    }
 
     /**
      * Returns addtl. dynamic Parametervalue. This is a method name which will be called on the object to be included.
@@ -61,18 +71,18 @@ public class DataGridColumnBean extends BeanContainer {
      * TagBean. Depends on the type of the TagBean.
      * @return methodname
      */
-    public String getSource() {
-        return source;
+    public String getVar() {
+        return var;
     }
 
     /**
      * Sets the methodname to be called on the object data to set (usually) the value of an included
      * TagBean. Depends on the type of the TagBean.
-     * @param source of the method
+     * @param var of the method
      */
 
-    public void setSource(String source) {
-        this.source = source;
+    public void setVar(String var) {
+        this.var = var;
     }
 
     /**
@@ -92,9 +102,15 @@ public class DataGridColumnBean extends BeanContainer {
     }
 
     public String toStartString() {
-        String result = new String();
-        if (header != null) result = "<th class=\"ui-datagrid-header\">" + header + "</th>";
-        return result;
+        StringBuffer sb = new StringBuffer();
+        sb.append("<th class=\"ui-datagrid-header\">");
+        if (header != null) {
+            sb.append(header);
+        } else {
+            sb.append("&nbsp;");
+        }
+        sb.append("</th>");
+        return sb.toString();
     }
 
     public String toEndString() {
@@ -105,7 +121,7 @@ public class DataGridColumnBean extends BeanContainer {
             // support in the appropriate tag to be added to the datagridcolumnbean container
 
             BaseComponentBean bean = (BaseComponentBean) container.get(i);
-            bean.setValue(this.getData(data, this.source));
+            bean.setValue(this.getData(data, this.var));
 
             if (bean instanceof TextFieldBean) {
                 TextFieldBean tfBean = (TextFieldBean) bean;
@@ -119,6 +135,14 @@ public class DataGridColumnBean extends BeanContainer {
                     ActionLinkBean alBean = (ActionLinkBean) bean;
                     alBean.addParamBean(this.paramName, this.getData(data, this.paramValue));
                 }
+            }
+
+            if (attributes!=null && bean instanceof SelectElementBean) {
+                if (attributes.isSelected(this.getData(data, this.var))) {
+                    SelectElementBean seBean = (SelectElementBean)bean;
+                    seBean.setSelected(true);
+                }
+
             }
 
             sb.append(bean.toStartString());
@@ -142,12 +166,15 @@ public class DataGridColumnBean extends BeanContainer {
     private String getData(Object data, String method) {
         String result = null;
 
+        System.out.println("\n\n\n\n Try to call method '"+method+"' on object "+data.getClass().getName()+"\n\n\n");
+
         Class dataClass = data.getClass();
         Method m = null;
         try {
             m = dataClass.getMethod(method, new Class[]{});
             result = (String) m.invoke(data, new Object[]{});
         } catch (NoSuchMethodException e) {
+
             e.printStackTrace();
         } catch (SecurityException e) {
             e.printStackTrace();

@@ -19,6 +19,8 @@ public class DataGridBean extends BeanContainer implements TagBean {
     private List list = null;
     private int startPos = 0;
     private PortletURI uri = null;
+    // holds the controlelemenet
+    private StringBuffer control = null;
 
     public DataGridBean() {
         super();
@@ -66,7 +68,6 @@ public class DataGridBean extends BeanContainer implements TagBean {
     public void setSize(int size) {
         this.size = size;
     }
-
 
     /**
      * Returns the header of the datagrid.
@@ -118,12 +119,12 @@ public class DataGridBean extends BeanContainer implements TagBean {
     }
 
 
-    private String createLink(PortletURI uri, int pos, String desc, boolean renderlink, String prefix) {
+    private String createLink(PortletURI uri, int pos, String desc, boolean renderlink) {
         StringBuffer result = new StringBuffer();
 
         result.append("<span class=\"ui-datagrid-controls-element\">");
         if (renderlink) {
-            uri.addParameter(prefix+beanId + "_pos", new Integer(pos).toString());
+            uri.addParameter(beanId + "_pos", new Integer(pos).toString());
             result.append("<a href=\"" + uri.toString() + "\"> " + desc + "</a>");
         } else {
             result.append(desc);
@@ -131,6 +132,8 @@ public class DataGridBean extends BeanContainer implements TagBean {
         result.append("</span>");
         return result.toString();
     }
+
+
 
     public String toStartString() {
 
@@ -140,10 +143,10 @@ public class DataGridBean extends BeanContainer implements TagBean {
         sb.append("<table class=\"ui-datagrid\"><tr><td>");
 
         if (key!=null) {
-            this.getLocalizedText(key, "DataGrid");
+            header = this.getLocalizedText(key, "DataGrid");
         }
 
-        if (header != null) sb.append("<div class=\"ui-datagrid-title\">" + header + "</div></td></tr><tr><td>\n");
+        if (header != null) sb.append("<div class=\"ui-datagrid-title\">" + header + "</div></td></tr>\n");
 
 
         String prefix = request.getParameter(SportletProperties.PREFIX);
@@ -152,6 +155,8 @@ public class DataGridBean extends BeanContainer implements TagBean {
         } else {
             prefix+="_";
         }
+        System.out.println("\n\n\n\n\n\n WE GOT DATAGRIDPREFIX "+prefix+"\n\n\n\n\n\n");
+
         String req_beanId = request.getParameter(prefix+"beanId");
 
         if (req_beanId != null) {
@@ -166,59 +171,70 @@ public class DataGridBean extends BeanContainer implements TagBean {
 
         uri.addParameter("beanId", beanId);
 
-        sb.append("<div class=\"ui-datagrid-controls\">");
 
-        // go to first linke
-        uri.addParameter(beanId + "_pos", "0");
-        if (startPos == 0) {
-            renderlink = false;
-        } else {
-            renderlink = true;
+        // only show controls when the datagridsize is smaller then the size of the list
+        if (this.size<list.size()) {
+
+            control = new StringBuffer();
+            control.append("<tr><td>");
+            control.append("<div class=\"ui-datagrid-controls\">");
+
+            // go to first link
+            uri.addParameter(beanId + "_pos", "0");
+            if (startPos == 0) {
+                renderlink = false;
+            } else {
+                renderlink = true;
+            }
+            control.append(createLink(uri, 0, this.getLocalizedText("UI_DATAGRID_START"), renderlink));
+
+            // go to prev link
+            int newPrevPos = startPos - size;
+            if (newPrevPos < 0) newPrevPos = 0;
+            if (startPos == 0) {
+                renderlink = false;
+            } else {
+                renderlink = true;
+            }
+            control.append(createLink(uri, newPrevPos, this.getLocalizedText("UI_DATAGRID_PREV"), renderlink));
+
+            // go to next link
+            int newNextPos = startPos + size;
+            if (newNextPos >= list.size()) {
+                newNextPos = list.size();
+                renderlink = false;
+            } else {
+                renderlink = true;
+            }
+            if (newNextPos < 0) newNextPos = 0;
+            control.append(createLink(uri, newNextPos, this.getLocalizedText("UI_DATAGRID_NEXT"), renderlink));
+
+            // go to end link
+            int newEndPos = list.size() - size;
+            if (newEndPos < 0) newEndPos = 0;
+            if (startPos <= list.size() && startPos >= (list.size() - size)) {
+                renderlink = false;
+            } else {
+                renderlink = true;
+            }
+            control.append(createLink(uri, newEndPos, this.getLocalizedText("UI_DATAGRID_END"), renderlink));
+
+            // showing the number
+            int endPos = startPos + size;
+            if (endPos > list.size()) {
+                endPos = list.size();
+            }
+            if (list != null) control.append(" " + (startPos+1) + "-" + endPos + "(" + list.size() + ")");
+
+            control.append("</div>");
+
+            control.append("</td></tr>");
+
+            sb.append(control);
         }
-        sb.append(createLink(uri, 0, this.getLocalizedText("UI_DATAGRID_START"), renderlink, prefix));
-
-        // go to prev link
-        int newPrevPos = startPos - size;
-        if (newPrevPos < 0) newPrevPos = 0;
-        if (startPos == 0) {
-            renderlink = false;
-        } else {
-            renderlink = true;
-        }
-        sb.append(createLink(uri, newPrevPos, this.getLocalizedText("UI_DATAGRID_PREV"), renderlink, prefix));
-
-        // go to next link
-        int newNextPos = startPos + size;
-        if (newNextPos >= list.size()) {
-            newNextPos = list.size();
-            renderlink = false;
-        } else {
-            renderlink = true;
-        }
-        if (newNextPos < 0) newNextPos = 0;
-        sb.append(createLink(uri, newNextPos, this.getLocalizedText("UI_DATAGRID_NEXT"), renderlink, prefix));
-
-        // go to end link
-        int newEndPos = list.size() - size;
-        if (newEndPos < 0) newEndPos = 0;
-        if (startPos <= list.size() && startPos >= (list.size() - size)) {
-            renderlink = false;
-        } else {
-            renderlink = true;
-        }
-        sb.append(createLink(uri, newEndPos, this.getLocalizedText("UI_DATAGRID_END"), renderlink, prefix));
-
-        int endPos = startPos + size;
-        if (endPos > list.size()) {
-            endPos = list.size();
-        }
-        if (list != null) sb.append(" " + startPos + "-" + endPos + "(" + list.size() + ")");
-
-        sb.append("</div>");
 
         // new row for datagrid
-        sb.append("</td></tr><tr><td>");
-
+        sb.append("<tr><td>");
         sb.append("<table class=\"ui-datagrid-content\" cellspacing=\"0\">");
         return sb.toString();
     }
@@ -265,6 +281,8 @@ public class DataGridBean extends BeanContainer implements TagBean {
         }
 
         sb.append("</table>");
+        // appends the controls again at the bottom
+        if (control!=null) { sb.append(control); }
         sb.append("</td></tr></table>");
         return sb.toString();
     }

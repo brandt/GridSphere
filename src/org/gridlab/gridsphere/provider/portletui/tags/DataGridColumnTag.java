@@ -2,10 +2,12 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
 import org.gridlab.gridsphere.provider.portletui.beans.DataGridColumnBean;
+import org.gridlab.gridsphere.provider.portletui.beans.DataGridAttributes;
 
 import javax.servlet.jsp.JspException;
 import java.util.Iterator;
 import java.util.Vector;
+import java.util.Set;
 
 /*
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
@@ -15,10 +17,19 @@ import java.util.Vector;
 public class DataGridColumnTag extends ContainerTag {
 
     private String header = null;
-    private String source = null;
+    private String var = null;
     private String paramName = null;
     private String paramValue = null;
     private String key = null;
+    private DataGridAttributes varattributes = null;
+
+    public DataGridAttributes getVarattributes() {
+        return varattributes;
+    }
+
+    public void setVarattributes(DataGridAttributes varattributes) {
+        this.varattributes = varattributes;
+    }
 
     public String getKey() {
         return key;
@@ -53,12 +64,12 @@ public class DataGridColumnTag extends ContainerTag {
         this.header = header;
     }
 
-    public String getSource() {
-        return source;
+    public String getVar() {
+        return var;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    public void setVar(String var) {
+        this.var = var;
     }
 
 
@@ -78,9 +89,10 @@ public class DataGridColumnTag extends ContainerTag {
             if (key != null) {
                 dataGridColumnBean.setHeader(this.getLocalizedText(key));
             }
-            dataGridColumnBean.setSource(this.source);
+            dataGridColumnBean.setVar(this.var);
             dataGridColumnBean.setParamName(this.paramName);
             dataGridColumnBean.setParamValue(this.paramValue);
+            dataGridColumnBean.setAttributes(this.varattributes);
 
             this.setBaseComponentBean(dataGridColumnBean);
             Iterator it = list.iterator();
