@@ -5,13 +5,13 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public class HiddenTextBean extends TextFieldBean {
+public class HiddenFieldBean extends TextFieldBean {
 
-    public HiddenTextBean() {
+    public HiddenFieldBean() {
         super();
     }
 
-    public HiddenTextBean(String name, String value) {
+    public HiddenFieldBean(String name, String value) {
         super(name, value);
     }
 

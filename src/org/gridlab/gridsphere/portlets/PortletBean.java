@@ -124,7 +124,7 @@ public class PortletBean {
         // If a submit button was presssed, the action method
         // we call is the the name of the pressed button
         FormEvent form = new FormEventImpl(this.actionEvent);
-        actionMethodName = form.getPressedSubmitButton();
+        actionMethodName = form.getSubmitButtonName();
         // If no submit button was pressed, then the action
         // method we call is the name of the portlet action
         if (actionMethodName == null) {

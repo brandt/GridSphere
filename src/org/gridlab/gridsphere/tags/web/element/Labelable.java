@@ -4,7 +4,7 @@
  */
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface Labelable extends Bean {
+public interface Labelable extends TagBean {
 
    /**
      * Sets a label to the bean. Will create a label for the bean if it does not exist. The name under this

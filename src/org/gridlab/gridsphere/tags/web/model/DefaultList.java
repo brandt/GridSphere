@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.model;
 
-import org.gridlab.gridsphere.tags.web.element.Bean;
+import org.gridlab.gridsphere.tags.web.element.TagBean;
 
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -14,11 +14,11 @@ public class DefaultList extends AbstractList implements DefaultListModel {
 
 
 
-    public void add(int index, Bean bean) {
+    public void add(int index, TagBean bean) {
         list.add(index, bean);
     }
 
-    public void addBean(Bean bean) {
+    public void addBean(TagBean bean) {
         list.add(bean);
     }
 
@@ -34,7 +34,7 @@ public class DefaultList extends AbstractList implements DefaultListModel {
         list.remove(index);
     }
 
-    public void set(int index, Bean bean) {
+    public void set(int index, TagBean bean) {
         list.set(index, bean);
     }
 

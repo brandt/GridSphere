@@ -15,14 +15,14 @@ public interface FormEvent extends ActionEvent {
     * Returns the name of the pressed submit button.
     * @return name of the button which was pressed
     */
-    public String getPressedSubmitButton();
+    public String getSubmitButtonName();
 
     /**
      * Gets back the prev. saved bean with the modifications from the userinterface.
      * @param name name of the bean
      * @return updated elementbean
      */
-    public Object getElementBean(String name);
+    public Object getTagBean(String name);
 
     /**
      * Gets back the prev. saved bean with the modifications from the userinterface.
@@ -30,7 +30,7 @@ public interface FormEvent extends ActionEvent {
      * @param request requestobject where the bean was stored (in the session of the request)
      * @return updated elementbean
      */
-    public Object getElementBean(String name, PortletRequest request);
+    public Object getTagBean(String name, PortletRequest request);
 
     /**
      * For debugging

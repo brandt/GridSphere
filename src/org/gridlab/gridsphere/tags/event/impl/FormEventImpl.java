@@ -51,7 +51,7 @@ public class FormEventImpl implements FormEvent {
      * that the names of all submit-type buttons start with 'submit:' (and only those and no other elements)
      * @return name of the button which was pressed
      */
-    public String getPressedSubmitButton() {
+    public String getSubmitButtonName() {
         String result = null;
 
         PortletRequest req = event.getPortletRequest();
@@ -91,7 +91,7 @@ public class FormEventImpl implements FormEvent {
      * @param request requestobject where the bean was stored (in the session of the request)
      * @return updated elementbean
      */
-    public Object getElementBean(String name, PortletRequest request) {
+    public Object getTagBean(String name, PortletRequest request) {
         HttpSession session = request.getSession();
         NameBean bean = (NameBean) getBean(name, request);
         System.out.println("Getting Bean " + name + " from Session");
@@ -121,9 +121,9 @@ public class FormEventImpl implements FormEvent {
      * @param name name of the bean
      * @return updated elementbean
      */
-    public Object getElementBean(String name) {
+    public Object getTagBean(String name) {
         PortletRequest request = event.getPortletRequest();
-        return getElementBean(name, request);
+        return getTagBean(name, request);
     }
 
     /**
