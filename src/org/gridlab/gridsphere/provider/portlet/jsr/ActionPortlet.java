@@ -369,15 +369,6 @@ public class ActionPortlet extends GenericPortlet {
         doView(request, response);
     }
 
-    /*
-    public void doError(RenderRequest request, RenderResponse response) throws PortletException, IOException {
-        log.debug("in doError");
-        PrintWriter out = response.getWriter();
-        String message = getNextError(request);
-        out.println(message);
-    }
-    */
-
     protected String getLocalizedText(PortletRequest req, String key) {
         Locale locale = req.getLocale();
         ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);

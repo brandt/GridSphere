@@ -15,12 +15,23 @@
 <ui:checkbox beanId="acctCB" value="TRUE"/>
 <ui:text key="LOGIN_CONFIG_ALLOW"/>
 <p>
+<ui:checkbox beanId="notifyCB" value="TRUE"/>
+<ui:text key="LOGIN_CONFIG_NOTIFY"/>
+<p>
+<ui:checkbox beanId="savepassCB" value="TRUE"/>
+<ui:text key="LOGIN_CONFIG_PASSWD"/>
+<br>
+<ui:text style="alert" key="LOGIN_CONFIG_PASSWD1"/>
+<br>
+<ui:text style="alert" key="LOGIN_CONFIG_PASSWD2"/>
+<p>
 <ui:frame>
 <ui:tablerow>
 <ui:tablecell>
-<ui:actionsubmit action="setUserCreateAccount" key="APPLY"/>
+<ui:actionsubmit action="setLoginSettings" key="APPLY"/>
 </ui:tablecell>
 </ui:tablerow>
+
 </ui:frame>
 </ui:group>
 </ui:form>

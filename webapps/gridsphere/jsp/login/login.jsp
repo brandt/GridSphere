@@ -45,16 +45,12 @@
     <p>
 
     <% if (request.getAttribute("canUserCreateAcct") != null)  { %>
-    <ui:table>
-         <ui:tablerow>
-         <ui:tablecell>
                     <ui:actionlink action="doNewUser" key="LOGIN_SIGNUP"/>
-         </ui:tablecell>
-         </ui:tablerow>
-    </ui:table>
         <p>
         <% } %>
 
- <ui:actionlink action="displayForgotPassword" key="LOGIN_FORGOT_PASSWORD"/>
+<% if (request.getAttribute("dispPass") != null)  { %>
+    <ui:actionlink action="displayForgotPassword" key="LOGIN_FORGOT_PASSWORD"/>
+<% } %>
 
 </ui:form>

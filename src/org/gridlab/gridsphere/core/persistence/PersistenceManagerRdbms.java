@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface PersistenceManagerRdbms {
 
+    public void resetDatabase(String connURL);
+    
     /**
      * Creates a session to conduct operations on database
      *

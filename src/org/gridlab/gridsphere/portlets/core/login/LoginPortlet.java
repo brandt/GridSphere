@@ -35,6 +35,8 @@ public class LoginPortlet extends ActionPortlet {
     private static String FORGOT_PASSWORD_LABEL ="forgotpassword";
     private static String ACTIVATE_ACCOUNT_LABEL ="activateaccount";
 
+    public static String SAVE_PASSWORDS = "SAVE_PASSWORDS";
+    public static String SEND_USER_FORGET_PASSWORD = "SEND_USER_FORGET_PASSWD";
 
     private static long REQUEST_LIFETIME = 1000*60*24*3; // 3 days
     
@@ -67,6 +69,14 @@ public class LoginPortlet extends ActionPortlet {
             mailService = (MailService) getPortletConfig().getContext().getService(MailService.class);
             portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
             canUserCreateAccount = portalConfigService.getPortalConfigSettings().getCanUserCreateAccount();
+            PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+            if (settings.getAttribute(SEND_USER_FORGET_PASSWORD) == null) {
+                settings.setAttribute(SEND_USER_FORGET_PASSWORD, Boolean.TRUE.toString());
+            }
+            if (settings.getAttribute(SAVE_PASSWORDS) == null) {
+                settings.setAttribute(SAVE_PASSWORDS, Boolean.TRUE.toString());
+            }
+            portalConfigService.savePortalConfigSettings(settings);
             loginService = (LoginService)getPortletConfig().getContext().getService(LoginService.class);
         } catch (PortletServiceException e) {
             throw new UnavailableException("Unable to initialize services");
@@ -97,6 +107,9 @@ public class LoginPortlet extends ActionPortlet {
 
         if (user instanceof GuestUser) {
             if (canUserCreateAccount) request.setAttribute("canUserCreateAcct", "true");
+            PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+            boolean dispUser = Boolean.valueOf(settings.getAttribute(SEND_USER_FORGET_PASSWORD)).booleanValue();
+            if (dispUser) request.setAttribute("dispPass", "true");
             setNextState(request, "login/login.jsp");
         } else {
             showConfigure(event);
@@ -140,6 +153,10 @@ public class LoginPortlet extends ActionPortlet {
         MessageBoxBean msg = evt.getMessageBoxBean("msg");
         msg.setKey("LOGIN_CREATE_ACCT");
 
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+        if (settings.getAttribute(SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
+            req.setAttribute("savePass", "true");
+        }
         setNextState(req, DO_VIEW_USER_EDIT_LOGIN);
         log.debug("in doViewNewUser");
     }
@@ -147,6 +164,11 @@ public class LoginPortlet extends ActionPortlet {
     public void doConfirmEditUser(FormEvent evt)
             throws PortletException {
         PortletRequest req = evt.getPortletRequest();
+
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+        if (settings.getAttribute(SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
+            req.setAttribute("savePass", "true");
+        }
 
         if (!canUserCreateAccount) return;
 
@@ -205,8 +227,12 @@ public class LoginPortlet extends ActionPortlet {
         }
 
         //Validate password
-        if (!isInvalid) {
-            isInvalid = isInvalidPassword(event);
+
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+        if (settings.getAttribute(SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
+            if (!isInvalid) {
+                isInvalid = isInvalidPassword(event);
+            }
         }
         // Throw exception if error was found
         if (isInvalid) {
@@ -262,11 +288,14 @@ public class LoginPortlet extends ActionPortlet {
         // Submit changes
         this.userManagerService.saveUser(newuser);
 
-        PasswordEditor editor = passwordManagerService.editPassword(newuser);
-        String password = request.getAttribute("password");
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+        if (settings.getAttribute(SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
+            PasswordEditor editor = passwordManagerService.editPassword(newuser);
+            String password = request.getAttribute("password");
 
-        editor.setValue(password);
-        passwordManagerService.saveHashedPassword(editor);
+            editor.setValue(password);
+            passwordManagerService.saveHashedPassword(editor);
+        }
 
         // Save user role
         saveUserRole(newuser);
@@ -301,6 +330,12 @@ public class LoginPortlet extends ActionPortlet {
         acctCB.setSelected(canUserCreateAccount);
         PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
 
+        CheckBoxBean notifyCB = event.getCheckBoxBean("notifyCB");
+        notifyCB.setSelected(Boolean.valueOf(settings.getAttribute(SEND_USER_FORGET_PASSWORD)).booleanValue());
+
+        CheckBoxBean savepassCB = event.getCheckBoxBean("savepassCB");
+        savepassCB.setSelected(Boolean.valueOf(settings.getAttribute(SAVE_PASSWORDS)).booleanValue());
+
         TextFieldBean mailServerTF = event.getTextFieldBean("mailHostTF");
         mailServerTF.setValue(settings.getAttribute(MailService.MAIL_SERVER_HOST));
         TextFieldBean mailSenderTF = event.getTextFieldBean("mailFromTF");
@@ -311,9 +346,10 @@ public class LoginPortlet extends ActionPortlet {
         setNextState(req, DO_CONFIGURE);
     }
 
-    public void setUserCreateAccount(FormEvent event) throws PortletException {
+    public void setLoginSettings(FormEvent event) throws PortletException {
         PortletRequest req = event.getPortletRequest();
         if (req.getRole().compare(req.getRole(), PortletRole.ADMIN) < 0) return;
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
         CheckBoxBean acctCB = event.getCheckBoxBean("acctCB");
         String useracct = acctCB.getSelectedValue();
         if (useracct != null) {
@@ -321,8 +357,30 @@ public class LoginPortlet extends ActionPortlet {
         } else {
             canUserCreateAccount = false;
         }
-        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+
         settings.setCanUserCreateAccount(canUserCreateAccount);
+
+        CheckBoxBean notifyCB = event.getCheckBoxBean("notifyCB");
+        String notify = notifyCB.getSelectedValue();
+        boolean sendForget;
+        if (notify != null) {
+            sendForget = true;
+        } else {
+            sendForget = false;
+        }
+
+        CheckBoxBean savepassCB = event.getCheckBoxBean("savepassCB");
+        String savepass = savepassCB.getSelectedValue();
+        boolean savePasswords;
+        if (savepass != null) {
+            savePasswords = true;
+        } else {
+            // if save passwords is false than can't send notification to update password so both must be false
+            savePasswords = false;
+            sendForget = false;
+        }
+        settings.setAttribute(SAVE_PASSWORDS, Boolean.toString(savePasswords));
+        settings.setAttribute(SEND_USER_FORGET_PASSWORD, Boolean.toString(sendForget));
         portalConfigService.savePortalConfigSettings(settings);
         showConfigure(event);
     }
@@ -345,8 +403,12 @@ public class LoginPortlet extends ActionPortlet {
     }
 
     public void displayForgotPassword(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
-        setNextState(req, DO_FORGOT_PASSWORD);
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+        boolean sendMail = Boolean.valueOf(settings.getAttribute(SEND_USER_FORGET_PASSWORD)).booleanValue();
+        if (sendMail) {
+            PortletRequest req = event.getPortletRequest();
+            setNextState(req, DO_FORGOT_PASSWORD);
+        }
     }
 
     public void notifyUser(FormEvent evt) {
@@ -436,9 +498,13 @@ public class LoginPortlet extends ActionPortlet {
         request.setAttribute("organization", evt.getTextFieldBean("organization").getValue());
 
         // put hashed pass in request
-        String pass = evt.getPasswordBean("password").getValue();
-        pass = passwordManagerService.getHashedPassword(pass);
-        request.setAttribute("password", pass);
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+        if (settings.getAttribute(SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
+            String pass = evt.getPasswordBean("password").getValue();
+            pass = passwordManagerService.getHashedPassword(pass);
+            request.setAttribute("password", pass);
+        }
+
         requestService.saveRequest(request);
 
         // mail user
@@ -446,7 +512,6 @@ public class LoginPortlet extends ActionPortlet {
         message.setEmailAddress(emailTF.getValue());
         message.setSubject(getLocalizedText(req, "MAIL_ACCT_HEADER"));
 
-        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
         if (settings.getAttribute(MailService.MAIL_SERVER_HOST) != null) {
             mailService.setMailServiceHost(settings.getAttribute(MailService.MAIL_SERVER_HOST));
         }
@@ -563,8 +628,6 @@ public class LoginPortlet extends ActionPortlet {
             String passwordValue = event.getPasswordBean("password").getValue();
             String confirmPasswordValue = event.getPasswordBean("confirmPassword").getValue();
 
-            System.err.println("password= " + passwordValue);
-
             // Otherwise, password must match confirmation
             if (!passwordValue.equals(confirmPasswordValue)) {
                 createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_MISMATCH"));
@@ -586,7 +649,7 @@ public class LoginPortlet extends ActionPortlet {
                     return;
                 } else {
                     // save password
-                    System.err.println("saving password= " + passwordValue);
+                    //System.err.println("saving password= " + passwordValue);
                     PasswordEditor editPasswd = passwordManagerService.editPassword(user);
                     editPasswd.setValue(passwordValue);
                     editPasswd.setDateLastModified(Calendar.getInstance().getTime());

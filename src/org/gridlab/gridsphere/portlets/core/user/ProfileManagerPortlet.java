@@ -23,8 +23,11 @@ import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.utils.DateUtil;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.tmf.config.TmfService;
 import org.gridlab.gridsphere.tmf.config.TmfUser;
+import org.gridlab.gridsphere.portlets.core.login.LoginPortlet;
 
 import javax.servlet.UnavailableException;
 import java.text.DateFormat;
@@ -44,7 +47,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
     private LocaleService localeService = null;
     private LayoutManagerService layoutMgr = null;
     private TextMessagingService tms = null;
-
+    private PortalConfigService portalConfigService = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
@@ -55,6 +58,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             this.localeService = (LocaleService) config.getContext().getService(LocaleService.class);
             this.layoutMgr = (LayoutManagerService) config.getContext().getService(LayoutManagerService.class);
             this.tms = (TextMessagingService) config.getContext().getService(TextMessagingService.class);
+            this.portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
@@ -76,6 +80,11 @@ public class ProfileManagerPortlet extends ActionPortlet {
         FrameBean groupsFrame = event.getFrameBean("groupsFrame");
         groupsFrame.setTableModel(model);
         messagingFrame.setTableModel(messaging);
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+        if (settings.getAttribute(LoginPortlet.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
+            req.setAttribute("savePass", "true");
+        }
+
         setNextState(req, VIEW_USER_JSP);
     }
 

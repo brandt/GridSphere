@@ -95,6 +95,8 @@
 
 <ui:form>
 
+<% if (request.getAttribute("savePass") != null)  { %>
+
 <h3><ui:text key="PROFILE_UPDATE_PASS" style="nostyle"/></h3>
 <ui:group>
 <ui:frame width="50%">
@@ -114,6 +116,9 @@
 <p>
 <ui:actionsubmit action="doSavePass" key="SAVE"/>
 </ui:group>
+
+<% } %>
+
 </ui:form>
 
 </td>

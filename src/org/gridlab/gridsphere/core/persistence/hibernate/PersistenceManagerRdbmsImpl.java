@@ -8,9 +8,9 @@ import net.sf.hibernate.*;
 import net.sf.hibernate.cfg.Configuration;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import javax.servlet.ServletContext;
 import java.io.*;
@@ -21,7 +21,7 @@ import java.util.Properties;
  *
  */
 public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
-    private static PortletLog log = SportletLog.getInstance(PersistenceManagerRdbmsImpl.class);
+    private static transient PortletLog log = SportletLog.getInstance(PersistenceManagerRdbmsImpl.class);
 
     private SessionFactory factory = null;
     private final static int CMD_DELETE = 1;
@@ -63,20 +63,26 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     public void resetDatabase(String connURL) {
 
         ServletContext ctx = GridSphereConfig.getServletContext();
+        String mappingPath = ctx.getRealPath("/WEB-INF/persistence");
         String gsPropsPath = ctx.getRealPath("/WEB-INF/CustomPortal/database/hibernate.properties");
         prop.setProperty("hibernate.connection.url", connURL);
         try {
             prop.store(new FileOutputStream(new File(gsPropsPath)), "hibernate.properties");
-            factory.close();
+            if (factory != null) factory.close();
             DBTask task = new DBTask();
             task.setConfigDir(ctx.getRealPath(""));
             task.setAction(DBTask.ACTION_CREATE);
             task.execute();
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+
+            Configuration cfg = loadConfiguration(mappingPath, prop);
+            factory = cfg.buildSessionFactory();
+        } catch (HibernateException e) {
 
         }
-
-
     }
 
     public PersistenceManagerRdbmsImpl(String persistenceConfigDir) {
@@ -99,7 +105,6 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         } catch (HibernateException e) {
             log.error("Could not instantiate Hibernate Factory", e);
         }
-
     }
 
     /**
@@ -216,13 +221,9 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         Transaction tx = null;
         Object result = null;
         Query q = null;
+
         try {
             session = factory.openSession();
-        } catch (HibernateException e) {
-            log.error("Unable to get hibernate session!!", e);
-            throw e;
-        }
-        try {
             tx = null;
             tx = session.beginTransaction();
             switch (command) {
@@ -247,7 +248,6 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
                     result = q.list().get(0);
                     break;
             }
-
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {

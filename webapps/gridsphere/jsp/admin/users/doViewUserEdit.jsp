@@ -6,7 +6,9 @@
 
 <h3><ui:text key="USER_EDIT_USER_MSG" style="nostyle"/></h3>
 
+<% if (request.getAttribute("savePass") != null)  { %>
 <ui:text style="alert" key="USER_PASS_BLANK_MSG"/>
+<% } %>
 
 <ui:form>
 <ui:hiddenfield beanId="userID"/>
@@ -22,25 +24,6 @@
                 <ui:textfield beanId="userName"/>
             </ui:tablecell>
         </ui:tablerow>
-<%--
-        <ui:tablerow>
-            <ui:tablecell width="200">
-                <ui:text key="FAMILYNAME"/>
-            </ui:tablecell>
-            <ui:tablecell>
-                <ui:textfield beanId="familyName"/>
-            </ui:tablecell>
-        </ui:tablerow>
-
-        <ui:tablerow>
-            <ui:tablecell width="200">
-                <ui:text key="GIVENNAME"/>
-            </ui:tablecell>
-            <ui:tablecell>
-                <ui:textfield beanId="givenName"/>
-            </ui:tablecell>
-        </ui:tablerow>
---%>
 
         <ui:tablerow>
             <ui:tablecell width="200">
@@ -79,6 +62,8 @@
         </ui:tablerow>
 
         </ui:frame>
+
+   <% if (request.getAttribute("savePass") != null)  { %>
         <ui:frame>
         <ui:tablerow>
             <ui:tablecell width="200">
@@ -97,10 +82,8 @@
                 <ui:password beanId="confirmPassword"/>
             </ui:tablecell>
         </ui:tablerow>
-
-        
-    </ui:frame>
-
+        </ui:frame>
+   <% } %>
 
 <ui:frame>
         <ui:tablerow>

@@ -11,12 +11,14 @@ import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
+import org.gridlab.gridsphere.portlets.core.login.LoginPortlet;
 
 import javax.servlet.UnavailableException;
 import java.util.Iterator;
@@ -94,6 +96,11 @@ public class UserManagerPortlet extends ActionPortlet {
         HiddenFieldBean hf = evt.getHiddenFieldBean("newuser");
         hf.setValue("true");
 
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+        if (settings.getAttribute(LoginPortlet.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
+            req.setAttribute("savePass", "true");
+        }
+
         setSelectedUserRole(evt, PortletRole.USER);
         setNextState(req, DO_VIEW_USER_EDIT);
         log.debug("in doViewNewUser");
@@ -120,6 +127,10 @@ public class UserManagerPortlet extends ActionPortlet {
         setSelectedUserRole(evt, role);
 
         setUserValues(evt, user);
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+        if (settings.getAttribute(LoginPortlet.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
+            req.setAttribute("savePass", "true");
+        }
 
         setNextState(req, DO_VIEW_USER_EDIT);
     }
@@ -158,6 +169,10 @@ public class UserManagerPortlet extends ActionPortlet {
             setNextState(req, "doListUsers");
         } catch (PortletException e) {
             createErrorMessage(evt, e.getMessage());
+            PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+            if (settings.getAttribute(LoginPortlet.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
+                req.setAttribute("savePass", "true");
+            }
             setNextState(req, DO_VIEW_USER_EDIT);
         }
     }
@@ -294,20 +309,21 @@ public class UserManagerPortlet extends ActionPortlet {
         } else {
             //System.err.println("Creating account request for existing user");
             newuser = this.userManagerService.editUser(user);
-            //newuser.setPasswordValidation(false);
         }
 
-
-        PasswordEditor editor = passwordManagerService.editPassword(newuser);
-        String password = event.getPasswordBean("password").getValue();
-        boolean isgood = this.isInvalidPassword(event, newuserflag);
-        if (isgood) {
-            setNextState(event.getPortletRequest(), DO_VIEW_USER_EDIT);
-            return newuser;
-        } else {
-            if (!password.equals("")) {
-                editor.setValue(password);
-                passwordManagerService.savePassword(editor);
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+        if (settings.getAttribute(LoginPortlet.SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
+            PasswordEditor editor = passwordManagerService.editPassword(newuser);
+            String password = event.getPasswordBean("password").getValue();
+            boolean isgood = this.isInvalidPassword(event, newuserflag);
+            if (isgood) {
+                setNextState(event.getPortletRequest(), DO_VIEW_USER_EDIT);
+                return newuser;
+            } else {
+                if (!password.equals("")) {
+                    editor.setValue(password);
+                    passwordManagerService.savePassword(editor);
+                }
             }
         }
 
