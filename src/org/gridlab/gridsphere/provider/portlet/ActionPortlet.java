@@ -196,17 +196,19 @@ public class ActionPortlet extends AbstractPortlet {
 
     protected void checkAdminRole(FormEvent event) throws PortletException {
         PortletRequest req = event.getPortletRequest();
-        if (!req.getRole().isAdmin()) {
-             throw new PortletException("You must have admin access!");
-         }
+        PortletRole userRole = req.getRole();
+        if (userRole.compare(userRole, PortletRole.ADMIN) < 0) {
+            throw new PortletException("You must have user access!");
+        }
     }
 
 
     protected void checkUserRole(FormEvent event) throws PortletException {
         PortletRequest req = event.getPortletRequest();
-        if (!req.getRole().isUser()) {
-             throw new PortletException("You must have user access!");
-         }
+        PortletRole userRole = req.getRole();
+        if (userRole.compare(userRole, PortletRole.USER) < 0) {
+            throw new PortletException("You must have user access!");
+        }
     }
 
     /**
