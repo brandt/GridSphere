@@ -124,7 +124,7 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
     public Object load() throws  IOException, PersistenceManagerException {
         Object object = null;
         try {
-            log.info("Using getConnectionURL() " + descriptorPath);
+            log.debug("Using getConnectionURL() " + descriptorPath);
             FileReader filereader = null;
 
             filereader = new FileReader(descriptorPath);
@@ -132,7 +132,7 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
             Mapping mapping = new Mapping();
 
             mapping.loadMapping(mappingPath);
-            log.info("Using  getMappingFile()" + mappingPath);
+            log.debug("Using  getMappingFile()" + mappingPath);
 
             Unmarshaller unmarshal = new Unmarshaller(mapping);
             object = unmarshal.unmarshal(filereader);

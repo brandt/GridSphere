@@ -22,7 +22,7 @@ public class PersistenceManagerFactory {
     protected static Map databases = new HashMap();
 
     private PersistenceManagerFactory() {
-        log.info("Entering PersistenceManagerFactory");
+        log.debug("Entering PersistenceManagerFactory");
     }
 
     public static synchronized PersistenceManagerRdbms createGridSphereRdbms() {

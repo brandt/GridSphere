@@ -23,7 +23,7 @@ import java.io.IOException;
  */
 public class PortletManager implements PortletManagerService {
 
-    public final static String CORE_CONTEXT = "coreContext";
+    public final static String CORE_CONTEXT = "startup-portlet-webapps";
     private static PortletLog log = SportletLog.getInstance(PortletManager.class);
     private static PortletManager instance = new PortletManager();
     private ServletContext context = null;
@@ -56,7 +56,7 @@ public class PortletManager implements PortletManagerService {
      * @throws PortletServiceUnavailableException if initialization fails
      */
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-        log.info("in init()");
+        log.debug("in init()");
         if (!isInitialized) {
             context = config.getServletConfig().getServletContext();
             String webapps = config.getInitParameter(CORE_CONTEXT);

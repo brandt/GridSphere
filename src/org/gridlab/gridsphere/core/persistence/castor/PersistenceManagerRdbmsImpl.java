@@ -201,7 +201,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             db.close();
             db = null;
         } catch (Exception e) {
-            log.info("Exception " + e);
+            log.error("Exception " + e);
             throw new PersistenceManagerException("Mapping Error :" + e);
         }   finally {
             if (db != null) {

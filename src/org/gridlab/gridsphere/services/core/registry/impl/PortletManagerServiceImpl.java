@@ -41,12 +41,12 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
     }
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-        log.info("in init()");
+        log.debug("in init()");
         portletManager.init(config);
     }
 
     public void destroy() {
-        log.info("in destroy()");
+        log.debug("in destroy()");
     }
 
     /**
