@@ -111,6 +111,10 @@
         <servlet-name>ServletTestRunner</servlet-name>
         <servlet-class>org.apache.cactus.server.runner.ServletTestRunner</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DatePortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.date.DatePortlet</servlet-class>
+    </servlet>
 
     <servlet>
         <servlet-name>SecureDirectory</servlet-name>
