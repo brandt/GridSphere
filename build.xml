@@ -158,6 +158,7 @@ Copyright:
         <echo message="compile                Compiles GridSphere source code   "/>
         <echo message="create-database        Creates a new GridSphere database"/>
         <echo message="docs                   Creates Javadoc API and GridSphere guides  "/>
+        <echo message="javadocs               Creates only Javadoc API"/>
         <echo message="run-tests              Builds and runs the JUnit tests            "/>
         <echo message="test-reports           Creates HTML test reports from the JUnit test results"/>
         <echo message="new-project            Creates a new portlet project in projects directory"/>
@@ -421,7 +422,6 @@ Copyright:
             value="${cathome}/${gswebapp.dir}"/>
     </target>
 
-
     <target name="create-test-database" depends="setenv, configure-test-database, compile">
         <taskdef name="schemaexport"
             classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask"
@@ -631,7 +631,7 @@ Copyright:
 
         <mkdir dir="${env.CATALINA_HOME}/webapps/gridsphere/docs"/>
         <copy todir="${env.CATALINA_HOME}/webapps/gridsphere/docs">
-            <fileset dir="build/docs"/>
+            <fileset dir="${gridsphere.build}/docs"/>
         </copy>
 
         <copy overwrite="true" file="${build.lib}/gridsphere-provider.jar" todir="${env.CATALINA_HOME}/shared/lib"/>
