@@ -142,6 +142,13 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
         return portletManager.getPortletWebApplicationNames();
     }
 
-
+    /**
+     * Lists all the portlet web application descriptions known to the portlet container
+     *
+     * @return the list of web application names as <code>String</code> elements
+     */
+    public String getPortletWebApplicationDescription(String webApplicationName) {
+        return portletManager.getPortletWebApplicationDescription(webApplicationName);
+    }
 
 }

@@ -76,13 +76,15 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
         log.info("Entering initGroups()");
 
         initSportletGroup((SportletGroup)SportletGroup.SUPER);
-        initSportletGroup((SportletGroup)SportletGroup.CORE);
+        initSportletGroup((SportletGroup)PortletGroupFactory.GRIDSPHERE_GROUP);
 
         List webappNames = pms.getPortletWebApplicationNames();
+
         Iterator it = webappNames.iterator();
         while (it.hasNext()) {
             String groupName = (String)it.next();
             if (!existsGroupWithName(groupName)) {
+                String groupDescription = pms.getPortletWebApplicationDescription(groupName);
                 createGroup(groupName);
             }
         }
@@ -917,6 +919,9 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
         return getSportletGroupByName(name);
     }
 
+    public String getGroupDescription(String groupName) {
+        return pms.getPortletWebApplicationDescription(groupName);
+    }
     private SportletGroup getSportletGroupByName(String name) {
         return selectSportletGroup("where portletGroup.Name=\"" + name + "\"");
     }

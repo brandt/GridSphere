@@ -98,4 +98,10 @@ public interface PortletManagerService extends PortletService {
      */
     public List getPortletWebApplicationNames();
 
+    /**
+     * Returns the portlet web application description for the supplied web application name
+     *
+     * @return the portlet web application description
+     */
+    public String getPortletWebApplicationDescription(String webApplicationName);
 }

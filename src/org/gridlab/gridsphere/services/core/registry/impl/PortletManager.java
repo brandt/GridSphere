@@ -38,7 +38,6 @@ public class PortletManager implements PortletManagerService {
 
     // A multi-valued hashtable with a webapp key and a List value containing portletAppID's
     private List webapps = new Vector();
-    //private UserPortletManager userPortletManager = UserPortletManager.getDefault();
 
     /**
      * Default instantiation disallowed
@@ -154,6 +153,17 @@ public class PortletManager implements PortletManagerService {
             l.add(webapp.getWebApplicationName());
         }
         return l;
+    }
+
+    public String getPortletWebApplicationDescription(String webApplicationName) {
+        String webappDesc = "Undefined portlet web application";
+        for (int i = 0; i < webapps.size(); i++) {
+            PortletWebApplication webApp = (PortletWebApplication)webapps.get(i);
+            if (webApp.getWebApplicationName().equalsIgnoreCase(webApplicationName)) {
+                return webApp.getWebApplicationDescription();
+            }
+        }
+        return webappDesc;
     }
 
 }
