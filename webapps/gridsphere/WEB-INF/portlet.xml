@@ -19,6 +19,10 @@
                     <title>File Manager</title>
                     <description>Provides users with a virtual filesystem</description>
                 </language>
+                <language locale="it">
+                    <title>Gestione File</title>
+                    <description>Fornisce agli utenti un filesystem virtuale</description>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -35,7 +39,11 @@
                 <default-locale>en</default-locale>
                 <language locale="en">
                     <title>Banner</title>
-                    <description>Displays a file in a portlet</description>
+                    <description>Displays a banner in a portlet</description>
+                </language>
+                <language locale="it">
+                    <title>Titolo</title>
+                    <description>Visualizza un titolo in una portlet</description>
                 </language>
                 <config-param>
                     <param-name>title</param-name>
@@ -87,6 +95,12 @@
                     <description>A portlet a portálba való bejelentkezésre szolgál</description>
                     <keywords>bejelentkezés portlet</keywords>
                 </language>
+                <language locale="it">
+                    <title>Login</title>
+                    <title-short>Login</title-short>
+                    <description>la Portlet fornisce funzionalità di login</description>
+                    <keywords>portlet login</keywords>
+                </language>
                 <language locale="pl">
                   <title>Logowanie</title>
                   <title-short>Logowanie</title-short>
@@ -137,6 +151,12 @@
                     <description>A portlet a portálból való kijelentkezésre szolgál</description>
                     <keywords>kijelentkezés portlet</keywords>
                 </language>
+                <language locale="it">
+                    <title>Logout</title>
+                    <title-short>Logout</title-short>
+                    <description>la Portlet fornisce funzionalità di logout</description>
+                    <keywords>portlet logout</keywords>
+                </language>
                 <language locale="pl">
                     <title>Wylogowanie</title>
                     <title-short>Wylogowanie</title-short>
@@ -170,15 +190,21 @@
                 <default-locale>en</default-locale>
                 <language locale="en">
                     <title>User Account Manager</title>
-                    <title-short>UserManager</title-short>
+                    <title-short>User Account Manager</title-short>
                     <description>Enables portal administrators to administer user accounts</description>
                     <keywords>user account administration</keywords>
                 </language>
                 <language locale="de">
                     <title>Konto Manager</title>
-                    <title-short>KontoManager</title-short>
+                    <title-short>Konto Manager</title-short>
                     <description>Ermoeglicht das administrieren von Nutzer Konten</description>
-                    <keywords>nutzer konten administration</keywords>
+                    <keywords>nutzer konten administrieren</keywords>
+                </language>
+                <language locale="it">
+                    <title>Gestione account utente</title>
+                    <title-short>Gestione account utente</title-short>
+                    <description>permette agli gestire del portale di amministrare gli account utente</description>
+                    <keywords>agli gestire</keywords>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
@@ -203,6 +229,10 @@
                     <title>Portlet Group Manager</title>
                     <description>Enables portal administrators to administer portlet groups</description>
                 </language>
+                <language locale="it">
+                    <title>Gestione Gruppo Portlet</title>
+                    <description>Consente agli amministratori del portale di gestire i gruppi di portlet</description>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -225,6 +255,10 @@
                 <language locale="en">
                     <title>Portlet Application Manager</title>
                     <description>Enables portal administrators to administer portlets</description>
+                </language>
+                <language locale="it">
+                    <title>Gestione Applicazione Portlet</title>
+                    <description>Consente agli amministratori del portale di gestire le portlet</description>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
@@ -252,6 +286,10 @@
                      <title>Notizblock</title>
                      <description>Dieses Portlet stellt ein Notizblock zur Verfuegung</description>
                  </language>
+                 <language locale="it">
+                     <title>Blocco note</title>
+                     <description>Fornisce agli utenti un block notes con funzionalità di ricerca</description>
+                 </language>
              </concrete-portlet>
          </concrete-portlet-app>
      </portlet-app-def>
@@ -274,6 +312,10 @@
                  <language locale="en">
                      <title>Layout Manager</title>
                      <description>Provides user layout customization</description>
+                 </language>
+                 <language locale="it">
+                     <title>Gestione Layout</title>
+                     <description>Consente la personalizzazione del layout utente</description>
                  </language>
                  <config-param>
                     <param-name>supported-themes</param-name>
@@ -302,6 +344,10 @@
                     <title>Profile Manager</title>
                     <description>Customizes users profile</description>
                 </language>
+                <language locale="it">
+                    <title>Gestione Profilo</title>
+                    <description>Personalizza il profilo utente</description>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -323,6 +369,10 @@
                     <title>Locale</title>
                     <description>Selects a locale</description>
                 </language>
+                <language locale="it">
+                    <title>Localizzazione</title>
+                    <description>Seleziona una localizzazione</description>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -340,6 +390,10 @@
                 <language locale="en">
                     <title>Portlet Subscription</title>
                     <description>Customizes users portlets</description>
+                </language>
+                <language locale="it">
+                    <title>Sottoscrizione alla portlet</title>
+                    <description>Personalizza le portlet a cui l'utente è iscritto</description>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
@@ -363,11 +417,15 @@
                  <default-locale>en</default-locale>
                  <language locale="en">
                      <title>Text Messaging</title>
-                     <description>Provides users with a searchable NotePad</description>
+                     <description>Provides users ability to send messages</description>
                  </language>
                  <language locale="de">
                      <title>Text Nachrichten</title>
-                     <description>Dieses Portlet stellt ein Notizblock zur Verfuegung</description>
+                     <description>Provides users ability to send messages</description>
+                 </language>
+                 <language locale="it">
+                     <title>Messaggi di testo</title>
+                     <description>Consente agli utenti di inviare messaggi</description>
                  </language>
              </concrete-portlet>
          </concrete-portlet-app>
