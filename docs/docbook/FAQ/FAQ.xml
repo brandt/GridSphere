@@ -29,6 +29,58 @@ The recommended solution is to get a recent xalan.jar from http://xml.apache.org
                 </para>
             </answer>
         </qandaentry>
+
+        <qandaentry>
+            <question>
+                <para>
+                    I would like to add support for a new locale in GridSphere. What must I do?
+                </para>
+            </question>
+            <answer>
+                <para><important>Make sure you check GridSphere out of CVS to get latest files!</important></para>
+                <para>
+                 First translate the following two GridSphere property files:
+                 <orderedlist>
+                    <listitem>
+                        <filename>gridsphere/config/resources/Portlet_en.properties</filename>
+                    </listitem>
+                    <listitem>
+                        <filename>gridsphere/webapps/gridsphere/WEB-INF/classes/Portlet_en.properties</filename>
+                    </listitem>
+                 </orderedlist>
+                    Use the appropriate ISO language code e.g. English is "en", Spanish is "es", etc. in the filename.
+                    The properties are Unicode encoded, which means you should create a temp file with the properties
+                    in the native language complete with accents, etc. Then you need to run "native2ascii" tool that
+                    is distributed with JDK on the temp file. E.g. <emphasis>native2ascii mytranslation > Portlet_hi.properties</emphasis>
+                    as an example of translating to Hindi.
+                </para>
+                <para>
+                 Second translate the following descriptor files:
+                 <orderedlist>
+                    <listitem>
+                        <filename>gridsphere/webapps/gridsphere/WEB-INF/portlet.xml</filename>
+                    </listitem>
+                    <listitem>
+                        <filename>gridsphere/webapps/gridsphere/WEB-INF/layout.xml</filename>
+                    </listitem>
+                     <listitem>
+                        <filename>gridsphere/webapps/gridsphere/WEB-INF/authmodules.xml</filename>
+                    </listitem>
+                 </orderedlist>
+                 These files are UTF-8 encoded. Simply Editing them in most IDE's or JEdit is fine.
+                </para>
+                <para>
+                    Now you must create a flag icon in <filename>gridsphere/webapps/gridsphere/images/flags</filename>
+                    directory. look at existing flags for proper sizing and filename conventions.
+                </para>
+                <para>
+                   Finally edit <filename>gridsphere/webapps/gridsphere/WEB-INF/GridSphereServices.xml</filename> and in
+                    the section for the "Locale Service", add your locale to the comma separated list of supported locales.
+                </para>
+                <para><important>Please send us your additions so we can add them back into the code!</important></para>
+            </answer>
+        </qandaentry>
+
         <qandaentry>
             <question>
                 <para>
