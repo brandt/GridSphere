@@ -37,5 +37,5 @@
 
 </ui:panel>
 
-<ui:actionlink portletMode="edit" value="EDIT"/> <ui:text key="PROFILE_SETTINGS"/>
+<ui:actionlink portletMode="edit" key="EDIT"/> <ui:text key="PROFILE_SETTINGS"/>
 
