@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletRole;
@@ -61,8 +62,8 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
 
         UserACL rootacl = new UserACL();
         rootacl.setUserID(user.getID());
-        rootacl.setRoleID(SportletRole.SUPER);
-        rootacl.setGroupID(SportletGroup.getSuperGroup().getID());
+        rootacl.setRoleID(PortletRole.SUPER.getID());
+        rootacl.setGroupID(PortletGroup.SUPER.getID());
         rootacl.setStatus(UserACL.STATUS_APPROVED);
 
         try {
@@ -145,7 +146,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
                 log.error("User " + user.getFullName() + " did not requested a role with an accountrequest change");
             } else {
                 // we don't want to approve a superuserrole by an admin!
-                if (notapproved.getRoleID() != SportletRole.SUPER) {
+                if (notapproved.getRoleID() != SportletRole.SUPER.getID()) {
                     // delete the status the user has until now
                     UserACL approved = (UserACL) pm.restoreObject(command2);
                     if (approved != null) {

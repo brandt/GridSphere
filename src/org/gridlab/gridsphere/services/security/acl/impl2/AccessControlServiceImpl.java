@@ -82,7 +82,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
     // @todo check the length of the second query string, could get too long!
 
         String command =
-            "select u from org.gridlab.gridsphere.services.security.acl.impl2.UserACL u where u.RoleID=\""+SportletRole.getSuperRole().getRole()+
+            "select u from org.gridlab.gridsphere.services.security.acl.impl2.UserACL u where u.RoleID=\""+PortletRole.SUPER.getRole()+
                 "\" and u.Status="+UserACL.STATUS_APPROVED;
         //log.info(command);
         List acl = listACL(command);

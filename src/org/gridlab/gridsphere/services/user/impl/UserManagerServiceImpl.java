@@ -15,6 +15,7 @@ import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
@@ -523,7 +524,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     public boolean isSuperuser(User user) {
 
         try {
-            return aclService.hasRoleInGroup(user, SportletGroup.getSuperGroup(), SportletRole.getSuperRole());
+            return aclService.hasRoleInGroup(user, PortletGroup.SUPER, PortletRole.SUPER);
         } catch (PortletServiceException e) {
             log.error("Exception :" + e);
             return false;
@@ -539,7 +540,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public boolean isAdminuser(User user, PortletGroup group) {
         try {
-            return aclService.hasRoleInGroup(user, group, SportletRole.getAdminRole());
+            return aclService.hasRoleInGroup(user, group, PortletRole.ADMIN);
         } catch (PortletServiceException e) {
             log.error("Exception :" + e);
             return false;

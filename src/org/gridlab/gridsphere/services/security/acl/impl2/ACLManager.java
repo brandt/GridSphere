@@ -51,8 +51,8 @@ public class ACLManager {
 
         UserACL rootacl = new UserACL();
         rootacl.setUserID(user.getID());
-        rootacl.setRoleID(SportletRole.SUPER);
-        rootacl.setGroupID(SportletGroup.getSuperGroup().getID());
+        rootacl.setRoleID(PortletRole.SUPER.getID());
+        rootacl.setGroupID(PortletGroup.SUPER.getID());
         rootacl.setStatus(UserACL.STATUS_APPROVED);
 
         try {
@@ -135,7 +135,7 @@ public class ACLManager {
                 log.error("User " + user.getFullName() + " did not requested a role with an accountrequest change");
             } else {
                 // we don't want to approve a superuserrole by an admin!
-                if (notapproved.getRoleID() != SportletRole.SUPER) {
+                if (notapproved.getRoleID() != PortletRole.SUPER.getID()) {
                     // delete the status the user has until now
                     UserACL approved = (UserACL) pm.restoreObject(command2);
                     if (approved != null) {
@@ -219,7 +219,7 @@ public class ACLManager {
     // @todo check the length of the second query string, could get too long!
 
         String command =
-            "select u from org.gridlab.gridsphere.services.security.acl.impl2.UserACL u where u.RoleID=\""+SportletRole.getSuperRole().getRole()+
+            "select u from org.gridlab.gridsphere.services.security.acl.impl2.UserACL u where u.RoleID=\""+PortletRole.SUPER.getRole()+
                 "\" and u.Status="+UserACL.STATUS_APPROVED;
         //log.info(command);
         List acl = listACL(command);
