@@ -368,7 +368,7 @@
 
 
     <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.layout.LayoutManagerPortlet">
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.layout.UserLayoutPortlet">
             <portlet-name>Layout Manager Portlet</portlet-name>
             <servlet-name>LayoutPortlet</servlet-name>
             <allows>
@@ -385,7 +385,7 @@
             </supports>
         </portlet-app>
 
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.layout.LayoutManagerPortlet.1">
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.layout.UserLayoutPortlet.1">
             <concrete-portlet>
                 <portlet-name>Layout Manager Portlet</portlet-name>
                 <default-locale>en</default-locale>

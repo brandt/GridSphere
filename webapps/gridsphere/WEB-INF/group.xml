@@ -13,7 +13,7 @@
         <required-role>USER</required-role>
     </portlet-role-info>
     <portlet-role-info>
-        <portlet-class>org.gridlab.gridsphere.portlets.core.layout.LayoutManagerPortlet.1</portlet-class>
+        <portlet-class>org.gridlab.gridsphere.portlets.core.layout.UserLayoutPortlet.1</portlet-class>
         <required-role>USER</required-role>
     </portlet-role-info>
     <portlet-role-info>
