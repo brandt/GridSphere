@@ -552,6 +552,11 @@
                             <entry>sortable</entry><entry>no</entry><entry>boolean: if true then the data in the table can be sorted by header</entry>
                         </row>
                     </tbody>
+                    <tbody>
+                        <row>
+                            <entry>zebra</entry><entry>no</entry><entry>boolean: if true then every other row will be highlighted</entry>
+                        </row>
+                    </tbody>
                 </tgroup>
             </table>
             <example>
@@ -596,6 +601,11 @@
                     <tbody>
                         <row>
                             <entry>header</entry><entry>no</entry><entry>boolean: true if this row is a header equivalent to &lt;th&gt; in HTML</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>zebra</entry><entry>no</entry><entry>boolean: true if this row should be darkened</entry>
                         </row>
                     </tbody>
                     <tbody>
@@ -740,6 +750,11 @@
                     </tbody>
                     <tbody>
                         <row>
+                            <entry>zebra</entry><entry>no</entry><entry>boolean: if true then every other row will be highlighted</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
                             <entry>key</entry><entry>no</entry><entry>string: name of the key to lookup localized text from
                             the <filename>WEB-INF/classes/Portlet_XX.properties</filename> localized properties file</entry>
                         </row>
@@ -788,9 +803,52 @@
     <ui:frame beanId="errorMessage">
 </ui:panel>]]>
                 </screen>
+                <para>
                 This creates a frame that uses the "errorMessge bean to render itself. The errorMessage bean is created
                 and values are set in the portlet. If no beanId of "errorMessage" has been defined (as in when the page
                 is first displayed) then no frame will be rendered.
+                </para>
+                <screen>
+<![CDATA[<ui:panel>
+    <ui:frame sortable="true" zebra="true">
+        <ui:tablerow>
+            <ui:tablecell>
+                <ui:text value="Oranges"/>
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:text value="0.59"/>
+            </ui:tablecell>
+        </ui:tablerow>
+        <ui:tablerow>
+            <ui:tablecell>
+                <ui:text value="Kiwis"/>
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:text value="0.79"/>
+            </ui:tablecell>
+        </ui:tablerow>
+    </ui:frame>
+</ui:panel>]]>
+                </screen>
+                This creates a data frame of fruits and prices that can be sorted per column and creates "zebra"
+                table rows where every other row is highlighted.
+
+                <screen>
+<![CDATA[<ui:panel>
+    <ui:frame value="Something bad happened!" style="error">
+</ui:panel>]]>
+                </screen>
+                This creates a frame that displays the specified error message in the error style.
+                <screen>
+<![CDATA[<ui:panel>
+    <ui:frame beanId="errorMessage">
+</ui:panel>]]>
+                </screen>
+                <para>
+                This creates a frame that uses the "errorMessge bean to render itself. The errorMessage bean is created
+                and values are set in the portlet. If no beanId of "errorMessage" has been defined (as in when the page
+                is first displayed) then no frame will be rendered.
+                </para>
             </example>
         </sect2>
 
