@@ -386,9 +386,8 @@ public class NameServiceImpl implements NameService, PortletServiceProvider {
                         the create() method of the persistencemanager.
                     </para>
                     <para>
-                        To retrieve the list of objects we need some knowledge of OQL. Please refer to the castordocumentaion
-                        on howto use that.
-                        The method restoreList() will return a list with results according to the query.
+                        The method restoreList() will return a list with results according to the query. To retrieve the list of objects we need some knowledge of OQL. Please refer to the castordocumentaion
+                        on howto use that or send e-mail to the GridSphere users list for more assistance.
                     </para>
                 </para>
             </para>

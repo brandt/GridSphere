@@ -13,6 +13,8 @@ import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.services.core.file.FileManagerService;
 
 import javax.servlet.UnavailableException;
+import javax.activation.FileDataSource;
+import javax.activation.DataHandler;
 import java.io.*;
 import java.util.List;
 import java.util.Iterator;
@@ -36,7 +38,7 @@ public class FileManagerPortlet extends ActionPortlet {
     }
 
     public void doViewUserFiles(FormEvent event) throws PortletException {
-        log.debug("in LoginPortlet: doViewUser");
+        log.debug("in FileManagerPortlet: doViewUser");
         PortletRequest request = event.getPortletRequest();
         User user = request.getUser();
 
@@ -50,11 +52,11 @@ public class FileManagerPortlet extends ActionPortlet {
             item.setValue(list[i]);
             lb.addBean(item);
         }
-        setNextPresentation(request, "filemanager/view.jsp");
+        setNextState(request, "filemanager/view.jsp");
     }
 
     public void uploadFile(FormEvent event) throws PortletException {
-        log.debug("in LoginPortlet: doUploadFile");
+        log.debug("in FileManagerPortlet: doUploadFile");
         try {
             FileInputBean fi = event.getFileInputBean("userfile");
             User user = event.getPortletRequest().getUser();
@@ -67,11 +69,11 @@ public class FileManagerPortlet extends ActionPortlet {
         } catch (IOException e) {
             setNextError(event.getPortletRequest(), "Unable to store uploaded file " + e.getMessage());
         }
-        setNextPresentation(event.getPortletRequest(), DEFAULT_VIEW_PAGE);
+        setNextState(event.getPortletRequest(), DEFAULT_VIEW_PAGE);
     }
 
     public void deleteFile(FormEvent event) throws PortletException {
-        log.debug("in LoginPortlet: deleteFile");
+        log.debug("in FileManagerPortlet: deleteFile");
         ListBoxBean lb = event.getListBoxBean("filelist");
         List files = lb.getSelectedValues();
         User user = event.getPortletRequest().getUser();
@@ -84,12 +86,12 @@ public class FileManagerPortlet extends ActionPortlet {
     }
 
     public void cancelEdit(FormEvent event) throws PortletException {
-        log.debug("in LoginPortlet: cancelEdit");
-        setNextPresentation(event.getPortletRequest(), DEFAULT_VIEW_PAGE);
+        log.debug("in FileManagerPortlet: cancelEdit");
+        setNextState(event.getPortletRequest(), DEFAULT_VIEW_PAGE);
     }
 
     public void saveFile(FormEvent event) throws PortletException {
-        log.debug("in LoginPortlet: saveFile");
+        log.debug("in FileManagerPortlet: saveFile");
         User user = event.getPortletRequest().getUser();
         PortletRequest req = event.getPortletRequest();
         //String fname = event.getAction().getParameter("fileName");
@@ -116,12 +118,54 @@ public class FileManagerPortlet extends ActionPortlet {
     }
 
     public void downloadFile(FormEvent event) throws PortletException {
-        log.debug("in LoginPortlet: downloadFile");
+        log.debug("in FileManagerPortlet: downloadFile");
+        ListBoxBean lb = event.getListBoxBean("filelist");
+        List files = lb.getSelectedValues();
+        PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
+        User user = req.getUser();
+        Iterator it = files.iterator();
+        String fileName = null;
+        while (it.hasNext()) {
+            fileName = (String)it.next();
+        }
+
+
+        try {
+            File file = userStorage.getFile(user, fileName);
+            // ... find the file you want ...
+            if (!file.exists()) {
+                throw new FileNotFoundException("Whaur is it? Ah cannae find it!");
+            }
+            log.debug("filename: " + fileName);
+            FileDataSource fds = new FileDataSource(file);
+            if (fds == null) {
+                log.debug("grr");
+            }
+            //res.setContentType(fds.getContentType());
+            log.debug("content type = " + fds.getContentType());
+
+            res.setContentLength((int)file.length());
+            // force a save as dialog in recent browsers.
+
+            res.setHeader("Content-disposition","attachment; filename="+fileName);
+
+            // you should use a datahandler to write out data from a datasource.
+            DataHandler handler = new DataHandler(fds);
+            handler.writeTo(res.getOutputStream());
+        } catch(FileNotFoundException e) {
+            //res.sendError(HttpServletResponse.SC_NOT_FOUND,e.getMessage());
+        } catch(SecurityException e) {
+            // this gets thrown if a security policy applies to the file. see java.io.File for details.
+            //response.sendError(HttpServletResponse.SC_FORBIDDEN,e.getMessage());
+        } catch(IOException ioe) {
+            //response.sendError(HttpServletResponse.SC_INTERNAL_SERVER,e.getMessage());
+        }
     }
 
     public void editFile(FormEvent event) throws PortletException {
 
-        log.debug("in LoginPortlet: viewFile");
+        log.debug("in FileManagerPortlet: viewFile");
         ListBoxBean lb = event.getListBoxBean("filelist");
         PortletRequest req = event.getPortletRequest();
         User user = req.getUser();
@@ -144,17 +188,17 @@ public class FileManagerPortlet extends ActionPortlet {
                     sb.append("\n");
                 }
                 fileTextArea.setValue(sb.toString());
-                setNextPresentation(req, "filemanager/edit.jsp");
+                setNextState(req, "filemanager/edit.jsp");
             } catch (FileNotFoundException e) {
                 log.error("Error opening file:" + file, e);
                 ErrorFrameBean error = event.getErrorFrameBean("errorFrame");
                 error.setValue("Unable to open file: " + file);
-                setNextPresentation(req, DEFAULT_VIEW_PAGE);
+                setNextState(req, DEFAULT_VIEW_PAGE);
             } catch (IOException e) {
                 log.error("Error opening file:" + file, e);
                 ErrorFrameBean error = event.getErrorFrameBean("errorFrame");
                 error.setValue("Unable to open file: " + file);
-                setNextPresentation(req, DEFAULT_VIEW_PAGE);
+                setNextState(req, DEFAULT_VIEW_PAGE);
             }
         }
     }

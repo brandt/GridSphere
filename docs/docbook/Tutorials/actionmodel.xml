@@ -14,14 +14,14 @@
         an Action Portlet Provider model for developing more sophisticated portlets.
     </para>
 
-   <sect1 id="actionmodel.intro"><title>Introduction</title>
+   <sect1 id="actionmodel.intro"><title>The ActionPortlet</title>
         <para>
         As described previously and in the Reference Guide, portlet development generally involves
         the implementation of an actionPerformed method and the doXXX render methods. In the general
         portlet lifecycle, the doView is invoked initially (when there is no inital action) which can
         produce output by using the &PortletResponse; to write directly to the output stream or by
         using the &PortletContext; to include a Java Server Page (JSP) used for presentation. In the
-        typically the presentation of a portlet will consist of standard HTML elements including forms,
+        typical case, the presentation of a portlet will consist of standard HTML elements including forms,
         checkboxes, input fields, submit buttons and other elements. Certain elements including
         hyperlinks, forms and submit buttons will generate actions that are trapped and used in the
         actionPerformed method of a portlet. The &ActionEvent; object available in the actionPerformed
@@ -55,20 +55,20 @@
        </para>
        <para>
         The &ActionPortlet; provides a few additional helper methods that are used for portlet navigation.
-        The <methodname>getNextPresentation</methodname> and <methodname>setNextPresentation</methodname> methods are used
+        The <methodname>getNextState</methodname> and <methodname>setNextState</methodname> methods are used
         after the completion of an action method to set the next presentation page that should be rendered.
         The page can be specified as either a JSP file or another render method that will get invoked (which
-        can then call setNextPresentation with a supplied JSP page to perform an include of a JSP page upon completion.)
+        can then call setNextState with a supplied JSP page to perform an include of a JSP page upon completion.)
         The following sample code illustrates how this works:
            <programlisting>
                public void doThis(FormEvent event)
                     // perform some business logic
                     Portlet req = event.getPortletRequest();
-                    setNextPresentation(req, "dothis.jsp");
+                    setNextState(req, "dothis.jsp");
 
                     // OR
 
-                    setNextPresentation(req, "renderThis");
+                    setNextState(req, "renderThis");
                }
 
                public void renderThis(PortletRequest req, PortletResponse res) {
@@ -177,7 +177,7 @@
         Now when an action is triggered from the user interface, the corresponding
         method is called in the portlet and can perform the required business logic before
         rendering the presentation. At the end of an action method, a portlet developer
-        calls the <methodname>setNextPresentation</methodname> method to set the presentation method
+        calls the <methodname>setNextState</methodname> method to set the presentation method
         or a JSP to be included. The following shows how the actionlink can be used to display a
         new view consisting of some text:
              <programlisting>
@@ -186,7 +186,7 @@
                // action methods
                public void doActionLink(FormEvent event) {
                     log.debug("in doActionLink");
-                    setNextPresentation(event.getPortletRequest(), "displayMessage");
+                    setNextState(event.getPortletRequest(), "displayMessage");
                }
 
                public void doActionSubmit(FormEvent event) {
@@ -232,7 +232,7 @@
                     TextBean tb = event.getTextBean("msg");
                     tb.setValue(value);
 
-                    setNextPresentation(event.getPortletRequest(), "simple.jsp");
+                    setNextState(event.getPortletRequest(), "simple.jsp");
                }
 
         </programlisting>

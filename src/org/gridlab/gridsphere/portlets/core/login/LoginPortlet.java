@@ -37,7 +37,7 @@ public class LoginPortlet extends ActionPortlet {
         PortletRequest request = event.getPortletRequest();
         User user = request.getUser();
         request.setAttribute("user", user);
-        setNextPresentation(request, "login/login.jsp");
+        setNextState(request, "login/login.jsp");
     }
 
     public void doConfigModules(FormEvent event) throws PortletException {
@@ -50,7 +50,7 @@ public class LoginPortlet extends ActionPortlet {
         log.debug(supportedModules.size() + "   " + activeModules.size());
         request.setAttribute("activeModules", activeModules);
         request.setAttribute("supportedModules", supportedModules);
-        setNextPresentation(request, "login/configure.jsp");
+        setNextState(request, "login/configure.jsp");
     }
 
     public void doTitle(PortletRequest request, PortletResponse response) throws PortletException, IOException {
@@ -58,10 +58,9 @@ public class LoginPortlet extends ActionPortlet {
         PrintWriter out = response.getWriter();
 
         if (user instanceof GuestUser) {
-
             out.println(getPortletSettings().getTitle(request.getLocale(), null));
         } else {
-            getPortletConfig().getContext().include("/jsp/login/login_title.jsp", request, response);
+            getPortletConfig().getContext().include("login/login_title.jsp", request, response);
         }
         /*
          ResourceBundle resBundle = ResourceBundle.getBundle("Portlet", locale);
@@ -80,7 +79,7 @@ public class LoginPortlet extends ActionPortlet {
             System.err.println("1. setting error key in frame");
             frame.setKey(errorKey);
         }
-        setNextPresentation(req, "doViewUser");
+        setNextState(req, "doViewUser");
     }
 
     public void configAuthModules(FormEvent event) throws PortletException {
@@ -122,7 +121,7 @@ public class LoginPortlet extends ActionPortlet {
             loginService.setActiveAuthModules(authModules);
         }
 
-        //setNextPresentation(req, "login/configure.jsp");
+        //setNextState(req, "login/configure.jsp");
 
     }
 
@@ -144,9 +143,9 @@ public class LoginPortlet extends ActionPortlet {
             }
         }
         if (isFound) {
-            setNextPresentation(event.getPortletRequest(), "login/module/configLDAPModule.jsp");
+            setNextState(event.getPortletRequest(), "login/module/configLDAPModule.jsp");
         } else {
-            setNextPresentation(event.getPortletRequest(), "login/module/moduleNotActive.jsp");
+            setNextState(event.getPortletRequest(), "login/module/moduleNotActive.jsp");
         }
     }
 
@@ -169,7 +168,7 @@ public class LoginPortlet extends ActionPortlet {
         }
         log.debug("Saving active login auth modules");
         loginService.setActiveAuthModules(newModules);
-        //setNextPresentation(event.getPortletRequest(), "login/configure.jsp");
+        //setNextState(event.getPortletRequest(), "login/configure.jsp");
     }
 
 }

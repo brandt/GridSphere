@@ -51,7 +51,7 @@ public class PortletApplicationManager extends ActionPortlet {
         List result = tomcat.getPortletAppList(webapps);
         event.getPortletRequest().setAttribute("result", result);
         //if (result != null) log.debug("result: " + result.getReturnCode() + " " + result.getDescription());
-        setNextPresentation(event.getPortletRequest(), "portletmanager/list.jsp");
+        setNextState(event.getPortletRequest(), "portletmanager/list.jsp");
     }
 
     public void doPortletManager(FormEvent event) throws PortletException {
@@ -140,7 +140,7 @@ public class PortletApplicationManager extends ActionPortlet {
         }
         req.setAttribute("result", result);
         if (result != null) log.debug("result: " + result.getReturnCode() + " " + result.getDescription());
-        setNextPresentation(req, "portletmanager/list.jsp");
+        setNextState(req, "portletmanager/list.jsp");
     }
 
 }
