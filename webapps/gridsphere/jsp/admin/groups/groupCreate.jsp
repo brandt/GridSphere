@@ -25,14 +25,14 @@
 <p>
 <% if (isPublic) { %>
     <ui:radiobutton beanId="groupVisibility" value="PUBLIC" selected="true"/>
-    <ui:text value="PUBLIC"/>
+    <ui:text value="GROUP_PUBLIC"/>
     <ui:radiobutton beanId="groupVisibility" value="PRIVATE"/>
-    <ui:text value="PRIVATE"/>
+    <ui:text value="GROUP_PRIVATE"/>
 <% } else { %>
     <ui:radiobutton beanId="groupVisibility" value="PUBLIC"/>
-    <ui:text value="PUBLIC"/>
+    <ui:text value="GROUP_PUBLIC"/>
     <ui:radiobutton beanId="groupVisibility" value="PRIVATE" selected="true"/>
-    <ui:text value="PRIVATE"/>
+    <ui:text value="GROUP_PRIVATE"/>
 <% } %>
 
 <h3><ui:text key="GROUP_SELECT_PORTLETS" style="nostyle"/></h3>
