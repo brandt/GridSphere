@@ -13,8 +13,10 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApp;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class PortletWrapper {
 
@@ -45,10 +47,14 @@ public class PortletWrapper {
      * normal initialization
      */
     public void init(HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        log.info("in PortletWrapper: init");
         req.setAttribute(PortletProperties.PORTLET_APPLICATION, portletApp);
         req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.INIT);
-        include(req, res);
+        try {
+            include(req, res);
+        } catch (Exception e) {
+            log.error("Unable to perform init");
+            throw new PortletException("Unable to perform init", e);
+        }
     }
 
     /**
@@ -63,9 +69,13 @@ public class PortletWrapper {
      * @param config the portlet configuration
      */
     public void destroy(HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        log.info("in PortletWrapper: destroy");
         req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.DESTROY);
-        include(req, res);
+        try {
+            include(req, res);
+        } catch (Exception e) {
+            log.error("Unable to perform destroy");
+            throw new PortletException("Unable to perform destroy", e);
+        }
     }
 
     /**
@@ -82,10 +92,14 @@ public class PortletWrapper {
      * @param settings the portlet settings
      */
     public void initConcrete(PortletSettings settings, HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        log.info("in PortletWrapper: initConcrete");
         req.setAttribute(PortletProperties.PORTLET_SETTINGS, settings);
         req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.INIT_CONCRETE);
-        include(req, res);
+        try {
+            include(req, res);
+        } catch (Exception e) {
+            log.error("Unable to perform initConcrete");
+            throw new PortletException("Unable to perform initConcrete", e);
+        }
     }
 
     /**
@@ -100,10 +114,14 @@ public class PortletWrapper {
      * @param settings the portlet settings
      */
     public void destroyConcrete(PortletSettings settings, HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        log.info("in PortletWrapper: destroyConcrete");
         req.setAttribute(PortletProperties.PORTLET_SETTINGS, settings);
         req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.DESTROY_CONCRETE);
-        include(req, res);
+        try {
+            include(req, res);
+        } catch (Exception e) {
+            log.error("Unable to perform destroyConcrete");
+            throw new PortletException("Unable to perform destroyConcrete", e);
+        }
     }
 
     /**
@@ -119,12 +137,15 @@ public class PortletWrapper {
      * @throws IOException if the streaming causes an I/O problem
      */
     public void service(String concretePortletID, HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        log.info("in PortletWrapper: service");
         req.setAttribute(GridSphereProperties.PORTLETID, concretePortletID);
         req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.SERVICE);
-        include(req, res);
+        try {
+            include(req, res);
+        } catch (Exception e) {
+            log.error("Unable to perform service on concrete portlet: " + concretePortletID);
+            throw new PortletException("Unable to perform service on concrete portlet: " + concretePortletID, e);
+        }
     }
-
 
     /**
      * Description copied from interface: PortletSessionListener
@@ -135,9 +156,13 @@ public class PortletWrapper {
      * @param request the portlet request
      */
     public void login(HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        log.info("in PortletWrapper: login");
         req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.LOGIN);
-        include(req, res);
+        try {
+            include(req, res);
+        } catch (Exception e) {
+            log.error("Unable to perform login");
+            throw new PortletException("Unable to perform login", e);
+        }
     }
 
     /**
@@ -150,9 +175,13 @@ public class PortletWrapper {
      * @param session the portlet session
      */
     public void logout(HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        log.info("in PortletWrapper: logout");
         req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.LOGOUT);
-        include(req, res);
+        try {
+            include(req, res);
+        } catch (Exception e) {
+            log.error("Unable to perform logout");
+            throw new PortletException("Unable to perform logout", e);
+        }
     }
 
     /**
@@ -164,11 +193,15 @@ public class PortletWrapper {
      * @throws PortletException if the listener has trouble fulfilling the request
      */
     public void actionPerformed(PortletAction action, HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        log.info("in PortletWrapper: actionPerformed");
         req.setAttribute(PortletProperties.ACTION_EVENT, action);
         req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.SERVICE);
         req.setAttribute(PortletProperties.PORTLET_ACTION_METHOD, PortletProperties.ACTION_PERFORMED);
-        include(req, res);
+        try {
+            include(req, res);
+        } catch (Exception e) {
+            log.error("Unable to perform actionPerformed");
+            throw new PortletException("Unable to perform actionPerformed", e);
+        }
     }
 
     /**
@@ -179,11 +212,15 @@ public class PortletWrapper {
      * @throws PortletException if the listener has trouble fulfilling the request
      */
     public void messageReceived(MessageEvent event, HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        log.info("in PortletWrapper: messageReceived");
         req.setAttribute(PortletProperties.MESSAGE_EVENT, event);
         req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.SERVICE);
         req.setAttribute(PortletProperties.PORTLET_ACTION_METHOD, PortletProperties.MESSAGE_RECEIVED);
-        include(req, res);
+        try {
+            include(req, res);
+        } catch (Exception e) {
+            log.error("Unable to perform messageReceived");
+            throw new PortletException("Unable to perform messageReceived", e);
+        }
     }
 
     /**
@@ -203,23 +240,14 @@ public class PortletWrapper {
      * @throws java.io.IOException if the streaming causes an I/O problem
      */
     public void doTitle(HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        log.info("in PortletWrapper: doTitle");
         req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.SERVICE);
         req.setAttribute(PortletProperties.PORTLET_ACTION_METHOD, PortletProperties.DO_TITLE);
-        include(req, res);
-    }
-
-    /**
-     * Notifies this listener that a portlet window has been detached.
-     *
-     * @param event the window event
-     */
-    public void windowDetached(WindowEvent event, HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        log.info("in PortletWrapper: windowDetached");
-        req.setAttribute(PortletProperties.MESSAGE_EVENT, event);
-        req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.SERVICE);
-        req.setAttribute(PortletProperties.PORTLET_ACTION_METHOD, PortletProperties.WINDOW_DETACHED);
-        include(req, res);
+        try {
+            include(req, res);
+        } catch (Exception e) {
+            log.error("Unable to perform doTitle");
+            throw new PortletException("Unable to perform doTitle", e);
+        }
     }
 
     /**
@@ -227,72 +255,24 @@ public class PortletWrapper {
      *
      * @param event the window event
      */
-    public void windowMaximized(WindowEvent event, HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        log.info("in PortletWrapper: windowMaximized");
-        req.setAttribute(PortletProperties.MESSAGE_EVENT, event);
+    public void windowEvent(WindowEvent event, HttpServletRequest req, HttpServletResponse res) throws PortletException {
+        log.info("in PortletWrapper: windowEvent");
+        req.setAttribute(PortletProperties.WINDOW_EVENT, event);
         req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.SERVICE);
-        req.setAttribute(PortletProperties.PORTLET_ACTION_METHOD, PortletProperties.WINDOW_MAXIMIZED);
-        include(req, res);
+        req.setAttribute(PortletProperties.PORTLET_ACTION_METHOD, PortletProperties.WINDOW_EVENT);
+        try {
+            include(req, res);
+        } catch (Exception e) {
+            log.error("Unable to perform windowEvent");
+            throw new PortletException("Unable to perform windowEvent", e);
+        }
     }
 
-    /**
-     * Notifies this listener that a portlet window has been minimized.
-     *
-     * @param event the window event
-     */
-    public void windowMinimized(WindowEvent event, HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        log.info("in PortletWrapper: windowMinimized");
-        req.setAttribute(PortletProperties.MESSAGE_EVENT, event);
-        req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.SERVICE);
-        req.setAttribute(PortletProperties.PORTLET_ACTION_METHOD, PortletProperties.WINDOW_MINIMIZED);
-        include(req, res);
-    }
-
-    /**
-     * Notifies this listener that a portlet window is about to be closed.
-     *
-     * @param event the window event
-     */
-    public void windowClosing(WindowEvent event, HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        log.info("in PortletWrapper: windowClosing");
-        req.setAttribute(PortletProperties.MESSAGE_EVENT, event);
-        req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.SERVICE);
-        req.setAttribute(PortletProperties.PORTLET_ACTION_METHOD, PortletProperties.WINDOW_CLOSING);
-        include(req, res);
-    }
-
-    /**
-     * Notifies this listener that a portlet window has been closed.
-     *
-     * @param event the window event
-     */
-    public void windowClosed(WindowEvent event, HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        log.info("in PortletWrapper: windowClosed");
-        req.setAttribute(PortletProperties.MESSAGE_EVENT, event);
-        req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.SERVICE);
-        req.setAttribute(PortletProperties.PORTLET_ACTION_METHOD, PortletProperties.WINDOW_CLOSED);
-        include(req, res);
-    }
-
-    /**
-     * Notifies this listener that a portlet window has been restored from being minimized or maximized, respectively.
-     *
-     * @param event the window event
-     */
-    public void windowRestored(WindowEvent event, HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        log.info("in PortletWrapper: windowRestored");
-        req.setAttribute(PortletProperties.MESSAGE_EVENT, event);
-        req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.SERVICE);
-        req.setAttribute(PortletProperties.PORTLET_ACTION_METHOD, PortletProperties.WINDOW_RESTORED);
-        include(req, res);
-    }
-
-    protected void include(HttpServletRequest req, HttpServletResponse res) throws PortletException {
+    protected void include(HttpServletRequest req, HttpServletResponse res)  {
         try {
             rd.include(req, res);
         } catch (Exception e) {
-            log.error("in PortletWrapper:", e);
-            throw new PortletException(e);
+            e.printStackTrace();
         }
     }
 
