@@ -69,10 +69,12 @@
         <mkdir dir="${project.dir}/src"/>
         <mkdir dir="${project.dir}/lib"/>
         <mkdir dir="${project.dir}/config"/>
-        <copy file="config/log4j.properties" tofile="${project.dir}/config/log4j.properties"/>
 
         <mkdir dir="${project.dir}/webapp"/>
         <mkdir dir="${project.dir}/webapp/WEB-INF"/>
+        <mkdir dir="${project.dir}/webapp/WEB-INF/classes"/>
+        <copy file="config/log4j.properties" tofile="${project.dir}/webapp/WEB-INF/classes/log4j.properties"/>
+
         <mkdir dir="${project.dir}/webapp/WEB-INF/persistence"/>
         <copy todir="${project.dir}/webapp/WEB-INF">
             <fileset dir="config/template"/>

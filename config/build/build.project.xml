@@ -184,7 +184,7 @@ Copyright:
             classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
             classpathref="classpath"/>
         <dbtask
-            configdir="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/persistence/"
+            configdir="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF"
             action="CREATE"/>
     </target>
 
@@ -207,15 +207,8 @@ Copyright:
     <!-- =================================================================== -->
     <target name="portlets-jar" depends="compile" description="Creates portlets JAR">
         <echo>Creating JAR for Tomcat</echo>
-
-        <mkdir dir="${build.classes}/${project.name}"/>
-
-        <copy file="config/log4j.properties"
-            tofile="${build.classes}/${project.name}/log4j.properties"/>
-
         <jar jarfile="${build.lib}/${project.name}.jar" basedir="${build.classes}">
             <include name="**/portlets/**"/>
-            <include name="${project.name}/**"/>
         </jar>
     </target>
 
@@ -224,15 +217,8 @@ Copyright:
     <!-- =================================================================== -->
     <target name="services-jar" depends="compile" description="Creates services JAR">
         <echo>Creating services JAR for Tomcat</echo>
-
-        <mkdir dir="${build.classes}/${project.name}"/>
-
-        <copy file="config/log4j.properties"
-            tofile="${build.classes}/${project.name}/log4j.properties"/>
-
         <jar jarfile="${build.lib}/${project.name}-services.jar" basedir="${build.classes}">
             <include name="**/services/**"/>
-            <include name="${project.name}/**"/>
         </jar>
     </target>
 
