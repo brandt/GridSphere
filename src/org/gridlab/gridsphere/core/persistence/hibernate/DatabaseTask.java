@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -110,9 +111,8 @@ public class DatabaseTask extends Task {
                     PersistenceManagerRdbms rdbms = PersistenceManagerFactory.createGridSphereRdbms();
                     try {
                         // check if there is the user table, should be enough
-                        List r = rdbms.restoreList("from " + User.class.getName());
+                        List r = rdbms.restoreList("select uzer from " + SportletUserImpl.class.getName() + " uzer");
                     } catch (PersistenceManagerException e) {
-
                         throw new BuildException("DB Creation dbError 6. " + NO_CORE_TABLES + " " + NOT_INSTALLED);
                     }
                 }

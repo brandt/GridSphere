@@ -205,6 +205,11 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         Query q = null;
         try {
             session = factory.openSession();
+        } catch (HibernateException e) {
+            log.error("Unable to get hibernate session!!", e);
+            throw e;
+        }
+        try {
             tx = null;
             tx = session.beginTransaction();
             switch (command) {
@@ -231,7 +236,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             }
 
             tx.commit();
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             if (tx != null) {
                 tx.rollback();
             }
