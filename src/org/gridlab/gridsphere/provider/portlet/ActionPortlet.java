@@ -48,6 +48,10 @@ public class ActionPortlet extends AbstractPortlet {
         super.initConcrete(settings);
     }
 
+    protected void setFileDownloadEvent(PortletRequest req, String fileName, String path) {
+        req.setAttribute("FMP_filename", fileName);
+        req.setAttribute("FMP_filepath", path);
+    }
     /**
      * Sets the next display state. The state specified may be either a JSP or it can
      * be another method name to invoke.
@@ -93,30 +97,37 @@ public class ActionPortlet extends AbstractPortlet {
 
     /**
      * Returns the title to display in the portlet
+     * Doesn't work since title rendering occurs before title is set!
      *
+     * @deprecated
      * @param request the <code>PortletRequest</code>
      * @return the title to display in the portlet
      */
     public String getNextTitle(PortletRequest request) {
         String id = request.getPortletSettings().getConcretePortletID();
+        log.debug("setting in attribute " + id+".title");
         String title = (String)request.getAttribute(id+".title");
         if (title == null) {
             Locale locale = request.getLocale();
             title = getPortletSettings().getTitle(locale, null);
-            System.err.println("Printing default title: " + title);
+            log.debug("Printing default title: " + title);
         }
+        log.debug("next title= " +title);
         return title;
     }
 
     /**
      * Sets the title to display in the portlet
+     * Doesn't work since title rendering occurs before title is set!
      *
+     * @deprecated
      * @param request the <code>PortletRequest</code>
      * @param title the title display in the portlet
      */
     public void setNextTitle(PortletRequest request, String title) {
         this.log.debug("Setting title to " + title);
         String id = request.getPortletSettings().getConcretePortletID();
+        System.err.println("in setNextT: in attribute " + id + ".title");
         request.setAttribute(id + ".title", title);
     }
 
@@ -367,6 +378,7 @@ public class ActionPortlet extends AbstractPortlet {
         log.debug("in doTitle");
         PrintWriter out = response.getWriter();
         String title = getNextTitle(request);
+
         out.println(title);
     }
 
@@ -380,337 +392,337 @@ public class ActionPortlet extends AbstractPortlet {
     }
 
     public String getParameter(PortletRequest request, String param) {
-            String value = request.getParameter(param);
-            if (value == null)
-                return "";
-            else
-                return value;
+        String value = request.getParameter(param);
+        if (value == null)
+            return "";
+        else
+            return value;
+    }
+
+    public String getParameter(PortletRequest request, String param, String defaultValue) {
+        String value = request.getParameter(param);
+        if (value == null)
+            return defaultValue;
+        else
+            return value;
+    }
+
+    public String[] getParameterValues(PortletRequest request, String param) {
+        String values[] = request.getParameterValues(param);
+
+        if (values == null)
+            return new String[0];
+        else
+            return values;
+    }
+
+    public int getParameterAsInt(PortletRequest request, String param) {
+        return getParameterAsInt(request, param, 0);
+    }
+
+    public int getParameterAsInt(PortletRequest request, String param, int defaultValue) {
+        String value = request.getParameter(param);
+        if (value == null)
+            return defaultValue;
+        if (value.equals(""))
+            return defaultValue;
+        try {
+            return (new Integer(value)).intValue();
+        } catch (Exception e) {
+            return defaultValue;
         }
+    }
 
-        public String getParameter(PortletRequest request, String param, String defaultValue) {
-            String value = request.getParameter(param);
-            if (value == null)
-                return defaultValue;
-            else
-                return value;
-        }
-
-        public String[] getParameterValues(PortletRequest request, String param) {
-            String values[] = request.getParameterValues(param);
-
-            if (values == null)
-                return new String[0];
-            else
-                return values;
-        }
-
-        public int getParameterAsInt(PortletRequest request, String param) {
-            return getParameterAsInt(request, param, 0);
-        }
-
-        public int getParameterAsInt(PortletRequest request, String param, int defaultValue) {
-            String value = request.getParameter(param);
-            if (value == null)
-                return defaultValue;
-            if (value.equals(""))
-                return defaultValue;
-            try {
-                return (new Integer(value)).intValue();
-            } catch (Exception e) {
-                return defaultValue;
-            }
-        }
-
-        public int[] getParameterValuesAsInt(PortletRequest request, String param) {
-            String values[] = request.getParameterValues(param);
-            if (values == null) {
-                return new int[0];
-            } else {
-                int objs[] = new int[values.length];
-                for (int ii = 0; ii < values.length; ++ii) {
-                    String value = values[ii];
-                    try {
-                        objs[ii] = (new Integer(value)).intValue();
-                    } catch (Exception e) {
-                        objs[ii] = 0;
-                    }
+    public int[] getParameterValuesAsInt(PortletRequest request, String param) {
+        String values[] = request.getParameterValues(param);
+        if (values == null) {
+            return new int[0];
+        } else {
+            int objs[] = new int[values.length];
+            for (int ii = 0; ii < values.length; ++ii) {
+                String value = values[ii];
+                try {
+                    objs[ii] = (new Integer(value)).intValue();
+                } catch (Exception e) {
+                    objs[ii] = 0;
                 }
-                return objs;
             }
+            return objs;
         }
+    }
 
-        public long getParameterAsLng(PortletRequest request, String param) {
-            return getParameterAsLng(request, param, 0);
+    public long getParameterAsLng(PortletRequest request, String param) {
+        return getParameterAsLng(request, param, 0);
+    }
+
+    public long getParameterAsLng(PortletRequest request, String param, long defaultValue) {
+        String value = request.getParameter(param);
+        if (value == null)
+            return defaultValue;
+        if (value.equals(""))
+            return defaultValue;
+        try {
+            return (new Long(value)).longValue();
+        } catch (Exception e) {
+            return defaultValue;
         }
+    }
 
-        public long getParameterAsLng(PortletRequest request, String param, long defaultValue) {
-            String value = request.getParameter(param);
-            if (value == null)
-                return defaultValue;
-            if (value.equals(""))
-                return defaultValue;
-            try {
-                return (new Long(value)).longValue();
-            } catch (Exception e) {
-                return defaultValue;
-            }
-        }
-
-        public long[] getParameterValuesAsLng(PortletRequest request, String param) {
-            String values[] = request.getParameterValues(param);
-            if (values == null) {
-                return new long[0];
-            } else {
-                long objs[] = new long[values.length];
-                for (int ii = 0; ii < values.length; ++ii) {
-                    String value = values[ii];
-                    try {
-                        objs[ii] = (new Long(value)).longValue();
-                    } catch (Exception e) {
-                        objs[ii] = 0;
-                    }
+    public long[] getParameterValuesAsLng(PortletRequest request, String param) {
+        String values[] = request.getParameterValues(param);
+        if (values == null) {
+            return new long[0];
+        } else {
+            long objs[] = new long[values.length];
+            for (int ii = 0; ii < values.length; ++ii) {
+                String value = values[ii];
+                try {
+                    objs[ii] = (new Long(value)).longValue();
+                } catch (Exception e) {
+                    objs[ii] = 0;
                 }
-                return objs;
             }
+            return objs;
         }
+    }
 
-        public float getParameterAsFlt(PortletRequest request, String param) {
-            return getParameterAsFlt(request, param, (float)0.0);
+    public float getParameterAsFlt(PortletRequest request, String param) {
+        return getParameterAsFlt(request, param, (float)0.0);
+    }
+
+    public float getParameterAsFlt(PortletRequest request, String param, float defaultValue) {
+        String value = request.getParameter(param);
+        if (value == null)
+            return defaultValue;
+        if (value.equals(""))
+            return defaultValue;
+        try {
+            return (new Float(value)).floatValue();
+        } catch (Exception e) {
+            return defaultValue;
         }
+    }
 
-        public float getParameterAsFlt(PortletRequest request, String param, float defaultValue) {
-            String value = request.getParameter(param);
-            if (value == null)
-                return defaultValue;
-            if (value.equals(""))
-                return defaultValue;
-            try {
-                return (new Float(value)).floatValue();
-            } catch (Exception e) {
-                return defaultValue;
-            }
-        }
-
-        public float[] getParameterValuesAsFlt(PortletRequest request, String param) {
-            String values[] = request.getParameterValues(param);
-            if (values == null) {
-                return new float[0];
-            } else {
-                float objs[] = new float[values.length];
-                for (int ii = 0; ii < values.length; ++ii) {
-                    String value = values[ii];
-                    try {
-                        objs[ii] = (new Float(value)).floatValue();
-                    } catch (Exception e) {
-                        objs[ii] = 0;
-                    }
+    public float[] getParameterValuesAsFlt(PortletRequest request, String param) {
+        String values[] = request.getParameterValues(param);
+        if (values == null) {
+            return new float[0];
+        } else {
+            float objs[] = new float[values.length];
+            for (int ii = 0; ii < values.length; ++ii) {
+                String value = values[ii];
+                try {
+                    objs[ii] = (new Float(value)).floatValue();
+                } catch (Exception e) {
+                    objs[ii] = 0;
                 }
-                return objs;
             }
+            return objs;
         }
+    }
 
-        public double getParameterAsDbl(PortletRequest request, String param) {
-            return getParameterAsDbl(request, param, 0.0);
+    public double getParameterAsDbl(PortletRequest request, String param) {
+        return getParameterAsDbl(request, param, 0.0);
+    }
+
+    public double getParameterAsDbl(PortletRequest request, String param, double defaultValue) {
+        String value = request.getParameter(param);
+        if (value == null)
+            return defaultValue;
+        if (value.equals(""))
+            return defaultValue;
+        try {
+            return (new Double(value)).doubleValue();
+        } catch (Exception e) {
+            return defaultValue;
         }
-
-        public double getParameterAsDbl(PortletRequest request, String param, double defaultValue) {
-            String value = request.getParameter(param);
-            if (value == null)
-                return defaultValue;
-            if (value.equals(""))
-                return defaultValue;
-            try {
-                return (new Double(value)).doubleValue();
-            } catch (Exception e) {
-                return defaultValue;
-            }
-        }
+    }
 
 
-        public double[] getParameterValuesAsDbl(PortletRequest request, String param) {
-            String values[] = request.getParameterValues(param);
-            if (values == null) {
-                return new double[0];
-            } else {
-                double objs[] = new double[values.length];
-                for (int ii = 0; ii < values.length; ++ii) {
-                    String value = values[ii];
-                    try {
-                        objs[ii] = (new Double(value)).doubleValue();
-                    } catch (Exception e) {
-                        objs[ii] = 0;
-                    }
+    public double[] getParameterValuesAsDbl(PortletRequest request, String param) {
+        String values[] = request.getParameterValues(param);
+        if (values == null) {
+            return new double[0];
+        } else {
+            double objs[] = new double[values.length];
+            for (int ii = 0; ii < values.length; ++ii) {
+                String value = values[ii];
+                try {
+                    objs[ii] = (new Double(value)).doubleValue();
+                } catch (Exception e) {
+                    objs[ii] = 0;
                 }
-                return objs;
             }
+            return objs;
         }
+    }
 
-        public boolean getParameterAsBool(PortletRequest request, String param) {
-            String value = request.getParameter(param);
-            if (value == null) return false;
-            if (value.equals("")) return false;
-            if (value.equals("true")) return true;
-            return false;
+    public boolean getParameterAsBool(PortletRequest request, String param) {
+        String value = request.getParameter(param);
+        if (value == null) return false;
+        if (value.equals("")) return false;
+        if (value.equals("true")) return true;
+        return false;
+    }
+
+    public boolean[] getParameterValuesAsBool(PortletRequest request, String param) {
+        String values[] = request.getParameterValues(param);
+        if (values == null) {
+            return new boolean[0];
+        } else {
+            boolean objs[] = new boolean[values.length];
+            for (int ii = 0; ii < values.length; ++ii) {
+                String value = values[ii];
+                if (value.equals("")) objs[ii] = false;
+                if (value.equals("true")) objs[ii] = true;
+                objs[ii] = false;
+            }
+            return objs;
         }
+    }
 
-        public boolean[] getParameterValuesAsBool(PortletRequest request, String param) {
-            String values[] = request.getParameterValues(param);
-            if (values == null) {
-                return new boolean[0];
-            } else {
-                boolean objs[] = new boolean[values.length];
-                for (int ii = 0; ii < values.length; ++ii) {
-                    String value = values[ii];
-                    if (value.equals("")) objs[ii] = false;
-                    if (value.equals("true")) objs[ii] = true;
-                    objs[ii] = false;
+    public Integer getParameterAsInteger(PortletRequest request, String param) {
+        String value = request.getParameter(param);
+        if (value == null)
+            return (new Integer(0));
+        if (value.equals("")) value = "0";
+        try {
+            return (new Integer(value));
+        } catch (Exception e) {
+            return (new Integer(0));
+        }
+    }
+
+    public Integer[] getParameterValuesAsInteger(PortletRequest request, String param) {
+        String values[] = request.getParameterValues(param);
+        if (values == null) {
+            return new Integer[0];
+        } else {
+            Integer objs[] = new Integer[values.length];
+            for (int ii = 0; ii < values.length; ++ii) {
+                String value = values[ii];
+                try {
+                    objs[ii] = (new Integer(value));
+                } catch (Exception e) {
+                    objs[ii] = (new Integer(0));
                 }
-                return objs;
             }
+            return objs;
         }
+    }
 
-        public Integer getParameterAsInteger(PortletRequest request, String param) {
-            String value = request.getParameter(param);
-            if (value == null)
-                return (new Integer(0));
-            if (value.equals("")) value = "0";
-            try {
-                return (new Integer(value));
-            } catch (Exception e) {
-                return (new Integer(0));
-            }
+    public Float getParameterAsFloat(PortletRequest request, String param) {
+        String value = request.getParameter(param);
+        if (value == null)
+            return (new Float(0.0));
+        if (value.equals("")) value = "0";
+        try {
+            return (new Float(value));
+        } catch (Exception e) {
+            return (new Float(0.0));
         }
+    }
 
-        public Integer[] getParameterValuesAsInteger(PortletRequest request, String param) {
-            String values[] = request.getParameterValues(param);
-            if (values == null) {
-                return new Integer[0];
-            } else {
-                Integer objs[] = new Integer[values.length];
-                for (int ii = 0; ii < values.length; ++ii) {
-                    String value = values[ii];
-                    try {
-                        objs[ii] = (new Integer(value));
-                    } catch (Exception e) {
-                        objs[ii] = (new Integer(0));
-                    }
+    public Float[] getParameterValuesAsFloat(PortletRequest request, String param) {
+        String values[] = request.getParameterValues(param);
+        if (values == null) {
+            return new Float[0];
+        } else {
+            Float objs[] = new Float[values.length];
+            for (int ii = 0; ii < values.length; ++ii) {
+                String value = values[ii];
+                try {
+                    objs[ii] = (new Float(value));
+                } catch (Exception e) {
+                    objs[ii] = (new Float(0.0));
                 }
-                return objs;
             }
+            return objs;
         }
+    }
 
-        public Float getParameterAsFloat(PortletRequest request, String param) {
-            String value = request.getParameter(param);
-            if (value == null)
-                return (new Float(0.0));
-            if (value.equals("")) value = "0";
-            try {
-                return (new Float(value));
-            } catch (Exception e) {
-                return (new Float(0.0));
-            }
+    public Double getParameterAsDouble(PortletRequest request, String param) {
+        String value = request.getParameter(param);
+        if (value == null)
+            return (new Double(0.0));
+        if (value.equals("")) value = "0";
+        try {
+            return (new Double(value));
+        } catch (Exception e) {
+            return (new Double(0.0));
         }
+    }
 
-        public Float[] getParameterValuesAsFloat(PortletRequest request, String param) {
-            String values[] = request.getParameterValues(param);
-            if (values == null) {
-                return new Float[0];
-            } else {
-                Float objs[] = new Float[values.length];
-                for (int ii = 0; ii < values.length; ++ii) {
-                    String value = values[ii];
-                    try {
-                        objs[ii] = (new Float(value));
-                    } catch (Exception e) {
-                        objs[ii] = (new Float(0.0));
-                    }
+    public Double[] getParameterValuesAsDouble(PortletRequest request, String param) {
+        String values[] = request.getParameterValues(param);
+        if (values == null) {
+            return new Double[0];
+        } else {
+            Double objs[] = new Double[values.length];
+            for (int ii = 0; ii < values.length; ++ii) {
+                String value = values[ii];
+                try {
+                    objs[ii] = (new Double(value));
+                } catch (Exception e) {
+                    objs[ii] = (new Double(0.0));
                 }
-                return objs;
             }
+            return objs;
         }
+    }
 
-        public Double getParameterAsDouble(PortletRequest request, String param) {
-            String value = request.getParameter(param);
-            if (value == null)
-                return (new Double(0.0));
-            if (value.equals("")) value = "0";
-            try {
-                return (new Double(value));
-            } catch (Exception e) {
-                return (new Double(0.0));
+    public Boolean getParameterAsBoolean(PortletRequest request, String param) {
+        String value = request.getParameter(param);
+        if (value == null) return new Boolean(false);
+        if (value.equals("")) return new Boolean(false);
+        if (value.equals("true")) return new Boolean(true);
+        return new Boolean(false);
+    }
+
+    public Boolean[] getParameterValuesAsBoolean(PortletRequest request, String param) {
+        String values[] = request.getParameterValues(param);
+        if (values == null) {
+            return new Boolean[0];
+        } else {
+            Boolean objs[] = new Boolean[values.length];
+            for (int ii = 0; ii < values.length; ++ii) {
+                String value = values[ii];
+                if (value.equals("")) objs[ii] = new Boolean(false);
+                if (value.equals("true")) objs[ii] = new Boolean(true);
+                objs[ii] = new Boolean(false);
             }
+            return objs;
         }
+    }
 
-        public Double[] getParameterValuesAsDouble(PortletRequest request, String param) {
-            String values[] = request.getParameterValues(param);
-            if (values == null) {
-                return new Double[0];
-            } else {
-                Double objs[] = new Double[values.length];
-                for (int ii = 0; ii < values.length; ++ii) {
-                    String value = values[ii];
-                    try {
-                        objs[ii] = (new Double(value));
-                    } catch (Exception e) {
-                        objs[ii] = (new Double(0.0));
-                    }
-                }
-                return objs;
+    public List getParameterValuesAsList(PortletRequest request, String param) {
+        // Create list for values
+        List listValues = new Vector();
+        // Get parameter values
+        String paramValues[] = getParameterValues(request, param);
+        for (int ii = 0; ii < paramValues.length; ++ii) {
+            listValues.add(paramValues[ii]);
+        }
+        return listValues;
+    }
+
+    public Map getParameterValuesAsMap(PortletRequest request, String param) {
+        // Create list for values
+        HashMap mapValues = new HashMap();
+        // Get parameter values
+        String paramValues[] = getParameterValues(request, param);
+        for (int ii = 0; ii < paramValues.length; ++ii) {
+            String paramValue = paramValues[ii];
+            int index = paramValue.indexOf(":");
+            if (index < 0) {
+                continue;
             }
+            String key = paramValue.substring(0, index);
+            String value = paramValue.substring(index+1,paramValue.length());
+            mapValues.put(key, value);
         }
-
-        public Boolean getParameterAsBoolean(PortletRequest request, String param) {
-            String value = request.getParameter(param);
-            if (value == null) return new Boolean(false);
-            if (value.equals("")) return new Boolean(false);
-            if (value.equals("true")) return new Boolean(true);
-            return new Boolean(false);
-        }
-
-        public Boolean[] getParameterValuesAsBoolean(PortletRequest request, String param) {
-            String values[] = request.getParameterValues(param);
-            if (values == null) {
-                return new Boolean[0];
-            } else {
-                Boolean objs[] = new Boolean[values.length];
-                for (int ii = 0; ii < values.length; ++ii) {
-                    String value = values[ii];
-                    if (value.equals("")) objs[ii] = new Boolean(false);
-                    if (value.equals("true")) objs[ii] = new Boolean(true);
-                    objs[ii] = new Boolean(false);
-                }
-                return objs;
-            }
-        }
-
-        public List getParameterValuesAsList(PortletRequest request, String param) {
-            // Create list for values
-            List listValues = new Vector();
-            // Get parameter values
-            String paramValues[] = getParameterValues(request, param);
-            for (int ii = 0; ii < paramValues.length; ++ii) {
-                listValues.add(paramValues[ii]);
-            }
-            return listValues;
-        }
-
-        public Map getParameterValuesAsMap(PortletRequest request, String param) {
-            // Create list for values
-            HashMap mapValues = new HashMap();
-            // Get parameter values
-            String paramValues[] = getParameterValues(request, param);
-            for (int ii = 0; ii < paramValues.length; ++ii) {
-                String paramValue = paramValues[ii];
-                int index = paramValue.indexOf(":");
-                if (index < 0) {
-                    continue;
-                }
-                String key = paramValue.substring(0, index);
-                String value = paramValue.substring(index+1,paramValue.length());
-                mapValues.put(key, value);
-            }
-            return mapValues;
-        }
+        return mapValues;
+    }
 
 
 
