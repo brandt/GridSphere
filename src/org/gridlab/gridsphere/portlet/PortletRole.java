@@ -5,6 +5,9 @@
  */
 package org.gridlab.gridsphere.portlet;
 
+import java.io.Serializable;
+import java.util.Comparator;
+
 
 /**
  * The <code>PortletRole</code> describes the supported portlet roles used
@@ -15,7 +18,7 @@ package org.gridlab.gridsphere.portlet;
  *
  * @see org.gridlab.gridsphere.portlet.PortletGroup
  */
-public class PortletRole {
+public class PortletRole implements Serializable, Comparator {
 
     private int role;
 
@@ -99,6 +102,16 @@ public class PortletRole {
             tagstring = "SUPER";
         }
         return tagstring;
+    }
+
+    public int compare(Object left, Object right) {
+        int leftID  =  ((PortletRole)left).getRole();
+        int rightID  = ((PortletRole)right).getRole();
+        int result;
+        if ( leftID < rightID ) { result = -1; }
+        else if ( leftID > rightID ) { result = 1; }
+        else { result = 0; }
+        return result;
     }
 
     public boolean equals(Object object) {
