@@ -43,20 +43,6 @@ public class ListBoxTag extends ContainerTag {
 
         System.err.println("creating new list");
 
-        if (!beanId.equals("")) {
-            listbox = (ListBoxBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
-            if (listbox == null) {
-                listbox = new ListBoxBean();
-                this.setBaseComponentBean(listbox);
-                listbox.setSize(size);
-            } else {
-                this.updateBaseComponentBean(listbox);
-            }
-        } else {
-            listbox = new ListBoxBean();
-            this.setBaseComponentBean(listbox);
-            listbox.setSize(size);
-        }
 
         ContainerTag rowTag = (ContainerTag)getParent();
         if (rowTag == null) return SKIP_BODY;
@@ -66,16 +52,27 @@ public class ListBoxTag extends ContainerTag {
     public int doEndTag() throws JspException {
 
         if (!beanId.equals("")) {
-            if (listbox.getSize() == 0) listbox.setSize(size);
+            listbox = (ListBoxBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            if (listbox == null) {
+                listbox = new ListBoxBean(beanId);
+                listbox.setSize(size);
+                this.setBaseComponentBean(listbox);
+            } else {
+                this.updateBaseComponentBean(listbox);
+            }
         } else {
+            listbox = new ListBoxBean();
             listbox.setSize(size);
+            this.setBaseComponentBean(listbox);
         }
+
+        System.err.println("in list box tag: beanID= " + beanId);
 
         Iterator it = list.iterator();
         while (it.hasNext()) {
             BaseComponentBean bc = (BaseComponentBean)it.next();
-            if (name!= null) bc.setName(name);
-            System.err.println("adding bean to listbox: name= " + name);
+            //if (name!= null) bc.setName(name);
+            //System.err.println("adding bean to listbox: name= " + name);
             listbox.addBean(bc);
         }
 
@@ -84,11 +81,11 @@ public class ListBoxTag extends ContainerTag {
         Object parentTag = getParent();
         if (parentTag instanceof ContainerTag) {
             ContainerTag containerTag = (ContainerTag)parentTag;
-            System.err.println("whats going on here? setting listbox name to: " + containerTag.getName());
-            listbox.setName(containerTag.getName());
+            //System.err.println("whats going on here? setting listbox name to: " + containerTag.getName());
+            //listbox.setName(containerTag.getName());
             containerTag.addTagBean(listbox);
         } else {
-            System.err.println("no container tag: just printing a listbox!");
+            //System.err.println("no container tag: just printing a listbox!");
             try {
                 JspWriter out = pageContext.getOut();
                 out.print(listbox.toString());

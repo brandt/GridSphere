@@ -32,6 +32,7 @@ public class ListBoxBean extends BeanContainer implements TagBean {
     public ListBoxBean(String beanId) {
         super(NAME);
         this.beanId = beanId;
+        System.err.println("beanId=" + beanId);
         this.cssStyle = LISTBOX_STYLE;
     }
 
@@ -62,7 +63,10 @@ public class ListBoxBean extends BeanContainer implements TagBean {
         String pname = (name == null) ? "" : name;
         String sname = pname;
         if (!beanId.equals("")) {
+            System.err.println("beanId is non-null");
             sname = "ui_" + vbName + "_" + beanId + "_" + pname;
+        } else {
+            System.err.println("in list box bean: beanId is null");
         }
         System.err.println("in ListBoxBean: toString: name= " + sname);
         String result = "<select name='"+sname+"' size='"+size+"'";
