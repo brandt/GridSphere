@@ -67,24 +67,25 @@ Copyright:
         <fail message="Unable to find Tomcat 4.1.+. Make sure you have set $CATALINA_HOME set" unless="catalina.exists"/>
     </target>
 
+    <target name="check-grid">
+        <!-- Check for known OGSA libraries -->
+        <condition property="grid.exists">
+            <and>
+                <available file="${env.CATALINA_HOME}/shared/lib/cog-jglobus.jar"/>
+                <available file="${env.CATALINA_HOME}/server/lib/cog-tomcat.jar"/>
+            </and>
+        </condition>
+    </target>
+
     <!-- =================================================================== -->
     <!-- Functions                                                           -->
     <!-- =================================================================== -->
-    <target name="setenv" depends="check-catalina" description="Check for libraries and print out config information">
+    <target name="setenv" depends="check-catalina, check-grid" description="Check for libraries and print out config information">
         <mkdir dir="${gridsphere.build}"/>
 
         <mkdir dir="${build.classes}"/>
         <mkdir dir="${build.webapps}"/>
         <mkdir dir="${build.docs}"/>
-
-
-        <!-- Check for known OGSA libraries -->
-        <condition property="grid.exists">
-            <and>
-                <available file="${env.CATALINA_HOME}/common/lib/cog-jglobus.jarjarbinks"/>
-                <available file="${env.CATALINA_HOME}/common/lib/cog-tomcat.jarjarbinks"/>
-            </and>
-        </condition>
 
         <echo message="--- Build environment for ${gridsphere.name} ---" />
         <echo message="--- Flags (Note: If the {property name} is displayed,"/>
