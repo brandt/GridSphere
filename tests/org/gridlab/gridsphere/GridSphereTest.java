@@ -5,30 +5,36 @@
 package org.gridlab.gridsphere;
 
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.apache.cactus.ServletTestCase;
 import org.apache.log4j.PropertyConfigurator;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerTest;
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.ServiceDescriptorTest;
 import org.gridlab.gridsphere.portletcontainer.GridSphereServletTest;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDescriptorTest;
+import org.gridlab.gridsphere.services.security.credential.CredentialManagerServiceTest;
 import org.gridlab.gridsphere.services.user.SetupRootUserTest;
 import org.gridlab.gridsphere.services.user.SetupTestGroupsTest;
 import org.gridlab.gridsphere.services.user.SetupTestUsersTest;
+import org.gridlab.gridsphere.services.user.UserManagerServiceTest;
 
 import java.net.URL;
 
 /**
  * Simple class to build a TestSuite out of the individual test classes.
  */
-public class AllJUnitTests extends TestCase {
+public class GridSphereTest extends ServletTestCase {
 
-    public AllJUnitTests(String name) {
+    public GridSphereTest(String name) {
         super(name);
     }
 
+    public static void main(String[] args) {
+        junit.textui.TestRunner.main(new String[] {GridSphereTest.class.getName()});
+    }
+
     public static Test suite() {
-        URL propsUrl = AllJUnitTests.class.getResource("/gridsphere/log4j.properties");
+        URL propsUrl = GridSphereTest.class.getResource("/gridsphere/log4j.properties");
         PropertyConfigurator.configure(propsUrl);
 
         TestSuite suite = new TestSuite();
@@ -41,8 +47,8 @@ public class AllJUnitTests extends TestCase {
 
         suite.addTest(new TestSuite(SetupTestGroupsTest.class));
         suite.addTest(new TestSuite(SetupTestUsersTest.class));
-        //suite.addTest(new TestSuite(UserManagerServiceTest.class));
-        //suite.addTest(new TestSuite(CredentialManagerServiceTest.class));
+        suite.addTest(new TestSuite(UserManagerServiceTest.class));
+        suite.addTest(new TestSuite(CredentialManagerServiceTest.class));
 
         return suite;
     }
