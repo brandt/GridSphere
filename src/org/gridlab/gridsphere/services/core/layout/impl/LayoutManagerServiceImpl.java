@@ -9,19 +9,18 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletService;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.provider.portletui.beans.FileInputBean;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 import org.gridlab.gridsphere.layout.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.List;
 import java.util.Iterator;
 import java.util.Vector;
-import java.util.ArrayList;
+
 
 /**
  * The <code>LayoutManagerService</code> manages users layouts
@@ -32,7 +31,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
     private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
     private PortletPageFactory pageFactory = null;
 
-    public void init(PortletServiceConfig config) {
+    public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         try {
         pageFactory = PortletPageFactory.getInstance();
         } catch (Exception e) {
@@ -45,10 +44,10 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
     public void setTheme(PortletRequest req, String theme) {
         PortletPage page = pageFactory.createPortletPage(req);
         page.setTheme(theme);
-        page.init(new Vector());
+        //page.init(new ArrayList());
     }
 
-    public void initPage(PortletRequest req) {
+    public void reloadPage(PortletRequest req) {
         PortletPage page = pageFactory.createPortletPage(req);
         page.init(new Vector());
     }

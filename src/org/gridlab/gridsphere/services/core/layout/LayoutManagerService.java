@@ -24,7 +24,7 @@ public interface LayoutManagerService extends PortletService {
 
     public String getTheme(PortletRequest req);
 
-    public void initPage(PortletRequest req);
+    public void reloadPage(PortletRequest req);
 
     public String[] getTabNames(PortletRequest req);
 

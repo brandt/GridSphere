@@ -89,7 +89,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         while (st.hasMoreTokens()) {
             ListBoxItemBean lb = new ListBoxItemBean();
             String val = (String)st.nextElement();
-            lb.setValue(val);
+            lb.setValue(val.trim());
             themeLB.addBean(lb);
         }
 
@@ -121,9 +121,10 @@ public class LayoutManagerPortlet extends ActionPortlet {
             tabNames[i] = newtitle;
             System.err.println("settng " + tabNames[i]);
         }
-        layoutMgr.initPage(req);
 
         layoutMgr.setTabNames(req, tabNames);
+        layoutMgr.reloadPage(req);
+
     }
 
     public void doConfigureLayout(FormEvent event) throws PortletException {
