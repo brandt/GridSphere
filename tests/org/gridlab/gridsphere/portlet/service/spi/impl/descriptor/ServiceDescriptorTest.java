@@ -8,7 +8,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 
@@ -36,17 +36,15 @@ public class ServiceDescriptorTest extends TestCase {
 
     public void testServiceDescriptor() {
         SportletServiceDescriptor descriptor = null;
-        Class clazz =  this.getClass();
 
         // load files from JAR
         String serviceFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_TEST_DIR) + "PortletServices-test.xml";
         String mappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_SERVICES_MAPPING);
-
         try {
             descriptor = new SportletServiceDescriptor(serviceFile, mappingFile);
         } catch (IOException e) {
             fail("IO error unmarshalling " + serviceFile + " using " + mappingFile + " : " + e.getMessage());
-        } catch (DescriptorException e) {
+        } catch (PersistenceManagerException e) {
             fail("Unable to unmarshall " + serviceFile + " using " + mappingFile + " : " + e.getMessage());
         }
         SportletServiceCollection services = descriptor.getServiceCollection();

@@ -8,7 +8,9 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.apache.log4j.PropertyConfigurator;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbmsImpl;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
@@ -34,7 +36,7 @@ public class PersistenceManagerTest extends TestCase {
 
     public void testGetPMInstance() {
         // create persistence manager
-        pm = PersistenceManagerRdbms.getInstance();
+        pm = PersistenceManagerFactory.createGridSphereRdbms();
     }
 
     public static void main(String[] args) throws Exception {

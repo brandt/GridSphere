@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.services.user;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
 import java.util.List;
@@ -51,6 +52,25 @@ public class SetupTestGroupsTest extends SetupRootUserTest {
 
         PortletGroup c = rootAclService.getGroupByName("cactus");
         assertEquals(cactus, c);
+    }
+
+    public void testSuperRolesHasSuperRole() {
+        assertTrue(rootAclService.hasSuperRole(rootUser));
+    }
+
+    public void testSuperRolesInSuperGroup() {
+        List groups = rootAclService.getGroups(rootUser);
+        assertEquals(1, groups.size());
+        //PortletGroup g = rootAclService.getSuperGroup()
+    }
+
+    public void testRolesInGroup() {
+        PortletRole role = rootAclService.getRoleInGroup(rootUser, null);
+        assertEquals(PortletRole.SUPER, role);
+    }
+
+    public void testHasSuperRole() {
+        assertTrue(rootAclService.hasSuperRole(rootUser));
     }
 
     public void testAddDeleteGroup() {

@@ -10,7 +10,6 @@ package org.gridlab.gridsphere.services.security.credential;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
@@ -29,7 +28,6 @@ public class CredentialManagerServiceTest extends ServiceTest {
 
     // Service variables
     private static PortletLog _log = SportletLog.getInstance(CredentialManagerServiceTest.class);
-    private PersistenceManagerRdbms _pm = PersistenceManagerRdbms.getInstance();
     private LoginService loginService = null;
     private UserManagerService userManagerService = null;
     private CredentialManagerService credentialManagerService = null;

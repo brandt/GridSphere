@@ -7,9 +7,7 @@ package org.gridlab.gridsphere.portletcontainer.descriptor;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import org.exolab.castor.types.AnyNode;
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.*;
 import org.gridlab.gridsphere.portlet.PortletWindow;
@@ -19,7 +17,6 @@ import org.gridlab.gridsphere.portlet.PortletRole;
 import java.io.IOException;
 import java.util.List;
 import java.util.Hashtable;
-import java.net.URL;
 
 /**
  * This is the base fixture for service testing. Provides a service factory and the
@@ -51,7 +48,7 @@ public class PortletDescriptorTest extends TestCase {
             pdd = new PortletDeploymentDescriptor(portletFile, mappingFile);
         } catch (IOException e) {
             fail("IO error unmarshalling " + portletFile + " using " + mappingFile + " : " + e.getMessage());
-        } catch (DescriptorException e) {
+        } catch (PersistenceManagerException e) {
             fail("Unable to unmarshall " + portletFile + " using " + mappingFile + " : " + e.getMessage());
         }
         List defs = pdd.getPortletDefinitionList();
@@ -94,15 +91,15 @@ public class PortletDescriptorTest extends TestCase {
 
         List winstatelist = portletApp.getAllowedWindowStates();
         assertEquals(2, winstatelist.size());
-        assertEquals(PortletWindow.State.MAXIMIZED, (PortletWindow.State) winstatelist.get(0));
-        assertEquals(PortletWindow.State.MINIMIZED, (PortletWindow.State) winstatelist.get(1));
+        assertEquals(PortletWindow.State.MAXIMIZED, winstatelist.get(0));
+        assertEquals(PortletWindow.State.MINIMIZED, winstatelist.get(1));
 
         List smodes = portletApp.getSupportedModes();
         assertEquals(4, smodes.size());
-        assertEquals(Portlet.Mode.VIEW, (Portlet.Mode) smodes.get(0));
-        assertEquals(Portlet.Mode.EDIT, (Portlet.Mode) smodes.get(1));
-        assertEquals(Portlet.Mode.HELP, (Portlet.Mode) smodes.get(2));
-        assertEquals(Portlet.Mode.CONFIGURE, (Portlet.Mode) smodes.get(3));
+        assertEquals(Portlet.Mode.VIEW, smodes.get(0));
+        assertEquals(Portlet.Mode.EDIT, smodes.get(1));
+        assertEquals(Portlet.Mode.HELP, smodes.get(2));
+        assertEquals(Portlet.Mode.CONFIGURE, smodes.get(3));
 
 
         // Check concrete one portal data
