@@ -13,8 +13,8 @@ public class ImageBean extends BaseComponentBean implements TagBean {
 
     public static final String NAME = "im";
     public String src = "";
-    public String alt = new String();
-    public String title = new String();
+    public String alt = null;
+    public String title = null;
     public String border = "0";
     protected String width = null;
     protected String height = null;
@@ -176,10 +176,12 @@ public class ImageBean extends BaseComponentBean implements TagBean {
 
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("<img src=\"" + this.src + "\" border=\"" + border + "\" alt=\"" + alt + "\" title=\"" + this.title + "\"");
-        if (width != null) sb.append(" \" width=\"" + width + "\"");
-        if (height != null) sb.append(" \" height=\"" + height + "\"");
-        if (align != null) sb.append(" \" align=\"" + align + "\"");
+        sb.append("<img src=\"" + this.src + "\" border=\"" + border + "\"");
+        if (width != null) sb.append(" width=\"" + width + "\"");
+        if (height != null) sb.append(" height=\"" + height + "\"");
+        if (align != null) sb.append(" align=\"" + align + "\"");
+        if (alt != null) sb.append(" alt=\"" + alt + "\"");
+        if (title != null) sb.append(" title=\"" + title + "\"");
         sb.append("/>");
         return sb.toString();
     }
