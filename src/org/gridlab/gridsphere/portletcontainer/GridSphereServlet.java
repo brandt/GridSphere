@@ -259,13 +259,11 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             req.setAttribute(SportletProperties.PORTLETGROUPS, groups);
             log.debug("Adding User: " + user.getID() + " with session:" + session.getId() + " to usersessionmanager");
             userSessionManager.addSession(user, session);
+            layoutEngine.loginPortlets(event);
         } catch (AuthorizationException err) {
             log.debug(err.getMessage());
             req.setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
-            return;
         }
-
-        layoutEngine.loginPortlets(event);
     }
 
 
@@ -280,6 +278,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletSession session = req.getPortletSession();
         session.removeAttribute(SportletProperties.PORTLET_USER);
         userSessionManager.removeSessions(req.getUser());
+        layoutEngine.logoutPortlets(event);
     }
 
     /**
