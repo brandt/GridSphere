@@ -351,7 +351,19 @@ Copyright:
   <!-- ================================================================= -->
   <!-- Deploys core portlets to a local server                              -->
   <!-- ================================================================= -->
-  <target name="deploy" depends="deploy-gs, deploy-hsqldb, deploy-portlets"/>
+  <target name="deploy" depends="deploy-prepare, deploy-hsqldb, deploy-gs, deploy-portlets"/>
+
+
+    <!-- ================================================================= -->
+    <!-- Deploys core GridSphere to a local server                              -->
+    <!-- ================================================================= -->
+    <target name="deploy-prepare" description="prepares local deployment">
+        <!-- Make core gpdk directory if necessary -->
+        <mkdir dir="${env.CATALINA_HOME}/gridsphere"/>
+        <mkdir dir="${env.CATALINA_HOME}/gridsphere/creds"/>
+        <!-- where hsqldb stores the datafiles -->
+        <mkdir dir="${env.CATALINA_HOME}/gridsphere/db"/>
+    </target>
 
     <!-- ================================================================= -->
     <!-- Deploys GridSphere to a local server                              -->
@@ -378,9 +390,6 @@ Copyright:
 
         <copy file="conf/log4j.properties" tofile="${env.CATALINA_HOME}/webapps/${Name}/WEB-INF/log4j.properties" />
 
-        <!-- Make core gpdk directory if necessary -->
-        <mkdir dir="${env.CATALINA_HOME}/gridsphere"/>
-        <mkdir dir="${env.CATALINA_HOME}/gridsphere/creds"/>
     </target>
 
     <!-- ================================================================= -->
@@ -388,8 +397,6 @@ Copyright:
     <!-- ================================================================= -->
     <target name="deploy-hsqldb" depends="mapping, db-hsqldb" description="deploys the hsqldb to tomcat">
         <replace file="${build.war}/${Name}/WEB-INF/conf/hsqldb.xml" token="@CATALINA_HOME@" value="${env.CATALINA_HOME}"/>
-        <!-- where hsqldb stores the datafiles -->
-        <mkdir dir="${env.CATALINA_HOME}/gridsphere/db"/>
         <copy file="conf/gridsphere-db.properties" tofile="${env.CATALINA_HOME}/gridsphere/db/gridsphere-db.properties" />
         <copy file="conf/gridsphere-db.script" tofile="${env.CATALINA_HOME}/gridsphere/db/gridsphere-db.script" />
     </target>
