@@ -185,6 +185,9 @@
         <field name="PortletPanel" type="org.gridlab.gridsphere.layout.PortletPanel">
             <bind-xml name="portlet-panel"/>
         </field>
+        <field name="LayoutManager" type="org.gridlab.gridsphere.layout.LayoutManager">
+            <bind-xml auto-naming="deriveByClass"/>
+        </field>
     </class>
 
 </mapping>

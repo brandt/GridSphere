@@ -26,28 +26,26 @@
 </portlet-frame>
 
 <!-- Portlet Dock -->
-<portlet-panel>
-    <portlet-dock>
-        <title>Portlet Dock</title>
-        <orientation>1</orientation>
-        <portlet-insets>
-            <width>4</width>
-            <height>4</height>
-        </portlet-insets>
+<portlet-dock>
+    <title>Portlet Dock</title>
+    <orientation>1</orientation>
+    <portlet-insets>
+        <width>4</width>
+        <height>4</height>
+    </portlet-insets>
 
-        <portlet-minimized>
-            <title>Hello</title>
-            <foreground>red</foreground>
-            <portlet-class>portletclass</portlet-class>
-        </portlet-minimized>
+    <portlet-minimized>
+        <title>Hello</title>
+        <foreground>red</foreground>
+        <portlet-class>portletclass</portlet-class>
+    </portlet-minimized>
 
-        <portlet-minimized>
-            <title>Bye</title>
-            <foreground>green</foreground>
-            <portlet-class>portletclass</portlet-class>
-        </portlet-minimized>
-    </portlet-dock>
-</portlet-panel>
+    <portlet-minimized>
+        <title>Bye</title>
+        <foreground>green</foreground>
+        <portlet-class>portletclass</portlet-class>
+    </portlet-minimized>
+</portlet-dock>
 
 <!-- Tabbed Panes -->
 <portlet-tabbed-pane>
@@ -100,7 +98,7 @@
                     <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.4</portlet-class>
                 </portlet-frame>
             </grid-layout>
-        </portlet-panel>
+          </portlet-panel>
 
         </portlet-tab>
         <portlet-tab>
