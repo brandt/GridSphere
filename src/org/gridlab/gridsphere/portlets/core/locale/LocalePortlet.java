@@ -17,7 +17,6 @@ import java.util.StringTokenizer;
 public class LocalePortlet extends ActionPortlet {
 
     public static final String VIEW_JSP = "/jsp/locale/view.jsp";
-    public static final String DEFAULT_DISPLAY_LOCALES="en,cs,de,fr,hu,pl,it";
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
@@ -58,7 +57,6 @@ public class LocalePortlet extends ActionPortlet {
         localeSelector.setSize(1);
 
         String displayLocales = getPortletSettings().getAttribute("display-locale");
-        if (displayLocales == null) displayLocales = DEFAULT_DISPLAY_LOCALES;
         StringTokenizer localeTokenizer = new StringTokenizer(displayLocales,",");
         while (localeTokenizer.hasMoreTokens()) {
                 String displayLocaleStr = localeTokenizer.nextToken();
@@ -66,7 +64,7 @@ public class LocalePortlet extends ActionPortlet {
                 ListBoxItemBean localeBean = makeLocaleBean(displayLocale.getDisplayLanguage(displayLocale), displayLocaleStr, locale);
                 localeSelector.addBean(localeBean);
         }
-        
+
         setNextState(request, "locale/viewlocale.jsp");
     }
 
