@@ -21,7 +21,8 @@ public class GridSphereServletTest extends ServletTestCase {
     protected static SportletServiceFactory factory = null;
     protected static PortletLog log = SportletLog.getInstance(GridSphereServletTest.class);
     protected PortletContext context = null;
-    protected GridSphereServlet gsServlet = null;
+    protected static GridSphereServlet gsServlet = null;    
+    private static boolean bInited = false;
 
     public GridSphereServletTest(String name) {
         super(name);
@@ -35,21 +36,24 @@ public class GridSphereServletTest extends ServletTestCase {
     }
 
     public void testInitGridSphere() {
-        gsServlet = new GridSphereServlet();
-        assertNotNull(gsServlet);
-        try {
-            gsServlet.init(config);
-        } catch (Exception e) {
-            fail("Unable to perform init() of GridSphereServlet!");
+        if (!bInited ){
+            gsServlet = new GridSphereServlet();
+            assertNotNull(gsServlet);
+            try {
+                gsServlet.init(config);
+            } catch (Exception e) {
+                fail("Unable to perform init() of GridSphereServlet!");
+            }
+            try {
+                gsServlet.initializeServices();
+            } catch (Exception e) {
+                e.printStackTrace();
+                fail("Unable to initialize GridSphere Portlet services!");
+                log.error("Unable to initialize GridSphere Portlet services!", e);
+            }
+            factory = SportletServiceFactory.getInstance();
+            bInited = true;
         }
-        try {
-            gsServlet.initializeServices();
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail("Unable to initialize GridSphere Portlet services!");
-            log.error("Unable to initialize GridSphere Portlet services!", e);
-        }
-        factory = SportletServiceFactory.getInstance();
     }
 
     public static Test suite() {
