@@ -61,8 +61,7 @@ public class FileManagerServiceImpl implements FileManagerService, PortletServic
         if (!f.exists()) {
             if (!f.mkdirs()) throw new IOException("Unable to create dir: " + userLoc);
         }
-        File newfile = new File(getLocationPath(user, fileName));
-        inputBean.storeFile(newfile);
+        inputBean.saveFile(getLocationPath(user, fileName));
     }
 
     public void deleteFile(User user, String filename) {

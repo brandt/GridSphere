@@ -97,15 +97,6 @@ public class FileInputBean extends InputBean implements TagBean {
         System.err.println("saved file :" + value);
     }
 
-    /**
-     * store Uploded file into file
-     *
-     */
-    public void storeFile(File file) throws Exception{
-        if (savedFileItem != null) {
-            savedFileItem.write(file);
-        }
-    }
 
     /**
      * Returns the uploaded file name
@@ -145,11 +136,13 @@ public class FileInputBean extends InputBean implements TagBean {
 
         File file = new File(filePath);
 
-        try {
-            if (!file.exists()) file.createNewFile();
-            //savedFileItem.write(filePath);
-        } catch (Exception e) {
-            throw new IOException("Unable to save file: " + e);
+        if (savedFileItem!=null){
+            try {
+                if (!file.exists()) file.createNewFile();
+                savedFileItem.write(file);
+            } catch (Exception e) {
+                throw new IOException("Unable to save file: " + e);
+            }
         }
     }
 
