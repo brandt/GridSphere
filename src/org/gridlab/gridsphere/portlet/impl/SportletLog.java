@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
+import org.apache.log4j.Level;
 import org.gridlab.gridsphere.portlet.PortletLog;
 
 import java.util.Hashtable;
@@ -27,7 +28,7 @@ import java.util.Map;
 public class SportletLog implements PortletLog {
 
     private static Map logMap = new Hashtable();
-
+    private static String thisClassName = SportletLog.class.getName() + ".";
     private Logger logger;
 
     /**
@@ -65,7 +66,7 @@ public class SportletLog implements PortletLog {
      * @param text the informational text to log
      */
     public void debug(String text) {
-        logger.debug(text);
+        logger.log(thisClassName, Level.DEBUG, text, null);
     }
 
     /**
@@ -83,7 +84,7 @@ public class SportletLog implements PortletLog {
      * @param the informational text to log
      */
     public void info(String text) {
-        logger.info(text);
+        logger.log(thisClassName, Level.INFO, text, null);
     }
 
     /**
@@ -101,7 +102,7 @@ public class SportletLog implements PortletLog {
      * @param text the warning text to log
      */
     public void warn(String text) {
-        logger.warn(text);
+        logger.log(thisClassName, Level.WARN, text, null);
     }
 
     /**
@@ -119,7 +120,7 @@ public class SportletLog implements PortletLog {
      * @param text the error text to log
      */
     public void error(String text) {
-         logger.error(text);
+        logger.log(thisClassName, Level.ERROR, text, null);
     }
 
     /**
@@ -129,7 +130,7 @@ public class SportletLog implements PortletLog {
      * @param cause the cause for logging
      */
     public void error(String text, Throwable cause) {
-        logger.error(text, cause);
+        logger.log(thisClassName, Level.INFO, text, cause);
     }
 
 }
