@@ -363,7 +363,7 @@ public class GroupManagerPortlet extends ActionPortlet {
                 layoutMgr.addApplicationTab(evt.getPortletRequest(), group.getName());
             }
             layoutMgr.addApplicationTab(groupEntryUser, group.getName());
-
+            layoutMgr.reloadPage(evt.getPortletRequest());
         } else {
             log.debug("Unable to get user: " + groupEntryUserID);
         }
