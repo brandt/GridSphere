@@ -41,7 +41,7 @@ Copyright:
   <property name="reports.tests"  value="${build.dir}/tests"/>
   <property name="test.cfg.dir"   value="${src.dir}"/>
 
-  <property name="gridsphere.dir" value="${env.TOMCAT_HOME}/${Name}"/>
+  <property name="gridsphere.dir" value="${env.TOMCAT_HOME}/webapps/${Name}"/>
   <property name="exclude.dirs" value=""/>
 
   <property name="debug" value="on"/>
