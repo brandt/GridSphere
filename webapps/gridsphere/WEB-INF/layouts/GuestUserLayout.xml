@@ -13,7 +13,20 @@
 
 <!-- Header components -->
 <portlet-header>
-    <portlet-content include="/html/pagehead.html"/>
+    <table-layout style="header">
+            <row-layout>
+                <column-layout>
+                    <portlet-frame transparent="true" outer-padding="0" label="locale">
+                        <portlet-class>org.gridlab.gridsphere.portlets.core.locale.LocalePortlet.1</portlet-class>
+                    </portlet-frame>
+                </column-layout>
+            </row-layout>
+            <row-layout>
+                <column-layout width="80%">
+                    <portlet-content include="/html/pagehead.html"/>
+                </column-layout>
+            </row-layout>
+        </table-layout>
 </portlet-header>
 
 <!-- Tabbed Panes -->

@@ -322,6 +322,55 @@
     </tag>
 
     <tag>
+        <name>image</name>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ImageTag</tag-class>
+        <body-content>empty</body-content>
+        <description>
+            Displays an image
+        </description>
+        <attribute>
+            <name>src</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>alt</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>align</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>width</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>height</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>border</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>title</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>beanId</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
         <name>list</name>
         <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ListTag</tag-class>
         <body-content>empty</body-content>
@@ -798,35 +847,6 @@
         </attribute>
         <attribute>
             <name>readonly</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-    </tag>
-
-    <tag>
-        <name>image</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ImageTag</tag-class>
-        <body-content>empty</body-content>
-        <description>
-            Displays an image
-        </description>
-        <attribute>
-            <name>src</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>alt</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>title</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>beanId</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

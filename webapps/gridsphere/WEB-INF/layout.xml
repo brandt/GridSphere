@@ -98,6 +98,7 @@
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
+                        <column-layout width="50%"/>
                     </row-layout>
                 </table-layout>
             </portlet-tab>
@@ -109,6 +110,7 @@
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
+                        <column-layout width="50%"/>
                     </row-layout>
                 </table-layout>
             </portlet-tab>

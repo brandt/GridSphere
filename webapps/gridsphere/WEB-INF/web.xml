@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-
 <!--
  $Id$
 -->
-
 <!DOCTYPE web-app
     PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
     "http://java.sun.com/j2ee/dtds/web-app_2.3.dtd">
@@ -25,7 +23,7 @@
         <servlet-class>org.gridlab.gridsphere.portletcontainer.GridSphereServlet</servlet-class>
         <init-param>
             <param-name>gridsphere_version</param-name>
-            <param-value>1.0</param-value>
+            <param-value>1.1</param-value>
         </init-param>
         <init-param>
             <param-name>gridsphere_release</param-name>
@@ -69,6 +67,11 @@
     </servlet>
 
     <servlet>
+        <servlet-name>GridSphereConfig</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.gridsphere.GridSpherePortlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>ServletRedirector</servlet-name>
         <servlet-class>org.apache.cactus.server.ServletTestRedirector</servlet-class>
     </servlet>
@@ -86,6 +89,11 @@
     <servlet>
         <servlet-name>ProfileManagerPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>LocalePortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.locale.LocalePortlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -145,6 +153,11 @@
     </servlet-mapping>
 
     <servlet-mapping>
+        <servlet-name>PortletApplicationManager</servlet-name>
+        <url-pattern>/admin/gridsphere</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
         <servlet-name>ProfileManagerPortlet</servlet-name>
         <url-pattern>/users/profile</url-pattern>
     </servlet-mapping>
@@ -169,10 +182,14 @@
         <url-pattern>/textmessaging</url-pattern>
     </servlet-mapping>
 
-
     <servlet-mapping>
         <servlet-name>SubscriptionPortlet</servlet-name>
         <url-pattern>/subscription</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>LocalePortlet</servlet-name>
+        <url-pattern>/locale</url-pattern>
     </servlet-mapping>
 
     <mime-mapping>
