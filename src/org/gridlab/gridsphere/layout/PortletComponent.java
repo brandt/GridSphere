@@ -6,7 +6,7 @@ package org.gridlab.gridsphere.layout;
 
 import java.awt.*;
 
-public abstract class PortletComponent {
+public class PortletComponent extends PortletContainer {
 
     protected int width;
     protected int height;
@@ -44,7 +44,9 @@ public abstract class PortletComponent {
         return name;
     }
 
-    public abstract void doLayout();
+    public void doLayout() {
+        // XXX: FILL ME IN
+    }
 
     public PortletDimension getSize(PortletDimension rv) {
         if (rv == null) rv = new PortletDimension();

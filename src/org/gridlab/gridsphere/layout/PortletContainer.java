@@ -7,7 +7,7 @@ package org.gridlab.gridsphere.layout;
 import java.util.List;
 import java.util.Vector;
 
-public class PortletContainer extends PortletComponent {
+public class PortletContainer {
 
     private List components = new Vector();
     private List constraintsList = new Vector();
@@ -35,6 +35,10 @@ public class PortletContainer extends PortletComponent {
     public void add(PortletComponent comp, Object constraints, int index) {
         components.add(index, comp);
         constraintsList.add(index, constraints);
+    }
+
+    public void doLayout() {
+        // XXX: FILL ME IN
     }
 
     public PortletComponent getPortletComponent(int n) {
@@ -86,8 +90,6 @@ public class PortletContainer extends PortletComponent {
     public void setLayout(LayoutManager mgr) {
         layoutManager = mgr;
     }
-
-    public void doLayout() {}
 
     public void invalidate() {}
 
