@@ -49,7 +49,7 @@ Copyright:
     <property name="docbook.dir" value="docs/docbook"/>
 
     <!-- GridSphere build targets -->
-    <property name="build.lib"     value="${gridsphere.build}/lib/ext"/>
+    <property name="build.lib"     value="${gridsphere.build}/lib"/>
     <property name="build.db"      value="${gridsphere.build}/db"/>
     <property name="build.classes" value="${gridsphere.build}/classes"/>
     <property name="build.webapps" value="${gridsphere.build}/webapps"/>
@@ -60,6 +60,7 @@ Copyright:
 
     <property environment="env"/>
 
+    <property name="catalina.exists" value="${env.CATALINA_HOME}"/>
     <!-- =================================================================== -->
     <!-- Sets the CLASSPATH                                                  -->
     <!-- =================================================================== -->
@@ -410,7 +411,7 @@ Copyright:
         <echo message="force database: ${var_force_database}"/>
         <condition property="var_force_database">
             <not>
-                <available file="${GRIDSPHERE_HOME}/database/${DATABASE_NAME}-db.script"/>
+                <available file="${GRIDSPHERE_HOME}/database/${DATABASE_NAME}.script"/>
             </not>
         </condition>
     </target>
@@ -632,7 +633,7 @@ Copyright:
 
         <!-- preprocess database file -->
         <copy todir="${env.CATALINA_HOME}/shared/lib">
-            <fileset dir="lib">
+            <fileset dir="lib/ext">
                 <include name="*.jar"/>
                 <exclude name="servlet*.jar"/>
             </fileset>
@@ -795,8 +796,9 @@ Copyright:
         </copy>
 
         <copy todir="${gridsphere.dist}/lib">
-            <fileset dir="${build.lib}"/>
+            <fileset dir="lib"/>
         </copy>
     </target>
+
 
 </project>
