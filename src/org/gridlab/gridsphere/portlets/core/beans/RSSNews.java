@@ -114,10 +114,12 @@ public class RSSNews {
 
     public void delete(String url) {
         Iterator it = feeds.iterator();
+
         while (it.hasNext()) {
             RSSFeed feed = (RSSFeed)it.next();
             if (feed.getUrl().equals(url)) {
                 feeds.remove(feed);
+                return;
             }
         }
     }
