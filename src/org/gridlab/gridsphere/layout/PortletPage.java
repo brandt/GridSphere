@@ -135,6 +135,7 @@ public class PortletPage implements Serializable, Cloneable {
         this.tabbedPane = tabbedPane;
     }
 
+
     public PortletTabbedPane getPortletTabbedPane() {
         return tabbedPane;
     }
@@ -179,12 +180,15 @@ public class PortletPage implements Serializable, Cloneable {
      */
     public List init(List list) {
         if (headerContainer != null) {
+            headerContainer.setTheme(theme);
             list = headerContainer.init(list);
         }
         if (tabbedPane != null) {
+            tabbedPane.setTheme(theme);
             list = tabbedPane.init(list);
         }
         if (footerContainer != null) {
+            footerContainer.setTheme(theme);
             list = footerContainer.init(list);
         }
         log.debug("Made a components list!!!! " + list.size());
@@ -301,7 +305,7 @@ public class PortletPage implements Serializable, Cloneable {
         out.println("  <link type=\"text/css\" href=\"themes/" + theme + "/css" +
                 "/default.css\" rel=\"STYLESHEET\"/>");
         out.println("<script language=\"JavaScript\" src=\"javascript/gridsphere.js\"></script>");
-        out.println("</head>\n<body>");
+        out.println("</head><body>");
 
         // A Portal page in 3 lines -- voila!
         //  -------- header ---------

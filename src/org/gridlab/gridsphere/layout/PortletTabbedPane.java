@@ -170,6 +170,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         PortletTab tab = null;
         for (int i = 0; i < getTabCount(); i++) {
             tab = getPortletTabAt(i);
+            tab.setTheme(theme);
             if (selectedIndex == i) tab.setSelected(true);
             tab.addPortletTabListener(this);
             list = tab.init(list);
