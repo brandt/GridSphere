@@ -10,10 +10,11 @@ Prerequisites:
    jakarta-ant from http://jakarta.apache.org
 
 Build Instructions:
-   To build, invoke the "build.pl" Perl script
+   To build, invoke "ant"
 
 Authors:
-  Jason Novotny <novotny@aei.mpg.de>
+  Jason Novotny  <novotny@aei.mpg.de>
+  Oliver Wehrens <wehrens@aei.mpg.de>
 
 Copyright:
   2002
@@ -30,7 +31,8 @@ Copyright:
   <property name="build.dir"      value="build"/>
   <property name="lib.dir"        value="lib"/>
   <property name="conf.dir"       value="conf"/>
-  <property name="webapp.dir"     value="webapps"/>
+  <property name="gswebapp.dir"   value="webapps/gridsphere"/>
+  <property name="corewebapp.dir" value="webapps/coreportlets"/>
   <property name="test.dir"       value="tests"/>
   <property name="dist.dir"       value="${Name}-${version}" />
   <property name="build.lib"      value="${build.dir}/lib"/>
@@ -41,7 +43,7 @@ Copyright:
   <property name="reports.tests"  value="${build.dir}/tests"/>
   <property name="test.cfg.dir"   value="${src.dir}"/>
 
-  <property name="gridsphere.dir" value="${env.TOMCAT_HOME}/webapps/${Name}"/>
+  <property name="gridsphere.dir" value="${env.CATALINA_HOME}/${Name}"/>
   <property name="exclude.dirs" value=""/>
 
   <property name="debug" value="on"/>
@@ -59,8 +61,7 @@ Copyright:
     <pathelement location="${jsse.jar}"/>
     <pathelement location="${jcert.jar}"/>
     <pathelement location="${pkcs11.jar}"/>
-    <pathelement location="${lib.dir}"/>
-    <fileset dir="${env.TOMCAT_HOME}/common/lib">
+    <fileset dir="${env.CATALINA_HOME}/common/lib">
       <include name="*.jar"/>
     </fileset>
     <fileset dir="lib/">
@@ -98,7 +99,7 @@ Copyright:
 
     <echo message="ANT_HOME is set to = ${env.ANT_HOME}"/>
     <echo message="JAVA_HOME is set to = ${env.JAVA_HOME}"/>
-    <echo message="TOMCAT_HOME is set to = ${env.TOMCAT_HOME}"/>
+    <echo message="CATALINA_HOME is set to = ${env.CATALINA_HOME}"/>
     <echo message=""/>
 
     <echo message="=== Required Libraries ===" />
@@ -117,7 +118,7 @@ Copyright:
   <!-- =================================================================== -->
   <!-- Builds and deploys GridSphere                                       -->
   <!-- =================================================================== -->
-  <target name="all" depends="clean,compile,docs,jar,war" description="Build and deploy GridSphere"/>
+  <target name="all" depends="clean,compile,docs,jar,gridsphere-war,core-war" description="Build and deploy GridSphere"/>
 
   <!-- =================================================================== -->
   <!-- Updates GridSphere source code                                      -->
@@ -133,14 +134,14 @@ Copyright:
   <target name="compile" depends="setenv" description="Compile GridSphere source code">
 
     <!-- backup, deploy and preprocess the properties file -->
-    <copy file="webapps/WEB-INF/conf/gridsphere.properties" tofile="webapps/WEB-INF/conf/gridsphere.properties.bak"/>
-    <copy file="webapps/WEB-INF/conf/gridsphere.properties" tofile="${classes.dir}/${Name}/gridsphere.properties"/>
+    <copy file="webapps/gridsphere/WEB-INF/conf/gridsphere.properties" tofile="webapps/gridsphere/WEB-INF/conf/gridsphere.properties.bak"/>
+    <copy file="webapps/gridsphere/WEB-INF/conf/gridsphere.properties" tofile="${classes.dir}/${Name}/gridsphere.properties"/>
     <copy file="conf/log4j.properties" tofile="${classes.dir}/log4j.properties" />
 
     <!-- <copy file="${webapp.dir}/WEB-INF/conf/${Name}.properties" tofile="${env.TOMCAT_HOME}/webapps/${Name}/WEB-INF/conf/${Name}.properties" />  -->
-    <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@TOMCAT_HOME@" value="${env.TOMCAT_HOME}"/>
-    <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@GRIDSPHERE_WEBAPP@" value="${env.TOMCAT_HOME}/webapps/${Name}"/>
-    <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@GRIDSPHERE_HOME@" value="${env.TOMCAT_HOME}/${Name}"/>
+    <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@CATALINA_HOME@" value="${env.CATALINA_HOME}"/>
+    <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@GRIDSPHERE_WEBAPP@" value="${env.CATALINA_HOME}/webapps/${Name}"/>
+    <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@GRIDSPHERE_HOME@" value="${env.CATALINA_HOME}/${Name}"/>
 
     <javac  srcdir="${src.dir}"
 		destdir="${classes.dir}"
@@ -156,7 +157,6 @@ Copyright:
   <!-- Creates a GridSphere JAR library archive                            -->
   <!-- =================================================================== -->
   <target name="gridsphere-jar" depends="compile" description="Create gridsphere.jar">
-
     <jar jarfile="${build.lib}/${Name}.jar" basedir="${classes.dir}" >
         <include name="log4j.properties" />
         <include name="org/**" />
@@ -184,9 +184,8 @@ Copyright:
   <!-- =================================================================== -->
   <!-- Creates core portlets required by GridSphere                        -->
   <!-- =================================================================== -->
-  <target name="core-portlets-jar" depends="compile" description="Create ${build.lib}/portlets/coreportlets.jar">
-    <mkdir dir="${build.lib}/portlets"/>
-    <jar jarfile="${build.lib}/portlets/coreportlets.jar" basedir="${classes.dir}" >
+  <target name="core-portlets-jar" depends="compile" description="Create ${build.lib}/coreportlets.jar">
+    <jar jarfile="${build.lib}/coreportlets.jar" basedir="${classes.dir}" >
         <include name="org/gridlab/gridsphere/portlets/**" />
         <include name="${conf.dir}/log4j.properties"/>
     </jar>
@@ -195,7 +194,7 @@ Copyright:
   <!-- =================================================================== -->
   <!-- Creates all JAR's                                                   -->
   <!-- =================================================================== -->
-  <target name="jar" depends="gridsphere-jar, portlet-api-jar, core-portlets-jar" description="Creates all jars"/>
+  <target name="jar" depends="gridsphere-jar, portlet-api-jar" description="Creates all jars"/>
 
   <!-- =================================================================== -->
   <!-- Cleans everything                                                   -->
@@ -286,48 +285,65 @@ Copyright:
   </target>
 
   <!-- =================================================================== -->
-  <!-- Creates the war file                                                -->
+  <!-- Creates the GridSphere WAR file                                                -->
   <!-- =================================================================== -->
-  <target name="war" depends="jar" description="Create GridSphere WAR for deployment">
+  <target name="gridsphere-war" depends="jar" description="Create GridSphere WAR for deployment">
     <war warfile="${build.dir}/${Name}.war"
-        webxml="${webapp.dir}/WEB-INF/web.xml">
+        webxml="${gswebapp.dir}/WEB-INF/web.xml">
         <classes dir="${classes.dir}"/>
         <lib dir="${lib.dir}">
             <include name="*.jar"/>
             <exclude name="servlet*.jar"/>
         </lib>
-        <fileset dir="${webapp.dir}">
+        <fileset dir="${gswebapp.dir}">
             <exclude name="WEB-INF/web.xml"/>
         </fileset>
     </war>
   </target>
 
+  <!-- =================================================================== -->
+  <!-- Creates the core portlets WAR file                                                -->
+  <!-- =================================================================== -->
+  <target name="core-war" depends="jar" description="Create GridSphere WAR for deployment">
+    <war warfile="${build.dir}/coreportlets.war"
+        webxml="${corewebapp.dir}/WEB-INF/web.xml">
+        <classes dir="${classes.dir}"/>
+        <lib dir="${lib.dir}">
+            <include name="*.jar"/>
+            <exclude name="servlet*.jar"/>
+        </lib>
+        <fileset dir="${corewebapp.dir}">
+            <exclude name="WEB-INF/web.xml"/>
+        </fileset>
+    </war>
+  </target>
+
+  <!-- ================================================================= -->
+  <!-- Deploys core portlets to a local server                              -->
+  <!-- ================================================================= -->
+  <target name="deploy" depends="deploy-gs, deploy-portlets"/>
+
     <!-- ================================================================= -->
     <!-- Deploys GridSphere to a local server                              -->
     <!-- ================================================================= -->
-    <target name="deploy-all" depends="jar" description="Deploys GridSphere to a local server">
+    <target name="deploy-gs" depends="jar" description="Deploys GridSphere to a local server">
         <copy todir="${install.war}/${Name}">
-            <fileset dir="${webapp.dir}"/>
+            <fileset dir="${gswebapp.dir}"/>
         </copy>
-        <copy todir="${install.war}/${Name}/WEB-INF/lib">
+        <copy todir="${env.CATALINA_HOME}/shared/lib">
             <fileset dir="${lib.dir}">
                 <include name="*.jar"/>
                 <exclude name="servlet*.jar"/>
             </fileset>
-            <fileset dir="${build.lib}"/>
-        </copy>
-        <!-- <copy todir="${install.war}/${Name}/WEB-INF/classes">
-            <fileset dir="${classes.dir}">
-                 <exclude name="**/Test*.*"/>
-                 <exclude name="**/test*.*"/>
+            <fileset dir="${build.lib}">
+                <exclude name="coreportlets.jar"/>
             </fileset>
-        </copy> -->
-        <copy todir="${env.TOMCAT_HOME}/webapps/${Name}">
+        </copy>
+        <copy todir="${env.CATALINA_HOME}/webapps/${Name}">
             <fileset dir="${install.war}/${Name}"/>
         </copy>
 
-        <copy file="conf/log4j.properties" tofile="${env.TOMCAT_HOME}/webapps/${Name}/WEB-INF/conf/log4j.properties" />
-        <copy file="${webapp.dir}/WEB-INF/conf/${Name}.properties" tofile="${env.TOMCAT_HOME}/webapps/${Name}/WEB-INF/conf/${Name}.properties" />
+        <copy file="conf/log4j.properties" tofile="${env.CATALINA_HOME}/webapps/${Name}/WEB-INF/log4j.properties" />
 
         <!-- Make core gpdk directory if necessary -->
         <mkdir dir="${gridsphere.dir}"/>
@@ -339,14 +355,12 @@ Copyright:
     <!-- Deploys core portlets to a local server                           -->
     <!-- ================================================================= -->
     <target name="deploy-portlets" depends="core-portlets-jar" description="Deploys core portlets to a local server">
-        <copy todir="${install.war}/${Name}">
-            <fileset dir="${webapp.dir}"/>
+        <copy todir="${install.war}/coreportlets">
+            <fileset dir="${corewebapp.dir}"/>
         </copy>
-        <copy todir="${env.TOMCAT_HOME}/webapps/${Name}/WEB-INF/lib/portlets">
-            <fileset dir="${build.lib}/portlets"/>
-        </copy>
-        <copy todir="${env.TOMCAT_HOME}/webapps/${Name}">
-            <fileset dir="${install.war}/${Name}"/>
+        <copy file="${build.lib}/coreportlets.jar" todir="${env.CATALINA_HOME}/webapps/coreportlets/WEB-INF/lib"/>
+        <copy todir="${env.CATALINA_HOME}/webapps/coreportlets">
+            <fileset dir="${install.war}/coreportlets"/>
         </copy>
     </target>
 
