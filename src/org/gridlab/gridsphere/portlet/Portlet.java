@@ -4,6 +4,14 @@
  */
 package org.gridlab.gridsphere.portlet;
 
+import org.gridlab.gridsphere.portlet.impl.PortletProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletConfig;
+import org.gridlab.gridsphere.portlet.impl.SportletRequest;
+import org.gridlab.gridsphere.portlet.impl.SportletResponse;
+import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApp;
+import org.gridlab.gridsphere.event.ActionEvent;
+import org.gridlab.gridsphere.event.impl.ActionEventImpl;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * The abstract PortletInfo is used by the portlet container to invoke the portlet.
@@ -63,38 +73,32 @@ public abstract class Portlet extends HttpServlet
     protected PortletConfig portletConfig = null;
     protected PortletSettings portletSettings = null;
 
-    //protected Cacheable cacheable = null;
-
-    //private PortletRegistryService registryService = null;
-
-    private String registeryID = null;
-
     public static class Mode implements Serializable {
 
-        protected static final int VIEW_MODE = 0;
-        protected static final int EDIT_MODE = 1;
-        protected static final int HELP_MODE = 2;
-        protected static final int CONFIGURE_MODE = 3;
+        protected static final int VIEW_MODE = 1;
+        protected static final int EDIT_MODE = 2;
+        protected static final int HELP_MODE = 3;
+        protected static final int CONFIGURE_MODE = 4;
 
         public static final Mode EDIT = new Mode(EDIT_MODE);
         public static final Mode VIEW = new Mode(VIEW_MODE);
         public static final Mode HELP = new Mode(HELP_MODE);
         public static final Mode CONFIGURE = new Mode(CONFIGURE_MODE);
 
-        private int mode = VIEW_MODE;
+        private int mode = 0;
 
         private Mode(int mode) {
             this.mode = mode;
         }
 
         public static Portlet.Mode getInstance(String mode) {
-            if (mode.equals(EDIT.toString())) {
+            if (mode.equalsIgnoreCase(EDIT.toString())) {
                 return EDIT;
-            } else if (mode.equals(VIEW.toString())) {
+            } else if (mode.equalsIgnoreCase(VIEW.toString())) {
                 return VIEW;
-            } else if (mode.equals(HELP.toString())) {
+            } else if (mode.equalsIgnoreCase(HELP.toString())) {
                 return HELP;
-            } else if (mode.equals(CONFIGURE.toString())) {
+            } else if (mode.equalsIgnoreCase(CONFIGURE.toString())) {
                 return CONFIGURE;
             }
             return null;
@@ -110,14 +114,14 @@ public abstract class Portlet extends HttpServlet
         }
 
         public String toString() {
-            String tagstring;
+            String tagstring = null;
             if (mode == EDIT_MODE) {
                 tagstring = "EDIT";
             } else if (mode == HELP_MODE) {
                 tagstring = "HELP";
             } else if (mode == CONFIGURE_MODE) {
                 tagstring = "CONFIGURE";
-            } else {
+            } else if (mode == VIEW_MODE) {
                 tagstring = "VIEW";
             }
             return tagstring;
@@ -151,12 +155,12 @@ public abstract class Portlet extends HttpServlet
         }
 
         public String toString() {
-            String tagstring;
+            String tagstring = null;
             if (modifier == PREVIOUS_MODE) {
                 tagstring = "PREVIOUS";
             } else if (modifier == REQUESTED_MODE) {
                 tagstring = "REQUESTED";
-            } else {
+            } else if (modifier == CURRENT_MODE) {
                 tagstring = "CURRENT";
             }
             return tagstring;
@@ -297,45 +301,6 @@ public abstract class Portlet extends HttpServlet
     public final void init(ServletConfig config) throws ServletException {
         super.init(config);
         log.info("in init(ServletConfig)");
-        /*
-        portletConfig = new SportletConfig(config);
-        PortletContext context = portletConfig.getContext();
-        PortletRegistryService registryService = (PortletRegistryService)context.getService(PortletRegistryService.class);
-        AccessControlService aclService = (AccessControlService)context.getService(AccessControlService.class);
-        */
-        //registryService.registerPortletConfig(portletConfig);
-
-        /*
-            This will register the portlet (servlet) with the registry service on startup.
-            I took this path initially thinking I could forward to remote third-party
-            portlets outside of gridsphere.jar and provide their context to the registry
-            service too. Now I've moved this to GridSphere.java  so the portlet container
-            controls the entire loading and initialization/shutdown of the portlets.
-
-            And whaddya know-- I started it up again trying to be compatible with WPS portlet API
-            in that the PortletConfig must contain the Initparameters defined in the web.xml for this portlet class
-            Also thinking more about portlets as autonomous units-- decouple gridsphere.jar from portlets such that
-            one can reload portlet components-- need to find switch to enable "smarter" jar reloading in Tomcat
-        */
-        /*
-        String concreteID = config.getInitParameter(GridSphereProperties.ID);
-        PortletDeploymentDescriptor pdd = null;
-        try {
-            pdd = new PortletDeploymentDescriptor(config);
-        } catch (IOException e) {
-            throw new ServletException("Unable to deserialize portlet.xml: ", e);
-        }
-        ConcretePortletApplication concreteApp = pdd.getConcretePortletApplication(concreteID);
-        PortletApplication portletApp = pdd.getPortletApplication(concreteID);
-        ConcretePortlet concretePortlet = new ConcreteSportlet(pdd, portletApp, concreteApp, aclService);
-
-        // create sportlet settings that is not modifiable initially
-        portletSettings = concretePortlet.getPortletSettings(false);
-        cacheable = concretePortlet.getCacheablePortletInfo();
-        context = concretePortlet.getPortletConfig().getContext();
-        registryService = (PortletRegistryService)context.getService(PortletRegistryService.class);
-        registeryID = registryService.registerPortlet(concretePortlet);
-        */
     }
 
     public final void init() throws ServletException {
@@ -366,46 +331,81 @@ public abstract class Portlet extends HttpServlet
         return super.getServletInfo();
     }
 
-    public final void service(ServletRequest request, ServletResponse response)
-            throws ServletException, IOException {
-        log.info("in service(ServletRequest, ServletResponse) of Portlet");
-
-        // make cacheable
-        // serve cached portlet output
-        //if (cacheable.getExpiration() < 0) {
-
-        //}
-        // redirect to GridSphere
+    public final void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+        super.service(request, response);
     }
 
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        // redirect to gridsphere
+    public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        log.info("in Portlet: service(HttpServletRequest, HttpServletResponse)");
+
+        // create portlet request and response objects
+        PortletRequest portletRequest = new SportletRequest(request);
+        PortletResponse portletResponse = new SportletResponse(response, request);
+
+        String method = (String)request.getAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD);
+        log.info("in Portlet: lifecycle method=" + method);
+        try {
+            if (method.equals(PortletProperties.INIT)) {
+                PortletApp app = (PortletApp)request.getAttribute(PortletProperties.PORTLET_APPLICATION);
+                this.portletConfig = new SportletConfig(getServletConfig(), app);
+                init(this.portletConfig);
+            } else if (method.equals(PortletProperties.SERVICE)) {
+                service(portletRequest, portletResponse);
+            } else if (method.equals(PortletProperties.DESTROY)) {
+                destroy(this.portletConfig);
+            } else if (method.equals(PortletProperties.INIT_CONCRETE)) {
+                PortletSettings settings = (PortletSettings)request.getAttribute(PortletProperties.PORTLET_SETTINGS);
+                initConcrete(settings);
+            } else if (method.equals(PortletProperties.DESTROY_CONCRETE)) {
+                PortletSettings settings = (PortletSettings)request.getAttribute(PortletProperties.PORTLET_SETTINGS);
+                destroyConcrete(settings);
+            } else if (method.equals(PortletProperties.LOGIN)) {
+                login(portletRequest);
+            } else if (method.equals(PortletProperties.LOGOUT)) {
+                PortletSession portletSession = (PortletSession)portletRequest.getPortletSession();
+                logout(portletSession);
+            } else {
+                log.error("Portlet received unsupported lifecycle method: " + method);
+            }
+        } catch (UnavailableException e) {
+
+        }
+        request.removeAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD);
     }
 
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp)
+    protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-        super.doPut(req, resp);
+        log.info("in Portlet: doGet");
+        super.doGet(req, res);
     }
 
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+    protected void doPut(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-        super.doPost(req, resp);
+        log.info("in Portlet: doPost");
+        super.doPut(req, res);
     }
 
-    protected void doTrace(HttpServletRequest req, HttpServletResponse resp)
+    protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-        super.doTrace(req, resp);
+        log.info("in Portlet: doPost");
+        super.doPost(req, res);
     }
 
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
+    protected void doTrace(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-        super.doDelete(req, resp);
+        log.info("in Portlet: doTrace");
+        super.doTrace(req, res);
+    }
+
+    protected void doDelete(HttpServletRequest req, HttpServletResponse res)
+            throws ServletException, IOException {
+        log.info("in Portlet: doDelete");
+        super.doDelete(req, res);
     }
 
     public final void destroy() {
+        log.info("in Portlet: destroy");
         super.destroy();
-        //registryService.unregisterPortlet(registeryID);
     }
 
 }

@@ -5,6 +5,9 @@
 package org.gridlab.gridsphere.portlet;
 
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.PortletProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletSettings;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import javax.servlet.UnavailableException;
 import javax.servlet.ServletRequest;
@@ -13,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Vector;
+import java.util.Map;
 
 /**
  * The PortletAdapter provides a default implementation for the PortletInfo interface.
@@ -29,6 +35,9 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
     protected Hashtable storeVars = new Hashtable();
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletAdapter.class);
+
+    /* keep track of all PortletSettings per concrete portlet (concreteID, PortletSettings) */
+    private Map allPortletSettings = new Hashtable();
 
     public PortletAdapter() {
         log.info("in PortletAdaptor constructor");
@@ -86,7 +95,7 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      */
     public void initConcrete(PortletSettings settings) throws UnavailableException {
         log.info("in initConcrete(PortletSettings)");
-        this.portletSettings = settings;
+        allPortletSettings.put(settings.getConcretePortletID(), settings);
     }
 
     /**
@@ -101,8 +110,8 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      * @param settings the portlet settings
      */
     public void destroyConcrete(PortletSettings settings) {
-        log.info("in initConcrete(PortletSettings)");
-        this.portletSettings = null;
+        log.info("in destroyConcrete(PortletSettings)");
+        allPortletSettings.remove(settings.getConcretePortletID());
     }
 
     /**
@@ -117,12 +126,31 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      * @throws PortletException if the portlet has trouble fulfilling the rendering request
      * @throws IOException if the streaming causes an I/O problem
      */
-    public void service(PortletRequest request, PortletResponse response)
-            throws PortletException, IOException {
+    public void service(PortletRequest request, PortletResponse response) throws PortletException, IOException {
+        log.info("in PortletAdapter: service(PortletRequest, PortletResponse)");
 
-        // super.service((ServletRequest)request, (ServletResponse)response);
-        // Forward to appropriate do... method
-        Portlet.Mode mode = (Portlet.Mode) request.getMode();
+        Portlet.Mode mode = request.getMode();
+        Portlet.Mode previousMode = request.getPreviousMode();
+
+        // set the proper PortletSettings
+        String portletID = (String)request.getAttribute(GridSphereProperties.PORTLETID);
+        if (portletID == null) {
+            portletID = (String)request.getParameter(GridSphereProperties.PORTLETID);
+        }
+
+        SportletSettings sportletSettings = (SportletSettings)allPortletSettings.get(portletID);
+
+        /*  UNCOMMENT THIS WHEN PREVIOUS MODE IS WORKING
+        if (previousMode.getMode() == Portlet.Mode.CONFIGURE.getMode()) {
+            sportletSettings.enableConfigurePermission(true);
+        }
+        */
+
+        this.portletSettings = (PortletSettings)sportletSettings;
+
+        String method = (String)request.getAttribute(PortletProperties.PORTLET_ACTION_METHOD);
+        if (method != null) return;
+
         if (mode != null) {
             switch (mode.getMode()) {
                 case Portlet.Mode.VIEW_MODE:
@@ -147,6 +175,8 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
             log.error("Received invalid PortletMode command : " + mode);
             throw new PortletException("Received invalid PortletMode command");
         }
+
+        request.removeAttribute(GridSphereProperties.PORTLETMODE);
     }
 
     /**

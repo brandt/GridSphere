@@ -5,9 +5,13 @@
 package org.gridlab.gridsphere.portlet;
 
 import org.gridlab.gridsphere.event.*;
+import org.gridlab.gridsphere.event.impl.ActionEventImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.PortletProperties;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 
 /**
@@ -28,6 +32,48 @@ public abstract class AbstractPortlet extends PortletAdapter implements ActionLi
      */
     public PortletConfig getConfig() {
         return super.getPortletConfig();
+    }
+
+    /**
+     * Called by the portlet container to ask this portlet to generate its markup using the given
+     * request/response pair. Depending on the mode of the portlet and the requesting client device,
+     * the markup will be different. Also, the portlet can take language preferences and/or
+     * personalized settings into account.
+     *
+     * @param request the portlet request
+     * @param response the portlet response
+     *
+     * @throws PortletException if the portlet has trouble fulfilling the rendering request
+     * @throws IOException if the streaming causes an I/O problem
+     */
+    public void service(PortletRequest request, PortletResponse response)
+            throws PortletException, IOException {
+        super.service(request, response);
+
+        log.info("in AbstractPortlet: service(PortletRequest, PortletResponse)");
+
+        String method = (String)request.getAttribute(PortletProperties.PORTLET_ACTION_METHOD);
+        if (method != null) {
+
+            String portletID = request.getParameter(GridSphereProperties.PORTLETID);
+            //this.portletSettings = (PortletSettings)allPortletSettings.get(portletID);
+
+            if (method.equals(PortletProperties.DO_TITLE)) {
+                doTitle(request, response);
+            } else if (method.equals(PortletProperties.ACTION_PERFORMED)) {
+                log.info("in AbstractPortlet: doing actionPerformed()");
+
+                // Set the appropiate portlet settings
+                PortletAction action = (PortletAction)request.getAttribute(PortletProperties.ACTION_EVENT);
+                ActionEvent evt = new ActionEventImpl(action, request, response);
+                actionPerformed(evt);
+            } //else {
+                //super.service(request, response);
+            //}
+        } //else {
+            //super.service(request, response);
+        //}
+        request.removeAttribute(PortletProperties.PORTLET_ACTION_METHOD);
     }
 
     /**
@@ -65,7 +111,12 @@ public abstract class AbstractPortlet extends PortletAdapter implements ActionLi
      * @throws <code>PortletException</code>if the portlet title has trouble fulfilling the rendering request
      * @throws java.io.IOException if the streaming causes an I/O problem
      */
-    public void doTitle(PortletRequest request, PortletResponse response) throws PortletException, IOException {}
+    public void doTitle(PortletRequest request, PortletResponse response) throws PortletException, IOException {
+        PortletSettings settings = request.getPortletSettings();
+        String title = settings.getTitle(request.getLocale(), request.getClient());
+        PrintWriter out = response.getWriter();
+        out.println(title);
+    }
 
     /**
      * Notifies this listener that a portlet window has been detached.
