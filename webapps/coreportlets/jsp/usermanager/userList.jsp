@@ -7,47 +7,40 @@
 <jsp:useBean id="userManagerBean"
              class="org.gridlab.gridsphere.portlets.core.beans.UserManagerBean"
              scope="request"/>
-<form name="UserManagerPortlet" action="<%=userManagerBean.getUserListURI()%>">
+<form name="UserManagerPortlet" method="POST" action="<%=userManagerBean.getUserListURI()%>">
   <input type="hidden" name="userID" value=""/>
   <script language="JAVASCRIPT">
     function UserManagerPortlet_listUser_onClick() {
-      document.UserManagerPortlet.action.value="<%=userManagerBean.getUserListURI()%>";
+      document.UserManagerPortlet.action="<%=userManagerBean.getUserListURI()%>";
+      document.UserManagerPortlet.submit();
+    }
+
+    function UserManagerPortlet_newUser_onClick(userID) {
+      document.UserManagerPortlet.userID.value="";
+      document.UserManagerPortlet.action="<%=userManagerBean.getUserEditURI()%>";
       document.UserManagerPortlet.submit();
     }
 
     function UserManagerPortlet_viewUser_onClick(userID) {
       document.UserManagerPortlet.userID.value=userID;
-      document.UserManagerPortlet.action.value="<%=userManagerBean.getUserViewURI()%>";
+      document.UserManagerPortlet.action="<%=userManagerBean.getUserViewURI()%>";
       document.UserManagerPortlet.submit();
     }
   </script>
-<% if (userManagerBean.isFormInvalid()) { %>
-<table bgcolor="BLACK" border=0 cellpadding=0 cellspacing=0 width="*">
+<table border="0" cellspacing="1" cellpadding="2" width="100%">
   <tr>
-    <td width="*">
-      <table cellspacing=0 cellpadding=0 border=0>
+    <td>
+      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
         <tr>
-          <td bgcolor="WHITE">
-            <font color="DARKRED"><bold>
-              <%=userManagerBean.getFormInvalidMessage()%>
-            </bold></font>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<% } %>
-<table bgcolor="BLACK" border="0" cellpadding="1" cellspacing="1" width="*">
-  <tr>
-    <td width="*">
-      <table border="0" cellspacing="1" cellpadding="1">
-        <tr>
-          <td bgcolor="GRAY">
+          <td bgcolor="#CCCCCC">
             <input type="button"
                    name="<%=UserManagerBean.ACTION_USER_LIST%>"
                    value="Refresh List"
                    onClick="javascript:UserManagerPortlet_listUser_onClick()"/>
+            &nbsp;&nbsp;<input type="button"
+                   name="<%=UserManagerBean.ACTION_USER_EDIT%>"
+                   value="New User"
+                   onClick="javascript:UserManagerPortlet_newUser_onClick()"/>
           </td>
         </tr>
       </table>
@@ -55,39 +48,29 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellspacing="1" cellpadding="1">
+      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
         <tr>
-          <td bgcolor="#999999">
-            <font color="WHITE">
-              ID
-            </font>
+          <td bgcolor="#CCCCCC">
+            ID
           </td>
-          <td bgcolor="GRAY">
-            <font color="WHITE">
-              User Name
-            </font>
+          <td bgcolor="#CCCCCC">
+            User Name
           </td>
-          <td bgcolor="GRAY">
-            <font color="WHITE">
-              Full Name
-            </font>
+          <td bgcolor="#CCCCCC">
+            Full Name
           </td>
-          <td bgcolor="GRAY">
-            <font color="WHITE">
-              Organization
-            </font>
+          <td bgcolor="#CCCCCC">
+            Organization
           </td>
-          <td bgcolor="GRAY">
-            <font color="WHITE">
-              Email Address
-            </font>
+          <td bgcolor="#CCCCCC">
+            Email Address
           </td>
         </tr>
 <% List userList = userManagerBean.getUserList();
    int numUsers = userList.size();
    if (numUsers == 0) { %>
         <tr>
-          <td bgcolor="WHITE" colsize="5">
+          <td bgcolor="WHITE" colspan="5">
             <font color="DARKRED">
               No user accounts in database.
             </font>

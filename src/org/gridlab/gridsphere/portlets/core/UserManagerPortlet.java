@@ -34,81 +34,79 @@ import java.util.List;
 public class UserManagerPortlet extends AbstractPortlet {
 
     private static PortletLog _log = SportletLog.getInstance(UserManagerPortlet.class);
-    private UserManagerService userManagerService = null;
-    private PasswordManagerService passwordManagerService = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
-        PortletContext context = config.getContext();
-        try {
-            userManagerService = (UserManagerService) context.getService(UserManagerService.class);
-            passwordManagerService = (PasswordManagerService) context.getService(PasswordManagerService.class);
-        } catch (PortletServiceUnavailableException e) {
-            throw new UnavailableException("Service instance unavailable: " + e.toString());
-        } catch (PortletServiceNotFoundException e) {
-            throw new UnavailableException("Service instance not found: " + e.toString());
-        }
-        System.err.println("init() in UserManagerPortlet");
+        _log.info("Exiting init()");
+    }
+
+    public void initConcrete(PortletSettings settings) throws UnavailableException {
+        super.initConcrete(settings);
+        _log.info("Exiting initConcrete()");
     }
 
     public void actionPerformed(ActionEvent event) throws PortletException {
+        _log.debug("Entering actionPerformed()");
         PortletAction action = event.getAction();
-        if (action instanceof DefaultPortletAction) {
-            //'Get the portlet request and response
-            PortletRequest request = event.getPortletRequest();
-            PortletResponse response = event.getPortletResponse();
-            // Create instance of user manager bean
-            UserManagerBean userManagerBean = getUserManagerBean(request, response);
-            //'Then process the appropriate action
-            DefaultPortletAction defaultAction = (DefaultPortletAction)action;
-            String actionName = action.toString();
-            _log.debug("Action performed " + actionName);
-            if (action.equals(UserManagerBean.ACTION_USER_LIST)) {
-                userManagerBean.doListUsers();
-            } else if (action.equals(UserManagerBean.ACTION_USER_VIEW)) {
-                userManagerBean.doViewUser();
-            } else if (action.equals(UserManagerBean.ACTION_USER_EDIT)) {
-                userManagerBean.doEditUser();
-            } else if (action.equals(UserManagerBean.ACTION_USER_EDIT_CONFIRM)) {
-                userManagerBean.doConfirmEditUser();
-            } else if (action.equals(UserManagerBean.ACTION_USER_DELETE)) {
-                userManagerBean.doDeleteUser();
-            } else if (action.equals(UserManagerBean.ACTION_USER_DELETE_CONFIRM)) {
-                userManagerBean.doConfirmDeleteUser();
-            } else {
-                userManagerBean.doListUsers();
-            }
-        }
+        //'Get the portlet request and response
+        PortletRequest request = event.getPortletRequest();
+        PortletResponse response = event.getPortletResponse();
+        // Get instance of user manager bean
+        UserManagerBean userManagerBean = getUserManagerBean(request, response);
+        // Then perform given action
+        userManagerBean.doAction(action);
+        _log.debug("Exiting actionPerformed()");
     }
 
     public void doView(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
+        _log.debug("Entering doView()");
+        // Get instance of user manager bean
         UserManagerBean userManagerBean = getUserManagerBean(request, response);
-        String nextJspPage = userManagerBean.getNextJspPage();
-        getPortletConfig().getContext().include(nextJspPage, request, response);
+        // If no action performed, then perform list users
+        if (userManagerBean.getActionPerformed() == null) {
+            userManagerBean.doListUsers();
+        }
+        // Get next page to display
+        String nextPage = userManagerBean.getNextPage();
+        // Include the given page
+        getPortletConfig().getContext().include(nextPage, request, response);
+        _log.debug("Exiting doView()");
     }
 
     public void doEdit(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
+        _log.debug("Entering doEdit()");
         PrintWriter out = response.getWriter();
         out.println("Edit mode not yet implemented.");
+        _log.debug("Exiting doEdit()");
     }
 
     public void doTitle(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
-        PrintWriter out = response.getWriter();
-        out.println("User Manager Portlet");
+        _log.debug("Entering doTitle()");
+        // Get instance of user manager bean
+        UserManagerBean userManagerBean = getUserManagerBean(request, response);
+        // Get next title to display
+        String title = userManagerBean.getNextTitle();
+        // Print the given title
+        response.getWriter().println(title);
+        _log.debug("Exiting doTitle()");
     }
+
     private UserManagerBean getUserManagerBean(PortletRequest request,
                                                PortletResponse response)
             throws PortletException {
+        _log.debug("Entering getUserManagerBean()");
         UserManagerBean userManagerBean =
                 (UserManagerBean)request.getAttribute(UserManagerBean.ATTRIBUTE_USER_MANAGER_BEAN);
         if (userManagerBean == null) {
+            _log.debug("Creating instance of user manager bean");
             PortletConfig config = getPortletConfig();
             userManagerBean = new UserManagerBean(config, request, response);
             request.setAttribute(UserManagerBean.ATTRIBUTE_USER_MANAGER_BEAN, userManagerBean);
         }
+        _log.debug("Exiting getUserManagerBean()");
         return userManagerBean;
     }
 }

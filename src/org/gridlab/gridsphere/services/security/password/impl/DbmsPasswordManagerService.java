@@ -118,7 +118,7 @@ public class DbmsPasswordManagerService
         if (password == null) {
             // Validate the value if requested
             if (validatePassword) {
-                validatePassword(password, value);
+                validatePassword(value);
             }
             password = new DbmsPassword();
             password.setUser(user);
@@ -134,7 +134,7 @@ public class DbmsPasswordManagerService
         } else {
             // Validate the value if requested
             if (validatePassword) {
-                validatePassword(value);
+                validatePassword(password, value);
             }
             password.setValue(value);
             password.setDateExpires(dateExpires);
@@ -166,33 +166,18 @@ public class DbmsPasswordManagerService
 
     public void deletePassword(User user) {
         Password password = getPassword(user);
-        try {
-            this.pm.delete(password);
-        } catch (PersistenceManagerException e) {
-            _log.error("Unable to delete password", e);
+        if (password != null) {
+            try {
+                this.pm.delete(password);
+            } catch (PersistenceManagerException e) {
+                _log.error("Unable to delete password", e);
+            }
         }
     }
 
     public boolean hasPassword(User user) {
         Password password = getPassword(user);
         return (password != null);
-    }
-
-    public void validatePassword(String password)
-          throws PasswordInvalidException {
-        if (password == null) {
-            String msg = "Password is not set.";
-            throw new PasswordInvalidException(msg);
-        }
-        password = password.trim();
-        if (password.length() == 0) {
-            String msg = "Password is blank.";
-            throw new PasswordInvalidException(msg);
-        }
-        if (password.length() < 5) {
-            String msg = "Password must be longer than 5 characters.";
-            throw new PasswordInvalidException(msg);
-        }
     }
 
     public void validatePassword(User user, String newValue)
@@ -213,6 +198,23 @@ public class DbmsPasswordManagerService
             throw new PasswordInvalidException(msg);
         }
         validatePassword(newValue);
+    }
+
+    public void validatePassword(String password)
+          throws PasswordInvalidException {
+        if (password == null) {
+            String msg = "Password is not set.";
+            throw new PasswordInvalidException(msg);
+        }
+        password = password.trim();
+        if (password.length() == 0) {
+            String msg = "Password is blank.";
+            throw new PasswordInvalidException(msg);
+        }
+        if (password.length() < 5) {
+            String msg = "Password must be longer than 5 characters.";
+            throw new PasswordInvalidException(msg);
+        }
     }
 
     public boolean isPasswordCorrect(User user, String value) {

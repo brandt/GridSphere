@@ -81,8 +81,27 @@
                 </portlet-panel>
             </portlet-tab>
         </portlet-tabbed-pane>
-    </portlet-tab>
+   </portlet-tab>
     <portlet-tab>
+        <title>Administration</title>
+        <portlet-tabbed-pane style="sub-menu">
+            <portlet-tab>
+                <title>Users</title>
+                <portlet-panel>
+                    <flow-layout>
+                        <align>1</align>
+                        <hgap>1</hgap>
+                        <vgap>1</vgap>
+                        <portlet-frame>
+                            <name>UserManagerPortlet</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.UserManagerPortlet.1</portlet-class>
+                        </portlet-frame>
+                    </flow-layout>
+                </portlet-panel>
+            </portlet-tab>
+        </portlet-tabbed-pane>
+   </portlet-tab>
+   <portlet-tab>
         <title>Cactus</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab>

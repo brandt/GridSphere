@@ -9,10 +9,13 @@
 package org.gridlab.gridsphere.portlets.core.beans;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 public class PortletBean {
 
-    private PortletConfig config = null;
+    private static PortletLog _log = SportletLog.getInstance(PortletBean.class);
+
+    protected PortletConfig config = null;
     protected PortletRequest request = null;
     protected PortletResponse response = null;
 

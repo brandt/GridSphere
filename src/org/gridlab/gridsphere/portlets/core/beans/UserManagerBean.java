@@ -16,6 +16,7 @@ import org.gridlab.gridsphere.services.user.UserManagerService;
 import org.gridlab.gridsphere.services.user.AccountRequest;
 import org.gridlab.gridsphere.services.user.PermissionDeniedException;
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portletcontainer.descriptor.Role;
@@ -29,15 +30,17 @@ import java.io.PrintWriter;
 
 public class UserManagerBean extends PortletBean {
 
+    // Portlet log
+    private static PortletLog _log = SportletLog.getInstance(UserManagerBean.class);
     // Portlet request attributes used within this portlet
     public static final String ATTRIBUTE_USER_MANAGER_PAGE = "userManagerPage";
     public static final String ATTRIBUTE_USER_MANAGER_BEAN = "userManagerBean";
     // JSP pages used by this portlet
-    public static final String PAGE_USER_LIST = "/jsp/userList.jsp";
-    public static final String PAGE_USER_VIEW = "/jsp/userView.jsp";
-    public static final String PAGE_USER_EDIT = "/jsp/userEdit.jsp";
-    public static final String PAGE_USER_DELETE = "/jsp/userDelete.jsp";
-    public static final String PAGE_USER_DELETE_CONFIRM = "/jsp/userDeleteConfirm.jsp";
+    public static final String PAGE_USER_LIST = "/jsp/usermanager/userList.jsp";
+    public static final String PAGE_USER_VIEW = "/jsp/usermanager/userView.jsp";
+    public static final String PAGE_USER_EDIT = "/jsp/usermanager/userEdit.jsp";
+    public static final String PAGE_USER_DELETE = "/jsp/usermanager/userDelete.jsp";
+    public static final String PAGE_USER_DELETE_CONFIRM = "/jsp/usermanager/userDeleteConfirm.jsp";
     // Portlet request actions available within this portlet
     public static final String ACTION_USER_LIST = "userList";
     public static final String ACTION_USER_VIEW = "userView";
@@ -47,23 +50,9 @@ public class UserManagerBean extends PortletBean {
     public static final String ACTION_USER_DELETE = "userDelete";
     public static final String ACTION_USER_DELETE_CONFIRM = "userDeleteConfirm";
     public static final String ACTION_USER_DELETE_CANCEL = "userDeleteCancel";
-    // Portlet request actions available within this portlet
-    public static final DefaultPortletAction PACTION_USER_LIST
-            = new DefaultPortletAction(ACTION_USER_LIST);
-    public static final DefaultPortletAction PACTION_USER_VIEW
-            = new DefaultPortletAction(ACTION_USER_VIEW);
-    public static final DefaultPortletAction PACTION_USER_EDIT
-            = new DefaultPortletAction(ACTION_USER_EDIT);
-    public static final DefaultPortletAction PACTION_USER_EDIT_CONFIRM
-            = new DefaultPortletAction(ACTION_USER_EDIT_CONFIRM);
-    public static final DefaultPortletAction PACTION_USER_EDIT_CANCEL
-            = new DefaultPortletAction(ACTION_USER_EDIT_CANCEL);
-    public static final DefaultPortletAction PACTION_USER_DELETE
-            = new DefaultPortletAction(ACTION_USER_DELETE);
-    public static final DefaultPortletAction PACTION_USER_DELETE_CONFIRM
-            = new DefaultPortletAction(ACTION_USER_DELETE_CONFIRM);
-    public static final DefaultPortletAction PACTION_USER_DELETE_CANCEL
-            = new DefaultPortletAction(ACTION_USER_DELETE_CANCEL);
+    // Portlet action
+    private String actionPerformed = null;
+    private String nextPage = PAGE_USER_LIST;
     // Portlet services
     private UserManagerService userManagerService = null;
     private PasswordManagerService passwordManagerService = null;
@@ -97,15 +86,47 @@ public class UserManagerBean extends PortletBean {
     public UserManagerBean(PortletConfig config, PortletRequest request, PortletResponse response)
             throws PortletException {
         super(config, request, response);
+        init(config);
     }
 
     protected void initServices(PortletConfig config)
             throws PortletException {
+        _log.debug("Entering initServices()");
         PortletContext context = config.getContext();
         this.userManagerService =
                 (UserManagerService)context.getService(UserManagerService.class);
         this.passwordManagerService =
                 (PasswordManagerService)context.getService(PasswordManagerService.class);
+        _log.debug("Exiting initServices()");
+    }
+
+    public void doAction(PortletAction action)
+            throws PortletException {
+        if (action instanceof DefaultPortletAction) {
+            // Save action to be performed
+            String actionName = ((DefaultPortletAction)action).getName();
+            setActionPerformed(actionName);
+            _log.debug("Action performed = " + actionName);
+            // Perform appropriate action
+            if (actionName.equals(ACTION_USER_LIST)) {
+                doListUsers();
+            } else if (actionName.equals(ACTION_USER_VIEW)) {
+                doViewUser();
+            } else if (actionName.equals(ACTION_USER_EDIT)) {
+                doEditUser();
+            } else if (actionName.equals(ACTION_USER_EDIT_CONFIRM)) {
+                doConfirmEditUser();
+            } else if (actionName.equals(ACTION_USER_DELETE)) {
+                doDeleteUser();
+            } else if (actionName.equals(ACTION_USER_DELETE_CONFIRM)) {
+                doConfirmDeleteUser();
+            } else {
+                doListUsers();
+            }
+        } else {
+            _log.debug("Action not default portlet action!");
+            doListUsers();
+        }
     }
 
     public void doListUsers()
@@ -121,7 +142,7 @@ public class UserManagerBean extends PortletBean {
         // Add delete user action
         createUserDeleteURI();
         // Set next page attribute
-        setNextJspPage(PAGE_USER_LIST);
+        setNextPage(PAGE_USER_LIST);
     }
 
     public void doViewUser()
@@ -135,7 +156,7 @@ public class UserManagerBean extends PortletBean {
         // Add delete user action
         createUserDeleteURI();
         // Set next page attribute
-        setNextJspPage(PAGE_USER_VIEW);
+        setNextPage(PAGE_USER_VIEW);
     }
 
     public void doEditUser()
@@ -148,7 +169,7 @@ public class UserManagerBean extends PortletBean {
         // which should be either user list or view
         createUserEditCancelURI();
         // Set next page attribute
-        setNextJspPage(PAGE_USER_EDIT);
+        setNextPage(PAGE_USER_EDIT);
     }
 
     public void doConfirmEditUser()
@@ -156,7 +177,7 @@ public class UserManagerBean extends PortletBean {
         try {
             // Load user so we have original attributes (for existing users)
             loadUser();
-            // First apply user parameters
+            // Apply user parameters
             editUser();
             // Save user
             saveUser();
@@ -167,7 +188,7 @@ public class UserManagerBean extends PortletBean {
             // Add delete user action
             createUserDeleteURI();
             // Set next page attribute
-            setNextJspPage(PAGE_USER_VIEW);
+            setNextPage(PAGE_USER_VIEW);
         } catch (PortletException e) {
             // Set form validation
             setIsFormInvalid(true);
@@ -178,7 +199,7 @@ public class UserManagerBean extends PortletBean {
             // which should be either user list or view
             createUserEditCancelURI();
             // Set next page attribute
-            setNextJspPage(PAGE_USER_EDIT);
+            setNextPage(PAGE_USER_EDIT);
         }
     }
 
@@ -192,7 +213,7 @@ public class UserManagerBean extends PortletBean {
         // which should be either user list or view
         createUserDeleteCancelURI();
         // Set next page attribute
-        setNextJspPage(PAGE_USER_DELETE);
+        setNextPage(PAGE_USER_DELETE);
     }
 
     public void doConfirmDeleteUser()
@@ -204,7 +225,7 @@ public class UserManagerBean extends PortletBean {
         // Add list user action
         createUserListURI();
         // Set next page attribute
-        setNextJspPage(PAGE_USER_DELETE_CONFIRM);
+        setNextPage(PAGE_USER_DELETE_CONFIRM);
     }
 
     public String getUserListURI() {
@@ -213,7 +234,7 @@ public class UserManagerBean extends PortletBean {
 
     public void createUserListURI() {
         PortletURI listURI = response.createURI();
-        listURI.addAction(PACTION_USER_LIST);
+        listURI.addAction(new DefaultPortletAction(ACTION_USER_LIST));
         request.setAttribute(ACTION_USER_LIST, listURI.toString());
     }
 
@@ -223,7 +244,7 @@ public class UserManagerBean extends PortletBean {
 
     public void createUserViewURI() {
         PortletURI viewURI = response.createURI();
-        viewURI.addAction(PACTION_USER_VIEW);
+        viewURI.addAction(new DefaultPortletAction(ACTION_USER_VIEW));
         request.setAttribute(ACTION_USER_VIEW, viewURI.toString());
     }
 
@@ -233,7 +254,7 @@ public class UserManagerBean extends PortletBean {
 
     public void createUserEditURI() {
         PortletURI editURI = response.createURI();
-        editURI.addAction(PACTION_USER_EDIT);
+        editURI.addAction(new DefaultPortletAction(ACTION_USER_EDIT));
         request.setAttribute(ACTION_USER_EDIT, editURI.toString());
     }
 
@@ -243,7 +264,7 @@ public class UserManagerBean extends PortletBean {
 
     public void createUserEditConfirmURI() {
         PortletURI editConfirmURI = response.createURI();
-        editConfirmURI.addAction(PACTION_USER_EDIT_CONFIRM);
+        editConfirmURI.addAction(new DefaultPortletAction(ACTION_USER_EDIT_CONFIRM));
         request.setAttribute(ACTION_USER_EDIT_CONFIRM, editConfirmURI.toString());
     }
 
@@ -252,8 +273,9 @@ public class UserManagerBean extends PortletBean {
     }
 
     public void createUserEditCancelURI() {
-        PortletURI editURI = response.createReturnURI();
-        request.setAttribute(ACTION_USER_EDIT_CANCEL, editURI.toString());
+        PortletURI cancelURI = response.createReturnURI();
+        cancelURI.addAction(new DefaultPortletAction(ACTION_USER_EDIT_CANCEL));
+        request.setAttribute(ACTION_USER_EDIT_CANCEL, cancelURI.toString());
     }
 
     public String getUserDeleteURI() {
@@ -262,7 +284,7 @@ public class UserManagerBean extends PortletBean {
 
     public void createUserDeleteURI() {
         PortletURI deleteURI = response.createURI();
-        deleteURI.addAction(PACTION_USER_DELETE);
+        deleteURI.addAction(new DefaultPortletAction(ACTION_USER_DELETE));
         request.setAttribute(ACTION_USER_DELETE, deleteURI.toString());
     }
 
@@ -272,7 +294,7 @@ public class UserManagerBean extends PortletBean {
 
     public void createUserDeleteConfirmURI() {
         PortletURI deleteConfirmURI = response.createURI();
-        deleteConfirmURI.addAction(PACTION_USER_DELETE_CONFIRM);
+        deleteConfirmURI.addAction(new DefaultPortletAction(ACTION_USER_DELETE_CONFIRM));
         request.setAttribute(ACTION_USER_DELETE_CONFIRM, deleteConfirmURI.toString());
     }
 
@@ -282,15 +304,45 @@ public class UserManagerBean extends PortletBean {
 
     public void createUserDeleteCancelURI() {
         PortletURI cancelURI = response.createReturnURI();
+        cancelURI.addAction(new DefaultPortletAction(ACTION_USER_EDIT_CANCEL));
         request.setAttribute(ACTION_USER_DELETE_CANCEL, cancelURI.toString());
     }
 
-    public String getNextJspPage() {
-        return (String)request.getAttribute(ATTRIBUTE_USER_MANAGER_PAGE);
+    public String getActionPerformed() {
+        return this.actionPerformed;
     }
 
-    public void setNextJspPage(String jspPage) {
-        request.setAttribute(ATTRIBUTE_USER_MANAGER_PAGE, jspPage);
+    public void setActionPerformed(String action) {
+        this.actionPerformed = action;
+    }
+
+    public String getNextTitle() {
+        if (this.actionPerformed == null) {
+            return "User Account Manager: List user accounts";
+        } else if (this.actionPerformed.equals(ACTION_USER_LIST)) {
+            return "User Account Manager: List user accounts";
+        } else if (this.actionPerformed.equals(ACTION_USER_VIEW)) {
+            return "User Account Manager: View user account";
+        } else if (this.actionPerformed.equals(ACTION_USER_EDIT)) {
+            return "User Account Manager: Edit user account";
+        } else if (this.actionPerformed.equals(ACTION_USER_EDIT_CONFIRM)) {
+            return "User Account Manager: Edited ser account";
+        } else if (this.actionPerformed.equals(ACTION_USER_DELETE)) {
+            return "User Account Manager: Delete user account";
+        } else if (this.actionPerformed.equals(ACTION_USER_DELETE_CONFIRM)) {
+            return "User Account Manager: Deleted user account";
+        } else {
+            return "User Account Manager: List user accounts";
+        }
+    }
+
+    public String getNextPage() {
+        return this.nextPage;
+    }
+
+    public void setNextPage(String nextPage) {
+        _log.debug("Setting next page to " + nextPage);
+        this.nextPage = nextPage;
     }
 
     public boolean isFormInvalid() {
@@ -479,10 +531,10 @@ public class UserManagerBean extends PortletBean {
         if (this.userName.equals("")) {
             throw new PortletException("User name can't be blank.");
         }
-        if (this.givenName.equals("")) {
-            throw new PortletException("Given name can't be blank.");
+        if (this.familyName.equals("")) {
+            throw new PortletException("Family name can't be blank.");
         }
-        if (this.userName.equals("")) {
+        if (this.givenName.equals("")) {
             throw new PortletException("Given name can't be blank.");
         }
         // Then edit password
@@ -507,6 +559,8 @@ public class UserManagerBean extends PortletBean {
         account.setFullName(getFullName());
         account.setEmailAddress(getEmailAddress());
         account.setOrganization(getOrganization());
+        // Submit the account request
+        this.userManagerService.submitAccountRequest(account);
         // Approvate account request
         User approver = getPortletUser();
         try {
@@ -514,7 +568,7 @@ public class UserManagerBean extends PortletBean {
         } catch (PermissionDeniedException e) {
             throw new PortletException(e.getMessage());
         }
-        // Load user if currently null
+        // Load user if currently null (was a new user)
         if (this.user == null) {
             this.user = this.userManagerService.getUserByID(getUserID());
         }
@@ -523,10 +577,14 @@ public class UserManagerBean extends PortletBean {
     }
 
     private void deleteUser() {
+        // First delete password
+        deletePassword();
+        // Then delete user
         try {
             User approver = getPortletUser();
             this.userManagerService.removeUser(approver, userName);
         } catch (PermissionDeniedException e) {
+            _log.error("Error deleting user", e);
         }
         // Blank out user id to be safe (but keep other attributes for display).
         setUserID("");
@@ -534,7 +592,9 @@ public class UserManagerBean extends PortletBean {
 
     private void loadPassword() {
         this.password = this.passwordManagerService.getPassword(this.user);
-        setPassword(password);
+        if (password != null) {
+            setPassword(password);
+        }
     }
 
     private void editPassword()
@@ -542,11 +602,16 @@ public class UserManagerBean extends PortletBean {
         // Apply password parameters
         // Note: We access request.getParameter() directly
         // in case password was not changed. See logic below.
-        setPasswordValue(this.request.getParameter("passwordValue"));
-        setPasswordConfirmation(this.request.getParameter("passwordConfirmation"));
+        setPasswordValue(request.getParameter("passwordValue"));
+        setPasswordConfirmation(request.getParameter("passwordConfirmation"));
         setPasswordLifetime(getParameterAsLng("passwordLifetime", -1));
-        // Validate password parameters if password was altered
-        if (this.passwordValue != null) {
+        if (this.passwordValue.length() == 0) {
+            // New users must be given a password
+            if (this.user == null) {
+                throw new PortletException("New users must be given a password.");
+            }
+        } else {
+            // Validate password parameters if password was altered
             if (!this.passwordValue.equals(passwordConfirmation)) {
                 throw new PortletException("Password must match confirmation.");
             }
@@ -561,7 +626,7 @@ public class UserManagerBean extends PortletBean {
     private void savePassword()
             throws PortletException {
         // Save password parameters if password was altered
-        if (this.passwordValue != null) {
+        if (this.passwordValue.length() > 0) {
             PasswordBean passwordBean = new PasswordBean();
             passwordBean.setUser(getUser());
             passwordBean.setValue(getPasswordValue());

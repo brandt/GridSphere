@@ -50,6 +50,11 @@
         <servlet-class>org.gridlab.gridsphere.portlets.core.RSSPortlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>UserManagerPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.UserManagerPortlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
        <servlet-name>HelloWorld</servlet-name>
        <url-pattern>/hello</url-pattern>
@@ -76,10 +81,14 @@
     </servlet-mapping>
 
     <servlet-mapping>
+       <servlet-name>UserManagerPortlet</servlet-name>
+       <url-pattern>/adminstration/users</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
        <servlet-name>RSSPortlet</servlet-name>
        <url-pattern>/rss</url-pattern>
     </servlet-mapping>
-
 
     <mime-mapping>
       <extension>wbmp</extension>

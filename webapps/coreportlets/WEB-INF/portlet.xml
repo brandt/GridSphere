@@ -433,5 +433,70 @@
 
 </portlet-app-def>
 
+<portlet-app-def>
+
+<portlet-app id="org.gridlab.gridsphere.portlets.core.UserManagerPortlet">
+    <portlet-name>User Account Manager</portlet-name>
+    <servlet-name>UserManagerPortlet</servlet-name>
+    <portlet-config>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </portlet-config>
+    <cache>
+        <expires>120</expires>
+        <shared>false</shared>
+    </cache>
+    <allows>
+        <maximized/>
+        <minimized/>
+        <resizing/>
+    </allows>
+    <supports>
+        <markup name="html">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+        <markup name="wml">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+    </supports>
+</portlet-app>
+
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.UserManagerPortlet.1">
+    <context-param>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </context-param>
+    <concrete-portlet>
+        <portlet-name>User Account Manager</portlet-name>
+        <default-locale>en</default-locale>
+        <language locale="en_US">
+            <title>User Account Manager</title>
+            <title-short>UserManager</title-short>
+            <description>Provides tools for administering user accounts</description>
+            <keywords>user account administration</keywords>
+        </language>
+        <group>
+            <group-name>ANY</group-name>
+        </group>
+        <owner>
+            <role-name>SUPER</role-name>
+        </owner>
+        <group>
+            <group-name>ANY</group-name>
+        </group>
+        <role>
+            <role-name>SUPER</role-name>
+        </role>
+    </concrete-portlet>
+</concrete-portlet-app>
+
+</portlet-app-def>
+
 
 </portlet-app-collection>
