@@ -21,10 +21,12 @@
                 <minimized/>
             </allows>
             <supports>
-                <view/>
-                <edit/>
-                <help/>
-                <configure/>
+                <markup name="html">
+                    <view/>
+                    <edit/>
+                    <help/>
+                    <configure/>
+                </markup>
             </supports>
         </portlet-app>
 
