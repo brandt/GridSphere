@@ -31,12 +31,21 @@ new-project:
     [input] Please enter a Project Name this will be used for your portlet web application
             and should be lowercase e.g. coolportlets
     <command>tutorial</command>
+
+    check-project-exists:
+    [mkdir] Created dir: /Users/novotny/gridsphere/projects/tutorial
+    [input] Do you wish to develop GridSphere/WebSphere portlets or JSR 168 portlets? Enter gs or jsr (gs,jsr)
+    <command>gs</command>
 ...
             </screen>
             At the first prompt a description of the portlet package (or one portlet) is provided.
             After that a project name is provided which defines the web application name that will be used to identify the
-            web application to the servlet container. In this case, the web application name is simply <command>hello</command>.
+            web application to the servlet container. In this case, the web application name is simply <command>tutorial</command>.
 
+            In addition, you must specify whether this is a JSR portlet application or a GridSphere portlet
+            application. Depending on which option is chosen, the proper template descriptor files will
+            will be placed in the new project. Please see the JSRPortletGuide docbook for more information
+            on developing JSR 168 compliant portlet applications.
 
             In the above example a package called 'tutorial' will be created in the projects directory
             of gridsphere. The directory structure is automatically created and the required template files are copied
@@ -258,8 +267,8 @@ public class HelloWorld  extends AbstractPortlet {
             <title>Register with gridsphere</title>
             The final step is to register the portlet with gridsphere. First you have to
             edit the <filename>PortletMaster.xml</filename> to register your project
-            with gridsphere. Either you use the deployed file in <filename>$CATALINA_HOME/gridsphere/PortletMaster.xml</filename>
-            or you use the one in your gridsphere sourcedir. There it is located in <filename>config/PortletMaster.xml</filename>.
+            with gridsphere. Either you use the deployed file in <filename>$CATALINA_HOME/gridsphere/WEB-INF/PortletMaster.xml</filename>
+            or you use the one in your gridsphere sourcedir. There it is located in <filename>webapps/gridsphere/WEB-INF/PortletMaster.xml</filename>.
             If you use the one in the gridsphere sourcedir you need to redeploy gridsphere.
             <example>
                 <title>HelloWorld.java - config/PortletMaster.xml</title>
