@@ -12,7 +12,6 @@ import org.gridlab.gridsphere.layout.event.PortletTabListener;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletRole;
-import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
@@ -63,7 +62,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      */
     public PortletTab getSelectedTab() {
         for (int i = 0; i < tabs.size(); i++) {
-            PortletTab tab = (PortletTab)tabs.get(i);
+            PortletTab tab = (PortletTab) tabs.get(i);
             if (tab.isSelected()) {
                 return tab;
             }
@@ -100,7 +99,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     public PortletTab getPortletTab(String label) {
         Iterator it = tabs.iterator();
         while (it.hasNext()) {
-            PortletTab tab = (PortletTab)it.next();
+            PortletTab tab = (PortletTab) it.next();
             if (tab.getLabel().equals(label)) return tab;
         }
         return null;
@@ -142,7 +141,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     public void removeTab(PortletTab tab) {
         Iterator it = tabs.iterator();
         while (it.hasNext()) {
-            PortletTab atab = (PortletTab)it.next();
+            PortletTab atab = (PortletTab) it.next();
             if (tab.getLabel().equals(atab.getLabel())) it.remove();
         }
     }
@@ -203,7 +202,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
             Iterator it = stabs.iterator();
 
             while (it.hasNext()) {
-                tab = (PortletTab)it.next();
+                tab = (PortletTab) it.next();
                 tab.setTheme(theme);
                 list = tab.init(req, list);
                 tab.addComponentListener(this);
@@ -228,7 +227,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      */
     public void handlePortletTabEvent(PortletTabEvent event) {
         if (event.getAction() == PortletTabEvent.TabAction.TAB_SELECTED) {
-            PortletTab selectedTab = (PortletTab)event.getPortletComponent();
+            PortletTab selectedTab = (PortletTab) event.getPortletComponent();
             this.setSelectedPortletTab(selectedTab);
         }
     }
@@ -244,11 +243,11 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
         PortletComponentEvent compEvt = event.getLastRenderEvent();
         if ((compEvt != null) && (compEvt instanceof PortletTabEvent)) {
-            PortletTabEvent tabEvent = (PortletTabEvent)compEvt;
+            PortletTabEvent tabEvent = (PortletTabEvent) compEvt;
             handlePortletTabEvent(tabEvent);
         }
         List l = Collections.synchronizedList(listeners);
-        synchronized(l) {
+        synchronized (l) {
             Iterator it = l.iterator();
             PortletComponent comp;
 
@@ -271,7 +270,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         // Make tab links
         String[] tabLinks = new String[tabs.size()];
         List stabs = Collections.synchronizedList(tabs);
-        synchronized(stabs) {
+        synchronized (stabs) {
             for (int i = 0; i < stabs.size(); i++) {
                 PortletTab tab = (PortletTab) stabs.get(i);
                 tabLinks[i] = tab.createTabTitleLink(event);
@@ -290,8 +289,8 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     private String replaceBlanks(String title) {
         String result = "&nbsp;";
         StringTokenizer st = new StringTokenizer(title);
-        while(st.hasMoreTokens()) {
-            result += st.nextToken()+"&nbsp;";
+        while (st.hasMoreTokens()) {
+            result += st.nextToken() + "&nbsp;";
         }
         return result;
     }
@@ -310,7 +309,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         PortletRole userRole = req.getRole();
 
         // Render tabs titles
-        out.println("<img height=\"3\" src=\"themes/" + theme + "/images/spacer.gif\"/>");
+//        out.println("<img height=\"3\" src=\"themes/" + theme + "/images/spacer.gif\"/>");
         out.println("<table class=\"tab-pane\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
         out.println("<tr >");
         out.println("<td class=\"tab-empty\">&nbsp;</td>");
@@ -331,16 +330,16 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                     String title = tab.getTitle(lang);
 
                     if (tab.isSelected()) {
-             //           out.println("<td><img src=\"themes/" + theme + "/images/tab-active-left.gif\"/></td>");
-                        out.println("<td class=\"tab-active"+tab.getFormattedComponentTheme()+"\">" + replaceBlanks(title) + "</td>");
-             //           out.println("<td><img src=\"themes/" + theme + "/images/tab-active-right.gif\"/></td>");
+                        //           out.println("<td><img src=\"themes/" + theme + "/images/tab-active-left.gif\"/></td>");
+                        out.println("<td class=\"tab-active" + tab.getFormattedComponentTheme() + "\">" + replaceBlanks(title) + "</td>");
+                        //           out.println("<td><img src=\"themes/" + theme + "/images/tab-active-right.gif\"/></td>");
                     } else {
-             //           out.println("<td><img src=\"themes/" + theme + "/images/tab-inactive-left.gif\"/></td>");
-                        out.println("<td class=\"tab-inactive"+tab.getFormattedComponentTheme()+"\"/><a class=\"tab-menu"+this.getFormattedComponentTheme()+"\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\">" + replaceBlanks(title) + "</a>");
-              //          out.println("<td><img src=\"themes/" + theme + "/images/tab-inactive-right.gif\"/></td>");
+                        //           out.println("<td><img src=\"themes/" + theme + "/images/tab-inactive-left.gif\"/></td>");
+                        out.println("<td class=\"tab-inactive" + tab.getFormattedComponentTheme() + "\"/><a class=\"tab-menu" + this.getFormattedComponentTheme() + "\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\">" + replaceBlanks(title) + "</a>");
+                        //          out.println("<td><img src=\"themes/" + theme + "/images/tab-inactive-right.gif\"/></td>");
                     }
                     //out.println("<td class=\"tab-empty\"></td>");
-                }  else {
+                } else {
                     // if role is < required role we try selecting the next possible tab
                     //System.err.println("in PortletTabbedPane menu: role is < required role we try selecting the next possible tab");
                     if (tab.isSelected()) {
@@ -378,7 +377,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         //PortletTab parentTab = (PortletTab)this.getParentComponent();
 
         // Render tabs titles get always the same componenttheme as the upper menu
-        out.println("<table border=\"0\" class=\"tab-sub-pane"+this.getFormattedComponentTheme()+"\" width=\"100%\"><tr><td>");
+        out.println("<table border=\"0\" class=\"tab-sub-pane" + this.getFormattedComponentTheme() + "\" width=\"100%\"><tr><td>");
         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>");
 
 
@@ -395,11 +394,11 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                     String title = tab.getTitle(lang);
 
                     if (tab.isSelected()) {
-                        out.println("<td> <span class=\"tab-sub-active"+this.getFormattedComponentTheme()+"\">");
-                        out.println("<a class=\"tab-sub-menu-active"+this.getFormattedComponentTheme()+"\" href=\""+links[i]+ "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\">" + title + "</a></span></td>");
+                        out.println("<td> <span class=\"tab-sub-active" + this.getFormattedComponentTheme() + "\">");
+                        out.println("<a class=\"tab-sub-menu-active" + this.getFormattedComponentTheme() + "\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\">" + title + "</a></span></td>");
                     } else {
-                        out.println("<td> <span class=\"tab-sub-inactive"+this.getFormattedComponentTheme()+"\">");
-                        out.println("<a class=\"tab-sub-menu"+this.getFormattedComponentTheme()+"\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\">" + title + "</a>");
+                        out.println("<td> <span class=\"tab-sub-inactive" + this.getFormattedComponentTheme() + "\">");
+                        out.println("<a class=\"tab-sub-menu" + this.getFormattedComponentTheme() + "\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\">" + title + "</a>");
                         out.println("</span></td>");
                     }
                 } else {
@@ -428,7 +427,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      *
      * @param event a gridsphere event
      * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException if an I/O error occurs during rendering
+     * @throws IOException            if an I/O error occurs during rendering
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.doRender(event);
@@ -447,7 +446,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     }
 
     public Object clone() throws CloneNotSupportedException {
-        PortletTabbedPane t = (PortletTabbedPane)super.clone();
+        PortletTabbedPane t = (PortletTabbedPane) super.clone();
         t.style = this.style;
         t.startIndex = this.startIndex;
         //t.selectedIndex = this.selectedIndex;
@@ -455,7 +454,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         synchronized (stabs) {
             t.tabs = new ArrayList(stabs.size());
             for (int i = 0; i < stabs.size(); i++) {
-                PortletTab tab = (PortletTab)stabs.get(i);
+                PortletTab tab = (PortletTab) stabs.get(i);
                 t.tabs.add(tab.clone());
             }
         }
