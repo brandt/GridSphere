@@ -44,21 +44,24 @@ public class PortletGridLayout extends BasePortletComponent implements LayoutMan
     }
 
     public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
+        super.doRender(ctx, req, res);
         log.debug("in doRender()");
         if (insets == null) insets = new PortletInsets();
 
-        int i, j, k;
+        int i = 0, j = 0, k = 0;
         if (components.size() > rows*cols)
             throw new PortletLayoutException("Number of components specified exceeds rows * columns");
-        k = 0;
-        for (i = 0; i < rows; i++) {
+
+        int max = components.size();
+        while ((i < rows) && (k < max)) {
             insets.doRender(ctx,req,res);
-            for (j = 0; j < cols; j++) {
+            while ((j < cols) && (k < max)) {
                 PortletComponent p = (PortletComponent)components.get(k);
                 p.doRender(ctx, req, res);
-                k++;
+                j++; k++;
                 insets.doRender(ctx,req,res);
             }
+            i++;
         }
 
     }

@@ -19,7 +19,7 @@ public class BasePortletComponent extends PortletContainer implements PortletCom
     protected String height;
     protected String name;
     protected String fgColor;
-    protected String bgColor;
+    protected String bgColor = "#CCCCCC";
     protected PortletBorder border;
     protected PortletInsets insets;
 
@@ -80,6 +80,7 @@ public class BasePortletComponent extends PortletContainer implements PortletCom
     }
 
     public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
+        log.debug("in doRender()");
         req.setAttribute("name", name);
         req.setAttribute("bgcolor", bgColor);
         req.setAttribute("fgcolor", fgColor);

@@ -30,9 +30,10 @@ public class PortletImage extends BasePortletComponent {
     }
 
     public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
+        super.doRender(ctx, req, res);
         req.setAttribute("image", image);
         try {
-            ctx.include("/WEB-INF/conf/layout/image.jsp", req, res);
+            ctx.include("/WEB-INF/conf/layout/portlet-image.jsp", req, res);
         } catch (PortletException e) {
             log.error("Unable to include component JSP", e);
             throw new PortletLayoutException("Unable to include component JSP", e);

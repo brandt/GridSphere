@@ -15,7 +15,6 @@ public class PortletMinimized extends BasePortletComponent {
 
     private PortletImage image;
     private String title;
-    private String color;
     private String portletClass;
 
     public PortletMinimized() {}
@@ -30,14 +29,6 @@ public class PortletMinimized extends BasePortletComponent {
 
     public String getTitle() {
         return title;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getColor() {
-        return color;
     }
 
     public void setPortletImage(PortletImage image) {
@@ -57,10 +48,11 @@ public class PortletMinimized extends BasePortletComponent {
     }
 
     public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
+        super.doRender(ctx, req, res);
         log.debug("in doRender()");
         try {
             req.setAttribute("title", title);
-            req.setAttribute("color", color);
+            req.setAttribute("color", fgColor);
             ctx.include("/WEB-INF/conf/layout/portlet-minimized.jsp", req, res);
         } catch (PortletException e) {
             log.error("Unable to include component JSP", e);

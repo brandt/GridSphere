@@ -29,6 +29,7 @@ public class PortletFrame extends BasePortletComponent {
     }
 
     public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
+        super.doRender(ctx, req, res);
         log.debug("in doRender()");
         try {
             PortletRegistryService registryService =
@@ -44,14 +45,28 @@ public class PortletFrame extends BasePortletComponent {
             RegisteredPortlet registeredPortlet = registryService.getRegisteredPortlet(portletClass);
             AbstractPortlet abstractPortlet = registeredPortlet.getActivePortlet();
             PortletSettings settings = registeredPortlet.getPortletSettings();
+
+            // set the portlet frame title
             String title = settings.getTitle(req.getLocale(), req.getClient());
             border.setTitle(title);
 
-            // render border
+            // render portlet frame
+            ///// begin portlet frame
+            PrintWriter out = res.getWriter();
+            out.println("<table width=\"90%\" border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#FFFFFF\"><tr><td>");
+
             border.doRender(ctx, req, res);
+
+            out.println("<tr><td valign=\"top\" align=\"left\"><table width=\"100%\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\" bgcolor=");
+            out.println("\"" + bgColor + "\"<tr><td width=\"25%\" valign=\"center\">");
+
 
             if (abstractPortlet != null)
                 abstractPortlet.service(req, res);
+
+            out.println("</tr></table></td></tr></table></td></tr></table>");
+            ///// end portlet frame
+
         } catch (PortletServiceUnavailableException e) {
             throw new PortletLayoutException("Unable to get portlet instance");
         } catch (PortletException e) {

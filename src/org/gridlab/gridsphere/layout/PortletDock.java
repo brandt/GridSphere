@@ -71,6 +71,7 @@ public class PortletDock extends BasePortletComponent {
     }
 
     public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
+        super.doRender(ctx, req, res);
         log.debug("in doRender()" + components.size());
         PrintWriter out = res.getWriter();
         out.write("<tr><td>" + title);

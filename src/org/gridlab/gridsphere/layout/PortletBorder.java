@@ -14,7 +14,7 @@ public class PortletBorder {
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletBorder.class);
 
     private String title = "";
-    private String titleColor = "#336699";
+    private String titleColor = "#FFFFFF";
     private String font = "Arial, Helvetica, sans-serif";
     private String lineColor = "#336699";
     private String thickness = "1";
@@ -72,11 +72,12 @@ public class PortletBorder {
     public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
         log.debug("in doRender()");
         try {
+            req.setAttribute("title", title);
             req.setAttribute("thickness", thickness);
             req.setAttribute("linecolor", lineColor);
             req.setAttribute("font", font);
             req.setAttribute("titlecolor", titleColor);
-            ctx.include("/WEB-INF/conf/layout/portlet-line-border.jsp", req, res);
+            ctx.include("/WEB-INF/conf/layout/portlet-border.jsp", req, res);
         } catch (PortletException e) {
             log.error("Unable to include component JSP", e);
             throw new PortletLayoutException("Unable to include component JSP", e);
