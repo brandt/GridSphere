@@ -50,22 +50,34 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
     public PersistenceManagerRdbmsImpl(String persistenceConfigDir) {
         log.info("Creating Hibernate RDBMS Impl using config in " + persistenceConfigDir);
-        this.factory = getFactory(persistenceConfigDir);
+        this.factory = getProjectFactory(persistenceConfigDir);
     }
 
     private SessionFactory getFactory(String persistenceConfigDir) {
-        Properties hibernateProperties = loadProperties(getPropertiesFile());
+        Properties hibernateProperties = loadProperties();
         Configuration cfg = loadConfiguration(persistenceConfigDir, hibernateProperties);
         SessionFactory factory = null;
 
         try {
             factory = cfg.buildSessionFactory();
         } catch (HibernateException e) {
-            log.error("Could instanciate Hibernate Factory " + e);
+            log.error("Could not instanciate Hibernate Factory " + e);
         }
         return factory;
     }
 
+    private SessionFactory getProjectFactory(String persistenceConfigDir) {
+        Properties hibernateProperties = loadProperties(persistenceConfigDir + File.separator + "hibernate.properties");
+        Configuration cfg = loadConfiguration(persistenceConfigDir, hibernateProperties);
+        SessionFactory factory = null;
+
+        try {
+            factory = cfg.buildSessionFactory();
+        } catch (HibernateException e) {
+            log.error("Could not instanciate Hibernate Factory " + e);
+        }
+        return factory;
+    }
     /**
      * Load the mappingfiles from the given dirctory location
      * @param persistenceConfigDir
