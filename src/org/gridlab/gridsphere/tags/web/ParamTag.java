@@ -5,15 +5,17 @@
 package org.gridlab.gridsphere.tags.web;
 
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
+import org.gridlab.gridsphere.tags.web.element.ActionLinkBean;
+import org.gridlab.gridsphere.tags.web.element.ParamBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.TagSupport;
 
-public class ParamTag extends TagSupport {
+public class ParamTag extends BaseTag {
 
-    private String name;
-    private String value;
+    private String name = "noname";
+    private String value = "novalue";
 
     public void setName(String name) {
         this.name = name;
@@ -33,6 +35,9 @@ public class ParamTag extends TagSupport {
 
     public int doStartTag() throws JspException {
         DefaultPortletAction action = (DefaultPortletAction) pageContext.getAttribute("_action");
+        if (bean.equals("")) {
+            this.htmlelement = new ParamBean(name, value);
+        }
         if (action != null) action.addParameter(name, value);
         return EVAL_BODY_INCLUDE;
     }
