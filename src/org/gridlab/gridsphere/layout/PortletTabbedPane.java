@@ -22,9 +22,6 @@ import java.io.PrintWriter;
 
 public class PortletTabbedPane extends BasePortletComponent implements PortletTabListener {
 
-    protected transient static PortletLog log = SportletLog.getInstance(PortletTabbedPane.class);
-
-
     private List tabs = new ArrayList();
     private int selectedIndex = 0;
     private String style = "menu";
@@ -32,7 +29,6 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
     public PortletTabbedPane() {}
 
     public void setStyle(String style) {
-        log.debug("style set: "+style);
         this.style = style;
     }
 
@@ -204,8 +200,6 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
         PrintWriter out = res.getWriter();
 
         // Render tabs titles
-        //out.println("<div class=\"tab-sub-pane\">");
-        //out.println("<div class=\"tab-sub-menu\">");
         out.println("<table border=\"0\" class=\"tab-sub-pane\" width=\"100%\"><tr><td>");
         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>");
 
@@ -215,23 +209,17 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
             String title = getTitleAt(i);
             tab = (PortletTab)tabs.get(i);
             if (tab.isSelected()) {
-                //out.println("<span class=\"tab-sub-active\">" + title + "</span>");
                 out.println("<td> <span class=\"tab-sub-active\">"+title+"</span></td>");
-
             } else {
                 out.println("<td> <span class=\"tab-sub-inactive\">");
                 out.println("<a class=\"tab-sub-menu\" href=\"" + links[i] + "\" >" +  title + "</a>");
                 out.println("</span></td>");
-
-               // out.println("<span class=\"tab-sub-inactive\"><a class=\"tab-sub-menu\" href=\"" + links[i] + "\" >" +  title + "</a></span>");
             }
         }
 
         out.println("</tr></table>");
-
         out.println("</td></tr></table>");
 
-        ///out.println("</div></div><div class=\"tab-bar\"></div>");
         PortletTab selectedTab = (PortletTab)tabs.get(selectedIndex);
         if (selectedTab != null)
             selectedTab.doRender(event);
@@ -241,8 +229,6 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
         super.doRender(event);
 
         String[] links = makeTabLinks(event);
-
-        log.debug("in tabbed pane: style=" + style);
         if (style.equals("sub-menu")) {
             doRenderSubMenu(event, links);
         } else {

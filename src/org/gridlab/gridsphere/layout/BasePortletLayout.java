@@ -14,13 +14,12 @@ import java.util.List;
 
 
 /**
- * The LayoutManager is responsible for constructing a layout appropriate
+ * The PortletLayout is responsible for constructing a layout appropriate
  * to the user's layout preferences.
  */
-public abstract class BaseLayoutManager extends BasePortletComponent implements LayoutManager, PortletFrameListener {
+public abstract class BasePortletLayout extends BasePortletComponent implements PortletLayout, PortletFrameListener {
 
     protected List components = new ArrayList();
-    protected PortletInsets insets;
 
     public List init(List list) {
         list = super.init(list);
@@ -28,6 +27,7 @@ public abstract class BaseLayoutManager extends BasePortletComponent implements 
         PortletComponent p = null;
         while (it.hasNext()) {
             p = (PortletComponent)it.next();
+            // all the components have the same theme
             p.setTheme(theme);
             // invoke init on each component
             list = p.init(list);
@@ -48,10 +48,8 @@ public abstract class BaseLayoutManager extends BasePortletComponent implements 
         Iterator it = components.iterator();
         PortletComponent p = null;
         int id = event.getID();
-
         while (it.hasNext()) {
             p = (PortletComponent)it.next();
-
             // check for the frame that has been maximized
             if (p.getComponentID() == id) {
                 p.setWidth("100%");
@@ -76,7 +74,7 @@ public abstract class BaseLayoutManager extends BasePortletComponent implements 
         }
     }
 
-    public void handleFrameResized(PortletFrameEvent event) {
+    public void handleFrameRestore(PortletFrameEvent event) {
         Iterator it = components.iterator();
         PortletComponent p = null;
         int id = event.getID();
@@ -97,7 +95,7 @@ public abstract class BaseLayoutManager extends BasePortletComponent implements 
         } else if (event.getAction() == PortletFrameEvent.Action.FRAME_MINIMIZED) {
             handleFrameMinimized(event);
         } else if (event.getAction() == PortletFrameEvent.Action.FRAME_RESIZED) {
-            handleFrameResized(event);
+            handleFrameRestore(event);
         }
     }
 
@@ -117,13 +115,6 @@ public abstract class BaseLayoutManager extends BasePortletComponent implements 
         return components;
     }
 
-    public PortletInsets getPortletInsets() {
-        return insets;
-    }
-
-    public void setPortletInsets(PortletInsets insets) {
-        this.insets = insets;
-    }
 }
 
 

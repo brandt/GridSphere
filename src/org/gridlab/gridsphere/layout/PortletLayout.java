@@ -9,10 +9,10 @@ import java.util.List;
 
 
 /**
- * The LayoutManager is responsible for constructing a layout appropriate
+ * The PortletLayout is responsible for constructing a layout appropriate
  * to the user's layout preferences.
  */
-public interface LayoutManager extends PortletLifecycle {
+public interface PortletLayout extends ComponentLifecycle {
 
     public void setPortletComponents(ArrayList components);
 

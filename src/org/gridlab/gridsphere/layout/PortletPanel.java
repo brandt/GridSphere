@@ -12,30 +12,30 @@ import java.util.ArrayList;
 
 public class PortletPanel extends BasePortletComponent {
 
-    private LayoutManager layoutManager;
+    private PortletLayout layout;
 
     public PortletPanel() {}
 
     public List init(List list) {
         super.init(list);
-        return layoutManager.init(list);
+        return layout.init(list);
     }
 
     public void destroy() {}
 
-    public PortletPanel(LayoutManager layoutManager) {
-        this.layoutManager = layoutManager;
+    public PortletPanel(PortletLayout layout) {
+        this.layout = layout;
     }
 
-    public void setLayoutManager(LayoutManager layoutManager) {
-        this.layoutManager = layoutManager;
+    public void setLayout(PortletLayout layout) {
+        this.layout = layout;
     }
 
-    public LayoutManager getLayoutManager() {
-        return layoutManager;
+    public PortletLayout getLayout() {
+        return layout;
     }
 
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
-        layoutManager.doRender(event);
+        if (layout != null) layout.doRender(event);
     }
 }

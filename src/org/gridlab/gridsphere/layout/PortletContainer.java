@@ -126,8 +126,8 @@ public class PortletContainer {
 
         Iterator it = components.iterator();
         while (it.hasNext()) {
-            PortletRender action = (PortletRender)it.next();
-            action.doRender(event);
+            PortletComponent comp = (PortletComponent)it.next();
+            comp.doRender(event);
         }
         out.println("</body></html>");
     }

@@ -25,7 +25,7 @@ import java.util.HashMap;
 /**
  * The portlet layout engine is responsible for managing user's layouts. It also manages
  * portlet web application default layout configurations that can be potentially added to a user layout
- * via the Layout Service
+ * via the PortletLayout Service
  */
 public class PortletLayoutEngine {
 
@@ -192,7 +192,7 @@ public class PortletLayoutEngine {
         } catch (IOException e) {
             log.error("in doRenderError: ", e);
         }
-        out.println("<h>Portlet Layout Engine unable to render!</h>");
+        out.println("<h>Portlet PortletLayout Engine unable to render!</h>");
         out.println("<b>" + error + "</b>");
     }
 
@@ -214,7 +214,7 @@ public class PortletLayoutEngine {
 
         PortletContainer pc = (PortletContainer)userLayouts.get(user);
         if (pc == null) {
-            throw new DescriptorException("Layout does not exist for user: " + user.getID());
+            throw new DescriptorException("PortletLayout does not exist for user: " + user.getID());
         }
         String userLayoutPath = getUserLayoutPath(user);
         PortletLayoutDescriptor.savePortletContainer(pc, userLayoutPath, layoutMappingPath);

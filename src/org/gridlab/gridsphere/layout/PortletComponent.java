@@ -4,7 +4,7 @@
  */
 package org.gridlab.gridsphere.layout;
 
-public interface PortletComponent extends PortletLifecycle {
+public interface PortletComponent extends ComponentLifecycle {
 
     public boolean isVisible();
 
@@ -14,24 +14,16 @@ public interface PortletComponent extends PortletLifecycle {
 
     public String getTheme();
 
-    public PortletBorder getPortletBorder();
-
-    public PortletInsets getPortletInsets();
-
     public String getName();
-
-    public String getHeight();
-
-    public String getWidth();
-
-    public void setPortletBorder(PortletBorder border);
 
     public void setName(String name);
 
-    public void setPortletInsets(PortletInsets insets);
+    public String getHeight();
 
     public void setHeight(String height);
 
     public void setWidth(String width);
+
+    public String getWidth();
 
 }

@@ -14,19 +14,14 @@
 
 <!-- Tabbed Panes -->
 <portlet-tabbed-pane selected="0" style="menu">
-  <!--  <selected>0</selected>
-    <style>menu</style>      -->
     <portlet-tab>
         <title>Configuration</title>
         <portlet-tabbed-pane selected="0" style="sub-menu">
-            <!--<selected>0</selected>
-            <style>sub-menu</style>     -->
             <portlet-tab>
                 <title>Login</title>
                 <portlet-panel>
                     <grid-layout columns="40,30,30">
                         <portlet-frame>
-                            <width>60</width>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.LoginPortlet.1</portlet-class>
                         </portlet-frame>
                         <portlet-frame>
@@ -86,14 +81,11 @@
             <portlet-tab>
                 <title>Cactus</title>
                 <portlet-panel>
-                    <flow-layout>
-                        <align>1</align>
-                        <hgap>1</hgap>
-                        <vgap>1</vgap>
+                    <grid-layout>
                         <portlet-frame>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.624.2</portlet-class>
                         </portlet-frame>
-                    </flow-layout>
+                    </grid-layout>
                 </portlet-panel>
             </portlet-tab>
         </portlet-tabbed-pane>
@@ -104,14 +96,11 @@
             <portlet-tab>
                 <title>ASC</title>
                 <portlet-panel>
-                    <flow-layout>
-                        <align>1</align>
-                        <hgap>1</hgap>
-                        <vgap>1</vgap>
+                    <grid-layout>
                         <portlet-frame>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.624.2</portlet-class>
                         </portlet-frame>
-                    </flow-layout>
+                    </grid-layout>
                 </portlet-panel>
             </portlet-tab>
         </portlet-tabbed-pane>

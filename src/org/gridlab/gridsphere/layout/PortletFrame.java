@@ -105,12 +105,8 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
      */
     public void handleTitleBarEvent(PortletTitleBarEvent event) throws PortletLayoutException {
 
-        if (event.getAction() == PortletTitleBarEvent.Action.MODE_MODIFY) {
-            //previousMode = portletMode;
-            //portletMode = event.getMode();
-        }
-        if (event.getAction() == PortletTitleBarEvent.Action.WINDOW_MODIFY) {
 
+        if (event.getAction() == PortletTitleBarEvent.Action.WINDOW_MODIFY) {
             PortletWindow.State state = event.getState();
             PortletFrameEvent evt = null;
             if (state == PortletWindow.State.MINIMIZED) {

@@ -8,7 +8,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 
-public interface PortletRender {
+public interface ComponentRender {
 
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException;
 

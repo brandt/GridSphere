@@ -9,7 +9,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import java.io.IOException;
 import java.util.List;
 
-public interface PortletLifecycle extends PortletRender {
+public interface ComponentLifecycle extends ComponentRender {
 
     public List init(List list);
 

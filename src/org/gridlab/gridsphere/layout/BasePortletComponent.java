@@ -9,42 +9,24 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 
-public abstract class BasePortletComponent extends BasePortletLifecycle implements PortletComponent {
+public abstract class BasePortletComponent extends BaseComponentLifecycle implements PortletComponent {
 
-    protected String width = new String();
-    protected String height = new String();
+    protected String width = "";
+    protected String height = "";
     protected String name = new String();
-    protected PortletBorder border;
-    protected PortletInsets insets;
     protected String theme = "xp";
     protected boolean isVisible = true;
-
-    public PortletBorder getPortletBorder() {
-        return border;
-    }
-
-    public PortletInsets getPortletInsets() {
-        return insets;
-    }
 
     public String getName() {
         return name;
     }
 
-    public String getHeight() {
-        return height;
-    }
-
-    public String getWidth() {
-        return width;
-    }
-
-    public void setPortletBorder(PortletBorder border) {
-        this.border = border;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getHeight() {
+        return height;
     }
 
     public void setHeight(String height) {
@@ -55,8 +37,8 @@ public abstract class BasePortletComponent extends BasePortletLifecycle implemen
         this.width = width;
     }
 
-    public void setPortletInsets(PortletInsets insets) {
-        this.insets = insets;
+    public String getWidth() {
+        return width;
     }
 
     public void setVisible(boolean isVisible) {
@@ -80,13 +62,7 @@ public abstract class BasePortletComponent extends BasePortletLifecycle implemen
     }
 
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
-        super.doRender(event);
-        SportletRequest req = event.getSportletRequest();
-        String sid = new Integer(COMPONENT_ID).toString();
-        req.setAttribute(LayoutProperties.ID, sid);
-        req.setAttribute(LayoutProperties.NAME, name);
-        req.setAttribute(LayoutProperties.HEIGHT, height);
-        req.setAttribute(LayoutProperties.WIDTH, width);
+
     }
 
 }
