@@ -231,10 +231,9 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
 
     /**
      * Returns the portlet log
-     * NEEDS TO BE IMPLEMENTED!!!
      */
     public PortletLog getPortletLog() {
-        return null;
+        return log;
     }
 
     /**
