@@ -17,7 +17,7 @@
 <ui:text key="LAYOUT_SELECT_THEME"/>&nbsp;<ui:listbox beanId="themeLB"/> <ui:actionsubmit action="saveTheme" key="SAVE"/>
 </ui:group>
 
-<h3>Create new tab</h3>
+<h3><ui:text key="LAYOUT_NEW_TAB" style="nostyle"/></h3>
 <ui:group>
 <ui:text key="LAYOUT_TAB_NAME"/>&nbsp;&nbsp;<ui:textfield beanId="userTabTF"/>
 <p>
