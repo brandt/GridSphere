@@ -21,14 +21,15 @@ import java.util.*;
 public class SportletSettings implements PortletSettings {
 
     protected Hashtable store = new Hashtable();
-    protected List roleList = new Vector();
-    protected List groupList = new Vector();
     protected List langList = new Vector();
     protected PortletDeploymentDescriptor pdd = null;
     protected PortletApplicationSettings applicationSettings = null;
     protected ConcretePortletInfo concretePortletInfo = null;
     protected String concretePortletID = null;
     protected SportletApplicationSettings appSettings = null;
+    protected Locale locale = null;
+
+    // Initially don't allow this user to modify sportlet settings
     protected boolean hasConfigurePermission = false;
 
 
@@ -42,12 +43,14 @@ public class SportletSettings implements PortletSettings {
      */
     public SportletSettings(PortletDeploymentDescriptor pdd,
                             ConcretePortletApplication portletApp,
-                            List knownGroups, List knownRoles, boolean hasConfigurePermission) {
-        this.hasConfigurePermission = hasConfigurePermission;
+                            List knownGroups, List knownRoles) {
+
         this.concretePortletInfo = portletApp.getConcretePortletInfo();
 
         this.concretePortletID = portletApp.getUID();
 
+        String localeStr = concretePortletInfo.getDefaultLocale();
+        locale = new Locale(localeStr, "");
         langList = concretePortletInfo.getLanguageList();
 
         // Stick <config-param> in store
@@ -55,43 +58,6 @@ public class SportletSettings implements PortletSettings {
         while (configParamsIt.hasNext()) {
             ConfigParam configParam = (ConfigParam)configParamsIt.next();
             store.put(configParam.getParamName(), configParam.getParamValue());
-        }
-
-        // Get groups list
-        List groups = concretePortletInfo.getGroupList();
-
-        // Make sure groups exist
-        while (knownGroups.iterator().hasNext()) {
-            PortletGroup pg = (PortletGroup)knownGroups.iterator().next();
-            while (groups.iterator().hasNext()) {
-                if (pg.getName().equalsIgnoreCase((String)groups.iterator().next())) {
-                    groupList.add(pg);
-                    break;
-                }
-            }
-        }
-
-        // groupList should at least contain BASE group if empty
-        if (groupList.isEmpty()) {
-            groupList.add(SportletGroup.getBaseGroup());
-        }
-
-        // Get roles list
-        List roles = concretePortletInfo.getRoleList();
-        // Make sure roles exist
-        while (knownRoles.iterator().hasNext()) {
-            PortletRole pr = (PortletRole)knownRoles.iterator().next();
-            while (roles.iterator().hasNext()) {
-                if (pr.getRoleName().equalsIgnoreCase((String)roles.iterator().next())) {
-                    roleList.add(pr);
-                    break;
-                }
-            }
-        }
-
-        // roleList should at least contain GUEST role if empty
-        if (roleList.isEmpty()) {
-            roleList.add(SportletRole.getGuestRole());
         }
     }
 
@@ -134,6 +100,15 @@ public class SportletSettings implements PortletSettings {
             }
         }
         return null;
+    }
+
+    /**
+     * Returns the portlet's default locale.
+     *
+     * @return the portlet's default locale
+     */
+    public Locale getDefaultLocale() {
+        return locale;
     }
 
     /**
@@ -185,26 +160,6 @@ public class SportletSettings implements PortletSettings {
             }
         }
         return null;
-    }
-
-    /**
-     * Returns the list of supported groups
-     * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
-     *
-     * @return the list of supported PortletGroup objects
-     */
-    public List getSupportedGroups() {
-        return groupList;
-    }
-
-    /**
-     * Returns the list of supported roles
-     * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
-     *
-     * @return the list of supported PortletRole objects
-     */
-    public List getSupportedRoles() {
-        return roleList;
     }
 
     /**

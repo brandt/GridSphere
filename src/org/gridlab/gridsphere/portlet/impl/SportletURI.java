@@ -4,9 +4,7 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.gridlab.gridsphere.portlet.PortletURI;
-import org.gridlab.gridsphere.portlet.PortletAction;
-import org.gridlab.gridsphere.portlet.DefaultPortletAction;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import javax.servlet.http.HttpServletResponse;
@@ -35,15 +33,26 @@ import java.util.*;
 public class SportletURI implements PortletURI {
 
     private HttpServletResponse res = null;
-    private Map store;
-    private boolean redirect = true;
+    private PortletRequest req = null;
+    private PortletSettings portletSettings = null;
     private String url;
 
-    public SportletURI(HttpServletResponse res, String servletName, boolean redirect) {
+
+    private Map store = new HashMap();
+    private boolean redirect = true;
+    private PortletWindow.State state;
+
+    public SportletURI() {}
+
+    public SportletURI(HttpServletResponse res, PortletRequest req) {
         store = new HashMap();
         this.res = res;
+        this.req = req;
+        url = req.getServerName();
+    }
+
+    public void setReturn(boolean redirect) {
         this.redirect = redirect;
-        url = servletName;
     }
 
     /**
@@ -67,13 +76,23 @@ public class SportletURI implements PortletURI {
      * @param action the portlet action
      */
     public void addAction(PortletAction action) {
-        // XXX: FIX ME HOW THE HELL DO ACTIONS GET SERIALIZED INTO A URI?
-        // SINCE ALL RELEVANT STUFF IS STRINGS WE CAN PROBABLY JUST INTROSPECT A
         if (action instanceof DefaultPortletAction) {
             DefaultPortletAction dpa = (DefaultPortletAction)action;
             store.put(GridSphereProperties.PORTLETNAME, dpa.getName());
             store.put(GridSphereProperties.PORTLETID, dpa.getPortletID());
+            Map actionParams = dpa.getParameters();
+            Set set = actionParams.keySet();
+            Iterator it = set.iterator();
+            while (it.hasNext()) {
+                String name = (String)it.next();
+                String value = (String)store.get(name);
+                url += name + "&" + value;
+            }
         }
+    }
+
+    public void setWindowState(PortletWindow.State state) {
+        this.state = state;
     }
 
     /**
@@ -84,21 +103,32 @@ public class SportletURI implements PortletURI {
      * @return the URI as a string
      */
     public String toString() {
+        String newURL;
         Set set = store.keySet();
         if (!set.isEmpty()) {
             // add question mark
             url += "?";
         }
-        while (set.iterator().hasNext()) {
-            String name = (String)set.iterator().next();
+        Iterator it = set.iterator();
+        while (it.hasNext()) {
+            String name = (String)it.next();
             String value = (String)store.get(name);
             url += name + "&" + value;
         }
         if (redirect) {
-            return res.encodeRedirectURL(url);
+            newURL = res.encodeRedirectURL(url);
         } else {
-            return res.encodeURL(url);
+            newURL = res.encodeURL(url);
         }
+        System.err.println("SportletURI: toString: " + newURL);
+        return newURL;
     }
 
+    public String encode(String clear) {
+        return null;
+    }
+
+    public String decode(String encoded) {
+        return null;
+    }
 }

@@ -95,6 +95,7 @@ public class SportletContext implements PortletContext {
      */
     public void include(String path, PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
+        if (path == null) throw new PortletException("The provided resource path is null");
         RequestDispatcher rd = null;
         rd = config.getServletContext().getRequestDispatcher(path);
         try {
@@ -179,7 +180,7 @@ public class SportletContext implements PortletContext {
      */
     public PortletService getService(Class service)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException {
-        return (PortletService) factory.createPortletService(service, props, config, true);
+        return (PortletService) factory.createPortletService(service, config, true);
     }
 
     /**

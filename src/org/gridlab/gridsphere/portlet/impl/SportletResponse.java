@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.portlet.impl;
 import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.PortletWindow;
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -18,18 +19,20 @@ import java.util.Locale;
 public class SportletResponse implements PortletResponse {
 
     private HttpServletResponse res = null;
+    private PortletRequest req = null;
+    private SportletURI sportletURI = null;
 
     // HARDCODED FOR SportletURI -- needs to have the servlet name
+    // config.getServletConfig().getServletName()
     // Can't blindly use ServletConfig.getServletName since that only works
     // if access provided using the mapping e.g. /gridsphere, but
     // if user goes to /GridSphere, the actual servlet name then
     // getServletName returns some crazy "org.apache.catalina.INVOKER.GridSphere"
 
-    private String servletName;
-
-    public SportletResponse(HttpServletResponse res, String servletName) {
+    public SportletResponse(HttpServletResponse res, PortletRequest req) {
         this.res = res;
-        this.servletName = servletName;
+        this.req = req;
+        sportletURI = new SportletURI(res, req);
     }
 
     /**
@@ -86,7 +89,8 @@ public class SportletResponse implements PortletResponse {
      * @return the portletURI
      */
     public PortletURI createReturnURI() {
-        return new SportletURI(res, "", true);
+        sportletURI.setReturn(true);
+        return sportletURI;
     }
 
 
@@ -96,7 +100,8 @@ public class SportletResponse implements PortletResponse {
      * @return the portlet URI
      */
     public PortletURI createURI() {
-        return new SportletURI(res, "", false);
+        sportletURI.setReturn(false);
+        return (PortletURI)sportletURI;
     }
 
     /**
@@ -105,7 +110,8 @@ public class SportletResponse implements PortletResponse {
      * @param state the portlet window state
      */
     public PortletURI createURI(PortletWindow.State state) {
-        return new SportletURI(res, "", false);
+        sportletURI.setWindowState(state);
+        return (PortletURI)sportletURI;
     }
 
     /**
@@ -211,9 +217,11 @@ public class SportletResponse implements PortletResponse {
         res.flushBuffer();
     }
 
+
     public void resetBuffer() throws IllegalStateException {
-        res.resetBuffer();
+        //res.resetBuffer();
     }
+
 
     public boolean isCommitted() {
         return res.isCommitted();

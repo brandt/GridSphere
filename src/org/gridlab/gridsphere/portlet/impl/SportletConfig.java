@@ -24,7 +24,7 @@ public class SportletConfig implements PortletConfig {
     private String portletName = null;
 
     /**
-     * Constructor creates a PortletConfig from a portlet.xml file
+     * Constructor creates a PortletConfig from a ServletConfig
      */
     public SportletConfig(ServletConfig servletConfig) {
         this.servletConfig = servletConfig;

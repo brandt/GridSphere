@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.portlet.impl;
 import org.gridlab.gridsphere.portlet.AccessDeniedException;
 import org.gridlab.gridsphere.portlet.Client;
 import org.gridlab.gridsphere.portlet.PortletData;
+import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -20,9 +21,14 @@ import java.util.Locale;
  */
 public class SportletData implements PortletData {
 
-    private Hashtable store = new Hashtable();
+    protected Hashtable store = new Hashtable();
+    protected transient boolean hasConfigurePermission = false;
 
-    public SportletData() {}
+    public SportletData(boolean hasConfigurePermission) {}
+
+    public void enableConfigurePermission(boolean hasConfigurePermission) {
+        this.hasConfigurePermission = hasConfigurePermission;
+    }
 
     /**
      * Returns the value of the attribute with the given name, or null if no such attribute exists.
@@ -51,6 +57,9 @@ public class SportletData implements PortletData {
      * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
     public void removeAttribute(String name) throws AccessDeniedException {
+        if (!hasConfigurePermission) {
+            throw new AccessDeniedException("User is unauthorized to remove portlet data attributes");
+        }
         store.remove(name);
     }
 
@@ -63,6 +72,9 @@ public class SportletData implements PortletData {
      * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
     public void setAttribute(String name, String value) throws AccessDeniedException {
+        if (!hasConfigurePermission) {
+            throw new AccessDeniedException("User is unauthorized to set portlet data attributes");
+        }
         store.put(name, value);
     }
 
@@ -72,15 +84,10 @@ public class SportletData implements PortletData {
      * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
     public void store() throws AccessDeniedException {
-        // XXX: FILL ME IN
-    }
-
-    /**
-     * Loads all attributes
-     */
-    protected void load() {
-        // XXX: FILL ME IN
-    }
-
+        if (!hasConfigurePermission) {
+            throw new AccessDeniedException("User is unauthorized to store portlet data attributes");
+        }
+        // make store persistent
+    }   // FIX ME: Oliver Wehrens
 
 }
