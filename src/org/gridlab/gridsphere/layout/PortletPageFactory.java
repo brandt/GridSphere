@@ -39,7 +39,7 @@ public class PortletPageFactory implements PortletSessionListener {
     // Store user layouts in a hash
     private static Map userLayouts = new Hashtable();
 
-    private static Map tckLayouts = new Hashtable();
+    private PortletPage tckLayout = null;
 
     private static Map guests = new Hashtable();
 
@@ -344,7 +344,10 @@ public class PortletPageFactory implements PortletSessionListener {
             tokenizer =  new StringTokenizer(portletNames[i], "/");
             String appName = tokenizer.nextToken();
             String portletName = tokenizer.nextToken();
-            String portletClass = registry.getPortletClassName(portletName);
+
+            // TODO not getting right portlet class
+
+            String portletClass = registry.getPortletClassName(appName, portletName);
             if (portletClass == null) {
                 System.err.println("Unable to find portlet class for " + portletName);
 
@@ -375,8 +378,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
         }
         page.init(req, new ArrayList());
-        String sessionId = req.getPortletSession().getId();
-        tckLayouts.put(sessionId, page);
+
         return page;
     }
 
@@ -387,15 +389,16 @@ public class PortletPageFactory implements PortletSessionListener {
 
         log.debug("User requesting layout: " + user.getUserName());
 
-        if (tckLayouts.containsKey(sessionId)) return (PortletPage)tckLayouts.get(sessionId);
         String[] portletNames = req.getParameterValues("portletName");
         if ( portletNames != null ) {
             System.err.println("Creating TCK LAYOUT!");
- 
-
-            return createTCKPage(req, portletNames );
+            tckLayout =  createTCKPage(req, portletNames );
         }
 
+        if (tckLayout != null) {
+            tckLayout.init(req, new ArrayList());
+            return tckLayout;
+        }
 
         if (user instanceof GuestUser) {
             return createFromGuestLayoutXML(req);

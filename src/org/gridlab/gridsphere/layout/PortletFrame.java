@@ -203,6 +203,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             ApplicationPortletConfig appConfig = appPortlet.getApplicationPortletConfig();
             if (appConfig != null) {
                 cacheExpiration = appConfig.getCacheExpires();
+                System.err.println("Cache for " + portletClass + "expires: " + cacheExpiration);
             }
         }
     }
@@ -328,13 +329,21 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
             // now perform actionPerformed on Portlet if it has an action
 
+
+            if (titleBar != null) titleBar.setPortletMode(req.getMode());
+
+            // remove cached output
+            String id = req.getPortletSession(true).getId();
+            cacheService.removeCached(portletClass + id);
+
             //System.err.println("in PortletFrame action invoked for " + portletClass);
             if (event.hasAction()) {
                 DefaultPortletAction action = event.getAction();
                 if (action.getName() != "") {
                     try {
+
                         PortletInvoker.actionPerformed(portletClass, action, req, res);
-                    } catch (PortletException e) {
+                    } catch (Exception e) {
                         errorFrame.setException(e);
                     }
                     String message = (String)req.getAttribute(SportletProperties.PORTLETERROR+portletClass);
@@ -344,11 +353,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 }
                 // in case portlet mode got reset
             }
-            if (titleBar != null) titleBar.setPortletMode(req.getMode());
 
-            // remove cached output
-            String id = req.getPortletSession(true).getId();
-            cacheService.removeCached(portletClass + id);
 
             List slisteners = Collections.synchronizedList(listeners);
             synchronized (slisteners) {
@@ -360,6 +365,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     comp.actionPerformed(event);
                 }
             }
+
+
         }
 
     }
@@ -373,7 +380,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
 
-        errorFrame.clearError();
+        //errorFrame.clearError();
         PortletRequest req = event.getPortletRequest();
         PortletRole userRole = req.getRole();
         if (userRole.compare(userRole, requiredRole) < 0) {
@@ -399,6 +406,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         if (errorFrame.hasError()) {
             errorFrame.doRender(event);
+            errorFrame.clearError();
             return;
         }
 
@@ -452,6 +460,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             req.setAttribute(SportletProperties.PREVIOUS_MODE, Portlet.Mode.VIEW);
             req.setAttribute(SportletProperties.PORTLET_WINDOW, PortletWindow.State.NORMAL);
         }
+
+        if (req.getAttribute(SportletProperties.RESPONSE_COMMITTED) != null) renderPortlet = false;
 
         if (renderPortlet) {
             if (!transparent) {
@@ -509,7 +519,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         } else {
             out.println(frame.toString());
         }
-        if (cacheExpiration >= 0) {
+        if (cacheExpiration > 0) {
             cacheService.cache(portletClass + id, frame, cacheExpiration, false);
         }
     }

@@ -40,7 +40,7 @@ public class PortletErrorFrame extends BasePortletComponent implements Cloneable
         return message;
     }
 
-    public void setException(PortletException cause) {
+    public void setException(Exception cause) {
         this.cause = cause;
     }
 
