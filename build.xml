@@ -769,7 +769,7 @@ Copyright:
             </tarfileset>
         </tar>
 
-        <zip destfile="../${gridsphere.project}-${version}-src.zip" basedir=".">
+        <zip destfile="${gridsphere.project}-${version}-src.zip" basedir=".">
             <exclude name="**/CVS"/>
             <exclude name="*.ipr"/>
             <exclude name="*.iws"/>
