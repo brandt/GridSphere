@@ -21,16 +21,14 @@
       document.UserManagerPortlet.submit();
     }
   </script>
-<table border="0" cellspacing="1" cellpadding="2" width="100%">
+<table class="portlet-pane" cellspacing="1">
 <% if (userManagerBean.isFormInvalid()) { %>
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td bgcolor="WHITE">
-            <font color="DARKRED"><bold>
+          <td class="portlet-frame-message-alert">
               <%=userManagerBean.getFormInvalidMessage()%>
-            </bold></font>
           </td>
         </tr>
       </table>
@@ -39,20 +37,18 @@
 <% } %>
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td align="center" bgcolor="#6666FF">
-            <font color="WHITE"><strong>
+          <td class="portlet-frame-title">
 <% if (userManagerBean.isNewUser()) { %>
               New User
 <% } else { %>
               Edit User [<%=userManagerBean.getUserName()%>]
 <% } %>
-            </strong></font>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-actions">
             <input type="button"
                    name="<%=UserManagerBean.ACTION_USER_EDIT_CONFIRM%>"
                    value="Save User"
@@ -68,62 +64,62 @@
   </tr>
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td width="200" bgcolor="#CCCCCC">
+          <td class="portlet-frame-label" width="200">
              User Name:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-input">
              <input type="text"
                     name="userName"
                     value="<%=userManagerBean.getUserName()%>"/>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-label">
              Family Name:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-input">
              <input type="text"
                     name="familyName"
                     value="<%=userManagerBean.getFamilyName()%>"/>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-label">
              Given Name:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-input">
              <input type="text"
                     name="givenName"
                     value="<%=userManagerBean.getGivenName()%>"/>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-label">
              Email Address:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-input">
              <input type="text"
                     name="emailAddress"
                     value="<%=userManagerBean.getEmailAddress()%>"/>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-label">
              Organization:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-input">
              <input type="text"
                     name="organization"
                     value="<%=userManagerBean.getOrganization()%>"/>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-label">
              Base Role:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-input">
              <select name="baseGroupRole">
                <% PortletRole thisRole = userManagerBean.getRoleInBaseGroup();
                    List allRoles = userManagerBean.getAllRolesInBaseGroup();
@@ -143,20 +139,20 @@
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-label">
              New Password:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-input">
              <input type="password"
                     name="passwordValue"
                     value=""/>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-label">
              Confirm Password:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-input">
              <input type="password"
                     name="passwordConfirmation"
                     value=""/>

@@ -53,7 +53,7 @@
   </tr>
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
 <% List userList = userManagerBean.getUserList();
    int numUsers = userList.size();
    if (numUsers == 0) { %>
