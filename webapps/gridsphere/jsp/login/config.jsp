@@ -54,7 +54,7 @@
 <p>
 
 <% if (authModules.size() == 1) { %>
-    <ui:messagebox value="One active authentication module is required !"/>
+    <ui:messagebox key="LOGIN_AUTHMODULES_ONEREQ"/>
 <% } %>
 
 <ui:frame>
