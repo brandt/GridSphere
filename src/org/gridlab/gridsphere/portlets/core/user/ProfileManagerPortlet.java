@@ -250,6 +250,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 PortletRole r = aclManagerService.getRoleInGroup(user, g);
                 TextBean roletext = new TextBean();
                 if (r.equals(PortletRole.GUEST)) r = PortletRole.USER;
+                if (req.getRole().equals(PortletRole.SUPER)) r = PortletRole.ADMIN;
                 roletext.setValue(r.getName());
                 roleTC.addBean(roletext);
 
