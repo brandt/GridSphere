@@ -84,12 +84,12 @@ public class LayoutManagerServiceImpl implements LayoutManagerService, PortletSe
         return layoutEngine.getUserLayout(user).getComponentIdentifierList();
     }
 
-    /*
+/*
     public void addFrameToTabPage(User user, String concretePortletID, String tabName) throws PortletLayoutException {
         PortletTabbedPane pane = findTabbedPane(user);
         int tabindex = pane.indexOfTab(tabName);
         PortletTab tab = pane.getPortletTabAt(tabindex);
-        LayoutManager layout = tab.getPortletComponent()panel.getLayoutManager();
+        PortletLayout layout = tab.getPortletComponent()panel.getLayoutManager();
         PortletFrame newFrame = new PortletFrame();
         PortletContainer pc = layoutEngine.getPortletContainer(user);
         List newlist = newFrame.init(pc.getComponentIdentifierList());
@@ -102,7 +102,7 @@ public class LayoutManagerServiceImpl implements LayoutManagerService, PortletSe
         PortletTabbedPane pane = findTabbedPane(user);
         int tabindex = pane.indexOfTab(tabName);
         PortletPanel panel = pane.getPortletPanelAt(tabindex);
-        LayoutManager layout = panel.getLayoutManager();
+        PortletLayout layout = panel.getLayoutManager();
         List comps = layout.getPortletComponents();
         Iterator it = comps.iterator();
         while (it.hasNext()) {
@@ -126,7 +126,7 @@ public class LayoutManagerServiceImpl implements LayoutManagerService, PortletSe
     public void addPortletTab(User user, String tabName) {
         PortletPanel panel = new PortletPanel();
         PortletGridLayout gridLayout = new PortletGridLayout();
-        panel.setLayoutManager(gridLayout);
+        panel.setLayout(gridLayout);
         PortletTabbedPane tabbedPane = findTabbedPane(user);
         if (tabbedPane != null) {
             tabbedPane.addTab(tabName, panel);

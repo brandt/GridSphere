@@ -10,15 +10,15 @@
     </class>
 
     <class name="org.gridlab.gridsphere.portletcontainer.descriptor.PortletDefinition">
-        <field name="PortletApp" type="org.gridlab.gridsphere.portletcontainer.descriptor.PortletApp">
+        <field name="ApplicationPortletDescriptor" type="org.gridlab.gridsphere.portletcontainer.descriptor.ApplicationPortletDescriptor">
             <bind-xml name="portlet-app"/>
         </field>
-        <field name="ConcreteApps" type="org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication" collection="arraylist">
+        <field name="ConcreteApps" type="org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletDescriptor" collection="arraylist">
             <bind-xml name="concrete-portlet-app"/>
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication">
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletDescriptor">
         <field name="ID" type="string">
             <bind-xml name="id" node="attribute"/>
         </field>
@@ -73,7 +73,7 @@
     </class>
 
 
-    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.PortletApp">
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.ApplicationPortletDescriptor">
         <field name="ID" type="string">
             <bind-xml name="id" node="attribute"/>
         </field>

@@ -9,7 +9,7 @@ package org.gridlab.gridsphere.portletcontainer.descriptor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PortletApp {
+public class ApplicationPortletDescriptor {
 
     private String id = new String();
     private String portletName = new String();
@@ -20,7 +20,8 @@ public class PortletApp {
     private SupportsModes supportsModes = new SupportsModes();
 
 
-    public PortletApp() {}
+    public ApplicationPortletDescriptor() {
+    }
 
     /**
      * Returns the id of a PortletApplication

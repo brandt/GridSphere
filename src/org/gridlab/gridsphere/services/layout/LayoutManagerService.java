@@ -23,7 +23,6 @@ public interface LayoutManagerService extends PortletService {
 
 
 
-
    /*
     public PortletTabModel getPortletTabModel() {
 

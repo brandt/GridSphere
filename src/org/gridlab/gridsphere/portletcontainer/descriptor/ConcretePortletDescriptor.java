@@ -9,28 +9,29 @@ package org.gridlab.gridsphere.portletcontainer.descriptor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConcretePortletApplication {
+public class ConcretePortletDescriptor {
 
     private String id = new String();
     //private String name = new String();
     private List contextParamList = new ArrayList();
     private ConcretePortletInfo portletInfo = new ConcretePortletInfo();
 
-    public ConcretePortletApplication() {}
+    public ConcretePortletDescriptor() {
+    }
 
     /**
-     * gets the UID of a ConcretePortletApplication
+     * gets the UID of a ConcretePortletDescriptor
      *
-     * @returns UID of the ConcretePortletApplication
+     * @returns UID of the ConcretePortletDescriptor
      */
     public String getID() {
         return id;
     }
 
     /**
-     * Sets the ID of a ConcretePortletApplication
+     * Sets the ID of a ConcretePortletDescriptor
      *
-     * @param id the ID of the ConcretePortletApplication
+     * @param id the ID of the ConcretePortletDescriptor
      */
     public void setID(String id) {
         this.id = id;
@@ -74,5 +75,6 @@ public class ConcretePortletApplication {
     public void setConcretePortletInfo(ConcretePortletInfo portletInfo) {
         this.portletInfo = portletInfo;
     }
+
 }
 
