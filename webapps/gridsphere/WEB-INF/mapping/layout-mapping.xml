@@ -82,6 +82,13 @@
         <map-to xml="column-layout"/>
     </class>
 
+    <class name="org.gridlab.gridsphere.layout.PortletVariableColumnLayout" extends="org.gridlab.gridsphere.layout.PortletFrameLayout">
+        <map-to xml="variable-column-layout"/>
+        <field name="Variant" type="string">
+            <bind-xml name="variant" node="attribute"/>
+        </field>
+    </class>
+
     <class name="org.gridlab.gridsphere.layout.PortletFrame" extends="org.gridlab.gridsphere.layout.BasePortletComponent">
         <map-to xml="portlet-frame"/>
         <field name="PortletClass" type="string">
