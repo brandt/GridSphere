@@ -178,9 +178,6 @@ Copyright:
         <copy file="conf/log4j.properties" tofile="${classes.dir}/log4j.properties" />
 
         <!-- <copy file="${webapp.dir}/WEB-INF/conf/${Name}.properties" tofile="${env.TOMCAT_HOME}/webapps/${Name}/WEB-INF/conf/${Name}.properties" />  -->
-        <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@CATALINA_HOME@" value="${env.CATALINA_HOME}"/>
-        <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@GRIDSPHERE_WEBAPP@" value="${env.CATALINA_HOME}/webapps/${Name}"/>
-        <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@GRIDSPHERE_HOME@" value="${env.CATALINA_HOME}/${Name}"/>
 
         <javac  srcdir="${src.dir}"
             destdir="${classes.dir}"
@@ -201,6 +198,9 @@ Copyright:
     <target name="gridsphere-jar" depends="compile" description="Create gridsphere.jar">
         <!-- need todo some modifications on gridsphere.properties for the DB -->
 
+        <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@CATALINA_HOME@" value="${env.CATALINA_HOME}"/>
+        <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@GRIDSPHERE_WEBAPP@" value="${GRIDSPHERE_WEBAPP}"/>
+        <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@GRIDSPHERE_HOME@" value="${env.CATALINA_HOME}/${Name}"/>
         <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@DB_CONFIG_FILE@" value="${DB_CONFIG_FILE}"/>
         <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@DB_DATABASE@" value="${DB_DATABASE}"/>
         <echo message="Replaced DB Config with : ${DB_CONFIG_FILE}"/>
@@ -338,7 +338,7 @@ Copyright:
         <property name="var_force_database" value="goforit"/>
     </target>
 
-    <target name="force-database" depends="force-database-internal, db-hsqldb" description="forces to rebuild the database in the deployed gs"/>
+    <target name="force-database" depends="force-database-internal, force-mapping, db-hsqldb" description="forces to rebuild the database in the deployed gs"/>
 
     <target name="check-database-hsqldb" description="checks if databasefile for hsqldb is there">
         <echo message="FORCE: ${var_force_database}"/>
@@ -411,7 +411,7 @@ Copyright:
     <!-- Creates all the API documentation                                   -->
     <!-- =================================================================== -->
     <target name="docs-gs" depends="setenv" description="Create GridSphere Javadocs">
-        <delete quiet="true" dir="${javadoc.dir}/portletapi"/>
+        <delete quiet="true" dir="${javadoc.dir}/gridsphere"/>
         <mkdir dir="${javadoc.dir}/gridsphere"/>
         <javadoc packagenames="org.*"
                  sourcepath="${src.dir}"
@@ -445,7 +445,8 @@ Copyright:
            excludepackagenames="org.gridlab.gridsphere.portlet.impl.*,
                                 org.gridlab.gridsphere.portlet.service.spi.impl.*,
                                 org.gridlab.gridsphere.event.impl.*,
-                                org.gridlab.gridsphere.services.*.impl.*"
+                                org.gridlab.gridsphere.services.*.impl.*,
+                                org.gridlab.gridsphere.services.*.*.impl.*"
 
            defaultexcludes="yes"
            doctitle="${project} Portlet API"
@@ -521,7 +522,8 @@ Copyright:
         <!-- we deploy, so we use the real hsqldb for now, this needs to be
            configurable for other DB as well -->
 
-        <property name="DB_CONFIG_FILE" value="${env.CATALINA_HOME}/${gswebapp.dir}/WEB-INF/conf/hsqldb.xml"/>
+        <property name="GRIDSPHERE_WEBAPP" value="${env.CATALINA_HOME}/${gswebapp.dir}"/>
+        <property name="DB_CONFIG_FILE" value="${GRIDSPHERE_WEBAPP}/WEB-INF/conf/hsqldb.xml"/>
         <property name="DB_DATABASE" value="gridsphere"/>
 
         <echo message="Deploy-prepare Replaced DB Config with : ${DB_CONFIG_FILE}"/>
@@ -635,6 +637,7 @@ Copyright:
     <target name="test-prepare" description="prepares stuff for unit tests">
         <property name="DB_CONFIG_FILE" value="webapps/gridsphere/WEB-INF/conf/hsqldb-junit.xml"/>
         <property name="DB_DATABASE" value="junit"/>
+        <property name="GRIDSPHERE_WEBAPP" value="webapps/gridsphere"/>
         <!-- now delete the jar file to make sure we get a correct one -->
         <delete file="${build.dir}/lib/${Name}.jar"/>
         <delete file="${build.dir}/${Name}/gridsphere.properties"/>

@@ -28,17 +28,13 @@ public class ServiceTest extends TestCase {
 
     protected void setUp() {
         PropertyConfigurator.configure("conf/log4j.properties");
-        factory = SportletServiceFactory.getInstance();
-        if (factory == null) fail("Unable to instantiate SportletServiceFactory!");
     }
 
-    /*
     public void testCreateFactory() {
         // create factory
         factory = SportletServiceFactory.getInstance();
         if (factory == null) fail("Unable to instantiate SportletServiceFactory!");
     }
-     */
 
     public static void main(String[] args) throws Exception {
         junit.textui.TestRunner.run(suite());
