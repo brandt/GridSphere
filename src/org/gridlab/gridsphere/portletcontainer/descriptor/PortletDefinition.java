@@ -11,33 +11,25 @@ import java.util.List;
 
 public class PortletDefinition {
 
-    private Vector PortletAppList = new Vector();
+    private PortletApplication portletApp = new PortletApplication();
+    private Vector concreteApps = new Vector();
 
-    /**
-     * gets the List of PortletApps
-     *
-     * @return vector of portletapps
-     */
-    public List getPortletAppList() {
-        return PortletAppList;
+    public List getConcreteApps() {
+        return concreteApps;
     }
 
-    /**
-     * set the Vector of portletapps
-     * (never used, only testing)
-     *
-     */
-    public void setPortletAppList(Vector portletAppList) {
-        this.PortletAppList = portletAppList;
+    public void setConcreteApps(Vector concreteApps) {
+        this.concreteApps = concreteApps;
     }
 
-    /**
-     * adds a portletapp to the List
-     * (never used, only testing)
-     */
-    public void addPortletApp(PortletApplication app) {
-        PortletAppList.add(app);
+    public void setPortletApp(PortletApplication portletApp) {
+        this.portletApp = portletApp;
     }
+
+    public PortletApplication getPortletApp() {
+        return portletApp;
+    }
+
 }
 
 

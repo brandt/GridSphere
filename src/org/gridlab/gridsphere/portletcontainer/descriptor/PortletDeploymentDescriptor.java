@@ -17,17 +17,17 @@ import java.util.List;
 public class PortletDeploymentDescriptor {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletDeploymentDescriptor.class);
-    private Vector PortletApp = new Vector();
+    private Vector PortletDef = new Vector();
 
     /**
      * Constructs a PortletDeploymentDescriptor from a portlet.xml and mapping file
      *
-     * @param url localtion of the portlet.xml
+     * @param portletFilePath localtion of the portlet.xml
      * @param mapping localtion of the mapping file
      * @throws PortletDeploymentDescriptorException if the PortletDeploymentDescriptor cannot be created
      */
-    public PortletDeploymentDescriptor(String url, String mapping) throws PortletDeploymentDescriptorException  {
-        load(url, mapping);
+    public PortletDeploymentDescriptor(String portletFilePath, String mappingFilePath) throws PortletDeploymentDescriptorException  {
+        load(portletFilePath, mappingFilePath);
     }
 
     /**
@@ -35,8 +35,8 @@ public class PortletDeploymentDescriptor {
      *
      * @return a list of PortletApps
      */
-    public List getPortletApp() {
-        return PortletApp;
+    public List getPortletDef() {
+        return PortletDef;
     }
 
     /**
@@ -44,15 +44,15 @@ public class PortletDeploymentDescriptor {
      *
      * @return a new PortletApp
      */
-    public PortletApplication createPortletApp() {
-        return new PortletApplication();
+    public PortletDefinition createPortletDef() {
+        return new PortletDefinition();
     }
 
     /**
      * Add a new portlet app to the descriptor
      * <b>not implemented yet</b>
      */
-    public void addPortletApp(PortletApplication portletApp) {}
+    public void addPortletDef(PortletDefinition portletDef) {}
 
     /**
      * Loads the PortletDeploymentDescriptor from the portlet.xml
@@ -70,11 +70,11 @@ public class PortletDeploymentDescriptor {
         // set the path to the mapping file
         pmx.setMappingFile(mapping);
 
-        PortletDefinition pd = null;
+        PortletCollection pc = null;
 
         // try to get it
         try {
-             pd = (PortletDefinition)pmx.restoreObject();
+             pc = (PortletCollection)pmx.restoreObject();
         } catch (RestoreException e) {
             log.error("RestoreError ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") "+e.getMessage());
             throw new PortletDeploymentDescriptorException("Unable to restore: "+e.getMessage());
@@ -83,7 +83,8 @@ public class PortletDeploymentDescriptor {
             throw new PortletDeploymentDescriptorException("Configuration error: "+e.getMessage());
         }
 
-        this.PortletApp = (Vector)pd.getPortletAppList();
+
+        this.PortletDef = (Vector)pc.getPortletDefList();
     }
 
     /**

@@ -5,6 +5,8 @@
 
 package org.gridlab.gridsphere.portletcontainer.descriptor;
 
+import junit.textui.TestRunner;
+
 public class Role {
 
     private String roleName = "";
@@ -12,11 +14,11 @@ public class Role {
     public Role() {}
 
     /**
-     * Returns the group name
+     * Returns the role name
      *
-     * @returns GroupName
+     * @returns the role name
      */
-    public String getUserRole() {
+    public String getRoleName() {
         return roleName;
     }
 

@@ -8,8 +8,8 @@ package org.gridlab.gridsphere.portletcontainer.descriptor;
 
 public class PortletApplication {
 
-    private String Uid = new String();                 // Uid of the Portletapplication
-    private String Name = new String();                // Name of the
+    private String uid = new String();                 // Uid of the Portletapplication
+    private String name = new String();                // Name of the
     private PortletInfo portletInfo = new PortletInfo();            // PortletInfo
 
     public PortletApplication() {}
@@ -19,8 +19,8 @@ public class PortletApplication {
      *
      * @returns Uid of the PortletApplication
      */
-    public String getUid() {
-        return Uid;
+    public String getUID() {
+        return uid;
     }
 
     /**
@@ -28,8 +28,8 @@ public class PortletApplication {
      *
      * @param uid uid of the PortletApplication
      */
-    public void setUid(String uid) {
-        this.Uid = uid;
+    public void setUID(String uid) {
+        this.uid = uid;
     }
 
     /**
@@ -38,7 +38,7 @@ public class PortletApplication {
      * @returns name of the PortletApplication
      */
     public String getName() {
-        return Name;
+        return name;
     }
 
     /**
@@ -47,7 +47,7 @@ public class PortletApplication {
      * @param name name of a PortletApplication
      */
     public void setName(String name) {
-        this.Name = name;
+        this.name = name;
     }
 
     /**
@@ -59,7 +59,6 @@ public class PortletApplication {
     public PortletInfo getPortletInfo() {
         return portletInfo;
     }
-
 
     /**
      * sets the portlet of a PortletApplication

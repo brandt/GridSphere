@@ -17,10 +17,6 @@ public class PortletInfo {
     private String Href = new String();
     private String Id = new String();
     private String Name = new String();
-    private String Description = new String();
-    private List configParamList = new Vector();
-    private List groupList = new Vector();
-    private List roleList = new Vector();
 
     /**
      * gets the href of a PortletInfo
@@ -75,78 +71,6 @@ public class PortletInfo {
      */
     public void setName(String Name) {
         this.Name = Name;
-    }
-
-    /**
-     * Returns the description of the portlet
-     *
-     * @returns description of the portlet
-     */
-    public String getDescription() {
-        return Description;
-    }
-
-    /**
-     * sets the name of the portlet
-     *
-     * @param description the description of the portlet
-     */
-    public void setDescription(String Description) {
-        this.Description = Description;
-    }
-
-    /**
-     * Returns the description of the portlet
-     *
-     * @returns description of the portlet
-     */
-    public List getConfigParamList() {
-        return configParamList;
-    }
-
-    /**
-     * sets the name of the portlet
-     *
-     * @param description the description of the portlet
-     */
-    public void setConfigParamList(Vector configParamList) {
-        this.configParamList = configParamList;
-    }
-
-    /**
-     * Returns the List of groups allowed access to this portlet
-     *
-     * @return vector of groups allowed access to this portlet
-     */
-    public List getGroupList() {
-        return groupList;
-    }
-
-    /**
-     * Sets the Vector of groups allowed access to this portlet
-     *
-     * @param groupList the Vector of groups allowed access to this portlet
-     */
-    public void setGroupList(Vector groupList) {
-        this.groupList = groupList;
-    }
-
-    /**
-     * Returns the List of roles allowed access to this portlet
-     *
-     * @return vector of roles allowed access to this portlet
-     */
-    public List getRoleList() {
-        return roleList;
-    }
-
-    /**
-     * Sets the Vector of roles allowed access to this portlet
-     *
-     * @param groupList the Vector of roles allowed access to this portlet
-     */
-    public void setRoleList(Vector roleList) {
-        this.roleList = roleList;
     }
 
 }

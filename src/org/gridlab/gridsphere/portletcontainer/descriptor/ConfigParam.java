@@ -42,7 +42,7 @@ public class ConfigParam {
      *
      * @param ParamValue the parameter value
      */
-    public void setParameterName(String ParamValue) {
+    public void setParamValue(String ParamValue) {
         this.ParamValue = ParamValue;
     }
 
