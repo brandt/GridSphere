@@ -38,13 +38,13 @@ public class DefaultTableModel extends BaseBean implements TagBean {
                 TextBean tb1 = new TextBean();
                 tb1.setValue(key);
                 cellbean = new TableCellBean();
-                cellbean.addTagBean(tb1);
-                tableRow.addTagBean(cellbean);
+                cellbean.addBean(tb1);
+                tableRow.addBean(cellbean);
                 TextBean tb2 = new TextBean();
                 tb2.setValue(" " + value);
                 cellbean = new TableCellBean();
-                cellbean.addTagBean(tb2);
-                tableRow.addTagBean(cellbean);
+                cellbean.addBean(tb2);
+                tableRow.addBean(cellbean);
                 dataList.add(tableRow);
             }
         }

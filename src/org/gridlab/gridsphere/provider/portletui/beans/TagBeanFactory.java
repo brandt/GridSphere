@@ -38,6 +38,22 @@ public class TagBeanFactory {
         return bean;
     }
 
+    public static TagBean getNewTagBean(PortletRequest req, String id) {
+        //System.err.println("Retrieving bean: " + id + " " + getBeanKey(req, id));
+        TagBean bean = (TagBean)req.getSession(true).getAttribute(getBeanKey(req, id));
+        if (bean != null) {
+            if (bean instanceof InputBean) {
+                InputBean input = (InputBean)bean;
+                String name = input.getName();
+                String val = req.getParameter(name);
+                if (val != null) input.setValue(val);
+            }
+            bean.setPortletRequest(req);
+            System.err.println("found bean id " + id);
+        }
+        return bean;
+    }
+
     public static void storeTagBean(PortletRequest req, TagBean tagBean) {
         String id = tagBean.getBeanId();
         if (!id.equals("")) {

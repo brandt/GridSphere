@@ -17,6 +17,14 @@ public abstract class BaseComponentBean extends BaseBean {
     protected String font = "";
     protected String key = null;
 
+    public BaseComponentBean() {
+        super();
+    }
+
+    public BaseComponentBean(String vbName) {
+        super(vbName);
+    }
+
     /**
      * Sets the name of the bean.
      * @param name the name of the bean

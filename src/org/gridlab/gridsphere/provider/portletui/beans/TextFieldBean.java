@@ -4,58 +4,39 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
+import org.gridlab.gridsphere.portlet.PortletRequest;
+
 public class TextFieldBean extends InputBean implements TagBean  {
+
+    public static final String NAME = "tf";
 
     public static final String TEXTFIELD_STYLE = "portlet-frame-text";
 
     public TextFieldBean() {
-        super();
+        super(NAME);
         this.inputtype = "text";
         this.cssStyle = TEXTFIELD_STYLE;
     }
 
-    public TextFieldBean(String name, String value) {
-        super();
-        this.name = name;
-        this.value = value;
+    public TextFieldBean(String name) {
+        super(name);
+        this.inputtype = "text";
+        this.cssStyle = TEXTFIELD_STYLE;
     }
 
-    public TextFieldBean(String name, String value, boolean disabled, boolean readonly, int size, int maxlength) {
-        //  super(name, value, disabled, readonly);
-        super();
-        this.name = name;
-        this.value = value;
-        this.disabled = disabled;
-        this.readonly = readonly;
-        this.size = size;
-        this.maxlength = maxlength;
+    public TextFieldBean(String name, String id) {
+        super(name);
+        this.inputtype = "text";
+        this.beanId = id;
+        this.cssStyle = TEXTFIELD_STYLE;
     }
 
-    /*
-    public String toString() {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("<input type='");
-        buffer.append(inputType);
-        buffer.append("' name='");
-        buffer.append(name);
-        buffer.append("' value='");
-        buffer.append(value);
-        buffer.append("' ");
-        if (maxlength > 0) {
-            buffer.append("maxlength='");
-            buffer.append(maxlength);
-            buffer.append("' ");
-        }
-        if (size > 0) {
-            buffer.append("size='");
-            buffer.append(size);
-            buffer.append("' ");
-        }
-        buffer.append(checkReadonly());
-        buffer.append(checkDisabled());
-        buffer.append("/>");
-        return buffer.toString();
+     public TextFieldBean(PortletRequest request, String id) {
+        super(NAME);
+        this.inputtype = "text";
+        this.cssStyle = TEXTFIELD_STYLE;
+        this.request = request;
+        this.beanId = id;
     }
-    */
 
 }

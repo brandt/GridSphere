@@ -4,7 +4,7 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-public class PanelBean extends TagBeanContainer implements TagBean {
+public class PanelBean extends BeanContainer implements TagBean {
 
     public static final String TABLE_PANE_STYLE = "portlet-pane";
     public static final String TABLE_PANE_WIDTH = "200";
@@ -16,6 +16,7 @@ public class PanelBean extends TagBeanContainer implements TagBean {
     protected String width = TABLE_PANE_WIDTH;
 
     public PanelBean() {
+        this.cssStyle = TABLE_PANE_STYLE;
     }
 
     public void setRows(String rows) {

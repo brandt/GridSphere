@@ -5,12 +5,27 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
+import org.gridlab.gridsphere.portlet.PortletRequest;
+
 public class TextAreaBean extends BaseComponentBean implements TagBean {
+
+    public static final String NAME = "ta";
+
+    public static final String TEXTAREA_STYLE = "portlet-frame-textarea";
 
     private int cols = 0;
     private int rows = 0;;
 
     public TextAreaBean() {
+        super(NAME);
+        this.cssStyle = TEXTAREA_STYLE;
+    }
+
+    public TextAreaBean(PortletRequest req, String beanId) {
+        super(NAME);
+        this.cssStyle = TEXTAREA_STYLE;
+        this.request = req;
+        this.beanId = beanId;
     }
 
     /**

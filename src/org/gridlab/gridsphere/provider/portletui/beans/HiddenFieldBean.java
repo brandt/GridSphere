@@ -7,12 +7,10 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 public class HiddenFieldBean extends TextFieldBean {
 
-    public HiddenFieldBean() {
-        super();
-    }
+    public static final String NAME = "hf";
 
-    public HiddenFieldBean(String name, String value) {
-        super(name, value);
+    public HiddenFieldBean() {
+        super(NAME);
     }
 
     public String toString() {

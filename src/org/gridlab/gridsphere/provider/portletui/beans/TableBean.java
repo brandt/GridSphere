@@ -6,7 +6,7 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 
-public class TableBean extends BaseBean implements TagBean {
+public class TableBean extends BaseComponentBean implements TagBean {
 
     protected DefaultTableModel defaultModel = new DefaultTableModel();
     protected String cellSpacing = "1";

@@ -5,14 +5,23 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
+import org.gridlab.gridsphere.portlet.PortletRequest;
+
 public class PasswordBean extends TextFieldBean {
 
+    public static final String NAME = "pb";
+
     public PasswordBean() {
-        super();
+        super(NAME);
     }
 
-    public PasswordBean(String name, String value, boolean disabled, boolean readonly, int size, int maxlength) {
-        super(name, value, disabled, readonly, size, maxlength);
+    public PasswordBean(PortletRequest req, String beanId) {
+        super(NAME, beanId);
+        this.request = req;
+    }
+
+    public PasswordBean(String beanId) {
+        super(NAME, beanId);
     }
 
     public String toString() {

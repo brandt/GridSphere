@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class TableRowBean extends TagBeanContainer {
+public class TableRowBean extends BeanContainer {
 
     public TableRowBean() {
         super();

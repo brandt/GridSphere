@@ -13,6 +13,10 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
         super();
     }
 
+    public SelectElementBean(String vbName) {
+        super(vbName);
+    }
+
     protected String checkSelected(String select) {
         if (selected) {
             return " " + select + "='" + select + "' ";
@@ -38,7 +42,13 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
     }
 
     public String toString(String type) {
-        return "<input type='" + type + "' name='" + name + "' value='" + value + "' " + checkDisabled() + " " + checkSelected("checked") +
+
+        String pname = name;
+        if (!beanId.equals("")) {
+            pname = "ui_" + vbName + "_" + beanId + "_" + name;
+        }
+
+        return "<input type='" + type + "' name='" + pname + "' value='" + value + "' " + checkDisabled() + " " + checkSelected("checked") +
                 "/>";
     }
 

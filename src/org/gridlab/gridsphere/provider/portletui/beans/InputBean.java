@@ -10,6 +10,12 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
     protected int size = 0;
     protected int maxlength = 0;
 
+    public InputBean() {}
+
+    public InputBean(String name) {
+        super(name);
+    }
+
     public int getSize() {
         return size;
     }
@@ -30,6 +36,9 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
         StringBuffer sb = new StringBuffer();
         sb.append("<input ");
         sb.append("type=\"" + inputtype + "\" ");
+        if (!beanId.equals("")) {
+            name = "ui_" + vbName + "_" + name;
+        }
         if (name != null) sb.append("name=\"" + name + "\" ");
         if (value != null) sb.append("value=\"" + value + "\" ");
         if (size != 0) sb.append("size=\"" + size + "\" ");

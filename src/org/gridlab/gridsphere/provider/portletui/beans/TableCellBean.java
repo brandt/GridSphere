@@ -9,10 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 
-public class TableCellBean extends TagBeanContainer implements TagBean {
+public class TableCellBean extends BeanContainer implements TagBean {
 
     protected String cellSpacing = "";
     protected String width = "";
+    protected String TABLE_CELL_STYLE = "";
 
     public TableCellBean() {
         super();
