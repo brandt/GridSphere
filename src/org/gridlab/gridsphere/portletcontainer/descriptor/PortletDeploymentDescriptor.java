@@ -20,34 +20,47 @@ public class PortletDeploymentDescriptor {
     private Vector PortletApp = new Vector();
 
     /**
-     * construcs PortletDeploymentDescriptor
+     * Constructs a PortletDeploymentDescriptor from a portlet.xml and mapping file
+     *
      * @param url localtion of the portlet.xml
      * @param mapping localtion of the mapping file
+     * @throws PortletDeploymentDescriptorException if the PortletDeploymentDescriptor cannot be created
      */
     public PortletDeploymentDescriptor(String url, String mapping) throws PortletDeploymentDescriptorException  {
         load(url, mapping);
     }
 
     /**
-     *  returns a vector of portletapps
+     * Returns a list of PortletApps
+     *
+     * @return a list of PortletApps
      */
     public List getPortletApp() {
         return PortletApp;
     }
 
     /**
-     * creates a new PortletApp (which is a vector)
+     * Creates a new PortletApp
+     *
+     * @return a new PortletApp
      */
     public PortletApp createPortletApp() {
         return new PortletApp();
     }
 
     /**
-     *  <b>not implemented yet</b>
+     * Add a new portlet app to the descriptor
+     * <b>not implemented yet</b>
      */
     public void addPortletApp(PortletApp portletApp) {}
 
-
+    /**
+     * Loads the PortletDeploymentDescriptor from the portlet.xml
+     *
+     * @param url the location of the portlet.xml file
+     * @param mapping the location of the portlet xml mapping file
+     * @throws PortletDeploymentDescriptorException if the PortletDeploymentDescriptor cannot be created
+     */
     public void load(String url, String mapping) throws PortletDeploymentDescriptorException  {
         PersistenceManagerXml pmx = new PersistenceManagerXml();
 
@@ -74,6 +87,7 @@ public class PortletDeploymentDescriptor {
     }
 
     /**
+     * Save the portlet deployment descriptor to portlet.xml
      * <b>not implemented yet</b>
      */
     public void save() {}
