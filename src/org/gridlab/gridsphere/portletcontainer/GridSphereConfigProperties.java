@@ -48,11 +48,6 @@ public interface GridSphereConfigProperties {
     /**
      * Directory containing GridSphere Castor mapping files
      */
-    public static final String GRIDSPHERE_MAPPING_DIR = "GRIDSPHERE_MAPPING_DIR";
-
-    /**
-     * Directory containing GridSphere Castor mapping files
-     */
     public static final String GRIDSPHERE_PORTLET_MAPPING = "GRIDSPHERE_PORTLET_MAPPING";
 
     /**

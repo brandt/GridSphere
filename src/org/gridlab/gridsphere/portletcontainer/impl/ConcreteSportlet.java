@@ -72,6 +72,9 @@ class ConcreteSportlet implements ConcretePortlet {
         appname = appID.substring(0, index);
         String appNo = appID.substring(index + 1);
 
+        System.err.println("appId " + appID + " appNo:");
+        concreteID = concSportlet.getConcretePortletID();
+
         // Get ConcretePortletConfig UID e.g. classname.number.number
         index = concreteID.lastIndexOf(".");
         String concreteNo = concreteID.substring(index + 1);

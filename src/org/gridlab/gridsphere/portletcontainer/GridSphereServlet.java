@@ -20,6 +20,7 @@ import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.security.AuthenticationException;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
+import org.apache.log4j.PropertyConfigurator;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContextEvent;
