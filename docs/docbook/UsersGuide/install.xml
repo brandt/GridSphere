@@ -37,9 +37,11 @@ If you are installing GridSphere on Windows please make sure that your
     </para>
     <para>
 Gridsphere comes with default the HSQL database. If you whish to use another hibernate supported database (like
-mysql, postgresql) you will need to download the requiered JDBC drivers from the database vendor and put them
-in the lib/ dir of gridsphere source before deploying. You are also requiered to make changes to the
-        <filename>webapps/gridsphere/WEB-INF/persistence/hibernate.properties</filename>.
+mysql, postgresql) you will need to download the required JDBC drivers from the database vendor and put them
+in the <filename>$CATALINA_HOME/shared/lib</filename> directory. You are also required to make changes to the
+        <filename>$CATALINA_HOME/webapps/gridsphere/CustomPortal/database/hibernate.properties</filename> hibernate
+        properties file. Next, issue "ant create-database" to create the database using the updated configuration.
+        Finally restart the application server.
     </para>
 </sect1>
 
@@ -144,6 +146,68 @@ In addition, the logging level can be selectively controlled by configuring the
 the GridSphere source directory and then re-deploying.
     </para>
 </sect1>
+
+<sect1>
+        <title>Configuring the Portal URL</title>
+        <para>
+            By default, the portal is configured as http://localhost:8080/gridsphere/gridsphere.
+            It is possible to change the context by editing the deployed context.
+            Under Tomcat 4, the context file is located in <filename></filename>.
+            Under Tomcat 5, the context file is located in <filename></filename>
+            Change the following:
+            </para>
+           <informalexample><programlisting>
+&lt;Context path="/gridsphere" docBase="gridsphere" debug="0" reloadable="false" crossContext="true"&gt;
+       &lt;Logger className="org.apache.catalina.logger.FileLogger"
+           prefix="localhost_gridsphere_log." suffix=".txt" timestamp="true"/&gt;
+&lt;/Context&gt;
+  </programlisting></informalexample>
+   <para>to</para>
+
+
+            <informalexample><programlisting>
+&lt;Context path="/myorg" docBase="gridsphere" debug="0" reloadable="false" crossContext="true"&gt;
+       &lt;Logger className="org.apache.catalina.logger.FileLogger"
+           prefix="localhost_gridsphere_log." suffix=".txt" timestamp="true"/&gt;
+&lt;/Context&gt;
+  </programlisting></informalexample>
+         <para>
+          Where the context <emphasis>path</emphasis> element corresponds to your desired context.
+
+          In addition, you can edit the servlet mapping by editing <filename>$CATALINA_HOME/webapps/gridsphere/WEB-INF/web.xml</filename>
+
+        </para>
+
+  <informalexample><programlisting>
+&lt;servlet-mapping&gt;
+       &lt;servlet-name&gt;gridsphere&lt;/servlet-name&gt;
+       &lt;url-pattern&gt;/gridsphere/*&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+     </programlisting></informalexample>
+    <para>to</para>
+
+    <informalexample><programlisting>
+&lt;servlet-mapping&gt;
+       &lt;servlet-name&gt;gridsphere&lt;/servlet-name&gt;
+       &lt;url-pattern&gt;/start/*&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+    </programlisting></informalexample>
+
+and then you can navigate to http://servername/myorg/start/
+
+    </sect1>
+
+<sect1>
+    <title>Redeploying a customized portal</title>
+        <para>
+           All custom settings including the default database are contained in
+            <filename>$CATALINA_HOME/webapps/gridsphere/WEB-INF/CustomPortal</filename>. To deploy a new portal configured
+            with the earlier customizations, simply manually copy over this directory to the new portal
+            directory. In order for the database to work, you will have to hand edit the
+            <filename>$CATALINA_HOME/webapps/gridsphere/WEB-INF/CustomPortal/database/hibernate.properties</filename>
+            <emphasis>hibernate.connection.url</emphasis> entry to match the new Tomcat location.
+        </para>
+    </sect1>
 
 <sect1>
     <title>Running GridSphere with Apache httpd2 and mod_jk</title>

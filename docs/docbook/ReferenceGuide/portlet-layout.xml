@@ -172,7 +172,12 @@ double-tabbed pane. An example illustration is shown:
             </callout>
             <callout arearefs="frame">
             <para>
-                The portlet frame is specified as the concrete portlet id representing the portlet class.
+                The portlet frame is specified as the concrete portlet id representing the portlet class. In the case of
+                WebSphere style application, the concrete portlet id shoudl be used. For JSR 168 portlet applications,
+                the webapp name and the portlet name (as expressed in &lt;portlet-name&gt; of portlet.xml) separated by
+                a '#' should be used e.g. jsrportlets#WeatherPortlet. However, the portlet class name will also work, but
+                does not guarantee uniqueness if multiple portlets with the same classname are declared in the portlet
+                descriptor.
             </para>
             </callout>
             <callout arearefs="label">

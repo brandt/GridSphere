@@ -18,5 +18,8 @@
     to be used in portlets for action handling or presentation logic. This reference guide is intended to
     summarize UI tag and bean usage.
     </para>
-
+    <para>
+        The JSR 168 Portlet Specification also provides a collection of portlet tags that are implemented
+        in GridSphere. Please see the specification for more details.
+    </para>
 </chapter>

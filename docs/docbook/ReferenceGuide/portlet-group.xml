@@ -84,7 +84,9 @@ An external portlet web application specifies a group definition in an XML descr
             </callout>
             <callout arearefs="gclass.def">
             <para>
-                The portlet-class element defines the fully qualified portlet class name of this portlet    
+                The portlet-class element defines the fully qualified portlet class name of this portlet (concrete portlet id) in the case
+                of WebSphere style portlet application. In JSR 168 applications, it can be the fully qualified portlet class name or should
+                specified as the webapp and the portlet name separated by a '#' e.g. jsrtutorial#ActionHelloPortlet
             </para>
             </callout>
             <callout arearefs="grole.def">

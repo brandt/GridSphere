@@ -112,13 +112,3 @@
             In addition, an external portlet application may include its own error page that will be displayed when an occur occurs. This
         error page must be placed in <filename>jsp/gs_error.jspn</filename> of the web application.
     </sect1>
-
-    <sect1>
-        <title>Configuring the Portal URL</title>
-        <para>
-            By default, the portal is configured as http://localhost:8080/gridsphere/gridsphere.
-            It is possible to change the context by doing the following:
-
-            
-        </para>
-    </sect1>
