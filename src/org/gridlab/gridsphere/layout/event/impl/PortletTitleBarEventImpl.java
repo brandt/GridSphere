@@ -24,6 +24,8 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
     private PortletRequest req;
     private PortletTitleBar titleBar = null;
     private PortletRequest request;
+    private boolean hasStateAction = false;
+    private boolean hasModeAction = false;
 
     /**
      * Constructs an instance of a PortletTitleBarEventImpl from a general
@@ -40,8 +42,11 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
             this.id = id;
             if (req.getParameter(SportletProperties.PORTLET_MODE) != null) {
                 action = PortletTitleBarEvent.TitleBarAction.MODE_MODIFY;
-            } else if (req.getParameter(SportletProperties.PORTLET_WINDOW) != null) {
+                hasModeAction = true;
+            }
+            if (req.getParameter(SportletProperties.PORTLET_WINDOW) != null) {
                 action = PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY;
+                hasStateAction = true;
             }
         }
         this.request = event.getPortletRequest();
@@ -108,6 +113,24 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
             return state;
         }
         return null;
+    }
+
+    /**
+     * Returns true if this title bar event signals a window state change
+     *
+     * @return true if this title bar event signals a window state change
+     */
+    public boolean hasWindowStateAction() {
+        return hasStateAction;
+    }
+
+    /**
+     * Returns true if this title bar event signals a portlet mode change
+     *
+     * @return true if this title bar event signals a portlet mode change
+     */
+    public boolean hasPortletModeAction() {
+        return hasModeAction;
     }
 
     public PortletComponent getPortletComponent() {

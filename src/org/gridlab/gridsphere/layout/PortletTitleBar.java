@@ -618,7 +618,9 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         User user = req.getUser();
         if (!(user instanceof GuestUser)) {
             if (titleBarEvent.hasAction()) {
-                if (titleBarEvent.getAction().getID() == PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY.getID()) {
+
+                if (titleBarEvent.hasWindowStateAction()) {
+
                     PortletResponse res = event.getPortletResponse();
                     windowState = titleBarEvent.getState();
                     WindowEvent winEvent = null;
@@ -643,7 +645,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                             errorMessage += "Failed to invoke window event method of portlet: " + portletClass;
                         }
                     }
-                } else if (titleBarEvent.getAction().getID() == PortletTitleBarEvent.TitleBarAction.MODE_MODIFY.getID()) {
+                } else if (titleBarEvent.hasPortletModeAction()) {
 
                     if (titleBarEvent.getMode().equals(Portlet.Mode.CONFIGURE)) {
                         boolean hasrole = aclService.hasRequiredRole(req, portletClass, true);
