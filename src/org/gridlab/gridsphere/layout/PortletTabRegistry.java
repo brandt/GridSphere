@@ -148,7 +148,7 @@ public class PortletTabRegistry {
         groupTabs.put(groupName, parentPane);
     }
 
-    public static synchronized void reloadTab(String tab, String tabXMLfile) {
+    public static synchronized void reloadTab(String tab, String tabXMLfile) throws PersistenceManagerException {
         try {
             PortletTabbedPane pane = PortletLayoutDescriptor.loadPortletTabs(tabXMLfile, layoutMappingFile);
             if (groupTabs.containsKey(tab)) {
@@ -157,7 +157,7 @@ public class PortletTabRegistry {
             if (applicationTabs.containsKey(tab)) {
                 applicationTabs.put(tab, pane);
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             log.error("Unable to reload tab: " + tab, e);
         }
     }

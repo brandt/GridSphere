@@ -77,6 +77,21 @@ public class PortletLayoutDescriptor {
     }
 
     /**
+     * Saves the portlet page associated with this descriptor
+     *
+     * @param pc the portlet container to load
+     * @param descriptorPath location of the layout.xml
+     * @param mappingPath location of the mapping file
+     *
+     * @throws IOException if an I/O error occurs
+     * @throws PersistenceManagerException if a descriptor error occurs
+     */
+    public static void validatePortletPage(PortletPage pc, String descriptorPath, String mappingPath) throws IOException, PersistenceManagerException {
+        pmXML.setDescriptorPath(descriptorPath);
+        pmXML.setMappingPath(mappingPath);
+    }
+
+    /**
      * Saves the portlet tab associated with this descriptor
      *
      * @param pane the list of portlet tabs to save

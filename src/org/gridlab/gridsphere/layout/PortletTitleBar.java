@@ -230,7 +230,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * Sets the window state of this title bar
      *
      * @param state the portlet window state expressed as a string
-     * @see PortletWindow.State
      */
     public void setWindowState(PortletWindow.State state) {
         if (state != null) this.windowState = state;
@@ -240,7 +239,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * Returns the window state of this title bar
      *
      * @return the portlet window state expressed as a string
-     * @see PortletWindow.State
      */
     public PortletWindow.State getWindowState() {
         return windowState;
@@ -250,7 +248,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * Sets the window state of this title bar
      *
      * @param state the portlet window state expressed as a string
-     * @see PortletWindow.State
      */
     public void setWindowStateAsString(String state) {
         if (state != null) {
@@ -266,7 +263,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * Returns the window state of this title bar
      *
      * @return the portlet window state expressed as a string
-     * @see PortletWindow.State
      */
     public String getWindowStateAsString() {
         return windowState.toString();
@@ -276,7 +272,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * Sets the portlet mode of this title bar
      *
      * @param mode the portlet mode expressed as a string
-     * @see Portlet.Mode
      */
     public void setPortletMode(Portlet.Mode mode) {
         if (mode != null) this.portletMode = mode;
@@ -286,7 +281,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * Returns the portlet mode of this title bar
      *
      * @return the portlet mode expressed as a string
-     * @see Portlet.Mode
      */
     public Portlet.Mode getPortletMode() {
         return portletMode;
@@ -296,7 +290,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * Sets the portlet mode of this title bar
      *
      * @param mode the portlet mode expressed as a string
-     * @see Portlet.Mode
      */
     public void setPortletModeAsString(String mode) {
         if (mode == null) return;
@@ -311,7 +304,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * Returns the portlet mode of this title bar
      *
      * @return the portlet mode expressed as a string
-     * @see Portlet.Mode
      */
     public String getPortletModeAsString() {
         return portletMode.toString();
