@@ -9,6 +9,10 @@ public class PortletErrorMessage {
     private String id = "";
     private Exception e = null;
 
+    public PortletErrorMessage(Exception e) {
+        this.e = e;
+    }
+
     public PortletErrorMessage(String portletID, Exception e) {
         this.id = id;
         this.e = e;
