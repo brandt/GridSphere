@@ -283,12 +283,11 @@ public class GroupManagerPortlet extends ActionPortlet {
         Set portletRoles = new HashSet();
 
         PortletGroup coreGroup = aclManagerService.getCoreGroup();
-
+        HiddenFieldBean gid = evt.getHiddenFieldBean("groupId");
         while (it.hasNext()) {
             String g = (String) it.next();
 
-
-            if (g.equals(coreGroup.getName())) {
+            if (g.equals(coreGroup.getName()) && (!gid.getValue().equals(coreGroup.getID()))) {
                 continue;
             }
 
@@ -317,7 +316,7 @@ public class GroupManagerPortlet extends ActionPortlet {
 
         TextFieldBean groupTF = evt.getTextFieldBean("groupNameTF");
         TextFieldBean groupDescTF = evt.getTextFieldBean("groupDescTF");
-        HiddenFieldBean gid = evt.getHiddenFieldBean("groupId");
+
         RadioButtonBean groupVisibility = evt.getRadioButtonBean("groupVisibility");
 
         SportletGroup newgroup = new SportletGroup();
@@ -325,7 +324,7 @@ public class GroupManagerPortlet extends ActionPortlet {
             newgroup.setOid(gid.getValue());
 
             PortletGroup oldgroup = aclService.getGroup(gid.getValue());
-
+            newgroup.setCore(oldgroup.isCore());
             // if group name has been modified update group tab
             if (!oldgroup.getName().equals(groupTF.getValue())) {
 
