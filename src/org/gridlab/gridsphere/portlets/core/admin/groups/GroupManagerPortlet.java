@@ -111,6 +111,7 @@ public class GroupManagerPortlet extends ActionPortlet {
 
         // see if there is a group already
         PortletGroup group = null;
+        Set portletRoleList = null;
         String groupId = event.getAction().getParameter("groupID");
         if (groupId != null) {
             User user = req.getUser();
@@ -121,134 +122,29 @@ public class GroupManagerPortlet extends ActionPortlet {
             groupDescTF.setValue(group.getDescription());
             if (!group.isPublic()) req.setAttribute("isPrivate", "true");
 
+            portletRoleList = group.getPortletRoleList();
+
         }
 
 
         PanelBean panel = event.getPanelBean("panel");
         FrameBean frame = new FrameBean();
         DefaultTableModel model = new DefaultTableModel();
-        if (group == null) {
-            List webappNames = portletMgr.getWebApplicationNames();
+        //if (group == null) {
+        List webappNames = portletMgr.getWebApplicationNames();
 
-            Iterator it = webappNames.iterator();
-
-
-            PortletRole role = req.getRole();
-            while (it.hasNext()) {
+        Iterator it = webappNames.iterator();
 
 
-                String g = (String)it.next();
-                System.err.println("listing group = " + g);
-                if (g.equals(PortletGroupFactory.GRIDSPHERE_GROUP.toString())) {
-                    continue;
-                }
-                TableRowBean tr = new TableRowBean();
-                tr.setHeader(true);
-                TableCellBean tc3 = new TableCellBean();
-                TextBean text3 = new TextBean();
-                text3.setValue(this.getLocalizedText(req, "SUBSCRIPTION_SUBSCRIBE"));
-                tc3.addBean(text3);
-                tr.addBean(tc3);
-                TableCellBean tc = new TableCellBean();
-                TextBean text = new TextBean();
-                text.setValue(portletMgr.getPortletWebApplicationDescription(g));
-                tc.addBean(text);
-                tr.addBean(tc);
-                tc = new TableCellBean();
-                text = new TextBean();
-                text.setValue(this.getLocalizedText(req, "SUBSCRIPTION_DESC"));
-                tc.addBean(text);
-                tr.addBean(tc);
-                tc = new TableCellBean();
-                text = new TextBean();
-                text.setValue(this.getLocalizedText(req, "SUBSCRIPTION_REQROLE"));
-                tc.addBean(text);
-                tr.addBean(tc);
-                model.addTableRowBean(tr);
+        PortletRole role = req.getRole();
+        while (it.hasNext()) {
 
-                //if (group != null) break;
 
-                List appColl = portletRegistry.getApplicationPortlets(g);
-                if (appColl.isEmpty()) appColl = portletRegistry.getApplicationPortlets(g);
-                Iterator appIt = appColl.iterator();
-                while (appIt.hasNext()) {
-                    ApplicationPortlet app = (ApplicationPortlet)appIt.next();
-                    List concPortlets = app.getConcretePortlets();
-                    Iterator cit = concPortlets.iterator();
-                    while (cit.hasNext()) {
-                        ConcretePortlet conc = (ConcretePortlet)cit.next();
-                        String concID = conc.getConcretePortletID();
-
-                        PortletRole reqrole = conc.getConcretePortletConfig().getRequiredRole();
-                        log.debug("subscribed to portlet: " + concID + " " + reqrole);
-                        if (role.compare(role, reqrole) >= 0) {
-                            // build an interface
-                            CheckBoxBean cb = new CheckBoxBean();
-                            cb.setBeanId(concID + "CB");
-                            cb.setValue(concID);
-                            cb.setSelected(false);
-
-                            // don't allow core portlets to be changed
-
-                            TableRowBean newtr = new TableRowBean();
-                            TableCellBean newtc = new TableCellBean();
-                            newtc.addBean(cb);
-                            newtr.addBean(newtc);
-
-                            TableCellBean newtc2 = new TableCellBean();
-                            TextBean tb = new TextBean();
-
-                            // set 2nd column to portlet display name from concrete portlet
-                            Locale loc = req.getLocale();
-                            /*
-                            int li = concID.lastIndexOf(".");
-                            concID = concID.substring(0, li);
-                            li = concID.lastIndexOf(".");
-                            concID = concID.substring(li+1);
-                            tb.setValue(concID);
-                            */
-                            String dispName = conc.getDisplayName(loc);
-                            tb.setValue(dispName);
-                            newtc2.addBean(tb);
-                            newtr.addBean(newtc2);
-                            newtc = new TableCellBean();
-                            TextBean tb2 = new TextBean();
-
-                            // set 3rd column to portlet description from concrete portlet
-
-                            //tb2.setValue(conc.getPortletSettings().getDescription(loc, null));
-                            tb2.setValue(conc.getDescription(loc));
-                            newtc.addBean(tb2);
-                            newtr.addBean(newtc);
-                            //model.addTableRowBean(newtr);
-
-                            // set 4th column to required role listbox
-                            ListBoxBean lb = new ListBoxBean();
-                            lb.setBeanId(concID + "LB");
-
-                            //tb2.setValue(conc.getPortletSettings().getDescription(loc, null));
-                            ListBoxItemBean item = new ListBoxItemBean();
-                            item.setValue(PortletRole.USER.getName());
-                            lb.addBean(item);
-                            item = new ListBoxItemBean();
-                            item.setValue(PortletRole.ADMIN.getName());
-                            lb.addBean(item);
-                            item = new ListBoxItemBean();
-                            item.setValue(PortletRole.SUPER.getName());
-                            lb.addBean(item);
-                            newtc = new TableCellBean();
-                            newtc.addBean(lb);
-                            newtr.addBean(newtc);
-                            model.addTableRowBean(newtr);
-                        }
-                    }
-                }
+            String g = (String)it.next();
+            System.err.println("listing group = " + g);
+            if (g.equals(PortletGroupFactory.GRIDSPHERE_GROUP.toString())) {
+                continue;
             }
-
-        } else {
-            Set portletRoleList = group.getPortletRoleList();
-            Iterator it = portletRoleList.iterator();
-
             TableRowBean tr = new TableRowBean();
             tr.setHeader(true);
             TableCellBean tc3 = new TableCellBean();
@@ -258,7 +154,7 @@ public class GroupManagerPortlet extends ActionPortlet {
             tr.addBean(tc3);
             TableCellBean tc = new TableCellBean();
             TextBean text = new TextBean();
-            text.setValue(group.getDescription());
+            text.setValue(portletMgr.getPortletWebApplicationDescription(g));
             tc.addBean(text);
             tr.addBean(tc);
             tc = new TableCellBean();
@@ -273,77 +169,116 @@ public class GroupManagerPortlet extends ActionPortlet {
             tr.addBean(tc);
             model.addTableRowBean(tr);
 
-            while (it.hasNext()) {
-                SportletRoleInfo info = (SportletRoleInfo)it.next();
-                System.err.println("class= " + info.getPortletClass() + "role " + info.getPortletRole());
-                CheckBoxBean cb = new CheckBoxBean();
-                cb.setBeanId(info.getPortletClass() + "CB");
-                cb.setValue(info.getPortletClass());
-                cb.setSelected(true);
+            //if (group != null) break;
 
-                TableRowBean newtr = new TableRowBean();
-                TableCellBean newtc = new TableCellBean();
-                newtc.addBean(cb);
-                newtr.addBean(newtc);
+            List appColl = portletRegistry.getApplicationPortlets(g);
+            if (appColl.isEmpty()) appColl = portletRegistry.getApplicationPortlets(g);
+            Iterator appIt = appColl.iterator();
+            while (appIt.hasNext()) {
+                ApplicationPortlet app = (ApplicationPortlet)appIt.next();
+                List concPortlets = app.getConcretePortlets();
+                Iterator cit = concPortlets.iterator();
+                while (cit.hasNext()) {
+                    boolean found = false;
+                    ConcretePortlet conc = (ConcretePortlet)cit.next();
+                    String concID = conc.getConcretePortletID();
 
-                TableCellBean newtc2 = new TableCellBean();
-                TextBean tb = new TextBean();
+                    PortletRole reqrole = conc.getConcretePortletConfig().getRequiredRole();
+                    log.debug("subscribed to portlet: " + concID + " " + reqrole);
+                    if (role.compare(role, reqrole) >= 0) {
+                        // build an interface
+                        CheckBoxBean cb = new CheckBoxBean();
+                        cb.setBeanId(concID + "CB");
+                        cb.setValue(concID);
 
-                // set 2nd column to portlet display name from concrete portlet
-                Locale loc = req.getLocale();
-                /*
-                int li = concID.lastIndexOf(".");
-                concID = concID.substring(0, li);
-                li = concID.lastIndexOf(".");
-                concID = concID.substring(li+1);
-                tb.setValue(concID);
-                */
-                String appID = PortletRegistry.getApplicationPortletID(info.getPortletClass());
-                ApplicationPortlet appPortlet = portletRegistry.getApplicationPortlet(appID);
-                ConcretePortlet concPortlet = appPortlet.getConcretePortlet(info.getPortletClass());
-                String dispName = concPortlet.getDisplayName(loc);
-                tb.setValue(dispName);
-                newtc2.addBean(tb);
-                newtr.addBean(newtc2);
-                newtc = new TableCellBean();
-                TextBean tb2 = new TextBean();
+                        cb.setSelected(false);
 
-                // set 3rd column to portlet description from concrete portlet
+                        // set 4th column to required role listbox
+                        ListBoxBean lb = new ListBoxBean();
+                        lb.setBeanId(concID + "LB");
 
-                //tb2.setValue(conc.getPortletSettings().getDescription(loc, null));
-                tb2.setValue(concPortlet.getDescription(loc));
-                newtc.addBean(tb2);
-                newtr.addBean(newtc);
-                //model.addTableRowBean(newtr);
+                        if (portletRoleList != null) {
+                            Iterator pit = portletRoleList.iterator();
+                            while (pit.hasNext() && (!found)) {
 
-                // set 4th column to required role listbox
-                ListBoxBean lb = new ListBoxBean();
-                lb.setBeanId(info.getPortletClass() + "LB");
+                                SportletRoleInfo info = (SportletRoleInfo)pit.next();
+                                if (info.getPortletClass().equals(concID)) {
+                                    cb.setSelected(true);
+                                    PortletRole reqRole = info.getPortletRole();
+                                    ListBoxItemBean item = new ListBoxItemBean();
+                                    item.setValue(PortletRole.USER.getName());
+                                    if (reqRole.isUser()) item.setSelected(true);
+                                    lb.addBean(item);
+                                    item = new ListBoxItemBean();
+                                    item.setValue(PortletRole.ADMIN.getName());
+                                    if (reqRole.isAdmin()) item.setSelected(true);
+                                    lb.addBean(item);
+                                    item = new ListBoxItemBean();
+                                    item.setValue(PortletRole.SUPER.getName());
+                                    if (reqRole.isSuper()) item.setSelected(true);
+                                    lb.addBean(item);
+                                    found = true;
+                                }
 
-                PortletRole reqRole = info.getPortletRole();
+                            }
 
-                //tb2.setValue(conc.getPortletSettings().getDescription(loc, null));
-                ListBoxItemBean item = new ListBoxItemBean();
+                        }
+
+                        // don't allow core portlets to be changed
+
+                        TableRowBean newtr = new TableRowBean();
+                        TableCellBean newtc = new TableCellBean();
+                        newtc.addBean(cb);
+                        newtr.addBean(newtc);
+
+                        TableCellBean newtc2 = new TableCellBean();
+                        TextBean tb = new TextBean();
+
+                        // set 2nd column to portlet display name from concrete portlet
+                        Locale loc = req.getLocale();
+                        /*
+                        int li = concID.lastIndexOf(".");
+                        concID = concID.substring(0, li);
+                        li = concID.lastIndexOf(".");
+                        concID = concID.substring(li+1);
+                        tb.setValue(concID);
+                        */
+                        String dispName = conc.getDisplayName(loc);
+                        tb.setValue(dispName);
+                        newtc2.addBean(tb);
+                        newtr.addBean(newtc2);
+                        newtc = new TableCellBean();
+                        TextBean tb2 = new TextBean();
+
+                        // set 3rd column to portlet description from concrete portlet
+
+                        //tb2.setValue(conc.getPortletSettings().getDescription(loc, null));
+                        tb2.setValue(conc.getDescription(loc));
+                        newtc.addBean(tb2);
+                        newtr.addBean(newtc);
+                        //model.addTableRowBean(newtr);
 
 
-                item.setValue(PortletRole.USER.getName());
-                if (reqRole.isUser()) item.setSelected(true);
-                lb.addBean(item);
-                item = new ListBoxItemBean();
-                item.setValue(PortletRole.ADMIN.getName());
-                if (reqRole.isAdmin()) item.setSelected(true);
-                lb.addBean(item);
-                item = new ListBoxItemBean();
-                item.setValue(PortletRole.SUPER.getName());
-                if (reqRole.isSuper()) item.setSelected(true);
-                lb.addBean(item);
-                newtc = new TableCellBean();
-                newtc.addBean(lb);
-                newtr.addBean(newtc);
-                model.addTableRowBean(newtr);
 
+                        //tb2.setValue(conc.getPortletSettings().getDescription(loc, null));
+                        if (!found) {
+                            ListBoxItemBean item = new ListBoxItemBean();
+                            item.setValue(PortletRole.USER.getName());
+                            lb.addBean(item);
+                            item = new ListBoxItemBean();
+                            item.setValue(PortletRole.ADMIN.getName());
+                            lb.addBean(item);
+                            item = new ListBoxItemBean();
+                            item.setValue(PortletRole.SUPER.getName());
+                            lb.addBean(item);
+                        }
+                        newtc = new TableCellBean();
+                        newtc.addBean(lb);
+                        newtr.addBean(newtc);
+                        model.addTableRowBean(newtr);
+                    }
+                }
             }
-
         }
 
 
