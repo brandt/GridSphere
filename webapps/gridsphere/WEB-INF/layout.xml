@@ -4,9 +4,11 @@
     <portlet-tab label="welcome">
         <title lang="en">Welcome</title>
         <title lang="de">Willkommen</title>
+        <title lang="it">Benvenuto</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab label="home">
                 <title lang="en">Home</title>
+                <title lang="it">Inizio</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -19,6 +21,7 @@
             </portlet-tab>
             <portlet-tab label="settings">
                 <title lang="en">Settings</title>
+                <title lang="it">Preferenze</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -31,6 +34,7 @@
             </portlet-tab>
             <portlet-tab label="subscribe">
                 <title lang="en">Subscription</title>
+                <title lang="it">Sottoscrizione</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -43,6 +47,7 @@
             </portlet-tab>
             <portlet-tab label="layouttab">
                 <title lang="en">Layout</title>
+                <title lang="it">Layout</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -55,6 +60,7 @@
             </portlet-tab>
             <portlet-tab label="utilities">
                 <title lang="en">Utilities</title>
+                <title lang="it">Utilitˆ</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="50%">
@@ -81,6 +87,7 @@
     </portlet-tab>
     <portlet-tab label="admin" required-role="SUPER">
         <title lang="en">Administration</title>
+        <title lang="it">Amministrazione</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab label="portlets">
                 <title lang="en">Portlets</title>
@@ -101,6 +108,7 @@
             </portlet-tab>
             <portlet-tab label="users">
                 <title lang="en">Users</title>
+                <title lang="it">Utenti</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="50%">
@@ -114,6 +122,7 @@
             </portlet-tab>
             <portlet-tab label="groups">
                 <title lang="en">Groups</title>
+                <title lang="it">Gruppi</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="50%">
