@@ -98,6 +98,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         // If first time being called, instantiate all portlets
         synchronized (firstDoGet) {
+            log.debug("Initializing portlets and services");
             try {
                 // initailize needed services
                 initializeServices();
