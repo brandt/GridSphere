@@ -703,9 +703,9 @@ Copyright:
 
 <!-- ++++++++++++++ START CRUSECONTROL ++++++++++++++++++++ -->
 
-    <target name="cruisecontrol" depends="clean, docs-all" description="target for cruisecontrol">
+    <target name="cruisecontrol" depends="clean" description="target for cruisecontrol">
         <mkdir dir="${build.dir}/reports"/>
-        <junit printsummary="yes" fork="yes" haltonfailure="yes">
+        <junit printsummary="yes" fork="yes" haltonfailure="no">
             <classpath>
                 <path refid="classpath"/>
                 <pathelement location="${build.dir}/lib/${Name}.jar"/>
