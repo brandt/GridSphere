@@ -19,15 +19,38 @@ public class GuestUser implements User {
     // store used to maintain user attributes
     private Hashtable store = new Hashtable();
 
-
+    private static GuestUser instance = null;
     // Data fields that make up the User object
-    private String familyName = "User";
-    private String fullName = "Guest User";
-    private String givenName = "Guest";
-    private String emailAddress = "no email";
-    private String id = "500";
-    private String userID = "500";
+    private String familyName = null;
+    private String fullName = null;
+    private String givenName = null;
+    private String emailAddress = null;
+    private String id = null;
+    private String userID = null;
     private long lastLoginTime;
+
+    private GuestUser() {
+        familyName = "User";
+        fullName = "Guest User";
+        givenName = "Guest";
+        emailAddress = "no email";
+        id = "500";
+        userID = "guest";
+        lastLoginTime = -1;
+    }
+
+    /**
+     * doSync is used to ensure only one thread has created an instance
+     */
+    private synchronized static void doSync() {}
+
+    public static GuestUser getInstance() {
+        if (instance == null) {
+            doSync();
+            instance = new GuestUser();
+        }
+        return instance;
+    }
 
     /**
      * Returns the value of the attribute with the given name,
@@ -87,15 +110,6 @@ public class GuestUser implements User {
      */
     public String getGivenName() {
         return givenName;
-    }
-
-    /**
-     * Sets the given (aka first) name of the user, or  if the given name is not available.
-     *
-     * @param givenName the given name
-     */
-    public void setGivenName(String givenName) {
-        this.givenName = givenName;
     }
 
     /**
