@@ -90,9 +90,11 @@ public class SportletDataManager implements PortletDataManager {
      * @param data the PortletData
      */
     public void setPortletData(User user, String portletID, PortletData data) throws PersistenceManagerException {
-        String appID = PortletRegistry.getApplicationPortletID(portletID);
-        String webApp = registry.getApplicationPortlet(appID).getWebApplicationName();
-        PersistenceManagerRdbms pm = PersistenceManagerFactory.createProjectPersistenceManagerRdbms(webApp);
+        //String appID = PortletRegistry.getApplicationPortletID(portletID);
+        //String webApp = registry.getApplicationPortlet(appID).getWebApplicationName();
+        //PersistenceManagerRdbms pm = PersistenceManagerFactory.createProjectPersistenceManagerRdbms(webApp);
+
+        PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
         SportletData sd = (SportletData) data;
         //sd.setPortletID(portletID);
         //sd.setUserID(user.getID());
