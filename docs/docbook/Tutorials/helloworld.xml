@@ -1,7 +1,7 @@
 <chapter id="thirdparty">
     <title>ThirdParty Portlets</title>
     <para>
-        Gridsphere provides the possibility to easily develop and deploy thirdparty
+        Gridsphere provides the possibility to easily develop and deploy third-party
         portlets. This chapter will describe how to do so.
     </para>
 
@@ -78,10 +78,6 @@ public class HelloWorld  extends AbstractPortlet {
         <param-name>Portlet Master</param-name>
         <param-value>yourid@yourdomain.com</param-value>
     </portlet-config>
-    <cache>
-        <expires>120</expires>
-        <shared>true</shared>
-    </cache>
     <allows>
         <maximized/>
         <minimized/>
