@@ -4,8 +4,12 @@
  */
 package org.gridlab.gridsphere.portlet.service.spi.impl.descriptor;
 
+import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
+
 import java.util.Vector;
 import java.util.List;
+import java.util.Properties;
+import java.util.Iterator;
 
 public class SportletServiceDefinition {
 
@@ -14,7 +18,7 @@ public class SportletServiceDefinition {
     protected String Interface = "";
     protected String Implementation = "";
     protected List ConfigParamList = new Vector();
-
+    protected Properties configProps = new Properties();
 
     public void setName(String Name) {
         this.Name = Name;
@@ -54,6 +58,21 @@ public class SportletServiceDefinition {
 
     public List getConfigParamList() {
         return ConfigParamList;
+    }
+
+    private void makeProperties() {
+        Iterator it = ConfigParamList.iterator();
+        ConfigParam param;
+        while (it.hasNext()) {
+            param = (ConfigParam)it.next();
+            configProps.setProperty(param.getParamName(), param.getParamValue());
+        }
+    }
+
+    public Properties getConfigProperties() {
+        if (configProps == null)
+            makeProperties();
+        return configProps;
     }
 
 }

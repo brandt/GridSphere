@@ -5,24 +5,17 @@
  */
 package org.gridlab.gridsphere.portletcontainer.descriptor;
 
-import org.gridlab.gridsphere.core.persistence.ConfigurationException;
-import org.gridlab.gridsphere.core.persistence.RestoreException;
-import org.gridlab.gridsphere.core.persistence.PersistenceException;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerXml;
+import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
 import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
+import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.Descriptor;
 
-import javax.servlet.ServletConfig;
-import java.util.Iterator;
-import java.util.Vector;
-import java.util.List;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 
-public class PortletDeploymentDescriptor {
+public class PortletDeploymentDescriptor extends Descriptor {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletDeploymentDescriptor.class);
     private PersistenceManagerXml pmx = PersistenceManagerXml.getInstance();
@@ -36,8 +29,8 @@ public class PortletDeploymentDescriptor {
      * @param mappingFilePath location of the mapping file
      * @throws PortletDeploymentDescriptorException if the PortletDeploymentDescriptor cannot be created
      */
-    public PortletDeploymentDescriptor(String portletFilePath, String mappingFilePath) throws IOException, PortletDeploymentDescriptorException  {
-        load(portletFilePath, mappingFilePath);
+    public PortletDeploymentDescriptor(String portletFilePath, String mappingFilePath) throws IOException, DescriptorException  {
+        pc = (PortletCollection)load(portletFilePath, mappingFilePath);
     }
 
     /**
@@ -46,7 +39,7 @@ public class PortletDeploymentDescriptor {
      * @return a list of PortletApps
      */
     public Vector getPortletDef() {
-        return PortletDef;
+        return pc.getPortletDefList();
     }
 
     /**
@@ -55,7 +48,7 @@ public class PortletDeploymentDescriptor {
      * @return a list of PortletApps
      */
     public void setPortletDef(Vector defs) {
-        PortletDef = defs;
+        pc.setPortletDefList(defs);
     }
 
     /**
@@ -136,36 +129,10 @@ public class PortletDeploymentDescriptor {
     }
 
     /**
-     * Loads the PortletDeploymentDescriptor from the portlet.xml
      *
-     * @param url the location of the portlet.xml file
-     * @param mapping the location of the portlet xml mapping file
-     * @throws PortletDeploymentDescriptorException if the PortletDeploymentDescriptor cannot be created
      */
-    public void load(String url, String mapping) throws IOException, PortletDeploymentDescriptorException  {
-
-        // where is the portlet.xml ?
-        pmx.setConnectionURL(url);
-
-        // set the path to the mapping file
-        pmx.setMappingFile(mapping);
-
-        // try to get it
-        try {
-             pc = (PortletCollection)pmx.restoreObject();
-        } catch (PersistenceException e) {
-            log.error("Unable to load portlet.xml: ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") ", e);
-            throw new PortletDeploymentDescriptorException("Unable to load file " + e.getMessage());
-        }
-        this.PortletDef = (Vector)pc.getPortletDefList();
-    }
-
-    /**
-     * Save the portlet deployment descriptor to portlet.xml
-     * <b>not implemented yet</b>
-     */
-    public void save() throws IOException, PersistenceException {
-        pmx.update(pc);
+    public void save(String portletFilePath, String mappingFilePath) throws IOException, DescriptorException {
+        save(portletFilePath, mappingFilePath, pc);
     }
 
 }

@@ -14,6 +14,7 @@ import org.gridlab.gridsphere.portletcontainer.descriptor.*;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.gridlab.gridsphere.core.persistence.PersistenceException;
+import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
 import org.exolab.castor.types.AnyNode;
 
 import java.util.*;
@@ -49,7 +50,7 @@ public class PortletDescriptorTest extends TestCase {
             pdd = new PortletDeploymentDescriptor(portletFile, mappingFile);
         } catch (IOException e) {
             fail("IO error unmarshalling " + portletFile + " using " + mappingFile + " : " + e.getMessage());
-        } catch (PortletDeploymentDescriptorException e) {
+        } catch (DescriptorException e) {
             fail("Unable to unmarshall " + portletFile + " using " + mappingFile + " : " + e.getMessage());
         }
         Vector defs = pdd.getPortletDef();
@@ -57,7 +58,7 @@ public class PortletDescriptorTest extends TestCase {
         // assertEquals(expected, actual)
 
         // we have one app descriptions
-        assertEquals(defs.size(), 1);
+        assertEquals(1, defs.size());
 
         PortletDefinition def = (PortletDefinition)defs.get(0);
         PortletApp portletApp = def.getPortletApp();
@@ -194,6 +195,7 @@ public class PortletDescriptorTest extends TestCase {
         assertEquals("Portlet Master", one.getParamName());
         assertEquals("secondguy@some.com", one.getParamValue());
 
+        // demonstrate saving
         /*
         Hashtable store = new Hashtable();
         store.put("beezle", "yo");
@@ -208,13 +210,13 @@ public class PortletDescriptorTest extends TestCase {
             list.add(parms);
         }
 
-        concreteOne.setUID("whose your daddy?");
+        concreteOne.setID("whose your daddy?");
         concreteOne.setContextParamList(list);
-        portletApp.setName("yo dude");
-        pdd.setPortletApplication(portletApp);
+        portletApp.setPortletName("yo dude");
+        pdd.setPortletAppDescriptor(portletApp);
         pdd.setConcretePortletApplication(concreteOne);
         try {
-            pdd.save();
+            pdd.save("/tmp/portlet.xml", "webapps/gridsphere/WEB-INF/conf/mapping/portlet-mapping.xml");
         } catch (Exception e) {
             System.err.println("Unable to save SportletApplicationSettings: " + e.getMessage());
         }

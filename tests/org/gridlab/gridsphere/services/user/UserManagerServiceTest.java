@@ -61,9 +61,9 @@ public class UserManagerServiceTest extends ServiceTest {
 
         // Create both services using mock ServletConfig
         try {
-            aclService = (AccessControlService)factory.createPortletService(AccessControlService.class, props, null, true);
-            aclManagerService = (AccessControlManagerService)factory.createPortletService(AccessControlManagerService.class, props, null, true);
-            userManager = (UserManagerService)factory.createPortletService(UserManagerService.class, props, null, true);
+            aclService = (AccessControlService)factory.createPortletService(AccessControlService.class, null, true);
+            aclManagerService = (AccessControlManagerService)factory.createPortletService(AccessControlManagerService.class, null, true);
+            userManager = (UserManagerService)factory.createPortletService(UserManagerService.class, null, true);
         } catch (Exception e) {
             log.error("Unable to initialize services: ", e);
         }

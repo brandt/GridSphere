@@ -5,54 +5,35 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceException;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerXml;
+import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.Descriptor;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 
 import java.io.IOException;
 
-public class PortletLayoutDescriptor {
+public class PortletLayoutDescriptor extends Descriptor {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletLayoutDescriptor.class);
     private PortletContainer pc = null;
-    private String layoutPath, layoutMappingPath;
 
-    public PortletLayoutDescriptor() throws IOException, PortletLayoutDescriptorException {
+    public PortletLayoutDescriptor() throws IOException, DescriptorException {
         GridSphereConfig gsConfig = GridSphereConfig.getInstance();
-        String layoutPath = gsConfig.getProperty(GridSphereConfigProperties.LAYOUT_XML);
+        String layoutDescriptorPath = gsConfig.getProperty(GridSphereConfigProperties.LAYOUT_XML);
         String layoutMappingPath = gsConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING_XML);
-        load(layoutPath, layoutMappingPath);
+        pc = (PortletContainer)load(layoutDescriptorPath, layoutMappingPath);
     }
-
-    /*
-    public PortletLayoutDescriptor(PortletConfig config) throws IOException, PortletLayoutDescriptorException {
-        // load in layout.xml file
-        String appRoot = config.getServletContext().getRealPath("") + "/";
-        String portletConfigFile = config.getInitParameter("layout.xml");
-        String portletMappingFile = config.getInitParameter("layout-mapping.xml");
-        if (portletConfigFile == null) {
-            portletConfigFile = "WEB-INF/conf/layout.xml";
-        }
-        if (portletMappingFile == null) {
-            portletMappingFile = "WEB-INF/conf/layout-mapping.xml";
-        }
-        layoutPath = appRoot + portletConfigFile;
-        layoutMappingPath = appRoot + portletMappingFile;
-        load(layoutPath, layoutMappingPath);
-    }
-    */
 
     /**
-     * Constructs a PortletDeploymentDescriptor from a portlet.xml and mapping file
+     * Constructs a PortletLayoutDescriptor from an xml descriptor and a mapping file
      *
-     * @param portletFilePath location of the layout.xml
-     * @param mappingFilePath location of the mapping file
-     * @throws PortletLayoutDescriptorException if the PortletLayoutDescriptor cannot be created
+     * @param layoutDescriptorPath location of the layout.xml
+     * @param layoutMappingPath location of the mapping file
+     * @throws DescriptorException if the PortletLayoutDescriptor cannot be created
      */
-    public PortletLayoutDescriptor(String layoutPath, String layoutMappingPath) throws IOException, PortletLayoutDescriptorException  {
-        load(layoutPath, layoutMappingPath);
+    public PortletLayoutDescriptor(String layoutDescriptorPath, String layoutMappingPath) throws IOException, DescriptorException  {
+        pc =(PortletContainer)load(layoutDescriptorPath, layoutMappingPath);
     }
 
     /**
@@ -64,56 +45,11 @@ public class PortletLayoutDescriptor {
         return pc;
     }
 
-    public void reload() throws IOException, PortletLayoutDescriptorException {
-        load(layoutPath, layoutMappingPath);
-    }
-
     /**
-     * Loads the PortletLayoutDescriptor from the layout.xml
      *
-     * @param url the location of the portlet.xml file
-     * @param mapping the location of the portlet xml mapping file
-     * @throws PortletDeploymentDescriptorException if the PortletDeploymentDescriptor cannot be created
      */
-    public void load(String url, String mapping) throws IOException, PortletLayoutDescriptorException  {
-        PersistenceManagerXml pmx = PersistenceManagerXml.getInstance();
-
-        // where is the portlet.xml ?
-        pmx.setConnectionURL(url);
-
-        // set the path to the mapping file
-        pmx.setMappingFile(mapping);
-
-        // try to get it
-        try {
-             pc = (PortletContainer)pmx.restoreObject();
-        } catch (PersistenceException e) {
-            log.error("PersistenceException ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") ", e);
-            throw new PortletLayoutDescriptorException("Unable to load portlet: "+e.getMessage());
-        }
-    }
-
-    /**
-     * Save the layout deployment descriptor to layout.xml
-     * <b>not implemented yet</b>
-     */
-    public void save(String url, String mapping) throws IOException, PortletLayoutDescriptorException {
-        PersistenceManagerXml pmx = PersistenceManagerXml.getInstance();
-
-        // where is the portlet.xml ?
-        pmx.setConnectionURL(url);
-
-        // set the path to the mapping file
-        pmx.setMappingFile(mapping);
-
-
-        // try to get it
-        try {
-             pmx.update(pc);
-        } catch (PersistenceException e) {
-            log.error("PersistenceException: ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") ", e);
-            throw new PortletLayoutDescriptorException("Unable to save: "+e.getMessage());
-        }
+    public void save(String descriptorPath, String mappingPath) throws IOException, DescriptorException {
+       save(descriptorPath, mappingPath, pc);
     }
 
 }

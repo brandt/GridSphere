@@ -28,7 +28,6 @@ import java.io.File;
 public class ServiceTest extends TestCase {
 
     protected static SportletServiceFactory factory = null;
-    protected static Properties props = null;
     private static PortletLog log = SportletLog.getInstance(ServiceTest.class);
 
 
@@ -42,20 +41,6 @@ public class ServiceTest extends TestCase {
 
         // create factory
         factory = SportletServiceFactory.getInstance();
-
-        // create properties
-        props = new Properties();
-        FileInputStream fistream = null;
-        GridSphereConfig gsConfig = GridSphereConfig.getInstance();
-        String serviceProps = gsConfig.getProperty(GridSphereConfigProperties.PORTLET_SERVICES);
-
-        log.info("loading properties file: " + serviceProps);
-        try {
-            fistream = new FileInputStream(serviceProps);
-            props.load(fistream);
-        } catch (IOException e) {
-            log.error("Unable to load properties file", e);
-        }
 
     }
 

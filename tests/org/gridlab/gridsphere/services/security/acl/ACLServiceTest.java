@@ -61,8 +61,8 @@ public class ACLServiceTest extends ServiceTest {
         log.info("setting up services");
         // create services
         try {
-            aclService = (AccessControlService)factory.createPortletService(AccessControlService.class, props, null, true);
-            aclManagerService = (AccessControlManagerService)factory.createPortletService(AccessControlManagerService.class, props, null, true);
+            aclService = (AccessControlService)factory.createPortletService(AccessControlService.class, null, true);
+            aclManagerService = (AccessControlManagerService)factory.createPortletService(AccessControlManagerService.class, null, true);
 
         } catch (PortletServiceUnavailableException e) {
             log.error("Unable to initialize access services: ", e);
