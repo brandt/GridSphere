@@ -68,7 +68,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     private Map renderParams = new HashMap();
 
-    private StringBuffer frame = new StringBuffer();
+    //private StringBuffer frame = new StringBuffer();
 
     /**
      * Constructs an instance of PortletFrame
@@ -274,7 +274,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         // remove cached output
         cacheService.removeCached(this.getComponentID() + portletClass + id);
-        frame = null;
+        //frame = null;
 
         hasTitleBarEvent = false;
 
@@ -454,9 +454,10 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         String id = event.getPortletRequest().getPortletSession(true).getId();
 
-        frame = (StringBuffer) cacheService.getCached(this.getComponentID() + portletClass + id);
+        StringBuffer frame = (StringBuffer) cacheService.getCached(this.getComponentID() + portletClass + id);
         String nocache = (String) req.getAttribute(CacheService.NO_CACHE);
         if ((frame != null) && (nocache == null)) {
+            req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, frame);
             return;
         }
         frame = new StringBuffer();
@@ -506,7 +507,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         if (renderPortlet) {
             if (!transparent) {
-                postframe.append(titleBar.getBufferedOutput());
+                postframe.append(titleBar.getBufferedOutput(req));
                 postframe.append("<tr><td  ");      // now the portlet content begins
                 if (!getInnerPadding().equals("")) {
                     writer.print("style=\"padding:" + getInnerPadding() + "px\"");
@@ -592,13 +593,13 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             if (titleStr == null) {
                 titleStr = titleBar.getTitle();                
             } 
-            frame.append(titleBar.getPreBufferedTitle());
+            frame.append(titleBar.getPreBufferedTitle(req));
             frame.append(titleStr);
-            frame.append(titleBar.getPostBufferedTitle());
+            frame.append(titleBar.getPostBufferedTitle(req));
         }
         req.removeAttribute(SportletProperties.PORTLET_TITLE);
         frame.append(postframe);
-
+        req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, frame);
         if ((cacheExpiration > 0) || (cacheExpiration == -1)) {
             cacheService.cache(this.getComponentID() + portletClass + id, frame, cacheExpiration);
         }
@@ -606,10 +607,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     public boolean isTargetedPortlet(PortletRequest req) {
         return (req.getParameter(SportletProperties.COMPONENT_ID).equals(req.getAttribute(SportletProperties.COMPONENT_ID)));
-    }
-
-    public StringBuffer getBufferedOutput() {
-        return frame;
     }
 
     public boolean hasError(PortletRequest req) {

@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.servlet.ServletContext;
@@ -25,7 +26,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
 
     private String textFile = null;
     private String context = null;
-    private StringBuffer content = null;
+    //private StringBuffer content = null;
 
     /**
      * Constructs an instance of PortletContent
@@ -84,7 +85,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
         PortletResponse res = event.getPortletResponse();
         StringWriter writer = new StringWriter();
         StoredPortletResponseImpl sres = new StoredPortletResponseImpl(res, writer);
-        content = new StringBuffer();
+        StringBuffer content = new StringBuffer();
 
         if (context != null) {
             if (!context.startsWith("/")) {
@@ -102,14 +103,11 @@ public class PortletContent extends BasePortletComponent implements Serializable
                     throw new PortletException("Unable to include resource: RequestDispatcher is null");
                 }
                 content = writer.getBuffer();
+                req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, content);
             } catch (Exception e) {
                 throw new PortletLayoutException("Unable to include textfile: " + textFile, e);
             }
         }
-    }
-
-    public StringBuffer getBufferedOutput() {
-        return content;
     }
 
     public Object clone() throws CloneNotSupportedException {

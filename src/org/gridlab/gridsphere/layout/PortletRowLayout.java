@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ import java.util.List;
  */
 public class PortletRowLayout extends PortletFrameLayout implements Cloneable, Serializable {
 
-    protected StringBuffer row = null;
+    //protected StringBuffer row = null;
 
 	public void doRender(GridSphereEvent event) throws PortletLayoutException,IOException {
     	String markupName=event.getPortletRequest().getClient().getMarkupName();
@@ -57,7 +58,7 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable, S
         //System.err.println("\t\tin render RowLayout");
         PortletComponent p = null;
 
-        row = new StringBuffer();
+        StringBuffer row = new StringBuffer();
         // starting of the gridtable
         row.append(" <!-- START ROW --> ");
         row.append("<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">");
@@ -69,18 +70,16 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable, S
                 row.append("<td valign=\"top\" width=\"" + p.getWidth() + "\">");
                 if (p.getVisible()) {
                     p.doRender(event);
-                    row.append(p.getBufferedOutput());
+                    row.append(p.getBufferedOutput(event.getPortletRequest()));
                 }
                 row.append("</td>");
             }
             row.append("</tr></tbody></table>");
             row.append("<!-- END ROW -->");
         }
+        event.getPortletRequest().setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, row);
     }
 
-    public StringBuffer getBufferedOutput() {
-        return row;
-    }
 
     public Object clone() throws CloneNotSupportedException {
         PortletRowLayout g = (PortletRowLayout) super.clone();

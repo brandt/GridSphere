@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ import java.util.List;
  */
 public class PortletColumnLayout extends PortletFrameLayout implements Cloneable, Serializable {
 
-    protected StringBuffer col = null;
+    //protected StringBuffer col = null;
 
     public PortletColumnLayout() {
     }
@@ -70,7 +71,7 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
 
     public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
         //System.err.println("\t\tin render ColumnLayout");
-        col = new StringBuffer();
+        StringBuffer col = new StringBuffer();
         PortletComponent p = null;
 
         // starting of the gridtable
@@ -84,17 +85,14 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
                     col.append("<tr><td valign=\"top\" width=\"100%\">");
                     if (p.getVisible()) {
                         p.doRender(event);
-                        col.append(p.getBufferedOutput());
+                        col.append(p.getBufferedOutput(event.getPortletRequest()));
                     }
                     col.append("</td></tr>");
                 }
             }
             col.append("</tbody></table> <!-- END COLUMN -->");
+            event.getPortletRequest().setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, col);
         }
-    }
-
-    public StringBuffer getBufferedOutput() {
-        return col;
     }
 
     public Object clone() throws CloneNotSupportedException {

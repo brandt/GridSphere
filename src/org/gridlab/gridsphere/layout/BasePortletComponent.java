@@ -34,7 +34,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected String roleString = PortletRole.GUEST.toString();
     protected PortletRole requiredRole = PortletRole.GUEST;
     protected List listeners = null;
-    protected StringBuffer bufferedOutput = new StringBuffer();
+    //protected StringBuffer bufferedOutput = new StringBuffer();
     protected boolean canModify = false;
 
 
@@ -280,8 +280,9 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
 
     }
 
-    public StringBuffer getBufferedOutput() {
-        return bufferedOutput;
+    public StringBuffer getBufferedOutput(PortletRequest req) {
+        StringBuffer sb =  (StringBuffer)req.getAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr);
+        return ((sb != null) ? sb : new StringBuffer());
     }
 
     public void addComponentListener(PortletComponent component) {

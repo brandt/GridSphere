@@ -58,7 +58,7 @@ public class PortletPage implements Serializable, Cloneable {
     private Hashtable labelsHash = new Hashtable();
     private Hashtable portletHash = new Hashtable();
 
-    private boolean isFlushed = true;
+
     /**
      * Constructs an instance of PortletPage
      */
@@ -516,18 +516,18 @@ public class PortletPage implements Serializable, Cloneable {
         //  -------- header ---------
         if (headerContainer != null) {
             headerContainer.doRender(event);
-            writer.println(headerContainer.getBufferedOutput());
+            writer.println(headerContainer.getBufferedOutput(req));
         }
 
         // ..| tabs | here |....
         if (tabbedPane != null) {
             tabbedPane.doRender(event);
-            writer.println(tabbedPane.getBufferedOutput());
+            writer.println(tabbedPane.getBufferedOutput(req));
         }
         //.... the footer ..........
         if (footerContainer != null) {
             footerContainer.doRender(event);
-            writer.println(footerContainer.getBufferedOutput());
+            writer.println(footerContainer.getBufferedOutput(req));
         }
 
         writer.println("</body></html>");

@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.layout.event.PortletTabListener;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
@@ -29,12 +30,12 @@ import java.util.*;
 public class PortletTabbedPane extends BasePortletComponent implements Serializable, PortletTabListener, Cloneable {
 
 
-    private List tabs = new Vector();
+    private List tabs = new ArrayList();
     private int startIndex = 0;
     private String style = "menu";
     private String layoutDescriptor = null;
 
-    protected StringBuffer pane = new StringBuffer();
+    //protected StringBuffer pane = new StringBuffer();
 
     /**
      * Constructs an instance of PortletTabbedPane
@@ -260,8 +261,6 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
         super.actionPerformed(event);
 
-        pane = null;
-
         PortletComponentEvent compEvt = event.getLastRenderEvent();
         if ((compEvt != null) && (compEvt instanceof PortletTabEvent)) {
             PortletTabEvent tabEvent = (PortletTabEvent) compEvt;
@@ -475,7 +474,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         PortletRequest req = event.getPortletRequest();
 
         PortletRole userRole = req.getRole();
-
+        StringBuffer pane = new StringBuffer();
         // put a spacing if a gfx theme
         //out.println("<img height=\"3\" src=\"themes/" + theme + "/images/spacer.gif\"/>");
         // pane.append("<table><tr><td height=\"600px\">");
@@ -538,9 +537,10 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
             PortletTab selectedTab = getSelectedTab();
             if (selectedTab != null) {
                 selectedTab.doRender(event);
-                pane.append(selectedTab.getBufferedOutput());
+                pane.append(selectedTab.getBufferedOutput(req));
             }
         }
+        req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, pane);
         //pane.append("</td></tr></table>");
     }
 
@@ -558,7 +558,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         //PortletTab parentTab = (PortletTab)this.getParentComponent();
         //PortletThemeRegistry themeReg = PortletThemeRegistry.getInstance();
         String path = "themes" + File.separator + theme + File.separator + "images" + File.separator;
-
+        StringBuffer pane = new StringBuffer();
         // Render tabs titles get always the same componenttheme as the upper menu
         pane.append("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"tab-sub-pane" + theme + "\" width=\"100%\"><tr><td>");
         pane.append("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>");
@@ -609,8 +609,9 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
             PortletTab selectedTab = getSelectedTab();
             if (selectedTab != null) {
                 selectedTab.doRender(event);
-                pane.append(selectedTab.getBufferedOutput());
+                pane.append(selectedTab.getBufferedOutput(req));
             }
+            req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, pane);
         }
     }
 
@@ -623,7 +624,6 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.doRender(event);
-        pane = new StringBuffer();
     	String markupName=event.getPortletRequest().getClient().getMarkupName();
     	if (markupName.equals("html")){
     		doRenderHTML(event);
@@ -648,10 +648,6 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         }
     }
 
-    public StringBuffer getBufferedOutput() {
-        return pane;
-    }
-
     public void remove(PortletComponent pc, PortletRequest req) {
         tabs.remove(pc);
         if (tabs.isEmpty()) parent.remove(this, req);
@@ -669,7 +665,6 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     public Object clone() throws CloneNotSupportedException {
         PortletTabbedPane t = (PortletTabbedPane) super.clone();
         t.style = this.style;
-        t.pane = this.pane;
         t.startIndex = this.startIndex;
         //t.selectedIndex = this.selectedIndex;
         List stabs = Collections.synchronizedList(tabs);
