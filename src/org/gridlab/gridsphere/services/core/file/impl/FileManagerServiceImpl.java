@@ -44,14 +44,14 @@ public class FileManagerServiceImpl implements FileManagerService, PortletServic
 
     public String getLocationPath(User user, String fileName) {
         fileName = fileName.substring(fileName.lastIndexOf(File.separator)+1);
-        String userLoc = PORTAL_TMP_DIR + File.separator + user.getID() + File.separator + fileName;
-        //String fileLoc = userLoc + File.separator + fileName;
-        //File userDir = new File(userLoc);
-        //if (userDir.exists()) {
-        //    log.debug("Creating temp directory for user: " + user.getID());
-        //    if (!userDir.mkdir()) log.error("Unable to create directory" + userLoc);
-        //}
-        return userLoc;
+        String userLoc = PORTAL_TMP_DIR + File.separator + user.getID();
+        String fileLoc = userLoc + File.separator + fileName;
+        File userDir = new File(userLoc);
+        if (!userDir.exists()) {
+            log.debug("Creating temp directory for user: " + user.getID());
+            if (!userDir.mkdir()) log.error("Unable to create directory" + userLoc);
+        }
+        return fileLoc;
     }
 
     /*
