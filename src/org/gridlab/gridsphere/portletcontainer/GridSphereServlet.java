@@ -97,18 +97,20 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletResponse portletRes = event.getPortletResponse();
 
         // If first time being called, instantiate all portlets
-        synchronized (firstDoGet) {
-            log.debug("Initializing portlets and services");
-            try {
-                // initailize needed services
-                initializeServices();
-                // initialize all portlets
-                PortletInvoker.initAllPortlets(portletReq, portletRes);
-            } catch (PortletException e) {
-                req.setAttribute(GridSphereProperties.ERROR, e);
+        if (firstDoGet.equals(Boolean.TRUE)) {
+            synchronized (firstDoGet) {
+                log.debug("Initializing portlets and services");
+                try {
+                    // initailize needed services
+                    initializeServices();
+                    // initialize all portlets
+                    PortletInvoker.initAllPortlets(portletReq, portletRes);
+                } catch (PortletException e) {
+                    req.setAttribute(GridSphereProperties.ERROR, e);
+                }
+                layoutEngine = PortletLayoutEngine.getInstance();
+                firstDoGet = Boolean.FALSE;
             }
-            layoutEngine = PortletLayoutEngine.getInstance();
-            firstDoGet = Boolean.FALSE;
         }
 
         List groups = aclService.getGroups(portletReq.getUser());
