@@ -69,13 +69,6 @@
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.layout.PortletTitleBar" extends="org.gridlab.gridsphere.layout.BasePortletComponent">
-        <map-to xml="portlet-title-bar"/>
-        <field name="Title" type="string">
-            <bind-xml name="title"/>
-        </field>
-    </class>
-
     <class name="org.gridlab.gridsphere.layout.PortletBorder">
         <map-to xml="portlet-border"/>
         <field name="Thickness" type="string">
@@ -91,8 +84,8 @@
         <field name="PortletClass" type="string">
             <bind-xml name="portlet-class"/>
         </field>
-        <field name="PortletTitleBar" type="org.gridlab.gridsphere.layout.PortletTitleBar">
-            <bind-xml name="portlet-title-bar"/>
+        <field name="Transparent" type="boolean">
+            <bind-xml name="transparent" node="attribute"/>
         </field>
     </class>
 

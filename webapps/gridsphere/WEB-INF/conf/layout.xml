@@ -15,6 +15,10 @@
     <text>/html/info.html</text>
 </portlet-text>
 
+<portlet-frame transparent="true">
+    <portlet-class>org.gridlab.gridsphere.portlets.core.LogoutPortlet.1</portlet-class>
+</portlet-frame>
+
 <!-- Login -->
 <!--
 <portlet-frame>
