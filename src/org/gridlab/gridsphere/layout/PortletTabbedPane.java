@@ -188,7 +188,6 @@ public class PortletTabbedPane extends BasePortletComponent {
 
     public List init(List list) {
         list = super.init(list);
-        System.err.println("COMP ID for tabbed pane: " + COMPONENT_ID);
         selectedTabBar = getSelectedPortletTabBar();
         PortletTabBar tabBar = null;
         ComponentIdentifier compId;

@@ -230,14 +230,10 @@ public class PortletTabBar extends BasePortletComponent {
         String modeString;
         for (i = 0; i < tabPages.size(); i++) {
             sportletURI = event.createNewAction(GridSphereEvent.Action.LAYOUT_ACTION, COMPONENT_ID, null);
-            //try {
-            // Create portlet link Href
+
             PortletTabPage tab = (PortletTabPage)tabPages.get(i);
             sportletURI.addParameter(GridSphereProperties.PORTLETTAB, tab.getTitle());
             tabLinks[i] = sportletURI.toString();
-            //} catch (Exception e) {
-            //log.error("Unable to create portlet tab link: " + e.getMessage());
-            //}
         }
         req.setAttribute(LayoutProperties.TABLINKS, tabLinks);
 
@@ -258,21 +254,9 @@ public class PortletTabBar extends BasePortletComponent {
 
         out.println("</div></div><div id=\"tab-bar\"></div>");
 
-        ///////////// OLD STUFF
-        //out.println("<table width=\"100%\">");
-        /*
-        for (i = 0; i < tabs.size(); i++) {
-        String title = getTitleAt(i);
-        out.println("<th><b>" + "<a href=\"" + tabLinks[i] + "\" >" +  title + "</a></b></th>");
-        }
-        out.println("</table>");
 
-        out.println("<table width=\"100%\">");
-        out.println("<tr><td>");
-        */
         LayoutManager layoutManager = selectedPanel.getLayoutManager();
         layoutManager.doRender(event);
-        //out.println("</td></tr></table>");
 
     }
 

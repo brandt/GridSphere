@@ -87,7 +87,7 @@ public class PortletLayoutEngine {
                 pc.login(event);
             } catch (Exception e) {
                 log.error("Unable to loadUserLayout for user: " + user, e);
-                throw new PortletLayoutException("Unable to deserailize user layout from layout descriptor: " + e.getMessage());
+                throw new PortletLayoutException("Unable to deserialize user layout from layout descriptor: " + e.getMessage());
             }
             userLayouts.put(user, pld);
         }

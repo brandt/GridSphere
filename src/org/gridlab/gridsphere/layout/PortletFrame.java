@@ -34,6 +34,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
     private String portletClass = null;
     private PortletTitleBar titleBar = new PortletTitleBar();
     private List listeners = new ArrayList();
+    private PortletErrorMessage error = null;
 
     public PortletFrame() {}
 
@@ -65,6 +66,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
     }
 
     public List init(List list) {
+        System.err.println("portlet class is: " + portletClass);
         list = super.init(list);
         if (titleBar != null) {
             ComponentIdentifier compId = new ComponentIdentifier();
@@ -85,12 +87,20 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
 
     public void login(GridSphereEvent event) {
         UserPortletManager userPortletManager = event.getUserPortletManager();
-        //userPortletManager.initUserPortlet(portletClass, event.getSportletRequest(), event.getSportletResponse());
+        try {
+            userPortletManager.initUserPortlet(portletClass, event.getSportletRequest(), event.getSportletResponse());
+        } catch (PortletException e) {
+            error = new PortletErrorMessage(e);
+        }
     }
 
     public void logout(GridSphereEvent event) {
         UserPortletManager userPortletManager = event.getUserPortletManager();
-        //userPortletManager.destroyUserPortlet(portletClass, event.getSportletRequest(), event.getSportletResponse());
+        try {
+            userPortletManager.destroyUserPortlet(portletClass, event.getSportletRequest(), event.getSportletResponse());
+        } catch (PortletException e) {
+            error = new PortletErrorMessage(e);
+        }
     }
 
     public void addFrameListener(PortletFrameListener listener) {
@@ -145,12 +155,14 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         req.setAttribute(GridSphereProperties.PORTLETID, portletClass);
         req.setAttribute(GridSphereProperties.COMPONENT_ID, componentIDStr);
         req.setMode(titleBar.getPortletMode());
+
         // Set the portlet data
         PortletData data = null;
         try {
             UserManagerService userManager = (UserManagerService)ctx.getService(UserManagerService.class);
             data = userManager.getPortletData(req.getUser(), portletClass);
         } catch (PortletServiceException e) {}
+
         req.setData(data);
 
         // now perform actionPerformed on Portlet if it has an action
@@ -161,12 +173,10 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
                 UserPortletManager userPortletManager = event.getUserPortletManager();
                 userPortletManager.actionPerformed(portletClass, action, req, res);
             } catch (PortletException e) {
-                System.err.println("titleBar.getPortletClass()= " + portletClass + "  " + actionStr);
+                error = new PortletErrorMessage(portletClass, e);
             }
         }
-
     }
-
 
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.doRender(event);
@@ -183,11 +193,9 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
 
         titleBar.doRender(event);
 
-        req.setMode(titleBar.getPortletMode());
+        //req.setMode(titleBar.getPortletMode());
 
-        PortletErrorMessage error = (PortletErrorMessage)req.getAttribute(GridSphereProperties.PORTLETERROR);
-        if ((error != null) && (error.getPortletID() == portletClass)) {
-            out.println("<b>Error!</b>");
+        if (error != null) {
             out.println(error.getMessage());
         } else {
             if (renderPortlet) {
@@ -196,7 +204,8 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
                 try {
                     userPortletManager.service(portletClass, req, res);
                 } catch (PortletException e) {
-                    out.println(e.getMessage());
+                    out.println("Portlet Unavailable");
+                    out.println(e.toString());
                 }
                 out.println("</div>");
             }
