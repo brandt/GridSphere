@@ -69,12 +69,16 @@ public class PortletPreferencesImpl implements PortletPreferences
             prefsMap.put(prefs[i].getName().getContent(), prefs[i]);
             defaultPrefsMap.put(prefs[i].getName().getContent(), prefs[i]);
         }
-        String validatorClass = portletPrefs.getPreferencesValidator().getContent();
-        if (validatorClass != null) {
-            try {
-                validator = (PreferencesValidator)Class.forName(validatorClass, true, loader).newInstance();
-            } catch (Exception e) {
-                System.err.println("Unable to create validoator: " + validatorClass + "! " + e.getMessage());
+
+        org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PreferencesValidator  v = portletPrefs.getPreferencesValidator();
+        if (v != null) {
+            String validatorClass = v.getContent();
+            if (validatorClass != null) {
+                try {
+                    validator = (PreferencesValidator)Class.forName(validatorClass, true, loader).newInstance();
+                } catch (Exception e) {
+                    System.err.println("Unable to create validoator: " + validatorClass + "! " + e.getMessage());
+                }
             }
         }
     }

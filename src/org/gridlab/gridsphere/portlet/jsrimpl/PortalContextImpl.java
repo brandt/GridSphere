@@ -28,7 +28,7 @@ public class PortalContextImpl implements PortalContext
     private List windowStates = null;
     private List portletModes = null;
 
-    public PortalContextImpl(PortletApp portletApp, PortletDefinition portletDef) {
+    public PortalContextImpl(PortletApp portletApp) {
         windowStates = new ArrayList();
         windowStates.add(WindowState.MAXIMIZED);
         windowStates.add(WindowState.NORMAL);

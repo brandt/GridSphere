@@ -409,7 +409,7 @@ public class PortletInvoker {
     public final static void destroyPortletWebApp(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         // First destroy all concrete portlets for each application portlet
         log.debug("in destroyPortletWebApp " + webApplicationName);
-        Collection appPortlets = registry.getApplicationPortlets(webApplicationName);
+        List appPortlets = registry.getApplicationPortlets(webApplicationName);
         PortletDispatcher portletDispatcher = null;
         Iterator it = appPortlets.iterator();
         while (it.hasNext()) {

@@ -88,7 +88,9 @@ public class SubscriptionPortlet extends ActionPortlet {
             tc.addBean(text);
             tr.addBean(tc);
             model.addTableRowBean(tr);
-            Collection appColl = portletRegistry.getApplicationPortlets(g.getName());
+            // Very nasty JSR 168 hack since JSR webapp names are stored internally with a ".1" extension
+            List appColl = portletRegistry.getApplicationPortlets(g.getName() + ".1");
+            if (appColl.isEmpty()) appColl = portletRegistry.getApplicationPortlets(g.getName());
             Iterator appIt = appColl.iterator();
             while (appIt.hasNext()) {
                 ApplicationPortlet app = (ApplicationPortlet)appIt.next();

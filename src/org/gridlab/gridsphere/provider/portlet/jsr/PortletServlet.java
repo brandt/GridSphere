@@ -132,6 +132,7 @@ public class PortletServlet  extends HttpServlet
         // create portlet context
         portletContext = new PortletContextImpl(ctx);
 
+        prefsManager = PortletPreferencesManager.getInstance();
     }
 
 
@@ -312,6 +313,7 @@ public class PortletServlet  extends HttpServlet
                 Portlet portlet = (Portlet)portlets.get(portletClass);
                 log.debug("in PortletServlet: service(): Initializing portlet " + portletClass);
                 PortletDefinition portletDef = portletWebApp.getPortletDefinition(portletClass);
+                if (portletDef == null) System.err.println("portlet def is null");
                 PortletConfig portletConfig = new PortletConfigImpl(getServletConfig(), portletDef, Thread.currentThread().getContextClassLoader());
                 try {
                     portlet.init(portletConfig);

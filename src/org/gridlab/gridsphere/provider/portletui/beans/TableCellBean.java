@@ -18,6 +18,7 @@ public class TableCellBean extends BeanContainer implements TagBean {
     protected String height = null;
     protected String align = null;
     protected String valign = null;
+
     protected String TABLE_CELL_STYLE = "portlet-section-body";
 
     /**

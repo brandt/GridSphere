@@ -417,7 +417,12 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 log.error("in ProfileManagerPortlet invalid group request", e);
             }
             this.aclManagerService.approveGroupRequest(groupRequest);
-            List portletIds =  portletRegistry.getAllConcretePortletIDs(req.getRole(), g.getName());
+            List portletIds =  null;
+            // Very nasty JSR 168 hack since JSR webapp names are stored internally with a ".1" extension
+            portletIds = portletRegistry.getAllConcretePortletIDs(req.getRole(), g.getName() + ".1");
+            if (portletIds.isEmpty()) {
+                portletIds =  portletRegistry.getAllConcretePortletIDs(req.getRole(), g.getName());
+            }
             this.layoutMgr.removePortlets(req, portletIds);
             this.layoutMgr.reloadPage(req);
         }

@@ -15,6 +15,7 @@ import org.gridlab.gridsphere.portletcontainer.PortletDispatcher;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletDispatcher;
+
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDeploymentDescriptor2;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityRoleRef;
@@ -61,7 +62,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
     private ServletContext context = null;
     private PortalContext portalContext = null;
     private ClassLoader loader = null;
-    private static PersistenceManagerRdbms pm = PersistenceManagerFactory.createPersistenceManagerRdbms("jsrportlets");
+    private static PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
 
     /**
      * Default constructor is private
@@ -92,7 +93,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
         }
 
         // create portal context
-        portalContext = new PortalContextImpl(pdd.getPortletWebApplication(), portletDef);
+        portalContext = new PortalContextImpl(pdd.getPortletWebApplication());
 
         /*
         log.debug("Creating request dispatcher for " + servletName);

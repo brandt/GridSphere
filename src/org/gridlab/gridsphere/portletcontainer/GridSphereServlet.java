@@ -71,6 +71,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
 
+    private static PortletRegistry registry = PortletRegistry.getInstance();
     /**
      * Initializes the GridSphere portlet container
      *

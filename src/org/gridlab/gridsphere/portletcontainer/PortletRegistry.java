@@ -76,9 +76,9 @@ public class PortletRegistry {
      * Returns all application portlets from the supplied portlet web application
      *
      * @param webApplicationName the portlet web application name
-     * @return the collection of application portlets
+     * @return the list of application portlets
      */
-    public Collection getApplicationPortlets(String webApplicationName) {
+    public List getApplicationPortlets(String webApplicationName) {
         List webappPortlets = new Vector();
         Set set = allApplicationPortlets.keySet();
         ApplicationPortlet appPortlet;
@@ -95,7 +95,7 @@ public class PortletRegistry {
 
     public List getAllConcretePortletIDs(PortletRole role, String webApplicationName) {
         List newlist = new Vector();
-        Collection appColl = getApplicationPortlets(webApplicationName);
+        List appColl = getApplicationPortlets(webApplicationName);
         Iterator appIt = appColl.iterator();
         while (appIt.hasNext()) {
             ApplicationPortlet app = (ApplicationPortlet)appIt.next();
@@ -112,6 +112,24 @@ public class PortletRegistry {
         }
         return newlist;
     }
+
+    public List getAllConcretePortletIDs() {
+        List newlist = new Vector();
+        Collection appColl = getAllApplicationPortlets();
+        Iterator appIt = appColl.iterator();
+        while (appIt.hasNext()) {
+            ApplicationPortlet app = (ApplicationPortlet)appIt.next();
+            List concPortlets = app.getConcretePortlets();
+            Iterator cit = concPortlets.iterator();
+            while (cit.hasNext()) {
+                ConcretePortlet conc = (ConcretePortlet)cit.next();
+                String concID = conc.getConcretePortletID();
+                newlist.add(concID);
+            }
+        }
+        return newlist;
+    }
+
     /**
      * Returns the application portlet id given a concrete portlet id
      *

@@ -53,7 +53,8 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
         String realPath = context.getRealPath("");
         int l = realPath.lastIndexOf(File.separator);
         String appName = realPath.substring(l+1);
-        System.err.println("in JSRPortletWebApplicationImpl: " + appName);
+
+        // Make all jsr portlets have only one concrete instance
         webApplicationName = appName + ".1";
         this.webAppDescription = context.getServletContextName();
         this.servletName = servletName;
@@ -62,10 +63,12 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
 
         // load portlet.xml
         loadJSRPortlets(context, loader);
+
         // load layout.xml
         //loadLayout(context);
         // load services xml
         loadServices(webApplicationName, context, loader);
+
     }
 
 
@@ -76,12 +79,10 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
      */
     protected void loadJSRPortlets(ServletContext ctx, ClassLoader loader) throws PortletException {
         // load in the portlet.xml file
-        String portletXMLfile = ctx.getRealPath("/WEB-INF/portlet-jsr.xml");
+        String portletXMLfile = ctx.getRealPath("/WEB-INF/portlet.xml");
         //String portletMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING);
 
-        // TODO use this line
-        //String portletMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-jsr-mapping.xml");
-        String portletMappingFile = ctx.getRealPath("/WEB-INF/mapping/portlet-jsr-mapping.xml");
+        String portletMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-jsr-mapping.xml");
 
         PortletDeploymentDescriptor2 pdd = null;
         try {
