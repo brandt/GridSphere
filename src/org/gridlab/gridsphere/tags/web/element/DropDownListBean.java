@@ -60,6 +60,7 @@ public class DropDownListBean extends BaseListBean implements DropDownList {
     }
 
     public void update(String[] values) {
+        //@todo FIXME NPE
         try {
             if (!multiple) {
                 list.unselectAll();
