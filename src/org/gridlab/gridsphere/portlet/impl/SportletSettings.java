@@ -27,7 +27,8 @@ public class SportletSettings implements PortletSettings {
     protected List langList = new Vector();
     protected String concretePortletID = new String();
     protected SportletApplicationSettings appSettings = null;
-    protected Locale locale = null;
+    protected Locale defaultLocale = null;
+    protected String defaultTitle = "";
 
     /**
      * Disallow default instantiation
@@ -50,11 +51,19 @@ public class SportletSettings implements PortletSettings {
         ConcretePortletConfig concPortletConf =
                 concPortlet.getConcretePortletConfig();
         String localeStr = concPortletConf.getDefaultLocale();
-        locale = new Locale(localeStr, "");
+        defaultLocale = new Locale(localeStr, "");
         langList = concPortletConf.getLanguageList();
 
+        Iterator it = langList.iterator();
+        while (it.hasNext()) {
+            LanguageInfo langInfo = (LanguageInfo) it.next();
+            if (langInfo.getLocale().startsWith(defaultLocale.toString())) {
+                defaultTitle = langInfo.getTitle();
+            }
+        }
         // Stick <config-param> in store
         store = concPortletConf.getConfigAttributes();
+
     }
 
     /**
@@ -84,15 +93,16 @@ public class SportletSettings implements PortletSettings {
      * @return the title of the portlet or null if none exists for the provided locale and client
      */
     public String getTitle(Locale locale, Client client) {
-        String defaultTitle = null;
         Iterator it = langList.iterator();
+        String title = defaultTitle;
         while (it.hasNext()) {
             LanguageInfo langInfo = (LanguageInfo) it.next();
             if (langInfo.getLocale().startsWith(locale.toString())) {
-                return langInfo.getTitle();
+                title = langInfo.getTitle();
+                return title;
             }
         }
-        return defaultTitle;
+        return title;
     }
 
     /**
@@ -101,7 +111,7 @@ public class SportletSettings implements PortletSettings {
      * @return the portlet's default locale
      */
     public Locale getDefaultLocale() {
-        return locale;
+        return defaultLocale;
     }
 
     /**
