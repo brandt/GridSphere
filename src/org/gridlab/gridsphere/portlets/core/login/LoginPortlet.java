@@ -75,8 +75,7 @@ public class LoginPortlet extends ActionPortlet {
 
         FrameBean frame = event.getFrameBean("errorFrame");
         String errorKey = (String)req.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
-        if ((errorKey != null) && (frame != null)) {
-            System.err.println("1. setting error key in frame");
+        if (errorKey != null) {
             frame.setKey(errorKey);
             frame.setStyle(FrameBean.ERROR_TYPE);
         }
