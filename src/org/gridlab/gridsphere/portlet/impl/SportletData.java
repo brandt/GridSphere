@@ -61,7 +61,9 @@ public class SportletData extends BaseObject implements PortletData  {
      */
     private String PortletID = new String();
 
-    public SportletData() {};
+    public SportletData() {
+        super();
+    }
 
     /**
      * Returns the value of the attribute with the given name, or null if no such attribute exists.
@@ -70,6 +72,8 @@ public class SportletData extends BaseObject implements PortletData  {
      * @return the value of the attribute
      */
     public String getAttribute(String name) {
+        System.out.println("========================== TRY TO GET ATTR: "+name);
+        System.out.println("STORESIZE: "+store.size());
         return (String) store.get(name);
     }
 
@@ -102,6 +106,7 @@ public class SportletData extends BaseObject implements PortletData  {
      * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
     public void setAttribute(String name, String value)  {
+        System.out.println(" ========================== PUT ATTRR :"+name+" VALUE "+value);
         store.put(name, value);
     }
 
