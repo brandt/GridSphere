@@ -11,18 +11,23 @@ public class Smssend {
 
     public static void main(String[] args) {
 
-        SMSInterface sms = new Sms();
-        sms.setMessage(" Hello from Java ");
+        if (args.length==2) {
 
-        try {
-            sms.setNumber("+491744840547");
-        } catch (SmsProviderNotSupportedException e) {
-            System.out.println("lala" + e);
-        }
-        try {
-            sms.send();
-        } catch (SmsException e) {
-            System.out.println("Send Error :" + e);
+            SMSInterface sms = new Sms();
+            sms.setMessage(args[1]);
+
+            try {
+                sms.setNumber(args[0]);
+            } catch (SmsProviderNotSupportedException e) {
+                System.out.println("Can not send a message to "+args[0]+" (Provider not supported)!");
+            }
+            try {
+                sms.send();
+            } catch (SmsException e) {
+                System.out.println("Send Error :" + e);
+            }
+        }  else {
+            System.out.println("Usage: \nSmssend <number> <message>\n <number> includes the intl. prefix!");
         }
     }
 
