@@ -157,16 +157,15 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 try {
                     // initialize portlet service factory
                     factory.init();
-
-                    // deep inside a service is used which is why this must follow the factory.init
-                    layoutEngine = PortletLayoutEngine.getInstance();
-
                     // initialize needed services
                     initializeServices();
                     // create a root user if none available
                     userManagerService.initRootUser();
                     // initialize all portlets
                     PortletInvoker.initAllPortlets(portletReq, portletRes);
+                    // deep inside a service is used which is why this must follow the factory.init
+                    layoutEngine = PortletLayoutEngine.getInstance();
+
                 } catch (PortletException e) {
                     req.setAttribute(SportletProperties.ERROR, e);
                     layoutEngine.doRenderError(event, e);
