@@ -45,8 +45,8 @@ public class SportletResponse implements PortletResponse {
     public SportletResponse(HttpServletResponse res, PortletRequest req) {
         this.res = res;
         this.req = req;
-        String mimeType = req.getClient().getMimeType();
-        res.setContentType(mimeType);
+        //String mimeType = req.getClient().getMimeType();
+        //res.setContentType(mimeType);
     }
 
     /**
