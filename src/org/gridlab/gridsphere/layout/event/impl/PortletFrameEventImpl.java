@@ -2,9 +2,9 @@
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-package org.gridlab.gridsphere.layout.impl;
+package org.gridlab.gridsphere.layout.event.impl;
 
-import org.gridlab.gridsphere.layout.PortletFrameEvent;
+import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
 
 /**
  * A PortletFrameEvent is created by a PortletFrame when a window event has been

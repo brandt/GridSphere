@@ -12,6 +12,6 @@ public interface FileFormEvent extends FormEvent {
     public static final int MAX_UPLOAD_SIZE = 1024 * 1024;
     public static final String TEMP_DIR = "/tmp";
 
-    public File saveFile(String filePath) throws FileFormException;
+    public String saveFile(String filePath) throws FileFormException;
 
 }

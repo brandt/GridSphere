@@ -21,16 +21,15 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.io.File;
+import java.io.FileOutputStream;
 
 public class FileFormEventImpl extends FormEventImpl implements FileFormEvent {
-
-    private boolean haveFile = false;
 
     public FileFormEventImpl(ActionEvent evt) {
         super(evt);
     }
 
-    public File saveFile(String filePath) throws FileFormException {
+    public String saveFile(String filePath) throws FileFormException {
 
         if (!filePath.endsWith("/")) filePath += "/";
 
@@ -50,20 +49,27 @@ public class FileFormEventImpl extends FormEventImpl implements FileFormEvent {
         }
         // Process the uploaded fields
         Iterator iter = items.iterator();
-        File file = null;
+        File file = new File(filePath);
+
+
+        int i = 0;
         try {
+            if (!file.exists()) file.createNewFile();
             while (iter.hasNext()) {
                 FileItem item = (FileItem) iter.next();
-                if (item.isFormField()) {
-                    item.write(filePath + item.getName());
-                    file = item.getStoreLocation();
+
+                if (!item.isFormField()) {
+                    System.err.println("fuxxy " + item.getFieldName() + "   " + item.getName() + " " + item.getStoreLocation().getAbsolutePath());
+                    filePath = filePath + item.getName();
+                    item.write(filePath);
+                    //file = item.getStoreLocation();
+                    System.err.println("Writing to location : " + filePath);
                 }
             }
-            haveFile = true;
         } catch (Exception e) {
             throw new FileFormException("Unable to save file", e);
         }
-        return file;
+        return filePath;
     }
 
 }

@@ -6,6 +6,8 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
+import org.gridlab.gridsphere.layout.event.PortletFrameListener;
 
 import java.io.IOException;
 import java.util.ArrayList;

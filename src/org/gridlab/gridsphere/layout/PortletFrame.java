@@ -4,7 +4,11 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.layout.impl.PortletFrameEventImpl;
+import org.gridlab.gridsphere.layout.event.impl.PortletFrameEventImpl;
+import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
+import org.gridlab.gridsphere.layout.event.PortletTitleBarEvent;
+import org.gridlab.gridsphere.layout.event.PortletTitleBarListener;
+import org.gridlab.gridsphere.layout.event.PortletFrameListener;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletDataManager;

@@ -49,12 +49,6 @@ public abstract class SelectElementBean extends NameValueDisableBean implements 
     }
 
     public void update(String[] values) {
-        try {
-            if (values.equals(null)) {
-                this.selected = true;
-            }
-        } catch (NullPointerException e) {
-            this.selected = false;
-        }
+        this.selected = (values == null) ? true : false;
     }
 }

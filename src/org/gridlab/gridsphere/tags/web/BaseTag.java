@@ -24,7 +24,7 @@ public class BaseTag extends TagSupport {
     protected Validator validator = new NoValidation();
     protected int size = 20;
     protected int maxLength = 20;
-    protected Element htmlelement;
+    protected Element htmlelement = null;
     protected String bean = new String();
     protected int rows = 10;
     protected int cols = 40;

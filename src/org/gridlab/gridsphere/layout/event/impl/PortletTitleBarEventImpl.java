@@ -2,9 +2,9 @@
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-package org.gridlab.gridsphere.layout.impl;
+package org.gridlab.gridsphere.layout.event.impl;
 
-import org.gridlab.gridsphere.layout.PortletTitleBarEvent;
+import org.gridlab.gridsphere.layout.event.PortletTitleBarEvent;
 import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletWindow;

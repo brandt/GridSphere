@@ -2,10 +2,10 @@
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-package org.gridlab.gridsphere.layout.impl;
+package org.gridlab.gridsphere.layout.event.impl;
 
 import org.gridlab.gridsphere.layout.PortletTab;
-import org.gridlab.gridsphere.layout.PortletTabEvent;
+import org.gridlab.gridsphere.layout.event.PortletTabEvent;
 
 /**
  * A PortletTabEvent is triggered by a PortletTab when a tab has been selected.
