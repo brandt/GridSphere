@@ -21,7 +21,7 @@
         <title>Initialized Portlet Web Applications</title>
         When deployed, GridSphere requires access to deployed portlet web applications. Since portlets are packaged according
         to the web application repository (WAR) format defined in the Java 2.3 Servlet Specification, the names of the
-        WAR files or web applications needs to be added to the <filename>webapps/gridsphere/WEB-INF/PortletMaster.xml</filename> file.
+        WAR files or web applications needs to be added to the <filename>$CATALINA_HOME/webapps/gridsphere/WEB-INF/PortletMaster.xml</filename> file.
         <example><title>The PortletMaster Descriptor</title>
         <programlisting><literallayout>
             <![CDATA[
@@ -29,9 +29,15 @@
     <service>
         <name>Portlet Manager Service</name>
         <user-required>true</user-required>
-        <description>Provides Administration Capabilities for Portlet Web Applications</description>
-        <interface>org.gridlab.gridsphere.services.core.registry.PortletManagerService</interface>
-        <implementation>org.gridlab.gridsphere.services.core.registry.impl.PortletManagerServiceImpl</implementation>
+        <description>
+            Provides Administration Capabilities for Portlet Web Applications
+        </description>
+        <interface>
+            org.gridlab.gridsphere.services.core.registry.PortletManagerService
+        </interface>
+        <implementation>
+            org.gridlab.gridsphere.services.core.registry.impl.PortletManagerServiceImpl
+        </implementation>
         <service-config>
             <param-name>startup-portlet-webapps</param-name>
             <param-value>gridsphere, examplets</param-value>
@@ -76,7 +82,9 @@
     <user-required>true</user-required>
     <description>Provides User Administration Capabilities</description>
     <interface>org.gridlab.gridsphere.services.core.user.UserManagerService</interface>
-    <implementation>org.gridlab.gridsphere.services.core.user.impl.UserManagerServiceImpl</implementation>
+    <implementation>
+        org.gridlab.gridsphere.services.core.user.impl.UserManagerServiceImpl
+    </implementation>
     <service-config>
         <param-name>userID</param-name>
         <param-value>root</param-value>

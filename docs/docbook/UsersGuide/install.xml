@@ -46,7 +46,7 @@
           <member><filename>javscript/</filename> - contains JavaScript used by the portal</member>
           <member><filename>themes/</filename> - contains CSS stylesheets used to create common look and feel</member>
           <member><filename>WEB-INF/</filename> - contains GridSphere configuration files, layouts, and database</member>
-          <member><filename>WEB-INF/PortletMaster.xml</filename> - contains the master descriptor file used to identify loaded portlet web applications</member>
+          <member><filename>WEB-INF/PortletMaster.xml</filename> - contains the master descriptor file used to define portlet web applications</member>
           <member><filename>WEB-INF/portlet.xml</filename> - contains the portlet descriptor for core portlets</member>
           <member><filename>WEB-INF/layout.xml</filename> - contains a default layout for the core portlets</member>
           <member><filename>WEB-INF/web.xml</filename> - contains servlet mappings necessary for the servlet container</member>
