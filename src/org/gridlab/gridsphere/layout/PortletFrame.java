@@ -411,6 +411,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             Map tmpParams = (Map)request.getAttribute(SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
             if (tmpParams != null) renderParams = tmpParams;
 
+            addRenderParams(request);
+
             List slisteners = Collections.synchronizedList(listeners);
             synchronized (slisteners) {
                 Iterator it = slisteners.iterator();
@@ -425,6 +427,20 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     }
 
+    private void addRenderParams(PortletRequest req) {
+        Map tmpParams = (Map)req.getParameterMap();
+            if (tmpParams != null) {
+                Iterator it = tmpParams.keySet().iterator();
+                while (it.hasNext()) {
+                    String key = (String)it.next();
+                    String[] paramValues = req.getParameterValues( key );
+                    if (key.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
+                        //System.err.println("replacing render param " + key);
+                        renderParams.put(key, tmpParams.get(key));
+                    }
+                }
+            }
+    }
     /**
      * Renders the portlet frame component
      *
@@ -439,17 +455,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         PortletResponse res = event.getPortletResponse();
 
         // check for render params
-        if ((onlyRender) && (event.getPortletComponentID().equals(componentIDStr))) {
-            Map tmpParams = (Map)req.getParameterMap();
-            if (tmpParams != null) {
-                Iterator it = tmpParams.keySet().iterator();
-                while (it.hasNext()) {
-                    String key = (String)it.next();
-                    String[] paramValues = req.getParameterValues( key );
-                    if (key.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
-                        renderParams.put(key, tmpParams.get(key));
-                    }
-                }
+        if (onlyRender)  {
+            if ((event.getPortletComponentID().equals(componentIDStr))) {
+                addRenderParams(req);
             }
         }
 
