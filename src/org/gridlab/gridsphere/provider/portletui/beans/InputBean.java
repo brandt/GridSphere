@@ -6,8 +6,8 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 public abstract class InputBean extends BaseComponentBean implements TagBean {
 
-    protected int size;
     protected String inputtype = "";
+    protected int size = 0;
     protected int maxlength = 0;
 
     public int getSize() {

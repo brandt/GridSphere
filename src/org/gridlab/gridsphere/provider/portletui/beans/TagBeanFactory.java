@@ -25,8 +25,13 @@ public class TagBeanFactory {
     public static TagBean getTagBean(PortletRequest req, String id) {
         //System.err.println("Retrieving bean: " + id + " " + getBeanKey(req, id));
         TagBean bean = (TagBean)req.getSession(true).getAttribute(getBeanKey(req, id));
-
         if (bean != null) {
+            if (bean instanceof InputBean) {
+                InputBean input = (InputBean)bean;
+                String name = input.getName();
+                String val = req.getParameter(name);
+                if (val != null) input.setValue(val);
+            }
             bean.setPortletRequest(req);
             System.err.println("found bean id " + id);
         }

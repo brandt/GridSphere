@@ -58,15 +58,17 @@ public class TextFieldTag extends BaseComponentTag {
 
         if (!beanId.equals("")) {
             textFieldBean = (TextFieldBean)pageContext.getSession().getAttribute(getBeanKey());
-            if (textFieldBean == null) textFieldBean = new TextFieldBean();
-        } else {
-            textFieldBean = new TextFieldBean();
+            if (textFieldBean != null) {
+                update(textFieldBean);
+            }
         }
-
-        textFieldBean.setCssStyle(TEXTFIELD_STYLE);
-        if (maxlength != 0) textFieldBean.setMaxLength(maxlength);
-        if (size != 0) textFieldBean.setSize(size);
-        this.setBaseComponentBean(textFieldBean);
+        if ((beanId.equals("")) || (textFieldBean == null)) {
+            textFieldBean = new TextFieldBean();
+            textFieldBean.setCssStyle(TEXTFIELD_STYLE);
+            if (maxlength != 0) textFieldBean.setMaxLength(maxlength);
+            if (size != 0) textFieldBean.setSize(size);
+            this.setBaseComponentBean(textFieldBean);
+        }
 
         if (!beanId.equals("")) {
             //System.err.println("storing bean in the session");

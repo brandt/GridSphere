@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.tags.portletui;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.provider.portletui.beans.BaseBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
