@@ -9,10 +9,7 @@
        <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-actions">
-            <gs:submit name="doListUser" value="List Users"/>
-            &nbsp;&nbsp;<gs:submit name="doNewUser" value="New User"/>
-            &nbsp;&nbsp;<gs:submit name="doEditUser" value="Edit User"/>
-            &nbsp;&nbsp;<gs:submit name="doDeleteUser" value="Delete User"/>
+            <gs:submit name="doViewListUser" value="List Users"/>
           </td>
         </tr>
       </table>
@@ -27,22 +24,6 @@
           </td>
           <td class="portlet-frame-text">
              <gs:text bean="userName"/>
-          </td>
-        </tr>
-        <tr>
-          <td class="portlet-frame-label">
-             Family Name:
-          </td>
-          <td class="portlet-frame-text">
-             <gs:text bean="familyName"/>
-          </td>
-        </tr>
-        <tr>
-          <td class="portlet-frame-label">
-             Given Name:
-          </td>
-          <td class="portlet-frame-text">
-             <gs:text bean="givenName"/>
           </td>
         </tr>
         <tr>
@@ -67,14 +48,6 @@
           </td>
           <td class="portlet-frame-text">
              <gs:text bean="organization"/>
-          </td>
-        </tr>
-        <tr>
-          <td class="portlet-frame-label">
-             Role In GridSphere:
-          </td>
-          <td class="portlet-frame-text">
-             <gs:text bean="userRole"/>
           </td>
         </tr>
       </table>

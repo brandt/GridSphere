@@ -8,8 +8,8 @@
       <table class="portlet-frame" cellspacing="1">
         <tr>
           <td class="portlet-frame-actions">
-            <gs:submit name="doListUser" value="List Users"/>
-            &nbsp;&nbsp;<gs:submit name="doNewUser" value="New User"/>
+            <gs:submit name="doConfigureListUser" value="List Users"/>
+            &nbsp;&nbsp;<gs:submit name="doConfigureNewUser" value="New User"/>
           </td>
         </tr>
       </table>

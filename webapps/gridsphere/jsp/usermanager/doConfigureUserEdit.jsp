@@ -1,7 +1,10 @@
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
-<gs:form action="doDeleteUser">
+<jsp:useBean id="userManagerBean"
+             class="org.gridlab.gridsphere.portlets.core.user.UserManagerBean"
+             scope="request"/>
+<gs:form action="doEditUser">
 <gs:hiddenfield bean="userID"/>
 <table class="portlet-pane" cellspacing="1" width="100%">
   <tr>
@@ -9,14 +12,13 @@
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-actions">
-            <gs:submit name="doConfirmDeleteUser" value="Confirm Delete"/>
-            &nbsp;&nbsp;<gs:submit name="doCancelDeleteUser" value="Cancel Delete"/>
+            <gs:submit name="doConfigureConfirmEditUser" value="Save User"/>
+            &nbsp;&nbsp;<gs:submit name="doConfigureCancelEditUser" value="Cancel Edit"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-message-alert">
-            Click "<span style="portlet-text-alert">Confirm Delete</span>" to delete this user,
-            "<span style="portlet-text-alert">Cancel Delete</span>" otherwise.
+            <gs:text bean="errorMessage"/>
           </td>
         </tr>
       </table>
@@ -27,58 +29,74 @@
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-label" width="200">
-             <gs:text text="User Name:"/>
+             User Name:
           </td>
           <td class="portlet-frame-text">
-             <gs:text bean="userName"/>
+             <gs:textfield bean="userName"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             <gs:text text="Family Name:"/>
+             Family Name:
           </td>
           <td class="portlet-frame-text">
-             <gs:text bean="familyName"/>
+             <gs:textfield bean="familyName"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             <gs:text text="Given Name:"/>
+             Given Name:
           </td>
           <td class="portlet-frame-text">
-             <gs:text bean="givenName"/>
+             <gs:textfield bean="givenName"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             <gs:text text="Full Name:"/>
+             Full Name:
           </td>
           <td class="portlet-frame-text">
-             <gs:text bean="fullName"/>
+             <gs:textfield bean="fullName"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             <gs:text text="Email Address:"/>
+             Email Address:
           </td>
           <td class="portlet-frame-text">
-             <gs:text bean="emailAddress"/>
+             <gs:textfield bean="emailAddress"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             <gs:text text="Organization:"/>
+             Organization:
           </td>
           <td class="portlet-frame-text">
-             <gs:text bean="organization"/>
+             <gs:textfield bean="organization"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             <gs:text text="Role In GridSphere:"/>
+             Role In GridSphere:
           </td>
-          <td class="portlet-frame-text">
-             <gs:text bean="userRole"/>
+          <td class="portlet-frame-input">
+             <gs:dropdownlist bean="userRole"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-label">
+             New Password:
+          </td>
+          <td class="portlet-frame-input">
+             <gs:password bean="password"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-label">
+             Confirm Password:
+          </td>
+          <td class="portlet-frame-input">
+             <gs:password bean="confirmPassword"/>
           </td>
         </tr>
       </table>
