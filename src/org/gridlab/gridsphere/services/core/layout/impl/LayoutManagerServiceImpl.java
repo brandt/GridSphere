@@ -51,15 +51,18 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         page.init(req, new Vector());
 
         // save user tab
+       /*
         try {
             page.save();
         } catch (IOException e) {
             log.error("Unable to save portlet page", e);
         }
+        */
     }
 
     public void refreshPage(PortletRequest req) {
         pageFactory.removePortletPage(req);
+
     }
 
     public String getTheme(PortletRequest req) {
@@ -157,12 +160,24 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
                 }
             }
         }
+    }
 
+    public PortletTabbedPane createUserTabbedPane(PortletRequest req, int cols, String label) {
+        PortletTabbedPane pane = pageFactory.createNewUserPane(req, cols, label);
+        return pane;
+    }
+
+    public PortletTabbedPane getUserTabbedPane(PortletRequest req) {
+        PortletPage page = pageFactory.createPortletPage(req);
+        
+        PortletTabbedPane pane = pageFactory.getUserTabbedPane(req);
+        return pane;
     }
 
     public PortletPage getPortletPage(PortletRequest req) {
         return pageFactory.createPortletPage(req);
     }
+
 
     public List getSubscribedPortlets(PortletRequest req) {
         User user = req.getUser();

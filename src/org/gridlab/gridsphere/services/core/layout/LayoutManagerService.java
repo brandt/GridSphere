@@ -7,10 +7,7 @@ package org.gridlab.gridsphere.services.core.layout;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletService;
-import org.gridlab.gridsphere.layout.PortletTab;
-import org.gridlab.gridsphere.layout.PortletPage;
-import org.gridlab.gridsphere.layout.PortletFrameLayout;
-import org.gridlab.gridsphere.layout.PortletTableLayout;
+import org.gridlab.gridsphere.layout.*;
 
 import java.util.List;
 
@@ -30,6 +27,10 @@ public interface LayoutManagerService extends PortletService {
     public PortletTableLayout getPortletLayout(PortletRequest req, String subtabName);
 
     public PortletPage getPortletPage(PortletRequest req);
+
+    public PortletTabbedPane createUserTabbedPane(PortletRequest req, int cols, String label);
+
+    public PortletTabbedPane getUserTabbedPane(PortletRequest req);
 
     public List getSubscribedPortlets(PortletRequest req);
 
