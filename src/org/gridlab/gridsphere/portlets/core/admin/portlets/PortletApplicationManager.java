@@ -35,6 +35,7 @@ public class PortletApplicationManager extends ActionPortlet {
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         DEFAULT_VIEW_PAGE = "listPortlets";
+        DEFAULT_HELP_PAGE = HELP_JSP;
     }
 
     public void initConcrete(PortletSettings settings) throws UnavailableException {
