@@ -5,19 +5,17 @@ Version: $Id$
 */
 
 .tab-pane {
-   width: 100%;
-   padding-top: 10px;
+   padding-top: 5px;
    font-family: verdana, arial, sans-serif;
    font-size:12px;
    font-weight:normal;
    background-color:#ffffff;
+   margin-left: 10px;
 }
 
 .tab-empty {
-    width: 10px;
-    padding-left: 5px;
+    width: 5px;
 }
-
 
 .tab-bar {
    width: 100%;
@@ -33,7 +31,7 @@ Version: $Id$
    color:white;
    background-color: #397df3;
    font-size:12px;
-   border: 1px solid #397df3;
+/*   border: 1px solid #397df3;*/
 }
 
 
@@ -41,9 +39,10 @@ Version: $Id$
    padding: 5px;
    margin-bottom: 0px;
    padding-bottom: 0px;
-   background-color: #ebebeb;
-   border: 1px solid #397df3;
+   background-color: #7997de;
+   color: #ffffff;
    font-size:12px;
+   margin-left: 10px;
 }
 
 a.tab-menu {
@@ -51,31 +50,33 @@ a.tab-menu {
 }
 
 a.tab-menu:link {
-  color: #000000;
+  color: #ffffff;
 }
 
 a.tab-menu:visited {
-  color: #000000;
+  color: #ffffff;
 }
 
 a.tab-menu:hover {
-  color: #000000;
+  color: #ffffff;
 }
 
 a.tab-menu:active {
-  color: #000000;
+  color: #ffffff;
 }
 
 /*  subpane */
 
 
 .tab-sub-active {
-    color: #ffffff;
+    background-color: #ffffff;
     border: 1px solid white;
-    padding-right: 2px;
-    padding-bottom: 1px;
+    font-weight: normal;
+    color: #397df3;
+    padding-right: 0px;
+    padding-bottom: 0px;
     padding-top: 0px;
-    padding-left: 2px;
+    padding-left: 0px;
 
 }
 
@@ -87,13 +88,11 @@ a.tab-menu:active {
     padding-left: 2px;
 }
 
-.tab-sub-pane {                                                                                                                                             5
-   width: 100%;
+.tab-sub-pane {
    background-color: #397df3;
-   padding-left: 2px;
-   font-size:12px;
-   padding-top: 3px;
-   padding-bottom: 3px;
+   margin: 0px;
+   padding: 0px;
+   height: 15px;
 }
 
 
