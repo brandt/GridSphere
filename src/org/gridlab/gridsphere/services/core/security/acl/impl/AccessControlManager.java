@@ -490,6 +490,7 @@ public class AccessControlManager implements AccessControlManagerService {
         if (group == null) {
             group = new SportletGroup();
             group.setName(groupName);
+            group.setPublic(true);
             try {
                 pm.create(group);
             } catch (PersistenceManagerException e) {
@@ -521,6 +522,17 @@ public class AccessControlManager implements AccessControlManagerService {
             String msg = "Error retrieving access right";
             log.error(msg, e);
             return new Vector();
+        }
+    }
+
+    public void modifyGroupAccess(PortletGroup group, boolean isPublic) {
+        SportletGroup g = this.getSportletGroupByName(group.getName());
+        g.setPublic(isPublic);
+        try {
+            pm.update(g);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error updating portlet group";
+            log.error(msg, e);
         }
     }
 

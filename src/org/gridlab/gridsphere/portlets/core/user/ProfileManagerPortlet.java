@@ -216,6 +216,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             groupsDescTC = new TableCellBean();
             PortletGroup g = (PortletGroup)it.next();
             String groupDesc = aclManagerService.getGroupDescription(g);
+
             CheckBoxBean cb = new CheckBoxBean();
             cb.setBeanId("groupCheckBox");
             if (aclManagerService.isUserInGroup(user, g)) cb.setSelected(true);
@@ -228,11 +229,26 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
             TextBean groupTB = new TextBean();
             groupTB.setValue(g.getName());
+            if (g.isPublic()) {
+                groupsTC.setDisabled(true);
+            }
             groupsTC.addBean(cb);
             groupsTC.addBean(groupTB);
             TextBean groupDescTB = new TextBean();
             groupDescTB.setValue(groupDesc);
             groupsDescTC.addBean(groupDescTB);
+            if (!g.isPublic()) {
+                TextBean priv = event.getTextBean("privateTB");
+                priv.setValue("&nbsp;&nbsp;This group is private. Please email the ");
+                List supers = aclManagerService.getUsersWithSuperRole();
+                User root = (User)supers.get(0);
+                String mailhref = "<a href=\"mailto:" + root.getEmailAddress() + "\">portal administrator</a>";
+                System.err.println(mailhref);
+                TextBean mailTB = new TextBean();
+                mailTB.setValue(mailhref);
+                groupsDescTC.addBean(priv);
+                groupsDescTC.addBean(mailTB);
+            }
             groupsTR.addBean(groupsTC);
             groupsTR.addBean(groupsDescTC);
             model.addTableRowBean(groupsTR);

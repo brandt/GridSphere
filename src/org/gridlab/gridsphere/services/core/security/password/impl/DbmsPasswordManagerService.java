@@ -26,6 +26,8 @@ import org.gridlab.gridsphere.services.core.user.impl.AccountRequestImpl;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class DbmsPasswordManagerService
     implements PortletServiceProvider, PasswordManagerService {
@@ -151,6 +153,7 @@ public class DbmsPasswordManagerService
         Date now = new Date();
         // Check if user has password already
         DbmsPassword password = getDbmsPassword(user);
+
         if (password == null) {
             // Validate the value if requested
             if (editor.getValidation()) {
@@ -158,6 +161,20 @@ public class DbmsPasswordManagerService
             }
             // Instantiate new password
             password = createDbmsPassword(user);
+
+            // MD5 hash of password value
+            /*
+            try {
+                MessageDigest md5 = MessageDigest.getInstance("MD5");
+                md5.update(value.getBytes());
+                byte[] newval = md5.digest();
+                value = new String(newval);
+            } catch (NoSuchAlgorithmException e) {
+                throw new InvalidPasswordException("Can't get MD5 algorithm! " + e.getMessage());
+            }
+            System.err.println("hashed passwd=" + value);
+            */
+
             password.setValue(value);
             password.setDateExpires(dateExpires);
             password.setDateCreated(now);
@@ -174,6 +191,20 @@ public class DbmsPasswordManagerService
                 String oldValue = password.getValue();
                 validatePassword(oldValue, value);
             }
+
+            // MD5 hash of password value
+            /*
+            try {
+                MessageDigest md5 = MessageDigest.getInstance("MD5");
+                md5.update(value.getBytes());
+                byte[] newval = md5.digest();
+                value = new String(newval);
+            } catch (NoSuchAlgorithmException e) {
+                throw new InvalidPasswordException("Can't get MD5 algorithm! " + e.getMessage());
+            }
+            System.err.println("hashed passwd=" + value);
+            */
+
             // Update password
             password.setValue(value);
             password.setDateExpires(dateExpires);
@@ -282,6 +313,19 @@ public class DbmsPasswordManagerService
         }
         _log.debug("Stored value is " + password.getValue());
         _log.debug("Provided value is " + value);
+
+        // MD5 hash of password value
+        /*
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            md5.update(value.getBytes());
+            byte[] newval = md5.digest();
+            value = new String(newval);
+        } catch (NoSuchAlgorithmException e) {
+            //
+        }
+        _log.debug("Hash of value is " + value);
+        */
         return password.equals(value);
     }
 

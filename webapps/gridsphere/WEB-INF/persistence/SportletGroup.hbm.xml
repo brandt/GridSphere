@@ -21,6 +21,7 @@
         </id>
 
         <property name="Name" type="string" column="name"/>
+        <property name="Public" type="boolean" column="ispublic"/>
 
     </class>
 </hibernate-mapping>

@@ -5,6 +5,7 @@ import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 
 import java.util.Map;
+import java.util.HashMap;
 
 /**
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>

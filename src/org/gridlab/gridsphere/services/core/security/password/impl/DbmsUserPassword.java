@@ -45,7 +45,7 @@ public class DbmsUserPassword  implements DbmsPassword {
         this.value = value;
     }
 
-    public boolean  getValidation() {
+    public boolean getValidation() {
         return validation;
     }
 
@@ -60,7 +60,6 @@ public class DbmsUserPassword  implements DbmsPassword {
     public void setLifetime(long lifetime) {
         this.lifetime = lifetime;
     }
-
 
     public Date getDateExpires() {
         return this.dateExpires;
