@@ -18,6 +18,7 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * The <code>PortletTabbedPane</code> represents the visual portlet tabbed pane interface
@@ -205,6 +206,28 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         return tabLinks;
     }
 
+    private String replaceBlanks(String title) {
+
+        String result = new String();
+
+        /*String[] splittedresult = title.split(" ");
+
+        for (int i=0;i<splittedresult.length;i++) {
+
+            result = result +splittedresult[i];
+            if (i<splittedresult.length-1) {
+                result = result +"&nbsp;";
+            }
+        }
+        */
+        StringTokenizer st = new StringTokenizer(title);
+        while(st.hasMoreTokens()) {
+            result = result + st.nextToken()+"&nbsp;";
+        }
+
+        return result;
+    }
+
     /**
      * Performs the rendering of a top-level tabbed pane for the "menu" style
      *
@@ -236,11 +259,11 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                 String title = tab.getTitle();
                 if (tab.isSelected()) {
                     out.println("<td><img src=\"themes/" + theme + "/images/tab-active-left.gif\"/></td>");
-                    out.println("<td class=\"tab-active\">" + title + "</td>");
+                    out.println("<td class=\"tab-active\">" + replaceBlanks(title) + "</td>");
                     out.println("<td><img src=\"themes/" + theme + "/images/tab-active-right.gif\"/></td>");
                 } else {
                     out.println("<td><img src=\"themes/" + theme + "/images/tab-inactive-left.gif\"/></td>");
-                    out.println("<td class=\"tab-inactive\"><a class=\"tab-menu\" href=\"" + links[i] + "\" >" + title + "</a>");
+                    out.println("<td class=\"tab-inactive\"><a class=\"tab-menu\" href=\"" + links[i] + "\" >" + replaceBlanks(title) + "</a>");
                     out.println("<td><img src=\"themes/" + theme + "/images/tab-inactive-right.gif\"/></td>");
                 }
                 out.println("<td class=\"tab-empty\">&nbsp;</td>");
@@ -281,7 +304,8 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
                 String title = tab.getTitle();
                 if (tab.isSelected()) {
-                    out.println("<td> <span class=\"tab-sub-active\">" + title + "</span></td>");
+                    out.println("<td> <span class=\"tab-sub-active\">");
+                    out.println("<a class=\"tab-sub-menu-active\" href=\""+links[i]+ "\" >"+ title + "</a></span></td>");
                 } else {
                     out.println("<td> <span class=\"tab-sub-inactive\">");
                     out.println("<a class=\"tab-sub-menu\" href=\"" + links[i] + "\" >" + title + "</a>");
