@@ -66,7 +66,7 @@ public interface CredentialManagerService extends PortletService {
     public String getCredentialLabel(String subject)
             throws CredentialMappingNotFoundException;
 
-    public void setCredentialLabel(String subject, String tag)
+    public void setCredentialLabel(String subject, String label)
             throws CredentialMappingNotFoundException;
 
     public List getCredentialHosts(String subject)
