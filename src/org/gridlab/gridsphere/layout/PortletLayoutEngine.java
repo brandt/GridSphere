@@ -16,6 +16,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Vector;
 
 /**
  * The <code>PortletLayoutEngine</code> is a singleton that is responsible for managing
@@ -160,6 +161,16 @@ public class PortletLayoutEngine {
             */
             if (!event.getPortletComponentID().equals("")) {
                 page.actionPerformed(event);
+
+                // sometimes the page needs reinitializing
+                if (event.getPortletRequest().getAttribute(SportletProperties.INIT_PAGE) != null) {
+                    System.err.println("\n\n\n\n\nreiniting and saving page!!!!!\n\n\n\n\n\n");
+                
+                    page.init(event.getPortletRequest(), new Vector());
+                    PortletTabbedPane pane = pageFactory.getUserTabbedPane(event.getPortletRequest());
+                    System.err.println("saving tab to" + pane.getLayoutDescriptor());
+                    pane.save();
+                }
             }
         } catch (PortletLayoutException e) {
             doRenderError(event.getPortletRequest(), event.getPortletResponse(), e);

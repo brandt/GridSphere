@@ -32,12 +32,21 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     private List tabs = new ArrayList();
     private int startIndex = 0;
     private String style = "menu";
+    private String layoutDescriptor = null;
 
 
     /**
      * Constructs an instance of PortletTabbedPane
      */
     public PortletTabbedPane() {
+    }
+
+    public void setLayoutDescriptor(String layoutDescriptor) {
+        this.layoutDescriptor = layoutDescriptor;
+    }
+
+    public String getLayoutDescriptor() {
+       return layoutDescriptor;
     }
 
     /**
@@ -186,6 +195,10 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      */
     public List getPortletTabs() {
         return tabs;
+    }
+
+    public PortletTab getLastPortletTab() {
+        return (PortletTab)tabs.get(tabs.size()-1);
     }
 
     /**
@@ -478,7 +491,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         if (tabs.isEmpty()) parent.remove(this, req);
     }
 
-    public void save(String layoutDescriptor) throws IOException {
+    public void save() throws IOException {
         try {
             String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
             System.err.println("saving desc: " + layoutDescriptor + " and mapping: " + layoutMappingFile);

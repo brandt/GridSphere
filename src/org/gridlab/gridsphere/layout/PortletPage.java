@@ -240,7 +240,7 @@ public class PortletPage implements Serializable, Cloneable {
         //log.debug("Made a components list!!!! " + list.size());
         for (int i = 0; i < list.size(); i++) {
             ComponentIdentifier c = (ComponentIdentifier) list.get(i);
-            //System.err.println("id: " + c.getComponentID() + " : " + c.getClassName() + " : " + c.hasPortlet());
+            System.err.println("id: " + c.getComponentID() + " : " + c.getClassName() + " : " + c.hasPortlet());
             //if (c.hasPortlet()) System.err.println("portlet= " + c.getPortletClass());
         }
         componentIdentifiers = list;
@@ -373,7 +373,7 @@ public class PortletPage implements Serializable, Cloneable {
                 if (comp == null) {
                     //log.warn("Event has invalid component id associated with it!");
                 } else {
-                    //log.debug("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
+                    System.err.println("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
                     comp.actionPerformed(event);
                 }
             }

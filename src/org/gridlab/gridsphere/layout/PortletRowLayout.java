@@ -27,7 +27,7 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable, S
         // starting of the gridtable
         out.println(" <!-- START ROW --> ");
         out.println("<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">");
-        out.println("<tbody><tr>") ;
+        out.println("<tbody><tr>");
         List scomponents = Collections.synchronizedList(components);
         synchronized(scomponents) {
         for (int i=0;i<scomponents.size();i++) {

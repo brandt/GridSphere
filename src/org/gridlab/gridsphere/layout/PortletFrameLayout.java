@@ -44,6 +44,15 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      */
     public List init(PortletRequest req, List list) {
         list = super.init(req, list);
+
+
+        ComponentIdentifier compId = new ComponentIdentifier();
+        compId.setPortletComponent(this);
+        compId.setComponentID(list.size());
+        compId.setComponentLabel(label);
+        compId.setClassName(this.getClass().getName());
+        list.add(compId);
+
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
             Iterator it = scomponents.iterator();
@@ -90,14 +99,19 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      * @throws PortletLayoutException if a layout error occurs during rendering
      * @throws IOException if an I/O error occurs during rendering
      */
+    /*
     public void actionPerformed(GridSphereEvent event) throws
             PortletLayoutException, IOException {
+
+        super.actionPerformed(event);
 
         PortletComponentEvent compEvt = event.getLastRenderEvent();
         if ((compEvt != null) && (compEvt instanceof PortletFrameEvent)) {
             PortletFrameEvent frameEvent = (PortletFrameEvent)compEvt;
             handleFrameEvent(frameEvent);
         }
+
+
 
         List slisteners = Collections.synchronizedList(listeners);
         synchronized (slisteners) {
@@ -109,7 +123,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
                 comp.actionPerformed(event);
             }
         }
-    }
+    } */
 
     /**
      * Performed when a frame maximized event has been received
