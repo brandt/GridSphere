@@ -34,6 +34,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.FileInputBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.HiddenFieldBean;
 import org.gridlab.gridsphere.provider.portletui.beans.RadioButtonBean;
+import org.gridlab.gridsphere.provider.portletui.beans.ActionLinkBean;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
@@ -225,6 +226,26 @@ public class FormEventImpl implements FormEvent {
 
     public void store() {}
 
+    public ActionLinkBean getActionLinkBean(String beanId) {
+        return null;
+    }
+
+    public ActionParamBean getActionParamBean(String beanId) {
+        return null;
+    }
+
+    public ActionSubmitBean getActionSubmitBean(String beanId) {
+        return null;
+    }
+
+    public ImageBean getImageBean(String beanId) {
+        return null;
+    }
+
+    public PanelBean getPanelBean(String beanId) {
+        return null;
+    }
+
     public CheckBoxBean getCheckBoxBean(String beanId) {
         return null;
     }
@@ -280,6 +301,10 @@ public class FormEventImpl implements FormEvent {
         return null;
     }
     */
+
+    public TableCellBean getTableCellBean(String beanId) {
+        return null;
+    }
 
     public Map getTagBeans() {
         return null;

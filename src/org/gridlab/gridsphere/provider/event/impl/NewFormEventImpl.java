@@ -1,26 +1,25 @@
 /*
- * @author <a href="novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  *
  * @version $Id$
  */
 package org.gridlab.gridsphere.provider.event.impl;
 
 import org.gridlab.gridsphere.event.ActionEvent;
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.provider.event.FormEvent;
-import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 
+import java.io.IOException;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
-import java.io.IOException;
 
 /*
  * The <code>FormEventImpl</code> provides methods for creating/retrieving visual beans
@@ -28,13 +27,20 @@ import java.io.IOException;
  */
 public class NewFormEventImpl implements FormEvent {
 
-    protected transient static PortletLog log = SportletLog.getInstance(NewFormEventImpl.class);
+    protected transient static PortletLog log = SportletLog.getInstance(FormEventImpl.class);
 
     protected ActionEvent event;
     protected PortletRequest request;
     protected PortletResponse response;
     protected Map tagBeans = null;
 
+    /**
+     * Constructs a FormEventImpl from a portlet request, a portlet response, and a collection of visual beans
+     *
+     * @param request the portlet request
+     * @param response the portlet response
+     * @param tagBeans a collection of tag beans
+     */
     public NewFormEventImpl(PortletRequest request, PortletResponse response, Map tagBeans) {
         this.request = request;
         this.response = response;
@@ -49,6 +55,11 @@ public class NewFormEventImpl implements FormEvent {
         printTagBeans();
     }
 
+    /**
+     * Constructs a FormEventImpl from a supplied action event
+     *
+     * @param evt the action event
+     */
     public NewFormEventImpl(ActionEvent evt) {
         event = evt;
         request = evt.getPortletRequest();
@@ -61,26 +72,105 @@ public class NewFormEventImpl implements FormEvent {
         printTagBeans();
     }
 
+    /**
+     * Returns the portlet request
+     *
+     * @return the portlet request
+     */
     public PortletRequest getPortletRequest() {
         return request;
     }
 
+    /**
+     * Returns the collection of visual tag beans contained by this form event
+     *
+     * @return the collection of visual tag beans
+     */
     public Map getTagBeans() {
         return tagBeans;
     }
 
+    /**
+     * Return the portlet response
+     *
+     * @return the portlet response
+     */
     public PortletResponse getPortletResponse() {
         return response;
     }
 
+    /**
+     * Return the portlet action
+     *
+     * @return the portlet action
+     */
     public  DefaultPortletAction getAction() {
         return event.getAction();
     }
 
+    /**
+     * Return the portlet action as a String
+     *
+     * @return the portlet action as a String
+     */
     public String getActionString() {
         return event.getActionString();
     }
 
+    /**
+     * Return an existing <code>ActionLinkBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a ActionLinkBean
+     */
+    public ActionLinkBean getActionLinkBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (ActionLinkBean)tagBeans.get(beanKey);
+        }
+        ActionLinkBean al = new ActionLinkBean(request, beanId);
+        tagBeans.put(beanKey, al);
+        return al;
+    }
+
+    /**
+     * Return an existing <code>ActionParamBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a ActionParamBean
+     */
+    public ActionParamBean getActionParamBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (ActionParamBean)tagBeans.get(beanKey);
+        }
+        ActionParamBean ap = new ActionParamBean(request, beanId);
+        tagBeans.put(beanKey, ap);
+        return ap;
+    }
+
+    /**
+     * Return an existing <code>ActionSubmitBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a ActionSubmitBean
+     */
+    public ActionSubmitBean getActionSubmitBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (ActionSubmitBean)tagBeans.get(beanKey);
+        }
+        ActionSubmitBean as = new ActionSubmitBean(request, beanId);
+        tagBeans.put(beanKey, as);
+        return as;
+    }
+
+    /**
+     * Return an existing <code>CheckBoxBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a CheckBoxBean
+     */
     public CheckBoxBean getCheckBoxBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
@@ -91,6 +181,12 @@ public class NewFormEventImpl implements FormEvent {
         return cb;
     }
 
+    /**
+     * Return an existing <code>RadioButtonBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a RadioButtonBean
+     */
     public RadioButtonBean getRadioButtonBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
@@ -101,6 +197,28 @@ public class NewFormEventImpl implements FormEvent {
         return rb;
     }
 
+    /**
+     * Return an existing <code>PanelBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a PanelBean
+     */
+    public PanelBean getPanelBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (PanelBean)tagBeans.get(beanKey);
+        }
+        PanelBean pb = new PanelBean(request, beanId);
+        tagBeans.put(beanKey, pb);
+        return pb;
+    }
+
+    /**
+     * Return an existing <code>TextFieldBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a TextFieldBean
+     */
     public TextFieldBean getTextFieldBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
@@ -111,6 +229,12 @@ public class NewFormEventImpl implements FormEvent {
         return tf;
     }
 
+    /**
+     * Return an existing <code>HiddenFieldBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a HiddenFieldBean
+     */
     public HiddenFieldBean getHiddenFieldBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
@@ -121,6 +245,12 @@ public class NewFormEventImpl implements FormEvent {
         return hf;
     }
 
+    /**
+     * Return an existing <code>FileInputBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a FileInputBean
+     */
     public FileInputBean getFileInputBean(String beanId) throws IOException {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
@@ -131,6 +261,12 @@ public class NewFormEventImpl implements FormEvent {
         return fi;
     }
 
+    /**
+     * Return an existing <code>PasswordBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a PasswordBean
+     */
     public PasswordBean getPasswordBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
@@ -141,6 +277,12 @@ public class NewFormEventImpl implements FormEvent {
         return pb;
     }
 
+    /**
+     * Return an existing <code>TextAreaBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a TextAreaBean
+     */
     public TextAreaBean getTextAreaBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
@@ -151,28 +293,29 @@ public class NewFormEventImpl implements FormEvent {
         return ta;
     }
 
+    /**
+     * Return an existing <code>FrameBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a FrameBean
+     */
     public FrameBean getFrameBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
             return (FrameBean)tagBeans.get(beanKey);
         }
         FrameBean fb = new FrameBean(request, beanId);
+        System.err.println("Creating new frame bean" + beanId + " bean key= " + beanKey);
         tagBeans.put(beanKey, fb);
         return fb;
     }
 
-    /*
-    public ErrorFrameBean getErrorFrameBean(String beanId) {
-        String beanKey = getBeanKey(beanId);
-        if (tagBeans.containsKey(beanKey)) {
-            return (ErrorFrameBean)tagBeans.get(beanKey);
-        }
-        ErrorFrameBean fb = new ErrorFrameBean(request, beanId);
-        tagBeans.put(beanKey, fb);
-        return fb;
-    }
-    */
-
+    /**
+     * Return an existing <code>TextBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a TextBean
+     */
     public TextBean getTextBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
@@ -183,17 +326,29 @@ public class NewFormEventImpl implements FormEvent {
         return tb;
     }
 
-    public ImageBean getURLImageBean(String beanId) {
+    /**
+     * Return an existing <code>ImageBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a ImageBean
+     */
+    public ImageBean getImageBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
             return (ImageBean)tagBeans.get(beanKey);
         }
-        ImageBean tb = new ImageBean(request, beanId);
-        tagBeans.put(beanKey, tb);
-        return tb;
+        ImageBean ib = new ImageBean(request, beanId);
+        tagBeans.put(beanKey, ib);
+        return ib;
 
     }
 
+    /**
+     * Return an existing <code>TableBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a TableBean
+     */
     public TableBean getTableBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
@@ -204,7 +359,44 @@ public class NewFormEventImpl implements FormEvent {
         return tb;
     }
 
+    /**
+     * Return an existing <code>TableRowBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a TableRowBean
+     */
+    public TableRowBean getTableRowBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (TableRowBean)tagBeans.get(beanKey);
+        }
+        TableRowBean tr = new TableRowBean(request, beanId);
+        tagBeans.put(beanKey, tr);
+        return tr;
+    }
 
+    /**
+     * Return an existing <code>TableCellBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a TableCellBean
+     */
+    public TableCellBean getTableCellBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (TableCellBean)tagBeans.get(beanKey);
+        }
+        TableCellBean tc = new TableCellBean(request, beanId);
+        tagBeans.put(beanKey, tc);
+        return tc;
+    }
+
+    /**
+     * Return an existing <code>ListBoxBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a ListBoxBean
+     */
     public ListBoxBean getListBoxBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
@@ -215,6 +407,12 @@ public class NewFormEventImpl implements FormEvent {
         return lb;
     }
 
+    /**
+     * Return an existing <code>ListBoxItemBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a ListBoxItemBean
+     */
     public ListBoxItemBean getListBoxItemBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
@@ -225,34 +423,8 @@ public class NewFormEventImpl implements FormEvent {
         return lb;
     }
 
-    public TagBean getNewTagBean(String beanId) {
-        String beanKey = getBeanKey(beanId);
-        return (TagBean)tagBeans.get(beanKey);
-    }
-
     /**
-     * Returns the name of the pressed submit button. To use this for form has to follow the convention
-     * that the names of all submit-type buttons start with 'submit:' (and only those and no other elements)
-     * @return name of the button which was pressed
-     */
-    public String getSubmitButtonName() {
-        return null;
-    }
-
-
-    /**
-     * Gets back the prev. saved bean with the modifications from the userinterface.  Returns null
-     * if none object was found.
-     * @param name name of the bean
-     * @return updated elementbean
-     */
-    public Object getTagBean(String name) {
-        return null;
-    }
-
-
-    /**
-     * Prints out all request parameters (debug)
+     * Prints the request parameters to stdout. Generally used for debugging
      */
     public void printRequestParameters() {
         System.out.println("\n\n show request params\n--------------------\n");
@@ -277,6 +449,9 @@ public class NewFormEventImpl implements FormEvent {
         System.out.println("--------------------\n");
     }
 
+    /**
+     * Prints the request attributes to stdout. Generally used for debugging
+     */
     public void printRequestAttributes() {
         System.out.println("\n\n show request attributes\n--------------------\n");
         Enumeration enum = request.getAttributeNames();
@@ -446,11 +621,20 @@ public class NewFormEventImpl implements FormEvent {
 
     }
 
+    /**
+     * Returns a bean key identifier using the component identifier
+     *
+     * @param beanId the bean identifier
+     * @return the bean key identifier
+     */
     protected String getBeanKey(String beanId) {
         String compId = (String)request.getAttribute(SportletProperties.COMPONENT_ID);
         return beanId + "_" + compId;
     }
 
+   /**
+     * Stores any created beans into the request
+     */
     public void store() {
         Iterator it = tagBeans.values().iterator();
         while (it.hasNext()) {
@@ -462,6 +646,9 @@ public class NewFormEventImpl implements FormEvent {
 
     }
 
+    /**
+     * Logs all tag bean identifiers, primarily used for debugging
+     */
     public void printTagBeans() {
         log.debug("in print tag beans:");
         Iterator it = tagBeans.values().iterator();
@@ -471,4 +658,15 @@ public class NewFormEventImpl implements FormEvent {
         }
     }
 
+    /**
+     * @deprecated
+     * @return a button name
+     */
+    public String getSubmitButtonName() {
+        return "";
+    }
+
+    public Object getTagBean(String name) {
+        return null;
+    }
 }

@@ -1,74 +1,188 @@
 /*
+<<<<<<< FormEvent.java
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @version $Id$
+=======
  * @author <a href="wehrens@aei.mpg.de">Oliver Wehrens</a>
  * @versiob $Id$
+>>>>>>> 1.11
  */
-
 package org.gridlab.gridsphere.provider.event;
 
 
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 
-import java.util.Map;
 import java.io.IOException;
+import java.util.Map;
 
+/**
+ * The <code>FormEvent</code> provides a decorator around a <code>ActionEvent</code> and is used in the GridSphere
+ * <code>ActionPortlet</code> model to create and store visual beans representing user interfaces.
+ */
 public interface FormEvent extends ActionEvent {
 
-    public Map getTagBeans();
+    /**
+     * Return an existing <code>ActionLinkBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a ActionLinkBean
+     */
+    public ActionLinkBean getActionLinkBean(String beanId);
 
-    public FrameBean getFrameBean(String beanID);
+    /**
+     * Return an existing <code>ActionParamBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a ActionParamBean
+     */
+    public ActionParamBean getActionParamBean(String beanId);
 
+    /**
+     * Return an existing <code>ActionSubmitBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a ActionSubmitBean
+     */
+    public ActionSubmitBean getActionSubmitBean(String beanId);
+
+    /**
+     * Return an existing <code>FrameBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a FrameBean
+     */
+    public FrameBean getFrameBean(String beanId);
+
+    /**
+     * Return an existing <code>FileInputBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a FileInputBean
+     */
     public FileInputBean getFileInputBean(String beanId) throws IOException;
 
-    //public ErrorFrameBean getErrorFrameBean(String beanId);
-
+    /**
+     * Return an existing <code>CheckBoxBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a CheckBoxBean
+     */
     public CheckBoxBean getCheckBoxBean(String beanId);
 
+    /**
+     * Return an existing <code>RadioButtonBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a RadioButtonBean
+     */
     public RadioButtonBean getRadioButtonBean(String beanId);
 
+    /**
+     * Return an existing <code>TextFieldBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a TextFieldBean
+     */
     public TextFieldBean getTextFieldBean(String beanId);
 
+    /**
+     * Return an existing <code>HiddenFieldBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a HiddenFieldBean
+     */
     public HiddenFieldBean getHiddenFieldBean(String beanId);
 
+    /**
+     * Return an existing <code>PasswordBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a PasswordBean
+     */
     public PasswordBean getPasswordBean(String beanId);
 
+    /**
+     * Return an existing <code>TextAreaBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a TextAreaBean
+     */
     public TextAreaBean getTextAreaBean(String beanId);
 
+    /**
+     * Return an existing <code>TextBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a TextBean
+     */
     public TextBean getTextBean(String beanId);
 
-    public ImageBean getURLImageBean(String beadId);
+    /**
+     * Return an existing <code>ImageBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a ImageBean
+     */
+    public ImageBean getImageBean(String beanId);
 
+    /**
+     * Return an existing <code>ListBoxBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a ListBoxBean
+     */
     public ListBoxBean getListBoxBean(String beanId);
 
+    /**
+     * Return an existing <code>PanelBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a PanelBean
+     */
+    public PanelBean getPanelBean(String beanId);
+
+    /**
+     * Return an existing <code>TableCellBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a TableCellBean
+     */
     //public TableCellBean getTableCellBean(String beanId);
+
+    /**
+     * Return an existing <code>TableRowBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a TableRowBean
+     */
     //public TableRowBean getTableRowBean(String beanId);
+
+    /**
+     * Return an existing <code>TableBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a TableBean
+     */
     //public TableBean getTableBean(String beanId);
 
-   /**
-    * Returns the name of the pressed submit button.
-    * @return name of the button which was pressed
-    */
-    public String getSubmitButtonName();
+    /**
+     * Returns the collection of visual tag beans contained by this form event
+     *
+     * @return the collection of visual tag beans
+     */
+    public Map getTagBeans();
 
     /**
-     * Gets back the prev. saved bean with the modifications from the userinterface.
-     * @param name name of the bean
-     * @return updated elementbean
+     * Stores any created beans into the request
      */
-    public Object getTagBean(String name);
-
-    /**
-     * Gets back the prev. saved bean with the modifications from the userinterface.
-     * @param name name of the bean
-     * @return updated elementbean
-     */
-    public org.gridlab.gridsphere.provider.portletui.beans.TagBean getNewTagBean(String name);
-
-    /**
-     * For debugging
-     */
-    public void printRequestParameters();
-
     public void store();
 
+    /**
+     * @deprecated
+     * @return a button name
+     */
+    public String getSubmitButtonName();
+
+    public Object getTagBean(String name);
 }
