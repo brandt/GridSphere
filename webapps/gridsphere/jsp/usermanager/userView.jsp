@@ -23,7 +23,7 @@
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-label" width="200">
-             <gs:text text="User Name:"/>
+             User Name:
           </td>
           <td class="portlet-frame-text">
              <gs:text bean="userName"/>
@@ -31,7 +31,7 @@
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             <gs:text text="Family Name:"/>
+             Family Name:
           </td>
           <td class="portlet-frame-text">
              <gs:text bean="familyName"/>
@@ -39,7 +39,7 @@
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             <gs:text text="Given Name:"/>
+             Given Name:
           </td>
           <td class="portlet-frame-text">
              <gs:text bean="givenName"/>
@@ -47,7 +47,7 @@
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             <gs:text text="Full Name:"/>
+             Full Name:
           </td>
           <td class="portlet-frame-text">
              <gs:text bean="fullName"/>
@@ -55,7 +55,7 @@
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             <gs:text text="Email Address:"/>
+             Email Address:
           </td>
           <td class="portlet-frame-text">
              <gs:text bean="emailAddress"/>
@@ -63,7 +63,7 @@
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             <gs:text text="Organization:"/>
+             Organization:
           </td>
           <td class="portlet-frame-text">
              <gs:text bean="organization"/>
@@ -71,7 +71,7 @@
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             <gs:text text="Role In GridSphere:"/>
+             Role In GridSphere:
           </td>
           <td class="portlet-frame-text">
              <gs:text bean="userRole"/>

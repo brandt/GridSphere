@@ -24,7 +24,7 @@
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-label" width="200">
-             <gs:text text="User Name:"/>
+             User Name:
           </td>
           <td class="portlet-frame-text">
              <gs:textfield bean="userName"/>
@@ -32,7 +32,7 @@
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             <gs:text text="Family Name:"/>
+             Family Name:
           </td>
           <td class="portlet-frame-text">
              <gs:textfield bean="familyName"/>
@@ -40,7 +40,7 @@
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             <gs:text text="Given Name:"/>
+             Given Name:
           </td>
           <td class="portlet-frame-text">
              <gs:textfield bean="givenName"/>
@@ -48,7 +48,7 @@
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             <gs:text text="Full Name:"/>
+             Full Name:
           </td>
           <td class="portlet-frame-text">
              <gs:textfield bean="fullName"/>
@@ -56,7 +56,7 @@
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             <gs:text text="Email Address:"/>
+             Email Address:
           </td>
           <td class="portlet-frame-text">
              <gs:textfield bean="emailAddress"/>
@@ -64,7 +64,7 @@
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             <gs:text text="Role In GridSphere:"/>
+             Role In GridSphere:
           </td>
           <td class="portlet-frame-input">
              <gs:dropdownlist bean="userRole"/>
@@ -72,7 +72,7 @@
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             <gs:text text="New Password:"/>
+             New Password:
           </td>
           <td class="portlet-frame-input">
              <gs:password bean="password"/>
@@ -80,7 +80,7 @@
         </tr>
         <tr>
           <td class="portlet-frame-label">
-            <gs:text text="Confirm Password:"/>
+             Confirm Password:
           </td>
           <td class="portlet-frame-input">
              <gs:password bean="confirmPassword"/>
