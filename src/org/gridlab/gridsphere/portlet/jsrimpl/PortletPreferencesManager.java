@@ -64,29 +64,28 @@ public class PortletPreferencesManager {
                 // we have no prefs in the xml so create one in the db...
                 log.debug("No prefs exist-- storing prefs for user: " + user.getID() + " portlet: " + portletID);
 
-                prefs = new PortletPreferencesImpl(prefDesc, loader);
+                prefs = new PortletPreferencesImpl();
                 prefs.setPortletId(portletID);
                 prefs.setUserId(user.getID());
 
             } else {
-
                 log.debug("Retrieved prefs for user: " + user.getID() + " portlet: " + portletID);
             }
             prefs.setPersistenceManager(pm);
-
+            prefs.init(prefDesc);
             if (prefDesc != null) {
-            org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PreferencesValidator v = prefDesc.getPreferencesValidator();
-            if (v != null) {
-                String validatorClass = v.getContent();
-                if (validatorClass != null) {
-                    try {
-                        PreferencesValidator validator = (PreferencesValidator) Class.forName(validatorClass, true, loader).newInstance();
-                        prefs.setValidator(validator);
-                    } catch (Exception e) {
-                        log.error("Unable to create validator: " + validatorClass + "! ",  e);
+                org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PreferencesValidator v = prefDesc.getPreferencesValidator();
+                if (v != null) {
+                    String validatorClass = v.getContent();
+                    if (validatorClass != null) {
+                        try {
+                            PreferencesValidator validator = (PreferencesValidator) Class.forName(validatorClass, true, loader).newInstance();
+                            prefs.setValidator(validator);
+                        } catch (Exception e) {
+                            log.error("Unable to create validator: " + validatorClass + "! ",  e);
+                        }
                     }
                 }
-            }
             }
 
             prefs.store();

@@ -43,7 +43,6 @@ import java.util.Map;
  */
 public class PortletPreferencesImpl implements PortletPreferences {
 
-    //private Map prefsMap = new HashMap();
     private transient Map defaultPrefsMap = new HashMap();
     private transient PreferencesValidator validator = null;
     private transient PersistenceManagerRdbms pm = null;
@@ -65,27 +64,35 @@ public class PortletPreferencesImpl implements PortletPreferences {
 
     private boolean isRender = false;
 
+
     public PortletPreferencesImpl() {
     }
 
-    public PortletPreferencesImpl(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences portletPrefs, ClassLoader loader) {
+    public void init(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences portletPrefs) {
         Map prefsMap = new HashMap();
         if (portletPrefs != null) {
             Preference[] prefs = portletPrefs.getPreference();
+            System.err.println("cycling thru prefs:");
             for (int i = 0; i < prefs.length; i++) {
-                PersistencePreferenceAttribute ppa = new PersistencePreferenceAttribute();
-                prefsMap.put(prefs[i].getName().getContent(), prefs[i]);
-                defaultPrefsMap.put(prefs[i].getName().getContent(), prefs[i]);
+                String name = prefs[i].getName().getContent();
+                defaultPrefsMap.put(name, prefs[i]);
+            }
 
-                ppa.setName(prefs[i].getName().getContent());
-                String[] vals = new String[prefs[i].getValueCount()];
-                Value[] prefVals = prefs[i].getValue();
-                for (int j = 0; j < vals.length; j++) {
-                    vals[j] = prefVals[j].getContent();
+            if (attributes.isEmpty()) {
+                for (int i = 0; i < prefs.length; i++) {
+                    String name = prefs[i].getName().getContent();
+                    PersistencePreferenceAttribute ppa = new PersistencePreferenceAttribute();
+                    prefsMap.put(prefs[i].getName().getContent(), prefs[i]);
+                    ppa.setName(name);
+                    String[] vals = new String[prefs[i].getValueCount()];
+                    Value[] prefVals = prefs[i].getValue();
+                    for (int j = 0; j < vals.length; j++) {
+                        vals[j] = prefVals[j].getContent();
+                    }
+                    ppa.setAValues(vals);
+                    ppa.setReadOnly(Boolean.valueOf(prefs[i].getReadOnly().getContent()).booleanValue());
+                    attributes.put(ppa.getName(), ppa);
                 }
-                ppa.setAValues(vals);
-                ppa.setReadOnly(Boolean.valueOf(prefs[i].getReadOnly().getContent()).booleanValue());
-                attributes.put(ppa.getName(), ppa);
             }
         }
     }
