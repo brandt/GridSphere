@@ -70,7 +70,7 @@ public class RequestServiceImpl implements RequestService, PortletServiceProvide
     }
 
     protected void clearExpiredEntries() {
-        log.debug("Updating generic requests");
+        //log.debug("Updating generic requests");
         Date date = Calendar.getInstance().getTime();
         List reqs = getAllRequests();
         Iterator it = reqs.iterator();
