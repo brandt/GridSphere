@@ -7,20 +7,25 @@
 package org.gridlab.gridsphere.core.persistence.castor;
 
 import org.gridlab.gridsphere.core.persistence.BaseObject;
+import org.gridlab.gridsphere.core.persistence.UniqueID;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 
+/**
+ * @table Attribute
+ * @key-generator UUID
+ * @depends org.gridlab.gridsphere.portlet.impl.SportletUserImpl
+ */
 public class Attribute extends BaseObject {
 
     private String Key;
     private String Value;
     private SportletUserImpl User;
 
-
-    private String getID() {
-        long l = System.currentTimeMillis();
-        String n = new String().valueOf(l);
-        return n;
-    }
+    /**
+     * @primary-key
+     * @sql-size 128
+     */
+    private String Oid;
 
     public Attribute () {
         super();
@@ -29,8 +34,7 @@ public class Attribute extends BaseObject {
     public Attribute(String k, String v) {
         Key = k;
         Value = v;
-        this.setOid(getID());
-        System.out.println("OID: "+getOid());
+        this.setOid(UniqueID.get());
     }
 
     public SportletUserImpl getUser() {
@@ -39,9 +43,7 @@ public class Attribute extends BaseObject {
 
     public void setUser(SportletUserImpl user) {
         User = user;
-        System.out.println("setUser:"+user.getID());
     }
-
 
     public String getKey() {
         return Key;
