@@ -43,7 +43,7 @@ import java.io.IOException;
 public class PortletPreferencesImpl implements PortletPreferences
 {
 
-    private Map prefsMap = new HashMap();
+    //private Map prefsMap = new HashMap();
     private transient Map defaultPrefsMap = new HashMap();
     private transient PreferencesValidator validator = null;
     private transient PersistenceManagerRdbms pm = null;
@@ -60,16 +60,29 @@ public class PortletPreferencesImpl implements PortletPreferences
      */
     private String userId = new String();
     // key/value pairs
-    //private Map attributes = new HashMap();
+
+    private Map attributes = new HashMap();
 
     private PortletPreferencesImpl() {}
 
     public PortletPreferencesImpl(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences portletPrefs, PersistenceManagerRdbms pm, ClassLoader loader) {
         this.pm = pm;
+        Map prefsMap = new HashMap();
         Preference[] prefs = portletPrefs.getPreference();
         for (int i = 0; i < prefs.length; i++) {
+            PersistencePreferenceAttribute ppa = new PersistencePreferenceAttribute();
             prefsMap.put(prefs[i].getName().getContent(), prefs[i]);
             defaultPrefsMap.put(prefs[i].getName().getContent(), prefs[i]);
+
+            ppa.setName(prefs[i].getName().getContent());
+            String[] vals = new String[prefs[i].getValueCount()];
+            Value[] prefVals = prefs[i].getValue();
+            for (int j = 0; j < vals.length; j++) {
+                vals[j] = prefVals[j].getContent();
+            }
+            ppa.setAValues(vals);
+            ppa.setReadOnly(Boolean.valueOf(prefs[i].getReadOnly().getContent()).booleanValue());
+            attributes.put(ppa.getName(), ppa);
         }
 
         org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PreferencesValidator  v = portletPrefs.getPreferencesValidator();
@@ -116,12 +129,9 @@ public class PortletPreferencesImpl implements PortletPreferences
      */
     public boolean isReadOnly(String key) {
         if (key == null) throw new IllegalArgumentException("key is NULL");
-        Preference pref = (Preference)prefsMap.get(key);
-        if (pref.getReadOnly().getContent().equalsIgnoreCase(Boolean.TRUE.toString())) {
-            return true;
-        }  else {
-            return false;
-        }
+        PersistencePreferenceAttribute ppa = (PersistencePreferenceAttribute)attributes.get(key);
+        if (ppa == null) return false;
+        return ppa.isReadOnly();
     }
 
     /**
@@ -148,10 +158,9 @@ public class PortletPreferencesImpl implements PortletPreferences
      */
     public String getValue(String key, String def) {
         if (key == null) throw new IllegalArgumentException("key is NULL");
-        Preference pref = (Preference)prefsMap.get(key);
-        if (pref == null) return def;
-        Value[] vals = pref.getValue();
-        return vals[0].getContent();
+        PersistencePreferenceAttribute ppa = (PersistencePreferenceAttribute)attributes.get(key);
+        if (ppa == null) return def;
+        return ppa.getValue();
     }
 
 
@@ -184,14 +193,9 @@ public class PortletPreferencesImpl implements PortletPreferences
 
     public String[] getValues(String key, String[] def) {
         if (key == null) throw new IllegalArgumentException("key is NULL");
-        Preference pref = (Preference)prefsMap.get(key);
-        if (pref == null) return def;
-        Value[] vals = pref.getValue();
-        String[] svals = new String[vals.length];
-        for (int i = 0; i < vals.length; i++) {
-            svals[i] = vals[i].getContent();
-        }
-        return svals;
+        PersistencePreferenceAttribute ppa = (PersistencePreferenceAttribute)attributes.get(key);
+        if (ppa == null) return def;
+        return ppa.getAValues();
     }
 
     /**
@@ -217,19 +221,16 @@ public class PortletPreferencesImpl implements PortletPreferences
         if (key == null) throw new IllegalArgumentException("key is NULL");
 
         // TODO use request value to determin if this value can be set
-        Preference pref = (Preference)prefsMap.get(key);
-        if (pref == null) {
-            pref = new Preference();
-            Name name = new Name();
-            name.setContent(key);
-            pref.setName(name);
-            Value val = new Value();
-            val.setContent(value);
-            pref.setValue(0, val);
-            prefsMap.put(key, pref);
+
+        PersistencePreferenceAttribute ppa = (PersistencePreferenceAttribute)attributes.get(key);
+        if (ppa == null) {
+            ppa = new PersistencePreferenceAttribute();
+            ppa.setName(key);
+            ppa.setReadOnly(false);
+            ppa.setValue(value);
+            attributes.put(key, ppa);
         } else {
-            Value[] vals = pref.getValue();
-            vals[0].setContent(value);
+            ppa.setValue(value);
         }
     }
 
@@ -258,26 +259,17 @@ public class PortletPreferencesImpl implements PortletPreferences
         if (key == null) throw new IllegalArgumentException("key is NULL");
 
         // TODO use request value to determine if this value can be set
-        Preference pref = (Preference)prefsMap.get(key);
-        if (pref == null) {
-            pref = new Preference();
-            Name name = new Name();
-            name.setContent(key);
-            pref.setName(name);
-            Value[] vals = new Value[values.length];
-            for (int i = 0; i < vals.length; i++) {
-                vals[i].setContent(values[i]);
-            }
-            pref.setValue(vals);
-            prefsMap.put(key, pref);
+        PersistencePreferenceAttribute ppa = (PersistencePreferenceAttribute)attributes.get(key);
+        if (ppa == null) {
+            ppa = new PersistencePreferenceAttribute();
+            ppa.setName(key);
+            ppa.setReadOnly(false);
+            ppa.setAValues(values);
+            attributes.put(key, ppa);
         } else {
-            Value[] vals = pref.getValue();
-            for (int i = 0; i < vals.length; i++) {
-                vals[i].setContent(values[i]);
-            }
+            ppa.setAValues(values);
         }
     }
-
 
     /**
      * Returns all of the keys that have an associated value,
@@ -289,7 +281,7 @@ public class PortletPreferencesImpl implements PortletPreferences
      *         available.
      */
     public java.util.Enumeration getNames() {
-        return new Enumerator(prefsMap.keySet().iterator());
+        return new Enumerator(attributes.keySet().iterator());
     }
 
     /**
@@ -308,17 +300,13 @@ public class PortletPreferencesImpl implements PortletPreferences
      */
     public java.util.Map getMap() {
         Map map = new HashMap();
-        Iterator it = prefsMap.keySet().iterator();
+        Iterator it = attributes.keySet().iterator();
         while (it.hasNext()) {
             String key = (String)it.next();
             String[] vals = this.getValues(key, null);
             map.put(key, vals);
         }
         return map;
-    }
-
-    public void setMap(Map map) {
-        this.prefsMap = map;
     }
 
     /**
@@ -338,14 +326,18 @@ public class PortletPreferencesImpl implements PortletPreferences
      */
     public void reset(String key) throws ReadOnlyException {
         if (key == null) throw new IllegalArgumentException("key is NULL");
-        Preference pref = (Preference)prefsMap.get(key);
-        if (pref != null) {
+        PersistencePreferenceAttribute ppa = (PersistencePreferenceAttribute)attributes.get(key);
+        if (ppa != null) {
             Preference defaultPref = (Preference)defaultPrefsMap.get(key);
             if (defaultPref != null) {
                 Value[] defvals = defaultPref.getValue();
-                pref.setValue(defvals);
+                String[] vals = new String[defvals.length];
+                for (int i = 0; i < defvals.length; i++) {
+                    vals[i] = defvals[i].getContent();
+                }
+                ppa.setAValues(vals);
             }  else {
-                prefsMap.remove(key);
+                attributes.remove(key);
             }
         }
     }
@@ -382,20 +374,6 @@ public class PortletPreferencesImpl implements PortletPreferences
      */
     public void store() throws java.io.IOException, ValidatorException {
         if (validator != null) validator.validate(this);
-        // cycle through
-        // get the names
-        /*
-        Enumeration enum = getNames();
-        while (enum.hasMoreElements()) {
-            String key = (String) enum.nextElement();
-            PersistencePreferenceAttribute ppa = new PersistencePreferenceAttribute();
-            ppa.readonly = isReadOnly(key);
-            String[] values = getValues(key, null);
-            for (int i = 0; i < values.length; i++) {
-                ppa.values.add(values[i]);
-            }
-            attributes.put(key, ppa);
-        }*/
         try {
             if (this.getOid() != null) {
                 pm.update(this);
@@ -444,11 +422,11 @@ public class PortletPreferencesImpl implements PortletPreferences
     }
 
     public Map getAttributes() {
-        return prefsMap;
+        return attributes;
     }
 
     public void setAttributes(Map attributes) {
-        this.prefsMap = attributes;
+        this.attributes = attributes;
     }
 
 }
