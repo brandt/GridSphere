@@ -56,8 +56,8 @@
         <name>Credential Manager Service</name>
         <user-required>true</user-required>
         <description>Provides Credential Management Capabilities</description>
-        <interface>org.gridlab.gridsphere.services.core.security.credential.CredentialManagerService</interface>
-        <implementation>org.gridlab.gridsphere.services.core.security.credential.impl.CredentialManagerServiceImpl</implementation>
+        <interface>org.gridlab.gridsphere.services.grid.security.credential.CredentialManagerService</interface>
+        <implementation>org.gridlab.gridsphere.services.grid.security.credential.impl.CredentialManagerServiceImpl</implementation>
         <service-config>
             <param-name>retrievalHost</param-name>
             <param-value>myproxy.gridlab.org</param-value>
