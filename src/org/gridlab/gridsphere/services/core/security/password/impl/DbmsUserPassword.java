@@ -12,6 +12,7 @@ public class DbmsUserPassword  implements DbmsPassword {
 
     private String oid = null;
     private SportletUserImpl user;
+    private String userName;
     private String value = new String();
     private String hint = new String();
     private long lifetime = -1;
@@ -95,6 +96,7 @@ public class DbmsUserPassword  implements DbmsPassword {
 
     public void setUser(User user) {
         this.user = (SportletUserImpl)user;
+        this.userName = user.getUserName();
     }
 
     /**
@@ -102,6 +104,14 @@ public class DbmsUserPassword  implements DbmsPassword {
      */
     public SportletUserImpl getSportletUser() {
         return this.user;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     /**
