@@ -117,7 +117,7 @@ public abstract class PortletAdapter extends Portlet {
             portletID = request.getParameter(GridSphereProperties.PORTLETID);
             if (portletID == null) {
                 log.error("in AbstractPortlet: No PortletID found in request attribute");
-                throw new PortletException("PortletID is null");
+                doError(request, response, "in AbstractPortlet: No PortletID found in request attribute");
             }
         }
 
@@ -130,29 +130,32 @@ public abstract class PortletAdapter extends Portlet {
         Portlet.Mode mode = request.getMode();
         if (mode == null) mode = Portlet.Mode.VIEW;
         log.info("Displaying mode: " + mode);
-        if (mode != null) {
-            switch (mode.getMode()) {
-                case Portlet.Mode.VIEW_MODE:
-                    doView(request, response);
-                    break;
-                case Portlet.Mode.EDIT_MODE:
-                    doEdit(request, response);
-                    break;
-                case Portlet.Mode.CONFIGURE_MODE:
-                    doConfigure(request, response);
-                    break;
-                case Portlet.Mode.HELP_MODE:
-                    doHelp(request, response);
-                    break;
-                default:
-                    log.error("Received invalid PortletMode command : " + mode);
-                    throw new PortletException("Received invalid PortletMode command: " + mode);
+        try {
+            if (mode != null) {
+                switch (mode.getMode()) {
+                    case Portlet.Mode.VIEW_MODE:
+                        doView(request, response);
+                        break;
+                    case Portlet.Mode.EDIT_MODE:
+                        doEdit(request, response);
+                        break;
+                    case Portlet.Mode.CONFIGURE_MODE:
+                        doConfigure(request, response);
+                        break;
+                    case Portlet.Mode.HELP_MODE:
+                        doHelp(request, response);
+                        break;
+                    default:
+                        log.error("Received invalid PortletMode command : " + mode);
+                        throw new IllegalArgumentException("Received invalid PortletMode command: " + mode);
+                }
+            } else {
+                log.error("Received NULL PortletMode command");
+                throw new IllegalArgumentException("Received NULL PortletMode command");
             }
-            //JspException jspException = (JspException)request.getAttribute("javax.servlet.jsp.jspException");
-
-        } else {
-            log.error("Received NULL PortletMode command");
-            throw new PortletException("Received NULL PortletMode command");
+        } catch (Exception e) {
+            log.error("in PortletAdapter: service()", e);
+            doError(request, response, e);
         }
     }
 
@@ -221,13 +224,28 @@ public abstract class PortletAdapter extends Portlet {
      * @param request the portlet request
      * @param response the portlet response
      *
-     * @throws PortletException if an error occurs during processing
      * @throws IOException if an I/O error occurs
      */
-    protected void doErrorMessage(PortletRequest request, PortletResponse response, String message)
-            throws PortletException, IOException {
+    protected void doError(PortletRequest request, PortletResponse response, String message)
+            throws IOException {
         PrintWriter out = response.getWriter();
-        out.println("<b>" + message + "</b>");
+        out.println("<b>Received Portlet Error</b><br>");
+        out.println(message);
+    }
+
+    /**
+     * Helper method to handle any errors that occured during processing
+     *
+     * @param request the portlet request
+     * @param response the portlet response
+     *
+     * @throws IOException if an I/O error occurs
+     */
+    protected void doError(PortletRequest request, PortletResponse response, Exception exception)
+            throws IOException {
+        PrintWriter out = response.getWriter();
+        out.println("<b>Received Portlet Error</b><br>");
+        exception.printStackTrace(out);
     }
 
     /**
