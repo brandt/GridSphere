@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.services.core.user;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
@@ -19,6 +20,7 @@ public class SetupTestUsersTest extends SetupRootUserTest {
     protected AccessControlManagerService rootACLService = null;
 
     protected User jason = null;
+    protected PortletGroup coreGroup = null;
 
     public SetupTestUsersTest(String name) {
         super(name);
@@ -45,6 +47,9 @@ public class SetupTestUsersTest extends SetupRootUserTest {
     }
 
     protected void createUsers() {
+
+        coreGroup = rootACLService.getCoreGroup();
+        assertNotNull(coreGroup);
 
         SportletUser jasonRequest = rootUserService.createUser();
 
