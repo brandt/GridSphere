@@ -4,20 +4,15 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
-import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletSettings;
-import org.gridlab.gridsphere.portletcontainer.descriptor.Owner;
-import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication;
-import org.gridlab.gridsphere.portletcontainer.impl.Cacheable;
+import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApp;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * An application portlet represents the portlet application defined in the portlet.xml
- * ApplicationPortlet is mostly a proxy for the PortletApplication class used by Castor
+ * ApplicationPortlet is mostly a proxy for the PortletApp class used by Castor
  *
- * @see <code>org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication</code>
+ * @see <code>org.gridlab.gridsphere.portletcontainer.descriptor.PortletApp</code>
  */
 public interface ApplicationPortlet {
 
@@ -37,11 +32,18 @@ public interface ApplicationPortlet {
     public ConcretePortlet getConcretePortlet(String concretePortletID);
 
     /**
+     * Return the web application name associated with this application portlet
+     *
+     * @return the web application name
+     */
+    public String getWebApplication();
+
+    /**
      * Return the PortletApplication, the portlet descriptor class that defines the portlet application
      *
      * @return the PortletApplication
      */
-    public PortletApplication getPortletApplication();
+    public PortletApp getPortletApplicationDescriptor();
 
     /**
      * Returns the id of a PortletApplication
@@ -55,7 +57,16 @@ public interface ApplicationPortlet {
      *
      * @returns name of the PortletApplication
      */
-    public String getName();
+    public String getPortletName();
+
+    /**
+     * Returns the name of a servlet associated with this portlet defined in web.xml as <servlet-name>
+     *
+     * @returns the servlet name
+     */
+    public String getServletName();
+
+    public PortletWrapper getPortletWrapper();
 
     /**
      * Returns the map of portlet configuration parameters that are used in the PortletConfig class

@@ -4,11 +4,9 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
-import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletSettings;
-import org.gridlab.gridsphere.portletcontainer.descriptor.Owner;
 import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication;
-import org.gridlab.gridsphere.portletcontainer.impl.Cacheable;
+import org.gridlab.gridsphere.portletcontainer.descriptor.Owner;
 
 import java.util.List;
 import java.util.Map;
@@ -84,7 +82,7 @@ public interface ConcretePortlet {
      *
      * @return the instantiated abstract portlet instance
      */
-    public AbstractPortlet getAbstractPortlet();
+    //public AbstractPortlet getAbstractPortlet(PortletContext ctx, PortletRequest req, PortletResponse res);
 
     /**
      * Return the Owner of the concrete portlet that can reconfigure the settings

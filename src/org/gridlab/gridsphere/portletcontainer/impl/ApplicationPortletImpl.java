@@ -4,18 +4,19 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl;
 
-import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletSettings;
+import org.gridlab.gridsphere.portlet.PortletConfig;
+import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portletcontainer.descriptor.*;
-import org.gridlab.gridsphere.portletcontainer.impl.Cacheable;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortletException;
+import org.gridlab.gridsphere.portletcontainer.PortletWrapper;
+import org.gridlab.gridsphere.portletcontainer.descriptor.*;
 
-import java.util.List;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -28,24 +29,27 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
 
     private PortletLog log = SportletLog.getInstance(ApplicationPortletImpl.class);
 
-    private String uid = "";
-    private String name = "";
+    private String id = "";
+    private String portletName = "";
+    private String servletName = "";
     private Cacheable cacheable = null;
     private SupportsModes supportedModes = null;
     private List allowedStates = null;
-    //private PortletDefinition portletDef = null;
     private List concretePortlets = null;
     private PortletConfig portletConfig = null;
-    private PortletApplication portletApp = null;
+    private PortletApp portletApp = null;
+    private ServletContext context;
+    private String webApplication = null;
+    private PortletWrapper portletWrapper = null;
 
-    public ApplicationPortletImpl(PortletDefinition portletDef, ClassLoader classLoader) {
-        //this.portletDef = portletDef;
+    public ApplicationPortletImpl(PortletDeploymentDescriptor pdd, PortletDefinition portletDef, String webApplication, ServletContext context) {
+        this.context = context;
         Iterator it;
+        this.webApplication = webApplication;
         this.portletApp = portletDef.getPortletApp();
-        PortletInfo portletInfo = portletApp.getPortletInfo();
 
         // Set cache information
-        CacheInfo cacheInfo = portletInfo.getCacheInfo();
+        CacheInfo cacheInfo = portletApp.getCacheInfo();
         /*
         if (cacheInfo == null) {
             cacheInfo = new CacheInfo("true", -1);
@@ -69,14 +73,33 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
         while (it.hasNext()) {
             ConcretePortletApplication concApp = (ConcretePortletApplication)it.next();
             try {
-                ConcretePortlet concretePortlet = new ConcretePortletImpl(portletApp, concApp, classLoader);
+                ConcretePortlet concretePortlet = new ConcretePortletImpl(pdd, portletApp, concApp);
                 concretePortlets.add(concretePortlet);
             } catch (ConcretePortletException e) {
                 log.error("Unable to create concrete portlet: " + concApp.getName(), e);
             }
         }
-        uid = portletApp.getUID();
-        name = portletApp.getName();
+        id = portletApp.getID();
+        portletName = portletApp.getPortletName();
+        servletName = portletApp.getServletName();
+
+        log.info("Creating request dispatcher for " + servletName);
+        RequestDispatcher rd = context.getNamedDispatcher(servletName);
+        if (rd == null) {
+            log.error("Unable to create a dispatcher for portlet: " + portletName);
+            log.error("Make sure the servletName: " + servletName + " is the servlet-name defined in web.xml");
+        }
+
+        portletWrapper = new PortletWrapper(rd, portletApp);
+    }
+
+    /**
+     * Return the web application name associated with this application portlet
+     *
+     * @return the web application name
+     */
+    public String getWebApplication() {
+        return webApplication;
     }
 
     /**
@@ -84,8 +107,12 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
      *
      * @return the PortletApplication
      */
-    public PortletApplication getPortletApplication() {
+    public PortletApp getPortletApplicationDescriptor() {
         return portletApp;
+    }
+
+    public PortletWrapper getPortletWrapper() {
+        return portletWrapper;
     }
 
     /**
@@ -121,7 +148,7 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
      * @returns the id of the PortletApplication
      */
     public String getPortletAppID() {
-        return uid;
+        return id;
     }
 
     /**
@@ -129,8 +156,17 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
      *
      * @returns name of the PortletApplication
      */
-    public String getName() {
-        return name;
+    public String getPortletName() {
+        return portletName;
+    }
+
+    /**
+     * Returns the name of a servlet associated with this portlet defined in web.xml as <servlet-name>
+     *
+     * @returns the servlet name
+     */
+    public String getServletName() {
+        return servletName;
     }
 
     /**

@@ -6,8 +6,6 @@ package org.gridlab.gridsphere.portletcontainer;
 
 import org.gridlab.gridsphere.portlet.PortletException;
 
-import javax.servlet.ServletException;
-
 /**
  * The PortletException class defines a general exception that a portlet can throw when it encounters difficulty.
  */

@@ -4,24 +4,19 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl;
 
-import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portlet.impl.*;
-import org.gridlab.gridsphere.portletcontainer.descriptor.*;
+import org.gridlab.gridsphere.portlet.AbstractPortlet;
+import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.impl.SportletGroup;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletRole;
+import org.gridlab.gridsphere.portlet.impl.SportletSettings;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortletException;
-import org.gridlab.gridsphere.services.security.acl.AccessControlService;
+import org.gridlab.gridsphere.portletcontainer.descriptor.*;
 
-import javax.servlet.ServletConfig;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.File;
 import java.util.*;
-import java.net.URLClassLoader;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * A ConcreteSportlet provides the portlet container with information used to create and manage the
@@ -38,6 +33,7 @@ public class ConcretePortletImpl implements ConcretePortlet {
     private AbstractPortlet abstractPortlet = null;
     private Map configMap = null;
     private Map contextMap = null;
+    private String servletName = "Undefined Servlet";
     private String portletName = "Undefined PortletInfo";
     private String portletClass = "Unknown Portlet Class";
     private String appID = null;
@@ -50,26 +46,27 @@ public class ConcretePortletImpl implements ConcretePortlet {
     private PortletGroup ownerGroup = SportletGroup.getBaseGroup();
     private PortletRole ownerRole = SportletRole.getGuestRole();
     private SportletSettings sportletSettings = null;
+    private PortletApp portletApp = null;
 
     /**
      * Create a ConcreteSportlet
      */
-    public ConcretePortletImpl(PortletApplication portletApp, ConcretePortletApplication concreteApp, ClassLoader classLoader) throws ConcretePortletException {
+    public ConcretePortletImpl(PortletDeploymentDescriptor pdd, PortletApp portletApp, ConcretePortletApplication concreteApp) throws ConcretePortletException {
 
         log.info("in ConcretePortletImpl construcor");
-
+        this.portletApp = portletApp;
         int index;
         Iterator it;
         String appname, cappname;
 
         // Get PortletApplication UID  e.g. classname.number
-        appID = portletApp.getUID();
+        appID = portletApp.getID();
         index = appID.lastIndexOf(".");
         appname = appID.substring(0, index);
         String appNo = appID.substring(index+1);
 
         // Get ConcretePortletApplication UID e.g. classname.number.number
-        concreteID = concreteApp.getUID();
+        concreteID = concreteApp.getID();
         index = concreteID.lastIndexOf(".");
         String concreteNo = concreteID.substring(index+1);
         String cappNo = concreteID.substring(0, index);
@@ -85,17 +82,24 @@ public class ConcretePortletImpl implements ConcretePortlet {
 
         portletClass = cappname;
         portletName = concreteApp.getName();
+        servletName = portletApp.getServletName();
 
+        /*
         log.info("creating new class: " + portletClass);
         try {
             Class cls =  classLoader.loadClass(portletClass);
             abstractPortlet = (AbstractPortlet)classLoader.loadClass(portletClass).newInstance();
-
-            //abstractPortlet = (AbstractPortlet) Class.forName(portletClass).newInstance();
         } catch (Exception e) {
             log.error("Unable to create AbstractPortlet: " + portletClass, e);
             throw new ConcretePortletException("Unable to create instance of portlet: " + portletClass);
         }
+        */
+         /* need concrete portlet class to instantiate
+          now we need the web app nad servlet name
+          we could return that and set the request dispatcher later
+          */
+        //abstractPortlet = new PortletWrapper();
+
 
          // SINCE ACL SERVICE DOESN"T WORK YET
         Vector knownGroups = new Vector();
@@ -190,7 +194,7 @@ public class ConcretePortletImpl implements ConcretePortlet {
         owner.setGroup(ownerGroup);
         owner.setRole(ownerRole);
 
-        sportletSettings = new SportletSettings(concreteApp);
+        sportletSettings = new SportletSettings(pdd, concreteApp);
     }
 
     /**
@@ -249,9 +253,12 @@ public class ConcretePortletImpl implements ConcretePortlet {
      *
      * @return the instantiated abstract portlet instance
      */
-    public AbstractPortlet getAbstractPortlet() {
-        return abstractPortlet;
+    /*
+    public AbstractPortlet getAbstractPortlet(PortletContext ctx, PortletRequest req, PortletResponse res) {
+        RequestDispatcher rd = ctx.getNamedDispatcher(servletName);
+        return new PortletWrapper(portletApp, rd, req, res);
     }
+    */
 
     public String getPortletClass() {
         return portletClass;
