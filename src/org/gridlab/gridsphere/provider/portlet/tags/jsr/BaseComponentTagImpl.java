@@ -4,7 +4,6 @@
  */
 package org.gridlab.gridsphere.provider.portlet.tags.jsr;
 
-
 import org.gridlab.gridsphere.provider.portletui.tags.BaseComponentTag;
 
 import javax.portlet.PortletRequest;
@@ -27,5 +26,7 @@ public abstract class BaseComponentTagImpl extends BaseComponentTag {
         ResourceBundle bundle = ResourceBundle.getBundle(base, locale);
         return bundle.getString(key);
     }
+
+    
 
 }

@@ -10,13 +10,9 @@ import org.gridlab.gridsphere.provider.portletui.beans.ActionParamBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
 import org.gridlab.gridsphere.provider.portletui.tags.ActionTag;
 
-import javax.portlet.RenderResponse;
-import javax.portlet.PortletURL;
-import javax.portlet.WindowState;
-import javax.portlet.PortletMode;
-import javax.portlet.WindowStateException;
-import javax.portlet.PortletModeException;
+import javax.portlet.*;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagExtraInfo;
 import javax.servlet.jsp.tagext.VariableInfo;
 import javax.servlet.jsp.tagext.TagData;
@@ -197,49 +193,57 @@ public abstract class ActionTagImpl extends BaseComponentTagImpl implements Acti
         return paramBeans;
     }
 
-    public String createActionURI() {
+    public String createActionURI(PortletURL url) throws JspException {
 
         // Builds a URI containing the actin and associated params
         RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
+        this.actionURL = url;
+        RenderRequest req = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
         // action is a required attribute except for FormTag
         if (label != null) {
-            actionURL = res.createRenderURL();
+            //actionURL = res.createRenderURL();
             res.setProperty("label", label);
         } else if (windowState != null) {
             WindowState state = new WindowState(windowState);
             try {
-                actionURL = res.createRenderURL();
+                //actionURL = res.createRenderURL();
                 actionURL.setWindowState(state);
             } catch (WindowStateException e) {
-                System.err.println("Unknown window state in renderURL tag: " + windowState);
+                throw new JspException("Unknown window state in renderURL tag: " + windowState);
             }
         } else if (portletMode != null) {
             PortletMode mode = new PortletMode(portletMode);
             try {
-                actionURL = res.createRenderURL();
+                //actionURL = res.createRenderURL();
                 actionURL.setPortletMode(mode);
             } catch (PortletModeException e) {
-                System.err.println("Unknown portlet mode in renderURL tag: " + mode);
+                throw new JspException("Unknown portlet mode in renderURL tag: " + portletMode);
             }
         } else {
-            actionURL = res.createRenderURL();
+            try {
+                //actionURL = res.createRenderURL();
+                actionURL.setPortletMode(req.getPortletMode());
+                System.err.println("\t\t\tSetting mode to " + req.getPortletMode());
+            } catch (PortletModeException e) {
+                throw new JspException("Unknown portlet mode in renderURL tag: " + portletMode);
+            }
         }
 
-        if (action != null) {
-            portletAction = new DefaultPortletAction(action);
+        //if (action != null) {
+            //portletAction = new DefaultPortletAction(action);
             if (!paramBeans.isEmpty()) {
                 String id = createUniquePrefix(2);
-                portletAction.addParameter(SportletProperties.PREFIX, id);
-
+                //portletAction.addParameter(SportletProperties.PREFIX, id);
+                //actionURL.setParameter(SportletProperties.PREFIX, id);
                 Iterator it = paramBeans.iterator();
                 while (it.hasNext()) {
                     ActionParamBean pbean = (ActionParamBean)it.next();
                     actionURL.setParameter(pbean.getName(), pbean.getValue());
                 }
             }
-            actionURL.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, action);
-        }
-
+            //if (!action.equals("render")) actionURL.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, action);
+        //}
+        System.err.println("printing URL = " + actionURL.toString());
         return actionURL.toString();
     }
 

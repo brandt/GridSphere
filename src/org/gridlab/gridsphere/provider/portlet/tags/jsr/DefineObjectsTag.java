@@ -66,12 +66,14 @@ public class DefineObjectsTag extends TagSupport {
         if (res instanceof HttpServletResponse) {
             hRes = (HttpServletResponse)res;
             RenderResponse renderResponse = (RenderResponse)hReq.getAttribute(SportletProperties.RENDER_RESPONSE);
+            renderResponse.setContentType("text/html");
             //new RenderResponseImpl(hReq, hRes);
             pageContext.setAttribute("renderResponse", renderResponse, PageContext.PAGE_SCOPE);
         }
         PortletConfig portletConfig = (PortletConfig)hReq.getAttribute(SportletProperties.PORTLET_CONFIG);
         //new PortletConfigImpl(pageContext.getServletConfig());
         pageContext.setAttribute("portletConfig", portletConfig, PageContext.PAGE_SCOPE);
+
         return SKIP_BODY;
     }
 
