@@ -119,7 +119,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         delete(command);
 
         command =
-                "select g from org.gridlab.gridsphere.services.security.acl.impl2 g where g.GroupID=" + groupid;
+                "select g from org.gridlab.gridsphere.services.security.acl.impl2.UserACL g where g.GroupID=" + groupid;
         delete(command);
     }
 
