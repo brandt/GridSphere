@@ -7,7 +7,7 @@
              class="org.gridlab.gridsphere.portlets.grid.job.JobManagerBean"
              scope="request"/>
 <gs:form action="doViewUserJob">
-<input type="hidden" name="jobID" value="<%=jobManagerBean.getParameter("jobID")%>">
+  <gs:hiddenfield name="jobID" value="jobID"/>
 <table class="portlet-pane" cellspacing="1">
   <tr>
     <td>
@@ -21,11 +21,28 @@
           <td class="portlet-frame-actions">
             <gs:submit name="doListJob" value="List Jobs"/>
             &nbsp;&nbsp;<gs:submit name="doNewUserJob" value="New Job"/>
-<%--
-            &nbsp;&nbsp;<gs:submit name="doStageUserJob" value="Stage Job"/>
-            &nbsp;&nbsp;<gs:submit name="doMigrateUserJob" value="Migrate Job"/>
-            &nbsp;&nbsp;<gs:submit name="doDeletUsereJob" value="Delete Job"/>
---%>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="100%">
+        <tr>
+          <td class="portlet-frame-label" width="200">
+             Job ID:
+          </td>
+          <td class="portlet-frame-value">
+             &nbsp;<%=jobManagerBean.getPortletRequestAttribute("jobID")%>
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-label" width="200">
+             Job Status:
+          </td>
+          <td class="portlet-frame-value">
+             &nbsp;<%=jobManagerBean.getPortletRequestAttribute("jobStatus")%>
           </td>
         </tr>
       </table>
@@ -39,7 +56,7 @@
              Executable:
           </td>
           <td class="portlet-frame-value">
-             <gs:text name="executable" value="executable">
+             &nbsp;<%=jobManagerBean.getPortletRequestAttribute("executable")%>
           </td>
         </tr>
         <tr>
@@ -47,7 +64,7 @@
              Stdout:
           </td>
           <td class="portlet-frame-value">
-             <gs:text name="stdout" value="stdout">
+             &nbsp;<%=jobManagerBean.getPortletRequestAttribute("stdout")%>
           </td>
         </tr>
         <tr>
@@ -55,7 +72,7 @@
              Stderr:
           </td>
           <td class="portlet-frame-value">
-             <gs:text name="stderr" value="stderr">
+             &nbsp;<%=jobManagerBean.getPortletRequestAttribute("stderr")%>
           </td>
         </tr>
       </table>
@@ -69,7 +86,7 @@
              Arguments:
           </td>
           <td class="portlet-frame-value">
-             <gs:text name="arguments" value="arguments">
+             &nbsp;<%=jobManagerBean.getPortletRequestAttribute("arguments")%>
           </td>
         </tr>
       </table>
@@ -83,7 +100,7 @@
              Environment:
           </td>
           <td class="portlet-frame-value">
-             <gs:text name="environment" value="environment">
+             &nbsp;<%=jobManagerBean.getPortletRequestAttribute("environment")%>
           </td>
         </tr>
       </table>
@@ -97,7 +114,7 @@
              Host Name:
           </td>
           <td class="portlet-frame-input">
-             <gs:text name="hostName" value="hostName">
+             &nbsp;<%=jobManagerBean.getPortletRequestAttribute("hostName")%>
           </td>
         </tr>
         <tr>
@@ -105,31 +122,9 @@
              Job Scheduler:&nbsp;
           </td>
           <td class="portlet-frame-input">
-             <gs:text name="hostName" value="jobScheduler">
+             &nbsp;<%=jobManagerBean.getPortletRequestAttribute("jobScheduler")%>
           </td>
         </tr>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-label" width="200">
-             Minimum Memory:
-          </td>
-          <td class="portlet-frame-input">
-             <gs:text name="memory" value="memory">
-          </td>
-        </tr>
-        <tr>
-          <td class="portlet-frame-label" width="200">
-             Number of Processors:
-          </td>
-          <td class="portlet-frame-input">
-             <gs:text name="cpuCount" value="cpuCount">
-          </td>
-        </tr>
-      </table>
     </td>
   </tr>
 <%--

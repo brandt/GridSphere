@@ -32,6 +32,11 @@
             &nbsp;&nbsp;<gs:submit name="doCancelEditUserJob" value="Cancel Edit"/>
           </td>
         </tr>
+        <tr>
+          <td class="portlet-frame-message-alert">
+            <gs:text bean="errorMessage"/>
+          </td>
+        </tr>
       </table>
     </td>
   </tr>

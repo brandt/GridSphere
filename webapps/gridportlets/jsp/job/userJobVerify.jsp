@@ -34,7 +34,7 @@
         </tr>
         <tr>
           <td class="portlet-frame-message-alert">
-            <%=jobManagerBean.getFormInvalidMessage()%>
+            <gs:text bean="errorMessage"/>
           </td>
         </tr>
       </table>

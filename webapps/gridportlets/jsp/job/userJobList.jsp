@@ -2,7 +2,8 @@
                  java.util.List,
                  org.gridlab.gridsphere.portlet.PortletURI,
                  org.gridlab.gridsphere.services.grid.job.Job,
-                 org.gridlab.gridsphere.services.grid.job.JobSpecification" %>
+                 org.gridlab.gridsphere.services.grid.job.JobSpecification,
+                 org.gridlab.gridsphere.services.grid.data.file.FileHandle" %>
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
@@ -11,19 +12,6 @@
              scope="request"/>
 <gs:form action="doListUserJob">
 <table class="portlet-pane" cellspacing="1" width="100%">
-<% if (jobManagerBean.isFormInvalid()) { %>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-message-alert">
-            <%=jobManagerBean.getFormInvalidMessage()%>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-<% } %>
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
@@ -55,40 +43,44 @@
              Job
          </td>
          <td class="portlet-frame-header" width="150">
-             Host
-         </td>
-         <td class="portlet-frame-header" width="200">
-             Scheduler
-         </td>
-         <td class="portlet-frame-header" width="150">
-             Queue
+             Status
          </td>
          <td class="portlet-frame-header" width="150">
              Executable
+         </td>
+         <td class="portlet-frame-header" width="150">
+             Host
          </td>
        </tr>
 <%   for (int ii = 0; ii < numUsers; ++ii) {
       System.out.println("job " + ii + " for user");
        Job job = (Job)userJobList.get(ii);
        String jobID = job.getID();
-       JobSpecification jobSpecification = (JobSpecification)job.getJobSpecification();%>
+       String jobStatus = job.getJobStatus().toString();
+       String hostname = job.getRuntimeHost();
+       JobSpecification jobSpecification = (JobSpecification)job.getJobSpecification();
+       FileHandle executable = jobSpecification.getExecutable();
+       String executableUrl = null;
+       if (executable == null) {
+           executableUrl = "";
+       } else {
+           executableUrl = executable.getFileUrl();
+       }
+%>
         <tr>
           <td class="portlet-frame-text">
-            <gs:actionlink action="doViewUserJob" label="start">
+            <gs:actionlink action="doViewUserJob" label="<%=jobID%>">
               <gs:actionparam name="jobID" value="<%=jobID%>"/>
             </gs:actionlink>
           </td>
           <td class="portlet-frame-text">
-            <%=job.getRuntimeHost()%>
+            <%=jobStatus%>
           </td>
           <td class="portlet-frame-text">
-            <%=job.getRuntimeScheduler()%>
+            <%=executableUrl%>
           </td>
           <td class="portlet-frame-text">
-            <%=job.getRuntimeQueue()%>
-          </td>
-          <td class="portlet-frame-text">
-            <%=jobSpecification.getExecutable()%>
+            <%=hostname%>
           </td>
         </tr>
 <%   }

@@ -1,7 +1,9 @@
 <%@ page import="org.gridlab.gridsphere.services.grid.security.credential.Credential,
                  org.gridlab.gridsphere.portlets.grid.security.CredentialRetrievalUserBean,
                  java.util.List,
-                 org.gridlab.gridsphere.services.grid.security.credential.CredentialMapping" %>
+                 org.gridlab.gridsphere.services.grid.security.credential.CredentialMapping,
+                 java.util.Date,
+                 java.util.GregorianCalendar" %>
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
@@ -17,9 +19,7 @@
         <tr>
           <td class="portlet-frame-actions">
             Password:
-            &nbsp;&nbsp;<input type="password"
-                   name="password"
-                   value=""/>
+            &nbsp;&nbsp;<input type="password" name="password" value=""/>
             &nbsp;&nbsp;<gs:submit name="doRetrieveUserCredential" value="Submit"/>
           </td>
         </tr>
@@ -61,18 +61,21 @@
        </tr>
 <%   for (int ii = 0; ii < numCredentialMappings; ++ii) {
        CredentialMapping credentialMapping = (CredentialMapping)credentialMappingList.get(ii);
-       Credential credential = credentialMapping.getCredential(); %>
+       Credential credential = credentialMapping.getCredential();
+       String label = credentialMapping.getLabel();
+       String subject = credentialMapping.getSubject();
+       long timeLeft = credential.getTimeLeft() / 36; %>
         <tr>
           <td class="portlet-frame-text">
             <a href="javascript:CredentialRetrievalUserPortlet_viewUserActiveCredential_onClick('<%=credentialMapping.getID()%>')">
-              <%=credentialMapping.getLabel()%>
+              <%=label%>
             </a>
           </td>
           <td class="portlet-frame-text">
-            <%=credentialMapping.getSubject()%>
+            <%=subject%>
           </td>
           <td class="portlet-frame-text">
-            <%=credential.getTimeLeft()%>
+            <%=timeLeft%> minutes
           </td>
         </tr>
 <%   }
