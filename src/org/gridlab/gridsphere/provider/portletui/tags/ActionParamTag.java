@@ -20,7 +20,6 @@ public class ActionParamTag extends TagSupport {
     protected String name = "";
     protected String value = "";
     protected ActionParamBean paramBean = null;
-    protected ImageBean imageBean = null;
 
     /**
      * Sets the action parameter name
@@ -80,6 +79,7 @@ public class ActionParamTag extends TagSupport {
         ActionTag actionTag = (ActionTag) getParent();
         if (actionTag != null) {
             //System.err.println("Setting action param bean: " + name + " " + value);
+
             paramBean = new ActionParamBean(name, value);
             actionTag.addParamBean(paramBean);
         }
