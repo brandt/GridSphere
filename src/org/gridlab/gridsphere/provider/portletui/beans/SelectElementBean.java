@@ -98,7 +98,15 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
         results.add(value);
     }
 
-    public String toStartString(String type) {
+    /**
+     * Clears the selected values in this bean
+     */
+    public void clearSelectedValues() {
+        selected = false;
+        results.clear();
+    }
+
+     public String toStartString(String type) {
         String pname = (name == null) ? "" : name;
         String sname = pname;
         if (!beanId.equals("")) {
