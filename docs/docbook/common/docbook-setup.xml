@@ -38,7 +38,6 @@ http://jakarta.apache.org/proposals/tapestry
 	value="../common/GridSphere-${docbook.xsl.base}-Fop.xsl"/>
 
 <property environment="env"/>
-<property name="fop.dir" value="${env.FOP_HOME}"/>
 
 <xmlcatalog id="docbook.catalog">
 	<dtd publicId="-//OASIS//DTD DocBook XML V4.1//EN" location="${docbook.dtd.dir}/docbookx.dtd"/>
@@ -101,9 +100,8 @@ http://jakarta.apache.org/proposals/tapestry
  <mkdir dir="${common-images.dest.dir}"/>
 
  <echo message="FOP_HOME is set to = ${env.FOP_HOME}"/>
- <condition property="fop.exists">
-      <equals arg1="${fop.dir}" arg2="${env.FOP_HOME}" trim="true"/>
- </condition>
+ <property name="fop.dir" value="${env.FOP_HOME}"/>
+ <available property="fop.exists" file="${env.FOP_HOME}/build/fop.jar"/>
 </target>
 
 <target name="clean">
@@ -120,7 +118,7 @@ http://jakarta.apache.org/proposals/tapestry
       </fileset>
     </copy>
     <copy todir="${common-images.dest.dir}">
-    	<fileset dir="../common/${docbook.xsl.dir}/images">
+    	<fileset dir="${docbook.xsl.dir}/images">
     		<include name="*.png"/>
     	</fileset>
     </copy>
@@ -255,18 +253,23 @@ Generating HTML from ${root.filename}.xml ...
 	description="Build and install documentation.">
 	<mkdir dir="${html.install.dir}"/>
   	<copy todir="${html.install.dir}">
-  	  <fileset dir="${html.output.dir}">
-  	  	<exclude name="*.fop"/>
-  	  </fileset>
+  	    <fileset dir="${html.output.dir}">
+  	        <exclude name="*.fop"/>
+  	    </fileset>
   	</copy>
     <delete dir="${html.output.dir}"/>
 </target>
 
 
-<target name="install-index" depends="html-nonchunked,pdf"
+<target name="install-index" depends="html-nonchunked"
 	description="Build and install documentation.">
   	<copy todir="${docs.dir}">
-  	  <fileset dir="${html.output.dir}"/>
+  	    <fileset dir="${html.output.dir}">
+            <exclude name="*.fop"/>
+            <exclude name="images/**"/>
+            <exclude name="standard-images/**"/>
+            <exclude name="common-images/**"/>
+        </fileset>
   	</copy>
     <delete dir="${html.output.dir}"/>
 </target>
