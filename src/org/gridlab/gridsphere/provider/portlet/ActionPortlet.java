@@ -397,20 +397,9 @@ public class ActionPortlet extends AbstractPortlet {
     }
 
     protected String getLocalizedText(PortletRequest req, String key) {
-
         PortletSession session = req.getPortletSession(true);
         String localeStr = (String)session.getAttribute(User.LOCALE);
-
-        User user = req.getUser();
-        String loc = (String)user.getAttribute(User.LOCALE);
-        Locale locale = null;
-        if (loc != null) {
-            locale = new Locale(loc, "", "");
-        } else if (localeStr != null) {
-            locale = new Locale(localeStr, "", "");
-        } else {
-            locale = req.getLocale();
-        }
+        Locale locale = new Locale(localeStr, "", "");
         ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
         return bundle.getString(key);
     }
