@@ -103,12 +103,16 @@ double-tabbed pane. An example illustration is shown:
                     &lt;row-layout&gt;  <co id="row.layout"/>
                         &lt;column-layout width="50%&gt; <co id="column.layout"/>
                             &lt;portlet-frame&gt; <co id="frame"/>
-                                &lt;portlet-class&gt;org.myorg.portlets.examples.simpleone.1&lt;/portlet-class&gt;
+                                &lt;portlet-class&gt;
+                org.myorg.portlets.examples.simpleone.1
+                            &lt;/portlet-class&gt;
                             &lt;/portlet-frame&gt;
                         &lt;/column-layout width="50%&gt;
                         &lt;column-layout width="50%&gt;
                             &lt;portlet-frame label="simpletwo"&gt; <co id="label"/>
-                                &lt;portlet-class&gt;org.myorg.portlets.examples.simpletwo.1&lt;/portlet-class&gt;
+                                &lt;portlet-class&gt;
+                org.myorg.portlets.examples.simpletwo.1
+                                &lt;/portlet-class&gt;
                             &lt;/portlet-frame&gt;
                         &lt;/column-layout&gt;
                     &lt;/row-layout&gt;
@@ -121,7 +125,9 @@ double-tabbed pane. An example illustration is shown:
                         &lt;column-layout&gt;
                             &lt;portlet-frame&gt;
                                 &lt;name&gt;DemoPortlet&lt;/name&gt;
-                                &lt;portlet-class&gt;org.gridlab.gridsphere.portlets.examples.DemoPortlet.1&lt;/portlet-class&gt;
+                                &lt;portlet-class&gt;
+                org.gridlab.gridsphere.portlets.examples.DemoPortlet.1
+                                &lt;/portlet-class&gt;
                             &lt;/portlet-frame&gt;
                         &lt;/column-layout&gt;
                     &lt;/row-layout&gt;

@@ -67,7 +67,7 @@ The recommended solution is to get a recent xalan.jar from http://xml.apache.org
                         <filename>gridsphere/webapps/gridsphere/WEB-INF/authmodules.xml</filename>
                     </listitem>
                  </orderedlist>
-                 These files are UTF-8 encoded. Simply Editing them in most IDE's or JEdit is fine.
+                 These files are UTF-8 encoded. Simply editing them in most IDE's or JEdit is fine.
                 </para>
                 <para>
                     Now you must create a flag icon in <filename>gridsphere/webapps/gridsphere/images/flags</filename>

@@ -50,8 +50,8 @@ shutdown. A <link linkend='portlet-services-descriptor'>portlet services descrip
     </para>
     <para>
     <programlisting>
-        ExampleService =
-           (ExampleService)getPortletConfig().getContext().getService(ExampleService.class);
+ExampleService =
+    (ExampleService)getPortletConfig().getContext().getService(ExampleService.class);
     </programlisting>
     </para>
     <para>

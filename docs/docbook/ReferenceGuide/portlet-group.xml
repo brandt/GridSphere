@@ -26,31 +26,45 @@ An external portlet web application specifies a group definition in an XML descr
     &lt;group-description&gt;Core GridSphere Group&lt;/group-description&gt; <co id="gdesc.def"/>
     &lt;group-visibility&gt;PUBLIC&lt;/group-visibility&gt;  <co id="gvisibility.def"/>
     &lt;portlet-role-info&gt; <co id="groleinfo.def"/>
-        &lt;portlet-class&gt;org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet.1&lt;/portlet-class&gt; <co id="gclass.def"/>
+        &lt;portlet-class&gt;
+ org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet.1
+        &lt;/portlet-class&gt; <co id="gclass.def"/>
         &lt;required-role&gt;USER&lt;/required-role&gt;  <co id="grole.def"/>
     &lt;/portlet-role-info&gt;
     &lt;portlet-role-info&gt;
-        &lt;portlet-class&gt;org.gridlab.gridsphere.portlets.core.subscription.SubscriptionPortlet.1&lt;/portlet-class&gt;
+        &lt;portlet-class&gt;
+ org.gridlab.gridsphere.portlets.core.subscription.SubscriptionPortlet.1
+        &lt;/portlet-class&gt;
         &lt;required-role&gt;USER&lt;/required-role&gt;
     &lt;/portlet-role-info&gt;
     &lt;portlet-role-info&gt;
-        &lt;portlet-class&gt;org.gridlab.gridsphere.portlets.core.layout.UserLayoutPortlet.1&lt;/portlet-class&gt;
+        &lt;portlet-class&gt;
+ org.gridlab.gridsphere.portlets.core.layout.UserLayoutPortlet.1
+        &lt;/portlet-class&gt;
         &lt;required-role&gt;USER&lt;/required-role&gt;
     &lt;/portlet-role-info&gt;
     &lt;portlet-role-info&gt;
-        &lt;portlet-class&gt;org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1&lt;/portlet-class&gt;
+        &lt;portlet-class&gt;
+ org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1
+    &lt;/portlet-class&gt;
         &lt;required-role&gt;SUPER&lt;/required-role&gt;
     &lt;/portlet-role-info&gt;
     &lt;portlet-role-info&gt;
-        &lt;portlet-class&gt;org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet.1&lt;/portlet-class&gt;
+        &lt;portlet-class&gt;
+ org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet.1
+    &lt;/portlet-class&gt;
         &lt;required-role&gt;SUPER&lt;/required-role&gt;
     &lt;/portlet-role-info&gt;
     &lt;portlet-role-info&gt;
-        &lt;portlet-class&gt;org.gridlab.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet.1&lt;/portlet-class&gt;
+        &lt;portlet-class&gt;
+ org.gridlab.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet.1
+    &lt;/portlet-class&gt;
         &lt;required-role&gt;ADMIN&lt;/required-role&gt;
     &lt;/portlet-role-info&gt;
     &lt;portlet-role-info&gt;
-        &lt;portlet-class&gt;org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet.1&lt;/portlet-class&gt;
+        &lt;portlet-class&gt;
+ org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet.1
+    &lt;/portlet-class&gt;
         &lt;required-role&gt;ADMIN&lt;/required-role&gt;
     &lt;/portlet-role-info&gt;
 &lt;/portlet-group&gt;
