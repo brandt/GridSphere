@@ -46,6 +46,25 @@ The recommended solution is to get a recent xalan.jar from http://xml.apache.org
                 </para>
             </answer>
         </qandaentry>
+
+
+        <qandaentry>
+            <question>
+                <para>
+                    I think I found a bug or I have a feature request!
+                </para>
+            </question>
+            <answer>
+                <para>
+                 See our bugtracker at:
+
+                            <ulink url="http://bugs.gridsphere.org">http://bugs.gridsphere.org</ulink> .
+
+                </para>
+            </answer>
+        </qandaentry>
+
+
         <qandaentry>
             <question>
                 <para>
@@ -68,6 +87,7 @@ The recommended solution is to get a recent xalan.jar from http://xml.apache.org
                 </para>
             </answer>
         </qandaentry>
+
 
         <qandaentry>
             <question>
