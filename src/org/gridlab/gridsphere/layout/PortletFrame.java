@@ -29,6 +29,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
     private List listeners = new ArrayList();
     private PortletErrorMessage error = null;
     private boolean transparent = false;
+    private PortletDataManager dataManager = SportletDataManager.getInstance();
 
     public PortletFrame() {
     }
@@ -139,7 +140,6 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         User user = req.getUser();
         PortletData data = null;
         if (!(user instanceof GuestUser)) {
-            PortletDataManager dataManager = SportletDataManager.getInstance();
             data = dataManager.getPortletData(req.getUser(), portletClass);
             req.setAttribute(GridSphereProperties.PORTLETDATA, data);
         }
@@ -164,6 +164,14 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         PortletResponse res = event.getPortletResponse();
 
         req.setAttribute(GridSphereProperties.PORTLETID, portletClass);
+
+        // Set the portlet data
+        User user = req.getUser();
+        PortletData data = null;
+        if (!(user instanceof GuestUser)) {
+            data = dataManager.getPortletData(req.getUser(), portletClass);
+            req.setAttribute(GridSphereProperties.PORTLETDATA, data);
+        }
 
         ///// begin portlet frame
         PrintWriter out = res.getWriter();
