@@ -299,6 +299,9 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * Modify an existing user account. Changes must be approved
      */
     public AccountRequest changeAccountRequest(User user) {
+        // get user from DB
+        // create an AccountRequestImpl from User
+        // when modifications are made to account request they go thru submission process again
         return null;
     }
 
@@ -363,6 +366,15 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         newuser.setID("" + requestImpl.getID());
         newuser.setUserID(requestImpl.getUserID());
         return newuser;
+    }
+
+    protected SportletUser modifyExistingUser(AccountRequestImpl requestImpl) {
+        //SportletUserImpl user = getUserFromDatabase
+        // don't fuck with ID of AccountRequestImpl
+        // Conserve user attributes
+        // user.setEmailAddress(requestImpl.getEmailAddress())
+        // change user in database
+        // return user
     }
 
 }
