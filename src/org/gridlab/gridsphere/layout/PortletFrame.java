@@ -5,25 +5,17 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.*;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
+import org.gridlab.gridsphere.portlet.impl.SportletWindow;
+import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.portletcontainer.PortletErrorMessage;
-import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
-import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
-import org.gridlab.gridsphere.services.container.registry.PortletRegistryServiceException;
 import org.gridlab.gridsphere.services.container.registry.UserPortletManager;
-import org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryServiceImpl;
 import org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryManager;
 
-import org.gridlab.gridsphere.event.ActionEvent;
-
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 

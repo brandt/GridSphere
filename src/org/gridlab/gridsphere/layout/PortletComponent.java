@@ -4,10 +4,7 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portlet.*;
 
-import java.awt.*;
-import java.io.IOException;
 
 public interface PortletComponent extends PortletRender {
 

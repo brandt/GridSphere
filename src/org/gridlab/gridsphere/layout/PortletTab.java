@@ -4,8 +4,7 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import java.util.Vector;
-import java.util.List;
+
 
 public class PortletTab {
 

@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portlet.PortletException;
+
 
 public class PortletLayoutDescriptorException extends PortletLayoutException {
 
