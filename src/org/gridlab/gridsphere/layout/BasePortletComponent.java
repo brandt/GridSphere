@@ -24,7 +24,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected String height = new String();
     protected String label = new String();
     protected String name = new String();
-    protected String theme = GridSphereConfig.getProperty(GridSphereConfigProperties.DEFAULT_THEME);
+    protected String theme = "xp";
     protected boolean isVisible = true;
     protected String roleString = "GUEST";
 
@@ -185,6 +185,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
             b.isVisible = this.isVisible;
             b.name = this.name;
             b.theme = this.theme;
+            b.label = this.label;
             b.roleString = this.roleString;
             return b;
     }
