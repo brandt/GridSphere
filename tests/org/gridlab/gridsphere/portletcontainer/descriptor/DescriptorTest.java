@@ -77,10 +77,10 @@ public class DescriptorTest extends TestCase {
         assertEquals("Concrete Hello World - Portlet Sample #1", concreteOne.getName());
         assertEquals("org.gridlab.gridsphere.portlets.core.HelloWorld.666.2", concreteOne.getUID());
 
-        List configList = concreteOne.getConfigParamList();
-        assertEquals(configList.size(), 2);
-        ConfigParam one = (ConfigParam)configList.get(0);
-        ConfigParam two = (ConfigParam)configList.get(1);
+        List contextList = concreteOne.getContextParamList();
+        assertEquals(contextList.size(), 2);
+        ConfigParam one = (ConfigParam)contextList.get(0);
+        ConfigParam two = (ConfigParam)contextList.get(1);
 
         assertEquals("Portlet Master", one.getParamName());
         assertEquals("master@domain.com", one.getParamValue());
@@ -110,6 +110,9 @@ public class DescriptorTest extends TestCase {
         assertEquals("Hallo Welt - Sample Portlet #1", langTwo.getTitle());
         assertEquals("Hallo Welt", langTwo.getTitleShort());
 
+        Owner o = onePI.getOwner();
+        assertEquals(o.getRoleName(), "SUPER");
+
         List groups = onePI.getGroupList();
         assertEquals(groups.size(), 1);
 
@@ -121,12 +124,18 @@ public class DescriptorTest extends TestCase {
         Role r = (Role)roles.get(0);
         assertEquals("GUEST", r.getRoleName());
 
+        List configList = onePI.getConfigParamList();
+        assertEquals(configList.size(), 1);
+        one = (ConfigParam)configList.get(0);
+        assertEquals("Portlet Mistress", one.getParamName());
+        assertEquals("mistress@domain.com", one.getParamValue());
 
-    // Check concrete two portal data
+
+        // Check concrete two portal data
         assertEquals(concreteTwo.getName(), "Concrete Hello World - Portlet Sample #2");
         assertEquals(concreteTwo.getUID(), "org.gridlab.gridsphere.portlets.core.HelloWorld.666.4");
 
-        configList = concreteTwo.getConfigParamList();
+        configList = concreteTwo.getContextParamList();
         assertEquals(configList.size(), 1);
         one = (ConfigParam)configList.get(0);
 
@@ -148,6 +157,10 @@ public class DescriptorTest extends TestCase {
         assertEquals(langOne.getTitle(), "Hello World - Sample Portlet #2");
         assertEquals(langOne.getTitleShort(), "Hello World");
 
+        Owner ow = onePI.getOwner();
+        assertEquals(ow.getRoleName(), "ADMIN");
+        assertEquals(ow.getGroupName(), "CACTUS");
+
         List groupsList = onePI.getGroupList();
         assertEquals(groups.size(), 1);
 
@@ -159,6 +172,11 @@ public class DescriptorTest extends TestCase {
         Role rol = (Role)rolez.get(0);
         assertEquals("USER", rol.getRoleName());
 
+        configList = onePI.getConfigParamList();
+        assertEquals(configList.size(), 1);
+        one = (ConfigParam)configList.get(0);
+        assertEquals("Portlet Master", one.getParamName());
+        assertEquals("secondguy@some.com", one.getParamValue());
     }
 
 
