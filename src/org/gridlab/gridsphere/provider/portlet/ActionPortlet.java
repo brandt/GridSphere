@@ -7,7 +7,6 @@ package org.gridlab.gridsphere.provider.portlet;
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.provider.event.FormEvent;
-import org.gridlab.gridsphere.provider.event.impl.FormEventImpl;
 import org.gridlab.gridsphere.provider.event.impl.NewFormEventImpl;
 
 import javax.servlet.UnavailableException;
@@ -189,7 +188,7 @@ public class ActionPortlet extends AbstractPortlet {
      */
     public void actionPerformed(ActionEvent event) throws PortletException {
         log.debug("in ActionPortlet: actionPerformed");
-        FormEvent formEvent = new FormEventImpl(event);
+        FormEvent formEvent = new NewFormEventImpl(event);
 
         Class[] parameterTypes = new Class[] { FormEvent.class };
         Object[] arguments = new Object[] { formEvent };
