@@ -175,4 +175,6 @@ public interface SportletProperties {
 
     public static final String PORTLET_ROLE = "org.gridlab.gridsphere.portlet.PortletRole";
 
+    public static final String PORTLETGROUPS = "org.gridlab.gridsphere.portlet.groups";
+
 }

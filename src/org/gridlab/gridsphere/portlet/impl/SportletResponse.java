@@ -4,10 +4,7 @@
 */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletResponse;
-import org.gridlab.gridsphere.portlet.PortletURI;
-import org.gridlab.gridsphere.portlet.PortletWindow;
+import org.gridlab.gridsphere.portlet.*;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
@@ -132,6 +129,19 @@ public class SportletResponse implements PortletResponse {
         SportletURI sportletURI = new SportletURI(res, req.getContextPath());
         sportletURI.addParameter(SportletProperties.COMPONENT_ID, componentLabel);
         sportletURI.setReturn(false);
+        return sportletURI;
+    }
+
+    /**
+     * Creates a portlet URI pointing to the given portlet mode and current
+     * portlet window state.
+     *
+     * @param mode the portlet mode
+     */
+    public PortletURI createURI(Portlet.Mode mode) {
+        SportletURI sportletURI = new SportletURI(res, req.getContextPath());
+        addURIParameters(sportletURI);
+        sportletURI.setPortletMode(mode);
         return sportletURI;
     }
 

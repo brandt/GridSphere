@@ -26,7 +26,7 @@ import java.util.Map;
  * This implementation of <code>SportletUserImpl</code> uses Castor for Java to SQL
  * bindings
  */
-public class SportletUserImpl   implements SportletUser, HttpSessionBindingListener {
+public class SportletUserImpl implements SportletUser, HttpSessionBindingListener {
 
 
     private String oid = null;

@@ -43,6 +43,8 @@ public class ClientImpl implements Client {
         // Mozilla 1.0:  Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-US; rv:1.0.1) Gecko/20020826
         // Opera 6.0b2:  Mozilla/4.0 (compatible; MSIE 5.0; Mac_PowerPC) Opera 6.0  [en]
 
+        // Compaq IPAQ: Mozilla/4.0 (compatible; MSIE 4.01; Windows CE; PPC; 240x320)
+
         String browserInfo = "Unknown browser";
         if (userAgent!=null){
             int i = userAgent.indexOf(" ");

@@ -4,10 +4,7 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.gridlab.gridsphere.portlet.DefaultPortletAction;
-import org.gridlab.gridsphere.portlet.PortletAction;
-import org.gridlab.gridsphere.portlet.PortletURI;
-import org.gridlab.gridsphere.portlet.PortletWindow;
+import org.gridlab.gridsphere.portlet.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
@@ -140,6 +137,15 @@ public class SportletURI implements PortletURI {
      */
     public void setWindowState(PortletWindow.State state) {
         store.put(SportletProperties.PORTLET_WINDOW, state.toString());
+    }
+
+    /**
+     * Sets the portlet mode that will be invoked by this URI
+     *
+     * @param mode the portlet mode that will be invoked by this URI
+     */
+    public void setPortletMode(Portlet.Mode mode) {
+        store.put(SportletProperties.PORTLET_MODE, mode.toString());
     }
 
     /**
