@@ -30,6 +30,7 @@ public class PortletContainer implements PortletLifecycle {
 
     protected LayoutManager layoutManager;
     protected String name = "";
+    protected String uiTheme = "xp";
 
     public PortletContainer() {}
 
@@ -43,10 +44,11 @@ public class PortletContainer implements PortletLifecycle {
 
     public List init(List list) {
         Iterator it = components.iterator();
-        PortletLifecycle cycle;
+        PortletComponent comp;
         while (it.hasNext()) {
-            cycle = (PortletLifecycle)it.next();
-            list = cycle.init(list);
+            comp = (PortletComponent)it.next();
+            comp.setTheme(uiTheme);
+            list = comp.init(list);
         }
         System.err.println("Made a components list!!!! " + list.size());
         for (int i = 0; i < list.size(); i++) {
@@ -103,8 +105,6 @@ public class PortletContainer implements PortletLifecycle {
         SportletResponse res = event.getSportletResponse();
         PrintWriter out = res.getWriter();
 
-        String uiTheme = GridSphereConfig.getProperty(GridSphereConfigProperties.UI_THEME);
-
         out.println("<html>");
         out.println("<head>");
         out.println("  <title>" + name + "</title>");
@@ -116,15 +116,20 @@ public class PortletContainer implements PortletLifecycle {
         out.println("<div id=\"page-logo\">" + name + "</div>");
         out.println("<div id=\"page-tagline\">Bigger. Better. Faster. More.</div>");
 
-        /////////////////////////////////////  OLD STUFF /////
-        //out.println("<html><head><meta HTTP-EQUIV=\"content-type\" CONTENT=\"text/html; charset=ISO-8859-1\">");
-        //out.println("<title>" + name + "</title>");
         Iterator it = components.iterator();
         while (it.hasNext()) {
             PortletRender action = (PortletRender)it.next();
             action.doRender(event);
         }
         out.println("</body></html>");
+    }
+
+    public void setTheme(String theme) {
+        this.uiTheme = theme;
+    }
+
+    public String getTheme() {
+        return uiTheme;
     }
 
     public void setPortletComponents(ArrayList components) {

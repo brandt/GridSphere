@@ -16,6 +16,7 @@ public abstract class BasePortletComponent extends BasePortletLifecycle implemen
     protected String name = new String();
     protected PortletBorder border;
     protected PortletInsets insets;
+    protected String theme = "xp";
     protected boolean isVisible = true;
 
     public PortletBorder getPortletBorder() {
@@ -64,6 +65,14 @@ public abstract class BasePortletComponent extends BasePortletLifecycle implemen
 
     public boolean isVisible() {
         return isVisible;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
+    }
+
+    public String getTheme() {
+        return theme;
     }
 
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {

@@ -25,10 +25,10 @@ public abstract class BaseLayoutManager extends BasePortletComponent implements 
     public List init(List list) {
         list = super.init(list);
         Iterator it = components.iterator();
-        PortletLifecycle p = null;
+        PortletComponent p = null;
         while (it.hasNext()) {
-            p = (PortletLifecycle)it.next();
-
+            p = (PortletComponent)it.next();
+            p.setTheme(theme);
             // invoke init on each component
             list = p.init(list);
             // If the component is a frame we want to be notified

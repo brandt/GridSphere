@@ -257,8 +257,6 @@ public class PortletTitleBar extends BasePortletComponent {
 
         PrintWriter out = res.getWriter();
 
-        String uiTheme = GridSphereConfig.getProperty(GridSphereConfigProperties.UI_THEME);
-
         out.println("<tr><td class=\"window-title\">");
         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>");
 
@@ -269,7 +267,7 @@ public class PortletTitleBar extends BasePortletComponent {
             PortletModeLink mode;
             while (modesIt.hasNext()) {
                 mode = (PortletModeLink)modesIt.next();
-                out.println("<a href=\"" +  mode.getModeHref() + "\"><img border=\"0\" src=\"themes/"+uiTheme+"/" +  mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\"/></a>");
+                out.println("<a href=\"" +  mode.getModeHref() + "\"><img border=\"0\" src=\"themes/"+ theme+"/" +  mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\"/></a>");
             }
             out.println("</td>");
         }
@@ -302,7 +300,7 @@ public class PortletTitleBar extends BasePortletComponent {
             out.println("<td class=\"window-icon-right\">");
             while (windowsIt.hasNext()) {
                 state = (PortletStateLink)windowsIt.next();
-                out.println("<a href=\"" +  state.getStateHref() + "\"><img border=\"0\" src=\"themes/"+uiTheme+"/" +  state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\"/></a>");
+                out.println("<a href=\"" +  state.getStateHref() + "\"><img border=\"0\" src=\"themes/"+ theme+"/" +  state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\"/></a>");
             }
             out.println("</td>");
         }

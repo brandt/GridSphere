@@ -132,8 +132,6 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
 
     public List init(List list) {
         if (selectedIndex < 0) selectedIndex = 0;
-
-
         PortletTab tab = null;
         for (int i = 0; i < getTabCount(); i++) {
             tab = getPortletTabAt(i);

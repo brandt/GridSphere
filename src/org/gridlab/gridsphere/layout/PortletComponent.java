@@ -10,6 +10,10 @@ public interface PortletComponent extends PortletLifecycle {
 
     public void setVisible(boolean isVisible);
 
+    public void setTheme(String theme);
+
+    public String getTheme();
+
     public PortletBorder getPortletBorder();
 
     public PortletInsets getPortletInsets();
