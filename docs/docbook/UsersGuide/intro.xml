@@ -13,7 +13,7 @@
     <para>
     The GridSphere User's Guide describes how to install and configure GridSphere.
     For more information on developing and packaging portlets, please consult
-    the GridSphere Portlet Developer's Guide and the GridSphere Tutorials. The current
+    the GridSphere PortletReference Guide and the GridSphere Tutorials. The current
     implementation is based upon the GridSphere Technical Design Document. The GridSphere
     portal framework comes in both source and binary forms. Binaries can be created
     from the source code and in both cases, the build environment is generally
@@ -52,7 +52,7 @@
     <listitem><para>&Log4J; provides an optimized logging library</para></listitem>
     <listitem><para>&HSQL; database provides a pure Java SQL database</para></listitem>
     <listitem><para>&Commons; utility classes for performing file uploads, etc.</para></listitem>
-
+    <listitem><para>&Xalan; is used for XSLT processing</para></listitem>
     </itemizedlist>
    </sect1>
     
@@ -82,10 +82,13 @@
 	To allow this, modify $CATALINA_HOME/conf/server.xml and make sure the following line is there:
 	<programlisting><literallayout>
 
-        <![CDATA[ <Context path="/gridsphere" docBase="gridsphere" debug="0" reloadable="false" crossContext="true">
-		<Logger className="org.apache.catalina.logger.FileLogger" prefix="localhost_gridsphere_log." suffix=".txt" timestamp="true"/>
-	</Context>]]>
+    <![CDATA[<Context path="/gridsphere" docBase="gridsphere" debug="0" reloadable="false" crossContext="true">
+                  <Logger className="org.apache.catalina.logger.FileLogger" prefix="localhost_gridsphere_log."
+                          suffix=".txt" timestamp="true"/>
+	         </Context>]]>
 
+    <important>Make sure there are no line-breaks in the Logger line-- cutting and pasting into
+    vi can cause problems ;-) and Tomcat may give few warnings</important>
     </literallayout></programlisting></para></listitem>
 	<listitem><para>The Portlet Manager Portlet requires the Tomcat manager webapp to be configured. Modify $CATALINA_HOME/conf/tomcat-user.xml and make sure the following line is there:
 	<programlisting><literallayout>
@@ -103,7 +106,7 @@
                  <Valve className="org.apache.catalina.valves.RemoteAddrValve"
                         allow="127.0.0.1"/>
         </Context>]]>
-
+    <important>ditto above ;-)</important>
     </literallayout></programlisting></para></listitem>
 
 	</orderedlist>

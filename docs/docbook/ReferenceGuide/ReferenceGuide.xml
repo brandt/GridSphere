@@ -16,6 +16,7 @@
 <!ENTITY portlet-descriptor SYSTEM "portlet-descriptor.xml">
 <!ENTITY portlet-layout SYSTEM "portlet-layout.xml">
 <!ENTITY portlet-services SYSTEM "portlet-services.xml">
+<!ENTITY portlet-persistence SYSTEM "portlet-persistence.xml">
 <!ENTITY portlet-resources SYSTEM "portlet-resources.xml">
 
 <!-- Application, page, library, component specification entities  -->
@@ -45,7 +46,7 @@
   &portlet-objects;
   &portlet-layout;
   &portlet-services;
-  &services-descriptor;
+  &portlet-persistence;
   &portlet-resources;
 
 </book>

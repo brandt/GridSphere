@@ -28,7 +28,7 @@
     and undeploy portlets to the container.
     </para>
     <para>
-    Because portlets extend from servlets, portlets are packaged as web applications according to the Servlet
+    Because portlets extend from servlets, portlets are packaged as web applications according to the Java Servlet
     Specification as Web ARchive (WAR) files just as any other distributable web application. Within a Portlet Web
     Application, a portlet descriptor file explained in more detail in the next section, is used to describe the
     portlet's properties and initialization information. A Portlet definition consists of an application portlet and
@@ -38,6 +38,16 @@
     instance, it's possible to provide access to multiple stock quote portlets that may have different configuration
     settings or allow access to a different set of groups, etc.
     </para>
+    <para>
+    The Portlet API explained in greater detail in <link linkend='portlet-objects' endterm="portlet-objects-title"/>
+    provides a much richer interface for web programming than the standard servlet model. In addition to providing
+    information about the current portlet mode and window state, the API provides access to the portal user including
+    group and role information using the <link linkend='portlet-objects'>GridSphere access control model</link>.
+    </para>
+    The Portlet Services API described in <link linkend='portlet-services' endterm="portlet-services-title"/>
+    provides a very clean approach for the creation of reusable "services" that perform a set
+    of tasks for a given portlet. Using the portlet API, a service instance can be obtained providing the portlet with
+    additional functionality.
     <figure>
         <title>Portlet Web Applications and the Portlet Lifecycle</title>
         <graphic fileref="lifecycle.png"/>
@@ -54,7 +64,7 @@
             </itemizedlist>
         </para>
     In general to reap the benefits of the GridSphere portlet model, a developer would create a new portlet
-    which subclasses from the &AbstractPortlet; class and implement the lifecycle methods detailed in teh next section.
+    which subclasses from the &AbstractPortlet; class and implement the lifecycle methods detailed in the next section.
     </para>
 
 </chapter>

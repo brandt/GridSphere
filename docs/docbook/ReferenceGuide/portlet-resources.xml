@@ -13,7 +13,9 @@
 <para>
     The architecture of GridSphere and API definitions of key portlet concepts matches the portlet API provided
     by IBM WebSphere to a large extent. An excellent source of more information on portlets and portlet development
-    is the WebSphere 4.X Portlet Developer's Guide.
+    is the WebSphere Portlet Zone and the following IBM WebSphere documents:
+
+    IBM WebSphere 4.X Portlet Developer's Guide.
 
     he Case for Portlets
     http://www-106.ibm.com/developerworks/ibm/library/i-portletintro/
@@ -21,7 +23,6 @@
     Portlet Application Programming
     http://www-106.ibm.com/developerworks/ibm/library/i-portal/
     http://www-106.ibm.com/developerworks/ibm/library/i-portal2/
-
 </para>
 
 </chapter>

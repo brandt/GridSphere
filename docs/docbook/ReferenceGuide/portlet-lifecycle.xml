@@ -12,27 +12,29 @@
 
 
 <para>
-The following lifecycle methods are implemented or subclassed by the Portlet classes. At portal startup and shutdown,
-the <methodname>init</methodname> and <methodname>destroy</methodname> methods are invoked for application and concrete portlets with a portlet web
-application. For every request made by a user, the <methodname>service</methodname> method is invoked which is responsible
-for invoking the appropriate portlet action method if one exists, and then the appropriate portlet render method.
+The portlet lifecycle extends the servlet lifecycle by offering more control over the event processing required of a
+and the presentation rendering. Just as servlets have <methodname>init</methodname> and
+<methodname>destroy</methodname> methods, the  portlet lifecycle methods listed below are responsible for the initialization and
+shutdown of concrete and application portlets. For every request made by a user, the <methodname>service</methodname> method is
+invoked which is responsible for invoking the appropriate <link linkend='portlet-action'>portlet action method</link>
+if one exists followed by the appropriate <link linkend='portlet-render'>portlet render method</link> for all portlets
+that are currently displayed on the portal page. All lifecycle methods throw a &PortletException; which acts as a proxy
+for the standard &ServletException;.
 </para>
 
-<sect1>
-      <title>Portlet Lifecycle Methods</title>
-    These lifecycle methods are invoked by all portlets:
 <itemizedlist>
 <listitem><para>
     Application portlet initialization is the first phase of startup. The portlet is
-    instantiated with the &PortletConfig; information (see Basic Portlet Objects section)
+    instantiated with the &PortletConfig; information described in
+    <link linkend='portlet-objects' endterm="portlet-objects-title"/>
     </para><para>
     <programlisting>
     <prompt>void</prompt> <methodname>init</methodname>(PortletConfig <emphasis>config</emphasis>)
     </programlisting>
 </para></listitem>
 <listitem><para>
-    The concrete portlet is placed into service and parametrized with a &PortletSettings; object (see Basic Portlet Objects section)
-    </para><para>
+    The concrete portlet is placed into service and parametrized with a &PortletSettings; object described in
+    <link linkend='portlet-objects' endterm="portlet-objects-title"/>
     <programlisting>
     <prompt>void</prompt> <methodname>initConcrete</methodname>(PortletSettings <emphasis>settings</emphasis>)
     </programlisting>
@@ -40,7 +42,7 @@ for invoking the appropriate portlet action method if one exists, and then the a
 
 <listitem><para>
     The <methodname>service</methodname> method is invoked for every client request. Based on the portlet mode or portlet action,
-    it invokes the appropriate actionPerformed, doView, doEdit, etc, method.
+    it invokes the appropriate action method if there is one followed by the render method of all displayed portlets.
     </para><para>
     <programlisting>
     <prompt>void</prompt> <methodname>service</methodname>(PortletRequest <emphasis>req</emphasis>, PortletResponse <emphasis>res</emphasis>)
@@ -65,11 +67,17 @@ for invoking the appropriate portlet action method if one exists, and then the a
 </para></listitem>
 
 </itemizedlist>
-</sect1>
 
-<sect1><title>Portlet Action Methods</title>
+<sect1><title id="portlet-action">Portlet Action Methods</title>
+    <para>
+        The Action methods handle any events that a portlet may have triggered. Any kind of form or hyperlink
+        triggered event will cause the <methodname>actionPerformed</methodname> method to be executed. Other
+        events included window events when a portlet is minimized, maximized, or resized and message events
+        when a portlet has received a message from another portlet. The &ActionEvent;, &WindowEvent; and &MessageEvent;
+        objects that get passed into the corresponding action methods contain the &PortletRequest; and &PortletResponse;
+        objects.
+    </para>
 <itemizedlist>
-
 <listitem><para>
     The <methodname>actionPerformed</methodname> method is invoked when the portlet receives an action and must be
     implemented by the portlet developer. This method is performed before any rendering is done via doView,
@@ -117,9 +125,17 @@ for invoking the appropriate portlet action method if one exists, and then the a
 </sect1>
 
 <sect1>
-    <title>Portlet Render Methods</title>
+    <title id="portlet-render">Portlet Render Methods</title>
+    <para>
+    The portlet container will render portlet presentation for all portlets that are currently visible in the page
+    based on the mode they are in as described previously. A portlet developer can override these methods to
+    provide customized layout by either printing to the output stream of the &PortletResponse; directly or by using a
+    &PortletContext; to perform an <methodname>include</methodname> on a chosen resource e.g. HTML or a JSP. The
+    <methodname>doTitle</methodname> is invoked by the layout engine during portlet rendering. If
+    <methodname>doTitle</methodname> is not overriden, then the title obtained from the concrete portlet desfinition is
+    used.
+    </para>
 <itemizedlist>
-
 <listitem><para>
     The <methodname>doView</methodname> method is invoked for a portlet when it is in <emphasis>VIEW</emphasis> mode.
 </para><para>

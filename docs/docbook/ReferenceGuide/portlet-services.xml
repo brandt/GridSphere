@@ -8,8 +8,7 @@
 -->
 
 <chapter id="portlet-services">
-    <title>Portlet Service Framework</title>
-
+    <title id="portlet-services-title">Portlet Service Framework</title>
 
 Portlet services allow for the easy separation of a service used to perform
 a set of operations from the portlets and the portlet container that use them.

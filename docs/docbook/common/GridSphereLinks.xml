@@ -7,6 +7,8 @@
 
 
 <!ENTITY HttpServlet "<classname>javax.servlet.http.HttpServlet</classname>">
+<!ENTITY ServletException "<classname>javax.servlet.ServletException</classname>">
+<!ENTITY PortletException "<classname>PortletException</classname>">
 <!ENTITY PortletRequest "<classname>PortletRequest</classname>">
 <!ENTITY PortletResponse "<classname>PortletResponse</classname>">
 <!ENTITY PortletSession "<classname>PortletSession</classname>">
@@ -23,6 +25,10 @@
 <!ENTITY PortletAdapter "<classname>org.gridlab.gridsphere.portlet.PortletAdapter</classname>">
 <!ENTITY PortletURI "<classname>PortletURI</classname>">
 <!ENTITY User "<classname>User</classname>">
+
+<!ENTITY ActionEvent "<classname>ActionEvent</classname>">
+<!ENTITY WindowEvent "<classname>WindowEvent</classname>">
+<!ENTITY MessageEvent "<classname>MessageEvent</classname>">
 
 <!-- Common Tapestry classes -->
 
@@ -42,6 +48,7 @@
 <!ENTITY Log4J '<ulink url="http://jakarta.apache.org/log4j">Log4J</ulink>'>
 <!ENTITY JUnit '<ulink url="http://www.junit.org">JUnit</ulink>'>
 <!ENTITY Cactus '<ulink url="http://jakarta.apache.org/cactus">Cactus</ulink>'>
+<!ENTITY Xalan '<ulink url="http://xml.apache.org/xalan">Xalan</ulink>'>
 <!ENTITY Commons '<ulink url="http://jakarta.apache.org/commons">Jakarta Commons</ulink>'>
 <!ENTITY DocBook '<ulink url="http://docbook.sourceforge.net/">DocBook</ulink>'>
 <!ENTITY Fop '<ulink url="http://xml.apache.org/fop">FOP</ulink>'>
