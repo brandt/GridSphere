@@ -439,12 +439,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         // Localize the window state names
         PortletRequest req = event.getPortletRequest();
         String locStr = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
-        Locale locale = null;
-        if (locStr != null) {
-            locale = new Locale(locStr, "", "");
-        } else {
-            locale = req.getLocale();
-        }
+        Locale locale = new Locale(locStr, "", "");
 
         // create a URI for each of the window states
         PortletStateLink stateLink;
