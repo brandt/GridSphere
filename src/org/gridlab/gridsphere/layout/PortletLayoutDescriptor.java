@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * The <code>PortletLayoutDescriptor</code> is responsible for marshalling and
@@ -37,7 +38,7 @@ public class PortletLayoutDescriptor {
      * @throws IOException if an I/O error occurs
      * @throws PersistenceManagerException if a descriptor error occurs
      */
-    public static PortletPage loadPortletContainer(String layoutDescriptorPath, String layoutMappingPath) throws IOException, PersistenceManagerException {
+    public static PortletPage loadPortletPage(String layoutDescriptorPath, String layoutMappingPath) throws IOException, PersistenceManagerException {
         pmXML = PersistenceManagerFactory.createPersistenceManagerXml(layoutDescriptorPath, layoutMappingPath);
         return (PortletPage) pmXML.load();
     }
@@ -53,9 +54,9 @@ public class PortletLayoutDescriptor {
      * @throws IOException if an I/O error occurs
      * @throws PersistenceManagerException if a descriptor error occurs
      */
-    public static PortletTab loadPortletTab(String descriptorPath, String mappingPath) throws IOException, PersistenceManagerException {
+    public static PortletTabbedPane loadPortletTabs(String descriptorPath, String mappingPath) throws IOException, PersistenceManagerException {
         pmXML = PersistenceManagerFactory.createPersistenceManagerXml(descriptorPath, mappingPath);
-        return (PortletTab) pmXML.load();
+        return (PortletTabbedPane) pmXML.load();
     }
 
     /**
@@ -77,16 +78,16 @@ public class PortletLayoutDescriptor {
     /**
      * Saves the portlet tab associated with this descriptor
      *
-     * @param tab the portlet tab to save
+     * @param pane the list of portlet tabs to save
      * @param descriptorPath location of the layout.xml
      * @param mappingPath location of the mapping file
      *
      * @throws IOException if an I/O error occurs
      * @throws PersistenceManagerException if a descriptor error occurs
      */
-    public static void savePortletTab(PortletTab tab, String descriptorPath, String mappingPath) throws IOException, PersistenceManagerException {
+    public static void savePortletTabbedPane(PortletTabbedPane pane, String descriptorPath, String mappingPath) throws IOException, PersistenceManagerException {
         pmXML.setDescriptorPath(descriptorPath);
         pmXML.setMappingPath(mappingPath);
-        pmXML.save(tab);
+        pmXML.save(pane);
     }
 }

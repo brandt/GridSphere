@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class PortletPage implements Serializable, Cloneable {
 
-    protected transient PortletLog log = SportletLog.getInstance(PortletPage.class);
+    private transient PortletLog log = SportletLog.getInstance(PortletPage.class);
 
     protected int COMPONENT_ID = 0;
 
@@ -254,22 +254,18 @@ public class PortletPage implements Serializable, Cloneable {
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
         log.debug("Entering actionPerformed()");
         // if there is a layout action do it!
-        if (event.getPortletComponentID() == -1) {
-            log.warn("Event has invalid component id associated with it!");
-        } else {
-        //if (event.getPortletComponentID() != -1) {
+        if (event.getPortletComponentID() > 0) {
+
             // the component id determines where in the list the portlet component is
             ComponentIdentifier compId = (ComponentIdentifier) componentIdentifiers.get(event.getPortletComponentID());
             if (compId == null) {
                 log.warn("Event has invalid component id associated with it!");
             } else {
-            //if (compId != null) {
                 PortletComponent comp = compId.getPortletComponent();
                 // perform an action if the component is non null
                 if (comp == null) {
                     log.warn("Event has invalid component id associated with it!");
                 } else {
-                //if (comp != null) {
                     log.debug("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
                     comp.actionPerformed(event);
                 }

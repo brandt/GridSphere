@@ -25,7 +25,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
     private List tabs = new ArrayList();
     private int startIndex = 0;
-    private int selectedIndex = 0;
+    private transient int selectedIndex = 0;
     private String style = "menu";
 
     /**

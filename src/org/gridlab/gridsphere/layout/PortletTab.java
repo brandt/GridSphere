@@ -79,7 +79,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         req.setAttribute(GridSphereProperties.COMPONENT_ID, componentIDStr);
         PortletURI portletURI = res.createURI();
         portletURI.addParameter(GridSphereProperties.COMPONENT_ID, componentIDStr);
-        portletURI.addParameter(GridSphereProperties.PORTLETTAB, title);
+        //portletURI.addParameter(GridSphereProperties.PORTLETTAB, title);
         return portletURI.toString();
     }
 
