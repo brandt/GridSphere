@@ -143,7 +143,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Compiles JUnit tests                                                -->
     <!-- =================================================================== -->
-    <target name="compile-tests" depends="compile-core" description="Compiles all JUnit tests">
+    <target name="compile-tests" depends="compile" description="Compiles all JUnit tests">
         <echo>Compiling JUnit Tests</echo>
         <javac srcdir="tests"
             destdir="${build.classes}"
@@ -297,11 +297,14 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Deploys @PROJECT_TITLE@ portlets to a local server                   -->
     <!-- =================================================================== -->
-    <target name="deploy" depends="jar, configure-database" if="${catalina.exists}" description="Deploys @PROJECT_TITLE@ portlet to a local server">
-        <property name="project.webapp" value="${env.CATALINA_HOME}/webapps"/>
+    <target name="deploy" depends="jar, configure-database" if="catalina.exists" description="Deploys @PROJECT_TITLE@ portlet to a local server">
+
+        <!-- Copy the gridsphere web app to build directory -->
+        <property name="project.webapp" value="${env.CATALINA_HOME}/webapps/${project.name}"/>
         <copy todir="${project.webapp}">
             <fileset dir="webapp"/>
         </copy>
+
         <copy file="${gridsphere.home}/lib/portlet-widget-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
         <copy file="lib/${project.name}.jar" todir="${project.webapp}/WEB-INF/lib"/>
     </target>
