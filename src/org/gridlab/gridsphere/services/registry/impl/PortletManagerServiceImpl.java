@@ -14,10 +14,7 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceAuthorizer;
-import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
-import org.gridlab.gridsphere.portletcontainer.ConcretePortletManager;
-import org.gridlab.gridsphere.portletcontainer.PortletRegistryManager;
-import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
+import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.portletcontainer.impl.PortletWebApplicationImpl;
 import org.gridlab.gridsphere.services.registry.PortletManagerService;
 
@@ -41,9 +38,6 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
 
     private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
     private static PortletRegistryManager registry = PortletRegistryManager.getInstance();
-
-    //private TomcatManagerWrapper tomcat = TomcatManagerWrapper.getInstance();
-    private static ConcretePortletManager concPortletMgr = ConcretePortletManager.getInstance();
 
     // A multi-valued hashtable with a webapp key and a List value containing portletAppID's
     private Map webapps = new Hashtable();
@@ -122,19 +116,19 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
     }
 
     public void initAllPortletWebApplications(PortletRequest req, PortletResponse res) throws PortletException {
-        concPortletMgr.initAllConcretePortlets(req, res);
+        PortletDispatcher.initAllPortlets(req, res);
     }
 
     public void initPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws PortletException {
-        concPortletMgr.initConcretePortlets(webApplicationName, req, res);
+        PortletDispatcher.initPortlets(webApplicationName, req, res);
     }
 
     public void destroyAllPortletWebApplications(PortletRequest req, PortletResponse res) throws PortletException {
-        concPortletMgr.destroyAllConcretePortlets(req, res);
+        PortletDispatcher.destroyAllPortlets(req, res);
     }
 
     public void destroyPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws PortletException {
-        concPortletMgr.destroyConcretePortlets(webApplicationName, req, res);
+        PortletDispatcher.destroyPortlets(webApplicationName, req, res);
     }
 
     /**
