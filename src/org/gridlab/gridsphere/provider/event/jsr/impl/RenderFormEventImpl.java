@@ -6,11 +6,11 @@ package org.gridlab.gridsphere.provider.event.jsr.impl;
 
 import org.gridlab.gridsphere.provider.event.jsr.RenderFormEvent;
 import org.gridlab.gridsphere.provider.event.impl.BaseFormEventImpl;
+import org.gridlab.gridsphere.portlet.jsrimpl.RenderRequestImpl;
+import org.gridlab.gridsphere.portlet.jsrimpl.RenderResponseImpl;
 
 import javax.portlet.RenderResponse;
 import javax.portlet.RenderRequest;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -31,14 +31,14 @@ public class RenderFormEventImpl extends BaseFormEventImpl implements RenderForm
      * @param tagBeans a collection of tag beans
      */
     public RenderFormEventImpl(RenderRequest request, RenderResponse response, Map tagBeans) {
-        super((HttpServletRequest)request, (HttpServletResponse)response);
+        super((RenderRequestImpl)request, (RenderResponseImpl)response);
         this.request = request;
         this.response = response;
         this.tagBeans = tagBeans;
             // Unless tagBeans is null, don't recreate them
             if (tagBeans == null) {
                 tagBeans = new HashMap();
-                createTagBeans((HttpServletRequest)request);
+                createTagBeans((RenderRequestImpl)request);
             }
             printRequestParameters();
 
