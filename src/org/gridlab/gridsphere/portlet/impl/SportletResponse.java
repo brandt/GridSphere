@@ -4,23 +4,44 @@
 */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletURI;
+import org.gridlab.gridsphere.portlet.PortletWindow;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Locale;
 
+/**
+ * A <code>SportletResponse</code> provides an implementation of the
+ * <code>PortletResponse</code> by following the decorator patterm.
+ * A HttpServletresponse object is used in composition to perform most of
+ * the required methods.
+ */
 public class SportletResponse implements PortletResponse {
 
     private HttpServletResponse res = null;
     private HttpServletRequest req = null;
 
+    /**
+     * Cannot instantiate uninitialized SportletResponse
+     */
+    private SportletResponse() {
+    }
+
+    /**
+     * Constructs an instance of SportletResponse using an
+     * <code>HttpServletResponse</code> and a <code>PortletRequest</code>
+     *
+     * @param res the <code>HttpServletRequest</code>
+     * @param req the <code>PortletRequest</code>
+     */
     public SportletResponse(HttpServletResponse res, PortletRequest req) {
         this.res = res;
         this.req = req;
@@ -68,9 +89,11 @@ public class SportletResponse implements PortletResponse {
     }
 
     /**
-     * Returns a boolean indicating whether the named response header has already been set.
+     * Returns a boolean indicating whether the named response header has
+     * already been set.
      *
-     * @return true if response header name has been sent, false otherwise
+     * @return <code>true</code> if response header name has been sent,
+     * <code>false</code> otherwise
      */
     public boolean containsHeader(String name) {
         return res.containsHeader(name);
@@ -105,7 +128,7 @@ public class SportletResponse implements PortletResponse {
      * Creates a portlet URI pointing to the current portlet mode and given portlet window state.
      *
      * @param state the portlet window state
-     * @see addURIParameters
+     * @see #addURIParameters
      */
     public PortletURI createURI(PortletWindow.State state) {
         SportletURI sportletURI = new SportletURI(res, req.getContextPath());
@@ -115,13 +138,13 @@ public class SportletResponse implements PortletResponse {
     }
 
     /**
-     * Add any additional parameters to the URI
+     * Add any additional parameters to the URI:
      * <ul><li>
      * GridSphereProperties.COMPONENT_ID
      * </li></ul>
      */
     protected void addURIParameters(PortletURI sportletURI) {
-        sportletURI.addParameter(GridSphereProperties.COMPONENT_ID, (String)req.getAttribute(GridSphereProperties.COMPONENT_ID));
+        sportletURI.addParameter(GridSphereProperties.COMPONENT_ID, (String) req.getAttribute(GridSphereProperties.COMPONENT_ID));
     }
 
     /**
@@ -165,6 +188,7 @@ public class SportletResponse implements PortletResponse {
      * Returns the writer object that can be used to contribute markup to the portlet response.
      *
      * @return the writer
+     * @throws IOException if an I/O error occurs
      */
     public PrintWriter getWriter() throws IOException {
         return res.getWriter();
@@ -190,15 +214,6 @@ public class SportletResponse implements PortletResponse {
         res.setHeader(name, value);
     }
 
-    /**
-     * Sets a response header with the given name and integer value.
-     * If the header had already been set, the new value overwrites the previous one.
-     * The containsHeader  method can be used to test for the presence of a header before setting its value.
-     *
-     * We need to think about all header methods and how to solve nameclashes, etc.
-     *
-     *
-     */
     public void setIntHeader(String name, int value) {
         res.setIntHeader(name, value);
     }

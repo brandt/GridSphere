@@ -4,18 +4,17 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
-import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
-import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletInfo;
-import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletDescriptor;
-import org.gridlab.gridsphere.portletcontainer.descriptor.LanguageInfo;
+import org.gridlab.gridsphere.portlet.Client;
+import org.gridlab.gridsphere.portlet.PortletApplicationSettings;
+import org.gridlab.gridsphere.portlet.PortletSettings;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
+import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletDescriptor;
+import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletInfo;
+import org.gridlab.gridsphere.portletcontainer.descriptor.LanguageInfo;
 
-import java.util.*;
 import java.io.IOException;
+import java.util.*;
 
 /**
  * The SportletSettings class provides the portlet with its dynamic configuration.
@@ -54,7 +53,7 @@ public class SportletSettings implements PortletSettings {
         store = concPortlet.getPortletContextHash();
         Iterator configParamsIt = concretePortletInfo.getConfigParamList().iterator();
         while (configParamsIt.hasNext()) {
-            ConfigParam configParam = (ConfigParam)configParamsIt.next();
+            ConfigParam configParam = (ConfigParam) configParamsIt.next();
             store.put(configParam.getParamName(), configParam.getParamValue());
         }
     }
@@ -88,7 +87,7 @@ public class SportletSettings implements PortletSettings {
     public String getTitle(Locale locale, Client client) {
         Iterator it = langList.iterator();
         while (it.hasNext()) {
-            LanguageInfo langInfo = (LanguageInfo)it.next();
+            LanguageInfo langInfo = (LanguageInfo) it.next();
             if (langInfo.getLocale().startsWith(locale.toString())) {
                 return langInfo.getTitle();
             }
@@ -114,7 +113,7 @@ public class SportletSettings implements PortletSettings {
      */
     public String getTitleShort(Locale locale, Client client) {
         while (langList.iterator().hasNext()) {
-            LanguageInfo langInfo = (LanguageInfo)langList.iterator().next();
+            LanguageInfo langInfo = (LanguageInfo) langList.iterator().next();
             if (langInfo.getLocale().equals(locale)) {
                 return langInfo.getTitleShort();
             }
@@ -131,7 +130,7 @@ public class SportletSettings implements PortletSettings {
      */
     public String getDescription(Locale locale, Client client) {
         while (langList.iterator().hasNext()) {
-            LanguageInfo langInfo = (LanguageInfo)langList.iterator().next();
+            LanguageInfo langInfo = (LanguageInfo) langList.iterator().next();
             if (langInfo.getLocale().equals(locale)) {
                 return langInfo.getDescription();
             }
@@ -148,7 +147,7 @@ public class SportletSettings implements PortletSettings {
      */
     public String getKeywords(Locale locale, Client client) {
         while (langList.iterator().hasNext()) {
-            LanguageInfo langInfo = (LanguageInfo)langList.iterator().next();
+            LanguageInfo langInfo = (LanguageInfo) langList.iterator().next();
             if (langInfo.getLocale().equals(locale)) {
                 return langInfo.getKeywords();
             }
@@ -171,10 +170,8 @@ public class SportletSettings implements PortletSettings {
      * Removes the attribute with the given name.
      *
      * @param name the attribute name
-     *
-     * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
-    public void removeAttribute(String name) throws AccessDeniedException {
+    public void removeAttribute(String name) {
         store.remove(name);
     }
 
@@ -183,27 +180,24 @@ public class SportletSettings implements PortletSettings {
      *
      * @param name the attribute name
      * @param value the attribute value
-     *
-     * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
-    public void setAttribute(String name, String value) throws AccessDeniedException {
+    public void setAttribute(String name, String value) {
         store.put(name, value);
     }
 
     /**
      * Stores all attributes.
      *
-     * @throws AccessDeniedException if the caller isn't authorized to access this data object
      * @throws IOException if the streaming causes an I/O problem
      */
-    public void store() throws AccessDeniedException, IOException {
+    public void store() throws IOException {
         ConcretePortletDescriptor concDescriptor = concPortlet.getConcretePortletDescriptor();
         ConcretePortletInfo concPortletInfo = concDescriptor.getConcretePortletInfo();
         Enumeration enum = store.elements();
         ArrayList list = new ArrayList();
         while (enum.hasMoreElements()) {
-            String key = (String)enum.nextElement();
-            String value = (String)store.get(key);
+            String key = (String) enum.nextElement();
+            String value = (String) store.get(key);
             ConfigParam parms = new ConfigParam(key, value);
             list.add(parms);
         }

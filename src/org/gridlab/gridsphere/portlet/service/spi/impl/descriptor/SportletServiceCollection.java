@@ -4,17 +4,36 @@
  */
 package org.gridlab.gridsphere.portlet.service.spi.impl.descriptor;
 
-import java.util.Vector;
 import java.util.List;
+import java.util.Vector;
 
+/**
+ * The <code>SportletServiceCollection</code> provides a list of
+ * <code>SportletServiceDefinition</code> entries.
+ */
 public class SportletServiceCollection {
 
-    protected List servicesList = new Vector();
+    private List servicesList = new Vector();
 
+    /**
+     * Sets the list of portlet service definitions
+     *
+     * @param servicesList a <code>Vector</code> containing
+     * portlet service definitions
+     *
+     * @see SportletServiceDefinition
+     */
     public void setPortletServicesList(Vector servicesList) {
         this.servicesList = servicesList;
     }
 
+    /**
+     * Returns the list of portlet service definitions
+     *
+     * @returnsa list containing the portlet service definitions
+     *
+     * @see SportletServiceDefinition
+     */
     public List getPortletServicesList() {
         return servicesList;
     }

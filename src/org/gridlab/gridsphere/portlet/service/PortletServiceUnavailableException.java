@@ -5,8 +5,9 @@
 package org.gridlab.gridsphere.portlet.service;
 
 /**
- * The PortletServiceUnavailableException is thrown if a portlet attempts to access an
- * service that cannot be loaded, because an error occured during initialization.
+ * The <code>PortletServiceUnavailableException</code> is thrown if a portlet
+ * attempts to access an service that cannot be loaded, because an error
+ * occured during initialization.
  */
 public class PortletServiceUnavailableException extends PortletServiceException {
 
@@ -22,7 +23,7 @@ public class PortletServiceUnavailableException extends PortletServiceException 
      * @param message a string indicating why this exception is thrown.
      */
     public PortletServiceUnavailableException(String message) {
-
+        super(message);
     }
 
 }

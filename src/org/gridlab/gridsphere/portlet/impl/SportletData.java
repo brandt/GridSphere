@@ -5,34 +5,30 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.gridlab.gridsphere.portlet.AccessDeniedException;
-import org.gridlab.gridsphere.portlet.Client;
-import org.gridlab.gridsphere.portlet.PortletData;
-import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletDescriptor;
+import org.exolab.castor.jdo.Database;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
-import org.exolab.castor.jdo.Database;
-import org.exolab.castor.jdo.PersistenceException;
+import org.gridlab.gridsphere.portlet.PortletData;
 
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Locale;
 import java.util.Vector;
-import java.io.IOException;
 
 /**
- * The PortletData contains information about the concrete portlet instance.
- * Also, it is through the data that the portlet has access to the personalized data.
- * The portlet can therefore only read the personalization data.
- * Only when the portlet is in EDIT mode, it has write access to the personalization data.
- */
-
-/**
+ * The <code>SportletData</code> contains information about the concrete portlet instance for
+ * a specific <code>User</code>. It is through the data that the portlet has
+ * access to the personalized data. The portlet can therefore only read the
+ * personalization data. Only when the portlet is in <code>EDIT</code> mode,
+ * it has write access to the personalization data.
+ * <p>
+ * This implementation of <code>PortletData</code> uses Castor for Java to SQL
+ * bindings
+ *
  * @table sportletdata
  */
-
-public class SportletData extends BaseObject implements PortletData  {
+public class SportletData extends BaseObject implements PortletData {
 
     protected transient Hashtable store = new Hashtable();
     private transient PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
@@ -61,19 +57,23 @@ public class SportletData extends BaseObject implements PortletData  {
      */
     private String PortletID = new String();
 
+    /**
+     * Constructs an instance of SportletData
+     */
     public SportletData() {
         super();
     }
 
     /**
-     * Returns the value of the attribute with the given name, or null if no such attribute exists.
+     * Returns the value of the attribute with the given name, or
+     * <code>null</code> if no such attribute exists.
      *
      * @param name the name of the attribute
      * @return the value of the attribute
      */
     public String getAttribute(String name) {
-        System.out.println("========================== TRY TO GET ATTR: "+name);
-        System.out.println("STORESIZE: "+store.size());
+        System.out.println("========================== TRY TO GET ATTR: " + name);
+        System.out.println("STORESIZE: " + store.size());
         return (String) store.get(name);
     }
 
@@ -90,8 +90,6 @@ public class SportletData extends BaseObject implements PortletData  {
      * Removes the attribute with the given name.
      *
      * @param name the attribute name
-     *
-     * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
     public void removeAttribute(String name) {
         store.remove(name);
@@ -102,11 +100,9 @@ public class SportletData extends BaseObject implements PortletData  {
      *
      * @param name the attribute name
      * @param value the attribute value
-     *
-     * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
-    public void setAttribute(String name, String value)  {
-        System.out.println(" ========================== PUT ATTRR :"+name+" VALUE "+value);
+    public void setAttribute(String name, String value) {
+        System.out.println(" ========================== PUT ATTRR :" + name + " VALUE " + value);
         store.put(name, value);
     }
 
@@ -141,10 +137,18 @@ public class SportletData extends BaseObject implements PortletData  {
         }
     }
 
+    /**
+     * Returns the attributes
+     *
+     * @return the attributes
+     */
     public Vector getAttributes() {
         return Attributes;
     }
 
+    /**
+     *
+     */
     public void setAttributes(Vector attributes) {
         Attributes = attributes;
     }
@@ -163,18 +167,38 @@ public class SportletData extends BaseObject implements PortletData  {
         convert2vector();
     }
 
+    /**
+     * Returns the user id of this portlet data
+     *
+     * @preturn the user id
+     */
     public String getUserID() {
         return UserID;
     }
 
+    /**
+     * Sets the user id of this portlet data
+     *
+     * @param userID the concrete portlet id
+     */
     public void setUserID(String userID) {
         UserID = userID;
     }
 
+    /**
+     * Returns the concrete portlet id of this portlet data
+     *
+     * @preturn the concrete portlet id
+     */
     public String getPortletID() {
         return PortletID;
     }
 
+    /**
+     * Sets the concrete portlet id of this portlet data
+     *
+     * @param portletID the concrete portlet id
+     */
     public void setPortletID(String portletID) {
         PortletID = portletID;
     }

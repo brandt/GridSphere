@@ -5,13 +5,13 @@
 package org.gridlab.gridsphere.portlet.service;
 
 /**
- * The PortletServiceNotFoundException is thrown if a portlet attempts to access an
- * service that cannot be
+ * The <code>PortletServiceNotFoundException</code> is thrown if a portlet
+ * attempts to access an service that cannot be found.
  */
 public class PortletServiceNotFoundException extends PortletServiceException {
 
     /**
-     * Constructs a new portlet service unavailable exception.
+     * Constructs a new portlet service not found exception.
      */
     public PortletServiceNotFoundException() {
     }

@@ -8,7 +8,7 @@ package org.gridlab.gridsphere.portlet;
 import java.util.Enumeration;
 
 /**
- * The User interface is an abstract view on the user-specific data.
+ * The <code>User</code> interface is an abstract view on the user-specific data.
  * Apart from a set of pre-defined, fixed set of attributes,
  * the interface gives access to user profile data.
  */
@@ -24,8 +24,9 @@ public interface User {
     public Object getAttribute(String name);
 
     /**
-     * Returns an enumeration of names of all attributes available to this request.
-     * This method returns an empty enumeration if the request has no attributes available to it.
+     * Returns an enumeration of names of all attributes available to this
+     * request. This method returns an empty enumeration if the request has
+     * no attributes available to it.
      *
      * @return an enumeration of attribute names
      */
@@ -39,23 +40,25 @@ public interface User {
     public String getFamilyName();
 
     /**
-     * Returns the full name of the user, or null if the full name is not available.
-     * The full name contains given names, family names and possibly a title or suffix.
-     * Therefore, the full name may be different from the concatenation of given and family name.
+     * Returns the full name of the user, or null if the full name is not
+     * available. The full name contains given names, family names and possibly
+     * a title or suffix. Therefore, the full name may be different from the
+     * concatenation of given and family name.
      *
      * @return the full name
      */
     public String getFullName();
 
     /**
-     * Returns the given (aka first) name of the user, or null if the given name is not available.
+     * Returns the given (aka first) name of the user, or null if the given
+     * name is not available.
      *
      * @return the given name
      */
     public String getGivenName();
 
     /**
-     * Returns the organization the user belongs to
+     * Returns the organization affiliation association of the user
      *
      * @return the organization name
      *
@@ -63,7 +66,8 @@ public interface User {
     public String getOrganization();
 
     /**
-     * Returns the given e-mail of the user or null if none is available.
+     * Returns the given e-mail of the user or <code>null</code> if none
+     * is available.
      *
      * @return the email address
      */
@@ -77,10 +81,11 @@ public interface User {
     public String getID();
 
     /**
-     * Returns the user id of the user, or null if the user id is not available.
-     * The userid is the user's login name
+     * Returns the user id of the user, or <code>null</code> if the user id
+     * is not available. The userid is the user's login name
      *
      * @return the user id
+     * @see #getUserName
      */
     public String getUserID();
 
@@ -89,11 +94,13 @@ public interface User {
      * purposes represents the name required for this user to login.
      *
      * @return String the user id
+     * @see #getUserID
      */
     public String getUserName();
 
     /**
-     * Returns the point of time that this user was last logged in, or null if this information is not available.
+     * Returns the point of time that this user was last logged in, or
+     * <code>null</code> if this information is not available.
      * The time is returned in number of milliseconds since January 1, 1970 GMT.
      *
      * @return the last login time
@@ -101,9 +108,9 @@ public interface User {
     public long getLastLoginTime();
 
     /**
-     * Returns a string representaation of the User
+     * Returns a <code>String</code> representation of the User
      *
-     * @return User information represented as a String
+     * @return User information represented as a <code>String</code>
      */
     public String toString();
 }

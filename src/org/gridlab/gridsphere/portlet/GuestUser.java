@@ -8,9 +8,9 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 /**
- * The Role interface is an abstract view on the user-specific data.
- * Apart from a set of pre-defined, fixed set of attributes,
- * the interface gives access to user data as well.
+ * A <code>GuestUser</code> is defined as a <code>User</code> that has not
+ * logged into the portal. As such, the <code>GuestUser</code> contains
+ * a default <code>User</code> implementation.
  */
 public class GuestUser implements User {
 
@@ -28,6 +28,9 @@ public class GuestUser implements User {
     private String Organization = null;
     private long LastLoginTime;
 
+    /**
+     * Constructor creates a private instance of GuestUser
+     */
     private GuestUser() {
         FamilyName = "Role";
         FullName = "Guest Role";
@@ -39,6 +42,11 @@ public class GuestUser implements User {
         LastLoginTime = -1;
     }
 
+    /**
+     * Returns a GuestUser instance
+     *
+     * @return a GuestUser instance
+     */
     public static GuestUser getInstance() {
         return instance;
     }
@@ -122,7 +130,7 @@ public class GuestUser implements User {
     }
 
     /**
-     * Returns the user id of the user, or null if the user id is not available.
+     * Returns the user id of the user, or <code>null</code> if the user id is not available.
      *
      * @return the user id
      */
@@ -131,7 +139,7 @@ public class GuestUser implements User {
     }
 
     /**
-     * This is an alias for the getUserID method, which for all intensive
+     * This is an alias for the {@link #getUserID} method, which for all intensive
      * purposes represents the name required for this user to login.
      *
      * @return String the user id
@@ -140,6 +148,11 @@ public class GuestUser implements User {
         return UserID;
     }
 
+    /**
+     * Return the organizational affiliation of the User
+     *
+     * @return the organizational affiliation of the User
+     */
     public String getOrganization() {
         return Organization;
     }

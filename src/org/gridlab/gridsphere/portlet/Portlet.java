@@ -4,27 +4,19 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import org.gridlab.gridsphere.portletcontainer.descriptor.ApplicationPortletDescriptor;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.*;
+import org.gridlab.gridsphere.portletcontainer.descriptor.ApplicationPortletDescriptor;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSessionEvent;
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.Enumeration;
-import java.util.List;
-import java.util.Vector;
 
 /**
- * The abstract PortletInfo is used by the portlet container to invoke the portlet.
- * Every portlet has to implement this abstract class, either by deriving directly from it,
- * or by using one of the abstract portlet implementations.
- *
  * A portlet is a small Java program that runs within a portlet container.
  * Portlets receive and respond to requests from the portlet container.
  * There is ever only one portlet object instance per portlet configuration in the web deployment descriptor.
@@ -32,7 +24,7 @@ import java.util.Vector;
  * Flyweight pattern, provided on a per-request basis. A concrete parameterization of a portlet object
  * is referred to as a concrete portlet. The settings of concrete portlets may change at any time caused
  * by administrators modifying portlet settings, e.g. using the config mode of a portlet.
- *
+ * <p>
  * Additionally, user can have personal views of concrete portlets. Therefore, the transient portlet session
  * and persistent concrete portlet data carries vital information for the portlet to create a personalized
  * user experience. A concrete portlet in conjunction with portlet data creates a concrete portlet instance.
@@ -42,20 +34,22 @@ import java.util.Vector;
  * The general programming rules for servlets also apply to portlets - instance variables should only used
  * when the intent is to share them between all the parallel threads that concurrently execute a portlet, and
  * portlet code should avoid synchronization unless absolutely required.
- *
+ * <p>
  * As part of running within the portlet container each portlet has a life-cycle.
  * The corresponding methods are called in the following sequence:
- *
- * 1. The portlet is constructed, then initialized with the init() method.
- * 2. A concrete portlet s initialized with the initConcrete() method for each PortletSettings.
- * 3. Any calls from the portlet container to the service() method are handled.
- * 4. The concrete portlet is taken out of service with the destroyConcrete() method.
- * 5. The portlet is taken out of service, then destroyed with the destroy() method,
- * then garbage collected and finalized.
- *
- * The concrete portlet instance is created and destroyed with the login() and logout() methods, respectively.
+ * <p>
+ * <ol>
+ * <li>The portlet is constructed, then initialized with the init() method.</li>
+ * <li>A concrete portlet is initialized with the {@link #initConcrete} method for each PortletSettings.</li>
+ * <li>Any calls from the portlet container to the service() method are handled.</li>
+ * <li>The concrete portlet is taken out of service with the destroyConcrete() method.</li>
+ * <li>The portlet is taken out of service, then destroyed with the destroy() method,
+ * then garbage collected and finalized.</li>
+ * </ol>
+ * <p>
+ * The <it>concrete portlet instance</it> is created and destroyed with the login() and logout() methods, respectively.
  * If a portlet provides personalized views these methods should be implemented.
- *
+ * <p>
  * The portlet container loads and instantiates the portlet class.
  * This can happen during startup of the portal server or later,
  * but no later then when the first request to the portlet has to be serviced.
@@ -71,6 +65,11 @@ public abstract class Portlet extends HttpServlet
 
     protected transient static PortletLog log = SportletLog.getInstance(Portlet.class);
 
+    /**
+     * A <code>Mode</code> is an immutable representation of the portlet mode.
+     * Possible mode values are <code>View</code>, <code>EDIT</code>,
+     * <code>HELP</code> and <code>CONFIGURE</code>
+     */
     public static class Mode implements Serializable {
 
         protected static final int VIEW_MODE = 1;
@@ -85,10 +84,22 @@ public abstract class Portlet extends HttpServlet
 
         private int mode = 0;
 
+        /**
+         * Private constructor creates pre-defined Mode objects
+         *
+         * @param mode the portlet mode to create
+         */
         private Mode(int mode) {
             this.mode = mode;
         }
 
+        /**
+         * Return a portlet mode from parsing a <code>String</code> representation
+         * of a portlet mode.
+         *
+         * @throws IIlegalArgumentException if the supplied <code>String</code>
+         * does not match a predefined portlet mode.
+         */
         public static Portlet.Mode toMode(String mode) throws IllegalArgumentException {
             if (mode == null) return null;
             if (mode.equalsIgnoreCase(EDIT.toString())) {
@@ -103,15 +114,20 @@ public abstract class Portlet extends HttpServlet
             throw new IllegalArgumentException("Unable to parse supplied mode: " + mode);
         }
 
+        /**
+         * Returns the portlet mode as an integer
+         *
+         * @return id the portlet mode
+         */
         public int getMode() {
             return mode;
         }
 
-        public Object readResolve() {
-            // XXX: FILL ME IN
-            return null;
-        }
-
+        /**
+         * Returns the portlet mode as a <code>String</code>
+         *
+         * @return the portlet mode as a <code>String</code>
+         */
         public String toString() {
             String tagstring = "Unknowm Portlet Mode!";
             if (mode == EDIT_MODE) {
@@ -127,8 +143,6 @@ public abstract class Portlet extends HttpServlet
         }
 
     }
-
-    public Portlet() {}
 
     /**
      * Called by the portlet container to indicate to this portlet that it is put into service.
@@ -297,11 +311,11 @@ public abstract class Portlet extends HttpServlet
         // create portlet request and response objects
         PortletRequest portletRequest = new SportletRequestImpl(request);
         PortletResponse portletResponse = new SportletResponse(response, portletRequest);
-        String method = (String)request.getAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
+        String method = (String) request.getAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
         if (method != null) {
             try {
                 if (method.equals(SportletProperties.INIT)) {
-                    ApplicationPortletDescriptor app = (ApplicationPortletDescriptor)request.getAttribute(SportletProperties.PORTLET_APPLICATION);
+                    ApplicationPortletDescriptor app = (ApplicationPortletDescriptor) request.getAttribute(SportletProperties.PORTLET_APPLICATION);
                     this.portletConfig = new SportletConfig(getServletConfig(), app);
                     init(this.portletConfig);
                 } else if (method.equals(SportletProperties.SERVICE)) {
@@ -309,15 +323,15 @@ public abstract class Portlet extends HttpServlet
                 } else if (method.equals(SportletProperties.DESTROY)) {
                     destroy(this.portletConfig);
                 } else if (method.equals(SportletProperties.INIT_CONCRETE)) {
-                    PortletSettings settings = (PortletSettings)request.getAttribute(SportletProperties.PORTLET_SETTINGS);
+                    PortletSettings settings = (PortletSettings) request.getAttribute(SportletProperties.PORTLET_SETTINGS);
                     initConcrete(settings);
                 } else if (method.equals(SportletProperties.DESTROY_CONCRETE)) {
-                    PortletSettings settings = (PortletSettings)request.getAttribute(SportletProperties.PORTLET_SETTINGS);
+                    PortletSettings settings = (PortletSettings) request.getAttribute(SportletProperties.PORTLET_SETTINGS);
                     destroyConcrete(settings);
                 } else if (method.equals(SportletProperties.LOGIN)) {
                     login(portletRequest);
                 } else if (method.equals(SportletProperties.LOGOUT)) {
-                    PortletSession portletSession = (PortletSession)portletRequest.getPortletSession();
+                    PortletSession portletSession = (PortletSession) portletRequest.getPortletSession();
                     logout(portletSession);
                 }
             } catch (PortletException e) {

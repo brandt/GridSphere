@@ -5,15 +5,22 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * The <code>PortletRole</code> describes the supported portlet roles used
+ * by the portal. In general, <code>Group</code>s contain <code>User</codes
+ * with a single <code>PortleRole</code>
+ * <p>
+ * Over time, we plan on allowing users to have more than one role
+ *
+ * @see org.gridlab.gridsphere.portlet.PortletGroup
+ */
 public class PortletRole {
 
     private int role;
 
     public static final int GUEST_ROLE = 1;
-    public static final int USER_ROLE  = 2;
+    public static final int USER_ROLE = 2;
     public static final int ADMIN_ROLE = 3;
     public static final int SUPER_ROLE = 4;
 
@@ -22,11 +29,23 @@ public class PortletRole {
     public static final PortletRole ADMIN = new PortletRole(ADMIN_ROLE);
     public static final PortletRole SUPER = new PortletRole(SUPER_ROLE);
 
+    /**
+     * Constructs an instance of PortletRole
+     */
     private PortletRole(int role) {
         this.role = role;
     }
 
-    public static PortletRole toPortletRole(String portletRole) throws Exception {
+    /**
+     * Return the appropriate <code>PortletRole</code> obtained by parsing
+     * the <code>String</code> portlet role name
+     *
+     * @param portletRole a portlet role name
+     * @throws IllegalArgumentException if the <code>String</code> does
+     * not match any of the pre-defined roles
+     */
+    public static PortletRole toPortletRole(String portletRole)
+            throws IllegalArgumentException {
         if (portletRole.equalsIgnoreCase("GUEST")) {
             return GUEST;
         } else if (portletRole.equalsIgnoreCase("USER")) {
@@ -36,7 +55,7 @@ public class PortletRole {
         } else if (portletRole.equalsIgnoreCase("SUPER")) {
             return SUPER;
         } else {
-            throw new Exception("Unable to create PortletRole corresponding to: " + portletRole);
+            throw new IllegalArgumentException("Unable to create PortletRole corresponding to: " + portletRole);
         }
     }
 
@@ -46,20 +65,6 @@ public class PortletRole {
 
     public int getID() {
         return role;
-    }
-
-    public String toString() {
-        String tagstring;
-        if (role == GUEST_ROLE) {
-            tagstring = "GUEST";
-        } else if (role == USER_ROLE) {
-            tagstring = "USER";
-        } else if (role == ADMIN_ROLE) {
-            tagstring = "ADMIN";
-        } else {
-            tagstring = "SUPER";
-        }
-        return tagstring;
     }
 
     public boolean isGuest() {
@@ -82,9 +87,23 @@ public class PortletRole {
         return false;
     }
 
+    public String toString() {
+        String tagstring;
+        if (role == GUEST_ROLE) {
+            tagstring = "GUEST";
+        } else if (role == USER_ROLE) {
+            tagstring = "USER";
+        } else if (role == ADMIN_ROLE) {
+            tagstring = "ADMIN";
+        } else {
+            tagstring = "SUPER";
+        }
+        return tagstring;
+    }
+
     public boolean equals(Object object) {
         if (object != null && (object.getClass().equals(this.getClass()))) {
-            PortletRole portletRole = (PortletRole)object;
+            PortletRole portletRole = (PortletRole) object;
             return (role == portletRole.getID());
         }
         return false;

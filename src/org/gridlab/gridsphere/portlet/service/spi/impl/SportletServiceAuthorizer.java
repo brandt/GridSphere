@@ -4,13 +4,18 @@
  */
 package org.gridlab.gridsphere.portlet.service.spi.impl;
 
-import org.gridlab.gridsphere.portlet.service.PortletServiceAuthorizationException;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceAuthorizer;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.services.core.user.impl.GridSphereUserManager;
+import org.gridlab.gridsphere.portlet.service.PortletServiceAuthorizationException;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceAuthorizer;
 import org.gridlab.gridsphere.services.core.security.AuthorizationException;
+import org.gridlab.gridsphere.services.core.user.impl.GridSphereUserManager;
 
+/**
+ * The <code>SportletServiceAuthorizer</code> provides an implementation of
+ * the <code>PortletServiceAuthorizer</code> using the internal
+ * <code>GridSphereUserManager</code> for access control logic.
+ */
 public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
 
     public static final String SUPER_MESSAGE =
@@ -27,13 +32,28 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
     private User user = null;
     private GridSphereUserManager userManager = null;
 
+    /**
+     * Constructor disallows non-argument instantiation
+     */
+    private SportletServiceAuthorizer() {
+    }
+
+    /**
+     * Constructs an instance of SportletServiceAuthorizer from a supplied User
+     * and GridSphereUserManager
+     *
+     * @param user the supplied <code>User</code>
+     * @param userManager an instance of <code>GridSphereUserManager</code>
+     */
     public SportletServiceAuthorizer(User user, GridSphereUserManager userManager) {
         this.user = user;
         this.userManager = userManager;
     }
 
     /**
-     * Throws AuthorizationException if supplied user not a super user.
+     * Authorizes operations that require super user access
+     *
+     * @throws PortletServiceAuthorizationException if supplied user is not a super user
      */
     public void authorizeSuperUser() throws PortletServiceAuthorizationException {
         if (!userManager.hasSuperRole(user)) {
@@ -42,11 +62,11 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
     }
 
     /**
-     * Throws AuthorizationException if supplied user is not a super user
-     * or an admin user within the specified group.
+     *  Authorizes operations that require admin user access
      *
-     * @param PortletGroup The portlet group within which the user should
-     *        be an admin if they are not a super user.
+     * @param <code>PortletGroup</code> the portlet group within which the
+     * user should be an admin if they are not a super user.
+     * @throws PortletServiceAuthorizationException if supplied user is not an admin user
      */
     public void authorizeAdminUser(PortletGroup group) throws PortletServiceAuthorizationException {
         if (!userManager.hasAdminRoleInGroup(user, group)) {
@@ -55,47 +75,51 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
     }
 
     /**
-     * Throws AuthorizationException if supplied user is not a super user
-     * or an admin user within the specified group.
+     * Authorizes operations that require super or admin user access
      *
-     * @param PortletGroup The portlet group within which the user should
-     *        be an admin if they are not a super user.
+     * @param <code>PortletGroup</code> the portlet group within which the
+     * user should be an admin if they are not a super user
+     * @throws PortletServiceAuthorizationException if supplied user is not a super or admin user
      */
     public void authorizeSuperOrAdminUser(PortletGroup group)
             throws AuthorizationException {
         if (!userManager.hasSuperRole(this.user) &&
-            !userManager.hasAdminRoleInGroup(this.user, group)) {
+                !userManager.hasAdminRoleInGroup(this.user, group)) {
             throw new PortletServiceAuthorizationException(SUPER_OR_ADMIN_MESSAGE);
         }
     }
 
     /**
-     * Throws AuthorizationException if supplied user is not a super user
-     * or an admin user within the specified group.
+     * Authorizes operations that require either a super user or can be invoked
+     * only if the supplied user  matches the associated user
      *
-     * @param PortletGroup The portlet group within which the user should
-     *        be an admin if they are not a super user.
+     * @param <code>PortletGroup</code> the portlet group within which the
+     * user should be an admin if they are not a super user
+     * @throws PortletServiceAuthorizationException if supplied user is
+     * not a super or same user
      */
     public void authorizeSuperOrSameUser(User user)
             throws AuthorizationException {
         if (!userManager.hasSuperRole(this.user) &&
-            !this.user.equals(user)) {
+                !this.user.equals(user)) {
             throw new PortletServiceAuthorizationException(SUPER_OR_SAME_MESSAGE);
         }
     }
 
     /**
-     * Throws AuthorizationException if supplied user not a super user
-     * or not the same user as specified in this method.
+     * Authorizes operations that require either a super user, or admin user, or
+     * can be invoked only if the supplied user  matches the associated user
      *
-     * @param User The user this supplied user should be equal to if
-     *        if the supplied user is not a super user.
+     * @param <code>PortletGroup</code> the portlet group within which the
+     * user should be an admin if they are not a super user
+     * @throws PortletServiceAuthorizationException if supplied user is
+     * not a super, admin, or same  user
      */
     public void authorizeSuperAdminOrSameUser(User user, PortletGroup group)
-             throws AuthorizationException {
+            throws AuthorizationException {
         if (!userManager.hasSuperRole(this.user) &&
-            !userManager.hasAdminRoleInGroup(this.user, group) &&
-            !this.user.equals(user)) {
+                !userManager.hasAdminRoleInGroup(this.user, group) &&
+                !this.user.equals(user)) {
             throw new PortletServiceAuthorizationException(SUPER_ADMIN_OR_SAME_MESSAGE);
         }
     }

@@ -6,31 +6,34 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletService;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.gridlab.gridsphere.portletcontainer.PortletMessageManager;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletMessageManager;
 
-
 import javax.servlet.*;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.Set;
 
 /**
- * The PortletContext interface defines a portlet's view of the portlet container
- * within which each portlet is running. The PortletContext also allows a portlet
- * to access resources available to it. Using the context, a portlet can access
- * the portlet log, and obtain URL references to resources.
+ * The <code>SportletContext</code> provides an implementation of the
+ * <code>PortletContext</code> by following the decorator patterm.
+ * A <code>ServletConfig</code> object is used in composition to perform most of
+ * the required methods (from which a <code>ServletContext</code> is readily
+ * obtained).
  */
 public class SportletContext implements PortletContext {
 
-    public final static String PORTLET_CONTAINER = "GridSphere Portal Server";
+    public final static String PORTLET_CONTAINER = "GridSphere";
     public final static int MAJOR_VERSION = 0;
     public final static int MINOR_VERSION = 9;
 
@@ -40,14 +43,24 @@ public class SportletContext implements PortletContext {
     private ServletConfig config = null;
     private ServletContext context = null;
 
+    /**
+     * Cannot instantiate uninitialized SportletContext
+     */
+    private SportletContext() {
+    }
+
+    /**
+     * Constructs an instance of SportletContext from a <code>ServletConfig</code>
+     */
     public SportletContext(ServletConfig config) {
         this.config = config;
         this.context = config.getServletContext();
     }
 
     /**
-     * Returns the attribute value with the given name, or null  if no such attribute exists.
-     * The context attributes can be used to share information between the portlets of one portlet application.
+     * Returns the attribute value with the given name, or null  if no such
+     * attribute exists. The context attributes can be used to share information
+     * between the portlets of one portlet application.
      *
      * @param name the attribute name
      * @return the attribute value
@@ -57,7 +70,8 @@ public class SportletContext implements PortletContext {
     }
 
     /**
-     * Returns an enumeration of the attribute names that this portlet context is aware of.
+     * Returns an enumeration of the attribute names that this portlet context
+     * is aware of.
      *
      * @return an enumeration of attribute names
      */
@@ -75,15 +89,19 @@ public class SportletContext implements PortletContext {
     }
 
     /**
-     * Allows the portlet to delegate the rendering to another resource as specified by the given path.
-     * The path has to be relative and will be resolved by this method, so that the portlet's resources are accessed.
-     *
+     * Allows the portlet to delegate the rendering to another resource as
+     * specified by the given path. The path has to be relative and will be
+     * resolved by this method, so that the portlet's resources are accessed.
+     * <p>
      * To access protected resources the path has to be prefixed with /WEB-INF/
-     * (e.g. /WEB-INF/myportlet/myportlet.jsp). Otherwise, the direct path is used. (e.g. /myportlet/myportlet.jsp).
-
+     * (e.g. /WEB-INF/myportlet/myportlet.jsp). Otherwise, the direct path is
+     * used. (e.g. /myportlet/myportlet.jsp).
+     * <p>
+     *
+     * <b>NONE OF THE DESCRIPTION BELOW IS IMPLEMENTED YET!</b>
      * This method is enabled for multi-language and multi-device support.
-     * For example, a jsp file "/myportlet/mytemplate.jsp" will be searched for in the following order,
-     * when accessing via HTML-Browser:
+     * For example, a jsp file "/myportlet/mytemplate.jsp" will be searched for
+     * in the following order, when accessing via HTML-Browser:
      *
      * 1. /myportlet/html/en_US/mytemplate.jsp
      * 2. /myportlet/html/en/mytemplate.jsp
@@ -94,7 +112,8 @@ public class SportletContext implements PortletContext {
      * @param request the portlet request
      * @param response the portlet response
      *
-     * @throws PortletException if the delegated resource has trouble fulfilling the rendering request
+     * @throws PortletException if the delegated resource has trouble fulfilling
+     * the rendering request
      * @throws IOException if the streaming causes an I/O problem
      */
     public void include(String path, PortletRequest request, PortletResponse response)
@@ -119,7 +138,8 @@ public class SportletContext implements PortletContext {
      * The method returns null if no resource exists at the given path.
      *
      * To access protected resources the path has to be prefixed with /WEB-INF/
-     * (e.g. /WEB-INF/myportlet/myportlet.jsp). Otherwise, the direct path is used. (e.g. /myportlet/myportlet.jsp).
+     * (e.g. /WEB-INF/myportlet/myportlet.jsp). Otherwise, the direct path is
+     * used. (e.g. /myportlet/myportlet.jsp).
      *
      * @param path the path to the resource
      * @return the input stream
@@ -134,11 +154,14 @@ public class SportletContext implements PortletContext {
      * The method returns null if no resource exists at the given path.
      *
      * To access protected resources the path has to be prefixed with /WEB-INF/
-     * (e.g. /WEB-INF/myportlet/myportlet.jsp). Otherwise, the direct path is used. (e.g. /myportlet/myportlet.jsp).
+     * (e.g. /WEB-INF/myportlet/myportlet.jsp). Otherwise, the direct path is
+     * used. (e.g. /myportlet/myportlet.jsp).
+     *
+     * <b>NONE OF THE DESCRIPTION BELOW IS IMPLEMENTED YET!</b>
      *
      * This method is enabled for multi-language and multi-device support.
-     * For example, a jsp file "/myportlet/mytemplate.jsp" will be searched for in the following order,
-     * when accessing via HTML-Browser:
+     * For example, a jsp file "/myportlet/mytemplate.jsp" will be searched for
+     * in the following order, when accessing via HTML-Browser:
      *
      * 1. /myportlet/html/en_US/mytemplate.jsp
      * 2. /myportlet/html/en/mytemplate.jsp
@@ -155,10 +178,13 @@ public class SportletContext implements PortletContext {
     }
 
     /**
-     * Returns the localized text resource with the given key and using the given locale.
+     * <b>NONE OF THE DESCRIPTION BELOW IS IMPLEMENTED YET!</b>
      *
-     * To use this feature, the portlet application's CLASSPATH has to contain a resource bundle
-     * with the same name (including the package) as the portlet.
+     * Returns the localized text resource with the given key and using the
+     * given locale.
+     * <p>
+     * To use this feature, the portlet application's CLASSPATH has to contain
+     * a resource bundle with the same name (including the package) as the portlet.
      *
      * @param bundle the name of the resource bundle
      * @param key the text key
@@ -171,23 +197,14 @@ public class SportletContext implements PortletContext {
     }
 
     /**
-     * Sends the given message to all portlets on the same page that have the given name regardless of the portlet application.
-     * If the portlet name is null the message is broadcast to all portlets in the same portlet application.
-     * If more than one instance of the portlet with the given name exists on the current page, the message is sent
-     * to every single instance of that portlet. If the source portlet has the same name as the target portlet(s),
-     * the message will not be sent to avoid possible cyclic calls.
-     *
-     * The portlet(s) with the given name will only receive the message event if it has/they have implemented
-     * the appropriate listener.
-     *
-     * This function may only be used during event processing, in any other case the method throws an AccessDeniedException.
+     * Sends the given message to the concrete portlet specified.
+     * The portlet(s) with the given name will only receive the message event
+     * if it has implemented the appropriate listener.
      *
      * @param concretePortletID the concrete portlet to send the message to
      * @param message the message to be sent
-     *
-     * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
      */
-    public void send(String concretePortletID, PortletMessage message) throws AccessDeniedException {
+    public void send(String concretePortletID, PortletMessage message) {
         PortletMessageManager messageManager = null;
         messageManager = SportletMessageManager.getInstance();
         messageManager.send(concretePortletID, message);
@@ -201,8 +218,8 @@ public class SportletContext implements PortletContext {
      * @param service the classname of the service to load
      * @return the portlet service
      *
-     * @throws PortletServiceUnavailableException
-     *      if an exception has occurrred that interferes with the portlet service's normal initialization
+     * @throws PortletServiceUnavailableException if an exception has occurrred
+     * that interferes with the portlet service's normal initialization
      * @throws PortletServiceNotFoundException if the PortletService is not found
      */
     public PortletService getService(Class service)
@@ -213,24 +230,25 @@ public class SportletContext implements PortletContext {
     /**
      * This function looks up a portlet service with the given classname.
      * The returned service is a service wrapper that contains the User object
-     * which can be used for method level access control. An implementation of the
-     * service is provided with the appropiae access control restrictions on the supplied
+     * which can be used for method level access control using the
+     * <code>PortletServiceAuthorizer</code>.
      *
      * @param service the classname of the service to load
      * @param User the user requesting a service instance
      * @return the portlet service
      *
-     * @throws PortletServiceUnavailableException
-     *      if an exception has occurrred that interferes with the portlet service's normal initialization
+     * @throws PortletServiceUnavailableException if an exception has occurrred
+     * that interferes with the portlet service's normal initialization
      * @throws PortletServiceNotFoundException if the PortletService is not found
      */
     public PortletService getService(Class service, User user)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException {
-        return (PortletService) factory.createPortletUserService(service, user, config, true);
+        return (PortletService) factory.createUserPortletService(service, user, config, true);
     }
 
     /**
-     * Returns the major version of the PortletInfo API that this portlet container supports.
+     * Returns the major version of the PortletInfo API that this portlet
+     * container supports.
      *
      * @return the major version
      */
@@ -239,7 +257,8 @@ public class SportletContext implements PortletContext {
     }
 
     /**
-     * Returns the minor version of the PortletInfo API that this portlet container supports.
+     * Returns the minor version of the PortletInfo API that this portlet
+     * container supports.
      *
      * @return the minor version
      */
@@ -248,14 +267,16 @@ public class SportletContext implements PortletContext {
     }
 
     /**
-     * Returns the name and version of the portlet container which the portlet is running in.
-     * The form of the returned string is servername/versionnumber.
-     * For the GridSphere Portal Server this method may return the string GridSphere Portal Server/0.9.
+     * Returns the name and version of the portlet container which the portlet
+     * is running in. The form of the returned string is
+     * servername/versionnumber-versionrelease.
      *
      * @return the string containing at least name and version number
      */
     public String getContainerInfo() {
-        return PORTLET_CONTAINER + "/" + MAJOR_VERSION + "." + MINOR_VERSION;
+        return PORTLET_CONTAINER + "/"
+                + GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_VERSION)
+                + "-" + GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_RELEASE);
     }
 
     /**
@@ -268,7 +289,6 @@ public class SportletContext implements PortletContext {
         return log;
     }
 
-    // ServletContext methods
     public final ServletContext getContext(String uripath) {
         return context.getContext(uripath);
     }
@@ -337,9 +357,6 @@ public class SportletContext implements PortletContext {
         context.setAttribute(name, object);
     }
 
-    /**
-     * Returns the <display-name> of the web application
-     */
     public final String getServletContextName() {
         return context.getServletContextName();
     }

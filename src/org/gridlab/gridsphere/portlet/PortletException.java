@@ -7,21 +7,22 @@ package org.gridlab.gridsphere.portlet;
 import javax.servlet.ServletException;
 
 /**
- * The PortletException class defines a general exception that a portlet can throw when it encounters difficulty.
+ * The <code>PortletException</code> class defines a general exception that a
+ * portlet can throw when it encounters an exceptional condition.
  */
 public class PortletException extends ServletException {
 
     private String text;
 
     /**
-     * Constructs a new portlet exception.
+     * Constructs an instance of PortletException
      */
     public PortletException() {
         super();
     }
 
     /**
-     * Constructs a new portlet exception with the given text.
+     * Constructs an instance of PortletException with the given text.
      * The portlet container may use the text write it to a log.
      *
      * @param text the exception text
@@ -52,6 +53,11 @@ public class PortletException extends ServletException {
         super(cause);
     }
 
+    /**
+     * Return the exception message
+     *
+     * @return the exception message
+     */
     public String getMessage() {
         return text;
     }

@@ -9,11 +9,11 @@ import org.gridlab.gridsphere.portlet.Client;
 import org.gridlab.gridsphere.portlet.PortletLog;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
 
 /**
- * The ClientImpl class represents the client device that the user connects to the portal with.
- * It defines methods to obtain information about clients, e.g. browsers running on PCs, WAP phones, PDAs etc.
+ * The <code>ClientImpl</code> class represents the client device that the user
+ * connects to the portal with. It defines methods to obtain information about
+ * clients, e.g. browsers running on PCs, WAP phones, PDAs etc.
  */
 public class ClientImpl implements Client {
 
@@ -21,7 +21,7 @@ public class ClientImpl implements Client {
 
     public static final String[] MIME_TYPES = {"text/html", "text/vnd.wap.wml"};
     public static final String[] MARKUP_TYPES = {"html", "wml", "chtml"};
-    public static final String[] MANUFACTURER_NAMES = { "opera", "netscape", "mozilla", "IE" };
+    public static final String[] MANUFACTURER_NAMES = {"opera", "netscape", "mozilla", "IE"};
     private String manufacturer = null;
     private String model = null;
     private String version = null;
@@ -29,6 +29,11 @@ public class ClientImpl implements Client {
     private String mimeType = null;
     private String markupName = null;
 
+    /**
+     * Constructs an instance of ClientImpl from a servlet request
+     *
+     * @param req an <code>HttpServletRequest</code>
+     */
     public ClientImpl(HttpServletRequest req) {
         // get the user-agent string containg client browser information
         userAgent = req.getHeader("user-agent");
@@ -45,9 +50,9 @@ public class ClientImpl implements Client {
         String mozillaVersion = userAgent.substring(0, i);
         //System.err.println("mozilla version: " + mozillaVersion);
         int j = userAgent.lastIndexOf(")");
-        String platformInfo = userAgent.substring(i+1, j+1).trim();
+        String platformInfo = userAgent.substring(i + 1, j + 1).trim();
         //System.err.println("platform info: " + platformInfo);
-        String browserInfo = userAgent.substring(j+1).trim();
+        String browserInfo = userAgent.substring(j + 1).trim();
         //System.err.println("browser info: " + browserInfo);
         mimeType = req.getHeader("accept");
 
@@ -79,7 +84,7 @@ public class ClientImpl implements Client {
         if (i < 0) {
             // IE 5.2 on  Mac OS X
             if (mimeType.equals("*/*")) {
-                mimeType= MIME_TYPES[0];
+                mimeType = MIME_TYPES[0];
                 markupName = MARKUP_TYPES[0];
             }
         } else {
@@ -97,7 +102,8 @@ public class ClientImpl implements Client {
 
 
     /**
-     * Returns the name of the manufacturer of this client, or null if the name is not available.
+     * Returns the name of the manufacturer of this client, or
+     * <code>null</code> if the name is not available.
      *
      * @return the manufacturer
      */
@@ -106,7 +112,8 @@ public class ClientImpl implements Client {
     }
 
     /**
-     * Returns the name of the model of this client, or null if the name is not available.
+     * Returns the name of the model of this client, or <code>null</code>
+     * if the name is not available.
      *
      * @return the model
      */
@@ -115,7 +122,8 @@ public class ClientImpl implements Client {
     }
 
     /**
-     * Returns the version of the model of this client, or null if the version is not available.
+     * Returns the version of the model of this client, or <code>null</code>
+     * if the version is not available.
      *
      * @return the version
      */
@@ -124,8 +132,9 @@ public class ClientImpl implements Client {
     }
 
     /**
-     * Returns the exact user agent that this client uses to identify itself to the portal.
-     * If the client does not send a user agent, this method returns null.
+     * Returns the exact user agent that this client uses to identify
+     * itself to the portal. If the client does not send a user agent,
+     * this method returns <code>null</code>
      *
      * @return the user agent
      */
@@ -134,11 +143,13 @@ public class ClientImpl implements Client {
     }
 
     /**
-     * Returns whether this client has the given capability. If the portal does not know enough about the client,
-     * it has to be on the safe side and return false.
+     * Returns whether this client has the given capability.
+     * If the portal does not know enough about the client,
+     * it has to be on the safe side and return <code>false</code>.
      *
-     * @param capability the capability
-     * @return true if the client has the given capability, false otherwise
+     * @param capability the <code>Capability</code>
+     * @return <code>true</code> if the client has the given
+     * capability, <code>false</code> otherwise
      */
     public boolean isCapableOf(Capability capability) {
         // XXX: FILL ME IN
@@ -150,8 +161,9 @@ public class ClientImpl implements Client {
      * The array of capability is tested in its entirety, ie. only if the client is
      * capable of every single capability this methods returns true.
      *
-     * @param capabilities an array of capabilities
-     * @return true if the client has the given capability, false otherwise
+     * @param capabilities an array of <code>Capability</code>
+     * @return <code>true</code> if the client has the given capability,
+     * <code>false</code> otherwise
      */
     public boolean isCapableOf(Capability[] capabilities) {
         // XXX: FILL ME IN
@@ -176,6 +188,11 @@ public class ClientImpl implements Client {
         return markupName;
     }
 
+    /**
+     * Return a <code>String</code> representation of the <code>Client</code>
+     *
+     * @return a <code>String</code> representation of the <code>Client</code>
+     */
     public String toString() {
         StringBuffer sb = new StringBuffer("\n");
         sb.append("User-agent: " + userAgent + "\n");

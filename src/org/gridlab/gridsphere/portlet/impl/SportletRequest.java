@@ -1,10 +1,6 @@
 /*
- * Created by IntelliJ IDEA.
- * User: novotny
- * Date: Dec 13, 2002
- * Time: 1:58:26 PM
- * To change template for new interface use
- * Code Style | Class Templates options (Tools | IDE Options).
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @version $Id$
  */
 package org.gridlab.gridsphere.portlet.impl;
 
@@ -12,6 +8,11 @@ import org.gridlab.gridsphere.portlet.*;
 
 import java.util.List;
 
+/**
+ * A <code>SportletRequest</code> turns the immutable <code>PortletRequest</code>
+ * into a stateful mutable object with all the additional set methods not defined
+ * by the <code>PortletRequest</code> interface.
+ */
 public interface SportletRequest extends PortletRequest {
 
     /**
@@ -23,17 +24,20 @@ public interface SportletRequest extends PortletRequest {
 
     /**
      * Sets the data of the concrete portlet instance
-     * If the portlet is run in CONFIGURE mode, the portlet data is not accessible and this method will return null.
+     * If the portlet is run in <code>CONFIGURE</code> mode, the portlet data
+     * is not accessible and this method will return <code>null</code>
      *
-     * @param portlet data the PortletData
+     * @param portlet data the <code>PortletData</code>
      */
     public void setData(PortletData data);
 
     /**
-     * Sets the roles this user has in the supplied PortletGroup. If no group
-     * is specified, the roles the user has in the BASE group are returned.
+     * Sets the roles this user has in the supplied <code>PortletGroup</code>.
+     * If no group is specified, the roles the user has in the <code>BASE</code>
+     * group are returned.
      *
-     * @param group the PortletGroup to query the user's roles or null if BASE group
+     * @param group the PortletGroup to query the user's roles or null if
+     * <code>BASE</code> group
      * @param roles an array of PortletRole objects
      *
      * @see PortletRole
@@ -41,31 +45,33 @@ public interface SportletRequest extends PortletRequest {
     public void setRoles(PortletGroup group, List roles);
 
     /**
-     * Returns the roles this user has in the supplied PortletGroup. If no group
-     * is specified, the roles the user has in the BASE group are returned.
+     * Returns the roles this user has in the supplied <code>PortletGroup</code>.
+     * If no group is specified, the roles the user has in the <code>BASE</code>
+     * group are returned.
      *
-     * @param group the PortletGroup to query the user's roles or null if BASE group
-     * @returns an array of PortletRole objects
+     * @param group the <code>PortletGroup</code> to query the user's roles or null if
+     * <code>BASE</code> group
+     * @returns an array of <code>PortletRole</code> objects
      *
      * @see PortletRole
      */
     public List getRoles(PortletGroup group);
 
     /**
-     * Returns the PortletGroup objects representing the users group membership
+     * Returns the <code>PortletGroup</code> objects representing the users
+     * group membership
      *
-     * @returns an array of PortletGroup objects. This method is guaranteed to at least
-     * return the PortletGroup.BaseGroup
+     * @returns an array of <code>PortletGroup</code> objects.
+     * This method is guaranteed to at least return the <code>BASE</code> group.
      *
      * @see PortletGroup
      */
     public List getGroups();
 
     /**
-     * Returns the PortletGroup objects representing the users group membership
+     * Returns the <code>PortletGroup</code> objects representing the users group membership
      *
-     * @returns an array of PortletGroup objects. This method is guaranteed to at least
-     * return the PortletGroup.BaseGroup
+     * @param list a list of <code>PortletGroup</code> objects.
      *
      * @see PortletGroup
      */
@@ -98,7 +104,5 @@ public interface SportletRequest extends PortletRequest {
      * @return the portlet window
      */
     public void setWindow(PortletWindow window);
-
-    public void logRequest();
 
 }

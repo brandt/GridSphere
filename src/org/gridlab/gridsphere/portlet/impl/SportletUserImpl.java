@@ -9,24 +9,25 @@ import org.exolab.castor.jdo.Database;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
-import javax.servlet.http.HttpSessionBindingListener;
 import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionBindingListener;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Vector;
 import java.util.List;
+import java.util.Vector;
 
 /**
- * The User interface is an abstract view on the user-specific data.
+ * The <code>SportletUserImpl</code> implements the <code>User</code> interface
+ * and is an abstract view on the user-specific data.
  * Apart from a set of pre-defined, fixed set of attributes,
  * the interface gives access to user profile data.
- */
-
-/**
+ * <p>
+ * This implementation of <code>SportletUserImpl</code> uses Castor for Java to SQL
+ * bindings
+ *
  * @table sportletuserimpl
+
  */
 public class SportletUserImpl extends BaseObject implements SportletUser, HttpSessionBindingListener {
 
@@ -76,7 +77,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
      * @field-type SportletUserImplAttribute
      * @many-key sportletuser
      */
-    public Vector Attributes = new Vector();
+    private Vector Attributes = new Vector();
 
     /**
      * Returns the internal unique user id.
@@ -225,12 +226,13 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
      * @param organization
      */
     public void setOrganization(String organization) {
-        this.Organization=organization;
+        this.Organization = organization;
     }
 
     /**
-     * Returns the point of time that this user was last logged in, or null if this information is not available.
-     * The time is returned in number of milliseconds since January 1, 1970 GMT.
+     * Returns the point of time that this user was last logged in, or
+     * <code>null</code> if this information is not available. The time is
+     * returned in number of milliseconds since January 1, 1970 GMT.
      *
      * @return the last login time
      */
@@ -239,7 +241,8 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
     }
 
     /**
-     * Sets the point of time that this user was last logged in, or null if this information is not available.
+     * Sets the point of time that this user was last logged in, or
+     * <code>null</code> if this information is not available.
      * The time is returned in number of milliseconds since January 1, 1970 GMT.
      *
      * @param lastLoginTime the last login time
@@ -289,15 +292,6 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
         return store.elements();
     }
 
-    /*
-    public List getACL() {
-        return ACL;
-    }
-
-    public void setACL(List acl) {
-        ACL = acl;
-    }
-    */
     private void convert2vector() {
         Enumeration allkeys = store.keys();
         SportletUserImplAttribute ha = null;
@@ -347,7 +341,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
         System.err.println("valueUnbound of SportletUserImpl invoked");
         try {
             pm.update(this);
-        } catch(PersistenceManagerException e) {
+        } catch (PersistenceManagerException e) {
             // what can we do??
         }
         pm = null;
@@ -373,14 +367,14 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
     public boolean equals(Object obj) {
         boolean b = true;
         if ((obj != null) && (obj.getClass().equals(this.getClass()))) {
-            b = (((SportletUserImpl)obj).EmailAddress == this.EmailAddress);
-            b &= (((SportletUserImpl)obj).FamilyName == this.FamilyName);
-            b &= (((SportletUserImpl)obj).GivenName == this.GivenName);
-            b &= (((SportletUserImpl)obj).FullName == this.FullName);
-            b &= (((SportletUserImpl)obj).FullName == this.FullName);
-            b &= (((SportletUserImpl)obj).UserID == this.UserID);
-            b &= (((SportletUserImpl)obj).LastLoginTime == this.LastLoginTime);
-            b &= (((SportletUserImpl)obj).Organization == this.Organization);
+            b = (((SportletUserImpl) obj).EmailAddress == this.EmailAddress);
+            b &= (((SportletUserImpl) obj).FamilyName == this.FamilyName);
+            b &= (((SportletUserImpl) obj).GivenName == this.GivenName);
+            b &= (((SportletUserImpl) obj).FullName == this.FullName);
+            b &= (((SportletUserImpl) obj).FullName == this.FullName);
+            b &= (((SportletUserImpl) obj).UserID == this.UserID);
+            b &= (((SportletUserImpl) obj).LastLoginTime == this.LastLoginTime);
+            b &= (((SportletUserImpl) obj).Organization == this.Organization);
         }
         return b;
     }

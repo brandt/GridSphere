@@ -4,17 +4,15 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import org.exolab.castor.jdo.PersistenceException;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-
-import java.util.Enumeration;
 import java.io.IOException;
+import java.util.Enumeration;
 
 /**
- * The PortletData contains information about the concrete portlet instance.
+ * The <code>PortletData</code> contains information about the concrete portlet instance.
  * Also, it is through the data that the portlet has access to the personalized data.
  * The portlet can therefore only read the personalization data.
- * Only when the portlet is in EDIT mode, it has write access to the personalization data.
+ * Only when the portlet is in <code>EDIT</code> mode, it has write access to
+ * the personalization data.
  */
 public interface PortletData {
 
@@ -45,15 +43,12 @@ public interface PortletData {
      *
      * @param name the attribute name
      * @param value the attribute value
-     *
-     * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
     public void setAttribute(String name, String value);
 
     /**
      * Stores all attributes.
      *
-     * @throws AccessDeniedException if the caller isn't authorized to access this data object
      * @throws IOException if the store failed
      */
     public void store() throws IOException;

@@ -4,26 +4,27 @@
  */
 package org.gridlab.gridsphere.portlet.service.spi;
 
+import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.User;
 
 import javax.servlet.ServletConfig;
-import java.util.Properties;
 
 /**
- * All interfaces in this Service Provider Interface (SPI) package are needed by all implementations of services.
- * The PortletServiceFactory interface has to be implemented by all portlet service factory implementations.
+ * The <code>PortletServiceFactory</code> interface must be implemented by
+ * all portlet service factory implementations.
  */
 public interface PortletServiceFactory {
 
     /**
-     * createPortletServiceFactory instantiates the given class and initializes it
+     * Creates a portlet service and initializes it
      *
      * @param service the class of the service
      * @param servletConfig the servlet configuration
-     * @param boolean reuse a previous initialized service if true, otherwise create a new service instance if false
+     * @param boolean reuse a previous initialized service if <code>true</code>,
+     * otherwise create a new service instance if <code>false</code>
+     *
      * @return the instantiated portlet service
      * @throws PortletServiceUnavailableException if the portlet service is unavailable
      * @throws PortletServiceNotFoundException if the PortletService is not found
@@ -34,18 +35,20 @@ public interface PortletServiceFactory {
             throws PortletServiceUnavailableException, PortletServiceNotFoundException;
 
     /**
-     * createPortletServiceFactory instantiates the given class and initializes it
+     * Creates a user portlet service and initializes it
      *
      * @param service the class of the service
      * @param servletConfig the servlet configuration
-     * @param boolean reuse a previous initialized service if true, otherwise create a new service instance if false
+     * @param boolean reuse a previous initialized service if <code>true</code>,
+     * otherwise create a new service instance if <code>false</code>
+     *
      * @return the instantiated portlet service
      * @throws PortletServiceUnavailableException if the portlet service is unavailable
      * @throws PortletServiceNotFoundException if the PortletService is not found
      */
-    public PortletService createPortletUserService(Class service, User user,
-                                               ServletConfig servletConfig,
-                                               boolean useCachedService)
+    public PortletService createUserPortletService(Class service, User user,
+                                                   ServletConfig servletConfig,
+                                                   boolean useCachedService)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException;
 
 }

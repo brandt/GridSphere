@@ -15,10 +15,11 @@ import java.util.Enumeration;
 import java.util.Locale;
 
 /**
- * The PortletContext interface defines a portlet's view of the portlet container
- * within which each portlet is running. The PortletContext also allows a portlet
- * to access resources available to it. Using the context, a portlet can access
- * the portlet log, and obtain URL references to resources.
+ * The <code>PortletContext</code> interface defines a portlet's view of the
+ * portlet container within which each portlet is running.
+ * The <code>PortletContext</code> also allows a portlet to access resources
+ * available to it. Using the context, a portlet can access the portlet log,
+ * obtain portlet service instances and obtain URL references to resources.
  */
 public interface PortletContext extends ServletContext {
 
@@ -131,14 +132,10 @@ public interface PortletContext extends ServletContext {
      * The portlet(s) with the given name will only receive the message event if it has/they have implemented
      * the appropriate listener.
      *
-     * This function may only be used during event processing, in any other case the method throws an AccessDeniedException.
-     *
      * @param portletName the name of the portlet(s) to send the message to
      * @param message the message to be sent
-     *
-     * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
      */
-    public void send(String portletName, PortletMessage message) throws AccessDeniedException;
+    public void send(String portletName, PortletMessage message);
 
     /**
      * This function looks up a portlet service with the given classname.
@@ -149,7 +146,8 @@ public interface PortletContext extends ServletContext {
      * @return the portlet service
      *
      * @throws PortletServiceUnavailableException
-     *      if an exception has occurrred that interferes with the portlet service's normal initialization
+     *      if an exception has occurrred that interferes with the portlet
+     *      service's normal initialization
      * @throws PortletServiceNotFoundException if the PortletService is not found
      */
     public PortletService getService(Class service)
@@ -162,7 +160,7 @@ public interface PortletContext extends ServletContext {
      * service is provided with the appropiae access control restrictions on the supplied
      *
      * @param service the classname of the service to load
-     * @param User the user requesting a service instance
+     * @param <code>User</code> the user requesting a service instance
      * @return the portlet service
      *
      * @throws PortletServiceUnavailableException
@@ -189,7 +187,6 @@ public interface PortletContext extends ServletContext {
     /**
      * Returns the name and version of the portlet container which the portlet is running in.
      * The form of the returned string is servername/versionnumber.
-     * For the GridSphere Portal Server this method may return the string GridSphere Portal Server/0.9.
      *
      * @return the string containing at least name and version number
      */

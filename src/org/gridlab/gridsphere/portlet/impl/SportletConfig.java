@@ -4,23 +4,24 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
-import org.gridlab.gridsphere.portletcontainer.descriptor.ApplicationPortletDescriptor;
-import org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes;
-import org.gridlab.gridsphere.portletcontainer.descriptor.Markup;
-import org.gridlab.gridsphere.portletcontainer.descriptor.AllowsWindowStates;
-import org.gridlab.gridsphere.portlet.*;
 import org.exolab.castor.types.AnyNode;
+import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
+import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portletcontainer.descriptor.AllowsWindowStates;
+import org.gridlab.gridsphere.portletcontainer.descriptor.ApplicationPortletDescriptor;
+import org.gridlab.gridsphere.portletcontainer.descriptor.Markup;
+import org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import java.util.*;
 
 /**
- * The SortletConfig class provides the portlet with its configuration.
- * The configuration holds information about the portlet that is valid for all users,
- * and is maintained by the administrator. The portlet can therefore only read the configuration.
- * Only when the portlet is in CONFIGURE mode, it has write access to the configuration data
+ * The <code>SportletConfig</code> class provides the portlet with its
+ * configuration. The configuration holds information about the portlet that
+ * is valid for all users, and is maintained by the administrator. The portlet
+ * can therefore only read the configuration. Only when the portlet is in
+ * <code>CONFIGURE</code> mode, it has write access to the configuration data
  * (the rest of the configuration is managed by the portlet container directly).
  */
 public class SportletConfig implements PortletConfig {
@@ -35,25 +36,35 @@ public class SportletConfig implements PortletConfig {
     private Hashtable configs = new Hashtable();
 
     /**
-     * Constructor creates a PortletConfig from a ServletConfig
+     * Cannot instantiate uninitialized SportletConfig
+     */
+    private SportletConfig() {
+    }
+
+    /**
+     * Constructs an instance of PortletConfig from a servlet configuration
+     * object and an application portlet descriptor
+     *
+     * @param servletConfig a <code>ServletConfig</code>
+     * @param appDescriptor a <code>ApplicationPortletDescriptor</code>
      */
     public SportletConfig(ServletConfig servletConfig, ApplicationPortletDescriptor appDescriptor) {
         this.servletConfig = servletConfig;
         this.context = new SportletContext(servletConfig);
         Iterator it;
 
-         // set supported modes info
+        // set supported modes info
         supportedModes = new Hashtable();
         SupportsModes smodes = appDescriptor.getSupportsModes();
         List modesList = smodes.getMarkupList();
         it = modesList.iterator();
         while (it.hasNext()) {
-            Markup markup = (Markup)it.next();
+            Markup markup = (Markup) it.next();
             String name = markup.getName();
             Iterator modesIt = markup.getPortletModes().iterator();
             List modes = new Vector();
             while (modesIt.hasNext()) {
-                AnyNode anode = (AnyNode)modesIt.next();
+                AnyNode anode = (AnyNode) modesIt.next();
                 modes.add(anode.getLocalName().toUpperCase());
             }
             supportedModes.put(name, modes);
@@ -64,7 +75,7 @@ public class SportletConfig implements PortletConfig {
         allowedStates = new Vector();
         it = states.getWindowStates().iterator();
         while (it.hasNext()) {
-            AnyNode anode = (AnyNode)it.next();
+            AnyNode anode = (AnyNode) it.next();
             String state = anode.getLocalName().toUpperCase();
             allowedStates.add(state);
         }
@@ -73,7 +84,7 @@ public class SportletConfig implements PortletConfig {
         List configList = appDescriptor.getConfigParamList();
         it = configList.iterator();
         while (it.hasNext()) {
-            ConfigParam configParam = (ConfigParam)it.next();
+            ConfigParam configParam = (ConfigParam) it.next();
             configs.put(configParam.getParamName(), configParam.getParamValue());
         }
 
@@ -105,12 +116,13 @@ public class SportletConfig implements PortletConfig {
      * @param mode the portlet mode
      * @param client the given client
      *
-     * @return true if the window supports the given state, false otherwise
+     * @return <code>true</code> if the window supports the given state,
+     * <code>false</code> otherwise
      */
     public boolean supports(Portlet.Mode mode, Client client) {
         String clientMarkup = client.getMarkupName();
         if (supportedModes.containsKey(clientMarkup)) {
-            List modes = (List)supportedModes.get(clientMarkup);
+            List modes = (List) supportedModes.get(clientMarkup);
             if (modes.contains(mode.toString().toUpperCase())) return true;
         }
         return false;
@@ -120,16 +132,16 @@ public class SportletConfig implements PortletConfig {
      * Returns whether the portlet window supports the given state
      *
      * @param state the portlet window state
-     * @return true if the window supports the given state, false otherwise
+     * @return <code>true</code> if the window supports the given state,
+     * <code>false</code> otherwise
      */
     public boolean supports(PortletWindow.State state) {
         if (allowedStates.contains(state.toString().toUpperCase())) return true;
         return false;
     }
 
-    // Overridden GenericServlet methods
     public final String getInitParameter(String name) {
-        return (String)configs.get(name);
+        return (String) configs.get(name);
     }
 
     public final Enumeration getInitParameterNames() {

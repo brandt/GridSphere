@@ -5,22 +5,35 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
-import org.gridlab.gridsphere.services.core.user.AccountRequest;
-import org.gridlab.gridsphere.services.core.user.impl.AccountRequestImpl;
-
-import java.util.Vector;
-import java.util.Random;
+import org.gridlab.gridsphere.portlet.PortletGroup;
 
 /**
+ * <code>SportletGroup</code> is the implementation of <code>PortletGroup</code>
+ * Portlet API interface to define portal groups.
+ * <p>
+ * This implemnetation uses Castor doclets to generate the SQL data bindings
+ *
+ * @see org.gridlab.gridsphere.portlet.PortletRole
+ *
  * @table sportletgroup
  */
 public class SportletGroup extends BaseObject implements PortletGroup {
 
-    public static final String SUPER_GROUP = "super";
-    public static final String BASE_GROUP = "base";
+    private static final String SUPER_GROUP = "super";
+    private static final String BASE_GROUP = "base";
+
+    /**
+     * The <code>BASE</code> PortletGroup is the group that every portal user
+     * is a member of by default
+     */
+    public static final PortletGroup BASE = new SportletGroup(SportletGroup.BASE_GROUP);
+
+    /**
+     * The <code>SUPER</code> PortletGroup is the group that only super users of
+     * the portal belong to
+     */
+    public static final PortletGroup SUPER = new SportletGroup(SportletGroup.SUPER_GROUP);
 
     /**
      * @sql-size 128
@@ -28,58 +41,111 @@ public class SportletGroup extends BaseObject implements PortletGroup {
      */
     private String Name = new String();
 
-    // @todo why did we need the baseGroup thing??
-    // @todo elimnate the sportletgroup(id, name) thing
+    /**
+     * Constructs an instance of SportletGroup
+     */
+    public SportletGroup() {
+        super();
+    }
 
+    /**
+     * Constructs an instance of SportletGroup with a chosen name
+     *
+     * @param groupName the name of the group
+     */
     public SportletGroup(String groupName) {
         super();
         this.Name = groupName;
     }
 
-    public SportletGroup() {
-        super();
-    }
-
-    public String getName() {
-        return Name;
-    }
-
-    public String getID() {
-        return getOid();
-    }
-
-    public void setID(String id) {
-        setOid(id);
-    }
-
-
+    /**
+     * Sets the name of the group
+     *
+     * @param name the group name
+     */
     public void setName(String name) {
         Name = name;
     }
 
+    /**
+     * Returns the portlet group name
+     *
+     * @return the portlet group name
+     */
+    public String getName() {
+        return Name;
+    }
+
+    /**
+     * Returns the group id
+     *
+     * @return the group id
+     */
+    public String getID() {
+        return getOid();
+    }
+
+    /**
+     * Sets the group id
+     *
+     * @param id the group id
+     */
+    public void setID(String id) {
+        setOid(id);
+    }
+
+    /**
+     * Tests if the supplied group is an instance of the <code>BASE</code> group
+     *
+     * @reeturn <code>true</code> if the group is <code>BASE</code> or
+     * <code>false</code> otherwise
+     */
     public boolean isBaseGroup() {
         if (Name.equals(BASE_GROUP)) return true;
         return false;
     }
 
+    /**
+     * Tests if the supplied group is an instance of the <code>SUPER</code> group
+     *
+     * @return <code>true</code> if the group is <code>SUPER</code> or
+     * <code>false</code> otherwise
+     */
     public boolean isSuperGroup() {
         if (Name.equals(SUPER_GROUP)) return true;
         return false;
     }
 
+    /**
+     * Tests the equality of two groups
+     *
+     * @param object the <code>PortletGroup</code> to be tested
+     * @return <code>true</code> if the groups are equal, <code>false</code>
+     * otherwise
+     */
     public boolean equals(Object object) {
         if (object != null && (object.getClass().equals(this.getClass()))) {
-            PortletGroup portletGroup = (PortletGroup)object;
+            PortletGroup portletGroup = (PortletGroup) object;
             return (Name == portletGroup.getName());
         }
         return false;
     }
 
 
+    /**
+     * Returns a unique hashcode
+     *
+     * @return a unique hash code
+     */
     public int hashCode() {
         return Name.hashCode();
     }
 
+    /**
+     * Returns the group name
+     *
+     * @return the group name
+     */
     public String toString() {
         return Name;
     }

@@ -4,41 +4,31 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import javax.servlet.UnavailableException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.jsp.JspException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSessionEvent;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Hashtable;
-import java.util.List;
-import java.util.Vector;
 import java.util.Map;
-import java.security.MessageDigest;
 
 /**
- * The PortletAdapter provides a default implementation for the PortletInfo interface.
- * It is recommended not to extend the portlet interface directly.
- * Rather, a portlet should derive from this or any other derived class, because changes in
- * the PortletInfo interface are then mostly likely to be catched by the default implementation,
- * rather than breaking your portlet implementation.
- *
- * The virtual instance is created and destroyed with the login() and logout() methods, respectively.
- * If a portlet provides personalized views these methods should be implemented.
+ * The <code>PortletAdapter</code> provides a default implementation for the
+ * <code>Portlet</code> interfaces as well as providing a default handler
+ * for the <code>PortletSessionListener</code> to allow <it>user portlet
+ * instances</it> to be created and removed via the {@link #login} and
+ * {@link #logout} methods.
  */
-public abstract class PortletAdapter extends Portlet implements PortletSessionListener {
+public abstract class PortletAdapter extends Portlet {
 
     protected Hashtable storeVars = new Hashtable();
 
     /* keep track of all PortletSettings per concrete portlet (concreteID, PortletSettings) */
     private Map allPortletSettings = new Hashtable();
 
-    public PortletAdapter() {}
+    public PortletAdapter() {
+    }
 
     /**
      * Called by the portlet container to indicate to this portlet that it is put into service.
@@ -121,20 +111,20 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      */
     public void service(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         // There must be a portlet ID to knwo which portlet to service
-        String portletID = (String)request.getAttribute(GridSphereProperties.PORTLETID);
+        String portletID = (String) request.getAttribute(GridSphereProperties.PORTLETID);
         if (portletID == null) {
             // it may be in the request parameter
-            portletID = (String)request.getParameter(GridSphereProperties.PORTLETID);
+            portletID = (String) request.getParameter(GridSphereProperties.PORTLETID);
             if (portletID == null) {
                 log.error("in AbstractPortlet: No PortletID found in request attribute");
                 throw new PortletException("PortletID is null");
             }
         }
 
-        portletSettings = (PortletSettings)allPortletSettings.get(portletID);
+        portletSettings = (PortletSettings) allPortletSettings.get(portletID);
         request.setAttribute(GridSphereProperties.PORTLETSETTINGS, portletSettings);
 
-        String method = (String)request.getAttribute(SportletProperties.PORTLET_ACTION_METHOD);
+        String method = (String) request.getAttribute(SportletProperties.PORTLET_ACTION_METHOD);
         if (method != null) return;
 
         Portlet.Mode mode = request.getMode();
@@ -167,7 +157,6 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
     }
 
     /**
-     * Description copied from interface: PortletSessionListener
      * Called by the portlet container to ask the portlet to initialize a personalized user experience.
      * In addition to initializing the session this method allows the portlet to initialize the
      * concrete portlet instance, for example, to store attributes in the session.
@@ -180,7 +169,6 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
 
 
     /**
-     * Description copied from interface: PortletSessionListener
      * Called by the portlet container to indicate that a concrete portlet instance is being removed.
      * This method gives the concrete portlet instance an opportunity to clean up any resources
      * (for example, memory, file handles, threads), before it is removed.
@@ -220,13 +208,15 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
 
     /**
      * Returns the portlet log
+     *
+     * @return the portlet log
      */
     public PortletLog getPortletLog() {
         return log;
     }
 
     /**
-     * Helper method to serve up the CONFIGURE mode.
+     * Helper method to handle any errors that occured during processing
      *
      * @param request the portlet request
      * @param response the portlet response
@@ -281,7 +271,6 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      */
     public void doHelp(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
-        // default is doView()
         doView(request, response);
     }
 
@@ -316,10 +305,8 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      * Removes a transient variable of the concrete portlet.
      *
      * @param name the variable name
-     *
-     * @throws AccessDeniedException if the method is called outside of a concrete portlet
      */
-    public void removeVariable(String name) throws AccessDeniedException {
+    public void removeVariable(String name) {
         if (storeVars.containsKey(name)) {
             storeVars.remove(name);
         }
@@ -330,10 +317,8 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      *
      * @param name the variable name
      * @param the variable value
-     *
-     * @throws AccessDeniedException if the method is called outside of a concrete portlet
      */
-    public void setVariable(String name, Object value) throws AccessDeniedException {
+    public void setVariable(String name, Object value) {
         if ((name != null) && (value != null))
             storeVars.put(name, value);
     }

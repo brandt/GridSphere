@@ -5,7 +5,7 @@
 package org.gridlab.gridsphere.portlet;
 
 /**
- * The AccessDeniedException is thrown if a portlet attempts to access dynamic data in a manner
+ * The <code>AccessDeniedException</code> is thrown if a portlet attempts to access dynamic data in a manner
  * that it is not allowed to. For example, a portlet which is not in CONFIGURE mode cannot set
  * or remove attributes in the dynamic data of the portlet configuration. However, it can read
  * attributes. This exception is also thrown if a portlet tries to access an event based function
@@ -14,7 +14,7 @@ package org.gridlab.gridsphere.portlet;
 public class AccessDeniedException extends PortletException {
 
     /**
-     * Constructs a new portlet exception.
+     * Constructs instance of AccessDeniedException
      */
     public AccessDeniedException() {
         super();

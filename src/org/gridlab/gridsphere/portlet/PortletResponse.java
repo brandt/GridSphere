@@ -9,6 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+/**
+ * The <code>PortletResponse</code> encapsulates the response sent by the client
+ * to the portlet.
+ */
 public interface PortletResponse extends HttpServletResponse {
 
     /**
@@ -45,7 +49,8 @@ public interface PortletResponse extends HttpServletResponse {
     /**
      * Returns a boolean indicating whether the named response header has already been set.
      *
-     * @return true if response header name has been sent, false otherwise
+     * @return <code>true</code> if response header name has been sent,
+     * <code>false</code> otherwise
      */
     public boolean containsHeader(String name);
 
@@ -65,7 +70,8 @@ public interface PortletResponse extends HttpServletResponse {
     public PortletURI createURI();
 
     /**
-     * Creates a portlet URI pointing to the current portlet mode and given portlet window state.
+     * Creates a portlet URI pointing to the current portlet mode and given
+     * portlet window state.
      *
      * @param state the portlet window state
      */
@@ -79,10 +85,10 @@ public interface PortletResponse extends HttpServletResponse {
     public String encodeNamespace(String aValue);
 
     /**
-     * Returns the encoded URI of the resource at the given path.
+     * Returns the encoded URL of the resource at the given path.
      *
      * @param path the given path
-     * @return the encoded URI
+     * @return the encoded URL
      */
     public String encodeURL(String path);
 
@@ -94,16 +100,19 @@ public interface PortletResponse extends HttpServletResponse {
     public String getCharacterEncoding();
 
     /**
-     * Returns the content type that can be used to contribute markup to the portlet response.
+     * Returns the content type that can be used to contribute markup to the
+     * portlet response.
      *
      * @return the content type
      */
     public String getContentType();
 
     /**
-     * Returns the writer object that can be used to contribute markup to the portlet response.
+     * Returns the writer object that can be used to contribute markup to the
+     * portlet response.
      *
      * @return the writer
+     * @throws IOException if an I/O error occurs
      */
     public PrintWriter getWriter() throws IOException;
 
@@ -125,9 +134,10 @@ public interface PortletResponse extends HttpServletResponse {
 
     /**
      * Sets a response header with the given name and integer value.
-     * If the header had already been set, the new value overwrites the previous one.
-     * The containsHeader  method can be used to test for the presence of a header before setting its value.
-     *
+     * If the header had already been set, the new value overwrites the
+     * previous one. The containsHeader  method can be used to test for the
+     * presence of a header before setting its value.
+     * <p>
      * We need to think about all header methods and how to solve nameclashes, etc.
      *
      */

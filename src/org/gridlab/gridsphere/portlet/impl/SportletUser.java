@@ -7,9 +7,8 @@ package org.gridlab.gridsphere.portlet.impl;
 import org.gridlab.gridsphere.portlet.User;
 
 /**
- * The User interface is an abstract view on the user-specific data.
- * Apart from a set of pre-defined, fixed set of attributes,
- * the interface gives access to user profile data.
+ * The <code>SportletUser</code> extends the immutable <code>User</code>
+ * and provides all the setter- methods to set user attributes.
  */
 public interface SportletUser extends User {
 
@@ -82,8 +81,9 @@ public interface SportletUser extends User {
     public void setUserName(String login);
 
     /**
-     * Sets the point of time that this user was last logged in, or null if this information is not available.
-     * The time is returned in number of milliseconds since January 1, 1970 GMT.
+     * Sets the point of time that this user was last logged in, or null if this
+     * information is not available. The time is returned in number of milliseconds
+     * since January 1, 1970 GMT.
      *
      * @param lastLoginTime the last login time
      */

@@ -4,71 +4,87 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.DefaultPortletAction;
+import org.gridlab.gridsphere.portlet.PortletAction;
+import org.gridlab.gridsphere.portlet.PortletURI;
+import org.gridlab.gridsphere.portlet.PortletWindow;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
- * A PortletURI represents a URI to a specific portlet function.
- * A URI is created through the PortletResponse  for a specific portlet mode.
- * Then additional parameter can be added to the URI.
- * The complete URI can be converted to a string which is ready for embedding into markup.
- * On top of the parameters, it is possible to add actions to a portlet URI.
- * Actions are portlet-specific activities that need to be performed as result of the incoming request,
- * but before the service() method of the portlet is called.
- * For example, the PERSONALIZE mode of the portlet is likely to have a "Save" button at the
- * end of its dialog. The "Save" button has to bring the user back to the DEFAULT mode of the portlet,
- * but to save the personalized portlet data, the portlet needs to be able to process the posted
- * data before the next markup is generated. This can be achieved by adding a "Save" action to the
- * URI that represents the "Save" button. The respective listener is attached the respective action listener
- * to the portlet response. This listener will be called when the next request comes and one of the
- * portlet URIs where the reason for the request. If more than one URI were part of the response, the listener
- * need to the check the action content. This depends on the definition of the actual action which is
- * the responsibility of the portlet developer.
+ * A <code>SportletURI</code> provides an implementation of a
+ * <code>PortletURI</code>
  */
 public class SportletURI implements PortletURI {
 
     private HttpServletResponse res = null;
     private Map store = new HashMap();
     private boolean redirect = true;
-    private String contextName;
+    private String contextPath;
     private PortletWindow.State state;
     private String id = "";
 
-    private SportletURI() {}
+    /**
+     * Cannot instantiate uninitialized SportletResponse
+     */
+    private SportletURI() {
+    }
 
-    public SportletURI(HttpServletResponse res, String contextName) {
-        store = new HashMap();
-        this.contextName = contextName;
+    /**
+     * Constructs a SportletURI from a <code>HttpServletResponse</code> and a
+     * context path obtained from a <code>HttpServletRequest</code>
+     *
+     * @param res a <code>HttpServletResponse</code>
+     * @param contextName the request context name
+     */
+    public SportletURI(HttpServletResponse res, String contextPath) {
+        this.store = new HashMap();
+        this.contextPath = contextPath;
         this.res = res;
         this.id = createUniquePrefix(2);
     }
 
+    /**
+     *  A string utility that produces a string composed of
+     * <code>numChars</code> number of characters
+     *
+     * @param numChars the number of characters in the resulting <code>String</code>
+     * @return the <code>String</code>
+     */
     private String createUniquePrefix(int numChars) {
         StringBuffer s = new StringBuffer();
-        for (int i=0; i <= numChars; i++) {
-            int nextChar=(int)(Math.random()*62);
-            if (nextChar<10) //0-9
+        for (int i = 0; i <= numChars; i++) {
+            int nextChar = (int) (Math.random() * 62);
+            if (nextChar < 10) //0-9
                 s.append(nextChar);
-            else if (nextChar<36) //a-z
-                s.append((char)(nextChar-10+'a'));
+            else if (nextChar < 36) //a-z
+                s.append((char) (nextChar - 10 + 'a'));
             else
-                s.append((char)(nextChar-36+'A'));
+                s.append((char) (nextChar - 36 + 'A'));
         }
         return s.toString();
     }
 
+    /**
+     * Determines if the generated URI should be referring back to itself
+     *
+     * @param redirect <code>true</code> if the generated URI should be
+     * redirected, <code>false</code> otherwise
+     */
     public void setReturn(boolean redirect) {
         this.redirect = redirect;
     }
 
     /**
-     * Adds the given parameter to this URI. A portlet container may wish to prefix the attribute names
-     * internally, to preserve a unique namespace for the portlet.
+     * Adds the given parameter to this URI. A portlet container may wish to
+     * prefix the attribute names internally, to preserve a unique namespace
+     * for the portlet.
      *
      * @param name the parameter name
      * @param value the parameter value
@@ -78,17 +94,19 @@ public class SportletURI implements PortletURI {
     }
 
     /**
-     * Adds the given action to this URI. The action is a portlet-defined implementation of the portlet action
-     * interface. It can carry any information. How the information is recovered should the next request be for
-     * this URI is at the discretion of the portlet container.
-     *
-     * Unless the ActionListener interface is implemented at the portlet this action will not be delivered.
+     * Adds the given action to this URI. The action is a portlet-defined
+     * implementation of the portlet action interface. It can carry any information.
+     * How the information is recovered should the next request be for this URI is
+     * at the discretion of the portlet container.
+     * <p>
+     * Unless the ActionListener interface is implemented at the portlet this
+     * action will not be delivered.
      *
      * @param action the portlet action
      */
     public void addAction(PortletAction action) {
         if (action instanceof DefaultPortletAction) {
-            DefaultPortletAction dpa = (DefaultPortletAction)action;
+            DefaultPortletAction dpa = (DefaultPortletAction) action;
             store.put(GridSphereProperties.ACTION, dpa.getName());
 
             Map actionParams = dpa.getParameters();
@@ -96,42 +114,48 @@ public class SportletURI implements PortletURI {
             Set set = actionParams.keySet();
             Iterator it = set.iterator();
             while (it.hasNext()) {
-                String name = (String)it.next();
+                String name = (String) it.next();
                 String newname = id + "_" + name;
-                String value = (String)actionParams.get(name);
+                String value = (String) actionParams.get(name);
                 store.put(newname, value);
             }
         }
     }
 
+    /**
+     * Sets the window state that will be invoked by this URI
+     *
+     * @param state the window state that will be invoked by this URI
+     */
     public void setWindowState(PortletWindow.State state) {
         store.put(GridSphereProperties.PORTLETWINDOW, state.toString());
     }
 
     /**
-     * Returns the complete URI as a string. The string is ready to be embedded in markup.
-     * Once the string has been created, adding more parameters or other listeners will not modify the string.
-     * You have to call this method again, to create an updated string.
+     * Returns the complete URI as a string. The string is ready to be embedded
+     * in markup. Once the string has been created, adding more parameters or
+     * other listeners will not modify the string. You have to call this method
+     * again, to create an updated string.
      *
      * @return the URI as a string
      */
     public String toString() {
-        String url = contextName;
+        String url = contextPath;
         String newURL;
         Set set = store.keySet();
         if (!set.isEmpty()) {
             // add question mark
-            url = contextName + contextName + "?";
+            url = contextPath + contextPath + "?";
         } else {
-            return contextName + url;
+            return contextPath + url;
         }
         boolean firstParam = true;
         Iterator it = set.iterator();
         while (it.hasNext()) {
             if (!firstParam)
                 url += "&";
-            String name = (String)it.next();
-            String value = (String)store.get(name);
+            String name = (String) it.next();
+            String value = (String) store.get(name);
             url += name + "=" + value;
             firstParam = false;
         }
@@ -143,11 +167,4 @@ public class SportletURI implements PortletURI {
         return newURL;
     }
 
-    public String encode(String clear) {
-        return null;
-    }
-
-    public String decode(String encoded) {
-        return null;
-    }
 }

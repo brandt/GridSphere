@@ -5,7 +5,7 @@
 package org.gridlab.gridsphere.portlet;
 
 /**
- * Instances of the Capability class correspond to particular properties which can be assigned to the client devices.
+ * Instances of the <code>Capability</code> class correspond to particular properties which can be assigned to the client devices.
  * The class has only a private constructor, so that it is not possible to dynamically create objects of this class
  * from outside the class. A set of predefined isntances (ie. capabilities) is provided.
  */
@@ -38,7 +38,7 @@ public class Capability {
     public static final int WML_TABLE = 12;
 
     /**
-     * capability constructor cannot be instantiated
+     * Capability constructor cannot be instantiated
      */
     private Capability() {
 

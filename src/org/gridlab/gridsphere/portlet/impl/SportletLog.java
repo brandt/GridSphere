@@ -13,9 +13,13 @@ import java.util.Hashtable;
 import java.util.Map;
 
 /**
- * The PortletLog provides the portlet with the ability to log information, warning, or error texts.
- * The log is maintained by the portlet container. The type and location of of the log is a matter of implementation.
- * Also, whether logging is enabled or not is at the discretion of the portlet container.
+ * The <code>PortletLog</code> provides the portlet with the ability to log
+ * information, warning, or error texts. The log is maintained by the portlet
+ * container. The type and location of of the log is a matter of implementation.
+ * Also, whether logging is enabled or not is at the discretion of the
+ * portlet container.
+ * <p>
+ * <code>
  * ...
  * PortletLog log = iContext.getLog ();
  *
@@ -23,6 +27,8 @@ import java.util.Map;
  *    log.warn ("Can access the content source");
  *
  * ...
+ * </code>
+ * <p>
  * This PortletLogImpl is a proxy for the Log 4J Logger object
  */
 public class SportletLog implements PortletLog {
@@ -41,7 +47,7 @@ public class SportletLog implements PortletLog {
     /**
      * Return an instance of the PortletLog for a particular class
      *
-     * @return the PortletLogImpl
+     * @return the PortletLog
      */
     public static synchronized PortletLog getInstance(Class clazz) {
         SportletLog log = (SportletLog) logMap.get(clazz);

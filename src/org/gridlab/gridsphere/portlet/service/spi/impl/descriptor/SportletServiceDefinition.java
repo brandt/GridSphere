@@ -6,99 +6,179 @@ package org.gridlab.gridsphere.portlet.service.spi.impl.descriptor;
 
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
 
-import java.util.Vector;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.Iterator;
-import java.io.PrintWriter;
-import java.io.PrintStream;
+import java.util.Vector;
 
+/**
+ * The <code>SportletServiceDefinition</code> defines a portlet service
+ * definition that is defined in the portlet service descripor.
+ */
 public class SportletServiceDefinition {
 
-    protected String Name = "";
-    protected String Description = "";
-    protected String Interface = "";
-    protected String Implementation = "";
-    protected boolean UserRequired = false;
-    protected List ConfigParamList = new Vector();
+    protected String serviceName = "";
+    protected String serviceDescription = "";
+    protected String serviceInterface = "";
+    protected String serviceImplementation = "";
+    protected boolean userRequired = false;
+    protected List configParamList = new Vector();
     protected Properties configProps = null;
 
-    public void setName(String Name) {
-        this.Name = Name;
+    /**
+     * Sets the portlet service name
+     *
+     * @param serviceName the portlet service name
+     */
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 
-    public String getName() {
-        return Name;
+    /**
+     * Returns the portlet service name
+     *
+     * @return the portlet service name
+     */
+    public String getServiceName() {
+        return this.serviceName;
     }
 
-    public void setDescription(String Description) {
-        this.Description = Description;
+    /**
+     * Sets the portlet service description
+     *
+     * @param serviceName the portlet service description
+     */
+    public void setServiceDescription(String serviceDescription) {
+        this.serviceDescription = serviceDescription;
     }
 
-    public String getDescription() {
-        return Description;
+    /**
+     * Returns the portlet service name
+     *
+     * @return the portlet service name
+     */
+    public String getServiceDescription() {
+        return this.serviceDescription;
     }
 
-    public void setInterface(String Interface) {
-        this.Interface = Interface;
+    /**
+     * Sets the portlet service interface
+     *
+     * @param serviceInterface the portlet service interface
+     */
+    public void setServiceInterface(String serviceInterface) {
+        this.serviceInterface = serviceInterface;
     }
 
-    public String getInterface() {
-        return Interface;
+    /**
+     * Returns the portlet service interface
+     *
+     * @return the portlet service interface
+     */
+    public String getServiceInterface() {
+        return this.serviceInterface;
     }
 
-    public String getImplementation() {
-        return Implementation;
+    /**
+     * Returns the portlet service implementation
+     *
+     * @param serviceImplementation the portlet service implementation
+     */
+    public String getServiceImplementation() {
+        return this.serviceImplementation;
     }
 
-    public void setImplementation(String Implementation) {
-        this.Implementation = Implementation;
+    /**
+     * Sets the portlet service implementation
+     *
+     * @param serviceImplementation the portlet service implementation
+     */
+    public void setServiceImplementation(String serviceImplementation) {
+        this.serviceImplementation = serviceImplementation;
     }
 
-    public void setUserRequired(boolean UserRequired) {
-        this.UserRequired = UserRequired;
+    /**
+     * Determines if this service is a user service or not
+     *
+     * @param userRequired if <code>true</code> then portlet service is
+     * an instance of a user service, <code>false</code> otherwise
+     */
+    public void setUserRequired(boolean userRequired) {
+        this.userRequired = userRequired;
     }
 
+    /**
+     * Determines if this service is a user service or not
+     *
+     * @return <code>true</code> if portlet service is
+     * an instance of a user service, <code>false</code> otherwise
+     */
     public boolean getUserRequired() {
-        return UserRequired;
+        return this.userRequired;
     }
 
-    public void setConfigParamList(Vector ConfigParamList) {
-        this.ConfigParamList = ConfigParamList;
+    /**
+     * Sets the service configuration parameter list
+     *
+     * @param configParamList the configuration parameter list
+     */
+    public void setConfigParamList(Vector configParamList) {
+        this.configParamList = configParamList;
     }
 
+    /**
+     * Returns the service configuration parameter list
+     *
+     * @return the configuration parameter list
+     */
     public List getConfigParamList() {
-        return ConfigParamList;
+        return this.configParamList;
     }
 
-    private void makeProperties() {
+    /**
+     * Creates a properties from the  ConfigParamList
+     *
+     * @see #getConfigParamList
+     */
+    private void createProperties() {
         configProps = new Properties();
-        Iterator it = ConfigParamList.iterator();
+        Iterator it = this.configParamList.iterator();
         ConfigParam param;
         while (it.hasNext()) {
-            param = (ConfigParam)it.next();
+            param = (ConfigParam) it.next();
             configProps.setProperty(param.getParamName(), param.getParamValue());
         }
     }
 
+    /**
+     * Return the configuration properties
+     *
+     * @return the configuration properties
+     */
     public Properties getConfigProperties() {
         if (configProps == null)
-            makeProperties();
+            createProperties();
         return configProps;
     }
 
+    /**
+     * Returns a <code>String</code> representation if this portlet service
+     * definition
+     *
+     * @return the service definition as a <code>String</code>
+     */
     public String toString() {
         StringBuffer sb = new StringBuffer("\n");
-        sb.append("service name: " + Name + "\n");
-        sb.append("description: " + Description + "\n");
-        sb.append("interface: " + Interface + "\n");
-        sb.append("user required: " + UserRequired + "\n");
-        sb.append("implementation: " + Implementation + "\n");
+        sb.append("service name: " + this.serviceName + "\n");
+        sb.append("service description: " + this.serviceDescription + "\n");
+        sb.append("service interface: " + this.serviceInterface + "\n");
+        sb.append("service implementation: " + this.serviceImplementation + "\n");
+        sb.append("user required: " + this.userRequired + "\n");
         sb.append("config properties: ");
-        Iterator it = ConfigParamList.iterator();
+        Iterator it = this.configParamList.iterator();
         ConfigParam c;
         while (it.hasNext()) {
-            c = (ConfigParam)it.next();
+            c = (ConfigParam) it.next();
             sb.append("\tname: " + c.getParamName() + "\tvalue: " + c.getParamValue());
         }
         return sb.toString();

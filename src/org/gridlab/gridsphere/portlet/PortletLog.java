@@ -5,23 +5,29 @@
 package org.gridlab.gridsphere.portlet;
 
 /**
- * The PortletLog provides the portlet with the ability to log information, warning, or error texts.
- * The log is maintained by the portlet container. The type and location of of the log is a matter of implementation.
- * Also, whether logging is enabled or not is at the discretion of the portlet container.
- * ...
+ * The <code>PortletLog</code> provides the portlet with the ability to log
+ * information, warning, or error texts. The log is maintained by the portlet
+ * container. The type and location of of the log is a matter of implementation.
+ * Also, whether logging is enabled or not is at the discretion of the portlet
+ * container.
+ * <p>
+ * <code>
+ *  ...
  * PortletLog log = iContext.getLog ();
  *
  * if (log.isWarnEnabled())
  *    log.warn ("Can access the content source");
  *
  * ...
+ * </code>
  */
 public interface PortletLog {
 
     /**
      * Returns whether the debug level of the portlet log is enabled.
      *
-     * @return true if debbuging is enabled, false otherwise
+     * @return <code>true</code> if debbuging is enabled, <code>false</code>
+     * otherwise
      */
     public boolean isDebugEnabled();
 
@@ -35,7 +41,8 @@ public interface PortletLog {
     /**
      * Returns whether the info level of the portlet log is enabled.
      *
-     * @return true if the log is enabled, false otherwise
+     * @return <code>true</code> if the log is enabled,
+     * <code>>false</code> otherwise
      */
     public boolean isInfoEnabled();
 
@@ -49,7 +56,8 @@ public interface PortletLog {
     /**
      * Returns whether the warn level of the portlet log is enabled.
      *
-     * @return true if the log is enabled, false otherwise
+     * @return <code>true</code> if the log is enabled,
+     * <code>false</code> otherwise
      */
     public boolean isWarnEnabled();
 
@@ -63,7 +71,8 @@ public interface PortletLog {
     /**
      * Returns whether the error level of the portlet log is enabled.
      *
-     * @return true if the log is enabled, false otherwise
+     * @return <code>true</code> if the log is enabled,
+     * <code>false</code> otherwise
      */
     public boolean isErrorEnabled();
 

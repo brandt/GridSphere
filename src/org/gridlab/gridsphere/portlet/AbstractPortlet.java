@@ -7,20 +7,22 @@ package org.gridlab.gridsphere.portlet;
 import org.gridlab.gridsphere.event.*;
 import org.gridlab.gridsphere.event.impl.ActionEventImpl;
 import org.gridlab.gridsphere.event.impl.MessageEventImpl;
-
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
-import javax.servlet.http.HttpSessionEvent;
 import java.io.IOException;
 import java.io.PrintWriter;
 
 
 /**
- * Additional extensions to a Portlet Adapter to provide action, title, message and window event handling
+ * The <code>AbstractPortlet</code> provides default implementations of the
+ * portlet event listeners and the <code>PortletTitleListener</code> to allow
+ * portlets to receive portlet events and generate title bar markup.
  */
 public class AbstractPortlet extends PortletAdapter implements ActionListener, MessageListener, WindowListener, PortletTitleListener {
 
+    /**
+     * Constructs an instance of AbstractPortlet
+     */
     public AbstractPortlet() {
         super();
     }
@@ -49,13 +51,13 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
     public void service(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
         super.service(request, response);
-        String method = (String)request.getAttribute(SportletProperties.PORTLET_ACTION_METHOD);
+        String method = (String) request.getAttribute(SportletProperties.PORTLET_ACTION_METHOD);
         if (method != null) {
             log.info("Received ACTION_METHOD: " + method);
             if (method.equals(SportletProperties.DO_TITLE)) {
                 doTitle(request, response);
             } else if (method.equals(SportletProperties.WINDOW_EVENT)) {
-                WindowEvent winEvent = (WindowEvent)request.getAttribute(SportletProperties.WINDOW_EVENT);
+                WindowEvent winEvent = (WindowEvent) request.getAttribute(SportletProperties.WINDOW_EVENT);
                 switch (winEvent.getEventId()) {
                     case WindowEvent.WINDOW_MAXIMIZED:
                         windowMaximized(winEvent);
@@ -73,12 +75,12 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
                 }
             } else if (method.equals(SportletProperties.ACTION_PERFORMED)) {
                 // Set the appropiate portlet action
-                DefaultPortletAction action = (DefaultPortletAction)request.getAttribute(SportletProperties.ACTION_EVENT);
-                ActionEvent evt =  new ActionEventImpl(action, request, response);
+                DefaultPortletAction action = (DefaultPortletAction) request.getAttribute(SportletProperties.ACTION_EVENT);
+                ActionEvent evt = new ActionEventImpl(action, request, response);
                 actionPerformed(evt);
             } else if (method.equals(SportletProperties.MESSAGE_RECEIVED)) {
                 // Set the appropiate portlet action
-                DefaultPortletMessage msg = (DefaultPortletMessage)request.getAttribute(SportletProperties.MESSAGE_EVENT);
+                DefaultPortletMessage msg = (DefaultPortletMessage) request.getAttribute(SportletProperties.MESSAGE_EVENT);
                 MessageEvent evt = new MessageEventImpl(request, msg);
                 messageReceived(evt);
             }
@@ -94,7 +96,8 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
      * @param event the action event
      * @throws PortletException if the listener has trouble fulfilling the request
      */
-    public void actionPerformed(ActionEvent event) throws PortletException {}
+    public void actionPerformed(ActionEvent event) throws PortletException {
+    }
 
     /**
      * Notifies this listener that the message which the listener is watching for has been performed.
@@ -103,7 +106,8 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
      *
      * @throws PortletException if the listener has trouble fulfilling the request
      */
-    public void messageReceived(MessageEvent event) throws PortletException {}
+    public void messageReceived(MessageEvent event) throws PortletException {
+    }
 
     /**
      * Called by the portlet container to render the portlet title.
@@ -118,8 +122,8 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
      * @param request the portlet request
      * @param response the portlet response
      *
-     * @throws <code>PortletException</code>if the portlet title has trouble fulfilling the rendering request
-     * @throws java.io.IOException if the streaming causes an I/O problem
+     * @throws PortletException if the portlet title has trouble fulfilling the rendering request
+     * @throws IOException if the streaming causes an I/O problem
      */
     public void doTitle(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         PortletSettings settings = request.getPortletSettings();

@@ -9,9 +9,9 @@ import java.util.Enumeration;
 
 
 /**
- * The PortletSession holds the user-specific data that the portlet needs to
- * personalize the one global portlet instance. Together with the portlet,
- * the portlet session constitutes the concrete portlet instance.
+ * The <code>PortletSession</code> holds the user-specific data that the portlet
+ * needs to personalize the one global portlet instance. Together with the
+ * portlet, the portlet session constitutes the concrete portlet instance.
  */
 public interface PortletSession extends HttpSession {
 
@@ -36,7 +36,7 @@ public interface PortletSession extends HttpSession {
      * Associates an attribute with the given name and value with this session.
      * If a portlet needs to communicate information to embedded servlets or JSP,
      * this methods can used carry the information along.
-     *
+     * <p>
      * The portlet provider should take care that the the namespace of attribute
      * names is not unnecessarily polluted. It is recommended to prefix all attributes
      * the package and class name of the portlet that makes use of this method.

@@ -8,7 +8,9 @@ import java.util.Hashtable;
 import java.util.Map;
 
 /**
- *
+ * The <code>DefaultPortletMessage</code> is a portlet message with default parameters.
+ * You can use this portlet message to construct a portlet message
+ * This default implementation demonstrates how to implement it.
  */
 public final class DefaultPortletMessage implements PortletMessage {
 
@@ -18,10 +20,13 @@ public final class DefaultPortletMessage implements PortletMessage {
     /**
      * Default constructor creates a PortletMessage with an empty message
      */
-    public DefaultPortletMessage() {}
+    public DefaultPortletMessage() {
+    }
 
     /**
      * Constructor creates a PortletMessage with the provided message
+     *
+     * @param message the portlet message
      */
     public DefaultPortletMessage(String message) {
         this.message = message;
@@ -45,6 +50,11 @@ public final class DefaultPortletMessage implements PortletMessage {
         this.message = message;
     }
 
+    /**
+     * Returns the message String
+     *
+     * @return the message <code>String</code>
+     */
     public String toString() {
         return message;
     }

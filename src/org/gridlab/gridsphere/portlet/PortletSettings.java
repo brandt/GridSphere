@@ -4,15 +4,17 @@
  */
 package org.gridlab.gridsphere.portlet;
 
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Locale;
-import java.io.IOException;
 
 /**
- * The PortletSettings interface provides the portlet with its dynamic configuration.
- * The configuration holds information about the portlet that is valid per concrete portlet for all users,
- * and is maintained by the administrator. The portlet can therefore only read the dynamic configuration.
- * Only when the portlet is in CONFIGURE mode, it has write access to the dynamic configuration data
+ * The <code>PortletSettings</code> interface provides the portlet with its
+ * dynamic configuration. The configuration holds information about the portlet
+ * that is valid per concrete portlet for all users, and is maintained by the
+ * administrator. The portlet can therefore only read the dynamic configuration.
+ * Only when the portlet is in <code>CONFIGURE</code> mode, it has write access
+ * to the dynamic configuration data.
  */
 public interface PortletSettings {
 
@@ -48,8 +50,8 @@ public interface PortletSettings {
     public Locale getDefaultLocale();
 
     /**
-     * Returns the short title of this window for the provided locale, or null if none exists.
-     * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
+     * Returns the short title of this window for the provided locale,
+     * or <code>null</code> if none exists.
      *
      * @param locale the locale-centric title
      * @param client the given client
@@ -59,8 +61,8 @@ public interface PortletSettings {
 
 
     /**
-     * Returns the description of this window for the provided locale, or null if none exists.
-     * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
+     * Returns the description of this window for the provided locale,
+     * or <code>null</code> if none exists.
      *
      * @param locale the locale-centric title
      * @param client the given client
@@ -69,8 +71,8 @@ public interface PortletSettings {
     public String getDescription(Locale locale, Client client);
 
     /**
-     * Returns the keywords of this window for the provided locale, or null if none exists.
-     * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
+     * Returns the keywords of this window for the provided locale,
+     * or <code>null</code> if none exists.
      *
      * @param locale the locale-centric title
      * @param client the given client
@@ -90,28 +92,23 @@ public interface PortletSettings {
      * Removes the attribute with the given name.
      *
      * @param name the attribute name
-     *
-     * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
-    public void removeAttribute(String name) throws AccessDeniedException;
+    public void removeAttribute(String name);
 
     /**
      * Sets the attribute with the given name and value.
      *
      * @param name the attribute name
      * @param value the attribute value
-     *
-     * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
-    public void setAttribute(String name, String value) throws AccessDeniedException;
+    public void setAttribute(String name, String value);
 
     /**
      * Stores all attributes.
      *
-     * @throws AccessDeniedException if the caller isn't authorized to access this data object
      * @throws IOException if the streaming causes an I/O problem
      */
-    public void store() throws AccessDeniedException, IOException;
+    public void store() throws IOException;
 
     /**
      * Returns the portlet application settings

@@ -5,17 +5,17 @@
 package org.gridlab.gridsphere.portlet.service.spi.impl;
 
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
+import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceAuthorizer;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceAuthorizer;
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceCollection;
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDefinition;
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDescriptor;
@@ -30,16 +30,15 @@ import java.lang.reflect.Constructor;
 import java.util.*;
 
 /**
- * The PortletServiceCacheFactory provides a singleton factory to create portlet services.
- *
- * Uses the double-check locking variant of the singleton pattern to allow for concurrent threads.
+ * The <code>SportletServiceFactory</code> provides a factory for the creation
+ * of portlet services. The <code>SportletServiceFactory</code> is also
+ * responsible for portlet service lifecycle management including
+ * initialization and shutdown.
  */
 public class SportletServiceFactory implements PortletServiceFactory {
 
     private static PortletLog log = SportletLog.getInstance(SportletServiceFactory.class);
-
     private static SportletServiceFactory instance = new SportletServiceFactory();
-
     private static GridSphereUserManager userManager = GridSphereUserManager.getInstance();
 
     // Maintain a single copy of each service instantiated
@@ -62,9 +61,16 @@ public class SportletServiceFactory implements PortletServiceFactory {
         String servicesPath = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_SERVICES_XML);
         serviceMappingPath = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_SERVICES_MAPPING_XML);
         addServices(servicesPath, serviceMappingPath);
-
     }
 
+    /**
+     * Constructor creates an instance of SportletServiceFactory from a servlet
+     * context
+     *
+     * <b>not fully implemented yet</b>
+     *
+     * @param context a <code>ServletContext</code>
+     */
     private SportletServiceFactory(ServletContext context) {
         String webApplicationName = context.getServletContextName();
         // get the servlet context for the coreportlets webapp
@@ -76,7 +82,13 @@ public class SportletServiceFactory implements PortletServiceFactory {
         addServices(servicesPath, serviceMappingPath);
     }
 
-
+    /**
+     * Umarshalls services from the descriptor file found in servicesPath
+     * using the mapping file specified
+     *
+     * @param servicesPath the path to the portlet services descriptor file
+     * @param mappingPath the path to the portlet services mapping file
+     */
     protected void addServices(String servicesPath, String mappingPath) {
         SportletServiceDescriptor descriptor = null;
         try {
@@ -91,8 +103,8 @@ public class SportletServiceFactory implements PortletServiceFactory {
         Iterator it = services.iterator();
         while (it.hasNext()) {
             SportletServiceDefinition serviceDef = (SportletServiceDefinition) it.next();
-            allServices.put(serviceDef.getInterface(), serviceDef);
-            log.info("adding service: " + serviceDef.getInterface() + " service def: " + serviceDef.toString());
+            allServices.put(serviceDef.getServiceInterface(), serviceDef);
+            log.info("adding service: " + serviceDef.getServiceInterface() + " service def: " + serviceDef.toString());
         }
     }
 
@@ -140,11 +152,11 @@ public class SportletServiceFactory implements PortletServiceFactory {
 
         // if user is required then pass in Guest user privileges
         if (def.getUserRequired()) {
-            return createPortletUserService(service, GuestUser.getInstance(), servletConfig, useCachedService);
+            return createUserPortletService(service, GuestUser.getInstance(), servletConfig, useCachedService);
         }
 
         /* Create the service implementation */
-        String serviceImpl = def.getImplementation();
+        String serviceImpl = def.getServiceImplementation();
         if (serviceImpl == null) {
             log.error("Unable to find implementing portlet service: " + serviceName +
                     " . Please check PortletServices.xml file for proper service entry");
@@ -185,7 +197,7 @@ public class SportletServiceFactory implements PortletServiceFactory {
      * @throws PortletServiceUnavailableException if the portlet service is unavailable
      * @throws PortletServiceNotFoundException if the PortletService is not found
      */
-    public PortletService createPortletUserService(Class service, User user,
+    public PortletService createUserPortletService(Class service, User user,
                                                    ServletConfig servletConfig,
                                                    boolean useCachedService)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException {
@@ -207,7 +219,7 @@ public class SportletServiceFactory implements PortletServiceFactory {
         }
 
         /* Create the service implementation */
-        String serviceImpl = def.getImplementation();
+        String serviceImpl = def.getServiceImplementation();
         if (serviceImpl == null) {
             log.error("Unable to find implementing portlet service: " + serviceName +
                     " . Please check PortletServices.xml file for proper service entry");
@@ -245,12 +257,18 @@ public class SportletServiceFactory implements PortletServiceFactory {
         return psp;
     }
 
+    /**
+     *  Returns an enumaration of the active services (services that have been
+     * initialized)
+     *
+     * @return an enumaration of the active services
+     */
     public Enumeration getActiveServices() {
         return initServices.keys();
     }
 
     /**
-     * This is used by the portlet container to shutdown a service
+     * Destroys a portlet service identified by its class
      *
      * @param service the service class to shutdown
      */
@@ -263,7 +281,7 @@ public class SportletServiceFactory implements PortletServiceFactory {
     }
 
     /**
-     * This is used by the portlet container to shutdown all instantiated services
+     * Shuts down all portlet services managed by this factory
      */
     public void shutdownServices() {
         // Calls destroy() on all services we know about

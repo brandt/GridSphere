@@ -4,11 +4,11 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
- * The DefaultPortletAction is a portlet action with default parameters.
+ * The <code>DefaultPortletAction</code> is a portlet action with default parameters.
  * You can use this portlet action to pass parameters in your action or create your own portlet action.
  * This default implementation demonstrates how to implement it.
  */
@@ -18,7 +18,7 @@ public final class DefaultPortletAction implements PortletAction {
     private String name;
 
     /**
-     * Constructor creates portlet action from action name
+     * Constructs an instance of DefaultPortletAction with the provided name
      */
     public DefaultPortletAction(String name) {
         this.name = name;
@@ -61,9 +61,14 @@ public final class DefaultPortletAction implements PortletAction {
         this.store = store;
     }
 
+    /**
+     * Tests the equality of another DefaultPortletAction object
+     *
+     * @return <code>true</code> if they are equal, <code>false</code> otherwise
+     */
     public boolean equals(Object obj) {
         if ((obj != null) && (obj.getClass().equals(this.getClass()))) {
-            return (((DefaultPortletAction)obj).getName().equals(this.getName()));
+            return (((DefaultPortletAction) obj).getName().equals(this.getName()));
         }
         return false;
     }

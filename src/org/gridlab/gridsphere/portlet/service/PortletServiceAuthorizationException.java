@@ -4,14 +4,29 @@
  */
 package org.gridlab.gridsphere.portlet.service;
 
+/**
+ * The <code>PortletServiceAuthorizationException</code> is a runtime exception
+ * that signals if an unauthorized operation has been attempted on a user
+ * service
+ *
+ * @see org.gridlab.gridsphere.portlet.service.spi.PortletServiceAuthorizer
+ */
 public class PortletServiceAuthorizationException extends RuntimeException {
 
+    /**
+     * Constructs an instance of PortletServiceAuthorizationException
+     */
     public PortletServiceAuthorizationException() {
         super();
     }
 
-    public PortletServiceAuthorizationException(String msg) {
-        super(msg);
+    /**
+     * Constructs an instance of PortletServiceAuthorizationException
+     *
+     * @param message a string indicating why this exception is thrown.
+     */
+    public PortletServiceAuthorizationException(String message) {
+        super(message);
     }
 }
 

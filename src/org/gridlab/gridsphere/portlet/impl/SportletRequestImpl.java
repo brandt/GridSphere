@@ -18,10 +18,10 @@ import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 /**
- * The SportletRequestImpl encapsulates the request sent by the client to the portlet.
- * Implemented using the Proxy/Decorator design pattern
- *
- * The implementation class uses the facade pattern to represent a HttpServletRequest
+ * A <code>SportletRequestImpl</code> provides an implementation of the
+ * <code>PortletRequest</code> by following the decorator patterm.
+ * A HttpServletRequest object is used in composition to perform most of
+ * the required methods.
  */
 public class SportletRequestImpl implements SportletRequest {
 
@@ -32,6 +32,12 @@ public class SportletRequestImpl implements SportletRequest {
     private PortletSession portletSession = null;
 
     private static PortletLog log = SportletLog.getInstance(SportletRequest.class);
+
+    /**
+     * Cannot instantiate uninitialized SportletRequestImpl
+     */
+    private SportletRequestImpl() {
+    }
 
     /**
      * Constructor creates a proxy for a HttpServletRequest
@@ -89,7 +95,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the client device
      */
     public Client getClient() {
-        Client client = (Client)req.getSession().getAttribute(GridSphereProperties.CLIENT);
+        Client client = (Client) req.getSession().getAttribute(GridSphereProperties.CLIENT);
         if (client == null) {
             client = new ClientImpl(req);
             req.getSession().setAttribute(GridSphereProperties.CLIENT, client);
@@ -161,7 +167,7 @@ public class SportletRequestImpl implements SportletRequest {
         if (getMode() == Portlet.Mode.CONFIGURE) {
             return null;
         }
-        return (PortletData)req.getAttribute(GridSphereProperties.PORTLETDATA);
+        return (PortletData) req.getAttribute(GridSphereProperties.PORTLETDATA);
     }
 
     /**
@@ -184,7 +190,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the User object
      */
     public User getUser() {
-        User user = (User)req.getSession(true).getAttribute(GridSphereProperties.USER);
+        User user = (User) req.getSession(true).getAttribute(GridSphereProperties.USER);
         if (user == null) {
             user = GuestUser.getInstance();
             req.getSession().setAttribute(GridSphereProperties.USER, user);
@@ -202,7 +208,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @see PortletRole
      */
     public List getRoles(PortletGroup group) {
-        List roles = (List)req.getAttribute(GridSphereProperties.PORTLETROLES);
+        List roles = (List) req.getAttribute(GridSphereProperties.PORTLETROLES);
         if (roles == null) {
             roles = new ArrayList();
             roles.add(PortletRole.GUEST);
@@ -233,7 +239,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @see PortletGroup
      */
     public List getGroups() {
-        List groups = (List)req.getAttribute(GridSphereProperties.PORTLETGROUPS);
+        List groups = (List) req.getAttribute(GridSphereProperties.PORTLETGROUPS);
         if (groups == null) {
             groups = new ArrayList();
         }
@@ -285,7 +291,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the portlet settings
      */
     public PortletSettings getPortletSettings() {
-        return (PortletSettings)req.getAttribute(GridSphereProperties.PORTLETSETTINGS);
+        return (PortletSettings) req.getAttribute(GridSphereProperties.PORTLETSETTINGS);
     }
 
     /**
@@ -304,7 +310,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the previous portlet mode
      */
     public Portlet.Mode getPreviousMode() {
-        return (Portlet.Mode)req.getAttribute(GridSphereProperties.PREVIOUSMODE);
+        return (Portlet.Mode) req.getAttribute(GridSphereProperties.PREVIOUSMODE);
     }
 
     /**
@@ -322,7 +328,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the portlet window
      */
     public PortletWindow getWindow() {
-        return (PortletWindow)req.getAttribute(GridSphereProperties.PORTLETWINDOW);
+        return (PortletWindow) req.getAttribute(GridSphereProperties.PORTLETWINDOW);
     }
 
     /**
@@ -340,7 +346,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the portlet mode
      */
     public Portlet.Mode getMode() {
-        return (Portlet.Mode)req.getAttribute(GridSphereProperties.PORTLETMODE);
+        return (Portlet.Mode) req.getAttribute(GridSphereProperties.PORTLETMODE);
     }
 
     /**
@@ -372,21 +378,10 @@ public class SportletRequestImpl implements SportletRequest {
      */
     public Map getParameterMap() {
         return req.getParameterMap();
-        /*
-        String name;
-        Map paramMap = new HashMap();
-        Enumeration enum = req.getParameterNames();
-        while (enum.hasMoreElements()) {
-            name = (String)enum.nextElement();
-            String[] values = req.getParameterValues(name);
-            paramMap.put(name, values);
-        }
-        return paramMap;
-        */
     }
 
     /**
-     * Returns an enumeration of all parameter names. If this request
+     * Returns an enumeration of all parameter names.
      *
      * @return the enumeration of parameter names
      */

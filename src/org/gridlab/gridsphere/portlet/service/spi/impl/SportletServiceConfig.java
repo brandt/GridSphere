@@ -5,16 +5,16 @@
 package org.gridlab.gridsphere.portlet.service.spi.impl;
 
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.portlet.PortletConfig;
 
 import javax.servlet.ServletConfig;
 import java.util.Enumeration;
 import java.util.Properties;
 
 /**
- * All interfaces in this Service Provider Interface (SPI) package are needed by all
- * implementations of services. PortletServiceConfig is the interface through which
- * portlet services access the configuration passed to them by the portlet container.
+ * The <code>SportletServiceConfig</code> provides an implementation
+ * of the <code>PortletServiceConfig</code> interface through which
+ * portlet services access the configuration settings from the services
+ * descriptor file.
  */
 public class SportletServiceConfig implements PortletServiceConfig {
 
@@ -22,6 +22,20 @@ public class SportletServiceConfig implements PortletServiceConfig {
     private Properties configProperties;
     private ServletConfig servletConfig;
 
+    /**
+     * Constructor disallows non-argument instantiation
+     */
+    private SportletServiceConfig() {
+    }
+
+    /**
+     * Constructs an instance of SportletServiceConfig using the supplied
+     * service class, the configuration properties and the  servlet configuration
+     *
+     * @param service the service class
+     * @param configProperties the service configuration properties
+     * @param servletConfig the <code>ServletConfig</code>
+     */
     public SportletServiceConfig(Class service,
                                  Properties configProperties,
                                  ServletConfig servletConfig) {
@@ -31,7 +45,7 @@ public class SportletServiceConfig implements PortletServiceConfig {
     }
 
     /**
-     * Gets the init parameter with the given name.
+     * Returns the init parameter with the given name.
      *
      * @param name the name of the requested init parameter.
      * @return the init parameter
@@ -41,7 +55,7 @@ public class SportletServiceConfig implements PortletServiceConfig {
     }
 
     /**
-     * Gets the init parameter with the given name. It returns the given default
+     * Returns the init parameter with the given name. It returns the given default
      * value if the parameter is not found.
      *
      * @param name the name of the requested init parameter.
@@ -53,7 +67,7 @@ public class SportletServiceConfig implements PortletServiceConfig {
     }
 
     /**
-     * Gets an enumeration with the names of all init parameters provided in the portlet service configuration.
+     * Returns an enumeration with the names of all init parameters provided in the portlet service configuration.
      *
      * @return an enumeration of the init parameters
      */
@@ -62,9 +76,9 @@ public class SportletServiceConfig implements PortletServiceConfig {
     }
 
     /**
-     * Return the ServletConfig object
+     * Returns the servlet configuration
      *
-     * @return the servlet config
+     * @return the servlet configuration
      */
     public ServletConfig getServletConfig() {
         return servletConfig;

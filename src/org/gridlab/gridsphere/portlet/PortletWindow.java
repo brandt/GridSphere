@@ -7,16 +7,17 @@ package org.gridlab.gridsphere.portlet;
 import java.io.Serializable;
 
 /**
- * The PortletWindow represents the window that encloses a portlet.
- * The portlet window can send events on manipulation of its various window controls,
- * like the "minimize" or "close" buttons. But a portlet can also interrogate
- * the portlet window about its current visibility state. For example,
- * a portlet may render its content differently depending on whether its window is maximized or not.
+ * The <code>PortletWindow</code> represents the window that encloses a portlet.
+ * The portlet window can send events on manipulation of its various window
+ * controls, like the "minimize" or "maximize" buttons. But a portlet can also
+ * interrogate the portlet window about its current visibility state.
+ * For example, a portlet may render its content differently depending on
+ * whether its window is maximized or not.
  */
 public interface PortletWindow {
 
     /**
-     * State describes Window state
+     * The <code>State</code> describes the <code>PortletWindow</code> state
      */
     public static class State implements Serializable {
 
@@ -60,9 +61,17 @@ public interface PortletWindow {
 
         private int state = NORMAL_STATE;
 
+        /**
+         * Constructs an instance of State
+         */
         private State() {
         }
 
+        /**
+         * Constructs an instance of State with a provided state id
+         *
+         * @param state the state id
+         */
         private State(int state) {
             this.state = state;
         }
@@ -70,8 +79,13 @@ public interface PortletWindow {
         /**
          * Returns a State object from parsing the supplied state string
          *
+         * @param windowState the window state expressed as a <code>String</code>
+         * @return the portlet window state
+         * @throws IllegalArgumentException if the passed in <code>String</code>
+         * does not match any of the defined window states
          */
-        public static final PortletWindow.State toState(String windowState) throws IllegalArgumentException {
+        public static final PortletWindow.State toState(String windowState)
+                throws IllegalArgumentException {
             if ("NORMAL".equalsIgnoreCase(windowState)) {
                 return PortletWindow.State.NORMAL;
             } else if ("MINIMIZED".equalsIgnoreCase(windowState)) {
@@ -89,6 +103,12 @@ public interface PortletWindow {
             }
         }
 
+        /**
+         * Returns a <code>String</code> representation of the portlet window
+         * state.
+         *
+         * @return the window state expressed as a <code>String</code>
+         */
         public String toString() {
             if (state == NORMAL_STATE) {
                 return "NORMAL";
@@ -106,19 +126,5 @@ public interface PortletWindow {
             return "Unknown State!";
         }
     }
-
-    /**
-     * Return the portlet window state.
-     *
-     * @return the portlet window state
-     */
-    public PortletWindow.State getWindowState();
-
-    /**
-     * Defines which portlet window state is shown next.
-     *
-     * @param state the portlet window state
-     */
-    public void setWindowState(PortletWindow.State state);
 
 }

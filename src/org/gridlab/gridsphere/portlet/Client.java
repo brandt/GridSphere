@@ -5,7 +5,7 @@
 package org.gridlab.gridsphere.portlet;
 
 /**
- * The Client interface represents the client device that the user connects to the portal with.
+ * The <code>Client</code> interface represents the client device that the user connects to the portal with.
  * It defines methods to obtain information about clients, e.g. browsers running on PCs, WAP phones, PDAs etc.
  */
 public interface Client {
@@ -44,7 +44,7 @@ public interface Client {
      * it has to be on the safe side and return false.
      *
      * @param capability the capability
-     * @return true if the client has the given capability, false otherwise
+     * @return <code>true</code> if the client has the given capability, <code>false</code> otherwise
      */
     public boolean isCapableOf(Capability capability);
 
@@ -54,7 +54,7 @@ public interface Client {
      * capable of every single capability this methods returns true.
      *
      * @param capabilities an array of capabilities
-     * @return true if the client has the given capability, false otherwise
+     * @return <code>true</code> if the client has the given capability, <code>false</code> otherwise
      */
     public boolean isCapableOf(Capability[] capabilities);
 
