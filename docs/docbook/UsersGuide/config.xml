@@ -9,32 +9,91 @@
 -->
 
 <chapter id="config">
-    <title>Configuration</title>
+    <title>GridSphere Configuration</title>
     <para>
-
+        Before deploying GridSphere to a servlet container, various configuration settings can
+        be adjusted to customize layout, database configuration, portlet services and the portlet
+        web applications that are started at run time. Below is a description of the various configuration files
+        and how they are used.
     </para>
 
     <sect1>
+        <title>Initialized Portlet Web Applications</title>
+        When deployed, GridSphere requires access to deployed portlet web applications. Since portlets are packaged according
+        to the web application repository (WAR) format defined in the Java 2.3 Servlet Specification, the names of the
+        WAR files or web applications needs to be added to the <filename>PortletMaster.xml</filename> file.
+        <example><title>The PortletMaster Descriptor</title>
+        <programlisting><literallayout>
+            <![CDATA[
+<portlet-services>
+    <service>
+        <name>Portlet Manager Service</name>
+        <user-required>true</user-required>
+        <description>Provides Administration Capabilities for Portlet Web Applications</description>
+        <interface>org.gridlab.gridsphere.services.core.registry.PortletManagerService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.registry.impl.PortletManagerServiceImpl</implementation>
+        <service-config>
+            <param-name>startup-portlet-webapps</param-name>
+            <param-value>gridsphere, examplets</param-value>
+        </service-config>
+    </service>
+</portlet-services>]]>
+        </literallayout></programlisting>
+            <para>
+                The PortletMaster Descriptor is in fact a general PortletServices descriptor, but specifies
+                only a single portlet manager service that needs to be initialized before all other services.
+                The <parameter>startup-portlet-webapps</parameter> parameter indicates which portlet web applications
+                shoudl be initialized at run-time. By default the <emphasis>gridsphere</emphasis> webapp
+                is initialized which contains all the core GridSphere portlets including Login, Logout, User
+                Administration, etc.
+            </para>
+        </example>
+    </sect1>
+
+    <sect1>
         <title>Portal Layout Configuration</title>
-
+        The two defined layouts used in GridSphere are found in <filename>config/layouts</filename> of your GridSphere
+        distribution and contain the <filename>GuestUserLayout.xml</filename>  and <filename>NewUserLayout.xml</filename>
+        which defines the guest and new user layout respectively. Initially before a user has logged in, they will see
+        the layout as presented in <filename>GuestUserLayout.xml</filename>. The guest layout conatins the Login portlet
+        to allow poeple to login and little else. This file may be edited to provide additional portlets to guest portal
+        users. The <filename>NewUserLayout.xml</filename> defines a layout that will appear to a user that has justlogged
+        into the portal for the first time. This layout is cloned for new users where they can further refine it by
+        manually editing the file or configuring it via the Layout Configuration portlet to appear in the next release.
     </sect1>
 
-
     <sect1>
-    	<title>Portlet Service Configuration</title>
-
-   </sect1>
-    
-    <sect1>
-    	<title>GridSphere Properties</title>
-	<para></para>
-    </sect1>
-    
-    <sect1>
-    	<title>Database Configuration</title>
-	<para>
-	</para>
-
+    	<title>Core GridSphere Portlets Configuration</title>
+        As described in greater detail in the Portlet Developers Guide, the portlet service descriptor file in
+        <filename>PortletServices.xml</filename> defines the portlet services that are used by a portlet web
+        application. The core portlets provided by GridSphere are defined in <filename>webapps/gridsphere/WEB-INF</filename>
+        directory as <filename>portlet.xml</filename>. The core services are defined in
+        <filename>PortletServices.xml</filename>. The User Account Manager Service defines the service used to manage
+        portal users and is configured in the following service definition of <filename>PortletServices.xml</filename>
+        <example><title>The User Account Manager Service Definition</title>
+        <programlisting><literallayout>
+            <![CDATA[
+<service>
+    <name>User Account Manager Service</name>
+    <user-required>true</user-required>
+    <description>Provides User Administration Capabilities</description>
+    <interface>org.gridlab.gridsphere.services.core.user.UserManagerService</interface>
+    <implementation>org.gridlab.gridsphere.services.core.user.impl.UserManagerServiceImpl</implementation>
+    <service-config>
+        <param-name>userID</param-name>
+        <param-value>root</param-value>
+    </service-config>
+    <service-config>
+        <param-name>password</param-name>
+        <param-value></param-value>
+    </service-config>
+</service>]]>
+    </literallayout></programlisting>
+    The initial <emphasis>root</emphasis> password is initially blank meaning that when the
+    portal first starts up, you can login as <emphasis>root</emphasis> with no password and then
+    change the password using the portal. In general, there should be no reason to edit the
+    <filename>PortletServices.xml</filename> services description of the core portlets.
+    </example>
     </sect1>
 
 </chapter>

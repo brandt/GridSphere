@@ -13,19 +13,15 @@
     <para>
     The GridSphere User's Guide describes how to install and configure GridSphere.
     For more information on developing and packaging portlets, please consult
-    the GridSphere Portlet Developer's Guide. The current implementation is
+    the GridSphere Portlet Developer's Guide and the GridSphere Tutorials. The current implementation is
     based upon the GridSphere Technical Design Document. The GridSphere portal
     framework comes in both source and binary forms. Binaries can be created
     from the source code and in both cases, the build environment is generally
     the same. The GridSphere source code comes with a README file explaining how
     to build the binary distribution. Both source and binaries come packaged
     with all the necessary third party libraries and requires a GridSphere
-    compatible servlet container.
+    compatible servlet container, currently Tomcat 4.1+.
 
-    </para>
-    <para>
-    Document conventions: 
-    GRIDSPHERE_HOME refers to the GridSphere directory location
     </para>
 
     <sect1>
@@ -33,11 +29,11 @@
         <itemizedlist>
         <listitem><para>JDK 1.3.1+ &JDK; or JRE if you don't need to build any
         source</para></listitem>
-        <listitem><para>Jakarta Ant 1.4.1+ &Ant; is used to compile and deploy
+        <listitem><para>Jakarta Ant 1.5+ &Ant; is used to compile and deploy
         the GridSphere framework</para>
         </listitem>
         <listitem><para>Jakarta Tomcat Servlet Container &Tomcat; 4.1.18+ is
-            required. (Currently, only Tomcat 4.1.18 supports the Manager web
+            required. (Currently, only Tomcat 4.1.18 fully supports the Manager web
             application that allows for dynamic portlet management.)
         </para></listitem>
         </itemizedlist>
@@ -50,11 +46,14 @@
 	</para>
 	<itemizedlist>
 	<listitem><para>&Castor; is used to provide Java to XML bindings and Java to SQL persistence</para></listitem>
-	<listitem><para>&JUnit; provides a unit testing framework that is used to test GridSphere portlet services</para></listitem>
-	<listitem><para>&Log4J; provides an optimized logging library</para></listitem>
+	<listitem><para>&Castordoclets; is used to create Castor mappings from Javadoc tags</para></listitem>
+    <listitem><para>&JUnit; provides a unit testing framework</para></listitem>
+    <listitem><para>&Cactus; provides a unit testing framework for testing GridSphere in a servlet container</para></listitem>
+    <listitem><para>&Log4J; provides an optimized logging library</para></listitem>
     <listitem><para>&HSQL; database provides a pure Java SQL database</para></listitem>
+    <listitem><para>&Commons; utility classes for performing file uploads, etc.</para></listitem>
 
-	</itemizedlist>
+    </itemizedlist>
    </sect1>
     
     <sect1>
@@ -89,17 +88,21 @@
 
     </literallayout></programlisting></para></listitem>
 	<listitem><para>The Portlet Manager Portlet requires the Tomcat manager webapp to be configured. Modify $CATALINA_HOME/conf/tomcat-user.xml and make sure the following line is there:
-	<literallayout><programlisting>
+	<programlisting><literallayout>
 
         <![CDATA[<user username="tomcat" password="tomcat" roles="tomcat,manager"/>]]>
 
-    </programlisting></literallayout>
+    </literallayout></programlisting>
 	</para>
 	<para>To ensure that clients can't access the manager webapp directly, modify $CATALINA_HOME/conf.server.xml
-	with the following:
+	with the following where $CATALINA_HOME is replaced with the actual path to Tomcat:
 	<programlisting><literallayout>
 
-
+        <![CDATA[<Context path="/manager" debug="0" privileged="true"
+                 docBase="$CATALINA_HOME/server/webapps/manager">
+                 <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+                        allow="127.0.0.1"/>
+        </Context>]]>
 
     </literallayout></programlisting></para></listitem>
 
