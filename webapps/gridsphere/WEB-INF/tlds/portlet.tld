@@ -83,4 +83,22 @@
         <tag-class>org.gridlab.gridsphere.provider.portlet.tags.jsrimpl.NamespaceTag</tag-class>
         <body-content>empty</body-content>
     </tag>
+    <tag>
+        <name>actionparam</name>
+        <tag-class>org.gridlab.gridsphere.provider.portlet.tags.jsrimpl.ActionParamTag</tag-class>
+        <body-content>empty</body-content>
+        <description>
+            Creates a portlet action parameter
+        </description>
+        <attribute>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
 </taglib>
