@@ -5,12 +5,12 @@
 
 <!-- Title -->
 <portlet-image>
-    <image>/gridsphere/images/title.jpg</image>
+    <image>images/title.jpg</image>
 </portlet-image>
 
 <!-- Information -->
 <portlet-text>
-    <text>/gridsphere/html/info.html</text>
+    <text>/html/info.html</text>
 </portlet-text>
 
 <!-- Portlet Dock -->
