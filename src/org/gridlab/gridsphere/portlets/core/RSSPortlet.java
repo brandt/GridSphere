@@ -31,7 +31,7 @@ import java.util.Iterator;
 
 public class RSSPortlet extends AbstractPortlet {
 
-    String _url = "http://diveintomark.org/xml/rss.xml";
+    String _url = "http://diveintomark.org/xml/rss.xml";  // the serverside should be default rss feed
     long _lastFetched = 0;
     int _fetch_interval = 5;        // in minutes
     Document RSSFeed = new Document(new Element("rss"));
@@ -48,7 +48,7 @@ public class RSSPortlet extends AbstractPortlet {
             SAXBuilder builder = new SAXBuilder(false);
             URL feedurl = new URL(url);
             doc = builder.build(feedurl);
-            _lastFetched = System.currentTimeMillis();
+            _lastFetched = 0;
             log.info("Fetched rss feed from "+url);
         } catch (MalformedURLException e) {
         } catch (JDOMException e) {
@@ -65,7 +65,8 @@ public class RSSPortlet extends AbstractPortlet {
             DefaultPortletAction action = (DefaultPortletAction) _action;
             PortletRequest req = evt.getPortletRequest();
             _url = (String) req.getParameter("rss_url");
-            _lastFetched = 0;
+            log.info("got new url "+_url);
+            _lastFetched = System.currentTimeMillis();
 
         }
     }
@@ -73,32 +74,40 @@ public class RSSPortlet extends AbstractPortlet {
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         PrintWriter out = response.getWriter();
 
-        if (System.currentTimeMillis()-_lastFetched > (_fetch_interval*60*100)) {
+   //     if (System.currentTimeMillis()-_lastFetched <= (_fetch_interval*60*100)) {
             RSSFeed = getRSSFeed(_url);
-        }
+    //    }
         Element root = RSSFeed.getRootElement();
 
-        out.println("RSSFeed Name :"+root.getChild("channel").getChild("title").getText());
-        List items = root.getChild("channel").getChildren("item");
-        Iterator it = items.iterator();
-        out.println("<ul>");
-        while (it.hasNext()) {
-            Element item = (Element)it.next();
-            String title = item.getChild("title").getText();
-            String link = item.getChild("link").getText();
-            String desc = item.getChild("description").getText();
-            out.println("<li><a target=\"_new\" href=\""+link+"\">"+title+"</a><br/>"+desc+"</li>");
-        }
-        out.println("</ul>");
+        String version = "unknown";
+        version = (String)root.getAttributeValue("version");
+        out.println("URL :"+_url);
 
+//        if (version.equals("2.0") || version.equals("0.91")) {
+           // out.println("RSSFeed Name :"+root.getChild("channel").getChild("title").getText());
+            List items = root.getChild("channel").getChildren("item");
+            Iterator it = items.iterator();
+            out.println("<ul>");
+            while (it.hasNext()) {
+                Element item = (Element)it.next();
+                String title = item.getChild("title").getText();
+                String link = item.getChild("link").getText();
+                String desc = item.getChild("description").getText();
+                out.println("<li><a target=\"_new\" href=\""+link+"\">"+title+"</a><br/>"+desc+"</li>");
+            }
+            out.println("</ul>");
+    //    } else {
+    //        out.println("This portlet does support RSS feeds version 0.91 and 2.0. <br>This feed "+_url+" is version "+version);
+    //    }
     }
 
     public void doEdit(PortletRequest request, PortletResponse response) throws PortletException, IOException {
-        PrintWriter out = response.getWriter();
-        PortletURI pictureURI = response.createURI();
-        DefaultPortletAction defAction = new DefaultPortletAction(PortletProperties.ACTION_PERFORMED);
-        pictureURI.addAction(defAction);
-        request.setAttribute("rss_url", pictureURI.toString());
+
+        PortletURI returnURI = response.createReturnURI();
+
+        DefaultPortletAction defAction = new DefaultPortletAction("rss_edit");
+        returnURI.addAction(defAction);
+        request.setAttribute("rss_url", returnURI.toString());
         getPortletConfig().getContext().include("/jsp/rss.jsp", request, response);
     }
 

@@ -91,6 +91,8 @@ public class SportletResponse implements PortletResponse {
      * @return the portletURI
      */
     public PortletURI createReturnURI() {
+        addURIParameters();
+        sportletURI.addParameter(GridSphereProperties.PORTLETMODE, (String)Portlet.Mode.VIEW.toString());
         sportletURI.setReturn(true);
         return sportletURI;
     }

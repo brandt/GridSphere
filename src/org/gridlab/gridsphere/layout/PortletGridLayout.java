@@ -45,35 +45,34 @@ public class PortletGridLayout extends BaseLayoutManager {
         int max = components.size();
         PortletComponent p = null;
 
-        //int gwidth = 100 / cols;
+        int gwidth = 100 / cols;
 
         //out.println("<table width=\"" + gwidth + "%\" border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#FFFFFF\">");
-        out.println("<table border=\"0\" width=\"100%\">");
-
+        out.println("<table border=\"0\" width=\"100%\"> <!-- overall gridlayout table -->");
+        //@todo this rendering has to change anyway with  the placement of the portlets in rows and position
         while (k < max) {
-            out.println("<tr>");
+            out.println("<tr> <!-- gridlayout row starts here -->");
             //insets.doRenderFirst(ctx,req,res);
             //insets.doRenderLast(ctx,req,res);
             while (j < cols) {
                 p = (PortletComponent)components.get(k);
-                //@todo need that for defined with in the porlet component (oliver)
 
                 if (p.getWidth().equals("100%")) {
-                    out.println("<td width=\"100%\" valign=\"top\">");
-                } else {
-                    out.println("<td valign=\"top\">");
+                    out.println("<td width=\"100%\" valign=\"top\"> <!-- this one is maximized -->");
+                } else if(p.isVisible()) {
+                    out.println("<td valign=\"top\" width=\""+gwidth+"%\"> <!-- this is a place for a portlet -->");
                 }
                 if (p.isVisible()) {
                     p.doRender(event);
                 }
                 j++; k++;
-                out.println("</td>");
+                out.println("</td> <!-- portlet ends here -->");
             }
             j = 0;
-           out.println("</tr>");
+           out.println("</tr> <!-- gridlayout row ends here -->");
         }
 
-        out.println("</table>");
+        out.println("</table> <!-- end overall gridlayout table -->");
     }
 
 }

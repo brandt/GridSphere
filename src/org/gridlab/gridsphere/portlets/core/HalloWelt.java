@@ -24,6 +24,7 @@ public class HalloWelt extends AbstractPortlet {
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         PrintWriter out = response.getWriter();
         out.println("<br>Hello, World Zwei</br>");
+        out.println("<table><tr><td>1</td></tr><tr><td>2</td></tr></table>");
     }
 
     public void doEdit(PortletRequest request, PortletResponse response) throws PortletException, IOException {

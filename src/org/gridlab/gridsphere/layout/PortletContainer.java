@@ -6,6 +6,8 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.impl.SportletResponse;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -104,15 +106,18 @@ public class PortletContainer implements PortletLifecycle {
         SportletResponse res = event.getSportletResponse();
         PrintWriter out = res.getWriter();
 
+        String uiTheme = GridSphereConfig.getInstance().getProperty(GridSphereConfigProperties.UI_THEME);
+
         out.println("<html>");
         out.println("<head>");
         out.println("  <title>" + name + "</title>");
-        out.println("  <link type=\"text/css\" href=\"css/default.css\" rel=\"STYLESHEET\"/>");
+        out.println("  <link type=\"text/css\" href=\"themes/xp/css"+
+         "/default.css\" rel=\"STYLESHEET\"/>");
         out.println("</head>\n<body>");
 
         // for css title
         out.println("<div id=\"page-logo\">" + name + "</div>");
-        out.println("<div id=\"page-tagline\">Solving the World's Problems!</div>");
+        out.println("<div id=\"page-tagline\">Bigger. Better. Faster. More.</div>");
 
         /////////////////////////////////////  OLD STUFF /////
         //out.println("<html><head><meta HTTP-EQUIV=\"content-type\" CONTENT=\"text/html; charset=ISO-8859-1\">");

@@ -59,4 +59,9 @@ public interface GridSphereConfigProperties {
     public static final String PERSISTENCE_CONFIGFILE = "PERSISTENCE_CONFIGFILE";
     public static final String PERSISTENCE_DBNAME = "PERSISTENCE_DBNAME";
 
+    /**
+     *  Configuration for the standard UI Theme
+     */
+    public static final String UI_THEME = "UI_THEME";
+
 }

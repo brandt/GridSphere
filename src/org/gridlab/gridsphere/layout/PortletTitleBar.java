@@ -270,51 +270,55 @@ public class PortletTitleBar extends BasePortletComponent {
 
         PrintWriter out = res.getWriter();
 
-        out.println("<div class=\"window-title\">");
+        out.println("<tr><td class=\"window-title\">");
+        out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>");
 
         // Output portlet mode icons
         if (modeLinks != null) {
             Iterator modesIt = modeLinks.iterator();
-            out.println("<span class=\"window-icon-left\">");
+            out.println("<td class=\"window-icon-left\">");
             PortletModeLink mode;
             while (modesIt.hasNext()) {
                 mode = (PortletModeLink)modesIt.next();
-                out.println("<a href=\"" +  mode.getModeHref() + "\"><img border=\"0\" src=\"" +  mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\"/></a>");
+                out.println("<a href=\"" +  mode.getModeHref() + "\"><img border=\"0\" src=\"themes/xp/" +  mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\"/></a>");
             }
-            out.println("</span>");
+            out.println("</td>");
         }
 
         // Invoke doTitle of portlet whose action was perfomed
         String actionStr = req.getParameter(GridSphereProperties.ACTION);
+        out.println("<td class=\"window-title-name\">");
         if (actionStr != null) {
             UserPortletManager userManager = event.getUserPortletManager();
             //req.setPortletSettings(settings);
             try {
-                out.println("<span class=\"window-title-name\">");
                 userManager.doTitle(portletClass, req, res);
                 out.println(" ("+portletMode.toString()+") ");
-                out.println("</span>");
                 title = "";
             } catch (PortletException e) {
                 ErrorMessage += "Unable to invoke doTitle on active portlet\n";
                 throw new PortletLayoutException("Unable to invoke doTitle on active portlet " + portletClass + "  " + COMPONENT_ID, e);
             }
+
         } else {
-            out.println("<span class=\"window-title-name\">" + title + "</span>");
+            out.println(title);
         }
+
+        out.println("</td>");
 
         // Output window state icons
         if (windowLinks != null) {
             Iterator windowsIt = windowLinks.iterator();
-            out.println("<span class=\"window-icon-right\">");
             PortletStateLink state;
+            out.println("<td class=\"window-icon-right\">");
             while (windowsIt.hasNext()) {
                 state = (PortletStateLink)windowsIt.next();
-                out.println("<a href=\"" +  state.getStateHref() + "\"><img border=\"0\" src=\"" +  state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\"/></a>");
+                out.println("<a href=\"" +  state.getStateHref() + "\"><img border=\"0\" src=\"themes/xp/" +  state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\"/></a>");
             }
-            out.println("</span>");
+            out.println("</td>");
         }
-        out.println("</div>");
+        out.println("</tr></table>");
+        out.println("</td></tr>");
     }
 
 

@@ -154,7 +154,13 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
 
         req.setAttribute(GridSphereProperties.PORTLETID, portletClass);
         req.setAttribute(GridSphereProperties.COMPONENT_ID, componentIDStr);
-        req.setMode(titleBar.getPortletMode());
+
+        String newmode = req.getParameter(GridSphereProperties.PORTLETMODE);
+        if (newmode != null) {
+            req.setMode(Portlet.Mode.getInstance(newmode));
+        } else {
+            req.setMode(titleBar.getPortletMode());
+        }
 
         // Set the portlet data
         PortletData data = null;
@@ -189,20 +195,20 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         ///// begin portlet frame
         PrintWriter out = res.getWriter();
 
-        out.println("<div class=\"window-main\">");
-        //out.println("<table class=\"window-main\">");
-        //out.println("<tr><td class=\"window-title\">");
+        out.println("<!-- PORTLET STARTS HERE -->");
+        //out.println("<div class=\"window-main\">");
+        out.println("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");        // this is the main table around one portlet
         titleBar.doRender(event);
-        //out.println("</td></tr>");
-        //out.println("<tr class=\"window-content\"><td class=\"window-content\">");
-
         //req.setMode(titleBar.getPortletMode());
+
 
         if (error != null) {
             out.println(error.getMessage());
         } else {
+
             if (renderPortlet) {
-                out.println("<div class=\"window-content\">");
+                out.println("<tr><td class=\"window-content\">");      // now the portlet content begins
+                //out.println("<div class=\"window-content\">");
                 UserPortletManager userPortletManager = event.getUserPortletManager();
                 try {
                     userPortletManager.service(portletClass, req, res);
@@ -210,11 +216,18 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
                     out.println("Portlet Unavailable");
                     out.println(e.toString());
                 }
-                out.println("</div>");
+                //out.println("</div>");
+                out.println("</td></tr>");
+            } else {
+                out.println("<tr><td class=\"window-content-minimize\">");      // now the portlet content begins
+                out.println("</td></tr>");
+
             }
         }
-        out.println("</div>");
-        //out.println("</td></tr></table>");
+        //out.println("</div>");
+
+        out.println("</table>");
+        out.println("<!--- PORTLET ENDS HERE -->");
     }
 
 }

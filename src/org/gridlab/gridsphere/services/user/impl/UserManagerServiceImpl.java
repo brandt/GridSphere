@@ -226,6 +226,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             throws PermissionDeniedException {
         if (isSuperUser(denier)) {
             // @TODO share code with approveAccountrequest
+            // @todo should somehow be in a transaction
 
             String userid = request.getID();
             AccountRequestImpl requestImpl = null;
@@ -356,7 +357,6 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             pd.setUserID(user.getID());
             try {
                 pm.create(pd);
-                System.out.println("create new one");
             } catch (PersistenceManagerException e) {
 
             }
