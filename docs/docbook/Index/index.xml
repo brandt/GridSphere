@@ -17,7 +17,7 @@
   <sect1><title>GridSphere Technical References</title>
 	<itemizedlist>
         <listitem><para><ulink url="design.pdf">GridSphere Design Document</ulink></para></listitem>
-        <listitem><para><ulink url="jetspeed_eval.pdf">Jetspeed Evaluation Document</ulink></para></listitem>
+        <listitem><para><ulink url="jetspeed-eval.pdf">Jetspeed Evaluation Document</ulink></para></listitem>
     </itemizedlist>
   </sect1>
 
