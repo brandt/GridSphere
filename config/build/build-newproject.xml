@@ -63,6 +63,37 @@
         <copy todir="${project.dir}/config/database">
             <fileset dir="config/database"/>
         </copy>
+
+
+        <property name="DATABASE_FILE"
+                  value="${project.dir}/config/database.xml"/>
+        <echo message="Preprocessing Database file: ${DATABASE_FILE}"/>
+        <replace file="${DATABASE_FILE}"
+                 token="@GRIDSPHERE_HOME@"
+                 value="${GRIDSPHERE_HOME}"/>
+        <replace file="${DATABASE_FILE}"
+            token="@DATABASE_NAME@"
+            value="${DATABASE_NAME}"/>
+        <replace file="${DATABASE_FILE}"
+            token="@PROJECT_NAME@"
+            value="${project.name}"/>
+
+        <property name="DATABASE_FILE"
+            value="${project.dir}/config/database-test.xml"/>
+        <echo message="Preprocessing Database file: ${DATABASE_FILE}"/>
+        <replace file="${DATABASE_FILE}"
+            token="@GRIDSPHERE_HOME@"
+            value="${GRIDSPHERE_HOME}"/>
+        <replace file="${DATABASE_FILE}"
+            token="@TEST_HOME@"
+            value="${TEST_HOME}"/>
+        <replace file="${DATABASE_FILE}"
+            token="@DATABASE_NAME@"
+            value="${DATABASE_NAME}"/>
+        <replace file="${DATABASE_FILE}"
+            token="@PROJECT_NAME@"
+            value="${project.name}"/>
+
         <mkdir dir="${project.dir}/webapp"/>
         <mkdir dir="${project.dir}/webapp/WEB-INF"/>
 
