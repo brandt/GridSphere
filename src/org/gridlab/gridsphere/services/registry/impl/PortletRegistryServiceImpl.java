@@ -12,6 +12,8 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistryManager;
+import org.gridlab.gridsphere.services.registry.PortletRegistryService;
+import org.gridlab.gridsphere.layout.PortletLayoutEngine;
 
 import javax.servlet.ServletContext;
 import java.util.*;
@@ -24,7 +26,7 @@ import java.util.*;
  * a Set of RegisteredPortlets and provides operations for the registration, unregistration and querying
  * of ConcretePortlet objects.
  */
-public class PortletRegistryServiceImpl implements org.gridlab.gridsphere.services.registry.PortletRegistryService, PortletServiceProvider {
+public class PortletRegistryServiceImpl implements PortletRegistryService, PortletServiceProvider {
 
     public final static String CORE_CONTEXT = "coreContext";
 
@@ -32,6 +34,7 @@ public class PortletRegistryServiceImpl implements org.gridlab.gridsphere.servic
     private static org.gridlab.gridsphere.services.registry.PortletRegistryService registryService = null;
     private ServletContext context = null;
 
+    private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
     private PortletRegistryManager manager = PortletRegistryManager.getInstance();
 
     // A multi-valued hashtable with a webapp key and a List value containing portletAppID's
@@ -61,6 +64,9 @@ public class PortletRegistryServiceImpl implements org.gridlab.gridsphere.servic
         addWebApp(webApplicationName);
     }
 
+    /**
+     *
+     */
     protected void addWebApp(String webApplicationName) {
         PortletWebApplication portletWebApp = new PortletWebApplication(webApplicationName, context);
         Collection appPortlets = portletWebApp.getAllApplicationPortlets();
@@ -70,6 +76,7 @@ public class PortletRegistryServiceImpl implements org.gridlab.gridsphere.servic
             webapps.put(webApplicationName, appPortlet);
             manager.addApplicationPortlet(appPortlet);
         }
+        layoutEngine.addApplicationTab(webApplicationName, portletWebApp.getApplicationTab());
     }
 
     /**
@@ -78,10 +85,8 @@ public class PortletRegistryServiceImpl implements org.gridlab.gridsphere.servic
      * @param the web application name
      */
     public void removePortletWebApplication(User user, String webApplicationName) {
-        ArrayList appIds = (ArrayList)webapps.get(webApplicationName);
-        for (int i = 0; i < appIds.size(); i++) {
-            manager.removeApplicationPortlet((String)appIds.get(i));
-        }
+        ApplicationPortlet appPortlet = (ApplicationPortlet)webapps.get(webApplicationName);
+        manager.removeApplicationPortlet((String)appPortlet.getPortletAppID());
         webapps.remove(webApplicationName);
     }
 
