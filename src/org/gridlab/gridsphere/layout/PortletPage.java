@@ -6,7 +6,7 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
@@ -328,13 +328,23 @@ public class PortletPage implements Serializable, Cloneable {
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
 
         // if there is a layout action do it!
-        if (!event.getPortletComponentID().equals("")) {
+
+        PortletComponent comp = getActiveComponent(event);
+        if (comp != null) {
+            System.err.println("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
+            comp.actionPerformed(event);
+        }
+    }
+
+    public PortletComponent getActiveComponent(GridSphereEvent event) {
+        String cid = event.getPortletComponentID();
+
+        if (!cid.equals("")) {
 
             // the component id determines where in the list the portlet component is
 
             // first check the hash
             ComponentIdentifier compId = null;
-            String cid = event.getPortletComponentID();
 
             int compIntId = -1;
             if (labelsHash.containsKey(cid)) {
@@ -372,13 +382,13 @@ public class PortletPage implements Serializable, Cloneable {
 
                                 boolean hasrole = false;
 
-                                    hasrole = aclService.hasRequiredRole(req, portletClass, false);
+                                hasrole = aclService.hasRequiredRole(req, portletClass, false);
 
 
                                 //boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
                                 if (!hasrole) {
                                     System.err.println("User " + user + " does not have required role!");
-                                    return;
+                                    return null;
                                 }
 
                             }
@@ -394,22 +404,23 @@ public class PortletPage implements Serializable, Cloneable {
                                 //System.err.println("hasRole = " + hasrole);
                                 if (!hasrole) {
                                     System.err.println("User " + user + " does not have required role!");
-                                    return;
+                                    return null;
                                 }
                             }
                         }
-                        System.err.println("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
+
                         if (comp instanceof PortletFrame) {
                             PortletFrame f = (PortletFrame)comp;
-                            System.err.println(" in portlet: " + f.getPortletClass());    
+                            System.err.println(" in portlet: " + f.getPortletClass());
                         }
-                        comp.actionPerformed(event);
+                        return comp;
                     }
                 }
             }
         }
-
+        return null;
     }
+
 
     /**
      * Renders the portlet cotainer by performing doRender on all portlet components
@@ -512,24 +523,44 @@ public class PortletPage implements Serializable, Cloneable {
         writer.println("<script language=\"JavaScript\" src=\"javascript/gridsphere.js\"></script>");
         writer.println("</head><body>");
 
-        // A Portal page in 3 lines -- voila!
-        //  -------- header ---------
-        if (headerContainer != null) {
-            headerContainer.doRender(event);
-            writer.println(headerContainer.getBufferedOutput(req));
-        }
 
-        // ..| tabs | here |....
-        if (tabbedPane != null) {
-            tabbedPane.doRender(event);
-            writer.println(tabbedPane.getBufferedOutput(req));
-        }
-        //.... the footer ..........
-        if (footerContainer != null) {
-            footerContainer.doRender(event);
-            writer.println(footerContainer.getBufferedOutput(req));
-        }
+        // In case the "floating" portlet state has been selected:
+        String wstate = event.getPortletRequest().getParameter(SportletProperties.PORTLET_WINDOW);
+        if ((wstate != null) && (wstate.equalsIgnoreCase(PortletWindow.State.FLOATING.toString()))) {
+            PortletComponent comp = getActiveComponent(event);
+            PortletComponent pc = comp.getParentComponent();
+            if (pc != null) {
+                if (pc instanceof PortletFrame) {
+                    PortletFrame f = (PortletFrame)pc;
+                    // render portlet frame in pop-up without titlebar
+                    f.setTransparent(true);
+                    f.doRender(event);
+                    f.setTransparent(false);
+                }
 
+                writer.println(pc.getBufferedOutput(req));
+            }
+        } else {
+
+            // A Portal page in 3 lines -- voila!
+            //  -------- header ---------
+            if (headerContainer != null) {
+                headerContainer.doRender(event);
+                writer.println(headerContainer.getBufferedOutput(req));
+            }
+
+            // ..| tabs | here |....
+            if (tabbedPane != null) {
+                tabbedPane.doRender(event);
+                writer.println(tabbedPane.getBufferedOutput(req));
+            }
+            //.... the footer ..........
+            if (footerContainer != null) {
+                footerContainer.doRender(event);
+                writer.println(footerContainer.getBufferedOutput(req));
+            }
+
+        }
         writer.println("</body></html>");
         //out.flush();
 

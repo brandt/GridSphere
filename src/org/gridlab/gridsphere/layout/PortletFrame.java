@@ -67,6 +67,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     private boolean isClosing = false;
 
     private Map renderParams = new HashMap();
+    private boolean onlyRender = true;
 
     //private StringBuffer frame = new StringBuffer();
 
@@ -208,8 +209,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         titleBar.setCanModify(canModify);
         titleBar.setTheme(theme);
         list = titleBar.init(req, list);
-        //titleBar.setParentComponent(this);
         titleBar.addComponentListener(this);
+        titleBar.setParentComponent(this);
         titleBar.setAccessControlService(aclService);
 
         // invalidate cache
@@ -356,7 +357,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     && (!event.getAction().getName().equals(FRAME_CLOSE_CANCEL_ACTION))) {
                 DefaultPortletAction action = event.getAction();
 
+                System.err.println("clearing render params");
                 renderParams.clear();
+                onlyRender = false;
 
                 try {
                     PortletInvoker.actionPerformed((String)request.getAttribute(SportletProperties.PORTLETID), action, request, res);
@@ -404,7 +407,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
             }
 
-            // see if render params are set
+            // see if render params are set from actionResponse
             Map tmpParams = (Map)request.getAttribute(SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
             if (tmpParams != null) renderParams = tmpParams;
 
@@ -434,15 +437,26 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
-     
+
+        // check for render params
+        if ((onlyRender) && (event.getPortletComponentID().equals(componentIDStr))) {
+            Map tmpParams = (Map)req.getParameterMap();
+            if (tmpParams != null) {
+                Iterator it = tmpParams.keySet().iterator();
+                while (it.hasNext()) {
+                    String key = (String)it.next();
+                    if (key.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
+                        renderParams.put(key, tmpParams.get(key));
+                    }
+                }
+            }
+        }
+
+
         User user = req.getUser();
         if (!(user instanceof GuestUser)) {
-
-            //boolean hasrole = hasRequiredRole(req, false);
             boolean hasrole = false;
-
             hasrole = aclService.hasRequiredRole(req, portletClass, false);
-
             //boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
             //System.err.println("hasRole = " + hasrole + " portletclass= " + portletClass);
             if (!hasrole) {
@@ -489,10 +503,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         // Render title bar
         if (!transparent) {
             titleBar.doRender(event);
-            /*
-            if (titleBar.hasRenderError()) {
-                errorFrame.setMessage(titleBar.getErrorMessage());
-            } */
         } else {
             req.setMode(titleBar.getPortletMode());
             req.setAttribute(SportletProperties.PREVIOUS_MODE, titleBar.getPreviousMode());
@@ -558,7 +568,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
                         if (!renderParams.isEmpty()) {
                             //System.err.println("PortletFrame: in " + portletClass + " sending render params");
-                            //System.err.println("in render " + portletClass + " there are render params in the frame setting in request! key= " + SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
+                            System.err.println("in render " + portletClass + " there are render params in the frame setting in request! key= " + SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
                             req.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr, renderParams);
                         }
 

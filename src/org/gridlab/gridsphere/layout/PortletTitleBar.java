@@ -162,11 +162,13 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         public static final String minimizeImage = "images/window_minimize.gif";
         public static final String maximizeImage = "images/window_maximize.gif";
         public static final String resizeImage = "images/window_resize.gif";
+        public static final String floatImage = "images/window_float.gif";
 
         public static final String closeSymbol = "X"; //WAP 2.0
         public static final String minimizeSymbol = "_"; //WAP 2.0
         public static final String maximizeSymbol = "="; //WAP 2.0
         public static final String resizeSymbol = "-"; //WAP 2.0
+        public static final String floatSymbol = "^"; //WAP 2.0
 
         /**
          * Constructs an instance of PortletStateLink with the supplied window state
@@ -181,16 +183,19 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             // Set the image src
             if (state.equals(PortletWindow.State.MINIMIZED)) {
                 imageSrc = minimizeImage;
-                symbol=minimizeSymbol;
+                symbol = minimizeSymbol;
             } else if (state.equals(PortletWindow.State.MAXIMIZED)) {
                 imageSrc = maximizeImage;
-                symbol=maximizeSymbol;
+                symbol = maximizeSymbol;
             } else if (state.equals(PortletWindow.State.RESIZING)) {
                 imageSrc = resizeImage;
-                symbol=resizeSymbol;
+                symbol = resizeSymbol;
             } else if (state.equals(PortletWindow.State.CLOSED)) {
                 imageSrc = closeImage;
-                symbol=closeSymbol;                
+                symbol = closeSymbol;
+            } else if (state.equals(PortletWindow.State.FLOATING)) {
+                imageSrc = floatImage;
+                symbol = floatSymbol;
             } else {
                 throw new IllegalArgumentException("No matching PortletWindow.State found for received window mode: " + state);
             }
@@ -400,11 +405,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         compId.setClassName(this.getClass().getName());
         list.add(compId);
         doConfig();
-        /*
-        windowState = PortletWindow.State.NORMAL;
-        portletMode = Portlet.Mode.VIEW;
-        previousMode = Portlet.Mode.VIEW;
-        */
         return list;
     }
 
@@ -491,6 +491,9 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             windowStates.remove(PortletWindow.State.RESIZING);
         }
 
+        // get rid of floating if window state is minimized
+        if (windowState.equals(PortletWindow.State.MINIMIZED)) windowStates.remove(PortletWindow.State.FLOATING);
+
         // Localize the window state names
         PortletRequest req = event.getPortletRequest();
 
@@ -503,11 +506,14 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             tmp = (PortletWindow.State) windowStates.get(i);
             portletURI = res.createURI();
             portletURI.addParameter(SportletProperties.COMPONENT_ID, this.componentIDStr);
-            //portletURI.addParameter(SportletProperties.PORTLETID, portletClass);
+
             try {
                 stateLink = new PortletStateLink(tmp, locale);
                 portletURI.addParameter(SportletProperties.PORTLET_WINDOW, tmp.toString());
                 stateLink.setHref(portletURI.toString());
+                if (tmp.equals(PortletWindow.State.FLOATING)) {
+                    stateLink.setHref(portletURI.toString() + "\" onClick=\"return popup(this, 'notes')\"");
+                }
                 stateLinks.add(stateLink);
             } catch (IllegalArgumentException e) {
                 // do nothing
@@ -548,7 +554,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         // Unless user is admin they should not see configure mode
         boolean hasConfigurePermission = false;
 
-        User user = req.getUser();
         boolean hasrole = aclService.hasRequiredRole(req, portletClass, true);
 
         //boolean hasrole = aclService.hasRequiredRole(user, portletClass, true);
@@ -622,7 +627,10 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 if (titleBarEvent.hasWindowStateAction()) {
 
                     PortletResponse res = event.getPortletResponse();
-                    windowState = titleBarEvent.getState();
+
+                    // don't set window state if it is floating
+                    if (!titleBarEvent.getState().equals(PortletWindow.State.FLOATING)) windowState = titleBarEvent.getState();
+
                     WindowEvent winEvent = null;
 
                     // if receive a window state that is not supported do nothing
@@ -712,7 +720,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         PortletResponse res = event.getPortletResponse();
 
         // get the appropriate title for this client
-        Client client = req.getClient();
         Locale locale = req.getLocale();
 
         List modeLinks = null, windowLinks = null;

@@ -259,7 +259,6 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
                 if (p.getVisible()) {
                     p.doRender(event);
                     table.append(p.getBufferedOutput(event.getPortletRequest()));
-                    //out.println("grid comp: "+i);
                 }
                 table.append("</td> </tr>");
             }
