@@ -1,9 +1,7 @@
-/**
- * Copyright 2003 IBM Corporation and Sun Microsystems, Inc.
- * All rights reserved.
- * Use is subject to license terms.
+/*
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @version $Id$
  */
-
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;

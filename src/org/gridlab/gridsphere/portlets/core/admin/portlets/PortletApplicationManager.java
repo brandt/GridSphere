@@ -62,7 +62,6 @@ public class PortletApplicationManager extends ActionPortlet {
     }
 
     public void doPortletManager(FormEvent event) throws PortletException {
-        checkSuperRole(event);
         log.debug("In doPortletManager");
         DefaultPortletAction action = event.getAction();
         PortletRequest req = event.getPortletRequest();
@@ -131,10 +130,12 @@ public class PortletApplicationManager extends ActionPortlet {
     }
 
     public void uploadPortletWAR(FormEvent event) throws PortletException {
-        checkSuperRole(event);
+
         log.debug("in FileManagerPortlet: doUploadFile");
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
+        if (req.getRole().compare(req.getRole(), PortletRole.SUPER) < 0) return;
+
         try {
             FileInputBean fi = event.getFileInputBean("userfile");
             User user = event.getPortletRequest().getUser();
@@ -169,10 +170,11 @@ public class PortletApplicationManager extends ActionPortlet {
     }
 
     public void deployWebapp(FormEvent event) throws PortletException {
-        checkSuperRole(event);
+
         log.debug("in FileManagerPortlet: deployWebapp");
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
+        if (req.getRole().compare(req.getRole(), PortletRole.SUPER) < 0) return;
         try {
             TextFieldBean tf = event.getTextFieldBean("webappNameTF");
             User user = event.getPortletRequest().getUser();

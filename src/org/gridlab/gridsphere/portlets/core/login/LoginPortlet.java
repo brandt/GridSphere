@@ -315,7 +315,8 @@ public class LoginPortlet extends ActionPortlet {
     }
 
     public void setUserCreateAccount(FormEvent event) throws PortletException {
-        checkSuperRole(event);
+        PortletRequest req = event.getPortletRequest();
+        if (req.getRole().compare(req.getRole(), PortletRole.ADMIN) < 0) return;
         CheckBoxBean acctCB = event.getCheckBoxBean("acctCB");
         String useracct = acctCB.getSelectedValue();
         if (useracct != null) {
@@ -330,7 +331,8 @@ public class LoginPortlet extends ActionPortlet {
     }
 
     public void configMailSettings(FormEvent event) throws PortletException {
-        checkSuperRole(event);
+        PortletRequest req = event.getPortletRequest();
+        if (req.getRole().compare(req.getRole(), PortletRole.ADMIN) < 0) return;
         TextFieldBean mailServerTF = event.getTextFieldBean("mailHostTF");
         String mailServer = mailServerTF.getValue();
 

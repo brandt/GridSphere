@@ -196,48 +196,6 @@ public class ActionPortlet extends AbstractPortlet {
     }
 
     /**
-     * @deprecated
-     *
-     * @param event
-     * @throws PortletException
-     */
-    protected void checkSuperRole(FormEvent event) throws PortletException {
-        PortletRequest req = event.getPortletRequest();
-        PortletRole userRole = req.getRole();
-        if (userRole.compare(userRole, PortletRole.SUPER) < 0) {
-            throw new PortletException("You must have super access!");
-        }
-    }
-
-    /**
-     * @deprecated
-     *
-     * @param event
-     * @throws PortletException
-     */
-    protected void checkAdminRole(FormEvent event) throws PortletException {
-        PortletRequest req = event.getPortletRequest();
-        PortletRole userRole = req.getRole();
-        if (userRole.compare(userRole, PortletRole.ADMIN) < 0) {
-            throw new PortletException("You must have admin access!");
-        }
-    }
-
-    /**
-     * @deprecated
-     *
-     * @param event
-     * @throws PortletException
-     */ 
-    protected void checkUserRole(FormEvent event) throws PortletException {
-        PortletRequest req = event.getPortletRequest();
-        PortletRole userRole = req.getRole();
-        if (userRole.compare(userRole, PortletRole.USER) < 0) {
-            throw new PortletException("You must have user access!");
-        }
-    }
-
-    /**
      * Uses the action name obtained from the <code>ActionEvent</code> to invoke the
      * appropriate portlet action method.
      *

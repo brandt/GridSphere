@@ -415,7 +415,6 @@ public class GroupManagerPortlet extends ActionPortlet {
     public void doViewEditGroupEntry(FormEvent evt)
             throws PortletException {
         log.debug("Entering doViewEditGroupEntry");
-        checkAdminRole(evt);
         PortletRequest req = evt.getPortletRequest();
         loadGroup(evt);
 
@@ -437,7 +436,7 @@ public class GroupManagerPortlet extends ActionPortlet {
     public void doViewAddGroupEntry(FormEvent evt)
             throws PortletException {
         log.debug("Entering doViewAddGroupEntry");
-        checkAdminRole(evt);
+
         PortletRequest req = evt.getPortletRequest();
 
 
@@ -455,7 +454,7 @@ public class GroupManagerPortlet extends ActionPortlet {
     public void doViewConfirmChangeRole(FormEvent evt)
             throws PortletException {
         log.debug("Entering doViewConfirmChangeRole");
-        checkAdminRole(evt);
+
         PortletRequest req = evt.getPortletRequest();
 
         HiddenFieldBean groupEntryIDBean = evt.getHiddenFieldBean("groupEntryID");
@@ -485,7 +484,7 @@ public class GroupManagerPortlet extends ActionPortlet {
     public void doViewRemoveGroupEntry(FormEvent evt)
             throws PortletException {
         log.debug("Entering doViewRemoveGroupEntry");
-        checkAdminRole(evt);
+
         PortletRequest req = evt.getPortletRequest();
         PortletGroup group = loadGroup(evt);
 
@@ -749,7 +748,7 @@ public class GroupManagerPortlet extends ActionPortlet {
 
 
     public void deleteGroup(FormEvent event) throws PortletException {
-        checkAdminRole(event);
+       
         String groupId = event.getAction().getParameter("groupID");
 
         PortletGroup group = aclManagerService.getGroup(groupId);

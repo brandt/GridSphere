@@ -119,7 +119,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
     }
 
     public void saveBanner(FormEvent event) throws PortletException, IOException {
-        this.checkSuperRole(event);
+
         TextAreaBean ta = event.getTextAreaBean("bannerTA");
         String newText = ta.getValue();
         String filename = this.getPortletConfig().getContext().getRealPath("/html/pagehead.html");
@@ -132,7 +132,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
     }
 
     public void saveDefaultTheme(FormEvent event) throws PortletException, IOException {
-        this.checkSuperRole(event);
+
         PortletRequest req = event.getPortletRequest();
         ListBoxBean themesLB = event.getListBoxBean("themesLB");
         String theme = themesLB.getSelectedValue();
@@ -152,7 +152,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
     }
 
     public void importLayout(FormEvent event) throws PortletException, IOException {
-        this.checkSuperRole(event);
 
         ListBoxBean appsLB = event.getListBoxBean("appsLB");
         String val = appsLB.getSelectedValue();
@@ -248,9 +247,9 @@ public class LayoutManagerPortlet extends ActionPortlet {
         HiddenFieldBean groupHF = event.getHiddenFieldBean("layoutHF");
         TextAreaBean ta = event.getTextAreaBean("layoutFile");
         String newText = ta.getValue();
-
+        PortletRequest req = event.getPortletRequest();
         if (groupHF.getValue().equals("guest")) {
-            this.checkSuperRole(event);
+            if (req.getRole().compare(req.getRole(), PortletRole.SUPER) < 0) return;
             String guestFile = PortletTabRegistry.getGuestLayoutFile();
             String tmpFile = guestFile + "-tmp";
             Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpFile), "UTF-8"));
