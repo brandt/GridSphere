@@ -61,29 +61,6 @@ Copyright:
 
     <property environment="env"/>
 
-    <property name="catalina.exists" value="${env.CATALINA_HOME}"/>
-    <!-- =================================================================== -->
-    <!-- Sets the CLASSPATH                                                  -->
-    <!-- =================================================================== -->
-    <path id="classpath">
-        <pathelement location="${build.lib}"/>
-        <pathelement location="${build.classes}"/>
-
-        <fileset dir="${env.CATALINA_HOME}/common/lib">
-            <include name="*.jar"/>
-        </fileset>
-
-        <!-- this is for the XML JARs in Tomcat 4.1.x -->
-        <fileset dir="${env.CATALINA_HOME}/common/endorsed">
-            <include name="*.jar"/>
-        </fileset>
-
-        <fileset dir="lib/ext">
-            <include name="*.jar"/>
-        </fileset>
-        <pathelement path="${java.class.path}"/>
-    </path>
-
     <!-- =================================================================== -->
     <!-- Functions                                                           -->
     <!-- =================================================================== -->
@@ -94,6 +71,12 @@ Copyright:
         <mkdir dir="${build.classes}"/>
         <mkdir dir="${build.webapps}"/>
         <mkdir dir="${build.docs}"/>
+
+        <condition property="catalina.exists">
+            <available file="${env.CATALINA_HOME}/bin/catalina.sh"/>
+        </condition>
+
+        <fail message="Unable to find Tomcat 4.1.+. Make sure you have set $CATALINA_HOME set" unless="catalina.exists"/>
 
         <available property="cog.present"
             classname="org.globus.common.Version"
@@ -128,7 +111,31 @@ Copyright:
         <echo message="debug=${debug}" />
         <echo message="deprecation=${deprecation}" />
         <echo message="optimize=${optimize}" />
+
     </target>
+
+    <!-- =================================================================== -->
+        <!-- Sets the CLASSPATH                                                  -->
+        <!-- =================================================================== -->
+        <path id="classpath">
+            <pathelement location="${build.lib}"/>
+            <pathelement location="${build.classes}"/>
+
+            <!-- this is for the servlet JARs in Tomcat 4.1.x -->
+            <fileset dir="${env.CATALINA_HOME}/common/lib">
+                <include name="*.jar"/>
+            </fileset>
+
+            <!-- this is for the XML JARs in Tomcat 4.1.x -->
+            <fileset dir="${env.CATALINA_HOME}/common/endorsed">
+                <include name="*.jar"/>
+            </fileset>
+
+            <fileset dir="lib/ext">
+                <include name="*.jar"/>
+            </fileset>
+            <pathelement path="${java.class.path}"/>
+        </path>
 
     <!-- =================================================================== -->
     <!-- Print usage information                                             -->
@@ -407,15 +414,6 @@ Copyright:
         </condition>
     </target>
 
-    <target name="check-database">
-        <echo message="force database: ${var_force_database}"/>
-        <condition property="var_force_database">
-            <not>
-                <available file="${GRIDSPHERE_HOME}/database/${DATABASE_NAME}.script"/>
-            </not>
-        </condition>
-    </target>
-
     <target name="doclet-mapping" depends="check-mapping" if="var_force_mapping">
         <javadoc packagenames="org.gridlab.gridsphere.*"
             sourcepath="src"
@@ -435,7 +433,16 @@ Copyright:
         </javadoc>
     </target>
 
-    <target name="create-database" depends="configure-database, check-database" if="var_force_database">
+    <target name="check-database-exists">
+        <echo message="force database: ${var_force_database}"/>
+        <condition property="var_force_database">
+            <not>
+                <available file="${GRIDSPHERE_HOME}/database/${DATABASE_NAME}.script"/>
+            </not>
+        </condition>
+    </target>
+
+    <target name="create-database" depends="configure-database, check-database-exists" if="var_force_database">
         <echo message="Creating Database at: ${GRIDSPHERE_HOME}/database/${DATABASE_NAME}"/>
         <echo message="Using script: ${GRIDSPHERE_HOME}/database/dbcreate.sql"/>
         <sql driver="org.hsqldb.jdbcDriver"
@@ -616,11 +623,6 @@ Copyright:
         <echo message="Deploying GridSphere to Tomcat servlet container at ${env.CATALINA_HOME}"/>
         <mkdir dir="${GRIDSPHERE_HOME}"/>
         <mkdir dir="${GRIDSPHERE_HOME}/creds"/>
-
-        <!-- where hsqldb stores the datafiles -->
-
-
-        <mkdir dir="${GRIDSPHERE_HOME}"/>
         <copy todir="${GRIDSPHERE_HOME}">
             <fileset dir="config"/>
         </copy>
@@ -629,7 +631,6 @@ Copyright:
         <copy todir="${build.webapps}/gridsphere">
             <fileset dir="${gswebapp.dir}"/>
         </copy>
-
 
         <!-- preprocess database file -->
         <copy todir="${env.CATALINA_HOME}/shared/lib">
