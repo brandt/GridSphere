@@ -1,0 +1,260 @@
+<!-- ===================================================================
+
+   Build file for the GridSphere Portal
+
+Notes:
+   This is a build file for use with the Jakarta Ant build tool.
+
+Prerequisites:
+
+   jakarta-ant from http://jakarta.apache.org
+
+Build Instructions:
+   To build, invoke the "build.pl" Perl script
+
+Authors:
+  Jason Novotny <novotny@aei.mpg.de>
+
+Copyright:
+  2002
+
+==================================================================== -->
+
+<project name="GridSphere" default="compile" basedir=".">
+
+  <property file="gridsphere.properties"/>
+
+  <property name="project"        value="GridSphere"/>
+  <property name="Name"           value="gridsphere"/>
+  <property name="version"        value="0.9"/>
+
+  <property name="src.dir"        value="src"/>
+  <property name="build.dir"      value="build"/>
+  <property name="lib.dir"        value="lib"/>
+  <property name="conf.dir"       value="conf"/>
+  <property name="webapp.dir"     value="webapps"/>
+  <property name="dist.dir"       value="${Name}-${version}" />
+  <property name="build.lib"      value="${build.dir}/lib"/>
+  <property name="classes.dir"    value="${build.dir}/classes"/>
+  <property name="docs.dir"       value="${build.dir}/docs"/>
+  <property name="javadoc.dir"    value="${build.dir}/javadocs"/>
+  <property name="install.war"    value="${build.dir}/webapp"/>
+  <property name="test.cfg.dir"   value="${src.dir}"/>
+
+  <property name="exclude.dirs" value=""/>
+
+  <property name="debug" value="on"/>
+  <property name="deprecation" value="false"/>
+
+  <property environment="env"/>
+
+
+  <!-- =================================================================== -->
+  <!-- Determine what dependencies are present                             -->
+  <!-- =================================================================== -->
+  <path id="classpath">
+    <pathelement location="${classes.dir}"/>
+    <pathelement location="${jnet.jar}"/>
+    <pathelement location="${jsse.jar}"/>
+    <pathelement location="${jcert.jar}"/>
+    <pathelement location="${pkcs11.jar}"/>
+    <fileset dir="${env.TOMCAT_HOME}/common/lib">
+      <include name="*.jar"/>
+    </fileset>
+    <fileset dir="lib">
+     <include name="*.jar"/>
+    </fileset>
+    <pathelement path="${java.class.path}"/>
+  </path>
+
+  <!-- =================================================================== -->
+  <!-- Functions                                                           -->
+  <!-- =================================================================== -->
+  <target name="setenv">
+	<mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.lib}"/>
+	<mkdir dir="${classes.dir}"/>
+
+    <available property="cog.present"
+        classname="org.globus.common.Version"
+        classpathref="classpath"/>
+
+    <available property="log4j.present"
+        classname="org.apache.log4j.Logger"
+        classpathref="classpath"/>
+
+    <available property="junit.present"
+      classname="junit.framework.TestCase"
+      classpathref="classpath"/>
+
+    <available property="bouncycastle.present"
+      classname="org.bouncycastle.asn1.x509.X509Name"
+      classpathref="classpath"/>
+
+    <condition property="jsse.present" >
+        <and>
+            <available classname="javax.security.cert.X509Certificate"
+                classpathref="classpath" />
+            <available classname="javax.net.SocketFactory"
+                classpathref="classpath" />
+      </and>
+    </condition>
+
+    <copy file="${conf.dir}/log4j.properties" toDir="${classes.dir}"/>
+
+    <echo message="--- Build environment for ${project} ---" />
+    <echo message="--- Flags (Note: If the {property name} is displayed,"/>
+    <echo message="           then the component is not present)" />
+    <echo message=""/>
+
+    <echo message="ANT_HOME is set to = ${env.ANT_HOME}"/>
+    <echo message="JAVA_HOME is set to = ${env.JAVA_HOME}"/>
+    <echo message="TOMCAT_HOME is set to = ${env.TOMCAT_HOME}"/>
+    <echo message=""/>
+
+    <echo message="=== Required Libraries ===" />
+    <echo message="log4j.present=${log4j.present}" />
+    <echo message="jsse.present=${jsse.present}" />
+    <echo message="bouncycastle.present=${bouncycastle.present}" />
+    <echo message="secureldap.present=${secureldap.present}" />
+
+    <echo message=""/>
+    <echo message="--- Optional Libraries ---" />
+    <echo message="junit.present=${junit.present}" />
+    <echo message=""/>
+    <echo message="--- Property values ---" />
+    <echo message="debug=${debug}" />
+    <echo message="deprecation=${deprecation}" />
+    <echo message="optimize=${optimize}" />
+
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Builds and deploys GridSphere                                       -->
+  <!-- =================================================================== -->
+  <target name="all" depends="clean,compile,docs,jar,war"/>
+
+  <!-- =================================================================== -->
+  <!-- Updates GridSphere source code                                      -->
+  <!-- =================================================================== -->
+  <target name="update">
+    <cvs command="update -dP"/>
+  </target>
+
+
+  <target name="compile" depends="setenv">
+
+	<javac  srcdir="${src.dir}"
+		destdir="${classes.dir}"
+		classpathref="classpath"
+		debug="${debug}"
+		optimize="${optimize}"
+		deprecation="${deprecation}">
+	</javac>
+
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Creates a GridSphere JAR library archive                            -->
+  <!-- =================================================================== -->
+  <target name="jar" depends="compile">
+    <jar jarfile="${build.lib}/${Name}.jar" basedir="${classes.dir}" >
+        <include name="org/**" />
+        <include name="${conf.dir}/log4j.properties"/>
+    </jar>
+  </target>
+
+
+  <!-- =================================================================== -->
+  <!-- Cleans everything                                                   -->
+  <!-- =================================================================== -->
+  <target name="clean">
+    <delete dir="${classes.dir}"/>
+	<delete quiet="true" dir="${dist.dir}"/>
+	<delete quiet="true" dir="${build.dir}"/>
+	<delete quiet="true" dir="${reports.tests}"/>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Creates the API documentation                                       -->
+  <!-- =================================================================== -->
+  <target name="docs" depends="setenv">
+    <mkdir dir="${javadoc.dir}"/>
+    <javadoc packagenames="org.*,javax.*"
+             sourcepath="${src.dir}"
+             classpathref="classpath"
+             destdir="${javadoc.dir}"
+             author="true"
+             version="true"
+             use="true"
+             windowtitle="${project} API"
+             doctitle="${project}"
+             bottom="Copyright &#169; 2002 GridLab Project. All Rights Reserved."
+    />
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Creates the war file                                                -->
+  <!-- =================================================================== -->
+  <target name="war" depends="jar">
+    <war warfile="${build.dir}/${Name}.war"
+            webxml="${webapp.dir}/WEB-INF/web.xml">
+
+            <classes dir="${classes.dir}">
+                <!-- Do not include test files in the runtime jar -->
+                <exclude name="**/Test*.*"/>
+                <exclude name="**/test*.*"/>
+            </classes>
+
+            <lib dir="${lib.dir}">
+                <include name="*.jar"/>
+                <exclude name="servlet*.jar"/>
+            </lib>
+
+            <fileset dir="${webapp.dir}">
+                <exclude name="WEB-INF/web.xml"/>
+            </fileset>
+
+        </war>
+
+    </target>
+
+    <!-- ================================================================= -->
+    <!-- Deploys GridSphere to a local server                              -->
+    <!-- ================================================================= -->
+    <target name="deploy" depends="jar">
+        <copy todir="${install.war}/${Name}">
+            <fileset dir="${webapp.dir}"/>
+        </copy>
+        <copy todir="${install.war}/${Name}/WEB-INF/lib">
+            <fileset dir="${lib.dir}">
+                <include name="*.jar"/>
+                <exclude name="servlet*.jar"/>
+            </fileset>
+        </copy>
+        <copy todir="${install.war}/${Name}/WEB-INF/classes">
+            <fileset dir="${classes.dir}">
+                <!-- Do not include test files in the runtime jar -->
+                 <exclude name="**/Test*.*"/>
+                 <exclude name="**/test*.*"/>
+            </fileset>
+        </copy>
+        <copy todir="${env.TOMCAT_HOME}/webapps/${Name}">
+            <fileset dir="${install.war}/${Name}"/>
+        </copy>
+    </target>
+
+
+  <!-- =================================================================== -->
+  <!-- Runs all JUnit tests: needs optional.jar and junit in classpath     -->
+  <!-- =================================================================== -->
+  <target name="test" if="junit.present" depends="compile">
+  </target>
+
+  <target name="testacl" depends="compile">
+    <java classname="org.gridlab.gridsphere.tests.ACLServiceTest" classpathref="classpath">
+        <arg value="50 50"/>
+    </java>
+  </target>
+
+</project>

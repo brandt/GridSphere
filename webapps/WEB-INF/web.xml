@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/j2ee/dtds/web-app_2.3.dtd">
+
+<web-app>
+    <servlet>
+        <servlet-name>gridsphere</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portletcontainer.GridSphere</servlet-class>
+        <init-param>
+            <param-name>PortletServices.properties</param-name>
+            <param-value>WEB-INF/conf/PortletServices.properties</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>HelloWorld</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.HelloWorld</servlet-class>
+	<load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+       <servlet-name>HelloWorld</servlet-name>
+       <url-pattern>/HelloWorld</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+       <servlet-name>
+          gridsphere
+       </servlet-name>
+       <url-pattern>
+         /gridsphere
+       </url-pattern>
+    </servlet-mapping>
+    
+    <mime-mapping> 
+      <extension>wbmp</extension> 
+      <mime-type>image/vnd.wap.wbmp</mime-type> 
+    </mime-mapping>
+    
+    <mime-mapping> 
+      <extension>wml</extension> 
+      <mime-type>text/vnd.wap.wml</mime-type> 
+    </mime-mapping>
+    
+    <mime-mapping> 
+      <extension>wmls</extension> 
+      <mime-type>text/vnd.wap.wmlscript</mime-type> 
+    </mime-mapping> 
+
+    <welcome-file-list>
+      <welcome-file>jsp/index.jsp</welcome-file>
+      <welcome-file>jsp/index.wml</welcome-file>
+      <welcome-file>jsp/index.html</welcome-file>
+    </welcome-file-list>
+
+</web-app>
