@@ -6,9 +6,9 @@
             <portlet-name>File Manager Portlet</portlet-name>
             <servlet-name>FileManagerPortlet</servlet-name>
             <supports>
-                 <view/>
-                 <help/>
-             </supports>
+                <view/>
+                <help/>
+            </supports>
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.file.FileManagerPortlet.1">
@@ -19,11 +19,11 @@
                     <title>File Manager</title>
                     <description>Provides users with a virtual filesystem</description>
                 </language>
-		    <language locale="de">
+                <language locale="de">
                     <title>Datei Manager</title>
                     <description>Bietet dem Benutzer ein virtuelles Dateisystem</description>
                 </language>
-		<language locale="fr">
+                <language locale="fr">
                     <title>Gestionnaire de Ficher</title>
                     <description>Donne a l'usager un system de ficher virtuel</description>
                 </language>
@@ -31,18 +31,18 @@
                     <title>Gestione File</title>
                     <description>Fornisce agli utenti un filesystem virtuale</description>
                 </language>
-		<language locale="hu">
+                <language locale="hu">
                     <title>File kezelő</title>
                     <description>Egy virtuális file rendszer elérését teszi lehetővé.</description>
                 </language>
-	        <language locale="cs">
-	            <title>Správce souborů</title>
-		    <description>Poskytuje uživatelům virtuální systém souborů</description>
-		</language>
-		<language locale="pl">
+                <language locale="cs">
+                    <title>Správce souborů</title>
+                    <description>Poskytuje uživatelům virtuální systém souborů</description>
+                </language>
+                <language locale="pl">
                     <title>Menadżer plików</title>
                     <description>Udostępnia użytkownikowi wirtualny system plików</description>
-              </language>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -61,11 +61,11 @@
                     <title>Banner</title>
                     <description>Displays a banner in a portlet</description>
                 </language>
-		<language locale="de">
+                <language locale="de">
                     <title>Banner</title>
                     <description>Zeigt ein Banner im Portlet an</description>
                 </language>
-		<language locale="fr">
+                <language locale="fr">
                     <title>Bannière</title>
                     <description>Affiche une bannière dans un portlet</description>
                 </language>
@@ -73,15 +73,15 @@
                     <title>Titolo</title>
                     <description>Visualizza un titolo in una portlet</description>
                 </language>
-		<language locale="hu">
+                <language locale="hu">
                     <title>Felirat</title>
                     <description>A portlet egy feliratot jelenít meg.</description>
                 </language>
-	        <language locale="cs">
-	            <title>Reklamní tabule</title>
-	            <description>Zobrazuje libovolný statický obsah v portletu</description>
-	        </language>
-		<language locale="pl">
+                <language locale="cs">
+                    <title>Reklamní tabule</title>
+                    <description>Zobrazuje libovolný statický obsah v portletu</description>
+                </language>
+                <language locale="pl">
                     <title>Plakat</title>
                     <description>Wyświetla plakat w portlecie</description>
                 </language>
@@ -103,12 +103,12 @@
             <servlet-name>LoginPortlet</servlet-name>
             <portlet-config>
                 <param-name>canUserCreateAccount</param-name>
-                <param-value>false</param-value> 
+                <param-value>false</param-value>
             </portlet-config>
             <supports>
-                 <view/>
+                <view/>
                 <help/>
-             </supports>
+            </supports>
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1">
@@ -137,7 +137,7 @@
                     <description>Anmelden Portlet ermoeglicht das Anmelden</description>
                     <keywords>anmelden logout</keywords>
                 </language>
-		<language locale="fr">
+                <language locale="fr">
                     <title>Login</title>
                     <title-short>Login</title-short>
                     <description>Ce Portlet permet de faire un login</description>
@@ -156,10 +156,10 @@
                     <keywords>portlet login</keywords>
                 </language>
                 <language locale="pl">
-                  <title>Logowanie</title>
-                  <title-short>Logowanie</title-short>
-                  <description>Portlet umożliwia zalogowanie się</description>
-                  <keywords>portlet logowanie loguj</keywords>
+                    <title>Logowanie</title>
+                    <title-short>Logowanie</title-short>
+                    <description>Portlet umożliwia zalogowanie się</description>
+                    <keywords>portlet logowanie loguj</keywords>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
@@ -193,7 +193,7 @@
                     <description>Abmelden Portlet ermoeglicht das Ausloggen</description>
                     <keywords>portlet abmelden</keywords>
                 </language>
-		<language locale="fr">
+                <language locale="fr">
                     <title>Logout</title>
                     <title-short>Logout</title-short>
                     <description>Ce Portlet permet de faire un logout</description>
@@ -242,17 +242,17 @@
                     <description>Enables portal administrators to administer user accounts</description>
                     <keywords>user account administration</keywords>
                 </language>
-		<language locale="cs">
-		    <title>Správa uživatelských účtů</title>
-		    <description>Umožňuje správcům portálu spravovat uživatelské účty.</description>
-		</language>
+                <language locale="cs">
+                    <title>Správa uživatelských účtů</title>
+                    <description>Umožňuje správcům portálu spravovat uživatelské účty.</description>
+                </language>
                 <language locale="de">
                     <title>Konto Manager</title>
                     <title-short>Konto Manager</title-short>
                     <description>Ermöglicht das administrieren von Nutzer Konten</description>
                     <keywords>nutzer konten administrieren</keywords>
                 </language>
-		<language locale="fr">
+                <language locale="fr">
                     <title>Gestionnaire de compte usager</title>
                     <description>Permet à l'administrateur du portail d'aministrer les comptes usagers</description>
                 </language>
@@ -262,11 +262,11 @@
                     <description>Permette agli gestire del portale di amministrare gli account utente</description>
                     <keywords>agli gestire</keywords>
                 </language>
-		<language locale="hu">
+                <language locale="hu">
                     <title>Felhasználói hozzáférés kezelő</title>
                     <description>Lehetővé teszi a portal adminisztrátorok számára, a felhasználók adminisztrációját.</description>
                 </language>
-	        <language locale="pl">
+                <language locale="pl">
                     <title>Menadżer kont użytkowników</title>
                     <description>Umożliwia administratorowi portalu administrowanie kontami użytkowników</description>
                 </language>
@@ -279,8 +279,8 @@
             <portlet-name>Portlet Group Manager</portlet-name>
             <servlet-name>GroupManagerPortlet</servlet-name>
             <supports>
-                 <view/>
-                 <help/>
+                <view/>
+                <help/>
             </supports>
         </portlet-app>
 
@@ -293,15 +293,15 @@
                     <title>Portlet Group Manager</title>
                     <description>Enables portal administrators to administer portlet groups</description>
                 </language>
-		<language locale="cs">
-		    <title>Správa skupin portletů</title>
-		    <description>Umožňuje správcům portálu spravovat skupiny portletů.</description>
-		</language>
-		<language locale="de">
+                <language locale="cs">
+                    <title>Správa skupin portletů</title>
+                    <description>Umožňuje správcům portálu spravovat skupiny portletů.</description>
+                </language>
+                <language locale="de">
                     <title>Portlet Gruppen Verwaltung</title>
                     <description>Ermöglicht Portal-Administratoren Portlet Gruppen zu verwalten</description>
                 </language>
-		<language locale="fr">
+                <language locale="fr">
                     <title>Gestionnaire de groupe</title>
                     <description>Permet à l'administrateur du portail d'aministrer les groupes</description>
                 </language>
@@ -309,14 +309,14 @@
                     <title>Gestione Gruppo Portlet</title>
                     <description>Consente agli amministratori del portale di gestire i gruppi di portlet</description>
                 </language>
-		<language locale="hu">
-                   <title>Portlet csoport kezelő</title>
-                   <description>Lehetővé teszi a portal adminisztrátorok számára, portlet csoportok kezelését.</description>
-               </language>
-	       <language locale="pl">
-                   <title>Menadżer grup portletów</title>
-                   <description>Umożliwia administratorowi portalu administrowanie grupami portletów</description>
-               </language>
+                <language locale="hu">
+                    <title>Portlet csoport kezelő</title>
+                    <description>Lehetővé teszi a portal adminisztrátorok számára, portlet csoportok kezelését.</description>
+                </language>
+                <language locale="pl">
+                    <title>Menadżer grup portletów</title>
+                    <description>Umożliwia administratorowi portalu administrowanie grupami portletów</description>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -340,11 +340,11 @@
                     <title>Portlet Application Manager</title>
                     <description>Enables portal administrators to administer portlets</description>
                 </language>
-		<language locale="de">
+                <language locale="de">
                     <title>Portlet Anwendungsverwaltung</title>
                     <description>Ermöglicht Portal-Administratoren Portlets zu verwalten</description>
                 </language>
-		<language locale="fr">
+                <language locale="fr">
                     <title>Gestionnaire d'application</title>
                     <description> Permet à l'administrateur du portail d'aministrer les applications</description>
                 </language>
@@ -352,128 +352,128 @@
                     <title>Gestione Applicazione Portlet</title>
                     <description>Consente agli amministratori del portale di gestire le portlet</description>
                 </language>
-		<language locale="cs">
-		    <title>Správa portletových aplikací</title>
-		    <description>Umožňuje správcům portálu spravovat portlety.</description>
-		</language>
-		<language locale="hu">
-                   <title>Portlet alkalmazás kezelő</title>
-                   <description>Lehetővé teszi a portal adminisztrátorok számára, portletek kezelését.</description>
-               </language>
-	       <language locale="pl">
-                  <title>Menadżer portletów</title>
-                  <description>Umożliwia administratorowi portalu administrowanie portletami</description>
-              </language>
+                <language locale="cs">
+                    <title>Správa portletových aplikací</title>
+                    <description>Umožňuje správcům portálu spravovat portlety.</description>
+                </language>
+                <language locale="hu">
+                    <title>Portlet alkalmazás kezelő</title>
+                    <description>Lehetővé teszi a portal adminisztrátorok számára, portletek kezelését.</description>
+                </language>
+                <language locale="pl">
+                    <title>Menadżer portletów</title>
+                    <description>Umożliwia administratorowi portalu administrowanie portletami</description>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
 
     <portlet-app-def>
-         <portlet-app id="org.gridlab.gridsphere.portlets.core.notepad.NotePadPortlet">
-             <portlet-name>NotePad Portlet</portlet-name>
-             <servlet-name>NotePadPortlet</servlet-name>
-             <supports>
-                 <view/>
-                 <help/>
-             </supports>
-         </portlet-app>
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.notepad.NotePadPortlet">
+            <portlet-name>NotePad Portlet</portlet-name>
+            <servlet-name>NotePadPortlet</servlet-name>
+            <supports>
+                <view/>
+                <help/>
+            </supports>
+        </portlet-app>
 
-         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.notepad.NotePadPortlet.1">
-             <concrete-portlet>
-                 <portlet-name>NotePad Portlet</portlet-name>
-                 <default-locale>en</default-locale>
-                 <language locale="en">
-                     <title>Notepad</title>
-                     <description>Provides users with a searchable NotePad</description>
-                 </language>
-                 <language locale="de">
-                     <title>Notizblock</title>
-                     <description>Dieses Portlet stellt ein Notizblock zur Verfuegung</description>
-                 </language>
-		 <language locale="fr">
-                     <title>BlocNote</title>
-                     <description>Permet à l'usager d'ecrire des notes</description>
-                 </language>
-                 <language locale="it">
-                     <title>Blocco note</title>
-                     <description>Fornisce agli utenti un block notes con funzionalità di ricerca</description>
-                 </language>
-		 <language locale="cs">
-		     <title>Poznámkový blok</title>
-		     <description>Poskytuje poznámkový blok s vyhledáváním.</description>
-		 </language>
-		 <language locale="hu">
-                     <title>Jegyzettömb</title>
-                     <description>Kereshető jegyzettömb alkalmazás.</description>
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.notepad.NotePadPortlet.1">
+            <concrete-portlet>
+                <portlet-name>NotePad Portlet</portlet-name>
+                <default-locale>en</default-locale>
+                <language locale="en">
+                    <title>Notepad</title>
+                    <description>Provides users with a searchable NotePad</description>
                 </language>
-		<language locale="pl">
-                     <title>Notatnik</title>
-                     <description>Udostępnia użytkownikowi notatnik z możliwością przeszukiwania</description>
+                <language locale="de">
+                    <title>Notizblock</title>
+                    <description>Dieses Portlet stellt ein Notizblock zur Verfuegung</description>
                 </language>
-             </concrete-portlet>
-         </concrete-portlet-app>
-     </portlet-app-def>
+                <language locale="fr">
+                    <title>BlocNote</title>
+                    <description>Permet à l'usager d'ecrire des notes</description>
+                </language>
+                <language locale="it">
+                    <title>Blocco note</title>
+                    <description>Fornisce agli utenti un block notes con funzionalità di ricerca</description>
+                </language>
+                <language locale="cs">
+                    <title>Poznámkový blok</title>
+                    <description>Poskytuje poznámkový blok s vyhledáváním.</description>
+                </language>
+                <language locale="hu">
+                    <title>Jegyzettömb</title>
+                    <description>Kereshető jegyzettömb alkalmazás.</description>
+                </language>
+                <language locale="pl">
+                    <title>Notatnik</title>
+                    <description>Udostępnia użytkownikowi notatnik z możliwością przeszukiwania</description>
+                </language>
+            </concrete-portlet>
+        </concrete-portlet-app>
+    </portlet-app-def>
 
     <portlet-app-def>
-         <portlet-app id="org.gridlab.gridsphere.portlets.core.layout.LayoutManagerPortlet">
-             <portlet-name>Layout Manager Portlet</portlet-name>
-             <servlet-name>LayoutPortlet</servlet-name>
-             <supports>
-                 <view/>
-                 <edit/>
-                 <help/>
-             </supports>
-         </portlet-app>
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.layout.LayoutManagerPortlet">
+            <portlet-name>Layout Manager Portlet</portlet-name>
+            <servlet-name>LayoutPortlet</servlet-name>
+            <supports>
+                <view/>
+                <edit/>
+                <help/>
+            </supports>
+        </portlet-app>
 
-         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.layout.LayoutManagerPortlet.1">
-             <concrete-portlet>
-                 <portlet-name>Layout Manager Portlet</portlet-name>
-                 <default-locale>en</default-locale>
-                 <language locale="en">
-                     <title>Layout Manager</title>
-                     <description>Provides user layout customization</description>
-                 </language>
-		 <language locale="de">
-                     <title>Layout Managieren</title>
-                     <description>Ermöglicht die benutzerspezifische Anpassung der Darstellung</description>
-                 </language>
-		 <language locale="fr">
-                     <title>Gestionnaire de Layout</title>
-                     <description>Permet a l'usager de modifier le layout</description>
-                 </language>
-                 <language locale="it">
-                     <title>Gestione Layout</title>
-                     <description>Consente la personalizzazione del layout utente</description>
-                 </language>
-		 <language locale="cs">
-		     <title>Správa umístění portletů</title>
-		     <description>Poskytuje uživatelem nastavitelné umístění portletů</description>
-		 </language>
-		 <language locale="hu">
-                     <title>Felépítés szekesztő</title>
-                     <description>Lehetővé teszi a portletekből egyéni weblapok felépítését</description>
-                 </language>
-		 <language locale="pl">
-		     <title>Menadżer układów graficznych</title>
-		     <description>Udostępnia użytkownikowi dostosowywanie układów graficznych</description>
-                 </language>
-                 <config-param>
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.layout.LayoutManagerPortlet.1">
+            <concrete-portlet>
+                <portlet-name>Layout Manager Portlet</portlet-name>
+                <default-locale>en</default-locale>
+                <language locale="en">
+                    <title>Layout Manager</title>
+                    <description>Provides user layout customization</description>
+                </language>
+                <language locale="de">
+                    <title>Layout Managieren</title>
+                    <description>Ermöglicht die benutzerspezifische Anpassung der Darstellung</description>
+                </language>
+                <language locale="fr">
+                    <title>Gestionnaire de Layout</title>
+                    <description>Permet a l'usager de modifier le layout</description>
+                </language>
+                <language locale="it">
+                    <title>Gestione Layout</title>
+                    <description>Consente la personalizzazione del layout utente</description>
+                </language>
+                <language locale="cs">
+                    <title>Správa umístění portletů</title>
+                    <description>Poskytuje uživatelem nastavitelné umístění portletů</description>
+                </language>
+                <language locale="hu">
+                    <title>Felépítés szekesztő</title>
+                    <description>Lehetővé teszi a portletekből egyéni weblapok felépítését</description>
+                </language>
+                <language locale="pl">
+                    <title>Menadżer układów graficznych</title>
+                    <description>Udostępnia użytkownikowi dostosowywanie układów graficznych</description>
+                </language>
+                <config-param>
                     <param-name>supported-themes</param-name>
                     <param-value>xp, swamp</param-value>
-                 </config-param>
-             </concrete-portlet>
-         </concrete-portlet-app>
-     </portlet-app-def>
+                </config-param>
+            </concrete-portlet>
+        </concrete-portlet-app>
+    </portlet-app-def>
 
     <portlet-app-def>
         <portlet-app id="org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet">
             <portlet-name>Profile Manager Portlet</portlet-name>
             <servlet-name>ProfileManagerPortlet</servlet-name>
             <supports>
-                 <view/>
-                 <edit/>
-                 <help/>
-             </supports>
+                <view/>
+                <edit/>
+                <help/>
+            </supports>
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet.1">
@@ -484,11 +484,11 @@
                     <title>Profile Manager</title>
                     <description>Customizes users profile</description>
                 </language>
-		<language locale="de">
+                <language locale="de">
                     <title>Benutzerprofil Verwaltung</title>
                     <description>Zur Anpassung der Benutzerprofile</description>
                 </language>
-		<language locale="fr">
+                <language locale="fr">
                     <title>Gestionnaire de profile</title>
                     <description>Permet de gérer les profiles </description>
                 </language>
@@ -496,18 +496,18 @@
                     <title>Gestione Profilo</title>
                     <description>Personalizza il profilo utente</description>
                 </language>
-		<language locale="cs">
-		    <title>Správce profilů uživatelů</title>
-		    <description>Nastavuje profily uživatelů</description>
-		</language>
-		<language locale="hu">
+                <language locale="cs">
+                    <title>Správce profilů uživatelů</title>
+                    <description>Nastavuje profily uživatelů</description>
+                </language>
+                <language locale="hu">
                     <title>Felhasználói adatok</title>
                     <description>Lehetővé teszi a felhasználók számára, saját beállításaik szerkesztését.</description>
-               </language>
-	       <language locale="pl">
+                </language>
+                <language locale="pl">
                     <title>Menadżer profili</title>
                     <description>Dostosowywanie profili użytkownika</description>
-              </language>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -517,8 +517,8 @@
             <portlet-name>Locale Portlet</portlet-name>
             <servlet-name>LocalePortlet</servlet-name>
             <supports>
-                 <view/>
-             </supports>
+                <view/>
+            </supports>
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.locale.LocalePortlet.1">
@@ -529,11 +529,11 @@
                     <title>Locale</title>
                     <description>Selects a locale</description>
                 </language>
-		<language locale="de">
+                <language locale="de">
                     <title>Spracheinstellungen</title>
                     <description>Wählt eine Spracheinstellungen</description>
                 </language>
-		<language locale="fr">
+                <language locale="fr">
                     <title>Locale</title>
                     <description>Sélectionne un locale</description>
                 </language>
@@ -541,18 +541,18 @@
                     <title>Localizzazione</title>
                     <description>Seleziona una localizzazione</description>
                 </language>
-	       <language locale="cs">
-	            <title>Jazykové nastavení</title>
-		    <description>Vybírá místní nastavení</description>
-	       </language>
-               <language locale="hu">
+                <language locale="cs">
+                    <title>Jazykové nastavení</title>
+                    <description>Vybírá místní nastavení</description>
+                </language>
+                <language locale="hu">
                     <title>Nyelvválasztás</title>
                     <description>Nyelv választása</description>
-               </language>
-	           <language locale="pl">
+                </language>
+                <language locale="pl">
                     <title>Lokalizacja</title>
                     <description>Wybór lokalizacji</description>
-               </language>
+                </language>
                 <config-param>
                     <param-name>display-locale</param-name>
                     <param-value>en,cs,de,fr,hu,pl,it</param-value>
@@ -566,9 +566,9 @@
             <portlet-name>Subscription Portlet</portlet-name>
             <servlet-name>SubscriptionPortlet</servlet-name>
             <supports>
-                 <view/>
+                <view/>
                 <help/>
-             </supports>
+            </supports>
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.subscription.SubscriptionPortlet.1">
@@ -579,11 +579,11 @@
                     <title>Portlet Subscription</title>
                     <description>Customizes users portlets</description>
                 </language>
-		<language locale="de">
+                <language locale="de">
                     <title>Portlet Abonnementverwaltung</title>
                     <description>Passt die Portlets des Benutzers an</description>
                 </language>
-		<language locale="fr">
+                <language locale="fr">
                     <title>Inscription Portlet</title>
                     <description>Permet de s'inscrire a des portlets</description>
                 </language>
@@ -591,68 +591,93 @@
                     <title>Sottoscrizione alla portlet</title>
                     <description>Personalizza le portlet a cui l'utente è iscritto</description>
                 </language>
-		<language locale="cs">
-		    <title>Výběr zobrazovaných portletů</title>
-		    <description>Vybírání portletů zobrazovaných uživateli</description>
-		</language>
-		<language locale="hu">
+                <language locale="cs">
+                    <title>Výběr zobrazovaných portletů</title>
+                    <description>Vybírání portletů zobrazovaných uživateli</description>
+                </language>
+                <language locale="hu">
                     <title>Portlet Feliratkozás</title>
                     <description>Felhasználói portletek testreszabása.</description>
-               </language>
-	       <language locale="pl">
+                </language>
+                <language locale="pl">
                     <title>Subskrypcja portletów</title>
                     <description>Dostosowywanie portletów użytkownika</description>
-               </language>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
 
     <portlet-app-def>
-         <portlet-app id="org.gridlab.gridsphere.portlets.core.messaging.TextMessagingPortlet">
-             <portlet-name>TextMessaging Portlet</portlet-name>
-             <servlet-name>TextMessagingPortlet</servlet-name>
-             <supports>
-                 <view/>
-                 <edit/>
-                 <help/>
-             </supports>
-         </portlet-app>
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.messaging.TextMessagingPortlet">
+            <portlet-name>TextMessaging Portlet</portlet-name>
+            <servlet-name>TextMessagingPortlet</servlet-name>
+            <supports>
+                <view/>
+                <edit/>
+                <help/>
+            </supports>
+        </portlet-app>
 
-         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.messaging.TextMessagingPortlet.1">
-             <concrete-portlet>
-                 <portlet-name>TextMessaging Portlet</portlet-name>
-                 <default-locale>en</default-locale>
-                 <language locale="en">
-                     <title>Text Messaging</title>
-                     <description>Provides users ability to send messages</description>
-                 </language>
-                 <language locale="de">
-                     <title>Text Nachrichten</title>
-                     <description>Bietet Benutzern die Möglichkeit Nachrichten zu verschicken</description>
-                 </language>
-		 <language locale="fr">
-                     <title>Messagerie texte</title>
-                     <description>Permet a l'usager d'envoyer des messages</description>
-                 </language>
-                 <language locale="it">
-                     <title>Messaggi di testo</title>
-                     <description>Consente agli utenti di inviare messaggi</description>
-                 </language>
-		 <language locale="cs">
-		     <title>Textové zprávy</title>
-		     <description>Poskytuje uživatel_um možnost posílat textové zprávy</description>
-		 </language>
-		 <language locale="hu">
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.messaging.TextMessagingPortlet.1">
+            <concrete-portlet>
+                <portlet-name>TextMessaging Portlet</portlet-name>
+                <default-locale>en</default-locale>
+                <language locale="en">
+                    <title>Text Messaging</title>
+                    <description>Provides users ability to send messages</description>
+                </language>
+                <language locale="de">
+                    <title>Text Nachrichten</title>
+                    <description>Bietet Benutzern die Möglichkeit Nachrichten zu verschicken</description>
+                </language>
+                <language locale="fr">
+                    <title>Messagerie texte</title>
+                    <description>Permet a l'usager d'envoyer des messages</description>
+                </language>
+                <language locale="it">
+                    <title>Messaggi di testo</title>
+                    <description>Consente agli utenti di inviare messaggi</description>
+                </language>
+                <language locale="cs">
+                    <title>Textové zprávy</title>
+                    <description>Poskytuje uživatel_um možnost posílat textové zprávy</description>
+                </language>
+                <language locale="hu">
                     <title>Szöveges üzenetküldés</title>
                     <description>Lehtővé teszi a felhasználók számára az üzenetküldést</description>
                 </language>
-		<language locale="pl">
+                <language locale="pl">
                     <title>Wiadomości tekstowe</title>
                     <description>Pozwala użytkownikowi na wysyłanie wiadomości</description>
-               </language>
-             </concrete-portlet>
-         </concrete-portlet-app>
-     </portlet-app-def>
+                </language>
+            </concrete-portlet>
+        </concrete-portlet-app>
+    </portlet-app-def>
+    <portlet-app-def>
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.file.CommanderPortlet">
+            <portlet-name>Commander Portlet</portlet-name>
+            <servlet-name>CommanderPortlet</servlet-name>
+            <supports>
+                <view/>
+                <help/>
+            </supports>
+        </portlet-app>
+
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.file.CommanderPortlet.1">
+            <concrete-portlet>
+                <portlet-name>Commander Portlet</portlet-name>
+                <default-locale>en</default-locale>
+                <language locale="en">
+                    <title>Commander</title>
+                    <description>Provides users with a secure virtual filesystem</description>
+                </language>
+                <language locale="pl">
+                    <title>Commander</title>
+                    <description>Udostępnia użytkownikowi bezpieczny wirtualny system plików</description>
+                </language>
+            </concrete-portlet>
+        </concrete-portlet-app>
+    </portlet-app-def>
 
 </portlet-app-collection>
 

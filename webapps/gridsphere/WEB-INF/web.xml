@@ -107,37 +107,42 @@
     </servlet>
 
     <servlet>
-	<servlet-name>SecureDirectory</servlet-name>
-	<servlet-class>org.gridlab.gridsphere.servlets.SecureDirectory</servlet-class>
-	<init-param>
-	    <param-name>strongProtection</param-name>
-	    <param-value>true</param-value>
-	</init-param>
+        <servlet-name>SecureDirectory</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.servlets.SecureDirectory</servlet-class>
+        <init-param>
+            <param-name>strongProtection</param-name>
+            <param-value>true</param-value>
+        </init-param>
     </servlet>
-								
+
+    <servlet>
+        <servlet-name>CommanderPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.file.CommanderPortlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>gridsphere</servlet-name>
-       <url-pattern>/gridsphere</url-pattern>
-    </servlet-mapping>
-
-     <servlet-mapping>
-       <servlet-name>LoginPortlet</servlet-name>
-       <url-pattern>/login</url-pattern>
+        <url-pattern>/gridsphere</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
-       <servlet-name>LogoutPortlet</servlet-name>
-       <url-pattern>/logout</url-pattern>
+        <servlet-name>LoginPortlet</servlet-name>
+        <url-pattern>/login</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
-       <servlet-name>LayoutPortlet</servlet-name>
-       <url-pattern>/layout</url-pattern>
+        <servlet-name>LogoutPortlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
-       <servlet-name>FileManagerPortlet</servlet-name>
-       <url-pattern>/file/manager</url-pattern>
+        <servlet-name>LayoutPortlet</servlet-name>
+        <url-pattern>/layout</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>FileManagerPortlet</servlet-name>
+        <url-pattern>/file/manager</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -196,23 +201,28 @@
     </servlet-mapping>
 
     <servlet-mapping>
-	<servlet-name>SecureDirectory</servlet-name>
-	<url-pattern>/secure/*</url-pattern>
+        <servlet-name>SecureDirectory</servlet-name>
+        <url-pattern>/secure/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>CommanderPortlet</servlet-name>
+        <url-pattern>/file/commander</url-pattern>
     </servlet-mapping>
 
     <mime-mapping>
-      <extension>wbmp</extension>
-      <mime-type>image/vnd.wap.wbmp</mime-type>
+        <extension>wbmp</extension>
+        <mime-type>image/vnd.wap.wbmp</mime-type>
     </mime-mapping>
 
     <mime-mapping>
-      <extension>wml</extension>
-      <mime-type>text/vnd.wap.wml</mime-type>
+        <extension>wml</extension>
+        <mime-type>text/vnd.wap.wml</mime-type>
     </mime-mapping>
 
     <mime-mapping>
-      <extension>wmls</extension>
-      <mime-type>text/vnd.wap.wmlscript</mime-type>
+        <extension>wmls</extension>
+        <mime-type>text/vnd.wap.wmlscript</mime-type>
     </mime-mapping>
 
 
