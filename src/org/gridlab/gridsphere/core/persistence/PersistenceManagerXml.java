@@ -5,12 +5,13 @@
 package org.gridlab.gridsphere.core.persistence;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface PersistenceManagerXml {
 
     public void setMappingPath(String mappingPath);
 
-    public String getMappingPath();
+    public List getMappingPaths();
 
     public void setDescriptorPath(String descriptorPath);
 

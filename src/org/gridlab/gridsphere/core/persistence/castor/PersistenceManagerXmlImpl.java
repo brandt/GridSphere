@@ -18,6 +18,9 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.xml.sax.InputSource;
 
 import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * The PersistenceManagerXmlImpl provides easy access to marshal/unmarshal Java objects to XML files
@@ -26,7 +29,7 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
 
     protected final static PortletLog log = SportletLog.getInstance(PersistenceManagerXmlImpl.class);
 
-    private String mappingPath = null;
+    private List mappingPaths = new ArrayList();
     private String descriptorPath = null;
 
     /**
@@ -43,7 +46,11 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
      */
     public PersistenceManagerXmlImpl(String descriptorPath, String mappingPath) {
         this.descriptorPath = descriptorPath;
-        this.mappingPath = mappingPath;
+        addMappingPath(mappingPath);
+    }
+
+    public void addMappingPath(String path) {
+        mappingPaths.add(path);
     }
 
     /**
@@ -52,7 +59,8 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
      * @param mappingPath the mapping file path
      */
     public void setMappingPath(String mappingPath) {
-        this.mappingPath = mappingPath;
+        mappingPaths.clear();
+        mappingPaths.add(mappingPath);
     }
 
     /**
@@ -60,8 +68,8 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
      *
      * @return the mapping file path
      */
-    public String getMappingPath() {
-        return mappingPath;
+    public List getMappingPaths() {
+        return mappingPaths;
     }
 
     /**
@@ -96,7 +104,14 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
             FileWriter filewriter = new FileWriter(descriptorPath);
             Marshaller marshal = new Marshaller(w);
             Mapping map = new Mapping();
-            map.loadMapping(mappingPath);
+
+            Iterator iterMappingPaths = mappingPaths.iterator();
+            while (iterMappingPaths.hasNext()) {
+                String mappingPath = (String)iterMappingPaths.next();
+                log.debug("Loading mapping path " + mappingPath);
+                map.loadMapping(mappingPath);
+            }
+
             marshal.setMapping(map);
             marshal.marshal(object);
             filewriter.close();
@@ -131,8 +146,12 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
 
             Mapping mapping = new Mapping();
 
-            log.debug("Using  getMappingFile()" + mappingPath);
-            mapping.loadMapping(mappingPath);
+            Iterator iterMappingPaths = mappingPaths.iterator();
+            while (iterMappingPaths.hasNext()) {
+                String mappingPath = (String)iterMappingPaths.next();
+                log.debug("Loading mapping path " + mappingPath);
+                mapping.loadMapping(mappingPath);
+            }
 
             Unmarshaller unmarshal = new Unmarshaller(mapping);
             unmarshal.setValidation(true);

@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.lang.reflect.Constructor;
 
 public class PersistenceManagerFactory {
 
@@ -76,6 +77,27 @@ public class PersistenceManagerFactory {
      */
     public static PersistenceManagerXml createPersistenceManagerXml(String descriptorURL, String mappingURL) {
         return new PersistenceManagerXmlImpl(descriptorURL, mappingURL);
+    }
+
+    /**
+     * Returns an instance of a PersistenceManagerXML from a descriptor and mapping URL
+     *
+     * @param descriptorURL the descriptor location
+     * @param mappingURL    the mapping location
+     * @return an instance of PersistenceManagerXmlImpl
+     */
+    public static PersistenceManagerXml createPersistenceManagerXml(String descriptorURL, String mappingURL, ClassLoader classLoader) {
+        PersistenceManagerXml pmXml = null;
+        try {
+            Class pmfClass = Class.forName(org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerXmlImpl.class.getName(), true, classLoader);
+            Class[] pmfParamTypes = { String.class, String.class };
+            Constructor constructor = pmfClass.getConstructor(pmfParamTypes);
+            Object[] pmfParams = { descriptorURL, mappingURL };
+            pmXml = (PersistenceManagerXml)constructor.newInstance(pmfParams);
+        } catch (Exception e) {
+            log.error("FATAL PMXML: Unable to deserialize ActionComponentTypes.xml", e);
+        }
+        return pmXml;
     }
 
     public static void shutdown() {
