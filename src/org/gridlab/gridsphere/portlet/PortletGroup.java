@@ -12,7 +12,7 @@ public interface PortletGroup {
 
     public String getName();
 
-    public int getID();
+    public String getID();
 
 
 }

@@ -1,5 +1,6 @@
 /*
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
  * @version $Id$
  */
 package org.gridlab.gridsphere.portlet;
@@ -54,6 +55,14 @@ public interface User {
     public String getGivenName();
 
     /**
+     * Returns the organization the user belongs to
+     *
+     * @return the organization name
+     *
+     */
+    public String getOrganization();
+
+    /**
      * Returns the given e-mail of the user or null if none is available.
      *
      * @return the email address
@@ -89,5 +98,6 @@ public interface User {
      * @return User information represented as a String
      */
     public String toString();
+
 
 }
