@@ -22,6 +22,7 @@ public class SecureDirectory extends HttpServlet {
 
     public static final String SECURE_CONTEXT = "secure";
     public static final String SECURE_CONTEXT_PATH = "/WEB-INF/" + SECURE_CONTEXT;
+    public static final String GUEST_SECUREDIR = "GUEST";
 
     private Perl5Util util = new Perl5Util();
     private final static int BUFFER_SIZE = 8 * 1024; //8 kB
@@ -53,13 +54,21 @@ public class SecureDirectory extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userID = (String) request.getSession().getAttribute(SportletProperties.PORTLET_USER);
+/*
         if (userID == null || userID.equals("")) {
             if (DEBUG)
                 log("Request blocked (userID=" + userID + ") !!! Request: " + request.getRequestURI() + "\nIP: " + request.getRemoteAddr() + "\n");
             response.setStatus(403);
-        } else if (!inited) {
+        } else
+*/
+        if (!inited) {
             response.setStatus(503);
         } else {
+            if (userID == null || userID.equals("")) {
+                if (DEBUG)
+                    log("No userID - request redirected to GUEST. Request: " + request.getRequestURI() + "\nIP: " + request.getRemoteAddr() + "\n");
+                userID=GUEST_SECUREDIR;
+            }
             String userDirPath = secureDirPath + "/" + userID;
             if (!(new File(userDirPath).isDirectory())) {
                 if (DEBUG)
