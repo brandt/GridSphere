@@ -500,7 +500,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                     pane.append("<td height=\"24\" width=\"6\" background=\"" + path + "tab-active-left.gif\">");
                     pane.append("&nbsp;");
                     pane.append("</td>");
-                    pane.append("<td height=\"24\" background=\"" + path + "tab-active-middle.gif\">");
+                    pane.append("<td height=\"24\" nowrap=\"nowrap\" background=\"" + path + "tab-active-middle.gif\">");
                     pane.append("<span class=\"tab-active\">" + replaceBlanks(title) + "</span>");
                     pane.append("<td height=\"24\" width=\"6\" background=\"" + path + "tab-active-right.gif\">");
                     pane.append("&nbsp;");
@@ -510,7 +510,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                     pane.append("<td height=\"24\" width=\"6\" background=\"" + path + "tab-inactive-left.gif\">");
                     pane.append("&nbsp;");
                     pane.append("</td>");
-                    pane.append("<td height=\"24\"   background=\"" + path + "tab-inactive-middle.gif\">");
+                    pane.append("<td height=\"24\" nowrap=\"nowrap\" background=\"" + path + "tab-inactive-middle.gif\">");
                     pane.append("<a class=\"tab-menu\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\">" + replaceBlanks(title) + "</a>");
                     pane.append("<td height=\"24\" width=\"6\" background=\"" + path + "tab-inactive-right.gif\">");
                     pane.append("&nbsp;");
@@ -576,7 +576,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                     String lang = req.getLocale().getLanguage();
                     String title = tab.getTitle(lang);
 
-                    pane.append("<td background=\"" + path + "subtab-middle.gif\" height=\"24\">");
+                    pane.append("<td nowrap=\"nowrap\" background=\"" + path + "subtab-middle.gif\" height=\"24\">");
                     if (tab.isSelected()) {
                         pane.append("<span class=\"tab-sub-active\">");
                         pane.append("<a class=\"tab-sub-menu-active\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\">" + replaceBlanks(title) + "</a></span>");
