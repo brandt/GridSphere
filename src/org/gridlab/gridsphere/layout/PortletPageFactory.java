@@ -166,6 +166,96 @@ public class PortletPageFactory implements PortletSessionListener {
         }
     }
 
+    public void addPortletApplicationTab(User user, String webAppName) {
+        PortletPage page = createPortletPage(user);
+        PortletTabbedPane pagePane = page.getPortletTabbedPane();
+        PortletTabbedPane appPane = PortletTabRegistry.getApplicationTabs(webAppName);
+        if (appPane != null) {
+            System.err.println("trying to add tabs!!!!!");
+            List tabs = appPane.getPortletTabs();
+            try {
+                for (int j = 0; j < tabs.size(); j++) {
+                    PortletTab tab = (PortletTab)tabs.get(j);
+                    pagePane.addTab((PortletTab)deepCopy(tab));
+                }
+            } catch (Exception e) {
+                log.error("Unable to copy application tabs for webapp: " + webAppName);
+            }
+            page.setPortletTabbedPane(pagePane);
+            try {
+                page.save();
+            } catch (IOException e) {
+
+            }
+        }
+    }
+
+    public void removePortletApplicationTab(User user, String webAppName) {
+        PortletPage page = createPortletPage(user);
+        PortletTabbedPane pagePane = page.getPortletTabbedPane();
+        PortletTabbedPane appPane = PortletTabRegistry.getApplicationTabs(webAppName);
+        if (appPane != null) {
+            System.err.println("trying to add tabs!!!!!");
+            List tabs = appPane.getPortletTabs();
+            try {
+                for (int j = 0; j < tabs.size(); j++) {
+                    PortletTab tab = (PortletTab)tabs.get(j);
+                    pagePane.removeTab(tab);
+                }
+            } catch (Exception e) {
+                log.error("Unable to copy application tabs for webapp: " + webAppName);
+            }
+            page.setPortletTabbedPane(pagePane);
+            try {
+                page.save();
+            } catch (IOException e) {
+
+            }
+        }
+    }
+
+    public PortletPage createGridSpherePage() {
+        PortletPage newPage = null;
+        PortletTabbedPane pane = null;
+        try {
+
+            //newPage = (PortletPage)templatePage.clone();
+            newPage = (PortletPage)deepCopy(templatePage);
+            log.debug("Returning cloned layout from webapps:");
+
+            pane = newPage.getPortletTabbedPane();
+
+            PortletManager manager = PortletManager.getInstance();
+            List webappNames = manager.getPortletWebApplicationNames();
+
+            PortletGroup g = PortletGroupFactory.GRIDSPHERE_GROUP;
+
+            for (int i = 0; i < webappNames.size(); i++) {
+                String webappName = (String)webappNames.get(i);
+
+                    if (g.getName().equals(webappName)) {
+                        log.debug("have group: " + g.getName());
+                        PortletTabbedPane portletTabs = PortletTabRegistry.getApplicationTabs(webappName);
+                        List tabs = portletTabs.getPortletTabs();
+                        for (int j = 0; j < tabs.size(); j++) {
+                            PortletTab tab = (PortletTab)tabs.get(j);
+
+                            //pane.addTab(g.getName(), (PortletTab)tab.clone());
+                            pane.addTab((PortletTab)deepCopy(tab));
+                        }
+                    }
+
+            }
+
+            newPage.setPortletTabbedPane(pane);
+            //newPage = (PortletPage)templatePage;
+        } catch (Exception e) {
+            log.error("Unable to make a clone of the templatePage", e);
+
+        }
+        return newPage;
+    }
+
     public PortletPage createFromGroups(PortletRequest req, List groups) {
 
         PortletPage newPage = null;
@@ -239,6 +329,8 @@ public class PortletPageFactory implements PortletSessionListener {
             }
             */
 
+
+
     public PortletPage createPortletPage(PortletRequest req) {
 
         String sessionId = req.getPortletSession().getId();
@@ -293,31 +385,63 @@ public class PortletPageFactory implements PortletSessionListener {
     }
 
 
-        public PortletPage createNewPage(PortletRequest req) {
-            // is user a SUPER?
-            PortletPage page = null;
-            PortletRole role = req.getRole();
-            if (role.equals(PortletRole.SUPER)) {
+    public PortletPage createPortletPage(User user) {
 
-                page = createFromAllWebApps(req);
+        log.debug("User requesting layout: " + user.getUserName());
 
+        PortletPage page = null;
 
-            }  else {
+        String userLayout = userLayoutDir + File.separator + user.getID();
 
-                List groups = (List)req.getAttribute(SportletProperties.PORTLETGROUPS);
-                page = createFromGroups(req, groups);
+        File f = new File(userLayout);
+        // try {
 
-            }
+        if (f.exists()) {
+            //page = (PortletPage)deepCopy(templatePage);
+            //page.setLayoutDescriptor(userLayout);
 
-            // save user's layout
             try {
-                String userLayout = userLayoutDir + File.separator + req.getUser().getID();
-                page.setLayoutDescriptor(userLayout);
-
+                page = PortletLayoutDescriptor.loadPortletPage(userLayout, layoutMappingFile);
+            } catch (Exception e) {
+                log.error("unable to get user layout");
+            }
+        } else {
+            page = createGridSpherePage();
+            page.setLayoutDescriptor(userLayout);
+            try {
                 page.save();
             } catch (IOException e) {
-                log.error("Unable to save users layout!", e);
+                log.error("unable to save layout", e);
             }
+        }
+        return page;
+    }
+
+    public PortletPage createNewPage(PortletRequest req) {
+        // is user a SUPER?
+        PortletPage page = null;
+        PortletRole role = req.getRole();
+        if (role.equals(PortletRole.SUPER)) {
+
+            page = createFromAllWebApps(req);
+
+
+        }  else {
+
+            List groups = (List)req.getAttribute(SportletProperties.PORTLETGROUPS);
+            page = createFromGroups(req, groups);
+
+        }
+
+        // save user's layout
+        try {
+            String userLayout = userLayoutDir + File.separator + req.getUser().getID();
+            page.setLayoutDescriptor(userLayout);
+
+            page.save();
+        } catch (IOException e) {
+            log.error("Unable to save users layout!", e);
+        }
 
         return page;
     }

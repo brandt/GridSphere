@@ -117,7 +117,13 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      * @param tab the portlet tab to remove
      */
     public void removeTab(PortletTab tab) {
-        if (tabs.contains(tab)) tabs.remove(tab);
+
+        Iterator it = tabs.iterator();
+        while (it.hasNext()) {
+            PortletTab atab = (PortletTab)it.next();
+            if (tab.getTitle().equals(atab.getTitle())) it.remove();
+        }
+        //if (tabs.contains(tab)) tabs.remove(tab);
     }
 
     /**
