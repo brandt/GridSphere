@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 
 public class TableBean extends BaseComponentBean implements TagBean {
 
@@ -18,6 +19,12 @@ public class TableBean extends BaseComponentBean implements TagBean {
 
     public TableBean() {
         super();
+    }
+
+    public TableBean(PortletRequest req, String beanId) {
+        super();
+        this.request = req;
+        this.beanId = beanId;
     }
 
     public TableBean(DefaultTableModel defaultModel) {
@@ -51,14 +58,14 @@ public class TableBean extends BaseComponentBean implements TagBean {
     public String toString() {
         StringBuffer sb = new StringBuffer();
 
-            sb.append("<table ");
-            sb.append("cellspacing=\"" + cellSpacing + "\" ");
-            if (width != null) {
-                sb.append("width=\"" + width + "\" ");
-            }
-            sb.append(">");
-            sb.append(defaultModel.toString());
-            sb.append("</table>");
+        sb.append("<table ");
+        sb.append("cellspacing=\"" + cellSpacing + "\" ");
+        if (width != null) {
+            sb.append("width=\"" + width + "\" ");
+        }
+        sb.append(">");
+        sb.append(defaultModel.toString());
+        sb.append("</table>");
 
         return sb.toString();
     }
