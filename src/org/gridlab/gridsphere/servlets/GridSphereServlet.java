@@ -138,7 +138,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         if (firstDoGet.equals(Boolean.TRUE)) {
 
             synchronized (firstDoGet) {
-                GridSphereConfig.setContextPath(req.getContextPath());
+
                 log.debug("Testing Database");
                 // checking if database setup is correct
                 DBTask dt = new DBTask();
@@ -166,8 +166,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
                     PortletResponse portletRes = event.getPortletResponse();
                     PortletInvoker.initAllPortlets(portletReq, portletRes);
+                    
                     // deep inside a service is used which is why this must follow the factory.init
-
                     layoutEngine.init();
                 } catch (Exception e) {
                     log.error("GridSphere initialization failed!", e);

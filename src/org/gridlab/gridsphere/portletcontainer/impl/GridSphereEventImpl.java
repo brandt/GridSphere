@@ -43,6 +43,10 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
         events = new Stack();
 
+        // Set the context path and servlet path to be used when creating url's
+        req.setAttribute(SportletProperties.CONTEXT_PATH, req.getContextPath()); // contextPath;
+        req.setAttribute(SportletProperties.SERVLET_PATH, req.getServletPath());
+
         /*
         String[] portletNames = req.getParameterValues("portletName");
         if ( portletNames != null ) {
