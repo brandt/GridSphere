@@ -84,25 +84,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         GridSphereEvent event = new GridSphereEventImpl(getServletConfig(), req, res);
 
-        //PortletRequestParser requestParser = new PortletRequestParser(req);
-        /*
-        if (requestParser.hasPortletAction()) {
-
-            System.err.println("Received ACTION: " + requestParser.toString());
-
-            String portletID = requestParser.getConcretePortletID();
-
-            //  invoke actionPerformed method
-            DefaultPortletAction portletAction = requestParser.getPortletAction();
-            userPortletManager.actionPerformed(portletID, portletAction, req, res);
-            // Get the active portlet instance
-
-        }
-        */
-
         // Render layout
         try {
-            //User user = requestParser.getUser();
             layoutEngine.service(event);
         } catch (PortletException e) {
             handleException(res, e);
@@ -199,7 +182,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event The session event
      */
     public void sessionCreated(HttpSessionEvent event) {
-        System.err.println("sessionCreated('" + event.getSession().getId() + "')");
+        log.info("sessionCreated('" + event.getSession().getId() + "')");
     }
 
 
@@ -210,7 +193,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public void sessionDestroyed(HttpSessionEvent event) {
 
-        System.err.println("sessionDestroyed('" + event.getSession().getId() + "')");
+        log.info("sessionDestroyed('" + event.getSession().getId() + "')");
         //HttpSession session = event.getSession();
         //User user = (User)session.getAttribute(GridSphereProperties.USER);
         //PortletLayoutEngine engine = PortletLayoutEngine.getInstance();
