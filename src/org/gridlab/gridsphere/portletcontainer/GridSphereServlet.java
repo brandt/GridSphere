@@ -19,10 +19,7 @@ import org.gridlab.gridsphere.layout.PortletErrorFrame;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletMessageManager;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.*;
@@ -172,32 +169,20 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
-        if ((username.trim().equals("portal")) && (password.trim().equals("schmortal"))) {
-            log.info("YO WE IN PORTAL!");
-            SportletUser user = new SportletUserImpl();
-            user.setUserID(username);
-            user.setID("45");
-            user.setFullName("Joe B. Portal");
-            user.setEmailAddress("joe@portal.com");
-            user.setFamilyName("Portal");
-            user.setGivenName("Joey");
-
+        try {
+            User user = loginService.login(username, password);
             session.setAttribute(SportletProperties.PORTLET_USER, user);
-        } else {
-            try {
-                User user = loginService.login(username, password);
-                session.setAttribute(SportletProperties.PORTLET_USER, user);
-                if (aclService.hasSuperRole(user)) {
-                    log.debug("User: " + user.getUserName() + " logged in as SUPER");
-                    req.setAttribute(SportletProperties.PORTLET_ROLE, PortletRole.SUPER);
-                }
-                userSessionManager.setSession(user, session);
-            } catch (AuthorizationException err) {
-                if(log.isDebugEnabled()) log.debug(err.getMessage());
-                req.setAttribute(LOGIN_ERROR_FLAG, LOGIN_ERROR_FLAG);
-                return;
+            if (aclService.hasSuperRole(user)) {
+                log.debug("User: " + user.getUserName() + " logged in as SUPER");
+                req.setAttribute(SportletProperties.PORTLET_ROLE, PortletRole.SUPER);
             }
+            userSessionManager.setSession(user, session);
+        } catch (AuthorizationException err) {
+            if(log.isDebugEnabled()) log.debug(err.getMessage());
+            req.setAttribute(LOGIN_ERROR_FLAG, LOGIN_ERROR_FLAG);
+            return;
         }
+
         layoutEngine.loginPortlets(event);
     }
 
@@ -284,9 +269,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event The servlet context event
      */
     public void contextDestroyed(ServletContextEvent event) {
-
+        ServletContext ctx = event.getServletContext();
         log.debug("contextDestroyed()");
-        //this.context = null;
+        log.debug("contextName: " + ctx.getServletContextName());
+        log.debug("context path: " + ctx.getRealPath(""));
 
     }
 
@@ -297,9 +283,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event The servlet context event
      */
     public void contextInitialized(ServletContextEvent event) {
-
-        //this.context = event.getServletContext();
         log.debug("contextInitialized()");
+        ServletContext ctx = event.getServletContext();
+        log.debug("contextName: " + ctx.getServletContextName());
+        log.debug("context path: " + ctx.getRealPath(""));
 
     }
 
