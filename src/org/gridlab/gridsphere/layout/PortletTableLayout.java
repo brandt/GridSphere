@@ -21,6 +21,7 @@ import java.util.ArrayList;
  */
 public class PortletTableLayout extends PortletFrameLayout implements Cloneable {
 
+    /** css Style of the table */
     protected String style = null;
 
     /**
@@ -44,7 +45,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
      * no background there can't be a real transparent portlet.
      * Most likely one sets just the background in that one.
      *
-     * @param style  css style of the that layout
+     * @param style css style of the that layout
      */
     public void setStyle(String style) {
         this.style = style;
@@ -73,7 +74,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
      *
      * @param event a gridsphere event
      * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException if an I/O error occurs during rendering
+     * @throws IOException            if an I/O error occurs during rendering
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletResponse res = event.getPortletResponse();
@@ -88,7 +89,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
             if (p instanceof PortletLayout) {
                 PortletComponent maxi = getMaximizedComponent(components);
                 if (maxi!=null) {
-                    p.doRender(event);
+                    maxi.doRender(event);
                     return;
                 }
             }
