@@ -1,6 +1,6 @@
-/* 
+/*
  * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
- * @team sonicteam
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
 package org.gridlab.gridsphere.core.persistence;
@@ -8,6 +8,7 @@ package org.gridlab.gridsphere.core.persistence;
 import org.gridlab.gridsphere.core.persistence.castor.Query;
 
 public interface PersistenceInterface {
+
     /**
      * Begins a transaction
      *

@@ -2,8 +2,6 @@
  * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
- *
- * The Class provides easy access to marshal/unmarshal objects to XML files
  */
 package org.gridlab.gridsphere.core.persistence.castor;
 
@@ -22,7 +20,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 
-
+/**
+ * The Class provides easy access to marshal/unmarshal objects to XML files
+ */
 public class PersistenceManagerXml implements PersistenceManagerInterface  {
 
     static Category cat = Category.getInstance(PersistenceManagerXml.class.getName());
