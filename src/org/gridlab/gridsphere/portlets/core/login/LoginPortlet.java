@@ -65,7 +65,7 @@ public class LoginPortlet extends ActionPortlet {
         User user = request.getUser();
         request.setAttribute("user", user);
         if (user instanceof GuestUser) {
-            request.setAttribute("canUserCreateAcct", Boolean.valueOf(canUserCreateAccount));
+            request.setAttribute("canUserCreateAcct", new Boolean(canUserCreateAccount));
             setNextState(request, "login/login.jsp");
         } else {
             showConfigure(event);
