@@ -66,6 +66,9 @@ To see all the targets invoke "ant --projecthelp".
 2) Read the compiled documentation found located at build/docs/index.html 
 for more information on using and developing portlets with  GridSphere.
 
+3) Startup Tomcat and then go to http://127.0.0.1:8080/gridsphere/gridsphere
+to see the portal!
+
 Testing GridSphere
 ------------------
 
