@@ -47,13 +47,16 @@ public class DatabaseTask extends Task {
             "Some core tables could not be found!";
 
     public void setConfigDir(String configDir) {
-        this.configDir = configDir;
-        //System.out.println("Setting configdir to: "+this.configDir);
+        this.configDir =
+                configDir + File.separator + "webapps" + File.separator + "gridsphere" + File.separator + "WEB-INF" + File.separator + "persistence";
+
+        System.out.println("Setting configdir to: " + this.configDir);
     }
 
 
     private void checkDatabase(boolean startUpCheck) throws BuildException {
 
+        // @todo seetinb the configdir appr. to system (win / unix)
         Properties prop = new Properties();
         String propfilename = configDir + File.separator + "hibernate.properties";
         System.out.println("create db: " + propfilename);
