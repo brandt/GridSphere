@@ -293,7 +293,7 @@ public class DeployGridSphereTCK extends Task {
 
     public void addGridSphereTagLibs(JarOutputStream tempJar) throws IOException {
 
-        String fileName = "build/lib/gridsphere-tags.jar";
+        String fileName = "build/lib/gridsphere-ui-tags.jar";
         byte[] buffer = new byte[1024];
         int bytesRead;
 
@@ -305,7 +305,7 @@ public class DeployGridSphereTCK extends Task {
         try {
 // Create a jar entry and add it to the temp jar.
 
-            JarEntry entry = new JarEntry("WEB-INF/lib/gridsphere-tags.jar");
+            JarEntry entry = new JarEntry("WEB-INF/lib/gridsphere-ui-tags.jar");
             tempJar.putNextEntry(entry);
 
 // Read the file and write it to the jar.
