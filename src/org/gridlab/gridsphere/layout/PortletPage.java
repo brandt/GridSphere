@@ -440,71 +440,69 @@ public class PortletPage implements Serializable, Cloneable {
         }
     }
 
-/**
- * Processes a message. The message is directed at a concrete portlet with 
- * a given concrete portlet ID. If the target ID is "*" the message is delivered
- * to every portlet in the PortletPage. 
- * @param concPortletID  The target concrete portlet's ID
- * @param msg  The message to deliver
- * @param event The GridsphereEvent associated with the message delivery
- */
-        public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) throws PortletException {
+    /**
+     * Processes a message. The message is directed at a concrete portlet with
+     * a given concrete portlet ID. If the target ID is "*" the message is delivered
+     * to every portlet in the PortletPage.
+     * @param concPortletID  The target concrete portlet's ID
+     * @param msg  The message to deliver
+     * @param event The GridsphereEvent associated with the message delivery
+     */
+    public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) throws PortletException {
 
-            
-            // support for broadcast messages            
-            
-            if (concPortletID.equals("*")) {
-                    Iterator entryIter = portletHash.entrySet().iterator();
-                    while (entryIter.hasNext()) {
-                            Map.Entry entry = (Map.Entry) entryIter.next();
-                            Integer cint = (Integer) entry.getValue();
-                            String portletID = (String) entry.getKey();
-                            
-                            int compIntId =  cint.intValue();
-                            ComponentIdentifier compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
+        // support for broadcast messages
+        if (concPortletID.equals("*")) {
+            Iterator entryIter = portletHash.entrySet().iterator();
+            while (entryIter.hasNext()) {
+                Map.Entry entry = (Map.Entry) entryIter.next();
+                Integer cint = (Integer) entry.getValue();
+                String portletID = (String) entry.getKey();
 
-                            if (compId != null) {
-                                PortletComponent comp = compId.getPortletComponent();
-                            
-                                // perform an action if the component is non null
-                                if (comp == null) {
-                                    //log.warn("Event has invalid component id associated with it!");
-                                } else {
-                                    //log.debug("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
-                                    comp.messageEvent(portletID, msg, event);
-                                }
-                            }
+                int compIntId =  cint.intValue();
+                ComponentIdentifier compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
+
+                if (compId != null) {
+                    PortletComponent comp = compId.getPortletComponent();
+
+                    // perform an action if the component is non null
+                    if (comp == null) {
+                        //log.warn("Event has invalid component id associated with it!");
+                    } else {
+                        //log.debug("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
+                        comp.messageEvent(portletID, msg, event);
                     }
-                    return ;
-            }
-
-
-            // the component id determines where in the list the portlet component is
-
-            // first check the hash
-            
-            ComponentIdentifier compId = null;
-
-            int compIntId = -1;
-            if (portletHash.containsKey(concPortletID)) {
-                Integer cint = (Integer) portletHash.get(concPortletID);
-                compIntId =  cint.intValue();
-                compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
-            } else {
-                throw new PortletException("Delivery of the message "+msg.toString()+" failed: "+concPortletID+" not found");
-            }
-
-            if (compId != null) {
-                PortletComponent comp = compId.getPortletComponent();
-                // perform an action if the component is non null
-                if (comp == null) {
-                    //log.warn("Event has invalid component id associated with it!");
-                } else {
-                    //log.debug("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
-                    comp.messageEvent(concPortletID, msg, event);
                 }
             }
+            return ;
         }
+
+
+        // the component id determines where in the list the portlet component is
+
+        // first check the hash
+
+        ComponentIdentifier compId = null;
+
+        int compIntId = -1;
+        if (portletHash.containsKey(concPortletID)) {
+            Integer cint = (Integer) portletHash.get(concPortletID);
+            compIntId =  cint.intValue();
+            compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
+        } else {
+            throw new PortletException("Delivery of the message "+msg.toString()+" failed: "+concPortletID+" not found");
+        }
+
+        if (compId != null) {
+            PortletComponent comp = compId.getPortletComponent();
+            // perform an action if the component is non null
+            if (comp == null) {
+                //log.warn("Event has invalid component id associated with it!");
+            } else {
+                //log.debug("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
+                comp.messageEvent(concPortletID, msg, event);
+            }
+        }
+    }
 
 }
 

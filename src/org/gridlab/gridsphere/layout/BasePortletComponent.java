@@ -36,6 +36,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected PortletRole requiredRole = PortletRole.GUEST;
     protected PortletGroup requiredGroup = PortletGroupFactory.GRIDSPHERE_GROUP;
     protected List listeners = null;
+    protected StringBuffer bufferedOutput = new StringBuffer();
 
     /**
      * Initializes the portlet component. Since the components are isolated
@@ -272,6 +273,10 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
         PortletRequest req = event.getPortletRequest();
         req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
 
+    }
+
+    public StringBuffer getBufferedOutput() {
+        return bufferedOutput;
     }
 
     public void addComponentListener(PortletComponent component) {

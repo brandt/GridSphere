@@ -12,15 +12,22 @@ import org.gridlab.gridsphere.layout.event.PortletTitleBarEvent;
 import org.gridlab.gridsphere.layout.event.impl.PortletFrameEventImpl;
 import org.gridlab.gridsphere.layout.event.impl.PortletTitleBarEventImpl;
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.PortletDataManager;
 import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletDataManager;
+import org.gridlab.gridsphere.services.core.cache.CacheService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Collections;
@@ -30,6 +37,8 @@ import java.util.Collections;
  * contains a portlet title bar unless visible is set to false.
  */
 public class PortletFrame extends BasePortletComponent implements Serializable, Cloneable {
+
+    private CacheService cacheService = null;
 
     // renderPortlet is true in doView and false on minimized
     private boolean renderPortlet = true;
@@ -156,6 +165,12 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      * @see ComponentIdentifier
      */
     public List init(PortletRequest req, List list) {
+        PortletServiceFactory factory = SportletServiceFactory.getInstance();
+        try {
+            cacheService = (CacheService)factory.createPortletService(CacheService.class, null, true);
+        } catch (PortletServiceException e) {
+            System.err.println("Unable to init Cache service! " + e.getMessage());
+        }
         list = super.init(req, list);
         dataManager = SportletDataManager.getInstance();
         ComponentIdentifier compId = new ComponentIdentifier();
@@ -316,15 +331,19 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             }
             if (titleBar != null) titleBar.setPortletMode(req.getMode());
 
+            // remove cached output
+            String id = req.getPortletSession(true).getId();
+            cacheService.removeCached(portletClass + id);
+
             List slisteners = Collections.synchronizedList(listeners);
             synchronized (slisteners) {
-            Iterator it = slisteners.iterator();
-            PortletComponent comp;
-            while (it.hasNext()) {
-                comp = (PortletComponent) it.next();
-                event.addNewRenderEvent(titleBarEvent);
-                comp.actionPerformed(event);
-            }
+                Iterator it = slisteners.iterator();
+                PortletComponent comp;
+                while (it.hasNext()) {
+                    comp = (PortletComponent) it.next();
+                    event.addNewRenderEvent(titleBarEvent);
+                    comp.actionPerformed(event);
+                }
             }
         }
 
@@ -351,6 +370,15 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
 
+        String id = event.getPortletRequest().getPortletSession(true).getId();
+        StringBuffer frame = (StringBuffer)cacheService.getCached(portletClass + id);
+        if (frame != null) {
+            out = res.getWriter();
+            out.println(frame.toString());
+            return;
+        }
+        frame = new StringBuffer();
+
         req.setAttribute(SportletProperties.PORTLETID, portletClass);
 
         if (errorFrame.hasError()) {
@@ -370,21 +398,28 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             }
         }
 
+        // TODO try to cache portlet's rendering---
+        StringWriter storedWriter = new StringWriter();
+        PrintWriter writer = new PrintWriter(storedWriter);
+
         ///// begin portlet frame
-        out.println("<!-- PORTLET STARTS HERE -->");
+        writer.println("<!-- PORTLET STARTS HERE -->");
         //out.println("<div class=\"window-main\">");
-        out.print("<table  ");
+        writer.print("<table  ");
 
         if (getOuterPadding().equals("")) {
-           out.print(" cellspacing=\"0\" class=\"window-main\" ");
+           writer.print(" cellspacing=\"0\" class=\"window-main\" ");
         } else {
             //out.print("border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"");        // this is the main table around one portlet
             //out.print(" cellspacing=\""+getOuterPadding()+"\" style=\"padding:"+getOuterPadding()+"px\"  class=\"window-main\" ");        // this is the main table around one portlet
-            out.print(" cellspacing=\"0\" style=\"margin:"+getOuterPadding()+"px\"  class=\"window-main\" ");        // this is the main table around one portlet
+            writer.print(" cellspacing=\"0\" style=\"margin:"+getOuterPadding()+"px\"  class=\"window-main\" ");        // this is the main table around one portlet
             //out.print("cellpadding=\""+getOuterPadding()+"\" class=\"window-main\" ");        // this is the main table around one portlet
         }
 
-        out.println(">");
+        writer.println(">");
+
+        String preframe = storedWriter.toString();
+        StringBuffer postframe = new StringBuffer();
 
         // Render title bar
         if (titleBar != null) {
@@ -400,32 +435,58 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         if (renderPortlet) {
             if (!transparent) {
-                out.print("<tr><td  ");      // now the portlet content begins
+                postframe.append("<tr><td  ");      // now the portlet content begins
                 if (!getInnerPadding().equals("")) {
-                    out.print("style=\"padding:" + getInnerPadding() + "px\"");
+                    writer.print("style=\"padding:" + getInnerPadding() + "px\"");
                 }
-                out.println(" class=\"window-content\"> " );
+                postframe.append(" class=\"window-content\"> " );
             } else {
-                out.println("<tr><td>");
+                postframe.append("<tr><td>");
             }
 
             if (errorFrame.hasError()) {
                 errorFrame.doRender(event);
             } else {
+                // TODO try to cache portlet's rendering---
+                storedWriter = new StringWriter();
+                writer = new PrintWriter(storedWriter);
+                PortletResponse wrappedResponse = new StoredPortletResponseImpl(res, writer);
                 try {
-                    PortletInvoker.service(portletClass, req, res);
+                    PortletInvoker.service(portletClass, req, wrappedResponse);
+                    postframe.append(storedWriter.toString());
                 } catch (PortletException e) {
                     errorFrame.setError("Unable to invoke service method", e);
                     errorFrame.doRender(event);
                 }
             }
-            out.println("</td></tr>");
+            postframe.append("</td></tr>");
         } else {
-            out.println("<tr><td class=\"window-content-minimize\">");      // now the portlet content begins
-            out.println("</td></tr>");
+            postframe.append("<tr><td class=\"window-content-minimize\">");      // now the portlet content begins
+            postframe.append("</td></tr>");
         }
-        out.println("</table>");
-        out.println("<!--- PORTLET ENDS HERE -->");
+        postframe.append("</table>");
+        postframe.append("<!--- PORTLET ENDS HERE -->");
+
+        // piece together portlet frame + title depending on whether title was set during doXXX method
+        // or not
+        String titleStr = (String)req.getAttribute(SportletProperties.PORTLET_TITLE);
+        if (titleStr == null) {
+            if (titleBar != null) {
+                titleStr = titleBar.getTitle();
+            }
+        }
+
+        frame.append(preframe);
+        if (titleBar != null) {
+            frame.append(titleBar.getPreBufferedTitle());
+            frame.append(titleStr);
+            frame.append(titleBar.getPostBufferedTitle());
+        }
+        frame.append(postframe);
+        out = res.getWriter();
+        out.println(frame.toString());
+
+        cacheService.cache(portletClass + id, frame, 0, false);
     }
 
     public Object clone() throws CloneNotSupportedException {
