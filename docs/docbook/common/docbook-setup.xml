@@ -40,7 +40,7 @@ http://jakarta.apache.org/proposals/tapestry
 <property environment="env"/>
 
 <xmlcatalog id="docbook.catalog">
-	<dtd publicId="-//OASIS//DTD DocBook XML V4.1//EN" location="${docbook.dtd.dir}/docbookx.dtd"/>
+	<dtd publicId="-//OASIS//DTD DocBook XML V4.3CR1//EN" location="${docbook.dtd.dir}/docbookx.dtd"/>
 </xmlcatalog>
 
 <target name="docbook-setup"
