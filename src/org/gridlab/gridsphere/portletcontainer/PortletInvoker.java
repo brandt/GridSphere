@@ -169,7 +169,7 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static  void service(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public final static void service(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         log.debug("in service " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -190,7 +190,7 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static  void actionPerformed(String concretePortletID, DefaultPortletAction action, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public final static void actionPerformed(String concretePortletID, DefaultPortletAction action, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         log.debug("in actionPerformed " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -232,7 +232,7 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static  void windowEvent(String concretePortletID, WindowEvent winEvent, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public final static void windowEvent(String concretePortletID, WindowEvent winEvent, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         log.debug("in windowEvent " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -253,7 +253,7 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static  void messageEvent(String concretePortletID, DefaultPortletMessage msgEvent, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public final static void messageEvent(String concretePortletID, DefaultPortletMessage msgEvent, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         log.debug("in messageEvent " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);

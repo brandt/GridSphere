@@ -180,8 +180,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
             userSessionManager.addSession(user, session);
         } catch (AuthorizationException err) {
-            if(log.isDebugEnabled()) log.debug(err.getMessage());
-            req.setAttribute(LOGIN_ERROR_FLAG, LOGIN_ERROR_FLAG);
+            log.debug(err.getMessage());
+            req.setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
             return;
         }
 

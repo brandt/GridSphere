@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.event.Event;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletContext;
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 
 /**
  * A <code>GridSphereEvent</code> represents a general portlet container
@@ -49,8 +50,14 @@ public interface GridSphereEvent extends Event {
     /**
      * Returns the portal layout component id associated with this event
      *
-     * @return the portal layout component id
+     * @return the portal layout component id or empty String iff none exists
      */
-    public int getPortletComponentID();
+    public String getPortletComponentID();
+
+
+    public void addNewRenderEvent(PortletComponentEvent evt);
+
+
+    public PortletComponentEvent getLastRenderEvent();
 
 }
