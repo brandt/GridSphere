@@ -215,19 +215,7 @@ public final class GlobusCredentialManager
     }
 
     public boolean existsCredentialPermission(String pattern) {
-        _log.debug("Testing if permission " + pattern + " exists");
-        String value = null;
-        try {
-            String query = "select cp.permittedSubjects from "
-                         + this.credentialPermissionImpl
-                         + " cp where cp.permittedSubjects=\"" + pattern + "\"";
-            _log.debug(query);
-            value = (String)this.pm.restoreObject(query);
-        } catch (PersistenceManagerException e) {
-            _log.error("Error checking if credential permission exists", e);
-            return false;
-        }
-        return (value != null);
+        return (getCredentialPermission(pattern) != null);
     }
 
     public List getPermittedCredentialSubjects() {
