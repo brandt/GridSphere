@@ -30,6 +30,8 @@ listed below may be used in creating a layout descriptor. For more details on co
         <listitem>
             <para>
                 Allows external content to be included in the layout using the <varname>include</varname> attribute.
+                The content may be located in another deployed webapp as well. You need to specify the webapp name
+                using the <varname>context</varname> attribute.
             </para>
         </listitem>
     </varlistentry>
