@@ -2,12 +2,12 @@
  * @author <a href="mailto:russell@aei-potsdam.mpg.de">Michael Paul Russell</a>
  * @version $Id$
  * <p>
- * GridSphere requires portlet users to authenticate with credentials at login. The 
- * credentials that portlet users authenticate with are then kept in memory and used 
+ * GridSphere requires portlet users to authenticate with credentials at login. The
+ * credentials that portlet users authenticate with are then kept in memory and used
  * as required to authenticate on behalf of portlet users to other Grid services.
  * <p>
- * This interface describes methods for permitting credentials for use within GridSphere, 
- * mapping credential subjects to portlet users and hostnames, and finally methods for 
+ * This interface describes methods for permitting credentials for use within GridSphere,
+ * mapping credential subjects to portlet users and hostnames, and finally methods for
  * managing credentials on the behalf of portlet users.
  */
 package org.gridlab.gridsphere.core.security;
@@ -23,13 +23,10 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.core.security.Credential;
 import org.gridlab.gridsphere.core.security.CredentialManager;
-import org.gridlab.gridsphere.core.security.CredentialNotActiveException;
 import org.gridlab.gridsphere.core.security.CredentialPermission;
-import org.gridlab.gridsphere.core.security.CredentialPermissionNotFoundException;
 import org.gridlab.gridsphere.core.security.CredentialNotPermittedException;
 import org.gridlab.gridsphere.core.security.CredentialMapping;
 import org.gridlab.gridsphere.core.security.MappingNotFoundException;
-import org.gridlab.gridsphere.core.security.CredentialExpiredException;
 import org.gridlab.gridsphere.core.security.CredentialRetrievalClient;
 import org.gridlab.gridsphere.core.security.CredentialRetrievalException;
 import org.gridlab.gridsphere.core.security.impl.GlobusCredentialMapping;
