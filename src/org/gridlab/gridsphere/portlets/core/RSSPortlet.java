@@ -79,7 +79,10 @@ public class RSSPortlet extends AbstractPortlet {
             System.out.println("not selected ");
         }
 
+        DropDownListBean ddl = (DropDownListBean)form.getElementBean("ddl");
+        System.out.println("Selected Item (value)"+ddl.getSelectedItem().getValue());
 
+        System.out.println("========================================================\n\n\n\n\n");
 
         /*
             PortletData data = req.getData();
@@ -199,8 +202,11 @@ public class RSSPortlet extends AbstractPortlet {
         cbb.setSelected(true);
         cbb.store("cbb", request);
 
-
-
+        DropDownListBean ddl = new DropDownListBean("apple");
+        ddl.add("powerbook","pb");
+        ddl.add("ibook","ib");
+        ddl.add("powermac","pm");
+        ddl.store("ddl", request);
 
         // under the covers, a fieldbean is stored and mapped to f_name
         getPortletConfig().getContext().include("/jsp/rss/edit.jsp", request, response);
