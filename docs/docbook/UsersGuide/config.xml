@@ -9,7 +9,7 @@
 -->
 
 <chapter id="config">
-    <title>GridSphere Configuration</title>
+    <title>Configuration</title>
     <para>
         Before deploying GridSphere to a servlet container, various configuration settings can
         be adjusted to customize layout, database configuration, portlet services and the portlet
@@ -43,7 +43,7 @@
                 The PortletMaster Descriptor is in fact a general PortletServices descriptor, but specifies
                 only a single portlet manager service that needs to be initialized before all other services.
                 The <parameter>startup-portlet-webapps</parameter> parameter indicates which portlet web applications
-                shoudl be initialized at run-time. By default the <emphasis>gridsphere</emphasis> webapp
+                should be initialized at run-time. By default the <emphasis>gridsphere</emphasis> webapp
                 is initialized which contains all the core GridSphere portlets including Login, Logout, User
                 Administration, etc.
             </para>

@@ -9,17 +9,85 @@
 -->
 
 <chapter id="install">
-    <title>Installation</title>
+    <title>Deployment and Testing</title>
     <para>
-
+        As explained in the INSTALL file, GridSphere relies on &Ant; for its compilation
+        and deployment. The build script, <filename>build.xml</filename> provides various
+        targets for compiling, deploying, building documentation, creating new portlet projects,
+        running unit tests and making test reports.
     </para>
 
   <sect1>
-    <title>GridSphere Installation</title>
+    <title>Deploying GridSphere</title>
+      <para>
+          From inside the GridSphere source directory, you should be able to issue:
+          <programlisting>ant install</programlisting> which will
+        compile the framework code, create documentation if necessary and deploy GridSphere
+        to a Tomcat container. Once this has completed succesfully, you should be able to start
+        up Tomcat by issuing the following:
+          <programlisting>
+              cd $CATALINA_HOME
+              ./startup.sh (or startup.bat on Windows)
+          </programlisting>
+          and then go to <ulink url="http://127.0.0.1:8080/gridsphere/gridsphere">http://127.0.0.1:8080/gridsphere/gridsphere</ulink>
+            you should see the running GridSphere portal. If an error occurs, please consult the
+          FAQ.
+      </para>
+  </sect1>
+
+  <sect1>
+    <title>GridSphere Home Directory</title>
+      By default GridSphere will create a directory to store persistent information such as
+      its database and user's layouts as well as any other files required to be kept long-term.
+      This can be set in <filename>build.properties</filename> as the property
+      <emphasis>gridsphere.home</emphasis>. If this is not set, then the default location is
+      $CATALINA_HOME/gridsphere. The directory structure of <emphasis>gridsphere.home</emphasis> is as follows:
+      <para>
+      <simplelist>
+      <member><filename>PortletMaster.xml</filename> - provides portlet manager initialization information such as which portlet web applications are initialized at startup</member>
+      <member><filename>mapping</filename> - contains all the mapping files used to convert XML descriptors into Java</member>
+      <member><filename>layout</filename> - contains user's specific layouts including the GuestUserLayout.xml and NewUserLayout.xml</member>
+      <member><filename>gridsphere</filename> - contains persistent gridsphere data</member>
+      <member><filename>gridsphere/database</filename> - contains the GridSphere database and configuration files</member>
+      </simplelist>
+      </para>
   </sect1>
 
   <sect1>
       <title>Uninstalling GridSphere</title>
+      <para>
+          GridSphere can be "undeployed" which will eliminate the gridsphere web application and
+          associated libraries from the Tomcat container. Simply issue:
+          <programlisting>ant undeploy</programlisting> from inside the GridSphere source directory
+      </para>
+  </sect1>
+
+    <sect1>
+      <title>Testing the GridSphere Framework</title>
+        <para>
+            In order to ensure higher code quality, unit tests of core framework functionality and
+            core services has been developed using the &JUnit; testing framework. Because proper
+            testing requires the framework to be running inside a servlet container, we have integrated
+            GridSphere and &Cactus; to perform server-side unit testing inside the Tomcat container.
+            To run the unit tests, issue the following:
+            <programlisting>ant run-tests</programlisting>
+            Once the tests have finished, you can invoke
+            <programlisting>ant test-reports</programlisting>
+            to create a nice HTMl output of all the JUnit test results.
+        </para>
+  </sect1>
+
+  <sect1>
+      <title>Logging and Debugging</title>
+      <para>
+          GridSphere uses the &Log4J; logging framework and logs all messages to
+          <filename>$CATALINA_HOME/logs/catalina.out</filename>
+          and to <filename>$CATALINA_HOME/logs/localhost_gridsphere_log.{yyyy-mm-dd}.txt</filename>
+        If you encounter any errors, please look at the log files for more information.
+          In addition, the logging level can be selectively controlled by configuring the
+          <filename>log4j.properties</filename> located in the <filename>config</filename> directory of
+          the GridSphere source directory and then re-deploying.
+      </para>
   </sect1>
 
 </chapter>

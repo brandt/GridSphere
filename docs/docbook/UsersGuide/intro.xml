@@ -13,9 +13,9 @@
     <para>
     The GridSphere User's Guide describes how to install and configure GridSphere.
     For more information on developing and packaging portlets, please consult
-    the GridSphere Portlet Developer's Guide and the GridSphere Tutorials. The current implementation is
-    based upon the GridSphere Technical Design Document. The GridSphere portal
-    framework comes in both source and binary forms. Binaries can be created
+    the GridSphere Portlet Developer's Guide and the GridSphere Tutorials. The current
+    implementation is based upon the GridSphere Technical Design Document. The GridSphere
+    portal framework comes in both source and binary forms. Binaries can be created
     from the source code and in both cases, the build environment is generally
     the same. The GridSphere source code comes with a README file explaining how
     to build the binary distribution. Both source and binaries come packaged
