@@ -124,18 +124,12 @@ public class PortletTitleBar extends BasePortletComponent {
         String minStr = PortletWindow.State.MINIMIZED.toString();
         String maxStr = PortletWindow.State.MAXIMIZED.toString();
         String resStr = PortletWindow.State.RESIZING.toString();
-        System.err.println("states==" + windowStates.size());
-        for (i = 0; i < windowStates.size(); i++) {
-            state = (String)windowStates.get(i);
-            if (state.equalsIgnoreCase(portletWindowState.toString())) {
-                windowStates.remove(i);
-            }
 
-            // add a resize state to list if contains minimized or maximized
-            if ((!windowStates.contains(resStr)) && ((state.equalsIgnoreCase(minStr)) || (state.equalsIgnoreCase(minStr)))) {
-                windowStates.add(resStr);
-            }
+        if (portletWindowState == PortletWindow.State.NORMAL) {
+            windowStates.remove(PortletWindow.State.RESIZING.toString().toLowerCase());
         }
+        // remove current state from list
+        windowStates.remove(portletWindowState.toString().toLowerCase());
 
         // create a URI for each of the window states
         String stateString;
@@ -181,13 +175,6 @@ public class PortletTitleBar extends BasePortletComponent {
             }
         }
 
-        // Only if user is logged in they get non-view modes
-        User user = req.getUser();
-        if (user instanceof GuestUser) {
-            portletModes = new String[1];
-            portletModes[0] = "view";
-        }
-
         // subtract current portlet mode
         String s;
         for (i = 0; i < portletModes.length; i++) {
@@ -203,7 +190,7 @@ public class PortletTitleBar extends BasePortletComponent {
         List portletLinks = new Vector();
         DefaultPortletAction modeAction;
         for (i = 0; i < portletModes.length; i++) {
-            sportletURI = new SportletURI(res);
+            sportletURI = event.createNewAction(GridSphereEvent.Action.LAYOUT_ACTION, COMPONENT_ID, portletClass);
             //sportletURI.addParameter(GridSphereProperties.PORTLETID, (String)req.getAttribute(GridSphereProperties.PORTLETID));
             try {
                 modeLink = new PortletModeLink(portletModes[i]);
@@ -223,6 +210,12 @@ public class PortletTitleBar extends BasePortletComponent {
 
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletTitleBarEvent evt = new PortletTitleBarEventImpl(event, COMPONENT_ID);
+        if (evt.getAction() == PortletTitleBarEvent.Action.WINDOW_MODIFY) {
+            portletWindowState = evt.getState();
+        } else if (evt.getAction() == PortletTitleBarEvent.Action.MODE_MODIFY) {
+            previousMode = portletMode;
+            portletMode = evt.getMode();
+        }
         if (evt != null) fireTitleBarAction(evt);
     }
 
@@ -247,9 +240,13 @@ public class PortletTitleBar extends BasePortletComponent {
         title = settings.getTitle(req.getLocale(), client);
 
         List modeLinks = null, windowLinks = null;
-        if (portletClass != null) {
-            modeLinks = makeModeLinks(event);
-            windowLinks = makeWindowLinks(event);
+        User user = req.getUser();
+        if (user instanceof GuestUser) {
+        } else {
+            if (portletClass != null) {
+                modeLinks = makeModeLinks(event);
+                windowLinks = makeWindowLinks(event);
+            }
         }
 
         req.setMode(portletMode);
@@ -266,13 +263,15 @@ public class PortletTitleBar extends BasePortletComponent {
             PortletModeLink mode;
             while (modesIt.hasNext()) {
                 mode = (PortletModeLink)modesIt.next();
-                out.println("<a href=\"" +  mode.getModeHref() + "\"><img border=\"0\" src=\"" +  mode.getImageSrc() + "\" alt=\"" + mode.getAltTag() + "\"/></a>");
+                out.println("<a href=\"" +  mode.getModeHref() + "\"><img border=\"0\" src=\"" +  mode.getImageSrc() + "\" title=\"" + mode.getAltTag() + "\"/></a>");
             }
             out.println("</span>");
         }
 
         // Invoke doTitle of portlet whose action was perfomed
-        if ((getComponentID() == event.getPortletComponentID()) && (portletClass != null)) {
+        String actionStr = req.getParameter(GridSphereProperties.ACTION);
+        if (actionStr != null) {
+        //if ((getComponentID() == event.getPortletComponentID()) && (portletClass != null)) {
             UserPortletManager userManager = event.getUserPortletManager();
             req.setPortletSettings(settings);
             try {
@@ -295,7 +294,7 @@ public class PortletTitleBar extends BasePortletComponent {
             PortletStateLink state;
             while (windowsIt.hasNext()) {
                 state = (PortletStateLink)windowsIt.next();
-                out.println("<a href=\"" +  state.getStateHref() + "\"><img border=\"0\" src=\"" +  state.getImageSrc() + "\" alt=\"" + state.getAltTag() + "\"/></a>");
+                out.println("<a href=\"" +  state.getStateHref() + "\"><img border=\"0\" src=\"" +  state.getImageSrc() + "\" title=\"" + state.getAltTag() + "\"/></a>");
             }
             out.println("</span>");
         }

@@ -82,12 +82,33 @@ public abstract class BaseLayoutManager extends BasePortletComponent implements 
         }
     }
 
+    public void handleFrameResized(PortletFrameEvent event) {
+        Iterator it = components.iterator();
+        PortletComponent p = null;
+        int id = event.getID();
+
+        while (it.hasNext()) {
+            p = (PortletComponent)it.next();
+            p.setVisible(true);
+        }
+    }
+
     public void handleFrameEvent(PortletFrameEvent event) throws PortletLayoutException {
         if (event.getAction() == PortletFrameEvent.Action.FRAME_MAXIMIZED) {
             handleFrameMaximized(event);
         } else if (event.getAction() == PortletFrameEvent.Action.FRAME_MINIMIZED) {
             handleFrameMinimized(event);
+        } else if (event.getAction() == PortletFrameEvent.Action.FRAME_RESIZED) {
+            handleFrameResized(event);
         }
+    }
+
+    public void addPortletComponent(PortletComponent component) {
+        components.add(component);
+    }
+
+    public void removePortletComponent(PortletComponent component) {
+        components.remove(component);
     }
 
     public void setPortletComponents(ArrayList components) {

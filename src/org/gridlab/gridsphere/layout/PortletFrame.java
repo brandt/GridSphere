@@ -144,7 +144,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
 
         req.setAttribute(GridSphereProperties.PORTLETID, portletClass);
         req.setAttribute(GridSphereProperties.COMPONENT_ID, componentIDStr);
-
+        req.setMode(titleBar.getPortletMode());
         // Set the portlet data
         PortletData data = null;
         try {
@@ -172,6 +172,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         super.doRender(event);
         SportletRequest req = event.getSportletRequest();
         SportletResponse res = event.getSportletResponse();
+
         req.setAttribute(GridSphereProperties.PORTLETID, portletClass);
         req.setAttribute(GridSphereProperties.COMPONENT_ID, componentIDStr);
 
@@ -180,17 +181,9 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
 
         out.println("<div id=\"window-main\">");
 
-        //////// OLD STUFF
-        //out.println("<table width=\"" + width + "%\"  border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#FFFFFF\"><tr><td>");
-        //out.println("<table width=\"100%\" border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#999999\">");
-        //out.println("<tr><td width=\"100%\">");
-
         titleBar.doRender(event);
 
-        ////// OLD STUFF
-        //out.println("</td></tr>");
-        //out.println("<tr><td valign=\"top\" align=\"left\"><table width=\"100%\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\" bgcolor=");
-        //out.println("\"" + bgColor + "\"<tr><td width=\"25%\" valign=\"center\">");
+        req.setMode(titleBar.getPortletMode());
 
         PortletErrorMessage error = (PortletErrorMessage)req.getAttribute(GridSphereProperties.PORTLETERROR);
         if ((error != null) && (error.getPortletID() == portletClass)) {
@@ -209,8 +202,6 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             }
         }
         out.println("</div>");
-        //out.println("</tr></table></td></tr></table></td></tr></table>");
-
     }
 
 }
