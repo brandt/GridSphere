@@ -9,7 +9,7 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 
 import javax.servlet.http.HttpSession;
 
-public abstract class BaseElementBean implements ElementBean {
+public abstract class BaseElementBean implements Element {
 
     protected String id = new String();
     protected String color = new String();

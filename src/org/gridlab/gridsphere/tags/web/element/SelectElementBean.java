@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public abstract class SelectElementBean extends BaseNameValueBean implements SelectableBean {
+public abstract class SelectElementBean extends BaseNameValueBean implements Selectable {
 
     protected boolean selected = false;
 
@@ -44,18 +44,11 @@ public abstract class SelectElementBean extends BaseNameValueBean implements Sel
     }
 
     public String toString(String type) {
-        return "<input type='" + type + "' name='" + name + "' value='" + value + "' " + checkDisabled() + " " + checkSelected("checked") +
+        return "<input type='" + type + "' name='" + getTagName()+name + "' value='" + value + "' " + checkDisabled() + " " + checkSelected("checked") +
                 "/>";
     }
 
     public void update(String[] values) {
-        if (!values[0].equals("")) {
-            selected = true;
-        } else {
-            selected = false;
-        }
-
+        this.selected = true;
     }
-
-
 }

@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface SelectableBean extends NameValueBean {
+public interface Selectable extends NameValue {
 
     /**
      * Sets the selected status of the bean.

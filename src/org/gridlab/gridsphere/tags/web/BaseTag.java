@@ -4,7 +4,7 @@
  */
 package org.gridlab.gridsphere.tags.web;
 
-import org.gridlab.gridsphere.tags.web.element.ElementBean;
+import org.gridlab.gridsphere.tags.web.element.Element;
 import org.gridlab.gridsphere.tags.web.validator.NoValidation;
 import org.gridlab.gridsphere.tags.web.validator.Validator;
 
@@ -24,7 +24,7 @@ public class BaseTag extends TagSupport {
     protected Validator validator = new NoValidation();
     protected int size = 20;
     protected int maxLength = 20;
-    protected ElementBean htmlelement;
+    protected Element htmlelement;
     protected String bean = new String();
     protected int rows = 10;
     protected int cols = 40;
@@ -163,7 +163,7 @@ public class BaseTag extends TagSupport {
 
     public int doStartTag() throws JspException {
         if (!bean.equals("")) {
-            this.htmlelement = (ElementBean) pageContext.getRequest().getAttribute(bean);
+            this.htmlelement = (Element) pageContext.getRequest().getAttribute(bean);
         }
         try {
             JspWriter out = pageContext.getOut();

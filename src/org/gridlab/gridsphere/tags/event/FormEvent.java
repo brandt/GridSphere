@@ -6,7 +6,9 @@
 package org.gridlab.gridsphere.tags.event;
 
 
-import org.gridlab.gridsphere.tags.web.element.ElementBean;
+import org.gridlab.gridsphere.tags.web.element.Element;
+import org.gridlab.gridsphere.tags.web.element.CheckBoxBean;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 
 import java.util.List;
 import java.util.Collection;
@@ -42,5 +44,7 @@ public interface FormEvent {
      * @return updated elementbean
      */
     public Object getElementBean(String name);
+
+    public Object getElementBean(String name, PortletRequest request);
 
 }

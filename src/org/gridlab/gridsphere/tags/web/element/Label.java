@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface LabelBean extends ElementBean {
+public interface Label extends Element {
 
     /**
      * Gets the label of the bean.

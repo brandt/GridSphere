@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface NameValueBean extends ElementBean {
+public interface NameValue extends Element {
 
     /**
      * Sets the value of the bean.

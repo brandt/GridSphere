@@ -7,7 +7,7 @@ package org.gridlab.gridsphere.tags.web.element;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
 
-public interface ElementBean {
+public interface Element {
 
     public String getId();
 

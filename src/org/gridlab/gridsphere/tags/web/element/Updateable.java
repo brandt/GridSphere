@@ -4,7 +4,7 @@
  */
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface Updateable extends ElementBean {
+public interface Updateable extends Element {
 
     /**
      * Updates the bean with given values.

@@ -4,7 +4,7 @@
  */
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface InputBean extends ReadOnlyBean {
+public interface Input extends ReadOnly {
 
     /**
      * Sets the size of the input field

@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public class TextBean extends BaseElementBean implements LabelBean {
+public class TextBean extends BaseElementBean implements Label {
 
     protected String label = new String();
 

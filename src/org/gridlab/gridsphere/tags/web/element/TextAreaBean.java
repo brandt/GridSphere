@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public class TextAreaBean extends ReadOnlyBaseBean implements TAElementBean {
+public class TextAreaBean extends ReadOnlyBaseBean implements TAElement {
 
     private int cols;
     private int rows;

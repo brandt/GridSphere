@@ -4,7 +4,7 @@
  */
 package org.gridlab.gridsphere.tags.web.element;
 
-public class TextFieldBean extends ReadOnlyBaseBean implements InputBean {
+public class TextFieldBean extends ReadOnlyBaseBean implements Input {
 
     protected int size;
     protected String inputtype = "text";

@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public abstract class BaseNameValueBean extends BaseElementBean implements NameValueBean {
+public abstract class BaseNameValueBean extends BaseElementBean implements NameValue {
 
     protected String value;
     protected String name;

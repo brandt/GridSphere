@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface ButtonBean extends NameValueBean {
+public interface Button extends NameValue {
 
     /**
      * Sets the type of the button
