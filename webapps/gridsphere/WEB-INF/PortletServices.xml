@@ -29,6 +29,10 @@
             <param-name>canUserCreateNewAccount</param-name>
             <param-value>false</param-value>
         </service-config>
+        <service-config>
+            <param-name>defaultTheme</param-name>
+            <param-value>default</param-value>
+        </service-config>
     </service>
 
     <service>

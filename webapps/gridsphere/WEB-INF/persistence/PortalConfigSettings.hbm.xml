@@ -22,12 +22,12 @@
 
         <property name="CanUserCreateAccount" type="boolean" column="canusercreateacct"/>
 
-       <!-- <property name="DefaultTheme" type="string" column="defaulttheme"/>
+        <property name="DefaultTheme" type="string" column="defaulttheme"/>
 
-        <set name="DefaultGroups" table="defaultgrouplist" cascade="all">
+        <set name="DefaultGroups" cascade="all">
             <key column="defaultgroup_oid"/>
             <one-to-many class="org.gridlab.gridsphere.portlet.impl.SportletGroup"/>
-        </set>  -->
+        </set>
 
     </class>
 
