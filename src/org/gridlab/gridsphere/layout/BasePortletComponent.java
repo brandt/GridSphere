@@ -26,6 +26,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected PortletComponent parent;
     protected String defaultWidth = "";
     protected String width = "";
+    protected String height = "";
     protected String label = "";
     protected String name = "";
     protected String theme = "";
@@ -159,6 +160,24 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      * @return the portlet component width
      */
     public String getWidth() {
+        return width;
+    }
+
+    /**
+     * Sets the portlet component height
+     *
+     * @param height the portlet component height
+     */
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    /**
+     * Returns the portlet component width
+     *
+     * @return the portlet component width
+     */
+    public String getHeight() {
         return width;
     }
 

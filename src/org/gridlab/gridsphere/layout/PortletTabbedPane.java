@@ -480,9 +480,12 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
         // put a spacing if a gfx theme
         //out.println("<img height=\"3\" src=\"themes/" + theme + "/images/spacer.gif\"/>");
-        pane.append("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
+        // pane.append("<table><tr><td height=\"600px\">");
+        pane.append("<!-- start tabbed pane --><table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
         //      out.println("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
+
         pane.append("<tr >");
+
 
         PortletTab tab;
         for (int i = 0; i < tabs.size(); i++) {
@@ -540,7 +543,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                 pane.append(selectedTab.getBufferedOutput());
             }
         }
-
+        //pane.append("</td></tr></table>");
     }
 
     /**
@@ -590,9 +593,9 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                 } else {
                     //System.err.println("in PortletTabbedPane submenu: role is < required role we try selecting the next possible tab");
                     if (tab.isSelected()) {
-                        int index = (i + 1);
-                        PortletTab newtab = (PortletTab) stabs.get(index);
+                        int index = (i + 1);                        
                         if (index < tabs.size()) {
+                            PortletTab newtab = (PortletTab) stabs.get(index);
                             this.setSelectedPortletTab(newtab);
                         }
                     }
@@ -601,7 +604,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
             pane.append("</tr></table>");
             pane.append("<td background=\"" + path + "subtab-middle.gif\" style=\"width:100%\">");
-            pane.append("&nbsp;</td></tr></table>");
+            pane.append("&nbsp;</td></tr></table><!-- end tabbed pane -->");
             PortletTab selectedTab = getSelectedTab();
             if (selectedTab != null)
                 selectedTab.doRender(event);
