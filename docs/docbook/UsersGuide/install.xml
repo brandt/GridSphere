@@ -73,7 +73,7 @@
             <programlisting>ant run-tests</programlisting>
             Once the tests have finished, you can invoke
             <programlisting>ant test-reports</programlisting>
-            to create a nice HTMl output of all the JUnit test results.
+            to create a nice HTML output of all the JUnit test results.
         </para>
   </sect1>
 
@@ -83,7 +83,7 @@
           GridSphere uses the &Log4J; logging framework and logs all messages to
           <filename>$CATALINA_HOME/logs/catalina.out</filename>
           and to <filename>$CATALINA_HOME/logs/localhost_gridsphere_log.{yyyy-mm-dd}.txt</filename>
-        If you encounter any errors, please look at the log files for more information.
+          If you encounter any errors, please look at the log files for more information.
           In addition, the logging level can be selectively controlled by configuring the
           <filename>log4j.properties</filename> located in the <filename>config</filename> directory of
           the GridSphere source directory and then re-deploying.

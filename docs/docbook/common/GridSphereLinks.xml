@@ -35,7 +35,7 @@
 <!ENTITY HSQL '<ulink url="http://exolab.castor.org">Hypersonic SQL</ulink>'>
 <!ENTITY Log4J '<ulink url="http://jakarta.apache.org/log4j">Log4J</ulink>'>
 <!ENTITY JUnit '<ulink url="http://www.junit.org">JUnit</ulink>'>
-<!ENTITY Cactus '<ulink url="http://jakarta.apache.org">Cactus</ulink>'>
+<!ENTITY Cactus '<ulink url="http://jakarta.apache.org/cactus">Cactus</ulink>'>
 <!ENTITY Commons '<ulink url="http://jakarta.apache.org/commons">Jakarta Commons</ulink>'>
 <!ENTITY DocBook '<ulink url="http://docbook.sourceforge.net/">DocBook</ulink>'>
 <!ENTITY Fop '<ulink url="http://xml.apache.org/fop">FOP</ulink>'>
