@@ -53,11 +53,7 @@ public abstract class Descriptor {
      * Save the layout deployment descriptor to layout.xml
      * <b>not implemented yet</b>
      */
-    protected void save(String descriptor, String mapping, Object object) throws IOException, DescriptorException {
-
-        GridSphereConfig gsConfig = GridSphereConfig.getInstance();
-        String descriptorPath = gsConfig.getProperty(descriptor);
-        String mappingPath = gsConfig.getProperty(mapping);
+    protected void save(String descriptorPath, String mappingPath, Object object) throws IOException, DescriptorException {
 
         PersistenceManagerXml pmx = PersistenceManagerXml.getInstance();
 
