@@ -212,6 +212,7 @@ public class UserManagerPortlet extends ActionPortlet {
         StringBuffer message = new StringBuffer();
         boolean isInvalid = false;
         // Validate user name
+        /*
         String userName = event.getTextFieldBean("userName").getValue();
         if (userName.equals("")) {
             message.append(this.getLocalizedText(req, "USER_NAME_BLANK") + "<br>");
@@ -224,7 +225,7 @@ public class UserManagerPortlet extends ActionPortlet {
                 isInvalid = true;
             }
         }
-
+        */
         // Validate family name
         String familyName = event.getTextFieldBean("familyName").getValue();
         if (familyName.equals("")) {
@@ -305,6 +306,13 @@ public class UserManagerPortlet extends ActionPortlet {
         // Account request
         SportletUser newuser = null;
 
+
+        PasswordEditor editor = passwordManagerService.editPassword(newuser);
+                String password = event.getPasswordBean("password").getValue();
+                editor.setValue(password);
+                passwordManagerService.savePassword(editor);
+
+
         // Create edit account request
         if (user == null) {
             newuser = this.userManagerService.createUser();
@@ -319,10 +327,6 @@ public class UserManagerPortlet extends ActionPortlet {
         // Submit changes
         this.userManagerService.saveUser(newuser);
 
-        PasswordEditor editor = passwordManagerService.editPassword(newuser);
-        String password = event.getPasswordBean("password").getValue();
-        editor.setValue(password);
-        passwordManagerService.savePassword(editor);
 
         // Save user role
         saveUserRole(event, newuser);
@@ -332,7 +336,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
     private void editAccountRequest(FormEvent event, SportletUser accountRequest) {
         log.debug("Entering editAccountRequest()");
-        accountRequest.setUserName(event.getTextFieldBean("userName").getValue());
+        //accountRequest.setUserName(event.getTextFieldBean("userName").getValue());
         accountRequest.setFamilyName(event.getTextFieldBean("familyName").getValue());
         accountRequest.setGivenName(event.getTextFieldBean("givenName").getValue());
         accountRequest.setFullName(event.getTextFieldBean("fullName").getValue());

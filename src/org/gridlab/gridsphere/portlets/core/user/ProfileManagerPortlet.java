@@ -97,9 +97,9 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 user.getLastLoginTime(), DateFormat.FULL, DateFormat.FULL));
         req.setAttribute("username", user.getUserName());
 
-        TextFieldBean userName = event.getTextFieldBean("userName");
+        TextBean userName = event.getTextBean("userName");
         userName.setValue(user.getUserName());
-        userName.setDisabled(disable);
+        //userName.setDisabled(disable);
 
         TextFieldBean fullName = event.getTextFieldBean("fullName");
         fullName.setValue(user.getFullName());

@@ -28,9 +28,9 @@
 <ui:actionsubmit action="createNewTab" key="CREATE"/>
 </ui:group>
 
+<% if (tabs.size() > 0) { %>
 <h3><ui:text key="LAYOUT_DISP_TABS" style="nostyle"/></h3>
 
-<% if (tabs.size() > 0) { %>
 <ui:table zebra="true">
     <ui:tablerow header="true">
     <ui:tablecell>

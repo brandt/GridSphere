@@ -36,7 +36,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      */
     public RenderResponseImpl(HttpServletRequest req, HttpServletResponse res, PortalContext portalContext) {
         super(req, res, portalContext);
-        contentType = res.getContentType();
+        //contentType = res.getContentType();
     }
 
     private boolean isValidContentType(String type) {

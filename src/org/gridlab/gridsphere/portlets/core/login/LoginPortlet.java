@@ -75,6 +75,8 @@ public class LoginPortlet extends ActionPortlet {
         log.debug("in LoginPortlet: doViewUser");
         PortletRequest request = event.getPortletRequest();
         User user = request.getUser();
+        PasswordBean pass = event.getPasswordBean("password");
+        pass.setValue("");
         request.setAttribute("user", user);
         if (user instanceof GuestUser) {
             if (canUserCreateAccount) request.setAttribute("canUserCreateAcct", "true");

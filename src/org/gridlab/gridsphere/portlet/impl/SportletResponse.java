@@ -136,10 +136,12 @@ public class SportletResponse extends HttpServletResponseWrapper implements Port
         this.getHttpServletResponse().setContentType(type);
     }
 
+    /*
     public String getContentType() {
         return this.getHttpServletResponse().getContentType();
     }
-
+    */
+    
     private HttpServletResponse getHttpServletResponse() {
         return (HttpServletResponse) super.getResponse();
     }

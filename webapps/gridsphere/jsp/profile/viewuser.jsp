@@ -30,7 +30,7 @@
 <ui:frame>
     <ui:tablerow>
         <ui:tablecell><ui:text key="USERNAME"/></ui:tablecell>
-        <ui:tablecell><ui:textfield beanId="userName"/></ui:tablecell>
+        <ui:tablecell><ui:text beanId="userName"/></ui:tablecell>
     </ui:tablerow>
     <ui:tablerow>
         <ui:tablecell><ui:text key="FULLNAME"/></ui:tablecell>
