@@ -38,10 +38,6 @@
             <param-value>false</param-value>
         </service-config>
         <service-config>
-            <param-name>defaultTheme</param-name>
-            <param-value>default</param-value>
-        </service-config>
-        <service-config>
             <param-name>mailService</param-name>
             <param-value></param-value>
         </service-config>
@@ -140,7 +136,7 @@
         <implementation>org.gridlab.gridsphere.services.core.cache.impl.CacheServiceImpl</implementation>
         <service-config>
             <param-name>isCachingOn</param-name>
-            <param-value>false</param-value>
+            <param-value>true</param-value>
         </service-config>
     </service>
 
