@@ -33,6 +33,7 @@ Copyright:
   <property name="lib.dir"        value="lib"/>
   <property name="conf.dir"       value="conf"/>
   <property name="webapp.dir"     value="webapps"/>
+  <property name="test.dir"       value="test"/>
   <property name="dist.dir"       value="${Name}-${version}" />
   <property name="build.lib"      value="${build.dir}/lib"/>
   <property name="classes.dir"    value="${build.dir}/classes"/>
@@ -153,7 +154,6 @@ Copyright:
 		debug="${debug}"
 		optimize="${optimize}"
 		deprecation="${deprecation}">
-        <exclude name="**/test/**" unless="junit.present"/>
 	</javac>
 
   </target>
@@ -252,27 +252,34 @@ Copyright:
     </target>
 
 
-  <!-- =================================================================== -->
-  <!-- Runs all JUnit tests: needs optional.jar and junit in classpath     -->
-  <!-- =================================================================== -->
-  <target name="test" if="junit.present" depends="compile" description="Runs all JUnit tests">
-      <mkdir dir = "${reports.tests}"/>
-      <copy file="${webapp.dir}/WEB-INF/conf/PortletServices.properties" todir="${classes.dir}"/>
-      <junit printsummary="yes" haltonfailure="yes">
-                <classpath>
-                        <path refid="classpath" />
-                        <pathelement location="${src.dir}" />
-                </classpath>
+    <!-- =================================================================== -->
+    <!-- Compiles and runs all JUnit tests: needs optional.jar and junit in classpath     -->
+    <!-- =================================================================== -->
+    <target name="compiletests" if="junit.present" depends="compile" description="Compiles all JUnit tests">
+        <mkdir dir = "${reports.tests}"/>
+        <copy file="${webapp.dir}/WEB-INF/conf/PortletServices.properties" todir="${classes.dir}"/>
+        <javac  srcdir="${test.dir}"
+		    destdir="${classes.dir}"
+		    classpathref="classpath"
+		    debug="${debug}"
+		    optimize="${optimize}"
+		    deprecation="${deprecation}">
+	    </javac>
+    </target>
 
-                <formatter type="plain" />
-
-                <batchtest fork="yes" todir="${reports.tests}">
-                        <fileset dir="${src.dir}">
-                           <include name="org/gridlab/gridsphere/tests/**/*.java"/>
-                        </fileset>
-                </batchtest>
-        </junit>
-  </target>
+    <!-- =================================================================== -->
+    <!-- Runs all JUnit tests: needs optional.jar and junit in classpath     -->
+    <!-- =================================================================== -->
+    <target name="runtests" depends="compiletests" if="junit.present">
+    <java fork="yes" classname="junit.textui.TestRunner"
+            taskname="junit" failonerror="true">
+        <arg value="org.gridlab.gridsphere.AllJUnitTests"/>
+        <classpath>
+            <path refid="classpath" />
+            <pathelement location="${src.dir}" />
+        </classpath>
+    </java>
+    </target>
 
   <target name="testacl" depends="compile">
     <java classname="org.gridlab.gridsphere.services.security.acl.test.ACLServiceTest" classpathref="classpath"/>
