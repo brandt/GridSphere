@@ -11,13 +11,17 @@ package org.gridlab.gridsphere.core.persistence;
 
 import org.exolab.castor.jdo.Database;
 import org.gridlab.gridsphere.core.persistence.castor.StringVector;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.PortletLog;
 
 import java.util.Vector;
 import java.util.List;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 
 public class BaseObject implements org.exolab.castor.jdo.TimeStampable, org.exolab.castor.jdo.Persistent {
 
-    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(BaseObject.class.getName());
+    protected transient static PortletLog log = SportletLog.getInstance(BaseObject.class);
 
     // the needed Oid
     private String Oid;
@@ -102,13 +106,34 @@ public class BaseObject implements org.exolab.castor.jdo.TimeStampable, org.exol
      * @param vector the vector to be converted
      * @return a vector of stringobjects
      */
-    public Vector convertToStringVector(Object object, List vector) {
+    public Vector convertToStringVector(Object object, List vector, Class cl) {
+        log.info("converting from Vector to StringVector");
 
         Vector newVector = new Vector();
 
         for (int i=0;i<vector.size();i++) {
-            StringVector sv = new StringVector(object,(String)vector.get(i));
-            newVector.add(sv);
+
+            Object v = new Object();
+
+            try {
+                v = cl.newInstance();
+
+                Method m1 = cl.getMethod("setValue", new Class[] { String.class } );
+                Method m2 = cl.getMethod("setReference", new Class[] { Object.class } );
+                m1.invoke(v, new Object[] { vector.get(i) } );
+                m2.invoke(v, new Object[] { object } );
+            } catch (InstantiationException e) {
+            } catch (IllegalAccessException e) {
+            } catch (NoSuchMethodException e) {
+            } catch (SecurityException e) {
+            } catch (IllegalArgumentException e) {
+            } catch (InvocationTargetException e) {
+            }
+
+            newVector.add(v);
+
+            log.info("converted to type :"+cl.getName());
+
         }
         return newVector;
     }
@@ -120,12 +145,16 @@ public class BaseObject implements org.exolab.castor.jdo.TimeStampable, org.exol
      * @return a vector of strings
      */
     public Vector convertToVector(List vector) {
+
+        log.info("converting from StringVector to Vector");
+
         Vector newVector = new Vector();
 
         for (int i=0;i<vector.size();i++) {
             StringVector sv = (StringVector)vector.get(i);
             newVector.add(sv.getValue());
         }
+
         return newVector;
     }
 }
