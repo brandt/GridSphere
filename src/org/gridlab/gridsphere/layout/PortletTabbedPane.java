@@ -1,8 +1,8 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
- * @author <a href="mailto:wehrens@aei.mpg.de">Oliver Wehrens</a>
- * @version $Id$
- */
+* @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+* @author <a href="mailto:wehrens@aei.mpg.de">Oliver Wehrens</a>
+* @version $Id$
+*/
 
 package org.gridlab.gridsphere.layout;
 
@@ -104,14 +104,14 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      *
      * @param index the index of the tab to remove
      */
-    public void removeTabAt(int index) {
+    public synchronized void removeTabAt(int index) {
         tabs.remove(index);
     }
 
     /**
      * Removes all portlet tabs from the tabbed pane
      */
-    public void removeAll() {
+    public synchronized void removeAll() {
         for (int i = 0; i < tabs.size(); i++) {
             tabs.remove(i);
         }
@@ -137,15 +137,15 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
         List stabs = Collections.synchronizedList(tabs);
         synchronized (stabs) {
-        for (int i = 0; i < stabs.size(); i++) {
-            portletTab = (PortletTab) stabs.get(i);
-            if (portletTab.getComponentID() == tab.getComponentID()) {
-                selectedIndex = i;
-                portletTab.setSelected(true);
-            } else {
-                portletTab.setSelected(false);
+            for (int i = 0; i < stabs.size(); i++) {
+                portletTab = (PortletTab) stabs.get(i);
+                if (portletTab.getComponentID() == tab.getComponentID()) {
+                    selectedIndex = i;
+                    portletTab.setSelected(true);
+                } else {
+                    portletTab.setSelected(false);
+                }
             }
-        }
         }
     }
 
@@ -252,9 +252,12 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     protected String[] createTabLinks(GridSphereEvent event) {
         // Make tab links
         String[] tabLinks = new String[tabs.size()];
-        for (int i = 0; i < tabs.size(); i++) {
-            PortletTab tab = (PortletTab) tabs.get(i);
-            tabLinks[i] = tab.createTabTitleLink(event);
+        List stabs = Collections.synchronizedList(tabs);
+        synchronized(stabs) {
+            for (int i = 0; i < stabs.size(); i++) {
+                PortletTab tab = (PortletTab) stabs.get(i);
+                tabLinks[i] = tab.createTabTitleLink(event);
+            }
         }
         //req.setAttribute(LayoutProperties.TABLINKS, tabLinks);
         return tabLinks;
@@ -297,35 +300,35 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         PortletTab tab;
         List stabs = Collections.synchronizedList(tabs);
         synchronized (stabs) {
-        for (int i = 0; i < stabs.size(); i++) {
+            for (int i = 0; i < stabs.size(); i++) {
 
-            tab = (PortletTab) stabs.get(i);
+                tab = (PortletTab) stabs.get(i);
 
-            PortletRole tabRole = tab.getRequiredRole();
+                PortletRole tabRole = tab.getRequiredRole();
 
-            if (userRole.compare(userRole, tabRole) >= 0) {
+                if (userRole.compare(userRole, tabRole) >= 0) {
 
-                String title = tab.getTitle();
-                if (tab.isSelected()) {
-                    out.println("<td><img src=\"themes/" + theme + "/images/tab-active-left.gif\"/></td>");
-                    out.println("<td class=\"tab-active\">" + replaceBlanks(title) + "</td>");
-                    out.println("<td><img src=\"themes/" + theme + "/images/tab-active-right.gif\"/></td>");
-                } else {
-                    out.println("<td><img src=\"themes/" + theme + "/images/tab-inactive-left.gif\"/></td>");
-                    out.println("<td class=\"tab-inactive\"><a class=\"tab-menu\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\"/>" + replaceBlanks(title) + "</a>");
-                    out.println("<td><img src=\"themes/" + theme + "/images/tab-inactive-right.gif\"/></td>");
+                    String title = tab.getTitle();
+                    if (tab.isSelected()) {
+                        out.println("<td><img src=\"themes/" + theme + "/images/tab-active-left.gif\"/></td>");
+                        out.println("<td class=\"tab-active\">" + replaceBlanks(title) + "</td>");
+                        out.println("<td><img src=\"themes/" + theme + "/images/tab-active-right.gif\"/></td>");
+                    } else {
+                        out.println("<td><img src=\"themes/" + theme + "/images/tab-inactive-left.gif\"/></td>");
+                        out.println("<td class=\"tab-inactive\"><a class=\"tab-menu\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\"/>" + replaceBlanks(title) + "</a>");
+                        out.println("<td><img src=\"themes/" + theme + "/images/tab-inactive-right.gif\"/></td>");
+                    }
+                    out.println("<td class=\"tab-empty\">&nbsp;</td>");
                 }
-                out.println("<td class=\"tab-empty\">&nbsp;</td>");
             }
-        }
-        out.println("<td class=\"tab-fillup\">&nbsp;</td></tr></table>");
+            out.println("<td class=\"tab-fillup\">&nbsp;</td></tr></table>");
 
-        if (!stabs.isEmpty()) {
-            PortletTab selectedTab = (PortletTab) stabs.get(selectedIndex);
-            if (selectedTab != null) {
-                selectedTab.doRender(event);
+            if (!stabs.isEmpty()) {
+                PortletTab selectedTab = (PortletTab) stabs.get(selectedIndex);
+                if (selectedTab != null) {
+                    selectedTab.doRender(event);
+                }
             }
-        }
         }
     }
 
@@ -349,29 +352,29 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         PortletTab tab;
         List stabs = Collections.synchronizedList(tabs);
         synchronized (stabs) {
-        for (int i = 0; i < stabs.size(); i++) {
-            tab = (PortletTab) stabs.get(i);
-            PortletRole requiredRole = tab.getRequiredRole();
-            if (userRole.compare(userRole, requiredRole) >= 0) {
+            for (int i = 0; i < stabs.size(); i++) {
+                tab = (PortletTab) stabs.get(i);
+                PortletRole requiredRole = tab.getRequiredRole();
+                if (userRole.compare(userRole, requiredRole) >= 0) {
 
-                String title = tab.getTitle();
-                if (tab.isSelected()) {
-                    out.println("<td> <span class=\"tab-sub-active\">");
-                    out.println("<a class=\"tab-sub-menu-active\" href=\""+links[i]+ "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\"/>" + title + "</a></span></td>");
-                } else {
-                    out.println("<td> <span class=\"tab-sub-inactive\">");
-                    out.println("<a class=\"tab-sub-menu\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\"/>" + title + "</a>");
-                    out.println("</span></td>");
+                    String title = tab.getTitle();
+                    if (tab.isSelected()) {
+                        out.println("<td> <span class=\"tab-sub-active\">");
+                        out.println("<a class=\"tab-sub-menu-active\" href=\""+links[i]+ "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\"/>" + title + "</a></span></td>");
+                    } else {
+                        out.println("<td> <span class=\"tab-sub-inactive\">");
+                        out.println("<a class=\"tab-sub-menu\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\"/>" + title + "</a>");
+                        out.println("</span></td>");
+                    }
                 }
             }
-        }
 
-        out.println("</tr></table>");
-        out.println("</td></tr></table>");
+            out.println("</tr></table>");
+            out.println("</td></tr></table>");
 
-        PortletTab selectedTab = (PortletTab) stabs.get(selectedIndex);
-        if (selectedTab != null)
-            selectedTab.doRender(event);
+            PortletTab selectedTab = (PortletTab) stabs.get(selectedIndex);
+            if (selectedTab != null)
+                selectedTab.doRender(event);
         }
     }
 
@@ -409,11 +412,11 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         t.selectedIndex = this.selectedIndex;
         List stabs = Collections.synchronizedList(tabs);
         synchronized (stabs) {
-        t.tabs = new ArrayList(stabs.size());
-        for (int i = 0; i < stabs.size(); i++) {
-            PortletTab tab = (PortletTab)stabs.get(i);
-            t.tabs.add(tab.clone());
-        }
+            t.tabs = new ArrayList(stabs.size());
+            for (int i = 0; i < stabs.size(); i++) {
+                PortletTab tab = (PortletTab)stabs.get(i);
+                t.tabs.add(tab.clone());
+            }
         }
         return t;
     }

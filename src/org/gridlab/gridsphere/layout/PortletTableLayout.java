@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Collections;
 
 /**
  * The <code>PortletTableLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>
@@ -51,17 +52,19 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
 
     private PortletComponent getMaximizedComponent(List components) {
         PortletComponent p = null;
-
-        for (int i=0;i<components.size();i++) {
-            p = (PortletComponent)components.get(i);
-            if (p instanceof PortletLayout) {
-               PortletComponent layout = this.getMaximizedComponent(((PortletLayout)p).getPortletComponents());
-               if (layout!=null) {
-                   p = layout;
-               }
-            }
-            if (p.getWidth().equals("100%")) {
-                return p;
+        List scomponents = Collections.synchronizedList(components);
+        synchronized(scomponents) {
+            for (int i=0;i<scomponents.size();i++) {
+                p = (PortletComponent)scomponents.get(i);
+                if (p instanceof PortletLayout) {
+                    PortletComponent layout = this.getMaximizedComponent(((PortletLayout)p).getPortletComponents());
+                    if (layout!=null) {
+                        p = layout;
+                    }
+                }
+                if (p.getWidth().equals("100%")) {
+                    return p;
+                }
             }
         }
         return null;
@@ -82,10 +85,12 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
 
         // check if one window is maximized
 
-        for (int i=0;i<components.size();i++) {
-            p = (PortletComponent)components.get(i);
+        List scomponents = Collections.synchronizedList(components);
+        synchronized(scomponents) {
+        for (int i=0;i<scomponents.size();i++) {
+            p = (PortletComponent)scomponents.get(i);
             if (p instanceof PortletLayout) {
-                PortletComponent maxi = getMaximizedComponent(components);
+                PortletComponent maxi = getMaximizedComponent(scomponents);
                 if (maxi!=null) {
                     out.println("<table border=\"0\" width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"><tbody><tr><td>");
                     maxi.doRender(event);
@@ -101,8 +106,9 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
                    out.print("class=\""+this.style+"\" ");
         }
         out.println("border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tbody>");
-        for (int i=0;i<components.size();i++) {
-            p = (PortletComponent) components.get(i);
+
+        for (int i=0;i<scomponents.size();i++) {
+            p = (PortletComponent) scomponents.get(i);
             out.println("<tr><td valign=\"top\" width=\"100%\">");
             if (p.getVisible()) {
                 p.doRender(event);
@@ -111,7 +117,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
             out.println("</td> </tr>");
         }
         out.println("</tbody></table>");
-
+        }
     }
 
     public Object clone() throws CloneNotSupportedException {

@@ -9,6 +9,8 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.Collections;
 
 /**
  *
@@ -25,8 +27,10 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable {
         out.println(" <!-- START ROW --> ");
         out.println("<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">");
         out.println("<tbody><tr>") ;
-        for (int i=0;i<components.size();i++) {
-            p = (PortletComponent) components.get(i);
+        List scomponents = Collections.synchronizedList(components);
+        synchronized(scomponents) {
+        for (int i=0;i<scomponents.size();i++) {
+            p = (PortletComponent) scomponents.get(i);
             //System.out.println("\n\n\n\n\n WIDTH "+p.getWidth()+"\n\n\n\n");
             out.println("<td valign=\"top\" width=\""+p.getWidth()+"\">");
             if (p.getVisible()) {
@@ -36,6 +40,7 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable {
         }
         out.println("</tr></tbody></table>");
         out.println("<!-- END ROW -->");
+        }
     }
 
     public Object clone() throws CloneNotSupportedException {

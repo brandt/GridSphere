@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Collections;
 
 /**
  * The <code>PortletColumnLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>
@@ -50,10 +51,12 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
             out.println("<table width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"> <!-- START COLUMN -->");
 
             out.println("<tbody>");
-            for (int i=0;i<components.size();i++) {
+            List scomponents = Collections.synchronizedList(components);
+            synchronized(scomponents) {
+            for (int i=0;i<scomponents.size();i++) {
                 out.print("<tr><td valign=\"top\">");
 
-                p = (PortletComponent) components.get(i);
+                p = (PortletComponent) scomponents.get(i);
 
                 if (p.getVisible()) {
                     p.doRender(event);
@@ -61,6 +64,7 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
                 }
 
                 out.println("</td></tr>");
+            }
             }
             out.println("</tbody>");
             out.println("</table> <!-- END COLUMN -->");
