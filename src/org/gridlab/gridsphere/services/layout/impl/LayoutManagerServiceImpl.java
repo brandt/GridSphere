@@ -40,6 +40,7 @@ public class LayoutManagerServiceImpl implements LayoutManagerService, PortletSe
     }
 
     public void addPortletFrame(User user, String concretePortletID) throws PortletLayoutException {
+        /*
         PortletContainer pc = layoutEngine.getPortletContainer(user);
         List compList = pc.getPortletComponents();
         Iterator it = compList.iterator();
@@ -47,11 +48,12 @@ public class LayoutManagerServiceImpl implements LayoutManagerService, PortletSe
             PortletComponent c = (PortletComponent)it.next();
             if (c instanceof PortletFrame) {
                 PortletFrame f = (PortletFrame)c;
-                if (concretePortletID.equals(f.getConcretePortletClass())) {
+                if (concretePortletID.equals(f.getPortletClass())) {
 
                 }
             }
         }
+        */
     }
 
     public void removePortletFrame(User user, String concretePortletID) {

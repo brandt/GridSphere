@@ -45,7 +45,7 @@ public abstract class Descriptor {
              object = pmx.restoreObject();
         } catch (PersistenceManagerException e) {
             log.error("PersistenceManagerException ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") ", e);
-            throw new DescriptorException("Unable to load descriptor: "+e.getMessage());
+            throw new DescriptorException("Unable to load descriptor: "+ e.getMessage());
         }
         return object;
     }

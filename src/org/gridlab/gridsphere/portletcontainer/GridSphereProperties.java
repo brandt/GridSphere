@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.portletcontainer;
 
 public class GridSphereProperties {
 
+    public static final String COMPONENT_ID = "cid";
     public static final String ID = "ID";
     public static final String CLIENT = "Client";
     public static final String PORTLETMODE = "PortletMode";
