@@ -84,7 +84,7 @@ public class RenderURLTagImpl extends ActionTag {
     }
 
     public int doEndTag() throws JspException {
-
+        paramPrefixing = false;
         RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
 
         actionlink.setAction(createJSRActionURI(res.createRenderURL()));

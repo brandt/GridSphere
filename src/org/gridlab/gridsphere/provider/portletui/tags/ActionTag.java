@@ -41,6 +41,7 @@ public abstract class ActionTag extends BaseComponentTag {
     protected List paramBeans = null;
     protected String label = null;
     protected ImageBean imageBean = null;
+    protected boolean paramPrefixing = true;
 
     public static class TEI extends TagExtraInfo {
 
@@ -252,16 +253,21 @@ public abstract class ActionTag extends BaseComponentTag {
         if (!paramBeans.isEmpty()) {
             //String id = createUniquePrefix(2);
             Iterator it = paramBeans.iterator();
-            //actionURL.setParameter(SportletProperties.PREFIX, id);
-            //portletAction.addParameter(SportletProperties.PREFIX, id);
+            if (paramPrefixing) {
+                actionURL.setParameter(SportletProperties.PREFIX, id);
+                portletAction.addParameter(SportletProperties.PREFIX, id);
+            }
             while (it.hasNext()) {
                 ActionParamBean pbean = (ActionParamBean) it.next();
                 //System.err.println("have param bean name= " + pbean.getName() + " value= " + pbean.getValue());
-                actionURL.setParameter(pbean.getName(), pbean.getValue());
-                portletAction.addParameter(pbean.getName(), pbean.getValue());
-                //actionURL.setParameter(id + "_" + pbean.getName(), pbean.getValue());
-                //portletAction.addParameter(id + "_" + pbean.getName(), pbean.getValue());
-                //actionURL.setParameter(pbean.getName(), pbean.getValue());
+                if (paramPrefixing) {
+                    actionURL.setParameter(id + "_" + pbean.getName(), pbean.getValue());
+                    portletAction.addParameter(id + "_" + pbean.getName(), pbean.getValue());
+                    //actionURL.setParameter(pbean.getName(), pbean.getValue());
+                } else {
+                    actionURL.setParameter(pbean.getName(), pbean.getValue());
+                    portletAction.addParameter(pbean.getName(), pbean.getValue());
+                }
             }
         }
 

@@ -57,7 +57,7 @@ public class ActionURLTagImpl extends ActionTag {
         return style;
     }
 
-    public int doStartTag() throws JspException {
+    public int doStartTag() throws JspException {      
         if (!beanId.equals("")) {
             actionlink = (ActionLinkBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (actionlink == null) {
@@ -85,6 +85,7 @@ public class ActionURLTagImpl extends ActionTag {
     }
 
     public int doEndTag() throws JspException {
+        paramPrefixing = false;
         // set action to non-null
         if (action == null) action = "";
         RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
