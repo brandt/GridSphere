@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<body>
+Portlet layout components are the visual graphical components that get displayed
+to a client consisting of presentation information in an appropriate markup
+language (currently just HTML).
+<p>
+Portlet components are typically defined in an XML schema known as layout.xml
+and unmarshalled to Java objects using the Castor java data binding libraries.
+<p>
+All Layout components implement a {@link PortletRender} interface responsible for
+ rendering the presentation content. In addition, most concrete portlet
+ components implement a {@link ComponentLifecyle} interface responsible for
+ handling all component lifecyle methods such as initialization, shutdown, and
+ performing actions.
+<p>
+The current list describes the concrete portlet components that are in use:
+<ul>
+<li>{@link PortletFrame}</li>
+<li>{@link PortletGridLayout}</li>
+<li>{@link PortletImage}</li>
+<li>{@link PortletPanel}</li>
+<li>{@link PortletTab}</li>
+<li>{@link PortletTabbedPane}</li>
+<li>{@link PortletText}</li>
+<li>{@link PortletTitlebar}</li>
+</ul>
+
+</body>
+</html>
