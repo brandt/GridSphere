@@ -88,10 +88,10 @@ public class GridSphere extends HttpServlet {
 
     public void registerPortlets() {
 
-        Iterator it = registryService.getRegisteredPortlets().iterator();
+        Iterator it = registryService.getConcretePortlets().iterator();
         try {
         while (it.hasNext()) {
-            RegisteredPortlet regPortlet = (RegisteredPortlet) it.next();
+            ConcretePortlet regPortlet = (ConcretePortlet) it.next();
             System.err.println("portlet name: " + regPortlet.getPortletName());
 
             AbstractPortlet abPortlet = regPortlet.getActivePortlet();
@@ -114,7 +114,7 @@ public class GridSphere extends HttpServlet {
         PortletRequest portletRequest = new SportletRequest(req);
         PortletResponse portletResponse = new SportletResponse(res, portletRequest);
 
-        layoutEngine = new PortletLayoutEngine(portletConfig);
+        layoutEngine = new PortletLayoutEngine();
         ActionEvent actionEvent = null;
         AbstractPortlet activePortlet = null;
 
@@ -132,6 +132,7 @@ public class GridSphere extends HttpServlet {
                 System.err.println("Received ACTION: " + gspAction.toString());
 
                 String portletID = gspAction.getConcretePortletID();
+
                 // Get the active portlet instance
                 activePortlet = registryService.getActivePortlet(portletID);
 
@@ -148,12 +149,11 @@ public class GridSphere extends HttpServlet {
 
                 // do actionPerformed
                 activePortlet.actionPerformed(actionEvent);
-
+                //portletConfig.getContext().getRequestDispatcher("/hello").include(req, res);
             }
 
             // Render layout
             doRender(portletRequest, portletResponse);
-
 
         } catch (Exception e) {
             handleException(portletResponse, e);
@@ -165,7 +165,7 @@ public class GridSphere extends HttpServlet {
     public void doRender(PortletRequest req, PortletResponse res) throws IOException, ServletException {
         // Make a layout
         log.info("in doRender()");
-        layoutEngine.doRender(req, res);
+        layoutEngine.doRender(portletConfig.getContext(), req, res);
     }
 
     public final void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
@@ -190,7 +190,7 @@ public class GridSphere extends HttpServlet {
         Iterator registeredIt = abstractPortlets.iterator();
         while (abstractIt.hasNext() && registeredIt.hasNext()) {
             AbstractPortlet ab = (AbstractPortlet) abstractIt.next();
-            RegisteredPortlet reg = (RegisteredPortlet) registeredIt.next();
+            ConcretePortlet reg = (ConcretePortlet) registeredIt.next();
             ab = reg.getActivePortlet();
             PortletSettings portletSettings = reg.getPortletSettings(false);
             PortletConfig portletConfig = reg.getPortletConfig();
