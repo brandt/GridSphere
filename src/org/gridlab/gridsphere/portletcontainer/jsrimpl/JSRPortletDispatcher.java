@@ -291,15 +291,18 @@ public class JSRPortletDispatcher implements PortletDispatcher {
      * @throws IOException if an
      */
     public void windowEvent(WindowEvent event, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
+
         req.setAttribute(SportletProperties.WINDOW_EVENT, event);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.WINDOW_EVENT);
+
         try {
             include(req, res);
         } catch (ServletException e) {
             log.error("Unable to perform windowEvent");
             throw new PortletException("Unable to perform windowEvent", e);
         }
+        
         req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
         req.removeAttribute(SportletProperties.PORTLET_ACTION_METHOD);
         req.removeAttribute(SportletProperties.WINDOW_EVENT);

@@ -249,7 +249,11 @@ public class PortletServlet  extends HttpServlet
                         log.error("Error during doTitle:", e);
                         throw new ServletException(e);
                     }
-                } else {
+                } else if (action.equals(SportletProperties.WINDOW_EVENT)) {
+                    // do nothing
+                } else if (action.equals(SportletProperties.MESSAGE_RECEIVED)) {
+                    // do nothing
+                } else if (action.equals(SportletProperties.ACTION_PERFORMED)) {
                     PortletPreferences prefs = prefsManager.getPortletPreferences(appPortlet, user, Thread.currentThread().getContextClassLoader(), false);
                     request.setAttribute(SportletProperties.PORTLET_PREFERENCES, prefs);
                     ActionRequestImpl actionRequest = new ActionRequestImpl(request, portalContext, portletContext, supports);
@@ -260,6 +264,7 @@ public class PortletServlet  extends HttpServlet
                         portlet.processAction(actionRequest, actionResponse);
                     } catch (Exception e) {
                         log.error("Error during processAction:", e);
+                        request.setAttribute(SportletProperties.PORTLETERROR + portletClassName, e.getMessage());
                         throw new ServletException(e);
                     }
                     Map params = ((ActionResponseImpl)actionResponse).getRenderParameters();
@@ -290,6 +295,7 @@ public class PortletServlet  extends HttpServlet
                             log.error("in PortletServlet(): destroy caught unavailable exception: ", d);
                         }
                     } catch (Exception e) {
+                        request.setAttribute(SportletProperties.PORTLETERROR + portletClassName, e.getMessage());
                         log.error("in PortletServlet(): doRender() caught exception: ", e);
                     }
                 }
