@@ -19,6 +19,14 @@ public class SportletResponse implements PortletResponse {
 
     private HttpServletResponse res = null;
 
+    // HARDCODED FOR SportletURI -- needs to have the servlet name
+    // Can't blindly use ServletConfig.getServletName since that only works
+    // if access provided using the mapping e.g. /gridsphere, but
+    // if user goes to /GridSphere, the actual servlet name then
+    // getServletName returns some crazy "org.apache.catalina.INVOKER.GridSphere"
+
+    private String servletName = "gridsphere";
+
     public SportletResponse(HttpServletResponse res) {
         this.res = res;
     }
@@ -77,17 +85,7 @@ public class SportletResponse implements PortletResponse {
      * @return the portletURI
      */
     public PortletURI createReturnURI() {
-         // taken from createReturnURL from HttpServletResponse
-        /*
-        if (isEncodeable(toAbsolute(url))) {
-                    HttpServletRequest hreq =
-                      (HttpServletRequest) request.getRequest();
-                    return (toEncoded(url, hreq.getSession().getId()));
-                } else
-                    return (url);
-
-          */
-        return new SportletURI();
+        return new SportletURI(res, servletName, true);
     }
 
 
@@ -97,7 +95,7 @@ public class SportletResponse implements PortletResponse {
      * @return the portlet URI
      */
     public PortletURI createURI() {
-        return new SportletURI();
+        return new SportletURI(res, servletName, false);
     }
 
     /**
@@ -106,7 +104,7 @@ public class SportletResponse implements PortletResponse {
      * @param state the portlet window state
      */
     public PortletURI createURI(PortletWindow.State state) {
-        return new SportletURI();
+        return new SportletURI(res, servletName, false);
     }
 
     /**

@@ -5,9 +5,13 @@
 package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.PortletURI;
+import org.gridlab.gridsphere.portlet.PortletAction;
+import org.gridlab.gridsphere.portlet.DefaultPortletAction;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
-import java.util.Map;
-import java.util.Hashtable;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 
 /**
@@ -30,10 +34,16 @@ import java.util.Hashtable;
  */
 public class SportletURI implements PortletURI {
 
+    private HttpServletResponse res = null;
     private Map store;
+    private boolean redirect = true;
+    private String url;
 
-    public SportletURI() {
-        store = new Hashtable();
+    public SportletURI(HttpServletResponse res, String servletName, boolean redirect) {
+        store = new HashMap();
+        this.res = res;
+        this.redirect = redirect;
+        url = servletName;
     }
 
     /**
@@ -48,6 +58,25 @@ public class SportletURI implements PortletURI {
     }
 
     /**
+     * Adds the given action to this URI. The action is a portlet-defined implementation of the portlet action
+     * interface. It can carry any information. How the information is recovered should the next request be for
+     * this URI is at the discretion of the portlet container.
+     *
+     * Unless the ActionListener interface is implemented at the portlet this action will not be delivered.
+     *
+     * @param action the portlet action
+     */
+    public void addAction(PortletAction action) {
+        // XXX: FIX ME HOW THE HELL DO ACTIONS GET SERIALIZED INTO A URI?
+        // SINCE ALL RELEVANT STUFF IS STRINGS WE CAN PROBABLY JUST INTROSPECT A
+        if (action instanceof DefaultPortletAction) {
+            DefaultPortletAction dpa = (DefaultPortletAction)action;
+            store.put(GridSphereProperties.PORTLETNAME, dpa.getName());
+            store.put(GridSphereProperties.PORTLETID, dpa.getPortletID());
+        }
+    }
+
+    /**
      * Returns the complete URI as a string. The string is ready to be embedded in markup.
      * Once the string has been created, adding more parameters or other listeners will not modify the string.
      * You have to call this method again, to create an updated string.
@@ -55,7 +84,21 @@ public class SportletURI implements PortletURI {
      * @return the URI as a string
      */
     public String toString() {
-        return null;
+        Set set = store.keySet();
+        if (!set.isEmpty()) {
+            // add question mark
+            url += "?";
+        }
+        while (set.iterator().hasNext()) {
+            String name = (String)set.iterator().next();
+            String value = (String)store.get(name);
+            url += name + "&" + value;
+        }
+        if (redirect) {
+            return res.encodeRedirectURL(url);
+        } else {
+            return res.encodeURL(url);
+        }
     }
 
 }
