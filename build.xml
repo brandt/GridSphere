@@ -37,8 +37,6 @@ Copyright:
         </classpath>
     </taskdef>
 
-    <property name="FindBugs.home" value="/Users/novotny/Jakarta/findbugs-0.7.4" />
-
     <property file="build.properties"/>
 
     <property name="optimize" value="false"/>
@@ -47,7 +45,7 @@ Copyright:
 
     <!-- Version properties -->
     <property name="version" value="2.0"/>
-    <property name="release" value="ALPHA 1"/>
+    <property name="release" value="RC 1"/>
     <property name="version.release" value="${version} ${release}"/>
     <property name="gridsphere.project" value="gridsphere"/>
     <property name="gridsphere.name" value="GridSphere ${version.release}"/>
