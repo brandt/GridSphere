@@ -69,9 +69,10 @@ class UserManagerServiceImpl implements PortletServiceProvider, UserManagerServi
 
     // Only single instance allowed of this class
     public static UserManagerServiceImpl getInstance() {
-        numClients++;
-        if (numClients <= MAX_CLIENTS) return instance;
-        return null;
+        //numClients++;
+        //if (numClients <= MAX_CLIENTS)
+        return instance;
+        //return null;
     }
 
     public UserManagerServiceImpl() {
@@ -677,7 +678,7 @@ class UserManagerServiceImpl implements PortletServiceProvider, UserManagerServi
      */
     public boolean isSuperUser(User user) {
         try {
-            return aclService.hasRoleInGroup(user, SportletGroup.SUPER, PortletRole.SUPER);
+            return aclService.hasRoleInGroup(user, PortletGroup.SUPER, PortletRole.SUPER);
         } catch (PortletServiceException e) {
             log.error("Exception :" + e);
             return false;

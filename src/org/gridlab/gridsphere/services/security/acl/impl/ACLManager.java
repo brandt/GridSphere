@@ -15,6 +15,7 @@ import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 
 import java.util.List;

@@ -15,6 +15,7 @@ import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
@@ -36,9 +37,11 @@ class AccessControlManagerServiceImpl implements PortletServiceProvider, AccessC
 
     // Only single instance allowed of this class
     public static AccessControlManagerServiceImpl getInstance() {
-        numClients++;
-        if (numClients <= MAX_CLIENTS) return instance;
-        return null;
+        //numClients++;
+        //if (numClients <= MAX_CLIENTS)
+        return instance;
+        //log.info("Unauthorized call to getInstance()");
+        //return null;
     }
 
     public AccessControlManagerServiceImpl() {

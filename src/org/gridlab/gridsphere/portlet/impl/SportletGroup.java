@@ -22,9 +22,6 @@ public class SportletGroup extends BaseObject implements PortletGroup {
     public static final String SUPER_GROUP = "0";
     public static final String BASE_GROUP = "1";
 
-    public static final PortletGroup BASE = new SportletGroup(BASE_GROUP);
-    public static final PortletGroup SUPER = new SportletGroup(SUPER_GROUP);
-
     /**
      * @sql-size 128
      * @sql-name base

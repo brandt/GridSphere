@@ -11,10 +11,9 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.impl.SportletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletResponse;
 import org.gridlab.gridsphere.portlet.impl.SportletWindow;
-import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-import org.gridlab.gridsphere.portletcontainer.PortletErrorMessage;
-import org.gridlab.gridsphere.portletcontainer.PortletEventDispatcher;
+import org.gridlab.gridsphere.portlet.impl.GuestUser;
+import org.gridlab.gridsphere.portletcontainer.*;
+import org.gridlab.gridsphere.portletcontainer.impl.SportletDataManager;
 //import org.gridlab.gridsphere.portletcontainer.UserPortletManager;
 import org.gridlab.gridsphere.services.user.UserManagerService;
 import org.gridlab.gridsphere.services.registry.PortletManagerService;
@@ -150,12 +149,14 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         }
 
         // Set the portlet data
+        User user = req.getUser();
         PortletData data = null;
-        try {
-            UserManagerService userManager = (UserManagerService)ctx.getService(UserManagerService.class);
-            data = userManager.getPortletData(req.getUser(), portletClass);
-        } catch (PortletServiceException e) {}
-        req.setData(data);
+        if (!(user instanceof GuestUser)) {
+            PortletDataManager dataManager = SportletDataManager.getInstance();
+            data = dataManager.getPortletData(req.getUser(), portletClass);
+            req.setData(data);
+        }
+
 
         // now perform actionPerformed on Portlet if it has an action
         DefaultPortletAction action = event.getAction();
