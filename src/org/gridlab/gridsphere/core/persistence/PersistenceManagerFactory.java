@@ -64,4 +64,20 @@ public class PersistenceManagerFactory {
         return new PersistenceManagerXmlImpl(descriptorURL, mappingURL);
     }
 
+    public static void shutdown() {
+        log.info("Shutting down PersistenceManagers ");
+        Set allpms = databases.keySet();
+        Iterator it = allpms.iterator();
+        while (it.hasNext()) {
+            String pmname = (String)it.next();
+            PersistenceManagerRdbms pm = (PersistenceManagerRdbms)databases.get(pmname);
+            log.info("  shutdown persistencemanager for "+pmname);
+            try {
+                pm.destroy();
+            } catch (PersistenceManagerException e) {
+                log.debug("Could not shutdown PersistenceManager "+pmname);
+            }
+        }
+    }
+
 }
