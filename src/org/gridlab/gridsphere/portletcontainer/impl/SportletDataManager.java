@@ -23,8 +23,6 @@ import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
  */
 public class SportletDataManager implements PortletDataManager {
 
-    private static transient PortletLog log = SportletLog.getInstance(PortletDataManager.class);
-    private PortletRegistry registry = PortletRegistry.getInstance();
     private static PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
     private static PortletDataManager instance = new SportletDataManager();
 
@@ -51,53 +49,23 @@ public class SportletDataManager implements PortletDataManager {
      * @return the PortletData for this portlet or null if none exists.
      */
     public PortletData getPortletData(User user, String portletID) throws PersistenceManagerException {
-        /*
-        String appID = PortletRegistry.getApplicationPortletID(portletID);
-        PersistenceManagerRdbms pm = null;
-        if (appID != null) {
-            ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
-            if (appPortlet != null) {
-                String webApp = appPortlet.getWebApplicationName();
-                pm = PersistenceManagerFactory.createProjectPersistenceManagerRdbms(webApp);
-            }
-        }
-        */
+
         if (user instanceof GuestUser) return null;
 
         String command =
                 "select u from " + SportletData.class.getName() + " u where u.UserID='" + user.getID() + "' and u.PortletID='" + portletID + "'";
 
         // get sportlet data if it exists
-        SportletData pd = (SportletData) pm.restore(command);
+        SportletData data = (SportletData) pm.restore(command);
 
         // or create one
-        if (pd == null) {
-            pd = new SportletData(pm);
-            pd.setPortletID(portletID);
-            pd.setUserID(user.getID());
-            pm.create(pd);
+        if (data == null) {
+            data = new SportletData(pm);
+            data.setPortletID(portletID);
+            data.setUserID(user.getID());
+            pm.create(data);
         }
-        return pd;
+        return data;
     }
 
-    /**
-     * Makes the users persistent portlet data persistent
-     *
-     * @param user the <code>User</code>
-     * @param portletID the concrete portlet id
-     * @param data the PortletData
-     */
-    public void setPortletData(User user, String portletID, PortletData data) throws PersistenceManagerException {
-        //String appID = PortletRegistry.getApplicationPortletID(portletID);
-        //String webApp = registry.getApplicationPortlet(appID).getWebApplicationName();
-        //PersistenceManagerRdbms pm = PersistenceManagerFactory.createProjectPersistenceManagerRdbms(webApp);
-
-        PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
-        SportletData sd = (SportletData) data;
-        //sd.setPortletID(portletID);
-        //sd.setUserID(user.getID());
-
-            pm.update(sd);
-
-    }
 }

@@ -24,13 +24,4 @@ public interface PortletDataManager {
      */
     PortletData getPortletData(User user, String portletID) throws PersistenceManagerException;
 
-    /**
-     * Makes the users persistent portlet data persistent
-     *
-     * @param user the <code>User</code>
-     * @param portletID the concrete portlet id
-     * @param data the PortletData
-     * @throws PersistenceManagerException if a persistence error occurs
-     */
-    void setPortletData(User user, String portletID, PortletData data) throws PersistenceManagerException;
 }
