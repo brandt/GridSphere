@@ -44,7 +44,7 @@ public interface PortletServiceFactory {
      * @throws PortletServiceNotFoundException if the PortletService is not found
      */
     public PortletService createPortletService(Class service,
-                                               Properties serviceProperties,
+                                               String servicesXMLPath,
                                                ServletConfig servletConfig,
                                                boolean useCachedService)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException;
