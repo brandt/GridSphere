@@ -527,8 +527,7 @@ Copyright:
     <!-- Builds the GridSphere docbook documentation                         -->
     <!-- =================================================================== -->
     <target name="docbook" description="Builds the GridSphere docbook documentation.">
-        <ant dir="${docbook.dir}/DevelopersGuide" target="install" inheritAll="false"/>
-        <ant dir="${docbook.dir}/UsersGuide" target="install" inheritAll="false"/>
+        <ant dir="${docbook.dir}" target="docbook" inheritAll="false"/>
     </target>
 
 <!-- +++++++++++++++ END DOCUMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
