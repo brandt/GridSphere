@@ -75,10 +75,13 @@ public abstract class BaseBean implements TagBean {
     }
 
     protected String getLocalizedText(String key) {
-        Locale locale = this.request.getLocale();
-        ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
-        return bundle.getString(key);
+        return getLocalizedText(key, "gridsphere.resources.Portlet");
     }
 
+    protected String getLocalizedText(String key, String base) {
+        Locale locale = this.request.getLocale();
+        ResourceBundle bundle = ResourceBundle.getBundle(base, locale);
+        return bundle.getString(key);
+    }
 
 }
