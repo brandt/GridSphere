@@ -26,7 +26,7 @@
     <sect1>
         <title>Simple Persistence</title>
         <para>Making data persistent in portlets is done using the <link linkend='portlet.data'>&PortletData;</link>
-        object under WebSphere portlet API and the <link linkend='portlet.data'>&PortletPreferneces;</link> object
+        object under WebSphere portlet API and the <link linkend='portlet.data'>&PortletPreferences;</link> object
         using the JSR 168 portlet API.</para>
         <para>
             In general when requiring persistence in a WebSphere portlet, first see if the
