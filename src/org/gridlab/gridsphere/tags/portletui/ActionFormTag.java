@@ -1,9 +1,9 @@
 package org.gridlab.gridsphere.tags.portletui;
 
-import org.gridlab.gridsphere.portlet.PortletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
 import java.util.ArrayList;
 
 public class ActionFormTag extends ActionTag {
@@ -28,11 +28,14 @@ public class ActionFormTag extends ActionTag {
     }
 
     public int doStartTag() throws JspException {
+        System.err.println("ActionFormTag: inDoStartTag");
         paramBeans = new ArrayList();
+
         return EVAL_BODY_BUFFERED;
     }
 
     public int doEndTag() throws JspException {
+        System.err.println("ActionFormTag: inDoEndTag");
         try {
             JspWriter out = pageContext.getOut();
 
@@ -45,7 +48,21 @@ public class ActionFormTag extends ActionTag {
             if (isMultipart) {
                 out.print(" enctype=\"multipart/form-data\"");
             }
-            if (name == null) name = "aform";
+            String noName = (String)pageContext.getAttribute("gs_formNumber", PageContext.REQUEST_SCOPE);
+            if (name == null) {
+                // use a counter to continually increase form number to provide unique form name
+                int ctr = 0;
+                if (noName == null) {
+                    ctr = 1;
+                } else {
+
+                    ctr = new Integer(noName).intValue() + 1;
+                }
+                noName = String.valueOf(ctr);
+
+                pageContext.setAttribute("gs_formNumber", noName, PageContext.REQUEST_SCOPE);
+                name = "form" + noName;
+            }
 
             out.print(" name=\""+name+"\"");
 
@@ -64,6 +81,7 @@ public class ActionFormTag extends ActionTag {
         } catch (Exception e) {
             throw new JspTagException(e.getMessage());
         }
+        name = null;
         return EVAL_PAGE;
     }
 
