@@ -8,7 +8,7 @@
     <sect1 id="newproject">
         <title>Creating a new project</title>
         <para>
-            First, issue the following GridSphere build script command to create a new template project.
+            First, issue the following GridSphere build script command to create a hello world tutorial project.
             <screen>
 <prompt>bash$</prompt> <command>ant <replaceable>new-project</replaceable>
             </command>
@@ -16,23 +16,28 @@
 new-project:
      [echo] Creating a New Portlet Project
     [input] Please enter a Project Title e.g. Cool Portlets
+    <command>Hello World Example</command>
     <prompt>This is the Hello World Portlet</prompt>
-    [input] Please enter a Project Name this will be used for your portlet web application and should be lowercase e.g. coolportlets
-    <prompt>hello</prompt>
+    [input] Please enter a Project Name this will be used for your portlet web application
+            and should be lowercase e.g. coolportlets
+    <command>tutorials</command>
 ...
             </screen>
-            At the first prompt enter a description of your portlet package (or one portlet) you want to develop.
-            After that you are asked to type in  a name for your portlet package under which it will be deployed in the
-            servlet container. In the above example a package called 'hello' will be created in the projects directory
+            At the first prompt a description of the portlet package (or one portlet) is provided.
+            After that a project name is provided which defines the web application name that will be used to identify the
+            web application to the servlet container. In this case, the web application name is simply <command>hello</command>.
+
+
+            In the above example a package called 'tutorial' will be created in the projects directory
             of gridsphere. The directory structure is automatically created and the required template files are copied
             to over to the new project. At the moment it is required that all portlet projects are maintained in the
             <filename>projects</filename> directory in the gridsphere home directory.
             Once you have a new project you may optionally commit it to CVS issuing the following:
-            screen>
-<prompt>bash$</prompt>
-            <command>cd new-project</command>
-           <prompt>bash$</prompt><command>cvs import -m "my new portlets" new-project STARTTAG VENDORTAG<replaceable>new-project</replaceable>
+            <screen>
+            <prompt>bash$</prompt><command>cd tutorial</command>
+            <prompt>bash$</prompt><command>cvs import -m "a hello example" hello STARTTAG VENDORTAG <replaceable>hello</replaceable>
             </command>
+                </screen>
             where STARTTAG and VENDORTAG are any labels of your choosing (see CVS documentation for more detailed information)
         </para>
     </sect1>
@@ -42,11 +47,19 @@ new-project:
 
             <sect2 id="helloworldsrc">
             <title>First Portlet</title>
-                After creating the new project you are ready to write your first portlet. The very basic portlet looks like:
+                After creating the new project you are ready to write your first portlet. First you need to create
+                a directory for the portlet source code. We create a portlets directory containing a tutorial directory.
+                <screen>
+            <prompt>bash$</prompt><command>cd src</command>
+            <prompt>bash$</prompt><command>mkdir -p portlets/tutorial</command>
+                </screen>
+                Now create a source file <filename>HelloWorld.java</filename> inside the
+                <filename>portlets/tutorial</filename> directory that looks like the following:
+
                 <example>
                     <title>HelloWorld.java</title>
                     <programlisting linenumbering='numbered'>
-package package org.gridlab.gridsphere.portlets.tutorial;
+package portlets.tutorial;
 
 public class HelloWorld  extends AbstractPortlet {
 
@@ -79,7 +92,7 @@ public class HelloWorld  extends AbstractPortlet {
 
 <portlet-app-def>
 
-<portlet-app id="org.gridlab.gridsphere.portlets.tutorial.HelloWorld">
+<portlet-app id="portlets.tutorial.HelloWorld">
     <portlet-name>Hello World Portlet Application</portlet-name>
     <servlet-name>HelloWorld</servlet-name>
     <portlet-config>
@@ -99,7 +112,7 @@ public class HelloWorld  extends AbstractPortlet {
     </supports>
 </portlet-app>
 
-<concrete-portlet-app id="org.gridlab.gridsphere.portlets.tutorial.HelloWorld.1">
+<concrete-portlet-app id="portlets.tutorial.HelloWorld.1">
     <context-param>
         <param-name>foobar</param-name>
         <param-value>a value</param-value>
@@ -153,7 +166,7 @@ public class HelloWorld  extends AbstractPortlet {
 
     <servlet>
         <servlet-name>HelloWorld</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.tutorial.HelloWorld</servlet-class>
+        <servlet-class>portlets.tutorial.HelloWorld</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -212,7 +225,7 @@ public class HelloWorld  extends AbstractPortlet {
         <implementation>org.gridlab.gridsphere.services.core.registry.impl.PortletManagerServiceImpl</implementation>
         <service-config>
             <param-name>startup-portlet-webapps</param-name>
-            <param-value>gridsphere, helloworld</param-value>
+            <param-value>gridsphere, tutorial</param-value>
         </service-config>
     </service>
 </portlet-services>
@@ -230,7 +243,7 @@ public class HelloWorld  extends AbstractPortlet {
             <![CDATA[
 <portlet-frame inner-padding="20">
     <name>RSS</name>
-    <portlet-class>org.gridlab.gridsphere.portlets.tutorial.HelloWorld.1</portlet-class>
+    <portlet-class>portlets.tutorial.HelloWorld.1</portlet-class>
 </portlet-frame>
 ]]>
             </programlisting>
