@@ -16,6 +16,8 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.Comparator;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * A portlet is a small Java program that runs within a portlet container.
@@ -142,6 +144,19 @@ public abstract class Portlet extends HttpServlet
                 tagstring = "VIEW";
             }
             return tagstring;
+        }
+
+        /**
+         * Returns a locale-specific <code>String</code> representation of
+         * the portlet mode.
+         *
+         * @return the locale-specific mode expressed as a <code>String</code>
+         */
+        public String getText(Locale locale) {
+            ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
+            String key = toString();
+            String value = bundle.getString(key);
+            return value;
         }
 
         public int compare(Object left, Object right) {

@@ -6,6 +6,9 @@ package org.gridlab.gridsphere.portlet;
 
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.Enumeration;
 
 /**
  * The <code>PortletWindow</code> represents the window that encloses a portlet.
@@ -115,6 +118,19 @@ public interface PortletWindow {
                 return "RESIZING";
             }
             return "Unknown State!";
+        }
+
+        /**
+         * Returns a locale-specific <code>String</code> representation of
+         * the portlet window state.
+         *
+         * @return the locale-specific window state expressed as a <code>String</code>
+         */
+        public String getText(Locale locale) {
+            ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
+            String key = toString();
+            String value = bundle.getString(key);
+            return value;
         }
 
         public Object clone() throws CloneNotSupportedException {
