@@ -38,6 +38,7 @@ public class PortletTitleBar extends BasePortletComponent {
 
     private PortletSettings settings;
 
+    private List allowedWindowStates = null;
     private String[] windowStates = null;
     private String errorMessage = "";
     private boolean hasError = false;
@@ -334,14 +335,7 @@ public class PortletTitleBar extends BasePortletComponent {
             settings = concPortlet.getPortletSettings();
 
             // get window states from application portlet config
-            List allowedWindowStates = appConfig.getAllowedWindowStates();
-
-            windowStates = new String[allowedWindowStates.size()];
-            for (int i = 0; i < allowedWindowStates.size(); i++) {
-                PortletWindow.State state = (PortletWindow.State)allowedWindowStates.get(i);
-                windowStates[i] = state.toString();
-            }
-
+            allowedWindowStates = appConfig.getAllowedWindowStates();
         }
     }
 
@@ -354,6 +348,12 @@ public class PortletTitleBar extends BasePortletComponent {
     protected List createWindowLinks(GridSphereEvent event) {
         PortletURI portletURI;
         PortletResponse res = event.getPortletResponse();
+
+        windowStates = new String[allowedWindowStates.size()];
+            for (int i = 0; i < allowedWindowStates.size(); i++) {
+                PortletWindow.State state = (PortletWindow.State)allowedWindowStates.get(i);
+                windowStates[i] = state.toString();
+            }
 
         for (int i = 0; i < windowStates.length; i++) {
             // remove current state from list
