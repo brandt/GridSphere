@@ -1,0 +1,46 @@
+
+Documentation
+============
++ Design Patterns - Jason
++ Design Document - mostly done, Michael will update the design document
++ Tokyo presentation (Poland) (Michael)
+	Work on core set of technical slides (Jason)
++ README, INSTALL (Jason, Oliver)
++ Portlet User's Guides -- using the various portlets (Michael)
++ Portlet Developer's Guides -- Mid-March (Michael & Jason)
+
+WebSite
+=======
++  Top-level documentation including presentations and published papers (Michael)
++ Developer documentation including CVS information (Jason)
++ Up 2 date Javadocs and Unit test results (Oliver)
+
+Code
+=====
++ Portlet Tags packaged -- wrappers for HTML elements (Oliver)
+	Tags, Beans and Models (Oliver)
++ Portlet Tag Documentation (Oliver)
++ DB Change Management (Michael)
++ add ant dist target to build binary
++ Portlet Application Manager (Jason)
++ Portlet subscription/ layout service (Michael, Jason)
++ Account request portlet (Michael)
++ Basic Grid portlets (Michael)
++ Get rid of Myproxy references in AccountRequest, etc. (Michael)
++ doHelp (Jason)
+	Get JScript code from Michael to display a new window
++ Allow multiple portlet deployment descriptors to deploy portlets/
++ Layout -- add 2 attributes to PortletFram for insets, outsets, make Logo and Title cool (Jason, Oliver)
+	-- update I added the attributes to Frame (Jason)
++ Fix PortletTitleBar to display configure mode oonly for admin or super role
++ Unit testing core services (Jason or Oliver)
++ Move Jsmash and InstantMessage somewhere else (Oliver)
+	(We'll leave the issue of whether to include IM in release to future version)
+
+Code refinement
+===============
++ Please Javadoc all your code and run Tools->Layout Code to optimize imports. Consider renaming variables to be more specific and descriptive. 
+
+http://java.sun.com/j2se/javadoc/writingdoccomments
+
++ Oliver, can you javadoc SportletUserImplAttribute and SPortletDataAttribute?
