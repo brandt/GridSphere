@@ -332,6 +332,8 @@ Copyright:
     <target name="clean" description="Delete classes and existing library">
         <delete quiet="true" dir="${project.build}"/>
         <delete quiet="true" dir="${project.dist}"/>
+        <delete quiet="true" file="lib/${project.name}.jar"/>
+        <delete quiet="true" file="lib/${project.name}-services.jar"/>
     </target>
 
     <target name="docs" depends="javadocs" description="Create @PROJECT_TITLE@ Documentation"/>
