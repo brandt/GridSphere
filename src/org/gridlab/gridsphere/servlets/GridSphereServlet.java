@@ -97,7 +97,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         GridSphereConfig.setServletConfig(config);
 
-        SportletLog.setConfigureURL(GridSphereConfig.getServletContext().getRealPath("/WEB-INF/classes/log4j.properties"));
+        //SportletLog.setConfigureURL(GridSphereConfig.getServletContext().getRealPath("/WEB-INF/classes/log4j.properties"));
         this.context = new SportletContext(config);
         factory = SportletServiceFactory.getInstance();
         layoutEngine = PortletLayoutEngine.getInstance();
