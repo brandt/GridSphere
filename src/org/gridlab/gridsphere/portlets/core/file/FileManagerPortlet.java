@@ -138,65 +138,14 @@ public class FileManagerPortlet extends ActionPortlet {
         ListBoxBean lb = event.getListBoxBean("filelist");
         List files = lb.getSelectedValues();
         PortletRequest req = event.getPortletRequest();
-        PortletResponse res = event.getPortletResponse();
         User user = req.getUser();
         Iterator it = files.iterator();
         String fileName = null;
         while (it.hasNext()) {
             fileName = (String)it.next();
         }
-
-        InputStream in = null;
-
-        try {
-            File file = userStorage.getFile(user, fileName);
-            // ... find the file you want ...
-            if (!file.exists()) {
-                throw new FileNotFoundException("No file found: " + fileName + " for user: " + user.getUserName());
-            }
-            log.debug("filename: " + fileName);
-            FileDataSource fds = new FileDataSource(file);
-
-            log.debug("content type = " + fds.getContentType());
-            //res.setContentType(fds.getContentType());
-            //res.setContentType("application/download");
-            res.reset();
-            res.resetBuffer();
-            //res.setContentType("application/octet-stream");
-            res.setContentType("application/x-download");
-            //res.setContentType( "application/unknow" );
-            //res.setHeader("Cache-Control","no-cache"); //HTTP 1.1
-            //res.setHeader("Pragma","no-cache"); //HTTP 1.0
-            //res.setDateHeader ("Expires", 0); //prevents caching at the proxy server
-
-            log.debug("file length= " + (int)file.length());
-            res.setContentLength((int)file.length());
-            // force a save as dialog in recent browsers.
-            res.setHeader("Content-Disposition","attachment; filename=" + fileName);
-            //res.setHeader("Content-Disposition","attachment");
-
-
-                in = new BufferedInputStream(new FileInputStream(fileName));
-                byte[] buf = new byte[4 * 1024];
-                int bytesRead;
-                while ((bytesRead = in.read(buf)) != -1) {
-                    res.getOutputStream().write(buf, 0, bytesRead);
-                }
-
-
-            // you should use a datahandler to write out data from a datasource.
-            //DataHandler handler = new DataHandler(fds);
-            //handler.writeTo(res.getOutputStream());
-        } catch(FileNotFoundException e) {
-            log.error("Unable to find file!", e);
-        } catch(SecurityException e) {
-            // this gets thrown if a security policy applies to the file. see java.io.File for details.
-            log.error("A security exception occured!", e);
-        } catch(IOException e) {
-            log.error("Caught IOException", e);
-            //response.sendError(HttpServletResponse.SC_INTERNAL_SERVER,e.getMessage());
-
-        }
+        String path = userStorage.getLocationPath(user, fileName);
+        setFileDownloadEvent(req, fileName, path);
     }
 
     public void editFile(FormEvent event) throws PortletException {
