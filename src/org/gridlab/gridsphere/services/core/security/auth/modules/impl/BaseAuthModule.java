@@ -62,8 +62,16 @@ public abstract class BaseAuthModule implements Comparable {
         return moduleDef.getModulePriority();
     }
 
+    public void setModulePriority(int priority) {
+        moduleDef.setModulePriority(priority);
+    }
+
     public boolean isModuleActive() {
         return moduleDef.getModuleActive();
+    }
+
+    public void setModuleActive(boolean active) {
+        moduleDef.setModuleActive(active);
     }
     
     public int compareTo(Object obj) {

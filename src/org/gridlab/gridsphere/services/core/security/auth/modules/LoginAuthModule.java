@@ -25,7 +25,11 @@ public interface LoginAuthModule extends Comparable {
     public int getModulePriority();
 
     public boolean isModuleActive();
-    
+
+    public void setModulePriority(int priority);
+
+    public void setModuleActive(boolean isActive);
+
     public void checkAuthentication(User user, String password) throws AuthenticationException;
 
 }
