@@ -129,9 +129,9 @@ public class PortletApplicationManager extends ActionPortlet {
             } else if ((operation != null) && (appName!= null)) {
                 if (operation.equals("start")) {
                     result = tomcat.startWebApp(appName);
+                    portletManager.destroyPortletWebApplication(appName, req, res);
                     portletManager.initPortletWebApplication(appName, req, res);
                 } else if (operation.equals("stop")) {
-                    portletManager.destroyPortletWebApplication(appName, req, res);
                     result = tomcat.stopWebApp(appName);
                 } else if (operation.equals("reload")) {
                     portletManager.destroyPortletWebApplication(appName, req, res);
@@ -143,6 +143,7 @@ public class PortletApplicationManager extends ActionPortlet {
                     result = tomcat.removeWebApp(appName);
                 } else if (operation.equals("deploy")) {
                     result = tomcat.deployWebApp(appName);
+                    result = tomcat.startWebApp(appName);
                     portletManager.initPortletWebApplication(appName, req, res);
                 } else if (operation.equals("undeploy")) {
                     result = tomcat.undeployWebApp(appName);
@@ -158,7 +159,7 @@ public class PortletApplicationManager extends ActionPortlet {
         }
         req.setAttribute("result", result);
         if (result != null) log.debug("result: " + result.getReturnCode() + " " + result.getDescription());
-        setNextState(req, VIEW_JSP);
+        setNextState(req, DEFAULT_VIEW_PAGE);
     }
 
     public void uploadFile(FormEvent event) throws PortletException {
@@ -194,7 +195,7 @@ public class PortletApplicationManager extends ActionPortlet {
             errMsg.setStyle("error");
             log.error("Unable to store uploaded file ", e);
         }
-        setNextState(req, VIEW_JSP);
+        setNextState(req, DEFAULT_VIEW_PAGE);
     }
 
     public void deployWebapp(FormEvent event) throws PortletException {
@@ -224,6 +225,6 @@ public class PortletApplicationManager extends ActionPortlet {
             errMsg.setStyle("error");
             log.error("Unable to deploy webapp  ", e);
         }
-        setNextState(req, VIEW_JSP);
+        setNextState(req, DEFAULT_VIEW_PAGE);
     }
 }

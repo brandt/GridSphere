@@ -16,7 +16,7 @@
     <ui:frame beanId="errorFrame"/>
 
     <ui:frame>
-    <ui:tablerow>
+    <ui:tablerow header="true">
         <ui:tablecell>
             <ui:text value="Portlet web application"/>
         </ui:tablecell>
@@ -24,10 +24,10 @@
             <ui:text value="Description"/>
         </ui:tablecell>
         <ui:tablecell>
-            <ui:text value="Sessions"/>
-        </ui:tablecell>
-        <ui:tablecell>
             <ui:text value="Running"/>
+        </ui:tablecell>
+         <ui:tablecell>
+            <ui:text value="Sessions"/>
         </ui:tablecell>
         <ui:tablecell>
             <ui:text value="Actions"/>
@@ -45,16 +45,21 @@
     <ui:tablecell><ui:text value="<%= description.getSessions() %>"/></ui:tablecell>
     <ui:tablecell>
     <% if (PortletGroupFactory.GRIDSPHERE_GROUP.getName().equalsIgnoreCase(description.getContextPath())) { %>
-        <ui:text value="  GridSphere core portlets cannot be redeployed  "/>
+        <ui:text value="  GridSphere core portlets cannot be redeployed or removed"/>
    <% } else { %>
+    <% if (description.getRunningState() == TomcatWebAppDescription.STOPPED) { %>
         <ui:actionlink action="doPortletManager" value="  start  ">
-            <ui:actionparam name="operation" value="start"/>
+            <ui:actionparam name="operation" value="  start  "/>
             <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
         </ui:actionlink>
+        <ui:text value="  stop  "/>
+      <% } else { %>
+        <ui:text value="  start  "/>
         <ui:actionlink action="doPortletManager" value="  stop  ">
             <ui:actionparam name="operation" value="stop"/>
             <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>
         </ui:actionlink>
+      <% } %>
         <ui:actionlink action="doPortletManager" value="  reload  ">
             <ui:actionparam name="operation" value="reload"/>
             <ui:actionparam name="context" value="<%= description.getContextPath() %>"/>

@@ -19,16 +19,6 @@ import java.util.List;
 public interface PortletManagerService extends PortletService {
 
     /**
-     * Initializes all the portlet web applications
-     *
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>Portletresponse</code>
-     * @throws IOException if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
-     */
-    public void initAllPortletWebApplications(PortletRequest req, PortletResponse res) throws IOException, PortletException;
-
-    /**
      * Initializes a portlet web application
      *
      * @param webApplicationName the name of the portlet web application
@@ -49,39 +39,6 @@ public interface PortletManagerService extends PortletService {
      * @throws PortletException if a portlet/servlet error occurs
      */
     public void destroyPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException;
-
-    /**
-     * Shuts down all currently active portlet web applications from the portlet container
-     *
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>Portletresponse</code>
-     * @throws IOException if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
-     */
-    public void destroyAllPortletWebApplications(PortletRequest req, PortletResponse res) throws IOException, PortletException;
-
-    /**
-     * Removes a portlet web application from the portlet container. If the web application is active, then the portlets
-     * are shutdown
-     *
-     * @param webApplicationName the name of the portlet web application
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>Portletresponse</code>
-     * @throws IOException if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
-     */
-    public void removePortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException;
-
-    /**
-     * Installs and initializes a portlet web application to the portlet container
-     *
-     * @param webApplicationName the name of the portlet web application
-     * @param req the <code>PortletRequest</code>
-     * @param res the <code>Portletresponse</code>
-     * @throws IOException if an I/O error occurs
-     * @throws PortletException if a portlet/servlet error occurs
-     */
-    public void installPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException;
 
     /**
      * Lists all the portlet web applications known to the portlet container

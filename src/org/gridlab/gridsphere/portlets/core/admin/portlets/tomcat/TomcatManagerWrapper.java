@@ -4,16 +4,15 @@
  */
 package org.gridlab.gridsphere.portlets.core.admin.portlets.tomcat;
 
+import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class TomcatManagerWrapper {
 
@@ -21,6 +20,7 @@ public class TomcatManagerWrapper {
     private final static String PASSWORD = "gridsphere";
 
     private static TomcatManagerWrapper instance = new TomcatManagerWrapper();
+    private PortletManager pm = PortletManager.getInstance();
 
     private TomcatManagerWrapper() {
     }
@@ -70,7 +70,6 @@ public class TomcatManagerWrapper {
             String line = null;
 
             line = reader.readLine();
-            System.err.println("line= " + line);
             StringTokenizer tokenizer = new StringTokenizer(line, "-");
             if (tokenizer.countTokens() == 2) {
                 String rc = tokenizer.nextToken();
@@ -96,18 +95,22 @@ public class TomcatManagerWrapper {
         return doCommand("/list");
     }
 
-    public List getPortletAppList(List webapps) throws TomcatManagerException {
+    public List getPortletAppList() throws TomcatManagerException {
+        List webapps = pm.getPortletWebApplicationNames();
         List l = new ArrayList();
         TomcatWebAppResult result = doCommand("/list");
         if (result != null) {
-            System.err.println("result: " + result.getReturnCode() + " " + result.getDescription());
-        }  else {
-            System.err.println("in getPortletAppList: nothing came back!");
-        }
-        Iterator it = result.getWebAppDescriptions().iterator();
-        while (it.hasNext()) {
-            TomcatWebAppDescription desc = (TomcatWebAppDescription)it.next();
-            if (webapps.contains((desc.getContextPath()))) l.add(desc);
+
+            Iterator it = result.getWebAppDescriptions().iterator();
+            while (it.hasNext()) {
+                TomcatWebAppDescription webAppDesc = (TomcatWebAppDescription)it.next();
+                System.err.println(webAppDesc.toString());
+                if (webapps.contains((webAppDesc.getContextPath()))) {
+                    String desc = pm.getPortletWebApplicationDescription(webAppDesc.getContextPath());
+                    webAppDesc.setDescription(desc);
+                    l.add(webAppDesc);
+                }
+            }
         }
         return l;
     }
