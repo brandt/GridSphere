@@ -7,10 +7,12 @@ package org.gridlab.gridsphere.portlet.impl;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
+import org.apache.log4j.PropertyConfigurator;
 import org.gridlab.gridsphere.portlet.PortletLog;
 
 import java.util.Hashtable;
 import java.util.Map;
+import java.net.URL;
 
 /**
  * The <code>PortletLog</code> provides the portlet with the ability to log
@@ -32,6 +34,11 @@ import java.util.Map;
  * This PortletLogImpl is a proxy for the Log 4J Logger object
  */
 public class SportletLog implements PortletLog {
+
+    static {
+        URL propsURL = SportletLog.class.getResource("/gridsphere/log4j.properties");
+        PropertyConfigurator.configure(propsURL);
+    }
 
     private static Map logMap = new Hashtable();
     private static String thisClassName = SportletLog.class.getName() + ".";
