@@ -67,6 +67,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
         ListBoxBean themeLB = event.getListBoxBean("themeLB");
+        themeLB.clear();
         String themes = getPortletSettings().getAttribute("supported-themes");
         StringTokenizer st = new StringTokenizer(themes, ",");
         while (st.hasMoreTokens()) {
