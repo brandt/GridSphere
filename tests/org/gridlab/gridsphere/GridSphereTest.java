@@ -12,11 +12,11 @@ import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerTest;
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.ServiceDescriptorTest;
 import org.gridlab.gridsphere.portletcontainer.GridSphereServletTest;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDescriptorTest;
-import org.gridlab.gridsphere.services.security.credential.CredentialManagerServiceTest;
-import org.gridlab.gridsphere.services.user.SetupRootUserTest;
-import org.gridlab.gridsphere.services.user.SetupTestGroupsTest;
-import org.gridlab.gridsphere.services.user.SetupTestUsersTest;
-import org.gridlab.gridsphere.services.user.UserManagerServiceTest;
+import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerServiceTest;
+import org.gridlab.gridsphere.services.core.user.SetupRootUserTest;
+import org.gridlab.gridsphere.services.core.user.SetupTestGroupsTest;
+import org.gridlab.gridsphere.services.core.user.SetupTestUsersTest;
+import org.gridlab.gridsphere.services.core.user.UserManagerServiceTest;
 
 import java.net.URL;
 
@@ -48,8 +48,8 @@ public class GridSphereTest extends ServletTestCase {
         suite.addTest(new TestSuite(SetupTestGroupsTest.class));
         suite.addTest(new TestSuite(SetupTestUsersTest.class));
         suite.addTest(new TestSuite(UserManagerServiceTest.class));
-        suite.addTest(new TestSuite(CredentialManagerServiceTest.class));
-
+        suite.addTest(new TestSuite(AccessControlManagerServiceTest.class));
+        //suite.addTest(new TestSuite(CredentialManagerServiceTest.class));
         return suite;
     }
 

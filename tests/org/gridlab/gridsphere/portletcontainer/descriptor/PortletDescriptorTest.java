@@ -26,6 +26,7 @@ import java.util.List;
  */
 public class PortletDescriptorTest extends ServletTestCase {
 
+    private final static String separator = System.getProperty("file.separator");
 
     public PortletDescriptorTest(String name) {
         super(name);
@@ -43,7 +44,7 @@ public class PortletDescriptorTest extends ServletTestCase {
         PortletDeploymentDescriptor pdd = null;
 
         // load files from JAR
-        String portletFile = GridSphereConfig.getProperty(GridSphereConfigProperties.TEST_HOME) + "/portlet-test.xml";
+        String portletFile = GridSphereConfig.getProperty(GridSphereConfigProperties.TEST_HOME) + separator + "portlet-test.xml";
         String mappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING);
 
         try {
