@@ -17,6 +17,7 @@ WebSite
 
 Code
 =====
++ Please move db/ to build/db (Oliver)
 + Portlet Tags packaged -- wrappers for HTML elements (Oliver)
 	Tags, Beans and Models (Oliver)
 + Portlet Tag Documentation (Oliver)
