@@ -105,9 +105,7 @@
                         </ui:tablecell>
                         <ui:tablecell width="50"/>
                         <ui:tablecell width="160">
-                            <ui:text>
                                 <%= new Date(resources[i].getLastModified()).toString()%>
-                            </ui:text>
                         </ui:tablecell>
                         <ui:tablecell width="30"/>
                     </ui:tablerow>
@@ -127,14 +125,10 @@
                             <a href="<%= URIs[i] %>"><%= resources[i].getResource() %></a>
                         </ui:tablecell>
                         <ui:tablecell width="50">
-                            <ui:text>
                                 <%= resources[i].getLength() %>
-                            </ui:text>
                         </ui:tablecell>
-                        <ui:tablecell width="160">
-                            <ui:text>
+                        <ui:tablecell width="190">
                                 <%= new Date(resources[i].getLastModified()).toString()%>
-                            </ui:text>
                         </ui:tablecell>
                         <ui:tablecell width="30">
                             <a href="<%= leftEditURIs.get(i) %>"><ui:text key="COMMANDER_EDIT"/></a>
@@ -242,7 +236,7 @@
                         <ui:tablecell width="50">
                             <ui:text key="COMMANDER_SIZE"/>
                         </ui:tablecell>
-                        <ui:tablecell width="160">
+                        <ui:tablecell width="190">
                             <ui:text key="COMMANDER_LAST_MODIFIED"/>
                         </ui:tablecell>
                         <ui:tablecell width="30"/>
@@ -262,9 +256,7 @@
                         </ui:tablecell>
                         <ui:tablecell width="50"/>
                         <ui:tablecell width="160">
-                            <ui:text>
                                 <%= new Date(resources[i].getLastModified()).toString()%>
-                            </ui:text>
                         </ui:tablecell>
                         <ui:tablecell width="30"/>
                     </ui:tablerow>
@@ -284,14 +276,10 @@
                             <a href="<%= URIs[i] %>"><%= resources[i].getResource() %></a>
                         </ui:tablecell>
                         <ui:tablecell width="50">
-                            <ui:text>
                                 <%= resources[i].getLength() %>
-                            </ui:text>
                         </ui:tablecell>
                         <ui:tablecell width="160">
-                            <ui:text>
                                 <%= new Date(resources[i].getLastModified()).toString()%>
-                            </ui:text>
                         </ui:tablecell>
                         <ui:tablecell width="30">
                             <a href="<%= rightEditURIs.get(i) %>"><ui:text key="COMMANDER_EDIT"/></a>

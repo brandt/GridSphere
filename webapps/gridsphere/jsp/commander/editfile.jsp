@@ -27,9 +27,7 @@
     <ui:tablerow header="true">
         <ui:tablecell width="100%">
             <ui:text key="COMMANDER_EDIT"/>
-            <ui:text>
             <%= userData.getPath(userData.getEditSide())+file.getName() %>
-            </ui:text>
         </ui:tablecell>
     </ui:tablerow>
     <ui:tablerow>
