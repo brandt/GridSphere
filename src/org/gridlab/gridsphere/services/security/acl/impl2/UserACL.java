@@ -12,7 +12,7 @@ public class UserACL extends BaseObject {
     static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(UserACL.class.getName());
 
     private String User;
-    private GroupACL groupacl;
+    private GroupACL GroupACL;
 
     public String getUser() {
         return User;
@@ -23,11 +23,11 @@ public class UserACL extends BaseObject {
     }
 
     public GroupACL getGroupACL() {
-        return groupacl;
+        return GroupACL;
     }
 
     public void setGroupACL(GroupACL group) {
-        this.groupacl = group;
+        this.GroupACL = group;
     }
 }
 
