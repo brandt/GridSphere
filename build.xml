@@ -169,6 +169,8 @@ Copyright:
 
         <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@DB_CONFIG_FILE@" value="${DB_CONFIG_FILE}"/>
         <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@DB_DATABASE@" value="${DB_DATABASE}"/>
+        <echo message="Replaced DB Config with : ${DB_CONFIG_FILE}"/>
+        <echo message="Replaced DB Database with : ${DB_DATABASE}"/>
 
 
         <jar jarfile="${build.lib}/${Name}.jar" basedir="${classes.dir}" >
@@ -478,7 +480,7 @@ Copyright:
     <!-- =================================================================== -->
 
     <target name="test-prepare" description="prepares stuff for unit tests">
-        <property name="DB_CONFIG_FILE=" value="webapps/gridsphere/WEB-INF/conf/hsqldb-junit.xml"/>
+        <property name="DB_CONFIG_FILE" value="webapps/gridsphere/WEB-INF/conf/hsqldb-junit.xml"/>
         <property name="DB_DATABASE" value="junit"/>
         <property name="DB_CREATE_DB" value="db-hsqldb-junit"/>
     </target>
