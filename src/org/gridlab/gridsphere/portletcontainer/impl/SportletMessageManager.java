@@ -2,7 +2,7 @@
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-package org.gridlab.gridsphere.services.core.message.impl;
+package org.gridlab.gridsphere.portletcontainer.impl;
 
 import org.gridlab.gridsphere.portlet.AccessDeniedException;
 import org.gridlab.gridsphere.portlet.PortletLog;
@@ -11,7 +11,6 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.services.core.message.PortletMessageService;
 import org.gridlab.gridsphere.portletcontainer.PortletMessageManager;
 
 import java.util.ArrayList;

@@ -12,13 +12,13 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
+import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
+import org.gridlab.gridsphere.portletcontainer.impl.SportletMessageManager;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.security.AuthenticationException;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
-import org.gridlab.gridsphere.services.core.message.PortletMessageService;
-import org.gridlab.gridsphere.services.core.message.impl.SportletMessageManager;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContextEvent;
