@@ -27,7 +27,7 @@ public class SportletResponse implements PortletResponse {
         this.req = req;
         String mimeType = req.getClient().getMimeType();
         res.setContentType(mimeType);
-        sportletURI = new SportletURI(res);
+        sportletURI = new SportletURI(res, req.getContextPath());
     }
 
     /**

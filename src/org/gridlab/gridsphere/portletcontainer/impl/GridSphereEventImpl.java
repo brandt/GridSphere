@@ -74,7 +74,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
     }
 
     public SportletURI createNewAction(GridSphereEvent.Action action, int PortletComponentID, String ActivePortletID) {
-        SportletURI sportletURI = new SportletURI(portletResponse);
+        SportletURI sportletURI = new SportletURI(portletResponse, portletRequest.getContextPath());
         sportletURI.addParameter(GridSphereProperties.ACTION, action.toString());
         String sid = new Integer(PortletComponentID).toString();
         sportletURI.addParameter(GridSphereProperties.COMPONENT_ID, sid);

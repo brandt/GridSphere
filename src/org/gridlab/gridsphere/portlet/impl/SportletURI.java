@@ -38,12 +38,14 @@ public class SportletURI implements PortletURI {
 
     private Map store = new HashMap();
     private boolean redirect = true;
+    private String contextName;
     private PortletWindow.State state;
 
     public SportletURI() {}
 
-    public SportletURI(HttpServletResponse res) {
+    public SportletURI(HttpServletResponse res, String contextName) {
         store = new HashMap();
+        this.contextName = contextName;
         this.res = res;
     }
 
@@ -98,14 +100,14 @@ public class SportletURI implements PortletURI {
      * @return the URI as a string
      */
     public String toString() {
-        String url = "";
+        String url = contextName;
         String newURL;
         Set set = store.keySet();
         if (!set.isEmpty()) {
             // add question mark
-            url = "?";
+            url = contextName + contextName + "?";
         } else {
-            return url;
+            return contextName + url;
         }
         boolean firstParam = true;
         Iterator it = set.iterator();
