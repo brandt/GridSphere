@@ -10,6 +10,15 @@ import java.util.List;
 public interface PersistenceManagerRdbms {
 
     /**
+     * Creates a session to conduct operations on database
+     *
+     * @return session  Session to conduction operations on database
+     * @throws PersistenceManagerException
+     */
+    public Session getSession() throws PersistenceManagerException;
+
+
+    /**
      * Creates the given object in the permanent storage.
      *
      * @param object object to be saved
