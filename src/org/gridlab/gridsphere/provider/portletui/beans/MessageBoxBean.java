@@ -44,6 +44,26 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
     }
 
     /**
+     * Sets the value of the message to be displayed. All other messages or deleted.
+     *
+     * @param text text to be displayed
+     */
+    public void setValue(String text) {
+        this.text = new ArrayList();
+        this.keys = new ArrayList();
+        this.text.add(text);
+    }
+
+    /**
+     * Returns the text of the messagebox.
+     *
+     * @return text of the messagebox
+     */
+    public String getValue() {
+        return getMessage(false);
+    }
+
+    /**
      * Sets the width of the messgebox
      * @param width witdh of the messagebox
      */
@@ -144,9 +164,11 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
 
     /**
      * Returns the message text. If localized keys were specified the translated (and only those) are returned.
-     * @return
+     *
+     * @param format format as html output
+     * @return text of the messagebox
      */
-    private String getMessage() {
+    private String getMessage(boolean format) {
         String result = null;
 
         List list = text;
@@ -161,7 +183,7 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
                 if (keys.size()!=0) {
                     message = getLocalizedText(message);
                 }
-                sb.append("<div class=\""+messageType+"\">"+message+"</div>");
+                if (format) sb.append("<div class=\""+messageType+"\">"+message+"</div>"); else sb.append(message);
             }
             result = sb.toString();
         }
@@ -176,7 +198,7 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
     public String toEndString() {
         this.cssClass="ui-messagebox";
         StringBuffer sb = new StringBuffer();
-        String message = getMessage();
+        String message = getMessage(true);
         if (height!=null) this.addCssStyle("height=\""+height+"\"");
         if (width!=null) this.addCssStyle("width=\""+width+"\"");
         // only return something if we have a message
