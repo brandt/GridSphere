@@ -87,20 +87,6 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     }
 
     /**
-     * Returns the componentTheme for usage directly in HTML/css
-     *
-     * @return formatted componentTheme to use with html/css
-     */
-    protected String getFormattedComponentTheme() {
-        if (this.theme.equals("")) {
-            return this.theme;
-        } else {
-            return "-"+theme;
-        }
-    }
-
-
-    /**
      * Returns the portlet component label
      *
      * @return the portlet component label

@@ -455,11 +455,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         writer.print("<table  ");
 
         if (getOuterPadding().equals("")) {
-            writer.print(" cellspacing=\"0\" class=\"window-main" + this.getTheme() + "\" ");
+            writer.print(" cellspacing=\"0\" class=\"window-main\"");
         } else {
             //out.print("border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"");        // this is the main table around one portlet
             //out.print(" cellspacing=\""+getOuterPadding()+"\" style=\"padding:"+getOuterPadding()+"px\"  class=\"window-main\" ");        // this is the main table around one portlet
-            writer.print(" cellspacing=\"0\" style=\"margin:" + getOuterPadding() + "px\"  class=\"window-main" + this.getFormattedComponentTheme() + "\" ");        // this is the main table around one portlet
+            writer.print(" cellspacing=\"0\" style=\"margin:" + getOuterPadding() + "px\"  class=\"window-main\" ");        // this is the main table around one portlet
             //out.print("cellpadding=\""+getOuterPadding()+"\" class=\"window-main\" ");        // this is the main table around one portlet
         }
 
@@ -489,7 +489,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 if (!getInnerPadding().equals("")) {
                     writer.print("style=\"padding:" + getInnerPadding() + "px\"");
                 }
-                postframe.append(" class=\"window-content" + this.getFormattedComponentTheme() + "\"> ");
+                postframe.append(" class=\"window-content\"> ");
             } else {
                 postframe.append("<tr><td >");
             }
