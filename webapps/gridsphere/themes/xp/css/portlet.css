@@ -326,25 +326,17 @@ in lighter color
 /**********************************************
   Text in every other row in the table
 **********************************************/
-.portlet-section-alternate{
+.portlet-section-alternate {
    color:black;
    background-color:linen;
-   font-size:12px;
-   font-weight:normal;
-   font-style:normal;
-   font-family:verdana, arial, sans-serif;
-   line-height:normal;
    text-align:left;
    text-decoration:none;
-   border-left: thin  solid black;
-   border-right: thin  solid black;
-   border-bottom: thin  solid black;
 }
 
 /**********************************************
   Text in a selected cell range
 **********************************************/
-.portlet-section-selected{
+.portlet-section-selected {
    color:grey;
    background-color:white;
    font-size:12px;
