@@ -6,10 +6,7 @@ package org.gridlab.gridsphere.portlet.service.spi.impl.descriptor;
 
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
 
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.Properties;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * The <code>SportletServiceDefinition</code> defines a portlet service
@@ -19,7 +16,7 @@ public class SportletServiceDefinition {
 
     protected SportletServiceDescriptor serviceDescriptor = null;
     protected String serviceName = "";
-    protected String serviceDescription = "";
+    protected List serviceDescriptions = new Vector();
     protected String serviceInterface = "";
     protected String serviceImplementation = "";
     protected boolean userRequired = false;
@@ -68,8 +65,8 @@ public class SportletServiceDefinition {
      *
      * @param serviceDescription the portlet service description
      */
-    public void setServiceDescription(String serviceDescription) {
-        this.serviceDescription = serviceDescription;
+    public void setServiceDescription(List serviceDescriptions) {
+        this.serviceDescriptions = serviceDescriptions;
     }
 
     /**
@@ -77,8 +74,8 @@ public class SportletServiceDefinition {
      *
      * @return the portlet service name
      */
-    public String getServiceDescription() {
-        return this.serviceDescription;
+    public List getServiceDescription() {
+        return this.serviceDescriptions;
     }
 
     /**
@@ -225,7 +222,7 @@ public class SportletServiceDefinition {
     public String toString() {
         StringBuffer sb = new StringBuffer("\n");
         sb.append("service name: " + this.serviceName + "\n");
-        sb.append("service description: " + this.serviceDescription + "\n");
+        sb.append("service description: " + this.serviceDescriptions.get(0) + "\n");
         sb.append("service interface: " + this.serviceInterface + "\n");
         sb.append("service implementation: " + this.serviceImplementation + "\n");
         sb.append("user required: " + this.userRequired + "\n");
