@@ -75,6 +75,19 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
     }
 
     /**
+     * Returns the selected values as a list
+     *
+     * @return selected values as a the list
+     */
+    public String getSelectedValue() {
+        if (results.isEmpty()) {
+            return null;
+        } else {
+            return (String)results.get(0);
+        }
+    }
+
+    /**
      * Adds a selected value to this bean
      *
      * @param value a selected value
