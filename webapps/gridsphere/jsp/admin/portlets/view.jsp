@@ -96,6 +96,10 @@
 </ui:panel>
 </ui:form>
 
+<%--
+
+// uploading portlet WAR files TBD
+
 <ui:fileform action="uploadPortletWAR">
 <ui:panel>
         <ui:frame>
@@ -120,3 +124,5 @@
         </ui:frame>
  </ui:panel>
  </ui:fileform>
+
+--%>
