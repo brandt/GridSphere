@@ -375,6 +375,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         // user.setEmailAddress(requestImpl.getEmailAddress())
         // change user in database
         // return user
+        return newuser;
     }
 
 }
