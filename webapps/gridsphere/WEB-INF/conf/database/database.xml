@@ -1,0 +1,16 @@
+<!DOCTYPE databases PUBLIC "-//EXOLAB/Castor JDO Configuration DTD Version 1.0//EN" "http://castor.exolab.org/jdo-conf.dtd">
+
+<database name="portal" engine="mysql" >
+    <driver url="jdbc:mysql://127.0.0.1/portal" class-name="org.gjt.mm.mysql.Driver">
+         <param name="user" value="root" />
+         <param name="password" value="" />
+    </driver>
+
+    <mapping href="../mapping/jdo/acl-mapping.xml" />
+    <mapping href="../mapping/jdo/useracl-mapping.xml"/>
+    <mapping href="../mapping/jdo/sportletuserimpl-mapping.xml"/>
+    <mapping href="../mapping/jdo/accountrequestimpl-mapping.xml"/>
+</database>
+
+
+

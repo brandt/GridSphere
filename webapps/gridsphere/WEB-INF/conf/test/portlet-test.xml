@@ -17,18 +17,10 @@
                 <minimized/>
             </allows>
             <supports>
-                <markup name="html">
-                    <view/>
-                    <edit/>
-                    <help/>
-                    <configure/>
-                </markup>
-                <markup name="wml">
-                    <view/>
-                    <edit/>
-                    <help/>
-                    <configure/>
-                </markup>
+                <view/>
+                <edit/>
+                <help/>
+                <configure/>
             </supports>
         </portlet-app>
 
@@ -36,10 +28,6 @@
             <context-param>
                 <param-name>buzzle</param-name>
                 <param-value>yea</param-value>
-            </context-param>
-            <context-param>
-                <param-name>beezle</param-name>
-                <param-value>yo</param-value>
             </context-param>
             <concrete-portlet>
                 <portlet-name>Hello World 1</portlet-name>
@@ -56,9 +44,7 @@
                     <description>Hier ist ein gleicht portlet</description>
                     <keywords>portlet hallo welt</keywords>
                 </language>
-                <allowed-access visibility="private">
-                    <role>ADMIN</role>
-                </allowed-access>
+                <allowed-access visibility="PRIVATE" role="ADMIN"/>
                 <config-param>
                     <param-name>Portlet Mistress</param-name>
                     <param-value>mistress@domain.com</param-value>
@@ -80,9 +66,7 @@
                     <description>Here is another simple portlet</description>
                     <keywords>portlet hello world</keywords>
                 </language>
-                <allowed-access visibility="public">
-                    <role>USER</role>
-                </allowed-access>
+                <allowed-access visibility="PUBLIC" role="USER"/>
                 <config-param>
                     <param-name>Portlet Master</param-name>
                     <param-value>secondguy@some.com</param-value>
