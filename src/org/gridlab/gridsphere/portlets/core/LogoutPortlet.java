@@ -38,7 +38,7 @@ public class LogoutPortlet extends AbstractPortlet {
 
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         PrintWriter out = response.getWriter();
-        out.println("<b>logout</b>");
+        getPortletConfig().getContext().include("/jsp/logout.jsp", request, response);
     }
 
 }
