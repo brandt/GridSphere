@@ -9,8 +9,8 @@ import org.gridlab.gridsphere.portlet.PortletConfig;
 import org.gridlab.gridsphere.portlet.PortletSettings;
 
 /**
- * A RegsiteredSportlet provides the portlet container with information used to create and manage the
- * portlet's lifecycle. A RegsiteredPortlet is responsible for parsing the portlet.xml file for
+ * A RegisteredSportlet provides the portlet container with information used to create and manage the
+ * portlet's lifecycle. A RegisteredPortlet is responsible for parsing the portlet.xml file for
  * portlet settings and portlet configuration information. The RegisteredPortlet also maintains an instantiated
  * portlet that is managed by the portlet container.
  */

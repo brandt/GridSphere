@@ -14,6 +14,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletConfig;
 import org.gridlab.gridsphere.portlet.impl.SportletSettings;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
+import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication;
 import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 
@@ -25,7 +26,7 @@ import java.util.List;
 
 /**
  * A RegisteredSportlet provides the portlet container with information used to create and manage the
- * portlet's lifecycle. A RegsiteredPortlet is responsible for parsing the portlet.xml file for
+ * portlet's lifecycle. A RegisteredPortlet is responsible for parsing the portlet.xml file for
  * portlet settings and portlet configuration information. The RegisteredPortlet also maintains an instantiated
  * portlet that is managed by the portlet container.
  */
@@ -37,19 +38,19 @@ public class RegisteredSportlet implements RegisteredPortlet {
     private PortletConfig portletConfig = null;
     private PortletSettings portletSettings = null;
     private String portletName = "Undefined PortletInfo";
-
+  /*
     public RegisteredSportlet(ServletConfig servletConfig) throws Exception {
         configure(servletConfig);
     }
-
-    public RegisteredSportlet(PortletApplication app) throws Exception {
-        configure(app);
+  */
+    public RegisteredSportlet(PortletApplication portletApp, ConcretePortletApplication concreteApp) throws Exception {
+        configure(portletApp, concreteApp);
     }
 
-    protected synchronized void configure(PortletApplication app) throws Exception {
+    protected synchronized void configure(PortletApplication portletApp, ConcretePortletApplication concreteApp) throws Exception {
         String portletClass = null;
-        String uid = app.getUid();
-        portletName = app.getName();
+        String uid = concreteApp.getUID();
+        portletName = concreteApp.getName();
         try {
             abstractPortlet = (AbstractPortlet) Class.forName(uid).newInstance();
         } catch (Exception e) {
@@ -81,19 +82,19 @@ public class RegisteredSportlet implements RegisteredPortlet {
 
         // Create Access Control Service
         AccessControlService aclService = (AccessControlService)portletConfig.getContext().getService(AccessControlService.class);
-        List groups = aclService.getAllGroups();
-        List roles = aclService.getAllRoles();
+        List allGroups = aclService.getAllGroups();
+        List allRoles = aclService.getAllRoles();
 
         PortletDeploymentDescriptor pdd = new PortletDeploymentDescriptor(portletFilePath, mappingFilePath);
 
         //String portletClass = "org.gridlab.gridsphere.portlets.HelloWorld";
-        Iterator portletApps = pdd.getPortletApp().iterator();
+        Iterator portletApps = pdd.getPortletDef().iterator();
         while (portletApps.hasNext()) {
-            PortletApplication portletApp = (PortletApplication) portletApps.next();
+            ConcretePortletApplication portletApp = (ConcretePortletApplication) portletApps.next();
 
             // create SportletSettings for each <portlet-app> definition
-            portletSettings = new SportletSettings(portletApp, groups, roles);
-            String portletClass = portletApp.getUid();
+            portletSettings = new SportletSettings(portletApp, allGroups, allRoles);
+            String portletClass = portletApp.getUID();
             portletName = portletApp.getName();
             try {
                 abstractPortlet = (AbstractPortlet) Class.forName(portletClass).newInstance();
