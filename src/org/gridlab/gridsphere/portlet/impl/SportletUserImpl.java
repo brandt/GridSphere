@@ -15,15 +15,13 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 /**
- * The Role interface is an abstract view on the user-specific data.
+ * The User interface is an abstract view on the user-specific data.
  * Apart from a set of pre-defined, fixed set of attributes,
- * the interface gives access to user data as well.
+ * the interface gives access to user profile data.
  */
 
 
 public class SportletUserImpl extends BaseObject implements SportletUser {
-
-    protected transient static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(SportletUserImpl.class);
 
     // store used to maintain user attributes
     private Hashtable Store = new Hashtable();
@@ -39,10 +37,23 @@ public class SportletUserImpl extends BaseObject implements SportletUser {
 
     public Vector Attributes = new Vector();
 
-    public void setAttribute(String name, Object value) {
+    /**
+     * Sets the value of the attribute with the given name,
+     *
+     * @param name the attribute name
+     * @param value the attribute value
+     */
+    public void setAttribute(String name, String value) {
         Store.put(name, value);
     }
 
+    /**
+     * Returns the value of the attribute with the given name,
+     * or null if no attribute with the given name exists.
+     *
+     * @param name the attribute name
+     * @return the attribute value
+     */
     public Object getAttribute(String name) {
         return Store.get(name);
     }
