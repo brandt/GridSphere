@@ -177,28 +177,38 @@ Copyright:
     <!-- Database stuff                                         -->
     <!-- =================================================================== -->
 
-    <target name="install-database" depends="setenv">
-        <echo message="Installing Database at: ${GRIDSPHERE_HOME}/gridsphere/database/gridsphere"/>
-        <echo message="Using script: config/database/create.sql"/>
-        <sql driver="org.hsqldb.jdbcDriver"
-           url="jdbc:hsqldb:${GRIDSPHERE_HOME}/gridsphere/database/gridsphere"
-           userid="sa"
-           password=""
-           onerror="continue"
-           src="config/database/create.sql">
-           <classpath refid="classpath"/>
-        </sql>
-        <mkdir dir="${GRIDSPHERE_HOME}/${project.name}/database"/>
-        <echo message="Copying mapping file config/database/${project.name}-mapping.xml"/>
-        <copy file="config/database/${project.name}-mapping.xml" todir="${GRIDSPHERE_HOME}/${project.name}/database"/>
-        <echo message="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"/>
-        <echo message="Make sure you add "/>
-        <echo message="       ${GRIDSPHERE_HOME}/${project.name}/database/${project.name}-mapping.xml "/>
-        <echo message="  to your database.xml in the mapping section!"/>
-        <echo message="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"/>
+    <target name="createdatabase" depends="setenv">
+          <taskdef name="schemaexport"
+              classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask"
+              classpathref="classpath"/>
+
+          <schemaexport
+              properties="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/hibernate.properties"
+              quiet="yes"
+              text="no"
+              drop="no"
+              delimiter=";"
+              output="schema-export.sql">
+              <fileset dir="webapp/WEB-INF/persistence/">
+                  <include name="**/*.hbm.xml"/>
+              </fileset>
+          </schemaexport>
+      </target>
+
+
+        <target name="updatedatabase" depends="setenv, compile">
+        <taskdef name="schemaupdate"
+            classname="net.sf.hibernate.tool.hbm2ddl.SchemaUpdateTask"
+            classpathref="classpath"/>
+
+        <schemaupdate
+            properties="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/hibernate.properties"
+            quiet="yes">
+            <fileset dir="webapp/WEB-INF/persistence/">
+                <include name="**/*.hbm.xml"/>
+            </fileset>
+        </schemaupdate>
     </target>
-
-
     <!-- =================================================================== -->
     <!-- Creates a @PROJECT_TITLE@ JAR library archive configured for Tomcat -->
     <!-- =================================================================== -->
