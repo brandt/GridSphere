@@ -361,7 +361,11 @@ public class GroupManagerPortlet extends ActionPortlet {
         User root = evt.getPortletRequest().getUser();
         if (groupEntryUser != null) {
             addGroupEntry(root, groupEntryUser, group, groupEntryRole);
+            if (groupEntryUser.getID().equals(root.getID())) {
+                layoutMgr.addApplicationTab(evt.getPortletRequest(), group.getName());
+            }
             layoutMgr.addApplicationTab(groupEntryUser, group.getName());
+
         } else {
             log.debug("Unable to get user: " + groupEntryUserID);
         }
@@ -406,6 +410,9 @@ public class GroupManagerPortlet extends ActionPortlet {
             // remove group layout
             PortletRegistry portletRegistry = PortletRegistry.getInstance();
             List portletIds =  portletRegistry.getAllConcretePortletIDs(req.getRole(), entry.getGroup().getName());
+            if (entry.getUser().getID().equals(root.getID())) {
+                this.layoutMgr.removePortlets(req, portletIds);
+            }
             this.layoutMgr.removePortlets(req, entry.getUser(), portletIds);
             //this.layoutMgr.removeApplicationTab(entry.getUser(), entry.getGroup().getName());
             // Put entry in list

@@ -121,6 +121,7 @@ public class UserManager implements UserManagerService {
         }
 
         // put root in all groups
+        /*
         List groups = aclManager.getGroups();
         Iterator it = groups.iterator();
         while (it.hasNext()) {
@@ -141,7 +142,7 @@ public class UserManager implements UserManagerService {
                 log.debug("adding root user to group: " + group.getName());
             }
         }
-
+        */
         log.info("Exiting initRootUser()");
     }
 

@@ -241,16 +241,18 @@ public class AccessControlManager implements AccessControlManagerService {
         PortletGroup group = request.getGroup();
         PortletRole role = request.getRole();
         // If role is super but group isn't, throw invalid access request exception
-        if (role.equals(PortletRole.SUPER) && (! group.equals(SportletGroup.SUPER) )) {
-            String msg = "Super role can only exist in super group.";
-            log.info(msg);
-            throw new InvalidGroupRequestException(msg);
+       // if (role.equals(PortletRole.SUPER) && (! group.equals(SportletGroup.SUPER) )) {
+        //    String msg = "Super role can only exist in super group.";
+        //    log.info(msg);
+         //   throw new InvalidGroupRequestException(msg);
         // If group is super but role isn't, throw invalid access request exception
-        } else if (group.equals(SportletGroup.SUPER) && (!role.equals(PortletRole.SUPER) )) {
-            String msg = "Super group can only contain super role.";
-            log.info(msg);
-            throw new InvalidGroupRequestException(msg);
-        } else if (! (role.equals(PortletRole.ADMIN) ||
+        // } else if (group.equals(SportletGroup.SUPER) && (!role.equals(PortletRole.SUPER) )) {
+         //   String msg = "Super group can only contain super role.";
+          //  log.info(msg);
+          //  throw new InvalidGroupRequestException(msg);
+        //} else
+
+        if (! (role.equals(PortletRole.ADMIN) ||
                       role.equals(PortletRole.USER)  ||
                       role.equals(PortletRole.GUEST) )) {
             String msg = "Portlet role [" + role + "] not recognized.";
@@ -304,12 +306,12 @@ public class AccessControlManager implements AccessControlManagerService {
     }
 
     public List getGroupEntries(User user) {
-        if (hasSuperRole(user)) {
-            return new Vector();
-        } else {
+        //if (hasSuperRole(user)) {
+        //    return new Vector();
+        //} else {
             String criteria = "where groupEntry.sportletUser.oid='" + user.getID() + "'";
             return selectGroupEntries(criteria);
-        }
+        //}
     }
 
     public List getGroupEntries(PortletGroup group) {
@@ -542,9 +544,9 @@ public class AccessControlManager implements AccessControlManagerService {
         while (allUsers.hasNext()) {
             User user = (User)allUsers.next();
             // If user has super role, don't include
-            if (hasSuperRole(user)) {
-                continue;
-            }
+         //   if (hasSuperRole(user)) {
+           //     continue;
+          //  }
             // Else, if user not in group, then include
             if (!isUserInGroup(user, group)) {
                 usersNotInGroup.add(user);
@@ -560,9 +562,9 @@ public class AccessControlManager implements AccessControlManagerService {
     public List getGroups(User user) {
         List groups = null;
         // If user has super role
-        if (hasSuperRole(user)) {
-            groups = getGroups();
-        } else {
+        //if (hasSuperRole(user)) {
+        //    groups = getGroups();
+        //} else {
             // Otherwise, return groups for given user
             String oql = "select groupEntry.sportletGroup from "
                        + jdoGroupEntry
@@ -576,7 +578,7 @@ public class AccessControlManager implements AccessControlManagerService {
                 log.error(msg, e);
                 return new Vector();
             }
-        }
+       // }
         return groups;
     }
 
@@ -595,15 +597,15 @@ public class AccessControlManager implements AccessControlManagerService {
     }
 
     public PortletRole getRoleInGroup(User user, PortletGroup group) {
-        if (hasSuperRole(user)) {
-            return PortletRole.SUPER;
-        } else {
+        //if (hasSuperRole(user)) {
+        //    return PortletRole.SUPER;
+        //} else {
             GroupEntry entry = getGroupEntry(user, group);
             if (entry == null) {
                 return PortletRole.GUEST;
             }
             return entry.getRole();
-        }
+        //}
     }
 
     public void addGroupEntry(User user, PortletGroup group, PortletRole role) {
@@ -648,7 +650,8 @@ public class AccessControlManager implements AccessControlManagerService {
     }
 
     public void grantSuperRole(User user) {
-        addGroupEntry(user, SportletGroup.SUPER, PortletRole.SUPER);
+        //addGroupEntry(user, SportletGroup.SUPER, PortletRole.SUPER);
+        addGroupEntry(user, SportletGroup.CORE, PortletRole.SUPER);
     }
 
     public void revokeSuperRole(User user) {
@@ -656,6 +659,7 @@ public class AccessControlManager implements AccessControlManagerService {
     }
 
     public boolean hasSuperRole(User user) {
-        return isUserInGroup(user, SportletGroup.SUPER);
+        return hasRoleInGroup(user, SportletGroup.CORE, PortletRole.SUPER);
+        //isUserInGroup(user, SportletGroup.SUPER);
     }
 }

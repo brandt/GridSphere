@@ -162,7 +162,7 @@ public class PortletApplicationManager extends ActionPortlet {
         setNextState(req, DEFAULT_VIEW_PAGE);
     }
 
-    public void uploadFile(FormEvent event) throws PortletException {
+    public void uploadPortletWAR(FormEvent event) throws PortletException {
         log.debug("in FileManagerPortlet: doUploadFile");
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
@@ -181,10 +181,10 @@ public class PortletApplicationManager extends ActionPortlet {
                 throw new PortletException("PortletRegistry service unavailable! ", e);
             }
 
-            //tomcat.installWebApp(appName)
             int isWar = fileName.indexOf(".war");
             if (isWar > 0) {
                 String appName = fileName.substring(0, isWar);
+                log.debug("installing and initing webapp: " + appName);
                 tomcat.installWebApp(appName, fileName);
                 portletManager.initPortletWebApplication(appName, req, res);
             }

@@ -43,7 +43,7 @@ public interface LayoutManagerService extends PortletService {
 
     public void addApplicationTab(User user, String webAppName);
 
-    public void removeApplicationTab(User user, String webAppName);
+    //public void removeApplicationTab(User user, String webAppName);
 
     public void removeSubscribedPortlet(PortletRequest req, String portletClassName);
 

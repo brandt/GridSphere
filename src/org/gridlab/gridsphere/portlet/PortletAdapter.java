@@ -138,9 +138,12 @@ public abstract class PortletAdapter extends Portlet {
         }
 
         String groupName = portletConfig.getGroupName();
-        PortletGroup group = PortletGroupFactory.createPortletGroup(groupName);
+        //PortletGroup group = PortletGroupFactory.createPortletGroup(groupName);
+        PortletGroup group = aclService.getGroupByName(groupName);
         PortletRole role = aclService.getRoleInGroup(request.getUser(), group);
+
         log.debug("Setting Group: " + group.toString() + " Role: " + role.toString());
+
         request.setAttribute(SportletProperties.PORTLET_GROUP, group);
         request.setAttribute(SportletProperties.PORTLET_ROLE, role);
 

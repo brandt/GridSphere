@@ -345,7 +345,7 @@ public class UserManagerPortlet extends ActionPortlet {
             this.aclManagerService.grantSuperRole(user);
         } else {
             // Revoke super role (in case they had it)
-            this.aclManagerService.revokeSuperRole(user);
+            //this.aclManagerService.revokeSuperRole(user);
             // Create appropriate access request
             GroupRequest groupRequest = this.aclManagerService.createGroupRequest();
             groupRequest.setUser(user);

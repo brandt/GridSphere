@@ -12,6 +12,7 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletContext;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
@@ -210,9 +211,13 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             groups.add(PortletGroupFactory.GRIDSPHERE_GROUP);
         } else {
             groups = aclService.getGroups(user);
-            role = aclService.getRoleInGroup(user, PortletGroupFactory.GRIDSPHERE_GROUP);
+            role = aclService.getRoleInGroup(user, SportletGroup.CORE);
+
+            System.err.println("SETTING ROLE=" + role);
         }
         req.setAttribute(SportletProperties.PORTLET_USER, user);
+
+
         req.setAttribute(SportletProperties.PORTLETGROUPS, groups);
         req.setAttribute(SportletProperties.PORTLET_ROLE, role);
     }
@@ -249,7 +254,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 PortletGroup g = (PortletGroup)it.next();
                 log.debug("groups:" + g.toString());
             }
-            PortletRole role = aclService.getRoleInGroup(user, PortletGroupFactory.GRIDSPHERE_GROUP);
+            PortletRole role = aclService.getRoleInGroup(user, SportletGroup.CORE);
             req.setAttribute(SportletProperties.PORTLET_ROLE, role);
             req.setAttribute(SportletProperties.PORTLETGROUPS, groups);
             log.debug("Adding User: " + user.getID() + " with session:" + session.getId() + " to usersessionmanager");

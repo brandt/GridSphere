@@ -414,6 +414,7 @@ public class PortletPageFactory implements PortletSessionListener {
                 log.error("unable to save layout", e);
             }
         }
+
         return page;
     }
 
@@ -421,17 +422,18 @@ public class PortletPageFactory implements PortletSessionListener {
         // is user a SUPER?
         PortletPage page = null;
         PortletRole role = req.getRole();
-        if (role.equals(PortletRole.SUPER)) {
+
+       /* if (role.equals(PortletRole.SUPER)) {
 
             page = createFromAllWebApps(req);
 
 
-        }  else {
+        }  else {   */
 
             List groups = (List)req.getAttribute(SportletProperties.PORTLETGROUPS);
             page = createFromGroups(req, groups);
 
-        }
+       // }
 
         // save user's layout
         try {

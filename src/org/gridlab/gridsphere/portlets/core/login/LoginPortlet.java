@@ -271,7 +271,7 @@ public class LoginPortlet extends ActionPortlet {
         log.debug("Entering saveUserRole()");
 
         // Revoke super role (in case they had it)
-        this.aclService.revokeSuperRole(user);
+        //this.aclService.revokeSuperRole(user);
         // Create appropriate access request
         GroupRequest groupRequest = this.aclService.createGroupRequest();
         groupRequest.setUser(user);

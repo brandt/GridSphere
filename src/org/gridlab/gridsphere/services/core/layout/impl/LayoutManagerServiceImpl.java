@@ -86,6 +86,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         }
     }
 
+    /*
     public void removeApplicationTab(User user, String webAppName) {
         pageFactory.removePortletApplicationTab(user, webAppName);
         PortletPage page = pageFactory.createPortletPage(user);
@@ -96,6 +97,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
             log.error("Unable to save layout!", e);
         }
     }
+    */
 
     /*
     public List getAvailableConcretePortletIDs(PortletRequest req) {
