@@ -46,7 +46,7 @@ Version: $Id$
 }
 
 .portlet-frame-actions {
-  background-color: #CCCCCC;
+  background-color: #7997DE;
   border: none;
   color: #000000;
   font-family: inherit;
@@ -79,16 +79,17 @@ Version: $Id$
 }
 
 .portlet-frame-header {
-  background-color: #7997DE;
+  background-color: #CCCCFF;
   border-none;
-  color: #FFFFFF;
+  color: #000000;
   font-family: inherit;
+  font-size: 10px;
   text-align: center;
   padding: 1;
 }
 
 .portlet-frame-header-checkbox {
-  background-color: #7997DE;
+  background-color: #cbccce;
   border-none;
   color: #FFFFFF;
   font-family: inherit;

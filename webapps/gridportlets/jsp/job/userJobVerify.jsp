@@ -35,7 +35,7 @@
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-message">
-              Last Step: Verify Job
+              <b>Last Step: Verify Job</b>
           </td>
         </tr>
         <tr>

@@ -20,7 +20,7 @@
   </tr>
   <tr>
     <td>
-      <gs:table bean="userList" cellspacing="1"/>
+      <gs:table bean="userList"/>
     </td>
   </tr>
 </table>

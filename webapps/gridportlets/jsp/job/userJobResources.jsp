@@ -19,7 +19,7 @@
         </tr>
         <tr>
           <td class="portlet-frame-message">
-              Step 2: Edit Job Resources
+              <b>Step 2: Edit Job Resources</b>
           </td>
         </tr>
         <tr>

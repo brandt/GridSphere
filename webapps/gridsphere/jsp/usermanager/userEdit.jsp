@@ -11,20 +11,14 @@
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td class="portlet-frame-message-alert">
-            <gs:text name="errorMessageBean"/>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
           <td class="portlet-frame-actions">
             <gs:submit name="doConfirmEditUser" value="Save User"/>
             &nbsp;&nbsp;<gs:submit name="doCancelEditUser" value="Cancel Edit"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-message-alert">
+            <gs:text bean="errorMessage"/>
           </td>
         </tr>
       </table>

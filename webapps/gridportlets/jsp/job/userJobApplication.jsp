@@ -23,7 +23,7 @@
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-message">
-              Step 1: Edit Job Application
+              <b>Step 1: Edit Job Application</b>
           </td>
         </tr>
         <tr>
@@ -111,9 +111,7 @@
         </tr>
         <tr>
           <td class="portlet-frame-input">
-             <textarea name="environment" cols="50" rows="4">
-               <%=jobManagerBean.getParameter("environment")%>
-             </textarea>
+             <textarea name="environment" cols="50" rows="4"><%=jobManagerBean.getParameter("environment")%></textarea>
           </td>
         </tr>
       </table>
