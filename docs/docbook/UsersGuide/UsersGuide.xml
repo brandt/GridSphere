@@ -14,7 +14,7 @@
 
 <!ENTITY chap-config SYSTEM "config.xml">
 
-<!ENTITY chap-config SYSTEM "install.xml">
+<!ENTITY chap-install SYSTEM "install.xml">
 
 <!-- Application, page, library, component specification entities  -->
 ]>
