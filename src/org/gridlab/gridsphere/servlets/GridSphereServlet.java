@@ -2,7 +2,7 @@
 * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
 * @version $Id$
 */
-package org.gridlab.gridsphere.portletcontainer;
+package org.gridlab.gridsphere.servlets;
 
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
@@ -15,12 +15,15 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletMessageManager;
+import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
+import org.gridlab.gridsphere.services.core.request.RequestService;
+import org.gridlab.gridsphere.services.core.request.GenericRequest;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -29,7 +32,6 @@ import javax.servlet.http.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.*;
 
 
@@ -65,12 +67,17 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     /* Session manager maps users to sessions */
     private UserSessionManager userSessionManager = UserSessionManager.getInstance();
 
+    /* creates cookie requests */
+    private RequestService requestService = null;
+
     private PortletContext context = null;
     private static Boolean firstDoGet = Boolean.TRUE;
 
     private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
 
     //private static PortletRegistry registry = PortletRegistry.getInstance();
+    private static final String COOKIE_REQUEST = "cookie-request";
+    private int COOKIE_EXPIRATION_TIME = 60 * 60 * 24 * 7;  // 1 week (in secs)
 
     private boolean isTCK = false;
 
@@ -82,7 +89,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public final void init(ServletConfig config) throws ServletException {
         super.init(config);
+
         GridSphereConfig.setServletConfig(config);
+        SportletLog.setConfigureURL(GridSphereConfig.getServletContext().getRealPath("/WEB-INF/classes/log4j.properties"));
         this.context = new SportletContext(config);
         factory = SportletServiceFactory.getInstance();
         log.debug("in init of GridSphereServlet");
@@ -91,6 +100,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public synchronized void initializeServices() throws PortletServiceException {
         // discover portlets
         // create groups from portlet web apps
+
+        requestService = (RequestService) factory.createPortletService(RequestService.class, getServletConfig().getServletContext(), true);
         log.debug("Creating access control manager service");
         aclService = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, getServletConfig().getServletContext(), true);
         // create root user in default group if necessary
@@ -113,6 +124,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         processRequest(req, res);
+
+
     }
 
     public void processRequest(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
@@ -128,7 +141,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 // checking if database setup is correct
                 DBTask dt = new DBTask();
                 dt.setAction(DBTask.ACTION_CHECKDB);
-                dt.setConfigDir(GridSphereConfig.getServletContext().getRealPath("/WEB-INF/persistence/"));
+                dt.setConfigDir(GridSphereConfig.getServletContext().getRealPath("/WEB-INF"));
                 try {
                     dt.execute();
 
@@ -144,10 +157,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 try {
                     // initialize needed services
                     initializeServices();
-
                     // create a root user if none available
                     userManagerService.initRootUser();
-
                     // initialize all portlets
                     PortletInvoker.initAllPortlets(portletReq, portletRes);
                 } catch (PortletException e) {
@@ -158,6 +169,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 firstDoGet = Boolean.FALSE;
             }
         }
+
+
+        checkUserHasCookie(event);
 
         setUserAndGroups(portletReq);
 
@@ -280,6 +294,89 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         req.setAttribute(SportletProperties.PORTLET_ROLE, role);
     }
 
+    protected void checkUserHasCookie(GridSphereEvent event) {
+        PortletRequest req = event.getPortletRequest();
+        User user = req.getUser();
+        if (user instanceof GuestUser) {
+            Cookie[] cookies = req.getCookies();
+            if (cookies != null) {
+                for (int i = 0; i < cookies.length; i++) {
+                    Cookie c = cookies[i];
+                    System.err.println("found a cookie:");
+                    System.err.println("name=" + c.getName());
+                    System.err.println("value=" + c.getValue());
+                    if (c.getName().equals("gsuid")) {
+
+                        String cookieVal = c.getValue();
+                        int hashidx = cookieVal.indexOf("#");
+                        if (hashidx > 0) {
+                            String uid = cookieVal.substring(0, hashidx);
+
+                            System.err.println("uid = " + uid);
+
+                            String reqid = cookieVal.substring(hashidx+1);
+                            System.err.println("reqid = " + reqid);
+
+                            GenericRequest genreq = requestService.getRequest(reqid, COOKIE_REQUEST);
+                            if (genreq != null) {
+
+                                if (genreq.getUserID().equals(uid)) {
+                                    User newuser = userManagerService.getUser(uid);
+                                    if (newuser != null) {
+                                        setUserSettings(event, newuser);
+                                    }
+                                }
+                            }
+                        }  else {
+                            System.err.println("grrrr");
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    protected void setUserCookie(GridSphereEvent event) {
+        PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
+
+        User user = req.getUser();
+        GenericRequest request = requestService.createRequest(COOKIE_REQUEST);
+        Cookie cookie = new Cookie("gsuid", user.getID() + "#" + request.getOid());
+        request.setUserID(user.getID());
+        long time = Calendar.getInstance().getTime().getTime() + COOKIE_EXPIRATION_TIME * 1000;
+        request.setLifetime(new Date(time));
+        requestService.saveRequest(request);
+
+        // COOKIE_EXPIRATION_TIME is specified in secs
+        cookie.setMaxAge(COOKIE_EXPIRATION_TIME);
+        res.addCookie(cookie);
+        System.err.println("adding a  cookie");
+    }
+
+    protected void removeUserCookie(GridSphereEvent event) {
+        PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (int i = 0; i < cookies.length; i++) {
+                Cookie c = cookies[i];
+                if (c.getName().equals("gsuid")) {
+                    int idx = c.getValue().indexOf("#");
+                    if (idx > 0) {
+                        String reqid = c.getValue().substring(idx+1);
+                        System.err.println("reqid= " + reqid);
+                        GenericRequest request = requestService.getRequest(reqid, COOKIE_REQUEST);
+                        if (request != null) requestService.deleteRequest(request);
+                    }
+                    c.setMaxAge(0);
+                    res.addCookie(c);
+                }
+            }
+        }
+
+    }
+
     /**
      * Handles login requests
      *
@@ -289,9 +386,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         log.debug("in login of GridSphere Servlet");
 
         String LOGIN_ERROR_FLAG = "LOGIN_FAILED";
-
-        PortletRequest req = event.getPortletRequest();
-        PortletSession session = req.getPortletSession(true);
+         PortletRequest req = event.getPortletRequest();
 
         String username = req.getParameter("username");
         String password = req.getParameter("password");
@@ -301,24 +396,39 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             User user = loginService.login(username, password);
             // null out passwd
             password = null;
-            req.setAttribute(SportletProperties.PORTLET_USER, user);
-            session.setAttribute(SportletProperties.PORTLET_USER, user.getID());
-            if (user.getAttribute(User.LOCALE) != null) {
-                session.setAttribute(User.LOCALE, new Locale((String)user.getAttribute(User.LOCALE), "", ""));
+            setUserSettings(event, user);
+
+            String remme = req.getParameter("remlogin");
+            if (remme != null) {
+                setUserCookie(event);
+            } else {
+                removeUserCookie(event);
             }
-            if (aclService.hasSuperRole(user)) {
-                log.debug("User: " + user.getUserName() + " logged in as SUPER");
-            }
-            setUserAndGroups(req);
-            log.debug("Adding User: " + user.getID() + " with session:" + session.getId() + " to usersessionmanager");
-            userSessionManager.addSession(user, session);
-            layoutEngine.loginPortlets(event);
+
+
         } catch (AuthorizationException err) {
             log.debug(err.getMessage());
             req.setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
         }
     }
 
+    public void setUserSettings(GridSphereEvent event, User user) {
+        PortletRequest req = event.getPortletRequest();
+        PortletSession session = req.getPortletSession(true);
+
+        req.setAttribute(SportletProperties.PORTLET_USER, user);
+        session.setAttribute(SportletProperties.PORTLET_USER, user.getID());
+        if (user.getAttribute(User.LOCALE) != null) {
+            session.setAttribute(User.LOCALE, new Locale((String)user.getAttribute(User.LOCALE), "", ""));
+        }
+        if (aclService.hasSuperRole(user)) {
+            log.debug("User: " + user.getUserName() + " logged in as SUPER");
+        }
+        setUserAndGroups(req);
+        log.debug("Adding User: " + user.getID() + " with session:" + session.getId() + " to usersessionmanager");
+        userSessionManager.addSession(user, session);
+        layoutEngine.loginPortlets(event);
+    }
 
     /**
      * Handles logout requests
@@ -328,6 +438,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     protected void logout(GridSphereEvent event) {
         log.debug("in logout of GridSphere Servlet");
         PortletRequest req = event.getPortletRequest();
+        removeUserCookie(event);
         PortletSession session = req.getPortletSession();
         session.removeAttribute(SportletProperties.PORTLET_USER);
         userSessionManager.removeSessions(req.getUser());
@@ -381,7 +492,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @return a string with the servlet information.
      */
     public final String getServletInfo() {
-        return "GridSphere Servlet 0.9";
+        return "GridSphere Servlet 2.0.1";
     }
 
     /**
