@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.layout.event;
 
 import org.gridlab.gridsphere.layout.PortletComponent;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 
 /**
  * A <code>PortletComponentEvent</code> is a general portlet render event
@@ -17,6 +18,8 @@ public interface PortletComponentEvent {
      * @return the portlet title bar event action
      */
     public ComponentAction getAction();
+
+    public PortletRequest getRequest();
 
     /**
      * Returns true if this event actually triggered an action

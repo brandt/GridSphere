@@ -245,6 +245,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         super.actionPerformed(event);
 
+        PortletRequest request = event.getPortletRequest();
         if ((titleBar != null) && (!hasTitleBarEvent)) {
             titleBar.setActive(true);
             PortletTitleBarEvent tbEvent = new PortletTitleBarEventImpl(titleBar, event, COMPONENT_ID);
@@ -259,7 +260,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         PortletComponentEvent titleBarEvent = event.getLastRenderEvent();
 
 
-
         if ((titleBarEvent != null) && (titleBarEvent instanceof PortletTitleBarEvent)) {
             PortletTitleBarEvent tbEvt = (PortletTitleBarEvent)titleBarEvent;
             if (titleBarEvent.getAction() == PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY) {
@@ -267,14 +267,14 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 PortletFrameEventImpl frameEvent = null;
                 if (state == PortletWindow.State.MINIMIZED) {
                     renderPortlet = false;
-                    frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_MINIMIZED, COMPONENT_ID);
+                    frameEvent = new PortletFrameEventImpl(this, request, PortletFrameEvent.FrameAction.FRAME_MINIMIZED, COMPONENT_ID);
                 } else if (state == PortletWindow.State.RESIZING) {
                     renderPortlet = true;
-                    frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_RESTORED, COMPONENT_ID);
+                    frameEvent = new PortletFrameEventImpl(this, request, PortletFrameEvent.FrameAction.FRAME_RESTORED, COMPONENT_ID);
                     frameEvent.setOriginalWidth(originalWidth);
                 } else if (state == PortletWindow.State.MAXIMIZED) {
                     renderPortlet = true;
-                    frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_MAXIMIZED, COMPONENT_ID);
+                    frameEvent = new PortletFrameEventImpl(this, request, PortletFrameEvent.FrameAction.FRAME_MAXIMIZED, COMPONENT_ID);
                 } else if (state == PortletWindow.State.CLOSED) {
                     renderPortlet = true;
 
@@ -287,8 +287,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     if (event.hasAction()) {
                         if (event.getAction().getName().equals("close")) {
                             isClosing = false;
-                            frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_CLOSED, COMPONENT_ID);
-
+                            frameEvent = new PortletFrameEventImpl(this, request, PortletFrameEvent.FrameAction.FRAME_CLOSED, COMPONENT_ID);
                         }
                         if (event.getAction().getName().equals("cancelClose")) {
                             isClosing = false;

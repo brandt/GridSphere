@@ -222,7 +222,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         super.actionPerformed(event);
 
         PortletComponentEvent compEvt = event.getLastRenderEvent();
-        PortletTabEvent tabEvent = new PortletTabEventImpl(this, PortletTabEvent.TabAction.TAB_SELECTED, COMPONENT_ID);
+        PortletTabEvent tabEvent = new PortletTabEventImpl(this, event.getPortletRequest(), PortletTabEvent.TabAction.TAB_SELECTED, COMPONENT_ID);
         List l = Collections.synchronizedList(listeners);
 
         synchronized(l) {

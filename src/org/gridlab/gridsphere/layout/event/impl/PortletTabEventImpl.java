@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.layout.PortletComponent;
 import org.gridlab.gridsphere.layout.PortletTab;
 import org.gridlab.gridsphere.layout.event.ComponentAction;
 import org.gridlab.gridsphere.layout.event.PortletTabEvent;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 
 /**
  * A <code>PortletTabEventImpl</code> is the concrete implementation of
@@ -18,6 +19,7 @@ public class PortletTabEventImpl implements PortletTabEvent {
     private ComponentAction action;
     private PortletTab portletTab;
     private int id;
+    private PortletRequest request;
 
     private PortletTabEventImpl() {}
 
@@ -30,10 +32,15 @@ public class PortletTabEventImpl implements PortletTabEvent {
      * @param id the portlet component id
      * @see PortletTab
      */
-    public PortletTabEventImpl(PortletTab portletTab, ComponentAction action, int id) {
+    public PortletTabEventImpl(PortletTab portletTab, PortletRequest request, ComponentAction action, int id) {
         this.action = action;
         this.portletTab = portletTab;
         this.id = id;
+        this.request = request;
+    }
+
+    public PortletRequest getRequest() {
+        return request;
     }
 
     /**

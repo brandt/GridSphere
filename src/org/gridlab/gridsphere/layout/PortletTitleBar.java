@@ -551,6 +551,9 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 windowState = titleBarEvent.getState();
                 WindowEvent winEvent = null;
 
+                // if receive a window state that is not supported do nothing
+                if (!allowedWindowStates.contains(windowState)) return;
+
                 if (windowState == PortletWindow.State.MAXIMIZED) {
                     winEvent = new WindowEventImpl(req, WindowEvent.WINDOW_MAXIMIZED);
                 } else if (windowState == PortletWindow.State.MINIMIZED) {

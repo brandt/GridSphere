@@ -23,6 +23,7 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
     private int id;
     private PortletRequest req;
     private PortletTitleBar titleBar = null;
+    private PortletRequest request;
 
     /**
      * Constructs an instance of a PortletTitleBarEventImpl from a general
@@ -43,6 +44,11 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
                 action = PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY;
             }
         }
+        this.request = event.getPortletRequest();
+    }
+
+    public PortletRequest getRequest() {
+        return request;
     }
 
     public boolean hasAction() {

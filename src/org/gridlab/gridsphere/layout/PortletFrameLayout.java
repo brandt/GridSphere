@@ -15,10 +15,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Collections;
+import java.util.*;
 
 
 /**
@@ -217,7 +214,19 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
             if (p.getComponentID() == id) {
                 if (p instanceof PortletFrame) {
                     this.removePortletComponent(p);
-                    break;
+
+                    try {
+                        PortletPageFactory pageFactory = PortletPageFactory.getInstance();
+                        PortletPage page = pageFactory.createPortletPage(event.getRequest());
+                        page.init(event.getRequest(), new Vector());
+                        page.save();
+
+                    } catch (Exception e) {
+                        //log.error("Unable to save portlet page", e);
+                    } finally {
+                        return;
+                    }
+
                 }
             }
         }
