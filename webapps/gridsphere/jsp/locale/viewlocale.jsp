@@ -9,7 +9,7 @@
 <br>
 
 <ui:form name="localeform" action="selectLang">
-    <% String flag = "/gridsphere/html/flags/"+locale.getLanguage() +".gif"; %>
+    <% String flag = "/gridsphere/images/flags/"+locale.getLanguage() +".gif"; %>
     <table>
     <tr>
     <td>

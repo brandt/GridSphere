@@ -9,7 +9,7 @@
 
 <% Locale locale = (Locale)request.getAttribute("locale"); %>
 
-<% String flag = "/gridsphere/html/flags/"+locale.getLanguage() +".gif"; %>
+<% String flag = "/gridsphere/images/flags/"+locale.getLanguage() +".gif"; %>
 
 <ui:messagebox beanId="msg"/>
 
