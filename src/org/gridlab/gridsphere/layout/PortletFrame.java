@@ -369,10 +369,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 String mymodeStr = (String)request.getAttribute(SportletProperties.PORTLET_MODE);
                 Portlet.Mode mymode = Portlet.Mode.toMode(mymodeStr);
                 if (mymode != null) {
-                    System.err.println("setting title mode to " + mymode);
+                    //System.err.println("setting title mode to " + mymode);
                     titleBar.setPortletMode(mymode);
                 }
-
             }
 
             // see if render params are set
@@ -556,6 +555,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             String titleStr = (String) req.getAttribute(SportletProperties.PORTLET_TITLE);
             if (titleStr == null) {
                 titleStr = titleBar.getTitle();
+                req.removeAttribute(SportletProperties.PORTLET_TITLE);
             }
 
             frame.append(preframe);
