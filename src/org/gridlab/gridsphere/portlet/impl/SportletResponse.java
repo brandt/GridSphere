@@ -124,13 +124,20 @@ public class SportletResponse extends HttpServletResponseWrapper implements Port
     }
 
     /**
-     * TODO
      * Maps the given string value into this portlet's namespace.
      *
      * @param aValue the string value
      */
     public String encodeNamespace(String aValue) {
-        return null;
+        return aValue + "_" + (String) req.getAttribute(SportletProperties.COMPONENT_ID);
+    }
+
+    public void setContentType(String type) {
+        this.getHttpServletResponse().setContentType(type);
+    }
+
+    public String getContentType() {
+        return this.getHttpServletResponse().getContentType();
     }
 
     private HttpServletResponse getHttpServletResponse() {

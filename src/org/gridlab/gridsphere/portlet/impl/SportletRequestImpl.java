@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
+import java.io.UnsupportedEncodingException;
 
 
 /**
@@ -293,6 +294,10 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
         // XXX: FILL ME IN
     }
 
+    public void setCharacterEncoding(String encoding) throws UnsupportedEncodingException {
+        this.getHttpServletRequest().setCharacterEncoding(encoding);
+    }
+    
     // Primarily used for debugging
     public void logRequest() {
         String name, paramvalue, headervals;
