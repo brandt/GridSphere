@@ -356,13 +356,20 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Deploys @PROJECT_TITLE@ portlets to a local server                   -->
     <!-- =================================================================== -->
-    <target name="deploy" depends="jar, create-real-database" if="catalina.exists" description="Deploys @PROJECT_TITLE@ portlet to a local server">
+    <target name="deploy" depends="jar" if="catalina.exists" description="Deploys @PROJECT_TITLE@ portlet to a local server">
         <echo>Deploying @PROJECT_NAME@ to Tomcat</echo>
         <!-- Copy the gridsphere web app to build directory -->
         <property name="project.webapp" value="${env.CATALINA_HOME}/webapps/${project.name}"/>
         <copy todir="${project.webapp}">
             <fileset dir="webapp"/>
         </copy>
+
+        <mkdir dir="${GRIDSPHERE_HOME}/${project.name}/database"/>
+        <copy todir="${GRIDSPHERE_HOME}/${project.name}/database">
+            <fileset dir="config/database"/>
+        </copy>
+
+        <antcall target="create-real-database"/>
 
         <copy file="${gridsphere.home}/lib/portlet-widget-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
         <copy file="lib/${project.name}.jar" todir="${project.webapp}/WEB-INF/lib"/>
