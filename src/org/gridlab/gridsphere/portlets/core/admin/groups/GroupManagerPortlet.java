@@ -12,10 +12,9 @@ import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
-import org.gridlab.gridsphere.services.core.security.acl.GroupAction;
 import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
-import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManager;
+import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
@@ -28,8 +27,6 @@ import org.gridlab.gridsphere.layout.PortletTabRegistry;
 
 import javax.servlet.UnavailableException;
 import java.util.*;
-import java.io.IOException;
-
 
 public class GroupManagerPortlet extends ActionPortlet {
 
@@ -283,7 +280,7 @@ public class GroupManagerPortlet extends ActionPortlet {
 
     public void doMakeGroup(FormEvent evt) throws PortletException {
         this.checkSuperRole(evt);
-        AccessControlManager aclService = AccessControlManager.getInstance();
+        AccessControlManagerServiceImpl aclService = AccessControlManagerServiceImpl.getInstance();
         List webappNames = portletMgr.getWebApplicationNames();
         Iterator it = webappNames.iterator();
         Set portletRoles = new HashSet();
@@ -314,11 +311,6 @@ public class GroupManagerPortlet extends ActionPortlet {
                     }
                 }
             }
-        }
-
-        it = portletRoles.iterator();
-        while (it.hasNext()) {
-            SportletRoleInfo info = (SportletRoleInfo)it.next();
         }
 
         TextFieldBean groupTF = evt.getTextFieldBean("groupNameTF");
@@ -495,14 +487,12 @@ public class GroupManagerPortlet extends ActionPortlet {
         PortletRole role = PortletRole.toPortletRole(selectedGroupRole);
 
         // Create add to group request
-        GroupRequest groupRequest = getACLService(root).createGroupRequest(entry);
+        GroupRequest groupRequest = getACLService(root).editGroupEntry(entry);
 
         groupRequest.setRole(role);
-        groupRequest.setGroupAction(GroupAction.EDIT);
 
         // Create access right
-        getACLService(root).submitGroupRequest(groupRequest);
-        getACLService(root).approveGroupRequest(groupRequest);
+        getACLService(root).saveGroupEntry(groupRequest);
 
         loadGroup(evt);
         entry = getACLService(root).getGroupEntry(groupEntryIDBean.getValue());
@@ -710,7 +700,7 @@ public class GroupManagerPortlet extends ActionPortlet {
                 //String userID = user.getID();
                 String userName = user.getUserName();
                 String fullName = user.getFullName();
-                String userLabel = userName + " (" + fullName + ")";
+                //String userLabel = userName + " (" + fullName + ")";
                 ListBoxItemBean item = new ListBoxItemBean();
                 item.setValue(userName);
                 usersNotInGroupListBox.addBean(item);
@@ -793,17 +783,19 @@ public class GroupManagerPortlet extends ActionPortlet {
 
     }
 
-    private GroupEntry addGroupEntry(User root, User user, PortletGroup group, PortletRole role)
-            throws PortletException {
+    private GroupEntry addGroupEntry(User root, User user, PortletGroup group, PortletRole role) {
         // Create add to group request
-        GroupRequest groupRequest = getACLService(root).createGroupRequest();
+        GroupRequest groupRequest = getACLService(root).createGroupEntry();
         groupRequest.setUser(user);
         groupRequest.setGroup(group);
         groupRequest.setRole(role);
 
         // Create access right
-        getACLService(root).submitGroupRequest(groupRequest);
-        getACLService(root).approveGroupRequest(groupRequest);
+        //getACLService(root).submitGroupRequest(groupRequest);
+        //getACLService(root).approveGroupRequest(groupRequest);
+
+        getACLService(root).saveGroupEntry(groupRequest);
+
         // Return the new group
         return getACLService(root).getGroupEntry(user, group);
     }
@@ -830,8 +822,9 @@ public class GroupManagerPortlet extends ActionPortlet {
             removeGroupEntry(root, entry);
             // remove group layout
 
-            layoutMgr.refreshPage(req);
-
+            if (entry.getUser().getID().equals(root.getID())) {
+                layoutMgr.removeGroupTab(req, entry.getGroup().getName());
+            }
             /*
             PortletRegistry portletRegistry = PortletRegistry.getInstance();
             List portletIds =  portletRegistry.getAllConcretePortletIDs(req.getRole(), entry.getGroup().getName());
@@ -848,14 +841,10 @@ public class GroupManagerPortlet extends ActionPortlet {
         req.setAttribute("groupEntryList", groupEntryList);
     }
 
-    private void removeGroupEntry(User root, GroupEntry entry)
-            throws PortletException {
+    private void removeGroupEntry(User root, GroupEntry entry) {
         // Create remove from group request
-        GroupRequest groupRequest = getACLService(root).createGroupRequest(entry);
-        groupRequest.setGroupAction(GroupAction.REMOVE);
-        // Create access right
-        getACLService(root).submitGroupRequest(groupRequest);
-        getACLService(root).approveGroupRequest(groupRequest);
+        GroupRequest groupRequest = getACLService(root).editGroupEntry(entry);
+        getACLService(root).deleteGroupEntry(groupRequest);
     }
 
     public void deleteGroup(FormEvent event) throws PortletException {

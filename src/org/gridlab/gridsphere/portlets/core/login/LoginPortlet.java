@@ -291,14 +291,13 @@ public class LoginPortlet extends ActionPortlet {
         Iterator it = groups.iterator();
         while (it.hasNext()) {
             PortletGroup group = (PortletGroup)it.next();
-            GroupRequest groupRequest = this.aclService.createGroupRequest();
+            GroupRequest groupRequest = this.aclService.createGroupEntry();
             groupRequest.setUser(user);
             groupRequest.setGroup(group);
             groupRequest.setRole(PortletRole.USER);
 
             // Submit changes
-            this.aclService.submitGroupRequest(groupRequest);
-            this.aclService.approveGroupRequest(groupRequest);
+            this.aclService.saveGroupEntry(groupRequest);
         }
 
     }

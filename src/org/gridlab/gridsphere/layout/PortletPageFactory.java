@@ -155,6 +155,26 @@ public class PortletPageFactory implements PortletSessionListener {
         }
     }
 
+    public void removePortletGroupTab(PortletRequest req, String groupName) {
+        PortletPage page = createPortletPage(req);
+        PortletTabbedPane pagePane = page.getPortletTabbedPane();
+        PortletTabbedPane appPane = PortletTabRegistry.getGroupTabs(groupName);
+        //getApplicationTabs(webAppName);
+        if (appPane != null) {
+            List tabs = appPane.getPortletTabs();
+            try {
+                for (int j = 0; j < tabs.size(); j++) {
+                    PortletTab tab = (PortletTab)tabs.get(j);
+                    pagePane.removeTab(tab);
+                }
+            } catch (Exception e) {
+                log.error("Unable to copy application tabs for webapp: " + groupName);
+            }        
+            page.setPortletTabbedPane(pagePane);
+            page.init(req, new ArrayList());
+        }
+    }
+
     public PortletTabbedPane getUserTabbedPane(PortletRequest req) {
         User user = req.getUser();
 

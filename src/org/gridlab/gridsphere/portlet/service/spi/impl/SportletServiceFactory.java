@@ -19,7 +19,7 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServic
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDescriptor;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
-import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManager;
+import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl;
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 
 import javax.servlet.ServletContext;
@@ -37,7 +37,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
 
     private static PortletLog log = SportletLog.getInstance(SportletServiceFactory.class);
     private static SportletServiceFactory instance = null;
-    private static AccessControlManager aclManager = AccessControlManager.getInstance();
+    private static AccessControlManagerServiceImpl aclManager = AccessControlManagerServiceImpl.getInstance();
     private static PortletSessionManager portletSessionManager = PortletSessionManager.getInstance();
     private static UserSessionManager userSessionManager = UserSessionManager.getInstance();
 
@@ -67,7 +67,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
     private SportletServiceFactory() {
         // Reads in the service definitions from the xml file and stores them in allServices
         // organized according to service interface keys and service definition values
-        String servicesPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/PortletMaster.xml");
+        String servicesPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/GridSphereServices.xml");
         String servicesMappingPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-services-mapping.xml");
         addServices(GridSphereConfig.getServletContext(), servicesPath, servicesMappingPath);
     }
@@ -120,6 +120,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             allServices.put(serviceDef.getServiceInterface(), serviceDef);
             log.debug("adding service: " + serviceDef.getServiceInterface() + " service def: " + serviceDef.toString());
             serviceContexts.put(serviceDef.getServiceInterface(), ctx);
+
         }
     }
 

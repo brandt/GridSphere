@@ -8,7 +8,7 @@ import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletServiceAuthorizationException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceAuthorizer;
-import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManager;
+import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 
 /**
@@ -30,7 +30,7 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
             "The user calling this method must have super privileges, admin privileges within this group, or be the same user given to this method";
 
     private User user = null;
-    private AccessControlManager aclManager = null;
+    private AccessControlManagerServiceImpl aclManager = null;
 
     /**
      * Constructor disallows non-argument instantiation
@@ -45,7 +45,7 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
      * @param user the supplied <code>User</code>
      * @param userManager an instance of <code>GridSphereUserManager</code>
      */
-    public SportletServiceAuthorizer(User user, AccessControlManager userManager) {
+    public SportletServiceAuthorizer(User user, AccessControlManagerServiceImpl userManager) {
         this.user = user;
         this.aclManager = userManager;
     }

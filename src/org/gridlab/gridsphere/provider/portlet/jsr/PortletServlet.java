@@ -69,7 +69,7 @@ public class PortletServlet  extends HttpServlet
         // load descriptor files
         log.debug("in init of PortletServlet");
 
-        //aclService = AccessControlManager.getInstance();
+        //aclService = AccessControlManagerServiceImpl.getInstance();
 
         //registry = PortletRegistry.getInstance();
 

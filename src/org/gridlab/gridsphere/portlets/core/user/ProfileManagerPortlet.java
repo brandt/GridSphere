@@ -15,7 +15,6 @@ import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerSer
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.security.acl.InvalidGroupRequestException;
 import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
-import org.gridlab.gridsphere.services.core.security.acl.GroupAction;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
@@ -406,23 +405,16 @@ public class ProfileManagerPortlet extends ActionPortlet {
             GroupEntry ge = this.aclManagerService.getGroupEntry(user, selectedGroup);
             if (!usergroups.contains(selectedGroup.getName())) {
                 log.debug("does not have group: " + selectedGroup.getName());
-                GroupRequest groupRequest = this.aclManagerService.createGroupRequest(ge);
+                GroupRequest groupRequest = this.aclManagerService.createGroupEntry();
                 groupRequest.setUser(user);
                 groupRequest.setGroup(selectedGroup);
                 groupRequest.setRole(PortletRole.USER);
-                groupRequest.setGroupAction(GroupAction.ADD);
 
-                // Create access right
-                try {
-                    this.aclManagerService.submitGroupRequest(groupRequest);
-                } catch (InvalidGroupRequestException e) {
-                    log.error("in ProfileManagerPortlet invalid group request", e);
-                }
-                this.aclManagerService.approveGroupRequest(groupRequest);
+                this.aclManagerService.saveGroupEntry(groupRequest);
 
 
                 log.debug("adding tab " + selectedGroup.getName());
-                // @TODO change to addGroupTab
+
                 this.layoutMgr.addGroupTab(req, selectedGroup.getName());
                 this.layoutMgr.reloadPage(req);
             }
@@ -436,18 +428,10 @@ public class ProfileManagerPortlet extends ActionPortlet {
             log.debug("Removing group :" + groupStr);
             PortletGroup g = this.aclManagerService.getGroupByName(groupStr);
             GroupEntry entry = this.aclManagerService.getGroupEntry(user, g);
-            GroupRequest groupRequest = this.aclManagerService.createGroupRequest(entry);
-            groupRequest.setGroupAction(GroupAction.REMOVE);
-            groupRequest.setRole(PortletRole.USER);
+            GroupRequest groupRequest = this.aclManagerService.editGroupEntry(entry);
 
-            // Create access right
-            try {
-                this.aclManagerService.submitGroupRequest(groupRequest);
-            } catch (InvalidGroupRequestException e) {
-                log.error("in ProfileManagerPortlet invalid group request", e);
-            }
             createSuccessMessage(event, this.getLocalizedText(req, "USER_GROUPS_SUCCESS"));
-            this.aclManagerService.approveGroupRequest(groupRequest);
+            this.aclManagerService.deleteGroupEntry(groupRequest);
 
             this.layoutMgr.refreshPage(req);
             /*
@@ -484,7 +468,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
     public void doSaveMessaging(FormEvent event) {
         // now do the messaging stuff
         PortletRequest req = event.getPortletRequest();
-        User user = req.getUser();
+        //User user = req.getUser();
         TmfUser tmfuser = tms.getUser(req.getUser().getUserID());
         // if the user does not exist yet
         if (tmfuser==null) {

@@ -15,7 +15,6 @@ import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
-import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
@@ -44,7 +43,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
-        this.log.debug("Entering initServices()");
+        log.debug("Entering initServices()");
         try {
             this.userManagerService = (UserManagerService)config.getContext().getService(UserManagerService.class);
             this.aclManagerService = (AccessControlManagerService)config.getContext().getService(AccessControlManagerService.class);
@@ -53,7 +52,7 @@ public class UserManagerPortlet extends ActionPortlet {
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
-        this.log.debug("Exiting initServices()");
+        log.debug("Exiting initServices()");
         DEFAULT_HELP_PAGE = "admin/users/help.jsp";
         DEFAULT_VIEW_PAGE = "doListUsers";
     }
@@ -301,12 +300,7 @@ public class UserManagerPortlet extends ActionPortlet {
         return false;
     }
 
-    public void validatePassword(String password)
-          throws InvalidPasswordException {
-
-    }
-    private User saveUser(FormEvent event, User user)
-            throws PortletException {
+    private User saveUser(FormEvent event, User user) {
         log.debug("Entering saveUser()");
         // Account request
         SportletUser newuser = null;
@@ -344,14 +338,9 @@ public class UserManagerPortlet extends ActionPortlet {
         accountRequest.setFullName(event.getTextFieldBean("fullName").getValue());
         accountRequest.setEmailAddress(event.getTextFieldBean("emailAddress").getValue());
         accountRequest.setOrganization(event.getTextFieldBean("organization").getValue());
-        String passwordValue = event.getPasswordBean("password").getValue();
-        // Save password parameters if password was altered
-
-        log.debug("Exiting editAccountRequest()");
     }
 
-    private void saveUserRole(FormEvent event, User user)
-            throws PortletException {
+    private void saveUserRole(FormEvent event, User user) {
         log.debug("Entering saveUserRole()");
         PortletRequest req = event.getPortletRequest();
         // Get selected role
@@ -359,7 +348,7 @@ public class UserManagerPortlet extends ActionPortlet {
         req.setAttribute("role", selectedRole);
         // If super role was chosen
         if (selectedRole.equals(PortletRole.SUPER)) {
-            this.log.debug("Granting super role");
+            log.debug("Granting super role");
             // Grant super role
             this.aclManagerService.grantSuperRole(user);
         } else {
@@ -370,14 +359,13 @@ public class UserManagerPortlet extends ActionPortlet {
             Iterator it = groups.iterator();
             while (it.hasNext()) {
                 PortletGroup group = (PortletGroup)it.next();
-                GroupRequest groupRequest = this.aclManagerService.createGroupRequest();
+                GroupRequest groupRequest = this.aclManagerService.createGroupEntry();
                 groupRequest.setUser(user);
                 groupRequest.setRole(selectedRole);
                 groupRequest.setGroup(group);
-                this.log.debug("Granting " + selectedRole + " role in gridsphere");
+                log.debug("Granting " + selectedRole + " role in gridsphere");
                 // Submit changes
-                this.aclManagerService.submitGroupRequest(groupRequest);
-                this.aclManagerService.approveGroupRequest(groupRequest);
+                this.aclManagerService.saveGroupEntry(groupRequest);
             }
         }
         log.debug("Exiting saveUserRole()");
@@ -409,13 +397,13 @@ public class UserManagerPortlet extends ActionPortlet {
         ListBoxBean roleListBean = event.getListBoxBean("userRole");
         List userRoleList = roleListBean.getSelectedValues();
         if (userRoleList.size() == 0) {
-            this.log.debug("No role was selected, setting to user");
+            log.debug("No role was selected, setting to user");
             // Impossible, but if not selected return user role
             return PortletRole.USER;
         } else {
             // Otherwise, return the first selected value
             String userRoleItem = (String)userRoleList.get(0);
-            this.log.debug("Selected role was " + userRoleItem);
+            log.debug("Selected role was " + userRoleItem);
             return PortletRole.toPortletRole(userRoleItem);
         }
     }
