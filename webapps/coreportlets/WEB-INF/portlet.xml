@@ -246,12 +246,11 @@
 
 </portlet-app-def>
 
-<!--
 <portlet-app-def>
 
-<portlet-app id="org.gridlab.gridsphere.portlets.core.SnoopPortlet">
-    <portlet-name>Snoop Portlet</portlet-name>
-    <servlet-name>SnoopPortlet</servlet-name>
+<portlet-app id="org.gridlab.gridsphere.portlets.core.DemoPortlet">
+    <portlet-name>Demo Portlet</portlet-name>
+    <servlet-name>DemoPortlet</servlet-name>
     <portlet-config>
         <param-name>Portlet Master</param-name>
         <param-value>yourid@yourdomain.com</param-value>
@@ -259,6 +258,7 @@
     <allows>
         <maximized/>
         <minimized/>
+        <resizing/>
     </allows>
     <supports>
         <markup name="html">
@@ -276,7 +276,7 @@
     </supports>
 </portlet-app>
 
-<concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.SnoopPortlet.2">
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.DemoPortlet.2">
     <context-param>
         <param-name>foobar</param-name>
         <param-value>a value</param-value>
@@ -307,7 +307,63 @@
 
 </portlet-app-def>
 
--->
+
+<portlet-app-def>
+
+<portlet-app id="org.gridlab.gridsphere.portlets.core.PortletApplicationManager">
+    <portlet-name>Application Manager Portlet</portlet-name>
+    <servlet-name>ManagerPortlet</servlet-name>
+    <portlet-config>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </portlet-config>
+    <allows>
+        <maximized/>
+        <minimized/>
+        <resizing/>
+    </allows>
+    <supports>
+        <markup name="html">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+        <markup name="wml">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+    </supports>
+</portlet-app>
+
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.PortletApplicationManager.1">
+    <context-param>
+        <param-name>foobar</param-name>
+        <param-value>a value</param-value>
+    </context-param>
+    <concrete-portlet>
+        <portlet-name>Application Manager Portlet</portlet-name>
+        <default-locale>en</default-locale>
+        <language locale="en_US">
+            <title>Portlet Application Manager</title>
+            <description>Displays Portlet Variables and Settings</description>
+        </language>
+        <owner>
+            <group-name>CACTUS</group-name>
+            <role-name>ADMIN</role-name>
+        </owner>
+        <group>
+            <group-name>ANY</group-name>
+        </group>
+        <role>
+            <role-name>GUEST</role-name>
+        </role>
+    </concrete-portlet>
+</concrete-portlet-app>
+
+</portlet-app-def>
 
 <portlet-app-def>
 
