@@ -2,11 +2,10 @@ package org.gridlab.gridsphere.portlet.jsrimpl;
 
 import org.gridlab.gridsphere.portlet.jsrimpl.PortletResponseImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState;
 
-import javax.portlet.RenderRequest;
-import javax.portlet.PortletResponse;
-import javax.portlet.PortletURL;
-import javax.portlet.RenderResponse;
+import javax.portlet.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
@@ -34,8 +33,8 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      *
      * @param res the <code>HttpServletRequest</code>
      */
-    public RenderResponseImpl(HttpServletRequest req, HttpServletResponse res) {
-        super(req, res);
+    public RenderResponseImpl(HttpServletRequest req, HttpServletResponse res, PortalContext portalContext) {
+        super(req, res, portalContext);
         contentType = req.getContentType();
     }
 
@@ -84,7 +83,6 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      */
     public PortletURL createRenderURL() {
         PortletURL portletURL = new PortletURLImpl(req, (HttpServletResponse)super.getResponse());
-        addURLParameters(portletURL);
         return portletURL;
     }
 
@@ -105,7 +103,6 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
     public PortletURL createActionURL() {
         PortletURL portletURL = new PortletURLImpl(req, (HttpServletResponse)super.getResponse());
         portletURL.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, "");
-        addURLParameters(portletURL);
         return portletURL;
     }
 

@@ -4,19 +4,16 @@ package org.gridlab.gridsphere.portlet.jsrimpl;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletWindow;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.PortletResponse;
-import javax.portlet.WindowStateException;
-import javax.portlet.WindowState;
-import javax.portlet.PortletModeException;
-import javax.portlet.PortletMode;
-import javax.portlet.ActionResponse;
+import javax.portlet.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.HashMap;
+import java.util.Enumeration;
 
 
 /**
@@ -38,7 +35,7 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
      */
     boolean isRedirectAllowed = true;
 
-    private boolean redirected;
+    private boolean redirected = false;
     private String redirectLocation;
     protected Map renderParams = null;
     protected PortletMode portletMode;
@@ -50,8 +47,8 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
      *
      * @param res the <code>HttpServletRequest</code>
      */
-    public ActionResponseImpl(HttpServletRequest req, HttpServletResponse res) {
-        super(req, res);
+    public ActionResponseImpl(HttpServletRequest req, HttpServletResponse res, PortalContext portalContext) {
+        super(req, res, portalContext);
         renderParams = new HashMap();
     }
 
@@ -80,9 +77,9 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
      * @see WindowState
      */
     public void setWindowState(WindowState windowState)
-            throws WindowStateException {
+            throws WindowStateException, IllegalStateException {
         if (redirected) {
-            throw new IllegalStateException("it is not allowed to invoke setWindowState after sendRedirect has been called");
+            throw new IllegalStateException("cannot invoke setWindowState after sendRedirect has been called");
         }
         PortletWindow.State ws = PortletWindow.State.NORMAL;
         if (windowState == WindowState.MAXIMIZED) {
@@ -91,6 +88,17 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
             ws = PortletWindow.State.MINIMIZED;
         } else if (windowState == WindowState.NORMAL) {
             ws = PortletWindow.State.NORMAL;
+        } else {
+            Enumeration enum = portalContext.getSupportedWindowStates();
+            boolean found = false;
+            while (enum.hasMoreElements() & (!found)) {
+                WindowState s = (WindowState)enum.nextElement();
+                if (s.toString().equalsIgnoreCase(windowState.toString())) {
+                    ws = PortletWindow.State.toState(s.toString());
+                    found = true;
+                }
+            }
+            if (!found) throw new WindowStateException("Unsupported window state!", windowState);
         }
         isRedirectAllowed = false;
         this.windowState = windowState;
@@ -139,7 +147,17 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
         } else if (portletMode == PortletMode.HELP) {
             mode = Portlet.Mode.HELP;
         } else {
-            mode = Portlet.Mode.toMode(portletMode.toString());
+            Enumeration enum = portalContext.getSupportedPortletModes();
+            boolean found = false;
+            while (enum.hasMoreElements() & (!found)) {
+                PortletMode m = (PortletMode)enum.nextElement();
+                if (m.toString().equalsIgnoreCase(portletMode.toString())) {
+                    mode = Portlet.Mode.toMode(portletMode.toString());
+                    portletMode = m;
+                    found = true;
+                }
+            }
+            if (!found) throw new PortletModeException("Unsupported portlet mode!", portletMode);
         }
         this.portletMode = portletMode;
         req.setAttribute(SportletProperties.PORTLET_MODE, mode);
@@ -190,6 +208,7 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
                 location = res.encodeRedirectURL(location.toString());
                 redirectLocation = location;
                 redirected = true;
+                req.setAttribute(SportletProperties.RESPONSE_COMMITTED, "true");
                 //res.sendRedirect(location);
             }
         } else {

@@ -64,6 +64,7 @@ public class ActionRequestImpl extends PortletRequestImpl implements ActionReque
                 throw new IllegalStateException("User request HTTP POST data is of type application/x-www-form-urlencoded. This data has been already processed by the portal/portlet-container and is available as request parameters.");
             }
         }
+        hasReader = true;
         return super.getRequest().getInputStream();
     }
 
@@ -85,6 +86,9 @@ public class ActionRequestImpl extends PortletRequestImpl implements ActionReque
      */
     public void setCharacterEncoding(String enc)
             throws UnsupportedEncodingException, IllegalStateException {
+        if (hasReader) {
+            throw new IllegalStateException("Cannot invoke this method after using getReader or reading request parameters!");
+        }
         super.getRequest().setCharacterEncoding(enc);
     }
 
@@ -118,6 +122,7 @@ public class ActionRequestImpl extends PortletRequestImpl implements ActionReque
      */
     public java.io.BufferedReader getReader()
             throws java.io.UnsupportedEncodingException, java.io.IOException {
+        hasReader = true;
         return super.getRequest().getReader();
     }
 

@@ -1,8 +1,12 @@
 
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState;
+
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletURL;
+import javax.portlet.PortalContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.http.HttpServletRequest;
@@ -28,16 +32,19 @@ public abstract class PortletResponseImpl extends HttpServletResponseWrapper imp
     protected HttpServletRequest req = null;
     protected Map properties = null;
 
+    protected PortalContext portalContext = null;
+
     /**
      * Constructs an instance of SportletResponse using an
      * <code>HttpServletResponse</code> as a proxy
      *
      * @param res the <code>HttpServletRequest</code>
      */
-    public PortletResponseImpl(HttpServletRequest req, HttpServletResponse res) {
+    public PortletResponseImpl(HttpServletRequest req, HttpServletResponse res, PortalContext portalContext) {
         super(res);
         this.req = req;
         properties = new HashMap();
+        this.portalContext = portalContext;
     }
 
     /**
@@ -120,16 +127,6 @@ public abstract class PortletResponseImpl extends HttpServletResponseWrapper imp
     private HttpServletResponse getHttpServletResponse() {
         return (HttpServletResponse)super.getResponse();
     }
-
-     /**
-     * Add any additional parameters to the URL:
-     * <ul><li>
-     * SportletProperties.COMPONENT_ID
-     * </li></ul>
-     */
-    protected void addURLParameters(PortletURL portletURL) {
-        //portletURL.setParameter(SportletProperties.COMPONENT_ID, (String) req.getAttribute(SportletProperties.COMPONENT_ID));
-     }
 
 }
 

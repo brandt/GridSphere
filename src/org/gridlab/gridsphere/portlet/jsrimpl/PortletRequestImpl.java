@@ -18,7 +18,11 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.ServletInputStream;
 import java.util.*;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.UnsupportedEncodingException;
 
 
 /**
@@ -39,8 +43,9 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     protected PortalContext portalContext = null;
     protected Supports[] supports = null;
     protected String contextPath = "/";
-
+    protected boolean hasReader = false;
     protected Map props = null;
+    //protected boolean included = true;
 
     /**
      * Constructor creates a proxy for a HttpServletRequest
@@ -96,8 +101,12 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         Enumeration modesEnum = portalContext.getSupportedPortletModes();
         while (modesEnum.hasMoreElements()) {
             PortletMode m = (PortletMode)modesEnum.nextElement();
-            if (m.equals(mode)) return true;
+            if (m.equals(mode)) {
+                System.err.println("mode " + mode.toString() + " IS allowed");
+                return true;
+            }
         }
+        System.err.println("mode " + mode.toString() + " not allowed");
         return false;
     }
 
@@ -116,6 +125,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         } else {
             m = new PortletMode(mode.toString());
         }
+        System.err.println("returning mode=" + m.toString());
         return m;
     }
 
@@ -441,6 +451,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      *
      */
     public String getParameter(String name) {
+        hasReader = true;
         if (name == null) throw new IllegalArgumentException("name is NULL");
         return this.getHttpServletRequest().getParameter(name);
     }
@@ -463,6 +474,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      *			request has no parameters.
      */
     public java.util.Enumeration getParameterNames() {
+        hasReader = true;
         return this.getHttpServletRequest().getParameterNames();
     }
 
@@ -490,6 +502,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      */
     public String[] getParameterValues(String name) {
         if (name == null) throw new IllegalArgumentException("name is NULL");
+        hasReader = true;
         return this.getHttpServletRequest().getParameterValues(name);
     }
 
@@ -510,6 +523,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      *             String array (<code>String[]</code>).
      */
     public java.util.Map getParameterMap() {
+        hasReader = true;
         return Collections.unmodifiableMap(this.getHttpServletRequest().getParameterMap());
     }
 
@@ -545,8 +559,11 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      */
     public void setAttribute(String name, Object o) {
         if (name == null) throw new IllegalArgumentException("name is NULL");
-        if (o == null) this.removeAttribute(name);
-        this.getHttpServletRequest().setAttribute(name, o);
+        if (o == null) {
+            this.removeAttribute(name);
+        } else {
+            this.getHttpServletRequest().setAttribute(name, o);
+        }
     }
 
     /**
@@ -625,16 +642,16 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     public String getResponseContentType() {
         Portlet.Mode mode = (Portlet.Mode)getAttribute(SportletProperties.PORTLET_MODE);
         if (supports != null) {
-            for (int i = 0; i < supports.length; i++) {
-                Supports s = supports[i];
-                org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode[] modes = s.getPortletMode();
-                for (int j = 0; j < modes.length; j++) {
-                    org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode m = modes[j];
-                    if (m.getContent().equalsIgnoreCase(mode.toString())) {
-                        return s.getMimeType().getContent();
-                    }
+            Supports s = supports[0];
+            org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode[] modes = s.getPortletMode();
+            for (int j = 0; j < modes.length; j++) {
+                org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode m = modes[j];
+                if (m.getContent().equalsIgnoreCase(mode.toString())) {
+                    return s.getMimeType().getContent();
                 }
             }
+            return s.getMimeType().getContent();
+
         }
         return null;
     }
@@ -661,10 +678,14 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
             for (int i = 0; i < supports.length; i++) {
                 Supports s = supports[i];
                 org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode[] modes = s.getPortletMode();
-                for (int j = 0; j < modes.length; j++) {
-                    org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode m = modes[j];
-                    if (m.getContent().equalsIgnoreCase(mode.toString())) {
-                        types.add(s.getMimeType().getContent());
+                if (modes.length == 0) {
+                    types.add(s.getMimeType().getContent());
+                } else {
+                    for (int j = 0; j < modes.length; j++) {
+                        org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode m = modes[j];
+                        if (m.getContent().equalsIgnoreCase(mode.toString())) {
+                            types.add(s.getMimeType().getContent());
+                        }
                     }
                 }
             }
@@ -730,6 +751,30 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      */
     public int getServerPort() {
         return this.getHttpServletRequest().getServerPort();
+    }
+
+    public ServletInputStream getInputStream() throws IOException {
+        //if (included) {
+        //    return null;
+        //} else {
+            // the super class will ensure that a IllegalStateException is thrown if getReader() was called earlier
+            javax.servlet.ServletInputStream stream = getHttpServletRequest().getInputStream();
+            hasReader = true;
+            return stream;
+        //}
+    }
+
+    public BufferedReader getReader() throws UnsupportedEncodingException, IOException {
+        //if (included) {
+        //    return null;
+        //} else {
+
+        BufferedReader reader = getHttpServletRequest().getReader();
+
+        hasReader = true;
+
+        return reader;
+        //}
     }
 
     private HttpServletRequest getHttpServletRequest() {
