@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.*;
+import java.util.List;
+import java.awt.*;
 
 /**
  * The <code>PortletPage</code> is the generic container for a collection of
@@ -476,6 +478,8 @@ public class PortletPage implements Serializable, Cloneable {
     public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
 
         PortletResponse res = event.getPortletResponse();
+        PortletRequest req = event.getPortletRequest();
+
         PrintWriter out = null;
 
         // set content to UTF-8 for il8n
@@ -491,7 +495,14 @@ public class PortletPage implements Serializable, Cloneable {
         //out.println("<?xml version=\"1.0\"?>");
         //out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"" );
         //out.println("\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
-        out.println("<html>");
+        Locale locale = req.getLocale();
+        ComponentOrientation orientation = ComponentOrientation.getOrientation(locale);
+        if (orientation.isLeftToRight()) {
+            out.println("<html>");
+        } else {
+            out.println("<html dir=\"rtl\">");
+        }
+
         out.println("<head>");
 
         out.println("  <title>" + title + "</title>");
