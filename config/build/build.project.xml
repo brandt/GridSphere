@@ -312,13 +312,14 @@ Copyright:
 
         <copy todir="${project.webapp}/WEB-INF/lib">
             <fileset dir="lib">
-                <include name="*.jar"/>
+                <include name="*portlets.jar"/>
             </fileset>
         </copy>
 
         <copy todir="${env.CATALINA_HOME}/shared/lib">
             <fileset dir="lib/ext">
-                <include name="*.jar"/>
+                <include name="*-services.jar"/>
+                <include name="*-test.jar"/>
             </fileset>
         </copy>
 
