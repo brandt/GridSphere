@@ -63,6 +63,7 @@ public class PortletFlowLayout extends BasePortletComponent implements LayoutMan
     }
 
     public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
+        super.doRender(ctx, req, res);
         log.debug("in doRender()");
     }
 }
