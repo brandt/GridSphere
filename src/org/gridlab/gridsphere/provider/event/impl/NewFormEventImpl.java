@@ -1,11 +1,7 @@
 /*
- * @author <a href="wehrens@aei.mpg.de">Oliver Wehrens</a>
+ * @author <a href="novotny@aei.mpg.de">Jason Novotny</a>
  *
  * @version $Id$
- */
-
-/*
- * <code>FormEventImpl</code> provides methods for getting data out of a portletrequest.
  */
 package org.gridlab.gridsphere.provider.event.impl;
 
@@ -26,6 +22,10 @@ import java.util.Map;
 import java.util.HashMap;
 import java.io.IOException;
 
+/*
+ * The <code>FormEventImpl</code> provides methods for creating/retrieving visual beans
+ * from the <code>PortletRequest</code>
+ */
 public class NewFormEventImpl implements FormEvent {
 
     protected transient static PortletLog log = SportletLog.getInstance(NewFormEventImpl.class);
@@ -52,9 +52,13 @@ public class NewFormEventImpl implements FormEvent {
     public NewFormEventImpl(ActionEvent evt) {
         event = evt;
         request = evt.getPortletRequest();
-
+        response = evt.getPortletResponse();
         // Only create tag beans from request when initialized with action event
         createTagBeans(evt.getPortletRequest());
+
+        printRequestParameters();
+
+        printTagBeans();
     }
 
     public PortletRequest getPortletRequest() {
@@ -407,7 +411,6 @@ public class NewFormEventImpl implements FormEvent {
 
         }
 
-        printTagBeans();
     }
 
     protected String getBeanKey(String beanId) {
