@@ -1,24 +1,55 @@
-<%@ taglib uri="/portletWidgets" prefix="gs" %>
+<%@ page import="java.util.Iterator,
+                 org.gridlab.gridsphere.portlet.User"%>
+<%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
-<gs:form action="doViewListUser">
-<table class="portlet-pane" cellspacing="1">
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1">
-        <tr>
-          <td class="portlet-frame-actions">
-            <gs:submit name="doViewListUser" value="List Users"/>
-            &nbsp;&nbsp;<gs:submit name="doViewNewUser" value="New User"/>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <gs:table bean="userList"/>
-    </td>
-  </tr>
-</table>
-</gs:form>
+
+<jsp:useBean id="userList" class="java.util.List" scope="request"/>
+
+<ui:form>
+<ui:panel>
+    <ui:frame>
+        <ui:tablerow>
+            <ui:tablecell>
+                <ui:actionsubmit action="doViewListUser" value="List Users"/>
+                <ui:actionsubmit action="doViewNewUser" value="New User"/>
+            </ui:tablecell>
+        </ui:tablerow>
+    </ui:frame>
+
+    <ui:frame>
+                <ui:tablerow header="true">
+                    <ui:tablecell><ui:text value="User Name"/></ui:tablecell>
+                    <ui:tablecell><ui:text value="Full Name"/></ui:tablecell>
+                    <ui:tablecell><ui:text value="Email Address"/></ui:tablecell>
+                    <ui:tablecell><ui:text value="Organization"/></ui:tablecell>
+                </ui:tablerow>
+<%
+                Iterator userIterator = userList.iterator();
+                while (userIterator.hasNext()) {
+                    // Get next user
+                    User user = (User)userIterator.next();
+%>
+                    <ui:tablerow>
+                        <ui:tablecell>
+                            <ui:actionlink action="doViewViewUser" value="<%= user.getUserName() %>">
+                                <ui:actionparam name="userID" value="<%= user.getID() %>"/>
+                            </ui:actionlink>
+                        </ui:tablecell>
+                        <ui:tablecell>
+                            <ui:text value="<%= user.getFullName() %>" style="plain"/>
+                        </ui:tablecell>
+                        <ui:tablecell>
+                            <ui:text value="<%= user.getEmailAddress() %>" style="plain"/>
+                        </ui:tablecell>
+                        <ui:tablecell>
+                            <ui:text value="<%= user.getOrganization() %>" style="plain"/>
+                        </ui:tablecell>
+                    </ui:tablerow>
+<%
+                }
+%>
+    </ui:frame>
+
+</ui:panel>
+</ui:form>
