@@ -33,6 +33,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
     protected DefaultPortletMessage message = null;
 
     public GridSphereEventImpl(AccessControlManagerService  aclService, PortletContext ctx, HttpServletRequest req, HttpServletResponse res) {
+
         portletRequest = new SportletRequestImpl(req);
         portletResponse = new SportletResponse(res, portletRequest);
         portletContext = ctx;

@@ -122,10 +122,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 
         GridSphereEvent event = new GridSphereEventImpl(aclService, context, req, res);
-
         PortletRequest portletReq = event.getPortletRequest();
         PortletResponse portletRes = event.getPortletResponse();
-
 
         // If first time being called, instantiate all portlets
         if (firstDoGet) {
