@@ -2068,6 +2068,7 @@
                 This will create/show an messagebox with the beanId 'errorBox' and it will show the picture 'images/error.png'
                 left of the text inside the box. A value could be set here, but to make it more dynamic the text to be displayed
                 could be appended/set using the MessageBoxBean append/prepend{Text|Key} methods.
+                If the value of the MessageBoxBean is null the messagebox will not be displayed.
             </example>
         </sect2>
 
