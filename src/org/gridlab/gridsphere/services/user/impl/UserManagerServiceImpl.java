@@ -170,6 +170,8 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public void approveAccountRequest(User approver, AccountRequest request, MailMessage mailMessage)
             throws PermissionDeniedException {
+
+        //@todo check if a user with that userid already exists!
         if (isSuperuser(approver)) {
             String userid = request.getID();
             AccountRequestImpl requestImpl = null;
