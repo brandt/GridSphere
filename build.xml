@@ -303,6 +303,7 @@ Copyright:
             <!-- don't include portlets -->
             <exclude name="org/gridlab/gridsphere/portlets/**"/>
             <!-- don't include portlet widgets tag library -->
+            <exclude name="org/gridlab/gridsphere/provider/**"/>
             <exclude name="org/gridlab/gridsphere/tags/**"/>
         </jar>
      </target>
