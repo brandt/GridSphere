@@ -410,6 +410,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             // see if render params are set from actionResponse
             Map tmpParams = (Map)request.getAttribute(SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
             if (tmpParams != null) renderParams = tmpParams;
+	
+	    addRenderParams(request);
 
             List slisteners = Collections.synchronizedList(listeners);
             synchronized (slisteners) {
@@ -425,6 +427,21 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     }
 
+    private void addRenderParams(PortletRequest req) {
+        Map tmpParams = (Map)req.getParameterMap();
+            if (tmpParams != null) {
+                Iterator it = tmpParams.keySet().iterator();
+                while (it.hasNext()) {
+                    String key = (String)it.next();
+                    String[] paramValues = req.getParameterValues( key );
+                    if (key.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
+                        //System.err.println("replacing render param " + key);
+                        renderParams.put(key, tmpParams.get(key));
+                    }
+                }
+            }
+    }
+
     /**
      * Renders the portlet frame component
      *
@@ -438,21 +455,13 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
 
-        // check for render params
-        if ((onlyRender) && (event.getPortletComponentID().equals(componentIDStr))) {
-            Map tmpParams = (Map)req.getParameterMap();
-            if (tmpParams != null) {
-                Iterator it = tmpParams.keySet().iterator();
-                while (it.hasNext()) {
-                    String key = (String)it.next();
-                    String[] paramValues = req.getParameterValues( key );
-                    if (key.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
-                        renderParams.put(key, tmpParams.get(key));
-                    }
-                }
+ 	// check for render params
+        if (onlyRender)  {
+            if ((event.getPortletComponentID().equals(componentIDStr))) {
+                addRenderParams(req);
             }
         }
-
+	
         User user = req.getUser();
         if (!(user instanceof GuestUser)) {
             boolean hasrole = false;
