@@ -11,7 +11,7 @@
 <auth-modules>
 
     <auth-module>
-        <name>PasswordAuth</name>
+        <name>GridSphere Password</name>
         <description lang="en">Hashed password based authentication using GridSphere database</description>
         <implementation>org.gridlab.gridsphere.services.core.security.auth.modules.impl.PasswordAuthModule</implementation>
         <active>true</active>
