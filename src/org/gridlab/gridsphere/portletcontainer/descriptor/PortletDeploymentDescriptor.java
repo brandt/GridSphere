@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerXml;
 
 import java.util.Iterator;
 import java.util.Vector;
+import java.util.List;
 
 public class PortletDeploymentDescriptor {
 
@@ -31,7 +32,7 @@ public class PortletDeploymentDescriptor {
     /**
      *  returns a vector of portletapps
      */
-    public Vector getPortletApp() {
+    public List getPortletApp() {
         return PortletApp;
     };
 
@@ -39,7 +40,7 @@ public class PortletDeploymentDescriptor {
      * sets the PortletApp Vector
      */
     private void setPortletApp(Vector v) {
-        PortletApp = v;
+        this.PortletApp = v;
     }
 
     /**
@@ -77,7 +78,7 @@ public class PortletDeploymentDescriptor {
             throw new PortletDeploymentDescriptorException("Configuration error: "+e.getMessage());
         }
 
-        this.setPortletApp(pd.getPortletAppList());
+        this.setPortletApp((Vector)pd.getPortletAppList());
     }
 
     /**
