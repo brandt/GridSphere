@@ -495,7 +495,7 @@ Copyright:
         <copy overwrite="true" file="${gswebapp.dir}/WEB-INF/database/database.xml"
             tofile="${build.webapps}/gridsphere/WEB-INF/database/database.xml"/>
 
-        <copy overwrite="true" file="lib/portlet-widget-tags.jar" todir="${build.webapps}/gridsphere/WEB-INF/classes/lib"/>
+        <copy overwrite="true" file="lib/gridsphere-ui-tags.jar" todir="${build.webapps}/gridsphere/WEB-INF/classes/lib"/>
         <copy overwrite="true" file="lib/coreportlets.jar" todir="${build.webapps}/gridsphere/WEB-INF/classes/lib"/>
 
         <antcall target="configure-database"/>
