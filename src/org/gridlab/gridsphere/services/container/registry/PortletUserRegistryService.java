@@ -42,6 +42,5 @@ public interface PortletUserRegistryService extends PortletService {
 
     public PortletSettings getPortletSettings(PortletRequest request, String concretePortletID);
 
-    public void doAction(PortletRequest req, PortletResponse res);
 
 }

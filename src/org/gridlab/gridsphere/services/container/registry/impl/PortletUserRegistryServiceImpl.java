@@ -123,8 +123,9 @@ public class PortletUserRegistryServiceImpl implements PortletUserRegistryServic
     public void login(PortletRequest request) {
         log.info("in login()");
 
+        User user = request.getUser();
+        List usersPortlets = new Vector();
         // based on user.getID() get their UserPortlet and then getPortlets
-        List usersPortlets = null;
         Iterator it = usersPortlets.iterator();
         while (it.hasNext()) {
             String portletID = (String) it.next();
@@ -140,7 +141,7 @@ public class PortletUserRegistryServiceImpl implements PortletUserRegistryServic
         log.info("in logout()");
 
         // based on user.getID() get their UserPortlet and then getPortlets
-        List usersPortlets = null;
+        List usersPortlets = new Vector();
         Iterator it = usersPortlets.iterator();
         while (it.hasNext()) {
             String portletID = (String) it.next();
@@ -156,7 +157,6 @@ public class PortletUserRegistryServiceImpl implements PortletUserRegistryServic
      */
     public List getPortlets(PortletRequest request) {
         String uid = request.getUser().getID();
-
         return null;
     }
 
@@ -173,22 +173,24 @@ public class PortletUserRegistryServiceImpl implements PortletUserRegistryServic
         User user = request.getUser();
         SportletSettings sportletSettings = null;
         RegisteredPortlet regPortlet = registryService.getRegisteredPortlet(concretePortletID);
+
         Owner owner = regPortlet.getPortletOwner();
 
         Portlet.Mode mode = request.getMode();
+
         if (mode == Portlet.Mode.CONFIGURE) {
             PortletRole ownerRole = owner.getRole();
             PortletGroup ownerGroup = owner.getGroup();
+            try {
             /*
             if (aclService.hasSuperRole(user)) {
                 return regPortlet.getPortletSettings(true);
             }
             */
-            try {
             if (aclService.hasRoleInGroup(user, ownerGroup, ownerRole))
                 return regPortlet.getPortletSettings(true);
             } catch (PortletServiceException e) {
-                log.error("Unable to get access control service");
+                log.error("Unable to get access control service", e);
             }
         }
         return regPortlet.getPortletSettings(false);
@@ -207,8 +209,5 @@ public class PortletUserRegistryServiceImpl implements PortletUserRegistryServic
         return data;
     }
 
-    public void doAction(PortletRequest req, PortletResponse res) {
-
-    }
 
 }
