@@ -38,31 +38,7 @@ Build include file for the GridSphere Portal source code, see build.xml
             <fileset dir="${gswebapp.dir}"/>
         </copy>
 
-        <!-- change web.xml if precompiled jsps are available -->
-
-        <if>        <!-- to avoid errormsg if not found -->
-            <available file="${gridsphere.build}/jsp/web.inc"/>
-            <then>
-                <loadfile property="web.inc" srcfile="${gridsphere.build}/jsp/web.inc" failonerror="false"/>
-            </then>
-        </if>
-
-        <condition property="web.inc" value="">
-            <not>
-                <isset property="${web.inc}"/>
-            </not>
-        </condition>
-
-
-        <!-- add the web.inc to web.xml (if avail)-->
-        <copy
-            tofile="${gridsphere.build}/webapps/gridsphere/WEB-INF/web.xml"
-            file="${gridsphere.build}/webapps/gridsphere/WEB-INF/web-xml.tmpl" overwrite="true">
-            <filterset>
-                <filter token="PRECOMPILED-JSP" value="${web.inc}"/>
-            </filterset>
-        </copy>
-
+        <antcall target="modify-webxml"/>
 
         <copy todir="${gridsphere.build}/docs/EclipseGuide">
             <fileset dir="docs/docbook/EclipseGuide"/>
@@ -88,6 +64,40 @@ Build include file for the GridSphere Portal source code, see build.xml
             </then>
         </if>
     </target>
+
+    <target name="modify-webxml">
+        <!-- change web.xml if precompiled jsps are available -->
+        <if>
+            <equals arg1="${gridsphere.useprecompiledjsp}" arg2="true"/>
+            <then>
+
+                <if>        <!-- to avoid errormsg if not found -->
+                    <available file="${gridsphere.build}/jsp/web.inc"/>
+                    <then>
+                        <loadfile property="web.inc" srcfile="${gridsphere.build}/jsp/web.inc" failonerror="false"/>
+                    </then>
+                </if>
+
+                <condition property="web.inc" value="">
+                    <not>
+                        <isset property="${web.inc}"/>
+                    </not>
+                </condition>
+
+
+                <!-- add the web.inc to web.xml (if avail)-->
+                <copy
+                    tofile="${gridsphere.build}/webapps/gridsphere/WEB-INF/web.xml"
+                    file="${gridsphere.build}/webapps/gridsphere/WEB-INF/web-xml.tmpl" overwrite="true">
+                    <filterset>
+                        <filter token="PRECOMPILED-JSP" value="${web.inc}"/>
+                    </filterset>
+                </copy>
+
+            </then>
+        </if>
+    </target>
+
 
     <!-- ========================================================= -->
     <!-- =          JETTY                                        = -->
