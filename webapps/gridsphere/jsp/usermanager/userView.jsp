@@ -6,9 +6,12 @@
                  java.util.Iterator" %>
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
+<jsp:useBean id="userManagerBean"
+             class="org.gridlab.gridsphere.portlets.core.user.UserManagerBean"
+             scope="request"/>
 <portletAPI:init/>
 <gs:form action="doViewUser">
-<gs:hiddenfield bean="userID"/>
+<gs:actionparam name="userID" value="<%=userManagerBean.getUser().getID()%>"/>
 <table class="portlet-pane" cellspacing="1" width="100%">
   <tr>
     <td>

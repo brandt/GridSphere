@@ -68,7 +68,6 @@
           <td class="portlet-frame-text">
             <gs:actionlink action="doViewUserJob" label="start">
               <gs:actionparam name="jobID" value="<%=jobID%>"/>
-              <gs:actionparam name="context" value="<%=jobID%>"/>
             </gs:actionlink>
           </td>
           <td class="portlet-frame-text">

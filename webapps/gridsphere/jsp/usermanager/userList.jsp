@@ -24,6 +24,8 @@
   </tr>
   <tr>
     <td>
+        <gs:table bean="userList"/>
+<%--
       <table class="portlet-frame" cellspacing="1" width="100%">
 <% List userList = userManagerBean.getUserList();
    int numUsers = userList.size();
@@ -34,6 +36,8 @@
           </td>
         </tr>
 <% } else { %>
+        <tr>
+
        <tr>
          <td class="portlet-frame-header" width="100">
              User Name
@@ -70,6 +74,7 @@
         </tr>
 <%   }
    } %>
+--%>
       </table>
     </td>
   </tr>
