@@ -69,6 +69,22 @@
     </portlet-tab>
     <portlet-tab title="Administration" required-role="SUPER">
         <portlet-tabbed-pane style="sub-menu">
+            <portlet-tab title="Portlets">
+                <table-layout>
+                    <row-layout>
+                        <column-layout width="50%">
+                            <portlet-frame label="loginconfig">
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                        <column-layout width="50%">
+                            <portlet-frame label="portletmanager">
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
             <portlet-tab title="Users">
                 <table-layout>
                     <row-layout>
@@ -86,17 +102,6 @@
                         <column-layout width="80%">
                             <portlet-frame label="groupmanager">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet.1</portlet-class>
-                            </portlet-frame>
-                        </column-layout>
-                    </row-layout>
-                </table-layout>
-            </portlet-tab>
-            <portlet-tab title="Portlets">
-                <table-layout>
-                    <row-layout>
-                        <column-layout width="80%">
-                            <portlet-frame label="portletmanager">
-                                <portlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
                     </row-layout>
