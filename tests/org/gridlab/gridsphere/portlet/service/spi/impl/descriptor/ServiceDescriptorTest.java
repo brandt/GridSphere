@@ -51,10 +51,10 @@ public class ServiceDescriptorTest extends TestCase {
         assertEquals(2, list.size());
 
         SportletServiceDefinition serviceDef = (SportletServiceDefinition) list.get(0);
-        assertEquals("Test Portlet Service", serviceDef.getName());
-        assertEquals("This is a Test Portlet Service", serviceDef.getDescription());
-        assertEquals("org.gridlab.gridsphere.services.test.PortletTestService", serviceDef.getInterface());
-        assertEquals("org.gridlab.gridsphere.services.test.PortletTestServiceImpl", serviceDef.getImplementation());
+        assertEquals("Test Portlet Service", serviceDef.getServiceName());
+        assertEquals("This is a Test Portlet Service", serviceDef.getServiceDescription());
+        assertEquals("org.gridlab.gridsphere.services.test.PortletTestService", serviceDef.getServiceInterface());
+        assertEquals("org.gridlab.gridsphere.services.test.PortletTestServiceImpl", serviceDef.getServiceImplementation());
         assertEquals(false, serviceDef.getUserRequired());
         List configList = serviceDef.getConfigParamList();
 
@@ -64,10 +64,10 @@ public class ServiceDescriptorTest extends TestCase {
         assertEquals("some value", configParam.getParamValue());
 
         serviceDef = (SportletServiceDefinition) list.get(1);
-        assertEquals("User Test Portlet Service", serviceDef.getName());
-        assertEquals("This is a User Test Portlet Service", serviceDef.getDescription());
-        assertEquals("org.gridlab.gridsphere.services.test.PortletTestService", serviceDef.getInterface());
-        assertEquals("org.gridlab.gridsphere.services.test.PortletTestServiceImpl", serviceDef.getImplementation());
+        assertEquals("User Test Portlet Service", serviceDef.getServiceName());
+        assertEquals("This is a User Test Portlet Service", serviceDef.getServiceDescription());
+        assertEquals("org.gridlab.gridsphere.services.test.PortletTestService", serviceDef.getServiceInterface());
+        assertEquals("org.gridlab.gridsphere.services.test.PortletTestServiceImpl", serviceDef.getServiceImplementation());
         assertEquals(true, serviceDef.getUserRequired());
     }
 

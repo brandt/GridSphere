@@ -44,7 +44,7 @@ public class SetupTestUsersTest extends SetupTestGroupsTest {
         log.info(" =====================================  setup");
         // Create a root user services using mock ServletConfig
         try {
-            rootUserService = (UserManagerService) factory.createPortletUserService(UserManagerService.class, rootUser, null, true);
+            rootUserService = (UserManagerService) factory.createUserPortletService(UserManagerService.class, rootUser, null, true);
         } catch (Exception e) {
             log.error("Unable to initialize services: ", e);
         }
