@@ -9,22 +9,19 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 import org.gridlab.gridsphere.services.registry.PortletManagerService;
-import org.gridlab.gridsphere.services.security.acl.AccessControlService;
-import org.gridlab.gridsphere.services.security.AuthenticationException;
-import org.gridlab.gridsphere.services.user.UserManagerService;
 
-import javax.servlet.*;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
-import java.util.Iterator;
 
 
 public class GridSphereServlet extends HttpServlet implements ServletContextListener,
@@ -101,8 +98,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         try {
             layoutEngine.init();
         } catch (Exception e) {
-            log.error("Unable to initialize Portlet Layout Engine: ", e);
-            throw new ServletException("Unable to initialize Portlet Layout Engine: " + e.getMessage());
+            log.error("Unable to initialize Portlet PortletLayout Engine: ", e);
+            throw new ServletException("Unable to initialize Portlet PortletLayout Engine: " + e.getMessage());
         }
     }
 
@@ -110,9 +107,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         GridSphereEvent event = new GridSphereEventImpl(context, req, res);
 
+        PortletRequest portletReq = event.getPortletRequest();
+        PortletResponse portletRes = event.getPortletResponse();
+
         // If first time being called, instantiate all portlets
         if (firstDoGet) {
-            portletManager.initAllPortletWebApplications(event.getSportletRequest(), event.getSportletResponse());
+            portletManager.initAllPortletWebApplications(portletReq, portletRes);
             firstDoGet = false;
         }
 
@@ -135,15 +135,15 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
 
         /* This is where we get ACL info and update sportlet request */
-        SportletRequest sreq = event.getSportletRequest();
+        PortletRequest sreq = event.getPortletRequest();
         User user = sreq.getUser();
         List roles = new ArrayList();
         List groups = new ArrayList();
         if (user instanceof GuestUser) {
             roles.add(PortletRole.GUEST);
             groups.add(PortletGroup.BASE);
-            sreq.setRoles(PortletGroup.BASE, roles);
-            sreq.setGroups(groups);
+            sreq.setAttribute(GridSphereProperties.PORTLETROLES, roles);
+            sreq.setAttribute(GridSphereProperties.PORTLETGROUPS, groups);
         } else {
             /*
             try {
@@ -173,7 +173,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         String LOGIN_ERROR_FLAG = "LOGIN_ERROR";
         Integer LOGIN_ERROR_UNKNOWN = new Integer(-1);
 
-        PortletRequest req = event.getSportletRequest();
+        PortletRequest req = event.getPortletRequest();
         PortletSession session = req.getPortletSession(true);
 
         String username = (String) req.getParameter("username");
@@ -209,7 +209,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     }
 
     public void logout(GridSphereEvent event) {
-        PortletRequest req = event.getSportletRequest();
+        PortletRequest req = event.getPortletRequest();
         PortletSession session = req.getPortletSession();
         session.invalidate();
         log.debug("in logout of GridSphere Servlet");
@@ -318,7 +318,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public void sessionDestroyed(HttpSessionEvent event) {
         log.info("sessionDestroyed('" + event.getSession().getId() + "')");
         HttpSession session = event.getSession();
-        User user = (User)session.getAttribute(GridSphereProperties.USER);
+        User user = (User) session.getAttribute(GridSphereProperties.USER);
         PortletLayoutEngine engine = PortletLayoutEngine.getInstance();
         engine.removeUser(user);
     }

@@ -4,28 +4,27 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl;
 
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletContext;
-import org.gridlab.gridsphere.portlet.AbstractPortlet;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
-import org.gridlab.gridsphere.portlet.impl.*;
-import org.gridlab.gridsphere.portletcontainer.*;
-import org.gridlab.gridsphere.services.security.acl.AccessControlService;
-import org.gridlab.gridsphere.services.registry.PortletManagerService;
+import org.gridlab.gridsphere.portlet.PortletContext;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.impl.SportletRequestImpl;
+import org.gridlab.gridsphere.portlet.impl.SportletResponse;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portletcontainer.PortletEventDispatcher;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletConfig;
 import java.util.Enumeration;
 
 public class GridSphereEventImpl implements GridSphereEvent {
 
-    protected SportletRequest portletRequest;
-    protected SportletResponse portletResponse;
+    protected PortletRequest portletRequest;
+    protected PortletResponse portletResponse;
     protected PortletContext portletContext;
 
     protected int PortletComponentID = -1;
-    protected String ActivePortletID = null;
     protected DefaultPortletAction action = null;
     protected PortletEventDispatcher eventDispatcher = null;
 
@@ -41,8 +40,6 @@ public class GridSphereEventImpl implements GridSphereEvent {
         } catch (NumberFormatException e) {
         }
 
-        ActivePortletID = req.getParameter(GridSphereProperties.PORTLETID);
-
         /* This is where a DefaultPortletAction gets put together if one exists */
         String actionStr = portletRequest.getParameter(GridSphereProperties.ACTION);
         if (actionStr != null) {
@@ -52,9 +49,9 @@ public class GridSphereEventImpl implements GridSphereEvent {
                 Enumeration enum = portletRequest.getParameterNames();
                 String name, newname, value;
                 while (enum.hasMoreElements()) {
-                    name = (String)enum.nextElement();
+                    name = (String) enum.nextElement();
                     if (name.startsWith(prefix)) {
-                        newname = name.substring(prefix.length()+1);
+                        newname = name.substring(prefix.length() + 1);
                         value = portletRequest.getParameter(name);
                         action.addParameter(newname, value);
                     }
@@ -67,11 +64,11 @@ public class GridSphereEventImpl implements GridSphereEvent {
         return eventDispatcher;
     }
 
-    public SportletRequest getSportletRequest() {
+    public PortletRequest getPortletRequest() {
         return portletRequest;
     }
 
-    public SportletResponse getSportletResponse() {
+    public PortletResponse getPortletResponse() {
         return portletResponse;
     }
 
@@ -91,22 +88,8 @@ public class GridSphereEventImpl implements GridSphereEvent {
         return false;
     }
 
-    public SportletURI createNewAction(int PortletComponentID, String ActivePortletID) {
-        SportletURI sportletURI = new SportletURI(portletResponse, portletRequest.getContextPath());
-        String sid = new Integer(PortletComponentID).toString();
-        sportletURI.addParameter(GridSphereProperties.COMPONENT_ID, sid);
-        if (ActivePortletID != null) {
-            sportletURI.addParameter(GridSphereProperties.PORTLETID, ActivePortletID);
-        }
-        return sportletURI;
-    }
-
     public int getPortletComponentID() {
         return PortletComponentID;
-    }
-
-    public String getActivePortletID() {
-        return ActivePortletID;
     }
 
 }

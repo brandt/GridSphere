@@ -4,9 +4,9 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl;
 
+import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
 import org.gridlab.gridsphere.portlet.PortletConfig;
 import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.AbstractPortlet;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
@@ -16,6 +16,7 @@ import org.gridlab.gridsphere.portletcontainer.descriptor.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -30,27 +31,27 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
 
     private PortletLog log = SportletLog.getInstance(ApplicationPortletImpl.class);
 
-    private String id = "";
+    private PortletDeploymentDescriptor portletDD = null;
+    private String applicationPortletID = "";
     private String portletName = "";
     private String servletName = "";
     private Cacheable cacheable = null;
     private SupportsModes supportedModes = null;
     private List allowedStates = null;
     private List concretePortlets = null;
-    private PortletConfig portletConfig = null;
-    private PortletApp portletApp = null;
+    private ApplicationPortletDescriptor appDescriptor = null;
     private ServletContext context;
-    private String webApplication = null;
+    private String webAppName = null;
     private PortletWrapper portletWrapper = null;
 
     public ApplicationPortletImpl(PortletDeploymentDescriptor pdd, PortletDefinition portletDef, String webApplication, ServletContext context) {
+        this.portletDD = pdd;
         this.context = context;
-        Iterator it;
-        this.webApplication = webApplication;
-        this.portletApp = portletDef.getPortletApp();
+        this.webAppName = webApplication;
+        this.appDescriptor = portletDef.getApplicationPortletDescriptor();
 
         // Set cache information
-        CacheInfo cacheInfo = portletApp.getCacheInfo();
+        CacheInfo cacheInfo = appDescriptor.getCacheInfo();
         /*
         if (cacheInfo == null) {
             cacheInfo = new CacheInfo("true", -1);
@@ -59,9 +60,9 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
         cacheable.setExpiration(cacheInfo.getExpires());
         String shared = cacheInfo.getShared();
         if ((shared.equalsIgnoreCase("true")) ||
-            (shared.equalsIgnoreCase("t")) ||
-            (shared.equalsIgnoreCase("yes")) ||
-            (shared.equalsIgnoreCase("y"))) {
+                (shared.equalsIgnoreCase("t")) ||
+                (shared.equalsIgnoreCase("yes")) ||
+                (shared.equalsIgnoreCase("y"))) {
             cacheable.setShared(true);
         } else {
             cacheable.setShared(false);
@@ -69,20 +70,20 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
 
         // Set concrete portlet information
         List concreteApps = portletDef.getConcreteApps();
-        it = concreteApps.iterator();
+        Iterator it = concreteApps.iterator();
         concretePortlets = new Vector();
         while (it.hasNext()) {
-            ConcretePortletApplication concApp = (ConcretePortletApplication)it.next();
+            ConcretePortletDescriptor concApp = (ConcretePortletDescriptor) it.next();
             try {
-                ConcretePortlet concretePortlet = new ConcretePortletImpl(pdd, portletApp, concApp);
+                ConcretePortlet concretePortlet = new ConcretePortletImpl(pdd, appDescriptor, concApp);
                 concretePortlets.add(concretePortlet);
             } catch (ConcretePortletException e) {
                 log.error("Unable to create concrete portlet: " + concApp.getConcretePortletInfo().getName(), e);
             }
         }
-        id = portletApp.getID();
-        portletName = portletApp.getPortletName();
-        servletName = portletApp.getServletName();
+        applicationPortletID = appDescriptor.getID();
+        portletName = appDescriptor.getPortletName();
+        servletName = appDescriptor.getServletName();
 
         log.info("Creating request dispatcher for " + servletName);
         RequestDispatcher rd = context.getNamedDispatcher(servletName);
@@ -91,7 +92,7 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
             log.error("Make sure the servletName: " + servletName + " is the servlet-name defined in web.xml");
         }
 
-        portletWrapper = new PortletWrapper(rd, portletApp);
+        portletWrapper = new PortletWrapper(rd, appDescriptor);
     }
 
     /**
@@ -99,8 +100,8 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
      *
      * @return the web application name
      */
-    public String getWebApplication() {
-        return webApplication;
+    public String getWebApplicationName() {
+        return webAppName;
     }
 
     /**
@@ -108,10 +109,15 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
      *
      * @return the PortletApplication
      */
-    public PortletApp getPortletApplicationDescriptor() {
-        return portletApp;
+    public ApplicationPortletDescriptor getApplicationPortletDescriptor() {
+        return appDescriptor;
     }
 
+    /**
+     * Returns a PortletWrapper for this ApplicationPortlet
+     *
+     * @return PortletWrapper the proxy portlet for this ApplicationPortlet
+     */
     public PortletWrapper getPortletWrapper() {
         return portletWrapper;
     }
@@ -135,7 +141,7 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
     public ConcretePortlet getConcretePortlet(String concretePortletID) {
         Iterator it = concretePortlets.iterator();
         while (it.hasNext()) {
-            ConcretePortlet c = (ConcretePortlet)it.next();
+            ConcretePortlet c = (ConcretePortlet) it.next();
             if (c.getConcretePortletAppID().equals(concretePortletID)) {
                 return c;
             }
@@ -149,7 +155,7 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
      * @returns the id of the PortletApplication
      */
     public String getPortletAppID() {
-        return id;
+        return applicationPortletID;
     }
 
     /**
@@ -171,40 +177,19 @@ public class ApplicationPortletImpl implements ApplicationPortlet {
     }
 
     /**
-     * Returns the list of portlet configuration parameters that are used in the PortletConfig class
+     * Saves the supplied application portlet descriptor to serialize any changes that have been made
      *
-     * @return the list of portlet config parameters
+     * @param appDescriptor the application portlet descriptor
+     * @throws IOException if an I/O error ooccurs
      */
-    //public PortletConfig getPortletConfig() {
-    //    return portletConfig;
-    //}
+    public void saveDescriptor(ApplicationPortletDescriptor appDescriptor) throws IOException {
+        this.appDescriptor = appDescriptor;
+        portletDD.setApplicationPortletDescriptor(appDescriptor);
+        try {
+            portletDD.save();
+        } catch (DescriptorException e) {
+            log.error("Unable to save application portlet descriptor! " + applicationPortletID, e);
+        }
+    }
 
-    /**
-     * Returns the list of allowed portlet window states e.g. MINIMIZED, MAXIMIZED, RESIZING
-     *
-     * @return modes the list of allowed portlet window states
-     * @see <code>PortletWindow.State</code>
-     */
-    //public List getAllowedPortletWindowStates() {
-    //    return allowedStates;
-    //}
-
-    /**
-     * Return the cacheable portlet info consisting of:
-     * expires: -1 = never expires 0 = always expires # = number of seconds until expiration
-     * shared: true if portlet output shared among all users or false if not
-     */
-    //public Cacheable getCacheablePortletInfo() {
-    //    return cacheable;
-    //}
-
-    /**
-     * Returns the list of supported portlet modes e.g. EDIT, VIEW, HELP, CONFIGURE
-     *
-     * @return modes the list of allowed portlet modes
-     * @see <code>Portlet.Mode</code>
-     */
-    //public SupportsModes getSupportedPortletModes() {
-    //    return supportedModes;
-    //}
 }

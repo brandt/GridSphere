@@ -8,16 +8,17 @@ package org.gridlab.gridsphere.portletcontainer.descriptor;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerXml;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.Descriptor;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
 
 public class PortletDeploymentDescriptor extends Descriptor {
 
-    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletDeploymentDescriptor.class);
+    private static PortletLog log = SportletLog.getInstance(PortletDeploymentDescriptor.class);
     private PersistenceManagerXml pmx = PersistenceManagerXml.getInstance();
     private List PortletDef = new ArrayList();
     private PortletCollection pc = null;
@@ -31,9 +32,9 @@ public class PortletDeploymentDescriptor extends Descriptor {
      * @param mappingFilePath location of the mapping file
      * @throws PortletDeploymentDescriptorException if the PortletDeploymentDescriptor cannot be created
      */
-    public PortletDeploymentDescriptor(String portletFilePath, String mappingFilePath) throws IOException, DescriptorException  {
+    public PortletDeploymentDescriptor(String portletFilePath, String mappingFilePath) throws IOException, DescriptorException {
         this.mappingFilePath = mappingFilePath;
-        pc = (PortletCollection)load(portletFilePath, mappingFilePath);
+        pc = (PortletCollection) load(portletFilePath, mappingFilePath);
     }
 
     /**
@@ -58,16 +59,16 @@ public class PortletDeploymentDescriptor extends Descriptor {
      * Return the portlet application associated with the
      *
      * @param concretePortletID the concrete portlet ID
-     * @return the corresponding ConcretePortletApplication or null if none exists
+     * @return the corresponding ConcretePortletDescriptor or null if none exists
      */
-    public ConcretePortletApplication getConcretePortletApplication(String concretePortletID) {
+    public ConcretePortletDescriptor getConcretePortletDescriptor(String concretePortletID) {
         Iterator it = PortletDef.iterator();
         while (it.hasNext()) {
-            PortletDefinition pd = (PortletDefinition)it.next();
+            PortletDefinition pd = (PortletDefinition) it.next();
             List apps = pd.getConcreteApps();
             Iterator appsIt = apps.iterator();
             while (appsIt.hasNext()) {
-                ConcretePortletApplication capp = (ConcretePortletApplication)appsIt.next();
+                ConcretePortletDescriptor capp = (ConcretePortletDescriptor) appsIt.next();
                 String uid = capp.getID();
                 if (concretePortletID.equals(uid)) {
                     return capp;
@@ -77,21 +78,21 @@ public class PortletDeploymentDescriptor extends Descriptor {
         return null;
     }
 
-    public void setConcretePortletApplication(ConcretePortletApplication concApp) {
-        if (getConcretePortletApplication(concApp.getID()) == null) {
+    public void setConcretePortletDescriptor(ConcretePortletDescriptor concApp) {
+        if (getConcretePortletDescriptor(concApp.getID()) == null) {
             // see if an application portlet exists
             List defList = pc.getPortletDefList();
             Iterator it = defList.iterator();
             while (it.hasNext()) {
-                PortletDefinition pd = (PortletDefinition)it.next();
+                PortletDefinition pd = (PortletDefinition) it.next();
                 List apps = pd.getConcreteApps();
-                PortletApp pApp = pd.getPortletApp();
+                ApplicationPortletDescriptor pApp = pd.getApplicationPortletDescriptor();
                 if (concApp.getID().startsWith(pApp.getID())) {
                     apps.add(concApp);
                     defList.remove(pd);
-                    pd.setConcreteApps((ArrayList)apps);
+                    pd.setConcreteApps((ArrayList) apps);
                     defList.add(pd);
-                    pc.setPortletDefList((ArrayList)defList);
+                    pc.setPortletDefList((ArrayList) defList);
                 }
             }
         }
@@ -103,11 +104,11 @@ public class PortletDeploymentDescriptor extends Descriptor {
      * @param concretePortletID the concrete portlet ID
      * @return the corresponding PortletApplication or null if none exists
      */
-    public PortletApp getPortletAppDescriptor(String concretePortletID) {
+    public ApplicationPortletDescriptor getApplicationPortletDescriptor(String concretePortletID) {
         Iterator it = PortletDef.iterator();
         while (it.hasNext()) {
-            PortletDefinition pd = (PortletDefinition)it.next();
-            PortletApp app = pd.getPortletApp();
+            PortletDefinition pd = (PortletDefinition) it.next();
+            ApplicationPortletDescriptor app = pd.getApplicationPortletDescriptor();
             String uid = app.getID();
             if (concretePortletID.startsWith(uid)) {
                 return app;
@@ -122,12 +123,12 @@ public class PortletDeploymentDescriptor extends Descriptor {
      * @param concretePortletID the concrete portlet ID
      * @return the corresponding PortletApplication or null if none exists
      */
-    public void setPortletAppDescriptor(PortletApp portletApp) {
-        if (getPortletAppDescriptor(portletApp.getID()) == null) {
+    public void setApplicationPortletDescriptor(ApplicationPortletDescriptor portletApp) {
+        if (getApplicationPortletDescriptor(portletApp.getID()) == null) {
             PortletDefinition pd = new PortletDefinition();
             List defList = pc.getPortletDefList();
             defList.add(pd);
-            pc.setPortletDefList((ArrayList)defList);
+            pc.setPortletDefList((ArrayList) defList);
         }
     }
 

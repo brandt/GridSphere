@@ -4,16 +4,16 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
-import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApp;
-import org.gridlab.gridsphere.portlet.AbstractPortlet;
+import org.gridlab.gridsphere.portletcontainer.descriptor.ApplicationPortletDescriptor;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
  * An application portlet represents the portlet application defined in the portlet.xml
- * ApplicationPortlet is mostly a proxy for the PortletApp class used by Castor
+ * ApplicationPortlet is mostly a proxy for the ApplicationPortletDescriptor class used by Castor
  *
- * @see <code>org.gridlab.gridsphere.portletcontainer.descriptor.PortletApp</code>
+ * @see <code>org.gridlab.gridsphere.portletcontainer.descriptor.ApplicationPortletDescriptor</code>
  */
 public interface ApplicationPortlet {
 
@@ -37,14 +37,14 @@ public interface ApplicationPortlet {
      *
      * @return the web application name
      */
-    public String getWebApplication();
+    public String getWebApplicationName();
 
     /**
      * Return the PortletApplication, the portlet descriptor class that defines the portlet application
      *
      * @return the PortletApplication
      */
-    public PortletApp getPortletApplicationDescriptor();
+    public ApplicationPortletDescriptor getApplicationPortletDescriptor();
 
     /**
      * Returns the id of a PortletApplication
@@ -67,35 +67,19 @@ public interface ApplicationPortlet {
      */
     public String getServletName();
 
+    /**
+     * Returns a PortletWrapper for this ApplicationPortlet
+     *
+     * @return PortletWrapper the proxy portlet for this ApplicationPortlet
+     */
     public PortletWrapper getPortletWrapper();
 
     /**
-     * Returns the map of portlet configuration parameters that are used in the PortletConfig class
+     * Saves the supplied application portlet descriptor to serialize any changes that have been made
      *
-     * @return the map of portlet config parameters keys are variable name and values are variable values
+     * @param appDescriptor the application portlet descriptor
+     * @throws IOException if an I/O error ooccurs
      */
-    //public Map PortletConfig();
+    public void saveDescriptor(ApplicationPortletDescriptor applicationDescriptor) throws IOException;
 
-    /**
-     * Returns the list of allowed portlet window states e.g. MINIMIZED, MAXIMIZED, RESIZING
-     *
-     * @return modes the list of allowed portlet window states
-     * @see <code>PortletWindow.State</code>
-     */
-    //public List getAllowedPortletWindowStates();
-
-    /**
-     * Return the cacheable portlet info consisting of:
-     * expires: -1 = never expires 0 = always expires # = number of seconds until expiration
-     * shared: true if portlet output shared among all users or false if not
-     */
-    //public Cacheable getCacheablePortletInfo();
-
-    /**
-     * Returns the list of supported portlet modes e.g. EDIT, VIEW, HELP, CONFIGURE
-     *
-     * @return modes the list of allowed portlet modes
-     * @see <code>Portlet.Mode</code>
-     */
-    //public List getSupportedPortletModes();
 }

@@ -6,26 +6,26 @@ package org.gridlab.gridsphere.portletcontainer;
 
 import org.gridlab.gridsphere.event.MessageEvent;
 import org.gridlab.gridsphere.event.WindowEvent;
-import org.gridlab.gridsphere.event.ActionEvent;
-import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.DefaultPortletAction;
+import org.gridlab.gridsphere.portlet.PortletException;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletSettings;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApp;
+import org.gridlab.gridsphere.portletcontainer.descriptor.ApplicationPortletDescriptor;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public class PortletWrapper {
 
     public static PortletLog log = SportletLog.getInstance(PortletWrapper.class);
 
     private RequestDispatcher rd;
-    private PortletApp portletApp = null;
+    private ApplicationPortletDescriptor portletApp = null;
 
-    public PortletWrapper(RequestDispatcher rd, PortletApp portletApp) {
+    public PortletWrapper(RequestDispatcher rd, ApplicationPortletDescriptor portletApp) {
         this.rd = rd;
         this.portletApp = portletApp;
     }
@@ -273,7 +273,7 @@ public class PortletWrapper {
         }
     }
 
-    protected void include(HttpServletRequest req, HttpServletResponse res)  {
+    protected void include(HttpServletRequest req, HttpServletResponse res) {
         try {
             rd.include(req, res);
         } catch (Exception e) {

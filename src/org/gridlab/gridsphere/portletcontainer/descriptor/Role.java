@@ -5,13 +5,13 @@
 
 package org.gridlab.gridsphere.portletcontainer.descriptor;
 
-import junit.textui.TestRunner;
 
 public class Role {
 
     private String roleName = "";
 
-    public Role() {}
+    public Role() {
+    }
 
     /**
      * Returns the role name

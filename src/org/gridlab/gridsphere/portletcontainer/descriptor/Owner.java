@@ -15,7 +15,8 @@ public class Owner {
     private PortletGroup group = null;
     private PortletRole role = null;
 
-    public Owner() {}
+    public Owner() {
+    }
 
     /**
      * gets the group name

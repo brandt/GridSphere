@@ -7,8 +7,6 @@
 
 package org.gridlab.gridsphere.portletcontainer.descriptor;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class LanguageInfo {
 

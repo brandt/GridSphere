@@ -4,17 +4,9 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
+import org.gridlab.gridsphere.event.WindowEvent;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
-import org.gridlab.gridsphere.portletcontainer.PortletWrapper;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-import org.gridlab.gridsphere.event.WindowEvent;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Hashtable;
-import java.util.Map;
 
 /**
  * The PortletRegistryService acts as a repository for portlets and makes them available to the portlet

@@ -4,19 +4,16 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
-import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletResponse;
-import org.gridlab.gridsphere.portlet.impl.SportletURI;
-import org.gridlab.gridsphere.portlet.impl.SportletRequest;
-import org.gridlab.gridsphere.services.registry.PortletManagerService;
+import org.gridlab.gridsphere.event.Event;
+import org.gridlab.gridsphere.portlet.DefaultPortletAction;
+import org.gridlab.gridsphere.portlet.PortletContext;
+import org.gridlab.gridsphere.portlet.PortletResponse;
 
-public interface GridSphereEvent {
+public interface GridSphereEvent extends Event {
 
     public PortletContext getPortletContext();
 
-    public SportletRequest getSportletRequest();
-
-    public SportletResponse getSportletResponse();
+    public PortletResponse getPortletResponse();
 
     public PortletEventDispatcher getPortletEventDispatcher();
 
@@ -26,6 +23,6 @@ public interface GridSphereEvent {
 
     public int getPortletComponentID();
 
-    public SportletURI createNewAction(int PortletComponentID, String ActivePortletID);
+    //public PortletURI createNewAction(int PortletComponentID, String ActivePortletID);
 
 }

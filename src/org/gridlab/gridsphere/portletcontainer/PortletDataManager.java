@@ -9,12 +9,12 @@ import org.gridlab.gridsphere.portlet.User;
 
 public interface PortletDataManager {
     /**
- * Returns the users portlet data for the specified portlet
- *
- * @param User the user
- * @param portletID the concrete portlet id
- * @return the PortletData for this portlet or null if none exists.
- */
+     * Returns the users portlet data for the specified portlet
+     *
+     * @param User the user
+     * @param portletID the concrete portlet id
+     * @return the PortletData for this portlet or null if none exists.
+     */
     PortletData getPortletData(User user, String portletID);
 
     /**

@@ -9,7 +9,8 @@ import java.util.List;
 
 public class PortletCollection {
 
-    public PortletCollection() {}
+    public PortletCollection() {
+    }
 
     private List PortletDefList = new ArrayList();
 

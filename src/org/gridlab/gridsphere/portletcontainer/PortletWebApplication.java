@@ -7,13 +7,14 @@ package org.gridlab.gridsphere.portletcontainer;
 import java.util.Collection;
 
 public interface PortletWebApplication {
-    void destroy();
 
-    String getWebApplicationName();
+    public void destroy();
 
-    String getWebApplicationDescription();
+    public String getWebApplicationName();
 
-    ApplicationPortlet getApplicationPortlet(String portletApplicationID);
+    public String getWebApplicationDescription();
 
-    Collection getAllApplicationPortlets();
+    public ApplicationPortlet getApplicationPortlet(String portletApplicationID);
+
+    public Collection getAllApplicationPortlets();
 }

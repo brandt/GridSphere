@@ -4,12 +4,13 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
-import org.gridlab.gridsphere.portlet.impl.SportletSettings;
-import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication;
+import org.gridlab.gridsphere.portlet.PortletSettings;
+import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletDescriptor;
 import org.gridlab.gridsphere.portletcontainer.descriptor.Owner;
 
+import java.io.IOException;
+import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A ConcreteSportlet provides the portlet container with information used to create and manage the
@@ -32,14 +33,14 @@ public interface ConcretePortlet {
      *
      * @return the concrete portlet application
      */
-    public ConcretePortletApplication getConcretePortletApplication();
+    public ConcretePortletDescriptor getConcretePortletDescriptor();
 
     /**
      * Returns the map of portlet context parameters that are used in the PortletConfig class
      *
      * @return the map of portlet context parameters keys are variable name and values are variable values
      */
-    public Map getPortletContext();
+    public Hashtable getPortletContext();
 
 
     /**
@@ -47,21 +48,14 @@ public interface ConcretePortlet {
      *
      * @return the map of portlet config parameters keys are variable name and values are variable values
      */
-    public Map getPortletConfig();
+    public Hashtable getPortletConfig();
 
     /**
      * Returns the sportlet settings for this concrete portlet
      *
      * @return the sportlet settings
      */
-    public SportletSettings getSportletSettings();
-
-    /**
-     * Returns the portlet application settings for this concrete portlet
-     *
-     * @return the portlet application settings
-     */
-    //public PortletApplicationSettings getPortletApplicationSettings(boolean enableConfig);
+    public PortletSettings getPortletSettings();
 
     /**
      * Return the name of this portlet
@@ -76,13 +70,6 @@ public interface ConcretePortlet {
      * @return the portlet classname
      */
     public String getPortletClass();
-
-    /**
-     * Return the instantiated abstract portlet instance
-     *
-     * @return the instantiated abstract portlet instance
-     */
-    //public AbstractPortlet getAbstractPortlet(PortletContext ctx, PortletRequest req, PortletResponse res);
 
     /**
      * Return the Owner of the concrete portlet that can reconfigure the settings
@@ -121,4 +108,11 @@ public interface ConcretePortlet {
      */
     public List getLanguageList();
 
+    /**
+     * Saves the supplied concrete portlet descriptor to serialize any changes that have been made
+     *
+     * @param concreterDescriptor the concrete portlet descriptor
+     * @throws IOException if an I/O error ooccurs
+     */
+    public void saveDescriptor(ConcretePortletDescriptor concreteDescriptor) throws IOException;
 }

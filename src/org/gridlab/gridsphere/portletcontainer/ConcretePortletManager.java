@@ -5,9 +5,6 @@
 package org.gridlab.gridsphere.portletcontainer;
 
 import org.gridlab.gridsphere.portlet.PortletSettings;
-import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
-import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridlab.gridsphere.portletcontainer.PortletWrapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +25,8 @@ public class ConcretePortletManager {
     private static ConcretePortletManager concPortletMgr = new ConcretePortletManager();
     private static PortletRegistryManager registry = PortletRegistryManager.getInstance();
 
-    private ConcretePortletManager() {}
+    private ConcretePortletManager() {
+    }
 
     public static ConcretePortletManager getInstance() {
         return concPortletMgr;
@@ -45,14 +43,14 @@ public class ConcretePortletManager {
         try {
             Iterator it = appPortlets.iterator();
             while (it.hasNext()) {
-                ApplicationPortlet appPortlet = (ApplicationPortlet)it.next();
+                ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
                 portletWrapper = appPortlet.getPortletWrapper();
                 List concPortlets = appPortlet.getConcretePortlets();
                 Iterator concIt = concPortlets.iterator();
                 PortletSettings settings = null;
                 while (concIt.hasNext()) {
-                    ConcretePortlet concPortlet = (ConcretePortlet)concIt.next();
-                    settings = concPortlet.getSportletSettings();
+                    ConcretePortlet concPortlet = (ConcretePortlet) concIt.next();
+                    settings = concPortlet.getPortletSettings();
                     portletWrapper.initConcrete(settings, req, res);
                 }
             }
@@ -72,14 +70,14 @@ public class ConcretePortletManager {
         try {
             Iterator it = appPortlets.iterator();
             while (it.hasNext()) {
-                ApplicationPortlet appPortlet = (ApplicationPortlet)it.next();
+                ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
                 portletWrapper = appPortlet.getPortletWrapper();
                 List concPortlets = appPortlet.getConcretePortlets();
                 Iterator concIt = concPortlets.iterator();
                 PortletSettings settings = null;
                 while (concIt.hasNext()) {
-                    ConcretePortlet concPortlet = (ConcretePortlet)concIt.next();
-                    settings = concPortlet.getSportletSettings();
+                    ConcretePortlet concPortlet = (ConcretePortlet) concIt.next();
+                    settings = concPortlet.getPortletSettings();
                     portletWrapper.initConcrete(settings, req, res);
                 }
             }
@@ -96,14 +94,14 @@ public class ConcretePortletManager {
         try {
             Iterator it = appPortlets.iterator();
             while (it.hasNext()) {
-                ApplicationPortlet appPortlet = (ApplicationPortlet)it.next();
+                ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
                 portletWrapper = appPortlet.getPortletWrapper();
                 List concPortlets = appPortlet.getConcretePortlets();
                 Iterator concIt = concPortlets.iterator();
                 PortletSettings settings = null;
                 while (concIt.hasNext()) {
-                    ConcretePortlet concPortlet = (ConcretePortlet)concIt.next();
-                    settings = concPortlet.getSportletSettings();
+                    ConcretePortlet concPortlet = (ConcretePortlet) concIt.next();
+                    settings = concPortlet.getPortletSettings();
                     portletWrapper.destroyConcrete(settings, req, res);
                 }
             }
@@ -123,14 +121,14 @@ public class ConcretePortletManager {
         try {
             Iterator it = appPortlets.iterator();
             while (it.hasNext()) {
-                ApplicationPortlet appPortlet = (ApplicationPortlet)it.next();
+                ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
                 portletWrapper = appPortlet.getPortletWrapper();
                 List concPortlets = appPortlet.getConcretePortlets();
                 Iterator concIt = concPortlets.iterator();
                 PortletSettings settings = null;
                 while (concIt.hasNext()) {
-                    ConcretePortlet concPortlet = (ConcretePortlet)concIt.next();
-                    settings = concPortlet.getSportletSettings();
+                    ConcretePortlet concPortlet = (ConcretePortlet) concIt.next();
+                    settings = concPortlet.getPortletSettings();
                     portletWrapper.destroyConcrete(settings, req, res);
                 }
             }
@@ -147,7 +145,7 @@ public class ConcretePortletManager {
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         PortletWrapper portletWrapper = appPortlet.getPortletWrapper();
         ConcretePortlet concPortlet = appPortlet.getConcretePortlet(concretePortletID);
-        PortletSettings settings = concPortlet.getSportletSettings();
+        PortletSettings settings = concPortlet.getPortletSettings();
         try {
             portletWrapper.initConcrete(settings, req, res);
         } catch (Exception e) {
@@ -160,7 +158,7 @@ public class ConcretePortletManager {
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         PortletWrapper wrapper = appPortlet.getPortletWrapper();
         ConcretePortlet concPortlet = appPortlet.getConcretePortlet(concretePortletID);
-        PortletSettings settings = concPortlet.getSportletSettings();
+        PortletSettings settings = concPortlet.getPortletSettings();
         try {
             wrapper.destroyConcrete(settings, req, res);
         } catch (Exception e) {

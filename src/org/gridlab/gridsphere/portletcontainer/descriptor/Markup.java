@@ -8,7 +8,6 @@ import org.exolab.castor.types.AnyNode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Iterator;
 
 public class Markup {
 
@@ -34,7 +33,7 @@ public class Markup {
     public String[] getPortletModesAsStrings() {
         String[] modes = new String[portletModes.size()];
         for (int i = 0; i < portletModes.size(); i++) {
-            AnyNode a = (AnyNode)portletModes.get(i);
+            AnyNode a = (AnyNode) portletModes.get(i);
             modes[i] = a.getLocalName();
         }
         return modes;

@@ -4,8 +4,6 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
-import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
-
 import java.util.*;
 
 public class PortletRegistryManager {
@@ -14,7 +12,8 @@ public class PortletRegistryManager {
 
     private Hashtable allApplicationPortlets = new Hashtable();
 
-    private PortletRegistryManager() {}
+    private PortletRegistryManager() {
+    }
 
     public static PortletRegistryManager getInstance() {
         return instance;
@@ -33,7 +32,7 @@ public class PortletRegistryManager {
     }
 
     public ApplicationPortlet getApplicationPortlet(String applicationPortletID) {
-        return (ApplicationPortlet)allApplicationPortlets.get(applicationPortletID);
+        return (ApplicationPortlet) allApplicationPortlets.get(applicationPortletID);
     }
 
     public Collection getAllApplicationPortlets() {
@@ -45,8 +44,8 @@ public class PortletRegistryManager {
         Enumeration enum = allApplicationPortlets.elements();
         ApplicationPortlet appPortlet;
         while (enum.hasMoreElements()) {
-            appPortlet = (ApplicationPortlet)enum.nextElement();
-            if (appPortlet.getWebApplication().equals((webApplicationName))) {
+            appPortlet = (ApplicationPortlet) enum.nextElement();
+            if (appPortlet.getWebApplicationName().equals((webApplicationName))) {
                 webappPortlets.add(appPortlet);
             }
         }

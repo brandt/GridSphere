@@ -34,7 +34,8 @@ public class GridSphereConfig implements GridSphereConfigProperties {
         }
     }
 
-    private GridSphereConfig() {}
+    private GridSphereConfig() {
+    }
 
     /**
      * Return the value for the given property key

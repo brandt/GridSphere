@@ -4,10 +4,6 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
-import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
-import org.gridlab.gridsphere.portletcontainer.PortletWrapper;
-import org.gridlab.gridsphere.portlet.AbstractPortlet;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collection;
@@ -26,7 +22,8 @@ public class ApplicationPortletManager {
 
     private PortletRegistryManager registry = PortletRegistryManager.getInstance();
 
-    private ApplicationPortletManager() {}
+    private ApplicationPortletManager() {
+    }
 
     public static ApplicationPortletManager getInstance() {
         return instance;
@@ -38,7 +35,7 @@ public class ApplicationPortletManager {
         try {
             Iterator it = appPortlets.iterator();
             while (it.hasNext()) {
-                ApplicationPortlet appPortlet = (ApplicationPortlet)it.next();
+                ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
                 portletWrapper = appPortlet.getPortletWrapper();
                 portletWrapper.init(req, res);
             }
@@ -53,7 +50,7 @@ public class ApplicationPortletManager {
         try {
             Iterator it = appPortlets.iterator();
             while (it.hasNext()) {
-                ApplicationPortlet appPortlet = (ApplicationPortlet)it.next();
+                ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
                 portletWrapper = appPortlet.getPortletWrapper();
                 portletWrapper.init(req, res);
             }
@@ -68,7 +65,7 @@ public class ApplicationPortletManager {
         try {
             Iterator it = appPortlets.iterator();
             while (it.hasNext()) {
-                ApplicationPortlet appPortlet = (ApplicationPortlet)it.next();
+                ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
                 portletWrapper = appPortlet.getPortletWrapper();
                 portletWrapper.destroy(req, res);
             }
@@ -83,7 +80,7 @@ public class ApplicationPortletManager {
         try {
             Iterator it = appPortlets.iterator();
             while (it.hasNext()) {
-                ApplicationPortlet appPortlet = (ApplicationPortlet)it.next();
+                ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
                 portletWrapper = appPortlet.getPortletWrapper();
                 portletWrapper.destroy(req, res);
             }
@@ -97,8 +94,8 @@ public class ApplicationPortletManager {
         PortletWrapper wrapper = appPortlet.getPortletWrapper();
         try {
             wrapper.init(req, res);
-        } catch (Exception e ) {
-           //throw new PortletLifecycleException(e);
+        } catch (Exception e) {
+            //throw new PortletLifecycleException(e);
         }
     }
 
@@ -107,8 +104,8 @@ public class ApplicationPortletManager {
         PortletWrapper wrapper = appPortlet.getPortletWrapper();
         try {
             wrapper.destroy(req, res);
-        } catch (Exception e ) {
-           //throw new PortletLifecycleException(e);
+        } catch (Exception e) {
+            //throw new PortletLifecycleException(e);
         }
     }
 

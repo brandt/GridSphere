@@ -4,26 +4,26 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl;
 
-import org.gridlab.gridsphere.portlet.AbstractPortlet;
-import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
+import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletSettings;
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortletException;
 import org.gridlab.gridsphere.portletcontainer.descriptor.*;
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
 
-import java.util.*;
+import java.io.IOException;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 
 /**
- * A ConcreteSportlet provides the portlet container with information used to create and manage the
+ * A ConcretePortlet provides the portlet container with information used to create and manage the
  * portlet's lifecycle. A ConcretePortlet is created given a PortletApplication and a corresponding
- * ConcretePortletApplication provided by the PortletDeploymentDescriptor. The ConcretePortlet parses
+ * ConcretePortletDescriptor provided by the PortletDeploymentDescriptor. The ConcretePortlet parses
  * the information provided and provides PortletSettings. The ConcretePortlet also maintains an instantiated
  * portlet that is managed by the portlet container.
  */
@@ -31,10 +31,11 @@ public class ConcretePortletImpl implements ConcretePortlet {
 
     private static PortletLog log = SportletLog.getInstance(ConcretePortletImpl.class);
 
-    private ConcretePortletApplication concreteApp = null;
+    private PortletDeploymentDescriptor portletDD = null;
+    private ConcretePortletDescriptor concDescriptor = null;
     private AbstractPortlet abstractPortlet = null;
-    private Map configMap = null;
-    private Map contextMap = null;
+    private Hashtable configHash = null;
+    private Hashtable contextHash = null;
     private String servletName = "Undefined Servlet";
     private String portletName = "Undefined PortletInfo";
     private String portletClass = "Unknown Portlet Class";
@@ -45,35 +46,36 @@ public class ConcretePortletImpl implements ConcretePortlet {
     private List groupList = new Vector();
     private List languageList = new Vector();
     private String defaultLocale = "en_US";
-    private PortletGroup ownerGroup = SportletGroup.BASE;
+    private PortletGroup ownerGroup = PortletGroup.BASE;
     private PortletRole ownerRole = PortletRole.GUEST;
-    private SportletSettings sportletSettings = null;
-    private PortletApp portletApp = null;
+    private SportletSettings portletSettings = null;
+    private ApplicationPortletDescriptor portletApp = null;
 
     /**
      * Create a ConcreteSportlet
      */
-    public ConcretePortletImpl(PortletDeploymentDescriptor pdd, PortletApp portletApp, ConcretePortletApplication concreteApp) throws ConcretePortletException {
+    public ConcretePortletImpl(PortletDeploymentDescriptor pdd, ApplicationPortletDescriptor appDescriptor, ConcretePortletDescriptor concDescriptor) throws ConcretePortletException {
 
         log.info("in ConcretePortletImpl construcor");
-        this.portletApp = portletApp;
+        this.portletApp = appDescriptor;
+        this.concDescriptor = concDescriptor;
         int index;
         Iterator it;
         String appname, cappname;
 
         // Get PortletApplication UID  e.g. classname.number
-        appID = portletApp.getID();
+        appID = appDescriptor.getID();
         index = appID.lastIndexOf(".");
         appname = appID.substring(0, index);
-        String appNo = appID.substring(index+1);
+        String appNo = appID.substring(index + 1);
 
-        // Get ConcretePortletApplication UID e.g. classname.number.number
-        concreteID = concreteApp.getID();
+        // Get ConcretePortletDescriptor UID e.g. classname.number.number
+        concreteID = concDescriptor.getID();
         index = concreteID.lastIndexOf(".");
-        String concreteNo = concreteID.substring(index+1);
+        String concreteNo = concreteID.substring(index + 1);
         String cappNo = concreteID.substring(0, index);
         index = cappNo.lastIndexOf(".");
-        cappNo = cappNo.substring(index+1);
+        cappNo = cappNo.substring(index + 1);
         cappname = concreteID.substring(0, index);
 
         // Check that cappID = appID and cappname = appname
@@ -83,8 +85,8 @@ public class ConcretePortletImpl implements ConcretePortlet {
         }
 
         portletClass = cappname;
-        portletName = concreteApp.getConcretePortletInfo().getName();
-        servletName = portletApp.getServletName();
+        portletName = concDescriptor.getConcretePortletInfo().getName();
+        servletName = appDescriptor.getServletName();
 
         /*
         log.info("creating new class: " + portletClass);
@@ -96,29 +98,29 @@ public class ConcretePortletImpl implements ConcretePortlet {
             throw new ConcretePortletException("Unable to create instance of portlet: " + portletClass);
         }
         */
-         /* need concrete portlet class to instantiate
-          now we need the web app nad servlet name
-          we could return that and set the request dispatcher later
-          */
+        /* need concrete portlet class to instantiate
+         now we need the web app nad servlet name
+         we could return that and set the request dispatcher later
+         */
         //abstractPortlet = new PortletWrapper();
 
 
-         // SINCE ACL SERVICE DOESN"T WORK YET
+        // SINCE ACL SERVICE DOESN"T WORK YET
         Vector knownGroups = new Vector();
         Vector knownRoles = new Vector();
         //knownGroups = aclService.getAllGroups();
         //knownRoles = aclService.getAllRoles();
 
         // Get PortletConfig params
-        List contextList = concreteApp.getContextParamList();
-        contextMap = new Hashtable(contextList.size());
+        List contextList = concDescriptor.getContextParamList();
+        contextHash = new Hashtable(contextList.size());
         it = contextList.iterator();
         while (it.hasNext()) {
-            ConfigParam param = (ConfigParam)it.next();
-            contextMap.put(param.getParamName(), param.getParamValue());
+            ConfigParam param = (ConfigParam) it.next();
+            contextHash.put(param.getParamName(), param.getParamValue());
         }
 
-        ConcretePortletInfo concPortInfo = concreteApp.getConcretePortletInfo();
+        ConcretePortletInfo concPortInfo = concDescriptor.getConcretePortletInfo();
 
         // Get locale information
         defaultLocale = concPortInfo.getDefaultLocale();
@@ -126,11 +128,11 @@ public class ConcretePortletImpl implements ConcretePortlet {
 
         // Get PortletConfig params
         List configList = concPortInfo.getConfigParamList();
-        configMap = new Hashtable(configList.size());
+        configHash = new Hashtable(configList.size());
         it = configList.iterator();
         while (it.hasNext()) {
-            ConfigParam param = (ConfigParam)it.next();
-            configMap.put(param.getParamName(), param.getParamValue());
+            ConfigParam param = (ConfigParam) it.next();
+            configHash.put(param.getParamName(), param.getParamValue());
         }
 
         // Get groups list
@@ -138,9 +140,9 @@ public class ConcretePortletImpl implements ConcretePortlet {
         Iterator knownGroupsIt = knownGroups.iterator();
         // Make sure groups exist
         while (knownGroupsIt.hasNext()) {
-            PortletGroup pg = (PortletGroup)knownGroups.iterator().next();
+            PortletGroup pg = (PortletGroup) knownGroups.iterator().next();
             while (groups.iterator().hasNext()) {
-                if (pg.getName().equalsIgnoreCase((String)groups.iterator().next())) {
+                if (pg.getName().equalsIgnoreCase((String) groups.iterator().next())) {
                     groupList.add(pg);
                     break;
                 }
@@ -179,7 +181,7 @@ public class ConcretePortletImpl implements ConcretePortlet {
         it = knownGroups.iterator();
 
         while (it.hasNext()) {
-            PortletGroup group = (PortletGroup)it.next();
+            PortletGroup group = (PortletGroup) it.next();
             if (group.getName().equalsIgnoreCase(groupName)) {
                 ownerGroup = group;
                 break;
@@ -200,7 +202,7 @@ public class ConcretePortletImpl implements ConcretePortlet {
         owner.setGroup(ownerGroup);
         owner.setRole(ownerRole);
 
-        sportletSettings = new SportletSettings(pdd, concreteApp);
+        portletSettings = new SportletSettings(this);
     }
 
     /**
@@ -208,8 +210,8 @@ public class ConcretePortletImpl implements ConcretePortlet {
      *
      * @return the sportlet settings
      */
-    public SportletSettings getSportletSettings() {
-        return sportletSettings;
+    public PortletSettings getPortletSettings() {
+        return portletSettings;
     }
 
     /**
@@ -218,8 +220,8 @@ public class ConcretePortletImpl implements ConcretePortlet {
      *
      * @return the concrete portlet application
      */
-    public ConcretePortletApplication getConcretePortletApplication() {
-        return concreteApp;
+    public ConcretePortletDescriptor getConcretePortletDescriptor() {
+        return concDescriptor;
     }
 
 
@@ -232,8 +234,8 @@ public class ConcretePortletImpl implements ConcretePortlet {
      *
      * @return the portlet config
      */
-    public Map getPortletConfig() {
-        return configMap;
+    public Hashtable getPortletConfig() {
+        return configHash;
     }
 
     /**
@@ -241,8 +243,8 @@ public class ConcretePortletImpl implements ConcretePortlet {
      *
      * @return the map of portlet context parameters keys are variable name and values are variable values
      */
-    public Map getPortletContext() {
-        return contextMap;
+    public Hashtable getPortletContext() {
+        return contextHash;
     }
 
     /**
@@ -280,7 +282,7 @@ public class ConcretePortletImpl implements ConcretePortlet {
         return owner;
     }
 
-       /**
+    /**
      * Returns the list of supported groups
      * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
      *
@@ -316,6 +318,22 @@ public class ConcretePortletImpl implements ConcretePortlet {
      */
     public List getLanguageList() {
         return languageList;
+    }
+
+    /**
+     * Saves the supplied concrete portlet descriptor to serialize any changes that have been made
+     *
+     * @param concreterDescriptor the concrete portlet descriptor
+     * @throws IOException if an I/O error ooccurs
+     */
+    public void saveDescriptor(ConcretePortletDescriptor concreteDescriptor) throws IOException {
+        this.concDescriptor = concDescriptor;
+        portletDD.setConcretePortletDescriptor(concreteDescriptor);
+        try {
+            portletDD.save();
+        } catch (DescriptorException e) {
+            log.error("Unable to save concrete portlet descriptor! " + concreteID, e);
+        }
     }
 
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class PortletDefinition {
 
-    private PortletApp portletApp = new PortletApp();
+    private ApplicationPortletDescriptor appDescriptor = new ApplicationPortletDescriptor();
     private List concreteApps = new ArrayList();
 
     public List getConcreteApps() {
@@ -22,12 +22,12 @@ public class PortletDefinition {
         this.concreteApps = concreteApps;
     }
 
-    public void setPortletApp(PortletApp portletApp) {
-        this.portletApp = portletApp;
+    public void setApplicationPortletDescriptor(ApplicationPortletDescriptor portletApp) {
+        this.appDescriptor = portletApp;
     }
 
-    public PortletApp getPortletApp() {
-        return portletApp;
+    public ApplicationPortletDescriptor getApplicationPortletDescriptor() {
+        return appDescriptor;
     }
 
 }

@@ -5,12 +5,12 @@
 package org.gridlab.gridsphere.portletcontainer.impl;
 
 import org.gridlab.gridsphere.layout.PortletLayoutEngine;
-import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDefinition;
-import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
-import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
+import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
-import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
+import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
+import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDefinition;
+import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -27,7 +27,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
     private RequestDispatcher rd = null;
     private String webAppDescription;
 
-    // Layout engine handles layout.xml
+    // PortletLayout engine handles layout.xml
     private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
 
     public PortletWebApplicationImpl(String webApplicationName, ServletContext context) {
@@ -55,7 +55,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // Every PortletDefinition has a PortletApplication and possibly multiple ConcretePortletApplication's
+        // Every PortletDefinition has a PortletApplication and possibly multiple ConcretePortletDescriptor's
         Iterator portletDefs = pdd.getPortletDef().iterator();
 
         // Iterate thru portlet definitions for portlet applications
@@ -75,6 +75,10 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
             String layoutMappingfile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING_XML);
             layoutEngine.addApplicationTab(webApplicationName, layoutXMLfile);
         }
+    }
+
+    public void init() {
+
     }
 
     public void destroy() {

@@ -9,7 +9,8 @@ public class Group {
 
     private String GroupName = "";
 
-    public Group() {}
+    public Group() {
+    }
 
     /**
      * gets the group name
