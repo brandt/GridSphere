@@ -2,6 +2,10 @@
 <%@ page import="org.gridlab.gridsphere.portlet.*,
                  org.gridlab.gridsphere.portletcontainer.GridSphereProperties"%>
 
+<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
+
+<portletAPI:init/>
+
 <% User user = (User)session.getAttribute(GridSphereProperties.USER); %>
 
 <table border=0 cellpadding=0 cellspacing=0 >
