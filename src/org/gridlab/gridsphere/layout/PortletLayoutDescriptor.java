@@ -1,0 +1,101 @@
+/*
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
+ * @version $Id$
+ */
+package org.gridlab.gridsphere.layout;
+
+import org.gridlab.gridsphere.core.persistence.ConfigurationException;
+import org.gridlab.gridsphere.core.persistence.RestoreException;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerXml;
+import org.gridlab.gridsphere.portlet.PortletLog;
+
+import javax.servlet.ServletConfig;
+import java.util.Iterator;
+import java.util.Vector;
+import java.util.List;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
+public class PortletLayoutDescriptor {
+
+    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletLayoutDescriptor.class);
+    private PortletContainer pc = null;
+
+    public PortletLayoutDescriptor(ServletConfig config) throws PortletLayoutDescriptorException {
+        // load in layout.xml file
+        String appRoot = config.getServletContext().getRealPath("") + "/";
+        String portletConfigFile = config.getInitParameter("layout.xml");
+        String portletMappingFile = config.getInitParameter("layout-mapping.xml");
+        if (portletConfigFile == null) {
+            portletConfigFile = "WEB-INF/conf/layout.xml";
+        }
+        if (portletMappingFile == null) {
+            portletMappingFile = "WEB-INF/conf/layout-mapping.xml";
+        }
+        String fullPath = appRoot + portletConfigFile;
+        String mappingPath = appRoot + portletMappingFile;
+        try {
+            FileInputStream fistream = new FileInputStream(fullPath);
+        } catch (FileNotFoundException e) {
+            log.error("Can't find file: " + fullPath);
+            throw new PortletLayoutDescriptorException("Unable to create layout from " + fullPath + " using " + mappingPath);
+        }
+        load(fullPath, mappingPath);
+    }
+
+    /**
+     * Constructs a PortletDeploymentDescriptor from a portlet.xml and mapping file
+     *
+     * @param portletFilePath location of the layout.xml
+     * @param mappingFilePath location of the mapping file
+     * @throws PortletLayoutDescriptorException if the PortletLayoutDescriptor cannot be created
+     */
+    public PortletLayoutDescriptor(String portletFilePath, String mappingFilePath) throws PortletLayoutDescriptorException  {
+        load(portletFilePath, mappingFilePath);
+    }
+
+    /**
+     * Returns the portlet container associated with this descriptor
+     *
+     * @return the portlet container
+     */
+    public PortletContainer getPortletContainer() {
+        return pc;
+    }
+
+    /**
+     * Loads the PortletLayoutDescriptor from the layout.xml
+     *
+     * @param url the location of the portlet.xml file
+     * @param mapping the location of the portlet xml mapping file
+     * @throws PortletDeploymentDescriptorException if the PortletDeploymentDescriptor cannot be created
+     */
+    public void load(String url, String mapping) throws PortletLayoutDescriptorException  {
+        PersistenceManagerXml pmx = new PersistenceManagerXml();
+
+        // where is the portlet.xml ?
+        pmx.setConnectionURL(url);
+
+        // set the path to the mapping file
+        pmx.setMappingFile(mapping);
+
+        // try to get it
+        try {
+             pc = (PortletContainer)pmx.restoreObject();
+        } catch (RestoreException e) {
+            log.error("RestoreError ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") "+e.getMessage());
+            throw new PortletLayoutDescriptorException("Unable to restore: "+e.getMessage());
+        } catch (ConfigurationException e) {
+            log.error("ConfigurationError ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") "+e);
+            throw new PortletLayoutDescriptorException("Configuration error: "+e.getMessage());
+        }
+    }
+
+    /**
+     * Save the portlet deployment descriptor to portlet.xml
+     * <b>not implemented yet</b>
+     */
+    public void save() {}
+
+}
