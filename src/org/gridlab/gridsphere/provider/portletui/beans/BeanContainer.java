@@ -39,6 +39,15 @@ public abstract class BeanContainer extends BaseComponentBean {
     }
 
     /**
+     * Adds a visual bean to the bean container
+     *
+     * @param bean a base component bean
+     */
+    public void setBean(int index, BaseComponentBean bean) {
+        container.set(index, bean);
+    }
+
+    /**
      * Removes a visual bean from the bean container
      *
      * @param bean the visual bean to remove
