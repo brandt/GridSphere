@@ -27,9 +27,9 @@ public class PortletBean {
     protected ActionEvent actionEvent = null;
     protected PortletAction actionPerformed = null;
     protected String page = null;
-    protected String title = null;
+    protected String title = "";
     protected boolean isFormInvalid = false;
-    protected String formInvalidMessage = null;
+    protected String formInvalidMessage = "";
 
     public PortletBean() {
     }

@@ -397,12 +397,12 @@ public class UserManagerBean extends ActionEventHandler {
                 return true;
             }
         // If user already exists and password unchanged, no problem
-        } else if (this.user != null &&
-                   passwordValue.length() == 0 &&
+        } else if (passwordValue.length() == 0 &&
                    confirmPasswordValue.length() == 0) {
             return false;
+        }
         // Otherwise, password must match confirmation
-        } else if (!passwordValue.equals(confirmPasswordValue)) {
+        if (!passwordValue.equals(confirmPasswordValue)) {
             message.append("Password must match confirmation\n");
             return true;
         // If they do match, then validate password with our service
