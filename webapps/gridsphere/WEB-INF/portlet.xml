@@ -401,6 +401,10 @@
                     <title>Localizzazione</title>
                     <description>Seleziona una localizzazione</description>
                 </language>
+                <language locale="hu">
+                    <title>Nyelvválasztás</title>
+                    <description>Nyelv választása</description>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
