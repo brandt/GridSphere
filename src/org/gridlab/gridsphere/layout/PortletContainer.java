@@ -104,12 +104,11 @@ public class PortletContainer implements PortletLifecycle {
         SportletResponse res = event.getSportletResponse();
         PrintWriter out = res.getWriter();
 
-        out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">");
+        out.println("<html>");
         out.println("<head>");
-        out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\"/>");
-        out.println("<title>" + name + "</title>");
-        out.println("<link type=\"text/css\" href=\"css/default.css\" rel=\"STYLESHEET\"/>");
-        out.println("</head><body>");
+        out.println("  <title>" + name + "</title>");
+        out.println("  <link type=\"text/css\" href=\"css/default.css\" rel=\"STYLESHEET\"/>");
+        out.println("</head>\n<body>");
 
         // for css title
         out.println("<div id=\"page-logo\">" + name + "</div>");
