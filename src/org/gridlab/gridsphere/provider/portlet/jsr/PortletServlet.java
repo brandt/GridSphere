@@ -236,7 +236,10 @@ public class PortletServlet  extends HttpServlet
                     //setGroupAndRole(actionRequest, actionResponse);
                     log.debug("in PortletServlet: action handling portlet " + portletClassName);
                     doAction(portlet, actionRequest, actionResponse);
-                    redirect(request, response, actionResponse);
+
+                    // TODO Enabling this passes some TCK tests
+
+                    //redirect(request, response, actionResponse);
                 }
             } else {
                 RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext, supports);
