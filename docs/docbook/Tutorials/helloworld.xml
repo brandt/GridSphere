@@ -1,14 +1,14 @@
 <chapter id="thirdparty">
     <title>ThirdParty Portlets</title>
     <para>
-        Gridsphere provides the possibility to easily develop and deploy third-party
+        Gridsphere provides capabilities for easily developing and deploying third-party
         portlets. This chapter will describe how to do so.
     </para>
 
     <sect1 id="newproject">
         <title>Creating a new project</title>
         <para>
-            If you want to develop new portlets for gridsphere you need to issue the command
+            First, issue the following GridSPhere build script command to create a new template project.
             <screen>
 <prompt>bash$</prompt> <command>ant <replaceable>new-project</replaceable>
             </command>
@@ -22,10 +22,18 @@ new-project:
 ...
             </screen>
             At the first prompt enter a description of your portlet package (or one portlet) you want to develop.
-            After that you are asked to type in  a name for your portletpackage under which it will be deployed in the servlet container.
-            In the above example a package called 'hello' will be created in the projects directory of gridsphere.
-            All needed template files and the directoy structure is automatically created.
-            At the moment it is requiered that all portlet projects are in the projects dir in the gridsphere home directory.
+            After that you are asked to type in  a name for your portlet package under which it will be deployed in the
+            servlet container. In the above example a package called 'hello' will be created in the projects directory
+            of gridsphere. The directory structure is automatically created and the required template files are copied
+            to over to the new project. At the moment it is required that all portlet projects are maintained in the
+            <filename>projects</filename> directory in the gridsphere home directory.
+            Once you have a new project you may optionally commit it to CVS issuing the following:
+            screen>
+<prompt>bash$</prompt>
+            <command>cd new-project</command>
+           <prompt>bash$</prompt><command>cvs import -m "my new portlets" new-project STARTTAG VENDORTAG<replaceable>new-project</replaceable>
+            </command>
+            where STARTTAG and VENDORTAG are any labels of your choosing (see CVS documentation for more detailed information)
         </para>
     </sect1>
 
@@ -45,7 +53,7 @@ public class HelloWorld  extends AbstractPortlet {
     public void doView(PortletRequest request, PortletResponse response)
          throws PortletException, IOException {
         PrintWriter out = response.getWriter();
-        out.println("<h1>Hello World</h1>");
+        out.println("&lt;h1&gt;Hello World&lt;/h1&gt;");
     }
 }
                     </programlisting>
@@ -179,7 +187,7 @@ public class HelloWorld  extends AbstractPortlet {
             <screen>
 <prompt>bash$</prompt> <command>ant <replaceable>deploy</replaceable></command>
             </screen>
-            in the homedirectory of the your project. Your portlet is now deployed to
+            in the home directory of the your project. Your portlet is now deployed to
             gridsphere.
         </sect2>
 
@@ -212,7 +220,7 @@ public class HelloWorld  extends AbstractPortlet {
             </programlisting>
             </example>
             The last part is to edit the <filename>$CATALINA_HOME/gridsphere/GuestUserLayout.xml</filename> or
-            the <filename>config/layouts/GuestUserLayout.xml</filename> in the sourcedirectory of gridsphere. If you
+            the <filename>config/layouts/GuestUserLayout.xml</filename> in the source directory of gridsphere. If you
             choose the second way you have to redeploy gridsphere.
             The <filename>GuestUserLayout.xml</filename> should have a section inside some grid-layout tag which
             looks like this:
