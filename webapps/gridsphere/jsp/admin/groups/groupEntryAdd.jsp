@@ -8,7 +8,7 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:actionsubmit action="doViewConfirmAddGroupEntry" key="GROUP_ADD_USER"/>
+                <ui:actionsubmit action="doViewConfirmAddGroupEntry" key="GROUP_ADD_USERS"/>
                 <ui:actionsubmit action="doViewCancelAddGroupEntry" key="GROUP_CANCEL_ADD"/>
             </ui:tablecell>
         </ui:tablerow>
