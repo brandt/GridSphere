@@ -453,7 +453,6 @@ Copyright:
         <mkdir dir="${build.javadoc}"/>
         <javadoc packagenames="org.gridlab.gridsphere.*"
             sourcepath="src"
-            additionalparam="-breakiterator"
             classpathref="classpath"
             destdir="${build.javadoc}"
             author="true"

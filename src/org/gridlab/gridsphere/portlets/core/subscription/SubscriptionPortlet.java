@@ -24,6 +24,7 @@ public class SubscriptionPortlet extends ActionPortlet {
 
     // JSP pages used by this portlet
     public static final String VIEW_JSP = "subscription/view.jsp";
+    public static final String HELP_JSP = "subscription/help.jsp";
 
     // Portlet services
     private AccessControlManagerService aclService = null;
