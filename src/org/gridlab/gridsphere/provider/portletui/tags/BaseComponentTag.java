@@ -185,10 +185,14 @@ public abstract class BaseComponentTag extends BaseBeanTag {
     }
 
     protected String getLocalizedText(String key) {
-        PortletRequest req = (PortletRequest) pageContext.getAttribute("portletRequest");
-        Locale locale = req.getLocale();
-        ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
-        return bundle.getString(key);
+        return getLocalizedText(key, "Portlet");
     }
 
+    protected String getLocalizedText(String key, String base) {
+        PortletRequest req = (PortletRequest) pageContext.getAttribute("portletRequest");
+        Locale locale = req.getLocale();
+        ResourceBundle bundle = ResourceBundle.getBundle(base, locale);
+
+        return bundle.getString(key);
+    }
 }
