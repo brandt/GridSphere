@@ -14,6 +14,12 @@ public class TextFieldBean extends ReadOnlyBaseBean implements Input {
         super();
     }
 
+    public TextFieldBean(String name, String value) {
+        super();
+        this.name = name;
+        this.value = value;
+    }
+
     public TextFieldBean(String name, String value, boolean disabled, boolean readonly, int size, int maxlength) {
         //  super(name, value, disabled, readonly);
         super();
