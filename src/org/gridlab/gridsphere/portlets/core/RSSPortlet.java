@@ -13,8 +13,11 @@ import org.gridlab.gridsphere.portlet.impl.SportletData;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portletcontainer.PortletDataManager;
+import org.gridlab.gridsphere.portletcontainer.impl.SportletDataManager;
 import org.gridlab.gridsphere.tags.web.element.TextFieldBean;
 import org.gridlab.gridsphere.tags.web.element.CheckBoxBean;
+import org.gridlab.gridsphere.tags.web.element.TextBean;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -69,19 +72,16 @@ public class RSSPortlet extends AbstractPortlet {
 
         TextFieldBean fieldBean = (TextFieldBean)form.getElementBean("f");
         System.out.println("\n\n\n\nVALUE 1 :"+fieldBean.getValue());
-        /**
-        PortletData data = new SportletData();
-        if (data.getAttribute("myattr").equals("")) {
-
+        /*
+            PortletData data = req.getData();
             data.setAttribute("myattr","testing");
             try {
                 data.store();
             } catch (PersistenceManagerException e) {
                 System.out.println("ERROR: "+e);
             }
-        } else {
             System.out.println("\n\n\n\nATTRIBUTE "+data.getAttribute("myattr"));
-        }     **/
+        */
         String button = form.getPressedSubmitButton();
 
         if (_action.getName().equals("rss_edit")) {
@@ -171,10 +171,21 @@ public class RSSPortlet extends AbstractPortlet {
 
         // code prototyping
         TextFieldBean fieldBean = new TextFieldBean("jason", "oliver", false, false, 20, 30);
+        fieldBean.setColor("blue");fieldBean.setBackgroundcolor("red");
+        fieldBean.setDisabled(true);
         fieldBean.store("f", request);
+
+        TextBean text = new TextBean("Text lalalal");
+        text.setColor("white");
+        text.setBackgroundcolor("black");
+        text.store("textid",request);
+
 
         CheckBoxBean cbb = new CheckBoxBean("test","test",false, false);
         cbb.store("cbb", request);
+
+
+
 
         // under the covers, a fieldbean is stored and mapped to f_name
         getPortletConfig().getContext().include("/jsp/rss/edit.jsp", request, response);
