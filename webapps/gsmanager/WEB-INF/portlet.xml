@@ -16,18 +16,10 @@
         <resizing/>
     </allows>
     <supports>
-        <markup name="html">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-        <markup name="wml">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
+        <view/>
+        <edit/>
+        <help/>
+        <configure/>
     </supports>
 </portlet-app>
 
@@ -43,12 +35,10 @@
             <title>Portlet Application Manager</title>
             <description>Displays Portlet Variables and Settings</description>
         </language>
-        <allowed-access visibility="public">
-            <role>ANY</role>
-        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
 </portlet-app-def>
 
 </portlet-app-collection>
+

@@ -20,18 +20,10 @@
         <resizing/>
     </allows>
     <supports>
-        <markup name="html">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-        <markup name="wml">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
+        <view/>
+        <edit/>
+        <help/>
+        <configure/>
     </supports>
 </portlet-app>
 
@@ -49,9 +41,6 @@
             <description>Portlet provides login capabilities</description>
             <keywords>portlet login</keywords>
         </language>
-        <allowed-access visibility="public">
-            <role>ANY</role>
-        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -70,25 +59,6 @@
         <expires>120</expires>
         <shared>true</shared>
     </cache>
-    <allows>
-        <maximized/>
-        <minimized/>
-        <resizing/>
-    </allows>
-    <supports>
-        <markup name="html">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-        <markup name="wml">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-    </supports>
 </portlet-app>
 
 <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.LogoutPortlet.1">
@@ -105,9 +75,6 @@
             <description>Portlet provides logout capabilities</description>
             <keywords>portlet logout</keywords>
         </language>
-        <allowed-access visibility="public">
-            <role>ANY</role>
-        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -134,9 +101,6 @@
             <description>Portlet provides subscription capabilities</description>
             <keywords>portlet subscription</keywords>
         </language>
-        <allowed-access visibility="public">
-            <role>ANY</role>
-        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -155,25 +119,6 @@
         <expires>120</expires>
         <shared>true</shared>
     </cache>
-    <allows>
-        <maximized/>
-        <minimized/>
-        <resizing/>
-    </allows>
-    <supports>
-        <markup name="html">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-        <markup name="wml">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-    </supports>
 </portlet-app>
 
 <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.RSSPortlet.1">
@@ -190,9 +135,6 @@
             <description>a rss portlet</description>
             <keywords>rss portlet</keywords>
         </language>
-        <allowed-access visibility="public">
-            <role>ANY</role>
-        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -211,25 +153,6 @@
         <expires>120</expires>
         <shared>false</shared>
     </cache>
-    <allows>
-        <maximized/>
-        <minimized/>
-        <resizing/>
-    </allows>
-    <supports>
-        <markup name="html">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-        <markup name="wml">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-    </supports>
 </portlet-app>
 
 <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.UserManagerPortlet.1">
@@ -246,9 +169,6 @@
             <description>Provides tools for administering user accounts</description>
             <keywords>user account administration</keywords>
         </language>
-        <allowed-access visibility="public">
-            <role>ANY</role>
-        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -267,25 +187,6 @@
         <expires>120</expires>
         <shared>false</shared>
     </cache>
-    <allows>
-        <maximized/>
-        <minimized/>
-        <resizing/>
-    </allows>
-    <supports>
-        <markup name="html">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-        <markup name="wml">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-    </supports>
 </portlet-app>
 
 <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.AccessControllerPortlet.1">
@@ -302,9 +203,6 @@
             <description>Provides tools for administering access to portlets</description>
             <keywords>access control user group role administration</keywords>
         </language>
-        <allowed-access visibility="public">
-            <role>ANY</role>
-        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 

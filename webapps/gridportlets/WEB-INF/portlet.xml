@@ -26,18 +26,10 @@
         <resizing/>
     </allows>
     <supports>
-        <markup name="html">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-        <markup name="wml">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
+        <view/>
+        <edit/>
+        <help/>
+        <configure/>
     </supports>
 </portlet-app>
 
@@ -55,9 +47,6 @@
             <description>Enables administrators to specify what credentials are permitted for use in GridSphere.</description>
             <keywords>credential permission user administration</keywords>
         </language>
-        <allowed-access visibility="public">
-            <role>ANY</role>
-        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -78,25 +67,6 @@
         <expires>120</expires>
         <shared>false</shared>
     </cache>
-    <allows>
-        <maximized/>
-        <minimized/>
-        <resizing/>
-    </allows>
-    <supports>
-        <markup name="html">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-        <markup name="wml">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-    </supports>
 </portlet-app>
 
 <concrete-portlet-app id="org.gridlab.gridsphere.portlets.grid.security.CredentialMappingAdminPortlet.1">
@@ -113,9 +83,6 @@
             <description>Enables administrators to map credentials to users.</description>
             <keywords>credential mapping user administration</keywords>
         </language>
-        <allowed-access visibility="public">
-            <role>ANY</role>
-        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -136,25 +103,6 @@
         <expires>120</expires>
         <shared>false</shared>
     </cache>
-    <allows>
-        <maximized/>
-        <minimized/>
-        <resizing/>
-    </allows>
-    <supports>
-        <markup name="html">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-        <markup name="wml">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-    </supports>
 </portlet-app>
 
 <concrete-portlet-app id="org.gridlab.gridsphere.portlets.grid.security.CredentialManagerAdminPortlet.1">
@@ -171,9 +119,6 @@
             <description>Enables administrators to see what credentials are in use.</description>
             <keywords>active credential user administration</keywords>
         </language>
-        <allowed-access visibility="public">
-            <role>ANY</role>
-        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -194,25 +139,6 @@
         <expires>120</expires>
         <shared>false</shared>
     </cache>
-    <allows>
-        <maximized/>
-        <minimized/>
-        <resizing/>
-    </allows>
-    <supports>
-        <markup name="html">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-        <markup name="wml">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-    </supports>
 </portlet-app>
 
 <concrete-portlet-app id="org.gridlab.gridsphere.portlets.grid.security.CredentialRetrievalUserPortlet.1">
@@ -233,9 +159,6 @@
             </description>
             <keywords>credential retrieval user</keywords>
         </language>
-        <allowed-access visibility="public">
-            <role>ANY</role>
-        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -256,25 +179,6 @@
         <expires>120</expires>
         <shared>false</shared>
     </cache>
-    <allows>
-        <maximized/>
-        <minimized/>
-        <resizing/>
-    </allows>
-    <supports>
-        <markup name="html">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-        <markup name="wml">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-    </supports>
 </portlet-app>
 
 <concrete-portlet-app id="org.gridlab.gridsphere.portlets.grid.security.CredentialMappingUserPortlet.1">
@@ -295,9 +199,6 @@
             </description>
             <keywords>credential mapping user</keywords>
         </language>
-        <allowed-access visibility="public">
-            <role>ANY</role>
-        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 

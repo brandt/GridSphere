@@ -20,18 +20,10 @@
         <resizing/>
     </allows>
     <supports>
-        <markup name="html">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-        <markup name="wml">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
+        <view/>
+        <edit/>
+        <help/>
+        <configure/>
     </supports>
 </portlet-app>
 
@@ -77,9 +69,6 @@
             <param-name>Portlet Master</param-name>
             <param-value>yourid@yourdomain.com</param-value>
         </config-param>
-        <allowed-access visibility="public">
-            <role>ANY</role>
-        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -90,19 +79,6 @@
 <portlet-app id="org.gridlab.gridsphere.portlets.examples.HalloWelt">
     <portlet-name>Hallo Welt Portlet Application</portlet-name>
     <servlet-name>HalloWelt</servlet-name>
-    <allows>
-        <maximized/>
-        <minimized/>
-        <resizing/>
-    </allows>
-    <supports>
-        <markup name="html">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-    </supports>
 </portlet-app>
 
 <concrete-portlet-app id="org.gridlab.gridsphere.portlets.examples.HalloWelt.1">
@@ -119,9 +95,6 @@
             <description>Hallo Welt - Beispiel Portlet #1</description>
             <keywords>portlet hallo welt</keywords>
         </language>
-        <allowed-access visibility="public">
-            <role>ANY</role>
-        </allowed-access>
     </concrete-portlet>
 </concrete-portlet-app>
 
@@ -136,25 +109,6 @@
         <param-name>Portlet Master</param-name>
         <param-value>yourid@yourdomain.com</param-value>
     </portlet-config>
-    <allows>
-        <maximized/>
-        <minimized/>
-        <resizing/>
-    </allows>
-    <supports>
-        <markup name="html">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-        <markup name="wml">
-            <view/>
-            <edit/>
-            <help/>
-            <configure/>
-        </markup>
-    </supports>
 </portlet-app>
 
 <concrete-portlet-app id="org.gridlab.gridsphere.portlets.examples.DemoPortlet.1">
@@ -169,9 +123,6 @@
             <title>Portlet API Demo</title>
             <description>Displays Portlet Variables and Settings</description>
         </language>
-        <allowed-access visibility="public">
-            <role>ANY</role>
-        </allowed-access>
         <config-param>
             <param-name>Portlet Master</param-name>
             <param-value>yourid@yourdomain.com</param-value>
