@@ -41,7 +41,7 @@ Copyright:
     <property name="deprecation" value="true"/>
 
     <!-- Version properties -->
-    <property name="version"         value="1.0" />
+    <property name="version"         value="1.0"/>
     <property name="release"         value="ea-dev" />
     <property name="version.release" value="${version} ${release}"/>
     <property name="gridsphere.name"         value="GridSphere ${version.release}"/>
@@ -387,6 +387,9 @@ Copyright:
         <replace file="${DATABASE_FILE}"
                  token="@GRIDSPHERE_HOME@"
                  value="${GRIDSPHERE_HOME}"/>
+        <replace file="${DATABASE_FILE}"
+            token="@DATABASE_NAME@"
+            value="${DATABASE_NAME}"/>
     </target>
 
     <target name="configure-test-database" depends="doclet-mapping">
@@ -396,16 +399,19 @@ Copyright:
         <replace file="${DATABASE_FILE}"
             token="@GRIDSPHERE_HOME@"
             value="${GRIDSPHERE_HOME}"/>
-       <replace file="${DATABASE_FILE}"
+        <replace file="${DATABASE_FILE}"
             token="@TEST_HOME@"
             value="${TEST_HOME}"/>
+        <replace file="${DATABASE_FILE}"
+            token="@DATABASE_NAME@"
+            value="${DATABASE_NAME}"/>
     </target>
 
     <target name="check-mapping">
         <echo message="force mapping: ${var_force_mapping}"/>
         <condition property="var_force_mapping">
             <not>
-                <available file="${GRIDSPHERE_HOME}/mapping/docletmapping.xml"/>
+                <available file="${GRIDSPHERE_HOME}/mapping/${DATABASE_NAME}mapping.xml"/>
             </not>
         </condition>
     </target>
@@ -426,7 +432,7 @@ Copyright:
             private="true"
             doclet="org.castor.doclet.jdo.JDO"
             docletpath="lib/ext/jdom.jar;lib/ext/castor-doclet.jar"
-            additionalparam="-J-DFILE=${GRIDSPHERE_HOME}/mapping/docletmapping.xml -J-DLOG=1">
+            additionalparam="-J-DFILE=${GRIDSPHERE_HOME}/mapping/${DATABASE_NAME}mapping.xml -J-DLOG=1">
             <classpath refid="classpath"/>
         </javadoc>
     </target>
@@ -435,7 +441,7 @@ Copyright:
         <echo message="force database: ${var_force_database}"/>
         <condition property="var_force_database">
             <not>
-                <available file="${GRIDSPHERE_HOME}/database/gridsphere.script"/>
+                <available file="${GRIDSPHERE_HOME}/database/${DATABASE_NAME}.script"/>
             </not>
         </condition>
     </target>
@@ -444,16 +450,16 @@ Copyright:
         <echo message="force database: ${var_force_database}"/>
         <condition property="var_force_database">
             <not>
-                <available file="${TEST_HOME}/database/gridsphere-test.script"/>
+                <available file="${TEST_HOME}/database/${DATABASE_NAME}.script"/>
             </not>
         </condition>
     </target>
 
     <target name="create-real-database" depends="configure-database, check-real-database-exists" if="var_force_database">
-        <echo message="Creating Database at: ${GRIDSPHERE_HOME}/database/gridsphere"/>
+        <echo message="Creating Database at: ${GRIDSPHERE_HOME}/database/${DATABASE_NAME}"/>
         <echo message="Using script: ${GRIDSPHERE_HOME}/database/dbcreate.sql"/>
         <sql driver="org.hsqldb.jdbcDriver"
-           url="jdbc:hsqldb:${GRIDSPHERE_HOME}/database/gridsphere"
+           url="jdbc:hsqldb:${GRIDSPHERE_HOME}/database/${DATABASE_NAME}"
            userid="sa"
            password=""
            onerror="continue"
@@ -463,10 +469,10 @@ Copyright:
     </target>
 
     <target name="create-test-database" depends="configure-test-database, check-test-database-exists" if="var_force_database">
-        <echo message="Creating Database at: ${TEST_HOME}/database/gridsphere-test"/>
+        <echo message="Creating Database at: ${TEST_HOME}/database/${DATABASE_NAME}"/>
         <echo message="Using script: ${GRIDSPHERE_HOME}/database/dbcreate.sql"/>
         <sql driver="org.hsqldb.jdbcDriver"
-           url="jdbc:hsqldb:${TEST_HOME}/database/gridsphere-test"
+           url="jdbc:hsqldb:${TEST_HOME}/database/${DATABASE_NAME}"
            userid="sa"
            password=""
            onerror="continue"

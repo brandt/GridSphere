@@ -38,7 +38,7 @@ public class ServiceDescriptorTest extends TestCase {
         SportletServiceDescriptor descriptor = null;
 
         // load files from JAR
-        String serviceFile = GridSphereConfig.getProperty(GridSphereConfigProperties.TEST_HOME) + "/test/PortletServices-test.xml";
+        String serviceFile = GridSphereConfig.getProperty(GridSphereConfigProperties.TEST_HOME) + "/PortletServices-test.xml";
         String mappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.SERVICES_MAPPING);
         try {
             descriptor = new SportletServiceDescriptor(serviceFile, mappingFile);

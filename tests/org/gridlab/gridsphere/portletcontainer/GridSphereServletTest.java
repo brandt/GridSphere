@@ -22,6 +22,7 @@ public class GridSphereServletTest extends ServletTestCase {
     protected static SportletServiceFactory factory = null;
     protected static PortletLog log = SportletLog.getInstance(GridSphereServletTest.class);
     protected PortletContext context = null;
+    protected GridSphereServlet gsServlet = null;
 
     public GridSphereServletTest(String name) {
         super(name);
@@ -31,13 +32,20 @@ public class GridSphereServletTest extends ServletTestCase {
 
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         junit.textui.TestRunner.run(suite());
     }
 
     public void testCreateServlet() {
-        GridSphereServlet servlet = new GridSphereServlet();
+        gsServlet = new GridSphereServlet();
+        assertNotNull(gsServlet);
+        try {
+            gsServlet.init(config);
+        } catch (Exception e) {
+            fail("Unable to initialize GridSphere Portlet services!");
+        }
         this.context = new SportletContext(config);
+        assertNotNull(context);
     }
 
     public static Test suite() {

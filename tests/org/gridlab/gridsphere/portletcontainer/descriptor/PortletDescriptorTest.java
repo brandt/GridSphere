@@ -43,7 +43,7 @@ public class PortletDescriptorTest extends ServletTestCase {
         PortletDeploymentDescriptor pdd = null;
 
         // load files from JAR
-        String portletFile = GridSphereConfig.getProperty(GridSphereConfigProperties.TEST_HOME) + "/test/portlet-test.xml";
+        String portletFile = GridSphereConfig.getProperty(GridSphereConfigProperties.TEST_HOME) + "/portlet-test.xml";
         String mappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING);
 
         try {

@@ -23,7 +23,7 @@ public class SetupTestGroupsTest extends SetupRootUserTest {
         super(name);
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         junit.textui.TestRunner.run(suite());
     }
 

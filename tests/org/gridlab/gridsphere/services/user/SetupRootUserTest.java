@@ -7,11 +7,12 @@ package org.gridlab.gridsphere.services.user;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.service.spi.impl.GridSphereServiceTest;
 import org.gridlab.gridsphere.portletcontainer.GridSphereServletTest;
 import org.gridlab.gridsphere.services.core.security.AuthenticationException;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 
-public class SetupRootUserTest extends GridSphereServletTest {
+public class SetupRootUserTest extends GridSphereServiceTest {
 
     private static LoginService loginService = null;
 
@@ -21,7 +22,7 @@ public class SetupRootUserTest extends GridSphereServletTest {
         super(name);
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         junit.textui.TestRunner.run(suite());
     }
 
@@ -31,21 +32,22 @@ public class SetupRootUserTest extends GridSphereServletTest {
 
     protected void setUp() {
         super.setUp();
-        super.testCreateServlet();
-        testCreateRootUser();
+        super.testServiceFactoryCreate();
     }
 
     public void testCreateRootUser() {
         log.info(" =====================================  setup");
-        try {
-            loginService = (LoginService) factory.createPortletService(LoginService.class, null, true);
-        } catch (Exception e) {
-            fail("Unable to initialize services: " + e.getMessage());
-        }
         loginRoot();
     }
 
     public void loginRoot() {
+        try {
+            loginService = (LoginService) factory.createPortletService(LoginService.class, config, true);
+        } catch (Exception e) {
+            String msg = "Unable to get login service instance";
+            log.error(msg, e);
+            fail(msg);
+        }
         try {
             rootUser = loginService.login("root", "");
         } catch (AuthenticationException e) {

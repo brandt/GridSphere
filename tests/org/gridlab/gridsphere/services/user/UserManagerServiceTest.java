@@ -13,7 +13,7 @@ public class UserManagerServiceTest extends SetupTestUsersTest {
         super(name);
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         junit.textui.TestRunner.run(suite());
     }
 
