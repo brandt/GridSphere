@@ -38,8 +38,7 @@ http://jakarta.apache.org/proposals/tapestry
 	value="../common/GridSphere-${docbook.xsl.base}-Fop.xsl"/>
 
 <property environment="env"/>
-<property name="fop.dir" value="${env.FOP_HOME}"/>
-
+<property name="fop.exists" value="${env.FOP_HOME}"/>
 
 <xmlcatalog id="docbook.catalog">
 	<dtd publicId="-//OASIS//DTD DocBook XML V4.1//EN" location="${docbook.dtd.dir}/docbookx.dtd"/>
@@ -100,6 +99,13 @@ http://jakarta.apache.org/proposals/tapestry
  <mkdir dir="${html.output.dir}"/>
  <mkdir dir="${images.src.dir}"/>
  <mkdir dir="${common-images.dest.dir}"/>
+
+ <echo message="FOP_HOME is set to = ${env.FOP_HOME}"/>
+ <condition property="fop.dir">
+    <not>
+      <equals arg1="${fop.exists}" arg2="${env.FOP_HOME}" trim="true"/>
+    </not>
+</condition>
 </target>
 
 <target name="clean">
