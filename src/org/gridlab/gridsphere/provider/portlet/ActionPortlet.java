@@ -209,11 +209,8 @@ public class ActionPortlet extends AbstractPortlet {
 
         log.debug("method name to invoke: " + methodName);
 
-        try {
-            doAction(req, res, methodName, parameterTypes, arguments);
-        } catch (Exception e) {
-            setNextError(req, "Exception during actionPerformed: " + e.getMessage());
-        }
+        doAction(req, res, methodName, parameterTypes, arguments);
+
         formEvent.store();
         setTagBeans(req, formEvent.getTagBeans());
         if (hasError(req)) {
@@ -313,21 +310,21 @@ public class ActionPortlet extends AbstractPortlet {
             FormEvent formEvent = new FormEventImpl(request, response, tagBeans);
             Class[] paramTypes = new Class[] { FormEvent.class };
             Object[] arguments = new Object[] { formEvent };
-            try {
-                doAction(request, response, next, paramTypes, arguments);
-                formEvent.store();
-                next = getNextState(request);
-                log.debug("in doView: next page is= " + next);
-                doViewJSP(request, response, next);
-            } catch (Exception e) {
+
+            doAction(request, response, next, paramTypes, arguments);
+            formEvent.store();
+            next = getNextState(request);
+            log.debug("in doView: next page is= " + next);
+            doViewJSP(request, response, next);
+
+            if (hasError(request)) {
                 PrintWriter out = response.getWriter();
-                if (hasError(request)) {
-                    log.debug("hasError = true");
-                    String message = getNextError(request);
-                    out.println(message);
-                }
-                out.println("Exception occured: " + e.getMessage());
+                log.debug("hasError = true");
+                String message = getNextError(request);
+                out.println(message);
             }
+
+
         }
     }
 

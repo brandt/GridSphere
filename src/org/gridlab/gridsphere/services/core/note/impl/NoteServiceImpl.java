@@ -63,12 +63,12 @@ public class NoteServiceImpl implements NoteService, PortletServiceProvider {
 
     public String addNote(User user, String name, String text) {
         if (!noteExists(user, name)) {
-            Note Note = new Note();
-            Note.setName(name);
-            Note.setContent(text);
-            Note.setUserid(user.getID());
+            Note note = new Note();
+            note.setName(name);
+            note.setContent(text);
+            note.setUserid(user.getID());
             try {
-                pm.create(Note);
+                pm.create(note);
                 return "";
             } catch (PersistenceManagerException e) {
                 e.printStackTrace();

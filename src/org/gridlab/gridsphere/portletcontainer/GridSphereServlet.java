@@ -171,7 +171,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                     newit.remove();
                 }
             }
-
         }
 
         setUserAndGroups(portletReq);

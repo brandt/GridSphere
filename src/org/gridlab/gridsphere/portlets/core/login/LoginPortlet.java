@@ -12,7 +12,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.FrameBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
 import org.gridlab.gridsphere.provider.portletui.beans.HiddenFieldBean;
-import org.gridlab.gridsphere.services.core.security.auth.LoginAuthModule;
+import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
@@ -240,7 +240,7 @@ public class LoginPortlet extends ActionPortlet {
         return newuser;
     }
 
-    private void editAccountRequest(FormEvent event, AccountRequest accountRequest) throws PortletException {
+    private void editAccountRequest(FormEvent event, AccountRequest accountRequest) {
         log.debug("Entering editAccountRequest()");
         accountRequest.setUserName(event.getTextFieldBean("userName").getValue());
         accountRequest.setFamilyName(event.getTextFieldBean("familyName").getValue());

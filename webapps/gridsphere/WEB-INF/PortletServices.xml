@@ -15,18 +15,6 @@
         <interface>org.gridlab.gridsphere.services.core.user.LoginService</interface>
         <implementation>org.gridlab.gridsphere.services.core.user.impl.LoginServiceImpl</implementation>
         <service-config>
-            <param-name>PASSWORD_AUTH_MODULE</param-name>
-            <param-value>org.gridlab.gridsphere.services.core.security.auth.modules.PasswordAuthModule</param-value>
-        </service-config>
-        <service-config>
-            <param-name>LDAP_AUTH_MODULE</param-name>
-            <param-value>org.gridlab.gridsphere.services.security.auth.modules.LDAPAuthModule</param-value>
-        </service-config>
-        <service-config>
-            <param-name>MYPROXY_AUTH_MODULE</param-name>
-            <param-value>org.gridlab.gridsphere.services.security.auth.modules.CredentialAuthModule</param-value>
-        </service-config>
-        <service-config>
             <param-name>LOGIN_MODULE</param-name>
             <param-value>org.gridlab.gridsphere.services.core.user.UserManagerService</param-value>
         </service-config>

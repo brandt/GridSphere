@@ -325,7 +325,7 @@ Copyright:
     </target>
 
     <target name="install" depends="deploy">
-        <antcall target="createdatabase"/>
+        <antcall target="create-database"/>
     </target>
 
 </project>

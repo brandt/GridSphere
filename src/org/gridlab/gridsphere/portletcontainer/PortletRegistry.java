@@ -68,6 +68,7 @@ public class PortletRegistry {
         return allApplicationPortlets.values();
     }
 
+
     /**
      * Returns all application portlets from the supplied portlet web application
      *

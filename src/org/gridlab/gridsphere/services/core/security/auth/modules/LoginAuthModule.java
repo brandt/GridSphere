@@ -1,6 +1,9 @@
-package org.gridlab.gridsphere.services.core.security.auth;
+package org.gridlab.gridsphere.services.core.security.auth.modules;
 
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
+
+import java.util.Map;
 
 /**
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
@@ -8,9 +11,11 @@ import org.gridlab.gridsphere.portlet.User;
  */
 public interface LoginAuthModule extends Comparable {
 
-    public void setEnvironmentVariable(String name, String value);
+    public void setAttributes(Map attributes);
 
-    public String getEnvironmentVariable(String name);
+    public String getAttribute(String name);
+
+    public Map getAttributes();
 
     public String getModuleName();
 
