@@ -1,8 +1,11 @@
 <%@ page import="org.gridlab.gridsphere.portletcontainer.GridSphereProperties,
                  org.gridlab.gridsphere.portlet.*,
-                 org.gridlab.gridsphere.portlets.core.LoginPortlet
-                 "%>
+                 org.gridlab.gridsphere.portlets.core.LoginPortlet"%>
 
+<%@ taglib uri="/portletWidgets" prefix="gs" %>
+<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
+
+<portletAPI:init/>
 <jsp:useBean id="login" class="java.lang.String" scope="request"/>
 
 <table border=0 cellpadding=1 cellspacing=0 width="181" bgcolor=6699CC><tr><td><font color=FFFFFF><b>&nbsp;Get Proxy from Server</b></font></td></tr>
@@ -28,34 +31,27 @@
 <% } %>
 <td width=1000>
     <table border=0 cellpadding=3 cellspacing=0 width="178"><tr><td valign=top>
-    <form method="POST" action="<%= login %>">
+
+    <gs:form action="login">
+
     <table cellspacing=2 cellpadding=2 border=0>
     <tr>
     <td align="right">Username: </td>
     <td align="left">
-        <input type="text"
-            name="username"
-            size="8"
-            maxlength="20"
-            value="">
-        </input>
+        <gs:textfield name="username" size="8" maxlength="20" value=""></gs:textfield>
     </td>
     </tr>
     <tr>
     <td align="right">Password: </td>
     <td align="left">
-        <input type="password"
-            name="password"
-            size="8"
-            maxlength="20">
-        </input>
+        <gs:password name="password" size="8" maxlength="20"></gs:password>
     </td>
     </tr>
     <tr>
-    <td colspan=5 align="center"><input type="submit" name="option" value="Login" ></input></td>
+    <td colspan=5 align="center"><gs:input type="submit" name="option" value="Login" ></gs:input></td>
     </tr>
     </table>
-    </form>
+    </gs:form>
 
 </td>
 </tr>
