@@ -20,7 +20,7 @@ A group can be created via the "Group Manager Portlet" or a webapp can define a 
 An external portlet web application specifies a group definition in an XML descriptor file found in
 <filename>WEB-INF/group.xml</filename>. An example illustration is shown:
 </para>
-<informalexample id="group.def"><programlisting>
+<informalexample id="groupex.def"><programlisting>
 &lt;portlet-group&gt;  <co id="group.def"/>
     &lt;group-name&gt;GridSphere&lt;/group-name&gt; <co id="gname.def"/>
     &lt;group-description&gt;Core GridSphere Group&lt;/group-description&gt; <co id="gdesc.def"/>

@@ -170,7 +170,6 @@
                 <programlisting linenumbering="yes">
                     User user = request.getUser();
                     result = (MyClass)pm.restore("from "+MyClass.class.getName()+" as sub where sub.Useroid='"+user.getID()+"'");
-
                 </programlisting>
             </informalexample>
         </sect2>
