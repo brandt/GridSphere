@@ -6,13 +6,10 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletRole;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
-import org.gridlab.gridsphere.portlet.impl.SportletRole;
-import org.gridlab.gridsphere.portlet.impl.SportletGroup;
+import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
-import org.gridlab.gridsphere.services.security.acl.impl2.UserACL;
+import org.gridlab.gridsphere.services.security.acl.impl.UserACL;
 import org.gridlab.gridsphere.services.user.impl.AccountRequestImpl;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.ConfigurationException;
@@ -70,7 +67,7 @@ public class UserManagerServiceTest extends ServiceTest {
             pm.deleteList("select u from org.gridlab.gridsphere.services.user.impl.AccountRequestImpl u");
             pm.deleteList("select u from org.gridlab.gridsphere.portlet.impl.SportletUserImpl u");
             pm.deleteList("select u from org.gridlab.gridsphere.portlet.impl.SportletGroup u");
-            pm.deleteList("select u from org.gridlab.gridsphere.services.security.acl.impl2.UserACL u");
+            pm.deleteList("select u from org.gridlab.gridsphere.services.security.acl.impl.UserACL u");
         } catch (PersistenceManagerException e) {
             log.error("Exception " + e);
         }
@@ -107,6 +104,15 @@ public class UserManagerServiceTest extends ServiceTest {
     public void testSportletUserAttributes() {
         log.info("+ testSportletuserAttributes");
         User jason = userManager.loginUser("jason");
+        SportletUser su = (SportletUser)jason;
+        su.setAttribute("test","result");
+        userManager.saveUser(su);
+
+        User jason2 = userManager.loginUser("jason");
+        String Attribute = (String)jason2.getAttribute("test");
+        System.out.println("Attr:"+Attribute );
+
+        assertEquals("result", Attribute);
     }
 
     public void testUserDns() {
@@ -435,6 +441,7 @@ public class UserManagerServiceTest extends ServiceTest {
                 log.error("Exception " + e);
                 fail("No permissions!");
         }
+
 
     }
 
