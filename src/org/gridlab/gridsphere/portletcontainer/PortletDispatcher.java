@@ -236,7 +236,6 @@ public class PortletDispatcher {
      * @param response the portlet response
      *
      * @throws <code>PortletException</code>if the portlet title has trouble fulfilling the rendering request
-     * @throws java.io.IOException if the streaming causes an I/O problem
      */
     public void doTitle(HttpServletRequest req, HttpServletResponse res) throws PortletException {
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);

@@ -27,6 +27,16 @@ public interface GridSphereConfigProperties {
     public static final String GRIDSPHERE_HOME = "GRIDSPHERE_HOME";
 
     /**
+     * Location of GridSphere directory used to store persistent data
+     */
+    public static final String GRIDSPHERE_VERSION = "GRIDSPHERE_VERSION";
+
+    /**
+     * Location of GridSphere directory used to store persistent data
+     */
+    public static final String GRIDSPHERE_RELEASE = "GRIDSPHERE_RELEASE";
+
+    /**
      * Portlet deployment descriptor mapping file
      */
     public static final String PORTLET_MAPPING_XML = "PORTLET_MAPPING_XML";

@@ -33,35 +33,27 @@ public interface PortletMessageManager {
      *
      * @param portletName the name of the portlet(s) to send the message to
      * @param message the message to be sent
-     *
-     * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
      */
-    public void send(String portletName, PortletMessage message) throws AccessDeniedException;
+    public void send(String portletName, PortletMessage message);
 
     /**
      * Retrieves the messages for the given portlet name and removes them from the queue
      *
-     * @para portletName the name of the portlet(s) to send the message to
+     * @param portletName the name of the portlet(s) to send the message to
      * @return a list of PortletMessage objects
-     *
-     * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
      */
-    public List retrieveMessages(String portletName) throws AccessDeniedException;
+    public List retrieveMessages(String portletName);
 
     /**
      * Retrieves all the messages  removes them from the queue
      *
      * @return a list of PortletMessage objects
-     *
-     * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
      */
-    public Map retrieveAllMessages() throws AccessDeniedException;
+    public Map retrieveAllMessages();
 
     /**
      * Clears all the messages
-     *
-     * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
      */
-    public void clearAllMessages() throws AccessDeniedException;
+    public void clearAllMessages();
 
 }

@@ -67,7 +67,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         log.debug("in init of GridSphereServlet");
         // Create an instance of the registry service used by the UserPortletManager
         try {
-            portletManager = (PortletManagerService) factory.createPortletUserService(PortletManagerService.class, GuestUser.getInstance(), config, true);
+            portletManager = (PortletManagerService) factory.createUserPortletService(PortletManagerService.class, GuestUser.getInstance(), config, true);
         } catch (PortletServiceUnavailableException e) {
             log.error("Failed to get registry instance in GridSphere: ", e);
             throw new ServletException("Unable to get portlet instance: " + e.getMessage());
@@ -148,7 +148,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletRole role = PortletRole.GUEST;
         List groups = new ArrayList();
         if (user instanceof GuestUser) {
-            groups.add(PortletGroup.BASE);
+            groups.add(SportletGroup.BASE);
             portletReq.setAttribute(GridSphereProperties.PORTLETROLES, role);
             portletReq.setAttribute(GridSphereProperties.PORTLETGROUPS, groups);
         } else {

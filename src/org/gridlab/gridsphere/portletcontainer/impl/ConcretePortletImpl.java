@@ -44,7 +44,7 @@ class ConcretePortletImpl implements ConcretePortlet {
     private AllowedAccess access = null;
     private List languageList = new Vector();
     private String defaultLocale = "en_US";
-    private PortletGroup ownerGroup = PortletGroup.BASE;
+    private PortletGroup ownerGroup = SportletGroup.BASE;
     private PortletRole ownerRole = PortletRole.GUEST;
     private SportletSettings portletSettings = null;
     private ApplicationPortletDescriptor portletApp = null;

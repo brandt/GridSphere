@@ -39,18 +39,14 @@ public class SportletMessageManager implements PortletMessageManager {
      * If more than one instance of the portlet with the given name exists on the current page, the message is sent
      * to every single instance of that portlet. If the source portlet has the same name as the target portlet(s),
      * the message will not be sent to avoid possible cyclic calls.
-     *
+     * <p>
      * The portlet(s) with the given name will only receive the message event if it has/they have implemented
      * the appropriate listener.
      *
-     * This function may only be used during event processing, in any other case the method throws an AccessDeniedException.
-     *
      * @param portletName the name of the portlet(s) to send the message to
      * @param message the message to be sent
-     *
-     * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
      */
-    public void send(String concretePortletID, PortletMessage message) throws AccessDeniedException {
+    public void send(String concretePortletID, PortletMessage message) {
         List l = (List) messages.get(concretePortletID);
         if (l == null) l = new ArrayList();
         l.add(message);
@@ -62,10 +58,8 @@ public class SportletMessageManager implements PortletMessageManager {
      *
      * @para portletName the name of the portlet(s) to send the message to
      * @return a list of PortletMessage objects
-     *
-     * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
      */
-    public List retrieveMessages(String concretePortletID) throws AccessDeniedException {
+    public List retrieveMessages(String concretePortletID) {
         List messageList = new ArrayList();
         List l = (List) messages.get(concretePortletID);
         if (l != null) {
@@ -79,19 +73,16 @@ public class SportletMessageManager implements PortletMessageManager {
      * Retrieves all the messages  removes them from the queue
      *
      * @return a list of PortletMessage objects
-     *
-     * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
      */
-    public Map retrieveAllMessages() throws AccessDeniedException {
+    public Map retrieveAllMessages() {
         return messages;
     }
 
     /**
      * Clears all the messages
      *
-     * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
      */
-    public void clearAllMessages() throws AccessDeniedException {
+    public void clearAllMessages() {
         messages.clear();
     }
 }
