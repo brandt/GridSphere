@@ -21,6 +21,7 @@ import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.security.acl.InvalidGroupRequestException;
 
 import java.util.List;
+import java.util.Set;
 
 public class AccessControlManagerServiceImpl implements AccessControlManagerService, PortletServiceProvider {
 
@@ -50,6 +51,14 @@ public class AccessControlManagerServiceImpl implements AccessControlManagerServ
     public void destroy() {}
 
     /*** PORTLET GROUP METHODS ***/
+
+    public PortletGroup createGroup(String groupName, Set portletRoleList) {
+       return aclManager.createGroup(groupName, portletRoleList);    
+    }
+
+    public void deleteGroup(PortletGroup group) {
+        aclManager.deleteGroup(group);
+    }
 
     public List getGroups() {
         return aclManager.getGroups();

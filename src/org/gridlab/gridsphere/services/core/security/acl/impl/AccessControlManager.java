@@ -21,11 +21,9 @@ import org.gridlab.gridsphere.services.core.user.impl.*;
 import org.gridlab.gridsphere.services.core.user.impl.GroupEntryImpl;
 import org.gridlab.gridsphere.services.core.user.impl.GroupRequestImpl;
 import org.gridlab.gridsphere.services.core.user.impl.UserManager;
+import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
-import java.util.ArrayList;
+import java.util.*;
 
 public class AccessControlManager implements AccessControlManagerService {
 
@@ -33,6 +31,7 @@ public class AccessControlManager implements AccessControlManagerService {
     private static AccessControlManager instance = null;
     private static UserManager userManager = null;
     private PortletManager pms = null;
+    private PortletRegistry registry = null;
     private PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
 
     private String jdoGroupRequest = GroupRequestImpl.class.getName();
@@ -42,6 +41,7 @@ public class AccessControlManager implements AccessControlManagerService {
     private static boolean isInitialized = false;
 
     private AccessControlManager() {
+        registry = PortletRegistry.getInstance();
         pms = PortletManager.getInstance();
         userManager = UserManager.getInstance();
         //initGroups();
@@ -81,6 +81,7 @@ public class AccessControlManager implements AccessControlManagerService {
             System.err.println(groupName);
             if (!existsGroupWithName(groupName)) {
                 log.info("creating group " + groupName);
+                registry.getAllConcretePortletIDs();
                 createGroup(groupName);
             }
         }
@@ -494,6 +495,23 @@ public class AccessControlManager implements AccessControlManagerService {
             group = new SportletGroup();
             group.setName(groupName);
             group.setPublic(true);
+            try {
+                pm.create(group);
+            } catch (PersistenceManagerException e) {
+                String msg = "Error creating portlet group " + groupName;
+                log.error(msg, e);
+            }
+        }
+        return group;
+    }
+
+    public PortletGroup createGroup(String groupName, Set portletRoleList) {
+        SportletGroup group = getSportletGroupByName(groupName);
+        if (group == null) {
+            group = new SportletGroup();
+            group.setName(groupName);
+            group.setPublic(true);
+            group.setPortletRoleList(portletRoleList);
             try {
                 pm.create(group);
             } catch (PersistenceManagerException e) {

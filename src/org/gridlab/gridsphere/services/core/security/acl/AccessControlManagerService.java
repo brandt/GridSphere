@@ -14,14 +14,19 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 
 import java.util.List;
+import java.util.Set;
 
 public interface AccessControlManagerService extends PortletService {
 
     /*** PORTLET GROUP METHODS ***/
 
+    public PortletGroup createGroup(String groupName, Set portletRoleList);
+
     public List getGroups();
 
     public void modifyGroupAccess(PortletGroup group, boolean isPublic);
+
+    public void deleteGroup(PortletGroup group);
 
     public PortletGroup getGroup(String groupId);
 

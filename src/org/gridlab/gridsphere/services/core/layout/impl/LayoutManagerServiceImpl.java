@@ -114,7 +114,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
     }
 
     public void removePortlets(PortletRequest req, User user, List portletClassNames) {
-        PortletPage page = pageFactory.createPortletPage(user);
+        PortletPage page = pageFactory.createPortletPage(req);
         page.init(req, new ArrayList());
         List cidList = page.getComponentIdentifierList();
         Iterator it = cidList.iterator();

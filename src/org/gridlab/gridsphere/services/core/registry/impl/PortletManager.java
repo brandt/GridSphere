@@ -257,6 +257,33 @@ public class PortletManager implements PortletManagerService {
     }
 
     /**
+     * Returns the deployed web application names
+     *
+     * @return the known web application names
+     */
+    public List getWebApplicationNames() {
+        List l = new Vector();
+        // get rid of duplicates -- in the case of JSR portlets two webapps exist by the same name
+        // since the first one represents the "classical" webapp which itself adds the jsr webapp to the
+        // registry with the same name
+        for (int i = 0; i < webapps.size(); i++) {
+            PortletWebApplication webapp = (PortletWebApplication)webapps.get(i);
+            String webappName = webapp.getWebApplicationName();
+            if (!l.contains(webappName)) l.add(webappName);
+        }
+        for (int i = 0; i < l.size(); i++) {
+            String s = (String)l.get(i);
+            int idx = s.indexOf(".");
+            if ((idx > 0) && s.endsWith(".1")) {
+                String n = s.substring(0,idx);
+                System.err.println("n = " + n);
+                l.remove(n);
+            }
+        }
+        return l;
+    }
+
+    /**
      * Returns the description of the supplied web application
      *
      * @param webApplicationName
