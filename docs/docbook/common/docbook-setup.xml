@@ -13,7 +13,7 @@ http://jakarta.apache.org/proposals/tapestry
 <property file="../../../build.properties"/>
 
 
-<property name="docs.dir" value="${gridsphere.build}/docs"/>
+<property name="docs.dir" value="../build/docs"/>
 <property name="html.install.dir" value="${docs.dir}/${root.filename}"/>
 
 <!-- The base name for the DTD distribution (the directory and tar file
@@ -182,7 +182,7 @@ Converting Flow Objects to PDF ...
 				<include name="lib/*.zip"/>
 			</fileset>
 		</classpath>
-		<arg line="-d -fo ${root.filename}.fop"/>
+		<arg line=" -d -fo ${root.filename}.fop"/>
 		<arg line="-pdf ${root.filename}.pdf"/>
 	</java>
 
