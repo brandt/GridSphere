@@ -158,7 +158,7 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
         PortletURI sportletURI;
         for (int i = 0; i < tabs.size(); i++) {
             PortletTab tab = (PortletTab)tabs.get(i);
-            sportletURI = event.createNewAction(GridSphereEvent.Action.LAYOUT_ACTION, tab.getComponentID(), null);
+            sportletURI = event.createNewAction(tab.getComponentID(), null);
 
             sportletURI.addParameter(GridSphereProperties.PORTLETTAB, tab.getTitle());
             tabLinks[i] = sportletURI.toString();

@@ -67,7 +67,6 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
     }
 
     public List init(List list) {
-        System.err.println("portlet class is: " + portletClass);
         COMPONENT_ID = list.size();
         componentIDStr = String.valueOf(COMPONENT_ID);
         ComponentIdentifier compId = new ComponentIdentifier();
@@ -160,9 +159,8 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         */
 
         // now perform actionPerformed on Portlet if it has an action
-        String actionStr = req.getParameter(GridSphereProperties.ACTION);
-        if (actionStr != null) {
-            DefaultPortletAction action = new DefaultPortletAction(actionStr);
+        DefaultPortletAction action = event.getAction();
+        if (action.getName() != "") {
             try {
                 UserPortletManager userPortletManager = event.getUserPortletManager();
                 userPortletManager.actionPerformed(portletClass, action, req, res);
@@ -170,6 +168,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
                 error = new PortletErrorMessage(portletClass, e);
             }
         }
+
     }
 
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {

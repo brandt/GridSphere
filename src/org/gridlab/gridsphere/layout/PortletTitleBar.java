@@ -128,7 +128,7 @@ public class PortletTitleBar extends BasePortletComponent {
         Iterator it = windowStates.iterator();
         while (it.hasNext()) {
             String winState = (String)it.next();
-            sportletURI = event.createNewAction(GridSphereEvent.Action.LAYOUT_ACTION, COMPONENT_ID, portletClass);
+            sportletURI = event.createNewAction(COMPONENT_ID, portletClass);
             try {
                 stateLink = new PortletStateLink(winState);
                 // Create portlet link Href
@@ -175,7 +175,7 @@ public class PortletTitleBar extends BasePortletComponent {
         PortletModeLink modeLink;
         List portletLinks = new Vector();
         for (i = 0; i < portletModes.length; i++) {
-            sportletURI = event.createNewAction(GridSphereEvent.Action.LAYOUT_ACTION, COMPONENT_ID, portletClass);
+            sportletURI = event.createNewAction(COMPONENT_ID, portletClass);
             //sportletURI.addParameter(GridSphereProperties.PORTLETID, (String)req.getAttribute(GridSphereProperties.PORTLETID));
             try {
                 modeLink = new PortletModeLink(portletModes[i]);

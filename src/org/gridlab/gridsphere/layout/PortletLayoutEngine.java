@@ -100,7 +100,7 @@ public class PortletLayoutEngine {
 
         User user = event.getSportletRequest().getUser();
         System.err.println(user.getFamilyName());
-        if (user.getID().equals(GuestUser.getInstance().getID())) {
+        if (user instanceof GuestUser) {
             return guestContainer;
 
             // Check if we have user's layout already
