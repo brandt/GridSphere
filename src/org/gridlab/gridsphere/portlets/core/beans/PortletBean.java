@@ -3,12 +3,13 @@
  * User: russell
  * Date: Jan 22, 2003
  * Time: 11:07:24 AM
- * To change template for new class use 
+ * To change template for new class use
  * Code Style | Class Templates options (Tools | IDE Options).
  */
 package org.gridlab.gridsphere.portlets.core.beans;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 
 import java.util.List;
@@ -22,8 +23,14 @@ public class PortletBean {
     protected PortletContext context = null;
     protected PortletRequest request = null;
     protected PortletResponse response = null;
+    protected PortletLog log = null;
     protected User user = null;
     protected PortletSession session = null;
+    protected String actionPerformed = null;
+    protected String nextPage = null;
+    protected String nextTitle = null;
+    protected boolean isFormInvalid = false;
+    protected String formInvalidMessage = null;
 
     public PortletBean() {
     }
@@ -41,10 +48,7 @@ public class PortletBean {
         this.response = response;
         this.user = request.getUser();
         this.session = request.getPortletSession();
-    }
-
-    protected void initServices(User user, PortletConfig config)
-            throws PortletException {
+        this.log = context.getLog();
     }
 
     public PortletConfig getPortletConfig() {
@@ -94,9 +98,66 @@ public class PortletBean {
     }
 
     public PortletURI getPortletActionURI(String action) {
-        PortletURI actionURI = response.createReturnURI();
+        PortletURI actionURI = this.response.createReturnURI();
         actionURI.addAction(new DefaultPortletAction(action));
         return actionURI;
+    }
+
+    public PortletLog getPortletLog() {
+        return this.log;
+    }
+
+    public String getActionPerformed() {
+        return this.actionPerformed;
+    }
+
+    public void setActionPerformed(String action) {
+        this.log.debug("Setting next action to " + action);
+        this.actionPerformed = action;
+    }
+
+    public void setActionPerformed(PortletAction action) {
+        this.log.debug("Setting next action to " + action);
+        this.actionPerformed = action.toString();
+    }
+
+    public String getNextTitle() {
+        return this.nextTitle;
+    }
+
+    public void setNextTitle(String title) {
+        this.log.debug("Setting next title to " + title);
+        this.nextTitle = title;
+    }
+
+    public String getNextPage() {
+        return this.nextPage;
+    }
+
+    public void setNextPage(String page) {
+        this.log.debug("Setting next page to " + page);
+        this.nextPage = page;
+    }
+
+    public void doAction(PortletAction action)
+            throws PortletException {
+        setActionPerformed(action);
+    }
+
+    public boolean isFormInvalid() {
+        return this.isFormInvalid;
+    }
+
+    public void setIsFormInvalid(boolean flag) {
+        this.isFormInvalid = flag;
+    }
+
+    public String getFormInvalidMessage() {
+        return this.formInvalidMessage;
+    }
+
+    public void setFormInvalidMessage(String message) {
+        this.formInvalidMessage = message;
     }
 
     public String getParameter(String param) {

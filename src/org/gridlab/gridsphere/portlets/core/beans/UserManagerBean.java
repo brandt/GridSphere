@@ -32,11 +32,6 @@ import java.io.PrintWriter;
 
 public class UserManagerBean extends PortletBean {
 
-    // Portlet log
-    private static PortletLog _log = SportletLog.getInstance(UserManagerBean.class);
-    // Portlet request attributes used within this portlet
-    public static final String ATTRIBUTE_USER_MANAGER_PAGE = "userManagerPage";
-    public static final String ATTRIBUTE_USER_MANAGER_BEAN = "userManagerBean";
     // JSP pages used by this portlet
     public static final String PAGE_USER_LIST = "/jsp/usermanager/userList.jsp";
     public static final String PAGE_USER_VIEW = "/jsp/usermanager/userView.jsp";
@@ -52,16 +47,10 @@ public class UserManagerBean extends PortletBean {
     public static final String ACTION_USER_DELETE = "userDelete";
     public static final String ACTION_USER_DELETE_CONFIRM = "userDeleteConfirm";
     public static final String ACTION_USER_DELETE_CANCEL = "userDeleteCancel";
-    // Portlet action
-    private String actionPerformed = null;
-    private String nextPage = PAGE_USER_LIST;
     // Portlet services
     private UserManagerService userManagerService = null;
     private PasswordManagerService passwordManagerService = null;
     private AccessControlManagerService aclManagerService = null;
-    // Form validation
-    private boolean isFormInvalid = false;
-    private String formInvalidMessage = new String();
     // Current list of users
     private List userList = null;
     // Profile attributes
@@ -84,21 +73,28 @@ public class UserManagerBean extends PortletBean {
 
     public UserManagerBean() {
         super();
+        initView();
     }
 
     public UserManagerBean(PortletConfig config, PortletRequest request, PortletResponse response)
             throws PortletException {
         super(config, request, response);
         initServices();
+        initView();
     }
 
-    protected void initServices()
+    private void initServices()
             throws PortletException {
-        _log.debug("Entering initServices()");
+        this.log.debug("Entering initServices()");
         this.userManagerService = (UserManagerService)getPortletService(UserManagerService.class);
         this.aclManagerService = (AccessControlManagerService)getPortletService(AccessControlManagerService.class);
         this.passwordManagerService = (PasswordManagerService)getPortletService(PasswordManagerService.class);
-        _log.debug("Exiting initServices()");
+        this.log.debug("Exiting initServices()");
+    }
+
+    private void initView() {
+        setNextPage(PAGE_USER_LIST);
+        setNextTitle("User Account Manager");
     }
 
     public void doAction(PortletAction action)
@@ -107,7 +103,7 @@ public class UserManagerBean extends PortletBean {
             // Save action to be performed
             String actionName = ((DefaultPortletAction)action).getName();
             setActionPerformed(actionName);
-            _log.debug("Action performed = " + actionName);
+            this.log.debug("Action performed = " + actionName);
             // Perform appropriate action
             if (actionName.equals(ACTION_USER_LIST)) {
                 doListUsers();
@@ -125,7 +121,7 @@ public class UserManagerBean extends PortletBean {
                 doListUsers();
             }
         } else {
-            _log.debug("Action not default portlet action!");
+            this.log.debug("Action not default portlet action!");
             doListUsers();
         }
     }
@@ -221,46 +217,6 @@ public class UserManagerBean extends PortletBean {
 
     public PortletURI getUserDeleteCancelURI() {
         return getPortletActionURI(ACTION_USER_DELETE_CANCEL);
-    }
-
-    public String getActionPerformed() {
-        return this.actionPerformed;
-    }
-
-    public void setActionPerformed(String action) {
-        this.actionPerformed = action;
-    }
-
-    public String getNextTitle() {
-        return "User Account Manager";
-        /***
-        if (this.actionPerformed == null) {
-            return "User Account Manager: List user accounts";
-        } else if (this.actionPerformed.equals(ACTION_USER_LIST)) {
-            return "User Account Manager: List user accounts";
-        } else if (this.actionPerformed.equals(ACTION_USER_VIEW)) {
-            return "User Account Manager: View user account";
-        } else if (this.actionPerformed.equals(ACTION_USER_EDIT)) {
-            return "User Account Manager: Edit user account";
-        } else if (this.actionPerformed.equals(ACTION_USER_EDIT_CONFIRM)) {
-            return "User Account Manager: Edited ser account";
-        } else if (this.actionPerformed.equals(ACTION_USER_DELETE)) {
-            return "User Account Manager: Delete user account";
-        } else if (this.actionPerformed.equals(ACTION_USER_DELETE_CONFIRM)) {
-            return "User Account Manager: Deleted user account";
-        } else {
-            return "User Account Manager: List user accounts";
-        }
-        ***/
-    }
-
-    public String getNextPage() {
-        return this.nextPage;
-    }
-
-    public void setNextPage(String nextPage) {
-        _log.debug("Setting next page to " + nextPage);
-        this.nextPage = nextPage;
     }
 
     public boolean isFormInvalid() {
@@ -415,9 +371,9 @@ public class UserManagerBean extends PortletBean {
     public void setRoleInBaseGroup(String role) {
         try {
             this.baseGroupRole = PortletRole.toPortletRole(role);
-            _log.debug("Set base role to " + baseGroupRole);
+            this.log.debug("Set base role to " + baseGroupRole);
         } catch (Exception e) {
-            _log.error("Unable to instantiate role " + role, e);
+            this.log.error("Unable to instantiate role " + role, e);
             this.baseGroupRole = PortletRole.USER;
         }
     }
@@ -622,16 +578,16 @@ public class UserManagerBean extends PortletBean {
         accessRequest.setGroup(PortletGroup.BASE);
         // If super role was chosen
         if (role.equals(PortletRole.SUPER)) {
-            _log.debug("Granting super role");
+            this.log.debug("Granting super role");
             // Grant super role
             this.aclManagerService.grantSuperRole(user);
-            _log.debug("Granting admin role in base group");
+            this.log.debug("Granting admin role in base group");
             // Set admin role in base group
             accessRequest.setRole(PortletRole.ADMIN);
         } else {
             // Revoke super role
             this.aclManagerService.revokeSuperRole(user);
-            _log.debug("Granting " + role + " role in base group");
+            this.log.debug("Granting " + role + " role in base group");
             // Grant chosen role in base group
             accessRequest.setRole(role);
         }

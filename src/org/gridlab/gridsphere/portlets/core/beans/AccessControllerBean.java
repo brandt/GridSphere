@@ -28,11 +28,6 @@ import java.io.PrintWriter;
 
 public class AccessControllerBean extends PortletBean {
 
-    // Portlet log
-    private static PortletLog _log = SportletLog.getInstance(AccessControllerBean.class);
-    // Portlet request attributes used within this portlet
-    public static final String ATTRIBUTE_ACL_MANAGER_PAGE = "aclManagerPage";
-    public static final String ATTRIBUTE_ACL_MANAGER_BEAN = "aclManagerBean";
     // JSP pages used by this portlet
     public static final String PAGE_GROUP_LIST = "/jsp/aclmanager/groupList.jsp";
     public static final String PAGE_GROUP_VIEW = "/jsp/aclmanager/groupView.jsp";
@@ -68,18 +63,12 @@ public class AccessControllerBean extends PortletBean {
     public static final String ACTION_GROUP_ENTRY_REMOVE_CONFIRM = "groupEntryRemoveConfirm";
     public static final String ACTION_GROUP_ENTRY_REMOVE_CANCEL = "groupEntryRemoveCancel";
 
-    // Portlet action
-    private String actionPerformed = null;
-    private String nextPage = PAGE_GROUP_LIST;
     // Portlet services
     private UserManagerService userManagerService = null;
     private AccessControlManagerService aclManagerService = null;
-    // Form validation
-    private boolean isFormInvalid = false;
-    private String formInvalidMessage = new String();
+
     // Current list of users
     private List userList = null;
-
     // Group and entry properties
     private List groupList = new Vector();
     private PortletGroup group = null;
@@ -97,20 +86,27 @@ public class AccessControllerBean extends PortletBean {
 
     public AccessControllerBean() {
         super();
+        initView();
     }
 
     public AccessControllerBean(PortletConfig config, PortletRequest request, PortletResponse response)
             throws PortletException {
         super(config, request, response);
         initServices();
+        initView();
     }
 
-    protected void initServices()
+    private void initServices()
             throws PortletException {
-        _log.debug("Entering initServices()");
+        this.log.debug("Entering initServices()");
         this.userManagerService = (UserManagerService)getPortletService(UserManagerService.class);
         this.aclManagerService = (AccessControlManagerService)getPortletService(AccessControlManagerService.class);
-        _log.debug("Exiting initServices()");
+        this.log.debug("Exiting initServices()");
+    }
+
+    private void initView() {
+        setNextPage(PAGE_GROUP_LIST);
+        setNextTitle("Access Control Manager");
     }
 
     public void doAction(PortletAction action)
@@ -119,7 +115,7 @@ public class AccessControllerBean extends PortletBean {
             // Save action to be performed
             String actionName = ((DefaultPortletAction)action).getName();
             setActionPerformed(actionName);
-            _log.debug("Action performed = " + actionName);
+            this.log.debug("Action performed = " + actionName);
             // Perform appropriate action
             if (actionName.equals(ACTION_GROUP_LIST)) {
                 doListGroups();
@@ -151,44 +147,44 @@ public class AccessControllerBean extends PortletBean {
                 doListGroups();
             }
         } else {
-            _log.debug("Action not default portlet action!");
+            this.log.debug("Action not default portlet action!");
             doListGroups();
         }
     }
 
     public void doListGroups()
             throws PortletException {
-        _log.debug("Entering doListGroups");
+        this.log.debug("Entering doListGroups");
         // Load group list
         loadGroupList();
         // Set next page attribute
         setNextPage(PAGE_GROUP_LIST);
-        _log.debug("Exiting doListGroups");
+        this.log.debug("Exiting doListGroups");
     }
 
     public void doViewGroup()
             throws PortletException {
-        _log.debug("Entering doViewGroup");
+        this.log.debug("Entering doViewGroup");
         // Load group so we can edit attributes
         loadGroup();
         // Set next page attribute
         setNextPage(PAGE_GROUP_VIEW);
-        _log.debug("Exiting doViewGroup");
+        this.log.debug("Exiting doViewGroup");
     }
 
     public void doEditGroup()
             throws PortletException {
-        _log.debug("Entering doEditGroup");
+        this.log.debug("Entering doEditGroup");
         // Load group so we can edit attributes
         loadGroup();
         // Set next page attribute
         setNextPage(PAGE_GROUP_EDIT);
-        _log.debug("Exiting doEditGroup");
+        this.log.debug("Exiting doEditGroup");
     }
 
     public void doConfirmEditGroup()
             throws PortletException {
-        _log.debug("Entering doConfirmEditGroup");
+        this.log.debug("Entering doConfirmEditGroup");
         try {
             // Load group so we have original attributes (for existing groups)
             loadGroup();
@@ -205,29 +201,29 @@ public class AccessControllerBean extends PortletBean {
             // Set next page attribute
             setNextPage(PAGE_GROUP_EDIT);
         }
-        _log.debug("Exiting doConfirmEditGroup");
+        this.log.debug("Exiting doConfirmEditGroup");
     }
 
     public void doDeleteGroup()
             throws PortletException {
-        _log.debug("Entering doDeleteGroup");
+        this.log.debug("Entering doDeleteGroup");
         // Load group so we can have attributes
         loadGroup();
         // Set next page attribute
         setNextPage(PAGE_GROUP_DELETE);
-        _log.debug("Exiting doDeleteGroup");
+        this.log.debug("Exiting doDeleteGroup");
     }
 
     public void doConfirmDeleteGroup()
             throws PortletException {
-        _log.debug("Entering doConfirmDeleteGroup");
+        this.log.debug("Entering doConfirmDeleteGroup");
         // Load group so we can have attributes
         loadGroup();
         // Delete group
         deleteGroup();
         // Set next page attribute
         setNextPage(PAGE_GROUP_DELETE_CONFIRM);
-        _log.debug("Exiting doConfirmDeleteGroup");
+        this.log.debug("Exiting doConfirmDeleteGroup");
     }
 
     public void doViewGroupEntry()
@@ -338,76 +334,6 @@ public class AccessControllerBean extends PortletBean {
 
     public PortletURI getGroupDeleteCancelURI() {
         return getPortletActionURI(ACTION_GROUP_DELETE_CANCEL);
-    }
-
-    public String getActionPerformed() {
-        return this.actionPerformed;
-    }
-
-    public void setActionPerformed(String action) {
-        this.actionPerformed = action;
-    }
-
-    public String getNextTitle() {
-        return "Access Control Manager";
-        /***
-        if (this.actionPerformed == null) {
-            return "Access Control Manager: List portlet groups";
-        } else if (this.actionPerformed.equals(ACTION_GROUP_LIST)) {
-            return "Access Control Manager: List portlet groups";
-        } else if (this.actionPerformed.equals(ACTION_GROUP_VIEW)) {
-            return "Access Control Manager: View portlet group";
-        } else if (this.actionPerformed.equals(ACTION_GROUP_EDIT)) {
-            return "Access Control Manager: Edit portlet group";
-        } else if (this.actionPerformed.equals(ACTION_GROUP_EDIT_CONFIRM)) {
-            return "Access Control Manager: Edited portlet group";
-        } else if (this.actionPerformed.equals(ACTION_GROUP_DELETE)) {
-            return "Access Control Manager: Delete portlet group";
-        } else if (this.actionPerformed.equals(ACTION_GROUP_DELETE_CONFIRM)) {
-            return "Access Control Manager: Deleted portlet group";
-        } else if (this.actionPerformed.equals(ACTION_GROUP_ENTRY_VIEW)) {
-            return "Access Control Manager: View portlet group entry";
-        } else if (this.actionPerformed.equals(ACTION_GROUP_ENTRY_EDIT)) {
-            return "Access Control Manager: Edit portlet group entry";
-        } else if (this.actionPerformed.equals(ACTION_GROUP_ENTRY_EDIT_CONFIRM)) {
-            return "Access Control Manager: View portlet group entry";
-        } else if (this.actionPerformed.equals(ACTION_GROUP_ENTRY_ADD)) {
-            return "Access Control Manager: Add portlet group entry";
-        } else if (this.actionPerformed.equals(ACTION_GROUP_ENTRY_ADD_CONFIRM)) {
-            return "Access Control Manager: View portlet group entry";
-        } else if (this.actionPerformed.equals(ACTION_GROUP_ENTRY_REMOVE)) {
-            return "Access Control Manager: Remove portlet group entry";
-        } else if (this.actionPerformed.equals(ACTION_GROUP_ENTRY_REMOVE_CONFIRM)) {
-            return "Access Control Manager: View portlet group entry";
-        } else {
-            return "Access Control Manager: List portlet groups";
-        }
-        ***/
-    }
-
-    public String getNextPage() {
-        return this.nextPage;
-    }
-
-    public void setNextPage(String nextPage) {
-        _log.debug("Setting next page to " + nextPage);
-        this.nextPage = nextPage;
-    }
-
-    public boolean isFormInvalid() {
-        return this.isFormInvalid;
-    }
-
-    public void setIsFormInvalid(boolean flag) {
-        this.isFormInvalid = flag;
-    }
-
-    public String getFormInvalidMessage() {
-        return this.formInvalidMessage;
-    }
-
-    public void setFormInvalidMessage(String message) {
-        this.formInvalidMessage = message;
     }
 
     public List getAllRolesInBaseGroup() {
@@ -688,7 +614,7 @@ public class AccessControllerBean extends PortletBean {
                 String roleName = (String)entryRoleNameMap.get(entryUserID);
                 role = PortletRole.toPortletRole(roleName);
             } catch (Exception e) {
-                _log.error("Error retrieving role name", e);
+                this.log.error("Error retrieving role name", e);
                 role = PortletRole.GUEST;
             }
             // Add group entry

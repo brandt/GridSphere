@@ -3,7 +3,7 @@
  * User: russell
  * Date: Jan 17, 2003
  * Time: 11:57:10 AM
- * To change template for new class use 
+ * To change template for new class use
  * Code Style | Class Templates options (Tools | IDE Options).
  */
 package org.gridlab.gridsphere.portlets.core;
@@ -91,12 +91,12 @@ public class AccessControllerPortlet extends AbstractPortlet {
             throws PortletException {
         _log.debug("Entering getAccessControllerBean()");
         AccessControllerBean aclManagerBean =
-                (AccessControllerBean)request.getAttribute(AccessControllerBean.ATTRIBUTE_ACL_MANAGER_BEAN);
+                (AccessControllerBean)request.getAttribute("aclManagerBean");
         if (aclManagerBean == null) {
             _log.debug("Creating instance of acl manager bean");
             PortletConfig config = getPortletConfig();
             aclManagerBean = new AccessControllerBean(config, request, response);
-            request.setAttribute(AccessControllerBean.ATTRIBUTE_ACL_MANAGER_BEAN, aclManagerBean);
+            request.setAttribute("aclManagerBean", aclManagerBean);
         }
         _log.debug("Exiting getAccessControllerBean()");
         return aclManagerBean;

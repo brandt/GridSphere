@@ -446,7 +446,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         // If new user then set initial set acl
         if (request.isNewUser()) {
             // Grant user role in base group
-            addUserToGroup(user, PortletGroup.BASE,  PortletRole.USER);
+            addGroupEntry(user, PortletGroup.BASE,  PortletRole.USER);
         }
     }
 
@@ -784,7 +784,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
             // Perform requested action
             if (action.equals(GroupAction.ADD)) {
                 // Add user to group
-                addUserToGroup(user, group, role);
+                addGroupEntry(user, group, role);
            } else if (action.equals(GroupAction.EDIT)) {
                 // Get associated entry
                 GroupEntryImpl entryImpl = requestImpl.getGroupEntry();
@@ -839,7 +839,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         return sumGroupEntries;
     }
 
-    public List selectGroupEntries(String criteria) {
+    private List selectGroupEntries(String criteria) {
         String oql = "select groupEntry from "
                    + jdoGroupEntry
                    + " groupEntry "
@@ -938,10 +938,24 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     }
 
     public List selectGroups(String criteria) {
-        String oql = "select portletGroup from "
-                   + jdoPortletGroup
-                   + " portletGroup "
-                   + criteria;
+        // Build object query
+        StringBuffer oqlBuffer = new StringBuffer();
+        oqlBuffer.append("select portletGroup from ");
+        oqlBuffer.append(jdoPortletGroup);
+        oqlBuffer.append(" portletGroup ");
+        // Note, we don't return super groups
+        if (criteria.equals("")) {
+            oqlBuffer.append(" where ");
+        } else {
+            oqlBuffer.append(criteria);
+            oqlBuffer.append(" and ");
+        }
+        oqlBuffer.append("portletGroup.ObjectID !=\"");
+        oqlBuffer.append(PortletGroup.SUPER.getID());
+        oqlBuffer.append("\"");
+        // Generate object query
+        String oql = oqlBuffer.toString();
+        // Execute query
         try {
             return pm.restoreList(oql);
         } catch (PersistenceManagerException e) {
@@ -964,10 +978,14 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     }
 
     private SportletGroup selectSportletGroup(String criteria) {
-        String oql = "select portletGroup from "
-                   + jdoPortletGroup
-                   + " portletGroup "
-                   + criteria;
+        // Build object query
+        StringBuffer oqlBuffer = new StringBuffer();
+        oqlBuffer.append("select portletGroup from ");
+        oqlBuffer.append(jdoPortletGroup);
+        oqlBuffer.append(" portletGroup ");
+        oqlBuffer.append(criteria);
+        // Generate object query
+        String oql = oqlBuffer.toString();
         try {
             return (SportletGroup)pm.restoreObject(oql);
         } catch (PersistenceManagerException e) {
@@ -1071,7 +1089,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         return entry.getRole();
     }
 
-    private void addUserToGroup(User user, PortletGroup group, PortletRole role) {
+    private void addGroupEntry(User user, PortletGroup group, PortletRole role) {
         GroupEntryImpl right = getGroupEntryImpl(user, group);
         if (right != null) {
             deleteGroupEntry(right);
@@ -1083,7 +1101,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         saveGroupEntry(right);
     }
 
-    private void removeUserFromGroup(User user, PortletGroup group) {
+    private void removeGroupEntry(User user, PortletGroup group) {
         GroupEntry entry = getGroupEntry(user, group);
         if (entry != null) {
             log.debug("Deleting group entry " + entry.getID());
@@ -1113,11 +1131,11 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     }
 
     public void grantSuperRole(User user) {
-        addUserToGroup(user, PortletGroup.SUPER, PortletRole.SUPER);
+        addGroupEntry(user, PortletGroup.SUPER, PortletRole.SUPER);
     }
 
     public void revokeSuperRole(User user) {
-        removeUserFromGroup(user, PortletGroup.SUPER);
+        removeGroupEntry(user, PortletGroup.SUPER);
     }
 
     public boolean hasSuperRole(User user) {

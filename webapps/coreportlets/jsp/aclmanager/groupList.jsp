@@ -57,13 +57,13 @@
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td class="portlet-frame-header" width="200">
+          <td class="portlet-frame-header" width="150">
               Name
           </td>
           <td class="portlet-frame-header" width="200">
               Label
           </td>
-          <td class="portlet-frame-header" width="*" >
+          <td class="portlet-frame-header" width="250" >
               Description
           </td>
         </tr>
@@ -72,16 +72,12 @@
    if (numGroups == 0) { %>
         <tr>
           <td id="portlet-frame-alert" colspan="3">
-              No group accounts in database.
+              No groups in database.
           </td>
         </tr>
 <% } else {
      for (int ii = 0; ii < numGroups; ++ii) {
-       PortletGroup group = (PortletGroup)groupList.get(ii);
-       if (group.getID().equals(PortletGroup.BASE.getID()) ||
-           group.getID().equals(PortletGroup.SUPER.getID())) {
-           continue;
-       } %>
+       PortletGroup group = (PortletGroup)groupList.get(ii); %>
         <tr>
           <td class="portlet-frame-value">
               <a href="javascript:AccessControllerPortlet_viewGroup_onClick('<%=group.getID()%>')">

@@ -1,30 +1,22 @@
 /*
  * Created by IntelliJ IDEA.
  * User: russell
- * Date: Jan 17, 2003
- * Time: 11:57:10 AM
- * To change template for new class use
+ * Date: Feb 14, 2003
+ * Time: 6:16:50 AM
+ * To change template for new class use 
  * Code Style | Class Templates options (Tools | IDE Options).
  */
 package org.gridlab.gridsphere.portlets.core;
 
-import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.*;
-import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-import org.gridlab.gridsphere.portlets.core.beans.UserManagerBean;
+import org.gridlab.gridsphere.event.ActionEvent;
+import org.gridlab.gridsphere.portlets.core.beans.CredentialManagerBean;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Iterator;
-import java.util.List;
 
-public class UserManagerPortlet extends AbstractPortlet {
-
+public class CredentialManagerPortlet extends AbstractPortlet {
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         getPortletLog().info("Exiting init()");
@@ -42,9 +34,9 @@ public class UserManagerPortlet extends AbstractPortlet {
         PortletRequest request = event.getPortletRequest();
         PortletResponse response = event.getPortletResponse();
         // Get instance of user manager bean
-        UserManagerBean userManagerBean = getUserManagerBean(request, response);
+        CredentialManagerBean credentialManagerBean = getCredentialManagerBean(request, response);
         // Then perform given action
-        userManagerBean.doAction(action);
+        credentialManagerBean.doAction(action);
         getPortletLog().debug("Exiting actionPerformed()");
     }
 
@@ -52,13 +44,13 @@ public class UserManagerPortlet extends AbstractPortlet {
             throws PortletException, IOException {
         getPortletLog().debug("Entering doView()");
         // Get instance of user manager bean
-        UserManagerBean userManagerBean = getUserManagerBean(request, response);
+        CredentialManagerBean credentialManagerBean = getCredentialManagerBean(request, response);
         // If no action performed, then perform list users
-        if (userManagerBean.getActionPerformed() == null) {
-            userManagerBean.doListUsers();
+        if (credentialManagerBean.getActionPerformed() == null) {
+            credentialManagerBean.doListCredentialMappings();
         }
         // Get next page to display
-        String nextPage = userManagerBean.getNextPage();
+        String nextPage = credentialManagerBean.getNextPage();
         // Include the given page
         getPortletConfig().getContext().include(nextPage, request, response);
         getPortletLog().debug("Exiting doView()");
@@ -76,27 +68,27 @@ public class UserManagerPortlet extends AbstractPortlet {
             throws PortletException, IOException {
         getPortletLog().debug("Entering doTitle()");
         // Get instance of user manager bean
-        UserManagerBean userManagerBean = getUserManagerBean(request, response);
+        CredentialManagerBean credentialManagerBean = getCredentialManagerBean(request, response);
         // Get next title to display
-        String title = userManagerBean.getNextTitle();
+        String title = credentialManagerBean.getNextTitle();
         // Print the given title
         response.getWriter().println(title);
         getPortletLog().debug("Exiting doTitle()");
     }
 
-    private UserManagerBean getUserManagerBean(PortletRequest request,
+    private CredentialManagerBean getCredentialManagerBean(PortletRequest request,
                                                PortletResponse response)
             throws PortletException {
-        getPortletLog().debug("Entering getUserManagerBean()");
-        UserManagerBean userManagerBean =
-                (UserManagerBean)request.getAttribute("userManagerBean");
-        if (userManagerBean == null) {
+        getPortletLog().debug("Entering getCredentialManagerBean()");
+        CredentialManagerBean credentialManagerBean =
+                (CredentialManagerBean)request.getAttribute("credentialManagerBean");
+        if (credentialManagerBean == null) {
             getPortletLog().debug("Creating instance of user manager bean");
             PortletConfig config = getPortletConfig();
-            userManagerBean = new UserManagerBean(config, request, response);
-            request.setAttribute("userManagerBean", userManagerBean);
+            credentialManagerBean = new CredentialManagerBean(config, request, response);
+            request.setAttribute("credentialManagerBean", credentialManagerBean);
         }
-        getPortletLog().debug("Exiting getUserManagerBean()");
-        return userManagerBean;
+        getPortletLog().debug("Exiting getCredentialManagerBean()");
+        return credentialManagerBean;
     }
 }
