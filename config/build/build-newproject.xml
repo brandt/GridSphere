@@ -58,6 +58,9 @@
         <replace file="${project.dir}/build.xml"
                  token="@PROJECT_NAME@"
                  value="${project.name}"/>
+        <replace file="${project.dir}/build.xml"
+                 token="@GRIDSPHERE_BASE@"
+                 value="${basedir}"/>
 
 
         <mkdir dir="${project.dir}/src"/>

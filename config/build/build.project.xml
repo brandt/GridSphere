@@ -79,7 +79,7 @@ Copyright:
             <include name="*.jar"/>
         </fileset>
 
-        <fileset dir="${gridsphere.home}/lib">
+        <fileset dir="@GRIDSPHERE_BASE@/lib">
             <include name="*.jar"/>
             <include name="ext/*.jar"/>
         </fileset>
