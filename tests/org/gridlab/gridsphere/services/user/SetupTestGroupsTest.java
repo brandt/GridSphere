@@ -9,9 +9,11 @@ import junit.framework.TestSuite;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
 
+import java.util.List;
+
 public class SetupTestGroupsTest extends SetupRootUserTest {
 
-    private static AccessControlManagerService aclService = null;
+    protected static AccessControlManagerService rootAclService = null;
 
     protected PortletGroup portal = null;
     protected PortletGroup triana = null;
@@ -31,32 +33,45 @@ public class SetupTestGroupsTest extends SetupRootUserTest {
 
     protected void setUp() {
         super.setUp();
+        super.loginRoot();
         log.info(" =====================================  setup");
         // Create a root user services using mock ServletConfig
         try {
-            aclService = (AccessControlManagerService) factory.createPortletUserService(AccessControlManagerService.class, rootUser, null, true);
+            rootAclService = (AccessControlManagerService) factory.createPortletUserService(AccessControlManagerService.class, rootUser, null, true);
         } catch (Exception e) {
             log.error("Unable to initialize services: ", e);
         }
-        setupGroups();
     }
 
-    public void setupGroups() {
+    public void testSetupGroups() {
         log.info("- setup groups");
-        portal = aclService.createGroup("portal");
-        triana = aclService.createGroup("triana");
-        cactus = aclService.createGroup("cactus");
+        portal = rootAclService.createGroup("portal");
+        triana = rootAclService.createGroup("triana");
+        cactus = rootAclService.createGroup("cactus");
+
+        PortletGroup c = rootAclService.getGroupByName("cactus");
+        assertEquals(cactus, c);
+    }
+
+    public void testAddDeleteGroup() {
+        log.info("- testAddRemove");
+        PortletGroup hiya = rootAclService.createGroup("hiya");
+        PortletGroup c = rootAclService.getGroupByName("hiya");
+        assertEquals(hiya, c);
+        rootAclService.deleteGroup(hiya);
+        c = rootAclService.getGroupByName("hiya");
+        assertEquals(null, c);
     }
 
     public void teardownGroups() {
-        log.info("- setup groups");
-        aclService.deleteGroup(portal);
-        aclService.deleteGroup(triana);
-        aclService.deleteGroup(cactus);
+        log.info("- teardown groups");
+        rootAclService.deleteGroup(portal);
+        rootAclService.deleteGroup(triana);
+        rootAclService.deleteGroup(cactus);
     }
 
     protected void tearDown() {
-        teardownGroups();
+        //teardownGroups();
         super.tearDown();
     }
 

@@ -39,6 +39,7 @@ public class SetupTestUsersTest extends SetupTestGroupsTest {
 
     protected void setUp() {
         super.setUp();
+        super.testSetupGroups();
         log.info(" =====================================  setup");
         // Create a root user services using mock ServletConfig
         try {
@@ -46,10 +47,9 @@ public class SetupTestUsersTest extends SetupTestGroupsTest {
         } catch (Exception e) {
             log.error("Unable to initialize services: ", e);
         }
-        setupUsers();
     }
 
-    public void setupUsers() {
+    public void testSetupUsers() {
         log.info("- setup users");
         List users = userService.getUsers();
         int numUsers = users.size();
@@ -92,8 +92,9 @@ public class SetupTestUsersTest extends SetupTestGroupsTest {
         }
     }
 
+
     public void teardownUsers() {
-        log.info("- setup groups");
+        log.info("- teardown users");
         userService.deleteAccount(jason);
         userService.deleteAccount(michael);
         userService.deleteAccount(oliver);

@@ -32,6 +32,7 @@ public class AllJUnitTests extends TestCase {
 
         suite.addTest(new TestSuite(ServiceTest.class));
         suite.addTest(new TestSuite(SetupRootUserTest.class));
+
         suite.addTest(new TestSuite(SetupTestGroupsTest.class));
         suite.addTest(new TestSuite(SetupTestUsersTest.class));
         suite.addTest(new TestSuite(UserManagerServiceTest.class));
