@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.core.mail.MailMessage;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.hibernate.PersistenceManagerRdbmsImpl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
@@ -28,6 +29,7 @@ import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
 import java.util.*;
+import java.io.IOException;
 
 public class GridSphereUserManager implements UserManagerService, AccessControlManagerService {
 
@@ -35,7 +37,9 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     private static GridSphereUserManager instance = new GridSphereUserManager();
     private PortletManagerService pms = null;
     private PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
+    //private PersistenceManagerRdbms pm = null;
     private PasswordManagerService passwordManagerService = DbmsPasswordManagerService.getInstance();
+    //private PasswordManagerService passwordManagerService = null;
 
     private static boolean isInitialized = false;
 
@@ -46,6 +50,15 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     private String jdoPortletGroup = SportletGroup.class.getName();
 
     private GridSphereUserManager() {}
+
+    public static void main(String[] args) throws Exception  {
+        GridSphereUserManager gum = GridSphereUserManager.getInstance();
+        String dir = "webapps/gridsphere/WEB-INF/persistence/";
+        gum.pm = new PersistenceManagerRdbmsImpl(dir);
+        //gum.pm.createDatabaseFromScratch(dir);
+        gum.initSportletGroup((SportletGroup)SportletGroup.SUPER);
+        gum.initSportletGroup((SportletGroup)PortletGroupFactory.GRIDSPHERE_GROUP);
+    }
 
     public static GridSphereUserManager getInstance() {
         return instance;
@@ -60,7 +73,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
             } catch (Exception e) {
                 throw new PortletServiceUnavailableException("Unable to get instance of PMS!");
             }
-            initAccessControl(config);
+            initGroups(config);
             initRootUser(config);
 
             log.info("Entering init()");
@@ -68,7 +81,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
         }
     }
 
-    private void initAccessControl(PortletServiceConfig config)
+    private void initGroups(PortletServiceConfig config)
             throws PortletServiceUnavailableException {
         log.info("Entering initGroups()");
 
@@ -93,15 +106,17 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
         String groupName = group.getName();
         if (!existsGroupWithName(groupName)) {
             try {
+                log.error("Creating group...." + groupName);
                 pm.create(group);
+                log.error("Created group...." + groupName);
             } catch (Exception e) {
                 log.error("Error creating group " + groupName, e);
             }
         } else {
             try {
+                log.error("Resetting group...." + groupName);
                 SportletGroup realGroup = this.getSportletGroupByName(groupName);
                 group.setID(realGroup.getID());
-                group.setOid(realGroup.getOid());
             } catch (Exception e) {
                 log.error("Error resetting group " + groupName, e);
             }
@@ -215,7 +230,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     public AccountRequest getAccountRequest(String oid) {
         String oql = "select accountRequest from "
                    + jdoAccountRequest
-                   + " accountRequest where accountRequest.ObjectID=" + oid;
+                   + " accountRequest where accountRequest.oid=" + oid;
         try {
             return (AccountRequest)pm.restore(oql);
         } catch (PersistenceManagerException e) {
@@ -255,6 +270,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
                  validateAccountRequest(request);
                  /* Store account request */
                  try {
+                     log.debug("Creating account request record for " + request.getUserName());
                      pm.create(request);
                  } catch (PersistenceManagerException e) {
                      String msg = "Error saving account request";
@@ -315,6 +331,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
                 return;
             }
         }
+        log.debug("Saving password record for account request " + request.getUserName());
         // Otherwise attempt to save password edits
         try {
             this.passwordManagerService.savePassword(passwordBean);
@@ -325,9 +342,9 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
 
     private boolean existsAccountRequest(AccountRequest request) {
         AccountRequestImpl requestImpl = (AccountRequestImpl)request;
-        String oql = "select accountRequest.ObjectID from "
-                   + jdoAccountRequest
-                   + " accountRequest where accountRequest.ObjectID="
+        String oql = "select accountRequest.oid from "
+                   + this.jdoAccountRequest
+                   + " accountRequest where accountRequest.oid="
                    + requestImpl.getOid();
         try {
             return (pm.restore(oql) != null);
@@ -363,6 +380,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     private void activateAccountRequestPassword(AccountRequest request, User user) {
         // If a new password was submitted with account request
         if (this.passwordManagerService.hasPassword(request)) {
+            log.info("Activating password for " + user.getUserName());
             // Activate user password
             try {
                 this.passwordManagerService.activatePassword(request, user);
@@ -373,7 +391,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     }
 
     private void activateAccountRequestGroupEntries(AccountRequest request, User user) {
-        // If new user then set initial set acl
+        // If new user then set initial acl
         if (request.isNewUser()) {
             // Grant user role in base group
             addGroupEntry(user, SportletGroup.CORE,  PortletRole.USER);
@@ -441,7 +459,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
 
     public User getLoggedInUser(String loginName) {
         SportletUserImpl user = getSportletUserImplByLoginName(loginName);
-        if (user != null) {
+        if (user!=null) {
             long now = Calendar.getInstance().getTime().getTime();
             user.setLastLoginTime(now);
             saveSportletUserImpl(user);
@@ -454,11 +472,12 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     }
 
     private SportletUserImpl getSportletUserImpl(String id) {
-        return selectSportletUserImpl("where user.ObjectID=\"" + id + "\"");
+        return selectSportletUserImpl("where user.oid='" + id + "'");
     }
 
     private SportletUserImpl getSportletUserImplByLoginName(String loginName) {
-        return selectSportletUserImpl("where user.UserID=\"" + loginName + "\"");
+        log.debug("Attempting to retrieve user by login name " + loginName);
+        return selectSportletUserImpl("where user.UserID='" + loginName + "'");
     }
 
     private SportletUserImpl selectSportletUserImpl(String criteria) {
@@ -497,6 +516,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
         resetFullName(user);
         // Create or update user
         if (existsSportletUserImpl(user)) {
+            log.debug("Updating user record for " + user.getUserName());
             try {
                 pm.update(user);
             } catch (PersistenceManagerException e) {
@@ -504,6 +524,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
                 log.error(msg, e);
             }
         } else {
+            log.debug("Creating user record for " + user.getUserName());
             try {
                 pm.create(user);
             } catch (PersistenceManagerException e) {
@@ -538,22 +559,22 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     }
 
     public boolean existsUserWithID(String userID) {
-        String criteria = "where user.ObjectID=\"" + userID + "\"";
+        String criteria = "where user.oid='" + userID + "'";
         return existsSportletUserImpl(criteria);
     }
 
     public boolean existsUserName(String loginName) {
-        String criteria = "where user.UserID=\"" + loginName + "\"";
+        String criteria = "where user.UserID='" + loginName + "'";
         return existsSportletUserImpl(criteria);
     }
 
     private boolean existsSportletUserImpl(SportletUserImpl user) {
-        String criteria = "where user.ObjectID=\"" + user.getOid() + "\"";
+        String criteria = "where user.oid='" + user.getOid() + "'";
         return existsSportletUserImpl(criteria);
     }
 
     private boolean existsSportletUserImpl(String criteria) {
-        String oql = "select user.ObjectID from "
+        String oql = "select user.oid from "
                    + jdoUser
                    + " user "
                    + criteria;
@@ -572,12 +593,12 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     }
 
     public List getGroupRequests(User user) {
-        String criteria = "where groupRequest.user=\"" + user.getID() + "\"";
+        String criteria = "where groupRequest.sportletUser.oid='" + user.getID() + "'";
         return selectGroupRequests(criteria);
     }
 
     public List getGroupRequests(PortletGroup group) {
-        String criteria = "where groupRequest.sgroup=\"" + group.getID() + "\"";
+        String criteria = "where groupRequest.sportletGroup.oid='" + group.getID() + "'";
         return selectGroupRequests(criteria);
     }
 
@@ -610,7 +631,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     }
 
     private GroupRequestImpl getGroupRequestImpl(String id) {
-        String criteria = "where groupRequest.ObjectID=\"" + id + "\"";
+        String criteria = "where groupRequest.oid='" + id + "'";
         return selectGroupRequestImpl(criteria);
     }
 
@@ -630,10 +651,10 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
 
     private boolean existsGroupRequest(GroupRequest request) {
        GroupRequestImpl requestImpl = (GroupRequestImpl)request;
-       String oql = "select groupRequest.ObjectID from "
+       String oql = "select groupRequest.oid from "
                   + jdoGroupRequest
-                  + " groupRequest where groupRequest.ObjectID="
-                  + requestImpl.getOid();
+                  + " groupRequest where groupRequest.oid='"
+                  + requestImpl.getOid() + "'";
        try {
            return (pm.restore(oql) != null);
        } catch (PersistenceManagerException e) {
@@ -768,13 +789,13 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
         if (hasSuperRole(user)) {
             return new Vector();
         } else {
-            String criteria = "where groupEntry.user=\"" + user.getID() + "\"";
+            String criteria = "where groupEntry.sportletUser.oid='" + user.getID() + "'";
             return selectGroupEntries(criteria);
         }
     }
 
     public List getGroupEntries(PortletGroup group) {
-        String criteria = "where groupEntry.sgroup=\"" + group.getID() + "\"";
+        String criteria = "where groupEntry.sportletGroup.oid='" + group.getID() + "'";
         return selectGroupEntries(criteria);
     }
 
@@ -803,7 +824,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     }
 
     public GroupEntry getGroupEntry(String id) {
-        String criteria = "where groupEntry.ObjectID=\"" + id + "\"";
+        String criteria = "where groupEntry.oid='" + id + "'";
         return selectGroupEntryImpl(criteria);
     }
 
@@ -812,8 +833,8 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     }
 
     private GroupEntryImpl getGroupEntryImpl(User user, PortletGroup group) {
-        String criteria = "where groupEntry.user=\"" + user.getID() + "\""
-                        +  " and groupEntry.sgroup=\"" + group.getID() + "\"";
+        String criteria = " where groupEntry.sportletUser.oid='" + user.getID() + "'"
+                       +  " and groupEntry.sportletGroup.oid='" + group.getID() + "'";
         return selectGroupEntryImpl(criteria);
     }
 
@@ -833,10 +854,10 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
 
    private boolean existsGroupEntry(GroupEntry entry) {
        GroupEntryImpl rightImpl = (GroupEntryImpl)entry;
-       String oql = "select groupEntry.ObjectID from "
+       String oql = "select groupEntry.oid from "
                   + jdoGroupEntry
-                  + " groupEntry where groupEntry.ObjectID="
-                  + rightImpl.getOid();
+                  + " groupEntry where groupEntry.oid='"
+                  + rightImpl.getOid() + "'";
        try {
            return (pm.restore(oql) != null);
        } catch (PersistenceManagerException e) {
@@ -889,9 +910,9 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     public List selectGroups(String criteria) {
         // Build object query
         StringBuffer oqlBuffer = new StringBuffer();
-        oqlBuffer.append("select portletGroup from ");
+        oqlBuffer.append("select grp from ");
         oqlBuffer.append(jdoPortletGroup);
-        oqlBuffer.append(" portletGroup ");
+        oqlBuffer.append(" grp ");
         // Note, we don't return super groups
         if (criteria.equals("")) {
             oqlBuffer.append(" where ");
@@ -899,9 +920,9 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
             oqlBuffer.append(criteria);
             oqlBuffer.append(" and ");
         }
-        oqlBuffer.append("portletGroup.ObjectID !=\"");
+        oqlBuffer.append("grp.oid !='");
         oqlBuffer.append(getSuperGroup().getID());
-        oqlBuffer.append("\"");
+        oqlBuffer.append("'");
         // Generate object query
         String oql = oqlBuffer.toString();
         // Execute query
@@ -915,7 +936,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     }
 
     public PortletGroup getGroup(String id) {
-        return selectSportletGroup("where portletGroup.ObjectID=\"" + id + "\"");
+        return selectSportletGroup("where grp.oid='" + id + "'");
     }
 
     private PortletGroup getSuperGroup() {
@@ -930,22 +951,23 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
         return pms.getPortletWebApplicationDescription(groupName);
     }
     private SportletGroup getSportletGroupByName(String name) {
-        return selectSportletGroup("where portletGroup.Name=\"" + name + "\"");
+        return selectSportletGroup("where grp.Name='" + name + "'");
     }
 
     private SportletGroup selectSportletGroup(String criteria) {
         // Build object query
         StringBuffer oqlBuffer = new StringBuffer();
-        oqlBuffer.append("select portletGroup from ");
+        oqlBuffer.append("select grp from ");
         oqlBuffer.append(jdoPortletGroup);
-        oqlBuffer.append(" portletGroup ");
+        oqlBuffer.append(" grp ");
         oqlBuffer.append(criteria);
         // Generate object query
         String oql = oqlBuffer.toString();
+        log.debug(oql);
         try {
             return (SportletGroup)pm.restore(oql);
         } catch (PersistenceManagerException e) {
-            String msg = "Error retrieving portlet groups";
+            String msg = "Error retrieving portlet group";
             log.error(msg, e);
             return null;
         }
@@ -980,11 +1002,11 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     }
 
     public List getUsers(PortletGroup group) {
-        String oql = "select groupEntry.user from "
+        String oql = "select groupEntry.sportletUser from "
                    + jdoGroupEntry
-                   + " groupEntry where sgroup=\""
+                   + " groupEntry where groupEntry.sportletGroup.oid='"
                    + group.getID()
-                   + "\"";
+                   + "'";
         try {
             return pm.restoreList(oql);
         } catch (PersistenceManagerException e) {
@@ -1022,11 +1044,11 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
             groups = getGroups();
         } else {
             // Otherwise, return groups for given user
-            String oql = "select groupEntry.sgroup from "
+            String oql = "select groupEntry.sportletGroup from "
                        + jdoGroupEntry
-                       + " groupEntry where user=\""
+                       + " groupEntry where groupEntry.sportletUser.oid='"
                        + user.getID()
-                       + "\"";
+                       + "'";
             try {
                 groups = pm.restoreList(oql);
             } catch (PersistenceManagerException e) {

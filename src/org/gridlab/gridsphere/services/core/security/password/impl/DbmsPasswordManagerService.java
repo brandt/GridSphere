@@ -114,7 +114,7 @@ public class DbmsPasswordManagerService
         DbmsPassword password = null;
         String query = "select pw from "
                      + this.userPasswordImpl
-                     + " pw where pw.user=" + user.getID();
+                     + " pw where pw.sportletUser.oid='" + user.getID() + "'";
         try {
             password = (DbmsPassword)this.pm.restore(query);
         } catch (PersistenceManagerException e) {
@@ -131,7 +131,7 @@ public class DbmsPasswordManagerService
         DbmsRequestPassword password = null;
         String query = "select pw from "
                      + this.requestPasswordImpl
-                     + " pw where pw.user=" + request.getID();
+                     + " pw where pw.accountRequest.oid='" + request.getID() + "'";
         try {
             password = (DbmsRequestPassword)this.pm.restore(query);
         } catch (PersistenceManagerException e) {

@@ -6,32 +6,15 @@
 
 package org.gridlab.gridsphere.services.core.security.acl.impl;
 
-import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.portlet.PortletRole;
 
-/**
- * @table useracl
- */
-public class UserACL extends BaseObject {
+public class UserACL {
 
-    /**
-     * @sql-name roleid
-     */
+
+    private String oid = null;
     private int RoleID = PortletRole.GUEST.getID();
-
-    /**
-     * @sql-size 50
-     * @sql-name userid
-     */
     private String UserID = new String();
-    /**
-     * @sql-size 50
-     * @sql-name groupid
-     */
     private String GroupID = new String();
-    /**
-     * @sql-name status
-     */
     private int Status = 0;         // 0 not approved; 1 approved
 
     public static final int STATUS_NOT_APPROVED = 0;
@@ -46,6 +29,14 @@ public class UserACL extends BaseObject {
         this.RoleID = roleid;
         this.GroupID = groupid;
         this.Status = STATUS_NOT_APPROVED;
+    }
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
     }
 
     public String getUserID() {

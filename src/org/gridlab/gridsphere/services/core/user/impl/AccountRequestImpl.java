@@ -5,7 +5,6 @@
  */
 package org.gridlab.gridsphere.services.core.user.impl;
 
-import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
@@ -21,43 +20,16 @@ import org.gridlab.gridsphere.services.core.user.AccountRequest;
 import java.util.Date;
 import java.util.Enumeration;
 
-/**
- * @table accountrequest
- *
- */
-public class AccountRequestImpl extends BaseObject implements AccountRequest {
+public class AccountRequestImpl implements AccountRequest {
 
     protected transient static PortletLog log = SportletLog.getInstance(AccountRequestImpl.class);
 
-    /**
-     * @sql-size 32
-     * @sql-name userid
-     */
+    private String oid = null;
     private String UserID = "";
-    /**
-     * @sql-size 30
-     * @sql-name givenname
-     */
     private String GivenName = "";
-    /**
-     * @sql-size 50
-     * @sql-name familyname
-     */
     private String FamilyName = "";
-    /**
-     * @sql-size 256
-     * @sql-name fullname
-     */
     private String FullName = "";
-    /**
-     * @sql-size 128
-     * @sql-name emailaddress
-     */
     private String EmailAddress = "";
-    /**
-     * @sql-size 256
-     * @sql-name organization
-     */
     private String Organization = "";
 
     // Password bean
@@ -70,6 +42,14 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
         super();
         this.isNewUser = true;
         this.passwordBean = new PasswordEditor(this);
+    }
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
     }
 
     public AccountRequestImpl(User user) {
@@ -363,7 +343,6 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
      * @return the account request information
      */
     public String toString() {
-        int i;
         StringBuffer sb = new StringBuffer();
         sb.append("Given Name: " + GivenName);
         sb.append("Family Name: " + FamilyName);

@@ -3,48 +3,34 @@
  */
 package org.gridlab.gridsphere.services.core.user.impl;
 
-import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
 
-/**
- *  @table groupentry
- */
-public class GroupEntryImpl
-        extends BaseObject
-        implements GroupEntry {
+public class GroupEntryImpl  implements GroupEntry {
 
-    /**
-     * @sql-name user
-     * @get-method getSportletUser
-     * @set-method setSportletUser
-     * @required
-     */
+    protected transient static PortletLog log = SportletLog.getInstance(GroupEntryImpl.class);
+
+    private String oid = null;
     private SportletUserImpl user = null;
-
-    /**
-     * @sql-name sgroup
-     * @get-method getSportletGroup
-     * @set-method setSportletGroup
-     * @required
-     */
     private SportletGroup sgroup = null;
-
-    /**
-     * @sql-name role
-     * @sql-size 256
-     * @required
-     * @get-method getRoleName
-     * @set-method setRoleName
-     */
     private String role = null;
 
     public String getID() {
         return getOid();
+    }
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
     }
 
     public User getUser() {

@@ -8,56 +8,31 @@
  */
 package org.gridlab.gridsphere.services.core.security.password.impl;
 
-import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.services.core.user.impl.AccountRequestImpl;
 
 import java.util.Date;
 
-/**
- * @table requestpassword
- */
-public class DbmsRequestPassword extends BaseObject implements DbmsPassword {
+public class DbmsRequestPassword  implements DbmsPassword {
 
-    /**
-     * @sql-name user
-     * @get-method getAccountRequest
-     * @set-method setAccountRequest
-     * @required
-     */
+    private String oid = null;
     private AccountRequestImpl user;
-    /**
-     * @sql-size 32
-     * @sql-name value
-     * @required
-     */
     private String value = new String();
-    /**
-     * @sql-size 256
-     * @sql-name hint
-     */
     private String hint = new String();
-    /**
-     * @sql-name lifetime
-     * @required
-     */
     private long lifetime = -1;
-    /**
-     * @sql-name dateexpires
-     */
     private Date dateExpires = null;
-    /**
-     * @sql-name datecreated
-     * @required
-     */
     private Date dateCreated = null;
-    /**
-     * @sql-name datelastmodified
-     * @required
-     */
     private Date dateLastModified = null;
 
     private transient boolean validation = false;
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
 
     public boolean  getValidation() {
         return validation;

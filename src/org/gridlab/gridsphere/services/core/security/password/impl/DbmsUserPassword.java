@@ -1,63 +1,33 @@
-/*
- * Created by IntelliJ IDEA.
- * User: russell
- * Date: Jan 31, 2003
- * Time: 12:04:46 PM
- * To change template for new class use 
- * Code Style | Class Templates options (Tools | IDE Options).
+/**
+ * $Id$
  */
 package org.gridlab.gridsphere.services.core.security.password.impl;
 
-import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 
 import java.util.Date;
 
-/**
- * @table userpassword
- */
-public class DbmsUserPassword extends BaseObject implements DbmsPassword {
+public class DbmsUserPassword  implements DbmsPassword {
 
-    /**
-     * @sql-name user
-     * @get-method getSportletUser
-     * @set-method setSportletUser
-     * @required
-     */
+    private String oid = null;
     private SportletUserImpl user;
-    /**
-     * @sql-size 32
-     * @sql-name value
-     * @required
-     */
     private String value = new String();
-    /**
-     * @sql-size 256
-     * @sql-name hint
-     */
     private String hint = new String();
-    /**
-     * @sql-name lifetime
-     * @required
-     */
     private long lifetime = -1;
-    /**
-     * @sql-name dateexpires
-     */
     private Date dateExpires = null;
-    /**
-     * @sql-name datecreated
-     * @required
-     */
     private Date dateCreated = null;
-    /**
-     * @sql-name datelastmodified
-     * @required
-     */
     private Date dateLastModified = null;
 
     private transient boolean validation = false;
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
 
     public String getHint() {
         return this.hint;

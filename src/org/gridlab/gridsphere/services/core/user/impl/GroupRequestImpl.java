@@ -3,55 +3,25 @@
  */
 package org.gridlab.gridsphere.services.core.user.impl;
 
-import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.services.core.security.acl.GroupAction;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 
-/**
- * @table grouprequest
- */
-public class GroupRequestImpl
-        extends BaseObject
-        implements GroupRequest {
+public class GroupRequestImpl implements GroupRequest {
 
-    /**
-     * @sql-name entry
-     * @get-method getGroupEntry
-     * @set-method setGroupEntry
-     */
+    protected transient static PortletLog log = SportletLog.getInstance(GroupRequestImpl.class);
+
+    private String oid = null;
     private GroupEntryImpl entry = null;
-    /**
-     * @sql-name user
-     * @get-method getSportletUser
-     * @set-method setSportletUser
-     * @required
-     */
     private SportletUserImpl user = null;
-    /**
-     * @sql-name sgroup
-     * @get-method getSportletGroup
-     * @set-method setSportletGroup
-     * @required
-     */
     private SportletGroup sgroup = null;
-    /**
-     * @sql-name role
-     * @sql-size 256
-     * @get-method getRoleName
-     * @set-method setRoleName
-     * @required
-     */
     private String role = null;
-    /**
-     * @sql-name action
-     * @sql-size 128
-     * @required
-     */
     private String action = GroupAction.ADD.toString();
 
     public GroupRequestImpl() {
@@ -63,6 +33,14 @@ public class GroupRequestImpl
         this.sgroup = entry.getSportletGroup();
         this.role = entry.getRole().toString();
         this.action = GroupAction.EDIT.toString();
+    }
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
     }
 
     public String getID() {
