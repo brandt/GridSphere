@@ -157,11 +157,10 @@ Copyright:
         <delete quiet="true" dir="${project.dist}"/>
     </target>
 
-
     <target name="docs" depends="javadocs" description="Create ${project.title} Documentation"/>
 
     <!-- =================================================================== -->
-    <!-- Creates all the @PROJECT_TITLE@ API documentation                                   -->
+    <!-- Creates all the @PROJECT_TITLE@ API documentation                   -->
     <!-- =================================================================== -->
     <target name="javadocs" depends="setenv" description="Create ${project.title} Javadocs">
         <delete quiet="true" dir="${build.javadoc}"/>
@@ -197,7 +196,7 @@ Copyright:
     <!-- Deploys @PROJECT_TITLE@ portlet to a local server                   -->
     <!-- =================================================================== -->
     <target name="deploy" depends="jar" if="${catalina.exists}" description="Deploys ${project.title} portlet to a local server">
-        <property name="project.webapp" value="${env.CATALINA_HOME}/webapps/${project.name}.war"/>
+        <property name="project.webapp" value="${env.CATALINA_HOME}/webapps"/>
         <copy todir="${project.webapp}">
             <fileset dir="webapp"/>
         </copy>
