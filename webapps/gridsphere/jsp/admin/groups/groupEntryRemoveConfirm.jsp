@@ -15,7 +15,6 @@
         <ui:tablerow>
             <ui:tablecell>
                 <ui:actionsubmit action="doViewViewGroup" value="Back to Group"/>
-                &nbsp;&nbsp;
                 <ui:actionsubmit action="doViewListGroup" value="List Groups"/>
             </ui:tablecell>
         </ui:tablerow>

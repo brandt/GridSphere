@@ -9,29 +9,29 @@
 <ui:form>
 <ui:panel>
 
-Edit Settings for <b><%= username %></b>
+<ui:text key="PROFILE_EDIT"/>  <b><%= username %></b>
 
 <br>
-<b>Last Login Time: </b><%= logintime %>
+<ui:text key="PROFILE_LASTLOGIN"/>  <b><%= logintime %></b>
 <ui:frame>
     <ui:tablerow>
-        <ui:tablecell><ui:text value="Username: "/></ui:tablecell>
+        <ui:tablecell><ui:text key="USERNAME"/></ui:tablecell>
         <ui:tablecell><ui:textfield beanId="userName"/></ui:tablecell>
     </ui:tablerow>
     <ui:tablerow>
-        <ui:tablecell><ui:text value="Full Name: "/></ui:tablecell>
+        <ui:tablecell><ui:text key="FULLNAME"/></ui:tablecell>
         <ui:tablecell><ui:textfield beanId="fullName"/></ui:tablecell>
     </ui:tablerow>
     <ui:tablerow>
-        <ui:tablecell><ui:text value="Email Address: "/></ui:tablecell>
+        <ui:tablecell><ui:text key="EMAILADDRESS"/></ui:tablecell>
         <ui:tablecell><ui:textfield beanId="email"/></ui:tablecell>
     </ui:tablerow>
     <ui:tablerow>
-        <ui:tablecell><ui:text value="Organization: "/></ui:tablecell>
+        <ui:tablecell><ui:text key="ORGANIZATION"/></ui:tablecell>
         <ui:tablecell><ui:textfield beanId="organization"/></ui:tablecell>
     </ui:tablerow>
     <ui:tablerow>
-        <ui:tablecell><ui:text value="Preferred Locale: "/></ui:tablecell>
+        <ui:tablecell><ui:text key="PROFILE_LOCALE"/></ui:tablecell>
         <ui:tablecell><ui:listbox beanId="userLocale"/></ui:tablecell>
     </ui:tablerow>
 </ui:frame>
@@ -39,7 +39,7 @@ Edit Settings for <b><%= username %></b>
 <ui:frame beanId="groupsFrame"/>
 
 <ui:frame>
-<ui:actionsubmit action="doSaveUser" value="Save Changes"/>
+<ui:actionsubmit action="doSaveUser" key="PROFILE_SAVE"/>
 </ui:frame>
 </ui:panel>
 

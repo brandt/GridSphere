@@ -26,7 +26,7 @@
                 while ((groupIterator.hasNext() && descsIterator.hasNext())) {
                     // Get next user
                     PortletGroup group = (PortletGroup)groupIterator.next();
-
+                    String desc = (String)descsIterator.next();
 %>
                 <ui:tablerow>
                         <ui:tablecell>
@@ -35,7 +35,7 @@
                             </ui:actionlink>
                         </ui:tablecell>
                         <ui:tablecell>
-                            <%= descsIterator.next() %>
+                            <ui:text value="<%= desc %>"/>
                         </ui:tablecell>
                 </ui:tablerow>
 

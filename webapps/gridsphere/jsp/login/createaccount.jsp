@@ -10,7 +10,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text value="User Name:"/>
+                <ui:text key="USERNAME"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:textfield beanId="userName"/>
@@ -19,7 +19,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text value="Family Name:"/>
+                <ui:text key="FAMILYNAME"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:textfield beanId="familyName"/>
@@ -28,7 +28,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text value="Given Name:"/>
+                <ui:text value="GIVENNAME"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:textfield beanId="givenName"/>
@@ -37,7 +37,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text value="Full Name:"/>
+                <ui:text key="FULLNAME"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:textfield beanId="fullName"/>
@@ -46,7 +46,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text value="Email Address:"/>
+                <ui:text key="EMAILADDRESS"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:textfield beanId="emailAddress"/>
@@ -55,7 +55,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text value="Organization:"/>
+                <ui:text key="ORGANIZATION"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:textfield beanId="organization"/>
@@ -64,7 +64,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text value="Password:"/>
+                <ui:text key="PASSWORD"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:password beanId="password"/>
@@ -73,7 +73,7 @@
 
         <ui:tablerow>
             <ui:tablecell width="200">
-                <ui:text value="Confirm Password:"/>
+                <ui:text value="CONFIRM_PASS"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:password beanId="confirmPassword"/>
@@ -85,8 +85,8 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:actionsubmit action="doConfirmEditUser" value="Save"/>
-                <ui:actionsubmit action="doCancelEditUser" value="Cancel"/>
+                <ui:actionsubmit action="doConfirmEditUser" key="SAVE"/>
+                <ui:actionsubmit action="doCancelEditUser" key="CANCEL"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>

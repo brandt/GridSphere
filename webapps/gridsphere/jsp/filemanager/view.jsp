@@ -10,7 +10,7 @@
         <ui:frame>
             <ui:tablerow>
                 <ui:tablecell width="100">
-                    <ui:text value="File: "/>
+                    <ui:text key="FILE_NAME"/>
                 </ui:tablecell>
                 <ui:tablecell width="60">
                     <ui:fileinput beanId="userfile" size="20" maxlength="20"/>
@@ -22,7 +22,7 @@
         <ui:frame>
             <ui:tablerow>
                 <ui:tablecell width="100">
-                    <ui:actionsubmit action="uploadFile" value="Upload file"/>
+                    <ui:actionsubmit action="uploadFile" key="FILE_UPLOAD"/>
                 </ui:tablecell>
                 <ui:tablecell/>
             </ui:tablerow>
@@ -33,7 +33,7 @@
         <ui:frame>
             <ui:tablerow>
                 <ui:tablecell width="300">
-                    <ui:text value="List current files:"/>
+                    <ui:text key="FILE_LIST"/>
                 </ui:tablecell>
             </ui:tablerow>
             <ui:tablerow>
@@ -47,9 +47,9 @@
             <ui:tablerow>
                 <ui:tablecell/>
                 <ui:tablecell>
-                    <ui:actionsubmit action="deleteFile" value="Delete file"/>
-                    <ui:actionsubmit action="editFile" value="Edit file"/>
-                    <ui:actionsubmit action="downloadFile" value="Download file"/>
+                    <ui:actionsubmit action="deleteFile" key="FILE_DELETE"/>
+                    <ui:actionsubmit action="editFile" key="FILE_EDIT"/>
+                    <ui:actionsubmit action="downloadFile" key="FILE_DOWNLOAD"/>
                 </ui:tablecell>
                 <ui:tablecell/>
             </ui:tablerow>

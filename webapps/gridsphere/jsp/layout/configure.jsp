@@ -8,17 +8,17 @@
 
 <ui:frame beanId="msgFrame"/>
 
-Configure supported themes by specifying the css directory name in the comma separated list:
+<ui:text key="LAYOUT_CONFIG_THEMES"/>
 <ui:frame>
     <ui:tablerow>
-        <ui:tablecell><ui:text value="Supported themes: "/><ui:textfield beanId="themesTF"/></ui:tablecell>
+        <ui:tablecell><ui:text key="LAYOUT_SUPPORTED_THEMES"/>&nbsp;<ui:textfield beanId="themesTF"/></ui:tablecell>
     </ui:tablerow>
 </ui:frame>
 
 <ui:frame>
     <ui:tablerow>
         <ui:tablecell>
-            <ui:actionsubmit action="doSaveThemes" value="Save Changes"/>
+            <ui:actionsubmit action="doSaveThemes" key="LAYOUT_APPLY"/>
         </ui:tablecell>
     </ui:tablerow>
 </ui:frame>

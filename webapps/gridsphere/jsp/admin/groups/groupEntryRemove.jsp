@@ -17,7 +17,6 @@
         <ui:tablerow>
             <ui:tablecell>
                 <ui:actionsubmit action="doViewConfirmRemoveGroupEntry" value="Remove Users"/>
-                &nbsp;&nbsp;
                 <ui:actionsubmit action="doViewCancelRemoveGroupEntry" value="Cancel Remove"/>
             </ui:tablecell>
         </ui:tablerow>

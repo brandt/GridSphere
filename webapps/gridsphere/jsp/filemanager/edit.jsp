@@ -30,9 +30,9 @@
             <ui:tablerow>
                 <ui:tablecell/>
                 <ui:tablecell>
-                    <ui:actionsubmit action="deleteFile" value="Delete file"/>
-                    <ui:actionsubmit action="saveFile" value="Save file"/>
-                    <ui:actionsubmit action="cancelEdit" value="Cancel"/>
+                    <ui:actionsubmit action="deleteFile" key="FILE_DELETE"/>
+                    <ui:actionsubmit action="saveFile" key="FILE_SAVE"/>
+                    <ui:actionsubmit action="cancelEdit" key="CANCEL"/>
                 </ui:tablecell>
                 <ui:tablecell/>
             </ui:tablerow>
