@@ -14,10 +14,8 @@ public abstract class SelectElementBean extends BaseNameValueBean implements Sel
     }
 
     public SelectElementBean(String name, String value, boolean selected, boolean disabled) {
-        this.name = name;
-        this.value = value;
+        super(name, value, disabled);
         this.selected = selected;
-        this.disabled = disabled;
     }
 
 
@@ -38,8 +36,18 @@ public abstract class SelectElementBean extends BaseNameValueBean implements Sel
     }
 
     public String toString(String type) {
-        return "<input type='"+type+"' name='"+name+"' value='"+value+"' "+checkDisabled()+" "+checkSelected("checked")+
+        return "<input type='"+type+"' name='"+getIdRef()+name+"' value='"+value+"' "+checkDisabled()+" "+checkSelected("checked")+
             "/>";
     }
+
+    public void update(String[] values) {
+        if (!values[0].equals("")) {
+            selected = true;
+        } else {
+            selected = false;
+        }
+
+    }
+
 
 }

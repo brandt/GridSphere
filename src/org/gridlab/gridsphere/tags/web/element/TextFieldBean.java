@@ -4,18 +4,19 @@
  */
 package org.gridlab.gridsphere.tags.web.element;
 
-public class InputFieldBean extends ReadOnlyBaseBean implements InputBean {
+public class TextFieldBean extends ReadOnlyBaseBean implements InputBean {
 
     protected int size;
     protected String inputtype = "text";
     protected int maxlength;
 
-    public InputFieldBean() {
+    public TextFieldBean() {
         super();
     }
 
-    public InputFieldBean(String name, String value, boolean disabled, boolean readonly, int size, int maxlength) {
+    public TextFieldBean(String name, String value, boolean disabled, boolean readonly, int size, int maxlength) {
       //  super(name, value, disabled, readonly);
+        super();
         this.name = name;
         this.value = value;
         this.disabled = disabled;
@@ -49,9 +50,8 @@ public class InputFieldBean extends ReadOnlyBaseBean implements InputBean {
         this.maxlength = maxlength;
     }
 
-
     public String toString() {
-        return "<input type='" + inputtype + "' name='" + name + "' value='" + value + "' size='"
+        return "<input type='" + inputtype + "' name='" + getIdRef()+name + "' value='" + value + "' size='"
                 + size + "' maxlength='" + maxlength + "'/>";
     }
 

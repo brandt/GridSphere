@@ -18,4 +18,11 @@ public interface NameValueBean extends ElementBean {
     public boolean isDisabled();
 
     public void setDisabled(boolean flag);
+
+    /**
+     * Updates the values of the bean.
+     * @param values array of strings representaing the updates
+     */
+    public void update(String[] values);
+
 }

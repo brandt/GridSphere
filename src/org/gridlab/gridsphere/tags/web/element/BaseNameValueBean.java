@@ -11,14 +11,6 @@ public abstract class BaseNameValueBean extends BaseElementBean implements NameV
     protected String name;
     protected boolean disabled;
 
-    public String checkDisabled() {
-        if (disabled) {
-            return " disabled='disabled' ";
-        } else {
-            return "";
-        }
-    }
-
     public BaseNameValueBean() {
         super();
     }
@@ -29,6 +21,14 @@ public abstract class BaseNameValueBean extends BaseElementBean implements NameV
         this.value = value;
         this.disabled = disabled;
         this.id = name;
+    }
+
+    public String checkDisabled() {
+        if (disabled) {
+            return " disabled='disabled' ";
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -78,5 +78,13 @@ public abstract class BaseNameValueBean extends BaseElementBean implements NameV
      */
     public void setDisabled(boolean flag) {
         this.disabled = flag;
+    }
+
+    /**
+     * Updates the value(s) of the bean.
+     * @param values array of strings representaing the updates
+     */
+    public void update(String[] values) {
+        this.value = values[0];
     }
 }

@@ -14,4 +14,5 @@ public class CheckBoxBean extends SelectElementBean {
     public String toString() {
         return super.toString("checkbox");
     }
+
 }
