@@ -47,7 +47,7 @@
                 <language locale="de">
                     <title>Anmelden</title>
                     <title-short>Anmelden</title-short>
-                    <description>Anmelden Portlet ermoeglicht das Anmelden</description>
+                    <description>Anmelden Portlet ermöglicht das Anmelden</description>
                     <keywords>anmelden logout</keywords>
                 </language>
                 <language locale="fr">
@@ -109,7 +109,7 @@
                 <language locale="de">
                     <title>Abmelden</title>
                     <title-short>Abmelden</title-short>
-                    <description>Abmelden Portlet ermoeglicht das Ausloggen</description>
+                    <description>Abmelden Portlet ermöglicht das Ausloggen</description>
                     <keywords>portlet abmelden</keywords>
                 </language>
                 <language locale="fr">
@@ -175,7 +175,7 @@
                 <language locale="de">
                     <title>Konto Manager</title>
                     <title-short>Konto Manager</title-short>
-                    <description>Ermöglicht das administrieren von Nutzer Konten</description>
+                    <description>Ermöglicht das Administrieren von Nutzerkonten</description>
                     <keywords>nutzer konten administrieren</keywords>
                 </language>
                 <language locale="fr">
@@ -394,7 +394,7 @@
                     <description>Provides user layout customization</description>
                 </language>
                 <language locale="de">
-                    <title>Layout Managieren</title>
+                    <title>Layout einstellen</title>
                     <description>Ermöglicht die benutzerspezifische Anpassung der Darstellung</description>
                 </language>
                 <language locale="fr">
@@ -452,7 +452,7 @@
                 </language>
                 <language locale="de">
                     <title>Benutzerprofil Verwaltung</title>
-                    <description>Zur Anpassung der Benutzerprofile</description>
+                    <description>Anpassung der Benutzerprofile</description>
                 </language>
                 <language locale="fr">
                     <title>Gestionnaire de profile</title>
