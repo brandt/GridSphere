@@ -189,4 +189,8 @@ public interface SportletProperties {
     public static final String LOCALE = "org.gridlab.gridsphere.portlet.Locale";
 
     public static final String PORTLET_SERVLET = "org.gridlab.gridsphere.portlets.PortletServlet";
+
+    public static final String FILE_DOWNLOAD_NAME = "org.gridlab.gridsphere.portletcontainer.FILE_DOWNLOAD_NAME";
+
+    public static final String FILE_DOWNLOAD_PATH = "org.gridlab.gridsphere.portletcontainer.FILE_DOWNLOAD_PATH";
 }

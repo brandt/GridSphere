@@ -258,7 +258,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         try {
 
             User user = loginService.login(username, password);
-
+            // null out passwd
+            password = null;
             req.setAttribute(SportletProperties.PORTLET_USER, user);
             session.setAttribute(SportletProperties.PORTLET_USER, user.getID());
             if (aclService.hasSuperRole(user)) {
@@ -308,8 +309,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletResponse res = event.getPortletResponse();
         PortletRequest req = event.getPortletRequest();
         try {
-            String fileName = (String) req.getAttribute("FMP_filename");
-            String path = (String) req.getAttribute("FMP_filepath");
+            String fileName = (String) req.getAttribute(SportletProperties.FILE_DOWNLOAD_NAME);
+            String path = (String) req.getAttribute(SportletProperties.FILE_DOWNLOAD_PATH);
             if ((fileName == null) || (path == null)) return;
             log.debug("in downloadFile");
             log.debug("filename: " + fileName + " filepath= " + path);
@@ -330,7 +331,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         } catch (IOException e) {
             log.error("Caught IOException", e);
             //response.sendError(HttpServletResponse.SC_INTERNAL_SERVER,e.getMessage());
-
         }
     }
 

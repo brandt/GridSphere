@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.provider.portlet;
 
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.event.impl.FormEventImpl;
 
@@ -49,8 +50,8 @@ public class ActionPortlet extends AbstractPortlet {
     }
 
     protected void setFileDownloadEvent(PortletRequest req, String fileName, String path) {
-        req.setAttribute("FMP_filename", fileName);
-        req.setAttribute("FMP_filepath", path);
+        req.setAttribute(SportletProperties.FILE_DOWNLOAD_NAME, fileName);
+        req.setAttribute(SportletProperties.FILE_DOWNLOAD_PATH, path);
     }
     /**
      * Sets the next display state. The state specified may be either a JSP or it can

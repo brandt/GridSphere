@@ -62,8 +62,8 @@ public class ActionPortlet extends GenericPortlet {
     }
 
     protected void setFileDownloadEvent(PortletRequest req, String fileName, String path) {
-        req.setAttribute("FMP_filename", fileName);
-        req.setAttribute("FMP_filepath", path);
+        req.setAttribute(SportletProperties.FILE_DOWNLOAD_NAME, fileName);
+        req.setAttribute(SportletProperties.FILE_DOWNLOAD_PATH, path);
     }
     /**
      * Sets the next display state. The state specified may be either a JSP or it can
