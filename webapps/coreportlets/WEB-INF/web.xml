@@ -62,17 +62,17 @@
 
     <servlet>
         <servlet-name>CredentialMappingPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.CredentialMappingPortlet</servlet-class>
+        <servlet-class>org.gridlab.gridsphere.portlets.grid.CredentialMappingPortlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>CredentialPermissionPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.CredentialPermissionPortlet</servlet-class>
+        <servlet-class>org.gridlab.gridsphere.portlets.grid.CredentialPermissionPortlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>ActiveCredentialPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.ActiveCredentialPortlet</servlet-class>
+        <servlet-class>org.gridlab.gridsphere.portlets.grid.ActiveCredentialPortlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

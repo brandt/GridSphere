@@ -154,10 +154,11 @@ Copyright:
         <echo message="force-mapping          will rebuild the mapping file for castor  "/>
         <echo message="force-database         will rebuild the databasestructure        "/>
         <echo message="                           in the deployed gridsphere            "/>
-
     </target>
 
+    <target name="newproject" description="creates a new project template">
 
+    </target>
 
     <!-- =================================================================== -->
     <!-- Builds and deploys GridSphere                                       -->
@@ -252,7 +253,8 @@ Copyright:
     <!-- =================================================================== -->
     <target name="core-portlets-jar" depends="compile" description="Create ${build.lib}/coreportlets.jar">
         <jar jarfile="${build.lib}/coreportlets.jar" basedir="${classes.dir}" >
-            <include name="org/gridlab/gridsphere/portlets/core/**" />
+            <include name="org/gridlab/gridsphere/portlets/**" />
+            <exclude name="org/gridlab/gridsphere/portlets/manager/**" />
             <include name="${conf.dir}/log4j.properties"/>
         </jar>
     </target>
@@ -260,7 +262,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates GridSphere manager portlet                                  -->
     <!-- =================================================================== -->
-    <target name="manager-portlet-jar" depends="compile" description="Create ${build.lib}/coreportlets.jar">
+    <target name="manager-portlet-jar" depends="compile" description="Create ${build.lib}/gsmanager-portlet.jar">
         <jar jarfile="${build.lib}/gsmanager-portlet.jar" basedir="${classes.dir}" >
             <include name="org/gridlab/gridsphere/portlets/manager/**" />
             <include name="${conf.dir}/log4j.properties"/>
@@ -667,7 +669,7 @@ Copyright:
     </target>
 
 
-    <target name="make-test-reports" depends="test-prepare, compiletests,  db-hsqldb-junit, jar" if="junit.present" description="Execute Unit Tests">
+    <target name="make-test-reports" depends="runtests,  db-hsqldb-junit, jar" if="junit.present" description="Execute Unit Tests">
        <mkdir dir="${build.dir}/reports/html"/>
        <junitreport todir="${build.dir}/reports">
             <fileset dir="${build.dir}/reports">
