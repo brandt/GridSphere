@@ -54,7 +54,7 @@ public class LocalePortlet extends ActionPortlet {
         localeSelector.setSize(1);
 
 
-        ListBoxItemBean bean_en = makeLocaleBean(Locale.US.getDisplayLanguage(new Locale("en","","")), "en_US", locale);
+        ListBoxItemBean bean_en = makeLocaleBean(Locale.US.getDisplayLanguage(new Locale("en","","")), "en", locale);
         ListBoxItemBean bean_cz = makeLocaleBean(new Locale("cs","","").getDisplayLanguage(new Locale("cs","","")), "cs", locale);
         ListBoxItemBean bean_ge = makeLocaleBean(Locale.GERMAN.getDisplayLanguage(new Locale("de","","")), "de", locale);
         ListBoxItemBean bean_fr = makeLocaleBean(Locale.FRENCH.getDisplayLanguage(new Locale("fr","","")), "fr", locale);
