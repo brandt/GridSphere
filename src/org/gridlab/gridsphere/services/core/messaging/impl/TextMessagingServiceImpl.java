@@ -83,7 +83,10 @@ public class TextMessagingServiceImpl implements TextMessagingService, PortletSe
     public boolean isUserOnService(String userid, String messagetype) {
         TmfConfig config = core.getTmfConfig();
         TmfUser u = config.getUser(userid);
-        boolean result = (u.getUserNameForMessagetype(messagetype) != null);
+        if (u==null) return false;
+        String name = u.getUserNameForMessagetype(messagetype);
+        boolean result = false;
+        if (name!=null && !name.equals("")) result = true; // so the user entered something in there
         return result;
     }
 
