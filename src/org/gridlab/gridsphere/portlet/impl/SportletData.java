@@ -134,7 +134,7 @@ public class SportletData extends BaseObject implements PortletData {
         while (allkeys.hasMoreElements()) {
             String key = (String) allkeys.nextElement();
             ha = new SportletDataAttribute(key, (String) store.get(key));
-            ha.setPortletData(this);
+            ha.setSportletData(this);
             Attributes.add(ha);
         }
     }

@@ -49,7 +49,7 @@ public class BaseObject implements TimeStampable, Persistent {
         UniqueID uid = UniqueID.getInstance();
         this.ObjectID = uid.get();
         timestamp = 0;
-        log.debug("constructor oid:" + ObjectID);
+        //log.debug("constructor oid:" + ObjectID);
     }
 
     /**
