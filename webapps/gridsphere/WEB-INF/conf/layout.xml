@@ -47,14 +47,12 @@
 -->
 
 <!-- Tabbed Panes -->
-<portlet-tabbed-pane>
+<portlet-tabbed-pane selected="0" style="menu">
     <portlet-tab>
         <title>Configuration</title>
-        <selected>true</selected>
-        <portlet-tab-bar>
-            <portlet-tab-page>
+        <portlet-tabbed-pane selected="0" style="sub-menu">
+            <portlet-tab>
                 <title>Login</title>
-                <selected>true</selected>
                 <portlet-panel>
                     <grid-layout>
                         <columns>1</columns>
@@ -72,10 +70,9 @@
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>
-            </portlet-tab-page>
-            <portlet-tab-page>
+            </portlet-tab>
+            <portlet-tab>
                 <title>Whatever</title>
-                <selected>false</selected>
                 <portlet-panel>
                     <grid-layout>
                         <columns>1</columns>
@@ -89,10 +86,9 @@
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>
-            </portlet-tab-page>
-            <portlet-tab-page>
+            </portlet-tab>
+            <portlet-tab>
                 <title>New Stuff</title>
-                <selected>false</selected>
                 <portlet-panel>
                     <grid-layout>
                         <columns>2</columns>
@@ -106,15 +102,14 @@
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>
-            </portlet-tab-page>
-        </portlet-tab-bar>
+            </portlet-tab>
+        </portlet-tabbed-pane>
     </portlet-tab>
     <portlet-tab>
         <title>Cactus</title>
-        <portlet-tab-bar>
-            <portlet-tab-page>
+        <portlet-tabbed-pane style="sub-menu">
+            <portlet-tab>
                 <title>Cactus</title>
-                <selected>false</selected>
                 <portlet-panel>
                     <flow-layout>
                         <align>1</align>
@@ -125,8 +120,26 @@
                         </portlet-frame>
                     </flow-layout>
                 </portlet-panel>
-            </portlet-tab-page>
-        </portlet-tab-bar>
+            </portlet-tab>
+        </portlet-tabbed-pane>
+    </portlet-tab>
+    <portlet-tab>
+        <title>ASC</title>
+        <portlet-tabbed-pane style="sub-menu">
+            <portlet-tab>
+                <title>ASC</title>
+                <portlet-panel>
+                    <flow-layout>
+                        <align>1</align>
+                        <hgap>1</hgap>
+                        <vgap>1</vgap>
+                        <portlet-frame>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.624.2</portlet-class>
+                        </portlet-frame>
+                    </flow-layout>
+                </portlet-panel>
+            </portlet-tab>
+        </portlet-tabbed-pane>
     </portlet-tab>
 </portlet-tabbed-pane>
 

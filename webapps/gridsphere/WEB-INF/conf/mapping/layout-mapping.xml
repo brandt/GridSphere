@@ -145,6 +145,12 @@
         <field name="PortletTabs" type="org.gridlab.gridsphere.layout.PortletTab" collection="arraylist">
             <bind-xml name="portlet-tab"/>
         </field>
+        <field name="Style" type="string" node="attribute">
+            <bind-xml name="style"/>
+        </field>
+        <field name="SelectedIndex" type="integer" node="attribute">
+            <bind-xml name="selected"/>
+        </field>
     </class>
 
     <class name="org.gridlab.gridsphere.layout.PortletTab">
@@ -152,11 +158,8 @@
         <field name="Title" type="string">
             <bind-xml name="title"/>
         </field>
-        <field name="Selected" type="boolean">
-            <bind-xml name="selected"/>
-        </field>
-        <field name="PortletTabBar" type="org.gridlab.gridsphere.layout.PortletTabBar">
-            <bind-xml name="portlet-tab-bar"/>
+        <field name="PortletComponent" type="org.gridlab.gridsphere.layout.PortletComponent">
+            <bind-xml auto-naming="deriveByClass"/>
         </field>
     </class>
 
@@ -165,15 +168,15 @@
         <field name="PortletTabPages" type="org.gridlab.gridsphere.layout.PortletTabPage" collection="arraylist">
             <bind-xml name="portlet-tab-page"/>
         </field>
+        <field name="SelectedIndex" type="integer">
+            <bind-xml name="selected"/>
+        </field>
     </class>
 
     <class name="org.gridlab.gridsphere.layout.PortletTabPage">
         <map-to xml="portlet-tab-page"/>
         <field name="Title" type="string">
             <bind-xml name="title"/>
-        </field>
-        <field name="Selected" type="boolean">
-            <bind-xml name="selected"/>
         </field>
         <field name="PortletPanel" type="org.gridlab.gridsphere.layout.PortletPanel">
             <bind-xml name="portlet-panel"/>
