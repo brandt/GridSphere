@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.portletcontainer;
 
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.hibernate.DatabaseTask;
 import org.gridlab.gridsphere.layout.PortletLayoutEngine;
 import org.gridlab.gridsphere.layout.PortletPageFactory;
@@ -126,87 +127,89 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 log.debug("Testing Database");
                 // checking if database setup is correct
                 DatabaseTask dt = new DatabaseTask();
-                database = dt.checkDBSetup(GridSphereConfig.getServletContext().getRealPath("/WEB-INF/persistence/"));
 
-                if (database) {
-                    log.debug("Initializing portlets and services");
-                    try {
-                        // initailize needed services
-                        initializeServices();
-                        // initialize all portlets
-                        PortletInvoker.initAllPortlets(portletReq, portletRes);
-                    } catch (PortletException e) {
-                        req.setAttribute(SportletProperties.ERROR, e);
-                    }
-                    layoutEngine = PortletLayoutEngine.getInstance();
-                    firstDoGet = Boolean.FALSE;
+                try {
+                    dt.checkDBSetup(GridSphereConfig.getServletContext().getRealPath("/WEB-INF/persistence/"));
+                } catch (PersistenceManagerException e) {
+                    RequestDispatcher rd = req.getRequestDispatcher("/jsp/dberror.jsp");
+                    req.setAttribute("error", "DB Error! Please contact your GridSphere/Database Administrator!");
+                    rd.forward(req, res);
+                    return;
+                }
+
+                log.debug("Initializing portlets and services");
+                try {
+                    // initialize needed services
+                    initializeServices();
+                    // initialize all portlets
+                    PortletInvoker.initAllPortlets(portletReq, portletRes);
+                } catch (PortletException e) {
+                    req.setAttribute(SportletProperties.ERROR, e);
+                }
+                layoutEngine = PortletLayoutEngine.getInstance();
+                firstDoGet = Boolean.FALSE;
+            }
+        }
+
+
+        setUserAndGroups(portletReq);
+
+        // Handle user login and logout
+        if (event.hasAction()) {
+            if (event.getAction().getName().equals(SportletProperties.LOGIN)) {
+                login(event);
+                //event = new GridSphereEventImpl(aclService, context, req, res);
+            }
+            if (event.getAction().getName().equals(SportletProperties.LOGOUT)) {
+                logout(event);
+                // since event is now invalidated, must create new one
+                event = new GridSphereEventImpl(aclService, context, req, res);
+            }
+        }
+
+        layoutEngine.actionPerformed(event);
+
+        // is this a file download operation?
+        downloadFile(event);
+
+        // Handle any outstanding messages
+        // This needs work certainly!!!
+        Map portletMessageLists = messageManager.retrieveAllMessages();
+        if (!portletMessageLists.isEmpty()) {
+            Set keys = portletMessageLists.keySet();
+            Iterator it = keys.iterator();
+            String concPortletID = null;
+            List messages = null;
+            while (it.hasNext()) {
+                concPortletID = (String) it.next();
+                messages = (List) portletMessageLists.get(concPortletID);
+                Iterator newit = messages.iterator();
+                while (newit.hasNext()) {
+                    PortletMessage msg = (PortletMessage) newit.next();
+                    layoutEngine.messageEvent(concPortletID, msg, event);
+                    newit.remove();
                 }
             }
         }
 
-        if (database) {
-            setUserAndGroups(portletReq);
+        setUserAndGroups(portletReq);
 
-            // Handle user login and logout
-            if (event.hasAction()) {
-                if (event.getAction().getName().equals(SportletProperties.LOGIN)) {
-                    login(event);
-                    //event = new GridSphereEventImpl(aclService, context, req, res);
-                }
-                if (event.getAction().getName().equals(SportletProperties.LOGOUT)) {
-                    logout(event);
-                    // since event is now invalidated, must create new one
-                    event = new GridSphereEventImpl(aclService, context, req, res);
-                }
-            }
+        layoutEngine.service(event);
 
-            layoutEngine.actionPerformed(event);
+        log.debug("Session stats");
+        userSessionManager.dumpSessions();
 
-            // is this a file download operation?
-            downloadFile(event);
+        log.debug("Portlet service factory stats");
+        factory.logStatistics();
 
-            // Handle any outstanding messages
-            // This needs work certainly!!!
-            Map portletMessageLists = messageManager.retrieveAllMessages();
-            if (!portletMessageLists.isEmpty()) {
-                Set keys = portletMessageLists.keySet();
-                Iterator it = keys.iterator();
-                String concPortletID = null;
-                List messages = null;
-                while (it.hasNext()) {
-                    concPortletID = (String) it.next();
-                    messages = (List) portletMessageLists.get(concPortletID);
-                    Iterator newit = messages.iterator();
-                    while (newit.hasNext()) {
-                        PortletMessage msg = (PortletMessage) newit.next();
-                        layoutEngine.messageEvent(concPortletID, msg, event);
-                        newit.remove();
-                    }
-                }
-            }
-
-            setUserAndGroups(portletReq);
-
-            layoutEngine.service(event);
-
-            log.debug("Session stats");
-            userSessionManager.dumpSessions();
-
-            log.debug("Portlet service factory stats");
-            factory.logStatistics();
-
-            log.debug("Portlet page factory stats");
-            try {
-                PortletPageFactory pageFactory = PortletPageFactory.getInstance();
-                pageFactory.logStatistics();
-            } catch (Exception e) {
-                log.error("Unable to get page factory", e);
-            }
-        } else {
-            RequestDispatcher rd = req.getRequestDispatcher("/jsp/dberror.jsp");
-            req.setAttribute("error", "DB Error! Please contact your GridSphere/Database Administrator!");
-            rd.forward(req, res);
+        log.debug("Portlet page factory stats");
+        try {
+            PortletPageFactory pageFactory = PortletPageFactory.getInstance();
+            pageFactory.logStatistics();
+        } catch (Exception e) {
+            log.error("Unable to get page factory", e);
         }
+
 
     }
 
