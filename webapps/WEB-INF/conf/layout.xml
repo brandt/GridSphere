@@ -4,7 +4,6 @@
 <container-name>GridSphere Portal</container-name>
 
 <!-- Title -->
-
 <portlet-image>
     <image>/gridsphere/images/title.jpg</image>
 </portlet-image>
@@ -25,13 +24,13 @@
 
     <portlet-minimized>
         <title>Hello</title>
-        <color>red</color>
+        <foreground>red</foreground>
         <portlet-class>portletclass</portlet-class>
     </portlet-minimized>
 
     <portlet-minimized>
         <title>Bye</title>
-        <color>green</color>
+        <foreground>green</foreground>
         <portlet-class>portletclass</portlet-class>
     </portlet-minimized>
 
@@ -52,13 +51,18 @@
                     <width>2</width>
                     <height>2</height>
                 </portlet-insets>
+
                 <portlet-frame>
+                    <width>50</width>
                     <portlet-border>
-                        <color>blue</color>
-                        <font>helvetica</font>
+                        <config-mode>true</config-mode>
+                        <window-mode>true</window-mode>
+                        <title-color>#FFFFFF</title-color>
+                        <line-color>#336699</line-color>
+                        <font>Arial, Helvetica, sans-serif</font>
                         <thickness>2</thickness>
                     </portlet-border>
-                    <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.2</portlet-class>
+                    <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.624.2</portlet-class>
                 </portlet-frame>
             </grid-layout>
         </portlet-panel>
@@ -76,7 +80,9 @@
                     <vgap>1</vgap>
                     <portlet-frame>
                         <portlet-border>
-                            <color>blue</color>
+                            <title-color>#FFFFFF</title-color>
+                            <line-color>#336699</line-color>
+                            <font>Arial, Helvetica, sans-serif</font>
                             <thickness>2</thickness>
                         </portlet-border>
                         <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.624.2</portlet-class>
