@@ -45,7 +45,7 @@ No more DTM IDs are available</literallayout>
                     <para>
 For some reason the version of Xalan shipped with JDK1.4.1 has some bugs.
 The recommended solution is to copy xalan.jar from <filename>lib/ext</filename> in the GridSphere source to
-<filename>$JAVA_HOME/lib/endorsed</filename>.
+<filename>$JAVA_HOME/jre/lib/endorsed</filename>.
                     </para>
                 </answer>
             </qandaentry>
