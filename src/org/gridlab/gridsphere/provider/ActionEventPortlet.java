@@ -58,8 +58,8 @@ public abstract class ActionEventPortlet extends AbstractPortlet {
         PortletResponse response = event.getPortletResponse();
         // Get instance of portlet bean
         ActionEventHandler portletBean = getPortletBean(request, response);
-        // Set action performed
-        portletBean.setActionPerformed(event);
+        // Perform action
+        portletBean.performAction(event);
         log.debug("Exiting actionPerformed()");
     }
 
@@ -69,8 +69,10 @@ public abstract class ActionEventPortlet extends AbstractPortlet {
         log.debug("Entering doView()");
         // Get instance of user manager bean
         ActionEventHandler portletBean = getPortletBean(request, response);
-        // Do view action
-        portletBean.doViewAction();
+        // Do default view action if no action performed
+        if (portletBean.getActionPerformed() == null) {
+            portletBean.doViewAction();
+        }
         // Get next page to display
         String nextPage = portletBean.getPage();
         log.debug("Next page = " + nextPage);
@@ -85,8 +87,10 @@ public abstract class ActionEventPortlet extends AbstractPortlet {
         log.debug("Entering doConfig()");
         // Get instance of user manager bean
         ActionEventHandler portletBean = getPortletBean(request, response);
-        // Do view action
-        portletBean.doConfigAction();
+        // Do default config action if no action performed
+        if (portletBean.getActionPerformed() == null) {
+            portletBean.doConfigAction();
+        }
         // Get next page to display
         String nextPage = portletBean.getPage();
         log.debug("Next page = " + nextPage);
@@ -101,8 +105,10 @@ public abstract class ActionEventPortlet extends AbstractPortlet {
         log.debug("Entering doEdit()");
         // Get instance of user manager bean
         ActionEventHandler portletBean = getPortletBean(request, response);
-        // Do view action
-        portletBean.doEditAction();
+        // Do default edit action if no action performed
+        if (portletBean.getActionPerformed() == null) {
+            portletBean.doEditAction();
+        }
         // Get next page to display
         String nextPage = portletBean.getPage();
         log.debug("Next page = " + nextPage);
@@ -117,8 +123,10 @@ public abstract class ActionEventPortlet extends AbstractPortlet {
         log.debug("Entering doHelp()");
         // Get instance of user manager bean
         ActionEventHandler portletBean = getPortletBean(request, response);
-        // Do view action
-        portletBean.doHelpAction();
+        // Do default help action if no action performed
+        if (portletBean.getActionPerformed() == null) {
+            portletBean.doHelpAction();
+        }
         // Get next page to display
         String nextPage = portletBean.getPage();
         log.debug("Next page = " + nextPage);

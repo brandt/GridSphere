@@ -65,7 +65,7 @@ public class JobManagerBean extends ActionEventHandler {
         this.log.debug("Exiting initServices()");
     }
 
-    public void doDefaultViewAction()
+    public void doViewAction()
             throws PortletException {
         doListUserJob();
     }

@@ -128,14 +128,31 @@ public class ActionEventHandler {
         }
     }
 
+    public boolean wasActionPerformed() {
+        return (this.actionEvent != null);
+    }
+
     public String getActionPerformedMethodName() {
         return this.actionEventMethodName;
     }
 
     public String getActionPerformedParameter(String paramName) {
+        if (this.formEvent == null) {
+            return getParameter(paramName);
+        } else {
+            return getParameter("gstag:" + paramName);
+        }
+        /***
         DefaultPortletAction action = this.actionEvent.getAction();
         Map parameters = action.getParameters();
-        return (String)parameters.get(paramName);
+        this.log.debug("Getting action event parameter " + paramName);
+        String paramValue = (String)parameters.get(paramName);
+        if (paramValue == null) {
+            this.log.debug("Action event parameter not set");
+            return "";
+        }
+        return paramValue;
+        ***/
     }
 
     public Object getTagBean(String beanName) {
@@ -221,51 +238,22 @@ public class ActionEventHandler {
     }
 
     public void doConfigAction()
-            throws PortletException {
-        invokeActionPerformed("doDefaultConfigAction");
-    }
-
-    public void doDefaultConfigAction()
            throws PortletException {
     }
 
     public void doViewAction()
-            throws PortletException {
-        invokeActionPerformed("doDefaultViewAction");
-    }
-
-    public void doDefaultViewAction()
            throws PortletException {
     }
 
     public void doEditAction()
-            throws PortletException {
-        invokeActionPerformed("doDefaultEditAction");
-    }
-
-    public void doDefaultEditAction()
            throws PortletException {
     }
 
     public void doHelpAction()
-            throws PortletException {
-        invokeActionPerformed("doDefaultHelpAction");
-    }
-
-    public void doDefaultHelpAction()
            throws PortletException {
     }
 
-    private void invokeActionPerformed(String defaultActionPerformedMethodName)
-            throws PortletException {
-        if (getActionPerformed() == null) {
-            invokeActionPerformedMethod(defaultActionPerformedMethodName);
-        } else {
-            invokeActionPerformed();
-        }
-    }
-
-    private void invokeActionPerformed()
+    public void performAction(ActionEvent actionEvent)
             throws PortletException {
         this.log.debug("Entering doAction(ActionEvent)");
         if (actionEvent == null) {
@@ -279,12 +267,12 @@ public class ActionEventHandler {
             this.log.debug("Performing method " + methodName);
             System.out.println("Performing method " + methodName);
             // Invoke action method
-            invokeActionPerformedMethod(methodName);
+            performAction(methodName);
         }
         this.log.debug("Exiting doAction(ActionEvent)");
     }
 
-    private void invokeActionPerformedMethod(String methodName)
+    private void performAction(String methodName)
             throws PortletException {
         // Get object and class references
         Object thisObject = (Object)this;
@@ -355,6 +343,14 @@ public class ActionEventHandler {
 
     public void setFormInvalidMessage(String message) {
         this.formInvalidMessage = message;
+    }
+
+    public Object getPortletRequestAttribute(String name) {
+        return this.request.getAttribute(name);
+    }
+
+    public void setPortletRequestAttribute(String name, Object value) {
+        this.request.setAttribute(name, value);
     }
 
     public String getParameter(String param) {

@@ -98,7 +98,7 @@ public class UserManagerBean extends ActionEventHandler {
         this.log.debug("Exiting initServices()");
     }
 
-    public void doDefaultViewAction()
+    public void doViewAction()
             throws PortletException {
         doListUser();
     }
@@ -360,7 +360,7 @@ public class UserManagerBean extends ActionEventHandler {
                 PortletURI userIDLink = createPortletActionURI("doViewUser");
                 userIDLink.addParameter("userID", user.getID());
                 ActionLinkBean userIDLinkBean =
-                        new ActionLinkBean(userIDLink, "doViewAction", user.getID());
+                        new ActionLinkBean(userIDLink, "doViewUser", user.getID());
                 TableCellBean cellBean = createTableCellBean(userIDLinkBean);
                 rowBean.add(cellBean);
                 // User name
@@ -402,8 +402,9 @@ public class UserManagerBean extends ActionEventHandler {
     private void initUser() {
         System.err.println("Calling initUser()!");
         PortletRequest portletRequest = getPortletRequest();
-        userIDBean = new HiddenFieldBean();
-        userIDBean.store("userID", portletRequest);
+
+        setPortletRequestAttribute("userID", "");
+
         userNameBean = new TextBean();
         userNameBean.store("userName", portletRequest);
         familyNameBean = new TextBean();
@@ -420,10 +421,12 @@ public class UserManagerBean extends ActionEventHandler {
 
     private void setUser(User user) {
         System.err.println("Calling setUser()!");
-        this.user = user;
         PortletRequest portletRequest = getPortletRequest();
-        userIDBean = new HiddenFieldBean("userID", user.getID());
-        userIDBean.store("userID", portletRequest);
+        this.user = user;
+
+        String userID = user.getID();
+        setPortletRequestAttribute("userID", userID);
+
         userNameBean = new TextBean(user.getUserName());
         userNameBean.store("userName", portletRequest);
         familyNameBean = new TextBean(user.getFamilyName());
