@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+<!--
+
+    Authentication modules mapping file
+
+    $Id$
+
+-->
+<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
+<mapping>
+
+    <class name="org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleCollection">
+        <map-to xml="auth-modules"/>
+        <field name="AuthModulesList" type="org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition" collection="vector">
+            <bind-xml name="auth-module"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition">
+        <field name="ModuleName" type="string">
+            <bind-xml name="name"/>
+        </field>
+        <field name="ModuleDescription" type="string">
+            <bind-xml name="description"/>
+        </field>
+        <field name="ModulePriority" type="integer">
+            <bind-xml name="priority"/>
+        </field>
+        <field name="ModuleActive" type="boolean">
+            <bind-xml name="active"/>
+        </field>
+        <field name="ModuleImplementation" type="string">
+            <bind-xml name="implementation"/>
+        </field>
+        <field name="ConfigParamList" type="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam" collection="vector">
+            <bind-xml name="auth-config"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam">
+        <field name="ParamName" type="string">
+            <bind-xml name="param-name"/>
+        </field>
+        <field name="ParamValue" type="string">
+            <bind-xml name="param-value"/>
+        </field>
+    </class>
+
+</mapping>
