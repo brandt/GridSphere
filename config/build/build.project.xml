@@ -55,7 +55,14 @@ Copyright:
 
     <property environment="env"/>
 
-    <property name="catalina.exists" value="${env.CATALINA_HOME}"/>
+    <!-- Check for catalina.sh in CATALINA_HOME/bin -->
+    <target name="check-catalina">
+        <condition property="catalina.exists">
+            <available file="${env.CATALINA_HOME}/bin/catalina.sh"/>
+        </condition>
+        <fail message="Unable to find Tomcat 4.1.+. Make sure you have set $CATALINA_HOME set" unless="catalina.exists"/>
+    </target>
+
     <!-- =================================================================== -->
     <!-- Sets the CLASSPATH                                                  -->
     <!-- =================================================================== -->
@@ -83,7 +90,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Functions                                                           -->
     <!-- =================================================================== -->
-    <target name="setenv" description="Check for libraries and print out config information">
+    <target name="setenv" depends="check-catalina" description="Check for libraries and print out config information">
 
         <!-- Make build directories -->
         <mkdir dir="${project.build}"/>
