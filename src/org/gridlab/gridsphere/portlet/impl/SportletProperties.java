@@ -148,7 +148,7 @@ public interface SportletProperties {
 
     public static final String DEFAULT_PORTLET_MESSAGE = "message";
 
-    public static final String PORTLETID = "org.gridlab.gridsphere.portlet.PortletID";
+    public static final String PORTLETID = "pid";
 
     public static final String ERROR = "org.gridlab.gridsphere.portlet.error";
     // Portlet API objects

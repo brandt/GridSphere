@@ -62,15 +62,17 @@ public class PortletSessionManager implements HttpSessionListener {
             String id = event.getSession().getId();
             if (id != null) {
                 List sessionListeners = (List)sessions.get(id);
-                Iterator it = sessionListeners.iterator();
-                while (it.hasNext()) {
-                    PortletSessionListener sessionListener = (PortletSessionListener)it.next();
-                    PortletSession session = new SportletSession(event.getSession());
-                    try {
-                        log.debug("logging a session listener out:");
-                        sessionListener.logout(session);
-                    } catch (PortletException e) {
-                        log.error("Unable to invoke logout on session listener ", e);
+                if (sessionListeners != null) {
+                    Iterator it = sessionListeners.iterator();
+                    while (it.hasNext()) {
+                        PortletSessionListener sessionListener = (PortletSessionListener)it.next();
+                        PortletSession session = new SportletSession(event.getSession());
+                        try {
+                            log.debug("logging a session listener out:");
+                            sessionListener.logout(session);
+                        } catch (PortletException e) {
+                            log.error("Unable to invoke logout on session listener ", e);
+                        }
                     }
                 }
                 sessions.remove(event.getSession().getId());
