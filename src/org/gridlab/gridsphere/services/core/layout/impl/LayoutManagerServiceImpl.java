@@ -4,16 +4,12 @@
  */
 package org.gridlab.gridsphere.services.core.layout.impl;
 
-import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.service.PortletService;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.provider.portletui.beans.FileInputBean;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 import org.gridlab.gridsphere.layout.*;
 
@@ -55,6 +51,68 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
     public String getTheme(PortletRequest req) {
         PortletPage page = pageFactory.createPortletPage(req);
         return page.getTheme();
+    }
+
+    public void addPortletTab(PortletRequest req, PortletTab tab) {
+        PortletPage page = pageFactory.createPortletPage(req);
+        PortletTabbedPane pane = page.getPortletTabbedPane();
+        pane.addTab(tab);
+    }
+
+    public void removePortlets(PortletRequest req, List portletClassNames) {
+
+        Iterator cit = portletClassNames.iterator();
+        while (cit.hasNext()) {
+            System.err.println("removing " + (String)cit.next());
+        }
+
+        PortletPage page = pageFactory.createPortletPage(req);
+        List cidList = page.getComponentIdentifierList();
+        Iterator it = cidList.iterator();
+        while (it.hasNext()) {
+            ComponentIdentifier cid = (ComponentIdentifier)it.next();
+            PortletComponent pc = cid.getPortletComponent();
+            if (pc instanceof PortletFrame) {
+                if (portletClassNames.contains(cid.getPortletClass())) {
+                    System.err.println("component has portlet: " + cid.getPortletClass() + cid.getClassName());
+                    removePortletComponent(pc);
+                }
+            }
+        }
+
+    }
+
+    public PortletPage getPortletPage(PortletRequest req) {
+        return pageFactory.createPortletPage(req);
+    }
+
+    private void removePortletComponent(PortletComponent pc) {
+        PortletComponent parent = pc.getParentComponent();
+        if (parent instanceof PortletFrameLayout) {
+            PortletFrameLayout layout = (PortletFrameLayout)parent;
+            layout.removePortletComponent(pc);
+            if (layout.getPortletComponents().size() == 0) {
+                removePortletComponent(parent);
+            }
+        }
+
+    }
+
+    public List getAllPortletNames(PortletRequest req) {
+        List portlets = new Vector();
+        PortletPage page = pageFactory.createPortletPage(req);
+        List cids = page.getComponentIdentifierList();
+        Iterator it = cids.iterator();
+        while (it.hasNext()) {
+            ComponentIdentifier cid = (ComponentIdentifier) it.next();
+            PortletComponent pc = cid.getPortletComponent();
+            if (pc instanceof PortletFrame) {
+                PortletFrame f = (PortletFrame) pc;
+                portlets.add(cid.getPortletClass());
+
+            }
+        }
+        return portlets;
     }
 
     public String[] getTabNames(PortletRequest req) {

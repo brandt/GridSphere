@@ -4,14 +4,12 @@
  */
 package org.gridlab.gridsphere.services.core.layout;
 
-import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.service.PortletService;
-import org.gridlab.gridsphere.provider.portletui.beans.FileInputBean;
+import org.gridlab.gridsphere.layout.PortletTab;
+import org.gridlab.gridsphere.layout.PortletPage;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.util.List;
 
 /**
  * The <code>LayoutManagerService</code> manages users layouts
@@ -23,6 +21,14 @@ public interface LayoutManagerService extends PortletService {
     public void setTheme(PortletRequest req, String theme);
 
     public String getTheme(PortletRequest req);
+
+    public PortletPage getPortletPage(PortletRequest req);
+
+    public void addPortletTab(PortletRequest req, PortletTab tab);
+
+    public void removePortlets(PortletRequest req, List portletClassNames);
+
+    public List getAllPortletNames(PortletRequest req);
 
     public void reloadPage(PortletRequest req);
 
