@@ -543,9 +543,10 @@ public class PortletPage implements Serializable, Cloneable {
                 // render portlet frame in pop-up without titlebar
                 f.setTransparent(true);
                 req.setAttribute(CacheService.NO_CACHE, CacheService.NO_CACHE);
-                f.getPortletTitleBar().setWindowState(PortletWindow.State.FLOATING);
+                req.setAttribute(SportletProperties.FLOAT_STATE, "true");
                 f.doRender(event);
                 f.setTransparent(false);
+
                 writer.println(f.getBufferedOutput(req));
             }
         } else {
