@@ -318,7 +318,7 @@ Copyright:
         <copy file="config/log4j.properties"
                   tofile="${build.classes}/${project.name}/log4j.properties"/>
 
-        <jar jarfile="lib/${project.name}-services.jar" basedir="${build.classes}" >
+        <jar jarfile="lib/ext/${project.name}-services.jar" basedir="${build.classes}" >
             <include name="**/services/**"/>
         </jar>
      </target>
@@ -386,11 +386,17 @@ Copyright:
         <antcall target="create-real-database"/>
 
         <copy file="${gridsphere.base}/lib/portlet-widget-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
-        <copy file="lib/${project.name}.jar" todir="${project.webapp}/WEB-INF/lib"/>
-        <copy file="lib/${project.name}-services.jar" todir="${env.CATALINA_HOME}/shared/lib"/>
 
-        <copy todir="${env.CATALINA_HOME}/shared/lib/">
-          <fileset dir="lib/ext" includes="*.jar" />
+        <copy todir="${project.webapp}/WEB-INF/lib">
+            <fileset dir="lib">
+                <include name="*.jar"/>
+            </fileset>
+        </copy>
+
+        <copy todir="${env.CATALINA_HOME}/shared/lib">
+            <fileset dir="lib/ext">
+                <include name="*.jar"/>
+            </fileset>
         </copy>
 
     </target>
