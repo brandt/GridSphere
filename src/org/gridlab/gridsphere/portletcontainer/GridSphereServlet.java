@@ -1,7 +1,7 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
- * @version $Id$
- */
+* @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+* @version $Id$
+*/
 package org.gridlab.gridsphere.portletcontainer;
 
 
@@ -166,7 +166,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 messages = (List)portletMessageLists.get(concPortletID);
                 Iterator newit = messages.iterator();
                 while (newit.hasNext()) {
-                    DefaultPortletMessage msg = (DefaultPortletMessage)newit.next();
+                    PortletMessage msg = (PortletMessage)newit.next();
                     PortletInvoker.messageEvent(concPortletID, msg, portletReq, portletRes);
                 }
             }
@@ -235,7 +235,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         try {
 
-             User user = loginService.login(username, password);
+            User user = loginService.login(username, password);
 
             req.setAttribute(SportletProperties.PORTLET_USER, user);
             session.setAttribute(SportletProperties.PORTLET_USER, user.getID());
@@ -283,7 +283,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event the gridsphere event
      * @throws PortletException
      */
-     public void downloadFile(GridSphereEvent event) throws PortletException {
+    public void downloadFile(GridSphereEvent event) throws PortletException {
         PortletResponse res = event.getPortletResponse();
         PortletRequest req = event.getPortletRequest();
         try {
@@ -439,32 +439,32 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         //engine.logoutPortlets(event);
     }
 
-        /**
-         * Record the fact that a session has been created.
-         *
-         * @param event The session event
-         */
-        public void sessionDidActivate(HttpSessionEvent event) {
-            log.debug("sessionDidActivate('" + event.getSession().getId() + "')");
-            sessionManager.sessionCreated(event);
-        }
+    /**
+     * Record the fact that a session has been created.
+     *
+     * @param event The session event
+     */
+    public void sessionDidActivate(HttpSessionEvent event) {
+        log.debug("sessionDidActivate('" + event.getSession().getId() + "')");
+        sessionManager.sessionCreated(event);
+    }
 
 
-        /**
-         * Record the fact that a session has been destroyed.
-         *
-         * @param event The session event
-         */
-        public void sessionWillPassivate(HttpSessionEvent event) {
-            sessionManager.sessionDestroyed(event);
-            //loginService.sessionDestroyed(event.getSession());
-            log.debug("sessionWillPassivate('" + event.getSession().getId() + "')");
-            //HttpSession session = event.getSession();
-            //User user = (User) session.getAttribute(SportletProperties.USER);
-            //System.err.println("user : " + user.getUserID() + " expired!");
-            //PortletLayoutEngine engine = PortletLayoutEngine.getDefault();
-            //engine.removeUser(user);
-            //engine.logoutPortlets(event);
-        }
+    /**
+     * Record the fact that a session has been destroyed.
+     *
+     * @param event The session event
+     */
+    public void sessionWillPassivate(HttpSessionEvent event) {
+        sessionManager.sessionDestroyed(event);
+        //loginService.sessionDestroyed(event.getSession());
+        log.debug("sessionWillPassivate('" + event.getSession().getId() + "')");
+        //HttpSession session = event.getSession();
+        //User user = (User) session.getAttribute(SportletProperties.USER);
+        //System.err.println("user : " + user.getUserID() + " expired!");
+        //PortletLayoutEngine engine = PortletLayoutEngine.getDefault();
+        //engine.removeUser(user);
+        //engine.logoutPortlets(event);
+    }
 
 }

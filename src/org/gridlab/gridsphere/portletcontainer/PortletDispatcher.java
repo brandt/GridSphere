@@ -207,7 +207,7 @@ public class PortletDispatcher {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if the listener has trouble fulfilling the request
      */
-    public void actionPerformed(DefaultPortletAction action, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
+    public void actionPerformed(PortletAction action, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
         req.setAttribute(SportletProperties.ACTION_EVENT, action);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.ACTION_PERFORMED);
@@ -229,7 +229,7 @@ public class PortletDispatcher {
      * @throws IOException if an I/O error occurs during dispatching
      * @throws PortletException if the listener has trouble fulfilling the request
      */
-    public void messageEvent(DefaultPortletMessage message, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
+    public void messageEvent(PortletMessage message, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
         req.setAttribute(SportletProperties.MESSAGE_EVENT, message);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.MESSAGE_RECEIVED);

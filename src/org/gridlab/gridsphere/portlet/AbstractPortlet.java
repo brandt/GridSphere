@@ -81,7 +81,7 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
                     actionPerformed(evt);
                 } else if (method.equals(SportletProperties.MESSAGE_RECEIVED)) {
                     // Set the appropriate portlet message
-                    DefaultPortletMessage msg = (DefaultPortletMessage) request.getAttribute(SportletProperties.MESSAGE_EVENT);
+                    PortletMessage msg = (PortletMessage) request.getAttribute(SportletProperties.MESSAGE_EVENT);
                     MessageEvent evt = new MessageEventImpl(request, msg);
                     messageReceived(evt);
                 }

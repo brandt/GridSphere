@@ -33,7 +33,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
     protected String portletComponentID = null;
     protected DefaultPortletAction action = null;
-    protected DefaultPortletMessage message = null;
+    protected PortletMessage message = null;
 
     protected Stack events = null;
 
@@ -164,7 +164,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
         return false;
     }
 
-    public DefaultPortletMessage getMessage() {
+    public PortletMessage getMessage() {
         return message;
     }
 
