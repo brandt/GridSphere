@@ -126,7 +126,6 @@ Invoke "ant help"
             <fileset file="${servlet-api.file}"/>
         </path>
 
-        <echo message="${servlet-api.file}"/>
         <echo message="GridSphere Webserver is ${gridsphere.appserver}"/>
         <echo message="GridSphere will be deployed to ${appserver.home}"/>
     </target>
