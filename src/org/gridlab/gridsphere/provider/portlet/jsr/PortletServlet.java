@@ -338,7 +338,7 @@ public class PortletServlet extends HttpServlet
                     actionRequest.setAttribute("renderParams" + "_" + portletClassName + "_" + cid, params);
                     log.debug("placing render params in attribute: " + "renderParams" + "_" + portletClassName + "_" + cid);
                     //actionRequest.clearParameters();
-                    //redirect(request, response, actionRequest, actionResponse, portalContext);
+                    redirect(request, response, actionRequest, actionResponse, portalContext);
                 }
             } else {
                 PortletPreferences prefs = prefsManager.getPortletPreferences(appPortlet, user, Thread.currentThread().getContextClassLoader(), true);
