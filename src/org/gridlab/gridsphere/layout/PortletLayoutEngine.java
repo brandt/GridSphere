@@ -29,7 +29,7 @@ public class PortletLayoutEngine {
 
     private Map userLayouts = new Hashtable();
 
-    private PortletLayoutEngine(PortletConfig config) throws PortletLayoutDescriptorException {
+    public PortletLayoutEngine(PortletConfig config) throws PortletLayoutDescriptorException {
         this.config = config;
         // load in template guest layout.xml file
         String appRoot = config.getServletContext().getRealPath("") + "/";
