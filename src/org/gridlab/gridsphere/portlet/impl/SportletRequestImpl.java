@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletInputStream;
@@ -17,6 +18,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
+import java.util.HashMap;
 
 /**
  * The SportletRequestImpl encapsulates the request sent by the client to the portlet.
@@ -28,11 +30,13 @@ public class SportletRequestImpl implements SportletRequest {
     private HttpServletRequest req = null;
     private PortletSession portletSession = null;
     private PortletSettings portletSettings = null;
+    private PortletData portletData = null;
     private PortletWindow portletWindow = null;
     private Portlet.ModeModifier modeModifier = null;
     private Portlet.Mode previousMode = null;
     private Portlet.Mode mode = null;
     private Client client = null;
+    private User user = null;
 
     private static PortletLog log = SportletLog.getInstance(SportletRequestImpl.class);
 
@@ -43,8 +47,15 @@ public class SportletRequestImpl implements SportletRequest {
      */
     public SportletRequestImpl(HttpServletRequest req) {
         this.req = req;
-        HttpSession session = req.getSession();
-        portletSession = new SportletSession(session);
+        HttpSession session = req.getSession(false);
+        if (session == null) {
+            portletSession = null;
+            user = GuestUser.getInstance();
+        } else {
+            user = (User)session.getAttribute(GridSphereProperties.USER);
+            portletSession = new SportletSession(session);
+        }
+        portletWindow = (PortletWindow)req.getAttribute(GridSphereProperties.PORTLETWINDOW);
         this.portletWindow = new SportletWindow();
         this.client = new ClientImpl(req);
 
@@ -99,6 +110,11 @@ public class SportletRequestImpl implements SportletRequest {
         return client;
     }
 
+    /**
+     * Returns whether this request was made using a secure channel, such as HTTPS.
+     *
+     * @return true if channel is secure, false otherwise
+     */
     public boolean isSecure() {
         return req.isSecure();
     }
@@ -109,8 +125,10 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the portlet session
      */
     public PortletSession getPortletSession() {
-        HttpSession session = req.getSession();
-        portletSession = new SportletSession(session);
+        if (portletSession == null) {
+            HttpSession session = req.getSession();
+            portletSession = new SportletSession(session);
+        }
         return portletSession;
     }
 
@@ -124,16 +142,35 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the portlet session
      */
     public PortletSession getPortletSession(boolean create) {
-        HttpSession session = req.getSession(create);
-        if (create == true) {
-            portletSession = new SportletSession(session);
+        if (portletSession == null) {
+            HttpSession session = req.getSession(create);
+            if (create == true) {
+                portletSession = new SportletSession(session);
+            }
         }
         return portletSession;
     }
 
+    /**
+     * Returns an array containing all of the Cookie  objects the client sent with this request. This method returns null if no cookies were sent.
+     *
+     * @return an array of all the Cookies  included with this request, or null  if the request has no cookies
+     */
     public Cookie[] getCookies() {
         return req.getCookies();
     }
+
+    /**
+     *
+     * Returns the data of the concrete portlet instance
+     * If the portlet is run in CONFIGURE mode, the portlet data is not accessible and this method will return null.
+     *
+     * @return the PortletData
+     */
+    public PortletData getData() {
+        return portletData;
+    }
+
 
     /**
      * Returns the user object. The user object contains useful information about the user and his or her preferences.
@@ -144,24 +181,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the User object
      */
     public User getUser() {
-        HttpSession session = req.getSession();
-        User user = (User) session.getAttribute("gridsphere.user");
-        if (user == null) {
-            user = new GuestUser();
-            setUser(user);
-        }
         return user;
-    }
-
-    /**
-     * Sets the user object. The user object contains useful information about the user and his or her preferences.
-     * If the user has not logged in or does not grant access to the portlet, this method returns null
-     *
-     * @return the User object
-     */
-    public void setUser(User user) {
-        HttpSession session = req.getSession();
-        session.setAttribute("gridsphere.user", user);
     }
 
     /**
@@ -190,12 +210,13 @@ public class SportletRequestImpl implements SportletRequest {
         return req.getLocales();
     }
 
+    /**
+     * Returns the PortletSettings object of the concrete portlet.
+     *
+     * @return portletSettings the portlet settings
+     */
     public PortletSettings getPortletSettings() {
         return portletSettings;
-    }
-
-    public void setPortletSettings(PortletSettings portletSettings) {
-        this.portletSettings = portletSettings;
     }
 
     /**
@@ -271,8 +292,15 @@ public class SportletRequestImpl implements SportletRequest {
      * @return a map of parameters
      */
     public Map getParameterMap() {
-        // XXX: FILL ME IN
-        return null;
+        String name;
+        Map paramMap = new HashMap();
+        Enumeration enum = req.getParameterNames();
+        while (enum.hasMoreElements()) {
+            name = (String)enum.nextElement();
+            String[] values = req.getParameterValues(name);
+            paramMap.put(name, values);
+        }
+        return paramMap;
     }
 
     /**

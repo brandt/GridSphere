@@ -87,6 +87,15 @@ public interface PortletRequest extends HttpServletRequest {
     public Cookie[] getCookies();
 
     /**
+     *
+     * Returns the data of the concrete portlet instance
+     * If the portlet is run in CONFIGURE mode, the portlet data is not accessible and this method will return null.
+     *
+     * @return the PortletData
+     */
+    public PortletData getData();
+
+    /**
      * Returns the user object. The user object contains useful information about the user and his or her preferences.
      * If the user has not logged in or does not grant access to the portlet, this method returns null
      *
