@@ -390,11 +390,12 @@ Copyright:
     <!-- =================================================================== -->
 
     <target name="create-database" depends="configure-database, jar">
-        <taskdef name="createdb"
-            classname="org.gridlab.gridsphere.core.persistence.hibernate.DatabaseTask"
+        <taskdef name="dbtask"
+            classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
             classpathref="classpath"/>
-        <createdb
-            configdir="${env.CATALINA_HOME}"/>
+        <dbtask
+            configdir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence"
+            action="CREATE"/>
     </target>
 
     <target name="configure-database" depends="setenv">
@@ -420,27 +421,6 @@ Copyright:
             value="${cathome}/${gswebapp.dir}"/>
     </target>
 
-    <!-- WILL BE REMOVED AFTER MORE TESTS -->
-
-    <target name="create-database-old" depends="setenv, configure-database, compile">
-        <!-- <delete dir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/database"/> -->
-        <taskdef name="schemaexport"
-            classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask"
-            classpathref="classpath"/>
-
-        <schemaexport
-            properties="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/hibernate.properties"
-            quiet="yes"
-            text="no"
-            drop="no"
-            delimiter=";"
-            output="build/schema-export.sql">
-            <fileset dir="webapps/gridsphere/WEB-INF/persistence/">
-                <include name="**/*.hbm.xml"/>
-            </fileset>
-        </schemaexport>
-        <echo message="Successfully created new database"/>
-    </target>
 
     <target name="create-test-database" depends="setenv, configure-test-database, compile">
         <taskdef name="schemaexport"
@@ -461,19 +441,15 @@ Copyright:
         <echo message="Successfully created test database"/>
     </target>
 
-    <target name="update-database" depends="configure-database">
-        <taskdef name="schemaupdate"
-            classname="net.sf.hibernate.tool.hbm2ddl.SchemaUpdateTask"
+    <target name="update-database" depends="configure-database, jar">
+        <taskdef name="dbtask"
+            classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
             classpathref="classpath"/>
-
-        <schemaupdate
-            properties="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/hibernate.properties"
-            quiet="yes">
-            <fileset dir="webapps/gridsphere/WEB-INF/persistence/">
-                <include name="**/*.hbm.xml"/>
-            </fileset>
-        </schemaupdate>
+        <dbtask
+            configdir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence"
+            action="UPDATE"/>
     </target>
+
 
     <!-- +++++++++++++++ START DOCUMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
