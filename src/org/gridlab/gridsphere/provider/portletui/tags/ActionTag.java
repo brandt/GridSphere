@@ -17,6 +17,7 @@ import java.util.List;
 public abstract class ActionTag extends BaseComponentTag {
 
     protected String action = null;
+    protected boolean isSecure = false;
     protected PortletURI actionURI = null;
     protected String windowState = null;
     protected String portletMode = null;
@@ -40,6 +41,24 @@ public abstract class ActionTag extends BaseComponentTag {
      */
     public String getLabel() {
         return label;
+    }
+
+    /**
+     * If secure is true, then use https, otherwise use http
+     *
+     * @param isSecure
+     */
+    public void setSecure(boolean isSecure) {
+        this.isSecure = isSecure;
+    }
+
+    /**
+     * Returns true if this actiontag is secure e.g. https, flase otherwise
+     *
+     * @return true if this actiontag is secure, false otherwise
+     */
+    public boolean getSecure() {
+        return isSecure;
     }
 
     public void setPortletMode(String portletMode) {
@@ -92,7 +111,7 @@ public abstract class ActionTag extends BaseComponentTag {
 
         // action is a required attribute except for FormTag
         if (label != null) {
-            actionURI = res.createURI(label);
+            actionURI = res.createURI(label, isSecure);
         } else if (windowState != null) {
             PortletWindow.State state = PortletWindow.State.toState(windowState);
             actionURI = res.createURI(state);
@@ -100,7 +119,7 @@ public abstract class ActionTag extends BaseComponentTag {
             Portlet.Mode mode = Portlet.Mode.toMode(portletMode);
             actionURI = res.createURI(mode);
         } else {
-            actionURI = res.createURI();
+            actionURI = res.createURI(isSecure);
         }
         if (action != null) {
             portletAction = new DefaultPortletAction(action);

@@ -31,6 +31,13 @@ public interface PortletResponse extends HttpServletResponse {
     public PortletURI createURI();
 
     /**
+     * Creates a portlet URI pointing to the current portlet mode with the specified security.
+     *
+     * @return the portlet URI
+     */
+    public PortletURI createURI(boolean isSecure);
+
+    /**
      * Creates a portlet URI pointing to the current portlet mode and given
      * portlet window state.
      *
@@ -47,11 +54,11 @@ public interface PortletResponse extends HttpServletResponse {
     public PortletURI createURI(Portlet.Mode mode);
 
     /**
-     * Creates a portlet URI pointing to another portal component
+     * Creates a portlet URI pointing to another portal component with the specified security
      *
      * @return the portlet component label
      */
-    public PortletURI createURI(String componentLabel);
+    public PortletURI createURI(String componentLabel, boolean isSecure);
 
 
     /**

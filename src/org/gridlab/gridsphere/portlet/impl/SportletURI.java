@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.portlet.impl;
 import org.gridlab.gridsphere.portlet.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import java.net.URLEncoder;
 import java.util.*;
 
@@ -18,7 +19,9 @@ import java.util.*;
 public class SportletURI implements PortletURI {
 
     private HttpServletResponse res = null;
+    private HttpServletRequest req = null;
     private Map store = new HashMap();
+    private boolean isSecure = false;
     private boolean redirect = true;
     private String contextPath = null;
     private String id = "";
@@ -38,9 +41,31 @@ public class SportletURI implements PortletURI {
      * @param res a <code>HttpServletResponse</code>
      * @param contextPath the request context path
      */
-    public SportletURI(HttpServletResponse res, String contextPath) {
+    public SportletURI(HttpServletRequest req, HttpServletResponse res, String contextPath) {
         this.store = new HashMap();
         this.contextPath = contextPath;
+        this.res = res;
+        this.req = req;
+        this.id = createUniquePrefix(2);
+        // don't prefix these parameters of an action
+        sportletProps = new HashSet();
+        sportletProps.add(SportletProperties.COMPONENT_ID);
+        sportletProps.add(SportletProperties.PORTLET_WINDOW);
+        sportletProps.add(SportletProperties.PORTLET_MODE);
+    }
+
+    /**
+     * Constructs a SportletURI from a <code>HttpServletResponse</code> and a
+     * context path obtained from a <code>HttpServletRequest</code>
+     *
+     * @param res a <code>HttpServletResponse</code>
+     * @param contextPath the request context path
+     */
+    public SportletURI(HttpServletRequest req, HttpServletResponse res, String contextPath, boolean isSecure) {
+        this.store = new HashMap();
+        this.isSecure = isSecure;
+        this.contextPath = contextPath;
+        this.req = req;
         this.res = res;
         this.id = createUniquePrefix(2);
         // don't prefix these parameters of an action
@@ -167,6 +192,14 @@ public class SportletURI implements PortletURI {
      * @return the URI as a string
      */
     public String toString() {
+        StringBuffer s = new StringBuffer();
+        if (isSecure) {
+            s.append("https://");
+            System.err.println("USING SECURE HTTPS!!!!!!!!!!!!!!!!!!!");
+        } else {
+            s.append("http://");
+        }
+        s.append(req.getServerName() + ":" + req.getServerPort());
 
         // add the actionsprams and prefix them
 
@@ -187,7 +220,7 @@ public class SportletURI implements PortletURI {
             // add question mark
             url = contextPath + contextPath + "?";
         } else {
-            return contextPath + url;
+            return s.append(contextPath + url).toString();
         }
         boolean firstParam = true;
         it = set.iterator();
@@ -216,7 +249,8 @@ public class SportletURI implements PortletURI {
         } else {
             newURL = res.encodeURL(url);
         }
-        return newURL;
+        s.append(newURL);
+        return s.toString();
     }
 
 }

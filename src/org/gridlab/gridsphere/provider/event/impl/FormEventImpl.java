@@ -352,6 +352,22 @@ public class FormEventImpl implements FormEvent {
     }
 
     /**
+     * Return an existing <code>IncludeBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a IncludeBean
+     */
+    public IncludeBean getIncludeBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (IncludeBean) tagBeans.get(beanKey);
+        }
+        IncludeBean includeBean = new IncludeBean(beanId);
+        tagBeans.put(beanKey, includeBean);
+        return includeBean;
+    }
+
+    /**
      * Return an existing <code>TableBean</code> or create a new one
      *
      * @param beanId the bean identifier
@@ -429,22 +445,6 @@ public class FormEventImpl implements FormEvent {
         ListBoxItemBean lb = new ListBoxItemBean(request, beanId);
         tagBeans.put(beanKey, lb);
         return lb;
-    }
-
-    /**
-     * Return an existing <code>IncludeBean</code> or create a new one
-     *
-     * @param beanId the bean identifier
-     * @return a IncludeBean
-     */
-    public IncludeBean getIncludeBean(String beanId) {
-        String beanKey = getBeanKey(beanId);
-        if (tagBeans.containsKey(beanKey)) {
-            return (IncludeBean) tagBeans.get(beanKey);
-        }
-        IncludeBean includeBean = new IncludeBean(request, beanId);
-        tagBeans.put(beanKey, includeBean);
-        return includeBean;
     }
 
     /**

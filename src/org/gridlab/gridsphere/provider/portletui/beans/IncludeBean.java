@@ -4,10 +4,8 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.apache.jasper.runtime.ServletResponseWrapperInclude;
 
 import javax.servlet.ServletContext;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.jsp.JspWriter;
 
 /*
@@ -52,14 +50,6 @@ public class IncludeBean extends BaseBean implements TagBean {
 
     public void setServletContext(ServletContext servletContext) {
         this.servletContext = servletContext;
-    }
-
-    public PortletResponse getPortletResponse() {
-        return response;
-    }
-
-    public void setPortletResponse(PortletResponse response) {
-        this.response = response;
     }
 
     public JspWriter getJspWriter() {

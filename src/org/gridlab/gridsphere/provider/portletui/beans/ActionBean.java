@@ -18,6 +18,7 @@ import java.util.List;
 public abstract class ActionBean extends BaseComponentBean implements TagBean {
 
     protected String action = null;
+    protected boolean isSecure = false;
     protected PortletURI portletURI = null;
     protected List paramBeanList = new ArrayList();
     protected String label = null;
@@ -65,6 +66,24 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
      */
     public String getLabel() {
         return label;
+    }
+
+    /**
+     * If secure is true, then use https, otherwise use http
+     *
+     * @param isSecure
+     */
+    public void setSecure(boolean isSecure) {
+        this.isSecure = isSecure;
+    }
+
+    /**
+     * Returns true if this actiontag is secure e.g. https, flase otherwise
+     *
+     * @return true if this actiontag is secure, false otherwise
+     */
+    public boolean getSecure() {
+        return isSecure;
     }
 
     /**
