@@ -225,8 +225,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             SportletUserImpl u = new SportletUserImpl();
             u.setUserName("tckuser");
             u.setUserID("tckuser");
-            ArrayList l = new ArrayList();
-            l.add(SportletGroup.CORE);
+            Map l = new HashMap();
+            l.put(SportletGroup.CORE, PortletRole.USER);
             req.setAttribute(SportletProperties.PORTLET_USER, u);
             req.setAttribute(SportletProperties.PORTLETGROUPS, l);
             req.setAttribute(SportletProperties.PORTLET_ROLE, PortletRole.USER);
@@ -244,15 +244,22 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
 
         }
-        List groups = null;
+        HashMap groups = new HashMap();
         PortletRole role = PortletRole.GUEST;
         if (user == null) {
             user = GuestUser.getInstance();
-            groups = new ArrayList();
-            groups.add(PortletGroupFactory.GRIDSPHERE_GROUP);
+            groups = new HashMap();
+            groups.put(PortletGroupFactory.GRIDSPHERE_GROUP, PortletRole.GUEST);
         } else {
-            groups = aclService.getGroups(user);
-            role = aclService.getRoleInGroup(user, SportletGroup.CORE);
+            List mygroups = aclService.getGroups(user);
+            Iterator it = mygroups.iterator();
+            while (it.hasNext()) {
+                PortletGroup g = (PortletGroup)it.next();
+                role = aclService.getRoleInGroup(user, g);
+                groups.put(g, role);
+            }
+
+
         }
 
         // set user, role and groups in request
@@ -287,15 +294,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             if (aclService.hasSuperRole(user)) {
                 log.debug("User: " + user.getUserName() + " logged in as SUPER");
             }
-            List groups = aclService.getGroups(req.getUser());
-            Iterator it = groups.iterator();
-            while (it.hasNext()) {
-                PortletGroup g = (PortletGroup) it.next();
-                log.debug("groups:" + g.toString());
-            }
-            PortletRole role = aclService.getRoleInGroup(user, SportletGroup.CORE);
-            req.setAttribute(SportletProperties.PORTLET_ROLE, role);
-            req.setAttribute(SportletProperties.PORTLETGROUPS, groups);
+            setUserAndGroups(req);
             log.debug("Adding User: " + user.getID() + " with session:" + session.getId() + " to usersessionmanager");
             userSessionManager.addSession(user, session);
             layoutEngine.loginPortlets(event);
