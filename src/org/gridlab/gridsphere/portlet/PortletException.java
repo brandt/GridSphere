@@ -18,7 +18,6 @@ public class PortletException extends ServletException {
 
     private Throwable cause = null;
     private String text = "";
-    private List messages = new ArrayList();
 
     /**
      * Constructs an instance of PortletException
@@ -35,7 +34,7 @@ public class PortletException extends ServletException {
      */
     public PortletException(String text) {
         super(text);
-        this.text += "\n" + text;
+        this.text = text;
     }
 
     /**
@@ -60,6 +59,7 @@ public class PortletException extends ServletException {
     public PortletException(Throwable cause) {
         super(cause);
         this.cause = cause;
+        text = cause.getMessage();
     }
 
     /**
@@ -75,15 +75,6 @@ public class PortletException extends ServletException {
         return ((cause != null) ? cause.getCause() : null);
     }
 
-    /**
-     * Return the exception message
-     *
-     * @return the exception message
-     */
-    public List getMessages() {
-        return messages;
-    }
-
     public void printStackTrace() {
         //super.printStackTrace();
         if (cause != null) {
@@ -93,21 +84,18 @@ public class PortletException extends ServletException {
 
     public void printStackTrace(PrintStream ps) {
         //super.printStackTrace(ps);
+        if (text != null) ps.println(text);
         if (cause != null) {
-            ps.println();
-            ps.println();
+            ps.println("Caused by:");
             cause.printStackTrace(ps);
         }
     }
 
     public void printStackTrace(PrintWriter pw) {
         //super.printStackTrace(pw);
-        pw.println(text);
+        if (text != null) pw.println(text);
         if (cause != null) {
-            pw.println();
-            pw.println();
             pw.println("Caused by:");
-            pw.println(cause.getMessage());
             cause.printStackTrace(pw);
         }
     }

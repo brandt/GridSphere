@@ -120,6 +120,7 @@ public class PortletServlet extends HttpServlet
 
             } catch (Exception e) {
                 log.error("Unable to create jsr portlet instance: " + portletClass, e);
+                throw new ServletException("Unable to create jsr portlet instance: " + portletClass, e);
             }
         }
 

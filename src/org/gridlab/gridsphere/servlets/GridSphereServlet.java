@@ -148,13 +148,19 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 } catch (Exception e) {
                     RequestDispatcher rd = req.getRequestDispatcher("/jsp/dberror.jsp");
                     log.error("Check DB failed: ", e);
-                    req.setAttribute("error", "DB Error! Please contact your GridSphere/Database Administrator!");
+                    req.setAttribute(SportletProperties.ERROR, "DB Error! Please contact your GridSphere/Database Administrator!");
                     rd.forward(req, res);
                     return;
                 }
 
                 log.debug("Initializing portlets and services");
                 try {
+                    // initialize portlet service factory
+                    factory.init();
+
+                    // deep inside a service is used which is why this must follow the factory.init
+                    layoutEngine = PortletLayoutEngine.getInstance();
+
                     // initialize needed services
                     initializeServices();
                     // create a root user if none available
@@ -163,9 +169,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                     PortletInvoker.initAllPortlets(portletReq, portletRes);
                 } catch (PortletException e) {
                     req.setAttribute(SportletProperties.ERROR, e);
+                    layoutEngine.doRenderError(event, e);
+                    return;
                 }
-
-                layoutEngine = PortletLayoutEngine.getInstance();
                 firstDoGet = Boolean.FALSE;
             }
         }

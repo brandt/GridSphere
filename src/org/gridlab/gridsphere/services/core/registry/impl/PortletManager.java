@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.portletcontainer.impl.PortletWebApplicationImpl;
@@ -98,11 +99,10 @@ public class PortletManager implements PortletManagerService {
      * Initializes portlet web applications that are defined by the <code>PortletManagerService</code>
      *
      * @param config the <code>PortletServiceConfig</code>
-     * @throws PortletServiceUnavailableException
-     *          if initialization fails
      */
     public synchronized void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.debug("in init()");
+
         if (!isInitialized) {
             context = config.getServletContext();
             //String webapps = config.getInitParameter(CORE_CONTEXT);
@@ -133,12 +133,13 @@ public class PortletManager implements PortletManagerService {
                             addWebApp(portletWebApp);
                         } catch (PortletException e) {
                             log.error("Unable to create portlet web application: " + webapp);
-                            e.printStackTrace();
+                            throw new PortletServiceUnavailableException("Unable to create portlet web application: " + webapp, e);
                         }
                     }
                 }
             } else {
-                log.error(portletsPath + " does not exist!");
+                log.error("Portlet application " + portletsPath + " does not exist!");
+                throw new PortletServiceUnavailableException("Portlet application " + portletsPath + " does not exist!");                        
             }
             isInitialized = true;
         }
@@ -149,7 +150,7 @@ public class PortletManager implements PortletManagerService {
      *
      * @param portletWebApp the portlet web application name
      */
-    public synchronized void addWebApp(PortletWebApplication portletWebApp) {
+    public synchronized void addWebApp(PortletWebApplication portletWebApp) throws PortletServiceException {
         log.debug("adding webapp: " + portletWebApp.getWebApplicationName());
         addPortletFile(portletWebApp.getWebApplicationName());
         Collection appPortlets = portletWebApp.getAllApplicationPortlets();
@@ -162,7 +163,7 @@ public class PortletManager implements PortletManagerService {
         webapps.add(portletWebApp);
     }
 
-    private void addPortletFile(String webappName) {
+    private void addPortletFile(String webappName) throws PortletServiceException {
         String portletsPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/Portlets");
 
         File f = new File(portletsPath);
@@ -177,6 +178,7 @@ public class PortletManager implements PortletManagerService {
             newfile.createNewFile();
         } catch (IOException e) {
             log.error("Unable to create portlet app file: " + newfile.getAbsolutePath());
+            throw new PortletServiceException("Unable to create portlet app file: " + newfile.getAbsolutePath(), e);
         }
     }
 
@@ -270,10 +272,10 @@ public class PortletManager implements PortletManagerService {
      * @throws PortletException if a portlet exception occurs
      */
     public synchronized void initPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
-        System.err.println("adding web app" + webApplicationName);
+        log.debug("adding web app" + webApplicationName);
         PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webApplicationName, context);
         addWebApp(portletWebApp);
-        System.err.println("initing web app " + webApplicationName);
+        log.debug("initing web app " + webApplicationName);
         PortletInvoker.initPortletWebApp(webApplicationName, req, res);
     }
 
@@ -288,10 +290,10 @@ public class PortletManager implements PortletManagerService {
      */
     public synchronized void initPortletWebApplication(PortletWebApplication portletWebApplication, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         String webapp = portletWebApplication.getWebApplicationName();
-        System.err.println("adding web app" + webapp);
+        log.debug("adding web app" + webapp);
         PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
         addWebApp(portletWebApp);
-        System.err.println("initing web app " + webapp);
+        log.debug("initing web app " + webapp);
         PortletInvoker.initPortletWebApp(webapp, req, res);
     }
 

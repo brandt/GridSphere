@@ -92,6 +92,7 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
                 if (request.getAttribute(SportletProperties.PORTLETERROR + getPortletSettings().getConcretePortletID()) == null) {
                     request.setAttribute(SportletProperties.PORTLETERROR + getPortletSettings().getConcretePortletID(), e);
                 }
+                throw new PortletException(e);
                 //doError(request, response, e);
             }
         }

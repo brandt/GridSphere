@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceAuthorizer;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
@@ -65,6 +66,17 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
      * Private constructor. Use getDefault() instead.
      */
     private SportletServiceFactory() {
+
+    }
+
+    public static synchronized SportletServiceFactory getInstance() {
+        if (instance == null) {
+            instance = new SportletServiceFactory();
+        }
+        return instance;
+    }
+    
+    public static void init() throws PortletServiceException {
         // Reads in the service definitions from the xml file and stores them in allServices
         // organized according to service interface keys and service definition values
         String servicesPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/GridSphereServices.xml");
@@ -100,16 +112,13 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
      * @param servicesPath the path to the portlet services descriptor file
      * @param mappingPath  the path to the portlet services mapping file
      */
-    public synchronized void addServices(ServletContext ctx, String servicesPath, String mappingPath) {
+    public static synchronized void addServices(ServletContext ctx, String servicesPath, String mappingPath) throws PortletServiceException {
         SportletServiceDescriptor descriptor = null;
         try {
             descriptor = new SportletServiceDescriptor(servicesPath, mappingPath);
-        } catch (IOException e) {
-            log.error("IO error unmarshalling " + servicesPath + " using " + mappingPath + " : " + e.getMessage());
-            return;
-        } catch (PersistenceManagerException e) {
-            log.error("Unable to unmarshall " + servicesPath + " using " + mappingPath + " : " + e.getMessage());
-            return;
+        } catch (Exception e) {
+            log.error("error unmarshalling " + servicesPath + " using " + mappingPath + " : " + e.getMessage());
+            throw new PortletServiceException("error unmarshalling " + servicesPath + " using " + mappingPath, e);
         }
         SportletServiceCollection serviceCollection = descriptor.getServiceCollection();
         List services = serviceCollection.getPortletServicesList();
@@ -120,7 +129,6 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             allServices.put(serviceDef.getServiceInterface(), serviceDef);
             log.debug("adding service: " + serviceDef.getServiceInterface() + " service def: " + serviceDef.toString());
             serviceContexts.put(serviceDef.getServiceInterface(), ctx);
-
         }
     }
 
@@ -131,16 +139,13 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
      * @param servicesPath the path to the portlet services descriptor file
      * @param mappingPath  the path to the portlet services mapping file
      */
-    public synchronized void addServices(String webappName, ServletContext ctx, String servicesPath, String mappingPath, ClassLoader loader) {
+    public static synchronized void addServices(String webappName, ServletContext ctx, String servicesPath, String mappingPath, ClassLoader loader) throws PortletServiceException {
         SportletServiceDescriptor descriptor = null;
         try {
             descriptor = new SportletServiceDescriptor(servicesPath, mappingPath);
-        } catch (IOException e) {
-            log.error("IO error unmarshalling " + servicesPath + " using " + mappingPath + " : " + e.getMessage());
-            return;
-        } catch (PersistenceManagerException e) {
-            log.error("Unable to unmarshall " + servicesPath + " using " + mappingPath + " : " + e.getMessage());
-            return;
+        } catch (Exception e) {
+            log.error("Error unmarshalling " + servicesPath + " using " + mappingPath + " : " + e.getMessage());
+            throw new PortletServiceException("Error unmarshalling " + servicesPath + " using " + mappingPath, e);
         }
         SportletServiceCollection serviceCollection = descriptor.getServiceCollection();
         List services = serviceCollection.getPortletServicesList();
@@ -156,13 +161,6 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             webapplist.add(serviceDef.getServiceInterface());
         }
         webappServices.put(webappName, webapplist);
-    }
-
-    public static synchronized SportletServiceFactory getInstance() {
-        if (instance == null) {
-            instance = new SportletServiceFactory();
-        }
-        return instance;
     }
 
     /**

@@ -201,14 +201,7 @@ public abstract class PortletAdapter extends Portlet {
                     doEdit(request, response);
                     break;
                 case Portlet.Mode.CONFIGURE_MODE:
-                    //System.err.println("about to invoke configure mode");
-                    /*if (role.compare(role, PortletRole.ADMIN) < 0) {
-                        log.debug("user not privledged to access configure mode");
-                        request.setMode(Portlet.Mode.VIEW);
-                        doView(request, response);
-                    } else {*/
-                        doConfigure(request, response);
-                    //}
+                    doConfigure(request, response);
                     break;
                 case Portlet.Mode.HELP_MODE:
                     doHelp(request, response);
@@ -219,8 +212,8 @@ public abstract class PortletAdapter extends Portlet {
             }
         } catch (Exception e) {
             log.error("in PortletAdapter: service()", e);
-            e.printStackTrace();           
-            request.setAttribute(SportletProperties.PORTLETERROR + getPortletSettings().getConcretePortletID(), e.getMessage());
+            request.setAttribute(SportletProperties.PORTLETERROR + getPortletSettings().getConcretePortletID(), e);
+            throw new PortletException(e);
         }
     }
 

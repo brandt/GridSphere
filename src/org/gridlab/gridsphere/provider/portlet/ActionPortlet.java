@@ -312,7 +312,7 @@ public class ActionPortlet extends AbstractPortlet {
                 getPortletConfig().getContext().include("/jsp/" + jsp, request, response);
             }
         } catch (Exception e) {
-            log.error("Unable to include resource : " + e.getMessage());
+            log.error("Unable to include resource : ", e);
             doErrorInvalidAction(request, e);
             setNextError(request, "Unable to include resource " + jsp);
             throw new PortletException(e);
