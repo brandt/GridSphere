@@ -246,7 +246,12 @@ public abstract class BaseComponentTag extends BaseBeanTag {
             ResourceBundle bundle = ResourceBundle.getBundle(base, locale);
             return bundle.getString(key);
         } catch (Exception e) {
-            return key;
+            try {
+                ResourceBundle bundle = ResourceBundle.getBundle(base, Locale.ENGLISH);
+                return bundle.getString(key);
+            } catch (Exception ex) {
+                return key;
+            }
         }
     }
 
