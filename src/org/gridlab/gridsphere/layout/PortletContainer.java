@@ -6,8 +6,9 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.portletcontainer.PortletEventDispatcher;
+import org.gridlab.gridsphere.portletcontainer.PortletDispatcher;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -61,7 +62,9 @@ public class PortletContainer {
     }
 
     public void loginPortlets(GridSphereEvent event) throws PortletException {
-        PortletEventDispatcher dispatcher = event.getPortletEventDispatcher();
+        //PortletDispatcher dispatcher = event.getPortletEventDispatcher();
+        PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
         Iterator it = componentIdentifiers.iterator();
         ComponentIdentifier cid = null;
         PortletFrame f = null;
@@ -71,13 +74,15 @@ public class PortletContainer {
             if (cid.getClassName().equals("org.gridlab.gridsphere.layout.PortletFrame")) {
                 f = (PortletFrame) cid.getPortletComponent();
                 portlets.add(f.getPortletClass());
-                dispatcher.portletLogin(f.getPortletClass());
+                PortletDispatcher.portletLogin(f.getPortletClass(), req, res);
             }
         }
     }
 
     public void logoutPortlets(GridSphereEvent event) throws PortletException {
-        PortletEventDispatcher dispatcher = event.getPortletEventDispatcher();
+        PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
+        //PortletDispatcher dispatcher = event.getPortletEventDispatcher();
         Iterator it = componentIdentifiers.iterator();
         ComponentIdentifier cid = null;
         PortletFrame f = null;
@@ -85,7 +90,7 @@ public class PortletContainer {
             cid = (ComponentIdentifier) it.next();
             if (cid.getPortletClass().equals("org.gridlab.gridsphere.layout.PortletFrame")) {
                 f = (PortletFrame) cid.getPortletComponent();
-                dispatcher.portletLogout(f.getPortletClass());
+                PortletDispatcher.portletLogout(f.getPortletClass(), req, res);
             }
         }
     }
