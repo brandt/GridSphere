@@ -293,7 +293,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
         model.addTableRowBean(trMessaging);
 
-        List services = tms.getServices();
+        List services = tms.getActiveServices();
 
         if (services.size() == 0) {
             TableRowBean noServiceRow = new TableRowBean();
@@ -483,7 +483,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             //tmfuser.setPreferred(h_service.getValue());
         }
 
-        List services = tms.getServices();
+        List services = tms.getActiveServices();
         for (int i = 0; i < services.size(); i++) {
             TmfService tmfservice = (TmfService) services.get(i);
 
