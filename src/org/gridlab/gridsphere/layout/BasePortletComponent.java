@@ -29,7 +29,8 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected String width = new String();
     protected String label = new String();
     protected String name = new String();
-    protected String theme = "xp";
+    protected String theme = "default";
+    protected String componentTheme = "";
     protected boolean isVisible = true;
     protected String roleString = PortletRole.GUEST.toString();
     protected String groupString = PortletGroupFactory.GRIDSPHERE_GROUP.getName();
@@ -76,6 +77,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
         return name;
     }
 
+
     /**
      * Sets the portlet component name
      *
@@ -84,6 +86,40 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     public void setName(String name) {
         this.name = name;
     }
+
+    /**
+     * Gets the theme for on component annd its childs
+     *
+     * @return name of the componenttheme
+     */
+    public String getComponentTheme() {
+        return componentTheme;
+    }
+
+    /**
+     * Set the theme for the component and its childs.
+     *
+     * @param componentTheme
+     */
+    public void setComponentTheme(String componentTheme) {
+        System.out.println("\n\n\n\n\n\n\n\n\n SET COMP THEME \n\n\n\n\n\n\n");
+        this.componentTheme = componentTheme;
+    }
+
+    /**
+     * Returns the componentTheme for usage directly in HTML/css
+     *
+     * @return formatted componentTheme to use with html/css
+     */
+    protected String getFormattedComponentTheme() {
+        if (this.componentTheme.equals("")) {
+            return this.componentTheme;
+        } else {
+            System.out.println("\n\n\n\n WE HAVE A COMP THEEME HERE!!!!!\n\n\n\n");
+            return "-"+this.componentTheme;
+        }
+    }
+
 
     /**
      * Returns the portlet component label

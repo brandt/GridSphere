@@ -645,9 +645,9 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         PortletResponse wrappedResponse = new StoredPortletResponseImpl(res, writer);
 
         if (isActive) {
-            writer.println("<tr><td class=\"window-title-active\">");
+            writer.println("<tr><td class=\"window-title-active"+this.getFormattedComponentTheme()+"\">");
         } else {
-            writer.println("<tr><td class=\"window-title-inactive\">");
+            writer.println("<tr><td class=\"window-title-inactive"+this.getFormattedComponentTheme()+"\">");
         }
         isActive = false;
         writer.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>");
@@ -666,7 +666,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         // Invoke doTitle of portlet whose action was perfomed
         //String actionStr = req.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
-        writer.println("<td class=\"window-title-name\">");
+        writer.println("<td class=\"window-title-name"+this.getFormattedComponentTheme()+"\">");
 
         prebufferedTitle = storedWriter.getBuffer();
 

@@ -288,7 +288,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      * @return a title without blank spaces
      */
     private String replaceBlanks(String title) {
-        String result = new String();
+        String result = "&nbsp;";
         StringTokenizer st = new StringTokenizer(title);
         while(st.hasMoreTokens()) {
             result += st.nextToken()+"&nbsp;";
@@ -331,15 +331,15 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                     String title = tab.getTitle(lang);
 
                     if (tab.isSelected()) {
-                        out.println("<td><img src=\"themes/" + theme + "/images/tab-active-left.gif\"/></td>");
-                        out.println("<td class=\"tab-active\">" + replaceBlanks(title) + "</td>");
-                        out.println("<td><img src=\"themes/" + theme + "/images/tab-active-right.gif\"/></td>");
+             //           out.println("<td><img src=\"themes/" + theme + "/images/tab-active-left.gif\"/></td>");
+                        out.println("<td class=\"tab-active"+tab.getFormattedComponentTheme()+"\">" + replaceBlanks(title) + "</td>");
+             //           out.println("<td><img src=\"themes/" + theme + "/images/tab-active-right.gif\"/></td>");
                     } else {
-                        out.println("<td><img src=\"themes/" + theme + "/images/tab-inactive-left.gif\"/></td>");
-                        out.println("<td class=\"tab-inactive\"><a class=\"tab-menu\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\"/>" + replaceBlanks(title) + "</a>");
-                        out.println("<td><img src=\"themes/" + theme + "/images/tab-inactive-right.gif\"/></td>");
+             //           out.println("<td><img src=\"themes/" + theme + "/images/tab-inactive-left.gif\"/></td>");
+                        out.println("<td class=\"tab-inactive"+tab.getFormattedComponentTheme()+"\"><a class=\"tab-menu"+this.getFormattedComponentTheme()+"\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\"/>" + replaceBlanks(title) + "</a>");
+              //          out.println("<td><img src=\"themes/" + theme + "/images/tab-inactive-right.gif\"/></td>");
                     }
-                    out.println("<td class=\"tab-empty\">&nbsp;</td>");
+                    //out.println("<td class=\"tab-empty\"></td>");
                 }  else {
                     // if role is < required role we try selecting the next possible tab
                     //System.err.println("in PortletTabbedPane menu: role is < required role we try selecting the next possible tab");
@@ -375,11 +375,15 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         PrintWriter out = res.getWriter();
         PortletRole userRole = req.getRole();
 
-        // Render tabs titles
-        out.println("<table border=\"0\" class=\"tab-sub-pane\" width=\"100%\"><tr><td>");
+        //PortletTab parentTab = (PortletTab)this.getParentComponent();
+
+        // Render tabs titles get always the same componenttheme as the upper menu
+        out.println("<table border=\"0\" class=\"tab-sub-pane"+this.getFormattedComponentTheme()+"\" width=\"100%\"><tr><td>");
         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>");
 
+
         PortletTab tab;
+
         List stabs = Collections.synchronizedList(tabs);
         synchronized (stabs) {
             for (int i = 0; i < stabs.size(); i++) {
@@ -391,11 +395,11 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                     String title = tab.getTitle(lang);
 
                     if (tab.isSelected()) {
-                        out.println("<td> <span class=\"tab-sub-active\">");
-                        out.println("<a class=\"tab-sub-menu-active\" href=\""+links[i]+ "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\"/>" + title + "</a></span></td>");
+                        out.println("<td> <span class=\"tab-sub-active"+this.getFormattedComponentTheme()+"\">");
+                        out.println("<a class=\"tab-sub-menu-active"+this.getFormattedComponentTheme()+"\" href=\""+links[i]+ "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\"/>" + title + "</a></span></td>");
                     } else {
-                        out.println("<td> <span class=\"tab-sub-inactive\">");
-                        out.println("<a class=\"tab-sub-menu\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\"/>" + title + "</a>");
+                        out.println("<td> <span class=\"tab-sub-inactive"+this.getFormattedComponentTheme()+"\">");
+                        out.println("<a class=\"tab-sub-menu"+this.getFormattedComponentTheme()+"\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\"/>" + title + "</a>");
                         out.println("</span></td>");
                     }
                 } else {
