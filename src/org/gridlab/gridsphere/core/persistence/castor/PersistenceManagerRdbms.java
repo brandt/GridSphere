@@ -100,18 +100,6 @@ public class PersistenceManagerRdbms {
     }
 
     /**
-     * checks if all variables have been set
-     *
-     */
-    private void checkSettings() throws PersistenceManagerException {
-
-        String msg = null;
-
-        if (getConnectionURL().equals(null))
-            throw new PersistenceManagerException("Connection URL not specified");
-    }
-
-    /**
      * Creates an object to the database
      *
      * @param object to be marshalled
@@ -119,7 +107,7 @@ public class PersistenceManagerRdbms {
      * @throws CreateException is creation went wrong
      */
     public void create(Object object) throws PersistenceManagerException {
-        checkSettings();
+
         Database db = null;
 
         //SportletGroup sa = (SportletGroup)object;
@@ -147,9 +135,6 @@ public class PersistenceManagerRdbms {
      * @throws UpdateException if updated failed
      */
     public void update(Object object) throws PersistenceManagerException {
-
-        checkSettings();
-
         Database db = null;
         // get Database
         try {
@@ -186,9 +171,6 @@ public class PersistenceManagerRdbms {
      * @return list of objects from OQL query
      */
     public List restoreList() throws PersistenceManagerException {
-
-        checkSettings();
-
         OQLQuery oql = null;
         Database db = null;
         QueryResults results = null;
@@ -250,9 +232,6 @@ public class PersistenceManagerRdbms {
      */
 
     public void delete(Object object) throws PersistenceManagerException {
-
-        checkSettings();
-
         Database db = null;
         try {
             db = jdo.getDatabase();
@@ -330,8 +309,6 @@ public class PersistenceManagerRdbms {
      */
     public void deleteList(String query) throws PersistenceManagerException {
 
-        checkSettings();
-
         Database db = null;
         OQLQuery oql = null;
         QueryResults results = null;
@@ -364,8 +341,6 @@ public class PersistenceManagerRdbms {
         Database db = null;
         OQLQuery oql = null;
         QueryResults results = null;
-
-        checkSettings();
 
         try {
             db = jdo.getDatabase();
