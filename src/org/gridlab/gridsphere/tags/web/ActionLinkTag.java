@@ -14,7 +14,7 @@ import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 
-public class ActionTag extends TagSupport {
+public class ActionLinkTag extends TagSupport {
 
     private String action;
     private String label;
