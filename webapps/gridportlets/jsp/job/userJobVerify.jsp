@@ -1,281 +1,185 @@
-<%@ page language="java"%>
-<%-- Set error page --%>
-<%@ page errorPage="/jsp/orbiter/pages/error.jsp"%>
-<%-- Instantiate module bean --%>
-<jsp:useBean id="module" scope="page"
-  class="org.gridlab.portal.pages.GrmsJobManagerPageBean"/>
-<% module.setPageContext(pageContext); %>
-<!-- Begin presentation -->
-<form method="POST" name="GrmsJobVerify" action="servlet/orbiter">
-  <input type="hidden" name="moduleRequest" value="gridlab.resmgmt.GrmsJobVerify">
-  <input type="hidden" name="executable" value="<%=module.getParameter("executable")%>">
-  <input type="hidden" name="stdout" value="<%=module.getParameter("stdout")%>">
-  <input type="hidden" name="stderr" value="<%=module.getParameter("stderr")%>">
-  <input type="hidden" name="arguments" value="<%=module.getParameter("arguments")%>">
-  <input type="hidden" name="environment" value="<%=module.getParameter("environment")%>">
-  <input type="hidden" name="hostGroupName" value="<%=module.getParameter("hostGroupName")%>">
-  <input type="hidden" name="hostName" value="<%=module.getParameter("hostName")%>">
-  <input type="hidden" name="jobScheduler" value="<%=module.getParameter("jobScheduler")%>">
-  <input type="hidden" name="memory" value="<%=module.getParameter("memory")%>">
-  <input type="hidden" name="cpuCount" value="<%=module.getParameter("cpuCount")%>">
-  <input type="hidden" name="osType" value="<%=module.getParameter("osType")%>">
-  <input type="hidden" name="osName" value="<%=module.getParameter("osName")%>">
-  <input type="hidden" name="osVersion" value="<%=module.getParameter("osVersion")%>">
-  <input type="hidden" name="osRelease" value="<%=module.getParameter("osRelease")%>">
-  <table width="90%" border="0"
-         cellspacing="2" cellpadding="0" bgcolor="#999999">
-    <tr>
-      <td width="100%">
-        <table width="100%" border="0"
-               cellspacing="1" cellpadding="1" bgcolor="#336699">
-          <tr>
-            <td height="20" align="left" valign="middle">
-              <font color="#FFFFFF" face="Arial, Helvetica, sans-serif">
-              &nbsp;New Job (GridLab Resource Management System)
-              </font></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-    <tr>
-      <td width="100%">
-        <table width="100%" border="0"
-               cellspacing="1" cellpadding="1" bgcolor="#FFFFFF">
-          <tr>
-            <td height="20" align="left" valign="middle">
-              <font size="-1" color="#000000" face="Arial, Helvetica, sans-serif">
-              &nbsp;Last Step: Verify the information below is correct.
-              </font></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-    <tr>
-      <td bgcolor="#999999" width="100%">
-        <font size="-1" face="Arial, Helvetica, sans-serif">
-          &nbsp;Application
-        </font>
-      </td>
-    </tr>
-    <tr>
-      <td width="100%">
-        <table width="100%" border="0" cellspacing="1" cellpadding="1" bgcolor="#CCCCCC">
-<tr>
-  <td width="200">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;Executable:&nbsp;
-    </font>
-  </td>
-  <td bgcolor="#FFFFFF">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;<%=module.getParameter("executable")%>
-    </font>
-  </td>
-</tr>
-<tr>
-  <td width="200">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;Stdout:&nbsp;
-    </font>
-  </td>
-  <td bgcolor="#FFFFFF">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;<%=module.getParameter("stdout")%>
-    </font>
-  </td>
-</tr>
-<tr>
-  <td width="200">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;Stderr:&nbsp;
-    </font>
-  </td>
-  <td bgcolor="#FFFFFF">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;<%=module.getParameter("stderr")%>
-    </font>
-  </td>
-</tr>
-<tr>
-  <td width="200">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;Arguments:&nbsp;
-    </font>
-  </td>
-  <td bgcolor="#FFFFFF">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;<%=module.getParameter("arguments")%>
-    </font>
-  </td>
-</tr>
-<tr>
-  <td width="200">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;Environment:&nbsp;
-    </font>
-  </td>
-  <td bgcolor="#FFFFFF">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;<%=module.getParameter("environment")%>
-    </font>
-  </td>
-</tr>
-        </table>
-      </td>
-    </tr>
-    <tr>
-      <td bgcolor="#999999" width="100%">
-        <font size="-1" face="Arial, Helvetica, sans-serif">
-          &nbsp;Resource Requirements
-        </font>
-      </td>
-    </tr>
-    <tr>
-      <td width="100%">
-        <table width="100%" border="0" cellspacing="1" cellpadding="1" bgcolor="#CCCCCC">
-<tr>
-  <td width="200">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;Hostname:&nbsp;
-    </font>
-  </td>
-  <td bgcolor="#FFFFFF">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;<%=module.getParameter("hostName")%>
-    </font>
-  </td>
-</tr>
-<tr>
-  <td width="200">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;Job Scheduler:&nbsp;
-    </font>
-  </td>
-  <td bgcolor="#FFFFFF">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;<%=module.getParameter("jobScheduler")%>
-    </font>
-  </td>
-</tr>
-<tr>
-  <td width="200">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;Memory:&nbsp;
-    </font>
-  </td>
-  <td bgcolor="#FFFFFF">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;<%=module.getParameter("memory")%>
-    </font>
-  </td>
-</tr>
-<tr>
-  <td width="200">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;Processors:&nbsp;
-    </font>
-  </td>
-  <td bgcolor="#FFFFFF">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;<%=module.getParameter("cpuCount")%>
-    </font>
-  </td>
-</tr>
-<tr>
-  <td width="200">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;OS Type:&nbsp;
-    </font>
-  </td>
-  <td bgcolor="#FFFFFF">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;<%=module.getParameter("osType")%>
-    </font>
-  </td>
-</tr>
-<tr>
-  <td width="200">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;OS Name:&nbsp;
-    </font>
-  </td>
-  <td bgcolor="#FFFFFF">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;<%=module.getParameter("osName")%>
-    </font>
-  </td>
-</tr>
-<tr>
-  <td width="200">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;OS Version:&nbsp;
-    </font>
-  </td>
-  <td bgcolor="#FFFFFF">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;<%=module.getParameter("osVersion")%>
-    </font>
-  </td>
-</tr>
-<tr>
-  <td width="200">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;OS Release:&nbsp;
-    </font>
-  </td>
-  <td bgcolor="#FFFFFF">
-    <font size="-1" face="Arial, Helvetica, sans-serif">
-      &nbsp;<%=module.getParameter("osRelease")%>
-    </font>
-  </td>
-</tr>
-        </table>
-      </td>
-    </tr>
-    <tr>
-      <td width="100%">
-        <table width="100%" border="0"
-               cellspacing="1" cellpadding="1" bgcolor="#CCCCCC">
-          <tr>
-            <td align="left" valign="middle">
-              <font size="-1" face="Arial, Helvetica, sans-serif">
-              &nbsp;<input type="button" name="JobBack" value="<< Back"
-                onClick="javascript:GrmsJobBack_onClick()">&nbsp;
-              &nbsp;<input type="button" name="JobSubmit" value="Submit"
-                onClick="javascript:GrmsJobSubmit_onClick()">&nbsp;
-              &nbsp;<input type="button" name="JobCancel" value="Cancel"
-                onClick="javascript:GrmsJobCancel_onClick()">&nbsp;
-              </font></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-  <script language="JavaScript">
-
-    function GrmsJobVerify_onValidate() {
-      var isValid = true;
-      return isValid;
-    }
-
-    function GrmsJobBack_onClick() {
-        document.GrmsJobVerify.moduleRequest.value="gridlab.resmgmt.GrmsJobResources";
-        document.GrmsJobVerify.submit();
-    }
-
-    function GrmsJobSubmit_onClick() {
-      if (GrmsJobVerify_onValidate()) {
-        document.GrmsJobVerify.moduleRequest.value="gridlab.resmgmt.GrmsJobSubmit";
-        document.GrmsJobVerify.submit();
-      }
-    }
-
-    function GrmsJobCancel_onClick() {
-      if (confirm("Are you sure you want to cancel this operation?")) {
-        document.GrmsJobVerify.moduleRequest.value="gridlab.resmgmt.Jobs";
-        document.GrmsJobVerify.submit();
-      }
-    }
-
-  </script>
-</form>
+<%@ page import="org.gridlab.gridsphere.portlet.User,
+                 org.gridlab.gridsphere.portlet.PortletURI" %>
+<%@ taglib uri="/portletWidgets" prefix="gs" %>
+<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
+<portletAPI:init/>
+<jsp:useBean id="jobManagerBean"
+             class="org.gridlab.gridsphere.portlets.grid.job.JobManagerBean"
+             scope="request"/>
+<gs:form action="doVerifyUserJob">
+<input type="hidden" name="executable" value="<%=jobManagerBean.getParameter("executable")%>">
+<input type="hidden" name="stdout" value="<%=jobManagerBean.getParameter("stdout")%>">
+<input type="hidden" name="stderr" value="<%=jobManagerBean.getParameter("stderr")%>">
+<input type="hidden" name="arguments" value="<%=jobManagerBean.getParameter("arguments")%>">
+<input type="hidden" name="environment" value="<%=jobManagerBean.getParameter("environment")%>">
+<input type="hidden" name="hostName" value="<%=jobManagerBean.getParameter("hostName")%>">
+<input type="hidden" name="jobScheduler" value="<%=jobManagerBean.getParameter("jobScheduler")%>">
+<input type="hidden" name="memory" value="<%=jobManagerBean.getParameter("memory")%>">
+<input type="hidden" name="cpuCount" value="<%=jobManagerBean.getParameter("cpuCount")%>">
+<table class="portlet-pane" cellspacing="1">
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="100%">
+        <tr>
+          <td class="portlet-frame-title">
+              New Job
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-message">
+              Last Step: Verify Job
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-actions">
+            <gs:submit name="doValidateEditUserJob" value="&lt;&lt; Back"/>
+            &nbsp;&nbsp;<gs:submit name="doSubmitEditUserJob" value="Submit Job"/>
+            &nbsp;&nbsp;<gs:submit name="doCancelEditUserJob" value="Cancel Edit"/>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="100%">
+        <tr>
+          <td class="portlet-frame-label" width="200">
+             Executable:
+          </td>
+          <td class="portlet-frame-value">
+             <gs:text name="executable" value="executable">
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-label" width="200">
+             Stdout:
+          </td>
+          <td class="portlet-frame-value">
+             <gs:text name="stdout" value="stdout">
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-label" width="200">
+             Stderr:
+          </td>
+          <td class="portlet-frame-value">
+             <gs:text name="stderr" value="stderr">
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="100%">
+        <tr>
+          <td class="portlet-frame-label" width="200">
+             Arguments:
+          </td>
+          <td class="portlet-frame-value">
+             <gs:text name="arguments" value="arguments">
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="100%">
+        <tr>
+          <td class="portlet-frame-label" width="200">
+             Environment:
+          </td>
+          <td class="portlet-frame-value">
+             <gs:text name="environment" value="environment">
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="100%">
+        <tr>
+          <td class="portlet-frame-label" width="200">
+             Host Name:
+          </td>
+          <td class="portlet-frame-input">
+             <gs:text name="hostName" value="hostName">
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-label">
+             Job Scheduler:&nbsp;
+          </td>
+          <td class="portlet-frame-input">
+             <gs:text name="hostName" value="jobScheduler">
+          </td>
+        </tr>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="100%">
+        <tr>
+          <td class="portlet-frame-label" width="200">
+             Minimum Memory:
+          </td>
+          <td class="portlet-frame-input">
+             <gs:text name="memory" value="memory">
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-label" width="200">
+             Number of Processors:
+          </td>
+          <td class="portlet-frame-input">
+             <gs:text name="cpuCount" value="cpuCount">
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+<%--
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="100%">
+        <tr>
+          <td class="portlet-frame-label" width="200">
+             Operating System Type:
+          </td>
+          <td class="portlet-frame-input">
+             <gs:text name="osType" value="osType">
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-label" width="200">
+             Operating System Name:
+          </td>
+          <td class="portlet-frame-input">
+             <gs:text name="osName" value="osName">
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-label" width="200">
+             Operating System Version:
+          </td>
+          <td class="portlet-frame-input">
+             <gs:text name="osVersion" value="osVersion">
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-label" width="200">
+             Operating System Release:
+          </td>
+          <td class="portlet-frame-input">
+             <gs:text name="osRelease" value="osRelease">
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+--%>
+</table>
+</gs:form>

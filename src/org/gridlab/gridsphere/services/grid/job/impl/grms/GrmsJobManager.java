@@ -141,7 +141,6 @@ public class GrmsJobManager implements JobManagerService {
         }
         _logger.info("GrmsJobManager: Getting default proxy");
         GlobusProxy globusProxy = GlobusProxy.getDefaultUserProxy();
-        _logger.info("GrmsJobManager: Setting port properties");
         setPortProperties(grmsBroker, globusProxy);
         return grmsBroker;
     }
@@ -158,14 +157,13 @@ public class GrmsJobManager implements JobManagerService {
             System.err.println(message);
             throw e;
         }
-        _logger.info("GrmsJobManager: Getting user proxy");
         GlobusProxy globusProxy = getUserDefaultGlobusProxy(user);
-        _logger.info("GrmsJobManager: Setting port properties");
         setPortProperties(grmsBroker, globusProxy);
         return grmsBroker;
     }
 
     private void setPortProperties(Remote ws, GlobusProxy globusProxy) {
+        _logger.info("GrmsJobManager: Setting port properties");
         Stub stub = (Stub) ws;
         stub._setProperty(GSIHTTPTransport.GSI_CREDENTIALS, globusProxy);
         stub._setProperty(GSIHTTPTransport.GSI_MODE, GSIHTTPTransport.GSI_MODE_FULL_DELEG);
@@ -665,11 +663,14 @@ public class GrmsJobManager implements JobManagerService {
 
     private GlobusProxy getUserDefaultGlobusProxy(User user) {
         if (credentialManager.hasActiveCredentials(user)) {
+            _logger.info("GrmsJobManager: Getting user proxy");
             List credentials = credentialManager.getActiveCredentials(user);
             GlobusCredential credential = (GlobusCredential)credentials.get(0);
             return credential.getGlobusProxy();
+        } else {
+            _logger.info("GrmsJobManager: User has no active proxies");
+            return null;
         }
-        return null;
     }
 
     private List toXsdStringList(ArrayOf_Xsd_StringHolder array) {

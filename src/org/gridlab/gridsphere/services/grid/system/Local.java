@@ -14,29 +14,29 @@ public class Local {
     private static PortletLog _logger = null;
     private static ResourceBundle _properties = null;
 
+    /***
     static {
-        try {
-            loadProperties();
-        } catch (MissingResourceException e) {
-        }
+        loadProperties();
     }
+    ***/
 
     private Local() {
     }
 
-    public static void loadProperties()
-            throws MissingResourceException {
+    public static void loadProperties() {
         String properties = "gridportlets.gridportlets";
         try {
-            System.out.println("Grid: Loading properties file");
+            _logger.info("Loading properties file");
             _properties = ResourceBundle.getBundle(properties);
         } catch (MissingResourceException e) {
             _logger.error("Error getting properties file", e);
-            throw e;
         }
     }
 
     public static String getProperty(String name) {
+        if (_properties == null) {
+            return "";
+        }
         try {
             String value = _properties.getString(name);
             return value;
@@ -47,6 +47,9 @@ public class Local {
     }
 
     public static String getProperty(String name, String def) {
+        if (_properties == null) {
+            return def;
+        }
         try {
             String value = _properties.getString(name);
             return value;
@@ -55,21 +58,14 @@ public class Local {
         }
     }
 
-    public static String getConfigPath() {
-        String path = getProperty("GRIDPORTLETS_HOME", "");
-        StringBuffer buffer = new StringBuffer(path);
-        buffer.append(FileSeparator);
-        buffer.append("gridlab");
-        return buffer.toString();
+    public static String getHomePath() {
+        return getProperty("GRIDPORTLETS_HOME",
+            "~/gridsphere/webapps/gridportlets");
     }
 
     public static String getJdoCastorPath() {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(getConfigPath());
-        buffer.append(FileSeparator);
-        buffer.append(getProperty("GRIDPORTLETS_JDO_CASTOR", ""));
-        buffer.append(FileSeparator);
-        return buffer.toString();
+        return getProperty("GRIDPORTLETS_JDO_CASTOR",
+            "~/gridsphere/webapps/gridportlets/WEB-INF/jdo/castor");
     }
 
     public static String getLocalHost() {

@@ -10,20 +10,20 @@
 <jsp:useBean id="jobManagerBean"
              class="org.gridlab.gridsphere.portlets.grid.job.JobManagerBean"
              scope="request"/>
-<gs:form action="doListUser">
+<gs:form action="doListUserJob">
 <table class="portlet-pane" cellspacing="1">
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-title">
-              List Users
+              List Jobs
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-actions">
-            <gs:submit name="doListUser" value="List Users"/>
-            &nbsp;&nbsp;<gs:submit name="doNewUser" value="New User"/>
+            <gs:submit name="doListUserJob" value="List Jobs"/>
+            &nbsp;&nbsp;<gs:submit name="doNewUserJob" value="New Job"/>
           </td>
         </tr>
       </table>
@@ -37,7 +37,7 @@
    if (numUsers == 0) { %>
         <tr>
           <td class="portlet-frame-text">
-            There are no user accounts in the database.
+            There are no jobs associated with your account.
           </td>
         </tr>
 <% } else { %>
