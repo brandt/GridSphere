@@ -1,27 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<portlet-app-collection>
+
 <portlet-app-def>
 
-<portlet-app uid="org.gridlab.gridsphere.portlets.core.HelloWorld">
+<portlet-app uid="org.gridlab.gridsphere.portlets.core.HelloWorld.666">
     <portlet-app-name>Hello World Portlet Application</portlet-app-name>
-    <portlet href="WEB-INF/web.xml#Servlet_1902648613" id="Portlet_1902648613">
+    <portlet href="WEB-INF/web.xml#Servlet_1902648613" id="Portlet_1">
         <portlet-name>Hello World</portlet-name>
-        <description>Hello World - Sample Portlet #1</description>
-        <config-param>
-            <param-name>somename</param-name>
-            <param-value>somevalue</param-value>
-        </config-param>
-        <config-param>
-            <param-name>anothername</param-name>
-            <param-value>anothervalue</param-value>
-        </config-param>
+    </portlet>
+</portlet-app>
+
+<concrete-portlet-app uid="org.gridlab.gridsphere.portlets.core.HelloWorld.666.2">
+    <portlet-app-name>Concrete Hello World - Portlet Sample #1</portlet-app-name>
+    <config-param>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </config-param>
+    <concrete-portlet href="Portlet_1902648613">
+        <portlet-name>Hello World</portlet-name>
+        <default-locale>en</default-locale>
+        <language locale="en_US">
+            <title>Hello World - Sample Portlet #1</title>
+            <title-short>Hello World</title-short>
+            <description>Hello World - Sample Portlet #1</description>
+            <keywords>portlet hello world</keywords>
+        </language>
         <group>
             <group-name>ANY</group-name>
         </group>
         <role>
             <role-name>GUEST</role-name>
         </role>
-    </portlet>
-</portlet-app>
+    </concrete-portlet>
+</concrete-portlet-app>
+
+</portlet-app-def>
+
+<portlet-app-def>
 
 <portlet-app uid="org.gridlab.gridsphere.portlets.core.HalloWelt">
     <portlet-app-name>Hallo Welt Portlet Application</portlet-app-name>
@@ -30,4 +45,8 @@
     </portlet>
 </portlet-app>
 
+
+
 </portlet-app-def>
+
+</portlet-app-collection>
