@@ -56,7 +56,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
     public PortletWebApplicationImpl(String webApplicationName, ServletContext context) throws PortletException {
         this.webApplicationName = webApplicationName;
         // get the servlet context for the coreportlets webapp
-        String contextURIPath = "/" + webApplicationName;
+        String contextURIPath = null;
         if (webApplicationName.startsWith("/")) {
             contextURIPath = webApplicationName;
             webApplicationName = webApplicationName.substring(1);
@@ -73,7 +73,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         //System.err.println("testing example portlets");
         //ServletContext testsc = context.getContext("/exampleportlets");
         //System.err.println("description: " + ctx.getServletContextName());
-        //System.err.println("context path: " + ctx.getRealPath(""));
+        System.err.println("context path: " + ctx.getRealPath(""));
         //System.err.println("testing core portlets");
         //testsc = context.getContext("/coreportlets");
         //System.err.println("description: " + testsc.getServletContextName());

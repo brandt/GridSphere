@@ -120,4 +120,5 @@ public class PortletSessionManager implements HttpSessionListener {
             log.debug("session #id: " + (String)it.next());
         }
     }
+
 }

@@ -91,10 +91,13 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     public synchronized void initializeServices() throws PortletServiceException {
         // discover portlets
+        log.debug("Creating portlet manager service");
         portletManager = (PortletManagerService) factory.createUserPortletService(PortletManagerService.class, GuestUser.getInstance(), getServletConfig(), true);
         // create groups from portlet web apps
+        log.debug("Creating access control manager service");
         aclService = (AccessControlManagerService) factory.createUserPortletService(AccessControlManagerService.class, GuestUser.getInstance(), getServletConfig(), true);
         // create root user in default group if necessary
+        log.debug("Creating user manager service");
         userManagerService = (UserManagerService) factory.createUserPortletService(UserManagerService.class, GuestUser.getInstance(), getServletConfig(), true);
         loginService = (LoginService) factory.createUserPortletService(LoginService.class, GuestUser.getInstance(), getServletConfig(), true);
     }
@@ -217,7 +220,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
-
         try {
             User user = loginService.login(username, password);
             req.setAttribute(SportletProperties.PORTLET_USER, user);
@@ -265,15 +267,13 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @throws PortletException
      */
      public void downloadFile(GridSphereEvent event) throws PortletException {
-        log.debug("in FileManagerPortlet: downloadFile");
-
         PortletResponse res = event.getPortletResponse();
         PortletRequest req = event.getPortletRequest();
         try {
-
             String fileName = (String)req.getAttribute("FMP_filename");
             String path = (String)req.getAttribute("FMP_filepath");
             if ((fileName == null) || (path == null)) return;
+            log.debug("in downloadFile");
             log.debug("filename: " + fileName + " filepath= " + path);
             File f = new File(path);
 
