@@ -42,20 +42,20 @@
             <bind-xml name="portlet-description"/>
         </field>
 
-        <field name="InitParam" type="org.gridlab.gridsphere.portletcontainer.descriptor.InitParam">
-            <bind-xml name="init-param"/>
+        <field name="ConfigParamList" type="org.gridlab.gridsphere.portletcontainer.descriptor.ConfigParam" collection="vector">
+            <bind-xml name="config-param"/>
         </field>
 
-        <field name="Group" type="org.gridlab.gridsphere.portletcontainer.descriptor.Group" collection="vector">
+        <field name="GroupList" type="org.gridlab.gridsphere.portletcontainer.descriptor.Group" collection="vector">
             <bind-xml name="group"/>
         </field>
 
-        <field name="User" type="org.gridlab.gridsphere.portletcontainer.descriptor.User" collection="vector">
-            <bind-xml name="user"/>
+        <field name="RoleList" type="org.gridlab.gridsphere.portletcontainer.descriptor.Role" collection="vector">
+            <bind-xml name="role"/>
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.InitParam">
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.ConfigParam">
         <field name="ParamName" type="string">
             <bind-xml name="param-name"/>
         </field>
@@ -71,9 +71,9 @@
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.User">
-        <field name="UserRole" type="string">
-            <bind-xml name="user-role"/>
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.Role">
+        <field name="RoleName" type="string">
+            <bind-xml name="role-name"/>
         </field>
     </class>
 
