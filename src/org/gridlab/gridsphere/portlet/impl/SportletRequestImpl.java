@@ -28,9 +28,6 @@ public class SportletRequestImpl implements SportletRequest {
     // The actual servlet request we are wrapping
     private HttpServletRequest req = null;
 
-    // The actual session obtained from the servlet request
-    private HttpSession session = null;
-
     // Another proxy class
     private PortletSession portletSession = null;
 
@@ -44,8 +41,8 @@ public class SportletRequestImpl implements SportletRequest {
      */
     public SportletRequestImpl(HttpServletRequest req) {
         this.req = req;
-        if (portletSession == null)
-            portletSession = new SportletSession(req.getSession(true));
+        //if (portletSession == null)
+        //    portletSession = new SportletSession(req.getSession(true));
     }
 
     /**
@@ -126,6 +123,8 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the portlet session
      */
     public PortletSession getPortletSession() {
+        if (portletSession == null)
+            portletSession = new SportletSession(req.getSession(true));
         return portletSession;
     }
 
@@ -139,12 +138,9 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the portlet session
      */
     public PortletSession getPortletSession(boolean create) {
-        if (portletSession == null) {
-            HttpSession session = req.getSession(create);
-            if (create == true) {
-                portletSession = new SportletSession(session);
-            }
-        }
+        if ((portletSession == null) && (create == false))
+            return null;
+        if (portletSession == null) portletSession = new SportletSession(req.getSession(create));
         return portletSession;
     }
 
@@ -164,7 +160,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the PortletData
      */
     public PortletData getData() {
-        if ((session == null) || (getMode() == Portlet.Mode.CONFIGURE)) {
+        if ((portletSession == null) || (getMode() == Portlet.Mode.CONFIGURE)) {
             return null;
         }
         return (PortletData)req.getAttribute(GridSphereProperties.PORTLETDATA);
@@ -177,7 +173,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @param portlet data the PortletData
      */
     public void setData(PortletData data) {
-        if ((session == null) || (getMode() != Portlet.Mode.EDIT)) return;
+        if ((portletSession == null) || (getMode() != Portlet.Mode.EDIT)) return;
         req.setAttribute(GridSphereProperties.PORTLETDATA, data);
     }
 
@@ -390,7 +386,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @param name the parameter name
      * @return the parameter value
      */
-    public final String getParameter(java.lang.String name) {
+    public final String getParameter(String name) {
         return req.getParameter(name);
     }
 

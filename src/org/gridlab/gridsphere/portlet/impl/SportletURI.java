@@ -33,13 +33,11 @@ import java.util.*;
 public class SportletURI implements PortletURI {
 
     private HttpServletResponse res = null;
-    private PortletSettings portletSettings = null;
-
-
     private Map store = new HashMap();
     private boolean redirect = true;
     private String contextName;
     private PortletWindow.State state;
+    private String id = "";
 
     public SportletURI() {}
 
@@ -47,6 +45,21 @@ public class SportletURI implements PortletURI {
         store = new HashMap();
         this.contextName = contextName;
         this.res = res;
+        this.id = createUniquePrefix(2);
+    }
+
+    private String createUniquePrefix(int numChars) {
+        StringBuffer s = new StringBuffer();
+        for (int i=0; i <= numChars; i++) {
+            int nextChar=(int)(Math.random()*62);
+            if (nextChar<10) //0-9
+                s.append(nextChar);
+            else if (nextChar<36) //a-z
+                s.append((char)(nextChar-10+'a'));
+            else
+                s.append((char)(nextChar-36+'A'));
+        }
+        return s.toString();
     }
 
     public void setReturn(boolean redirect) {
@@ -77,13 +90,16 @@ public class SportletURI implements PortletURI {
         if (action instanceof DefaultPortletAction) {
             DefaultPortletAction dpa = (DefaultPortletAction)action;
             store.put(GridSphereProperties.ACTION, dpa.getName());
+
             Map actionParams = dpa.getParameters();
+            if (!actionParams.isEmpty()) store.put(GridSphereProperties.PREFIX, id);
             Set set = actionParams.keySet();
             Iterator it = set.iterator();
             while (it.hasNext()) {
                 String name = (String)it.next();
+                String newname = id + "_" + name;
                 String value = (String)actionParams.get(name);
-                store.put(name, value);
+                store.put(newname, value);
             }
         }
     }

@@ -38,7 +38,7 @@ public interface SportletRequest extends PortletRequest {
      *
      * @see PortletRole
      */
-    public void setRoles(PortletGroup group, PortletRole[] roles);
+    public void setRoles(PortletGroup group, List roles);
 
     /**
      * Returns the PortletGroup objects representing the users group membership
@@ -48,7 +48,17 @@ public interface SportletRequest extends PortletRequest {
      *
      * @see PortletGroup
      */
-    public PortletGroup[] getGroups();
+    public List getGroups();
+
+    /**
+     * Returns the PortletGroup objects representing the users group membership
+     *
+     * @returns an array of PortletGroup objects. This method is guaranteed to at least
+     * return the PortletGroup.BaseGroup
+     *
+     * @see PortletGroup
+     */
+    public void setGroups(List groups);
 
     /**
      * Sets the PortletSettings object of the concrete portlet.
