@@ -157,8 +157,8 @@ public class PortletPageFactory implements PortletSessionListener {
                 for (int j = 0; j < tabs.size(); j++) {
                     PortletTab tab = (PortletTab)tabs.get(j);
 
-                    //pane.addTab(name, (PortletTab)tab.clone());
-                    pane.addTab(g.getName(), (PortletTab)deepCopy(tab));
+                    pane.addTab(g.getName(), (PortletTab)tab.clone());
+                    //pane.addTab(g.getName(), (PortletTab)deepCopy(tab));
                 }
             }
 
