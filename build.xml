@@ -560,7 +560,7 @@ Copyright:
                 <exclude name="*.LICENSE"/>
             </fileset>
             <fileset dir="lib">
-                <exclude name="portlet-widget-tags.jar"/>
+                <exclude name="gridsphere-ui-tags.jar"/>
                 <exclude name="coreportlets.jar"/>
                 <exclude name="ext/**"/>
             </fileset>
@@ -575,7 +575,7 @@ Copyright:
             <fileset dir="build/docs"/>
         </copy>
 
-        <copy overwrite="true" file="lib/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
+        <copy overwrite="true" file="lib/gridsphere-ui-tags.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
         <copy overwrite="true" file="lib/coreportlets.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
 
     </target>
