@@ -97,11 +97,29 @@ public interface PortletRequest extends HttpServletRequest {
 
     /**
      * Returns the user object. The user object contains useful information about the user and his or her preferences.
-     * If the user has not logged in or does not grant access to the portlet, this method returns null
+     * If the user has not logged in or does not grant access to the portlet, this method creates a GuestUser
      *
-     * @return the Role object
+     * @see GuestUser
+     *
+     * @return the User object
      */
     public User getUser();
+
+    /**
+     * Returns the roles this user has in the supplied PortletGroup. If no group
+     * is specified, the roles the user has in the BASE group are returned.
+     *
+     * @param group the PortletGroup to query the user's roles or null if BASE group
+     * @returns an array of PortletRole objects
+     */
+    public PortletRole[] getRoles(PortletGroup group);
+
+    /**
+     * Returns the PortletGroup objects representing the users group membership
+     *
+     * @returns an array of PortletGroup objects
+     */
+    public PortletGroup[] getGroups();
 
     /**
      * Returns the PortletSettings object of the concrete portlet.

@@ -37,27 +37,6 @@ public class SportletRequest implements PortletRequest {
     // Another proxy class
     private PortletSession portletSession = null;
 
-    // The previous portlet mode
-    private Portlet.Mode previousMode;
-
-    // The current portlet mode
-    private Portlet.Mode mode;
-
-    // The portlet mode modifier
-    private Portlet.ModeModifier modeModifier;
-
-    // A representation of the client
-    //private Client client = null;
-
-    // Contains user specific portlet data
-    private PortletData data = null;
-
-    // Contains concrete portlet information
-    private PortletSettings settings = null;
-
-    // Represents the portlet window
-    private PortletWindow window = null;
-
     private static PortletLog log = SportletLog.getInstance(SportletRequest.class);
 
     /**
@@ -180,7 +159,7 @@ public class SportletRequest implements PortletRequest {
      * @return the PortletData
      */
     public PortletData getData() {
-        if ((session == null) || (mode == Portlet.Mode.CONFIGURE)) {
+        if ((session == null) || (getMode() == Portlet.Mode.CONFIGURE)) {
             return null;
         }
         return (PortletData)req.getAttribute(GridSphereProperties.PORTLETDATA);
@@ -193,7 +172,7 @@ public class SportletRequest implements PortletRequest {
      * @param portlet data the PortletData
      */
     public void setData(PortletData data) {
-        this.data = data;
+        req.setAttribute(GridSphereProperties.PORTLETDATA, data);
     }
 
     /**
@@ -205,9 +184,32 @@ public class SportletRequest implements PortletRequest {
      * @return the User object
      */
     public User getUser() {
-        User user = (User)portletSession.getAttribute(GridSphereProperties.USER);
-        if (user == null) user = GuestUser.getInstance();
-        return user;
+        return (User)portletSession.getAttribute(GridSphereProperties.USER);
+    }
+
+    /**
+     * Returns the roles this user has in the supplied PortletGroup. If no group
+     * is specified, the roles the user has in the BASE group are returned.
+     *
+     * @param group the PortletGroup to query the user's roles or null if BASE group
+     * @returns an array of PortletRole objects
+     *
+     * @see PortletRole
+     */
+    public PortletRole[] getRoles(PortletGroup group) {
+        return (PortletRole[])req.getAttribute(GridSphereProperties.PORTLETROLES);
+    }
+
+    /**
+     * Returns the PortletGroup objects representing the users group membership
+     *
+     * @returns an array of PortletGroup objects. This method is guaranteed to at least
+     * return the PortletGroup.BaseGroup
+     *
+     * @see PortletGroup
+     */
+    public PortletGroup[] getGroups() {
+        return (PortletGroup[])req.getAttribute(GridSphereProperties.PORTLETGROUPS);
     }
 
     /**
@@ -260,7 +262,7 @@ public class SportletRequest implements PortletRequest {
      * @return the previous portlet mode
      */
     public void setPreviousMode(Portlet.Mode previousMode) {
-        this.previousMode = previousMode;
+        req.setAttribute(GridSphereProperties.PREVIOUSMODE, previousMode);
     }
 
     /**
@@ -281,7 +283,7 @@ public class SportletRequest implements PortletRequest {
      * @param modeModifier the portlet mode modifier
      */
     public void setModeModifier(Portlet.ModeModifier modeModifier) {
-        this.modeModifier = modeModifier;
+        req.setAttribute(GridSphereProperties.MODEMODIFIER, modeModifier);
     }
 
     /**
@@ -293,7 +295,7 @@ public class SportletRequest implements PortletRequest {
      * @return the portlet mode modifier
      */
     public Portlet.ModeModifier getModeModifier() {
-        return modeModifier;
+        return (Portlet.ModeModifier)req.getAttribute(GridSphereProperties.MODEMODIFIER);
     }
 
     /**
