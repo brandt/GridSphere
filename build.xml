@@ -313,10 +313,30 @@ Copyright:
         <jar jarfile="${build.lib}/gridsphere-ui-tags.jar" basedir="${build.classes}">
             <include name="gridsphere/log4j.properties"/>
             <include name="org/gridlab/gridsphere/provider/portlet/ActionPortlet.class"/>
+            <include name="org/gridlab/gridsphere/provider/portletui/tags/**"/>
+            <exclude name="org/gridlab/gridsphere/provider/portletui/tags/jsr/**"/>
+            <include name="org/gridlab/gridsphere/provider/portlet/tags/gs/**"/>
+            <metainf dir="${gswebapp.dir}/WEB-INF/tlds">
+                <exclude name="**/portletjsrui.tld"/>
+                <exclude name="**/portlet.tld"/>
+            </metainf>
+        </jar>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates the GridSphere JSR UI tags JAR                              -->
+    <!-- =================================================================== -->
+    <target name="gridsphere-jsr-tags-jar" depends="compile" description="Create lib/gridsphere-jsr-tags.jar">
+        <jar jarfile="${build.lib}/gridsphere-jsr-tags.jar" basedir="${build.classes}">
+            <include name="gridsphere/log4j.properties"/>
             <include name="org/gridlab/gridsphere/provider/portlet/jsr/**"/>
             <include name="org/gridlab/gridsphere/provider/portletui/tags/**"/>
-            <include name="org/gridlab/gridsphere/provider/portlet/tags/**"/>
-            <metainf dir="${gswebapp.dir}/WEB-INF/tlds"/>
+            <exclude name="org/gridlab/gridsphere/provider/portletui/tags/gs/**"/>
+            <include name="org/gridlab/gridsphere/provider/portlet/tags/jsr/**"/>
+            <metainf dir="${gswebapp.dir}/WEB-INF/tlds">
+                <exclude name="**/portletui.tld"/>
+                <exclude name="**/portletapi.tld"/>
+            </metainf>
         </jar>
     </target>
 
@@ -329,9 +349,7 @@ Copyright:
         </copy>
         <jar jarfile="${build.lib}/gridsphere-provider.jar" basedir="${build.classes}">
             <include name="org/gridlab/gridsphere/provider/event/**"/>
-            <include name="org/gridlab/gridsphere/provider/portlet/beans/**"/>
             <include name="org/gridlab/gridsphere/provider/portletui/beans/**"/>
-            <include name="org/gridlab/gridsphere/provider/portlet/beans/**"/>
             <include name="org/gridlab/gridsphere/provider/portletui/model/**"/>
             <include name="gridsphere/**"/>
         </jar>
@@ -349,7 +367,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates all JAR's                                                   -->
     <!-- =================================================================== -->
-    <target name="jar" depends="gridsphere-ui-tags-jar, gridsphere-provider-jar, portlet-api-jar, portlet-jar, coreportlets-jar" description="Creates all jars"/>
+    <target name="jar" depends="gridsphere-ui-tags-jar, gridsphere-jsr-tags-jar, gridsphere-provider-jar, portlet-api-jar, portlet-jar, coreportlets-jar" description="Creates all jars"/>
 
     <!-- =================================================================== -->
     <!-- Cleans everything                                                   -->
@@ -390,8 +408,7 @@ Copyright:
             classname="org.gridlab.gridsphere.core.persistence.hibernate.DatabaseTask"
             classpathref="classpath"/>
         <createdb
-            configdir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/"
-            />
+            configdir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/"/>
     </target>
 
     <target name="configure-database" depends="setenv">
