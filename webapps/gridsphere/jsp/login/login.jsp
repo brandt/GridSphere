@@ -1,3 +1,4 @@
+<%@ page import="org.gridlab.gridsphere.portlet.impl.SportletProperties"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
@@ -35,7 +36,7 @@
     <ui:table>
             <ui:tablerow>
                 <ui:tablecell width="100">
-                    <ui:actionsubmit action="gs_login" key="LOGIN_ACTION"/>
+                    <ui:actionsubmit action="<%= SportletProperties.LOGIN %>" key="LOGIN_ACTION"/>
                 </ui:tablecell>
                 <ui:tablecell/>
             </ui:tablerow>
