@@ -6,6 +6,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
+import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 
 import java.io.*;
@@ -21,7 +22,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
     private static PortletPageFactory instance = null;
     private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
-
+    private static PortletRegistry registry = PortletRegistry.getInstance();
     private static PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
 
     private String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
@@ -37,6 +38,8 @@ public class PortletPageFactory implements PortletSessionListener {
 
     // Store user layouts in a hash
     private static Map userLayouts = new Hashtable();
+
+    private static Map tckLayouts = new Hashtable();
 
     private static Map guests = new Hashtable();
 
@@ -331,6 +334,51 @@ public class PortletPageFactory implements PortletSessionListener {
             */
 
 
+    public PortletPage createTCKPage(PortletRequest req, String[] portletNames) {
+        String pageName = req.getParameter("pageName");
+
+        PortletPage page = new PortletPage();
+        PortletTableLayout tableLayout = new PortletTableLayout();
+        StringTokenizer tokenizer;
+        for (int i = 0; i < portletNames.length; i++) {
+            tokenizer =  new StringTokenizer(portletNames[i], "/");
+            String appName = tokenizer.nextToken();
+            String portletName = tokenizer.nextToken();
+            String portletClass = registry.getPortletClassName(portletName);
+            if (portletClass == null) {
+                System.err.println("Unable to find portlet class for " + portletName);
+
+            }
+            if ( pageName == null ) {
+                pageName = "TCK_testpage_" + portletName;
+            }
+            PortletFrame frame = new PortletFrame();
+            PortletTitleBar tb = new PortletTitleBar();
+            tb.setPortletClass(portletClass);
+            frame.setPortletTitleBar(tb);
+            frame.setLabel(portletName);
+            frame.setPortletClass(portletClass);
+            tableLayout.addPortletComponent(frame);
+        }
+
+        PortletTab tab = new PortletTab();
+
+        tab.setTitle(pageName);
+        tab.setPortletComponent(tableLayout);
+        PortletTabbedPane pane = new PortletTabbedPane();
+        pane.addTab(tab);
+        page.setPortletTabbedPane(pane);
+        page.setLayoutDescriptor("/tmp/test.xml");
+        try {
+            page.save();
+        } catch (IOException e) {
+
+        }
+        page.init(req, new ArrayList());
+        String sessionId = req.getPortletSession().getId();
+        tckLayouts.put(sessionId, page);
+        return page;
+    }
 
     public PortletPage createPortletPage(PortletRequest req) {
 
@@ -339,9 +387,22 @@ public class PortletPageFactory implements PortletSessionListener {
 
         log.debug("User requesting layout: " + user.getUserName());
 
+        if (tckLayouts.containsKey(sessionId)) return (PortletPage)tckLayouts.get(sessionId);
+        String[] portletNames = req.getParameterValues("portletName");
+        if ( portletNames != null ) {
+            System.err.println("Creating TCK LAYOUT!");
+ 
+
+            return createTCKPage(req, portletNames );
+        }
+
+
         if (user instanceof GuestUser) {
             return createFromGuestLayoutXML(req);
         }
+
+
+
 
         PortletPage page = null;
 
@@ -385,6 +446,56 @@ public class PortletPageFactory implements PortletSessionListener {
         return page;
     }
 
+    public PortletPage createPortletPage(PortletRequest req, PortletPage page) {
+
+            String sessionId = req.getPortletSession().getId();
+            User user = req.getUser();
+
+            log.debug("User requesting layout: " + user.getUserName());
+
+            if (user instanceof GuestUser) {
+                return createFromGuestLayoutXML(req);
+            }
+
+            // Need to provide one guest container per users session
+            if (userLayouts.containsKey(sessionId)) {
+                log.debug("Returning existing layout for:" + sessionId + " for user=" + user.getUserName());
+                return (PortletPage) userLayouts.get(sessionId);
+            } else {
+
+                // Now the user is user so remove guest layout
+                if (guests.containsKey(sessionId)) {
+                    log.debug("Removing guest container for:" + sessionId);
+                    guests.remove(sessionId);
+                }
+
+                String userLayout = userLayoutDir + File.separator + user.getID();
+
+                File f = new File(userLayout);
+                // try {
+
+                if (f.exists()) {
+                    //page = (PortletPage)deepCopy(templatePage);
+                    //page.setLayoutDescriptor(userLayout);
+
+                    try {
+                        page = PortletLayoutDescriptor.loadPortletPage(userLayout, layoutMappingFile);
+                        //page.setPortletTabbedPane(pane);
+                        page.init(req, new ArrayList());
+                    } catch (Exception e) {
+                        page = createNewPage(req);
+                    }
+                } else {
+                    page = createNewPage(req);
+                }
+                userLayouts.put(sessionId, page);
+                sessionManager.addSessionListener(sessionId, this);
+                //} catch (Exception e) {
+                //    log.error("Unable to create new user layout", e);
+                //}
+            }
+            return page;
+        }
 
     public PortletPage createPortletPage(User user) {
 
