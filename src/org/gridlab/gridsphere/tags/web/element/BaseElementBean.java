@@ -129,6 +129,10 @@ public abstract class BaseElementBean implements TagBean {
     }
 
     protected String getCSS(String text) {
+
+        if (cssStyle.equals("") && color.equals("") && font.equals("") && backgroundcolor.equals("")) {
+            return text;
+        }
         String css = "<span ";
         if (!cssStyle.equals("")) {
             css = css + " class='" + cssStyle + "' ";

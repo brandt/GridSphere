@@ -9,7 +9,7 @@ import org.gridlab.gridsphere.tags.web.model.DefaultList;
 
 import java.util.Iterator;
 
-public class TableBean extends BaseElementBean {
+public class TableBean extends BaseElementBean implements Updateable {
 
     protected String tablestring = "table";
 
@@ -17,6 +17,10 @@ public class TableBean extends BaseElementBean {
 
     public void add(TagBean bean) {
         list.addBean(bean);
+    }
+
+    public void update(String[] values) {
+        System.out.println("VALUES :"+values);
     }
 
     protected String getCSS() {
