@@ -47,11 +47,18 @@ public interface User {
     public String getFullName();
 
     /**
-     * Returns the given (aka first) name of the user, or  if the given name is not available.
+     * Returns the given (aka first) name of the user, or null if the given name is not available.
      *
      * @return the given name
      */
     public String getGivenName();
+
+    /**
+     * Returns the given e-mail of the user or null if none is available.
+     *
+     * @return the email address
+     */
+    public String getEmailAddress();
 
     /**
      * Returns the internal unique user id.

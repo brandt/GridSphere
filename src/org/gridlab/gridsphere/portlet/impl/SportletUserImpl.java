@@ -19,11 +19,11 @@ public class SportletUserImpl implements SportletUser {
     // store used to maintain user attributes
     private Hashtable store = new Hashtable();
 
-
     // Data fields that make up the User object
     private String familyName;
     private String fullName;
     private String givenName;
+    private String emailAddress;
     private String id;
     private String userID;
     private long lastLoginTime;
@@ -115,6 +115,24 @@ public class SportletUserImpl implements SportletUser {
      */
     public void setGivenName(String givenName) {
         this.givenName = givenName;
+    }
+
+    /**
+     * Returns the given e-mail of the user or null if none is available.
+     *
+     * @return the email address
+     */
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    /**
+     * Sets the given e-mail of the user.
+     *
+     * @param the email address
+     */
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     /**

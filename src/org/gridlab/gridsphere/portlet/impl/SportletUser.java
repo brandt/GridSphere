@@ -39,6 +39,13 @@ public interface SportletUser extends User {
     public void setGivenName(String givenName);
 
     /**
+     * Sets the given e-mail of the user.
+     *
+     * @param the email address
+     */
+    public void setEmailAddress(String emailAddress);
+
+    /**
      * Sets the internal unique user id.
      *
      * @param id the internal unique id
