@@ -1,4 +1,4 @@
-<%@ page import="java.util.Locale,
+<%@ page import="java.util.Locale, java.util.List,
                  org.gridlab.gridsphere.services.core.secdir.ResourceInfo,
                  java.util.Date"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
@@ -7,8 +7,9 @@
 <portletAPI:init/>
 
 <jsp:useBean id="userData" class="org.gridlab.gridsphere.portlets.core.file.UserData" scope="request" />
-<jsp:useBean id="leftEditURIs" class="java.util.List" scope="request"/>
-<jsp:useBean id="rightEditURIs" class="java.util.List" scope="request"/>
+
+<% List leftEditURIs = (List)request.getAttribute("leftEditURIs"); %>
+<% List rightEditURIs = (List)request.getAttribute("rightEditURIs"); %>
 
 <% if(!userData.getCorrect().booleanValue()){ %>
 <ui:panel width="100%">
