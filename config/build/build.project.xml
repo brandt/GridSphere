@@ -24,6 +24,12 @@ Copyright:
 
     <property file="build.properties"/>
 
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="../../lib/ant-contrib-0.3.jar"/>
+        </classpath>
+    </taskdef>
+
     <property name="project.name" value="@PROJECT_NAME@"/>
     <property name="project.title" value="@PROJECT_TITLE@"/>
 
@@ -337,13 +343,22 @@ Copyright:
             </fileset>
         </copy>
 
-        <antcall target="copygs"/>
-        <antcall target="copyjsr"/>
+        <if>
+            <equals arg1="${use.jsr}" arg2="jsr"/>
+            <then>
+                <echo message="Copying jsr tag libraries" />
+                <antcall target="copyjsr"/>
+            </then>
+            <else>
+                <echo message="Copying gs tag libraries" />
+                <antcall target="copygs"/>
+            </else>
+        </if>
 
         <antcall target="configure-database"/>
     </target>
 
-    <target name="copyjsr" if="use.jsr">
+    <target name="copyjsr">
         <copy file="${GRIDSPHERE_PROJECT}/build/lib/gridsphere-jsr-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
 
         <copy todir="${project.webapp}/WEB-INF/lib">
@@ -357,7 +372,7 @@ Copyright:
         </copy>
     </target>
 
-    <target name="copygs" unless="use.jsr">
+    <target name="copygs">
         <copy file="${GRIDSPHERE_PROJECT}/build/lib/gridsphere-ui-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
 
         <copy todir="${env.CATALINA_HOME}/shared/lib">
