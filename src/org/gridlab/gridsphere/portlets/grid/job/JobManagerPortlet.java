@@ -7,13 +7,13 @@ package org.gridlab.gridsphere.portlets.grid.job;
 import org.gridlab.gridsphere.portlet.PortletConfig;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletSettings;
-import org.gridlab.gridsphere.portlets.GridSpherePortlet;
+import org.gridlab.gridsphere.provider.AbstractActionPortlet;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class JobManagerPortlet extends GridSpherePortlet {
+public class JobManagerPortlet extends AbstractActionPortlet {
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);

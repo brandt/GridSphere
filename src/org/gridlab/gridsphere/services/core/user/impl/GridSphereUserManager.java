@@ -1043,20 +1043,26 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     }
 
     public List getGroups(User user) {
-        String oql = "select groupEntry.user from "
-                   + jdoGroupEntry
-                   + " groupEntry where user=\""
-                   + user.getID()
-                   + "\" and group !=\""
-                   + getSuperGroup().getID()
-                   + "\"";
-        try {
-            return pm.restoreList(oql);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error retrieving access right";
-            log.error(msg, e);
-            return new Vector();
+        List groups = null;
+        // If user has super role
+        if (hasSuperRole(user)) {
+            groups = getGroups();
+        } else {
+            // Otherwise, return groups for given user
+            String oql = "select groupEntry.group from "
+                       + jdoGroupEntry
+                       + " groupEntry where user=\""
+                       + user.getID()
+                       + "\"";
+            try {
+                groups = pm.restoreList(oql);
+            } catch (PersistenceManagerException e) {
+                String msg = "Error retrieving access right";
+                log.error(msg, e);
+                return new Vector();
+            }
         }
+        return groups;
     }
 
     public List getGroupsNotMemberOf(User user) {
