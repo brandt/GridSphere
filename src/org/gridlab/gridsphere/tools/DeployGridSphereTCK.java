@@ -60,7 +60,7 @@ public class DeployGridSphereTCK extends Task {
     }
 
     private void deployPortlets() throws IOException {
-        String portletsDir = catalina + "/webapps/gridsphere/WEB-INF/Portlets/";
+        String portletsDir = catalina + "/webapps/gridsphere/WEB-INF/CustomPortal/portlets/";
         File tmp = null;
         for (int i = 0; i < portletapps.size(); i++) {
             tmp = new File(portletsDir + portletapps.get(i));
