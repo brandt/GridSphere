@@ -5,14 +5,20 @@
             <portlet-tab>
                 <title>Hello World!</title>
                 <portlet-panel>
-                    <grid-layout>
-                        <portlet-frame>
-                             <portlet-class>org.gridlab.gridsphere.portlets.examples.HelloWorld.1</portlet-class>
-                        </portlet-frame>
-		        <portlet-frame>
-                             <portlet-class>org.gridlab.gridsphere.portlets.examples.HalloWelt.1</portlet-class>
-                        </portlet-frame>
-                    </grid-layout>
+                    <table-layout>
+                        <row-layout>
+                            <column-layout>
+                                <portlet-frame>
+                                    <portlet-class>org.gridlab.gridsphere.portlets.examples.HelloWorld.1</portlet-class>
+                                </portlet-frame>
+                            </column-layout>
+                            <column-layout>
+                                <portlet-frame>
+                                    <portlet-class>org.gridlab.gridsphere.portlets.examples.HalloWelt.1</portlet-class>
+                                </portlet-frame>
+                            </column-layout>
+                        </row-layout>
+                    </table-layout>
                 </portlet-panel>
             </portlet-tab>
         </portlet-tabbed-pane>
