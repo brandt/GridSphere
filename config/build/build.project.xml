@@ -289,7 +289,7 @@ Copyright:
 
         <copy file="${gridsphere.build}/lib/gridsphere-ui-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
 
-        <touch file="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/Portlets/${project.name}"/>
+        <touch file="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${project.name}"/>
 
         <if>
             <equals arg1="${use.jsr}" arg2="jsr"/>
