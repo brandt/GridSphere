@@ -21,6 +21,9 @@ Copyright:
 
 <project name="GridSphere" default="help" basedir=".">
 
+    <!-- Needed to import ant-contrib tasks -->
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties" />
+
     <property file="build.properties"/>
 
     <property name="optimize"    value="false"/>
@@ -42,12 +45,12 @@ Copyright:
     <!-- GridSphere webapps files -->
     <property name="gswebapp.dir"   value="webapps/gridsphere"/>
     <property name="corewebapp.dir" value="webapps/coreportlets"/>
-    <property name="gridwebapp.dir" value="webapps/gridportlets"/>
-    <property name="exwebapp.dir"   value="webapps/exampleportlets"/>
     <property name="manwebapp.dir"  value="webapps/gsmanager"/>
 
     <!-- GridSphere DocBook documentation -->
     <property name="docbook.dir" value="docs/docbook"/>
+
+    <property name="projects.dir" value="projects"/>
 
     <!-- GridSphere build targets -->
     <property name="build.lib"     value="${gridsphere.build}/lib"/>
@@ -101,7 +104,7 @@ Copyright:
     <!-- =================================================================== -->
     <target name="setenv" depends="check-catalina" description="Check for libraries and print out config information">
         <mkdir dir="${gridsphere.build}"/>
-
+        <mkdir dir="${projects.dir}"/>
         <mkdir dir="${build.classes}"/>
         <mkdir dir="${build.webapps}"/>
         <mkdir dir="${build.docs}"/>
@@ -116,10 +119,10 @@ Copyright:
         <echo message="CATALINA_HOME is set to = ${env.CATALINA_HOME}"/>
 
         <echo message=""/>
-        <echo message="--- Property values ---" />
-        <echo message="debug=${debug}" />
-        <echo message="deprecation=${deprecation}" />
-        <echo message="optimize=${optimize}" />
+        <echo message="--- Property values ---"/>
+        <echo message="debug=${debug}"/>
+        <echo message="deprecation=${deprecation}"/>
+        <echo message="optimize=${optimize}"/>
     </target>
 
     <!-- =================================================================== -->
@@ -154,13 +157,25 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Compiles all source code in distribution                            -->
     <!-- =================================================================== -->
-    <target name="compile-all" depends="compile, compile-tests" description="Compiles all source code in distribution"/>
+    <target name="compile-all" depends="compile-projects, compile-tests" description="Compiles all source code in distribution"/>
 
     <!-- =================================================================== -->
     <!-- Compiles all portlets                                               -->
     <!-- =================================================================== -->
     <target name="compile" depends="compile-core-portlets" description="Compile GridSphere source code">
         <echo>Compiling GridSphere</echo>
+    </target>
+
+    <target name="compile-projects" depends="compile" description="Compile all portlet subprojects">
+        <foreach target="compile-project" param="thisEnv">
+        <path>
+            <dirset dir="${project.dir}" includes="*"/>
+        </path>
+        </foreach>
+    </target>
+
+    <target name="compile-project" >
+           <ant dir="${thisEnv}" target="compile"/>
     </target>
 
     <!-- =================================================================== -->
@@ -345,6 +360,25 @@ Copyright:
 
 <!-- +++++++++++++++++ END JAR CREATION +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
+     <!-- =================================================================== -->
+    <!-- Cleans everything                                                   -->
+    <!-- =================================================================== -->
+    <target name="clean-all" depends="clean-projects" description="Delete classes and existing library">
+        <delete quiet="true" dir="${gridsphere.build}"/>
+        <delete quiet="true" dir="${gridsphere.dist}"/>
+    </target>
+
+    <target name="clean-projects" description="Compile all portlet subprojects">
+        <foreach target="clean-project" param="thisEnv">
+            <path>
+                <dirset dir="${project.dir}" includes="*"/>
+            </path>
+        </foreach>
+    </target>
+
+    <target name="clean-project" >
+        <ant dir="${thisEnv}" target="clean"/>
+    </target>
 
     <!-- =================================================================== -->
     <!-- Cleans everything                                                   -->
@@ -553,6 +587,21 @@ Copyright:
 
 
 <!-- +++++++++++++++ START DEPLOY  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <!-- =================================================================== -->
+    <!-- Deploys GridSphere and all project portlets to Tomcat                                        -->
+    <!-- =================================================================== -->
+    <target name="deploy-all" depends="deploy" description="Compile all portlet subprojects">
+        <foreach target="deploy-project" param="thisEnv">
+            <path>
+                <dirset dir="${project.dir}" includes="*"/>
+            </path>
+        </foreach>
+    </target>
+
+    <target name="deploy-project" >
+        <ant dir="${thisEnv}" target="deploy"/>
+    </target>
 
     <!-- =================================================================== -->
     <!-- Deploys GridSphere to Tomcat                                        -->
