@@ -388,51 +388,6 @@
         </concrete-portlet-app>
     </portlet-app-def>
 
-    <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.notepad.NotePadPortlet">
-            <portlet-name>NotePad Portlet</portlet-name>
-            <servlet-name>NotePadPortlet</servlet-name>
-            <supports>
-                <view/>
-                <help/>
-            </supports>
-        </portlet-app>
-
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.notepad.NotePadPortlet.1">
-            <concrete-portlet>
-                <portlet-name>NotePad Portlet</portlet-name>
-                <default-locale>en</default-locale>
-                <language locale="en">
-                    <title>Notepad</title>
-                    <description>Provides users with a searchable NotePad</description>
-                </language>
-                <language locale="de">
-                    <title>Notizblock</title>
-                    <description>Dieses Portlet stellt ein Notizblock zur Verfuegung</description>
-                </language>
-                <language locale="fr">
-                    <title>BlocNote</title>
-                    <description>Permet à l'usager d'ecrire des notes</description>
-                </language>
-                <language locale="it">
-                    <title>Blocco note</title>
-                    <description>Fornisce agli utenti un block notes con funzionalità di ricerca</description>
-                </language>
-                <language locale="cs">
-                    <title>Poznámkový blok</title>
-                    <description>Poskytuje poznámkový blok s vyhledáváním.</description>
-                </language>
-                <language locale="hu">
-                    <title>Jegyzettömb</title>
-                    <description>Kereshető jegyzettömb alkalmazás.</description>
-                </language>
-                <language locale="pl">
-                    <title>Notatnik</title>
-                    <description>Udostępnia użytkownikowi notatnik z możliwością przeszukiwania</description>
-                </language>
-            </concrete-portlet>
-        </concrete-portlet-app>
-    </portlet-app-def>
 
     <portlet-app-def>
         <portlet-app id="org.gridlab.gridsphere.portlets.core.layout.LayoutManagerPortlet">
