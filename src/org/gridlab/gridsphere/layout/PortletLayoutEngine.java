@@ -118,6 +118,10 @@ public class PortletLayoutEngine {
         }
     }
 
+    public PortletContainer getPortletContainer(User user) throws PortletLayoutException {
+          return null;
+    }
+
     protected PortletContainer getPortletContainer(GridSphereEvent event) throws PortletLayoutException {
         // if user is guest then use guest template
         PortletContainer pc = null;
