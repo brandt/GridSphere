@@ -391,9 +391,11 @@ Copyright:
         <!-- we deploy, so we use the real hsqldb for now, this needs to be
            configurable for other DB as well -->
 
-        <property name="DB_CONFIG_FILE=" value="${env.CATALINA_HOME}/${gswebapp.dir}/WEB-INF/conf/hsqldb.xml"/>
+        <property name="DB_CONFIG_FILE" value="${env.CATALINA_HOME}/${gswebapp.dir}/WEB-INF/conf/hsqldb.xml"/>
         <property name="DB_DATABASE" value="gridsphere"/>
-        <property name="DB_CREATE_DB" value="db-hsqldb"/>
+
+        <echo message="Deploy-prepare Replaced DB Config with : ${DB_CONFIG_FILE}"/>
+        <echo message="Deploy-prepare Replaced DB Database with : ${DB_DATABASE}"/>
 
     </target>
 
