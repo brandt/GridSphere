@@ -343,14 +343,14 @@ Copyright:
             </fileset>
         </copy>
 
+        <copy file="${GRIDSPHERE_PROJECT}/build/lib/gridsphere-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
+
         <if>
             <equals arg1="${use.jsr}" arg2="jsr"/>
             <then>
-                <echo message="Copying jsr tag libraries" />
                 <antcall target="copyjsr"/>
             </then>
             <else>
-                <echo message="Copying gs tag libraries" />
                 <antcall target="copygs"/>
             </else>
         </if>
@@ -359,7 +359,6 @@ Copyright:
     </target>
 
     <target name="copyjsr">
-        <copy file="${GRIDSPHERE_PROJECT}/build/lib/gridsphere-jsr-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
 
         <copy todir="${project.webapp}/WEB-INF/lib">
             <fileset dir="${build.lib}">
@@ -373,8 +372,7 @@ Copyright:
     </target>
 
     <target name="copygs">
-        <copy file="${GRIDSPHERE_PROJECT}/build/lib/gridsphere-ui-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
-
+   
         <copy todir="${env.CATALINA_HOME}/shared/lib">
             <fileset dir="${build.lib}">
                 <include name="${project.name}-services.jar"/>
