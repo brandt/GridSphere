@@ -80,8 +80,9 @@
 	</para>
 	<orderedlist>
 	<listitem><para>Download Jakarta &Tomcat; 4.1.18+ distribution</para></listitem>
-	<listitem><para>Unzip tomcat into your preferred location and set the CATALINA_HOME environment to point to this location</para></listitem>
-	<listitem><para>The Portlet Manager Portlet requires the Tomcat manager webapp to be configured to
+	<listitem><para>Unzip tomcat into your preferred location and set the CATALINA_HOME environment to point to this location <important>If using Windows, set the path with forward slashes e.g C:/MyApps/MyTomcat-4.29!</important></para></listitem>
+
+    <listitem><para>The Portlet Manager Portlet requires the Tomcat manager webapp to be configured to
     allow the gridsphere user to manage web applications. You must modify
         <filename>$CATALINA_HOME/conf/tomcat-users.xml</filename> and make sure the following line is there:
 	<programlisting><literallayout>

@@ -20,11 +20,6 @@
         <servlet-class>org.gridlab.gridsphere.provider.portlet.jsr.PortletServlet</servlet-class>
     </servlet>
 
-    <taglib>
-        <taglib-uri>http://java.sun.com/portlets</taglib-uri>
-        <taglib-location>/WEB-INF/lib/gridsphere-jsr-tags.jar</taglib-location>
-    </taglib>
-
     <servlet-mapping>
        <servlet-name>PortletServlet</servlet-name>
        <url-pattern>/jsr/@PROJECT_NAME@</url-pattern>
