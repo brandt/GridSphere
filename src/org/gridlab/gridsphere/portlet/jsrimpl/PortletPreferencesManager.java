@@ -65,31 +65,36 @@ public class PortletPreferencesManager {
                 log.debug("No prefs exist-- storing prefs for user: " + user.getID() + " portlet: " + portletID);
 
                 prefs = new PortletPreferencesImpl(prefDesc, loader);
-                prefs.setPersistenceManager(pm);
                 prefs.setPortletId(portletID);
                 prefs.setUserId(user.getID());
-                prefs.store();
+
             } else {
-                prefs.setPersistenceManager(pm);
 
                 log.debug("Retrieved prefs for user: " + user.getID() + " portlet: " + portletID);
             }
+            prefs.setPersistenceManager(pm);
+
+            if (prefDesc != null) {
+            org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PreferencesValidator v = prefDesc.getPreferencesValidator();
+            if (v != null) {
+                String validatorClass = v.getContent();
+                if (validatorClass != null) {
+                    try {
+                        PreferencesValidator validator = (PreferencesValidator) Class.forName(validatorClass, true, loader).newInstance();
+                        prefs.setValidator(validator);
+                    } catch (Exception e) {
+                        log.error("Unable to create validator: " + validatorClass + "! ",  e);
+                    }
+                }
+            }
+            }
+
+            prefs.store();
+
+            prefs.setRender(isRender);
         } catch (Exception e) {
             log.error("Error attempting to restore persistent preferences: ", e);
         }
-        org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PreferencesValidator v = prefDesc.getPreferencesValidator();
-        if (v != null) {
-            String validatorClass = v.getContent();
-            if (validatorClass != null) {
-                try {
-                    PreferencesValidator validator = (PreferencesValidator) Class.forName(validatorClass, true, loader).newInstance();
-                    prefs.setValidator(validator);
-                } catch (Exception e) {
-                    System.err.println("Unable to create validator: " + validatorClass + "! " + e.getMessage());
-                }
-            }
-        }
-        prefs.setRender(isRender);
         return prefs;
     }
 
