@@ -1,8 +1,7 @@
 
 <!--
-
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
-"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3CR1//EN"
+"http://www.oasis-open.org/docbook/xml/4.3b2/docbookx.dtd"
 
 Author:     Jason Novotny
 Version:    $Id$
