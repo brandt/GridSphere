@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.Capability;
 import org.gridlab.gridsphere.portlet.Client;
+import org.gridlab.gridsphere.portlet.PortletLog;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
@@ -16,6 +17,11 @@ import java.util.Enumeration;
  */
 public class ClientImpl implements Client {
 
+    private PortletLog log = SportletLog.getInstance(ClientImpl.class);
+
+    public static final String[] MIME_TYPES = {"text/html", "text/vnd.wap.wml"};
+    public static final String[] MARKUP_TYPES = {"html", "wml", "chtml"};
+    public static final String[] MANUFACTURER_NAMES = { "opera", "netscape", "mozilla", "IE" };
     private String manufacturer = null;
     private String model = null;
     private String version = null;
@@ -24,10 +30,69 @@ public class ClientImpl implements Client {
     private String markupName = null;
 
     public ClientImpl(HttpServletRequest req) {
-        Enumeration enum = req.getHeaders("user-agent");
-        while (enum.hasMoreElements()) {
-            System.err.println((String)enum.nextElement());
+        // get the user-agent string containg client browser information
+        userAgent = req.getHeader("user-agent");
+        //System.err.println("User-agent: " + userAgent);
+        // parse it!
+        // below are Mac OS X
+        // Netscape 6.2: Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-US; rv:0.9.4.1) Gecko/20020315 Netscape6/6.2.2
+        // Netscape 7.0: Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-US; rv:1.0.1) Gecko/20020823 Netscape/7.0
+        // IE 5.2:       Mozilla/4.0 (compatible; MSIE 5.22; Mac_PowerPC)
+        // Mozilla 1.0:  Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-US; rv:1.0.1) Gecko/20020826
+        // Opera 6.0b2:  Mozilla/4.0 (compatible; MSIE 5.0; Mac_PowerPC) Opera 6.0  [en]
+
+        int i = userAgent.indexOf(" ");
+        String mozillaVersion = userAgent.substring(0, i);
+        //System.err.println("mozilla version: " + mozillaVersion);
+        int j = userAgent.lastIndexOf(")");
+        String platformInfo = userAgent.substring(i+1, j+1).trim();
+        //System.err.println("platform info: " + platformInfo);
+        String browserInfo = userAgent.substring(j+1).trim();
+        //System.err.println("browser info: " + browserInfo);
+        mimeType = req.getHeader("accept");
+
+        //System.err.println("MIME types: " + mimeTypes);
+        // Netscape 6.2: text/xml, application/xml, application/xhtml+xml, text/html;q=0.9, image/png, image/jpeg, image/gif;q=0.2, text/plain;q=0.8, text/css, */*;q=0.1
+        // IE 5.2:       */*
+        // Mozilla 1.0: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,video/x-mng,image/png,image/jpeg,image/gif;q=0.2,text/css,*/*;q=0.1
+        // Opera 6.0b2: text/html, image/png, image/jpeg, image/gif, image/x-xbitmap, */*
+
+        // get manufacturer
+        if (browserInfo.startsWith("Opera")) {
+            manufacturer = MANUFACTURER_NAMES[0];
+        } else if (browserInfo.startsWith("Gecko")) {
+            i = browserInfo.indexOf(" ");
+            if (i > 0) {
+                if (browserInfo.substring(i).trim().startsWith("Netscape")) {
+                    manufacturer = MANUFACTURER_NAMES[1];
+                } else {
+                    manufacturer = MANUFACTURER_NAMES[2];
+                }
+            } else {
+                manufacturer = MANUFACTURER_NAMES[2];
+            }
+        } else {
+            manufacturer = MANUFACTURER_NAMES[3];
         }
+
+        i = mimeType.indexOf("html");
+        if (i < 0) {
+            // IE 5.2 on  Mac OS X
+            if (mimeType.equals("*/*")) {
+                mimeType= MIME_TYPES[0];
+                markupName = MARKUP_TYPES[0];
+            }
+        } else {
+            mimeType = MIME_TYPES[0];
+            markupName = MARKUP_TYPES[0];
+        }
+
+        // make up version for now
+        version = "1.0";
+        // make up model for now
+        model = "gridsphere model";
+
+        //logRequest(req);
     }
 
 
@@ -109,6 +174,60 @@ public class ClientImpl implements Client {
      */
     public String getMarkupName() {
         return markupName;
+    }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer("\n");
+        sb.append("User-agent: " + userAgent + "\n");
+        sb.append("manufacturer: " + manufacturer + "\n");
+        sb.append("model: " + model + "\n");
+        sb.append("version: " + version + "\n");
+        sb.append("markup: " + markupName + "\n");
+        sb.append("mimeType: " + mimeType);
+        return sb.toString();
+    }
+
+    // Primarily used for debugging
+    public void logRequest(HttpServletRequest req) {
+        String name, paramvalue, headervals;
+        Object attrvalue;
+        Enumeration enum, eenum;
+
+        log.debug("PortletRequest Information");
+        log.debug("\trequest headers: ");
+
+        enum = req.getHeaderNames();
+        while (enum.hasMoreElements()) {
+            name = (String) enum.nextElement();
+            eenum = (Enumeration) req.getHeaders(name);
+            headervals = "";
+            while (eenum.hasMoreElements()) {
+                headervals += " " + (String) eenum.nextElement();
+            }
+            log.debug("\t\tname=" + name + " values=" + headervals);
+        }
+        log.debug("\tcontent type: " + req.getContentType());
+        if (req.getCookies() != null)
+            log.debug("\tcookies are present");
+        log.debug("\trequest method: " + req.getMethod());
+        log.debug("\tremote host: " + req.getRemoteHost() + " " + req.getRemoteAddr());
+        log.debug("\trequest scheme: " + req.getScheme());
+        log.debug("\trequest attribute names: ");
+        enum = req.getAttributeNames();
+        while (enum.hasMoreElements()) {
+            name = (String) enum.nextElement();
+            attrvalue = (Object) req.getAttribute(name);
+            log.debug("\t\tname=" + name + " object type=" + attrvalue.getClass().getName());
+        }
+        log.debug("\trequest parameter names: note if a parameter has multiple values, only the first element is displayed ");
+        enum = req.getParameterNames();
+        while (enum.hasMoreElements()) {
+            name = (String) enum.nextElement();
+            paramvalue = req.getParameter(name);
+            log.debug("\t\tname=" + name + " value=" + paramvalue);
+        }
+        log.debug("\trequest parameter info: ");
+        log.debug("\trequest path info: " + req.getPathInfo());
     }
 
 }
