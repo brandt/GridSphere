@@ -4,10 +4,10 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl;
 
-import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
 import org.gridlab.gridsphere.portlet.AbstractPortlet;
-import org.gridlab.gridsphere.portlet.PortletSettings;
 import org.gridlab.gridsphere.portlet.PortletConfig;
+import org.gridlab.gridsphere.portlet.PortletSettings;
+import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
 
 public interface RegisteredSportlet extends RegisteredPortlet {
 

@@ -4,9 +4,9 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
+import org.gridlab.gridsphere.portlet.AbstractPortlet;
 import org.gridlab.gridsphere.portlet.PortletConfig;
 import org.gridlab.gridsphere.portlet.PortletSettings;
-import org.gridlab.gridsphere.portlet.AbstractPortlet;
 
 /**
  * A RegsiteredSportlet provides the portlet container with information used to create and manage the

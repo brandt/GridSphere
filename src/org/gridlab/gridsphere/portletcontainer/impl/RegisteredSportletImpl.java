@@ -4,16 +4,18 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl;
 
-import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
-import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
-import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.AbstractPortlet;
+import org.gridlab.gridsphere.portlet.PortletConfig;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletSettings;
 import org.gridlab.gridsphere.portlet.impl.SportletConfig;
-import org.gridlab.gridsphere.portlet.impl.SportletSettings;
-import org.gridlab.gridsphere.services.PortletRegistryService;
+import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication;
+import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
 
 import javax.servlet.ServletConfig;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Iterator;
 
 /**
  * A RegsiteredSportlet provides the portlet container with information used to create and manage the
@@ -34,6 +36,22 @@ public class RegisteredSportletImpl implements RegisteredSportlet {
         configure(servletConfig);
     }
 
+    public RegisteredSportletImpl(PortletApplication app) throws Exception {
+        configure(app);
+    }
+
+    protected synchronized void configure(PortletApplication app) throws Exception {
+        String portletClass = null;
+        String uid = app.getUid();
+        portletName = app.getName();
+        try {
+            abstractPortlet = (AbstractPortlet) Class.forName(uid).newInstance();
+        } catch (Exception e) {
+            log.error("Unable to create AbstractPortlet: " + portletClass, e);
+            throw new Exception("Unable to create registered portlet");
+        }
+    }
+
     /**
      * Configures the PortletConfig and PortletSettings objects from the portlet.xml file
      */
@@ -42,10 +60,15 @@ public class RegisteredSportletImpl implements RegisteredSportlet {
         log.info("configure() in Portlet");
         String appRoot = config.getServletContext().getRealPath("");
         String portletConfigFile = config.getInitParameter("portlet.xml");
+        String portletMappingFile = config.getInitParameter("portlet-mapping-file.xml");
         if (portletConfigFile == null) {
             portletConfigFile = "/WEB-INF/conf/portlet.xml";
         }
+        if (portletMappingFile == null) {
+            portletMappingFile = "/WEB-INF/conf/portletdefinition-mapping.xml";
+        }
         String fullPath = appRoot + portletConfigFile;
+        String mappingPath = appRoot + portletMappingFile;
         try {
             fistream = new FileInputStream(fullPath);
         } catch (FileNotFoundException e) {
@@ -56,15 +79,23 @@ public class RegisteredSportletImpl implements RegisteredSportlet {
         portletConfig = new SportletConfig(config);
 
         // Here is where we need to have a Portal Deployment Descriptor that is marshalled into an object
-        //PortletDeploymentDescriptor pdd = new PortletDeploymentDescriptorImpl();
+        String xmlFile = config.getInitParameter("portlet.xml");
+
+        PortletDeploymentDescriptor pdd = new PortletDeploymentDescriptor(fullPath, mappingPath);
         //portletSettings = new SportletSettings(pdd);
 
-        String portletClass = "org.gridlab.gridsphere.portlets.HelloWorld";
-        try {
-            abstractPortlet = (AbstractPortlet)Class.forName(portletClass).newInstance();
-        } catch (Exception e) {
-            log.error("Unable to create AbstractPortlet: " + portletClass, e);
-            throw new Exception("Unable to create registered portlet");
+        //String portletClass = "org.gridlab.gridsphere.portlets.HelloWorld";
+        Iterator portletApps = pdd.getPortletApp().iterator();
+        while (portletApps.hasNext()) {
+            PortletApplication portletApp = (PortletApplication) portletApps.next();
+            String portletClass = portletApp.getUid();
+            portletName = portletApp.getName();
+            try {
+                abstractPortlet = (AbstractPortlet) Class.forName(portletClass).newInstance();
+            } catch (Exception e) {
+                log.error("Unable to create AbstractPortlet: " + portletClass, e);
+                throw new Exception("Unable to create registered portlet");
+            }
         }
     }
 

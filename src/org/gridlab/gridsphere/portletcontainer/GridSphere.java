@@ -6,26 +6,25 @@ package org.gridlab.gridsphere.portletcontainer;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletConfig;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.services.ServletParsingService;
 import org.gridlab.gridsphere.services.PortletRegistryService;
-import org.gridlab.gridsphere.portletcontainer.impl.RegisteredSportletImpl;
-import org.apache.log4j.PropertyConfigurator;
+import org.gridlab.gridsphere.services.ServletParsingService;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.*;
-
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Properties;
 
 
 public class GridSphere extends HttpServlet {
@@ -34,8 +33,9 @@ public class GridSphere extends HttpServlet {
     private static Properties props = new Properties();
 
     private static SportletServiceFactory factory = SportletServiceFactory.getInstance();
+
     private static PortletRegistryService registryService = null;
-    private static ServletParsingService  parseService = null;
+    private static ServletParsingService parseService = null;
 
     private static Collection abstractPortlets = new HashSet();
     private static Collection registeredPortlets = null;
@@ -46,9 +46,6 @@ public class GridSphere extends HttpServlet {
 
     public final void init(ServletConfig config) throws ServletException {
         super.init(config);
-        String prefix =  getServletContext().getRealPath("/");
-        String file = getInitParameter("log4j.properties");
-        PropertyConfigurator.configure(prefix+file);
 
         synchronized (this.getClass()) {
             try {
@@ -57,7 +54,7 @@ public class GridSphere extends HttpServlet {
                 log.info("init success");
 
             } catch (Exception e) {
-                log.error("init failed: ", e);
+                System.err.println("GridSphere: init() failed: " + e.getMessage());
             }
         }
     }
@@ -70,43 +67,77 @@ public class GridSphere extends HttpServlet {
         log.info("configure() in GridSphere");
         log.info("Application Server info:");
         log.info(context.getServerInfo() + context.getMajorVersion() + context.getMinorVersion());
+
         String appRoot = context.getRealPath("");
         String serviceProps = config.getInitParameter("PortletServices.properties");
-        String fullPath = appRoot + "/" + serviceProps;
+        String propsPath = appRoot + "/" + serviceProps;
         try {
-            fistream = new FileInputStream(fullPath);
+            fistream = new FileInputStream(propsPath);
         } catch (FileNotFoundException e) {
-            log.error("Can't find file: " + fullPath);
+            System.err.println("ERROR: Unable to find properties file: " + propsPath);
+            System.err.println("Make sure location is specified in server.xml " + propsPath);
         }
         props.load(fistream);
 
         // Start services
-        parseService =
-                (ServletParsingService)factory.createPortletService(ServletParsingService.class, props, config, true);
-        registryService =
-                (PortletRegistryService)factory.createPortletService(PortletRegistryService.class, props, config, true);
 
+        parseService =
+                (ServletParsingService) factory.createPortletService(ServletParsingService.class, props, config, true);
+        registryService =
+                (PortletRegistryService) factory.createPortletService(PortletRegistryService.class, props, config, true);
+
+
+        // read portlet.xml and retrieve portlet info
+        log.info("configure() in GridSphere");
+
+
+    }
+
+    /**
+     * Provide user login. Calls login() method on all portlets that are
+     * in a users profile
+     * For now, just login all known portlets
+     */
+    public final void doLogin(PortletRequest req, PortletResponse res) {
+        Iterator it = abstractPortlets.iterator();
+        while (it.hasNext()) {
+            AbstractPortlet ab = (AbstractPortlet) it.next();
+            ab.login(req);
+        }
+    }
+
+    /**
+     * Log a user out of the portal. Calls logout() method on all portlets that are
+     * in a users profile
+     * For now, just logout of all known portlets
+     */
+    public final void doLogoff(PortletRequest req, PortletResponse res) {
+        Iterator it = abstractPortlets.iterator();
+        while (it.hasNext()) {
+            AbstractPortlet ab = (AbstractPortlet) it.next();
+            ab.logout(req.getPortletSession());
+        }
     }
 
     public final void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 
         // Get available portlets from PortletRegistry the first time the portal is accessed
         if (firstDoGet) {
-                Iterator it = registryService.getRegisteredPortlets().iterator();
-                while (it.hasNext()) {
-                    RegisteredPortlet regPortlet = (RegisteredPortlet)it.next();
-                    System.err.println("portlet name: " + regPortlet.getPortletName());
+            Iterator it = registryService.getRegisteredPortlets().iterator();
+            while (it.hasNext()) {
+                RegisteredPortlet regPortlet = (RegisteredPortlet) it.next();
+                System.err.println("portlet name: " + regPortlet.getPortletName());
 
-                    AbstractPortlet abPortlet = regPortlet.getActivePortlet();
-                    abstractPortlets.add(abPortlet);
-                    PortletConfig portletConfig = regPortlet.getPortletConfig();
-                    PortletSettings portletSettings = regPortlet.getPortletSettings();
+                AbstractPortlet abPortlet = regPortlet.getActivePortlet();
+                abstractPortlets.add(abPortlet);
+                // PortletConfig portletConfig = regPortlet.getPortletConfig();
+                PortletSettings portletSettings = regPortlet.getPortletSettings();
 
-                    abPortlet.init(portletConfig);
-                    abPortlet.initConcrete(portletSettings);
-                }
+                abPortlet.init(portletConfig);
+                abPortlet.initConcrete(portletSettings);
+            }
 
-                firstDoGet = false;
+            firstDoGet = false;
         }
 
 
@@ -147,22 +178,14 @@ public class GridSphere extends HttpServlet {
         //helloPortlet.login(portletRequest);
 
         // For now, use cheesy request parameters.. not sure what else...
-        String login = (String)portletRequest.getAttribute(GridSphereProperties.Login);
-        String logoff = (String)portletRequest.getAttribute(GridSphereProperties.Logoff);
+        String login = (String) portletRequest.getAttribute(GridSphereProperties.Login);
+        String logoff = (String) portletRequest.getAttribute(GridSphereProperties.Logoff);
         if (login != null) {
-            Iterator it = abstractPortlets.iterator();
-            while (it.hasNext()) {
-                AbstractPortlet ab = (AbstractPortlet)it.next();
-                ab.login(portletRequest);
-            }
+            doLogin(portletRequest, portletResponse);
         }
 
         if (logoff != null) {
-            Iterator it = abstractPortlets.iterator();
-            while (it.hasNext()) {
-                AbstractPortlet ab = (AbstractPortlet)it.next();
-                ab.logout(portletRequest.getPortletSession());
-            }
+            doLogoff(portletRequest, portletResponse);
         }
 
 
@@ -171,32 +194,22 @@ public class GridSphere extends HttpServlet {
         // Hmm.. what if include is really slow and so even if jsp handles caching it doesn't matter? We'll see...
         //helloPortlet.service(portletRequest, portletResponse);
 
-        Iterator it = abstractPortlets.iterator();
         PrintWriter out = portletResponse.getWriter();
+        //ServletOutputStream out = portletResponse.getOutputStream();
+        out.println("<html><body>");
 
-        out.println("<html><body bcolor=white>");
-        out.println("<table>");
-        out.println("<tr><th>Portlet1</th></tr>");
-
+        Iterator it = abstractPortlets.iterator();
         while (it.hasNext()) {
-            AbstractPortlet ab = (AbstractPortlet)it.next();
+            AbstractPortlet ab = (AbstractPortlet) it.next();
 
             // First execute portlet business logic
             ab.execute(portletRequest);
-
+            out.println("<b>portlet</b>");
             // Second forward to presentation logic
-            out.println("<tr><th>Portlet2</th></tr>");
-            out.println("<tr>");
-            out.println();
-            ab.service(portletRequest, portletResponse);
-            out.println("</tr>");
-            out.println("<tr><th>Portlet3</th></tr>");
             ab.service(portletRequest, portletResponse);
         }
 
-        out.println("</table>");
         out.println("</body></html>");
-
         //helloPortlet.logout(portletRequest.getPortletSession());
         //helloPortlet.destroyConcrete(portletSettings);
         //helloPortlet.destroy(portletConfig);
@@ -225,8 +238,8 @@ public class GridSphere extends HttpServlet {
         Iterator abstractIt = abstractPortlets.iterator();
         Iterator registeredIt = abstractPortlets.iterator();
         while (abstractIt.hasNext() && registeredIt.hasNext()) {
-            AbstractPortlet ab = (AbstractPortlet)abstractIt.next();
-            RegisteredPortlet reg = (RegisteredPortlet)registeredIt.next();
+            AbstractPortlet ab = (AbstractPortlet) abstractIt.next();
+            RegisteredPortlet reg = (RegisteredPortlet) registeredIt.next();
             ab = reg.getActivePortlet();
             PortletConfig pConfig = reg.getPortletConfig();
             PortletSettings pSettings = reg.getPortletSettings();
