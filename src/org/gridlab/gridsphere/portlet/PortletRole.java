@@ -12,10 +12,10 @@ public class PortletRole {
 
     private int role;
 
-    public static final int SUPER_ROLE = 0;
     public static final int GUEST_ROLE = 1;
     public static final int USER_ROLE  = 2;
     public static final int ADMIN_ROLE = 3;
+    public static final int SUPER_ROLE = 4;
 
     public static final PortletRole GUEST = new PortletRole(GUEST_ROLE);
     public static final PortletRole USER = new PortletRole(USER_ROLE);
@@ -85,7 +85,7 @@ public class PortletRole {
     public boolean equals(Object object) {
         if (object != null && (object.getClass().equals(this.getClass()))) {
             PortletRole portletRole = (PortletRole)object;
-            return (role == portletRole.getRole());
+            return (role == portletRole.getID());
         }
         return false;
     }

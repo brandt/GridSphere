@@ -54,8 +54,8 @@ public interface PortletData {
      * Stores all attributes.
      *
      * @throws AccessDeniedException if the caller isn't authorized to access this data object
-     * @throws PersistenceManagerException if the store failed
+     * @throws IOException if the store failed
      */
-    public void store() throws PersistenceManagerException;
+    public void store() throws IOException;
 
 }

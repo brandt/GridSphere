@@ -158,7 +158,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the PortletData
      */
     public PortletData getData() {
-        if ((portletSession == null) || (getMode() == Portlet.Mode.CONFIGURE)) {
+        if (getMode() == Portlet.Mode.CONFIGURE) {
             return null;
         }
         return (PortletData)req.getAttribute(GridSphereProperties.PORTLETDATA);

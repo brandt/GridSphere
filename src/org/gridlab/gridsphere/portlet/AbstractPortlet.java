@@ -71,8 +71,6 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
                         throw new PortletException("Received invalid WindowEvent");
                 }
             } else if (method.equals(SportletProperties.ACTION_PERFORMED)) {
-                log.info("in AbstractPortlet: doing actionPerformed()");
-
                 // Set the appropiate portlet action
                 DefaultPortletAction action = (DefaultPortletAction)request.getAttribute(SportletProperties.ACTION_EVENT);
                 ActionEvent evt =  new ActionEventImpl(action, request, response);

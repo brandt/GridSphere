@@ -108,10 +108,14 @@ public class SportletData extends BaseObject implements PortletData  {
     /**
      * Stores all attributes.
      *
-     * @throws PersistenceManagerException store fails
+     * @throws IOException store fails
      */
-    public void store() throws PersistenceManagerException {
-        pm.update(this);
+    public void store() throws IOException {
+        try {
+            pm.update(this);
+        } catch (PersistenceManagerException e) {
+            throw new IOException(e.getMessage());
+        }
     }
 
     private void convert2vector() {

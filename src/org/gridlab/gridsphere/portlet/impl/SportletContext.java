@@ -10,7 +10,8 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.services.core.message.PortletMessageService;
+import org.gridlab.gridsphere.services.core.message.impl.SportletMessageManager;
+import org.gridlab.gridsphere.portletcontainer.PortletMessageManager;
 
 
 import javax.servlet.*;
@@ -181,19 +182,15 @@ public class SportletContext implements PortletContext {
      *
      * This function may only be used during event processing, in any other case the method throws an AccessDeniedException.
      *
-     * @param portletName the name of the portlet(s) to send the message to
+     * @param concretePortletID the concrete portlet to send the message to
      * @param message the message to be sent
      *
      * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
      */
-    public void send(String portletName, PortletMessage message) throws AccessDeniedException {
-        PortletMessageService messageService = null;
-        try {
-            messageService = (PortletMessageService) factory.createPortletService(PortletMessageService.class, config, false);
-        } catch (PortletServiceException e) {
-            throw new AccessDeniedException("Unable to get instance of PortletMessageService");
-        }
-        messageService.send(portletName, message);
+    public void send(String concretePortletID, PortletMessage message) throws AccessDeniedException {
+        PortletMessageManager messageManager = null;
+        messageManager = SportletMessageManager.getInstance();
+        messageManager.send(concretePortletID, message);
     }
 
     /**
