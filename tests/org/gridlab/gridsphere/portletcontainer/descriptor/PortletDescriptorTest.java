@@ -43,8 +43,6 @@ public class PortletDescriptorTest extends TestCase {
     public void testPortletDescriptor() {
         PortletDeploymentDescriptor pdd = null;
 
-        Class clazz =  this.getClass();
-
         // load files from JAR
         String portletFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_TEST_DIR) + "portlet-test.xml";
         String mappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_PORTLET_MAPPING);
@@ -68,12 +66,26 @@ public class PortletDescriptorTest extends TestCase {
         List concreteApps = def.getConcreteSportletList();
 
         // we have two concrete portlet apps
-        assertEquals(concreteApps.size(), 2);
+        assertEquals(2, concreteApps.size());
         ConcreteSportletDefinition concreteOne = (ConcreteSportletDefinition) concreteApps.get(0);
         ConcreteSportletDefinition concreteTwo = (ConcreteSportletDefinition) concreteApps.get(1);
         assertEquals("org.gridlab.gridsphere.portlets.core.HelloWorld.666", portletApp.getApplicationPortletID());
         assertEquals("Hello World", portletApp.getPortletName());
         assertEquals("hello", portletApp.getServletName());
+
+        Hashtable configHash = portletApp.getConfigParams();
+        List cl = portletApp.getConfigParamList();
+
+        assertEquals(2, cl.size());
+        assertEquals(2, configHash.size());
+
+        assertEquals(true, configHash.containsKey("AppConfigOne"));
+        assertEquals(true, configHash.containsKey("AppConfigTwo"));
+
+        String val = (String)configHash.get("AppConfigOne");
+        assertEquals("one", val);
+        val = (String)configHash.get("AppConfigTwo");
+        assertEquals("two", val);
 
         // Test cache info -- later
         //CacheInfo c = portletApp.getCacheInfo();
@@ -97,7 +109,7 @@ public class PortletDescriptorTest extends TestCase {
         assertEquals("org.gridlab.gridsphere.portlets.core.HelloWorld.666.2", concreteOne.getConcretePortletID());
 
         Hashtable contextList = concreteOne.getContextAttributes();
-        assertEquals(contextList.size(), 1);
+        assertEquals(1, contextList.size());
 
         assertEquals(true, contextList.containsKey("buzzle"));
         assertEquals(true, contextList.containsValue("yea"));
@@ -127,7 +139,8 @@ public class PortletDescriptorTest extends TestCase {
         assertEquals(ConcretePortletConfig.Scope.PRIVATE, onePI.getConcretePortletScope());
         assertEquals(PortletRole.ADMIN, onePI.getRequiredRole());
 
-        Hashtable configHash = onePI.getConfigAttributes();
+        configHash = onePI.getConfigAttributes();
+
         assertEquals(configHash.size(), 1);
         assertEquals(true, configHash.containsKey("Portlet Mistress"));
         assertEquals(true, configHash.containsValue("mistress@domain.com"));

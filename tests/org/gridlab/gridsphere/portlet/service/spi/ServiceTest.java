@@ -30,11 +30,6 @@ public class ServiceTest extends TestCase {
     }
 
     protected void setUp() {
-        /*
-        URL url = this.getClass().getResource("/gridsphere/log4j.properties");
-        if (url == null) fail ("Unable to find log4j.properties in JAR");
-        PropertyConfigurator.configure(url);
-        */
     }
 
     public void testCreateServiceFactory() {

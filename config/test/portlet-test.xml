@@ -5,8 +5,12 @@
             <portlet-name>Hello World</portlet-name>
             <servlet-name>hello</servlet-name>
             <portlet-config>
-                <param-name>Portlet Master</param-name>
-                <param-value>yourid@yourdomain.com</param-value>
+                <param-name>AppConfigOne</param-name>
+                <param-value>one</param-value>
+            </portlet-config>
+            <portlet-config>
+                <param-name>AppConfigTwo</param-name>
+                <param-value>two</param-value>
             </portlet-config>
             <cache>
                 <expires>120</expires>

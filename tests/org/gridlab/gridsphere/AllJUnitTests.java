@@ -4,6 +4,7 @@
  */
 package org.gridlab.gridsphere;
 
+import java.net.URL;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -17,6 +18,8 @@ import org.gridlab.gridsphere.services.user.SetupTestUsersTest;
 import org.gridlab.gridsphere.services.user.UserManagerServiceTest;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerTest;
 
+import org.apache.log4j.PropertyConfigurator;
+
 /**
  * Simple class to build a TestSuite out of the individual test classes.
  */
@@ -27,6 +30,9 @@ public class AllJUnitTests extends TestCase {
     }
 
     public static Test suite() {
+        URL propsUrl = AllJUnitTests.class.getResource("/gridsphere/log4j.properties");
+        PropertyConfigurator.configure(propsUrl);
+
         TestSuite suite = new TestSuite();
         suite.addTest(new TestSuite(PortletDescriptorTest.class));
         suite.addTest(new TestSuite(ServiceDescriptorTest.class));
