@@ -107,8 +107,10 @@ Invoke "ant help"
                 <property name="appserver.home" value="${env.CATALINA_HOME}"/>
 <!--                <property name="servlet-api.file" value="${appserver.home}/common/lib/servlet-api.jar"/>-->
                 <path id="servletpath">
-                    <fileset file="${appserver.home}/common/lib/servlet-api.jar"/>
-                    <fileset file="${appserver.home}/common/lib/jsp-api.jar"/>
+                    <fileset dir="${appserver.home}/common/lib/">
+                        <include name="*.jar"/>
+                    </fileset>
+
                 </path>
             </then>
         </if>
@@ -120,6 +122,10 @@ Invoke "ant help"
 <!--                <property name="servlet-api.file" value="${appserver.home}/lib/javax.servlet.jar"/>-->
                 <path id="servletpath">
                     <fileset file="${appserver.home}/lib/javax.servlet.jar"/>
+                    <fileset dir="${appserver.home}/ext/">
+                        <exclude name="*.LICENSE"/>
+                        <include name="*.jar"/>
+                    </fileset>
                 </path>
             </then>
         </if>
@@ -228,7 +234,7 @@ Invoke "ant help"
     <!-- Builds and deploys GridSphere                                       -->
     <!-- =================================================================== -->
 
-    <target name="install" depends="license, splash, compile, docs, deploy" description="Build and deploy GridSphere">
+    <target name="install" depends="license, splash, compile,  deploy" description="Build and deploy GridSphere">
         <antcall target="create-database"/>
         <echo message="GridSphere successfully installed."/>
         <echo message="Please start up your webserver and go to http://127.0.0.1/gridsphere/gridsphere"/>
