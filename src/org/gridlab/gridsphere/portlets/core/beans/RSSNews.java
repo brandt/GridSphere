@@ -27,6 +27,7 @@ public class RSSNews {
     private RSSNews() {
 
         super();
+        this.add("http://www.ibm.com/developerworks/news/dw_tech_nl.rss", "IBM Developerworks");
         this.add("http://www.xml.com/2002/12/18/examples/rss20.xml.txt","xml.com feed examples");
         this.add("http://www.snipsnap.org/exec/rss","SnipSnap.org");
         this.add("http://diveintomark.org/xml/rss.xml","DiveIntoMark");
@@ -88,7 +89,7 @@ public class RSSNews {
         result = result + next + " seconds.<p/> ";
 
         try {
-            if (version.equals("2.0") || version.equals("3.14159265359")) {
+            if (version.equals("2.0") || version.equals("3.14159265359") || version.equals("0.91")) {
                 List items = root.getChild("channel").getChildren("item");
                 Iterator it = items.iterator();
                 result = result +"<ul>";
