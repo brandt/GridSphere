@@ -9,15 +9,17 @@
              class="org.gridlab.gridsphere.portlets.core.beans.UserManagerBean"
              scope="request"/>
 <gs:form action="doListUser">
-<table class="portlet-pane" cellspacing="1">
+<table class="portlet-pane" cellspacing="1" width="100%">
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
+<!--
         <tr>
           <td class="portlet-frame-title">
               List Users
           </td>
         </tr>
+-->
         <tr>
           <td class="portlet-frame-actions">
             <gs:submit name="doListUser" value="List Users"/>
