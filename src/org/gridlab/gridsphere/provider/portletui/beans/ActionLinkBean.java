@@ -13,6 +13,10 @@ public class ActionLinkBean extends ActionBean implements TagBean {
     }
 
     public String toStartString() {
+        return "";
+    }
+
+    public String toEndString() {
         //if (value == null) createLink();
         //return "<a href=\"" + action + "\"/>" + value + "</a>";
         return "<a href=\"" + action + "\"" + " onClick=\"this.href='" + action + "&JavaScript=enabled'\"/>" + value + "</a>";
