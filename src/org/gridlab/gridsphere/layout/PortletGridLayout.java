@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
@@ -111,6 +112,7 @@ public class PortletGridLayout extends PortletFrameLayout implements Cloneable {
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletResponse res = event.getPortletResponse();
+        PortletRequest req = event.getPortletRequest();
         PrintWriter out = res.getWriter();
 
         //int j = 0, k = 0;
@@ -128,9 +130,12 @@ public class PortletGridLayout extends PortletFrameLayout implements Cloneable {
 
         // ok this one is maximized show only this window
         List scomponents = Collections.synchronizedList(components);
+        PortletRole userRole = req.getRole();
         synchronized (scomponents) {
         for (int i = 0; i < numComponents; i++) {
             p = (PortletComponent) scomponents.get(i);
+            PortletRole reqRole = PortletRole.toPortletRole(p.getRequiredRoleAsString());
+            if (userRole.compare(userRole, reqRole) >= 0) {
             if (p.getWidth().equals("100%")) {
                 // make another table around this, just for the padding
                 out.println("<table border=\"0\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"> ");
@@ -138,6 +143,7 @@ public class PortletGridLayout extends PortletFrameLayout implements Cloneable {
                 p.doRender(event);
                 out.println("</td></tr></table>");
                 return;
+            }
             }
         }
         }

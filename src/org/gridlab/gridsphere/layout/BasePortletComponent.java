@@ -31,7 +31,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected String name = new String();
     protected String theme = "xp";
     protected boolean isVisible = true;
-    protected String roleString = "GUEST";
+    protected String roleString = PortletRole.GUEST.toString();
     protected String groupString = PortletGroupFactory.GRIDSPHERE_GROUP.getName();
     protected PortletRole requiredRole = PortletRole.GUEST;
     protected PortletGroup requiredGroup = PortletGroupFactory.GRIDSPHERE_GROUP;

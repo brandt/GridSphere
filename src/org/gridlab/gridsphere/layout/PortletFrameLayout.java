@@ -47,7 +47,6 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      */
     public List init(PortletRequest req, List list) {
         list = super.init(req, list);
-        List remcomps = new ArrayList();
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
             Iterator it = scomponents.iterator();
@@ -67,10 +66,10 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
                     }
                 }
                 if (!found) {
-                    remcomps.add(p);
+                    it.remove();
                 }
                 if (userRole.compare(userRole, reqRole) < 0) {
-                    remcomps.add(p);
+                    it.remove();
                 } else {
                 // all the components have the same theme
                 p.setTheme(theme);
@@ -78,20 +77,9 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
                 list = p.init(req, list);
 
                 p.addComponentListener(this);
-                /*
-                // If the component is a frame we want to be notified
-                if (p instanceof PortletFrame) {
-                PortletFrame f = (PortletFrame) p;
-                f.addFrameListener(this);
-                }
-                */
+
                 p.setParentComponent(this);
                 }
-            }
-            it = remcomps.iterator();
-            while (it.hasNext()) {
-                PortletComponent comp = (PortletComponent)it.next();
-                scomponents.remove(comp);
             }
         }
         return list;

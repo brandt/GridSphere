@@ -224,31 +224,18 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         PortletRole userRole = req.getRole();
 
         synchronized (stabs) {
-            List remtabs = new ArrayList();
             int i = 0;
             Iterator it = stabs.iterator();
 
-
             while (it.hasNext()) {
                 tab = (PortletTab)it.next();
-                PortletRole tabRole = PortletRole.toPortletRole(tab.getRequiredRoleAsString());
-                //System.err.println(tab.getTitle() + tab.getRequiredRoleAsString() + " myrole=" + userRole);
-                if (userRole.compare(userRole, tabRole) >= 0) {
-                    tab.setTheme(theme);
-                    if (selectedIndex == i) tab.setSelected(true);
-                    list = tab.init(req, list);
+                tab.setTheme(theme);
+                if (selectedIndex == i) tab.setSelected(true);
+                list = tab.init(req, list);
 
-                    tab.addComponentListener(this);
-                    tab.setParentComponent(this);
-                } else {
-                    remtabs.add(tab);
-                }
+                tab.addComponentListener(this);
+                tab.setParentComponent(this);
                 i++;
-
-            }
-            it = remtabs.iterator();
-            while (it.hasNext()) {
-                tabs.remove(it.next());
             }
         }
         return list;
@@ -360,6 +347,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                 if (userRole.compare(userRole, tabRole) >= 0) {
 
                     String title = tab.getTitle();
+
                     if (tab.isSelected()) {
                         out.println("<td><img src=\"themes/" + theme + "/images/tab-active-left.gif\"/></td>");
                         out.println("<td class=\"tab-active\">" + replaceBlanks(title) + "</td>");

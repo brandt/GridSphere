@@ -436,65 +436,65 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     }
 
 
-        /* (non-Javadoc)
-         * @see org.gridlab.gridsphere.layout.PortletComponent#messageEvent(java.lang.String, org.gridlab.gridsphere.portlet.PortletMessage, org.gridlab.gridsphere.portletcontainer.GridSphereEvent)
-         */
-        public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) {
-                
-                if (portletClass.equals(concPortletID)) {
-                        PortletRequest req = event.getPortletRequest();
+    /* (non-Javadoc)
+    * @see org.gridlab.gridsphere.layout.PortletComponent#messageEvent(java.lang.String, org.gridlab.gridsphere.portlet.PortletMessage, org.gridlab.gridsphere.portletcontainer.GridSphereEvent)
+    */
+    public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) {
 
-                        req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
+        if (portletClass.equals(concPortletID)) {
+            PortletRequest req = event.getPortletRequest();
 
-                        PortletRole role = req.getRole();
-                        if (role.compare(role, requiredRole) < 0) return;
+            req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
 
-                        PortletResponse res = event.getPortletResponse();
+            PortletRole role = req.getRole();
+            if (role.compare(role, requiredRole) < 0) return;
 
-                        req.setAttribute(SportletProperties.PORTLETID, portletClass);
+            PortletResponse res = event.getPortletResponse();
 
-                        // Override if user is a guest
-                        User user = req.getUser();
-                        if (user instanceof GuestUser) {
-                            req.setMode(Portlet.Mode.VIEW);
-                        } else {
-                            if (titleBar != null) {
-                                Portlet.Mode mode = titleBar.getPortletMode();
-                                //System.err.println("setting mode in " + portletClass + " to " + mode.toString());
-                                req.setMode(mode);
-                            } else {
-                                req.setMode(Portlet.Mode.VIEW);
-                            }
-                        }
+            req.setAttribute(SportletProperties.PORTLETID, portletClass);
 
-
-                        // Set the portlet data
-                        PortletData data = null;
-                        if (!(user instanceof GuestUser)) {
-                            try {
-                                data = dataManager.getPortletData(req.getUser(), portletClass);
-                                req.setAttribute(SportletProperties.PORTLET_DATA, data);
-                            } catch (PersistenceManagerException e) {
-                                errorFrame.setError("Unable to retrieve user's portlet data!", e);
-                            }
-                        }
-                        
-                        try {
-                            PortletInvoker.messageEvent(portletClass, msg, req, res);
-                        } catch (IOException ioex) {
-                            errorFrame.setException(new PortletException("IO Exception occured:",ioex));
-                        }
-                         catch (PortletException e) {
-                            errorFrame.setException(e);
-                        }
-                        String message = (String)req.getAttribute(SportletProperties.PORTLETERROR+portletClass);
-                        if (message != null) {
-                            errorFrame.setMessage(message);
-                        }
-
+            // Override if user is a guest
+            User user = req.getUser();
+            if (user instanceof GuestUser) {
+                req.setMode(Portlet.Mode.VIEW);
+            } else {
+                if (titleBar != null) {
+                    Portlet.Mode mode = titleBar.getPortletMode();
+                    //System.err.println("setting mode in " + portletClass + " to " + mode.toString());
+                    req.setMode(mode);
                 } else {
-                        super.messageEvent(concPortletID, msg, event);
+                    req.setMode(Portlet.Mode.VIEW);
                 }
+            }
+
+
+            // Set the portlet data
+            PortletData data = null;
+            if (!(user instanceof GuestUser)) {
+                try {
+                    data = dataManager.getPortletData(req.getUser(), portletClass);
+                    req.setAttribute(SportletProperties.PORTLET_DATA, data);
+                } catch (PersistenceManagerException e) {
+                    errorFrame.setError("Unable to retrieve user's portlet data!", e);
+                }
+            }
+
+            try {
+                PortletInvoker.messageEvent(portletClass, msg, req, res);
+            } catch (IOException ioex) {
+                errorFrame.setException(new PortletException("IO Exception occured:",ioex));
+            }
+            catch (PortletException e) {
+                errorFrame.setException(e);
+            }
+            String message = (String)req.getAttribute(SportletProperties.PORTLETERROR+portletClass);
+            if (message != null) {
+                errorFrame.setMessage(message);
+            }
+
+        } else {
+            super.messageEvent(concPortletID, msg, event);
         }
+    }
 
 }
