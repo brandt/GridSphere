@@ -52,10 +52,6 @@
                    value="New Permission"
                    onClick="javascript:CredentialPermissionPortlet_newCredentialPermission_onClick()"/>
             &nbsp;&nbsp;<input type="button"
-                   name="<%=CredentialPermissionBean.ACTION_CREDENTIAL_PERMISSION_EDIT%>"
-                   value="Edit Permission"
-                   onClick="javascript:CredentialPermissionPortlet_editCredentialPermission_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
                    name="<%=CredentialPermissionBean.ACTION_CREDENTIAL_PERMISSION_DELETE%>"
                    value="Delete Permission"
                    onClick="javascript:CredentialPermissionPortlet_deleteCredentialPermission_onClick()"/>

@@ -65,16 +65,19 @@
         </tr>
 <% } else { %>
        <tr>
-         <td class="portlet-frame-header" width="150">
+         <td class="portlet-frame-header" width="100">
            Credential Subject
          </td>
          <td class="portlet-frame-header" width="100">
            Credential Label
          </td>
          <td class="portlet-frame-header" width="100">
+           Credential Tag
+         </td>
+         <td class="portlet-frame-header" width="100">
            User Name
          </td>
-         <td class="portlet-frame-header" width="150">
+         <td class="portlet-frame-header" width="100">
            Full Name
          </td>
        </tr>
@@ -88,6 +91,9 @@
           </td>
           <td class="portlet-frame-text">
             <%=credentialMapping.getLabel()%>
+          </td>
+          <td class="portlet-frame-text">
+            <%=credentialMapping.getTag()%>
           </td>
           <td class="portlet-frame-text">
             <%=credentialMapping.getUser().getUserName()%>

@@ -158,24 +158,12 @@ public class CredentialPermissionBean extends CredentialManagerBean {
         return this.credentialPermissionID;
     }
 
-    public void setCredentialPermissionID(String id) {
-        this.credentialPermissionID = id;
-    }
-
     public String getPermittedSubjects() {
         return this.permittedSubjects;
     }
 
-    public void setPermittedSubjects(String permittedSubjects) {
-        this.permittedSubjects = permittedSubjects;
-    }
-
     public String getDescription() {
        return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public void loadCredentialPermissionList()
@@ -223,9 +211,12 @@ public class CredentialPermissionBean extends CredentialManagerBean {
 
     public void saveCredentialPermission()
             throws PortletException {
+        this.credentialManagerService.createCredentialPermission(this.permittedSubjects, this.description);
+        this.credentialPermissionID = this.permittedSubjects;
     }
 
     public void deleteCredentialPermission()
             throws PortletException {
+        this.credentialManagerService.deleteCredentialPermission(this.permittedSubjects);
     }
 }

@@ -11,24 +11,13 @@
       action="<%=credentialMappingBean.getPortletActionURI(CredentialMappingBean.ACTION_CREDENTIAL_MAPPING_VIEW)%>">
   <input type="hidden" name="credentialMappingID" value="<%=credentialMappingBean.getCredentialMappingID()%>"/>
   <script type="text/javascript">
-    function CredentialMappingPortlet_listCredentialMapping_onClick() {
-      document.CredentialMappingPortlet.action="<%=credentialMappingBean.getPortletActionURI(CredentialMappingBean.ACTION_CREDENTIAL_MAPPING_LIST)%>";
+    function CredentialMappingPortlet_confirmDeleteCredentialMapping_onClick() {
+      document.CredentialMappingPortlet.action="<%=credentialMappingBean.getPortletActionURI(CredentialMappingBean.ACTION_CREDENTIAL_MAPPING_DELETE_CONFIRM)%>";
       document.CredentialMappingPortlet.submit();
     }
 
-    function CredentialMappingPortlet_newCredentialMapping_onClick(credentialMappingID) {
-      document.CredentialMappingPortlet.credentialMappingID.value="";
-      document.CredentialMappingPortlet.action="<%=credentialMappingBean.getPortletActionURI(CredentialMappingBean.ACTION_CREDENTIAL_MAPPING_EDIT)%>";
-      document.CredentialMappingPortlet.submit();
-    }
-
-    function CredentialMappingPortlet_editCredentialMapping_onClick() {
-      document.CredentialMappingPortlet.action="<%=credentialMappingBean.getPortletActionURI(CredentialMappingBean.ACTION_CREDENTIAL_MAPPING_EDIT)%>";
-      document.CredentialMappingPortlet.submit();
-    }
-
-    function CredentialMappingPortlet_deleteCredentialMapping_onClick() {
-      document.CredentialMappingPortlet.action="<%=credentialMappingBean.getPortletActionURI(CredentialMappingBean.ACTION_CREDENTIAL_MAPPING_DELETE)%>";
+    function CredentialMappingPortlet_cancelDeleteCredentialMapping_onClick() {
+      document.CredentialMappingPortlet.action="<%=credentialMappingBean.getPortletActionURI(CredentialMappingBean.ACTION_CREDENTIAL_MAPPING_DELETE_CANCEL)%>";
       document.CredentialMappingPortlet.submit();
     }
   </script>
@@ -37,28 +26,32 @@
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
+          <td class="portlet-frame-message">
+            Click <span style="portlet-text-alert">Confirm Delete</span> to delete this permission,
+            <span style="portlet-text-alert">Cancel Delete</span> otherwise.
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="100%">
+        <tr>
           <td class="portlet-frame-title">
-              List Credential Mappings
+              Delete Credential Mapping [<%=credentialMappingBean.getCredentialSubject()%>]
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-actions">
             <input type="button"
-                   name="<%=CredentialMappingBean.ACTION_CREDENTIAL_MAPPING_LIST%>"
-                   value="List Mappings"
-                   onClick="javascript:CredentialMappingPortlet_listCredentialMapping_onClick()"/>
+                   name="<%=CredentialMappingBean.ACTION_CREDENTIAL_MAPPING_DELETE_CONFIRM%>"
+                   value="Confirm Delete"
+                   onClick="javascript:CredentialMappingPortlet_confirmDeleteCredentialMapping_onClick()"/>
             &nbsp;&nbsp;<input type="button"
-                   name="<%=CredentialMappingBean.ACTION_CREDENTIAL_MAPPING_EDIT%>"
-                   value="New Mapping"
-                   onClick="javascript:CredentialMappingPortlet_newCredentialMapping_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
-                   name="<%=CredentialMappingBean.ACTION_CREDENTIAL_MAPPING_EDIT%>"
-                   value="Edit Mapping"
-                   onClick="javascript:CredentialMappingPortlet_editCredentialMapping_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
-                   name="<%=CredentialMappingBean.ACTION_CREDENTIAL_MAPPING_DELETE%>"
-                   value="Delete Mapping"
-                   onClick="javascript:CredentialMappingPortlet_deleteCredentialMapping_onClick()"/>
+                   name="<%=CredentialMappingBean.ACTION_CREDENTIAL_MAPPING_DELETE_CANCEL%>"
+                   value="Cancel Delete"
+                   onClick="javascript:CredentialMappingPortlet_cancelDeleteCredentialMapping_onClick()"/>
           </td>
         </tr>
       </table>

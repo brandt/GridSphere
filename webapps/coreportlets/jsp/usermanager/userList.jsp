@@ -41,7 +41,7 @@
           <td class="portlet-frame-actions">
             <input type="button"
                    name="<%=UserManagerBean.ACTION_USER_LIST%>"
-                   value="Refresh List"
+                   value="List Users"
                    onClick="javascript:UserManagerPortlet_listUser_onClick()"/>
             &nbsp;&nbsp;<input type="button"
                    name="<%=UserManagerBean.ACTION_USER_EDIT%>"

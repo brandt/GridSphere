@@ -172,12 +172,6 @@ public class PortletBean {
         this.log.debug("Exiting doAction(Object, String)");
     }
 
-
-    public void doAction(PortletAction action)
-            throws PortletException {
-        setActionPerformed(action);
-    }
-
     public void doDefaultViewAction()
             throws PortletException {
     }
