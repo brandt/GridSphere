@@ -117,11 +117,8 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
                 v.add(res.next());
             }
             pm.commit();
-        } catch (TransactionException e) {
+        } catch (PersistenceException e) {
             cat.error("Transaction error "+e);
-            throw new PortletServiceException();
-        } catch (QueryException e) {
-            cat.error("QueryException "+e);
             throw new PortletServiceException();
         }
         return v;
@@ -167,10 +164,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
                 pm.close();
                 return false;
             }
-        } catch (TransactionException e) {
-            pm.close();
-            throw new PortletServiceException(e.toString());
-        } catch (QueryException e) {
+        } catch (PersistenceException e) {
             pm.close();
             throw new PortletServiceException(e.toString());
         }

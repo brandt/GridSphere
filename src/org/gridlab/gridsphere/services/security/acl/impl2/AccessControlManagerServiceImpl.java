@@ -62,13 +62,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
                 pm.delete(res.next());
             }
             pm.commit();
-        } catch (TransactionException e) {
-            pm.close();
-            throw new PortletServiceException(e.toString());
-        } catch (QueryException e) {
-            pm.close();
-            throw new PortletServiceException(e.toString());
-        } catch (DeleteException e) {
+        } catch (PersistenceException e) {
             pm.close();
             throw new PortletServiceException(e.toString());
         }
@@ -104,13 +98,9 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
             pm.begin();
             pm.create(ga);
             pm.commit();
-        } catch (TransactionException e) {
+        } catch (PersistenceException e) {
             pm.close();
             cat.error("Transaction Exception "+e);
-            throw new PortletServiceException(e.toString());
-        } catch (CreateException e) {
-            pm.close();
-            cat.error("Create Exception "+e);
             throw new PortletServiceException(e.toString());
         }
 
@@ -137,15 +127,12 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
             Groups ga = (Groups)res.next();
             ga.setName(newGroupName);
             pm.commit();
-        } catch (TransactionException e) {
+        } catch (PersistenceException e) {
             pm.close();
             cat.error("Transaction Exception "+e);
             throw new PortletServiceException(e.toString());
-        } catch (QueryException e) {
-            pm.close();
-            cat.error("Problem querying "+e);
-            throw new PortletServiceException(e.toString());
         }
+
         pm.close();
 
     }
@@ -179,13 +166,9 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
             pm.begin();
             pm.create(ur);
             pm.commit();
-        } catch (TransactionException e) {
+        } catch (PersistenceException e) {
             pm.close();
             cat.error("TransactionException "+e);
-            throw new PortletServiceException(e.toString());
-        } catch (CreateException e) {
-            pm.close();
-            cat.error("CreationException "+e);
             throw new PortletServiceException(e.toString());
         }
         cat.info("created user "+user.getUserID()+" in group "+group.getName());
