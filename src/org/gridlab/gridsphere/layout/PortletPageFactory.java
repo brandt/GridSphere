@@ -287,7 +287,7 @@ public class PortletPageFactory implements PortletSessionListener {
          ois = new ObjectInputStream(bin);                  // F
          // return the new object
          Object ro = ois.readObject(); // G
-          String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
+          //String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
      /*
          try {
             PortletLayoutDescriptor.savePortletPage((PortletPage)ro, "/tmp/test.xml", layoutMappingFile);
