@@ -37,7 +37,7 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
         super();
         // @todo read the configfile here
         DatabaseName = "portal";
-        ConnectionURL = "/home/wehrens/Projects/gridsphere/webapps/WEB-INF/conf/database.xml";
+        ConnectionURL = "webapps/WEB-INF/conf/database.xml";
 
     }
 
