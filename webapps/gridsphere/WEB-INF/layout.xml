@@ -98,13 +98,6 @@
                             </portlet-frame>
                         </column-layout>
                     </row-layout>
-                    <!--                    <row-layout>
-                                            <column-layout width="50%">
-                                                <portlet-frame label="filemanager">
-                                                    <portlet-class>org.gridlab.gridsphere.portlets.core.file.FileManagerPortlet.1</portlet-class>
-                                                </portlet-frame>
-                                            </column-layout>
-                                        </row-layout>-->
                 </table-layout>
             </portlet-tab>
         </portlet-tabbed-pane>
