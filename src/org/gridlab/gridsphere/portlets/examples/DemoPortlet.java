@@ -7,15 +7,18 @@ package org.gridlab.gridsphere.portlets.examples;
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.event.WindowEvent;
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
+import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Iterator;
 
 public class DemoPortlet extends AbstractPortlet {
 
@@ -79,19 +82,28 @@ public class DemoPortlet extends AbstractPortlet {
 
         Portlet.Mode mode = request.getMode();
         Portlet.Mode prev = request.getPreviousMode();
+        out.println("Current portlet mode: <b>" + mode + "</b><br>");
+        out.println("Previous portlet mode: <b>" + prev + "</b><br>");
 
         List groups = request.getGroups();
-        List roles = request.getRoles(null);
+        Iterator it = groups.iterator();
+        while (it.hasNext()) {
+            PortletGroup g = (PortletGroup)it.next();
+            PortletRole r = request.getRole(g);
+            out.println("Portlet group: <b>" + g.toString() + "</b> Portlet role: <b>" + r.toString() + "</b>");
+        }
 
-        PortletWindow window = request.getWindow();
-
+        PortletWindow.State state = request.getWindowState();
+        out.println("<br>Portlet window state: <b>" + state + "</b><br>");
         User user = request.getUser();
 
         PortletContext ctx = portletConfig.getContext();
-        ctx.getContainerInfo();
+        String info = ctx.getContainerInfo();
         int majVer = ctx.getMajorVersion();
         int minVer = ctx.getMinorVersion();
-
+        out.println("Container info: <br>");
+        out.println("Container name: <b>" + info + "</b> maj version: <b>"
+                + majVer + "</b> min version: <b>" + minVer + "</b>");
 
         boolean supports = portletConfig.supports(PortletWindow.State.MINIMIZED);
         boolean s = portletConfig.supports(Portlet.Mode.EDIT);
@@ -99,6 +111,7 @@ public class DemoPortlet extends AbstractPortlet {
         String value = portletSettings.getApplicationSettings().getAttribute("foobar");
         out.println(value);
         //getPortletConfig().getContext().include("/jsp/snoop/view.jsp", request, response);
+
     }
 
     public void doEdit(PortletRequest request, PortletResponse response) throws PortletException, IOException {
