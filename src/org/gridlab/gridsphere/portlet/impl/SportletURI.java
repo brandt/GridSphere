@@ -8,10 +8,7 @@ import org.gridlab.gridsphere.portlet.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -25,6 +22,8 @@ public class SportletURI implements PortletURI {
     private boolean redirect = true;
     private String contextPath = null;
     private String id = "";
+    private Map actionParams = new HashMap();
+    private Set sportletProps = null;
 
     /**
      * Cannot instantiate uninitialized SportletResponse
@@ -44,6 +43,11 @@ public class SportletURI implements PortletURI {
         this.contextPath = contextPath;
         this.res = res;
         this.id = createUniquePrefix(2);
+        // don't prefix these parameters of an action
+        sportletProps = new HashSet();
+        sportletProps.add(SportletProperties.COMPONENT_ID);
+        sportletProps.add(SportletProperties.PORTLET_WINDOW);
+        sportletProps.add(SportletProperties.PORTLET_MODE);
     }
 
     /**
@@ -86,7 +90,11 @@ public class SportletURI implements PortletURI {
      * @param value the parameter value
      */
     public void addParameter(String name, String value) {
-        store.put(name, value);
+        if (sportletProps.contains(name)) {
+            store.put(name, value);
+        } else {
+            actionParams.put(name, value);
+        }
     }
 
     /**
@@ -94,7 +102,11 @@ public class SportletURI implements PortletURI {
      * @param name
      */
     public void removeParameter(String name) {
-        store.remove(name);
+        if (sportletProps.contains(name)) {
+            store.remove(name);
+        } else {
+            actionParams.remove(name);
+        }
     }
 
     /**
@@ -124,16 +136,7 @@ public class SportletURI implements PortletURI {
             if (!dpa.getName().equals("")) {
                 store.put(SportletProperties.DEFAULT_PORTLET_ACTION, dpa.getName());
 
-                Map actionParams = dpa.getParameters();
-                if (!actionParams.isEmpty()) store.put(SportletProperties.PREFIX, id);
-                Set set = actionParams.keySet();
-                Iterator it = set.iterator();
-                while (it.hasNext()) {
-                    String name = (String) it.next();
-                    String newname = id + "_" + name;
-                    String value = (String) actionParams.get(name);
-                    store.put(newname, value);
-                }
+                this.actionParams = dpa.getParameters();
             }
         }
     }
@@ -183,6 +186,19 @@ public class SportletURI implements PortletURI {
      * @return the URI as a string
      */
     public String toString() {
+
+        // add the actionsprams and prefix them
+
+        Set paramSet = actionParams.keySet();
+        Iterator it = paramSet.iterator();
+        while (it.hasNext()) {
+            String name = (String) it.next();
+            String newname = id + "_" + name;
+            String value = (String) actionParams.get(name);
+            store.put(newname, value);
+        }
+        if (!actionParams.isEmpty()) store.put(SportletProperties.PREFIX, id);
+
         String url = contextPath;
         String newURL;
         Set set = store.keySet();
@@ -193,7 +209,7 @@ public class SportletURI implements PortletURI {
             return contextPath + url;
         }
         boolean firstParam = true;
-        Iterator it = set.iterator();
+        it = set.iterator();
         //try {
         while (it.hasNext()) {
             if (!firstParam)
