@@ -243,6 +243,11 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <name>sortable</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>type</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -629,6 +634,11 @@
         </attribute>
         <attribute>
             <name>width</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>sortable</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
