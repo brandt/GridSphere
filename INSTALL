@@ -47,11 +47,11 @@ dist -- creates a GridSphere distribution in the dist directory
 deploy -- deploys the GridSphere framework and all portlets to a
 	  Tomcat servlet container located at $CATALINA_HOME
 
-docs-all -- compiles all GridSphere docbook documentation and
-	    builds the Javadoc documentation from the source code
+docs -- compiles all GridSphere docbook documentation and
+	builds the Javadoc documentation from the source code
 
-make-test-reports -- runs all Junit tests and creates HTML
-		     status reports in the build/reports directory
+run-tests -- runs all Junit tests and creates HTML
+	     status reports in the build/reports directory
 
 To see all the targets invoke "ant --projecthelp".
 
