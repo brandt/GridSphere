@@ -37,7 +37,7 @@ public class PortletContainer {
     protected List portlets = new ArrayList();
 
     protected String name = "";
-    protected String uiTheme = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_DEFAULT_THEME);
+    protected String theme = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_DEFAULT_THEME);
 
     /**
      * Constructs an instance of PortletContainer
@@ -69,7 +69,7 @@ public class PortletContainer {
      * @param theme the theme of this portlet component
      */
     public void setTheme(String theme) {
-        this.uiTheme = theme;
+        this.theme = theme;
     }
 
     /**
@@ -78,7 +78,7 @@ public class PortletContainer {
      * @return the theme of this portlet component
      */
     public String getTheme() {
-        return uiTheme;
+        return theme;
     }
 
     /**
@@ -142,7 +142,7 @@ public class PortletContainer {
         PortletComponent comp;
         while (it.hasNext()) {
             comp = (PortletComponent) it.next();
-            comp.setTheme(uiTheme);
+            comp.setTheme(theme);
             list = comp.init(list);
         }
         System.err.println("Made a components list!!!! " + list.size());
@@ -246,7 +246,7 @@ public class PortletContainer {
         out.println("<html>");
         out.println("<head>");
         out.println("  <title>" + name + "</title>");
-        out.println("  <link type=\"text/css\" href=\"themes/" + uiTheme + "/css" +
+        out.println("  <link type=\"text/css\" href=\"themes/" + theme + "/css" +
                 "/default.css\" rel=\"STYLESHEET\"/>");
         out.println("<script language=\"JavaScript\" src=\"javascript/gridsphere.js\"></script>");
         out.println("</head>\n<body>");

@@ -13,7 +13,7 @@
 <mapping>
 
     <class name="org.gridlab.gridsphere.layout.PortletContainer">
-        <map-to xml="portlet-layout"/>
+        <map-to xml="container-layout"/>
         <field name="Theme" type="string">
             <bind-xml name="theme" node="attribute"/>
         </field>
