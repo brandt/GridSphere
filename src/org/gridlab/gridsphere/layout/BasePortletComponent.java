@@ -81,10 +81,10 @@ public class BasePortletComponent extends PortletContainer implements PortletCom
 
     public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
         log.debug("in doRender()");
-        req.setAttribute("name", name);
-        req.setAttribute("bgcolor", bgColor);
-        req.setAttribute("fgcolor", fgColor);
-        req.setAttribute("height", height);
-        req.setAttribute("width", width);
+        req.setAttribute(LayoutProperties.NAME, name);
+        req.setAttribute(LayoutProperties.BGCOLOR, bgColor);
+        req.setAttribute(LayoutProperties.FGCOLOR, fgColor);
+        req.setAttribute(LayoutProperties.HEIGHT, height);
+        req.setAttribute(LayoutProperties.WIDTH, width);
     }
 }

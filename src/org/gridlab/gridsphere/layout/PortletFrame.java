@@ -5,9 +5,13 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletWindow;
+import org.gridlab.gridsphere.portlet.impl.SportletURI;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
+import org.gridlab.gridsphere.event.ActionEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,7 +21,8 @@ public class PortletFrame extends BasePortletComponent {
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletFrame.class);
 
     private String portletClass;
-    private String windowState;
+    private String windowState = SportletWindow.NORMAL.toString();
+    private String portletMode = Portlet.Mode.VIEW.toString();
 
     public PortletFrame() {
     }
@@ -38,6 +43,14 @@ public class PortletFrame extends BasePortletComponent {
         return windowState;
     }
 
+    public void setPortletMode(String portletMode) {
+        this.portletMode = portletMode;
+    }
+
+    public String getPortletMode() {
+        return portletMode;
+    }
+
     public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
         super.doRender(ctx, req, res);
         log.debug("in doRender()");
@@ -49,30 +62,49 @@ public class PortletFrame extends BasePortletComponent {
             log.error("Failed to get registry instance in PortletFrame: ", e);
             throw new PortletLayoutException("Unable to get portlet instance");
         }
-        // To alter the window and mode properties of the active portlet
-        //PortletWindow window = req.getWindow();
-        //Portlet.Mode mode = req.getMode();
-
 
         if (border == null) border = new PortletBorder();
 
-        // need to invoke the doView or whatever of the portlet class
-        DefaultPortletAction layoutAction = new DefaultPortletAction("layout");
-
-        //props.setPortletID(portletClass);
-        System.err.println("before creating URI ");
-        PortletURI windowURI = res.createURI(PortletWindow.NORMAL);
-        windowURI.addAction(layoutAction);
-
-        String windowLink = windowURI.toString();
-
-        layoutAction.addParameter("layoutproperties", "");
-        System.err.println("contacting regiostry for portlet: " + portletClass);
+        System.err.println("contacting registry for portlet: " + portletClass);
         RegisteredPortlet registeredPortlet = registryService.getRegisteredPortlet(portletClass);
         AbstractPortlet abstractPortlet = registeredPortlet.getActivePortlet();
-        System.err.println("now I have an abstract portlet");
         PortletSettings settings = registeredPortlet.getPortletSettings(false);
-        System.err.println("after portlet settings: ");
+
+        // Set the portlet ID
+        req.setAttribute(GridSphereProperties.PORTLETID, settings.getConcretePortletID());
+        System.err.println("concrete " + settings.getConcretePortletID());
+        // Set the portlet window
+        PortletWindow p = SportletWindow.getInstance(windowState);
+        req.setAttribute(GridSphereProperties.PORTLETWINDOW, p);
+
+        // Set the portlet mode
+        String prevMode = req.getParameter(GridSphereProperties.PORTLETMODE);
+        if (prevMode == null) prevMode = Portlet.Mode.VIEW.toString();
+        req.getPortletSession().setAttribute(GridSphereProperties.PREVIOUSMODE, prevMode);
+        req.getPortletSession().setAttribute(GridSphereProperties.PORTLETMODE, portletMode);
+
+        // Create URI tags that can be used
+        PortletURI minimizedModeURI = res.createURI(PortletWindow.State.MINIMIZED);
+        PortletURI maximizedModeURI = res.createURI(PortletWindow.State.MAXIMIZED);
+        PortletURI closedModeURI = res.createURI(PortletWindow.State.CLOSED);
+        PortletURI restoreModeURI = res.createURI(PortletWindow.State.RESIZING);
+
+        PortletURI modeURI = res.createURI();
+        DefaultPortletAction dpa = new DefaultPortletAction(PortletAction.MODE);
+        modeURI.addAction(dpa);
+
+        modeURI.addParameter(GridSphereProperties.PORTLETMODE, Portlet.Mode.EDIT.toString());
+        String edit = modeURI.toString();
+        req.setAttribute(LayoutProperties.EDITURI, edit);
+
+        modeURI.addParameter(GridSphereProperties.PORTLETMODE, Portlet.Mode.HELP.toString());
+        String help = modeURI.toString();
+        req.setAttribute(LayoutProperties.HELPURI, help);
+
+        modeURI.addParameter(GridSphereProperties.PORTLETMODE, Portlet.Mode.CONFIGURE.toString());
+        String configure = modeURI.toString();
+        req.setAttribute(LayoutProperties.CONFIGUREURI, configure);
+
         // set the portlet frame title
         String title = settings.getTitle(req.getLocale(), req.getClient());
         border.setTitle(title);
@@ -81,13 +113,11 @@ public class PortletFrame extends BasePortletComponent {
         ///// begin portlet frame
         PrintWriter out = res.getWriter();
         out.println("<table width=\"" + width + "%\"  border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#FFFFFF\"><tr><td>");
-        System.err.println("before borderin PortletFrame");
+
         border.doRender(ctx, req, res);
 
         out.println("<tr><td valign=\"top\" align=\"left\"><table width=\"100%\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\" bgcolor=");
         out.println("\"" + bgColor + "\"<tr><td width=\"25%\" valign=\"center\">");
-
-        System.err.println("in PortletFrame");
 
         try {
             if (abstractPortlet != null) {
@@ -99,7 +129,5 @@ public class PortletFrame extends BasePortletComponent {
         }
         out.println("</tr></table></td></tr></table></td></tr></table>");
         ///// end portlet frame
-
-
     }
 }

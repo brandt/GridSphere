@@ -90,13 +90,13 @@ public class PortletBorder {
     public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
         log.debug("in doRender()");
         try {
-            req.setAttribute("title", title);
-            req.setAttribute("thickness", thickness);
-            req.setAttribute("linecolor", lineColor);
-            req.setAttribute("font", font);
-            req.setAttribute("titlecolor", titleColor);
-            req.setAttribute("configmode", configMode.toString());
-            req.setAttribute("windowmode", windowMode.toString());
+            req.setAttribute(LayoutProperties.TITLE, title);
+            req.setAttribute(LayoutProperties.THICKNESS, thickness);
+            req.setAttribute(LayoutProperties.LINECOLOR, lineColor);
+            req.setAttribute(LayoutProperties.FONT, font);
+            req.setAttribute(LayoutProperties.TITLECOLOR, titleColor);
+            req.setAttribute(LayoutProperties.PORTLETMODE, configMode.toString());
+            req.setAttribute(LayoutProperties.WINDOWSTATE, windowMode.toString());
             ctx.include("/WEB-INF/conf/layout/portlet-border.jsp", req, res);
         } catch (PortletException e) {
             log.error("Unable to include component JSP", e);
