@@ -4,13 +4,14 @@
  */
 package org.gridlab.gridsphere.portlets.core;
 
-import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlets.core.tomcat.TomcatManagerWrapper;
 import org.gridlab.gridsphere.portlets.core.tomcat.TomcatWebAppResult;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
+import org.gridlab.gridsphere.provider.ActionPortlet;
+import org.gridlab.gridsphere.provider.portletui.beans.ErrorFrameBean;
+import org.gridlab.gridsphere.provider.event.FormEvent;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
@@ -22,38 +23,60 @@ import java.util.Map;
  * ui application management and hence dynamic portlet management. This class needs to be adapted for
  * other servlet containers.
  */
-public class PortletApplicationManager extends AbstractPortlet {
+public class PortletApplicationManager extends ActionPortlet {
 
     private PortletManagerService portletManager = null;
     private TomcatManagerWrapper tomcat = TomcatManagerWrapper.getInstance();
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
+        DEFAULT_VIEW_PAGE = "listPortlets";
     }
 
-    public void actionPerformed(ActionEvent event) throws PortletException {
+    public void initConcrete(PortletSettings settings) throws UnavailableException {
+        super.initConcrete(settings);
+    }
+
+    public void listPortlets(FormEvent event) throws PortletException {
+        ErrorFrameBean frame = event.getErrorFrameBean("errorFrame");
+        User user = event.getPortletRequest().getUser();
+        try {
+            portletManager = (PortletManagerService)getConfig().getContext().getService(PortletManagerService.class, user);
+        } catch (PortletServiceException e) {
+            frame.setValue("PortletRegistry service unavailable! " + e.getMessage());
+            throw new PortletException("PortletRegistry service unavailable! ", e);
+        }
+        //TomcatWebAppResult result = tomcat.getWebAppList();
+        List webapps = portletManager.getPortletWebApplicationNames();
+        List result = tomcat.getPortletAppList(webapps);
+        event.getPortletRequest().setAttribute("result", result);
+        //if (result != null) log.debug("result: " + result.getReturnCode() + " " + result.getDescription());
+        setNextPresentation(event.getPortletRequest(), "portletmanager/list.jsp");
+    }
+
+    public void doPortletManager(FormEvent event) throws PortletException {
+        log.debug("In doPortletManager");
         DefaultPortletAction action = event.getAction();
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
 
         User user = event.getPortletRequest().getUser();
+        ErrorFrameBean frame = event.getErrorFrameBean("errorFrame");
 
         try {
             portletManager = (PortletManagerService)getConfig().getContext().getService(PortletManagerService.class, user);
-        } catch (PortletServiceUnavailableException e) {
+        } catch (PortletServiceException e) {
+            frame.setValue("PortletRegistry service unavailable! " + e.getMessage());
             throw new PortletException("PortletRegistry service unavailable! ", e);
-        } catch (PortletServiceNotFoundException e) {
-            throw new PortletException("PortletRegistryService not found! ", e);
         }
 
         Map params = action.getParameters();
         String operation = (String)params.get("operation");
         String appName = (String)params.get("context");
         TomcatWebAppResult result = null;
+
         try {
-            if (action.getName().equals("list")) {
-                result = tomcat.getWebAppList();
-            } else if (action.getName().equals("install")) {
+           if (action.getName().equals("install")) {
                 log.debug("In actionPerformed doing an install");
 
 
@@ -113,29 +136,11 @@ public class PortletApplicationManager extends AbstractPortlet {
             }
         } catch (IOException e) {
             log.error("Caught IOException!", e);
+            frame.setValue("Caught IOException! " + e.getMessage());
         }
         req.setAttribute("result", result);
-        if (result != null) System.err.println("result: " + result.getReturnCode() + " " + result.getDescription());
-    }
-
-    public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
-        /*
-        List webapps = portletManager.getPortletWebApplications();
-        for (int i = 0; i < webapps.size(); i++) {
-            System.err.println("webapp " + i + " " + webapps.get(i));
-        }
-
-        TomcatWebAppResult result = tomcat.getWebAppList();
-        List allwebapps = result.getWebAppDescriptions();
-        System.err.println(result.getReturnCode() + " : " + result.getDescription());
-        request.setAttribute("result", result);
-        getPortletConfig().getContext().include("/jsp/list.jsp", request, response);
-        */
-        if (request.getAttribute("result") != null) {
-            getPortletConfig().getContext().include("/jsp/list.jsp", request, response);
-        } else {
-            getPortletConfig().getContext().include("/jsp/display.jsp", request, response);
-        }
+        if (result != null) log.debug("result: " + result.getReturnCode() + " " + result.getDescription());
+        setNextPresentation(req, "portletmanager/list.jsp");
     }
 
 }

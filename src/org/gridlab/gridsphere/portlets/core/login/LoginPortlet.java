@@ -6,7 +6,6 @@ package org.gridlab.gridsphere.portlets.core.login;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
-import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridlab.gridsphere.provider.ActionPortlet;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 

@@ -10,6 +10,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.StringTokenizer;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ArrayList;
 
 public class TomcatManagerWrapper {
 
@@ -98,6 +101,17 @@ public class TomcatManagerWrapper {
      */
     public TomcatWebAppResult getWebAppList() {
         return doCommand("/list");
+    }
+
+    public List getPortletAppList(List webapps) {
+        List l = new ArrayList();
+        TomcatWebAppResult result = doCommand("/list");
+        Iterator it = result.getWebAppDescriptions().iterator();
+        while (it.hasNext()) {
+            TomcatWebAppDescription desc = (TomcatWebAppDescription)it.next();
+            if (webapps.contains((desc.getContextPath()))) l.add(desc);
+        }
+        return l;
     }
 
     public TomcatWebAppResult reloadWebApp(String context) {
