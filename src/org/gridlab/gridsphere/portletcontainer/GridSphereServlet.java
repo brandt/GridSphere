@@ -126,6 +126,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletRequest portletReq = event.getPortletRequest();
         PortletResponse portletRes = event.getPortletResponse();
 
+
         // If first time being called, instantiate all portlets
         if (firstDoGet) {
             //PortletInvoker dispatcher = event.getPortletEventDispatcher();
@@ -137,6 +138,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         if (event.hasAction()) {
             if (event.getAction().getName().equals(SportletProperties.LOGIN)) {
                 login(event);
+                event = new GridSphereEventImpl(aclService, context, req, res);
             }
             if (event.getAction().getName().equals(SportletProperties.LOGOUT)) {
                 logout(event);
@@ -205,6 +207,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         }
         layoutEngine.loginPortlets(event);
     }
+
 
     /**
      * Handles logout requests

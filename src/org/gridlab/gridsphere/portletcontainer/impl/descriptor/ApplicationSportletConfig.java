@@ -62,7 +62,7 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
 
     /**
      * Returns the name of a servlet associated with this portlet defined
-     * in web.xml as <servlet-name>
+     * in ui.xml as <servlet-name>
      *
      * @return the servlet name
      */
@@ -71,7 +71,7 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
     }
 
     /**
-     * Sets the servlet name associated with this portlet defined in web.xml
+     * Sets the servlet name associated with this portlet defined in ui.xml
      * as <servlet-name>
      *
      * @param servletName the servlet name

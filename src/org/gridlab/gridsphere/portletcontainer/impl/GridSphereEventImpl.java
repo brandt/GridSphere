@@ -5,10 +5,7 @@
 package org.gridlab.gridsphere.portletcontainer.impl;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletRequestImpl;
-import org.gridlab.gridsphere.portlet.impl.SportletResponse;
-import org.gridlab.gridsphere.portlet.impl.SportletRequest;
-import org.gridlab.gridsphere.portlet.impl.SportletContext;
+import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
@@ -44,6 +41,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
         try {
             portletComponentID = new Integer(cidStr).intValue();
         } catch (NumberFormatException e) {
+            portletComponentID = 0;
         }
 
         /* This is where a DefaultPortletAction gets put together if one exists */
@@ -85,6 +83,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
                 portletRequest.setRole(group, role);
             }
         }
+
     }
 
     public PortletRequest getPortletRequest() {

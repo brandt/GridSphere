@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
 
 /**
  * <code>GridSphereConfig</code> represents the <code>gridsphere.properties</code> properties file
- * used for maintaing properties about the GridSphere portlet conatiner.
+ * used for maintaing properties about the GridSphere portlet container.
  */
 public class GridSphereConfig implements GridSphereConfigProperties {
 

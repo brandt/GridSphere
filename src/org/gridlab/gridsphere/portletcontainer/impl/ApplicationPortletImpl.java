@@ -43,7 +43,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
      *
      * @param pdd the <code>PortletDeploymentDescriptor</code>
      * @param portletDef a <code>SportletDefinition</code>
-     * @param webApplication the web application name for this application portlet
+     * @param webApplication the ui application name for this application portlet
      * @param context the <code>ServletContext</code> containing this application portlet
      */
     public ApplicationPortletImpl(PortletDeploymentDescriptor pdd, SportletDefinition portletDef,
@@ -87,7 +87,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
         RequestDispatcher rd = context.getNamedDispatcher(servletName);
         if (rd == null) {
             log.error("Unable to create a dispatcher for portlet: " + portletName);
-            log.error("Make sure the servletName: " + servletName + " is the servlet-name defined in web.xml");
+            log.error("Make sure the servletName: " + servletName + " is the servlet-name defined in ui.xml");
         }
         portletDispatcher = new PortletDispatcher(rd, appPortletConfig);
     }
@@ -174,7 +174,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
     }
 
     /**
-     * Returns the name of a servlet associated with this portlet defined in web.xml as <servlet-name>
+     * Returns the name of a servlet associated with this portlet defined in ui.xml as <servlet-name>
      *
      * @return the servlet name
      */

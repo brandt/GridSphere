@@ -37,7 +37,6 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
     private Map appPortlets = new Hashtable();
     private RequestDispatcher rd = null;
     private String webAppDescription;
-    private String groupOwnerName;
 
     // PortletLayout engine handles layout.xml
     private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
@@ -48,10 +47,10 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
     private PortletWebApplicationImpl() {}
 
     /**
-     * Constructs an instance of a PortletWebApplicationImpl from a supplied web application name and corresponding
+     * Constructs an instance of a PortletWebApplicationImpl from a supplied ui application name and corresponding
      * <code>ServletContext</code>
      *
-     * @param webApplicationName the teh web application name
+     * @param webApplicationName the teh ui application name
      * @param context the <code>ServletContext</code>
      */
     public PortletWebApplicationImpl(String webApplicationName, ServletContext context) {
@@ -168,19 +167,10 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
     /**
      * Returns the portlet web application name
      *
-     * @return the web application name
+     * @return the ui application name
      */
     public String getWebApplicationName() {
         return webApplicationName;
-    }
-
-    /**
-     * Returns the group owner name of this portlet web application
-     *
-     * @return the group owner name of this portlet web application
-     */
-    public String getGroupOwnerName() {
-        return pdd.getGroupOwnerName();
     }
 
     /**

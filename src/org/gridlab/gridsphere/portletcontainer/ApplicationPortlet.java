@@ -54,7 +54,7 @@ public interface ApplicationPortlet {
     public String getApplicationPortletName();
 
     /**
-     * Returns the name of a servlet associated with this portlet defined in web.xml as <servlet-name>
+     * Returns the name of a servlet associated with this portlet defined in ui.xml as <servlet-name>
      *
      * @return the servlet name
      */
