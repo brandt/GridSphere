@@ -84,7 +84,7 @@
         <body-content>empty</body-content>
     </tag>
     <tag>
-        <name>actionparam</name>
+        <name>param</name>
         <tag-class>org.gridlab.gridsphere.provider.portlet.tags.jsrimpl.ActionParamTag</tag-class>
         <body-content>empty</body-content>
         <description>
