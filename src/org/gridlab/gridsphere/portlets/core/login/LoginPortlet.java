@@ -81,13 +81,7 @@ public class LoginPortlet extends ActionPortlet {
             out.println(getNextTitle(request));
         } else {
             out.println(getLocalizedText(request, "LOGIN_CONFIGURE"));
-            //getPortletConfig().getContext().include("/jsp/login/login_title.jsp", request, response);
         }
-        /*
-         ResourceBundle resBundle = ResourceBundle.getBundle("Portlet", locale);
-         String welcome = resBundle.getString("LOGIN_SUCCESS");
-         out.println(welcome + ", " + user.getFullName());
-         */
     }
 
     public void gs_login(FormEvent event) throws PortletException {
