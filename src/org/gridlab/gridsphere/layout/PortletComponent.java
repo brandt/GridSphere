@@ -10,10 +10,19 @@ public abstract class PortletComponent {
 
     protected int width;
     protected int height;
+    protected String name;
     protected String fgColor;
     protected String bgColor;
     protected PortletBorder border;
     protected PortletInsets insets;
+
+    public String getBackground() {
+        return bgColor;
+    }
+
+    public String getForeground() {
+        return fgColor;
+    }
 
     public PortletBorder getBorder() {
         return border;
@@ -29,6 +38,10 @@ public abstract class PortletComponent {
 
     public PortletDimension getMinimumSize() {
         return null;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public abstract void doLayout();
@@ -51,8 +64,16 @@ public abstract class PortletComponent {
         this.bgColor = bgColor;
     }
 
+    public void setForeground(String ggColor) {
+        this.fgColor = fgColor;
+    }
+
     public void setBorder(PortletBorder border) {
         this.border = border;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 }
