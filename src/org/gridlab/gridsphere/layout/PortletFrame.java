@@ -26,9 +26,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Collections;
+import java.util.*;
 
 /**
  * <code>PortletFrame</code> provides the visual representation of a portlet. A portlet frame
@@ -516,17 +514,22 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     portletURI.addParameter(SportletProperties.COMPONENT_ID, String.valueOf(titleBar.getComponentID()));
                     portletURI.addParameter(SportletProperties.PORTLET_WINDOW, PortletWindow.State.CLOSED.toString());
                     postframe.append("<form action=\"" + portletURI.toString() + "\" method=\"POST\"");
-                    postframe.append("<p><b>Do you really wish to unsubscribe from this portlet?</b></p>");
+                    Locale locale = req.getLocale();
+                    ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
+                    String value = bundle.getString("UNSUBSCRIBE_MESSAGE");
+                    String ok = bundle.getString("OK");
+                    String cancel = bundle.getString("CANCEL");
+                    postframe.append("<p><b>" + value + "</b></p>");
 
                     portletURI = res.createURI();
 
                     portletURI.addParameter(PortletWindow.State.CLOSED.toString(), Boolean.TRUE.toString());
 
-                    postframe.append("<p><input class=\"portlet-form-button\" type=\"submit\" name=\"" + SportletProperties.DEFAULT_PORTLET_ACTION + "=close\" value=\"OK\"");
+                    postframe.append("<p><input class=\"portlet-form-button\" type=\"submit\" name=\"" + SportletProperties.DEFAULT_PORTLET_ACTION + "=close\" value=\"" + ok + "\"");
                     portletURI = res.createURI();
 
                     portletURI.addParameter(PortletWindow.State.CLOSED.toString(), Boolean.FALSE.toString());
-                    postframe.append("<input class=\"portlet-form-button\" type=\"submit\" name=\"" + SportletProperties.DEFAULT_PORTLET_ACTION + "=cancelClose\" value=\"Cancel\"");
+                    postframe.append("<input class=\"portlet-form-button\" type=\"submit\" name=\"" + SportletProperties.DEFAULT_PORTLET_ACTION + "=cancelClose\" value=\"" + cancel + "\"");
                     postframe.append("</p></form>");
                 }  else {
 
