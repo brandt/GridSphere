@@ -60,7 +60,7 @@ public class DefineObjectsTag extends TagSupport {
             hReq = (HttpServletRequest)req;
             renderRequest = (RenderRequest)hReq.getAttribute(SportletProperties.RENDER_REQUEST);
             //new RenderRequestImpl(hReq, portalContext);
-            pageContext.setAttribute("renderRequest", renderRequest, PageContext.PAGE_SCOPE);
+            pageContext.setAttribute("renderRequest", renderRequest);
         }
         ServletResponse res = pageContext.getResponse();
         if (res instanceof HttpServletResponse) {
@@ -68,11 +68,11 @@ public class DefineObjectsTag extends TagSupport {
             RenderResponse renderResponse = (RenderResponse)hReq.getAttribute(SportletProperties.RENDER_RESPONSE);
             renderResponse.setContentType("text/html");
             //new RenderResponseImpl(hReq, hRes);
-            pageContext.setAttribute("renderResponse", renderResponse, PageContext.PAGE_SCOPE);
+            pageContext.setAttribute("renderResponse", renderResponse);
         }
         PortletConfig portletConfig = (PortletConfig)hReq.getAttribute(SportletProperties.PORTLET_CONFIG);
         //new PortletConfigImpl(pageContext.getServletConfig());
-        pageContext.setAttribute("portletConfig", portletConfig, PageContext.PAGE_SCOPE);
+        pageContext.setAttribute("portletConfig", portletConfig);
 
         return SKIP_BODY;
     }

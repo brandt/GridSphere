@@ -139,7 +139,7 @@ public class ActionLinkTag extends ActionTag {
             action = actionlink.getAction();
         }
         
-        actionlink.setPortletURI(createGSActionURI());
+        actionlink.setPortletURI(createActionURI());
 
         if ((bodyContent != null) && (value == null)) {
             actionlink.setValue(bodyContent.getString());

@@ -30,7 +30,7 @@ public class InitTag extends TagSupport {
         if (req instanceof HttpServletRequest) {
             HttpServletRequest hReq = (HttpServletRequest)req;
             portletRequest = new SportletRequestImpl(hReq);
-            pageContext.setAttribute("portletRequest", portletRequest);            
+            pageContext.setAttribute("portletRequest", portletRequest);
         }
         ServletResponse res = pageContext.getResponse();
         if (res instanceof HttpServletResponse) {

@@ -190,9 +190,9 @@ public abstract class ActionTag extends BaseComponentTag {
 
     protected String createJSRActionURI(PortletURL url) throws JspException {
         // Builds a URI containing the actin and associated params
-        RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
+        RenderResponse res = (RenderResponse) pageContext.getAttribute("renderResponse", PageContext.PAGE_SCOPE);
         this.actionURL = (PortletURLImpl)url;
-        RenderRequest req = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
+        RenderRequest req = (RenderRequest) pageContext.getAttribute("renderRequest", PageContext.PAGE_SCOPE);
         // action is a required attribute except for FormTag
         if (windowState == null) {
             windowState = req.getWindowState().toString();
@@ -240,7 +240,6 @@ public abstract class ActionTag extends BaseComponentTag {
             }
         }
         if (action != null) {
-            System.err.println("stting action :" + action);
             actionURL.setAction(action);
         }
         //if (!action.equals("render"))
@@ -251,7 +250,7 @@ public abstract class ActionTag extends BaseComponentTag {
 
     public String createActionURI() throws JspException {
         if (isJSR()) {
-            RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
+            RenderResponse res = (RenderResponse) pageContext.getAttribute("renderResponse");
             return createJSRActionURI(res.createActionURL());
         }
         return createGSActionURI();

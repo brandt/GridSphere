@@ -211,6 +211,7 @@ public class ActionPortlet extends AbstractPortlet {
     }
 
 
+    
     protected void checkUserRole(FormEvent event) throws PortletException {
         PortletRequest req = event.getPortletRequest();
         PortletRole userRole = req.getRole();

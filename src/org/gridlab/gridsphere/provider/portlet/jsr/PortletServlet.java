@@ -13,15 +13,14 @@ import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRPortletWebApplicationImpl;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRApplicationPortletImpl;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.*;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManager;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 
 import javax.portlet.*;
+import javax.portlet.PortletMode;
+import javax.portlet.PortletPreferences;
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -37,11 +36,11 @@ import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.ResourceBundle;
 
 public class PortletServlet  extends HttpServlet
         implements Servlet, ServletConfig, Serializable, ServletContextListener,
@@ -206,7 +205,14 @@ public class PortletServlet  extends HttpServlet
             userInfo.put("user.organization", user.getOrganization());
             userInfo.put("user.lastlogintime", new Long(user.getLastLoginTime()).toString());
             userInfo.put("user.name.full", user.getFullName());
-            userInfo.put("user.namefamily", user.getFamilyName());
+            userInfo.put("user.name.family", user.getFamilyName());
+        }
+
+        UserAttribute[] userAttrs = portletWebApp.getUserAttributes();
+        for (int i = 0; i < userAttrs.length; i++) {
+            UserAttribute userAttr = userAttrs[i];
+            String name = userAttr.getName().getContent();
+            userInfo.put(name, "");
         }
 
         request.setAttribute(PortletRequest.USER_INFO, userInfo);
@@ -383,15 +389,16 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
             location = aResponse.getRedirectLocation();
 
             if (location != null) {
-                /*
-                if (location.indexOf("://") < 0 ) {
+            //if (location == null) {
 
-                    PortletURLImpl redirectUrl = new PortletURLImpl(servletRequest, servletResponse, portalContext);
+                //if (location.indexOf("://") < 0 ) {
+             /*
+                    PortletURLImpl redirectUrl = new PortletURLImpl(servletRequest, servletResponse, portalContext, false);
                     //TODO: don't send changes in case of exception -> PORTLET:SPEC:17
 
                     // get the changings of this portlet entity that might be set during action handling
                     // change portlet mode
-                    redirectUrl.setContextPath(actionRequest.getContextPath());
+                    //redirectUrl.setContextPath(actionRequest.getContextPath());
                     try {
                         if (aResponse.getChangedPortletMode() != null) {
                             redirectUrl.setPortletMode(aResponse.getChangedPortletMode());
@@ -415,11 +422,11 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
                     }
                     // get render parameters
                     Map renderParameter = aResponse.getRenderParameters();
-                    redirectUrl.setParameter(SportletProperties.COMPONENT_ID, (String) servletRequest.getParameter(SportletProperties.COMPONENT_ID));
+                    redirectUrl.setComponentID((String) servletRequest.getParameter(SportletProperties.COMPONENT_ID));
                     redirectUrl.setParameters(renderParameter);
                     System.err.println("redirecting url " +  redirectUrl.toString());
                     location = servletResponse.encodeRedirectURL(redirectUrl.toString());
-                }
+               //}
                 */
                 javax.servlet.http.HttpServletResponse redirectResponse = servletResponse;
                 while (redirectResponse instanceof javax.servlet.http.HttpServletResponseWrapper) {
