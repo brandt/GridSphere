@@ -1,7 +1,6 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletRequest;
-
+import javax.servlet.http.HttpServletRequest;
 import java.util.Iterator;
 
 /*
@@ -25,7 +24,7 @@ public class ActionMenuItemBean extends BeanContainer {
         this.beanId = beanId;
     }
 
-    public ActionMenuItemBean(PortletRequest req, String beanId) {
+    public ActionMenuItemBean(HttpServletRequest req, String beanId) {
         super();
         this.request = req;
         this.beanId = beanId;

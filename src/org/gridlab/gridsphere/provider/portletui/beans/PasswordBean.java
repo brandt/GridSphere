@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * A <code>PasswordBean</code> represents a password input element
@@ -27,7 +27,7 @@ public class PasswordBean extends TextFieldBean {
      * @param req the portlet request
      * @param beanId the bean identifier
      */
-    public PasswordBean(PortletRequest req, String beanId) {
+    public PasswordBean(HttpServletRequest req, String beanId) {
         super(NAME, beanId);
         this.request = req;
     }

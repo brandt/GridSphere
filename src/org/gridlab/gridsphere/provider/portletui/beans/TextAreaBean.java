@@ -5,7 +5,8 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletRequest;
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * The <code>TextAreaBean</code> represents a text area element
@@ -31,7 +32,7 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
      * @param req the portlet request
      * @param beanId the bean identifier
      */
-    public TextAreaBean(PortletRequest req, String beanId) {
+    public TextAreaBean(HttpServletRequest req, String beanId) {
         super(NAME);
         this.cssClass = TextBean.MSG_INFO;
         this.request = req;

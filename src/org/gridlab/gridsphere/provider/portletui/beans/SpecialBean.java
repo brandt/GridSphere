@@ -4,7 +4,7 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *  A <code>SpecialBean</code> is just a demonstration of how to create a tag/bean pair
@@ -32,7 +32,7 @@ public class SpecialBean extends BaseComponentBean implements TagBean {
         this.cssClass = TEXTFIELD_STYLE;
     }
 
-    public SpecialBean(PortletRequest request, String id) {
+    public SpecialBean(HttpServletRequest request, String id) {
         super(NAME);
         this.cssClass = TEXTFIELD_STYLE;
         this.request = request;

@@ -4,7 +4,7 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * A <code>HiddenFieldBean</code> represents a hidden field element
@@ -36,7 +36,7 @@ public class HiddenFieldBean extends TextFieldBean {
      * @param req the portlet request
      * @param beanId the bean identifier
      */
-    public HiddenFieldBean(PortletRequest req, String beanId) {
+    public HiddenFieldBean(HttpServletRequest req, String beanId) {
         super(NAME);
         this.request = req;
         this.beanId = beanId;

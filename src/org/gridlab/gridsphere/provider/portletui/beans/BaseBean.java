@@ -4,9 +4,9 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -19,7 +19,7 @@ public abstract class BaseBean implements TagBean {
 
     protected String beanId = "";
     protected String vbName = "undefined";
-    protected PortletRequest request = null;
+    protected HttpServletRequest request = null;
 
     /**
      * Constructs default base bean

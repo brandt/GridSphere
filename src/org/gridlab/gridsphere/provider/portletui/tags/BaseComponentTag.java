@@ -4,7 +4,6 @@
  */
 package org.gridlab.gridsphere.provider.portletui.tags;
 
-import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
 
 import java.util.Locale;
@@ -207,10 +206,9 @@ public abstract class BaseComponentTag extends BaseBeanTag {
     }
 
     protected String getLocalizedText(String key, String base) {
-        PortletRequest req = (PortletRequest) pageContext.getAttribute("portletRequest");
-        Locale locale = req.getLocale();
+        Locale locale = (Locale)pageContext.getSession().getAttribute("gridsphere.user.locale");
+        if (locale == null) locale = Locale.ENGLISH;
         ResourceBundle bundle = ResourceBundle.getBundle(base, locale);
-
         return bundle.getString(key);
     }
 }

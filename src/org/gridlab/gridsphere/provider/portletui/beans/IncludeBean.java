@@ -1,11 +1,9 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletResponse;
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspWriter;
 
 /*
@@ -18,7 +16,6 @@ import javax.servlet.jsp.JspWriter;
 public class IncludeBean extends BaseBean implements TagBean {
 
     private ServletContext servletContext = null;
-    private PortletResponse response = null;
     private JspWriter jspWriter = null;
     private String page = null;
 
@@ -39,7 +36,7 @@ public class IncludeBean extends BaseBean implements TagBean {
     /**
      * Constructs an include bean
      */
-    public IncludeBean(PortletRequest request, String beanId) {
+    public IncludeBean(HttpServletRequest request, String beanId) {
         this.request = request;
         this.beanId = beanId;
     }

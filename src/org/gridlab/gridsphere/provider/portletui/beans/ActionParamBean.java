@@ -4,7 +4,7 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * An <code>ActionParamBean</code> is a visual bean that represents action parameters associated with a portlet action
@@ -37,7 +37,7 @@ public class ActionParamBean extends BaseBean {
      * @param req the portlet request
      * @param beanId the bean identifier
      */
-    public ActionParamBean(PortletRequest req, String beanId) {
+    public ActionParamBean(HttpServletRequest req, String beanId) {
         this.beanId = beanId;
         this.request = req;
     }

@@ -1,9 +1,9 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /*
@@ -32,14 +32,14 @@ public class DataGridBean extends BeanContainer implements TagBean {
         this.beanId = beanId;
     }
 
-    public DataGridBean(PortletRequest req, String beanId) {
+    public DataGridBean(HttpServletRequest req, String beanId) {
         super();
         this.request = req;
         this.beanId = beanId;
     }
 
     // TODO place Oliver's hack here and not in base bean
-    public void setPortletRequest(PortletRequest request) {
+    public void setHttpServletRequest(HttpServletRequest request) {
         this.request = request;
     }
 

@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * An <code>ActionSubmitBean</code> is a visual bean that represents an HTML button and
@@ -30,7 +30,7 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
      * @param req the portlet request
      * @param beanId the bean identifier
      */
-    public ActionSubmitBean(PortletRequest req, String beanId) {
+    public ActionSubmitBean(HttpServletRequest req, String beanId) {
         super(NAME);
         this.cssClass = SUBMIT_STYLE;
         this.request = req;

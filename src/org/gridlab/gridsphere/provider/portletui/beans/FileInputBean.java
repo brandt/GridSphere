@@ -5,8 +5,8 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.apache.commons.fileupload.FileItem;
-import org.gridlab.gridsphere.portlet.PortletRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,7 +41,7 @@ public class FileInputBean extends InputBean implements TagBean {
      * @param beanId the bean identifier
      * @throws IOException if an I/O exception occurs
      */
-    public FileInputBean(PortletRequest request, String beanId) throws IOException {
+    public FileInputBean(HttpServletRequest request, String beanId) throws IOException {
         super(NAME);
         this.cssClass = SUBMIT_STYLE;
         this.inputtype = "file";
@@ -49,7 +49,7 @@ public class FileInputBean extends InputBean implements TagBean {
         this.beanId = beanId;
     }
 
-    public FileInputBean(PortletRequest request, String beanId, FileItem fileItem) throws IOException {
+    public FileInputBean(HttpServletRequest request, String beanId, FileItem fileItem) throws IOException {
         super(NAME);
         this.cssClass = SUBMIT_STYLE;
         this.inputtype = "file";

@@ -4,8 +4,9 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * A <code>TableBean</code> provides a table element
@@ -41,7 +42,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
      * @param req the portlet request
      * @param beanId the bean identifier
      */
-    public TableBean(PortletRequest req, String beanId) {
+    public TableBean(HttpServletRequest req, String beanId) {
         super();
         this.request = req;
         this.beanId = beanId;

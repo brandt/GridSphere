@@ -113,7 +113,7 @@ public class DataGridTag extends ContainerTag {
             dataGridBean.setHeader(getLocalizedText(key, "DataGrid"));
         }
 
-        dataGridBean.setPortletRequest(request);
+        dataGridBean.setHttpServletRequest(request);
 
         try {
             JspWriter out = pageContext.getOut();

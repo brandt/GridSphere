@@ -4,8 +4,7 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletRequest;
-
+import javax.servlet.http.HttpServletRequest;
 import java.util.Iterator;
 
 /**
@@ -24,7 +23,7 @@ public class ActionLinkBean extends ActionBean implements TagBean {
     /**
      * Constructs an action link bean from a portlet request and supplied bean identifier
      */
-    public ActionLinkBean(PortletRequest req, String beanId) {
+    public ActionLinkBean(HttpServletRequest req, String beanId) {
         this.request = req;
         this.beanId = beanId;
     }

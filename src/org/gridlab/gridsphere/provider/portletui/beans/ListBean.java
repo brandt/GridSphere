@@ -5,8 +5,7 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletRequest;
-
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -41,7 +40,7 @@ public class ListBean extends BaseComponentBean implements TagBean {
      * @param request the portlet request
      * @param beanId the bean identifier
      */
-    public ListBean(PortletRequest request, String beanId) {
+    public ListBean(HttpServletRequest request, String beanId) {
         super(NAME);
         this.request = request;
         this.beanId = beanId;

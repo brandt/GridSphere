@@ -4,8 +4,9 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *  The <code>FrameBean</code> extends <code>TableBean</code> to provide a stylized table that can also
@@ -46,7 +47,7 @@ public class FrameBean extends TableBean implements TagBean {
      * @param req the portlet request
      * @param beanId the bean identifier
      */
-    public FrameBean(PortletRequest req, String beanId) {
+    public FrameBean(HttpServletRequest req, String beanId) {
         super(FRAME_TABLE);
         this.beanId = beanId;
         this.request = req;
