@@ -4,9 +4,7 @@
  */
 package org.gridlab.gridsphere.provider.portletui.tags;
 
-import org.gridlab.gridsphere.portlet.DefaultPortletAction;
-import org.gridlab.gridsphere.portlet.PortletResponse;
-import org.gridlab.gridsphere.portlet.PortletURI;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.provider.portletui.beans.ActionParamBean;
 
 import java.util.Iterator;
@@ -20,6 +18,8 @@ public abstract class ActionTag extends BaseComponentTag {
 
     protected String action = null;
     protected PortletURI actionURI = null;
+    protected String windowState = null;
+    protected String portletMode = null;
     protected DefaultPortletAction portletAction = null;
     protected List paramBeans = null;
     protected String label = null;
@@ -40,6 +40,22 @@ public abstract class ActionTag extends BaseComponentTag {
      */
     public String getLabel() {
         return label;
+    }
+
+    public void setPortletMode(String portletMode) {
+        this.portletMode = portletMode;
+    }
+
+    public String getPortletMode() {
+        return portletMode;
+    }
+
+    public void setWindowState(String windowState) {
+        this.windowState = windowState;
+    }
+
+    public String getWindowState() {
+        return windowState;
     }
 
     public void setAction(String action) {
@@ -78,6 +94,12 @@ public abstract class ActionTag extends BaseComponentTag {
         // action is a required attribute except for FormTag
         if (label != null) {
             actionURI = res.createURI(label);
+        } else if (windowState != null) {
+            PortletWindow.State state = PortletWindow.State.toState(windowState);
+            actionURI = res.createURI(state);
+        } else if (portletMode != null) {
+            Portlet.Mode mode = Portlet.Mode.toMode(portletMode);
+            actionURI = res.createURI(mode);
         } else {
             actionURI = res.createURI();
         }
