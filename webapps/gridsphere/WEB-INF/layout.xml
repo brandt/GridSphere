@@ -21,7 +21,6 @@
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
-                            <required-role>SUPER</required-role>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.PortletApplicationManager.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
@@ -32,7 +31,6 @@
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
-                            <required-role>SUPER</required-role>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.user.UserManagerPortlet.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
