@@ -38,13 +38,36 @@
 
 <portlet-app-def>
 
-<portlet-app uid="org.gridlab.gridsphere.portlets.core.HalloWelt">
+<portlet-app uid="org.gridlab.gridsphere.portlets.core.HalloWelt.624">
     <portlet-app-name>Hallo Welt Portlet Application</portlet-app-name>
     <portlet href="WEB-INF/web.xml#Servlet_1902648614" id="Portlet_1902648614">
         <portlet-name>Hallo Welt</portlet-name>
     </portlet>
 </portlet-app>
 
+<concrete-portlet-app uid="org.gridlab.gridsphere.portlets.core.HalloWelt.624.2">
+    <portlet-app-name>Concrete Hallo Welt - Portlet Sample #1</portlet-app-name>
+    <config-param>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </config-param>
+    <concrete-portlet href="Portlet_1902648613">
+        <portlet-name>Hallo Welt</portlet-name>
+        <default-locale>en</default-locale>
+        <language locale="en_US">
+            <title>Hallo Welt - Beispiel Portlet #1</title>
+            <title-short>Hallo Welt</title-short>
+            <description>Hallo Welt - Beispiel Portlet #1</description>
+            <keywords>portlet hallo welt</keywords>
+        </language>
+        <group>
+            <group-name>ANY</group-name>
+        </group>
+        <role>
+            <role-name>GUEST</role-name>
+        </role>
+    </concrete-portlet>
+</concrete-portlet-app>
 
 
 </portlet-app-def>
