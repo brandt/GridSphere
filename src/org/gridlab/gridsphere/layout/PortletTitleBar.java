@@ -408,7 +408,7 @@ public class PortletTitleBar extends BasePortletComponent {
         PortletResponse res = event.getPortletResponse();
 
         portletModes = new String[supportedModes.size()];
-        for (int i = 0; i < supportedModes.size(); i++) {
+        for (i = 0; i < supportedModes.size(); i++) {
             Portlet.Mode mode = (Portlet.Mode)supportedModes.get(i);
             portletModes[i] = mode.toString();
         }
