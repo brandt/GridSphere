@@ -4,20 +4,19 @@
  */
 package org.gridlab.gridsphere.services.core.message.impl;
 
-import org.gridlab.gridsphere.layout.*;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.PortletMessage;
 import org.gridlab.gridsphere.portlet.AccessDeniedException;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletMessage;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.services.layout.LayoutManagerService;
 import org.gridlab.gridsphere.services.core.message.PortletMessageService;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The LayoutManagerService provies customization support for user layouts
@@ -57,7 +56,7 @@ public class PortletMessageServiceImpl implements PortletMessageService, Portlet
      * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
      */
     public void send(String portletName, PortletMessage message) throws AccessDeniedException {
-        List l = (List)messages.get(portletName);
+        List l = (List) messages.get(portletName);
         if (l == null) l = new ArrayList();
         l.add(message);
         messages.put(portletName, l);
@@ -73,7 +72,7 @@ public class PortletMessageServiceImpl implements PortletMessageService, Portlet
      */
     public List retrieveMessages(String portletName) throws AccessDeniedException {
         List messageList = new ArrayList();
-        List l = (List)messages.get(portletName);
+        List l = (List) messages.get(portletName);
         if (l != null) {
             messageList.addAll(l);
             messages.remove(l);
