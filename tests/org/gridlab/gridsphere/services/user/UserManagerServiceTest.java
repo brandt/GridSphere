@@ -15,6 +15,8 @@ import org.gridlab.gridsphere.portlet.service.spi.ServiceTest;
 import org.gridlab.gridsphere.services.security.AuthenticationException;
 import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
+import org.gridlab.gridsphere.portletcontainer.PortletDataManager;
+import org.gridlab.gridsphere.portletcontainer.impl.SportletDataManager;
 
 import java.util.List;
 import java.util.Vector;
@@ -208,8 +210,9 @@ public class UserManagerServiceTest extends ServiceTest {
 
     public void testSportletData() {
         log.info("+ testSportletData");
+        PortletDataManager dataManager = SportletDataManager.getInstance();
         User jason = userManager.getUser(getSuperUser(), "jason");
-        PortletData pd = (PortletData) userManager.getPortletData(jason, "1");
+        PortletData pd = (PortletData) dataManager.getPortletData(jason, "1");
         pd.setAttribute("test", "result");
         try {
             pd.store();
@@ -218,7 +221,7 @@ public class UserManagerServiceTest extends ServiceTest {
         }
 
         User jason2 = userManager.getUser(getSuperUser(), "jason");
-        PortletData pd2 = userManager.getPortletData(jason2, "1");
+        PortletData pd2 = dataManager.getPortletData(jason2, "1");
         String result = pd2.getAttribute("test");
         assertEquals("result", result);
     }
