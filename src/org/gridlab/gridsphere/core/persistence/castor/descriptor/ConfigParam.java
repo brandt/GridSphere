@@ -5,10 +5,6 @@
 
 package org.gridlab.gridsphere.core.persistence.castor.descriptor;
 
-import java.util.List;
-import java.util.Enumeration;
-import java.util.Hashtable;
-
 /**
  * A <code>ConfigParam</code> is an attribute representation used
  * to define attribute names and values in a descriptor by Castor.
@@ -37,7 +33,7 @@ public class ConfigParam {
     /**
      * Returns the parameter name
      *
-     * @returns the parameter name
+     * @return the parameter name
      */
     public String getParamName() {
         return paramName;
@@ -55,7 +51,7 @@ public class ConfigParam {
     /**
      * Returns the parameter value
      *
-     * @returns the parameter value
+     * @return the parameter value
      */
     public String getParamValue() {
         return paramValue;

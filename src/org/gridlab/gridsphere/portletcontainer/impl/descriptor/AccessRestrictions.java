@@ -20,7 +20,7 @@ import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
  */
 public class AccessRestrictions {
 
-    private String role = PortletRole.USER.toString();
+    private String role = PortletRole.GUEST.toString();
     private String visibility = ConcretePortletConfig.Scope.PUBLIC.toString();
 
     /**

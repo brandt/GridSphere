@@ -189,8 +189,7 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
     }
 
     /**
-     * Used internally by Castor. Clients should use #getSupportedModes
-     * instead.
+     * Returns the supported modes for this portlet
      *
      * @return the supported modes for this portlet
      */

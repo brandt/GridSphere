@@ -6,6 +6,7 @@
 package org.gridlab.gridsphere.core.persistence.castor.descriptor;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -16,7 +17,7 @@ import java.util.Iterator;
  */
 public class ConfigParamList {
 
-    private List configList = null;
+    private List configList = new ArrayList();
     private Hashtable configHash = new Hashtable();
 
     public ConfigParamList() {}
@@ -28,9 +29,8 @@ public class ConfigParamList {
         this.configList = configList;
     }
 
-    public void setConfigParamList(List configList) {
+    public void setConfigParamList(ArrayList configList) {
         this.configList = configList;
-        createConfigHash();
     }
 
     public List getConfigParamList() {
@@ -39,10 +39,11 @@ public class ConfigParamList {
 
     public void setConfigParams(Hashtable configHash) {
         this.configHash = configHash;
-        createConfigList();
+        this.createConfigList();
     }
 
     public Hashtable getConfigParams() {
+        this.createConfigHash();
         return configHash;
     }
 
@@ -51,7 +52,7 @@ public class ConfigParamList {
      * a <code>Hashtable</code> used by clients
      */
     protected void createConfigHash() {
-        if (configList == null) return;
+        configHash = new Hashtable();
         Iterator it = configList.iterator();
         while (it.hasNext()) {
             ConfigParam configParam = (ConfigParam) it.next();
@@ -64,6 +65,7 @@ public class ConfigParamList {
      * a <code>ConfigParam</code> list used by Castor
      */
     protected void createConfigList() {
+        configList = new ArrayList();
         Enumeration enum = configHash.keys();
         ConfigParam configParam = null;
         String paramName = null;

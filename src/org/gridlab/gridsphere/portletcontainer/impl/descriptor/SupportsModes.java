@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class SupportsModes {
 
-    private List portletModes = new ArrayList();
+    private List modes = new ArrayList();
     private PortletLog log = SportletLog.getInstance(SupportsModes.class);
 
     /**
@@ -37,7 +37,7 @@ public class SupportsModes {
      * @return a <code>List</code> containing <code>AnyNode</code> elements
      */
     public List getModes() {
-        return portletModes;
+        return modes;
     }
 
     /**
@@ -50,7 +50,7 @@ public class SupportsModes {
      * <code>AnyNode</code> elements
      */
     public void setModes(ArrayList modes) {
-        if (modes != null) this.portletModes = modes;
+        if (modes != null) this.modes = modes;
     }
 
     /**
@@ -60,24 +60,24 @@ public class SupportsModes {
      * @return a <code>List</code> containing <code>String</code> elements
      */
     public List getPortletModesAsStrings() {
-        List modes = new ArrayList();
-        if (portletModes.isEmpty()) {
-            modes.add(Portlet.Mode.CONFIGURE.toString());
-            modes.add(Portlet.Mode.EDIT.toString());
-            modes.add(Portlet.Mode.HELP.toString());
-            modes.add(Portlet.Mode.VIEW.toString());
+        List modeStrings = new ArrayList();
+        if (this.modes.isEmpty()) {
+            modeStrings.add(Portlet.Mode.CONFIGURE.toString());
+            modeStrings.add(Portlet.Mode.EDIT.toString());
+            modeStrings.add(Portlet.Mode.HELP.toString());
+            modeStrings.add(Portlet.Mode.VIEW.toString());
         }
-        for (int i = 0; i < portletModes.size(); i++) {
-            AnyNode a = (AnyNode) portletModes.get(i);
+        for (int i = 0; i < this.modes.size(); i++) {
+            AnyNode a = (AnyNode) this.modes.get(i);
             Portlet.Mode mode = null;
             try {
                 mode = Portlet.Mode.toMode(a.getLocalName());
-                modes.add(mode.toString());
+                modeStrings.add(mode.toString());
             } catch (IllegalArgumentException e) {
                 log.error("unable to parse mode: " + mode);
             }
         }
-        return modes;
+        return modeStrings;
     }
 
      /**
@@ -87,24 +87,24 @@ public class SupportsModes {
      * @return a <code>List</code> containing <code>Portlet.Mode</code> elements
      */
     public List getPortletModes() {
-        List modes = new ArrayList();
-        if (portletModes.isEmpty()) {
-            modes.add(Portlet.Mode.CONFIGURE);
-            modes.add(Portlet.Mode.EDIT);
-            modes.add(Portlet.Mode.HELP);
-            modes.add(Portlet.Mode.VIEW);
+        List portletModes = new ArrayList();
+        if (this.modes.isEmpty()) {
+            portletModes.add(Portlet.Mode.CONFIGURE);
+            portletModes.add(Portlet.Mode.EDIT);
+            portletModes.add(Portlet.Mode.HELP);
+            portletModes.add(Portlet.Mode.VIEW);
         }
-        for (int i = 0; i < portletModes.size(); i++) {
-            AnyNode a = (AnyNode) portletModes.get(i);
+        for (int i = 0; i < this.modes.size(); i++) {
+            AnyNode a = (AnyNode) this.modes.get(i);
             Portlet.Mode mode = null;
             try {
                 mode = Portlet.Mode.toMode(a.getLocalName());
-                modes.add(mode);
+                portletModes.add(mode);
             } catch (Exception e) {
               log.error("unable to parse mode: " + mode);
             }
         }
-        return modes;
+        return portletModes;
     }
 
 }

@@ -17,6 +17,11 @@ public class LanguageInfo {
     private String titleShort = new String();
 
     /**
+     * Creates an instance of LanguageInfo
+     */
+    public LanguageInfo() {}
+
+    /**
      * Returns the description of the portlet
      *
      * @return the description of the portlet

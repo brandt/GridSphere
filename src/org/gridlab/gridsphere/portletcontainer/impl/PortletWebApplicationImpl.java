@@ -20,6 +20,9 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.*;
+
 /**
  * The <code>PortletWebApplicationImpl</code> ia an implementation of a <code>PortletWebApplication</code> that
  * represents a collection of portlets contained in a packaged WAR file. Currently
@@ -27,6 +30,7 @@ import java.util.Map;
  */
 public class PortletWebApplicationImpl implements PortletWebApplication {
 
+    private PortletLog log = SportletLog.getInstance(PortletWebApplicationImpl.class);
     private String webApplicationName = null;
     private Map appPortlets = new Hashtable();
     private RequestDispatcher rd = null;
@@ -72,10 +76,12 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         //System.err.println("description: " + testsc.getServletContextName());
         //System.err.println("context path: " + testsc.getRealPath(""));
 
-
         this.webAppDescription = ctx.getServletContextName();
 
-        if (ctx == null) System.err.println("Unable to get ServletContext for: " + contextURIPath);
+        if (ctx == null) {
+            log.error( webApplicationName + ": Unable to get ServletContext for: " + contextURIPath);
+            return;
+        }
         rd = ctx.getNamedDispatcher(webApplicationName);
         // load portlet.xml
         loadPortlets(ctx);
@@ -97,7 +103,8 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         try {
             pdd = new PortletDeploymentDescriptor(portletXMLfile, portletMappingFile);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Mapping Error! " + webApplicationName, e);
+            return;
         }
         // Every SportletDefinition has a PortletApplication and possibly multiple ConcretePortletConfig's
         Iterator portletDefs = pdd.getPortletDefinitionList().iterator();
@@ -121,7 +128,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         String layoutXMLfile = ctx.getRealPath("") + "/WEB-INF/layout.xml";
         File f = new File(layoutXMLfile);
         if (f.exists()) {
-            String layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_LAYOUT_MAPPING);
+            //String layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_LAYOUT_MAPPING);
             layoutEngine.addApplicationTab(webApplicationName, layoutXMLfile);
         }
     }
