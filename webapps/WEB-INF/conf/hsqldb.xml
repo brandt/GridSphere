@@ -1,7 +1,7 @@
 <!DOCTYPE databases PUBLIC
 	"-//EXOLAB/Castor JDO Configuration DTD Version 1.0//EN"
 	"http://castor.exolab.org/jdo-conf.dtd">
-<database name="default" engine="hsql" >
+<database name="testdb" engine="hsql" >
  <driver class-name="org.hsqldb.jdbcDriver"
           url="jdbc:hsqldb:testdb">
     <param name="user" value="sa" />
