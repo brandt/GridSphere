@@ -8,7 +8,6 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.spi.impl.GridSphereServiceTest;
-import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 
 public class SetupRootUserTest extends GridSphereServiceTest {
