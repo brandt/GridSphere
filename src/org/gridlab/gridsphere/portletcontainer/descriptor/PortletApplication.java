@@ -9,9 +9,9 @@ package org.gridlab.gridsphere.portletcontainer.descriptor;
 public class PortletApplication {
     static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(PortletApplication.class.getName());
 
-    String Uid;                 // Uid of the Portletapplication
-    String Name;                // Name of the
-    Portlet Portlet;            // Portlet
+    private String Uid;                 // Uid of the Portletapplication
+    private String Name;                // Name of the
+    private Portlet Portlet;            // Portlet
 
     public String getUid() {
         return Uid;

@@ -9,18 +9,19 @@
 package org.gridlab.gridsphere.portletcontainer.descriptor;
 
 import java.util.Vector;
+import java.util.List;
 
 public class PortletDefinition {
     static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(PortletDefinition.class.getName());
 
-    Vector PortletAppList;
+    private Vector PortletAppList = null;
 
     /**
      * gets the List of PortletApps
      *
      * @return vector of portletapps
      */
-    public Vector getPortletAppList() {
+    public List getPortletAppList() {
         return PortletAppList;
     }
 
@@ -30,7 +31,7 @@ public class PortletDefinition {
      *
      */
     public void setPortletAppList(Vector portletAppList) {
-        PortletAppList = portletAppList;
+        this.PortletAppList = portletAppList;
     }
 
 

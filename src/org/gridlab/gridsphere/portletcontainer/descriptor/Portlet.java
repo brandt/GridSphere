@@ -9,9 +9,9 @@ package org.gridlab.gridsphere.portletcontainer.descriptor;
 public class Portlet {
     static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(Portlet.class.getName());
 
-    String Href;
-    String Id;
-    String Name;
+    private String Href;
+    private String Id;
+    private String Name;
 
     public String getHref() {
         return Href;
