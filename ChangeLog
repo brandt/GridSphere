@@ -1,6 +1,21 @@
 Changes since Gridsphere 1.1.1
 ==============================
 
++ Implementation of JSR 168 portlet API that is 100% sun tck compliant. The 
+ model uses existing gridsphere portlet called PortletServlet as a controller
+ for JSR 168 portlets. Both portlet apis are still being supported. The 
+ underlying impl code is portlet/impl for gridsphere and portlet/jsrimpl for 
+ JSR implementation. 
++ Added checkXXXRole methods to ActionPortlet to allow action methods to do
+ role checking to avoid security vulnerabilities with file manager and banner 
+ portlet
++ Improved tags overall and enhanced table tag to be sortable and break 
+  into pages of data
++ ActionPortlet model for JSR portlets
++ Updated templating build system to develop JSR portlets
++ Added create TCK user/layout code to GS portal and layout engine to 
+ run thru compliance tests. Ant target/task deploytck creates gs style portlet WAR's out of existing TCK WAR files.
+
 
 Changes since GridSphere 1.0
 ============================
