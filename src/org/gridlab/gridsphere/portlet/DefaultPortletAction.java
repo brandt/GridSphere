@@ -16,7 +16,6 @@ public final class DefaultPortletAction implements PortletAction {
 
     private Map store = new Hashtable();
     private String name;
-    private String portletID;
 
     /**
      * Constructor creates portlet action from action name

@@ -4,10 +4,7 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import org.gridlab.gridsphere.event.ActionEvent;
-import org.gridlab.gridsphere.event.ActionListener;
-import org.gridlab.gridsphere.event.WindowEvent;
-import org.gridlab.gridsphere.event.WindowListener;
+import org.gridlab.gridsphere.event.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 import java.io.IOException;
@@ -16,7 +13,7 @@ import java.io.IOException;
 /**
  * Additional extensions to a Portlet Adapter to provide action and window event handling
  */
-public abstract class AbstractPortlet extends PortletAdapter implements ActionListener, WindowListener, PortletTitleListener {
+public abstract class AbstractPortlet extends PortletAdapter implements ActionListener, MessageListener, WindowListener, PortletTitleListener {
 
     public static PortletLog log = SportletLog.getInstance(AbstractPortlet.class);
 
@@ -42,6 +39,15 @@ public abstract class AbstractPortlet extends PortletAdapter implements ActionLi
      * @throws PortletException if the listener has trouble fulfilling the request
      */
     public abstract void actionPerformed(ActionEvent event) throws PortletException;
+
+    /**
+     * Notifies this listener that the message which the listener is watching for has been performed.
+     *
+     * @param event the message event
+     *
+     * @throws PortletException if the listener has trouble fulfilling the request
+     */
+    public void messageReceived(MessageEvent event) throws PortletException {}
 
     /**
      * Called by the portlet container to render the portlet title.

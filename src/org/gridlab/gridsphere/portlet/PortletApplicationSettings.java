@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.portlet;
 
 import java.util.Enumeration;
+import java.io.IOException;
 
 /**
  * The PortletApplicationSettings interface provides the portlet with the application's dynamic configuration.
@@ -53,7 +54,8 @@ public interface PortletApplicationSettings {
      * Stores all attributes.
      *
      * @throws AccessDeniedException if the caller isn't authorized to access this data object
+     * @throws IOException if the streaming causes an I/O problem
      */
-    public void store() throws AccessDeniedException;
+    public void store() throws AccessDeniedException, IOException;
 
 }

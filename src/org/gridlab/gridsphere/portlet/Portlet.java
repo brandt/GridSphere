@@ -4,6 +4,17 @@
  */
 package org.gridlab.gridsphere.portlet;
 
+import org.gridlab.gridsphere.portletcontainer.impl.ConcreteSportlet;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication;
+import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
+import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication;
+import org.gridlab.gridsphere.portlet.impl.SportletConfig;
+import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
+import org.gridlab.gridsphere.services.security.acl.AccessControlService;
+import org.gridlab.gridsphere.core.persistence.PersistenceException;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -62,6 +73,10 @@ public abstract class Portlet extends HttpServlet
 
     protected PortletConfig portletConfig = null;
     protected PortletSettings portletSettings = null;
+
+    private PortletRegistryService registryService = null;
+
+    private String registeryID = null;
 
     public static class Mode implements Serializable {
 
@@ -291,32 +306,43 @@ public abstract class Portlet extends HttpServlet
     public final void init(ServletConfig config) throws ServletException {
         super.init(config);
         log.info("in init(ServletConfig)");
-
         /*
         portletConfig = new SportletConfig(config);
         PortletContext context = portletConfig.getContext();
         PortletRegistryService registryService = (PortletRegistryService)context.getService(PortletRegistryService.class);
-        registryService.registerPortletConfig(portletConfig);
+        AccessControlService aclService = (AccessControlService)context.getService(AccessControlService.class);
+        */
+        //registryService.registerPortletConfig(portletConfig);
 
-        System.err.println(config.getServletName());
-        System.err.println(config.getClass().getName());
-        System.err.println(config.getServletContext().getServletContextName());
-
+        /*
             This will register the portlet (servlet) with the registry service on startup.
             I took this path initially thinking I could forward to remote third-party
             portlets outside of gridsphere.jar and provide their context to the registry
             service too. Now I've moved this to GridSphere.java  so the portlet container
             controls the entire loading and initialization/shutdown of the portlets.
+
+            And whaddya know-- I started it up again trying to be compatible with WPS portlet API
+            in that the PortletConfig must contain the Initparameters defined in the web.xml for this portlet class
+            Also thinking more about portlets as autonomous units-- decouple gridsphere.jar from portlets such that
+            one can reload portlet components-- need to find switch to enable "smarter" jar reloading in Tomcat
+        */
+        /*
+        String concreteID = config.getInitParameter(GridSphereProperties.ID);
+        PortletDeploymentDescriptor pdd = null;
         try {
-            RegisteredPortlet registeredPortlet = new RegisteredSportletImpl(config);
-            portletConfig = registeredPortlet.getPortletConfig();
-            portletSettings = registeredPortlet.getPortletSettings();
-            PortletContext context = registeredPortlet.getPortletConfig().getContext();
-            registryService = (PortletRegistryService)context.getService(PortletRegistryService.class);
-            id = registryService.registerPortlet(registeredPortlet);
-        } catch (Exception e) {
-            throw new ServletException("Unable to Initialize PortletInfo " + e.getMessage());
+            pdd = new PortletDeploymentDescriptor(config);
+        } catch (IOException e) {
+            throw new ServletException("Unable to deserialize portlet.xml: ", e);
         }
+        ConcretePortletApplication concreteApp = pdd.getConcretePortletApplication(concreteID);
+        PortletApplication portletApp = pdd.getPortletApplication(concreteID);
+        ConcretePortlet concretePortlet = new ConcreteSportlet(pdd, portletApp, concreteApp, aclService);
+
+        // create sportlet settings that is not modifiable initially
+        portletSettings = concretePortlet.getPortletSettings(false);
+        context = concretePortlet.getPortletConfig().getContext();
+        registryService = (PortletRegistryService)context.getService(PortletRegistryService.class);
+        registeryID = registryService.registerPortlet(concretePortlet);
         */
     }
 
@@ -350,7 +376,7 @@ public abstract class Portlet extends HttpServlet
 
     public final void service(ServletRequest request, ServletResponse response)
             throws ServletException, IOException {
-
+        log.info("in service(ServletRequest, ServletResponse) of Portlet");
         // redirect to GridSphere
     }
 
@@ -381,6 +407,7 @@ public abstract class Portlet extends HttpServlet
 
     public final void destroy() {
         super.destroy();
+        registryService.unregisterPortlet(registeryID);
     }
 
 }

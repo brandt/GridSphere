@@ -4,6 +4,8 @@
  */
 package org.gridlab.gridsphere.portlet;
 
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+
 import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.util.Hashtable;
@@ -187,6 +189,15 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
     public PortletConfig getPortletConfig() {
         return portletConfig;
     }
+
+    /**
+     * Returns the portlet log
+     * NEEDS TO BE IMPLEMENTED!!!
+     */
+    public PortletLog getPortletLog() {
+        return null;
+    }
+
 
     /**
      * Helper method to serve up the CONFIGURE mode.
