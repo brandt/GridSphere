@@ -593,6 +593,10 @@ Copyright:
             <fileset dir="${gswebapp.dir}"/>
         </copy>
 
+        <copy todir="${gridsphere.build}/docs/EclipseGuide">
+            <fileset dir="docs/docbook/EclipseGuide"/>
+        </copy>
+
         <!-- Copy context file -->
         <if>
             <available file="${env.CATALINA_HOME}/conf/Catalina" type="dir" property="tomcat5"/>
