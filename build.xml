@@ -463,6 +463,7 @@ Copyright:
         <mkdir dir="${build.javadoc}"/>
         <javadoc packagenames="org.gridlab.gridsphere.*"
             sourcepath="src"
+            additionalparam="-breakiterator"
             classpathref="classpath"
             destdir="${build.javadoc}"
             author="true"
@@ -624,7 +625,8 @@ Copyright:
             <fileset dir="${build.webapps}/gridsphere"/>
         </copy>
 
-        <copy overwrite="true" file="lib/gridsphere-test.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
+       <!-- <copy overwrite="true" file="lib/gridsphere-test.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/> -->
+        <copy overwrite="true" file="lib/gridsphere-test.jar" todir="${env.CATALINA_HOME}/shared/lib"/>
 
     </target>
 
