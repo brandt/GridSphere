@@ -31,14 +31,6 @@ public class PortletContainer implements PortletLifecycle {
 
     public PortletContainer() {}
 
-    public void add(PortletComponent comp) {
-        components.add(comp);
-    }
-
-    public void add(PortletComponent comp, int index) {
-        components.add(index, comp);
-    }
-
     public void setContainerName(String name) {
         this.name = name;
     }
@@ -60,11 +52,10 @@ public class PortletContainer implements PortletLifecycle {
             list.add(compId);
             portletComponents = cycle.init(list);
         }
-
         System.err.println("Made a components list!!!! " + portletComponents.size());
         for (int i = 0; i < portletComponents.size(); i++) {
             ComponentIdentifier c = (ComponentIdentifier)portletComponents.get(i);
-            System.err.println(c.getComponentID() + " : " + c.getClassName());
+            System.err.println("id: " + c.getComponentID() + " : " + c.getClassName() +  " : " + c.hasPortlet());
         }
         return portletComponents;
     }
@@ -112,6 +103,10 @@ public class PortletContainer implements PortletLifecycle {
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         SportletResponse res = event.getSportletResponse();
         PrintWriter out = res.getWriter();
+
+
+
+
         out.println("<html><head><meta HTTP-EQUIV=\"content-type\" CONTENT=\"text/html; charset=ISO-8859-1\">");
         out.println("<title>" + name + "</title>");
         Iterator it = components.iterator();
@@ -122,14 +117,6 @@ public class PortletContainer implements PortletLifecycle {
         out.println("</html>");
     }
 
-    public PortletComponent getPortletComponent(int n) {
-        return (PortletComponent)components.get(n);
-    }
-
-    public int getPortletComponentCount() {
-        return components.size();
-    }
-
     public void setPortletComponents(ArrayList components) {
         this.components = components;
     }
@@ -138,26 +125,8 @@ public class PortletContainer implements PortletLifecycle {
         return components;
     }
 
-    public void remove(int index) {
-        components.remove(index);
-    }
-
-    public void remove(PortletComponent comp) {
-        components.remove(comp);
-    }
-
-    public void removeAll() {
-        for (int i = 0; i < components.size(); i++) {
-            components.remove(i);
-        }
-    }
-
-    public LayoutManager getLayout() {
-        return layoutManager;
-    }
-
-    public void setLayout(LayoutManager mgr) {
-        layoutManager = mgr;
+    public List getComponentIdentifierList() {
+        return portletComponents;
     }
 
     public int getComponentID() {

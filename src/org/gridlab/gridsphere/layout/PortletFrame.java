@@ -70,6 +70,8 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             ComponentIdentifier compId = new ComponentIdentifier();
             compId.setPortletLifecycle(titleBar);
             compId.setComponentID(COMPONENT_ID);
+            componentIDStr = String.valueOf(COMPONENT_ID);
+            compId.setPortletClass(portletClass);
             compId.setClassName(titleBar.getClass().getName());
             if (portletClass != null) {
                 titleBar.setPortletClass(portletClass);
@@ -140,6 +142,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         SportletResponse res = event.getSportletResponse();
         PortletContext ctx = event.getPortletContext();
 
+        req.setAttribute(GridSphereProperties.PORTLETID, portletClass);
         req.setAttribute(GridSphereProperties.COMPONENT_ID, componentIDStr);
 
         // Set the portlet data
@@ -169,6 +172,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         super.doRender(event);
         SportletRequest req = event.getSportletRequest();
         SportletResponse res = event.getSportletResponse();
+        req.setAttribute(GridSphereProperties.PORTLETID, portletClass);
         req.setAttribute(GridSphereProperties.COMPONENT_ID, componentIDStr);
 
         ///// begin portlet frame
