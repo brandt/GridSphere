@@ -20,6 +20,7 @@ public class TextTag extends BaseComponentTag {
     protected TextBean textBean = null;
     protected String key = null;
     protected String style = TextBean.MSG_INFO;
+    protected String format = null;
 
     /**
      * Sets the style of the text: Available styles are
@@ -56,6 +57,23 @@ public class TextTag extends BaseComponentTag {
         return style;
     }
 
+    /**
+     * Sets the format of the text
+     *
+     * @param format
+     */
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    /**
+     * Returns the format of the text
+     *
+     * @return the format of the text
+     */
+    public String getFormat() {
+        return format;
+    }
 
     /**
      * Returns the key used to identify localized text
@@ -93,6 +111,7 @@ public class TextTag extends BaseComponentTag {
         if (key != null) {
             textBean.setValue(getLocalizedText(key));
         }
+        if (format != null) textBean.setFormat(format);
 
         if ((bodyContent != null) && (value == null)) {
             textBean.setValue(bodyContent.getString());

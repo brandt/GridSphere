@@ -26,6 +26,7 @@ public class TextBean extends BaseComponentBean implements TagBean {
     public static final String MSG_UNDERLINE = "underline";
 
     protected String style = "info";
+    protected String format = null;
 
     /**
      * Constructs a default text bean
@@ -90,11 +91,30 @@ public class TextBean extends BaseComponentBean implements TagBean {
         this.style = style;
     }
 
+    /**
+     * Sets the format of the text
+     *
+     * @param format
+     */
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    /**
+     * Returns the format of the text
+     *
+     * @return the format of the text
+     */
+    public String getFormat() {
+        return format;
+    }
+
     public String toStartString() {
         return "";
     }
 
     public String toEndString() {
+        String text = null;
         if (style.equalsIgnoreCase("error") || (style.equalsIgnoreCase("err"))) {
             this.cssStyle = MSG_ERROR;
         } else if (style.equalsIgnoreCase("status")) {
@@ -114,6 +134,9 @@ public class TextBean extends BaseComponentBean implements TagBean {
         } else if (style.equalsIgnoreCase(TextBean.MSG_UNDERLINE)) {
             return "<u>" + value + "</u>";
         }
-        return "<span class=\"" + cssStyle + "\">" + value + "</span>";
+        text = "<span class=\"" + cssStyle + "\"";
+        if (format != null) text += " style=\"" + format + "\"";
+        text += ">" + value + "</span>";
+        return text;
     }
 }
