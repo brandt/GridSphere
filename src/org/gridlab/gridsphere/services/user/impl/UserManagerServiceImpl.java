@@ -70,7 +70,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         try {
             // This is the in-memory representation of user data
-            userData = UserDataManager.getUserData();
+            ///userData = UserDataManager.getUserData();
             aclService = (AccessControlService) factory.createPortletService(AccessControlService.class, config.getServletConfig(), true);
             aclManagerService = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, config.getServletConfig(), true);
             log.info("in init()");

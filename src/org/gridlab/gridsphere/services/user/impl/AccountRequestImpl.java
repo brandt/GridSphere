@@ -28,12 +28,10 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
     private String EmailAddress = "";
     private String Organization = "";
     private List DesiredGroups = new Vector();
-    private List ApprovedGroups = new Vector();
     private List Userdns = new Vector();
     private List MyproxyUserNames = new Vector();
 
     private Vector DesiredGroupsSV = new Vector();      // half-ready for castor
-    private Vector ApprovedGroupsSV = new Vector();
     private Vector UserdnsSV = new Vector();            // ready
     private Vector MyproxyUserNamesSV = new Vector();   // ready
 
@@ -268,27 +266,6 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
     }
 
     // ----
-
-    /**
-     * Returns the list of groups the user is authorized to join, or null if none
-     *
-     * @return groups the List of group names the user is authorized to join, or empty if none
-     */
-    public List getApprovedGroups() {
-        return ApprovedGroups;
-    }
-
-    /**
-     * Not part of the AccountRequest interface. Allows the UserAdminService to approve a desiredGroup entry
-     *
-     * @param group the group name to approve
-     */
-    public void addApprovedGroup(PortletGroup group) {
-        // make sure it's a desired group as well
-
-        ApprovedGroups.add(group);
-
-    }
 
     /**
      * Prints the constents of the account request to a String

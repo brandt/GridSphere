@@ -41,6 +41,11 @@
          <sql many-key="Reference"/>
       </field>
 
+
+      <field name="DesiredGroups" type="org.gridlab.gridsphere.portlet.impl.SportletGroup" collection="vector">
+         <sql many-key="Oid"/>
+      </field>
+
    </class>
 
    <!-- should use inheritence here in castor ! -->
