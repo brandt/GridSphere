@@ -1,10 +1,9 @@
-<%@ page isErrorPage="true" %>
-
+<jsp:useBean id="error" class="java.lang.Throwable" scope="request"/> 
+<b>An error occurred!</b>
+<p>
 <br>
-	<%= exception.getMessage() %>
+	<%= error.getMessage() %>
 <p></p>
 	<b>Stack Trace:</b><br>
-        <% exception.printStackTrace(new java.io.PrintWriter(out)); %>
-
-
+        <% error.printStackTrace(new java.io.PrintWriter(out)); %>
 
