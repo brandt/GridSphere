@@ -32,31 +32,10 @@ public class GridSphereConfig implements GridSphereConfigProperties {
         return config.getServletContext();
     }
 
-    static {
-        try {
-            configBundle = ResourceBundle.getBundle(PROJECT_NAME + "." + PROJECT_NAME);
-        } catch (MissingResourceException mre) {
-            System.err.println("Config: Missing gridsphere.properties file " + mre.toString());
-        }
-    }
-
     /**
      * Default constructor disallows instantiation
      */
     private GridSphereConfig() {
-    }
-
-    /**
-     * Return the value for the given property key
-     *
-     * @return <code>String</code> the value for the given property key
-     */
-    public static final String getProperty(String type) {
-        String configString = configBundle.getString(type);
-        if ((configString != null) && (type.endsWith("DIR"))) {
-            if (!configString.endsWith(pathtype)) configString += pathtype;
-        }
-        return configString;
     }
 
 }

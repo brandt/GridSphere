@@ -41,17 +41,6 @@ public class PersistenceManagerFactory {
         return (PersistenceManagerRdbms)databases.get(databaseName);
     }
 
-    public static synchronized PersistenceManagerRdbms createProjectPersistenceManagerRdbms(String databaseName) {
-        if (!databases.containsKey(databaseName)) {
-            String databaseConfigFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_HOME)
-                    + "/" + databaseName + "/database/database.xml";
-            PersistenceManagerRdbms pm = new PersistenceManagerRdbmsImpl(databaseName, databaseConfigFile);
-            log.debug("Getting PM instance: database: " + databaseName + " databaseConfigFile: " + databaseConfigFile);
-            databases.put(databaseName, pm);
-        }
-        return (PersistenceManagerRdbms)databases.get(databaseName);
-    }
-
     public static synchronized PersistenceManagerRdbms createPersistenceManagerRdbms(String databaseName, String databaseConfigFile) {
         if (!databases.containsKey(databaseName)) {
 

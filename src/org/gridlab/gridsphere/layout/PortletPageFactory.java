@@ -17,7 +17,7 @@ import java.util.*;
  */
 public class PortletPageFactory implements PortletSessionListener {
 
-    private String userLayoutDir = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_DIR);
+    private String userLayoutDir = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/users");
 
     private static PortletPageFactory instance = null;
     private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
@@ -26,15 +26,12 @@ public class PortletPageFactory implements PortletSessionListener {
 
     private String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
 
-    //private String layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING);
     private PortletPage templatePage = null;
     private PortletPage guestPage = null;
     private PortletPage newuserPage = null;
     private PortletPage errorPage = null;
 
     private String templateLayoutPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/TemplateLayout.xml");
-
-    //private String templateLayoutPath = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_DIR) + "/TemplateLayout.xml";
 
     private String newuserLayoutPath = null;
 
@@ -44,8 +41,7 @@ public class PortletPageFactory implements PortletSessionListener {
     private Map guests = new Hashtable();
 
     private PortletPageFactory() throws IOException, PersistenceManagerException {
-        //String errorLayoutFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/ErrorLayout.xml");
-        String errorLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_DIR) + "/ErrorLayout.xml";
+        String errorLayoutFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/ErrorLayout.xml");
 
         errorPage = PortletLayoutDescriptor.loadPortletPage(errorLayoutFile, layoutMappingFile);
         errorPage.init(new ArrayList());
@@ -57,8 +53,7 @@ public class PortletPageFactory implements PortletSessionListener {
     }
 
     public void reloadGuestUserLayout() throws IOException, PersistenceManagerException {
-        //String guestLayoutFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/GuestUserLayout.xml");
-        String guestLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_DIR) + "/GuestUserLayout.xml";
+        String guestLayoutFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/GuestUserLayout.xml");
 
         guestPage = PortletLayoutDescriptor.loadPortletPage(guestLayoutFile, layoutMappingFile);
         guestPage.setLayoutDescriptor(guestLayoutFile);
