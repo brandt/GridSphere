@@ -313,8 +313,8 @@ public class PortletServlet extends HttpServlet
                         portlet.processAction(actionRequest, actionResponse);
                         Map params = ((ActionResponseImpl) actionResponse).getRenderParameters();
                         String cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
-                        actionRequest.setAttribute("renderParams" + "_" + pid + "_" + cid, params);
-                        log.debug("placing render params in attribute: " + "renderParams" + "_" + pid + "_" + cid);
+                        actionRequest.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid, params);
+                        log.debug("placing render params in attribute: " + SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid);
                         redirect(request, response, actionRequest, actionResponse, portalContext);
                     } catch (Exception e) {
                         log.error("Error during processAction:", e);
