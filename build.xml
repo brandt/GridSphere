@@ -160,7 +160,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Builds and deploys GridSphere                                       -->
     <!-- =================================================================== -->
-    <target name="install" depends="license, clean, compile, docs, deploy" description="Build and deploy GridSphere">
+    <target name="install" depends="license, clean, compile, deploy" description="Build and deploy GridSphere">
         <antcall target="create-database"/>
     </target>
 
@@ -299,12 +299,12 @@ Copyright:
     <!-- =================================================================== -->
     <target name="portlet-api-jar" depends="compile" description="Creates JSR portlet API JAR">
         <echo>Creating JSR portlet API JAR for Tomcat</echo>
-        <jar jarfile="${build.lib}/portlet-jsr-api.jar" basedir="${build.classes}" >
+        <jar jarfile="${build.lib}/portlet-jsr-api.jar" basedir="${build.classes}">
             <include name="javax/**"/>
             <include name="**/portlet/jsrimpl/**"/>
             <include name="gridsphere/log4j.properties"/>
         </jar>
-     </target>
+    </target>
 
     <!-- =================================================================== -->
     <!-- Creates the GridSphere UI tags JAR                                  -->
@@ -385,6 +385,15 @@ Copyright:
     <!-- Creates database                                                    -->
     <!-- =================================================================== -->
 
+    <target name="create-database" depends="configure-database, jar">
+        <taskdef name="createdb"
+            classname="org.gridlab.gridsphere.core.persistence.hibernate.DatabaseTask"
+            classpathref="classpath"/>
+        <createdb
+            configdir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/"
+            />
+    </target>
+
     <target name="configure-database" depends="setenv">
         <mkdir dir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/"/>
         <copy overwrite="true" file="webapps/gridsphere/WEB-INF/persistence/hibernate.properties" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/"/>
@@ -407,7 +416,9 @@ Copyright:
             value="gridsphere-test"/>
     </target>
 
-    <target name="create-database" depends="setenv, configure-database, compile">
+    <!-- WILL BE REMOVED AFTER MORE TESTS -->
+
+    <target name="create-database-old" depends="setenv, configure-database, compile">
         <!-- <delete dir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/database"/> -->
         <taskdef name="schemaexport"
             classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask"
@@ -574,7 +585,7 @@ Copyright:
     <!-- =================================================================== -->
     <target name="deploy" depends="gridsphere-jar, jar" description="Deploys GridSphere to a local server">
 
-       <!-- <delete dir="${build.webapps}/gridsphere"/> -->
+        <!-- <delete dir="${build.webapps}/gridsphere"/> -->
 
         <antcall target="deploy-install"/>
 
@@ -647,7 +658,7 @@ Copyright:
             <fileset dir="${build.webapps}/gridsphere"/>
         </copy>
 
-       <!-- <copy overwrite="true" file="lib/gridsphere-test.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/> -->
+        <!-- <copy overwrite="true" file="lib/gridsphere-test.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/> -->
         <copy overwrite="true" file="${build.lib}/gridsphere-test.jar" todir="${env.CATALINA_HOME}/shared/lib"/>
 
     </target>
@@ -785,7 +796,7 @@ Copyright:
             <fileset dir="${gridsphere.build}/reports">
                 <include name="TEST-*.xml"/>
             </fileset>
-            <report format="noframes" todir="${gridsphere.build}/reports/html" styledir="${env.ANT_HOME}/etc" />
+            <report format="noframes" todir="${gridsphere.build}/reports/html" styledir="${env.ANT_HOME}/etc"/>
         </junitreport>
     </target>
 
@@ -829,7 +840,6 @@ Copyright:
             </fileset>
         </mail>
     </target>
-
 
 
 </project>
