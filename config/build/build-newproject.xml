@@ -71,7 +71,7 @@
             <fileset dir="config/database"/>
         </copy>
 
-        <property name="DATABASE_NAME"
+<!--        <property name="DATABASE_NAME"
                   value="${project.name}"/>
         <property name="DATABASE_FILE"
                   value="${project.dir}/config/database/database.xml"/>
@@ -100,7 +100,7 @@
             value="${DATABASE_NAME}"/>
         <replace file="${DATABASE_FILE}"
             token="@PROJECT_NAME@"
-            value="${project.name}"/>
+            value="${project.name}"/>         -->
 
         <mkdir dir="${project.dir}/webapp"/>
         <mkdir dir="${project.dir}/webapp/WEB-INF"/>

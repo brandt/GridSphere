@@ -175,6 +175,9 @@ Copyright:
     <target name="configure-database" depends="setenv, doclet-mapping" if="use.persistence">
         <property name="DATABASE_FILE"
                   value="${GRIDSPHERE_HOME}/${project.name}/database/database.xml"/>
+
+        <property name="DATABASE_NAME"
+                  value="${project.name}"/>
         <echo message="Preprocessing Database file: ${DATABASE_FILE}"/>
         <replace file="${DATABASE_FILE}"
                  token="@GRIDSPHERE_HOME@"
@@ -182,6 +185,13 @@ Copyright:
         <replace file="${DATABASE_FILE}"
                  token="@DATABASE_NAME@"
                  value="${DATABASE_NAME}"/>
+        <replace file="${DATABASE_FILE}"
+                 token="@PROJECTS_NAME@"
+                 value="${project.name}"/>
+        <replace file="${DATABASE_FILE}"
+            token="@DATABASE_NAME@"
+            value="${DATABASE_NAME}"/>
+
     </target>
 
     <target name="configure-test-database" depends="setenv, doclet-mapping" if="use.persistence">
