@@ -1,0 +1,60 @@
+<!--
+Build include file for the GridSphere Portal source code, see build.xml
+
+ - $Id$
+
+-->
+
+
+<project name="GridSphere database">
+
+    <!-- Creates the database . Include file to build.xm -->
+
+    <!-- =================================================================== -->
+    <!-- Creates database                                                    -->
+    <!-- =================================================================== -->
+
+    <target name="create-database" depends="configure-database, jar">
+        <taskdef name="dbtask"
+            classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
+            classpathref="classpath"/>
+        <dbtask
+            configdir="${appserver.home}/webapps/gridsphere"
+            action="CREATE"/>
+    </target>
+
+    <target name="configure-database" depends="setenv">
+        <pathconvert targetos="windows" dirsep="/" property="cathome">
+            <path location="${appserver.home}"/>
+        </pathconvert>
+
+        <replace file="${gridsphere.build}/webapps/gridsphere/WEB-INF/CustomPortal/database/hibernate.properties"
+            token="@GRIDSPHERE_DB@"
+            value="${cathome}/${gswebapp.dir}/WEB-INF/CustomPortal/database/gridsphere"/>
+        <copy overwrite="true" file="${gridsphere.build}/webapps/gridsphere/WEB-INF/CustomPortal/database/hibernate.properties"
+            todir="${appserver.home}/webapps/gridsphere/WEB-INF/CustomPortal/database/"/>
+    </target>
+
+    <target name="configure-test-database" depends="setenv">
+        <copy overwrite="true"
+            file="webapps/gridsphere/WEB-INF/CustomPortal/database/hibernate.properties"
+            todir="${appserver.home}/webapps/gridsphere/WEB-INF/CustomPortal/database"/>
+        <pathconvert targetos="windows" dirsep="/" property="cathome">
+            <path location="${appserver.home}"/>
+        </pathconvert>
+        <replace file="${appserver.home}/webapps/gridsphere/WEB-INF/CustomPortal/database/hibernate.properties"
+            token="@GRIDSPHERE_DB@"
+            value="${cathome}/${gswebapp.dir}/WEB-INF/CustomPortal/database/gridsphere-test"/>
+    </target>
+
+    <target name="update-database" depends="configure-database, jar">
+        <taskdef name="dbtask"
+            classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
+            classpathref="classpath"/>
+        <dbtask
+            configdir="${appserver.home}/webapps/gridsphere"
+            action="UPDATE"/>
+    </target>
+
+
+</project>

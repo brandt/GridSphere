@@ -1,6 +1,7 @@
 
 <project name="New Project" default="new-project" basedir=".">
 
+
     <target name="check-project-exists">
         <condition property="new-project-exists">
             <not>
@@ -20,11 +21,11 @@
         <copy file="${newproject.dir}/build.xml" tofile="${newproject.dir}/build.xml.bak" overwrite="true"/>
         <copy file="config/build/build.project.xml" tofile="${newproject.dir}/build.xml" overwrite="true"/>
         <replace file="${newproject.dir}/build.xml"
-                 token="@PROJECT_TITLE@"
-                 value="${project.title}"/>
+            token="@PROJECT_TITLE@"
+            value="${project.title}"/>
         <replace file="${newproject.dir}/build.xml"
-                 token="@PROJECT_NAME@"
-                 value="${project.name}"/>
+            token="@PROJECT_NAME@"
+            value="${project.name}"/>
     </target>
 
     <!-- =================================================================== -->
@@ -53,18 +54,18 @@
 
         <copy file="config/build/build.properties" tofile="${project.dir}/build.properties" filtering="true"/>
         <replace file="${project.dir}/build.properties"
-                 token="@GRIDSPHERE_HOME@"
-                 value="${GRIDSPHERE_HOME}"/>
+            token="@GRIDSPHERE_HOME@"
+            value="${GRIDSPHERE_HOME}"/>
 
         <replace file="${project.dir}/build.properties"
-                 token="@PROJECT_TITLE@"
-                 value="${project.title}"/>
+            token="@PROJECT_TITLE@"
+            value="${project.title}"/>
         <replace file="${project.dir}/build.properties"
-                 token="@PROJECT_NAME@"
-                 value="${project.name}"/>
+            token="@PROJECT_NAME@"
+            value="${project.name}"/>
         <replace file="${project.dir}/build.properties"
-                 token="@USE_JSR@"
-                 value="${which}"/>
+            token="@USE_JSR@"
+            value="${which}"/>
 
         <mkdir dir="${project.dir}/src"/>
         <mkdir dir="${project.dir}/lib"/>

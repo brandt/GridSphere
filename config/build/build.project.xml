@@ -22,6 +22,7 @@ Copyright:
 <project default="help" basedir=".">
 
     <property file="build.properties"/>
+    <property file="${gridsphere.home}/build.properties"/>
 
     <import file="userbuild.xml" optional="true"/>
 
@@ -46,14 +47,16 @@ Copyright:
     <property name="build.javadoc" value="${build.docs}/javadocs"/>
     <property name="build.tests" value="${project.build}/tests"/>
 
+
     <property environment="env"/>
 
     <!-- Check for catalina.sh in CATALINA_HOME/bin -->
     <target name="check-catalina">
-        <condition property="catalina.exists">
-            <available file="${env.CATALINA_HOME}/bin/bootstrap.jar"/>
-        </condition>
-        <fail message="Unable to find Tomcat 4.1.+. Make sure you have set $CATALINA_HOME set" unless="catalina.exists"/>
+        <!--        <condition property="catalina.exists">
+                    <available file="${appserver.home}/bin/bootstrap.jar"/>
+                </condition>
+                <fail message="Unable to find Tomcat 4.1.+. Make sure you have set $CATALINA_HOME set" unless="catalina.exists"/>
+                -->
     </target>
 
     <!-- =================================================================== -->
@@ -63,19 +66,10 @@ Copyright:
 
         <pathelement location="${build.classes}"/>
 
-        <fileset dir="${env.CATALINA_HOME}/common/lib">
+        <fileset dir="${gridsphere.home}/lib/jetty/lib">
             <include name="*.jar"/>
         </fileset>
 
-        <!-- this is for the XML JARs in Tomcat 4.1.x -->
-        <fileset dir="${env.CATALINA_HOME}/common/endorsed">
-            <include name="*.jar"/>
-        </fileset>
-
-        <fileset dir="${env.CATALINA_HOME}/shared/lib">
-            <include name="*.jar"/>
-            <exclude name="${project.name}-services.jar"/>
-        </fileset>
 
         <fileset dir="${gridsphere.build}/lib">
             <include name="*.jar"/>
@@ -102,7 +96,25 @@ Copyright:
         <mkdir dir="${build.webapp}"/>
         <mkdir dir="${build.docs}"/>
 
-        <property name="TEST_HOME" value="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/test"/>
+        <echo message="${gridsphere.appserver}"/>
+
+        <if>
+            <equals arg1="${gridsphere.appserver}" arg2="tomcat"/>
+            <then>
+                <echo message="Installing for Tomcat"/>
+                <property name="appserver.home" value="${env.CATALINA_HOME}"/>
+            </then>
+
+        </if>
+        <if>
+            <equals arg1="${gridsphere.appserver}" arg2="jetty"/>
+            <then>
+                <echo message="Installing for Jetty"/>
+                <property name="appserver.home" value="${env.APPSERVER_HOME}"/>
+            </then>
+        </if>
+
+        <property name="TEST_HOME" value="${appserver.home}/webapps/${project.name}/WEB-INF/test"/>
 
         <echo message="--- Build environment for ${project} ---"/>
         <echo message="--- Flags (Note: If the {property name} is displayed,"/>
@@ -111,8 +123,10 @@ Copyright:
 
         <echo message="ANT_HOME is set to = ${env.ANT_HOME}"/>
         <echo message="JAVA_HOME is set to = ${env.JAVA_HOME}"/>
-        <echo message="CATALINA_HOME is set to = ${env.CATALINA_HOME}"/>
-        <echo message="TEST_HOME is set to = ${TEST_HOME}"/>
+
+
+        <echo message="GridSphere Webserver is ${gridsphere.appserver}"/>
+        <echo message="GridSphere will be deployed to ${appserver.home}"/>
 
         <echo message="--- Property values ---"/>
         <echo message="debug=${debug}"/>
@@ -172,12 +186,12 @@ Copyright:
     <!-- =================================================================== -->
 
     <target name="configure-database" depends="setenv">
-        <mkdir dir="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/persistence/"/>
-        <copy overwrite="true" file="webapp/WEB-INF/persistence/hibernate.properties" todir="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/persistence/"/>
+        <mkdir dir="${appserver.home}/webapps/${project.name}/WEB-INF/persistence/"/>
+        <copy overwrite="true" file="webapp/WEB-INF/persistence/hibernate.properties" todir="${appserver.home}/webapps/${project.name}/WEB-INF/persistence/"/>
         <pathconvert targetos="windows" dirsep="/" property="cathome">
-            <path location="${env.CATALINA_HOME}"/>
+            <path location="${appserver.home}"/>
         </pathconvert>
-        <replace file="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/persistence/hibernate.properties"
+        <replace file="${appserver.home}/webapps/${project.name}/WEB-INF/persistence/hibernate.properties"
             token="@3RDPARTY_WEBAPP@"
             value="${cathome}/webapps/${project.name}"/>
     </target>
@@ -187,7 +201,7 @@ Copyright:
             classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
             classpathref="classpath"/>
         <dbtask
-            configdir="${env.CATALINA_HOME}/webapps/${project.name}"
+            configdir="${appserver.home}/webapps/${project.name}"
             action="CREATE"/>
     </target>
 
@@ -196,7 +210,7 @@ Copyright:
             classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
             classpathref="classpath"/>
         <dbtask
-            configdir="${env.CATALINA_HOME}/webapps/${project.name}"
+            configdir="${appserver.home}/webapps/${project.name}"
             action="UPDATE"/>
     </target>
 
@@ -274,10 +288,14 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Deploys portlets to a local server                                  -->
     <!-- =================================================================== -->
-    <target name="deploy" depends="jar" if="catalina.exists" description="Deploys portlet to a local server">
-        <echo>Deploying project to Tomcat</echo>
+    <target name="deploy" depends="jar" description="Deploys portlet to a local server">
+        <echo>Deploying project</echo>
+
+
         <!-- Copy the gridsphere web app to build directory -->
-        <property name="project.webapp" value="${env.CATALINA_HOME}/webapps/${project.name}"/>
+        <property name="project.webapp" value="${appserver.home}/webapps/${project.name}"/>
+        <mkdir dir="${project.webapp}"/>
+
         <copy overwrite="true" todir="${project.webapp}">
             <fileset dir="webapp"/>
         </copy>
@@ -292,7 +310,7 @@ Copyright:
 
         <copy file="${gridsphere.build}/lib/gridsphere-ui-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
 
-        <touch file="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${project.name}"/>
+        <touch file="${appserver.home}/webapps/gridsphere/WEB-INF/CustomPortal/portlets/${project.name}"/>
 
         <if>
             <equals arg1="${use.jsr}" arg2="jsr"/>
@@ -321,8 +339,8 @@ Copyright:
     </target>
 
     <target name="copygs">
-   
-        <copy todir="${env.CATALINA_HOME}/shared/lib">
+
+        <copy todir="${appserver.home}/shared/lib">
             <fileset dir="${build.lib}">
                 <include name="${project.name}-services.jar"/>
                 <include name="${project.name}-test.jar"/>

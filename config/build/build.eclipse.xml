@@ -106,10 +106,10 @@ Copyright:
 
         <pathelement path="${java.class.path}"/>
     </path>
-	
-	<target name="help" depends="">
-		<echo message="dummy help"/>
-	</target>
+
+    <target name="help" depends="">
+        <echo message="dummy help"/>
+    </target>
 
 
     <!-- =================================================================== -->
@@ -117,7 +117,7 @@ Copyright:
     <!-- =================================================================== -->
 
     <!-- Copy the necessary resources to the Eclipse Build directory -->
-    
+
     <target name="eclipse-resources" depends="">
 
         <mkdir dir="${eclipse.build}/gridsphere"/>
@@ -181,10 +181,10 @@ Copyright:
 
     </target>
 
-	<target name="eclipse-local-config" depends="">
-		<copy overwrite="yes" todir="${catalina.base}/webapps/gridsphere">
-			<fileset dir="${local.config}"/>
-		</copy>
-	</target>
+    <target name="eclipse-local-config" depends="">
+        <copy overwrite="yes" todir="${catalina.base}/webapps/gridsphere">
+            <fileset dir="${local.config}"/>
+        </copy>
+    </target>
 
 </project>

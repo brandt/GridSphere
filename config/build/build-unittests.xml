@@ -1,0 +1,64 @@
+<!--
+Build include file for the GridSphere Portal source code, see build.xml
+
+ - $Id$
+
+-->
+
+
+<project name="unittests">
+
+
+    <!-- =================================================================== -->
+    <!-- Run the client JUnit test cases                                     -->
+    <!-- =================================================================== -->
+    <target name="tests">
+
+        <delete dir="${gridsphere.build}/reports"/>
+        <mkdir dir="${gridsphere.build}/reports"/>
+
+        <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" fork="yes">
+            <sysproperty key="cactus.contextURL" value="http://localhost:8080/gridsphere"/>
+            <classpath>
+                <path refid="classpath"/>
+                <pathelement location="${gridsphere.appserver}/webapps/gridsphere"/>
+            </classpath>
+            <test name="org.gridlab.gridsphere.GridSphereTest" todir="${gridsphere.build}/reports">
+                <formatter type="xml"/>
+            </test>
+        </junit>
+
+    </target>
+
+
+    <!-- =================================================================== -->
+    <!-- Creates HTML reports from the test results                          -->
+    <!-- =================================================================== -->
+    <target name="test-reports" description="Create test reports from Junit results">
+        <echo message="Making GridSphere Junit Test Reports"/>
+        <mkdir dir="${gridsphere.build}/reports/html"/>
+        <junitreport todir="${gridsphere.build}/reports">
+            <fileset dir="${gridsphere.build}/reports">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="noframes" todir="${gridsphere.build}/reports/html" styledir="${env.ANT_HOME}/etc"/>
+        </junitreport>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Mail the HTML reports of  the test results                          -->
+    <!-- =================================================================== -->
+    <target name="mail">
+        <mail
+            mailhost="${mail.junit.mailhost}"
+            from="${mail.junit.from}"
+            tolist="${mail.junit.tolist}"
+            subject="GridSphere JUnit Test Results">
+            <message mimetype="text/html" src="${gridsphere.build}/reports/html/junit-noframes.html"/>
+            <fileset dir="${gridsphere.build}/reports">
+                <include name="TESTS-*.xml"/>
+            </fileset>
+        </mail>
+    </target>
+
+</project>

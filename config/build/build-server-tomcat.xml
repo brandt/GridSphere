@@ -1,0 +1,44 @@
+<!--
+Build include file for the GridSphere Portal source code, see build.xml
+
+ - $Id$
+
+-->
+
+<project name="tomcat">
+
+    <!-- ==================================================================== -->
+    <!-- Start Tomcat                                                         -->
+    <!-- ==================================================================== -->
+    <target name="start-tomcat">
+        <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
+            <jvmarg value="-Dcatalina.home=${gridsphere.appserver}"/>
+            <jvmarg value="-Xdebug"/>
+            <jvmarg value="-Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n"/>
+            <arg value="start"/>
+            <classpath>
+                <pathelement path="${java.home}/../lib/tools.jar"/>
+                <fileset dir="${gridsphere.appserver}">
+                    <include name="bin/bootstrap.jar"/>
+                </fileset>
+            </classpath>
+        </java>
+
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Stop Tomcat                                                         -->
+    <!-- =================================================================== -->
+    <target name="stop-tomcat">
+        <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
+            <jvmarg value="-Dcatalina.home=${gridsphere.appserver}"/>
+            <arg value="stop"/>
+            <classpath>
+                <fileset dir="${gridsphere.appserver}">
+                    <include name="bin/bootstrap.jar"/>
+                </fileset>
+            </classpath>
+        </java>
+    </target>
+
+</project>

@@ -1,0 +1,158 @@
+<!--
+Build include file for the GridSphere Portal source code, see build.xml
+
+ - $Id$
+
+-->
+
+
+<project name="GridSphere Deploy">
+
+
+    <target name="deploy" depends="gridsphere-jar, jar">
+
+        <echo message="GridSphere AppServer: ${gridsphere.appserver}"/>
+        <if>
+            <equals arg1="${gridsphere.appserver}" arg2="jetty"/>
+            <then>
+                <echo message="Installing for Jetty"/>
+                <antcall target="deploy-jetty"/>
+            </then>
+        </if>
+
+
+        <if>
+            <equals arg1="${gridsphere.appserver}" arg2="tomcat"/>
+            <then>
+                <echo message="Installing for Tomcat"/>
+                <antcall target="deploy-tomcat"/>
+            </then>
+        </if>
+
+
+    </target>
+
+
+    <target name="deploy-common">
+        <!-- Copy the gridsphere web app to build directory -->
+        <copy todir="${build.webapps}/gridsphere">
+            <fileset dir="${gswebapp.dir}"/>
+        </copy>
+
+        <copy todir="${gridsphere.build}/docs/EclipseGuide">
+            <fileset dir="docs/docbook/EclipseGuide"/>
+        </copy>
+
+        <copy todir="${appserver.home}/webapps">
+            <fileset dir="${build.webapps}"/>
+        </copy>
+
+        <mkdir dir="${appserver.home}/webapps/gridsphere/docs"/>
+        <copy todir="${appserver.home}/webapps/gridsphere/docs">
+            <fileset dir="${gridsphere.build}/docs"/>
+        </copy>
+
+
+    </target>
+
+    <!-- ========================================================= -->
+    <!-- =          JETTY                                        = -->
+    <!-- ========================================================= -->
+
+
+    <!-- deploys gridsphere to jetty -->
+    <target name="deploy-jetty" depends="deploy-common">
+
+        <!-- if there is no start.jar in appserver.home install jetty -->
+
+        <if>
+            <available file="${appserver.home}/start.jar" type="file" property="jetty"/>
+            <then>
+                <echo message="Found jetty."/>
+            </then>
+            <else>
+                <echo message="No Jetty in install dir detected. Installing jetty."/>
+                <antcall target="install-jetty"/>
+            </else>
+        </if>
+
+
+        <copy todir="${build.webapps}/gridsphere">
+            <fileset dir="${gswebapp.dir}"/>
+        </copy>
+
+        <copy overwrite="true" todir="${appserver.home}/ext">
+            <fileset dir="lib">
+                <exclude name="*.LICENSE"/>
+            </fileset>
+            <fileset dir="${build.lib}">
+                <exclude name="gridsphere-test.jar"/>
+                <exclude name="gridsphere-ui-tags.jar"/>
+                <exclude name="gridsphere-provider.jar"/>
+                <exclude name="coreportlets.jar"/>
+
+            </fileset>
+        </copy>
+
+        <copy overwrite="true" file="${build.lib}/gridsphere-provider.jar" todir="${appserver.home}/ext/"/>
+        <copy overwrite="true" file="${build.lib}/gridsphere-ui-tags.jar" todir="${appserver.home}/webapps/gridsphere/WEB-INF/lib"/>
+        <copy overwrite="true" file="${build.lib}/coreportlets.jar" todir="${appserver.home}/webapps/gridsphere/WEB-INF/lib"/>
+
+    </target>
+
+    <!-- deploys jetty to appserver.home -->
+    <target name="install-jetty" description="Deploys jetty to jetty.home">
+        <mkdir dir="${appserver.home}"/>
+        <mkdir dir="${appserver.home}/webapps"/>
+        <mkdir dir="${appserver.home}/logs"/>
+        <copy todir="${appserver.home}">
+            <fileset dir="lib/jetty/"/>
+        </copy>
+
+    </target>
+
+
+    <!-- ========================================================= -->
+    <!-- =          TOMCAT                                       = -->
+    <!-- ========================================================= -->
+
+    <target name="deploy-tomcat" depends="deploy-common">
+        <!-- Copy context file -->
+        <if>
+            <available file="${appserver.home}/conf/Catalina" type="dir" property="tomcat5"/>
+            <then>
+                <echo message="Detected Tomcat 5"/>
+                <copy file="webapps/gridsphere-context.xml" tofile="${appserver.home}/conf/Catalina/localhost/gridsphere.xml"/>
+            </then>
+            <else>
+                <echo message="Detected Tomcat 4"/>
+                <copy file="webapps/gridsphere-context.xml" todir="${build.webapps}"/>
+            </else>
+        </if>
+
+        <copy overwrite="true" todir="${appserver.home}/shared/lib">
+            <fileset dir="lib">
+                <exclude name="*.LICENSE"/>
+                <exclude name="*.txt"/>
+            </fileset>
+            <fileset dir="${build.lib}">
+                <exclude name="gridsphere-test.jar"/>
+                <exclude name="gridsphere-ui-tags.jar"/>
+                <exclude name="gridsphere-provider.jar"/>
+                <exclude name="coreportlets.jar"/>
+
+            </fileset>
+        </copy>
+
+        <copy file="webapps/log4j.xml" todir="${appserver.home}/common/classes"/>
+
+
+        <copy overwrite="true" file="${build.lib}/gridsphere-provider.jar" todir="${appserver.home}/shared/lib"/>
+        <copy overwrite="true" file="${build.lib}/gridsphere-ui-tags.jar" todir="${appserver.home}/webapps/gridsphere/WEB-INF/lib"/>
+        <copy overwrite="true" file="${build.lib}/coreportlets.jar" todir="${appserver.home}/webapps/gridsphere/WEB-INF/lib"/>
+
+
+    </target>
+
+
+</project>

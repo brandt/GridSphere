@@ -25,12 +25,12 @@ Copyright:
 
     <property environment="env"/>
 
-    <patternset id="dist.portlets" >
-      <include name="webapps/*.war"/>
+    <patternset id="dist.portlets">
+        <include name="webapps/*.war"/>
     </patternset>
 
-    <patternset id="extra.jars" >
-      <include name="lib/*.jar"/>
+    <patternset id="extra.jars">
+        <include name="lib/*.jar"/>
     </patternset>
 
     <property name="newproject" value="projects/newproject"/>
@@ -82,24 +82,24 @@ Copyright:
             classname="junit.framework.TestCase"
             classpathref="classpath"/>
 
-        <echo message="--- Build environment for ${project} ---" />
+        <echo message="--- Build environment for ${project} ---"/>
         <echo message="--- Flags (Note: If the {property name} is displayed,"/>
-        <echo message="           then the component is not present)" />
+        <echo message="           then the component is not present)"/>
         <echo message=""/>
 
         <echo message="ANT_HOME is set to = ${env.ANT_HOME}"/>
         <echo message="JAVA_HOME is set to = ${env.JAVA_HOME}"/>
         <echo message="CATALINA_HOME is set to = ${env.CATALINA_HOME}"/>
 
-        <echo message="=== Required Libraries ===" />
+        <echo message="=== Required Libraries ==="/>
         <echo message="log4j.present=$log4j.present"/>
 
         <echo message=""/>
-        <echo message="--- Optional Libraries ---" />
+        <echo message="--- Optional Libraries ---"/>
         <echo message="junit.present=$junit.present"/>
         <echo message=""/>
 
-        <echo message="optimize=${optimize}" />
+        <echo message="optimize=${optimize}"/>
 
     </target>
 
