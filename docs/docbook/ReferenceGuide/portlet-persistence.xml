@@ -15,16 +15,21 @@
     </para>
     <sect1>
         <title>Configuration</title>
-        The configurationfile for the PersistenceManager is
+        <para>
+        The configuration file for the <link linkend='persist'>&PersistenceManager;</link> is
         <filename>$GRIDSPHERE_SOURCE/webapps/gridsphere/WEB-INF/persistence/hibernate.properties</filename>.
-        For the available configurationoptions please see the &Hibernate; website. By default it is configured
-        GridSphere by default is configured to use HSQL, a pure Java in-memory database useful for testing and development.
-        For a production environment we strongly recommend to use a standalone database such as MySQL.
+        For the available configuration options please see the &Hibernate; website. By default it is configured
+        to use HSQL, a pure Java in-memory database useful for testing and development.
+        For a production environment we strongly recommend to use a standalone database such as MySQL, etc.
+        </para>
     </sect1>
     <sect1>
         <title>Simple Persistence</title>
+        <para>Making data persistent in portlets is done using the <link linkend='portlet.data'>&PortletData;</link>
+        object under WebSphere portlet API and the <link linkend='portlet.data'>&PortletPreferneces;</link> object
+        using the JSR 168 portlet API.</para>
         <para>
-            In general when requiring persistence in a portlet, first see if the
+            In general when requiring persistence in a WebSphere portlet, first see if the
             <link linkend='portlet.data'>&PortletData;</link> object can meet your needs. Although, it only provides
             a container for simple &String; key/value pairs it can go a long way.
             <informalexample>
@@ -47,8 +52,34 @@
                 </programlisting>
             </informalexample>
             PortletData saved values are on a per user basis.
-
         </para>
+        <para>
+            JSR 168 provides a <link linkend='portlet.preferences'>&PortletPreferences;</link>
+            object available from the <link linkend='portlet.data'>&PortletRequest;</link>. It can also store key-value
+            pairs (only in the processAction method and not in a render method).
+            <informalexample>
+                <programlisting>
+                            PortletPreferences prefs = request.getPreferences();
+                            prefs.setValue("key", value);
+                            try {
+                            prefs.store();
+                            } catch (IOException e) {
+                            // something went wrong while storing the data!
+                            }
+                </programlisting>
+            </informalexample>
+                    This would store the String value under the key 'key'. Getting data back is as easy
+                    as storing data. If no value is found <classname>null</classname> is returned.
+            <informalexample>
+                <programlisting>
+                            PortletPreferences prefs = request.getPreferences();
+                            String value = prefs.getValue("key");
+                </programlisting>
+            </informalexample>
+                    PortletPreferences saved values are on a per user basis.
+        </para>
+
+
     </sect1>
     <sect1>
         <title>The Persistence Manager</title>
@@ -146,119 +177,4 @@
 
     </sect1>
 
-
-
-    <!-- - create : creates a new object
-    - restoreObject : restores a single object matchin the query in
-      rdbms (aka the first found object) , in xml one xml files
-      represents one object it will return the object
-    - restoreList : returns a list object conntaining all objects
-      which matches the query (rdbms) in xml it returns a list with
-      just on object (maybe never used this function, I just put it
-      there)
-    - delete : deletes object from storage (rdbms), in xml it does nothing
-      until now (should delete the file)
-    - update : updates the object on the storage
-
-    These methods are in the interface, further more there is
-
-    - setConnectionURL : in rdbms sets the filename of the database.xml file,
-      in xml sets the filename to the xml file where you want to have your
-      data saved
-
-
-    In rdbms you need two more methods:
-
-    - setDatabaseName : which database to save to (like 'portal')
-    - setQuery : sets the actual query
-
-    The CRUD methods are throwing exception, every one throws
-    ConfigurationException if the configuration was not ok (like
-    connectionURL was not set) and Create/Restore/Update/Delete
-    Exception (only in the corresponding methods of course)
-
-    If you want to store your data in a rdbms (like mysql) and want
-    to not direclty code in castor syntax you have to extend from
-    BaseObject (or implement the methods and variables there).
-    Every objects needs an ObjectID (Oid) and for castortransactions
-    the field timestamp is needed. For my classes I assume Oid and
-    timestamp exists in every class which should be saved to a rdbms.
-    You don't need this if you want to save to xml.
-    Fuurthermore you need to 'normalize' your classes to store them in
-    a database and structures like vector and list are not directly
-    saved in the object itself but in a seperate table (since these
-    structures can only be represented in a database as a table and
-    table in table is not possible, but table with a reference to another
-    table). Let's assume you have an Object Users, with a vector
-    of computername of this user.
-
-    public class User {
-       private String name;
-       private Vector ListOfComputers;
-
-       get/set...
-
-    }
-
-    The database table for user would look like:
-
-    Oid varchar(255), Name varchar(255)...but waht about the list?
-
-    The ListOfComputers must be stored in a sperate table, actually it should
-    have the name 'Computer'.
-
-    Oid varchar(255), Name varachr(255), UserOid varchar(255)
-
-    So every entry in the table ListOfComputers would have
-    an Oid, the name of the computer and the reference to the User.
-    What does this mean for the User Object, it should look like this:
-
-    public class User {
-        private String name;
-        private Vector ListOfComputers;
-
-        get/set Name
-
-        public void addComputer(String name) {
-           Computer comp = new Computer(name);
-           comp.setOwner(this.name);
-           persistencemanger.save(comp);
-        }
-
-        public void getComputers() {
-
-           Vector list = persistencemanager.getList(query database for all computers with this username);
-           ListOfComputers = list;
-
-        }
-
-    }
-
-    public Computer {
-       private String name;
-       private String owner;
-       get/set/constructor
-
-
-    }
-
-
-
-    If you want to make your object persistent, your object can only
-    contain fields which are known to castor (see castor website
-    for supprted types). Hashmap and map are NOT supported yet (or
-    they do not work as expected). For every object you have to write
-    a xml mapping file so that castor knows how to save it (true for
-    rdbms where you also have to create the databasetable, partly true
-    for xml, you don't have to write a mapping file, but then the xml
-    output looks ugly)
-
-    As far as I understood the idea behind all this if you are constructing
-    objects with relaction to other objects, not just including a field
-    CustomerID there but include the customerobject by itself. I guess
-    this is somewhat memory intense, but with that it makes perfectly sense
-    with object/relational mappers and this is the way todo it, because
-    you can't make classical sql joins but you have to query the (sub)object
-    directly. Thats why this is Object Query Language and not SQL.
-    -->
 </chapter>

@@ -9,8 +9,33 @@
 
 <chapter id="portlet-resources">
     <title>Additional Portlet Resources</title>
-
-<para>
+  <para>
+  Many resources exist on both the WebSphere portlet model and the JSR 168 Portlet API standard. The fololowing lists
+      websites useful for both models as well as generic portlet and web application sites.
+  </para>
+    <sect1>
+        <title>General portlet and web application development</title>
+        <itemizedlist>
+        <ulink url="http://www.jspolympus.com/Portlets/Portlets.jsp">Excellent site with links to articles in JSP, Servlets, Portlets, JSF, etc</ulink>
+        <ulink url="http://portlets.blogspot.com/">Portlet Development Blog</ulink>
+        <ulink url="http://portlet-opensrc.sourceforge.net">Portlet Open Source Trading Site</ulink>
+        </itemizedlist>
+    </sect1>
+    <sect1>
+        <title>JSR 168 portlet API and model</title>
+        <itemizedlist>
+        <ulink url="http://www.jcp.org/aboutJava/communityprocess/review/jsr168/">JSR 168 Portlet Specification</ulink>
+        <ulink url="http://www-106.ibm.com/developerworks/websphere/library/techarticles/0312_hepper/hepper.html">
+            Comparing the JSR 168 Java Portlet Specification with the IBM Portlet API
+        </ulink>
+        <ulink url="http://www-106.ibm.com/developerworks/websphere/library/techarticles/0403_hepper/0403_hepper.html">
+            Best practices: Developing portlets using JSR 168 and WebSphere Portal V5.02
+        </ulink>
+        </itemizedlist>
+    </sect1>
+    <sect1>
+        <title>WebSphere portlet development information</title>
+    <para>
     The architecture of GridSphere and API definitions of key portlet concepts matches the portlet API provided
     by IBM WebSphere to a large extent. An excellent source of more information on portlets and portlet development
     is the <ulink url="http://www7b.boulder.ibm.com/wsdd/zones/portal/">IBM WebSphere Portal Zone</ulink>
@@ -21,5 +46,6 @@
     <listitem><ulink url="http://www-106.ibm.com/developerworks/ibm/library/i-portal/">Portlet Application Programming(part 1)</ulink>
     <ulink url="http://www-106.ibm.com/developerworks/ibm/library/i-portal2/">(part 2)</ulink></listitem>
     </itemizedlist>
-</para>
+    </para>
+    </sect1>
 </chapter>

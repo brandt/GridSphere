@@ -37,10 +37,12 @@ The recommended solution is to get a recent xalan.jar from http://xml.apache.org
             </question>
             <answer>
                 <para>
-                In our first release of GridSphere we have developed a portal framework based upon the portlet
-                API. To provide greater reusability and flexibility, it was decided to not require any Grid
+                GridSphere provides a complete portal framework based upon the portlet
+                API and a minimal set of core portlets. To provide greater reusability and flexibility,
+                it was decided to not require any Grid
                 services for the proper functioning of the GridSphere portlet container. However, we are currently
-                developing many fundamental Grid portlets that will showcase GridLab and OGSA services.
+                developing many fundamental Grid portlets that will showcase GridLab and OGSA services under a
+                separate portlet application "grid portlets".
                 </para>
             </answer>
         </qandaentry>
@@ -71,13 +73,13 @@ The recommended solution is to get a recent xalan.jar from http://xml.apache.org
             <question>
                 <para>
                     I started my own portlets package and deployed it. Gridsphere now fails loading at startup!
-                        I think I edited all configuration files correctly. What's wrong?
+                    I think I edited all configuration files correctly. What's wrong?
                 </para>
             </question>
             <answer>
                 <para>
-                        Please doublecheck the xml configuration files and make sure that the packagename of the portlets
-                        contains '.portlets.' and of the services '.services.'.
+                Please doublecheck the xml configuration files and make sure that the packagename of the portlets
+                contains '.portlets.' and of the services '.services.'.
                 </para>
             </answer>
         </qandaentry>
