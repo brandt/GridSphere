@@ -18,7 +18,8 @@ public class ClientImpl implements Client {
 
     public static final String[] MIME_TYPES = {"text/html", "text/vnd.wap.wml"};
     public static final String[] MARKUP_TYPES = {"html", "wml", "chtml"};
-    public static final String[] MANUFACTURER_NAMES = {"opera", "netscape", "mozilla", "IE"};
+    public static final String[] MANUFACTURER_NAMES = {"opera", "netscape", "mozilla", "IE","4thpass","Alcatel","BlackBerry","jBrowser","M3Gate","Motorola","Sony","Nokia","Panasonic","Philips","Sagem","Samsung","Siemens","SonyEricsson","WinWAP"};
+    public static final String[] WAP_IDENTIFIER = {"4thpass","Alcatel-","BlackBerry/","jBrowser","M3GATE/","MOT-","Sony CMD","Nokia","Panasonic","PHILIPS","SAGEM-","SAMSUNG-","SIE-","SonyEricsson","WinWAP"};
     private String manufacturer = null;
     private String model = null;
     private String version = null;
@@ -46,6 +47,19 @@ public class ClientImpl implements Client {
         // Compaq IPAQ: Mozilla/4.0 (compatible; MSIE 4.01; Windows CE; PPC; 240x320)
 
         String browserInfo = "Unknown browser";
+        //WAP 2.0 identifification begins here:
+        for (int identString=0;identString<15;identString++)
+        {
+        	if (userAgent.indexOf(WAP_IDENTIFIER[identString])!=-1) {
+        		browserInfo=MANUFACTURER_NAMES[identString+4];
+        		manufacturer=MANUFACTURER_NAMES[identString+4];
+        		mimeType=MIME_TYPES[0];
+        		markupName=MARKUP_TYPES[1];
+        	}
+        }
+        //WAP 2.0 identification ends here
+        
+        if (browserInfo.equals("Unknown browser")) //WAP 2.0
         if (userAgent != null) {
             int i = userAgent.indexOf(" ");
 
@@ -82,7 +96,8 @@ public class ClientImpl implements Client {
         } else {
             manufacturer = MANUFACTURER_NAMES[3];
         }
-
+        
+        if (markupName==null)//WAP 2.0
         if (mimeType != null) {
             int i = mimeType.indexOf("html");
             if (i < 0) {
