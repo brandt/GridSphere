@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <portlet-tabbed-pane>
-    <portlet-tab>
-        <title>Welcome</title>
+    <portlet-tab label="welcome" title="Welcome">
         <portlet-tabbed-pane style="sub-menu">
-            <portlet-tab label="home">
-                <title>Home</title>
+            <portlet-tab label="home" title="Home">
                 <table-layout>
                     <row-layout>
-                        <column-layout width="30%">
-                            <portlet-frame label="login">
-                                <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
-                            </portlet-frame>
-                        </column-layout>
-                        <column-layout width="70%">
+                        <column-layout width="50%">
                             <portlet-frame label="filemanager">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.file.FileManagerPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                        <column-layout width="50%">
+                            <portlet-frame required-role="SUPER" label="login">
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
                     </row-layout>
@@ -28,8 +26,18 @@
                     </row-layout>
                 </table-layout>
             </portlet-tab>
-            <portlet-tab label="utilities">
-                <title>Utilities</title>
+            <portlet-tab label="settings" title="Settings">
+                <table-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="profile">
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+            <portlet-tab label="utilities" title="Utilities">
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -42,41 +50,36 @@
             </portlet-tab>
         </portlet-tabbed-pane>
     </portlet-tab>
-    <portlet-tab>
-        <required-role>SUPER</required-role>
-        <title>Administration</title>
+    <portlet-tab title="Administration" required-role="SUPER">
         <portlet-tabbed-pane style="sub-menu">
-            <portlet-tab>
-                <title>Portlets</title>
+            <portlet-tab title="Users">
                 <table-layout>
                     <row-layout>
                         <column-layout width="80%">
-                            <portlet-frame>
-                                <portlet-class>org.gridlab.gridsphere.portlets.core.PortletApplicationManager.1</portlet-class>
-                            </portlet-frame>
-                        </column-layout>
-                    </row-layout>
-                </table-layout>
-            </portlet-tab>
-            <portlet-tab>
-                <title>Users</title>
-                <table-layout>
-                    <row-layout>
-                        <column-layout width="80%">
-                            <portlet-frame>
+                            <portlet-frame label="usermanager">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
                     </row-layout>
                 </table-layout>
             </portlet-tab>
-            <portlet-tab>
-                <title>Groups</title>
+            <portlet-tab title="Groups">
                 <table-layout>
                     <row-layout>
                         <column-layout width="80%">
-                            <portlet-frame>
+                            <portlet-frame label="groupmanager">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+            <portlet-tab title="Portal">
+                <table-layout>
+                    <row-layout>
+                        <column-layout width="80%">
+                            <portlet-frame label="portalstats">
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
                     </row-layout>

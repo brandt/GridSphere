@@ -2,12 +2,12 @@
 <portlet-app-collection>
 
     <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.PortletApplicationManager">
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager">
             <portlet-name>Application Manager Portlet</portlet-name>
             <servlet-name>ManagerPortlet</servlet-name>
         </portlet-app>
 
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.PortletApplicationManager.1">
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1">
             <concrete-portlet>
                 <portlet-name>Application Manager Portlet</portlet-name>
                 <default-locale>en</default-locale>
@@ -233,6 +233,50 @@
              </concrete-portlet>
          </concrete-portlet-app>
      </portlet-app-def>
+
+    <portlet-app-def>
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.portlets.PortalStatsPortlet">
+            <portlet-name>Portal Statistics Portlet</portlet-name>
+            <servlet-name>PortalStatsPortlet</servlet-name>
+            <supports>
+                 <view/>
+                 <help/>
+             </supports>
+        </portlet-app>
+
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.portlets.PortalStatsPortlet.1">
+            <concrete-portlet>
+                <portlet-name>Portal Statistics Portlet</portlet-name>
+                <default-locale>en</default-locale>
+                <language locale="en">
+                    <title>Portal Statistics</title>
+                    <description>Displays portal statistics such as sessions, users and services information</description>
+                </language>
+            </concrete-portlet>
+        </concrete-portlet-app>
+    </portlet-app-def>
+
+    <portlet-app-def>
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet">
+            <portlet-name>Profile Manager Portlet</portlet-name>
+            <servlet-name>ProfileManagerPortlet</servlet-name>
+        </portlet-app>
+
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet.1">
+            <concrete-portlet>
+                <portlet-name>Profile Manager Portlet</portlet-name>
+                <default-locale>en</default-locale>
+                <language locale="en">
+                    <title>Profile Manager</title>
+                    <description>Customizes users profile</description>
+                </language>
+                <config-param>
+                    <param-name>supported-locales</param-name>
+                    <param-value>en, de, pl, cs, hu</param-value>
+                </config-param>
+            </concrete-portlet>
+        </concrete-portlet-app>
+    </portlet-app-def>
 
 </portlet-app-collection>
 

@@ -61,7 +61,7 @@
 
     <servlet>
         <servlet-name>ManagerPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.PortletApplicationManager</servlet-class>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager</servlet-class>
     </servlet>
 
     <servlet>
@@ -85,12 +85,19 @@
     </servlet>
 
     <servlet>
-
         <servlet-name>NotePadPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.notepad.NotePadPortlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>ProfileManagerPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet</servlet-class>
+    </servlet>
 
+    <servlet>
+        <servlet-name>PortalStatsPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.PortalStatsPortlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>gridsphere</servlet-name>
@@ -130,6 +137,16 @@
     <servlet-mapping>
         <servlet-name>GroupManagerPortlet</servlet-name>
         <url-pattern>/admin/groups</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ProfileManagerPortlet</servlet-name>
+        <url-pattern>/users/profile</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PortalStatsPortlet</servlet-name>
+        <url-pattern>/admin/stats</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
