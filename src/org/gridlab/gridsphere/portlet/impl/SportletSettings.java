@@ -89,9 +89,9 @@ public class SportletSettings implements PortletSettings {
         Iterator it = langList.iterator();
         while (it.hasNext()) {
             LanguageInfo langInfo = (LanguageInfo) it.next();
-            //if (langInfo.getLocale().startsWith(locale.toString())) {
+            if (langInfo.getLocale().startsWith(locale.toString())) {
                 return langInfo.getTitle();
-            //}
+            }
         }
         return null;
     }
