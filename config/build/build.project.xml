@@ -198,7 +198,7 @@ Copyright:
               classpathref="classpath"/>
 
           <schemaexport
-              properties="webapp/WEB-INF/persistence/hibernate.properties"
+              properties="{$CATALINA_HOME}/webapps/${project.name}/WEB-INF/persistence/hibernate.properties"
               quiet="yes"
               text="no"
               drop="no"
@@ -217,7 +217,7 @@ Copyright:
             classpathref="classpath"/>
 
         <schemaupdate
-            properties="webapp/WEB-INF/persistence/hibernate.properties"
+            properties="{$CATALINA_HOME}/webapps/${project.name}/WEB-INF/persistence/hibernate.properties"
             quiet="yes">
             <fileset dir="webapp/WEB-INF/persistence/">
                 <include name="**/*.hbm.xml"/>
