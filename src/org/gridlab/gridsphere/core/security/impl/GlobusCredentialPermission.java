@@ -25,7 +25,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import com.stevesoft.pat.Regex;
+//import com.stevesoft.pat.Regex;
+import org.apache.regexp.RE;
 
 /**
  * @table credentialpermission
@@ -41,7 +42,7 @@ public class GlobusCredentialPermission extends BaseObject implements Credential
      * @sql-name permittedsubjects
      * @required
      */
-    private String permittedSubjects= null;
+    private String permittedSubjects = null;
 
     /**
      * @sql-size 256
@@ -108,7 +109,7 @@ public class GlobusCredentialPermission extends BaseObject implements Credential
         }
         return answer;
         ***/
-        Regex ex = new Regex(this.permittedSubjects);
-        return ex.search(subject);
+        RE ex = new RE(this.permittedSubjects);
+        return ex.match(subject);
     }
 }
