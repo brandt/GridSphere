@@ -8,7 +8,9 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletResponse;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletURI;
+import org.gridlab.gridsphere.portlet.PortletLog;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -16,6 +18,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class PortletTabBar extends BasePortletComponent {
+
+    protected transient static PortletLog log = SportletLog.getInstance(PortletTabBar.class);
 
     private PortletPanel selectedPanel = null;
     private List tabPages = new ArrayList();
@@ -144,6 +148,7 @@ public class PortletTabBar extends BasePortletComponent {
 
     public void setSelectedIndex(int index) {
         unselectLastTab();
+        if (index<0) {index=0;};
         PortletTabPage tabPage = (PortletTabPage)tabPages.get(index);
         tabPage.setSelected(true);
     }
