@@ -15,9 +15,12 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 public class PasswordAuthModule implements LoginAuthModule {
 
+    private static final int PASSWORD_MODULE_PRIORITY = 100;
     private String moduleName;
     private PasswordManagerService passwordManager = null;
+
     private PortletLog log = SportletLog.getInstance(PasswordAuthModule.class);
+
 
     public PasswordAuthModule(String moduleName) {
         this.moduleName = moduleName;
@@ -34,6 +37,24 @@ public class PasswordAuthModule implements LoginAuthModule {
 
     public String getModuleName() {
         return moduleName;
+    }
+
+    public int getModulePriority() {
+        return PASSWORD_MODULE_PRIORITY;
+    }
+
+    public int compareTo(Object obj) {
+        if ((obj != null) && (obj instanceof LoginAuthModule)) {
+            LoginAuthModule l = (LoginAuthModule)obj;
+            if (this.PASSWORD_MODULE_PRIORITY < l.getModulePriority()) {
+                return -1;
+            } else if (this.PASSWORD_MODULE_PRIORITY > l.getModulePriority()) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+        throw new ClassCastException("Unable to compare supplied object to this module");
     }
 
     public void checkAuthorization(User user, String password) throws AuthorizationException {
