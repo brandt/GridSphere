@@ -61,7 +61,7 @@ public class TableTag extends BaseComponentTag {
      *
      * @param cellSpacing the table cell spacing
      */
-    public void setCellSpacing(String cellSpacing) {
+    public void setCellspacing(String cellSpacing) {
         this.cellSpacing = cellSpacing;
     }
 
@@ -70,7 +70,7 @@ public class TableTag extends BaseComponentTag {
      *
      * @return the table cell spacing
      */
-    public String getCellSpacing() {
+    public String getCellspacing() {
         return cellSpacing;
     }
 
