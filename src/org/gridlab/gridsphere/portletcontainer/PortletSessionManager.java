@@ -20,7 +20,7 @@ public class PortletSessionManager implements HttpSessionListener {
     private static PortletSessionManager instance  = new PortletSessionManager();
     private PortletLog log = SportletLog.getInstance(PortletSessionManager.class);
 
-    private Map sessions = new HashMap();
+    private Hashtable sessions = new Hashtable();
 
     private PortletSessionManager() {
 
@@ -58,7 +58,7 @@ public class PortletSessionManager implements HttpSessionListener {
         //PortletLayoutEngine engine = PortletLayoutEngine.getDefault();
         //engine.removeUser(user);
         //engine.logoutPortlets(event);
-        synchronized (sessions) {
+        //synchronized (sessions) {
             String id = event.getSession().getId();
             if (id != null) {
                 List sessionListeners = (List)sessions.get(id);
@@ -74,12 +74,13 @@ public class PortletSessionManager implements HttpSessionListener {
                             log.error("Unable to invoke logout on session listener ", e);
                         }
                     }
+                    log.debug("Removing session: " + id);
+                    sessions.remove(id);
                 }
-                sessions.remove(event.getSession().getId());
             } else {
                 log.info("Not sure why sessionDestroyed listener provides null session id!");
             }
-        }
+        //}
         dumpSessions();
     }
 
@@ -89,15 +90,16 @@ public class PortletSessionManager implements HttpSessionListener {
         List sessionListeners = (List)sessions.get(sessionId);
 
         if (sessionListeners == null) {
-            log.debug("session listeners null for id " + sessionId);
+            //log.debug("session listeners null for id " + sessionId);
             sessionListeners = new ArrayList();
         }
 
         sessionListeners.add(sessionListener);
 
         sessions.put(sessionId, sessionListeners);
+        dumpSessions();
     }
-
+    /*
     public void removeSessionListener(String sessionId, PortletSessionListener sessionListener) {
         log.debug("removing session listener for : " + sessionId + " " + sessionListener.getClass());
 
@@ -106,15 +108,16 @@ public class PortletSessionManager implements HttpSessionListener {
             sessionListeners.remove(sessionListener);
         }
         sessions.put(sessionId, sessionListeners);
+        dumpSessions();
     }
-
+    */
     public void dumpSessions() {
-        log.debug("Session information:");
+        log.debug("PortletSessionManager Session information:");
         log.debug("# current sessions: " + sessions.size());
         Set keySet = sessions.keySet();
         Iterator it = keySet.iterator();
         while (it.hasNext()) {
-            log.debug("current sessions #id: " + (String)it.next());
+            log.debug("session #id: " + (String)it.next());
         }
     }
 }

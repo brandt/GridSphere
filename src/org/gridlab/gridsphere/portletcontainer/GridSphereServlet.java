@@ -24,11 +24,10 @@ import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import javax.activation.FileDataSource;
+import javax.activation.DataHandler;
+import java.io.*;
+import java.util.*;
 
 
 /**
@@ -105,6 +104,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletRequest portletReq = event.getPortletRequest();
         PortletResponse portletRes = event.getPortletResponse();
 
+
+
         // If first time being called, instantiate all portlets
         if (firstDoGet.equals(Boolean.TRUE)) {
             synchronized (firstDoGet) {
@@ -122,14 +123,14 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
         }
 
-        //List groups = aclService.getGroups(portletReq.getUser());
-        //portletReq.setAttribute(SportletProperties.PORTLETGROUPS, groups);
+        List groups = aclService.getGroups(portletReq.getUser());
+        portletReq.setAttribute(SportletProperties.PORTLETGROUPS, groups);
 
         // Handle user login and logout
         if (event.hasAction()) {
             if (event.getAction().getName().equals(SportletProperties.LOGIN)) {
                 login(event);
-                event = new GridSphereEventImpl(aclService, context, req, res);
+                //event = new GridSphereEventImpl(aclService, context, req, res);
             }
             if (event.getAction().getName().equals(SportletProperties.LOGOUT)) {
                 logout(event);
@@ -138,6 +139,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         // Render layout
         layoutEngine.actionPerformed(event);
+
+        downloadFile(event);
 
         // Handle any outstanding messages
         // This needs work certainly!!!
@@ -159,7 +162,18 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         }
 
+        groups = aclService.getGroups(portletReq.getUser());
+        portletReq.setAttribute(SportletProperties.PORTLETGROUPS, groups);
+
         layoutEngine.service(event);
+
+        log.debug("Session stats");
+        userSessionManager.dumpSessions();
+
+        log.debug("Portlet service factory stats");
+        factory.logStatistics();
+
+
     }
     /**
      * Handles login requests
@@ -177,6 +191,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
+
         try {
             User user = loginService.login(username, password);
             session.setAttribute(SportletProperties.PORTLET_USER, user);
@@ -184,6 +199,14 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 log.debug("User: " + user.getUserName() + " logged in as SUPER");
                 req.setAttribute(SportletProperties.PORTLET_ROLE, PortletRole.SUPER);
             }
+            List groups = aclService.getGroups(req.getUser());
+            Iterator it = groups.iterator();
+            while (it.hasNext()) {
+                PortletGroup g = (PortletGroup)it.next();
+                log.debug("groups:" + g.toString());
+            }
+            req.setAttribute(SportletProperties.PORTLETGROUPS, groups);
+            log.debug("Adding User: " + user.getID() + " with session:" + session.getId() + " to usersessionmanager");
             userSessionManager.addSession(user, session);
         } catch (AuthorizationException err) {
             log.debug(err.getMessage());
@@ -201,9 +224,47 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event a <code>GridSphereEvent</code>
      */
     protected void logout(GridSphereEvent event) {
+        log.debug("in logout of GridSphere Servlet");
         PortletRequest req = event.getPortletRequest();
         userSessionManager.removeSessions(req.getUser());
-        log.debug("in logout of GridSphere Servlet");
+    }
+
+    /**
+     * Method to set the response headers to perform file downloads to a browser
+     *
+     * @param event the gridsphere event
+     * @throws PortletException
+     */
+     public void downloadFile(GridSphereEvent event) throws PortletException {
+        log.debug("in FileManagerPortlet: downloadFile");
+
+        PortletResponse res = event.getPortletResponse();
+        PortletRequest req = event.getPortletRequest();
+        try {
+
+            String fileName = (String)req.getAttribute("FMP_filename");
+            String path = (String)req.getAttribute("FMP_filepath");
+            if ((fileName == null) || (path == null)) return;
+            log.debug("filename: " + fileName + " filepath= " + path);
+            File f = new File(path);
+
+            FileDataSource fds = new FileDataSource(f);
+            res.setContentType(fds.getContentType());
+            res.setHeader("Content-Disposition","attachment; filename=" + fileName);
+
+            // you should use a datahandler to write out data from a datasource.
+            DataHandler handler = new DataHandler(fds);
+            handler.writeTo(res.getOutputStream());
+        } catch(FileNotFoundException e) {
+            log.error("Unable to find file!", e);
+        } catch(SecurityException e) {
+            // this gets thrown if a security policy applies to the file. see java.io.File for details.
+            log.error("A security exception occured!", e);
+        } catch(IOException e) {
+            log.error("Caught IOException", e);
+            //response.sendError(HttpServletResponse.SC_INTERNAL_SERVER,e.getMessage());
+
+        }
     }
 
     /**
