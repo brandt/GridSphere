@@ -210,6 +210,12 @@ public class SportletServiceFactory implements PortletServiceFactory {
             throw new PortletServiceNotFoundException("Unable to find implementing portlet service for interface: " + serviceName);
         }
 
+        Properties configProperties = def.getConfigProperties();
+        List configList = def.getConfigParamList();
+
+        PortletServiceConfig portletServiceConfig =
+                new SportletServiceConfig(service, configProperties, servletConfig);
+
         // instantiate wrapper with user and impl
         try {
             Class c = Class.forName(serviceImpl);
@@ -221,6 +227,16 @@ public class SportletServiceFactory implements PortletServiceFactory {
             log.error("Unable to create portlet service wrapper: " + serviceImpl, e);
             throw new PortletServiceNotFoundException("Unable to create portlet service: " + serviceName);
         }
+
+        try {
+            psp.init(portletServiceConfig);
+        } catch (PortletServiceUnavailableException e) {
+            log.error("Unable to initialize portlet service: " + serviceImpl, e);
+            throw new PortletServiceNotFoundException("Unable to initialize portlet service: " + serviceImpl);
+        }
+
+        initServices.put(service, psp);
+
         return psp;
     }
 
