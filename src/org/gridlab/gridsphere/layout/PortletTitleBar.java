@@ -11,10 +11,9 @@ import org.gridlab.gridsphere.layout.event.PortletTitleBarListener;
 import org.gridlab.gridsphere.layout.event.impl.PortletTitleBarEventImpl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portletcontainer.*;
-import org.gridlab.gridsphere.portletcontainer.descriptor.AllowsWindowStates;
-import org.gridlab.gridsphere.portletcontainer.descriptor.ApplicationPortletDescriptor;
-import org.gridlab.gridsphere.portletcontainer.descriptor.Markup;
-import org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.AllowsWindowStates;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.SupportsModes;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -34,7 +33,7 @@ public class PortletTitleBar extends BasePortletComponent {
     private String portletClass = null;
     private PortletWindow.State windowState = PortletWindow.State.NORMAL;
 
-    private String[] portletModes = {Portlet.Mode.VIEW.toString()};
+    private String[] portletModes = null;
     private Portlet.Mode portletMode = Portlet.Mode.VIEW;
     private Portlet.Mode previousMode = null;
 
@@ -42,7 +41,7 @@ public class PortletTitleBar extends BasePortletComponent {
 
     private PortletSettings settings;
     private List modeList = null;
-    private List allowsWindowStates = new ArrayList();
+    private String[] windowStates = null;
     private String ErrorMessage = null;
 
     /**
@@ -307,14 +306,25 @@ public class PortletTitleBar extends BasePortletComponent {
         String appID = registryManager.getApplicationPortletID(portletClass);
         ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
         if (appPortlet != null) {
-            ApplicationPortletDescriptor appDD = appPortlet.getApplicationPortletDescriptor();
-            SupportsModes supportedModes = appDD.getSupportsModes();
-            modeList = supportedModes.getMarkupList();
+            ApplicationPortletConfig appConfig = appPortlet.getApplicationPortletConfig();
+
+            // get supported modes from application portlet config
+            List supportedModes = appConfig.getSupportedModes();
+            for (int i = 0; i < supportedModes.size(); i++) {
+                Portlet.Mode mode = (Portlet.Mode)supportedModes.get(i);
+                portletModes[i] = mode.toString();
+            }
+
             ConcretePortlet concPortlet = appPortlet.getConcretePortlet(portletClass);
             settings = concPortlet.getPortletSettings();
-            // Get window state settings
-            AllowsWindowStates allowedWindowStates = appDD.getAllowsWindowStates();
-            allowsWindowStates = allowedWindowStates.getWindowStatesAsStrings();
+
+            // get window states from application portlet config
+            List allowsWindowStates = appConfig.getAllowedWindowStates();
+            for (int i = 0; i < supportedModes.size(); i++) {
+                PortletWindow.State state = (PortletWindow.State)allowsWindowStates.get(i);
+                windowStates[i] = state.toString();
+            }
+
         }
     }
 
@@ -329,32 +339,27 @@ public class PortletTitleBar extends BasePortletComponent {
         PortletURI portletURI;
         PortletResponse res = event.getPortletResponse();
 
-        // subtract current window state
-        List windowStates = new ArrayList(allowsWindowStates);
 
-        if (windowState == PortletWindow.State.NORMAL) {
-            windowStates.remove(PortletWindow.State.RESIZING.toString().toLowerCase());
+        for (int i = 0; i < windowStates.length; i++) {
+            // remove current state from list
+            if (windowStates[i].equalsIgnoreCase(windowState.toString())) {
+                windowStates[i] = "";
+            }
         }
-        // remove current state from list
-        windowStates.remove(windowState.toString().toLowerCase());
-
         // create a URI for each of the window states
         PortletStateLink stateLink;
         List stateLinks = new Vector();
-        Iterator it = windowStates.iterator();
-        while (it.hasNext()) {
-            String winState = (String) it.next();
-
+        for (int i = 0; i < windowStates.length; i++) {
             portletURI = res.createURI();
             portletURI.addParameter(GridSphereProperties.COMPONENT_ID, this.componentIDStr);
             portletURI.addParameter(GridSphereProperties.PORTLETID, portletClass);
             try {
-                stateLink = new PortletStateLink(winState);
-                portletURI.addParameter(GridSphereProperties.PORTLETWINDOW, winState);
+                stateLink = new PortletStateLink(windowStates[i]);
+                portletURI.addParameter(GridSphereProperties.PORTLETWINDOW, windowStates[i]);
                 stateLink.setHref(portletURI.toString());
                 stateLinks.add(stateLink);
             } catch (IllegalArgumentException e) {
-                ErrorMessage += "Unable to create window state link: " + winState + "\n";
+                ErrorMessage += "Unable to create window state link: " + windowStates[i] + "\n";
             }
         }
         return stateLinks;
@@ -375,16 +380,6 @@ public class PortletTitleBar extends BasePortletComponent {
 
         // get client preferred markup
         Client client = req.getClient();
-
-        // Make sure Client supports supported modes
-        Markup m = null;
-        Iterator it = modeList.iterator();
-        while (it.hasNext()) {
-            m = (Markup) it.next();
-            if (m.getName().equals(client.getMarkupName())) {
-                portletModes = m.getPortletModesAsStrings();
-            }
-        }
 
         // subtract current portlet mode
         for (i = 0; i < portletModes.length; i++) {

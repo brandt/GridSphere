@@ -1,8 +1,0 @@
-<!DOCTYPE databases PUBLIC "-//EXOLAB/Castor JDO Configuration DTD Version 1.0//EN" "http://castor.exolab.org/jdo-conf.dtd">
-
-<database name="testdb" engine="postgresql" >
-     <driver url="jdbc:poolman://testdb" class-name="com.codestudio.sql.PoolMan">
-
-     </driver>
-     <mapping href="webapps/gridpshere/WEB-INF/conf/mapping/docletmapping.xml"/>
-</database>

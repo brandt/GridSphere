@@ -124,7 +124,6 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
         Iterator it = components.iterator();
         PortletComponent p = null;
         int id = event.getID();
-
         while (it.hasNext()) {
             p = (PortletComponent) it.next();
             if (p.getComponentID() == id) {

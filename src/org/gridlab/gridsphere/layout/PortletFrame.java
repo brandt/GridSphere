@@ -12,6 +12,7 @@ import org.gridlab.gridsphere.layout.event.impl.PortletFrameEventImpl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletDataManager;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -33,12 +34,58 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
     private String portletClass = null;
     private PortletTitleBar titleBar = null;
     private List listeners = new ArrayList();
-    private PortletErrorMessage error = null;
+    private PortletErrorMessage error = new PortletErrorMessage();
     private boolean transparent = false;
     private String innerPadding = "";
     private String outerPadding = "";
 
     private PortletDataManager dataManager = SportletDataManager.getInstance();
+
+    // Playing with the idea of a portlet error frame to abstract error display
+    class PortletErrorMessage {
+
+        private String id = "";
+        private Exception e = null;
+        private String msg = null;
+
+        public PortletErrorMessage() {
+
+        }
+
+        public boolean hasMessage() {
+            return ((msg != null) ? true: false);
+        }
+
+        public String getPortletID() {
+            return id;
+        }
+
+        public void setPortletID(String portletID) {
+            this.id = portletID;
+        }
+
+        public String getMessage() {
+            return msg;
+        }
+
+        public void setMessage(String msg) {
+            this.msg += msg;
+        }
+
+        public void setMessage(String msg, Exception e) {
+            this.msg += msg;
+            setException(e);
+        }
+
+        public Exception getException() {
+            return e;
+        }
+
+        public void setException(Exception e) {
+            this.msg += e.getMessage();
+        }
+
+    }
 
     /**
      * Constructs an instance of PortletFrame
@@ -205,7 +252,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.actionPerformed(event);
-        System.err.println("in action Performde in PortletFrame");
+        System.err.println("in action Performed in PortletFrame");
         // process events
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
@@ -229,8 +276,12 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         User user = req.getUser();
         PortletData data = null;
         if (!(user instanceof GuestUser)) {
-            data = dataManager.getPortletData(req.getUser(), portletClass);
-            req.setAttribute(GridSphereProperties.PORTLETDATA, data);
+            try {
+                data = dataManager.getPortletData(req.getUser(), portletClass);
+                req.setAttribute(GridSphereProperties.PORTLETDATA, data);
+            } catch (PersistenceManagerException e) {
+                error.setMessage("Unable to retrieve user's portlet data", e);
+            }
         }
 
 
@@ -240,7 +291,8 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             try {
                 PortletInvoker.actionPerformed(portletClass, action, req, res);
             } catch (PortletException e) {
-                error = new PortletErrorMessage(portletClass, e);
+                error.setMessage("Unable to perform action");
+                error.setException(e);
             }
         }
         // in case portlet mode got reset
@@ -265,8 +317,12 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         User user = req.getUser();
         PortletData data = null;
         if (!(user instanceof GuestUser)) {
+            try {
             data = dataManager.getPortletData(req.getUser(), portletClass);
             req.setAttribute(GridSphereProperties.PORTLETDATA, data);
+            } catch (PersistenceManagerException e) {
+                error.setMessage("Unable to retrieve user's portlet data", e);
+            }
         }
 
         ///// begin portlet frame
