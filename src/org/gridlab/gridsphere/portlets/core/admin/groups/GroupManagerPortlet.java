@@ -94,6 +94,9 @@ public class GroupManagerPortlet extends ActionPortlet {
                 groupList.add(g);
             }
         }
+        List webappNames = portletMgr.getWebApplicationNames();
+        if (webappNames.size() > 1) req.setAttribute("create", "yes");
+
         req.setAttribute("groupList", groupList);
         req.setAttribute("groupDescs", groupDescs);
         setNextState(req, DO_VIEW_GROUP_LIST);
@@ -270,8 +273,9 @@ public class GroupManagerPortlet extends ActionPortlet {
 
         User user = evt.getPortletRequest().getUser();
         TextFieldBean groupTF = evt.getTextFieldBean("groupNameTF");
+        TextFieldBean groupDescTF = evt.getTextFieldBean("groupDescTF");
         if ((groupTF.getValue() != "") && !portletRoles.isEmpty()) {
-            this.getACLService(user).createGroup(groupTF.getValue(), portletRoles);
+            this.getACLService(user).createGroup(groupTF.getValue(), groupDescTF.getValue(), portletRoles);
         } else {
             log.error("Unable to create new group. Either group name or portlets is empty");
         }
