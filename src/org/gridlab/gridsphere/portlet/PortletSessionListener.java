@@ -5,8 +5,8 @@
 package org.gridlab.gridsphere.portlet;
 
 /**
- * This feature is an addition to the Portlet interface. To support session features in the portlet,
- * this interface has to be implemented additionally to the Portlet interface.
+ * This feature is an addition to the PortletInfo interface. To support session features in the portlet,
+ * this interface has to be implemented additionally to the PortletInfo interface.
  */
 public interface PortletSessionListener {
 
