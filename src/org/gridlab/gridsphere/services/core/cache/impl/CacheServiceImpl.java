@@ -27,28 +27,8 @@ import org.gridlab.gridsphere.services.core.timer.TimerService;
  */
 public class CacheServiceImpl implements PortletServiceProvider, CacheService {
 
-    private TimerService timerService = null;
     private Map key2object = null;    
     private boolean isCachingOn = true;
-
-    /**
-     * Erases the timed out objects from the cache.
-     */
-    private static class CacheServiceCleaner extends TimerTask {
-
-        CacheServiceImpl impl;
-        public void run() {
-            impl.clearExpiredEntries();
-        }
-
-        /**
-         * @param impl
-         */
-        public CacheServiceCleaner(CacheServiceImpl impl) {
-            this.impl = impl;
-        }
-
-    }
 
     private static class CacheObject {
         public String key;
@@ -80,20 +60,11 @@ public class CacheServiceImpl implements PortletServiceProvider, CacheService {
                 !isCachingOnStr.equals("y")) {
             isCachingOn = false;
         }
-        try {
-            timerService = (TimerService) factory.createPortletService(TimerService.class, config.getServletContext(), true);
-            timerService.schedule("org.gridlab.gridslide.service.CacheService", new CacheServiceCleaner(this),1000,60000);
-        } catch (PortletServiceUnavailableException e) {
-            throw new PortletServiceUnavailableException("Cannot initialize CacheManager service", e);
-        } catch (PortletServiceNotFoundException e) {
-            throw new PortletServiceUnavailableException("Cannot initialize CacheManager service", e);
-        }
         key2object = new HashMap();
     }
 
     public synchronized void destroy() {
         key2object.clear();
-        timerService.cancel("org.gridlab.gridslide.service.CacheService");
     }
 
     public synchronized void cache(String key, Object object, long timeout) {
