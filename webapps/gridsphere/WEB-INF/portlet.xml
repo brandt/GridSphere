@@ -23,6 +23,10 @@
                     <title>Datei Manager</title>
                     <description>Bietet dem Benutzer ein virtuelles Dateisystem</description>
                 </language>
+		<language locale="fr">
+                    <title>Gestionnaire de Ficher</title>
+                    <description>Donne a l'usager un system de ficher virtuel</description>
+                </language>
                 <language locale="it">
                     <title>Gestione File</title>
                     <description>Fornisce agli utenti un filesystem virtuale</description>
@@ -60,6 +64,10 @@
 		<language locale="de">
                     <title>Banner</title>
                     <description>Zeigt ein Banner im Portlet an</description>
+                </language>
+		<language locale="fr">
+                    <title>Bannière</title>
+                    <description>Affiche une bannière dans un portlet</description>
                 </language>
                 <language locale="it">
                     <title>Titolo</title>
@@ -224,6 +232,10 @@
                     <description>Ermöglicht das administrieren von Nutzer Konten</description>
                     <keywords>nutzer konten administrieren</keywords>
                 </language>
+		<language locale="fr">
+                    <title>Gestionnaire de compte usager</title>
+                    <description>Permet à l'administrateur du portail d'aministrer les comptes usagers</description>
+                </language>
                 <language locale="it">
                     <title>Gestione account utente</title>
                     <title-short>Gestione account utente</title-short>
@@ -269,6 +281,10 @@
                     <title>Portlet Gruppen Verwaltung</title>
                     <description>Ermöglicht Portal-Administratoren Portlet Gruppen zu verwalten</description>
                 </language>
+		<language locale="fr">
+                    <title>Gestionnaire de groupe</title>
+                    <description>Permet à l'administrateur du portail d'aministrer les groupes</description>
+                </language>
                 <language locale="it">
                     <title>Gestione Gruppo Portlet</title>
                     <description>Consente agli amministratori del portale di gestire i gruppi di portlet</description>
@@ -307,6 +323,10 @@
 		<language locale="de">
                     <title>Portlet Anwendungsverwaltung</title>
                     <description>Ermöglicht Portal-Administratoren Portlets zu verwalten</description>
+                </language>
+		<language locale="fr">
+                    <title>Gestionnaire d'application</title>
+                    <description> Permet à l'administrateur du portail d'aministrer les applications</description>
                 </language>
                 <language locale="it">
                     <title>Gestione Applicazione Portlet</title>
@@ -350,6 +370,10 @@
                      <title>Notizblock</title>
                      <description>Dieses Portlet stellt ein Notizblock zur Verfuegung</description>
                  </language>
+		 <language locale="fr">
+                     <title>BlocNote</title>
+                     <description>Permet à l'usager d'ecrire des notes</description>
+                 </language>
                  <language locale="it">
                      <title>Blocco note</title>
                      <description>Fornisce agli utenti un block notes con funzionalità di ricerca</description>
@@ -392,6 +416,10 @@
 		 <language locale="de">
                      <title>Layout Managieren</title>
                      <description>Ermöglicht die benutzerspezifische Anpassung der Darstellung</description>
+                 </language>
+		 <language locale="fr">
+                     <title>Gestionnaire de Layout</title>
+                     <description>Permet a l'usager de modifier le layout</description>
                  </language>
                  <language locale="it">
                      <title>Gestione Layout</title>
@@ -440,6 +468,10 @@
                     <title>Benutzerprofil Verwaltung</title>
                     <description>Zur Anpassung der Benutzerprofile</description>
                 </language>
+		<language locale="fr">
+                    <title>Gestionnaire de profile</title>
+                    <description>Permet de gérer les profiles </description>
+                </language>
                 <language locale="it">
                     <title>Gestione Profilo</title>
                     <description>Personalizza il profilo utente</description>
@@ -481,6 +513,10 @@
                     <title>Spracheinstellungen</title>
                     <description>Wählt eine Spracheinstellungen</description>
                 </language>
+		<language locale="fr">
+                    <title>Locale</title>
+                    <description>Sélectionne un locale</description>
+                </language>
                 <language locale="it">
                     <title>Localizzazione</title>
                     <description>Seleziona una localizzazione</description>
@@ -518,6 +554,10 @@
 		<language locale="de">
                     <title>Portlet Abonnementverwaltung</title>
                     <description>Passt die Portlets des Benutzers an</description>
+                </language>
+		<language locale="fr">
+                    <title>Inscription Portlet</title>
+                    <description>Permet de s'inscrire a des portlets</description>
                 </language>
                 <language locale="it">
                     <title>Sottoscrizione alla portlet</title>
@@ -562,6 +602,10 @@
                  <language locale="de">
                      <title>Text Nachrichten</title>
                      <description>Bietet Benutzern die Möglichkeit Nachrichten zu verschicken</description>
+                 </language>
+		 <language locale="fr">
+                     <title>Messagerie texte</title>
+                     <description>Permet a l'usager d'envoyer des messages</description>
                  </language>
                  <language locale="it">
                      <title>Messaggi di testo</title>

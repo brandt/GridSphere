@@ -75,27 +75,7 @@
     <% } %>
 
 </ui:frame>
-
 </ui:panel>
-
-<ui:form>
-<ui:panel>
-    <ui:frame>
-        <ui:tablerow>
-            <ui:tablecell>
-                <ui:text key="PORTLET_CONFIG_PORT"/>
-            </ui:tablecell>
-        </ui:tablerow>
-        <ui:tablerow>
-            <ui:tablecell>
-                <ui:text key="PORTLET_CONFIG_MSG"/>
-                <ui:textfield beanId="tomcatPortTF"/>
-                <ui:actionsubmit action="configPort" key="SAVE"/>
-            </ui:tablecell>
-        </ui:tablerow>
-    </ui:frame>
-</ui:panel>
-</ui:form>
 
 <ui:form>
 <ui:panel>
