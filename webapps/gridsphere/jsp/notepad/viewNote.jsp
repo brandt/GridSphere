@@ -55,24 +55,24 @@
         </ui:tablerow>
 
      <% if (np_action.equals("view")) { %>
-             <ui:textfield beanId="search"/><ui:actionsubmit action="doSearch" value="Search"/>
-            <ui:actionsubmit action="doShowEdit" value="Edit this Note"/>
-            <ui:actionsubmit action="doShowNew" value="Create a new Note"/>
-            <ui:actionsubmit action="doDelete" value="Delete this Note"/>
+            <ui:textfield beanId="search"/><ui:actionsubmit action="doSearch" key="NOTEPAD_SEARCH"/>
+            <ui:actionsubmit action="doShowEdit" key="NOTEPAD_EDIT"/>
+            <ui:actionsubmit action="doShowNew" key="NOTEPAD_CREATE"/>
+            <ui:actionsubmit action="doDelete" key="NOTEPAD_DELETE"/>
             <%
         }
         %>
      <% if (np_action.equals("edit")) { %>
-            <ui:actionsubmit action="doUpdate" value="Update this Note"/>
+            <ui:actionsubmit action="doUpdate" key="NOTEPAD_UPDATE"/>
             <%
      }
         %>
      <% if (np_action.equals("new")) { %>
-            <ui:actionsubmit action="doAdd" value="Add this Note"/>
+            <ui:actionsubmit action="doAdd" key="NOTEPAD_ADD"/>
             <%
      }
         %>
-    <ui:actionsubmit action="showList" value="Show all Notes"/>
+    <ui:actionsubmit action="showList" key="NOTEPAD_SHOWLIST"/>
 
     </ui:frame>
 

@@ -32,9 +32,9 @@
                 }
 
 %>
-    <ui:textfield beanId="search"/><ui:actionsubmit action="doSearch" value="Search"/>
-    <ui:actionsubmit action="doShowNew" value="Create a Note"/>
-    <ui:actionsubmit action="showList" value="Show all Notes"/>
+    <ui:textfield beanId="search"/><ui:actionsubmit action="doSearch" key="NOTEPAD_SEARCH"/>
+    <ui:actionsubmit action="doShowNew" key="NOTEPAD_CREATE"/>
+    <ui:actionsubmit action="showList" key="NOTEPAD_SHOWLIST"/>
     </ui:frame>
 
 </ui:form>
