@@ -244,6 +244,7 @@ public class PortletServlet  extends HttpServlet
                     try {
                         portlet.processAction(actionRequest, actionResponse);
                     } catch (Exception e) {
+                        log.error("Error during processAction:", e);
                         throw new ServletException(e);
                     }
                     Map params = ((ActionResponseImpl)actionResponse).getRenderParameters();

@@ -105,7 +105,6 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @return a portlet render URL
      */
     public PortletURL createRenderURL() {
-        System.err.println("created a render url: ");
         PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse)super.getResponse(), portalContext, false);
         portletURL.setComponentID((String) req.getAttribute(SportletProperties.COMPONENT_ID));
         return portletURL;
@@ -126,7 +125,6 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @return a portlet action URL
      */
     public PortletURL createActionURL() {
-        System.err.println("created an action url: ");
         PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse)super.getResponse(), portalContext, true);
         portletURL.setAction("");
         portletURL.setComponentID((String)req.getAttribute(SportletProperties.COMPONENT_ID));
@@ -174,14 +172,12 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @see  #getContentType
      */
     public void setContentType(String type) {
-        System.err.println("\n\n\nCset to PE= " + type);
         String mimeType = stripCharacterEncoding(type);
         if (!isValidContentType(mimeType)) {
             throw new IllegalArgumentException(mimeType);
         }
         this.getHttpServletResponse().setContentType(mimeType);
         this.contentType = mimeType;
-        System.err.println("\n\n\nSET CTYPE= " + contentType);
     }
 
 
@@ -230,7 +226,6 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
     public java.io.PrintWriter getWriter() throws java.io.IOException {
         if ((contentType == null) || (hasOutputStream)) throw new IllegalStateException("A writer has already been obtained");
         hasWriter = true;
-        System.err.println("\n\n\nin getWriter CONTENT TYPE= " + contentType);
         return this.getHttpServletResponse().getWriter();
     }
 
@@ -390,7 +385,6 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
     public java.io.OutputStream getPortletOutputStream() throws java.io.IOException {
         if ((contentType == null) || (hasWriter)) throw new IllegalStateException("A writer has already been obtained");
         hasOutputStream = true;
-        System.err.println("\n\n\nin getPortletOutputStream CONTENT TYPE= " + contentType);
         return this.getHttpServletResponse().getOutputStream();
     }
 

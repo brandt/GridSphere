@@ -105,7 +105,7 @@ public class ActionLinkBean extends ActionBean implements TagBean {
         StringBuffer sb = new StringBuffer();
         sb.append("<a");
         if (name != null) sb.append(" name=\"" + name + "\"");
-        sb.append(" href=\"" + action + "\"" + getFormattedCss() + " onClick=\"this.href='" + action + "&JavaScript=enabled'\"/>" + value);
+        sb.append(" href=\"" + action + "\"" + getFormattedCss() + " onClick=\"this.href='" + action + "&JavaScript=enabled'\">" + value);
         sb.append("</a>");
         return sb.toString();
     }

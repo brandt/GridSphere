@@ -200,6 +200,13 @@ public abstract class ActionTagImpl extends BaseComponentTagImpl implements Acti
         this.actionURL = url;
         RenderRequest req = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
         // action is a required attribute except for FormTag
+        if (windowState == null) {
+            windowState = req.getWindowState().toString();
+        }
+        if (portletMode == null) {
+            portletMode = req.getPortletMode().toString();
+        }
+
         if (label != null) {
             //actionURL = res.createRenderURL();
             res.setProperty("label", label);

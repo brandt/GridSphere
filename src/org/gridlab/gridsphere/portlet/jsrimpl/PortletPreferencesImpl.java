@@ -92,7 +92,7 @@ public class PortletPreferencesImpl implements PortletPreferences
                 try {
                     validator = (PreferencesValidator)Class.forName(validatorClass, true, loader).newInstance();
                 } catch (Exception e) {
-                    System.err.println("Unable to create validoator: " + validatorClass + "! " + e.getMessage());
+                    System.err.println("Unable to create validator: " + validatorClass + "! " + e.getMessage());
                 }
             }
         }

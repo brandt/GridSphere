@@ -237,10 +237,10 @@ public class ActionPortlet extends AbstractPortlet {
 
         try {
             doAction(req, res, methodName, parameterTypes, arguments);
-
             formEvent.store();
             setTagBeans(req, formEvent.getTagBeans());
         } catch (PortletException e) {
+            this.setNextError(req, e.getMessage());
             if (hasError(req)) {
                 setNextState(req, ERROR_PAGE);
             }
@@ -267,27 +267,27 @@ public class ActionPortlet extends AbstractPortlet {
         Class thisClass = this.getClass();
         // Call method specified by action name
         try {
-            if (this.log.isDebugEnabled()) {
-                this.log.debug("Getting action method " + thisClass.getName() + "." + methodName + "()");
+            if (log.isDebugEnabled()) {
+                log.debug("Getting action method " + thisClass.getName() + "." + methodName + "()");
             }
 
             Method method = thisClass.getMethod(methodName, parameterTypes);
-            this.log.debug("Invoking action method: " + methodName);
+            log.debug("Invoking action method: " + methodName);
 
             method.invoke(thisObject, arguments);
         } catch (NoSuchMethodException e) {
             String error = "No such method: " + methodName + "\n" + e.getMessage();
-            this.log.error(error, e);
+            log.error(error, e);
             // If action is not illegal do error undefined action
             doErrorInvalidAction(request, error);
         } catch (IllegalAccessException e) {
             String error = "Error accessing action method: " + methodName + "\n" + e.getMessage();
-            this.log.error(error, e);
+            log.error(error, e);
             // If action is not illegal do error undefined action
             doErrorInvalidAction(request, error);
         } catch (InvocationTargetException e) {
             String error = "Error invoking action method: " + methodName + "\n" + e.getMessage();
-            this.log.error(error, e);
+            log.error(error, e);
             // If action is not illegal do error undefined action
             doErrorInvalidAction(request, error);
         }

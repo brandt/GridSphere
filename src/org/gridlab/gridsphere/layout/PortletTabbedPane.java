@@ -336,7 +336,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
              //           out.println("<td><img src=\"themes/" + theme + "/images/tab-active-right.gif\"/></td>");
                     } else {
              //           out.println("<td><img src=\"themes/" + theme + "/images/tab-inactive-left.gif\"/></td>");
-                        out.println("<td class=\"tab-inactive"+tab.getFormattedComponentTheme()+"\"><a class=\"tab-menu"+this.getFormattedComponentTheme()+"\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\"/>" + replaceBlanks(title) + "</a>");
+                        out.println("<td class=\"tab-inactive"+tab.getFormattedComponentTheme()+"\"/><a class=\"tab-menu"+this.getFormattedComponentTheme()+"\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\">" + replaceBlanks(title) + "</a>");
               //          out.println("<td><img src=\"themes/" + theme + "/images/tab-inactive-right.gif\"/></td>");
                     }
                     //out.println("<td class=\"tab-empty\"></td>");
@@ -396,10 +396,10 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
                     if (tab.isSelected()) {
                         out.println("<td> <span class=\"tab-sub-active"+this.getFormattedComponentTheme()+"\">");
-                        out.println("<a class=\"tab-sub-menu-active"+this.getFormattedComponentTheme()+"\" href=\""+links[i]+ "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\"/>" + title + "</a></span></td>");
+                        out.println("<a class=\"tab-sub-menu-active"+this.getFormattedComponentTheme()+"\" href=\""+links[i]+ "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\">" + title + "</a></span></td>");
                     } else {
                         out.println("<td> <span class=\"tab-sub-inactive"+this.getFormattedComponentTheme()+"\">");
-                        out.println("<a class=\"tab-sub-menu"+this.getFormattedComponentTheme()+"\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\"/>" + title + "</a>");
+                        out.println("<a class=\"tab-sub-menu"+this.getFormattedComponentTheme()+"\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\">" + title + "</a>");
                         out.println("</span></td>");
                     }
                 } else {

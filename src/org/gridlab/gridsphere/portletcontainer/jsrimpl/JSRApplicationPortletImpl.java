@@ -167,7 +167,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
      */
     public PortletDispatcher getPortletDispatcher(org.gridlab.gridsphere.portlet.PortletRequest req, org.gridlab.gridsphere.portlet.PortletResponse res) {
 
-        System.err.println("in getPortletDispatcher: cid=" + req.getAttribute(SportletProperties.COMPONENT_ID));
+        //System.err.println("in getPortletDispatcher: cid=" + req.getAttribute(SportletProperties.COMPONENT_ID));
         String cid = (String)req.getAttribute(SportletProperties.COMPONENT_ID);
 
         // TODO fix my hack to get any render params and pass them as queryInfo to the portlet
@@ -220,7 +220,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
         String realWebAppName = webAppName.substring(0,webAppName.length() - 2);
 
        
-        System.err.println("in getPortletDispatcher of jsr query string " + "/jsr/" + realWebAppName  + extraInfo);
+        //System.err.println("in getPortletDispatcher of jsr query string " + "/jsr/" + realWebAppName  + extraInfo);
         // TODO change dangerously hardcoded value!!!
         RequestDispatcher rd = context.getRequestDispatcher("/jsr/" + realWebAppName  + extraInfo);
         //RequestDispatcher rd = context.getNamedDispatcher(servletName);

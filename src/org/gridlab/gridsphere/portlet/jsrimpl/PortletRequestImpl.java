@@ -209,7 +209,6 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         } else {
             m = new PortletMode(mode.toString());
         }
-        System.err.println("returning mode=" + m.toString());
         return m;
     }
 
@@ -554,7 +553,6 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      *
      */
     public String getParameter(String name) {
-        System.err.println("getting param name=" + name);
         if (name == null) throw new IllegalArgumentException("name is NULL");
         hasReader = true;
         Object val = this.getParameterMap().get(name);

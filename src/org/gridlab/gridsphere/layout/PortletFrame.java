@@ -203,7 +203,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             ApplicationPortletConfig appConfig = appPortlet.getApplicationPortletConfig();
             if (appConfig != null) {
                 cacheExpiration = appConfig.getCacheExpires();
-                System.err.println("Cache for " + portletClass + "expires: " + cacheExpiration);
+                //System.err.println("Cache for " + portletClass + "expires: " + cacheExpiration);
             }
         }
     }

@@ -188,7 +188,6 @@ public class SportletURI implements PortletURI {
             store.put(name, value);
         }
 
-        System.err.println("\t\t\t\tcontext path= " + contextPath);
         String url = contextPath;
         String newURL;
         Set set = store.keySet();

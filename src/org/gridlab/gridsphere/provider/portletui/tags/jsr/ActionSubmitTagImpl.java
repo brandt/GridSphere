@@ -81,8 +81,8 @@ public class ActionSubmitTagImpl extends ActionTagImpl implements ActionSubmitTa
         if (parentTag instanceof ContainerTag) {
             ContainerTag containerTag = (ContainerTag) parentTag;
             containerTag.addTagBean(actionSubmitBean);
-
         }
+        
         try {
             JspWriter out = pageContext.getOut();
             out.print(actionSubmitBean.toStartString());

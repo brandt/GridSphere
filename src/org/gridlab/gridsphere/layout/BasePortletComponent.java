@@ -102,7 +102,6 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      * @param componentTheme
      */
     public void setComponentTheme(String componentTheme) {
-        System.out.println("\n\n\n\n\n\n\n\n\n SET COMP THEME \n\n\n\n\n\n\n");
         this.componentTheme = componentTheme;
     }
 

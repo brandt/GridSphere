@@ -294,7 +294,6 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
             throw new IllegalArgumentException("Render parameter key or value  must not be null.");
         }
 
-        System.err.println("placing render param " + key + " " + value);
         renderParams.put(SportletProperties.RENDER_PARAM_PREFIX + key, new String[] {value});
 
         isRedirectAllowed = false;

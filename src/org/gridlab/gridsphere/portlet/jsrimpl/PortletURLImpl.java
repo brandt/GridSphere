@@ -317,7 +317,7 @@ public class PortletURLImpl implements PortletURL {
             url += "&" + SportletProperties.PORTLET_MODE + "=" + mode.toString();
         }
         if (state != null) {
-            url += "&" + SportletProperties.PORTLET_WINDOW + "=" + mode.toString();
+            url += "&" + SportletProperties.PORTLET_WINDOW + "=" + state.toString();
         }
         if (action != null) {
             url += "&action=" + action;
@@ -371,7 +371,7 @@ public class PortletURLImpl implements PortletURL {
             newURL = res.encodeURL(url);
         }
         s.append(newURL);
-        System.err.println("created URL= " + s.toString());
+        //System.err.println("created URL= " + s.toString());
         return s.toString();
     }
 
