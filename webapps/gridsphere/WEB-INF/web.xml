@@ -245,6 +245,16 @@
         <mime-type>text/vnd.wap.wmlscript</mime-type>
     </mime-mapping>
 
+    <taglib>
+      <taglib-uri>/portletUI</taglib-uri>
+      <taglib-location>/WEB-INF/tlds/portletui.tld</taglib-location>
+    </taglib>
+
+    <taglib>
+      <taglib-uri>/portletAPI</taglib-uri>
+      <taglib-location>/WEB-INF/tlds/portletapi.tld</taglib-location>
+    </taglib>
+
     <env-entry>
         <description>JNDI logging context for this app</description>
         <env-entry-name>log4j/logging-context</env-entry-name>
