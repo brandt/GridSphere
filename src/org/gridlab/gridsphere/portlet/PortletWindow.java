@@ -50,6 +50,11 @@ public interface PortletWindow {
         public static final PortletWindow.State RESIZING = new PortletWindow.State(PortletWindow.State.RESIZING_STATE, "RESIZING");
 
         /**
+         * Allows the portlet window to exist in its own browser frame
+         */
+        public static final PortletWindow.State FLOATING = new PortletWindow.State(PortletWindow.State.FLOATING_STATE, "FLOATING");
+
+        /**
          * The ordering here is also used in the layout of icons
          */
         private static final int NORMAL_STATE = 0;
@@ -57,11 +62,12 @@ public interface PortletWindow {
         private static final int RESIZING_STATE = 2;
         private static final int MAXIMIZED_STATE = 3;
         private static final int CLOSED_STATE = 4;
+        private static final int FLOATING_STATE = 5;
 
         private int state = NORMAL_STATE;
         private String stateString = "";
 
-        private static int numStates = 5;
+        private static int numStates = 6;
 
         /**
          * Constructs an instance of State
@@ -108,6 +114,8 @@ public interface PortletWindow {
                 return PortletWindow.State.RESIZING;
             } else if ("CLOSED".equalsIgnoreCase(windowState)) {
                 return PortletWindow.State.CLOSED;
+            } else if ("FLOATING".equalsIgnoreCase(windowState)) {
+                return PortletWindow.State.FLOATING;
             } else {
                 PortletWindow.State newstate = new PortletWindow.State(numStates, windowState);
                 numStates++;
@@ -186,6 +194,9 @@ public interface PortletWindow {
                     break;
                 case RESIZING_STATE:
                     s = PortletWindow.State.RESIZING;
+                    break;
+                case FLOATING_STATE:
+                    s = PortletWindow.State.FLOATING;
                     break;
             }
             return s;

@@ -77,12 +77,14 @@ public class AllowsWindowStates {
                 statesAsStates.add(PortletWindow.State.RESIZING);
                 statesAsStates.add(PortletWindow.State.MAXIMIZED);
                 statesAsStates.add(PortletWindow.State.CLOSED);
+                statesAsStates.add(PortletWindow.State.FLOATING);
             }
             if (statesAsStrings.isEmpty()) {
                 statesAsStrings.add(PortletWindow.State.MINIMIZED.toString());
                 statesAsStrings.add(PortletWindow.State.RESIZING.toString());
                 statesAsStrings.add(PortletWindow.State.MAXIMIZED.toString());
                 statesAsStrings.add(PortletWindow.State.CLOSED.toString());
+                statesAsStrings.add(PortletWindow.State.FLOATING.toString());
             }
         }
         for (int i = 0; i < windowStates.size(); i++) {
