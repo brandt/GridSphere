@@ -21,7 +21,7 @@
         </id>
 
         <property name="PortletClass" type="string" column="portletclass"/>
-        <property name="Role" type="string" column="portletrole"/>
+        <property name="PortletRole" type="string" column="portletrole"/>
 
     </class>
 </hibernate-mapping>

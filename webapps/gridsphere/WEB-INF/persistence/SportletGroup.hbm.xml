@@ -17,17 +17,15 @@
             length="32"
             >
             <generator class="uuid.hex"/>
-
         </id>
 
         <property name="Name" type="string" column="name"/>
         <property name="Public" type="boolean" column="ispublic"/>
 
-        <set name="portletRoleList" table="portletrolelist" cascade="all">
+        <set name="PortletRoleList" table="portletrolelist" lazy="true">
             <key column="role_oid"/>
             <many-to-many column="role_info" class="org.gridlab.gridsphere.portlet.impl.SportletRoleInfo"/>
         </set>
-
 
     </class>
 </hibernate-mapping>
