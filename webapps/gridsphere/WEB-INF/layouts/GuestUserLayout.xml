@@ -23,23 +23,20 @@
         <portlet-tabbed-pane selected="0" style="sub-menu">
             <portlet-tab label="home">
                 <title>Home</title>
-                <portlet-panel>
-                    <table-layout>
-                        <row-layout>
-                            <column-layout width="70%">
-                                <portlet-frame>
-                                    <portlet-class>org.gridlab.gridsphere.portlets.core.file.BannerPortlet.1</portlet-class>
-                                </portlet-frame>
-                            </column-layout>
-
-                            <column-layout width="30%">
-                                <portlet-frame label="login">
-                                    <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
-                                </portlet-frame>
-                            </column-layout>
-                        </row-layout>
-                    </table-layout>
-                </portlet-panel>
+                <table-layout>
+                    <row-layout>
+                        <column-layout width="70%">
+                            <portlet-frame>
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.file.BannerPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                        <column-layout width="30%">
+                            <portlet-frame label="login">
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
             </portlet-tab>
         </portlet-tabbed-pane>
     </portlet-tab>
