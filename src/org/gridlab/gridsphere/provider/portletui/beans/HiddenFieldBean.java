@@ -47,7 +47,4 @@ public class HiddenFieldBean extends TextFieldBean {
         return super.toStartString();
     }
 
-    public void store() {
-        super.store();
-    }
 }
