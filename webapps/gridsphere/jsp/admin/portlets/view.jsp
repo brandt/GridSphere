@@ -10,7 +10,7 @@
 
 <ui:messagebox beanId="msg"/>
 
-<ui:panel>
+<ui:group label="Current portlet applications">
 
     <ui:frame>
     <ui:tablerow header="true">
@@ -73,17 +73,14 @@
     <% } %>
 
 </ui:frame>
-</ui:panel>
+</ui:group>
+
+<table><tr><td height="10px"></td></tr></table>
+
+<ui:group key="PORTLET_DEPLOY_MSG">
 
 <ui:form>
-<ui:panel>
     <ui:frame>
-        <ui:tablerow>
-            <ui:tablecell width="100">
-                <ui:text key="PORTLET_DEPLOY_MSG"/>
-            </ui:tablecell>
-        </ui:tablerow>
-
         <ui:tablerow>
             <ui:tablecell width="100">
                 <ui:text key="PORTLET_WEBAPP_MSG"/>&nbsp;
@@ -92,18 +89,19 @@
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
-</ui:panel>
 </ui:form>
+</ui:group>
 
-<%--
+<%-- uploading portlet WAR files TBD --%>
 
-// uploading portlet WAR files TBD
+<table><tr><td height="10px"></td></tr></table>
 
+
+<ui:group key="PORTLET_UPLOAD">
 <ui:fileform action="uploadPortletWAR">
-<ui:panel>
         <ui:frame>
             <ui:tablerow>
-                <ui:tablecell width="100">
+                <ui:tablecell width="50">
                     <ui:text key="PORTLET_FILE"/>&nbsp;
                 </ui:tablecell>
                 <ui:tablecell width="60">
@@ -121,7 +119,5 @@
                 <ui:tablecell/>
             </ui:tablerow>
         </ui:frame>
- </ui:panel>
  </ui:fileform>
-
---%>
+</ui:group>

@@ -21,6 +21,9 @@
                 <ui:text key="GROUP_NAME"/>
             </ui:tablecell>
             <ui:tablecell>
+                <ui:text key="GROUP_MANAGE_PORTLETS"/>
+            </ui:tablecell>
+            <ui:tablecell>
                 <ui:text key="GROUP_MANAGE_USERS"/>
             </ui:tablecell>
             <ui:tablecell>
@@ -40,7 +43,10 @@
 
                 <ui:tablerow>
                         <ui:tablecell>
-                            <ui:actionlink action="doCreateNewGroup" value="<%=group.getName() %>">
+                            <ui:text value="<%=group.getName() %>"/>
+                        </ui:tablecell>
+                        <ui:tablecell>
+                            <ui:actionlink action="doCreateNewGroup" key="GROUP_EDIT_PORTLETS">
                                 <ui:actionparam name="groupID" value="<%= group.getID() %>"/>
                             </ui:actionlink>
                         </ui:tablecell>
@@ -78,12 +84,13 @@
 
     <ui:frame>
         <ui:tablerow>
+        <ui:tablecell>
         <% if (request.getAttribute("create") != null) { %>
-            <ui:tablecell>
+
                 <ui:actionsubmit action="doCreateNewGroup" key="GROUP_CREATE_NEW"/>
-            </ui:tablecell>
+
             <% } %>
-            <ui:tablecell>
+           
                 <ui:actionsubmit action="doEditDefaultGroups" key="GROUP_EDIT_DEFS"/>
             </ui:tablecell>
         </ui:tablerow>
