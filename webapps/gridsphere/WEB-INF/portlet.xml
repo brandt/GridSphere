@@ -139,12 +139,6 @@
                   <description>Portlet umożliwia zalogowanie się</description>
                   <keywords>portlet logowanie loguj</keywords>
                 </language>
-                <language locale="ro">
-                    <title>Intra</title>
-                    <title-short>Intra</title-short>
-                    <description>Portlet provides login capabilities</description>
-                    <keywords>portlet intra</keywords>
-                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -194,12 +188,6 @@
                     <title-short>Wylogowanie</title-short>
                     <description>Portlet umożliwia wylogowanie się</description>
                     <keywords>portlet wylogowanie wyloguj</keywords>
-                </language>
-                <language locale="ro">
-                    <title>Iesiti</title>
-                    <title-short>Iesiti</title-short>
-                    <description>Portlet provides logout capabilities</description>
-                    <keywords>portlet iesiti</keywords>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
@@ -417,7 +405,7 @@
                      <title>Felépítés szekesztő</title>
                      <description>Lehetővé teszi a portletekből egyéni weblapok felépítését</description>
                  </language>
-		 <language locale="pl">                    
+		 <language locale="pl">
 		     <title>Menadżer układów graficznych</title>
 		     <description>Udostępnia użytkownikowi dostosowywanie układów graficznych</description>
                  </language>
