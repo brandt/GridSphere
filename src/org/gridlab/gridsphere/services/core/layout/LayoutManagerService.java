@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.services.core.layout;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.layout.PortletTab;
 import org.gridlab.gridsphere.layout.PortletPage;
@@ -38,11 +39,17 @@ public interface LayoutManagerService extends PortletService {
 
     public void addApplicationTab(PortletRequest req, String webAppName);
 
+    public void addApplicationTab(User user, String webAppName);
+
+    public void removeApplicationTab(User user, String webAppName);
+
     public void removeSubscribedPortlet(PortletRequest req, String portletClassName);
 
     public void removeSubscribedPortlets(PortletRequest req, List portletClassNames);
 
     public void removePortlets(PortletRequest req, List portletClassNames);
+
+    public void removePortlets(PortletRequest req, User user, List portletClassNames);
 
     public List getAllPortletNames(PortletRequest req);
 

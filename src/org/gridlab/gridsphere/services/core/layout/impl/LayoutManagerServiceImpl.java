@@ -71,6 +71,28 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         pageFactory.addPortletApplicationTab(req, webAppName);
     }
 
+    public void addApplicationTab(User user, String webAppName) {
+        pageFactory.addPortletApplicationTab(user, webAppName);
+        PortletPage page = pageFactory.createPortletPage(user);
+        try {
+            System.err.println("Saving user layout!!!!");
+            page.save();
+        } catch (IOException e) {
+            log.error("Unable to save layout!", e);
+        }
+    }
+
+    public void removeApplicationTab(User user, String webAppName) {
+        pageFactory.removePortletApplicationTab(user, webAppName);
+        PortletPage page = pageFactory.createPortletPage(user);
+        try {
+            System.err.println("Saving user layout!!!!");
+            page.save();
+        } catch (IOException e) {
+            log.error("Unable to save layout!", e);
+        }
+    }
+
     /*
     public List getAvailableConcretePortletIDs(PortletRequest req) {
         return portletRegistry.getAllConcretePortletIDs(req.getRole());
@@ -98,6 +120,29 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
             }
         }
 
+    }
+
+    public void removePortlets(PortletRequest req, User user, List portletClassNames) {
+        PortletPage page = pageFactory.createPortletPage(user);
+        page.init(req, new ArrayList());
+        List cidList = page.getComponentIdentifierList();
+        Iterator it = cidList.iterator();
+        while (it.hasNext()) {
+            ComponentIdentifier cid = (ComponentIdentifier)it.next();
+            System.err.println("foun cid: " + cid.getClassName());
+            PortletComponent pc = cid.getPortletComponent();
+            if (pc instanceof PortletFrame) {
+                if (portletClassNames.contains(cid.getPortletClass())) {
+                    System.err.println("component has portlet: " + cid.getPortletClass() + cid.getClassName());
+                    removePortletComponent(pc);
+                }
+            }
+        }
+        try {
+            page.save();
+        } catch (IOException e) {
+            log.error("Unable to save layout", e);
+        }
     }
 
     public void removePortlet(PortletRequest req, String portletClassNames) {

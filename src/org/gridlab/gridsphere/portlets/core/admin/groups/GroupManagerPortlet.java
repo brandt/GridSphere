@@ -13,6 +13,8 @@ import org.gridlab.gridsphere.services.core.security.acl.GroupAction;
 import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
+import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
+import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 
 import javax.servlet.UnavailableException;
 import java.util.ArrayList;
@@ -36,12 +38,14 @@ public class GroupManagerPortlet extends ActionPortlet {
 
     // Portlet services
     private UserManagerService userManagerService = null;
+    private LayoutManagerService  layoutMgr = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         this.log.debug("Entering initServices()");
         try {
             this.userManagerService = (UserManagerService)config.getContext().getService(UserManagerService.class);
+            this.layoutMgr = (LayoutManagerService)config.getContext().getService(LayoutManagerService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
@@ -357,6 +361,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         User root = evt.getPortletRequest().getUser();
         if (groupEntryUser != null) {
             addGroupEntry(root, groupEntryUser, group, groupEntryRole);
+            layoutMgr.addApplicationTab(groupEntryUser, group.getName());
         } else {
             log.debug("Unable to get user: " + groupEntryUserID);
         }
@@ -398,6 +403,11 @@ public class GroupManagerPortlet extends ActionPortlet {
             GroupEntry entry = getACLService(root).getGroupEntry(groupEntryID);
             // Remove group entry
             removeGroupEntry(root, entry);
+            // remove group layout
+            PortletRegistry portletRegistry = PortletRegistry.getInstance();
+            List portletIds =  portletRegistry.getAllConcretePortletIDs(req.getRole(), entry.getGroup().getName());
+            this.layoutMgr.removePortlets(req, entry.getUser(), portletIds);
+            //this.layoutMgr.removeApplicationTab(entry.getUser(), entry.getGroup().getName());
             // Put entry in list
             groupEntryList.add(entry);
         }
