@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Collections;
 
 
 /**
@@ -41,7 +42,9 @@ public class PortletContainer extends BasePortletComponent implements
      */
     public List init(List list) {
         list = super.init(list);
-        Iterator it = components.iterator();
+        List scomponents = Collections.synchronizedList(components);
+        synchronized (scomponents) {
+        Iterator it = scomponents.iterator();
         PortletComponent p = null;
         while (it.hasNext()) {
             p = (PortletComponent) it.next();
@@ -49,6 +52,7 @@ public class PortletContainer extends BasePortletComponent implements
             p.setTheme(theme);
             // invoke init on each component
             list = p.init(list);
+        }
         }
         return list;
     }
@@ -79,11 +83,14 @@ public class PortletContainer extends BasePortletComponent implements
      * @throws IOException if an I/O error occurs during rendering
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
-        Iterator it = components.iterator();
+        List scomponents = Collections.synchronizedList(components);
+        synchronized (scomponents) {
+        Iterator it = scomponents.iterator();
         PortletComponent comp = null;
         while (it.hasNext()) {
             comp = (PortletComponent)it.next();
             comp.doRender(event);
+        }
         }
     }
 
@@ -125,10 +132,13 @@ public class PortletContainer extends BasePortletComponent implements
 
     public Object clone() throws CloneNotSupportedException {
         PortletContainer f = (PortletContainer)super.clone();
-        f.components = new ArrayList(this.components.size());
-        for (int i = 0; i < this.components.size(); i++) {
-            PortletComponent comp = (PortletComponent)this.components.get(i);
+        List scomponents = Collections.synchronizedList(components);
+        synchronized (scomponents) {
+        f.components = new ArrayList(scomponents.size());
+        for (int i = 0; i < scomponents.size(); i++) {
+            PortletComponent comp = (PortletComponent)scomponents.get(i);
             f.components.add(comp.clone());
+        }
         }
         return f;
     }

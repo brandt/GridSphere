@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Collections;
 
 
 /**
@@ -42,7 +43,10 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      */
     public List init(List list) {
         list = super.init(list);
-        Iterator it = components.iterator();
+        List scomponents = Collections.synchronizedList(components);
+        synchronized (scomponents) {
+        Iterator it = scomponents.iterator();
+
         PortletComponent p = null;
         while (it.hasNext()) {
             p = (PortletComponent) it.next();
@@ -60,6 +64,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
                 f.addFrameListener(this);
             }
             */
+        }
         }
         return list;
     }
@@ -86,12 +91,15 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
             handleFrameEvent(frameEvent);
         }
 
-        Iterator it = listeners.iterator();
-        PortletComponent comp;
-        while (it.hasNext()) {
-            comp = (PortletComponent) it.next();
-            event.addNewRenderEvent(compEvt);
-            comp.actionPerformed(event);
+        List slisteners = Collections.synchronizedList(listeners);
+        synchronized (slisteners) {
+            Iterator it = slisteners.iterator();
+            PortletComponent comp;
+            while (it.hasNext()) {
+                comp = (PortletComponent) it.next();
+                event.addNewRenderEvent(compEvt);
+                comp.actionPerformed(event);
+            }
         }
     }
 
@@ -101,7 +109,9 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      * @param event a portlet frame event
      */
     public void handleFrameMaximized(PortletFrameEvent event) {
-        Iterator it = components.iterator();
+        List scomponents = Collections.synchronizedList(components);
+        synchronized (scomponents) {
+        Iterator it = scomponents.iterator();
         PortletComponent p = null;
         int id = event.getID();
         while (it.hasNext()) {
@@ -114,6 +124,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
                 p.setVisible(false);
             }
         }
+        }
     }
 
     /**
@@ -122,7 +133,9 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      * @param event a portlet frame event
      */
     public void handleFrameMinimized(PortletFrameEvent event) {
-        Iterator it = components.iterator();
+        List scomponents = Collections.synchronizedList(components);
+        synchronized (scomponents) {
+        Iterator it = scomponents.iterator();
         PortletComponent p = null;
         int id = event.getID();
 
@@ -134,6 +147,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
             p.setWidth(p.getDefaultWidth());
             p.setVisible(true);
         }
+        }
     }
 
     /**
@@ -142,7 +156,9 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      * @param event a portlet frame event
      */
     public void handleFrameRestore(PortletFrameEvent event) {
-        Iterator it = components.iterator();
+        List scomponents = Collections.synchronizedList(components);
+        synchronized (scomponents) {
+        Iterator it = scomponents.iterator();
         PortletComponent p = null;
         int id = event.getID();
         while (it.hasNext()) {
@@ -157,6 +173,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
             } else {
                 p.setVisible(true);
             }
+        }
         }
     }
 
@@ -214,10 +231,13 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
 
     public Object clone() throws CloneNotSupportedException {
         PortletFrameLayout f = (PortletFrameLayout)super.clone();
-        f.components = new ArrayList(this.components.size());
-        for (int i = 0; i < this.components.size(); i++) {
-            PortletComponent comp = (PortletComponent)this.components.get(i);
+        List scomponents = Collections.synchronizedList(components);
+        synchronized (scomponents) {
+        f.components = new ArrayList(scomponents.size());
+        for (int i = 0; i < scomponents.size(); i++) {
+            PortletComponent comp = (PortletComponent)scomponents.get(i);
             f.components.add(comp.clone());
+        }
         }
         return f;
     }

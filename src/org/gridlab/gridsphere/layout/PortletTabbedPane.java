@@ -17,10 +17,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * The <code>PortletTabbedPane</code> represents the visual portlet tabbed pane interface
@@ -138,14 +135,17 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     public void setSelectedPortletTab(PortletTab tab) {
         PortletTab portletTab;
 
-        for (int i = 0; i < tabs.size(); i++) {
-            portletTab = (PortletTab) tabs.get(i);
+        List stabs = Collections.synchronizedList(tabs);
+        synchronized (stabs) {
+        for (int i = 0; i < stabs.size(); i++) {
+            portletTab = (PortletTab) stabs.get(i);
             if (portletTab.getComponentID() == tab.getComponentID()) {
                 selectedIndex = i;
                 portletTab.setSelected(true);
             } else {
                 portletTab.setSelected(false);
             }
+        }
         }
     }
 
@@ -157,13 +157,16 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     public void setSelectedPortletTab(String tabTitle) {
         PortletTab portletTab;
 
-        for (int i = 0; i < tabs.size(); i++) {
-            portletTab = (PortletTab) tabs.get(i);
-            if (portletTab.getTitle().equals(tabTitle)) {
-                selectedIndex = i;
-                portletTab.setSelected(true);
-            } else {
-                portletTab.setSelected(false);
+        List stabs = Collections.synchronizedList(tabs);
+        synchronized (stabs) {
+            for (int i = 0; i < stabs.size(); i++) {
+                portletTab = (PortletTab) stabs.get(i);
+                if (portletTab.getTitle().equals(tabTitle)) {
+                    selectedIndex = i;
+                    portletTab.setSelected(true);
+                } else {
+                    portletTab.setSelected(false);
+                }
             }
         }
     }
@@ -189,12 +192,15 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     public List init(List list) {
         if (selectedIndex < 0) selectedIndex = 0;
         PortletTab tab = null;
-        for (int i = 0; i < getTabCount(); i++) {
-            tab = getPortletTabAt(i);
-            tab.setTheme(theme);
-            if (selectedIndex == i) tab.setSelected(true);
-            tab.addPortletTabListener(this);
-            list = tab.init(list);
+        List stabs = Collections.synchronizedList(tabs);
+        synchronized (stabs) {
+            for (int i = 0; i < getTabCount(); i++) {
+                tab = getPortletTabAt(i);
+                tab.setTheme(theme);
+                if (selectedIndex == i) tab.setSelected(true);
+                tab.addPortletTabListener(this);
+                list = tab.init(list);
+            }
         }
         return list;
     }
@@ -223,13 +229,16 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
             PortletTabEvent tabEvent = (PortletTabEvent)compEvt;
             handlePortletTabEvent(tabEvent);
         }
+        List l = Collections.synchronizedList(listeners);
+        synchronized(l) {
+            Iterator it = l.iterator();
+            PortletComponent comp;
 
-        Iterator it = listeners.iterator();
-        PortletComponent comp;
-        while (it.hasNext()) {
-            comp = (PortletComponent) it.next();
-            event.addNewRenderEvent(compEvt);
-            comp.actionPerformed(event);
+            while (it.hasNext()) {
+                comp = (PortletComponent) it.next();
+                event.addNewRenderEvent(compEvt);
+                comp.actionPerformed(event);
+            }
         }
 
     }
@@ -286,9 +295,11 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         out.println("<td class=\"tab-empty\">&nbsp;</td>");
 
         PortletTab tab;
-        for (int i = 0; i < tabs.size(); i++) {
+        List stabs = Collections.synchronizedList(tabs);
+        synchronized (stabs) {
+        for (int i = 0; i < stabs.size(); i++) {
 
-            tab = (PortletTab) tabs.get(i);
+            tab = (PortletTab) stabs.get(i);
 
             PortletRole tabRole = tab.getRequiredRole();
 
@@ -309,11 +320,12 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         }
         out.println("<td class=\"tab-fillup\">&nbsp;</td></tr></table>");
 
-        if (!tabs.isEmpty()) {
-            PortletTab selectedTab = (PortletTab) tabs.get(selectedIndex);
+        if (!stabs.isEmpty()) {
+            PortletTab selectedTab = (PortletTab) stabs.get(selectedIndex);
             if (selectedTab != null) {
                 selectedTab.doRender(event);
             }
+        }
         }
     }
 
@@ -335,8 +347,10 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
 
         PortletTab tab;
-        for (int i = 0; i < tabs.size(); i++) {
-            tab = (PortletTab) tabs.get(i);
+        List stabs = Collections.synchronizedList(tabs);
+        synchronized (stabs) {
+        for (int i = 0; i < stabs.size(); i++) {
+            tab = (PortletTab) stabs.get(i);
             PortletRole requiredRole = tab.getRequiredRole();
             if (userRole.compare(userRole, requiredRole) >= 0) {
 
@@ -355,9 +369,10 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         out.println("</tr></table>");
         out.println("</td></tr></table>");
 
-        PortletTab selectedTab = (PortletTab) tabs.get(selectedIndex);
+        PortletTab selectedTab = (PortletTab) stabs.get(selectedIndex);
         if (selectedTab != null)
             selectedTab.doRender(event);
+        }
     }
 
     /**
@@ -392,10 +407,13 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         t.style = this.style;
         t.startIndex = this.startIndex;
         t.selectedIndex = this.selectedIndex;
-        t.tabs = new ArrayList(this.tabs.size());
-        for (int i = 0; i < this.tabs.size(); i++) {
-            PortletTab tab = (PortletTab)this.tabs.get(i);
+        List stabs = Collections.synchronizedList(tabs);
+        synchronized (stabs) {
+        t.tabs = new ArrayList(stabs.size());
+        for (int i = 0; i < stabs.size(); i++) {
+            PortletTab tab = (PortletTab)stabs.get(i);
             t.tabs.add(tab.clone());
+        }
         }
         return t;
     }

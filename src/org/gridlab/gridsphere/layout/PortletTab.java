@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Collections;
 
 /**
  * A <code>PortletTab</code> represents the visual tab graphical interface and is contained
@@ -163,14 +164,17 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
 
         PortletComponentEvent compEvt = event.getLastRenderEvent();
         PortletTabEvent tabEvent = new PortletTabEventImpl(this, PortletTabEvent.TabAction.TAB_SELECTED, COMPONENT_ID);
-        Iterator it = listeners.iterator();
-        PortletComponent comp;
-        while (it.hasNext()) {
-            comp = (PortletComponent) it.next();
-            event.addNewRenderEvent(tabEvent);
-            comp.actionPerformed(event);
-        }
+        List l = Collections.synchronizedList(listeners);
 
+        synchronized(l) {
+            Iterator it = l.iterator();
+            PortletComponent comp;
+            while (it.hasNext()) {
+                comp = (PortletComponent) it.next();
+                event.addNewRenderEvent(tabEvent);
+                comp.actionPerformed(event);
+            }
+        }
     }
 
     /**

@@ -82,6 +82,7 @@ public class PortletPageFactory implements PortletSessionListener {
     public void logout(PortletSession session) {
         log.debug("in logout PortletPageFactory");
         String sessionId = session.getId();
+        log.debug("in logout PortletPageFactory for session: " + sessionId);
         if (guests.containsKey(sessionId)) {
             log.debug("Removing guest container for:" + sessionId);
             guests.remove(sessionId);
@@ -207,19 +208,19 @@ public class PortletPageFactory implements PortletSessionListener {
 
     public PortletPage createPortletPage(PortletRequest req) {
 
-        log.debug("number of guest layouts: " + guests.size());
-        log.debug("number of user layouts: " + userLayouts.size());
-
-        String sessionId = req.getSession().getId();
+        String sessionId = req.getPortletSession().getId();
         User user = req.getUser();
 
+        log.debug("User requesting layout: " + user.getUserName());
+
         if (user instanceof GuestUser) {
+            log.debug("User is a guest user!!");
             return createFromGuestLayoutXML(req);
         }
 
         // Need to provide one guest container per users session
         if (userLayouts.containsKey(sessionId)) {
-            log.debug("Returning existing layout for:" + sessionId);
+            log.debug("Returning existing layout for:" + sessionId + " for user=" + user.getUserName());
             return (PortletPage) userLayouts.get(sessionId);
         } else {
 
@@ -258,6 +259,11 @@ public class PortletPageFactory implements PortletSessionListener {
     public PortletPage createFromGuestLayoutXML(PortletRequest req) {
         PortletSession session = req.getPortletSession(true);
         String id = session.getId();
+
+        if (userLayouts.containsKey(id)) {
+            userLayouts.remove(id);
+        }
+
         if ((id != null) && (guests.containsKey(id))) {
             return (PortletPage)guests.get(id);
         } else {
@@ -342,4 +348,22 @@ public class PortletPageFactory implements PortletSessionListener {
          ois.close();
       }
    }
+
+    public void logStatistics() {
+
+        log.debug("number of guest layouts: " + guests.size());
+        Iterator it = guests.keySet().iterator();
+        while (it.hasNext()) {
+            String id = (String)it.next();
+            log.debug("guest has session: " + id);
+        }
+        log.debug("number of user layouts: " + userLayouts.size());
+        it = userLayouts.keySet().iterator();
+        while (it.hasNext()) {
+            String id = (String)it.next();
+            log.debug("user has session: " + id);
+        }
+
+    }
+
 }
