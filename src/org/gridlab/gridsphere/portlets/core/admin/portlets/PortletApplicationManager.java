@@ -6,9 +6,9 @@ package org.gridlab.gridsphere.portlets.core.admin.portlets;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portlets.core.admin.portlets.tomcat.TomcatManagerException;
-import org.gridlab.gridsphere.portlets.core.admin.portlets.tomcat.TomcatManagerWrapper;
-import org.gridlab.gridsphere.portlets.core.admin.portlets.tomcat.TomcatWebAppResult;
+import org.gridlab.gridsphere.services.core.registry.impl.tomcat.TomcatManagerException;
+import org.gridlab.gridsphere.services.core.registry.impl.tomcat.TomcatManagerWrapper;
+import org.gridlab.gridsphere.services.core.registry.impl.tomcat.TomcatWebAppResult;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
