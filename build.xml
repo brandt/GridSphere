@@ -65,6 +65,7 @@ Copyright:
     <fileset dir="${env.CATALINA_HOME}/common/lib">
       <include name="*.jar"/>
     </fileset>
+    <!-- this is for the XML JARs in Tomcat 4.1.x -->
     <fileset dir="${env.CATALINA_HOME}/common/endorsed">
       <include name="*.jar"/>
     </fileset>
@@ -138,8 +139,8 @@ Copyright:
   <target name="compile" depends="setenv" description="Compile GridSphere source code">
 
     <!-- backup, deploy and preprocess the properties file -->
-    <copy file="${gswebapp.dir}/WEB-INF/conf/gridsphere.properties" tofile="${gswebapp.dir}/WEB-INF/conf/gridsphere.properties.bak"/>
-    <copy file="${gswebapp.dir}/WEB-INF/conf/gridsphere.properties" tofile="${classes.dir}/${Name}/gridsphere.properties"/>
+    <copy file="conf/gridsphere.properties" tofile="conf/gridsphere.properties.bak"/>
+    <copy file="conf/gridsphere.properties" tofile="${classes.dir}/${Name}/gridsphere.properties"/>
     <copy file="conf/log4j.properties" tofile="${classes.dir}/log4j.properties" />
 
     <!-- <copy file="${webapp.dir}/WEB-INF/conf/${Name}.properties" tofile="${env.TOMCAT_HOME}/webapps/${Name}/WEB-INF/conf/${Name}.properties" />  -->
