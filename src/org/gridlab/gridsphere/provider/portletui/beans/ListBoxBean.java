@@ -143,20 +143,37 @@ public class ListBoxBean extends BeanContainer implements TagBean {
         return false;
     }
 
-    /**
-     * Returns the selected values of the list.
-     * @return selected values of the list
-     */
-    public List getSelectedValues() {
+    private List getSelectedNamesValues(boolean names) {
         List result = new ArrayList();
         Iterator it = container.iterator();
         while (it.hasNext()) {
             ListBoxItemBean item = (ListBoxItemBean)it.next();
             if (item.isSelected()) {
-                result.add(item.getValue());
+                if (names) {
+                    result.add(item.getName());
+                } else {
+                    result.add(item.getValue());
+                }
             }
         }
         return result;
+
+    }
+
+    /**
+     * Returns the selected values of the list.
+     * @return selected values of the list
+     */
+    public List getSelectedValues() {
+        return getSelectedNamesValues(false);
+    }
+
+    /**
+     * Returns the selected names of the list
+     * @return selected names of the list
+     */
+    public List getSelectedNames() {
+        return getSelectedNamesValues(true);
     }
 
     /**
