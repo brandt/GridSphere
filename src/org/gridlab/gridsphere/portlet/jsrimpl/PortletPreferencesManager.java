@@ -53,19 +53,19 @@ public class PortletPreferencesManager {
      */
     public javax.portlet.PortletPreferences getPortletPreferences(JSRApplicationPortletImpl appPortlet, User user, ClassLoader loader, boolean isRender) {
 
-        if (user instanceof GuestUser) return null;
-
+        PortletPreferencesImpl prefs = null;
         String portletID = appPortlet.getApplicationPortletID();
+
         String command =
                 "select u from " + PortletPreferencesImpl.class.getName() + " u where u.userId='" + user.getID() + "' and u.portletId='" + portletID + "'";
 
         // get persistence prefs if it exists
         org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences prefDesc = appPortlet.getPortletPreferences();
-        PortletPreferencesImpl prefs = null;
+
         try {
             prefs = (PortletPreferencesImpl) pm.restore(command);
             if (prefs == null) {
-                // we have no prefs in the xml so create one in the db...
+                // we have no prefs in the db so create one from the xml...
                 log.debug("No prefs exist-- storing prefs for user: " + user.getID() + " portlet: " + portletID);
                 prefs = new PortletPreferencesImpl();
                 prefs.setPortletId(portletID);
@@ -90,7 +90,7 @@ public class PortletPreferencesManager {
                 }
             }
 
-            prefs.store();
+            //prefs.store();
 
             prefs.setRender(isRender);
         } catch (Exception e) {
