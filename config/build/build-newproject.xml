@@ -100,7 +100,6 @@
     </target>
 
     <target name="checkjsr" if="use.jsr">
-        <echo message="goddamn it"/>
         <copy overwrite="true" file="config/template/gridsphere-portlet-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/gridsphere-portlet.xml"/>
         <copy overwrite="true" file="config/template/portlet-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/portlet.xml"/>
         <copy overwrite="true" file="config/template/layout-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/layout.xml"/>
