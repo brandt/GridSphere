@@ -31,8 +31,6 @@ public class SportletRequestImpl implements SportletRequest {
     // The actual servlet request we are wrapping
     private HttpServletRequest req = null;
 
-    // Another proxy class
-    //private PortletSession portletSession = null;
     private static PortletLog log = SportletLog.getInstance(SportletRequest.class);
 
 
@@ -132,13 +130,6 @@ public class SportletRequestImpl implements SportletRequest {
      */
     public PortletSession getPortletSession() {
         return new SportletSession(req.getSession(true));
-        /*
-        if (portletSession == null) {
-            System.err.println("creating new session!!!!!");
-            portletSession = new SportletSession(req.getSession(true));
-        }
-        return portletSession;
-        */
     }
 
     /**
@@ -151,19 +142,10 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the portlet session
      */
     public PortletSession getPortletSession(boolean create) {
-        System.err.println("in getPortletSession create: " + create);
         if ((req.getSession() == null) && (create == false)) {
             return null;
         }
         return new SportletSession(req.getSession(true));
-        /*
-        if ((portletSession == null) && (create == false))
-            return null;
-        if (create == true) {
-            portletSession = new SportletSession(req.getSession(true));
-        }
-        */
-        //return portletSession;
     }
 
     /**

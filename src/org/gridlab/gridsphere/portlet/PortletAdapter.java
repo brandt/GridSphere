@@ -127,7 +127,7 @@ public abstract class PortletAdapter extends Portlet {
             // it may be in the request parameter
             portletID = request.getParameter(SportletProperties.PORTLETID);
             if (portletID == null) {
-                log.error("in AbstractPortlet: No PortletID found in request attribute");
+                log.error("in PortletAdapter: No PortletID found in request attribute");
                 return;
             }
         }

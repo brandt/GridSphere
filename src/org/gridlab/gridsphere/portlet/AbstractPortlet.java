@@ -85,7 +85,7 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
                     messageReceived(evt);
                 }
             } catch (Exception e) {
-                log.error("in PortletAdapter: service()", e);
+                log.error("in AbstractPortlet: service()", e);
                 request.setAttribute(SportletProperties.PORTLETERROR + getPortletSettings().getConcretePortletID(), "Error performing method:" + method + e.getMessage());
 
                 //doError(request, response, e);

@@ -7,6 +7,8 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.PortletGroup;
 
+import java.io.Serializable;
+
 /**
  * <code>SportletGroup</code> is the implementation of <code>PortletGroup</code>
  * Portlet API interface to define portal groups.
@@ -16,7 +18,7 @@ import org.gridlab.gridsphere.portlet.PortletGroup;
  * @see org.gridlab.gridsphere.portlet.PortletRole
  *
  */
-public class SportletGroup implements PortletGroup {
+public class SportletGroup implements Serializable, Cloneable, PortletGroup {
 
     private String oid = null;
     private static final String SUPER_GROUP = "super";
