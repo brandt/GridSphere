@@ -79,6 +79,9 @@ public class BasePortletComponent extends PortletContainer implements PortletCom
         this.insets = insets;
     }
 
+    /**
+     * @deprecated
+     */
     public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
         log.debug("in doRender()");
         req.setAttribute(LayoutProperties.NAME, name);
@@ -86,5 +89,23 @@ public class BasePortletComponent extends PortletContainer implements PortletCom
         req.setAttribute(LayoutProperties.FGCOLOR, fgColor);
         req.setAttribute(LayoutProperties.HEIGHT, height);
         req.setAttribute(LayoutProperties.WIDTH, width);
+    }
+
+    public void doRenderFirst(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
+        log.debug("in doRender()");
+        req.setAttribute(LayoutProperties.NAME, name);
+        req.setAttribute(LayoutProperties.BGCOLOR, bgColor);
+        req.setAttribute(LayoutProperties.FGCOLOR, fgColor);
+        req.setAttribute(LayoutProperties.HEIGHT, height);
+        req.setAttribute(LayoutProperties.WIDTH, width);
+    }
+
+    public void doRenderLast(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
+        log.debug("in doRender()");
+        req.removeAttribute(LayoutProperties.NAME);
+        req.removeAttribute(LayoutProperties.BGCOLOR);
+        req.removeAttribute(LayoutProperties.FGCOLOR);
+        req.removeAttribute(LayoutProperties.HEIGHT);
+        req.removeAttribute(LayoutProperties.WIDTH);
     }
 }
