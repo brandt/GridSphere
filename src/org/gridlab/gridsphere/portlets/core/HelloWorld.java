@@ -4,11 +4,10 @@
  */
 package org.gridlab.gridsphere.portlets.core;
 
-import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.event.ActionEvent;
+import org.gridlab.gridsphere.portlet.*;
 
 import javax.servlet.UnavailableException;
-import javax.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -18,10 +17,13 @@ public class HelloWorld extends AbstractPortlet {
         super.init(config);
     }
 
-    public void actionPerformed(ActionEvent evt) { }
+    public void actionPerformed(ActionEvent evt) {
+    }
 
-    public void service(PortletRequest request, PortletResponse response)
-            throws PortletException, IOException {
+    public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
+        PrintWriter out = response.getWriter();
+        String value = portletSettings.getApplicationSettings().getAttribute("foobar");
+        out.println(value);
         getPortletConfig().getContext().include("/jsp/hello.jsp", request, response);
     }
 

@@ -4,19 +4,16 @@
  */
 package org.gridlab.gridsphere.portlets.core;
 
-import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
-import org.gridlab.gridsphere.services.user.UserManagerService;
-import org.gridlab.gridsphere.services.user.AccountRequest;
 import org.gridlab.gridsphere.event.ActionEvent;
+import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-
+import org.gridlab.gridsphere.services.user.AccountRequest;
+import org.gridlab.gridsphere.services.user.UserManagerService;
 
 import javax.servlet.UnavailableException;
-import javax.servlet.RequestDispatcher;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public class AccountRequestSportlet extends AbstractPortlet {
 
@@ -26,7 +23,7 @@ public class AccountRequestSportlet extends AbstractPortlet {
         super.init(config);
         PortletContext context = config.getContext();
         try {
-            userService = (UserManagerService)context.getService(UserManagerService.class);
+            userService = (UserManagerService) context.getService(UserManagerService.class);
         } catch (PortletServiceUnavailableException e) {
             throw new UnavailableException("in PortletInit: Service instance unavailable: " + e.toString());
         } catch (PortletServiceNotFoundException s) {
@@ -34,14 +31,16 @@ public class AccountRequestSportlet extends AbstractPortlet {
         }
         System.err.println("init() in AccountRequest");
     }
-    public void execute(PortletRequest request) { }
+
+    public void execute(PortletRequest request) {
+    }
 
     public void actionPerformed(ActionEvent event) throws PortletException {
         // get parameters out of request and then store with UserManagerService
         DefaultPortletAction action;
         PortletAction _action = event.getAction();
         if (_action instanceof DefaultPortletAction) {
-            action = (DefaultPortletAction)_action;
+            action = (DefaultPortletAction) _action;
         } else {
             throw new PortletException("PortletAction is not an instance of  DefaultPortletAction");
         }
@@ -49,7 +48,7 @@ public class AccountRequestSportlet extends AbstractPortlet {
         PortletRequest request = event.getPortletRequest();
         AccountRequest accountRequest = null;
         if (action.getName().equals("submit")) {
-            accountRequest = (AccountRequest)request.getAttribute("account");
+            accountRequest = (AccountRequest) request.getAttribute("account");
             if (accountRequest != null) {
                 userService.submitAccountRequest(accountRequest);
             }
@@ -62,7 +61,7 @@ public class AccountRequestSportlet extends AbstractPortlet {
 
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         DefaultPortletAction action;
-        action = (DefaultPortletAction)request.getAttribute(GridSphereProperties.ACTION);
+        action = (DefaultPortletAction) request.getAttribute(GridSphereProperties.ACTION);
         if (action == null) {
             getPortletConfig().getContext().include("/jsp/accountrequest.jsp", request, response);
         }

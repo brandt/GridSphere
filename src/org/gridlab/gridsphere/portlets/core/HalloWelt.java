@@ -4,11 +4,10 @@
  */
 package org.gridlab.gridsphere.portlets.core;
 
-import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.event.ActionEvent;
+import org.gridlab.gridsphere.portlet.*;
 
 import javax.servlet.UnavailableException;
-import javax.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -19,15 +18,16 @@ public class HalloWelt extends AbstractPortlet {
         System.err.println("init() in HalloWelt");
     }
 
-    public void execute(PortletRequest request) throws PortletException {
-        // do nothing
+    public void actionPerformed(ActionEvent evt) {
     }
 
-    public void actionPerformed(ActionEvent evt) { }
-
-    public void service(PortletRequest request, PortletResponse response)
-            throws PortletException, IOException {
-        getPortletConfig().getContext().include("/jsp/hello2.jsp", request, response);
+    public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
+        PrintWriter out = response.getWriter();
+        out.println("<br>Hello, World Zwei</br>");
     }
 
+    public void doEdit(PortletRequest request, PortletResponse response) throws PortletException, IOException {
+        PrintWriter out = response.getWriter();
+        out.println("<br>now in edit mode</br>");
+    }
 }
