@@ -6,10 +6,21 @@ package org.gridlab.gridsphere.portletcontainer.descriptor;
 
 import java.util.Iterator;
 
-public interface PortletDeploymentDescriptor {
+public class PortletDeploymentDescriptor {
 
-    public PortletApp getPortletApp();
+    public PortletDeploymentDescriptor() {
+        load();
+    }
+    public PortletApp[] getPortletApp();
 
-    public ConcretePortletApp[] getConcretePortletApp();
+    public PortletApp createPortletApp() {
+        return new PortletApp();
+    }
+
+    public void addPortletApp();
+
+    public void load();
+
+    public void save();
 
 }
