@@ -14,10 +14,15 @@ Build include file for the GridSphere Portal source code, see build.xml
     <!-- Creates database                                                    -->
     <!-- =================================================================== -->
 
-    <target name="create-database" depends="configure-database, jar">
+    <target name="create-database" depends="configure-database">
         <taskdef name="dbtask"
             classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
-            classpathref="classpath"/>
+            classpathref="classpath">
+            <classpath id="hib.classpth">
+                <pathelement location="config"/>
+            </classpath>
+
+            </taskdef>
         <dbtask
             configdir="${appserver.home}/webapps/gridsphere"
             action="CREATE"/>
