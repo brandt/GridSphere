@@ -17,10 +17,10 @@ new-project:
      [echo] Creating a New Portlet Project
     [input] Please enter a Project Title e.g. Cool Portlets
     <command>Hello World Example</command>
-    <prompt>This is the Hello World Portlet</prompt>
+    <prompt>Tutorial Portlets</prompt>
     [input] Please enter a Project Name this will be used for your portlet web application
             and should be lowercase e.g. coolportlets
-    <command>tutorials</command>
+    <command>tutorial</command>
 ...
             </screen>
             At the first prompt a description of the portlet package (or one portlet) is provided.
@@ -51,15 +51,15 @@ new-project:
                 a directory for the portlet source code. We create a portlets directory containing a tutorial directory.
                 <screen>
             <prompt>bash$</prompt><command>cd src</command>
-            <prompt>bash$</prompt><command>mkdir -p portlets/tutorial</command>
+            <prompt>bash$</prompt><command>mkdir -p portlets/examples</command>
                 </screen>
                 Now create a source file <filename>HelloWorld.java</filename> inside the
-                <filename>portlets/tutorial</filename> directory that looks like the following:
+                <filename>portlets/examples</filename> directory that looks like the following:
 
                 <example>
                     <title>HelloWorld.java</title>
                     <programlisting linenumbering='numbered'>
-package portlets.tutorial;
+package portlets.examples;
 
 public class HelloWorld  extends AbstractPortlet {
 
@@ -74,25 +74,26 @@ public class HelloWorld  extends AbstractPortlet {
                 All portlets need to extend AbstractPortlet (line 3). In this example we just implement
                 the view mode of the portlet. This outputs just a simple html string to the page.
             </sect2>
+
             <sect2 id="portletdescriptor">
-                <title>PortletDescriptor</title>
+                <title>Portlet Deployment Descriptor</title>
                 <para>
-                    The next step in order to deploy the portlet is to write the portletdescriptor. During the init process
+                    The next step in order to deploy the portlet is to write the portlet descriptor. During the init process
                     (ant new-project) all needed template files were copied to the proper locations.
                     The descriptor file is <filename>webapp/WEB-INF/portlet.xml</filename> and it should look like the
                     following example. Please make sure the portlet-app-id matches the portletclass name and the
                     concrete-portlet-app-id matches it as well plus a numeric identifier.  Furthermore check if the
                     servlet-name matches the servlet-name defined in web.xml. See down for more information on this.
 
-                    <example>                        <title>HelloWorld.java - portlet.xml</title>
+                    <example>
+                        <title>Tutorial portlet descriptor - portlet.xml</title>
                     <programlisting>
                     <![CDATA[
-
 <portlet-app-collection>
 
 <portlet-app-def>
 
-<portlet-app id="portlets.tutorial.HelloWorld">
+<portlet-app id="portlets.examples.HelloWorld">
     <portlet-name>Hello World Portlet Application</portlet-name>
     <servlet-name>HelloWorld</servlet-name>
     <portlet-config>
@@ -112,7 +113,7 @@ public class HelloWorld  extends AbstractPortlet {
     </supports>
 </portlet-app>
 
-<concrete-portlet-app id="portlets.tutorial.HelloWorld.1">
+<concrete-portlet-app id="portlets.examples.HelloWorld.1">
     <context-param>
         <param-name>foobar</param-name>
         <param-value>a value</param-value>
@@ -142,6 +143,45 @@ public class HelloWorld  extends AbstractPortlet {
             </para>
 
         </sect2>
+
+        <sect2 id="layoutdescriptor">
+                <title>Portlet Layout Descriptor</title>
+                <para>
+                    The layout descriptor defines the default layout of the portlet web application as it rendered
+                    to the portal and is defined within portlet-tabbed-pane tags.
+                    The descriptor file is <filename>webapp/WEB-INF/layout.xml</filename> and it should look like the
+                    following example.
+
+                    <example>
+                        <title>Tutorial Layout Descriptor - layout.xml</title>
+                    <programlisting>
+                    <![CDATA[
+<portlet-tabbed-pane>
+    <portlet-tab>
+        <title>Examples</title>
+        <portlet-tabbed-pane style="sub-menu">
+            <portlet-tab>
+                <title>Hello World</title>
+                <portlet-panel>
+                    <table-layout>
+                        <column-layout>
+	                        <portlet-frame>
+                                <portlet-class>portlets.examples.HelloWorld.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </table-layout>
+                </portlet-panel>
+            </portlet-tab>
+        </portlet-tabbed-pane>
+    </portlet-tab>
+</portlet-tabbed-pane>
+            ]]>
+                    </programlisting>
+                    </example>
+            </para>
+
+        </sect2>
+
         <sect2 id="web.xml">
 
                 <title>web.xml</title>
@@ -166,7 +206,7 @@ public class HelloWorld  extends AbstractPortlet {
 
     <servlet>
         <servlet-name>HelloWorld</servlet-name>
-        <servlet-class>portlets.tutorial.HelloWorld</servlet-class>
+        <servlet-class>portlets.examples.HelloWorld</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -232,8 +272,9 @@ public class HelloWorld  extends AbstractPortlet {
 ]]>
             </programlisting>
             </example>
-            The last part is to edit the <filename>$CATALINA_HOME/gridsphere/GuestUserLayout.xml</filename> or
-            the <filename>config/layouts/GuestUserLayout.xml</filename> in the source directory of gridsphere. If you
+            The last part is to optionally edit the <filename>$CATALINA_HOME/gridsphere/GuestUserLayout.xml</filename> or
+            the <filename>config/layouts/GuestUserLayout.xml</filename> in the source directory of gridsphere in order
+            to make the new portlet available to guest users. If you
             choose the second way you have to redeploy gridsphere.
             The <filename>GuestUserLayout.xml</filename> should have a section inside some grid-layout tag which
             looks like this:
@@ -243,12 +284,13 @@ public class HelloWorld  extends AbstractPortlet {
             <![CDATA[
 <portlet-frame inner-padding="20">
     <name>RSS</name>
-    <portlet-class>portlets.tutorial.HelloWorld.1</portlet-class>
+    <portlet-class>portlets.examples.HelloWorld.1</portlet-class>
 </portlet-frame>
 ]]>
             </programlisting>
             </example>
         </sect2>
+
     </sect1>
 
     <sect1 id="persistence">
