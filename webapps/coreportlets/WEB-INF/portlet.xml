@@ -373,7 +373,7 @@
 
 <portlet-app-def>
 
-<portlet-app id="org.gridlab.gridsphere.portlets.core.PortletApplicationManager">
+<portlet-app id="org.gridlab.gridsphere.portlets.core.manager.PortletApplicationManager">
     <portlet-name>Application Manager Portlet</portlet-name>
     <servlet-name>ManagerPortlet</servlet-name>
     <portlet-config>
@@ -401,7 +401,7 @@
     </supports>
 </portlet-app>
 
-<concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.PortletApplicationManager.1">
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.manager.PortletApplicationManager.1">
     <context-param>
         <param-name>foobar</param-name>
         <param-value>a value</param-value>

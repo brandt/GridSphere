@@ -47,7 +47,7 @@
 
     <servlet>
         <servlet-name>ManagerPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.PortletApplicationManager</servlet-class>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.manager.PortletApplicationManager</servlet-class>
     </servlet>
 
     <servlet>
