@@ -6,10 +6,7 @@ package org.gridlab.gridsphere.portletcontainer;
 
 import org.gridlab.gridsphere.event.MessageEvent;
 import org.gridlab.gridsphere.event.WindowEvent;
-import org.gridlab.gridsphere.portlet.DefaultPortletAction;
-import org.gridlab.gridsphere.portlet.PortletException;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.PortletSettings;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.descriptor.ApplicationPortletDescriptor;
@@ -196,6 +193,8 @@ public class PortletDispatcher {
         req.setAttribute(SportletProperties.ACTION_EVENT, action);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.ACTION_PERFORMED);
+
+        PortletData data = (PortletData)req.getAttribute(GridSphereProperties.PORTLETDATA);
         try {
             include(req, res);
         } catch (Exception e) {

@@ -18,8 +18,7 @@ import org.gridlab.gridsphere.portletcontainer.PortletDataManager;
 public class SportletDataManager implements PortletDataManager {
 
     private static PortletLog log = SportletLog.getInstance(PortletDataManager.class);
-    private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
-
+    private static PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
     private static PortletDataManager instance = new SportletDataManager();
 
     private SportletDataManager() {

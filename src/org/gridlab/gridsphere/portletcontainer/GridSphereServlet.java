@@ -9,12 +9,16 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.security.AuthenticationException;
+import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
+import org.gridlab.gridsphere.services.core.message.PortletMessageService;
+import org.gridlab.gridsphere.services.core.message.impl.SportletMessageManager;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContextEvent;
@@ -22,9 +26,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 
 public class GridSphereServlet extends HttpServlet implements ServletContextListener,
@@ -40,12 +42,14 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private static PortletManagerService portletManager = null;
 
     /* GridSphere Access Control Service */
-    //private static AccessControlService aclService = null;
+    private static AccessControlManagerService aclService = null;
 
     private static LoginService loginService = null;
 
     /* GridSphere User Portlet Manager handles portlet lifecycle */
     //private static UserPortletManager userPortletManager = null;
+
+    private PortletMessageManager messageManager = SportletMessageManager.getInstance();
 
     /* GridSphere Portlet layout Engine handles rendering */
     private static PortletLayoutEngine layoutEngine = null;
@@ -70,10 +74,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             throw new ServletException("Unable to locate portlet registry service: " + e.getMessage());
         }
 
-        // Create an instance of the ACL service
-        /*
+        //Create an instance of the ACL service
         try {
-            aclService = (AccessControlService) factory.createPortletService(AccessControlService.class, config, true);
+            aclService = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, config, true);
         } catch (PortletServiceUnavailableException e) {
             log.error("Failed to get ACL service instance in GridSphere: ", e);
             throw new ServletException("Unable to get ACL service instance: " + e.getMessage());
@@ -81,7 +84,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             log.error("Failed to find ACL service instance in GridSphere: ", e);
             throw new ServletException("Unable to getACL service: " + e.getMessage());
         }
-        */
 
         try {
             loginService = (LoginService) factory.createPortletService(LoginService.class, config, true);
@@ -142,33 +144,30 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         /* This is where we get ACL info and update sportlet request */
         PortletRequest sreq = event.getPortletRequest();
         User user = sreq.getUser();
-        List roles = new ArrayList();
+        PortletRole role = PortletRole.GUEST;
         List groups = new ArrayList();
         if (user instanceof GuestUser) {
-            roles.add(PortletRole.GUEST);
             groups.add(PortletGroup.BASE);
-            sreq.setAttribute(GridSphereProperties.PORTLETROLES, roles);
+            sreq.setAttribute(GridSphereProperties.PORTLETROLES, role);
             sreq.setAttribute(GridSphereProperties.PORTLETGROUPS, groups);
         } else {
-            /*
-            try {
-                groups = aclService.getGroups(user);
-            } catch (PortletServiceException e) {
-                log.error("Unable to get groups from ACL Manager Service");
-            }
+            groups = aclService.getGroups(user);
             Iterator git = groups.iterator();
             PortletGroup group = null;
             while (git.hasNext()) {
                 group = (PortletGroup)git.next();
-                roles = aclService.getRolesInGroup(sreq.getUser(), group);
-                sreq.setRoles(group, roles);
+                role = aclService.getRoleInGroup(sreq.getUser(), group);
             }
-            */
+            //sreq.setAttribute();
         }
 
         // Render layout
 
         layoutEngine.actionPerformed(event);
+
+        // Handle any outstanding messages
+        Map portletMessageLists = messageManager.retrieveAllMessages();
+        //
 
         layoutEngine.service(event);
     }
@@ -197,7 +196,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             System.err.println("Creating new user");
             session.setAttribute(GridSphereProperties.USER, (User) user);
         } else {
-            log.info("normally the login method of UserManagerService gets called right now -- when it works");
             try {
                 User user = loginService.login(username, password);
                 session.setAttribute(GridSphereProperties.USER, user);

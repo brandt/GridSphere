@@ -45,76 +45,76 @@ public class PortletInvoker {
         log.info("in destroy " + concretePortletID);
         String appID = getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
-        PortletDispatcher wrapper = appPortlet.getPortletWrapper();
+        PortletDispatcher dispatcher = appPortlet.getPortletWrapper();
         // destroy the application portlet
-        wrapper.destroy(req, res);
+        dispatcher.destroy(req, res);
     }
 
     public static final void destroyConcrete(String concretePortletID, PortletRequest req, PortletResponse res) throws PortletException {
         log.info("in destroyConcrete " + concretePortletID);
         String appID = getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
-        PortletDispatcher wrapper = appPortlet.getPortletWrapper();
+        PortletDispatcher dispatcher = appPortlet.getPortletWrapper();
         ConcretePortlet concPortlet = appPortlet.getConcretePortlet(concretePortletID);
         PortletSettings settings = concPortlet.getPortletSettings();
         // destroy the concrete portlet
-        wrapper.destroyConcrete(settings, req, res);
+        dispatcher.destroyConcrete(settings, req, res);
     }
 
     public static final void login(String concretePortletID, PortletRequest req, PortletResponse res) throws PortletException {
         log.info("in login " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
-        PortletDispatcher wrapper = appPortlet.getPortletWrapper();
-        wrapper.login(req, res);
+        PortletDispatcher dispatcher = appPortlet.getPortletWrapper();
+        dispatcher.login(req, res);
     }
 
     public static final void logout(String concretePortletID, PortletRequest req, PortletResponse res) throws PortletException {
         log.info("in logout " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
-        PortletDispatcher wrapper = appPortlet.getPortletWrapper();
-        wrapper.logout(req, res);
+        PortletDispatcher dispatcher = appPortlet.getPortletWrapper();
+        dispatcher.logout(req, res);
     }
 
     public static final void service(String concretePortletID, PortletRequest req, PortletResponse res) throws PortletException {
         log.info("in service " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
-        PortletDispatcher wrapper = appPortlet.getPortletWrapper();
-        wrapper.service(req, res);
+        PortletDispatcher dispatcher = appPortlet.getPortletWrapper();
+        dispatcher.service(req, res);
     }
 
     public static final void actionPerformed(String concretePortletID, DefaultPortletAction action, PortletRequest req, PortletResponse res) throws PortletException {
         log.info("in actionPerformed " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
-        PortletDispatcher wrapper = appPortlet.getPortletWrapper();
-        wrapper.actionPerformed(action, req, res);
+        PortletDispatcher dispatcher = appPortlet.getPortletWrapper();
+        dispatcher.actionPerformed(action, req, res);
     }
 
     public static final void doTitle(String concretePortletID, PortletRequest req, PortletResponse res) throws PortletException {
         log.info("in doTitle " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
-        PortletDispatcher wrapper = appPortlet.getPortletWrapper();
-        wrapper.doTitle(req, res);
+        PortletDispatcher dispatcher = appPortlet.getPortletWrapper();
+        dispatcher.doTitle(req, res);
     }
 
     public static final void windowEvent(String concretePortletID, WindowEvent winEvent, PortletRequest req, PortletResponse res) throws PortletException {
         log.info("in portletWindowEvent " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
-        PortletDispatcher wrapper = appPortlet.getPortletWrapper();
-        wrapper.windowEvent(winEvent, req, res);
+        PortletDispatcher dispatcher = appPortlet.getPortletWrapper();
+        dispatcher.windowEvent(winEvent, req, res);
     }
 
     public static final void messageEvent(String concretePortletID, MessageEvent msgEvent, PortletRequest req, PortletResponse res) throws PortletException {
         log.info("in portletMessageEvent " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
-        PortletDispatcher wrapper = appPortlet.getPortletWrapper();
-        wrapper.messageEvent(msgEvent, req, res);
+        PortletDispatcher dispatcher = appPortlet.getPortletWrapper();
+        dispatcher.messageEvent(msgEvent, req, res);
     }
 
     public static final void initAllPortlets(PortletRequest req, PortletResponse res) throws PortletException {
