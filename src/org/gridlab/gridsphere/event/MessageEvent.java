@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.event;
 
 import org.gridlab.gridsphere.portlet.PortletMessage;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 
 /**
  * A <code>MessageEvent</code> is sent by the portlet container if one portlets send a message to another.
@@ -26,5 +27,13 @@ public interface MessageEvent extends Event {
      * @return the portlet message
      */
     public PortletMessage getMessage();
+
+    /**
+     * Returns the portlet request that has caused this event. If this event is not triggered by a request,
+     * this methods returns null
+     *
+     * @return the portlet request
+     */
+    public PortletRequest getPortletRequest();
 
 }
