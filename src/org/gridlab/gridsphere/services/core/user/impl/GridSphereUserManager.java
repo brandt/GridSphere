@@ -53,9 +53,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
 
     public static void main(String[] args) throws Exception  {
         GridSphereUserManager gum = GridSphereUserManager.getInstance();
-        String dir = "webapps/gridsphere/WEB-INF/persistence/";
-        gum.pm = new PersistenceManagerRdbmsImpl(dir);
-        //gum.pm.createDatabaseFromScratch(dir);
+        gum.pm = PersistenceManagerFactory.createGridSphereRdbms();
         gum.initSportletGroup((SportletGroup)SportletGroup.SUPER);
         gum.initSportletGroup((SportletGroup)PortletGroupFactory.GRIDSPHERE_GROUP);
     }
@@ -344,8 +342,8 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
         AccountRequestImpl requestImpl = (AccountRequestImpl)request;
         String oql = "select accountRequest.oid from "
                    + this.jdoAccountRequest
-                   + " accountRequest where accountRequest.oid="
-                   + requestImpl.getOid();
+                   + " accountRequest where accountRequest.oid='"
+                   + requestImpl.getOid()+"'";
         try {
             return (pm.restore(oql) != null);
         } catch (PersistenceManagerException e) {
@@ -441,6 +439,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
                    + " user "
                    + criteria;
         try {
+            System.out.println("\n\n\n\n GET USERS with "+oql+"\n\n\n\n");
             return pm.restoreList(oql);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving users with criteria " + criteria;
@@ -486,7 +485,9 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
                    + " user "
                    + criteria;
         try {
-            return (SportletUserImpl)pm.restore(oql);
+            SportletUserImpl sui = (SportletUserImpl)pm.restore(oql);
+            log.debug("Retrieved user with OQL: "+oql);
+            return sui;
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving user with criteria " + criteria;
             log.error(msg, e);
@@ -574,12 +575,16 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     }
 
     private boolean existsSportletUserImpl(String criteria) {
-        String oql = "select user.oid from "
+        String oql = "select user from "
                    + jdoUser
                    + " user "
                    + criteria;
         try {
-            return (pm.restore(oql) != null);
+            SportletUserImpl sui = (SportletUserImpl) pm.restore(oql);
+            if (sui==null) {
+                log.debug("User does not exsit!");
+            }
+            return (sui != null);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving account request";
             log.error(msg, e);
