@@ -5,6 +5,8 @@
  */
 package org.gridlab.gridsphere.portlet;
 
+import java.util.Set;
+
 
 /**
  * The <code>PortletGroup</code> interface describes portlet group used by the
@@ -42,6 +44,8 @@ public interface PortletGroup extends Cloneable {
      */
     public String getLabel();
 
+    public Set getPortletRoleList();
+    
     /**
      * Tests to see if this group is equal to a supplied group
      *

@@ -35,6 +35,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     private List titles = new ArrayList();
     private transient boolean selected = false;
     private PortletComponent portletComponent = null;
+    private boolean isCustomizable = false;
 
     /**
      * Constructs an instance of PortletTab
@@ -42,6 +43,14 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     public PortletTab() {
     }
 
+    public void setIsCustomizable(boolean isCustomizable) {
+        this.isCustomizable = isCustomizable;
+    }
+
+    public boolean isCustomizable() {
+        return isCustomizable;
+    }
+    
     /**
      * Constructs an instance of PortletTab with the supplied title and
      * portlet component.

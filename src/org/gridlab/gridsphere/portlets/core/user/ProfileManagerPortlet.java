@@ -23,6 +23,8 @@ import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridlab.gridsphere.services.core.utils.DateUtil;
+import org.gridlab.gridsphere.services.core.cache.CacheService;
+import org.gridlab.gridsphere.services.core.locale.LocaleService;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 import org.gridlab.gridsphere.tmf.config.TmfService;
 import org.gridlab.gridsphere.tmf.config.TmfUser;
@@ -44,6 +46,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
     private UserManagerService userManagerService = null;
     private PasswordManagerService passwordManagerService = null;
     private AccessControlManagerService aclManagerService = null;
+    private LocaleService localeService = null;
     private LayoutManagerService layoutMgr = null;
     private PortletRegistry portletRegistry = null;
     private TextMessagingService tms = null;
@@ -56,6 +59,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             this.userManagerService = (UserManagerService)config.getContext().getService(UserManagerService.class);
             this.aclManagerService = (AccessControlManagerService)config.getContext().getService(AccessControlManagerService.class);
             this.passwordManagerService = (PasswordManagerService)config.getContext().getService(PasswordManagerService.class);
+            this.localeService = (LocaleService)config.getContext().getService(LocaleService.class);
             this.portletRegistry = PortletRegistry.getInstance();
             this.layoutMgr = (LayoutManagerService)config.getContext().getService(LayoutManagerService.class);
             this.tms = (TextMessagingService) config.getContext().getService(TextMessagingService.class);
@@ -148,10 +152,27 @@ public class ProfileManagerPortlet extends ActionPortlet {
         email.setValue(user.getEmailAddress());
         email.setDisabled(disable);
 
-        ListBoxBean timezoneList = event.getListBoxBean("timezones");
 
-        Locale loc = (Locale)session.getAttribute(User.LOCALE);
-        Map zones = DateUtil.getLocalizedTimeZoneNames(loc);
+        Locale locale = req.getLocale();
+
+        req.setAttribute("locale", locale);
+
+        ListBoxBean localeSelector = event.getListBoxBean("userlocale");
+        localeSelector.clear();
+        localeSelector.setSize(1);
+        localeSelector.setDisabled(disable);
+
+        Locale[] locales = localeService.getSupportedLocales();
+
+        for (int i = 0; i < locales.length; i++) {
+            Locale displayLocale = locales[i];
+            ListBoxItemBean localeBean = makeLocaleBean(displayLocale.getDisplayLanguage(displayLocale), displayLocale.getLanguage(), locale);
+            localeSelector.addBean(localeBean);
+        }
+        req.setAttribute(CacheService.NO_CACHE, CacheService.NO_CACHE);
+
+        ListBoxBean timezoneList = event.getListBoxBean("timezones");
+        Map zones = DateUtil.getLocalizedTimeZoneNames(locale);
         Set keys = zones.keySet();
         Iterator it2 = keys.iterator();
         String userTimeZone = (String)user.getAttribute(User.TIMEZONE);
@@ -206,7 +227,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             groupsTC = new TableCellBean();
             groupsDescTC = new TableCellBean();
             PortletGroup g = (PortletGroup)it.next();
-            String groupDesc = aclManagerService.getGroupDescription(g);
+            String groupDesc = g.getDescription();
 
             CheckBoxBean cb = new CheckBoxBean();
             cb.setBeanId("groupCheckBox");
@@ -393,8 +414,11 @@ public class ProfileManagerPortlet extends ActionPortlet {
                     log.error("in ProfileManagerPortlet invalid group request", e);
                 }
                 this.aclManagerService.approveGroupRequest(groupRequest);
+
+
                 System.err.println("adding tab " + selectedGroup.getName());
-                this.layoutMgr.addApplicationTab(req, selectedGroup.getName());
+                // @TODO change to addGroupTab  
+                this.layoutMgr.addGroupTab(req, selectedGroup.getName());
                 this.layoutMgr.reloadPage(req);
             }
             usergroups.remove(selectedGroup.getName());
@@ -418,14 +442,19 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 log.error("in ProfileManagerPortlet invalid group request", e);
             }
             this.aclManagerService.approveGroupRequest(groupRequest);
+
+            this.layoutMgr.refreshPage(req);
+            /*
             List portletIds =  null;
             // Very nasty JSR 168 hack since JSR webapp names are stored internally with a ".1" extension
+
             portletIds = portletRegistry.getAllConcretePortletIDs(req.getRole(), g.getName() + ".1");
             if (portletIds.isEmpty()) {
                 portletIds =  portletRegistry.getAllConcretePortletIDs(req.getRole(), g.getName());
             }
             this.layoutMgr.removePortlets(req, portletIds);
             this.layoutMgr.reloadPage(req);
+            */
         }
 
         // now do the messaging stuff
@@ -460,6 +489,9 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
         // get timezone
         String timeZone = event.getListBoxBean("timezones").getSelectedValue();
+
+        // get timezone
+        String locale = event.getListBoxBean("userlocale").getSelectedValue();
 
         // Validate user name
         String userName = event.getTextFieldBean("userName").getValue();
@@ -505,6 +537,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         acctReq.setEmailAddress(eMail);
         acctReq.setUserName(userName);
         acctReq.setFullName(fullName);
+        if (locale!=null) acctReq.setAttribute(User.LOCALE, locale);
         if (timeZone!=null) acctReq.setAttribute(User.TIMEZONE, timeZone);
         if (organization != null) acctReq.setOrganization(organization);
 
@@ -546,4 +579,17 @@ public class ProfileManagerPortlet extends ActionPortlet {
         return false;
     }
 
+    private ListBoxItemBean makeLocaleBean(String language, String name, Locale locale) {
+        ListBoxItemBean bean = new ListBoxItemBean();
+        String display = language;
+        display = language.substring(0, 1).toUpperCase() + language.substring(1);
+
+        bean.setValue(display);
+        bean.setName(name);
+
+        if (locale.getLanguage().equals(name)) {
+            bean.setSelected(true);
+        }
+        return bean;
+    }
 }

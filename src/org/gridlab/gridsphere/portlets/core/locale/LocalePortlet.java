@@ -5,11 +5,13 @@
 package org.gridlab.gridsphere.portlets.core.locale;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
+import org.gridlab.gridsphere.services.core.locale.LocaleService;
 
 import javax.servlet.UnavailableException;
 import java.util.Locale;
@@ -18,9 +20,15 @@ import java.util.StringTokenizer;
 public class LocalePortlet extends ActionPortlet {
 
     public static final String VIEW_JSP = "/jsp/locale/view.jsp";
+    private LocaleService localeService = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
+        try {
+            this.localeService = (LocaleService)config.getContext().getService(LocaleService.class);
+        } catch (PortletServiceException e) {
+            log.error("Unable to initialize services!", e);
+        }
         DEFAULT_VIEW_PAGE = "showLocale";
     }
 
@@ -42,14 +50,7 @@ public class LocalePortlet extends ActionPortlet {
     public void showLocale(FormEvent event) throws PortletException {
         PortletRequest request = event.getPortletRequest();
         Locale locale = request.getLocale();
-        /*
-        String locale = (String)request.getPortletSession(true).getAttribute(User.LOCALE);
-        if (locale == null) {
-            locale = Locale.ENGLISH.getLanguage();
-            request.getPortletSession(true).setAttribute(User.LOCALE, locale);
-        }
-        Locale loc = new Locale(locale, "", "");
-        */
+
         request.setAttribute("locale", locale);
 
         ListBoxBean localeSelector = event.getListBoxBean("localeLB");
@@ -57,14 +58,15 @@ public class LocalePortlet extends ActionPortlet {
         localeSelector.setOnChange("GridSphere_SelectSubmit( this.form )");
         localeSelector.setSize(1);
 
-        String displayLocales = getPortletSettings().getAttribute("display-locale");
-        StringTokenizer localeTokenizer = new StringTokenizer(displayLocales,",");
-        while (localeTokenizer.hasMoreTokens()) {
-                String displayLocaleStr = localeTokenizer.nextToken();
-                Locale displayLocale = new Locale(displayLocaleStr,"","");
-                ListBoxItemBean localeBean = makeLocaleBean(displayLocale.getDisplayLanguage(displayLocale), displayLocaleStr, locale);
-                localeSelector.addBean(localeBean);
+
+        Locale[] locales = localeService.getSupportedLocales();
+
+        for (int i = 0; i < locales.length; i++) {
+            Locale displayLocale = locales[i];
+            ListBoxItemBean localeBean = makeLocaleBean(displayLocale.getDisplayLanguage(displayLocale), displayLocale.getLanguage(), locale);
+            localeSelector.addBean(localeBean);
         }
+
         request.setAttribute(CacheService.NO_CACHE, CacheService.NO_CACHE);
         setNextState(request, "locale/viewlocale.jsp");
     }
@@ -76,6 +78,7 @@ public class LocalePortlet extends ActionPortlet {
         if (loc != null) {
             Locale locale = new Locale(loc, "", "");
             session.setAttribute(User.LOCALE, locale);
+            
         }
     }
 

@@ -6,10 +6,12 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.Collections;
 
@@ -23,12 +25,20 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
     /** css Style of the table */
     protected String style = null;
 
+    protected boolean canModify = false;
     /**
      * Constructs an instance of PortletTableLayout
      */
     public PortletTableLayout() {
     }
 
+    public void setCanModify(boolean canModify) {
+        this.canModify = canModify;
+    }
+
+    public boolean getCanModify() {
+        return canModify;
+    }
     /**
      * Returns the CSS style name for the grid-layout.
      *
@@ -84,7 +94,12 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
         PortletComponent p = null;
 
         // check if one window is maximized
-
+        /*
+        StringBuffer frame = new StringBuffer();
+        StringWriter storedWriter = new StringWriter();
+        PrintWriter writer = new PrintWriter(storedWriter);
+        PortletResponse wrappedResponse = new StoredPortletResponseImpl(res, writer);
+        */
         List scomponents = Collections.synchronizedList(components);
         synchronized(scomponents) {
             for (int i=0;i<scomponents.size();i++) {
@@ -118,19 +133,18 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
             }
 
             /** setup bottom add portlet listbox */
-            /*
-            out.println("<tr>");
-            for (int i=0;i<scomponents.size();i++) {
+            if (canModify) {
+                out.println("<tr>");
+                for (int i=0;i<scomponents.size();i++) {
 
-                out.println("<td valign=\"top\" width=\"100%\">");
+                    out.println("<td valign=\"top\" width=\"100%\">");
 
-                out.println("<table><tr><td><b>hello</b></td></tr></table>");
+                    out.println("<table><tr><td><b>hello</b></td></tr></table>");
 
-                out.println("</td>");
+                    out.println("</td>");
+                }
+                out.println("</tr>");
             }
-            out.println("</tr>");
-            */
-
             out.println("</tbody></table>");
         }
     }

@@ -4,8 +4,6 @@
  */
 package org.gridlab.gridsphere.services.core.user;
 
-import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 
@@ -38,10 +36,6 @@ public interface AccountRequest extends SportletUser {
     public void setPasswordValidation(boolean flag);
 
     public boolean getPasswordHasChanged();
-
-    /*** ACL methods ***/
-
-    public void addToGroup(PortletGroup group, PortletRole role);
 
     /*** Other methods ***/
 

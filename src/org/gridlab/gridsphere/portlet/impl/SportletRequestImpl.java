@@ -174,17 +174,6 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
         this.getHttpServletRequest().setAttribute(SportletProperties.PORTLET_GROUP, groups);
     }
 
-    public PortletGroup getGroup() {
-        PortletGroup group = (PortletGroup)this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_GROUP);
-        if (group == null) return PortletGroupFactory.createPortletGroup("unknown group");
-        return group;
-    }
-
-
-    public void setGroup(PortletGroup group) {
-        this.getHttpServletRequest().setAttribute(SportletProperties.PORTLET_GROUP, group);
-    }
-
     /**
      * Returns the locale of the preferred language. The preference is based on the user's
      * choice of language(s) and/or the client's Accept-Language header.
@@ -195,7 +184,17 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
      * @return the locale of the preferred language
      */
     public Locale getLocale() {
-        Locale locale = (Locale)this.getPortletSession(true).getAttribute(User.LOCALE);
+        Locale locale = null;
+        User user = getUser();
+        if (!(user instanceof GuestUser)) {
+            String loc = (String)user.getAttribute(User.LOCALE);
+            if (loc != null) {
+                locale = new Locale(loc, "", "");
+                this.getPortletSession(true).setAttribute(User.LOCALE, locale);
+                return locale;
+            }
+        }
+        locale = (Locale)this.getPortletSession(true).getAttribute(User.LOCALE);
         if (locale != null) return locale;
         locale = this.getHttpServletRequest().getLocale();
         if (locale != null) return locale;

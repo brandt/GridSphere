@@ -49,22 +49,10 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
             Iterator it = scomponents.iterator();
             PortletRole userRole = req.getRole();
             PortletComponent p = null;
-            List groups = (List)req.getAttribute(SportletProperties.PORTLETGROUPS);
+
             while (it.hasNext()) {
                 p = (PortletComponent) it.next();
                 PortletRole reqRole = PortletRole.toPortletRole(p.getRequiredRoleAsString());
-                String group = p.getRequiredGroupAsString();
-                Iterator git = groups.iterator();
-                boolean found = false;
-                while (git.hasNext()) {
-                    PortletGroup g = (PortletGroup)git.next();
-                    if (g.getName().equalsIgnoreCase(group)) {
-                        found = true;
-                    }
-                }
-                if (!found) {
-                    it.remove();
-                }
                 if (userRole.compare(userRole, reqRole) < 0) {
                     it.remove();
                 } else {
@@ -219,8 +207,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
                         PortletPageFactory pageFactory = PortletPageFactory.getInstance();
                         PortletPage page = pageFactory.createPortletPage(event.getRequest());
                         page.init(event.getRequest(), new Vector());
-                        page.save();
-
+                        //page.save();
                     } catch (Exception e) {
                         //log.error("Unable to save portlet page", e);
                     }

@@ -1,5 +1,5 @@
 /*
- * @author <a href="mailto:michael.russell@aei.mpg.de">Michael Russell</a>
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
 package org.gridlab.gridsphere.portlets.core.admin.layout;
@@ -9,12 +9,10 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
-import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.layout.*;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.xml.sax.InputSource;
 
 import javax.servlet.UnavailableException;
 import java.util.*;
@@ -241,7 +239,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
         String group = event.getAction().getParameter("group");
 
         PortletTabRegistry.removeGroupTab(group);
-        PortletTabRegistry.removeApplicationTab(group);
         setNextState(req, VIEW_JSP);
     }
 }

@@ -8,13 +8,17 @@ import org.gridlab.gridsphere.layout.PortletLayoutEngine;
 import org.gridlab.gridsphere.layout.PortletTabRegistry;
 import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.PortletDeploymentDescriptor;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.SportletDefinition;
+import org.gridlab.gridsphere.services.core.security.acl.impl.descriptor.PortletGroupDescriptor;
+import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManager;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -90,6 +94,8 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         loadPortlets(ctx);
         // load layout.xml
         loadLayout(ctx);
+        // load group.xml
+        loadGroup(ctx);
         // load services xml
         loadServices(ctx);
     }
@@ -151,9 +157,33 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         File f = new File(layoutXMLfile);
         if (f.exists()) {
             try {
-                PortletTabRegistry.addApplicationTab(webApplicationName, layoutXMLfile);
+                PortletTabRegistry.addGroupTab(webApplicationName, layoutXMLfile);
             } catch (Exception e) {
                 throw new PortletException("Unable to deserialize layout.xml for: " + webApplicationName, e);
+            }
+        } else {
+            log.debug("Did not find layout.xml for: " + ctx.getServletContextName());
+        }
+    }
+
+    /**
+     * Loads in a group descriptor file from the associated servlet context
+     *
+     * @param ctx the <code>ServletContext</code>
+     */
+    protected void loadGroup(ServletContext ctx) throws PortletException {
+        // load in the portlet.xml file
+        if (isJSR) return;
+        String groupXMLfile = ctx.getRealPath("/WEB-INF/group.xml");
+        File f = new File(groupXMLfile);
+        if (f.exists()) {
+            try {
+                PortletGroupDescriptor groupDescriptor = new PortletGroupDescriptor(groupXMLfile);
+                SportletGroup group = groupDescriptor.getPortletGroup();
+                AccessControlManager aclManager = AccessControlManager.getInstance();
+                aclManager.createGroup(group);
+            } catch (Exception e) {
+                throw new PortletException("Unable to deserialize group.xml for: " + webApplicationName, e);
             }
         } else {
             log.debug("Did not find layout.xml for: " + ctx.getServletContextName());
@@ -188,7 +218,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
      */
     public void destroy() {
         log.debug("removing application tab :" + webApplicationName);
-        PortletTabRegistry.removeApplicationTab(webApplicationName);
+        PortletTabRegistry.removeGroupTab(webApplicationName);
     }
 
     /**

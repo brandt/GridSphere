@@ -118,13 +118,6 @@ public interface PortletRequest extends HttpServletRequest {
     public User getUser();
 
     /**
-     * Returns the PortletGroup of this this portlet
-     *
-     * @return the portlet group associated with this portlet
-     */
-    public PortletGroup getGroup();
-
-    /**
      * Returns the portlet role associated with this portlet
      *
      * @return the portlet role associated with this portlet

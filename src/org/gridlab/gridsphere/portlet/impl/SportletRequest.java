@@ -37,13 +37,6 @@ public interface SportletRequest extends PortletRequest {
     public void setRole(PortletRole role);
 
     /**
-     * Sets the group associated with this portlet request
-     *
-     * @param group the user's <code>PortletGroup</code>
-     */
-    public void setGroup(PortletGroup group);
-
-    /**
      * Sets the PortletSettings object of the concrete portlet.
      *
      * @param settings the portlet settings

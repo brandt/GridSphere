@@ -5,15 +5,9 @@
  */
 package org.gridlab.gridsphere.services.core.user.impl;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.services.core.security.acl.impl.UserACL;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.user.AccountRequest;
 
@@ -288,23 +282,6 @@ public class AccountRequestImpl implements AccountRequest {
      */
     public void setLastLoginTime(long lastLoginTime) {
 
-    }
-
-    //@todo should be done using the aclmanager service!
-    /**
-     * Adds a user with status 'candidate' to a group
-     *
-     * @param group
-     */
-    public void addToGroup(PortletGroup group, PortletRole role) {
-        UserACL acl;
-        acl = new UserACL(this.getID(), role.getID(), group.getID());
-        PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
-        try {
-            pm.create(acl);
-        } catch (PersistenceManagerException e) {
-            e.printStackTrace();
-        }
     }
 
     public PasswordEditor getPassword() {

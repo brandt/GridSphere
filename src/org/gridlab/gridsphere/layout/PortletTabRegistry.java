@@ -2,13 +2,14 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
+import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
+import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
 
 import java.io.IOException;
 import java.io.File;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 /**
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
@@ -29,12 +30,38 @@ public class PortletTabRegistry {
     private static Map groupTabs = new Hashtable();
     private static PortletPage guestPage = null;
 
+
+    static {
+
+        try {
+            File f = new File(groupLayoutDir);
+            if (!f.exists()) {
+                f.mkdir();
+            } else {
+                String[] files = f.list();
+                for (int i = 0; i < files.length; i++) {
+                    String group = files[i];
+                    int idx = group.indexOf(".xml");
+                    String groupName = group.substring(0, idx);
+                    String groupFile = groupLayoutDir + File.separator + groupName + ".xml";
+                    tabDescriptors.put(groupName, groupFile);
+
+                    PortletTabbedPane tabbedPane = PortletLayoutDescriptor.loadPortletTabs(groupFile, layoutMappingFile);
+                    groupTabs.put(groupName, tabbedPane);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Unable to load group layout files!!");
+            e.printStackTrace();
+        }
+    }
+
     private PortletTabRegistry() {}
 
-    public synchronized static void addApplicationTab(String webAppName, String tabXMLfile) throws IOException, PersistenceManagerException {
+    public synchronized static void addGroupTab(String webAppName, String tabXMLfile) throws IOException, PersistenceManagerException {
         PortletTabbedPane webAppTabs = PortletLayoutDescriptor.loadPortletTabs(tabXMLfile, layoutMappingFile);
         tabDescriptors.put(webAppName, tabXMLfile);
-        applicationTabs.put(webAppName, webAppTabs);
+        groupTabs.put(webAppName, webAppTabs);
     }
 
     public static void reloadGuestLayout() throws IOException, PersistenceManagerException {
@@ -57,10 +84,6 @@ public class PortletTabRegistry {
         return guestLayoutFile;
     }
 
-    public synchronized static void removeApplicationTab(String webAppName) {
-        applicationTabs.remove(webAppName);
-    }
-
     public static PortletTabbedPane getApplicationTabs(String webAppName) {
         return (PortletTabbedPane)applicationTabs.get(webAppName);
     }
@@ -69,16 +92,56 @@ public class PortletTabRegistry {
         return (PortletTabbedPane)groupTabs.get(groupName);
     }
 
-    public static void newGroupTab(String groupName) throws IOException, PersistenceManagerException {
+
+    public static void newGroupTab(String groupName, Set portletRoleInfo) throws IOException, PersistenceManagerException {
         File f = new File(groupLayoutDir);
         if (!f.exists()) {
             f.mkdir();
         }
         String groupFile = groupLayoutDir + File.separator + groupName + ".xml";
         tabDescriptors.put(groupName, groupFile);
-        PortletTabbedPane tabbedPane = new PortletTabbedPane();
-        PortletLayoutDescriptor.savePortletTabbedPane(tabbedPane, groupFile, layoutMappingFile);
-        groupTabs.put(groupName, tabbedPane);
+        PortletTabbedPane parentPane = new PortletTabbedPane();
+        Iterator it = portletRoleInfo.iterator();
+        String portletClass, reqRole;
+        PortletTab parentTab = new PortletTab();
+        parentTab.setTitle(groupName);
+        parentTab.setLabel(groupName);
+
+        PortletTabbedPane childPane = new PortletTabbedPane();
+        childPane.setStyle("sub-menu");
+        parentTab.setPortletComponent(childPane);
+        PortletTab pTab = null;
+        PortletFrame pFrame = null;
+        while (it.hasNext()) {
+            SportletRoleInfo info = (SportletRoleInfo)it.next();
+            portletClass = info.getPortletClass();
+            reqRole = info.getRole();
+            pTab = new PortletTab();
+            PortletRegistry registry = PortletRegistry.getInstance();
+            String appID = PortletRegistry.getApplicationPortletID(portletClass);
+            ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
+            ConcretePortlet conc = appPortlet.getConcretePortlet(portletClass);
+            String tabName = conc.getDisplayName(Locale.ENGLISH);
+            pTab.setTitle("en", tabName);
+            pTab.setRequiredRoleAsString(reqRole);
+            PortletTableLayout table = new PortletTableLayout();
+            PortletRowLayout row = new PortletRowLayout();
+            PortletColumnLayout col = new PortletColumnLayout();
+
+            pFrame = new PortletFrame();
+            pFrame.setPortletClass(portletClass);
+
+            col.addPortletComponent(pFrame);
+            row.addPortletComponent(col);
+            table.addPortletComponent(row);
+
+            pTab.setPortletComponent(table);
+
+            childPane.addTab(pTab);
+        }
+        parentPane.addTab(parentTab);
+        PortletLayoutDescriptor.savePortletTabbedPane(parentPane, groupFile, layoutMappingFile);
+        groupTabs.put(groupName, parentPane);
     }
 
     public static synchronized void reloadTab(String tab, String tabXMLfile) {
@@ -100,6 +163,12 @@ public class PortletTabRegistry {
     }
 
     public synchronized static void removeGroupTab(String groupName) {
+        String groupFile = (String)tabDescriptors.get(groupName);
+        if (groupFile != null) {
+            File f = new File(groupFile);
+            if (f.exists()) f.delete();
+            tabDescriptors.remove(groupName);
+        }
         groupTabs.remove(groupName);
     }
 

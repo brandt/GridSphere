@@ -62,6 +62,7 @@ public class SubscriptionPortlet extends ActionPortlet {
         List myNames = layoutMgr.getSubscribedPortlets(req);
 
         List groups = aclService.getGroups(user);
+
         Iterator it = groups.iterator();
 
         PanelBean panel = event.getPanelBean("panel");

@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
@@ -19,6 +20,8 @@ import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletM
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint;
+import org.gridlab.gridsphere.services.core.security.acl.impl.descriptor.PortletGroupDescriptor;
+import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManager;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -64,8 +67,9 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
         // load portlet.xml
         loadJSRPortlets(context);
 
-        // load layout.xml
-        //loadLayout(context);
+        // load group.xml
+        loadGroup(context);
+
         // load services xml
         loadServices(webApplicationName, context, loader);
 
@@ -109,6 +113,29 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
     }
 
     /**
+     * Loads in a group descriptor file from the associated servlet context
+     *
+     * @param ctx the <code>ServletContext</code>
+     */
+    protected void loadGroup(ServletContext ctx) throws PortletException {
+        // load in the portlet.xml file
+        String groupXMLfile = ctx.getRealPath("/WEB-INF/group.xml");
+        File f = new File(groupXMLfile);
+        if (f.exists()) {
+            try {
+                PortletGroupDescriptor groupDescriptor = new PortletGroupDescriptor(groupXMLfile);
+                SportletGroup group = groupDescriptor.getPortletGroup();
+                AccessControlManager aclManager = AccessControlManager.getInstance();
+                aclManager.createGroup(group);
+            } catch (Exception e) {
+                throw new PortletException("Unable to deserialize group.xml for: " + webApplicationName, e);
+            }
+        } else {
+            log.debug("Did not find layout.xml for: " + ctx.getServletContextName());
+        }
+    }
+
+    /**
      * Loads in a layout descriptor file from the associated servlet context
      *
      * @param ctx the <code>ServletContext</code>
@@ -132,7 +159,7 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
 
     public void destroy() {
         log.debug("removing application tab :" + webApplicationName);
-        PortletTabRegistry.removeApplicationTab(webApplicationName);
+        PortletTabRegistry.removeGroupTab(webApplicationName);
         log.debug("unloading portlet services: ");
         SportletServiceFactory factory = SportletServiceFactory.getInstance();
         factory.shutdownServices(webApplicationName);

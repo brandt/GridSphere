@@ -49,6 +49,8 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
     public void reloadPage(PortletRequest req) {
         PortletPage page = pageFactory.createPortletPage(req);
         page.init(req, new Vector());
+
+        // save user tab
         try {
             page.save();
         } catch (IOException e) {
@@ -57,7 +59,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
     }
 
     public void refreshPage(PortletRequest req) {
-        pageFactory.destroyPortletPage(req);
+        pageFactory.removePortletPage(req);
     }
 
     public String getTheme(PortletRequest req) {
@@ -75,8 +77,8 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         pageFactory.addPortletApplicationTab(req, webAppName);
     }
 
-    public void addApplicationTab(User user, String webAppName) {
-        pageFactory.addPortletApplicationTab(user, webAppName);
+    public void addGroupTab(PortletRequest req, String groupName) {
+        pageFactory.addPortletGroupTab(req, groupName);
         /*
         PortletPage page = pageFactory.createPortletPage(user);
         try {

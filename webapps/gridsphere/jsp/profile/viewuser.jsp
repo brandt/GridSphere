@@ -1,3 +1,4 @@
+<%@ page import="java.util.Locale"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
@@ -6,6 +7,11 @@
 <jsp:useBean id="logintime" class="java.lang.String" scope="request"/>
 <jsp:useBean id="username" class="java.lang.String" scope="request"/>
 <jsp:useBean id="mylocale" class="java.lang.String" scope="request"/>
+
+<% Locale locale = (Locale)request.getAttribute("locale"); %>
+
+<% String flag = "/gridsphere/html/flags/"+locale.getLanguage() +".gif"; %>
+
 <ui:panel>
 
 <ui:text key="PROFILE_VIEW"/>  <b><%= username %></b>
@@ -28,6 +34,10 @@
     <ui:tablerow>
         <ui:tablecell><ui:text key="ORGANIZATION"/></ui:tablecell>
         <ui:tablecell><ui:textfield beanId="organization"/></ui:tablecell>
+    </ui:tablerow>
+    <ui:tablerow>
+        <ui:tablecell><ui:text key="LOCALE"/></ui:tablecell>
+        <ui:tablecell><ui:image src="<%= flag %>" alt="<%= locale.getDisplayLanguage() %>" title="<%= locale.getDisplayLanguage() %>"/><ui:listbox beanId="userlocale"/></ui:tablecell>
     </ui:tablerow>
     <ui:tablerow>
         <ui:tablecell><ui:text key="TIMEZONE"/></ui:tablecell>

@@ -13,6 +13,8 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,9 +28,11 @@ import java.util.*;
  */
 public class PortletTabbedPane extends BasePortletComponent implements Serializable, PortletTabListener, Cloneable {
 
+
     private List tabs = new ArrayList();
     private int startIndex = 0;
     private String style = "menu";
+
 
     /**
      * Constructs an instance of PortletTabbedPane
@@ -472,6 +476,16 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     public void remove(PortletComponent pc, PortletRequest req) {
         tabs.remove(pc);
         if (tabs.isEmpty()) parent.remove(this, req);
+    }
+
+    public void save(String layoutDescriptor) throws IOException {
+        try {
+            String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
+            System.err.println("saving desc: " + layoutDescriptor + " and mapping: " + layoutMappingFile);
+            PortletLayoutDescriptor.savePortletTabbedPane(this, layoutDescriptor, layoutMappingFile);
+        } catch (PersistenceManagerException e) {
+            throw new IOException("Unable to save user's tabbed pane: " + e.getMessage());
+        }
     }
 
     public Object clone() throws CloneNotSupportedException {

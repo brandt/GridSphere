@@ -388,7 +388,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 }
             }
 
-
         }
 
     }

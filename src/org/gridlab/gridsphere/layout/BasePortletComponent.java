@@ -32,9 +32,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected String theme = "default";
     protected boolean isVisible = true;
     protected String roleString = PortletRole.GUEST.toString();
-    protected String groupString = PortletGroupFactory.GRIDSPHERE_GROUP.getName();
     protected PortletRole requiredRole = PortletRole.GUEST;
-    protected PortletGroup requiredGroup = PortletGroupFactory.GRIDSPHERE_GROUP;
     protected List listeners = null;
     protected StringBuffer bufferedOutput = new StringBuffer();
 
@@ -138,42 +136,6 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      */
     public PortletRole getRequiredRole() {
         return requiredRole;
-    }
-
-        /**
-     * Allows a required group to be associated with viewing this portlet
-     *
-     * @param groupString the required portlet group expresses as a <code>String</code>
-     */
-    public void setRequiredGroupAsString(String groupString) {
-        this.groupString = groupString;
-    }
-
-    /**
-     * Allows a required group to be associated with viewing this portlet
-     *
-     * @return the required portlet group expresses as a <code>String</code>
-     */
-    public String getRequiredGroupAsString() {
-        return groupString;
-    }
-
-    /**
-     * Allows a required group to be associated with viewing this portlet
-     *
-     * @param requiredGroup the required portlet group expresses as a <code>String</code>
-     */
-    public void setRequiredGroup(PortletGroup requiredGroup) {
-        this.requiredGroup = requiredGroup;
-    }
-
-    /**
-     * Allows a required group to be associated with viewing this portlet
-     *
-     * @return the required portlet group expresses as a <code>PortletGroup</code>
-     */
-    public PortletGroup getRequiredGroup() {
-        return requiredGroup;
     }
 
     /**

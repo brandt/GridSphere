@@ -50,7 +50,7 @@ public class PortletPage implements Serializable, Cloneable {
     protected String title = "";
     protected String theme = "";
 
-    private String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
+    //private String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
     private String layoutDescriptor = null;
 
     private Hashtable labelsHash = new Hashtable();
@@ -449,8 +449,19 @@ public class PortletPage implements Serializable, Cloneable {
 
     public void save() throws IOException {
         try {
-            System.err.println("saving desc: " + layoutDescriptor + " and mapping: " + layoutMappingFile);
-            PortletLayoutDescriptor.savePortletPage(this, layoutDescriptor, layoutMappingFile);
+            // save user tab
+            PortletTabbedPane myPane = new PortletTabbedPane();
+            for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+                PortletTab tab = tabbedPane.getPortletTabAt(i);
+                if (tab.isCustomizable()) {
+                    myPane.addTab(tab);
+                }
+            }
+            if (myPane.getTabCount() > 0) {
+                String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
+                System.err.println("saving desc: " + layoutDescriptor + " and mapping: " + layoutMappingFile);
+                PortletLayoutDescriptor.savePortletTabbedPane(myPane, layoutDescriptor, layoutMappingFile);
+            }
         } catch (PersistenceManagerException e) {
             throw new IOException("Unable to save user's tabbed pane: " + e.getMessage());
         }

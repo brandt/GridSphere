@@ -2,7 +2,6 @@
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
-<% List tabNames = (List)request.getAttribute("tabNames"); %>
 <% List groupNames = (List)request.getAttribute("groupNames"); %>
 
 <portletAPI:init/>
@@ -22,28 +21,12 @@
 
 <h3>Group Layouts</h3>
 
-<ui:text value="The following predefined layouts exist:"/>
-
-<p>
-
-<% Iterator it = tabNames.iterator();
-    while (it.hasNext()) {
-    String group = (String)it.next();
-%>
-
-<ui:text value="<%= group %>"/>
-<ui:actionlink action="editGroupLayout" value="Edit">
-    <ui:actionparam name="group" value="<%= group %>"/>
-</ui:actionlink>
-<p>
-
-<% } %>
 
 <ui:text value="The following group layouts exist:"/>
 
 <p>
 
-<%  it = groupNames.iterator();
+<%  Iterator it = groupNames.iterator();
     while (it.hasNext()) {
     String group = (String)it.next();
 %>
