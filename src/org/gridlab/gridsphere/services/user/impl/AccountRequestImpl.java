@@ -9,9 +9,9 @@ import org.gridlab.gridsphere.services.user.AccountRequest;
 import org.gridlab.gridsphere.services.security.acl.impl2.UserACL;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletGroup;
-import org.gridlab.gridsphere.portlet.impl.SportletRole;
+import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.core.persistence.ConfigurationException;
 import org.gridlab.gridsphere.core.persistence.CreateException;
@@ -36,14 +36,24 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
     private List Userdns = new Vector();
     private List MyproxyUserNames = new Vector();
 
-    private Vector DesiredGroupsSV = new Vector();      // half-ready for castor
+    //@todo desiredgroups can be deleted
     private Vector UserdnsSV = new Vector();            // ready
     private Vector MyproxyUserNamesSV = new Vector();   // ready
 
 
     public AccountRequestImpl() {
         super();
-        log.info("created accountrequestimpl with OID: "+getOid());
+        //log.info("created accountrequestimpl with OID: "+getOid());
+    }
+
+    public AccountRequestImpl(User user) {
+        setOid(user.getID());
+        setEmailAddress(user.getEmailAddress());
+        setFamilyName(user.getFamilyName());
+        setFullName(user.getFullName());
+        setGivenName(user.getGivenName());
+        setOrganization(user.getOrganization());
+        setUserID(user.getUserID());
     }
 
     /**
@@ -81,6 +91,8 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
     public void setUserID(String userID) {
         this.UserID = userID;
     }
+
+
 
     /**
      * Returns the full name of the user, or null if the full name is not available.
@@ -235,41 +247,6 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
         Userdns =  this.convertToVector(UserdnsSV);
     }
 
-    // --------
-
-    /**
-     * Adds a group the user wishes to join
-     *
-     * @param group the group a user wishes to join
-     */
-    public void setDesiredGroups(List group) {
-        //DesiredGroups = group;
-        for (int i=0;i<group.size();i++) {
-            addDesiredGroups((PortletGroup)group.get(i));
-        }
-
-    }
-
-    /**
-     * Returns the list of groups the user desires to join, or null if none
-     *
-     * @return groups the List of group names the user desires to join, or empty if none
-     */
-    public List getDesiredGroups() {
-       // log.info("called getDesiredGroups ");
-        return DesiredGroups;
-    }
-
-    public void addDesiredGroups(PortletGroup pg) {
-//        log.info("called addDesiredGroups "+pg.getName());
-        if (!DesiredGroups.contains(pg)) {
-            DesiredGroups.add(pg);
-            SportletGroup sg = (SportletGroup)pg;
-            sg.addAccountRequest(this);
-           // log.info("called addDesiredGroups for "+this.getFullName()+" and group "+sg.getName());
-        }
-    }
-
     // ----
 
     //@todo should be done using the aclmanager service!
@@ -278,15 +255,16 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
      *
      * @param group
      */
-    public void addToGroup(PortletGroup group){
-        UserACL acl = new UserACL(this.getID(),SportletRole.getCandidateRole().getRole() ,group.getID());
+    public void addToGroup(PortletGroup group, PortletRole role){
+        UserACL acl;
+        acl = new UserACL(this.getID(),role.getRole() ,group.getID());
         PersistenceManagerRdbms pm = new PersistenceManagerRdbms();
         try {
             pm.create(acl);
         } catch (PersistenceException e) {
             e.printStackTrace();
         }
-        log.info("added request for"+getFullName()+" for group "+group.getName());
+        //log.info("added request for"+getFullName()+" for group "+group.getName());
     }
 
     /**

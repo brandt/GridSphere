@@ -64,22 +64,22 @@ public interface UserManagerService extends PortletService {
      * Approve a new or modified account group request
      * If mailMessage is non-null, a mail message will be sent out to the account requestor
      *
-     * @param request the <code>AccountRequest</code> to approve
-     * @param groupName the group to approve admittance into
+     * @param request the <code>User</code> to approve
+     * @param group the group to approve admittance into
      * @param mailMessage the <code>MailMessage</code> to use for notification
      */
-    public void approveGroupRequest(User approver, AccountRequest request, PortletGroup group, MailMessage mailMessage)
+    public void approveGroupRequest(User approver, User request, PortletGroup group, MailMessage mailMessage)
             throws PermissionDeniedException;
 
     /**
      * Deny a new or modified account group request
      * If mailMessage is non-null, a mail message will be sent out to the account requestor
      *
-     * @param request the <code>AccountRequest</code> to approve
-     * @param groupName the group to deny admittance into
+     * @param request the <code>User</code> to approve
+     * @param group the group to deny admittance into
      * @param mailMessage the <code>MailMessage</code> to use for notification
      */
-    public void denyGroupRequest(User denier, AccountRequest request, PortletGroup group, MailMessage mailMessage)
+    public void denyGroupRequest(User denier, User request, PortletGroup group, MailMessage mailMessage)
             throws PermissionDeniedException;
 
     /**
@@ -122,7 +122,7 @@ public interface UserManagerService extends PortletService {
      *
      * @param userID the user login ID
      * @return true if the user exists, false otherwise
-     * @see Role.getUserID()
+     * @see org.gridlab.gridsphere.portletcontainer.descriptor.Role
      */
     public boolean existsUser(String userID);
 

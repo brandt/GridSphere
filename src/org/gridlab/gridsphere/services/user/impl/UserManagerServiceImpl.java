@@ -1,11 +1,15 @@
 /*
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
  * @version $Id$
  */
 package org.gridlab.gridsphere.services.user.impl;
 
 import org.gridlab.gridsphere.core.mail.MailMessage;
 import org.gridlab.gridsphere.core.mail.MailUtils;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManager;
+import org.gridlab.gridsphere.core.persistence.*;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRole;
@@ -23,9 +27,12 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
+import org.gridlab.gridsphere.services.security.acl.impl2.UserACL;
+import org.gridlab.gridsphere.services.security.acl.impl2.Groups;
 import org.gridlab.gridsphere.services.user.AccountRequest;
 import org.gridlab.gridsphere.services.user.UserManagerService;
 import org.gridlab.gridsphere.services.user.PermissionDeniedException;
+import org.gridlab.gridsphere.portletcontainer.descriptor.Role;
 
 import javax.mail.MessagingException;
 import java.util.*;
@@ -42,22 +49,13 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     private static AccessControlService aclService = null;
     private static AccessControlManagerService aclManagerService = null;
 
-    // This is the in-memory representation of user and account request data
-    protected static UserData userData = null;
+    private PersistenceManagerRdbms pm = null;
 
-    // This is the list of newly created AccountRequestImpl objects -- don't need to make persistent
-    private static List newAccountRequests = new Vector();
+    public UserManagerServiceImpl() {
+        super();
+        pm = new PersistenceManagerRdbms();
 
-    // This is the list of users that are logged in
-    private static List activeUsers;
-
-    // This is to make our life easier
-    private static Map usersHash = new Hashtable();
-
-    // This is the list required by PersistenceManager
-    private static List users = new Vector();
-
-    private static int uniqueID = 0;
+    }
 
     /**
      * Initializes the portlet service.
@@ -69,17 +67,12 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         try {
-            // This is the in-memory representation of user data
-            ///userData = UserDataManager.getUserData();
-            aclService = (AccessControlService) factory.createPortletService(AccessControlService.class, config.getServletConfig(), true);
-            aclManagerService = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, config.getServletConfig(), true);
+            aclService = (AccessControlService) factory.createPortletService(AccessControlService.class, null, config.getServletConfig(), true);
+            aclManagerService = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, null, config.getServletConfig(), true);
             log.info("in init()");
         } catch (PortletServiceNotFoundException e) {
             throw new PortletServiceUnavailableException("Unable to find portlet services: AccessControlService and AccessControlManagerService");
         }
-
-        // Load structures
-        load();
     }
 
     /**
@@ -107,27 +100,22 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public AccountRequest createAccountRequest() {
         AccountRequestImpl newacct = new AccountRequestImpl();
-        newAccountRequests.add(newacct);
-        newacct.setID(uniqueID);
-        uniqueID++;
         return newacct;
     }
 
     /**
      * Submit the account request to the queue for administrative approval
+     * @param request
+     * @throws PortletServiceException
      */
     public void submitAccountRequest(AccountRequest request) throws PortletServiceException {
 
-        int i;
-
-        // add request to list
-        Iterator it = newAccountRequests.iterator();
-        while (it.hasNext()) {
-            AccountRequestImpl a = (AccountRequestImpl) it.next();
-            if (a.getID() == request.getID()) {
-                userData.addAccountRequest(a);
-                newAccountRequests.remove(a);
-            }
+        try {
+            pm.create(request);
+        } catch (ConfigurationException e) {
+            log.info("conf error "+e);
+        } catch (CreateException e) {
+            log.info("create error "+e);
         }
 
         // mail the super user
@@ -141,6 +129,8 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         MailMessage superMsg = new MailMessage(newAcctSubject, newAcctBody, request.getEmailAddress(), "");
         MailMessage adminMsg = new MailMessage(newGroupSubject, newGroupBody, request.getEmailAddress(), "");
 
+        // do that later in the approveRequest thing
+/*
         try {
             // notify super users of new account
             Iterator rootIt = aclService.getSuperUsers().iterator();
@@ -150,166 +140,239 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 MailUtils.sendMail(superMsg, "localhost");
             }
 
-            // notify admins of groups user want to joins and super about account request
-            List groups = request.getDesiredGroups();
-            if (groups != null) {
-
-                for (i = 0; i < groups.size(); i++) {
-                    // get admins
-                    PortletGroup group = (PortletGroup) groups.get(i);
-                    Iterator adminIt = aclService.getUsersInGroup(SportletRole.getAdminRole(), group).iterator();
-
-                    while (adminIt.hasNext()) {
-                        String sender = (String) adminIt.next();
-                        adminMsg.setSender(sender);
-                        MailUtils.sendMail(adminMsg, "localhost");
-                    }
-                }
-            }
         } catch (MessagingException e) {
             log.error("Failed to mail message to: " + request.getEmailAddress(), e);
         }
-
+*/
     }
 
     /**
      * Administrators can retrieve all pending account request
      */
     public List getAccountRequests() {
-        return userData.getAccountRequests();
+        String command =
+            "select ar from org.gridlab.gridsphere.services.user.impl.AccountRequestImpl ar";
+        List requests = null;
+        try {
+            requests = pm.restoreList(command);
+        } catch (ConfigurationException e) {
+            log.info("Config error "+e);
+        } catch (RestoreException e) {
+            log.info("Restore error "+e);
+        }
+        return requests;
     }
 
     /**
      * Approve a new or modified account request
+     *
+     * @param approver user who approves this request (should better be a superuser)
+     * @param request accountrquest to be approved
+     * @param mailMessage message to be send ouut
+     * @throws PermissionDeniedException if the approver is not allowed to approve that request
      */
     public void approveAccountRequest(User approver, AccountRequest request, MailMessage mailMessage)
             throws PermissionDeniedException {
-
-        // See if group exists or not
-        // add request to list
-        int userid = request.getID();
-        AccountRequestImpl requestImpl = null;
-        Iterator it = userData.getAccountRequests().iterator();
-        while (it.hasNext()) {
-            requestImpl = (AccountRequestImpl) it.next();
-            if (requestImpl.getID() == userid) {
-                SportletUser user = makeNewUser(requestImpl);
-                usersHash.put(user.getID(), user);
-                userData.removeAccountRequest(requestImpl);
-                break;
+        if (isSuperuser(approver)) {
+            String userid = request.getID();
+            AccountRequestImpl requestImpl = null;
+            String command =
+                "select ar from org.gridlab.gridsphere.services.user.impl.AccountRequestImpl ar where ar.Oid="+userid;
+            try {
+                requestImpl = (AccountRequestImpl)pm.restoreObject(command);
+            } catch (PersistenceException e) {
+                log.error("PM Exception :"+e);
             }
-        }
 
-        // Mail the user
-        try {
-            if (mailMessage != null)
-                MailUtils.sendMail(mailMessage, "localhost");
-        } catch (MessagingException e) {
-            log.error("Unable to send mail: ", e);
+            SportletUserImpl user = null;
+
+            // now need to check wheter new account or an existing should be modified
+            if (existsUserID(userid)) {
+                user = (SportletUserImpl)modifyExistingUser(requestImpl, (SportletUser)getUserByID(userid));
+            } else {
+                // make a new user
+                user = (SportletUserImpl)makeNewUser(requestImpl);
+            }
+            // now delete the request and create/update the user
+            try {
+                if (existsUserID(userid)) {
+                    pm.update(user);
+                }   else {
+                    pm.create(user);
+                }
+                pm.delete(requestImpl);
+            } catch (PersistenceException e) {
+                log.error("PM Exception :"+e);
+            }
+            // Mail the user
+            try {
+                if (mailMessage != null)
+                    MailUtils.sendMail(mailMessage, "localhost");
+            } catch (MessagingException e) {
+                log.error("Unable to send mail: ", e);
+            }
+        } else {
+            log.info("User '"+approver.getGivenName()+"' tried to approve User '"+request.getGivenName()+"' (denied) ");
+            throw new PermissionDeniedException("Permission denied ");
         }
     }
 
     /**
      * Deny a new or modified account request
+     *
+     * @param denier user who denies the request
+     * @param request accountrequest to be denied
+     * @param mailMessage message to send out
+     * @throws PermissionDeniedException if the denier is no allowed to deny
      */
     public void denyAccountRequest(User denier, AccountRequest request, MailMessage mailMessage)
             throws PermissionDeniedException {
+        if (isSuperuser(denier)) {
+            // @TODO share code with approveAccountrequest
+            // @TODO deleting of ACL needs to be in sync, can not be depened (the useracl) from AccountRequestImpl since it should be depened from SportletUserImpl
+            // @todo solution: seperate table for accouuntrequest useracl and mapping and the depeneded
 
-        int userid = request.getID();
-        AccountRequestImpl requestImpl = null;
-        Iterator it = userData.getAccountRequests().iterator();
-        while (it.hasNext()) {
-            requestImpl = (AccountRequestImpl) it.next();
-            if (requestImpl.getID() == userid) {
-                userData.removeAccountRequest(requestImpl);
-                break;
+            String userid = request.getID();
+            AccountRequestImpl requestImpl = null;
+            String command =
+                "select ar from org.gridlab.gridsphere.services.user.impl.AccountRequestImpl ar where ar.Oid="+userid;
+            String command2 =
+                "select acl from org.gridlab.gridsphere.services.security.acl.impl2.UserACL acl where "+
+                "UserID=\""+request.getID()+"\"";
+
+            try {
+                requestImpl = (AccountRequestImpl)pm.restoreObject(command);
+                pm.delete(requestImpl);
+                // only delete the requested groups when the user did not exists before!
+                if (!existsUser(userid)) {
+                    pm.deleteList(command2);
+                }
+            } catch (PersistenceException e) {
+                log.error("PM Exception :"+e);
             }
+            // Mail the user
+            try {
+                if (mailMessage != null)
+                    MailUtils.sendMail(mailMessage, "localhost");
+            } catch (MessagingException e) {
+                log.error("Unable to send mail: ", e);
+            }
+        } else {
+            throw new PermissionDeniedException("Permission denied to deny Accounrequest for user "+request.getGivenName());
         }
-
-        // Mail the user
-        try {
-            if (mailMessage != null)
-                MailUtils.sendMail(mailMessage, "localhost");
-        } catch (MessagingException e) {
-            log.error("Unable to send mail: ", e);
-        }
-
     }
 
     /**
      * Approve a new or modified account group request
+     * @param approver
+     * @param user
+     * @param group
+     * @param mailMessage
+     * @throws PermissionDeniedException
      */
-    public void approveGroupRequest(User approver, AccountRequest request, PortletGroup group, MailMessage mailMessage)
+    public void approveGroupRequest(User approver, User user, PortletGroup group, MailMessage mailMessage)
             throws PermissionDeniedException {
-        if (!userData.getAccountRequests().contains(request)) return;
-
-        // first see if user exists or if user is still in account request stage
-        int userid = request.getID();
-
-        // See if group exists or not
-        // add request to list
-        Iterator it = newAccountRequests.iterator();
-        while (it.hasNext()) {
-            AccountRequestImpl a = (AccountRequestImpl) it.next();
-            if (a.getID() == userid) {
-               // a.addApprovedGroup(group);
+        if (isAdminuser(approver, group) || isSuperuser(user)) {
+            try {
+                aclManagerService.addUserToGroup(user, group);
+            } catch (PortletServiceException e) {
+                log.error("PortletService Exeption "+e);
             }
-        }
-
-        // Mail the user
-        try {
-            if (mailMessage != null)
-                MailUtils.sendMail(mailMessage, "localhost");
-        } catch (MessagingException e) {
-            log.error("Unable to send mail: ", e);
+            // Mail the user
+            try {
+                if (mailMessage != null)
+                    MailUtils.sendMail(mailMessage, "localhost");
+            } catch (MessagingException e) {
+                log.error("Unable to send mail: ", e);
+            }
+        } else {
+            throw new PermissionDeniedException("User "+approver.getFullName()+" is not allowed to approve the "+
+                    group.getName()+" group");
         }
     }
 
     /**
      * Deny a new or modified account group request
+     * @param denier
+     * @param user
+     * @param group
+     * @param mailMessage
+     * @throws PermissionDeniedException
      */
-    public void denyGroupRequest(User denier, AccountRequest request, PortletGroup group, MailMessage mailMessage)
+    public void denyGroupRequest(User denier, User user, PortletGroup group, MailMessage mailMessage)
             throws PermissionDeniedException {
 
-        if (!userData.getAccountRequests().contains(request)) return;
-
-        // first see if user exists or if user is still in account request stage
-        int userid = request.getID();
-
-        // See if group exists or not
-        // add request to list
-        Iterator it = newAccountRequests.iterator();
-        while (it.hasNext()) {
-            AccountRequestImpl a = (AccountRequestImpl)it.next();
-            if (a.getID() == userid) {
-               // a.addApprovedGroup(group);
+        if (isAdminuser(denier, group) || (isSuperuser(denier))) {
+            try {
+                aclManagerService.removeUserFromGroup(user, group);
+                // Mail the user
+                if (mailMessage != null) {
+                    MailUtils.sendMail(mailMessage, "localhost");
+                }
+            } catch (PortletServiceException e) {
+                log.error("Exception " + e);
+            } catch (MessagingException e) {
+                log.error("Unable to send mail: ", e);
             }
-        }
-
-        // Mail the user
-        try {
-            if (mailMessage != null)
-                MailUtils.sendMail(mailMessage, "localhost");
-        } catch (MessagingException e) {
-            log.error("Unable to send mail: ", e);
+        } else {
+            throw new PermissionDeniedException("Permission Denied!");
         }
     }
 
     /**
      * Modify an existing user account. Changes must be approved
+     * @param user
+     * @return
      */
     public AccountRequest changeAccountRequest(User user) {
         // get user from DB
         // create an AccountRequestImpl from User
         // when modifications are made to account request they go thru submission process again
-        return null;
+
+        AccountRequest ar = new AccountRequestImpl(user);
+
+        return ar;
+    }
+
+    /**
+     * Gets a user by a oql query
+     *
+     * @param command the oql query
+     * @return the requested user
+     */
+    private User getUser(String command) {
+        SportletUserImpl user = null;
+        try {
+            user = (SportletUserImpl)pm.restoreObject(command);
+        } catch (PersistenceException e) {
+            log.error("PM Exception :"+e.toString());
+        }
+        return user;
+    }
+
+    /**
+     * Gets a user by the unique ID
+     * @param ID unique ID
+     * @return requested user
+     */
+    private User getUserByID(String ID) {
+        String command =
+            "select u from org.gridlab.gridsphere.portlet.impl.SportletUserImpl u where Oid=\""+ID+"\"";
+        return getUser(command);
     }
 
     /**
      * loginUser retrieves a new user
+     *
+     * @param userName
+     * @return the correspodning userobject
+     * @see User
      */
     public User loginUser(String userName) {
-        return null;
+        // same as getUser, we do add the user somewhere to the active users
+        String command =
+            "select u from org.gridlab.gridsphere.portlet.impl.SportletUserImpl u where UserID=\""+userName+"\"";
+        return getUser(command);
     }
 
     /**
@@ -335,16 +398,54 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
     /**
      * Checks to see if account exists for a user
+     * @param userName
+     * @return true/false if user exists/not exists
      */
     public boolean existsUser(String userName) {
-        return false;
+        String command =
+                "select user from org.gridlab.gridsphere.portlet.impl.SportletUserImpl user where UserID=\""+userName+"\"";
+        SportletUser user = null;
+        try {
+            user = (SportletUser)pm.restoreObject(command);
+        } catch (PersistenceException e) {
+            log.error("Exception " + e);
+        }
+        return !(user==null);
+    }
+
+    /**
+     * Checks if a user with a given UserID already exists
+     *
+     * @param UserID
+     * @return true/false if the user exists
+     */
+    public boolean existsUserID(String UserID){
+        String command =
+                "select user from org.gridlab.gridsphere.portlet.impl.SportletUserImpl user where Oid=\""+UserID+"\"";
+        SportletUser user = null;
+        try {
+            user = (SportletUser)pm.restoreObject(command);
+        } catch (PersistenceException e) {
+            log.error("Exception " + e);
+        }
+        return !(user==null);
     }
 
     /**
      * Return a list of all portal users
+     * @return
      */
     public List getAllUsers() {
-        return null;
+
+        String command =
+            "select user from org.gridlab.gridsphere.portlet.impl.SportletUserImpl user";
+        List result = null;
+        try {
+            result = pm.restoreList(command);
+        } catch (PersistenceException e) {
+            log.error("Exception " + e);
+        }
+        return result;
     }
 
     /**
@@ -354,28 +455,82 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         return null;
     }
 
+
     /**
      * Creates a new SportletUser from an AccountRequestImpl
      */
     protected SportletUser makeNewUser(AccountRequestImpl requestImpl) {
         SportletUserImpl newuser = new SportletUserImpl();
-        newuser.setEmailAddress(requestImpl.getEmailAddress());
-        newuser.setFamilyName(requestImpl.getFamilyName());
-        newuser.setFullName(requestImpl.getFullName());
-        newuser.setGivenName(requestImpl.getGivenName());
-        newuser.setID("" + requestImpl.getID());
-        newuser.setUserID(requestImpl.getUserID());
+        modifyExistingUser(requestImpl, newuser);
         return newuser;
     }
+   /**
+    * Changes a SportletUser to the values of an accountrequest
+    * @param requestImpl
+    * @param user
+    * @return the changes portletuser
+    */
+    protected SportletUser modifyExistingUser(AccountRequestImpl requestImpl, SportletUser user) {
+        user.setEmailAddress(requestImpl.getEmailAddress());
+        user.setFamilyName(requestImpl.getFamilyName());
+        user.setFullName(requestImpl.getFullName());
+        user.setGivenName(requestImpl.getGivenName());
+        user.setID("" + requestImpl.getID());
+        user.setUserID(requestImpl.getUserID());
+        return user;
+    }
 
-    protected SportletUser modifyExistingUser(AccountRequestImpl requestImpl) {
-        //SportletUserImpl user = getUserFromDatabase
-        // don't fuck with ID of AccountRequestImpl
-        // Conserve user attributes
-        // user.setEmailAddress(requestImpl.getEmailAddress())
-        // change user in database
-        // return user
-        return null;
+    /**
+     * returns true if a oql query is succsessfull
+     * @param command oql query
+     * @return true/false
+     */
+    private boolean queryACL(String command) {
+        UserACL acl = null;
+        try {
+            acl = (UserACL)pm.restoreObject(command);
+        } catch (PersistenceException e) {
+            log.error("PM Exception: "+e);
+        }
+
+        if (acl!=null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * checks if the user is superuser
+     *
+     * @param user userobject to be examined
+     * @return true is the user is usperuser, false otherwise
+     */
+    public boolean isSuperuser(User user) {
+
+        // GroupID 0 is SuperUser group
+        // @TODO howto get rid of the long select from name, since there is this impl2 thing in there
+
+        String command = "select ua from org.gridlab.gridsphere.services.security.acl.impl2.UserACL ua where "+
+            "UserID=\""+user.getID()+"\" and RoleID="+SportletRole.SUPER;
+
+        return queryACL(command);
+
+    }
+
+    /**
+     * Checks if the user is an adminuser in a given group
+     * @param user the user
+     * @param group in that group
+     * @return true/false if he is an admin
+     */
+    public boolean isAdminuser(User user, PortletGroup group) {
+
+        String command =
+                " select ua from org.gridlab.gridsphere.services.security.acl.impl2.UserACL ua where "+
+            "UserID=\""+user.getID()+"\" and RoleID="+SportletRole.getAdminRole().getID()+" and GroupID=\""+group.getID()+"\"";
+
+        return queryACL(command);
     }
 
 }

@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.services.user;
 
 import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portlet.PortletRole;
 
 import java.util.List;
 
@@ -132,17 +133,16 @@ public interface AccountRequest {
      */
     public List getMyProxyUserDN();
 
-    /**
-     * Sets the list of groups the user wishes to join
-     *
-     * @param groups the list of PortletGroups the user wishes to join
-     */
-    public void setDesiredGroups(List groups);
 
     /**
-     * Returns the list of groups the user wishes to join
+     * Adds the AccountRequest to the group with that role
+     *
+     * @param group
+     * @param role
      */
-    public List getDesiredGroups();
+    public void addToGroup(PortletGroup group, PortletRole role);
+
+
 
     /**
      * Prints the constents of the account request to a String
