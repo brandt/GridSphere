@@ -45,10 +45,25 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
         events = new Stack();
 
+        String[] portletNames = req.getParameterValues("portletName");
+        if ( portletNames != null ) {
+            System.err.println("have a TCK POrtlet!!");
+            StringTokenizer tokenizer;
+            if (portletNames.length > 1) System.err.println("Arggh multiple portlets!!");
+            for (int i = 0; i < portletNames.length; i++) {
+                tokenizer =  new StringTokenizer(portletNames[i], "/");
+                String appName = tokenizer.nextToken();
+                portletComponentID = tokenizer.nextToken();
+            }
+
+
+        } else {
+
         portletComponentID = req.getParameter(SportletProperties.COMPONENT_ID);
         if (portletComponentID == null) {
             log.debug("Received a null component ID");
             portletComponentID = "";
+        }
         }
         /*
         try {

@@ -8,13 +8,9 @@ package org.gridlab.gridsphere.portletcontainer;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.hibernate.DatabaseTask;
-import org.gridlab.gridsphere.layout.PortletLayoutEngine;
-import org.gridlab.gridsphere.layout.PortletPageFactory;
+import org.gridlab.gridsphere.layout.*;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletContext;
-import org.gridlab.gridsphere.portlet.impl.SportletGroup;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
@@ -74,6 +70,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
 
     private static PortletRegistry registry = PortletRegistry.getInstance();
+    int testpageNo = 1;
 
     /**
      * Initializes the GridSphere portlet container
@@ -115,6 +112,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     }
 
     public void processRequest(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+
         GridSphereEvent event = new GridSphereEventImpl(aclService, context, req, res);
         PortletRequest portletReq = event.getPortletRequest();
         PortletResponse portletRes = event.getPortletResponse();
@@ -152,9 +150,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
         }
 
-
         setUserAndGroups(portletReq);
 
+        setTCKUser(portletReq);
+        
         // Handle user login and logout
         if (event.hasAction()) {
             if (event.getAction().getName().equals(SportletProperties.LOGIN)) {
@@ -196,6 +195,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         setUserAndGroups(portletReq);
 
+        setTCKUser(portletReq);
+
         layoutEngine.service(event);
 
         log.debug("Session stats");
@@ -215,6 +216,23 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     }
 
+    public void setTCKUser(PortletRequest req) {
+        String tck = (String)req.getPortletSession(true).getAttribute("tck");
+        String[] portletNames = req.getParameterValues("portletName");
+        if ((tck != null) || (portletNames != null)) {
+            System.err.println("Setting a TCK user");
+            SportletUserImpl u = new SportletUserImpl();
+            u.setUserName("tckuser");
+            u.setUserID("tckuser");
+            ArrayList l = new ArrayList();
+            l.add(SportletGroup.CORE);
+            req.setAttribute(SportletProperties.PORTLET_USER, u);
+            req.setAttribute(SportletProperties.PORTLETGROUPS, l);
+            req.setAttribute(SportletProperties.PORTLET_ROLE, PortletRole.USER);
+            req.getPortletSession(true).setAttribute("tck", "yes");
+        }
+    }
+
     public void setUserAndGroups(PortletRequest req) {
         // Retrieve user if there is one
         User user = null;
@@ -223,6 +241,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             if (uid != null) {
                 user = userManagerService.getUser(uid);
             }
+
         }
         List groups = null;
         PortletRole role = PortletRole.GUEST;

@@ -96,6 +96,7 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
         // Every SportletDefinition has a PortletApplication and possibly multiple ConcretePortletConfig's
         PortletDefinition[] portletDefs = pdd.getPortletDefinitionList();
 
+
         // Iterate thru portlet definitions for portlet applications
         for (int i = 0; i < portletDefs.length; i++) {
             ApplicationPortlet portletApp = new JSRApplicationPortletImpl(pdd, portletDefs[i], servletName, webApplicationName, ctx);
