@@ -61,15 +61,6 @@ public interface PersistenceManagerRdbms {
     public void deleteList(String query) throws PersistenceManagerException;
 
     /**
-     * Returns a PersistenceSession for handeling transactions and multiple operations.
-     *
-     * @return PersistenceSession
-     * @throws PersistenceManagerException
-     */
-    public PersistenceSession getPersistenceSession() throws PersistenceManagerException;
-
-
-    /**
      * Shuts down the PersistenceManager. Used to free any ressources
      * still used by it.
      *

@@ -147,17 +147,6 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         return loadProperties(persistenceConfigDir + "/hibernate.properties");
     }
 
-
-    public PersistenceSession getPersistenceSession() throws PersistenceManagerException {
-        try {
-            Session session = factory.openSession();
-            PersistenceSession psi = new PersistenceSessionImpl(session);
-            return psi;
-        } catch (HibernateException e) {
-            throw new PersistenceManagerException(e);
-        }
-    }
-
     public void create(Object object) throws PersistenceManagerException {
         try {
             doTransaction(object, "", CMD_CREATE);
