@@ -21,6 +21,7 @@
 <!ENTITY PortletSession "<classname>PortletSession</classname>">
 <!ENTITY PortletContext "<classname>PortletContext</classname>">
 <!ENTITY PortletConfig "<classname>PortletConfig</classname>">
+<!ENTITY PortletData "<classname>PortletData</classname>">
 <!ENTITY PortletSettings "<classname>PortletSettings</classname>">
 <!ENTITY PortletApplicationSettings "<classname>PortletApplicationSettings</classname>">
 <!ENTITY PortletRole "<classname>PortletRole</classname>">
@@ -58,7 +59,7 @@
 <!ENTITY Ant '<ulink url="http://jakarta.apache.org/ant">Ant</ulink>'>
 <!ENTITY Tomcat '<ulink url="http://jakarta.apache.org/tomcat">Tomcat</ulink>'>
 <!ENTITY Castor '<ulink url="http://exolab.castor.org">Castor</ulink>'>
-<!ENTITY Castordoclets '<ulink url="http://castordoclet.sourceforge.net">Castor Doclets</ulink>'>
+<!ENTITY Castordoclets '<ulink url="http://castordoclets.sourceforge.net">Castor Doclets</ulink>'>
 <!ENTITY HSQL '<ulink url="http://exolab.castor.org">Hypersonic SQL</ulink>'>
 <!ENTITY Log4J '<ulink url="http://jakarta.apache.org/log4j">Log4J</ulink>'>
 <!ENTITY JUnit '<ulink url="http://www.junit.org">JUnit</ulink>'>
