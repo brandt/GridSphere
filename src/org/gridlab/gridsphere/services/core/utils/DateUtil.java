@@ -1,0 +1,61 @@
+package org.gridlab.gridsphere.services.core.utils;
+
+import org.gridlab.gridsphere.portlet.User;
+
+import java.util.*;
+import java.text.DateFormat;
+
+
+/*
+ * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
+ * @version $Id$
+ */
+
+public class DateUtil {
+
+    /**
+     * Returns localized date for the timezone the user is in.
+     * @param user User
+     * @param locale locale of the resulting output
+     * @param milisec time to convert in milisec
+     * @return localized time string with timezones offset
+     */
+    public static String getLocalizedLongDate(User user, Locale locale, long milisec) {
+
+        TimeZone tz = TimeZone.getTimeZone((String)user.getAttribute(User.TIMEZONE));
+        if (tz==null) {
+            tz = TimeZone.getDefault();
+        }
+        if (locale==null) {
+            locale = Locale.getDefault();
+        }
+        Calendar cal = Calendar.getInstance(tz, locale);
+        cal.setTimeInMillis(milisec);
+
+        DateFormat uformatter = DateFormat.getDateTimeInstance(DateFormat.FULL,DateFormat.FULL,locale);
+        uformatter.setCalendar(cal);
+
+        return uformatter.format(cal.getTime());
+    }
+
+
+    /**
+     * Returns a map of localized nice TimeZonesNames.
+     * Does not return localized names yet.
+     * @param locale localized to that locale
+     * @return Map containing TimeZoneIDs as Key and localized names as values
+     */
+    public static Map getLocalizedTimeZoneNames(Locale locale) {
+
+        Map result = new HashMap();
+
+        String availableTZ[] = TimeZone.getAvailableIDs();
+        for (int i=0;i<availableTZ.length;i++) {
+            if ( (availableTZ[i].indexOf("/")>1) && (!availableTZ[i].startsWith("System"))) {
+                result.put(availableTZ[i], availableTZ[i]);
+            }
+        }
+
+        return result;
+    }
+}
