@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
 <mapping>
-   <class name="org.gridlab.gridsphere.services.security.acl.impl2.UserACL" identity="Oid" key-generator="UUID">
+   <class name="org.gridlab.gridsphere.services.security.acl.impl2.UserACL" identity="Oid" key-generator="UUID" depends="org.gridlab.gridsphere.portlet.impl.SportletUserImpl">
       <map-to table="UserACL" />
       <field name="UserID" type="java.lang.String">
          <sql type="char" name="UserID" />
@@ -9,8 +9,8 @@
       <field name="RoleID" type="integer">
          <sql type="integer" name="RoleID" />
       </field>
-      <field name="GroupID" type="integer">
-         <sql type="integer" name="GroupID" />
+      <field name="GroupID" type="java.lang.String">
+         <sql type="char" name="GroupID" />
       </field>
       <field name="Oid" type="java.lang.String">
          <sql type="char" name="Oid" />

@@ -2,7 +2,7 @@
 <!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
 <mapping>
 
-   <class name="org.gridlab.gridsphere.portlet.impl.SportletUserImpl" identity="Oid" key-generator="UUID">
+   <class name="org.gridlab.gridsphere.portlet.impl.SportletUserImpl" identity="Oid">
       <map-to table="SportletUserImpl" />
       <field name="FamilyName" type="java.lang.String">
          <sql type="char" name="FamilyName" />
@@ -19,9 +19,10 @@
       <field name="UserID" type="java.lang.String">
          <sql type="char" name="UserID" />
       </field>
-      <field name="LastLoginTime" type="long">
-         <sql name="longOid" />
-      </field>
+<!--      <field name="ID" type="java.lang.String">
+         <sql type="char" name="Id" />
+      </field>-->
+
       <field name="Attributes" type="org.gridlab.gridsphere.core.persistence.castor.Attribute" collection="vector">
          <sql many-key="UserOid" />
       </field>

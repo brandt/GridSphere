@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
 <mapping>
-   <class name="org.gridlab.gridsphere.services.user.impl.AccountRequestImpl" identity="Oid" key-generator="UUID">
+   <class name="org.gridlab.gridsphere.services.user.impl.AccountRequestImpl" identity="Oid" required="true">
       <map-to table="AccountRequestImpl" />
-      <field name="ID" type="integer">
-         <sql type="integer" name="ID" />
-      </field>
       <field name="UserID" type="java.lang.String">
          <sql type="char" name="UserID" />
       </field>
@@ -29,8 +26,8 @@
          <sql type="char" name="Oid" />
       </field>
 
-      <field name="DesiredGroupsSV" type="org.gridlab.gridsphere.services.user.impl.AccountRequestImplDesiredGroups" collection="vector">
-         <sql many-key="Reference"/>
+      <field name="DesiredGroups" type="org.gridlab.gridsphere.portlet.impl.SportletGroup" collection="vector">
+        <sql name="SportletGroup_Oid" many-table="AccountRequestImpl_SportletGroup" many-key="AccountRequestImpl_Oid" />
       </field>
 
       <field name="MyproxyUserNamesSV" type="org.gridlab.gridsphere.services.user.impl.AccountRequestImplMyproxyUserNames" collection="vector">
@@ -41,27 +38,9 @@
          <sql many-key="Reference"/>
       </field>
 
-
-      <field name="DesiredGroups" type="org.gridlab.gridsphere.portlet.impl.SportletGroup" collection="vector">
-         <sql many-key="Oid"/>
-      </field>
-
    </class>
 
    <!-- should use inheritence here in castor ! -->
-
-   <class name="org.gridlab.gridsphere.services.user.impl.AccountRequestImplDesiredGroups" identity="Oid" key-generator="UUID" depends="org.gridlab.gridsphere.services.user.impl.AccountRequestImpl">
-        <map-to table="AccountRequestImplDesiredGroups" />
-        <field name="Value" type="java.lang.String">
-            <sql type="char" name="Value" />
-        </field>
-        <field name="Reference" type="org.gridlab.gridsphere.services.user.impl.AccountRequestImpl">
-            <sql name="Reference" />
-        </field>
-        <field name="Oid" type="java.lang.String">
-            <sql type="char" name="Oid" />
-        </field>
-    </class>
 
    <class name="org.gridlab.gridsphere.services.user.impl.AccountRequestImplMyproxyUserNames" identity="Oid" key-generator="UUID" depends="org.gridlab.gridsphere.services.user.impl.AccountRequestImpl">
         <map-to table="AccountRequestImplMyProxyUserNames" />
