@@ -600,7 +600,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         postframe.append("</table>");
         postframe.append("<!--- PORTLET ENDS HERE -->");
 
-        //renderPortlet = true;
+        if (req.getAttribute(SportletProperties.RESPONSE_COMMITTED) != null) {
+            renderPortlet = true;
+        }
 
         // piece together portlet frame + title depending on whether title was set during doXXX method
         // or not
