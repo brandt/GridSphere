@@ -15,8 +15,8 @@
     <target name="update-project" description="Updates existing project with updated build.xml script">
         <echo>Updating a Portlet Project</echo>
         <input message="Please enter the Project Name e.g. the lowercase directory name e.g. coolportlets" addproperty="project.name"/>
-        <antcall target="check-project-exists"/>
-        <fail if="${new-project-exists}" message="Unable to find projects/${project.name}!"/>
+
+        <echo message="Overwriting ${project.dir}/build.xml"/>
         <copy file="config/build/build.project.xml" tofile="${project.dir}/build.xml" overwrite="true"/>
         <replace file="${project.dir}/build.xml"
                  token="@PROJECT_TITLE@"
