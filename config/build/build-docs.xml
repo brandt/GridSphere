@@ -14,17 +14,11 @@ Build include file for the GridSphere Portal source code, see build.xml
         <antcall target="docs"/>
     </target>
 
-    <target name="docs" depends="javadoc, docbook" description="Create GridSphere Documentation"/>
+    <target name="docs" depends="javadoc" description="Create GridSphere Documentation"/>
 
     <target name="check-javadocs">
         <condition property="javadocs.exists">
             <available file="${build.javadoc}/index.html"/>
-        </condition>
-    </target>
-
-    <target name="check-docbook">
-        <condition property="docbook.exists">
-            <available file="${build.docs}/index.html"/>
         </condition>
     </target>
 
@@ -87,17 +81,6 @@ Build include file for the GridSphere Portal source code, see build.xml
                 packages="org.gridlab.gridsphere.portlets:org.gridlab.gridsphere.portlets.*"/>
 
         </javadoc>
-    </target>
-
-    <!-- =================================================================== -->
-    <!-- Builds the GridSphere docbook documentation                         -->
-    <!-- =================================================================== -->
-    <target name="docbook" depends="setenv, check-docbook" description="Builds the GridSphere docbook documentation." unless="docbook.exists">
-        <ant dir="${docbook.dir}" target="docbook" inheritAll="false"/>
-	<copy todir="${gridsphere.build}/docs">
-        <fileset dir="docs/docbook/build/docs"/>
-	</copy>
-        <delete dir="docs/docbook/build"/>
     </target>
 
 </project>

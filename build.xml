@@ -238,8 +238,8 @@ Invoke "ant help"
         <echo>------------------------------------------------------------</echo>
         <echo>-- Installing GridSphere documentation is recommended  --</echo>
         <echo>------------------------------------------------------------</echo>
-        <echo>Answering 'y' below will deploy GridSphere documentation.</echo>
-        <echo>If you answer 'n' you can deploy the documentation at a later time </echo>
+        <echo>Answering 'y' below will deploy GridSphere javadoc API.</echo>
+        <echo>If you answer 'n' you can deploy the javadoc API documentation at a later time </echo>
         <echo>with 'ant docs'.                                     </echo>
         <echo>------------------------------------------------------------</echo>
         <input message="Do you want to install GridSphere documentation? "
