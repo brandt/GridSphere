@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.impl.*;
 
 /**
@@ -130,6 +131,22 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         if (f.exists()) {
             //String layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_LAYOUT_MAPPING);
             layoutEngine.addApplicationTab(webApplicationName, layoutXMLfile);
+        }
+    }
+
+    /**
+     * Loads in a layout descriptor file from the associated servlet context
+     *
+     * @param ctx the <code>ServletContext</code>
+     */
+    protected void loadServices(ServletContext ctx) {
+        // load in the portlet.xml file
+        String descriptor = ctx.getRealPath("") + "/WEB-INF/PortletServices.xml";
+        File f = new File(descriptor);
+        String mapping = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_SERVICES_MAPPING);
+        if (f.exists()) {
+            SportletServiceFactory factory = SportletServiceFactory.getInstance();
+            factory.addServices(descriptor, mapping);
         }
     }
 

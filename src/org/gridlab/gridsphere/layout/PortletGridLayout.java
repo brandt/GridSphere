@@ -30,12 +30,6 @@ public class PortletGridLayout extends PortletFrameLayout {
     public PortletGridLayout() {
     }
 
-    /*
-    public String getClassName() {
-        return PortletGridLayout.class.getName();
-    }
-     */
-
     /**
      * Returns the CSS style name for the grid-layout.
      *

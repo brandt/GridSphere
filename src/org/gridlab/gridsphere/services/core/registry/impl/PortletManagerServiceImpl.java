@@ -4,18 +4,14 @@
  */
 package org.gridlab.gridsphere.services.core.registry.impl;
 
-import org.gridlab.gridsphere.layout.PortletLayoutEngine;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceAuthorizer;
-import org.gridlab.gridsphere.portletcontainer.*;
-import org.gridlab.gridsphere.portletcontainer.impl.PortletWebApplicationImpl;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 
-import javax.servlet.ServletContext;
 import java.util.*;
 import java.io.IOException;
 
@@ -108,7 +104,6 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
     /**
      * Shuts down all currently active portlet web applications from the portlet container
      *
-     * @param webApplicationName the name of the portlet web application
      * @param req the <code>PortletRequest</code>
      * @param res the <code>Portletresponse</code>
      * @throws IOException if an I/O error occurs

@@ -39,10 +39,10 @@ class ConcreteSportlet implements ConcretePortlet {
      * Constructs an instance of ConcreteSportlet
      *
      * @param appPortletConfig an application portlet configuration
-     * @param concSportlet a concrete portlet descriptor
+     * @param concSportletDef a concrete portlet descriptor
      */
-    public ConcreteSportlet(ApplicationPortletConfig appPortletConfig, ConcreteSportletDefinition concSportlet) {
-        this.concSportletConfig = concSportlet.getConcreteSportletConfig();
+    public ConcreteSportlet(ApplicationPortletConfig appPortletConfig, ConcreteSportletDefinition concSportletDef) {
+        this.concSportletConfig = concSportletDef.getConcreteSportletConfig();
         String appID, appname, cappname;
         int index;
 
@@ -52,7 +52,7 @@ class ConcreteSportlet implements ConcretePortlet {
         appname = appID.substring(0, index);
         String appNo = appID.substring(index + 1);
 
-        concreteID = concSportlet.getConcretePortletID();
+        concreteID = concSportletDef.getConcretePortletID();
 
         // Get ConcretePortletConfig UID e.g. classname.number.number
         index = concreteID.lastIndexOf(".");
@@ -67,7 +67,7 @@ class ConcreteSportlet implements ConcretePortlet {
         }
         portletName = concSportletConfig.getName();
 
-        contextHash = concSportlet.getContextAttributes();
+        this.contextHash = concSportletDef.getContextAttributes();
 
         // Get locale information
         defaultLocale = concSportletConfig.getDefaultLocale();
