@@ -8,6 +8,7 @@ package org.gridlab.gridsphere.portletcontainer;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.hibernate.DatabaseTask;
+import org.gridlab.gridsphere.core.persistence.hibernate.DBTask;
 import org.gridlab.gridsphere.layout.*;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.*;
@@ -122,11 +123,13 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             synchronized (firstDoGet) {
                 log.debug("Testing Database");
                 // checking if database setup is correct
-                DatabaseTask dt = new DatabaseTask();
-
+                DBTask dt = new DBTask();
+                dt.setAction(DBTask.ACTION_CHECKDB);
+                dt.setConfigDir(GridSphereConfig.getServletContext().getRealPath("/WEB-INF/persistence/"));
                 try {
-                    dt.checkDBSetup(GridSphereConfig.getServletContext().getRealPath("/WEB-INF/persistence/"));
-                } catch (PersistenceManagerException e) {
+                    dt.execute();
+
+                } catch (Exception e) {
                     RequestDispatcher rd = req.getRequestDispatcher("/jsp/dberror.jsp");
                     log.error("Check DB failed: ", e);
                     req.setAttribute("error", "DB Error! Please contact your GridSphere/Database Administrator!");
