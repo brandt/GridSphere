@@ -437,7 +437,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         PortletStateLink stateLink;
         List stateLinks = new Vector();
         for (int i = 0; i < windowStates.size(); i++) {
-            System.err.println("windowState has " + windowStates.size());
             tmp = (PortletWindow.State)windowStates.get(i);
             portletURI = res.createURI();
             portletURI.addParameter(GridSphereProperties.COMPONENT_ID, this.componentIDStr);
