@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+New User Layout Descriptor
+
+This descriptor defines a new user's portal layout configuration
+
+$Id$
+-->
+<!-- Tabbed Panes -->
+
+<portlet-tab>
+    <title>Home</title>
+    <portlet-tabbed-pane selected="0" style="sub-menu">
+        <portlet-tab>
+            <title>Welcome</title>
+            <portlet-panel>
+                <grid-layout>
+                    <portlet-frame>
+                        <name>Login</name>
+                        <portlet-class>org.gridlab.gridsphere.portlets.core.LoginPortlet.1</portlet-class>
+                    </portlet-frame>
+                </grid-layout>
+            </portlet-panel>
+        </portlet-tab>
+        <portlet-tab>
+            <title>Administration</title>
+            <portlet-tabbed-pane style="sub-menu">
+                <portlet-tab>
+                    <title>Portlets</title>
+                    <portlet-panel>
+                        <grid-layout>
+                            <portlet-frame>
+                                <required-role>SUPER</required-role>
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.PortletApplicationManager.1</portlet-class>
+                            </portlet-frame>
+                        </grid-layout>
+                    </portlet-panel>
+                </portlet-tab>
+                <portlet-tab>
+                    <title>Accounts</title>
+                    <portlet-panel>
+                        <grid-layout>
+                            <portlet-frame>
+                                <required-role>SUPER</required-role>
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.user.UserManagerPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </grid-layout>
+                    </portlet-panel>
+                </portlet-tab>
+                <portlet-tab>
+                    <title>Access</title>
+                    <portlet-panel>
+                        <grid-layout>
+                            <portlet-frame>
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.AccessControllerPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </grid-layout>
+                    </portlet-panel>
+                </portlet-tab>
+                <portlet-tab>
+                    <title>Credentials</title>
+                    <portlet-panel>
+                        <grid-layout>
+                            <portlet-frame>
+                                <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialPermissionAdminPortlet.1</portlet-class>
+                            </portlet-frame>
+                            <portlet-frame>
+                                <name>CredentialMappingAdminPortlet</name>
+                                <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialMappingAdminPortlet.1</portlet-class>
+                            </portlet-frame>
+                            <portlet-frame>
+                                <name>CredentialManagerAdminPortlet</name>
+                                <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialManagerAdminPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </grid-layout>
+                    </portlet-panel>
+                </portlet-tab>
+            </portlet-tabbed-pane>
+        </portlet-tab>
+    </portlet-tabbed-pane>
+</portlet-tab>
+
+
+
