@@ -34,18 +34,6 @@ Copyright:
         </classpath>
     </taskdef>
 
-    <taskdef resource="junit.tasks">
-        <classpath>
-            <pathelement location="lib/ext/junit-3.8.1.jar"/>
-        </classpath>
-    </taskdef>
-
-    <taskdef resource="xalan.tasks">
-        <classpath>
-            <pathelement location="lib/ext/xalan-2.4.1.jar"/>
-        </classpath>
-    </taskdef>
-
     <property file="build.properties"/>
 
     <property name="optimize"    value="false"/>
