@@ -45,6 +45,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     private static boolean inited = false;
     private static Map authModules = new HashMap();
     private static Map activeAuthModules = new HashMap();
+
     private static LoginUserModule activeLoginModule = null;
 
     private PersistenceManagerRdbms pm = null;
@@ -188,34 +189,6 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
 
             loadAuthModules(authModulesPath, Thread.currentThread().getContextClassLoader());
 
-            /*
-            passwdModule = new PasswordAuthModule("PASSWORD_AUTH_MODULE");
-            authModules.put("PASSWORD_AUTH_MODULE", passwdModule);
-
-            Enumeration enum = config.getInitParameterNames();
-            while (enum.hasMoreElements()) {
-                String moduleName = (String) enum.nextElement();
-                if (moduleName.equals("LOGIN_MODULE")) {
-                    String loginClassName = config.getInitParameter(moduleName);
-                    try {
-                        PortletServiceFactory factory = SportletServiceFactory.getInstance();
-                        Class loginModClass = Class.forName(loginClassName);
-                        activeLoginModule = (LoginUserModule) factory.createPortletService(loginModClass, config.getServletContext(), true);
-                    } catch (ClassNotFoundException e) {
-                        log.error("Unable to create class from class name: " + loginClassName, e);
-                    } catch (PortletServiceNotFoundException e) {
-                        log.error("Unable to get service from portlet service factory: " + loginClassName, e);
-                    }
-                    log.debug("Created a login module service: " + loginClassName);
-                } else {
-                    String authClassName = config.getInitParameter(moduleName);
-                    LoginAuthModule authModule = createNewAuthModule(moduleName, authClassName);
-                    if (authModule != null) authModules.put(moduleName, authModule);
-                }
-            }
-            LoginAuthModule activeModule = (LoginAuthModule) authModules.get("PASSWORD_AUTH_MODULE");
-            activeAuthModules.add(activeModule);
-            */
             inited = true;
         }
     }
@@ -234,6 +207,15 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
                 AuthModuleDefinition def = (AuthModuleDefinition)it.next();
                 log.info(def.toString());
                 String modClassName = def.getModuleImplementation();
+
+                // before initializing check if we know about this mod in the db
+                AuthModuleDefinition am = getAuthModuleDefinition(def.getModuleName());
+                if (am != null) {
+                    def.setModulePriority(am.getModulePriority());
+                    def.setModuleActive(am.getModuleActive());
+                } else {
+                    pm.saveOrUpdate(def);
+                }
                 Class c = Class.forName(modClassName, true, classloader);
                 Class[] parameterTypes = new Class[]{AuthModuleDefinition.class};
                 Object[] obj = new Object[]{def};
@@ -245,6 +227,49 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         } catch (Exception e) {
             log.error("Error loading auth module!", e);
         }
+    }
+
+    public void saveAuthModule(LoginAuthModule authModule) {
+        try {
+            log.debug("saving auth module: " + authModule.getModuleName() + " " +
+                    authModule.getModulePriority() + " " + authModule.isModuleActive());
+            AuthModuleDefinition am = getAuthModuleDefinition(authModule.getModuleName());
+            if (am != null) {
+                am.setModulePriority(authModule.getModulePriority());
+                am.setModuleActive(authModule.isModuleActive());
+                pm.update(am);
+                authModules.put(am.getModuleImplementation(), authModule);
+                // in case old auth module was active and new one is not remove it first then reinsert if active
+                activeAuthModules.remove(am.getModuleImplementation());
+                if (authModule.isModuleActive()) activeAuthModules.put(am.getModuleImplementation(), authModule);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private AuthModuleDefinition getAuthModuleDefinition(String moduleName) {
+        AuthModuleDefinition am = null;
+        try {
+            am = (AuthModuleDefinition)pm.restore("select authmodule from " + AuthModuleDefinition.class.getName() +
+                " authmodule where authmodule.ModuleName='" +
+                moduleName + "'");
+        } catch (PersistenceManagerException e) {
+            e.printStackTrace();
+        }
+        return am;
+    }
+
+    public List getAuthModuleDefinitions() {
+        List mods = null;
+        try {
+            mods = pm.restoreList("select authmod from "
+                + AuthModuleDefinition.class.getName()
+                + " authmod ");
+        } catch (PersistenceManagerException e) {
+            e.printStackTrace();
+        }
+        return mods;
     }
 
 

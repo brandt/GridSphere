@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
+import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
 
 import java.util.List;
 
@@ -55,5 +56,7 @@ public interface LoginService extends PortletService {
     public User login(String loginName, String loginPassword)
             throws AuthenticationException, AuthorizationException;
 
+
+    public void saveAuthModule(LoginAuthModule authModule);
 
 }

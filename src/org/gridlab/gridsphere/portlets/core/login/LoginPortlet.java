@@ -21,6 +21,7 @@ import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
+import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 
@@ -157,6 +158,7 @@ public class LoginPortlet extends ActionPortlet {
         if (settings.getAttribute(SAVE_PASSWORDS).equals(Boolean.TRUE.toString())) {
             req.setAttribute("savePass", "true");
         }
+
         setNextState(req, DO_VIEW_USER_EDIT_LOGIN);
         log.debug("in doViewNewUser");
     }
@@ -325,6 +327,7 @@ public class LoginPortlet extends ActionPortlet {
     }
 
     public void showConfigure(FormEvent event) {
+
         PortletRequest req = event.getPortletRequest();
         CheckBoxBean acctCB = event.getCheckBoxBean("acctCB");
         acctCB.setSelected(canUserCreateAccount);
@@ -595,22 +598,27 @@ public class LoginPortlet extends ActionPortlet {
         PortletRequest req = event.getPortletRequest();
         CheckBoxBean cb = event.getCheckBoxBean("authModCB");
 
-        List values = cb.getSelectedValues();
+        List activeAuthMods = cb.getSelectedValues();
 
-        Iterator it = values.iterator();
+        List authModules = loginService.getAuthModules();
+        Iterator it = authModules.iterator();
         while (it.hasNext()) {
-            String val = (String)it.next();
-
-            LoginAuthModule authMod = loginService.getAuthModule(val);
-            if (authMod != null) {            
-            if (req.getParameter(val) != null) {
-
+            LoginAuthModule authMod = (LoginAuthModule)it.next();
+            // see if a checked active auth module appears
+            if (activeAuthMods.contains(authMod.getModuleName())) {
+                authMod.setModuleActive(true);
+            } else {
+                authMod.setModuleActive(false);
             }
-            }
-
+            String priority = req.getParameter(authMod.getModuleName());
+            authMod.setModulePriority(Integer.valueOf(priority).intValue());
+            loginService.saveAuthModule(authMod);
         }
 
+        
     }
+
+
 
     public void doSavePass(FormEvent event) {
 
