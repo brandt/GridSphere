@@ -7,7 +7,6 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.exolab.castor.jdo.Database;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
-import org.gridlab.gridsphere.core.persistence.castor.Attribute;
 import org.gridlab.gridsphere.portlet.PortletLog;
 
 import java.util.Enumeration;
@@ -67,7 +66,8 @@ public class SportletUserImpl extends BaseObject implements SportletUser {
     private long LastLoginTime = 0;
 
     /**
-     * @field-type org.gridlab.gridsphere.core.persistence.castor.Attribute
+     * @field-type SportletUserImplAttribute
+     * @many-key sportletuser
      */
     public Vector Attributes = new Vector();
 
@@ -263,10 +263,10 @@ public class SportletUserImpl extends BaseObject implements SportletUser {
     */
     private void convert2vector() {
         Enumeration allkeys = Store.keys();
-        Attribute ha = null;
+        SportletUserImplAttribute ha = null;
         while (allkeys.hasMoreElements()) {
             String key = (String) allkeys.nextElement();
-            ha = new Attribute(key, (String) Store.get(key));
+            ha = new SportletUserImplAttribute(key, (String) Store.get(key));
             ha.setUser(this);
             Attributes.add(ha);
         }
@@ -274,7 +274,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser {
 
     private void convert2hash() {
         for (int i = 0; i < Attributes.size(); i++) {
-            Attribute ha = (Attribute) Attributes.get(i);
+            SportletUserImplAttribute ha = (SportletUserImplAttribute) Attributes.get(i);
             Store.put((String) ha.getKey(), (String) ha.getValue());
         }
     }
