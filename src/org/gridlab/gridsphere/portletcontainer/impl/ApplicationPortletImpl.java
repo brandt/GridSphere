@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.portletcontainer.impl;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.*;
@@ -13,6 +14,7 @@ import javax.servlet.ServletContext;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import java.util.ArrayList;
 
 /**
  * The <code>ApplicationPortletImpl</code> is an implementation of the <code>ApplicationPortlet</code> interface
@@ -28,7 +30,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
     private String applicationPortletID = "";
     private String portletName = "";
     private String servletName = "";
-    private List concretePortlets = null;
+    private List concretePortlets = new ArrayList();
     private ApplicationPortletConfig appPortletConfig = null;
     private String webAppName = null;
     private PortletDispatcher portletDispatcher = null;
@@ -47,7 +49,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
      * @param context the <code>ServletContext</code> containing this application portlet
      */
     public ApplicationPortletImpl(PortletDeploymentDescriptor pdd, SportletDefinition portletDef,
-                                  String webApplication, ServletContext context) {
+                                  String webApplication, ServletContext context) throws PortletException {
 
         this.webAppName = webApplication;
         this.appPortletConfig = portletDef.getApplicationSportletConfig();
@@ -73,7 +75,6 @@ class ApplicationPortletImpl implements ApplicationPortlet {
         // Set concrete portlet information
         List concPortletDefs = portletDef.getConcreteSportletList();
         Iterator it = concPortletDefs.iterator();
-        concretePortlets = new Vector();
         while (it.hasNext()) {
             ConcreteSportletDefinition concSportlet = (ConcreteSportletDefinition) it.next();
             ConcretePortlet concretePortlet = new ConcreteSportlet(pdd, appPortletConfig, concSportlet);
@@ -86,8 +87,10 @@ class ApplicationPortletImpl implements ApplicationPortlet {
         log.debug("Creating request dispatcher for " + servletName);
         RequestDispatcher rd = context.getNamedDispatcher(servletName);
         if (rd == null) {
-            log.error("Unable to create a dispatcher for portlet: " + portletName);
-            log.error("Make sure the servletName: " + servletName + " is the servlet-name defined in ui.xml");
+            String msg = "Unable to create a dispatcher for portlet: " + portletName + "\n";
+            msg += "Make sure the servletName: " + servletName + " is the servlet-name defined in web.xml";
+            log.error(msg);
+            throw new PortletException(msg);
         }
         portletDispatcher = new PortletDispatcher(rd, appPortletConfig);
     }
@@ -182,4 +185,17 @@ class ApplicationPortletImpl implements ApplicationPortlet {
         return servletName;
     }
 
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("Application Portlet:\n");
+        sb.append("Portlet Name: " + portletName + "\n");
+        sb.append("Servlet Name: " + servletName + "\n");
+        sb.append("App Portlet ID: " + applicationPortletID + "\n");
+        if (portletDispatcher == null) {
+            sb.append("Portlet dispatcher: NULL");
+        } else {
+            sb.append("Portlet dispatcher: OK");
+        }
+        return sb.toString();
+    }
 }

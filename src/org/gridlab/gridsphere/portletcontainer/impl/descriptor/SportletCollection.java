@@ -17,7 +17,6 @@ import java.util.List;
 public class SportletCollection {
 
     private List portletDefList = new ArrayList();
-    private String groupOwnerName = GridSphereConfig.getProperty(GridSphereConfigProperties.CORE_GROUP_NAME);
 
     /**
      * Constructs an instance of SportletCollection
@@ -43,22 +42,5 @@ public class SportletCollection {
         this.portletDefList = portletDefList;
     }
 
-    /**
-     * Sets the group owner name of this portlet collection
-     *
-     * @param groupOwnerName the group owner of this porlet collection
-     */
-    public void setGroupOwnerName(String groupOwnerName) {
-        this.groupOwnerName = groupOwnerName;
-    }
-
-    /**
-     * Returns the group owner name of this portlet collection
-     *
-     * @return the group owner name of this portlet collection
-     */
-    public String getGroupOwnerName() {
-        return groupOwnerName;
-    }
 }
 

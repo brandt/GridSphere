@@ -74,6 +74,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
         }
 
         /* This is where we get ACL info and update sportlet request */
+        /*
         User user = portletRequest.getUser();
         if (! (user instanceof GuestUser) ) {
             log.debug("Role information for user: " + user.getUserID());
@@ -87,6 +88,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
                 log.debug("Group: " + group.toString() + " Role: " + role.toString());
             }
         }
+        */
     }
 
     public PortletRequest getPortletRequest() {

@@ -67,8 +67,8 @@ public class PortletDispatcher {
         try {
             include(req, res);
         } catch (ServletException e) {
-            log.error("Unable to perform init");
-            throw new PortletException("Unable to perform init", e);
+            log.error("Unable to perform init on: " + appPortletConfig.getApplicationPortletID());
+            throw new PortletException("Unable to perform init on: " + appPortletConfig.getApplicationPortletID(), e);
         }
     }
 
@@ -89,8 +89,8 @@ public class PortletDispatcher {
         try {
             include(req, res);
         } catch (ServletException e) {
-            log.error("Unable to perform destroy");
-            throw new PortletException("Unable to perform destroy", e);
+            log.error("Unable to perform destroy on: " + appPortletConfig.getApplicationPortletID());
+            throw new PortletException("Unable to perform destroy on: " + appPortletConfig.getApplicationPortletID(), e);
         }
     }
 

@@ -42,32 +42,25 @@ class ConcreteSportlet implements ConcretePortlet {
      * @param appPortletConfig an application portlet configuration
      * @param concSportletDef a concrete portlet descriptor
      */
-    public ConcreteSportlet(PortletDeploymentDescriptor pdd, ApplicationPortletConfig appPortletConfig, ConcreteSportletDefinition concSportletDef) {
+    public ConcreteSportlet(PortletDeploymentDescriptor pdd, ApplicationPortletConfig appPortletConfig, ConcreteSportletDefinition concSportletDef) throws PortletException  {
         this.portletDD = pdd;
         this.concSportletConfig = concSportletDef.getConcreteSportletConfig();
-        String appID, appname, cappname;
+        String appID, cappID;
         int index;
 
         // Get PortletApplication UID  e.g. classname.number
         appID = appPortletConfig.getApplicationPortletID();
-        index = appID.lastIndexOf(".");
-        appname = appID.substring(0, index);
-        String appNo = appID.substring(index + 1);
 
         concreteID = concSportletDef.getConcretePortletID();
-
-        // Get ConcretePortletConfig UID e.g. classname.number.number
         index = concreteID.lastIndexOf(".");
-        String cappNo = concreteID.substring(0, index);
-        index = cappNo.lastIndexOf(".");
-        cappNo = cappNo.substring(index + 1);
-        cappname = concreteID.substring(0, index);
+        cappID = concreteID.substring(0, index);
 
-        // Check that cappID = appID and cappname = appname
-        if ((!appNo.equals(cappNo)) || (!appname.equals(cappname))) {
-            log.error("<portlet-app uid=" + appname + appNo + " does not match <concrete-portlet-app uid=" + cappname + cappNo);
+        if (!(cappID.equals(appID))) {
+            String msg = "The portlet classname defined by the portlet application id: "
+            + appID + " and the concrete portlet classname: " + cappID + " are not equal";
+            log.error(msg);
+            throw new PortletException(msg);
         }
-        portletName = concSportletConfig.getName();
 
         this.contextHash = concSportletDef.getContextAttributes();
 

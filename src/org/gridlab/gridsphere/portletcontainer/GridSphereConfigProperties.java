@@ -72,12 +72,6 @@ public interface GridSphereConfigProperties {
     public static final String DATABASE_NAME = "DATABASE_NAME";
 
     /**
-     * Name of databse
-     */
-    public static final String CORE_GROUP_NAME = "CORE_GROUP_NAME";
-
-
-    /**
      * Directory containing user layouts
      */
     public static final String LAYOUT_DIR = "LAYOUT_DIR";

@@ -74,4 +74,6 @@ public interface ApplicationPortlet {
      */
     public ApplicationPortletConfig getApplicationPortletConfig();
 
+    public String toString();
+
 }

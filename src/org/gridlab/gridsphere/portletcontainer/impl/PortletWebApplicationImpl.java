@@ -50,15 +50,16 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
      * Constructs an instance of a PortletWebApplicationImpl from a supplied ui application name and corresponding
      * <code>ServletContext</code>
      *
-     * @param webApplicationName the teh ui application name
+     * @param webApplicationName the the web application name
      * @param context the <code>ServletContext</code>
      */
-    public PortletWebApplicationImpl(String webApplicationName, ServletContext context) {
+    public PortletWebApplicationImpl(String webApplicationName, ServletContext context) throws PortletException {
         this.webApplicationName = webApplicationName;
         // get the servlet context for the coreportlets webapp
         String contextURIPath = "/" + webApplicationName;
         if (webApplicationName.startsWith("/")) {
             contextURIPath = webApplicationName;
+            webApplicationName = webApplicationName.substring(1);
         } else {
             contextURIPath = "/" + webApplicationName;
         }
@@ -71,19 +72,19 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
 
         //System.err.println("testing example portlets");
         //ServletContext testsc = context.getContext("/exampleportlets");
-        //System.err.println("description: " + testsc.getServletContextName());
-        //System.err.println("context path: " + testsc.getRealPath(""));
+        //System.err.println("description: " + ctx.getServletContextName());
+        //System.err.println("context path: " + ctx.getRealPath(""));
         //System.err.println("testing core portlets");
         //testsc = context.getContext("/coreportlets");
         //System.err.println("description: " + testsc.getServletContextName());
-        //System.err.println("context path: " + testsc.getRealPath(""));
-
-        this.webAppDescription = ctx.getServletContextName();
+        //System.err.println("context path: " + te.getRealPath(""));
 
         if (ctx == null) {
             log.error( webApplicationName + ": Unable to get ServletContext for: " + contextURIPath);
-            return;
+            throw new PortletException(webApplicationName + ": Unable to get ServletContext for: " + contextURIPath);
         }
+        this.webAppDescription = ctx.getServletContextName();
+
         rd = ctx.getNamedDispatcher(webApplicationName);
         // load portlet.xml
         loadPortlets(ctx);
@@ -98,7 +99,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
      *
      * @param ctx the <code>ServletContext</code>
      */
-    protected void loadPortlets(ServletContext ctx) {
+    protected void loadPortlets(ServletContext ctx) throws PortletException {
         // load in the portlet.xml file
         String portletXMLfile = ctx.getRealPath("") + "/WEB-INF/portlet.xml";
         String portletMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING);
@@ -108,7 +109,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
             pdd = new PortletDeploymentDescriptor(portletXMLfile, portletMappingFile);
         } catch (Exception e) {
             log.error("Mapping Error! " + webApplicationName, e);
-            return;
+            throw new PortletException("Unable to load portlets from: " + webApplicationName + " + due to mapping error", e);
         }
         // Every SportletDefinition has a PortletApplication and possibly multiple ConcretePortletConfig's
         Iterator portletDefs = pdd.getPortletDefinitionList().iterator();
@@ -134,6 +135,8 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         if (f.exists()) {
             //String layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING);
             layoutEngine.addApplicationTab(webApplicationName, layoutXMLfile);
+        } else {
+            log.debug("Did not find layout.xml for: " + ctx.getServletContextName());
         }
     }
 
@@ -150,6 +153,8 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         if (f.exists()) {
             SportletServiceFactory factory = SportletServiceFactory.getInstance();
             factory.addServices(descriptor, mapping);
+        } else {
+            log.debug("Did not find PortletServices.xml for: " + ctx.getServletContextName());
         }
     }
 

@@ -273,7 +273,7 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static  void initAllPortlets(PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public final static void initAllPortlets(PortletRequest req, PortletResponse res) throws IOException, PortletException {
         // Initialize all concrete portlets for each application portlet
         Collection appPortlets = registry.getAllApplicationPortlets();
         PortletDispatcher portletDispatcher = null;
@@ -281,6 +281,9 @@ public class PortletInvoker {
         while (it.hasNext()) {
             ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
             portletDispatcher = appPortlet.getPortletDispatcher();
+            if (portletDispatcher == null) {
+                throw new PortletException("Unable to get a dispatcher for application portlet: " + appPortlet);
+            }
             List concPortlets = appPortlet.getConcretePortlets();
             Iterator concIt = concPortlets.iterator();
             PortletSettings settings = null;

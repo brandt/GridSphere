@@ -15,6 +15,7 @@ public class GridSphereProperties {
     public static final String MESSAGE = "message";
     public static final String PORTLETID = "PortletID";
     public static final String PORTLETTAB = "tab";
+    public static final String ERROR = "error";
 
     // Portlet API objects
     public static final String CLIENT = "Client";
@@ -27,7 +28,7 @@ public class GridSphereProperties {
     public static final String PORTLETERROR = "PortletError";
     public static final String PREFIX = "up";
     public static final String USER = "User";
-    public static final String PORTLETROLES = "PortletRoles";
-    public static final String PORTLETGROUPS = "PortletGroups";
+    public static final String PORTLETGROUP = "PortletGroup";
+    public static final String PORTLETROLE = "PortletRole";
     public static final String GROUPROLES = "GroupRoles";
 }

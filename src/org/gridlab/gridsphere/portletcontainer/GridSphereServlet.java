@@ -12,9 +12,11 @@ import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.layout.PortletLayoutEngine;
+import org.gridlab.gridsphere.layout.PortletErrorFrame;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletMessageManager;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 
@@ -54,6 +56,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     /* GridSphere Portlet layout Engine handles rendering */
     private static PortletLayoutEngine layoutEngine = null;
 
+    private PortletErrorFrame errorMsg = new PortletErrorFrame();
+
     private PortletContext context = null;
     private static Boolean firstDoGet = Boolean.TRUE;
 
@@ -66,49 +70,13 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public final void init(ServletConfig config) throws ServletException {
         super.init(config);
         this.context = new SportletContext(config);
+        log.debug("in init of GridSphereServlet");
+    }
 
-        log.info("in init of GridSphereServlet");
-        // Create an instance of the registry service used by the UserPortletManager
-        try {
-            portletManager = (PortletManagerService) factory.createUserPortletService(PortletManagerService.class, GuestUser.getInstance(), config, true);
-        } catch (PortletServiceUnavailableException e) {
-            log.error("Failed to get registry instance in GridSphere: ", e);
-            throw new ServletException("Unable to get portlet instance: " + e.getMessage());
-        } catch (PortletServiceNotFoundException e) {
-            log.error("Failed to find registry service instance in GridSphere: ", e);
-            throw new ServletException("Unable to locate portlet registry service: " + e.getMessage());
-        }
-
-        //Create an instance of the ACL service
-        try {
-            aclService = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, config, true);
-        } catch (PortletServiceUnavailableException e) {
-            log.error("Failed to get ACL service instance in GridSphere: ", e);
-            throw new ServletException("Unable to get ACL service instance: " + e.getMessage());
-        } catch (PortletServiceNotFoundException e) {
-            log.error("Failed to find ACL service instance in GridSphere: ", e);
-            throw new ServletException("Unable to getACL service: " + e.getMessage());
-        }
-
-        try {
-            loginService = (LoginService) factory.createPortletService(LoginService.class, config, true);
-        } catch (PortletServiceUnavailableException e) {
-            log.error("Failed to get registry instance in GridSphere: ", e);
-            throw new ServletException("Unable to get portlet instance: " + e.getMessage());
-        } catch (PortletServiceNotFoundException e) {
-            log.error("Failed to find registry service instance in GridSphere: ", e);
-            throw new ServletException("Unable to locate portlet registry service: " + e.getMessage());
-        }
-
-        // Get an instance of the PortletLayoutEngine
-        layoutEngine = PortletLayoutEngine.getInstance();
-
-        try {
-            layoutEngine.init();
-        } catch (Exception e) {
-            log.error("Unable to initialize Portlet PortletLayout Engine: ", e);
-            throw new ServletException("Unable to initialize Portlet PortletLayout Engine: " + e.getMessage());
-        }
+    public synchronized void initializeServices() throws PortletServiceException {
+        portletManager = (PortletManagerService) factory.createUserPortletService(PortletManagerService.class, GuestUser.getInstance(), getServletConfig(), true);
+        aclService = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, getServletConfig(), true);
+        loginService = (LoginService) factory.createPortletService(LoginService.class, getServletConfig(), true);
     }
 
     /**
@@ -127,8 +95,15 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         // If first time being called, instantiate all portlets
         synchronized (firstDoGet) {
-            //PortletInvoker dispatcher = event.getPortletEventDispatcher();
-            PortletInvoker.initAllPortlets(portletReq, portletRes);
+            try {
+                // initailize needed services
+                initializeServices();
+                // initialize all portlets
+                PortletInvoker.initAllPortlets(portletReq, portletRes);
+            } catch (PortletException e) {
+                req.setAttribute(GridSphereProperties.ERROR, e);
+            }
+            layoutEngine = PortletLayoutEngine.getInstance();
             firstDoGet = Boolean.FALSE;
         }
 
@@ -144,6 +119,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         }
 
         // Render layout
+
+        // Get an instance of the PortletLayoutEngine
+
         layoutEngine.actionPerformed(event);
 
         // Handle any outstanding messages
@@ -164,6 +142,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
 
         }
+
         layoutEngine.service(event);
     }
 
