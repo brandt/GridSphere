@@ -309,21 +309,21 @@ public class UserManagerPortlet extends ActionPortlet {
             throws PortletException {
         log.debug("Entering saveUser()");
         // Account request
-        SportletUser accountRequest = null;
+        SportletUser newuser = null;
 
         // Create edit account request
         if (user == null) {
-            accountRequest = this.userManagerService.createUser();
+            newuser = this.userManagerService.createUser();
         } else {
             //System.err.println("Creating account request for existing user");
-            accountRequest = this.userManagerService.editUser(user);
-            //accountRequest.setPasswordValidation(false);
+            newuser = this.userManagerService.editUser(user);
+            //newuser.setPasswordValidation(false);
         }
 
         // Edit account attributes
-        editAccountRequest(event, accountRequest);
+        editAccountRequest(event, newuser);
         // Submit changes
-        this.userManagerService.saveUser(accountRequest);
+        this.userManagerService.saveUser(newuser);
 
         PasswordEditor editor = passwordManagerService.editPassword(newuser);
         String password = event.getPasswordBean("password").getValue();
@@ -331,9 +331,9 @@ public class UserManagerPortlet extends ActionPortlet {
         passwordManagerService.savePassword(editor);
 
         // Save user role
-        saveUserRole(event, accountRequest);
+        saveUserRole(event, newuser);
         log.debug("Exiting saveUser()");
-        return accountRequest;
+        return newuser;
     }
 
     private void editAccountRequest(FormEvent event, SportletUser accountRequest) {
@@ -373,6 +373,7 @@ public class UserManagerPortlet extends ActionPortlet {
                 GroupRequest groupRequest = this.aclManagerService.createGroupRequest();
                 groupRequest.setUser(user);
                 groupRequest.setRole(selectedRole);
+                groupRequest.setGroup(group);
                 this.log.debug("Granting " + selectedRole + " role in gridsphere");
                 // Submit changes
                 this.aclManagerService.submitGroupRequest(groupRequest);
