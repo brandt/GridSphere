@@ -64,21 +64,25 @@ public class PortletManager implements PortletManagerService {
             context = config.getServletContext();
             String webapps = config.getInitParameter(CORE_CONTEXT);
             if (webapps != null) {
-
+                try {
                 String webapp;
                 StringTokenizer st = new StringTokenizer(webapps, ",");
                 if (st.countTokens() == 0) {
                     webapp = webapps.trim();
                     log.debug("adding webapp: " + webapp);
-                    addWebApp(webapp);
+                    PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
+                    addWebApp(portletWebApp);
                 } else {
                     while (st.hasMoreTokens()) {
                         webapp = (String) st.nextToken().trim();
                         log.debug("adding webapp: " + webapp);
-                        addWebApp(webapp);
+                        PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
+                        addWebApp(portletWebApp);
                     }
                 }
-
+                } catch (PortletException e) {
+                    log.error("Unable to create portlet web application ", e);
+                }
             }
             isInitialized = true;
         }
@@ -87,22 +91,18 @@ public class PortletManager implements PortletManagerService {
     /**
      * Adds a portlet web application to the registry
      *
-     * @param webApplicationName the portlet web application name
+     * @param portletWebApp the portlet web application name
      */
-    protected synchronized void addWebApp(String webApplicationName) {
-        try {
-            PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webApplicationName, context);
-            Collection appPortlets = portletWebApp.getAllApplicationPortlets();
-            Iterator it = appPortlets.iterator();
-            while (it.hasNext()) {
-                ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
-                log.debug("Adding application portlet: " + appPortlet.getApplicationPortletID());
-                registry.addApplicationPortlet(appPortlet);
-            }
-            webapps.add(portletWebApp);
-        } catch (PortletException e) {
-            // continue already being logged
+    public synchronized void addWebApp(PortletWebApplication portletWebApp) {
+        System.err.println("adding webapp: " + portletWebApp.getWebApplicationName());
+        Collection appPortlets = portletWebApp.getAllApplicationPortlets();
+        Iterator it = appPortlets.iterator();
+        while (it.hasNext()) {
+            ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
+            log.debug("Adding application portlet: " + appPortlet.getApplicationPortletID());
+            registry.addApplicationPortlet(appPortlet);
         }
+        webapps.add(portletWebApp);
     }
 
     /**
@@ -139,6 +139,39 @@ public class PortletManager implements PortletManagerService {
     }
 
     /**
+     * Removes the portlet application
+     *
+     * @param webApplication the portlet application name
+     */
+    public synchronized void removePortletWebApplication(PortletWebApplication webApplication) {
+        log.debug("in removePortletWebApplication: " + webApplication);
+        Iterator it = webapps.iterator();
+        List removeWebApps = new ArrayList();
+        while (it.hasNext()) {
+            PortletWebApplication webApp = (PortletWebApplication)it.next();
+
+            if (webApp.getWebApplicationName().equalsIgnoreCase(webApplication.getWebApplicationName())) {
+                webApp.destroy();
+                Collection appPortlets = webApp.getAllApplicationPortlets();
+                Iterator appsit = appPortlets.iterator();
+                while (appsit.hasNext()) {
+                    ApplicationPortlet appPortlet = (ApplicationPortlet) appsit.next();
+                    registry.removeApplicationPortlet(appPortlet.getApplicationPortletID());
+                }
+                log.debug("removing " + webApp.getWebApplicationName());
+                //webapps.remove(webApp);
+                removeWebApps.add(webApp);
+            }
+        }
+
+        it = removeWebApps.iterator();
+        while (it.hasNext()) {
+            webapps.remove(it.next());
+        }
+
+    }
+
+    /**
      * Initializes the portlet application
      *
      * @param webApplicationName  the name of the portlet application
@@ -149,9 +182,28 @@ public class PortletManager implements PortletManagerService {
      */
     public synchronized void initPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         System.err.println("adding web app" + webApplicationName);
-        addWebApp(webApplicationName);
+        PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webApplicationName, context);
+        addWebApp(portletWebApp);
         System.err.println("initing web app " + webApplicationName);
         PortletInvoker.initPortletWebApp(webApplicationName, req, res);
+    }
+
+    /**
+     * Initializes the portlet application
+     *
+     * @param portletWebApplication the portlet web application
+     * @param req the portlet request
+     * @param res the portlet response
+     * @throws IOException  if an I/O error occurs
+     * @throws PortletException if a portlet exception occurs
+     */
+    public synchronized void initPortletWebApplication(PortletWebApplication portletWebApplication, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+        String webapp = portletWebApplication.getWebApplicationName();
+        System.err.println("adding web app" + webapp);
+        PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
+        addWebApp(portletWebApp);
+        System.err.println("initing web app " + webapp);
+        PortletInvoker.initPortletWebApp(webapp, req, res);
     }
 
     /**
@@ -170,15 +222,35 @@ public class PortletManager implements PortletManagerService {
     }
 
     /**
+     * Shuts down the portlet application
+     *
+     * @param portletWebApplication the portlet web application
+     * @param req the portlet request
+     * @param res the portlet response
+     * @throws IOException  if an I/O error occurs
+     * @throws PortletException if a portlet exception occurs
+     */
+    public synchronized void destroyPortletWebApplication(PortletWebApplication portletWebApplication, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+        String webapp = portletWebApplication.getWebApplicationName();
+        log.debug("in destroyPortletWebApplication: " + webapp);
+        PortletInvoker.destroyPortletWebApp(webapp, req, res);
+        removePortletWebApplication(webapp);
+    }
+
+    /**
      * Returns the deployed web application names
      *
      * @return the known web application names
      */
     public List getPortletWebApplicationNames() {
         List l = new Vector();
+        // get rid of duplicates -- in the case of JSR portlets two webapps exist by the same name
+        // since the first one represents the "classical" webapp which itself adds the jsr webapp to the
+        // registry with the same name
         for (int i = 0; i < webapps.size(); i++) {
             PortletWebApplication webapp = (PortletWebApplication)webapps.get(i);
-            l.add(webapp.getWebApplicationName());
+            String webappName = webapp.getWebApplicationName();
+            if (!l.contains(webappName)) l.add(webappName);
         }
         return l;
     }
