@@ -13,7 +13,7 @@
 
 <portlet-header>
     <portlet-content include="/html/pagehead.html"/>
-    <portlet-error-frame/>
+    <portlet-content include="/jsp/error.jsp"/>
 </portlet-header>
 
 </page-layout>
