@@ -28,10 +28,10 @@ public interface AccessControlManagerService extends PortletService {
     /**
      * Rename an existing group
      *
-     * @param oldGroupName the name of the old group
+     * @param group the PortletGroup to modify
      * @param newGroupName the name of the new group
      */
-    public void renameGroup(String oldGroupName, String newGroupName);
+    public void renameGroup(PortletGroup group, String newGroupName);
 
     /**
      * Removes a group
