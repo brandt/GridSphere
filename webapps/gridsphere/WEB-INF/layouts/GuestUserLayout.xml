@@ -36,6 +36,7 @@
         <portlet-tabbed-pane selected="0" style="sub-menu">
             <portlet-tab label="home">
                 <title lang="en">Home</title>
+                <title lang="it">Inizio</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="70%">
