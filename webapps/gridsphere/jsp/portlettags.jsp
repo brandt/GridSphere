@@ -1,5 +1,5 @@
 
-<%@ taglib uri="/portletWidgets" prefix="gs" %>
+<%@ taglib uri="/portletUI" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
 <portletAPI:init/>

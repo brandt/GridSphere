@@ -1,5 +1,5 @@
 
-<%@ taglib uri="/portletWidgets" prefix="gs" %>
+<%@ taglib uri="/portletUI" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
 <portletAPI:init/>
@@ -99,7 +99,7 @@ the <code>actionPerformed(ActionEvent event)</code> portlet method.
     <td align="left"><gs:fileinput name="filename" size="8" maxlength="20"/></td>
     </tr>
     <tr>
-    <td colspan=5 align="center"><gs:submit name="option" value="Login"/></td>
+    <td colspan=5 align="center"><gs:actionsubmit name="option" value="Login"/></td>
     </tr>
     </table>
 
