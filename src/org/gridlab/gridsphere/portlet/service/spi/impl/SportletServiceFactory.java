@@ -50,8 +50,8 @@ public class SportletServiceFactory implements PortletServiceFactory {
 
     private String serviceMappingPath;
 
-    private AccessControlManagerServiceImpl aclManagerService = AccessControlManagerServiceImpl.getInstance();
-    private UserManagerServiceImpl userManagerService = UserManagerServiceImpl.getInstance();
+    //private AccessControlManagerServiceImpl aclManagerService = AccessControlManagerServiceImpl.getInstance();
+    //private UserManagerServiceImpl userManagerService = UserManagerServiceImpl.getInstance();
 
     /**
      * Private constructor. Use getInstance() instead.

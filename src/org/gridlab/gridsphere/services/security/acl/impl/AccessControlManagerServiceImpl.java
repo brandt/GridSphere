@@ -22,7 +22,7 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
 
 
-public class AccessControlManagerServiceImpl implements AccessControlManagerService {
+public class AccessControlManagerServiceImpl implements PortletServiceProvider, AccessControlManagerService {
 
     protected transient static PortletLog log = SportletLog.getInstance(AccessControlManagerServiceImpl.class);
 
@@ -42,7 +42,6 @@ public class AccessControlManagerServiceImpl implements AccessControlManagerServ
     }
 
     public AccessControlManagerServiceImpl() {
-        super();
         pm = PersistenceManagerRdbms.getInstance();
         jdoUserACL = UserACL.class.getName();
         jdoSportletGroup = SportletGroup.class.getName();
