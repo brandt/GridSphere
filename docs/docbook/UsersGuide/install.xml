@@ -37,6 +37,11 @@
             you should see the running GridSphere portal. If an error occurs, please consult the
           FAQ.
       </para>
+      <para>
+          If you are installing GridSphere on Windows please make sure that your
+          %TOMCAT_HOME% and %CATALINA_HOME% environment variables do not contain any DOS style slashes
+          "\" since this will make the install fail. Please use Unix style slashes "/".
+      </para>
   </sect1>
 
   <sect1>
