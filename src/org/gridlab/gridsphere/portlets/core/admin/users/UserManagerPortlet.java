@@ -242,9 +242,12 @@ public class UserManagerPortlet extends ActionPortlet {
             isInvalid = true;
         }
 
-        // Throw exception if error was found
         if (!isInvalid) {
             isInvalid = isInvalidPassword(event, message);
+        }
+
+        // Throw exception if error was found
+        if (isInvalid) {
             throw new PortletException(message.toString());
         }
         log.debug("Exiting validateUser()");

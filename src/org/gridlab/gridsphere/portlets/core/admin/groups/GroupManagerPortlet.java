@@ -213,6 +213,9 @@ public class GroupManagerPortlet extends ActionPortlet {
     private PortletGroup loadGroup(FormEvent evt) {
         HiddenFieldBean groupIDBean = evt.getHiddenFieldBean("groupID");
         String groupId = groupIDBean.getValue();
+        if (groupId == null) {
+            groupId = evt.getAction().getParameter("groupEntryID");
+        }
         return loadGroup(evt, groupId);
     }
 
