@@ -194,7 +194,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         checkUserHasCookie(event);
 
-        setTCKUser(portletReq);
+        // Used for TCK tests
+        //setTCKUser(portletReq);
 
         // Handle user login and logout
         if (event.hasAction()) {
@@ -236,8 +237,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         }
 
         setUserAndGroups(portletReq);
-
-        setTCKUser(portletReq);
+        // Used for TCK tests
+        //setTCKUser(portletReq);
 
 
         layoutEngine.service(event);
@@ -411,7 +412,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         String password = req.getParameter("password");
 
         try {
-
             User user = loginService.login(username, password);
             // null out passwd
             password = null;
