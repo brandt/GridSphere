@@ -4,7 +4,7 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApp;
+import org.gridlab.gridsphere.portletcontainer.descriptor.ApplicationPortletDescriptor;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.*;
 
@@ -306,7 +306,7 @@ public abstract class Portlet extends HttpServlet
         log.info("in Portlet: lifecycle method=" + method);
         try {
             if (method.equals(SportletProperties.INIT)) {
-                PortletApp app = (PortletApp)request.getAttribute(SportletProperties.PORTLET_APPLICATION);
+                ApplicationPortletDescriptor app = (ApplicationPortletDescriptor)request.getAttribute(SportletProperties.PORTLET_APPLICATION);
                 this.portletConfig = new SportletConfig(getServletConfig(), app);
                 init(this.portletConfig);
             } else if (method.equals(SportletProperties.SERVICE)) {

@@ -54,10 +54,6 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
         String method = (String)request.getAttribute(SportletProperties.PORTLET_ACTION_METHOD);
         log.info("Received ACTION_METHOD: " + method);
         if (method != null) {
-
-            String portletID = request.getParameter(GridSphereProperties.PORTLETID);
-            //this.portletSettings = (PortletSettings)allPortletSettings.get(portletID);
-
             if (method.equals(SportletProperties.DO_TITLE)) {
                 doTitle(request, response);
             } else if (method.equals(SportletProperties.WINDOW_EVENT)) {

@@ -8,7 +8,7 @@ package org.gridlab.gridsphere.portlet.impl;
 import org.gridlab.gridsphere.portlet.AccessDeniedException;
 import org.gridlab.gridsphere.portlet.Client;
 import org.gridlab.gridsphere.portlet.PortletData;
-import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication;
+import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletDescriptor;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;

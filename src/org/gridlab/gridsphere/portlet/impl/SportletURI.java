@@ -39,7 +39,7 @@ public class SportletURI implements PortletURI {
     private PortletWindow.State state;
     private String id = "";
 
-    public SportletURI() {}
+    private SportletURI() {}
 
     public SportletURI(HttpServletResponse res, String contextName) {
         store = new HashMap();

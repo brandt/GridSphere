@@ -117,7 +117,7 @@ public class SportletResponse implements PortletResponse {
     /**
      * Add any additional parameters to the URI
      * <ul><li>
-     * GridSphereProperties.PORTLETID
+     * GridSphereProperties.COMPONENT_ID
      * </li></ul>
      */
     protected void addURIParameters() {

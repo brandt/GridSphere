@@ -5,7 +5,7 @@
 package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
-import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApp;
+import org.gridlab.gridsphere.portletcontainer.descriptor.ApplicationPortletDescriptor;
 import org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes;
 import org.gridlab.gridsphere.portletcontainer.descriptor.Markup;
 import org.gridlab.gridsphere.portletcontainer.descriptor.AllowsWindowStates;
@@ -37,14 +37,14 @@ public class SportletConfig implements PortletConfig {
     /**
      * Constructor creates a PortletConfig from a ServletConfig
      */
-    public SportletConfig(ServletConfig servletConfig, PortletApp portletApp) {
+    public SportletConfig(ServletConfig servletConfig, ApplicationPortletDescriptor appDescriptor) {
         this.servletConfig = servletConfig;
         this.context = new SportletContext(servletConfig);
         Iterator it;
 
          // set supported modes info
         supportedModes = new Hashtable();
-        SupportsModes smodes = portletApp.getSupportsModes();
+        SupportsModes smodes = appDescriptor.getSupportsModes();
         List modesList = smodes.getMarkupList();
         it = modesList.iterator();
         while (it.hasNext()) {
@@ -60,7 +60,7 @@ public class SportletConfig implements PortletConfig {
         }
 
         // set allowed states info
-        AllowsWindowStates states = portletApp.getAllowsWindowStates();
+        AllowsWindowStates states = appDescriptor.getAllowsWindowStates();
         allowedStates = new Vector();
         it = states.getWindowStates().iterator();
         while (it.hasNext()) {
@@ -70,14 +70,14 @@ public class SportletConfig implements PortletConfig {
         }
 
         // set portlet config information
-        List configList = portletApp.getConfigParamList();
+        List configList = appDescriptor.getConfigParamList();
         it = configList.iterator();
         while (it.hasNext()) {
             ConfigParam configParam = (ConfigParam)it.next();
             configs.put(configParam.getParamName(), configParam.getParamValue());
         }
 
-        portletName = portletApp.getPortletName();
+        portletName = appDescriptor.getPortletName();
         //this.logConfig();
     }
 

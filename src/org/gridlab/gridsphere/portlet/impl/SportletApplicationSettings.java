@@ -11,7 +11,8 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
-import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication;
+import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletDescriptor;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 
 import java.util.*;
 import java.io.IOException;
@@ -25,24 +26,18 @@ import java.io.IOException;
  */
 public class SportletApplicationSettings implements PortletApplicationSettings {
 
-    protected PortletDeploymentDescriptor pdd = null;
+    protected ConcretePortlet concPortlet = null;
     protected Hashtable store = new Hashtable();
-    protected ConcretePortletApplication portletApp = null;
 
     /**
      * SportletApplicationSettings constructor
+     * Create a PortletApplicationSettings object from a concrete portlet
+     *
+     * @param concPortlet the concrete portlet
      */
-    public SportletApplicationSettings(PortletDeploymentDescriptor pdd, ConcretePortletApplication portletApp) {
-
-        this.pdd = pdd;
-        this.portletApp = portletApp;
-
-        // Stick <context-param> in store
-        Iterator contextParamsIt = portletApp.getContextParamList().iterator();
-        while (contextParamsIt.hasNext()) {
-            ConfigParam configParam = (ConfigParam)contextParamsIt.next();
-            store.put(configParam.getParamName(), configParam.getParamValue());
-        }
+    public SportletApplicationSettings(ConcretePortlet concPortlet) {
+        this.concPortlet = concPortlet;
+        store = concPortlet.getPortletContext();
     }
 
     /**
@@ -61,6 +56,7 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
      * @return an enumeration of all available attributes names
      */
     public Enumeration getAttributeNames() {
+
         return store.keys();
     }
 
@@ -94,7 +90,7 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
      * @throws IOException if the streaming causes an I/O problem
      */
     public void store() throws AccessDeniedException, IOException {
-        portletApp = pdd.getConcretePortletApplication(portletApp.getID());
+        ConcretePortletDescriptor concDescriptor = concPortlet.getConcretePortletDescriptor();
         Enumeration enum = store.elements();
         ArrayList list = new ArrayList();
         while (enum.hasMoreElements()) {
@@ -103,15 +99,8 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
             ConfigParam parms = new ConfigParam(key, value);
             list.add(parms);
         }
-        portletApp.setContextParamList(list);
-        pdd.setConcretePortletApplication(portletApp);
-        /*
-        try {
-            pdd.save();
-        } catch (PersistenceException e) {
-            throw new IOException("Unable to save PortletApplicationSettings: " + e.getMessage());
-        }
-        */
+        concDescriptor.setContextParamList(list);
+        concPortlet.saveDescriptor(concDescriptor);
     }
 
 }

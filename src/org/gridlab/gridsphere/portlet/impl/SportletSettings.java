@@ -11,8 +11,9 @@ import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
 import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletInfo;
-import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication;
+import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletDescriptor;
 import org.gridlab.gridsphere.portletcontainer.descriptor.LanguageInfo;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 
 import java.util.*;
 import java.io.IOException;
@@ -25,35 +26,33 @@ import java.io.IOException;
  */
 public class SportletSettings implements PortletSettings {
 
-    protected PortletDeploymentDescriptor pdd = null;
+    protected ConcretePortlet concPortlet = null;
     protected Hashtable store = new Hashtable();
     protected List langList = new Vector();
-    protected ConcretePortletInfo concretePortletInfo = null;
     protected String concretePortletID = null;
     protected SportletApplicationSettings appSettings = null;
     protected Locale locale = null;
 
     /**
      * SportletSettings constructor
-     * Create a PortletSettings object from a PortletApplication deployment descriptor object
+     * Create a PortletSettings object from a concrete portlet
      *
-     * @param pdd the PortletDeploymentDescriptor representing the portlet.xml. Only used for store method
-     * @param portletApp the PortletApplication deployment descriptor information
-     * @param knownGroups a list of known groups obtained from the AccessControlService
-     * @param knownRoles a list of known roles obtained from the AccessControlService
+     * @param concPortlet the concrete portlet
      */
-    public SportletSettings(PortletDeploymentDescriptor pdd, ConcretePortletApplication portletApp) {
+    public SportletSettings(ConcretePortlet concPortlet) {
 
-        this.pdd = pdd;
-        this.concretePortletInfo = portletApp.getConcretePortletInfo();
-        this.concretePortletID = portletApp.getID();
-        this.appSettings = new SportletApplicationSettings(pdd, portletApp);
+        this.concPortlet = concPortlet;
+        this.concretePortletID = concPortlet.getConcretePortletAppID();
+        this.appSettings = new SportletApplicationSettings(concPortlet);
 
+        ConcretePortletInfo concretePortletInfo =
+                concPortlet.getConcretePortletDescriptor().getConcretePortletInfo();
         String localeStr = concretePortletInfo.getDefaultLocale();
         locale = new Locale(localeStr, "");
         langList = concretePortletInfo.getLanguageList();
 
         // Stick <config-param> in store
+        store = concPortlet.getPortletContext();
         Iterator configParamsIt = concretePortletInfo.getConfigParamList().iterator();
         while (configParamsIt.hasNext()) {
             ConfigParam configParam = (ConfigParam)configParamsIt.next();
@@ -199,16 +198,8 @@ public class SportletSettings implements PortletSettings {
      * @throws IOException if the streaming causes an I/O problem
      */
     public void store() throws AccessDeniedException, IOException {
-        /*
-        PortletDeploymentDescriptor pdd = null;
-        try {
-            pdd = new PortletDeploymentDescriptor();
-        } catch (PortletDeploymentDescriptorException e) {
-            throw new IOException("Unable to load PortletDeploymentDescriptor: " + e.getMessage());
-        }
-        */
-        ConcretePortletApplication concPortletApp = pdd.getConcretePortletApplication(concretePortletID);
-        ConcretePortletInfo concPortletInfo = concPortletApp.getConcretePortletInfo();
+        ConcretePortletDescriptor concDescriptor = concPortlet.getConcretePortletDescriptor();
+        ConcretePortletInfo concPortletInfo = concDescriptor.getConcretePortletInfo();
         Enumeration enum = store.elements();
         ArrayList list = new ArrayList();
         while (enum.hasMoreElements()) {
@@ -218,15 +209,8 @@ public class SportletSettings implements PortletSettings {
             list.add(parms);
         }
         concPortletInfo.setConfigParamList(list);
-        concPortletApp.setConcretePortletInfo(concPortletInfo);
-        pdd.setConcretePortletApplication(concPortletApp);
-        /*
-        try {
-            pdd.save();
-        } catch (PersistenceException e) {
-            throw new IOException("Unable to save PortletSettings: " + e.getMessage());
-        }
-        */
+        concDescriptor.setConcretePortletInfo(concPortletInfo);
+        concPortlet.saveDescriptor(concDescriptor);
     }
 
     /**
