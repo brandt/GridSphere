@@ -281,8 +281,12 @@ Copyright:
     </java>
     </target>
 
-  <target name="testacl" depends="compile">
+  <!--<target name="testacl" depends="compile">
     <java classname="org.gridlab.gridsphere.services.security.acl.test.ACLServiceTest" classpathref="classpath"/>
+  </target>-->
+
+  <target name="testusermanagerservice" depends="compile">
+      <java classname="org.gridlab.gridsphere.services.user.UserManagerServiceTest2" classpathref="classpath"/>
   </target>
 
 </project>
