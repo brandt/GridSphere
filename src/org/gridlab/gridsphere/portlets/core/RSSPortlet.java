@@ -61,44 +61,38 @@ public class RSSPortlet extends AbstractPortlet {
     public void actionPerformed(ActionEvent evt) {
         PortletAction _action = evt.getAction();
 
-        if (_action instanceof DefaultPortletAction) {
-            DefaultPortletAction action = (DefaultPortletAction) _action;
-            PortletRequest req = evt.getPortletRequest();
-            _url = (String) req.getParameter("rss_url");
-            log.info("got new url "+_url);
-            _lastFetched = System.currentTimeMillis();
+        DefaultPortletAction action = (DefaultPortletAction) _action;
+        PortletRequest req = evt.getPortletRequest();
+        _url = (String) req.getParameter("rss_url");
+        log.info("=============> got new url "+_url);
+        _lastFetched = System.currentTimeMillis();
+        req.setMode(Portlet.Mode.VIEW);
 
-        }
     }
 
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         PrintWriter out = response.getWriter();
 
-   //     if (System.currentTimeMillis()-_lastFetched <= (_fetch_interval*60*100)) {
             RSSFeed = getRSSFeed(_url);
-    //    }
         Element root = RSSFeed.getRootElement();
 
+        PortletURI loginURI = response.createURI();
+        //out.println("CID: "+loginURI.toString());
         String version = "unknown";
         version = (String)root.getAttributeValue("version");
         out.println("URL :"+_url);
 
-//        if (version.equals("2.0") || version.equals("0.91")) {
-           // out.println("RSSFeed Name :"+root.getChild("channel").getChild("title").getText());
-            List items = root.getChild("channel").getChildren("item");
-            Iterator it = items.iterator();
-            out.println("<ul>");
-            while (it.hasNext()) {
-                Element item = (Element)it.next();
-                String title = item.getChild("title").getText();
-                String link = item.getChild("link").getText();
-                String desc = item.getChild("description").getText();
-                out.println("<li><a target=\"_new\" href=\""+link+"\">"+title+"</a><br/>"+desc+"</li>");
-            }
-            out.println("</ul>");
-    //    } else {
-    //        out.println("This portlet does support RSS feeds version 0.91 and 2.0. <br>This feed "+_url+" is version "+version);
-    //    }
+        List items = root.getChild("channel").getChildren("item");
+        Iterator it = items.iterator();
+        out.println("<ul>");
+        while (it.hasNext()) {
+            Element item = (Element)it.next();
+            String title = item.getChild("title").getText();
+            String link = item.getChild("link").getText();
+            String desc = item.getChild("description").getText();
+            out.println("<li><a target=\"_new\" href=\""+link+"\">"+title+"</a><br/>"+desc+"</li>");
+        }
+        out.println("</ul>");
     }
 
     public void doEdit(PortletRequest request, PortletResponse response) throws PortletException, IOException {
