@@ -12,9 +12,9 @@ import java.util.List;
 
 public abstract class BasePortletComponent extends BasePortletLifecycle implements PortletComponent {
 
-    protected String width;
-    protected String height;
-    protected String name;
+    protected String width = new String();
+    protected String height = new String();
+    protected String name = new String();
     protected PortletBorder border;
     protected PortletInsets insets;
     protected boolean isVisible = true;

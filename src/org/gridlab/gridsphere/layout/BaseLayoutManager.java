@@ -89,7 +89,11 @@ public abstract class BaseLayoutManager extends BasePortletComponent implements 
 
         while (it.hasNext()) {
             p = (PortletComponent)it.next();
-            p.setVisible(true);
+            if (p.getComponentID() == id) {
+                p.setWidth("");
+            } else {
+                p.setVisible(true);
+            }
         }
     }
 
