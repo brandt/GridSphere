@@ -108,12 +108,8 @@ public class ActionPortlet extends AbstractPortlet {
         String title = (String)request.getSession().getAttribute(id+".title");
         if (title == null) {
             String locStr = (String)request.getPortletSession(true).getAttribute(User.LOCALE);
-            User user = request.getUser();
-            String userlocale = (String)user.getAttribute(User.LOCALE);
             Locale locale = null;
-            if (userlocale != null) {
-                locale = new Locale(userlocale, "", "");
-            } else if (locStr != null) {
+            if (locStr != null) {
                 locale = new Locale(locStr, "", "");
             } else {
                 locale = getPortletSettings().getDefaultLocale();

@@ -129,11 +129,11 @@ public class SubscriptionPortlet extends ActionPortlet {
                     newtc = new TableCellBean();
                     TextBean tb2 = new TextBean();
 
-                    user.getAttribute(User.LOCALE);
 
-                    Locale loc = conc.getPortletSettings().getDefaultLocale();
-
-                        System.err.println("default loc: " + loc.getDisplayLanguage());
+                    String locale = (String)req.getSession(true).getAttribute(User.LOCALE);
+                    //Locale loc = conc.getPortletSettings().getDefaultLocale();
+                    Locale loc = new Locale(locale, "", "");
+                    System.err.println("default loc: " + loc.getLanguage());
 
                     tb2.setValue(conc.getPortletSettings().getDescription(loc, null));
                     newtc.addBean(tb2);

@@ -19,6 +19,8 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * A <code>PortletTab</code> represents the visual tab graphical interface and is contained
@@ -28,7 +30,8 @@ import java.util.Collections;
  */
 public class PortletTab extends BasePortletComponent implements Serializable, Cloneable {
 
-    private String title = "";
+    private String title = "?";
+    private List titles = new ArrayList();
     private transient boolean selected = false;
     private PortletComponent portletComponent = null;
 
@@ -42,12 +45,30 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      * Constructs an instance of PortletTab with the supplied title and
      * portlet component.
      *
-     * @param title the title of the portlet tab
+     * @param titles the titles of the portlet tab
      * @param portletComponent any portlet component to represent beneath the tab
      */
-    public PortletTab(String title, PortletComponent portletComponent) {
-        this.title = title;
+    public PortletTab(List titles, PortletComponent portletComponent) {
+        this.titles = titles;
         this.portletComponent = portletComponent;
+    }
+
+    /**
+     * Returns the portlet tab title
+     *
+     * @return the portlet tab title
+     */
+    public List getTitles() {
+        return titles;
+    }
+
+    /**
+     * Sets the portlet tab title
+     *
+     * @param titles the portlet tab title
+     */
+    public void setTitles(List titles) {
+        this.titles = titles;
     }
 
     /**
@@ -66,6 +87,36 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      */
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getTitle(String lang) {
+        Iterator it = titles.iterator();
+        String defTitle = title;
+        while (it.hasNext()) {
+            PortletTitle t = (PortletTitle)it.next();
+            System.err.println("existing lang=" + t.getLang());
+            if (lang.startsWith(t.getLang())) return t.getText();
+            if (t.getLang().startsWith(Locale.getDefault().getLanguage())) defTitle = t.getText();
+        }
+        return defTitle;
+    }
+
+    public void setTitle(String lang, String title) {
+        Iterator it = titles.iterator();
+        boolean found = false;
+        while (it.hasNext()) {
+            PortletTitle t = (PortletTitle)it.next();
+            if (lang.equalsIgnoreCase(t.getLang())) {
+                found = true;
+                t.setText(title);
+            }
+        }
+        if (!found) {
+            PortletTitle t = new PortletTitle();
+            t.setLang(lang);
+            t.setText(title);
+            titles.add(t);
+        }
     }
 
     /**
@@ -189,8 +240,15 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     public Object clone() throws CloneNotSupportedException {
         PortletTab t = (PortletTab)super.clone();
         t.portletComponent = (this.portletComponent == null) ? null : (PortletComponent)this.portletComponent.clone();
-        t.title = this.title;
         t.selected = this.selected;
+        List stitles = Collections.synchronizedList(titles);
+        synchronized (stitles) {
+            t.titles = new ArrayList(stitles.size());
+            for (int i = 0; i < stitles.size(); i++) {
+                PortletTitle title = (PortletTitle)stitles.get(i);
+                t.titles.add(title.clone());
+            }
+        }
         return t;
     }
 }

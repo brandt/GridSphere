@@ -33,10 +33,10 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
 
     private PortletLog log = SportletLog.getInstance(PortletWebApplicationImpl.class);
     private PortletDeploymentDescriptor pdd = null;
-    private String webApplicationName = null;
-    private Map appPortlets = new Hashtable();
-    private RequestDispatcher rd = null;
-    private String webAppDescription;
+    protected String webApplicationName = null;
+    protected Map appPortlets = new Hashtable();
+    protected RequestDispatcher rd = null;
+    protected String webAppDescription;
 
     // PortletLayout engine handles layout.xml
     private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();

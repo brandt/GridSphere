@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <portlet-tabbed-pane>
-    <portlet-tab label="welcome" title="Welcome">
+    <portlet-tab label="welcome">
+        <title lang="en">Welcome</title>
+        <title lang="de">Willkommen</title>
         <portlet-tabbed-pane style="sub-menu">
-            <portlet-tab label="home" title="Home">
+            <portlet-tab label="home">
+                <title lang="en">Home</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -14,7 +17,8 @@
                     </row-layout>
                 </table-layout>
             </portlet-tab>
-            <portlet-tab label="settings" title="Settings">
+            <portlet-tab label="settings">
+                <title lang="en">Settings</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -25,7 +29,8 @@
                     </row-layout>
                 </table-layout>
             </portlet-tab>
-            <portlet-tab label="subscribe" title="Subscription">
+            <portlet-tab label="subscribe">
+                <title lang="en">Subscription</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -36,7 +41,8 @@
                     </row-layout>
                 </table-layout>
             </portlet-tab>
-            <portlet-tab label="layouttab" title="Layout">
+            <portlet-tab label="layouttab">
+                <title lang="en">Layout</title>
                 <table-layout>
                     <row-layout>
                         <column-layout>
@@ -47,7 +53,8 @@
                     </row-layout>
                 </table-layout>
             </portlet-tab>
-            <portlet-tab label="utilities" title="Utilities">
+            <portlet-tab label="utilities">
+                <title lang="en">Utilities</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="50%">
@@ -72,9 +79,11 @@
             </portlet-tab>
         </portlet-tabbed-pane>
     </portlet-tab>
-    <portlet-tab title="Administration" required-role="SUPER">
+    <portlet-tab label="admin" required-role="SUPER">
+        <title lang="en">Administration</title>
         <portlet-tabbed-pane style="sub-menu">
-            <portlet-tab title="Portlets">
+            <portlet-tab label="portlets">
+                <title lang="en">Portlets</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="30%">
@@ -90,7 +99,8 @@
                     </row-layout>
                 </table-layout>
             </portlet-tab>
-            <portlet-tab title="Users">
+            <portlet-tab label="users">
+                <title lang="en">Users</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="50%">
@@ -102,7 +112,8 @@
                     </row-layout>
                 </table-layout>
             </portlet-tab>
-            <portlet-tab title="Groups">
+            <portlet-tab label="groups">
+                <title lang="en">Groups</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="50%">

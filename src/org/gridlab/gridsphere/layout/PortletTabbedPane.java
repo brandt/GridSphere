@@ -12,6 +12,7 @@ import org.gridlab.gridsphere.layout.event.PortletTabListener;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
@@ -71,14 +72,14 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     /**
      * Returns the tab with the supplied title
      *
-     * @param title the tab title
+     * @param label the tab label
      * @return the tab associated with this title
      */
-    public PortletTab getPortletTab(String title) {
+    public PortletTab getPortletTab(String label) {
         Iterator it = tabs.iterator();
         while (it.hasNext()) {
             PortletTab tab = (PortletTab)it.next();
-            if (tab.getTitle().equals(title)) return tab;
+            if (tab.getLabel().equals(label)) return tab;
         }
         return null;
     }
@@ -121,7 +122,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         Iterator it = tabs.iterator();
         while (it.hasNext()) {
             PortletTab atab = (PortletTab)it.next();
-            if (tab.getTitle().equals(atab.getTitle())) it.remove();
+            if (tab.getLabel().equals(atab.getLabel())) it.remove();
         }
         //if (tabs.contains(tab)) tabs.remove(tab);
     }
@@ -177,18 +178,18 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     }
 
     /**
-     * Sets the selected portlet tab title in this tabbed pane
+     * Sets the selected portlet tab in this tabbed pane
      *
-     * @param tabTitle the selected portlet tab title
+     * @param tabLabel the selected portlet tab label
      */
-    public void setSelectedPortletTab(String tabTitle) {
+    public void setSelectedPortletTab(String tabLabel) {
         PortletTab portletTab;
 
         List stabs = Collections.synchronizedList(tabs);
         synchronized (stabs) {
             for (int i = 0; i < stabs.size(); i++) {
                 portletTab = (PortletTab) stabs.get(i);
-                if (portletTab.getTitle().equals(tabTitle)) {
+                if (portletTab.getLabel().equals(tabLabel)) {
                     selectedIndex = i;
                     portletTab.setSelected(true);
                 } else {
@@ -346,7 +347,9 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
                 if (userRole.compare(userRole, tabRole) >= 0) {
 
-                    String title = tab.getTitle();
+                    String lang = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
+                    if (lang == null) lang = Locale.getDefault().getISO3Language();
+                    String title = tab.getTitle(lang);
 
                     if (tab.isSelected()) {
                         out.println("<td><img src=\"themes/" + theme + "/images/tab-active-left.gif\"/></td>");
@@ -396,7 +399,10 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                 PortletRole requiredRole = tab.getRequiredRole();
                 if (userRole.compare(userRole, requiredRole) >= 0) {
 
-                    String title = tab.getTitle();
+                    String lang = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
+                    if (lang == null) lang = Locale.getDefault().getISO3Language();
+                    String title = tab.getTitle(lang);
+
                     if (tab.isSelected()) {
                         out.println("<td> <span class=\"tab-sub-active\">");
                         out.println("<a class=\"tab-sub-menu-active\" href=\""+links[i]+ "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\"/>" + title + "</a></span></td>");

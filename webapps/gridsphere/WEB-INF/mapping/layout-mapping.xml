@@ -97,9 +97,6 @@
         <field name="PortletClass" type="string">
             <bind-xml name="portlet-class"/>
         </field>
-        <field name="PortletTitleBar" type="org.gridlab.gridsphere.layout.PortletTitleBar">
-            <bind-xml name="portlet-title-bar"/>
-        </field>
         <field name="Transparent" type="boolean">
             <bind-xml name="transparent" node="attribute"/>
         </field>
@@ -115,6 +112,16 @@
         <map-to xml="portlet-content"/>
         <field name="Include" type="string">
             <bind-xml name="include" node="attribute"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.layout.PortletTitle">
+        <map-to xml="title"/>
+        <field name="Lang" type="string">
+            <bind-xml name="lang" node="attribute"/>
+        </field>
+        <field name="Text" type="string">
+            <bind-xml name="PCDATA" node="text"/>
         </field>
     </class>
 
@@ -137,18 +144,14 @@
 
     <class name="org.gridlab.gridsphere.layout.PortletTab" extends="org.gridlab.gridsphere.layout.BasePortletComponent">
         <map-to xml="portlet-tab"/>
+        <field name="Titles" type="org.gridlab.gridsphere.layout.PortletTitle" collection="arraylist">
+            <bind-xml name="title"/>
+        </field>
         <field name="Title" type="string">
             <bind-xml name="title" node="attribute"/>
         </field>
         <field name="PortletComponent" type="org.gridlab.gridsphere.layout.PortletComponent">
             <bind-xml auto-naming="deriveByClass"/>
-        </field>
-    </class>
-
-    <class name="org.gridlab.gridsphere.layout.PortletTitleBar" extends="org.gridlab.gridsphere.layout.BasePortletComponent">
-        <map-to xml="portlet-title-bar"/>
-        <field name="Title" type="string">
-            <bind-xml name="title"/>
         </field>
     </class>
 

@@ -138,8 +138,7 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
         String title = "";
         Client client = request.getClient();
         if (settings != null) {
-            User user = request.getUser();
-            String userlocale = (String)user.getAttribute(User.LOCALE);
+            String userlocale = (String)request.getSession(true).getAttribute(User.LOCALE);
             if (userlocale != null) {
                 Locale locale = new Locale(userlocale, "", "");
                 title = settings.getTitle(locale, client);

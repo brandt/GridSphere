@@ -438,14 +438,9 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         // Localize the window state names
         PortletRequest req = event.getPortletRequest();
-
-        User user = req.getUser();
-        String loc = (String)user.getAttribute(User.LOCALE);
         String locStr = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
         Locale locale = null;
-        if (loc != null) {
-            locale = new Locale(loc, "", "");
-        } else if (locStr != null) {
+        if (locStr != null) {
             locale = new Locale(locStr, "", "");
         } else {
             locale = req.getLocale();
@@ -510,13 +505,9 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
 
          // Localize the portlet mode names
-        User user = req.getUser();
-        String loc = (String)user.getAttribute(User.LOCALE);
         String locStr = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
         Locale locale = null;
-        if (loc != null) {
-            locale = new Locale(loc, "", "");
-        } else if (locStr != null) {
+        if (locStr != null) {
             locale = new Locale(locStr, "", "");
         } else {
             locale = req.getLocale();
@@ -644,11 +635,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         Locale locale = Locale.getDefault();
         if (settings != null) {
             String locStr = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
-            User user = req.getUser();
-            String userlocale = (String)user.getAttribute(User.LOCALE);
-            if (userlocale != null) {
-                locale = new Locale(userlocale, "", "");
-            } else if (locStr != null) {
+            if (locStr != null) {
                 locale = new Locale(locStr, "", "");
             } else {
                 locale = settings.getDefaultLocale();

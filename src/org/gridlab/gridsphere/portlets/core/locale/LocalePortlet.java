@@ -25,7 +25,10 @@ public class LocalePortlet extends AbstractPortlet {
 
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         String locale = (String)request.getPortletSession(true).getAttribute(User.LOCALE);
-        if (locale == null) locale = Locale.getDefault().getISO3Language();
+        if (locale == null) {
+            locale = Locale.getDefault().getLanguage();
+            request.getPortletSession(true).setAttribute(User.LOCALE, locale);
+        }
         Locale loc = new Locale(locale, "", "");
         request.setAttribute("curLoc", loc);
         getPortletConfig().getContext().include(VIEW_JSP, request, response);

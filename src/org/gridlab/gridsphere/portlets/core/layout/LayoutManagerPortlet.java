@@ -346,11 +346,12 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletTabbedPane pane = page.getPortletTabbedPane();
         PortletTab toptab = new PortletTab();
         String tabName = event.getTextFieldBean("newTab").getValue();
-        toptab.setTitle(tabName);
+        String lang = (String)req.getSession(true).getAttribute(User.LOCALE);
+        toptab.setTitle(lang, tabName);
 
         PortletTab tab = new PortletTab();
         String title = this.getLocalizedText(req, "LAYOUT_UNTITLED_TAB");
-        tab.setTitle(title);
+        tab.setTitle(lang, title);
         PortletTabbedPane newpane = new PortletTabbedPane();
         newpane.setStyle("sub-menu");
         toptab.setPortletComponent(newpane);
@@ -380,7 +381,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         PortletTab tab = new PortletTab();
         String subtabName = event.getTextFieldBean("newSubTab").getValue();
-        tab.setTitle(subtabName);
+        String lang = (String)req.getSession(true).getAttribute(User.LOCALE);
+        tab.setTitle(lang, subtabName);
 
         PortletTableLayout table = new PortletTableLayout();
         PortletRowLayout row = new PortletRowLayout();

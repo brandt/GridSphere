@@ -19,6 +19,10 @@
                     <title>File Manager</title>
                     <description>Provides users with a virtual filesystem</description>
                 </language>
+		        <language locale="de">
+                    <title>Datei Manager</title>
+                    <description>Provides users with a virtual filesystem</description>
+                </language>
                 <language locale="it">
                     <title>Gestione File</title>
                     <description>Fornisce agli utenti un filesystem virtuale</description>
@@ -98,7 +102,7 @@
                 <language locale="it">
                     <title>Login</title>
                     <title-short>Login</title-short>
-                    <description>la Portlet fornisce funzionalità di login</description>
+                    <description>La Portlet fornisce funzionalità di login</description>
                     <keywords>portlet login</keywords>
                 </language>
                 <language locale="pl">
@@ -154,7 +158,7 @@
                 <language locale="it">
                     <title>Logout</title>
                     <title-short>Logout</title-short>
-                    <description>la Portlet fornisce funzionalità di logout</description>
+                    <description>La Portlet fornisce funzionalità di logout</description>
                     <keywords>portlet logout</keywords>
                 </language>
                 <language locale="pl">
@@ -197,13 +201,13 @@
                 <language locale="de">
                     <title>Konto Manager</title>
                     <title-short>Konto Manager</title-short>
-                    <description>Ermoeglicht das administrieren von Nutzer Konten</description>
+                    <description>Ermöglicht das administrieren von Nutzer Konten</description>
                     <keywords>nutzer konten administrieren</keywords>
                 </language>
                 <language locale="it">
                     <title>Gestione account utente</title>
                     <title-short>Gestione account utente</title-short>
-                    <description>permette agli gestire del portale di amministrare gli account utente</description>
+                    <description>Permette agli gestire del portale di amministrare gli account utente</description>
                     <keywords>agli gestire</keywords>
                 </language>
             </concrete-portlet>
@@ -310,6 +314,10 @@
                  <portlet-name>Layout Manager Portlet</portlet-name>
                  <default-locale>en</default-locale>
                  <language locale="en">
+                     <title>Layout Manager</title>
+                     <description>Provides user layout customization</description>
+                 </language>
+		 <language locale="de">
                      <title>Layout Manager</title>
                      <description>Provides user layout customization</description>
                  </language>

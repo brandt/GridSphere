@@ -31,9 +31,11 @@
 
 <!-- Tabbed Panes -->
 <portlet-tabbed-pane selected="0" style="menu">
-    <portlet-tab title="GridSphere">
+    <portlet-tab label="gridsphere">
+        <title lang="en">GridSphere</title>
         <portlet-tabbed-pane selected="0" style="sub-menu">
-            <portlet-tab label="home" title="Home">
+            <portlet-tab label="home">
+                <title lang="en">Home</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="70%">

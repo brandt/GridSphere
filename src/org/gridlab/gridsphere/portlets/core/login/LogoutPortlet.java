@@ -17,8 +17,7 @@ public class LogoutPortlet extends AbstractPortlet {
 
         Locale locale = Locale.getDefault();
         String title = "";
-        User user = request.getUser();
-        String userlocale = (String)user.getAttribute(User.LOCALE);
+        String userlocale = (String)request.getSession(true).getAttribute(User.LOCALE);
         if (userlocale != null) {
             locale = new Locale(userlocale, "", "");
             title = getPortletSettings().getTitle(locale, client);
