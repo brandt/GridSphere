@@ -5,19 +5,17 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.exolab.castor.jdo.Database;
-import org.gridlab.gridsphere.core.persistence.BaseObject;
+
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbmsImpl;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.List;
-import java.util.Vector;
+import java.util.Map;
 
 /**
  * The <code>SportletUserImpl</code> implements the <code>User</code> interface
@@ -27,59 +25,29 @@ import java.util.Vector;
  * <p>
  * This implementation of <code>SportletUserImpl</code> uses Castor for Java to SQL
  * bindings
- *
- * @table sportletuserimpl
-
  */
-public class SportletUserImpl extends BaseObject implements SportletUser, HttpSessionBindingListener {
+public class SportletUserImpl   implements SportletUser, HttpSessionBindingListener {
 
-    private transient PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
 
+    private String oid = null;
     // store used to maintain user attributes
-    private transient Hashtable store = new Hashtable();
+    private Map attributes = new HashMap();
 
-    /**
-     * @sql-size 32
-     * @sql-name userid
-     */
     private String UserID = new String();
-
-    /**
-     * @sql-size 50
-     * @sql-name familyname
-     */
     private String FamilyName = new String();
-    /**
-     * @sql-size 100
-     * @sql-name fullname
-     */
     private String FullName = new String();
-    /**
-     * @sql-size 30
-     * @sql-name givenname
-     */
     private String GivenName = new String();
-    /**
-     * @sql-size 128
-     * @sql-name emailaddress
-     */
     private String EmailAddress = new String();
-    /**
-     * @sql-size 256
-     * @sql-name organization
-     */
     private String Organization = new String();
-
-    /**
-     * @sql-name lastlogintime
-     */
     private long LastLoginTime = 0;
 
-    /**
-     * @field-type SportletUserImplAttribute
-     * @many-key sportletuser
-     */
-    private Vector Attributes = new Vector();
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
 
     /**
      * Returns the internal unique user id.
@@ -253,6 +221,16 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
         this.LastLoginTime = lastLoginTime;
     }
 
+
+    public Map getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map attributes) {
+        this.attributes = attributes;
+    }
+
+
     /**
      * Returns the value of the attribute with the given name,s
      * or null if no attribute with the given name exists.
@@ -261,7 +239,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
      * @return the attribute value
      */
     public Object getAttribute(String name) {
-        return store.get(name);
+        return attributes.get(name);
     }
 
     /**
@@ -271,7 +249,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
      * @param value the attribute value
      */
     public void setAttribute(String name, String value) {
-        store.put(name, value);
+        attributes.put(name, value);
     }
 
     /**
@@ -281,7 +259,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
      * @return an enumeration of attribute names
      */
     public Enumeration getAttributeNames() {
-        return store.elements();
+        return new Hashtable(attributes).keys();
     }
 
     /**
@@ -291,49 +269,9 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
      * @return an enumeration of attribute names
      */
     public Enumeration getAttributeValues() {
-        return store.elements();
+        return new Hashtable(attributes).elements();
     }
 
-    private void convert2vector() {
-        Enumeration allkeys = store.keys();
-        SportletUserImplAttribute ha = null;
-        while (allkeys.hasMoreElements()) {
-            String key = (String) allkeys.nextElement();
-            ha = new SportletUserImplAttribute(key, (String) store.get(key));
-            ha.setUser(this);
-            Attributes.add(ha);
-        }
-    }
-
-    private void convert2hash() {
-        for (int i = 0; i < Attributes.size(); i++) {
-            SportletUserImplAttribute ha = (SportletUserImplAttribute) Attributes.get(i);
-            store.put(ha.getKey(), ha.getValue());
-        }
-    }
-
-    public List getAttributes() {
-        return Attributes;
-    }
-
-    public void setAttributes(Vector attributes) {
-        Attributes = attributes;
-    }
-
-    public void jdoBeforeCreate(Database database) throws Exception {
-
-        //super.jdoBeforeCreate(database);
-        convert2vector();
-    }
-
-    public Class jdoLoad(short i) throws Exception {
-        convert2hash();
-        return super.jdoLoad(i);
-    }
-
-    public void jdoUpdate() {
-        convert2vector();
-    }
 
     public void valueBound(HttpSessionBindingEvent event) {
         System.err.println("valueBound of SportletUserImpl invoked");
@@ -341,6 +279,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
 
     public void valueUnbound(HttpSessionBindingEvent event) {
         System.err.println("valueUnbound of SportletUserImpl invoked");
+        PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
         try {
             pm.update(this);
         } catch (PersistenceManagerException e) {

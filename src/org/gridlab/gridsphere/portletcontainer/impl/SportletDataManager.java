@@ -67,7 +67,7 @@ public class SportletDataManager implements PortletDataManager {
         if (user instanceof GuestUser) return null;
 
         String command =
-                "select u from " + SportletData.class.getName() + " u where u.UserID=\"" + user.getID() + "\" and u.PortletID=\"" + portletID + "\"";
+                "select u from " + SportletData.class.getName() + " u where u.UserID='" + user.getID() + "' and u.PortletID='" + portletID + "'";
 
         // get sportlet data if it exists
         SportletData pd = (SportletData) pm.restore(command);

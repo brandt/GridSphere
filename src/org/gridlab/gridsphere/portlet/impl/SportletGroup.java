@@ -5,7 +5,6 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 
 /**
@@ -16,10 +15,10 @@ import org.gridlab.gridsphere.portlet.PortletGroup;
  *
  * @see org.gridlab.gridsphere.portlet.PortletRole
  *
- * @table sportletgroup
  */
-public class SportletGroup extends BaseObject implements PortletGroup {
+public class SportletGroup implements PortletGroup {
 
+    private String oid = null;
     private static final String SUPER_GROUP = "super";
     private static final String CORE_GROUP = "gridsphere";
 
@@ -35,10 +34,6 @@ public class SportletGroup extends BaseObject implements PortletGroup {
      */
     public static final PortletGroup CORE = new SportletGroup(SportletGroup.CORE_GROUP);
 
-    /**
-     * @sql-size 128
-     * @sql-name base
-     */
     private String Name = new String();
 
     /**
@@ -57,7 +52,14 @@ public class SportletGroup extends BaseObject implements PortletGroup {
         super();
         if (groupName == null) Name = "Unknown Group";
         this.Name = groupName;
-        log.debug("GROUP WITH ID "+getOid()+" NAME "+Name+" created.");
+    }
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
     }
 
     /**
@@ -66,7 +68,7 @@ public class SportletGroup extends BaseObject implements PortletGroup {
      * @param name the group name
      */
     public void setName(String name) {
-        Name = name;
+        this.Name = name;
     }
 
     /**
