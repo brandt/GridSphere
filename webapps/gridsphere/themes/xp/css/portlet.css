@@ -653,8 +653,12 @@ in lighter color
 **********************************************/
 .portlet-menu{
     color:black;
-    border: 1px dashed black;
+    border-right: 1px solid white;
+    border-top: 1px solid #848484;
+    border-left: 1px solid #848484;
+    border-bottom: 1px solid white;
     padding-bottom: 5px;
+    margin: 2px;
     text-align:center;
 }
 
