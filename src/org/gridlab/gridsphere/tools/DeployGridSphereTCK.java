@@ -49,33 +49,6 @@ public class DeployGridSphereTCK extends Task {
         }
     }
 
-    private void createVendorURLFile() throws IOException {
-
-        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("vendorTestsToURLMapping.xml")));
-        out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<!-- An example of file created by a vendor that maps TCK tests cases to a URL\n" +
-                "s. -->\n" +
-                "<test_case_urls xmlns=\"http://java.sun.com/xml/ns/portlet/portletTCKVendor_1_0\n" +
-                ".xsd\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation\n" +
-                "=\"http://java.sun.com/xml/ns/portlet/portletTCKVendor_1_0.xsd\n" +
-                "http://java.sun.com/xml/ns/portlet/portletTCKVendor_1_0.xsd\">\n" +
-                "        <test_case_url>\n" +
-                "                <test_name>com/sun/ts/tests/portlet/api/javax_portlet/ActionRe\n" +
-                "sponse/URLClient.java#SendRedirectTest</test_name>\n" +
-                "                <test_url>http://foo:8080/portal/portalPage=testCase1</test_ur\n" +
-                "l>\n" +
-                "        </test_case_url>\n" +
-                "        <test_case_url>\n" +
-                "                <test_name>com/sun/ts/tests/portlet/api/javax_portlet/ActionRe\n" +
-                "sponse/URLClient.java#SetRenderParametersTest</test_name>\n" +
-                "                <test_url>http://banana16.red.iplanet.com:80/portal/dt?action=\n" +
-                "content&provider=TCKContainer</test_url>\n" +
-                "        </test_case_url>\n" +
-                "</test_case_urls>");
-
-
-    }
-
     private void createPortletMaster() throws IOException {
 
         PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("PortletMaster-tck.xml")));
@@ -219,8 +192,8 @@ public class DeployGridSphereTCK extends Task {
         PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("tmp.xml")));
         boolean hasServletEntry = false;
         boolean domapping = false;
-        while ((line = bis.readLine()) != null) {
-            if (line.endsWith("<servlet-mapping>")) {
+        while ((line = bis.readLine()) != null)  {
+            if (line.endsWith("<servlet-mapping>") && (!hasServletEntry)) {
                 out.println("  <servlet>");
                 out.println("    <servlet-name>PortletServlet</servlet-name>");
                 out.println("    <servlet-class>org.gridlab.gridsphere.provider.portlet.jsr.PortletServlet</servlet-class>");
