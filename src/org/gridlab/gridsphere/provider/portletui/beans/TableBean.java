@@ -13,7 +13,7 @@ import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 public class TableBean extends BaseComponentBean implements TagBean {
 
     protected DefaultTableModel defaultModel = null;
-    protected String cellSpacing = "1";
+    protected String cellSpacing = "0";
     protected String width = null;
 
     /**
