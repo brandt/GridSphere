@@ -1,23 +1,10 @@
-<%@ page import="org.gridlab.gridsphere.portlet.User,
-                 org.gridlab.gridsphere.portlets.core.user.UserManagerBean,
-                 java.util.List" %>
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
-<jsp:useBean id="userManagerBean"
-             class="org.gridlab.gridsphere.portlets.core.user.UserManagerBean"
-             scope="request"/>
-<gs:form action="doListUser">
-  <input type="hidden" name="userID" value="<%=userManagerBean.getUserID()%>"/>
-  </script>
-<table class="portlet-pane" cellspacing="1">
+<gs:form action="doViewUser">
+<table class="portlet-pane" cellspacing="1" width="100%">
   <tr>
     <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-title">
-              Deleted User [<%=userManagerBean.getUserName()%>]
-          </td>
         <tr>
           <td class="portlet-frame-message">
             The following user was deleted.
@@ -43,50 +30,58 @@
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-label" width="200">
-             User Name:&nbsp;
+             <gs:text text="User Name:"/>
           </td>
           <td class="portlet-frame-text">
-             <%=userManagerBean.getUserName()%>
+             <gs:text bean="userName"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             Family Name:&nbsp;
+             <gs:text text="Family Name:"/>
           </td>
           <td class="portlet-frame-text">
-             <%=userManagerBean.getFamilyName()%>
+             <gs:text bean="familyName"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             Given Name:&nbsp;
+             <gs:text text="Given Name:"/>
           </td>
           <td class="portlet-frame-text">
-             <%=userManagerBean.getGivenName()%>
+             <gs:text bean="givenName"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             Full Name:&nbsp;
+             <gs:text text="Full Name:"/>
           </td>
           <td class="portlet-frame-text">
-             <%=userManagerBean.getFullName()%>
+             <gs:text bean="fullName"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             Email Address:&nbsp;
+             <gs:text text="Email Address:"/>
           </td>
           <td class="portlet-frame-text">
-             <%=userManagerBean.getEmailAddress()%>
+             <gs:text bean="emailAddress"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             Organization:&nbsp;
+             <gs:text text="Organization:"/>
           </td>
           <td class="portlet-frame-text">
-             <%=userManagerBean.getOrganization()%>
+             <gs:text bean="organization"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-label">
+             <gs:text text="Role In GridSphere:"/>
+          </td>
+          <td class="portlet-frame-text">
+             <gs:text bean="userRole"/>
           </td>
         </tr>
       </table>

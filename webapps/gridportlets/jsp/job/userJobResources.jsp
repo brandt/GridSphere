@@ -51,7 +51,7 @@
           </td>
           <td class="portlet-frame-input">
             <select name="jobScheduler">
-              <option value="jobmanager-fork">Fork</option>
+              <option value="">Fork</option>
               <option value="jobmanager-lsf">LSF</option>
               <option value="jobmanager-pbs">PBS</option>
             </select>

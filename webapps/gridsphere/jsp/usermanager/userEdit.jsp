@@ -1,7 +1,3 @@
-<%@ page import="org.gridlab.gridsphere.portlet.User,
-                 org.gridlab.gridsphere.portlets.core.user.UserManagerBean,
-                 java.util.List,
-                 org.gridlab.gridsphere.portlet.PortletRole" %>
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
@@ -9,21 +5,8 @@
              class="org.gridlab.gridsphere.portlets.core.user.UserManagerBean"
              scope="request"/>
 <gs:form action="doEditUser">
-  <input type="hidden" name="userID" value="<%=userManagerBean.getUserID()%>"/>
+<gs:hiddenfield bean="userID"/>
 <table class="portlet-pane" cellspacing="1" width="100%">
-<% if (userManagerBean.isFormInvalid()) { %>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-message-alert">
-              <%=userManagerBean.getFormInvalidMessage()%>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-<% } %>
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
@@ -41,92 +24,66 @@
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-label" width="200">
-             User Name:&nbsp;
+             <gs:text text="User Name:"/>
           </td>
-          <td class="portlet-frame-input">
-             <input type="text"
-                    name="userName"
-                    value="<%=userManagerBean.getUserName()%>"/>
+          <td class="portlet-frame-text">
+             <gs:textfield bean="userName"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             Family Name:&nbsp;
+             <gs:text text="Family Name:"/>
           </td>
-          <td class="portlet-frame-input">
-             <input type="text"
-                    name="familyName"
-                    value="<%=userManagerBean.getFamilyName()%>"/>
+          <td class="portlet-frame-text">
+             <gs:textfield bean="familyName"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             Given Name:&nbsp;
+             <gs:text text="Given Name:"/>
           </td>
-          <td class="portlet-frame-input">
-             <input type="text"
-                    name="givenName"
-                    value="<%=userManagerBean.getGivenName()%>"/>
+          <td class="portlet-frame-text">
+             <gs:textfield bean="givenName"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             Email Address:&nbsp;
+             <gs:text text="Full Name:"/>
           </td>
-          <td class="portlet-frame-input">
-             <input type="text"
-                    name="emailAddress"
-                    value="<%=userManagerBean.getEmailAddress()%>"/>
+          <td class="portlet-frame-text">
+             <gs:textfield bean="fullName"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             Organization:&nbsp;
+             <gs:text text="Email Address:"/>
           </td>
-          <td class="portlet-frame-input">
-             <input type="text"
-                    name="organization"
-                    value="<%=userManagerBean.getOrganization()%>"/>
+          <td class="portlet-frame-text">
+             <gs:textfield bean="emailAddress"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             Base Role:&nbsp;
+             <gs:text text="Role In GridSphere:"/>
           </td>
           <td class="portlet-frame-input">
-             <select name="baseGroupRole">
-               <% PortletRole thisRole = userManagerBean.getRoleInBaseGroup();
-                   List allRoles = userManagerBean.getAllRolesInBaseGroup();
-                   for (int ii = 0; ii < allRoles.size(); ++ii) {
-                       PortletRole thatRole = (PortletRole)allRoles.get(ii);
-                       if (thisRole.equals(thatRole)) { %>
-               <option label="<%=thatRole.toString()%>" selected="true"><%=thatRole.toString()%></option>
-               <%     } else { %>
-               <option label="<%=thatRole.toString()%>"><%=thatRole.toString()%></option>
-               <%     }
-
-                    } %>
-             </select>
+             <gs:dropdownlist bean="userRole"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             New Password:&nbsp;
+             <gs:text text="New Password:"/>
           </td>
           <td class="portlet-frame-input">
-             <input type="password"
-                    name="passwordValue"
-                    value=""/>
+             <gs:password bean="password"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             Confirm Password:&nbsp;
+            <gs:text text="Confirm Password:"/>
           </td>
           <td class="portlet-frame-input">
-             <input type="password"
-                    name="passwordConfirmation"
-                    value=""/>
+             <gs:password bean="confirmPassword"/>
           </td>
         </tr>
       </table>

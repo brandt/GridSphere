@@ -1,18 +1,8 @@
-<%@ page import="org.gridlab.gridsphere.portlet.User,
-                 org.gridlab.gridsphere.portlets.core.user.UserManagerBean,
-                 java.util.List,
-                 org.gridlab.gridsphere.portlet.PortletRole,
-                 org.gridlab.gridsphere.portlet.PortletGroup,
-                 java.util.Iterator" %>
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
-<jsp:useBean id="userManagerBean"
-             class="org.gridlab.gridsphere.portlets.core.user.UserManagerBean"
-             scope="request"/>
 <portletAPI:init/>
-<% String userID = (String)userManagerBean.getPortletRequestAttribute("userID"); %>
 <gs:form action="doViewUser">
-<gs:hiddenfield name="userID" value="<%=userID%>"/>
+<gs:hiddenfield bean="userID"/>
 <table class="portlet-pane" cellspacing="1" width="100%">
   <tr>
     <td>
@@ -57,6 +47,14 @@
         </tr>
         <tr>
           <td class="portlet-frame-label">
+             <gs:text text="Full Name:"/>
+          </td>
+          <td class="portlet-frame-text">
+             <gs:text bean="fullName"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-label">
              <gs:text text="Email Address:"/>
           </td>
           <td class="portlet-frame-text">
@@ -73,7 +71,7 @@
         </tr>
         <tr>
           <td class="portlet-frame-label">
-            Base Role:
+             <gs:text text="Role In GridSphere:"/>
           </td>
           <td class="portlet-frame-text">
              <gs:text bean="userRole"/>

@@ -17,6 +17,19 @@
 <input type="hidden" name="memory" value="<%=jobManagerBean.getParameter("memory")%>">
 <input type="hidden" name="cpuCount" value="<%=jobManagerBean.getParameter("cpuCount")%>">
 <table class="portlet-pane" cellspacing="1" width="100%">
+<% if (jobManagerBean.isFormInvalid()) { %>
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="100%">
+        <tr>
+          <td class="portlet-frame-message-alert">
+            <%=jobManagerBean.getFormInvalidMessage()%>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+<% } %>
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
