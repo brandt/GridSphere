@@ -19,10 +19,10 @@ user layouts composed that are represented as XML layout descriptors.
 
 <sect1><title>Portlet Layout Components</title>
 <para>
-A portal layout is represented per-user as a &PortletContainer;. A &PortletContainer; can contain any number of
+A portal layout is represented per-user as a &PortletPage;. A &PortletPage; can contain any number of
 portlet components. Generally, portal layout components inherit functionality from a &BasePortletComponent;
-that includes attributes for width, height and a CSS theme. Other layout components listed below may be used in
-creating a layout descriptor. For more details on component attributes, see the Javadoc API.
+that includes attributes for width, height, a CSS theme and optionally a required role. Other layout components
+listed below may be used in creating a layout descriptor. For more details on component attributes, see the Javadoc API.
 </para>
 <variablelist>
     <title>Portlet Layout Components</title>
@@ -84,9 +84,10 @@ An external portlet web application specifies the arrangement of portlets in an 
 double-tabbed pane. An example illustration is shown:
 </para>
 <informalexample id="layout.def"><programlisting>
-    &lt;portlet-tab&gt; <co id="tab"/>
+&lt;portlet-tabbed-pane&gt; <co id="tab.pane"/>
+    &lt;portlet-tab&gt;
         &lt;title&gt;Examples&lt;/title&gt; <co id="tab.title"/>
-        &lt;portlet-tabbed-pane style="sub-menu"&gt;  <co id="tab.pane"/>
+        &lt;portlet-tabbed-pane style="sub-menu"&gt;  <co id="tab.pane2"/>
             &lt;portlet-tab&gt;
                 &lt;title&gt;Simple Examples&lt;/title&gt;
                 &lt;portlet-panel&gt;
@@ -113,12 +114,12 @@ double-tabbed pane. An example illustration is shown:
             &lt;/portlet-tab&gt;
         &lt;/portlet-tabbed-pane&gt;
     &lt;/portlet-tab&gt;
-
+&lt;/portlet-tabbed-pane&gt;
 </programlisting>
     <calloutlist>
-            <callout arearefs="tab">
+            <callout arearefs="tab.pane">
             <para>
-                Every layout descriptor must begin with a tab element
+                Every layout descriptor must begin with a <emphasis>portlet-tabbed-pane</emphasis> element
             </para>
             </callout>
             <callout arearefs="tab.title">
@@ -126,7 +127,7 @@ double-tabbed pane. An example illustration is shown:
                 The tab title is the title string that is presented in the portal layout
             </para>
             </callout>
-            <callout arearefs="tab.pane">
+            <callout arearefs="tab.pane2">
             <para>
                 Although not required, in general a tab contains either a sub-level tabbed pane or a
                 <varname>portlet-panel</varname>

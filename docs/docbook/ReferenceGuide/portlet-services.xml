@@ -7,10 +7,8 @@
     Version:    $Id$
 -->
 
-<chapter id="portlet-services">
-
-<title id="portlet-services-title">Portlet Service Framework</title>
-
+<chapter id="portlet-services"><title id="portlet-services-title">Portlet Service Framework</title>
+<para>
 Portlet services encapsulate business or logic operations that can be re-used among portlets.
 The use of portlet services helps to minimize the amount of logic placed in a portlet and present it as
 a reusable library to other portlets. In addition, portlet services offer the following major advantages:
@@ -20,7 +18,7 @@ a reusable library to other portlets. In addition, portlet services offer the fo
         perform the proper operations based on the user's role</listitem>
         <listitem>Integration with testing framework makes it easy to write JUnit tests</listitem>
     </itemizedlist>
-
+</para>
 <sect1>
     <title>Portlet Service Architecture</title>
 <para>
@@ -191,7 +189,7 @@ For more details on methods provided by the services, consult the Javadoc API
     <sect2><title>Create service definition</title><para>Create a services definition entry in the <filename>WEB-INF/PortletServices.xml</filename> of
     the portlet web application</para>
 
-    <informalexample id="services.def"><programlisting>
+    <informalexample id="services.def.xml"><programlisting>
 
         ...
 
@@ -513,7 +511,7 @@ For more details on methods provided by the services, consult the Javadoc API
          <callout arearefs="def.setmeth.impl">
             <para>
                 The &PortletServiceAuthorizer; provides various authorization check methods that will throw a runtime
-                &AccesDeniedException; in the event they fail. If the check succeeds the underlying
+                &AccessDeniedException; in the event they fail. If the check succeeds the underlying
                 <classname>StockQuoteServiceFactory</classname> method is invoked.
             </para>
         </callout>

@@ -10,6 +10,7 @@
 <!ENTITY int "<classname>int</classname>">
 
 <!ENTITY HttpServlet "<classname>javax.servlet.http.HttpServlet</classname>">
+<!ENTITY HttpSession "<classname>javax.servlet.http.HttpSession</classname>">
 <!ENTITY ServletException "<classname>javax.servlet.ServletException</classname>">
 <!ENTITY ServletConfig "<classname>javax.servlet.ServletConfig</classname>">
 <!ENTITY ServletContext "<classname>javax.servlet.ServletContext</classname>">
@@ -35,6 +36,7 @@
 <!ENTITY PortletAdapter "<classname>org.gridlab.gridsphere.portlet.PortletAdapter</classname>">
 <!ENTITY PortletURI "<classname>PortletURI</classname>">
 <!ENTITY User "<classname>User</classname>">
+<!ENTITY Client "<classname>Client</classname>">
 
 <!ENTITY PortletService "<classname>PortletService</classname>">
 <!ENTITY PortletServiceFactory "<classname>PortletServiceFactory</classname>">
@@ -46,11 +48,18 @@
 <!ENTITY WindowEvent "<classname>WindowEvent</classname>">
 <!ENTITY MessageEvent "<classname>MessageEvent</classname>">
 
+<!ENTITY BasePortletComponent "<classname>PortletContainer</classname>">
+<!ENTITY PortletPage "<classname>PortletPage</classname>">
+<!ENTITY ActionPage "<classname>ActionPage</classname>">
+<!ENTITY DefaultActionPage "<classname>DefaultActionPage</classname>">
+
+
 <!-- Common Tapestry classes -->
 
 <!ENTITY ApiRoot "../javadocs/org/gridlab/gridsphere">
 
 <!ENTITY PortletException '<ulink url="&ApiRoot;/portlet/PortletException.html"><classname>AbstractPortlet</classname></ulink>'>
+<!ENTITY AccessDeniedException '<classname>AccessDeniedException</classname>'>
 
 
 <!-- External links -->
@@ -68,6 +77,7 @@
 <!ENTITY Commons '<ulink url="http://jakarta.apache.org/commons">Jakarta Commons</ulink>'>
 <!ENTITY DocBook '<ulink url="http://docbook.sourceforge.net/">DocBook</ulink>'>
 <!ENTITY Fop '<ulink url="http://xml.apache.org/fop">FOP</ulink>'>
+<!ENTITY GPDK '<ulink url="http://www.doesciencegrid/projects/GPDK">Grid Portal Development Kit</ulink>'>
 
 <!ENTITY GridSphereProjPage '<ulink url="http://www.gridsphere.org">GridSphere Project Page</ulink>'>
 

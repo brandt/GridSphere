@@ -56,17 +56,22 @@
     information about the current portlet mode and window state, the API provides access to the portal user including
     group and role information using the <link linkend='portlet-objects'>GridSphere access control model</link>.
     </para>
+    <para>
     The Portlet Services API described in <link linkend='portlet-services' endterm="portlet-services-title"/>
     provides a very clean approach for the creation of reusable "services" that perform a set
     of tasks for a given portlet. Using the portlet API, a service instance can be obtained providing the portlet with
     additional functionality.
+    </para>
+    <para>
+
     <figure>
         <title>Portlet Web Applications and the Portlet Lifecycle</title>
         <graphic fileref="lifecycle.png"/>
     </figure>
+    </para>
+
     <para>
     The following inheritance hierarchy describes the relationship between servlets and portlets:
-        <para>
             <itemizedlist>
             <listitem>&HttpServlet;</listitem>
             <listitem>&Portlet;</listitem>
@@ -74,7 +79,6 @@
             <listitem>&AbstractPortlet;</listitem>
             <listitem><classname>com.mycom.MyPortlet</classname></listitem>
             </itemizedlist>
-        </para>
     In general to reap the benefits of the GridSphere portlet model, a developer would create a new portlet
     which subclasses from the &AbstractPortlet; class and implement the lifecycle methods detailed in the next section.
     </para>
