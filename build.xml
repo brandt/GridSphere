@@ -143,6 +143,10 @@ Copyright:
         <property name="TEST_HOME" value="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/test"/>
         <property name="gridsphere.core" value="${GRIDSPHERE_HOME}/gridsphere"/>
 
+
+        <property name="DATABASE_CONFIG" value="${gridsphere.core}/database/database.xml"/>
+        <property name="DATABASE_NAME" value="gridsphere"/>
+
         <echo message="--- Build environment for ${gridsphere.name} ---" />
         <echo message="--- Flags (Note: If the {property name} is displayed,"/>
         <echo message="           then the component is not present)" />
@@ -243,11 +247,7 @@ Copyright:
     <!-- =================================================================== -->
     <target name="gridsphere-jar" depends="compile" description="Makes gridsphere JAR">
         <echo message="Configuring Database"/>
-
         <property name="TEST_HOME" value="${GRIDSPHERE_HOME}"/>
-
-        <property name="DATABASE_CONFIG" value="${gridsphere.core}/database/database.xml"/>
-        <property name="DATABASE_NAME" value="gridsphere"/>
 
         <ant target="make-gridsphere-jar"/>
     </target>
@@ -469,16 +469,16 @@ Copyright:
 
     <target name="doclet-mapping" depends="check-mapping" if="var_force_mapping">
         <mkdir dir="${gridsphere.core}/database"/>
-        <javadoc packagenames="org.gridlab.gridsphere.*"
-            sourcepath="src"
+        <javadoc packagenames="*"
+            sourcepath="src:${gridsphere.projects}"
             private="true"
             doclet="org.castor.doclet.ddl.DDL"
             docletpath="lib/ext/jdom.jar;lib/ext/castor-doclet.jar"
-            additionalparam="-J-DFILE=${gridsphere.core}/database/dbcreate.sql -J-DDB_TYPE=db2 -J-DLOG=1">
+            additionalparam="-J-DFILE=${gridsphere.core}/database/dbcreate.sql -J-DDB_TYPE=${gridsphere.database.type} -J-DLOG=1">
             <classpath refid="classpath"/>
         </javadoc>
-        <javadoc packagenames="org.gridlab.gridsphere.*"
-            sourcepath="src"
+        <javadoc packagenames="*"
+            sourcepath="src:${gridsphere.projects}"
             private="true"
             doclet="org.castor.doclet.jdo.JDO"
             docletpath="lib/ext/jdom.jar;lib/ext/castor-doclet.jar"
@@ -506,6 +506,20 @@ Copyright:
     </target>
 
     <target name="create-real-database" depends="configure-database, check-real-database-exists" if="var_force_database">
+        <echo message="Creating Database at: ${gridsphere.core}/database/${DATABASE_NAME}"/>
+        <echo message="Using script: ${GRIDSPHERE_HOME}/database/dbcreate.sql"/>
+        <sql driver="org.hsqldb.jdbcDriver"
+           url="jdbc:hsqldb:${gridsphere.core}/database/${DATABASE_NAME}"
+           userid="sa"
+           password=""
+           onerror="continue"
+           src="${gridsphere.core}/database/dbcreate.sql">
+           <classpath refid="classpath"/>
+        </sql>
+    </target>
+
+
+    <target name="force-real-database" depends="setenv">
         <echo message="Creating Database at: ${gridsphere.core}/database/${DATABASE_NAME}"/>
         <echo message="Using script: ${GRIDSPHERE_HOME}/database/dbcreate.sql"/>
         <sql driver="org.hsqldb.jdbcDriver"
