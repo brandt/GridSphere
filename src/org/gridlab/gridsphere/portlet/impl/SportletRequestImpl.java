@@ -185,17 +185,17 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
      */
     public Locale getLocale() {
         Locale locale = null;
+        locale = (Locale)this.getPortletSession(true).getAttribute(User.LOCALE);
+        if (locale != null) return locale;
         User user = getUser();
         if (!(user instanceof GuestUser)) {
             String loc = (String)user.getAttribute(User.LOCALE);
-            if (loc == null) {
+            if (loc != null) {
                 locale = new Locale(loc, "", "");
                 this.getPortletSession(true).setAttribute(User.LOCALE, locale);
                 return locale;
             }
         }
-        locale = (Locale)this.getPortletSession(true).getAttribute(User.LOCALE);
-        if (locale != null) return locale;
         locale = this.getHttpServletRequest().getLocale();
         if (locale != null) return locale;
         return Locale.ENGLISH;
