@@ -218,7 +218,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @see #getPortletOutputStream
      */
     public java.io.PrintWriter getWriter() throws java.io.IOException {
-        if ((contentType == null) || (hasOutputStream)) throw new IllegalStateException("A writer has already been obtained");
+        if ((contentType == null) || (hasOutputStream)) throw new IllegalStateException("A writer has already been obtained or the content type has not been set!");
         hasWriter = true;
         return this.getHttpServletResponse().getWriter();
     }
@@ -368,7 +368,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @see #getWriter
      */
     public java.io.OutputStream getPortletOutputStream() throws java.io.IOException {
-        if ((contentType == null) || (hasWriter)) throw new IllegalStateException("A writer has already been obtained");
+        if ((contentType == null) || (hasWriter)) throw new IllegalStateException("A writer has already been obtained or the content type has not been set!");
         hasOutputStream = true;
         return this.getHttpServletResponse().getOutputStream();
     }
