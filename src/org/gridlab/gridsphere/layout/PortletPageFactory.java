@@ -371,13 +371,13 @@ public class PortletPageFactory implements PortletSessionListener {
             topTab.setPortletComponent(childPane);
             pane.addTab(topTab);
             topTab.setName(tabName);
-            topTab.setLabel(URLEncoder.encode(tabName) + "Tab");
+            topTab.setLabel(URLEncoder.encode(tabName, "UTF-8") + "Tab");
             //pane.save(userLayout);
 
             PortletTableLayout table = new PortletTableLayout();
 
             table.setCanModify(true);
-            table.setLabel(URLEncoder.encode(tabName) + "TL");
+            table.setLabel(URLEncoder.encode(tabName, "UTF-8") + "TL");
 
 
             PortletRowLayout row = new PortletRowLayout();
