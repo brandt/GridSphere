@@ -79,7 +79,7 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
         if (action != null) sname = action;
         if (anchor != null) sname += "#" + anchor;
         if (onClick != null) {
-            sb.append(" onChange='" + onClick + "' ");
+            sb.append(" onClick='" + onClick + "' ");
         }
         sb.append("name=\"" + sname + "\" value=\"" + value + "\"/>");
         return sb.toString();
