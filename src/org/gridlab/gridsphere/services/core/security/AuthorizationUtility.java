@@ -6,7 +6,7 @@
  * To change template for new class use 
  * Code Style | Class Templates options (Tools | IDE Options).
  */
-package org.gridlab.gridsphere.services.security;
+package org.gridlab.gridsphere.services.core.security;
 
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletLog;
@@ -15,7 +15,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.services.user.UserManagerService;
-import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
+import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
 /**
  * This utility class provides useful methods for authorizing users to call methods.

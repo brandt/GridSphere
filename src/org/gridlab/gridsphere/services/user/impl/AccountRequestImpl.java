@@ -13,7 +13,7 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.services.security.acl.impl.UserACL;
+import org.gridlab.gridsphere.services.core.security.acl.impl.UserACL;
 import org.gridlab.gridsphere.services.security.password.PasswordBean;
 import org.gridlab.gridsphere.services.user.AccountRequest;
 

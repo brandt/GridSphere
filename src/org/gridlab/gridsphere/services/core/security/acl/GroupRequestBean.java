@@ -6,9 +6,9 @@
  * To change template for new class use 
  * Code Style | Class Templates options (Tools | IDE Options).
  */
-package org.gridlab.gridsphere.services.security.acl;
+package org.gridlab.gridsphere.services.core.security.acl;
 
-import org.gridlab.gridsphere.services.security.acl.GroupRequest;
+import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.User;

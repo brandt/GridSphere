@@ -12,7 +12,7 @@ import org.gridlab.gridsphere.services.security.password.InvalidPasswordExceptio
 import org.gridlab.gridsphere.services.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.security.password.Password;
 import org.gridlab.gridsphere.services.security.password.PasswordBean;
-import org.gridlab.gridsphere.services.security.acl.*;
+import org.gridlab.gridsphere.services.core.security.acl.*;
 import org.gridlab.gridsphere.services.user.UserManagerService;
 import org.gridlab.gridsphere.services.user.AccountRequest;
 import org.gridlab.gridsphere.services.user.UserManagerService;

@@ -16,8 +16,8 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.services.security.AuthenticationException;
-import org.gridlab.gridsphere.services.security.AuthenticationModule;
+import org.gridlab.gridsphere.services.core.security.AuthenticationException;
+import org.gridlab.gridsphere.services.core.security.AuthenticationModule;
 import org.gridlab.gridsphere.services.user.impl.GridSphereUserManager;
 import org.gridlab.gridsphere.services.user.LoginService;
 

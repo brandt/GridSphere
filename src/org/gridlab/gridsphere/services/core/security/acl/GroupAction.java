@@ -6,7 +6,7 @@
  * To change template for new class use 
  * Code Style | Class Templates options (Tools | IDE Options).
  */
-package org.gridlab.gridsphere.services.security.acl;
+package org.gridlab.gridsphere.services.core.security.acl;
 
 public class GroupAction {
 

@@ -13,7 +13,7 @@ import org.gridlab.gridsphere.event.impl.FileFormEventImpl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.services.registry.PortletManagerService;
+import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 import org.gridlab.gridsphere.portlets.manager.tomcat.TomcatManagerWrapper;
 import org.gridlab.gridsphere.portlets.manager.tomcat.TomcatWebAppResult;
 import org.apache.commons.fileupload.FileItem;

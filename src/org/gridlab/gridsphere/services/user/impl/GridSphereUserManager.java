@@ -9,10 +9,10 @@
 package org.gridlab.gridsphere.services.user.impl;
 
 import org.gridlab.gridsphere.services.user.*;
-import org.gridlab.gridsphere.services.security.acl.*;
-import org.gridlab.gridsphere.services.security.AuthenticationException;
-import org.gridlab.gridsphere.services.security.AuthenticationModule;
-import org.gridlab.gridsphere.services.security.impl.PasswordAuthenticationModule;
+import org.gridlab.gridsphere.services.core.security.acl.*;
+import org.gridlab.gridsphere.services.core.security.AuthenticationException;
+import org.gridlab.gridsphere.services.core.security.AuthenticationModule;
+import org.gridlab.gridsphere.services.core.security.impl.PasswordAuthenticationModule;
 import org.gridlab.gridsphere.services.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.security.password.PasswordBean;

@@ -8,7 +8,7 @@
  */
 package org.gridlab.gridsphere.services.user.impl;
 
-import org.gridlab.gridsphere.services.security.acl.GroupEntry;
+import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRole;

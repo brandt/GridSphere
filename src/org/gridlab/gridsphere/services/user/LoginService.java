@@ -13,8 +13,8 @@ import java.util.Map;
 
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.services.security.AuthenticationException;
-import org.gridlab.gridsphere.services.security.AuthenticationModule;
+import org.gridlab.gridsphere.services.core.security.AuthenticationException;
+import org.gridlab.gridsphere.services.core.security.AuthenticationModule;
 
 public interface LoginService extends PortletService {
 

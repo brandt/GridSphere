@@ -12,7 +12,7 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
-import org.gridlab.gridsphere.services.layout.LayoutManagerService;
+import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 
 
 import javax.servlet.UnavailableException;

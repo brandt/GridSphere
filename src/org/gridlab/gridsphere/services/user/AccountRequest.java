@@ -8,7 +8,7 @@ import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletUser;
-import org.gridlab.gridsphere.services.security.acl.GroupRequest;
+import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.security.password.PasswordBean;
 
 import java.util.List;

@@ -13,7 +13,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-import org.gridlab.gridsphere.services.security.AuthenticationException;
+import org.gridlab.gridsphere.services.core.security.AuthenticationException;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;

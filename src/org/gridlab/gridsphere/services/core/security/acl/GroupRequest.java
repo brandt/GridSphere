@@ -6,7 +6,7 @@
  * To change template for new interface use 
  * Code Style | Class Templates options (Tools | IDE Options).
  */
-package org.gridlab.gridsphere.services.security.acl;
+package org.gridlab.gridsphere.services.core.security.acl;
 
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRole;

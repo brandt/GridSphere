@@ -15,8 +15,8 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.services.security.AuthorizationException;
-import org.gridlab.gridsphere.services.security.AuthorizationUtility;
+import org.gridlab.gridsphere.services.core.security.AuthorizationException;
+import org.gridlab.gridsphere.services.core.security.AuthorizationUtility;
 import org.gridlab.gridsphere.services.security.credential.*;
 
 import java.util.List;

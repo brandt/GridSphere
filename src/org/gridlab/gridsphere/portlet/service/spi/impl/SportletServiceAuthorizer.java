@@ -9,7 +9,7 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceAuthorizer;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.services.user.impl.GridSphereUserManager;
-import org.gridlab.gridsphere.services.security.AuthorizationException;
+import org.gridlab.gridsphere.services.core.security.AuthorizationException;
 
 public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
 
