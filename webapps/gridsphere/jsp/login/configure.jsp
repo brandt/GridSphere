@@ -1,3 +1,8 @@
+<%@ page import="java.util.List,
+                 java.util.Iterator,
+                 org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule"%>
+<%@ taglib uri="/portletUI" prefix="ui" %>
+<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
 <%-- This is an ugly logic JSP page that iterates over the authorization modules --%>
 
@@ -28,21 +33,21 @@
         // Have to match to what we know
         if (authModuleName.equals("PASSWORD_AUTH_MODULE")) { %>
 
-<%@ include file="/jsp/login/module/password.jsp" %>
+        <%@ include file="/jsp/login/module/include/password.jsp" %>
 
-<%      }
+        <%      }
 
-        if (authModuleName.equals("LDAP_AUTH_MODULE")) { %>
+                if (authModuleName.equals("LDAP_AUTH_MODULE")) { %>
 
-<%@ include file="/jsp/login/module/ldap.jsp" %>
+        <%@ include file="/jsp/login/module/include/ldap.jsp" %>
 
-<%      }
+        <%      }
 
-        if (authModuleName.equals("MYPROXY_AUTH_MODULE")) { %>
+                if (authModuleName.equals("MYPROXY_AUTH_MODULE")) { %>
 
-<%@ include file="/jsp/login/module/myproxy.jsp" %>
+        <%@ include file="/jsp/login/module/include/myproxy.jsp" %>
 
-<%      }
+        <%      }
    } %>
 
 <ui:frame>
