@@ -5,6 +5,12 @@
 
 package org.gridlab.gridsphere.event;
 
+import org.gridlab.gridsphere.tags.web.model.CheckBoxModel;
+import org.gridlab.gridsphere.tags.web.model.ListBoxModel;
+
+import java.util.List;
+import java.util.Collection;
+
 public interface FormEvent {
 
    /**
@@ -13,4 +19,29 @@ public interface FormEvent {
     * @return name of the button which was pressed
     */
     public String getPressedSubmitButton();
+
+    public String getRadioButton();
+
+    /**
+     * Gets the list of selected values of a listbox
+     * @param listboxname name of the listbox
+     * @return array of stringvalues with the values of the listboxes
+     */
+    public String[] getSelectedListBoxValues (String listboxname);
+
+    /**
+     * Gets the list of values of selected checkboxes in a group (means with the same name), returns null if does not exist
+     * @param checkboxgroupname name of the checkboxgroup
+     * @return array of stringvalues with the values of the checkboxes
+     */
+    public String[] getSelectedCheckBoxValues (String checkboxgroupname);
+
+    /**
+     * Modifies the passed in checkboxmodelto reflect that changes on the checkboxes
+     * @model the model
+     */
+    public CheckBoxModel adjustCheckBoxModel(CheckBoxModel model);
+
+    public ListBoxModel adjustListBoxModel(ListBoxModel model);
+
 }
