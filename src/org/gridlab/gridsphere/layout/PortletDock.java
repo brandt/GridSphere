@@ -4,10 +4,19 @@
  */
 package org.gridlab.gridsphere.layout;
 
+import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletLog;
+
 import java.util.Vector;
 import java.util.List;
+import java.util.Iterator;
+import java.util.ListIterator;
+import java.io.PrintWriter;
 
-public class PortletDock extends PortletComponent {
+public class PortletDock extends BasePortletComponent {
+
+    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletDock.class);
 
     public static final int HORIZONTAL = 1;
     public static final int VERTICAL = 2;
@@ -58,6 +67,19 @@ public class PortletDock extends PortletComponent {
     public PortletInsets getMargin() {
         return margin;
     }
+
+    public void doRender(PrintWriter out) {
+        log.debug("in doRender()");
+        out.write("<tr><td>" + title);
+        ListIterator compIt = components.listIterator();
+        while (compIt.hasNext()) {
+            PortletComponent comp = (PortletComponent)compIt.next();
+            comp.doRender(out);
+            margin.doRender(out);
+        }
+        out.write("</td></tr>");
+    }
+
 
 }
 

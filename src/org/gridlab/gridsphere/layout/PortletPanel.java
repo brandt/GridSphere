@@ -4,9 +4,15 @@
  */
 package org.gridlab.gridsphere.layout;
 
-public class PortletPanel extends PortletComponent {
+import org.gridlab.gridsphere.portlet.PortletLog;
 
-    LayoutManager layoutManager;
+import java.io.PrintWriter;
+
+public class PortletPanel extends BasePortletComponent {
+
+    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletPanel.class);
+
+    private LayoutManager layoutManager;
 
     public PortletPanel() {}
 
@@ -14,10 +20,16 @@ public class PortletPanel extends PortletComponent {
         this.layoutManager = layoutManager;
     }
 
-    public void doLayout() {
+    public void setLayoutManager(LayoutManager layoutManager) {
+        this.layoutManager = layoutManager;
+    }
 
-        // XXX: RENDER THIS SHIT
+    public LayoutManager getLayoutManager() {
+        return layoutManager;
+    }
 
+    public void doRender(PrintWriter out) {
+        log.debug("in doRender()");
     }
 
 }

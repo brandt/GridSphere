@@ -4,15 +4,41 @@
  */
 package org.gridlab.gridsphere.layout;
 
+import org.gridlab.gridsphere.portlet.PortletLog;
+
+import java.io.PrintWriter;
+
 public class PortletInsets {
 
-    public int right, left, top, bottom;
+    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletInsets.class);
 
-    public PortletInsets(int top, int left, int bottom, int right) {
-        this.top = top;
-        this.right = right;
-        this.left = left;
-        this.bottom = bottom;
+    public int width, height;
+
+    public PortletInsets() {}
+
+    public PortletInsets(int width, int height) {
+        this.width = width;
+        this.height = height;
     }
 
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void doRender(PrintWriter out) {
+        log.debug("in doRender()");
+        out.write("<img SRC=/images/spacer.gif" + " WIDTH=" + width + " HEIGHT=" + height + " BORDER=0>");
+    }
 }

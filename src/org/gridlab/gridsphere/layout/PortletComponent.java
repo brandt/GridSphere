@@ -4,78 +4,40 @@
  */
 package org.gridlab.gridsphere.layout;
 
+import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletLog;
+
 import java.awt.*;
+import java.io.PrintWriter;
 
-public class PortletComponent extends PortletContainer {
+public interface PortletComponent {
 
-    protected int width;
-    protected int height;
-    protected String name;
-    protected String fgColor;
-    protected String bgColor;
-    protected PortletBorder border;
-    protected PortletInsets insets;
+    public String getBackground();
 
-    public String getBackground() {
-        return bgColor;
-    }
+    public String getForeground();
 
-    public String getForeground() {
-        return fgColor;
-    }
+    public PortletBorder getBorder();
 
-    public PortletBorder getBorder() {
-        return border;
-    }
+    public PortletInsets getInsets();
 
-    public PortletInsets getInsets() {
-        return insets;
-    }
+    public String getName();
 
-    public PortletDimension getMaximumSize() {
-        return null;
-    }
+    public void doRender(PrintWriter out);
 
-    public PortletDimension getMinimumSize() {
-        return null;
-    }
+    public void doBeginRender(PrintWriter out);
 
-    public String getName() {
-        return name;
-    }
+    public void doEndRender(PrintWriter out);
 
-    public void doLayout() {
-        // XXX: FILL ME IN
-    }
+    public int getHeight();
 
-    public PortletDimension getSize(PortletDimension rv) {
-        if (rv == null) rv = new PortletDimension();
-        rv.setSize(width, height);
-        return rv;
-    }
+    public int getWidth();
 
-    public int getHeight() {
-        return height;
-    }
+    public void setBackground(String bgColor);
 
-    public int getWidth() {
-        return width;
-    }
+    public void setForeground(String ggColor);
 
-    public void setBackground(String bgColor) {
-        this.bgColor = bgColor;
-    }
+    public void setBorder(PortletBorder border);
 
-    public void setForeground(String ggColor) {
-        this.fgColor = fgColor;
-    }
-
-    public void setBorder(PortletBorder border) {
-        this.border = border;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setName(String name);
 
 }

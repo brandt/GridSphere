@@ -36,7 +36,7 @@ public class PortletFlowLayout implements LayoutManager {
         this.align = align;
     }
 
-    public int getAlign() {
+    public int getAlignment() {
         return align;
     }
 

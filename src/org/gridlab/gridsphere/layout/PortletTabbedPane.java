@@ -4,69 +4,21 @@
  */
 package org.gridlab.gridsphere.layout;
 
+import org.gridlab.gridsphere.portlet.PortletLog;
+
 import java.util.Vector;
 import java.util.List;
+import java.io.PrintWriter;
 
-public class PortletTabbedPane extends PortletComponent {
+public class PortletTabbedPane extends BasePortletComponent {
+
+    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletTabbedPane.class);
 
     private int selectedIndex = -1;
     private PortletComponent selectedComponent;
-    private List titles;
-    private List components;
-    private Vector pages;
+    private Vector tabs = new Vector();
 
-    private class Page {
-
-        String title;
-        String background;
-        String foreground;
-        PortletComponent component;
-        boolean enabled = true;
-        PortletTabbedPane parent;
-
-        public Page(PortletTabbedPane parent, String title, PortletComponent component) {
-            this.parent = parent;
-            this.title = title;
-            this.component = component;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public String getBackground() {
-            return background != null? background : parent.getBackground();
-        }
-
-        public void setBackground(String c) {
-            background = c;
-        }
-
-        public String getForeground() {
-            return foreground != null? foreground : parent.getForeground();
-        }
-
-        public void setForeground(String c) {
-            foreground = c;
-        }
-
-        public PortletComponent getComponent() {
-            return component;
-        }
-
-        public void setComponent(PortletComponent component) {
-            this.component = component;
-        }
-
-    }
-
-    public PortletTabbedPane() {
-        pages = new Vector();
-    }
+    public PortletTabbedPane() {}
 
     public void add(PortletComponent component) {
         addTab(component.getName(), component);
@@ -81,23 +33,23 @@ public class PortletTabbedPane extends PortletComponent {
     }
 
     public void addTab(String title, PortletComponent component) {
-        Page page = new Page(this, title, component);
-        pages.add(page);
+        PortletTab tab = new PortletTab(this, title, component);
+        tabs.add(tab);
     }
 
     public String getBackgroundAt(int index)  {
-        Page page = (Page)pages.get(index);
-        return page.getBackground();
+        PortletTab tab = (PortletTab)tabs.get(index);
+        return tab.getBackground();
     }
 
     public PortletComponent getPortletComponentAt(int index)  {
-        Page page = (Page)pages.get(index);
-        return page.getComponent();
+        PortletTab tab = (PortletTab)tabs.get(index);
+        return tab.getComponent();
     }
 
     public String getForegroundAt(int index) {
-        Page page = (Page)pages.get(index);
-        return page.getForeground();
+        PortletTab tab = (PortletTab)tabs.get(index);
+        return tab.getForeground();
     }
 
     public PortletComponent getSelectedPortletComponent() {
@@ -109,20 +61,20 @@ public class PortletTabbedPane extends PortletComponent {
     }
 
     public int getTabCount() {
-        return pages.size();
+        return tabs.size();
     }
 
     public String getTitleAt(int index) {
-        Page page = (Page)pages.get(index);
-        return page.getTitle();
+        PortletTab tab = (PortletTab)tabs.get(index);
+        return tab.getTitle();
     }
 
     public int indexOfPortletComponent(PortletComponent component) {
         boolean found = false;
         int i;
-        for (i = 0; i < pages.size(); i++) {
-            Page page = (Page)pages.get(i);
-            if (page.getComponent().equals(component)) {
+        for (i = 0; i < tabs.size(); i++) {
+            PortletTab tab = (PortletTab)tabs.get(i);
+            if (tab.getComponent().equals(component)) {
                 found = true;
                 break;
             }
@@ -135,9 +87,9 @@ public class PortletTabbedPane extends PortletComponent {
     public int indexOfTab(String title) {
         boolean found = false;
         int i;
-        for (i = 0; i < pages.size(); i++) {
-            Page page = (Page)pages.get(i);
-            if (page.getTitle().equals(title)) {
+        for (i = 0; i < tabs.size(); i++) {
+            PortletTab tab = (PortletTab)tabs.get(i);
+            if (tab.getTitle().equals(title)) {
                 found = true;
                 break;
             }
@@ -148,55 +100,55 @@ public class PortletTabbedPane extends PortletComponent {
     }
 
     public void insertTab(String title, PortletComponent component, int index) {
-        Page page = new Page(this, title, component);
-        pages.add(index, page);
+        PortletTab tab = new PortletTab(this, title, component);
+        tabs.add(index, tab);
     }
 
     public void remove(PortletComponent component) {
         int i;
-        for (i = 0; i < pages.size(); i++) {
-            Page page = (Page)pages.get(i);
-            if (page.getComponent().equals(component)) {
-                pages.remove(page);
+        for (i = 0; i < tabs.size(); i++) {
+            PortletTab tab = (PortletTab)tabs.get(i);
+            if (tab.getComponent().equals(component)) {
+                tabs.remove(tab);
             }
         }
     }
 
     public void remove(int index) {
-        pages.remove(index);
+        tabs.remove(index);
     }
 
     public void removeAll() {
         int i;
-        for (i = 0; i < pages.size(); i++) {
-            pages.remove(i);
+        for (i = 0; i < tabs.size(); i++) {
+            tabs.remove(i);
         }
     }
 
     public void removeTabAt(int index) {
-        pages.remove(index);
+        tabs.remove(index);
     }
 
     public void setBackgroundAt(int index, String background) {
-        Page page = (Page)pages.get(index);
-        page.setBackground(background);
+        PortletTab tab = (PortletTab)tabs.get(index);
+        tab.setBackground(background);
     }
 
     public void setPortletComponentAt(int index, PortletComponent component) {
-        Page page = (Page)pages.get(index);
-        page.setComponent(component);
+        PortletTab tab = (PortletTab)tabs.get(index);
+        tab.setComponent(component);
     }
 
     public void setForegroundAt(int index, String foreground) {
-        Page page = (Page)pages.get(index);
-        page.setForeground(foreground);
+        PortletTab tab = (PortletTab)tabs.get(index);
+        tab.setForeground(foreground);
     }
 
     public void setSelectedPortletComponent(PortletComponent c) {
         int i;
-        for (i = 0; i < pages.size(); i++) {
-            Page page = (Page)pages.get(i);
-            if (page.getComponent().equals(c)) {
+        for (i = 0; i < tabs.size(); i++) {
+            PortletTab tab = (PortletTab)tabs.get(i);
+            if (tab.getComponent().equals(c)) {
                 selectedComponent = c;
                 selectedIndex = i;
                 break;
@@ -206,18 +158,25 @@ public class PortletTabbedPane extends PortletComponent {
 
     public void setSelectedIndex(int index) {
         selectedIndex = index;
-        Page page = (Page)pages.get(index);
-        selectedComponent = page.getComponent();
+        PortletTab tab = (PortletTab)tabs.get(index);
+        selectedComponent = tab.getComponent();
     }
 
     public void setTitleAt(int index, String title) {
-        Page page = (Page)pages.get(index);
-        page.setTitle(title);
+        PortletTab tab = (PortletTab)tabs.get(index);
+        tab.setTitle(title);
     }
 
-    public void doLayout() {
+    public void setPortletTabs(Vector tabs) {
+        this.tabs = tabs;
+    }
 
-        // XXX: RENDER THIS SHIT
+    public List getPortletTabs() {
+        return tabs;
+    }
+
+    public void doRender(PrintWriter out) {
+        log.debug("in doRender()");
     }
 
 }
