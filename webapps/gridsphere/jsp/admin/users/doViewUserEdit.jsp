@@ -1,10 +1,13 @@
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
+
+<ui:frame beanId="errorFrame"/>
+
 <ui:form>
 <ui:hiddenfield beanId="userID"/>
 <ui:hiddenfield beanId="newuser"/>
-<ui:panel>
+
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
@@ -13,8 +16,6 @@
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
-
-    <ui:frame beanId="errorFrame"/>
 
     <ui:frame>
 
@@ -82,6 +83,8 @@
             </ui:tablecell>
         </ui:tablerow>
 
+        </ui:frame>
+        <ui:frame>
         <ui:tablerow>
             <ui:tablecell width="200">
                 <ui:text key="PASSWORD"/>
@@ -101,8 +104,8 @@
             </ui:tablecell>
         </ui:tablerow>
 
+        
     </ui:frame>
+    </ui:form>
 
-</ui:panel>
-</ui:form>
 
