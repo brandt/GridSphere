@@ -23,6 +23,9 @@
         <field name="PortletHeader" type="org.gridlab.gridsphere.layout.PortletContainer">
             <bind-xml name="portlet-header"/>
         </field>
+        <field name="PortletBody" type="org.gridlab.gridsphere.layout.PortletContainer">
+            <bind-xml name="portlet-body"/>
+        </field>
         <field name="PortletFooter" type="org.gridlab.gridsphere.layout.PortletContainer">
             <bind-xml name="portlet-footer"/>
         </field>
