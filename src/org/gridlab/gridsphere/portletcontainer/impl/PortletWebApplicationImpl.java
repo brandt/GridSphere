@@ -204,10 +204,9 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         if (isJSR) return;
         String descriptor = ctx.getRealPath("/WEB-INF/PortletServices.xml");
         File f = new File(descriptor);
-        String mapping = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-services-mapping.xml");
         if (f.exists()) {
             SportletServiceFactory factory = SportletServiceFactory.getInstance();
-            factory.addServices(ctx, descriptor, mapping);
+            factory.addServices(ctx, descriptor);
         } else {
             log.debug("Did not find PortletServices.xml for: " + ctx.getServletContextName());
         }
