@@ -51,8 +51,6 @@ public class SportletRequest implements PortletRequest {
     // A representation of the client
     private Client client = null;
 
-    private static PortletLog log = SportletLog.getInstance(SportletRequest.class);
-
     // Contains user specific portlet data
     private PortletData data = null;
 
@@ -62,6 +60,8 @@ public class SportletRequest implements PortletRequest {
     // Represents the portlet window
     private PortletWindow window = null;
 
+    private static PortletLog log = SportletLog.getInstance(SportletRequest.class);
+
     /**
      * Constructor creates a proxy for a HttpServletRequest
      * All PortletRequest objects come from request or session attributes
@@ -69,8 +69,11 @@ public class SportletRequest implements PortletRequest {
      * @param req the HttpServletRequest
      */
     public SportletRequest(HttpServletRequest req) {
+        if (portletSession == null)
+            portletSession = new SportletSession(req.getSession(true));
         this.req = req;
         this.client = new ClientImpl(req);
+        this.logRequest();
     }
 
     /**
@@ -101,6 +104,7 @@ public class SportletRequest implements PortletRequest {
      * @param value the attribute value
      */
     public void setAttribute(String name, Object value) {
+        log.info("in setAttribute(): setting " + name);
         req.setAttribute(name, value);
     }
 
@@ -137,10 +141,6 @@ public class SportletRequest implements PortletRequest {
      * @return the portlet session
      */
     public PortletSession getPortletSession() {
-        if (session == null) {
-            session = req.getSession();
-            portletSession = new SportletSession(session);
-        }
         return portletSession;
     }
 
@@ -150,7 +150,7 @@ public class SportletRequest implements PortletRequest {
      *
      * If the given flag is false and there is no current portlet session, this method returns null.
      *
-     * @param create true to create a news session, false to return null if there is no current session
+     * @param create true to create a new session, false to return null if there is no current session
      * @return the portlet session
      */
     public PortletSession getPortletSession(boolean create) {
@@ -179,10 +179,10 @@ public class SportletRequest implements PortletRequest {
      * @return the PortletData
      */
     public PortletData getData() {
-        if ((session == null) || (getMode() == Portlet.Mode.CONFIGURE)) {
+        if ((session == null) || (mode == Portlet.Mode.CONFIGURE)) {
             return null;
         }
-        return data;
+        return (PortletData)req.getAttribute(GridSphereProperties.PORTLETDATA);
     }
 
     /**
@@ -265,7 +265,7 @@ public class SportletRequest implements PortletRequest {
      * @return the previous portlet mode
      */
     public Portlet.Mode getPreviousMode() {
-        return previousMode;
+        return (Portlet.Mode)req.getAttribute(GridSphereProperties.PREVIOUSMODE);
     }
 
     /**
@@ -283,7 +283,7 @@ public class SportletRequest implements PortletRequest {
      * @return the portlet window
      */
     public PortletWindow getWindow() {
-        return window;
+        return (PortletWindow)req.getAttribute(GridSphereProperties.PORTLETWINDOW);
     }
 
     /**
@@ -325,7 +325,7 @@ public class SportletRequest implements PortletRequest {
      * @return the portlet mode
      */
     public Portlet.Mode getMode() {
-        return mode;
+        return (Portlet.Mode)req.getAttribute(GridSphereProperties.PORTLETMODE);
     }
 
     /**
@@ -587,6 +587,8 @@ public class SportletRequest implements PortletRequest {
             paramvalue = getParameter(name);
             log.debug("\t\tname=" + name + " value=" + paramvalue);
         }
+        log.debug("\trequest parameter info: ");
+        log.debug("\trequest path info: " + req.getPathInfo());
     }
 
 }

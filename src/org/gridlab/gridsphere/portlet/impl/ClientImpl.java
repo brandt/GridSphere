@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.portlet.Capability;
 import org.gridlab.gridsphere.portlet.Client;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 
 /**
  * The ClientImpl class represents the client device that the user connects to the portal with.
@@ -23,7 +24,10 @@ public class ClientImpl implements Client {
     private String markupName = null;
 
     public ClientImpl(HttpServletRequest req) {
-        System.err.println(req.getHeaders("user-agent"));
+        Enumeration enum = req.getHeaders("user-agent");
+        while (enum.hasMoreElements()) {
+            System.err.println((String)enum.nextElement());
+        }
     }
 
 

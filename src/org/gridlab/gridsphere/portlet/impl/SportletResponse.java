@@ -4,10 +4,8 @@
 */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.gridlab.gridsphere.portlet.PortletURI;
-import org.gridlab.gridsphere.portlet.PortletWindow;
-import org.gridlab.gridsphere.portlet.PortletResponse;
-import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +30,7 @@ public class SportletResponse implements PortletResponse {
     public SportletResponse(HttpServletResponse res, PortletRequest req) {
         this.res = res;
         this.req = req;
-        sportletURI = new SportletURI(res, req);
+        sportletURI = new SportletURI(res);
     }
 
     /**
@@ -100,6 +98,7 @@ public class SportletResponse implements PortletResponse {
      * @return the portlet URI
      */
     public PortletURI createURI() {
+        addURIParameters();
         sportletURI.setReturn(false);
         return (PortletURI)sportletURI;
     }
@@ -108,10 +107,22 @@ public class SportletResponse implements PortletResponse {
      * Creates a portlet URI pointing to the current portlet mode and given portlet window state.
      *
      * @param state the portlet window state
+     * @see addURIParameters
      */
     public PortletURI createURI(PortletWindow.State state) {
+        addURIParameters();
         sportletURI.setWindowState(state);
         return (PortletURI)sportletURI;
+    }
+
+    /**
+     * Add any additional parameters to the URI
+     * <ul><li>
+     * GridSphereProperties.PORTLETID
+     * </li></ul>
+     */
+    protected void addURIParameters() {
+        sportletURI.addParameter(GridSphereProperties.PORTLETID, (String)req.getAttribute(GridSphereProperties.PORTLETID));
     }
 
     /**
