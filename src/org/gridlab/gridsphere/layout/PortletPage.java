@@ -36,7 +36,7 @@ public class PortletPage implements Serializable, Cloneable {
     protected PortletTabbedPane tabbedPane = null;
 
     // The component ID's of each of the layout components
-    protected List componentIdentifiers = new Vector();
+    protected List componentIdentifiers = null;
 
     // The list of portlets a user has-- generally contained within a PortletFrame/PortletTitleBar combo
     //protected List portlets = new ArrayList();
@@ -178,6 +178,9 @@ public class PortletPage implements Serializable, Cloneable {
      * @see ComponentIdentifier
      */
     public List init(List list) {
+
+        componentIdentifiers = new Vector();
+
         if (headerContainer != null) {
             headerContainer.setTheme(theme);
             list = headerContainer.init(list);
@@ -212,6 +215,8 @@ public class PortletPage implements Serializable, Cloneable {
                 labelsHash.put(compLabel, new Integer(cid.getComponentID()));
             }
         }
+
+        System.err.println("made components list!!!! " + list.size());
 
         return componentIdentifiers;
     }

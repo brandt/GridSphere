@@ -190,6 +190,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      * @see ComponentIdentifier
      */
     public List init(List list) {
+        list = super.init(list);
         if (selectedIndex < 0) selectedIndex = 0;
         PortletTab tab = null;
         List stabs = Collections.synchronizedList(tabs);
@@ -198,8 +199,8 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                 tab = getPortletTabAt(i);
                 tab.setTheme(theme);
                 if (selectedIndex == i) tab.setSelected(true);
-                tab.addPortletTabListener(this);
                 list = tab.init(list);
+                tab.addPortletTabListener(this);
             }
         }
         return list;

@@ -165,6 +165,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         compId.setComponentLabel(label);
         compId.setClassName(this.getClass().getName());
         list.add(compId);
+        hasTitleBarEvent = false;
         this.originalWidth = width;
         // if the portlet frame is transparent then it doesn't get a title bar
         if ((transparent == false) && (titleBar == null)) titleBar = new PortletTitleBar();
@@ -210,6 +211,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      * @throws IOException if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
+        System.err.println("in action performed portlet frame: " + portletClass);
 
         super.actionPerformed(event);
 
@@ -432,6 +434,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         f.roleString = this.roleString;
         f.requiredRole = (PortletRole)this.requiredRole.clone();
         f.renderPortlet = this.renderPortlet;
+        f.hasTitleBarEvent = false;
         return f;
     }
 }

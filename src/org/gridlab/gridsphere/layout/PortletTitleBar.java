@@ -554,6 +554,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         isActive = true;
 
         PortletRequest req = event.getPortletRequest();
+        req.setAttribute(SportletProperties.PORTLETID, portletClass);
 
         PortletComponentEvent lastEvent = event.getLastRenderEvent();
 

@@ -28,7 +28,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected boolean isVisible = true;
     protected String roleString = "GUEST";
     protected PortletRole requiredRole = null;
-    protected List listeners = new Vector();
+    protected List listeners = null;
 
     /**
      * Initializes the portlet component. Since the components are isolated
@@ -40,6 +40,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      * @see ComponentIdentifier
      */
     public List init(List list) {
+        listeners = new Vector();
         defaultWidth = width;
          if (roleString != null) {
             try {

@@ -147,8 +147,9 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         compId.setComponentLabel(label);
         compId.setClassName(this.getClass().getName());
         list.add(compId);
+        list = portletComponent.init(list);
         portletComponent.addComponentListener(this);
-        return portletComponent.init(list);
+        return list;
     }
 
     /**
