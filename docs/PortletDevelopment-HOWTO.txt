@@ -1,0 +1,274 @@
+/**
+ * $Id$
+ */
+
+Developing Portlets in the GridSphere Framework
+
+1) Portlet Concepts
+2) Portlet Deployment Descriptors
+3) Basic Portlet Objects
+4) Portlet Lifecycle
+4) Portlet Packaging
+5) Writing a Hello World Portlet
+5) Other Resources
+
+
+1. Portlet Concepts
+
+Portlets are defined as visual components that can be organized into portal web pages. Portlets
+provide "mini-applications" that can either display informational content or provide access to other services.
+The architecture of GridSphere and API definitions of key portlet concepts matches the portlet API provided
+by IBM WebSphere to a large extent. An excellent source of more information on portlets and portlet development
+is the WebSphere 4.1 Portlet Developer's Guide.
+
+In following largely the WebSphere specification, GridSphere also supports the notion that portlets inherit from
+the servlet concept and API defined in Sun's Servlet Specification. Hence, GridSphere runs as a web application
+that provides a portlet container for managing deployed portlets. Portlets are intended to be administered dynamically
+and portlet administrators can deploy and undeploy portlets to the container.
+
+The following inheritance hierarchy describes the relationship between servlets and portlets:
+
+javax.servlet.http.HttpServlet
+    org.gridlab.gridsphere.portlet.Portlet
+        org.gridlab.gridsphere.portlet.PortletAdaptor
+            org.gridlab.gridsphere.portlet.AbstractPortlet
+                ...
+                com.mycom.MyPortlet
+
+
+2. Portlet Deployment Descriptors
+
+Because portlets inherit from servlets and are also managed in part by the servlet container, the standard web.xml
+file must be augmented to include the names and mappings of portlets as shown in the following sample web.xml snippet:
+
+<web-app>
+    <servlet>
+        <servlet-name>HelloWorld</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld</servlet-class>
+    </servlet>
+
+    ...
+
+    <servlet-mapping>
+       <servlet-name>HelloWorld</servlet-name>
+       <url-pattern>/hello</url-pattern>
+    </servlet-mapping>
+</web-app>
+
+
+Portlets are defined in a portlet.xml file which has the following format:
+
+<portlet-app-collection>
+    <portlet-app-def>
+
+        <portlet-app ...>
+        </portlet-app>
+
+        <concrete-portlet-app ..>
+        </concrete-portlet-app>
+
+        <concrete-portlet-app ..>
+        </concrete-portlet-app>
+
+    </portlet-app-def>
+
+    <portlet-app-def>
+    ...
+    </portlet-app-def>
+
+</portlet-app-collection>
+
+A <portlet-app-collection> encompasses all the portlets defined by the <portlet-app-def> tags. Each
+<portlet-app-def> contains one <portlet-app> definition and one or more <concrete-portlet-app> definitions that
+describes a concrete portlet instance.
+
+The following sample shows a portlet application description for a HelloWorldPortlet:
+
+<portlet-app id="org.gridlab.gridsphere.portlets.core.HelloWorld">
+    <portlet-name>Hello World Portlet Application</portlet-name>
+    <servlet-name>HelloWorld</servlet-name>
+    <portlet-config>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </portlet-config>
+    <cache>
+        <expires>120</expires>
+        <shared>true</shared>
+    </cache>
+    <allows>
+        <maximized/>
+        <minimized/>
+    </allows>
+    <supports>
+        <markup name="html">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+        <markup name="wml">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+    </supports>
+</portlet-app>
+
+A portlet application defines the following information:
+
+<portlet-app id=""> -- The id is defined as the fully qualified classname of the portlet
+
+<portlet-name>      -- (Optional) An identifying name. Currently this is not used.
+
+<servlet-name>      --  This must match the <servlet-name> defined in the web.xml file which provides a mapping
+                        between a servlet (portlet) class and the servlet name used to reference the portlet by the
+                        portlet container.
+
+<portlet-config>    -- Defines configuration information for this portlet that is accessible via the PortletConfig
+                       object described in the section on "Basic Portlet Objects"
+
+<cache>             -- Instructs the portlet conatiner to perform caching of this portlet. Currently not used
+
+<allows>            -- (Optional) Defines the supported window states of this portlet. Possible values include
+                       minimized and maximized. If not specified both states are supported.
+
+<supports>          -- (Optional) Defines which portlet modes are supported for various markups. If this is
+                       not specified, all modes are enabled.
+
+A concrete portlet description is shown in the following sample snippet:
+
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.HelloWorld.1">
+    <context-param>
+        <param-name>foobar</param-name>
+        <param-value>some value</param-value>
+    </context-param>
+    <concrete-portlet>
+        <portlet-name>Hello World 1</portlet-name>
+        <default-locale>en</default-locale>
+        <language locale="en_US">
+            <title>Hello World - Sample Portlet #2</title>
+            <title-short>Hello World</title-short>
+            <description>Hello World - Sample Portlet #1</description>
+            <keywords>portlet hello world</keywords>
+        </language>
+        <config-param>
+            <param-name>Portlet Master</param-name>
+            <param-value>yourid@yourdomain.com</param-value>
+        </config-param>
+        <owner>
+            <group-name>CACTUS</group-name>
+            <role-name>ADMIN</role-name>
+        </owner>
+        <group>
+            <group-name>ANY</group-name>
+        </group>
+        <role>
+            <role-name>GUEST</role-name>
+        </role>
+    </concrete-portlet>
+</concrete-portlet-app>
+
+The concrete portlet description defines the following properties:
+
+<concrete-portlet-app id="..."> -- The id provided is the portlet application id (the classname of the portlet) with
+                                   an additional digit appended to uniquely identify this concrete portlet instance
+                                   among others.
+
+<context-param>                 -- Defines the portlet context information encapsulated by the
+                                   PortletApplicationSettings object described in the section on "Basic Portlet Objects"
+
+<concrete-portlet>              -- Defines additional concrete portlet information...
+
+<portlet-name>                  -- The name of this portlet. Currently not used.
+
+<default-locale>                -- The default locale of this portlet.
+
+<language locale="...">         -- Defines additional language support for the defined locale in the following tags:
+
+<title>                         -- The title used by the PortletBorder component to render the portlet title bar.
+
+<title-short>                   -- A more concise title that may be used for rendering portlets in WML enabled devices.
+
+<description>                   -- A brief description of capabilities provided by this portlet.
+
+<keywords>                      -- A list of keywords that can be used to index this portlet from a portlet lookup
+                                   service (when one becomes available ;-))
+
+<config-param>                  -- Addtional concrete portlet settings that are maintained in the PortletSettings
+                                   object described in the section on "Basic Portlet Objects".
+
+<owner>                         -- Defines the owner/administrator of this portlet defined by a group name and a
+    <group-name>                   role name. The owner may redeploy and reconfigure this portlet.
+    <role-name>
+
+<group>                         -- Defines the groups that may have access to this portlet. A group-name of ANY
+    <group-name>                   allows users in any other group to add this portlet to their subscription list.
+
+<role>                          -- Defines the roles that may have access to this portelt. A role-name of ANY
+    <role-name>                    allows users in any role to add this portlet to their subscription list.
+
+
+3. Basic Portlet Objects
+
+PortletRequest and PortletResponse
+
+The two most funadamental interfaces in the Portlet API after the portlet classes themselves are the PortletRequest
+and PortletResponse objects. These two mirror closely the HttpServletRequest and HttpServletResponse counterparts
+and offer all the previous methods and some additional portlet specific ones. The following methods are defined by
+the PortletRequest:
+
+ + Client getClient() -- returns a Client object representing the browser device being used by the client
+ + PortletData getData() -- returns the user-specific persistent data for the active portlet
+ + Portlet.Mode getMode() -- returns the Mode the portlet is running in e.g. Portlet.Mode.CONFIGURE, Portlet.Mode.VIEW
+ + PortletSession getPortletSession() -- returns the portlet session for this user
+ + PortletSettings getPortletSettings()  -- return the concrete portlet settings
+ + Portlet.Mode getPreviousMode() -- return the previous portlet mode of this portlet
+ + User getUser() -- return the User object
+ + PortletWindow getWindow() -- return the portlet window representing the window state of this portlet
+ + void setModeModifier(Portlet.ModeModifier modeModifier) --
+
+PortletRequest:
+
+PortletResponse:
+
+PortletSession:
+
+PortletConfig:
+
+PortletContext:
+
+PortletSettings:
+
+PortletApplicationSettings:
+
+User:
+
+Client:
+
+PortletData:
+
+4. Portlet Lifecycle
+
+
+5. Portlet Packaging
+
+6. Writing a HellWorld Portlet
+
+
+7. Other Resources
+
+    -- IBM Portal Developer's Zone  http://
+        -- IBM WebSphere 4.1 Portlet Developers Guide
+
+
+
+
+
+
+
+
+
+
+
+
