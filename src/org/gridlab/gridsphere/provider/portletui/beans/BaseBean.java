@@ -78,7 +78,7 @@ public abstract class BaseBean implements TagBean {
 
     protected String getBeanKey() {
         String cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
-        String compId = (String)request.getAttribute("compId");
+        String compId = (String)request.getAttribute(SportletProperties.GP_COMPONENT_ID);
         String beanKey = null;
         if (compId == null) {
             beanKey = beanId + "_" + cid;

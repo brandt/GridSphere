@@ -210,18 +210,14 @@ public class PortletPageFactory implements PortletSessionListener {
             boolean found = false;
             while (i < tmpPage.getComponentIdentifierList().size()) {
                 found = false;
-                System.err.println("i= " + i);
                 it = tmpPage.getComponentIdentifierList().iterator();
-                System.err.println("rem");
                 while (it.hasNext() && (!found)) {
                     found = false;
                     ComponentIdentifier cid = (ComponentIdentifier)it.next();
                     if (cid.getPortletComponent() instanceof PortletFrame) {
-                        System.err.println("found frame = " + cid.getPortletClass());
                         if (!allowedPortlets.contains(cid.getPortletClass())) {
                             PortletComponent pc = cid.getPortletComponent();
                             PortletComponent parent = pc.getParentComponent();
-                            System.err.println("removing portlet class= " + cid.getPortletClass());
                             parent.remove(pc, req);
                             tmpPage.init(req, new ArrayList());
                             found = true;
@@ -260,7 +256,7 @@ public class PortletPageFactory implements PortletSessionListener {
                 List  userTabs = userPane.getPortletTabs();
                 for (int i = 0; i < userTabs.size(); i++) {
                     PortletTab tab = (PortletTab)userTabs.get(i);
-                    System.err.println("adding user tab: " + tab.getTitle("en"));
+                    log.debug("adding user tab: " + tab.getTitle("en"));
                     pane.addTab((PortletTab)deepCopy(tab));
                 }
             }
@@ -269,7 +265,7 @@ public class PortletPageFactory implements PortletSessionListener {
             List tabs = gsTab.getPortletTabs();
             for (int j = 0; j < tabs.size(); j++) {
                 PortletTab tab = (PortletTab)tabs.get(j);
-                System.err.println("adding tab: " + tab.getTitle("en"));
+                log.debug("adding tab: " + tab.getTitle("en"));
                 pane.addTab((PortletTab)deepCopy(tab));
             }
 
@@ -285,7 +281,7 @@ public class PortletPageFactory implements PortletSessionListener {
                     tabs = portletTabs.getPortletTabs();
                     for (int j = 0; j < tabs.size(); j++) {
                         PortletTab tab = (PortletTab)tabs.get(j);
-                        System.err.println("adding tab: " + tab.getTitle("en"));
+                        log.debug("adding tab: " + tab.getTitle("en"));
                         //pane.addTab(g.getName(), (PortletTab)tab.clone());
                         pane.addTab((PortletTab)deepCopy(tab));
                     }
@@ -298,6 +294,16 @@ public class PortletPageFactory implements PortletSessionListener {
             newPage.setPortletTabbedPane(pane);
             //newPage = (PortletPage)templatePage;
             newPage.init(req, new ArrayList());
+
+            List list = newPage.getComponentIdentifierList();
+            log.debug("Made a components list!!!! " + list.size());
+
+            for (int i = 0; i < list.size(); i++) {
+                ComponentIdentifier c = (ComponentIdentifier) list.get(i);
+                log.debug("\tid: " + c.getComponentID() + " : " + c.getClassName() + " : " + c.hasPortlet());
+                //if (c.hasPortlet()) System.err.println("portlet= " + c.getPortletClass());
+            }
+
         } catch (Exception e) {
             log.error("Unable to make a clone of the templatePage", e);
 
@@ -342,7 +348,6 @@ public class PortletPageFactory implements PortletSessionListener {
             PortletRowLayout row = new PortletRowLayout();
             int width = 100 / cols;
             for (int i = 0; i < cols; i++) {
-                System.err.println("row layout = " + width);
                 PortletColumnLayout col = new PortletColumnLayout();
                 col.setWidth(String.valueOf(width) + "%");
                 row.addPortletComponent(col);
@@ -375,8 +380,7 @@ public class PortletPageFactory implements PortletSessionListener {
             String portletName = tokenizer.nextToken();
             String portletClass = registry.getPortletClassName(appName, portletName);
             if (portletClass == null) {
-                System.err.println("Unable to find portlet class for " + portletName);
-
+                log.error("Unable to find portlet class for " + portletName);
             }
             if ( pageName == null ) {
                 pageName = "TCK_testpage_" + portletName;
@@ -417,7 +421,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
         String[] portletNames = req.getParameterValues("portletName");
         if ( portletNames != null ) {
-            System.err.println("Creating TCK LAYOUT!");
+            log.info("Creating TCK LAYOUT!");
             tckLayout =  createTCKPage(req, portletNames );
         }
 

@@ -494,7 +494,6 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     public void save() throws IOException {
         try {
             String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
-            System.err.println("saving desc: " + layoutDescriptor + " and mapping: " + layoutMappingFile);
             PortletLayoutDescriptor.savePortletTabbedPane(this, layoutDescriptor, layoutMappingFile);
         } catch (PersistenceManagerException e) {
             throw new IOException("Unable to save user's tabbed pane: " + e.getMessage());

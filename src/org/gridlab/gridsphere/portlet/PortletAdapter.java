@@ -139,7 +139,6 @@ public abstract class PortletAdapter extends Portlet {
             }
         }
 
-        System.err.println("trying to get portletdata for " + portletID);
         PortletData data = null;
         User user = request.getUser();
         if (!(user instanceof GuestUser)) {
@@ -156,8 +155,7 @@ public abstract class PortletAdapter extends Portlet {
             request.setAttribute(SportletProperties.PORTLET_SETTINGS, portletSettings);
         }
 
-        System.err.println("trying to get groupname for " + portletID);
-        if (this.getPortletConfig() == null) System.err.println("portletconfig is null!");
+        //if (this.getPortletConfig() == null) System.err.println("portletconfig is null!");
 
         String groupName = this.getPortletConfig().getGroupName();
         //String portletName = portletConfig.getName();

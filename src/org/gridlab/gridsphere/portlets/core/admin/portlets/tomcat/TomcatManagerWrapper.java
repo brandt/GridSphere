@@ -106,7 +106,7 @@ public class TomcatManagerWrapper {
             Iterator it = result.getWebAppDescriptions().iterator();
             while (it.hasNext()) {
                 TomcatWebAppDescription webAppDesc = (TomcatWebAppDescription)it.next();
-                System.err.println(webAppDesc.toString());
+                //System.err.println(webAppDesc.toString());
                 if (webapps.contains((webAppDesc.getContextPath()))) {
                     String desc = pm.getPortletWebApplicationDescription(webAppDesc.getContextPath());
                     webAppDesc.setDescription(desc);

@@ -24,7 +24,6 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
     }
 
     public void remove(PortletComponent pc, PortletRequest req) {
-        System.err.println("removing portlet in column");
         components.remove(pc);
         if (getPortletComponents().isEmpty() && (!canModify)) {
             parent.remove(this, req);

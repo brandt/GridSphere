@@ -76,7 +76,7 @@ public class FileManagerPortlet extends ActionPortlet {
 	            errMsg.setStyle("error");
                 return;
             }
-            System.err.println("filename = " + fileName);
+            log.info("filename = " + fileName);
             if (fileName.equals("")) return;
 
             String userLoc = userStorage.getLocationPath(user, "");
@@ -86,7 +86,7 @@ public class FileManagerPortlet extends ActionPortlet {
             }
             String path = userStorage.getLocationPath(user, fileName);
 
-            System.err.println("storeFile: " + path);
+            log.info("storeFile: " + path);
             fi.saveFile(path);
 
             //userStorage.storeFile(user, fi, fileName);

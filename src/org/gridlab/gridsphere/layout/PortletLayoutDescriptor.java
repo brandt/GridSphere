@@ -87,7 +87,6 @@ public class PortletLayoutDescriptor {
      * @throws PersistenceManagerException if a descriptor error occurs
      */
     public static void savePortletTabbedPane(PortletTabbedPane pane, String descriptorPath, String mappingPath) throws IOException, PersistenceManagerException {
-        System.err.println("setting descriptor" + descriptorPath);
         pmXML.setDescriptorPath(descriptorPath);
         pmXML.setMappingPath(mappingPath);
         pmXML.save(pane);

@@ -410,40 +410,40 @@ public abstract class BaseFormEventImpl {
     /**
      * Prints the request parameters to stdout. Generally used for debugging
      */
-    public void printRequestParameters() {
-        System.out.println("\n\n show request params\n--------------------\n");
+    public void logRequestParameters() {
+        log.debug("\n\n show request params\n--------------------\n");
         Enumeration enum = request.getParameterNames();
         while (enum.hasMoreElements()) {
             String name = (String) enum.nextElement();
-            System.out.println("name :" + name);
+            log.debug("\t\tname :" + name);
             String values[] = request.getParameterValues(name);
             if (values.length == 1) {
                 String pval = values[0];
                 if (pval.length() == 0) {
                     pval = "no value";
                 }
-                if (!name.startsWith("ui_pb")) System.out.println(" value : " + pval);
+                if (!name.startsWith("ui_pb")) log.debug("\t\t value : " + pval);
             } else {
-                System.out.println(" value :");
+                log.debug("\t\t value :");
                 for (int i = 0; i < values.length; i++) {
-                    System.out.println("            - " + values[i]);
+                    log.debug("\t\t  - " + values[i]);
                 }
             }
         }
-        System.out.println("--------------------\n");
+        log.debug("--------------------\n");
     }
 
     /**
      * Prints the request attributes to stdout. Generally used for debugging
      */
-    public void printRequestAttributes() {
-        System.out.println("\n\n show request attributes\n--------------------\n");
+    public void logRequestAttributes() {
+        log.debug("\n\n show request attributes\n--------------------\n");
         Enumeration enum = request.getAttributeNames();
         while (enum.hasMoreElements()) {
             String name = (String) enum.nextElement();
-            System.out.println("name :" + name);
+            log.debug("name :" + name);
         }
-        System.out.println("--------------------\n");
+        log.debug("--------------------\n");
     }
 
     /**
@@ -530,7 +530,7 @@ public abstract class BaseFormEventImpl {
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
             } else if (vb.equals(FileInputBean.NAME)) {
-                this.printRequestAttributes();
+                logRequestAttributes();
                 //log.debug("Creating a fileinput bean with id:" + beanId);
                 try {
                     FileInputBean bean = null;
@@ -707,14 +707,13 @@ public abstract class BaseFormEventImpl {
             //log.debug("storing bean id: " + tagBean.getBeanId());
             tagBean.store();
         }
-        //printRequestAttributes();
-
+        //logRequestAttributes();
     }
 
     /**
      * Logs all tag bean identifiers, primarily used for debugging
      */
-    public void printTagBeans() {
+    public void logTagBeans() {
         //log.debug("in print tag beans:");
         Iterator it = tagBeans.values().iterator();
         while (it.hasNext()) {

@@ -49,7 +49,7 @@ public class PortletApplicationManager extends ActionPortlet {
         try {
             result = tomcat.getPortletAppList(req);
             event.getPortletRequest().setAttribute("result", result);
-            System.err.println("result is OK");
+            log.info("result is OK");
         } catch (TomcatManagerException e) {
             log.error("Unable to retrieve list of portlets. Make sure tomcat-users.xml has been edited according to the UserGuide.");
             event.getPortletRequest().setAttribute("result", result);
@@ -132,7 +132,7 @@ public class PortletApplicationManager extends ActionPortlet {
             FileInputBean fi = event.getFileInputBean("userfile");
             User user = event.getPortletRequest().getUser();
             String fileName = fi.getFileName();
-            System.err.println("filename = " + fileName);
+            log.info("filename = " + fileName);
             if (fileName.equals("")) return;
             PortletManagerService portletManager = null;
             try {

@@ -45,9 +45,9 @@ public class ActionFormEventImpl extends BaseFormEventImpl implements ActionForm
             tagBeans = new HashMap();
             createTagBeans((HttpServletRequest)request);
         }
-        printRequestParameters();
+        logRequestParameters();
 
-        printTagBeans();
+        logTagBeans();
     }
 
     /**

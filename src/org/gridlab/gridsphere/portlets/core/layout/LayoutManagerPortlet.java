@@ -55,7 +55,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
         RadioButtonBean rb = event.getRadioButtonBean("colsRB");
         String rbtype = rb.getSelectedValue();
 
-        System.err.println("rbtype= " + rbtype);
         int cols = Integer.valueOf(rbtype).intValue();
         PortletTabbedPane pane = layoutMgr.createUserTabbedPane(event.getPortletRequest(), cols, tabName);
 
@@ -128,11 +127,10 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletResponse res = event.getPortletResponse();
 
         req.setAttribute("lang", req.getLocale().getLanguage());
-        MessageBoxBean messageBox = event.getMessageBoxBean("messageBox");
-        messageBox.appendText("This portlet is under development!");
-
+        
         ListBoxBean themeLB = event.getListBoxBean("themeLB");
-        String theme = layoutMgr.getTheme(req);
+        PortletPage page = layoutMgr.getPortletPage(req);
+        String theme = page.getTheme();
         themeLB.clear();
         String themes = getPortletSettings().getAttribute("supported-themes");
         StringTokenizer st = new StringTokenizer(themes, ",");
@@ -169,7 +167,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
             log.error("in ProfileManagerPortlet invalid account request", e);
         }
         user = userManagerService.approveAccountRequest(acctReq);
-        layoutMgr.setTheme(req, theme);
+        PortletPage page = layoutMgr.getPortletPage(req);
+        page.setTheme(theme);
         layoutMgr.reloadPage(req);       
     }
 

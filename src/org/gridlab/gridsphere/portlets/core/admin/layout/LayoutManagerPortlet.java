@@ -237,7 +237,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         }
         
         String groupFile = PortletTabRegistry.getTabDescriptorPath(group.getName());
-        System.err.println("saving group layout: " + group.getName());
+        log.info("saving group layout: " + group.getName());
         Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(groupFile), "UTF-8"));
         byte[] text = newText.getBytes("iso-8859-1");
         String newstring = new String(text, "UTF-8");

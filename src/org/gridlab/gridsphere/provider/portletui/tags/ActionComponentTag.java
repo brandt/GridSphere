@@ -3,6 +3,7 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.provider.portletui.beans.ActionComponentBean;
 
 import javax.servlet.RequestDispatcher;
@@ -37,17 +38,17 @@ public class ActionComponentTag extends IncludeTag {
         ServletRequest request = pageContext.getRequest();
         ServletResponse response = pageContext.getResponse();
 
-        String baseCompId = (String)request.getAttribute("compId");
+        String baseCompId = (String)request.getAttribute(SportletProperties.GP_COMPONENT_ID);
 
         if (includeBean != null) {
             //log.debug("Using active component id ");
             activeCompId = ((ActionComponentBean)includeBean).getActiveComponentId();
         } else {
             //log.debug("Using request component id ");
-            activeCompId = (String)request.getAttribute("compId");
+            activeCompId = (String)request.getAttribute(SportletProperties.GP_COMPONENT_ID);
         }
         //log.debug("Changing component id from " + baseCompId + " to " + activeCompId);
-        request.setAttribute("compId", activeCompId);
+        request.setAttribute(SportletProperties.GP_COMPONENT_ID, activeCompId);
         try {
 
             // Very important here... must pass it the appropriate jsp writer!!!
@@ -60,6 +61,6 @@ public class ActionComponentTag extends IncludeTag {
             log.error("Unable to include page ", e);
         }
         //log.debug("Resetting component id to " + baseCompId);
-        request.setAttribute("compId", baseCompId);
+        request.setAttribute(SportletProperties.GP_COMPONENT_ID, baseCompId);
     }
 }

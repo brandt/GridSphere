@@ -380,7 +380,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         while (geIt.hasNext()) {
             GroupEntry ge = (GroupEntry)geIt.next();
             if (!ge.getGroup().equals(PortletGroupFactory.GRIDSPHERE_GROUP)) {
-                System.err.println("user is in group: " + ge.getGroup());
+                log.debug("user is in group: " + ge.getGroup());
                 //aclManagerService.deleteGroupEntry(ge);
                 usergroups.add(ge.getGroup().getName());
             }
@@ -390,11 +390,11 @@ public class ProfileManagerPortlet extends ActionPortlet {
         Iterator it = selectedGroups.iterator();
         while (it.hasNext()) {
             String groupStr = (String)it.next();
-            System.err.println("Selected group: " + groupStr);
+            log.debug("Selected group: " + groupStr);
             PortletGroup selectedGroup = this.aclManagerService.getGroupByName(groupStr);
             GroupEntry ge = this.aclManagerService.getGroupEntry(user, selectedGroup);
             if (!usergroups.contains(selectedGroup.getName())) {
-                System.err.println("does not have group: " + selectedGroup.getName());
+                log.debug("does not have group: " + selectedGroup.getName());
                 GroupRequest groupRequest = this.aclManagerService.createGroupRequest(ge);
                 groupRequest.setUser(user);
                 groupRequest.setGroup(selectedGroup);
@@ -410,7 +410,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 this.aclManagerService.approveGroupRequest(groupRequest);
 
 
-                System.err.println("adding tab " + selectedGroup.getName());
+                log.debug("adding tab " + selectedGroup.getName());
                 // @TODO change to addGroupTab  
                 this.layoutMgr.addGroupTab(req, selectedGroup.getName());
                 this.layoutMgr.reloadPage(req);
@@ -422,7 +422,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         it = usergroups.iterator();
         while (it.hasNext()) {
             String groupStr = (String)it.next();
-            System.err.println("Removing group :" + groupStr);
+            log.debug("Removing group :" + groupStr);
             PortletGroup g = this.aclManagerService.getGroupByName(groupStr);
             GroupEntry entry = this.aclManagerService.getGroupEntry(user, g);
             GroupRequest groupRequest = this.aclManagerService.createGroupRequest(entry);

@@ -6,6 +6,8 @@ import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.PortletLog;
 
 import java.io.IOException;
 import java.io.File;
@@ -16,6 +18,8 @@ import java.util.*;
  * @version $Id$
  */
 public class PortletTabRegistry {
+
+    protected static final PortletLog log = SportletLog.getInstance(PortletTabRegistry.class);
 
     private static String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
 
@@ -51,7 +55,7 @@ public class PortletTabRegistry {
                 }
             }
         } catch (Exception e) {
-            System.err.println("Unable to load group layout files!!");
+            log.error("Unable to load group layout files!!");
             e.printStackTrace();
         }
     }
@@ -72,9 +76,9 @@ public class PortletTabRegistry {
     public static PortletPage getGuestLayoutPage() {
         if (guestPage == null) {
             try {
-            reloadGuestLayout();
+                reloadGuestLayout();
             } catch (Exception e) {
-
+                log.error("Unable to reload guest user layout", e);
             }
         }
         return guestPage;
@@ -154,7 +158,7 @@ public class PortletTabRegistry {
                 applicationTabs.put(tab, pane);
             }
         } catch (Exception e) {
-
+            log.error("Unable to reload tab: " + tab, e);
         }
     }
 

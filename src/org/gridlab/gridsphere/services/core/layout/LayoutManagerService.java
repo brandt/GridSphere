@@ -16,62 +16,16 @@ import java.util.List;
  */
 public interface LayoutManagerService extends PortletService {
 
-    //public String[] getPortletClassNames(PortletRequest req);
-
-    public void setTheme(PortletRequest req, String theme);
-
-    public String getTheme(PortletRequest req);
+    public void reloadPage(PortletRequest req);
 
     public void refreshPage(PortletRequest req);
 
-    public PortletTableLayout getPortletLayout(PortletRequest req, String subtabName);
-
-    public PortletPage getPortletPage(PortletRequest req);
-
-    public PortletTabbedPane createUserTabbedPane(PortletRequest req, int cols, String label);
+    public void addGroupTab(PortletRequest req, String groupName);
 
     public PortletTabbedPane getUserTabbedPane(PortletRequest req);
 
-    public List getSubscribedPortlets(PortletRequest req);
+    public PortletTabbedPane createUserTabbedPane(PortletRequest req, int cols, String label);
 
-    public void setSubscribedPortlets(PortletRequest req, List portletClassNames);
-
-    public void addSubscribedPortlet(PortletRequest req, String portletClassName);
-
-    public void addPortletTab(PortletRequest req, PortletTab tab);
-
-    public void addApplicationTab(PortletRequest req, String webAppName);
-
-    public void addGroupTab(PortletRequest req, String webAppName);
-
-    //public void removeApplicationTab(User user, String webAppName);
-
-    public void removeSubscribedPortlet(PortletRequest req, String portletClassName);
-
-    public void removeSubscribedPortlets(PortletRequest req, List portletClassNames);
-
-    public void removePortlets(PortletRequest req, List portletClassNames);
-
-    public void removePortlets(PortletRequest req, User user, List portletClassNames);
-
-    public List getAllPortletNames(PortletRequest req);
-
-    public void reloadPage(PortletRequest req);
-
-    public List getTabNames(PortletRequest req);
-
-    public void setTabNames(PortletRequest req, List tabNames);
-
-    public List getSubTabNames(PortletRequest req, String tabName);
-
-    public void setSubTabNames(PortletRequest req, String tabName, List subTabNames);
-
-    public String[] getFrameClassNames(PortletRequest req, String subTabName);
-
-    public void setFrameClassNames(PortletRequest req, String subTabName, String[] frameNames);
-
-    public void removeTab(PortletRequest req, String tabName);
-
-    public void removeFrame(String frameClassName);
-
+    public PortletPage getPortletPage(PortletRequest req);
+  
 }

@@ -218,7 +218,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         //String tck = (String)req.getPortletSession(true).getAttribute("tck");
         String[] portletNames = req.getParameterValues("portletName");
         if ((isTCK) || (portletNames != null)) {
-            System.err.println("Setting a TCK user");
+            log.info("Setting a TCK user");
             SportletUserImpl u = new SportletUserImpl();
             u.setUserName("tckuser");
             u.setUserID("tckuser");

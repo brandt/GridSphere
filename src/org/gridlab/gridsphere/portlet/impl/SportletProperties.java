@@ -139,6 +139,9 @@ public interface SportletProperties {
 
     public static final String COMPONENT_ID = "cid";
 
+    // Used for "action component model" in grid portlets currently
+    public static final String GP_COMPONENT_ID = "gp_compid";
+
     public static final String DEFAULT_PORTLET_ACTION = "gs_action";
 
     public static final String DEFAULT_PORTLET_MESSAGE = "message";

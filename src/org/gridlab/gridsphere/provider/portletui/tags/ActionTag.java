@@ -231,7 +231,7 @@ public abstract class ActionTag extends BaseComponentTag {
         }
 
         ServletRequest request = pageContext.getRequest();
-        String compId = (String)request.getAttribute("compId");
+        String compId = (String)request.getAttribute(SportletProperties.GP_COMPONENT_ID);
 
         if (action != null) {
             if (compId == null) {
@@ -294,7 +294,7 @@ public abstract class ActionTag extends BaseComponentTag {
         if (action != null) {
 
             ServletRequest request = pageContext.getRequest();
-            String compId = (String)request.getAttribute("compId");
+            String compId = (String)request.getAttribute(SportletProperties.GP_COMPONENT_ID);
             if (compId == null) {
                 portletAction = new DefaultPortletAction(action);
             } else {

@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 /**
  * An abstract <code>InputBean</code> provides a generic input HTML element
@@ -95,7 +96,7 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
                 sname = "ui_" + vbName + "_" + beanId + "_" + pname;
             } else {
                 //log.debug("request not null");
-                String compId = (String)request.getAttribute("compId");
+                String compId = (String)request.getAttribute(SportletProperties.GP_COMPONENT_ID);
                 if (compId == null) {
                     sname = "ui_" + vbName + "_" + beanId + "_" + pname;
                 } else {

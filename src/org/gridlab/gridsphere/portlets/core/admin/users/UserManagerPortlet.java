@@ -299,7 +299,7 @@ public class UserManagerPortlet extends ActionPortlet {
         if (user == null) {
             accountRequest = this.userManagerService.createAccountRequest();
         } else {
-            System.err.println("Creating account request for existing user");
+            //System.err.println("Creating account request for existing user");
             accountRequest = this.userManagerService.createAccountRequest(user);
             //accountRequest.setPasswordValidation(false);
         }

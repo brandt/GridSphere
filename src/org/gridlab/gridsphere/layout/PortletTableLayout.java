@@ -164,7 +164,6 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
                         out.println("<table border=\"0\" width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"><tbody><tr><td>");
                         maxi.doRender(event);
                         out.println("</td></tr></tbody></table>");
-                        System.err.println("in portlet table layout handling maximized");
                         if ((canModify) && (!hasFrameMaximized)) {
                             renderUserSelects(event);
                         }

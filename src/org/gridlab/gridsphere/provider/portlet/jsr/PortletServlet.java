@@ -86,7 +86,6 @@ public class PortletServlet  extends HttpServlet
         while (it.hasNext()) {
             JSRApplicationPortletImpl appPortlet = (JSRApplicationPortletImpl)it.next();
             String portletClass = appPortlet.getPortletClassName();
-            System.err.println("creating new instance of " + portletClass);
             try {
                 // instantiate portlet classes
                 Portlet portletInstance = (Portlet) Class.forName(portletClass).newInstance();
@@ -126,7 +125,7 @@ public class PortletServlet  extends HttpServlet
                 Portlet portlet = (Portlet)portlets.get(portletClass);
                 log.debug("in PortletServlet: service(): Initializing portlet " + portletClass);
                 PortletDefinition portletDef = portletWebApp.getPortletDefinition(portletClass);
-                if (portletDef == null) System.err.println("portlet def is null");
+
                 PortletConfig portletConfig = new PortletConfigImpl(getServletConfig(), portletDef, Thread.currentThread().getContextClassLoader());
                 try {
                     portlet.init(portletConfig);
@@ -265,7 +264,7 @@ public class PortletServlet  extends HttpServlet
                     Map params = ((ActionResponseImpl)actionResponse).getRenderParameters();
                     String cid = (String)request.getAttribute(SportletProperties.COMPONENT_ID);
                     actionRequest.setAttribute("renderParams" + "_" + portletClassName + "_" + cid, params);
-                    System.err.println("placing render params in attribute: " + "renderParams" + "_" + portletClassName + "_" + cid);
+                    log.debug("placing render params in attribute: " + "renderParams" + "_" + portletClassName + "_" + cid);
                     //actionRequest.clearParameters();
                     redirect(request, response, actionRequest, actionResponse, portalContext);
                 }
@@ -439,7 +438,7 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
                             ((javax.servlet.http.HttpServletResponseWrapper) redirectResponse).getResponse();
                 }
 
-                System.err.println("redirecting to location= " + location);
+                log.debug("redirecting to location= " + location);
                 redirectResponse.sendRedirect(location);
             }
         }

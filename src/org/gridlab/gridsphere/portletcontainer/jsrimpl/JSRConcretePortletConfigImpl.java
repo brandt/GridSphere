@@ -76,7 +76,6 @@ public class JSRConcretePortletConfigImpl implements ConcretePortletConfig {
         String desc = (String)descsMap.get(loc.getLanguage());
         if (desc == null) {
             desc = portletName;
-            System.err.println("desc is null setting it to " + desc);
         }
         return desc;
     }
@@ -85,7 +84,6 @@ public class JSRConcretePortletConfigImpl implements ConcretePortletConfig {
         String disp = (String)dispsMap.get(loc.getLanguage());
         if (disp == null) {
             disp = portletName;
-            System.err.println("display name is null setting it to " + disp);
         }
         return disp;
     }

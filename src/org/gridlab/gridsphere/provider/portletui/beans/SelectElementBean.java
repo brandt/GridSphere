@@ -5,6 +5,8 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,7 +105,7 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
             if (request == null) {
                 sname = "ui_" + vbName + "_" + beanId + "_" + pname;
             } else {
-                String compId = (String)request.getAttribute("compId");
+                String compId = (String)request.getAttribute(SportletProperties.GP_COMPONENT_ID);
                 if (compId == null) {
                     sname = "ui_" + vbName + "_" + beanId + "_" + pname;
                 } else {

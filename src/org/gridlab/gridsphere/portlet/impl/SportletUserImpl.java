@@ -274,11 +274,11 @@ public class SportletUserImpl implements SportletUser, HttpSessionBindingListene
 
 
     public void valueBound(HttpSessionBindingEvent event) {
-        System.err.println("valueBound of SportletUserImpl invoked");
+        //System.err.println("valueBound of SportletUserImpl invoked");
     }
 
     public void valueUnbound(HttpSessionBindingEvent event) {
-        System.err.println("valueUnbound of SportletUserImpl invoked");
+        //System.err.println("valueUnbound of SportletUserImpl invoked");
         PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
         try {
             pm.update(this);

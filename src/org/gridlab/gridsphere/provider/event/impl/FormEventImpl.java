@@ -58,9 +58,9 @@ public class FormEventImpl extends BaseFormEventImpl implements FormEvent {
             tagBeans = new HashMap();
             createTagBeans(request);
         }
-        printRequestParameters();
+        logRequestParameters();
 
-        printTagBeans();
+        logTagBeans();
     }
 
     /**
@@ -77,9 +77,9 @@ public class FormEventImpl extends BaseFormEventImpl implements FormEvent {
         // Only create tag beans from request when initialized with action event
         createTagBeans(evt.getPortletRequest());
 
-        printRequestParameters();
+        logRequestParameters();
 
-        printTagBeans();
+        logTagBeans();
     }
 
     /**

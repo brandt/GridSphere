@@ -164,11 +164,10 @@ public class PortletLayoutEngine {
 
                 // sometimes the page needs reinitializing
                 if (event.getPortletRequest().getAttribute(SportletProperties.INIT_PAGE) != null) {
-                    System.err.println("\n\n\n\n\nreiniting and saving page!!!!!\n\n\n\n\n\n");
+                    log.info("\n\n\n\n\nreiniting and saving page!!!!!\n\n\n\n\n\n");
                 
                     page.init(event.getPortletRequest(), new Vector());
                     PortletTabbedPane pane = pageFactory.getUserTabbedPane(event.getPortletRequest());
-                    System.err.println("saving tab to" + pane.getLayoutDescriptor());
                     pane.save();
                 }
             }

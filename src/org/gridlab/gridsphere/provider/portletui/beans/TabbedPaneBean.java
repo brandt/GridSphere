@@ -33,7 +33,6 @@ public class TabbedPaneBean extends BeanContainer implements TagBean {
 
     public TabbedPaneBean(HttpServletRequest req) {
         super();
-        System.err.println("req is not null");
         this.request = req;
     }
 

@@ -45,7 +45,7 @@ public abstract class BaseBeanTag extends BodyTagSupport {
     protected String getBeanKey() {
         String cid = (String) pageContext.findAttribute(SportletProperties.COMPONENT_ID);
         ServletRequest request = pageContext.getRequest();
-        String compId = (String)request.getAttribute("compId");
+        String compId = (String)request.getAttribute(SportletProperties.GP_COMPONENT_ID);
         String beanKey = null;
         if (compId == null) {
             beanKey = beanId + "_" + cid;

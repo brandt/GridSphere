@@ -87,7 +87,7 @@ public class GroupManagerPortlet extends ActionPortlet {
             AccessControlManagerService aclService = getACLService(user);
             String desc = g.getDescription();
             if ((aclService.hasAdminRoleInGroup(user, g)) && (!g.equals(PortletGroupFactory.GRIDSPHERE_GROUP))) {
-                System.err.println("user " + user.getFullName() + " is admin");
+                log.info("user " + user.getFullName() + " is admin");
             //System.err.println("group= " + g.getName() + " ispublic=" + g.isPublic());
 
             //System.err.println("desc=" + desc);

@@ -253,12 +253,6 @@ public class PortletPage implements Serializable, Cloneable {
             list = footerContainer.init(req, list);
         }
 
-        //log.debug("Made a components list!!!! " + list.size());
-        for (int i = 0; i < list.size(); i++) {
-            ComponentIdentifier c = (ComponentIdentifier) list.get(i);
-            System.err.println("id: " + c.getComponentID() + " : " + c.getClassName() + " : " + c.hasPortlet());
-            //if (c.hasPortlet()) System.err.println("portlet= " + c.getPortletClass());
-        }
         componentIdentifiers = list;
 
         // Now go thru and create a labels hash
@@ -276,8 +270,6 @@ public class PortletPage implements Serializable, Cloneable {
                 labelsHash.put(compLabel, new Integer(cid.getComponentID()));
             }
         }
-
-        System.err.println("made components list!!!! " + list.size());
 
         return componentIdentifiers;
     }
@@ -386,10 +378,8 @@ public class PortletPage implements Serializable, Cloneable {
             if (compId != null) {
                 PortletComponent comp = compId.getPortletComponent();
                 // perform an action if the component is non null
-                if (comp == null) {
-                    //log.warn("Event has invalid component id associated with it!");
-                } else {
-                    System.err.println("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
+                if (comp != null) {
+                    //System.err.println("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
                     comp.actionPerformed(event);
                 }
             }
@@ -488,7 +478,6 @@ public class PortletPage implements Serializable, Cloneable {
             }
             if (myPane.getTabCount() > 0) {
                 String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
-                System.err.println("saving desc: " + layoutDescriptor + " and mapping: " + layoutMappingFile);
                 PortletLayoutDescriptor.savePortletTabbedPane(myPane, layoutDescriptor, layoutMappingFile);
             }
         } catch (PersistenceManagerException e) {

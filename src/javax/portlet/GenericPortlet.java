@@ -81,7 +81,6 @@ public abstract class GenericPortlet implements Portlet, PortletConfig
 
   public void init (PortletConfig config) throws PortletException
   {
-      System.err.println("in init of GenericPortlet");
     this.config = config;
     this.init();
   }
