@@ -327,8 +327,8 @@ in lighter color
   Text in every other row in the table
 **********************************************/
 .portlet-section-alternate {
-   color:black;
-   background-color:linen;
+   color: inherit;
+   background-color: #dddddd;
    text-align:left;
    text-decoration:none;
 }
