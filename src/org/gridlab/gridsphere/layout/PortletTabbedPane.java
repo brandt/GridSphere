@@ -219,6 +219,8 @@ public class PortletTabbedPane extends BasePortletComponent {
     public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
         super.doRenderFirst(ctx, req, res);
 
+        if (selectedPanel == null) selectedPanel = getSelectedPortletPanel();
+
         int i;
         PrintWriter out = res.getWriter();
 

@@ -133,6 +133,15 @@ public class PortletFrame extends BasePortletComponent {
                     renderPortlet = true;
                 }
             }
+
+            UserPortletManager userPortletManager = UserPortletManager.getInstance();
+
+            // now perform actionPerformed on Portlet if it has an action
+            String actionStr = req.getParameter(GridSphereProperties.ACTION);
+            if (actionStr != null) {
+                DefaultPortletAction action = new DefaultPortletAction(actionStr);
+                userPortletManager.actionPerformed(portletClass, action, req, res);
+            }
         }
 
     }

@@ -4,13 +4,12 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletResponse;
-import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.GuestUser;
+import org.gridlab.gridsphere.portlet.impl.PortletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
 
 import javax.servlet.ServletContext;
@@ -82,14 +81,20 @@ public class PortletLayoutEngine {
 
     public void service(User user, ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException {
         log.debug("in service()");
-
+        boolean doLayoutAction = false;
         PortletContainer pc = null;
 
         pc = getPortletContainer(user);
 
+        String actionType = req.getParameter(GridSphereProperties.ACTION_TYPE);
+        if ((actionType != null) && (actionType.equals(PortletProperties.LAYOUT_EVENT))) {
+            doLayoutAction = true;
+        }
+
         // XXX: How do we signal a user has logged out so we can userLayouts.remove(user)???
         try {
-            pc.doLayoutAction(ctx, req, res);
+            //if (doLayoutAction)
+                pc.doLayoutAction(ctx, req, res);
             pc.doRenderFirst(ctx, req, res);
             pc.doRenderLast(ctx, req, res);
         } catch (IOException e) {
