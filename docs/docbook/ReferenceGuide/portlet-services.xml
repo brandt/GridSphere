@@ -256,8 +256,8 @@ For more details on methods provided by the services, consult the Javadoc API
     package org.myorg.services.impl.StockQuoteServiceImpl;
 
     import org.myorg.services.StockQuoteService;
-    import org.gridlab.gridsphere.portlet.services.*;
-    import org.gridlab.gridsphere.portlet.services.spi.PortletServiceProvider;
+    import org.gridlab.gridsphere.portlet.service.*;
+    import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
     import java.util.List;
 
     public class StockQuoteServiceImpl implements PortletServiceProvider, StockQuoteService { <co id="def.serv.impl"/>
@@ -405,8 +405,8 @@ For more details on methods provided by the services, consult the Javadoc API
     package org.myorg.services.impl.StockQuoteServiceFactory;
 
     import org.myorg.services.StockQuoteService;
-    import org.gridlab.gridsphere.portlet.services.*;
-    import org.gridlab.gridsphere.portlet.services.spi.PortletServiceProvider;
+    import org.gridlab.gridsphere.portlet.service.*;
+    import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
     import java.util.List;
 
     public class StockQuoteServiceFactory implements PortletServiceProvider, StockQuoteService {
