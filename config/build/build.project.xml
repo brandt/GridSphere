@@ -321,7 +321,6 @@ Copyright:
         </copy>
 
         <mkdir dir="${project.webapp}/WEB-INF/lib"/>
-        <copy file="${GRIDSPHERE_PROJECT}/build/lib/gridsphere-ui-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
 
         <copy overwrite="true" todir="${project.webapp}/WEB-INF/lib">
             <fileset dir="${build.lib}">
@@ -334,6 +333,8 @@ Copyright:
     </target>
 
     <target name="copyjsr" if="use.jsr">
+        <copy file="${GRIDSPHERE_PROJECT}/build/lib/gridsphere-jsr-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
+
         <copy todir="${project.webapp}/WEB-INF/lib">
             <fileset dir="${build.lib}">
                 <include name="${project.name}-services.jar"/>
@@ -346,6 +347,8 @@ Copyright:
     </target>
 
     <target name="copygs" unless="use.jsr">
+        <copy file="${GRIDSPHERE_PROJECT}/build/lib/gridsphere-ui-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
+
         <copy todir="${env.CATALINA_HOME}/shared/lib">
             <fileset dir="${build.lib}">
                 <include name="${project.name}-services.jar"/>
