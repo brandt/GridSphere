@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.portlet.service.spi;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import java.util.Enumeration;
 
 /**
@@ -44,6 +45,6 @@ public interface PortletServiceConfig {
      *
      * @return the servlet configuration
      */
-    public ServletConfig getServletConfig();
+    public ServletContext getServletContext();
 
 }

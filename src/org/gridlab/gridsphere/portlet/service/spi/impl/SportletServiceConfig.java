@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.portlet.service.spi.impl;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -20,7 +21,7 @@ public class SportletServiceConfig implements PortletServiceConfig {
 
     private Class service;
     private Properties configProperties;
-    private ServletConfig servletConfig;
+    private ServletContext servletContext;
 
     /**
      * Constructor disallows non-argument instantiation
@@ -34,14 +35,14 @@ public class SportletServiceConfig implements PortletServiceConfig {
      *
      * @param service the service class
      * @param configProperties the service configuration properties
-     * @param servletConfig the <code>ServletConfig</code>
+     * @param servletContext the <code>ServletConfig</code>
      */
     public SportletServiceConfig(Class service,
                                  Properties configProperties,
-                                 ServletConfig servletConfig) {
+                                 ServletContext servletContext) {
         this.service = service;
         this.configProperties = configProperties;
-        this.servletConfig = servletConfig;
+        this.servletContext = servletContext;
     }
 
     /**
@@ -86,12 +87,12 @@ public class SportletServiceConfig implements PortletServiceConfig {
     }
 
     /**
-     * Returns the servlet configuration
+     * Returns the servlet context
      *
-     * @return the servlet configuration
+     * @return the servlet context
      */
-    public ServletConfig getServletConfig() {
-        return servletConfig;
+    public ServletContext getServletContext() {
+        return servletContext;
     }
 
 }

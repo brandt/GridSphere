@@ -23,6 +23,7 @@ import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManag
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -52,6 +53,9 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
     // Hash of all user services
     private static Hashtable userServices = new Hashtable();
 
+    // Hash of all user services
+    private static Hashtable serviceContexts = new Hashtable();
+
 
     /**
      * Private constructor. Use getDefault() instead.
@@ -61,7 +65,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         // organized according to service interface keys and service definition values
         String servicesPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/PortletMaster.xml");
         String servicesMappingPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-services-mapping.xml");
-        addServices(servicesPath, servicesMappingPath);
+        addServices(GridSphereConfig.getServletContext(), servicesPath, servicesMappingPath);
     }
 
     public void login(PortletRequest req) throws PortletException {
@@ -92,7 +96,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
      * @param servicesPath the path to the portlet services descriptor file
      * @param mappingPath the path to the portlet services mapping file
      */
-    public synchronized void addServices(String servicesPath, String mappingPath) {
+    public synchronized void addServices(ServletContext ctx, String servicesPath, String mappingPath) {
         SportletServiceDescriptor descriptor = null;
         try {
             descriptor = new SportletServiceDescriptor(servicesPath, mappingPath);
@@ -110,6 +114,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             SportletServiceDefinition serviceDef = (SportletServiceDefinition) it.next();
             allServices.put(serviceDef.getServiceInterface(), serviceDef);
             log.debug("adding service: " + serviceDef.getServiceInterface() + " service def: " + serviceDef.toString());
+            serviceContexts.put(serviceDef.getServiceInterface(), ctx);
         }
     }
 
@@ -126,13 +131,13 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
      * If no properties file is found or any error occurs an exception is thrown.
      *
      * @param service the class of the service
-     * @param servletConfig the servlet configuration
+     * @param servletContext the servlet configuration
      * @return the instantiated portlet service
      * @throws PortletServiceUnavailableException if the portlet service is unavailable
      * @throws PortletServiceNotFoundException if the PortletService is not found
      */
     public PortletService createPortletService(Class service,
-                                               ServletConfig servletConfig,
+                                               ServletContext servletContext,
                                                boolean useCachedService)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException {
 
@@ -159,7 +164,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
 
         // if user is required then pass in Guest user privileges
         if (def.getUserRequired()) {
-            return createUserPortletService(service, GuestUser.getInstance(), servletConfig, useCachedService);
+            return createUserPortletService(service, GuestUser.getInstance(), servletContext, useCachedService);
         }
 
         /* Create the service implementation */
@@ -172,8 +177,9 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
 
         Properties configProperties = def.getConfigProperties();
 
+        ServletContext ctx = (ServletContext)serviceContexts.get(serviceName);
         PortletServiceConfig portletServiceConfig =
-                new SportletServiceConfig(service, configProperties, servletConfig);
+                new SportletServiceConfig(service, configProperties, ctx);
 
         try {
             psp = (PortletServiceProvider) Class.forName(serviceImpl).newInstance();
@@ -199,7 +205,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
      *
      * @param service the class of the service
      * @param user the User
-     * @param servletConfig the servlet configuration
+     * @param servletContext the servlet configuration
      * @param useCachedService reuse a previous initialized service if <code>true</code>,
      * otherwise create a new service instance if <code>false</code>
      * @return the instantiated portlet service
@@ -207,7 +213,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
      * @throws PortletServiceNotFoundException if the PortletService is not found
      */
     public PortletService createUserPortletService(Class service, User user,
-                                                   ServletConfig servletConfig,
+                                                   ServletContext servletContext,
                                                    boolean useCachedService)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException {
 
@@ -222,7 +228,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             throw new PortletServiceNotFoundException("Unable to find portlet service: " + serviceName);
         }
         if (!def.getUserRequired()) {
-            return createPortletService(service, servletConfig, useCachedService);
+            return createPortletService(service, servletContext, useCachedService);
         } else if (user == null) {
             throw new PortletServiceNotFoundException("Unable to create service: " + serviceName + " user is null");
         }
@@ -249,9 +255,9 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         }
 
         Properties configProperties = def.getConfigProperties();
-
+        ServletContext ctx = (ServletContext)serviceContexts.get(serviceName);
         PortletServiceConfig portletServiceConfig =
-                new SportletServiceConfig(service, configProperties, servletConfig);
+                new SportletServiceConfig(service, configProperties, ctx);
 
         // Create an authroizer for the secure service
         PortletServiceAuthorizer auth = new SportletServiceAuthorizer(user, aclManager);
