@@ -31,8 +31,8 @@ Copyright:
     <property name="version"         value="1.0" />
     <property name="release"         value="ea-dev" />
     <property name="version.release" value="${version} ${release}"/>
-    <property name="project"         value="GridSphere ${version.release}"/>
-    <property name="gridsphere.name" value="GridSphere Portal Framework API ${version.release}" />
+    <property name="gridsphere.name"         value="GridSphere ${version.release}"/>
+    <property name="gridsphere.api" value="GridSphere Portal Framework API ${version.release}" />
 
     <!-- GridSphere build and dist directories -->
 
@@ -51,13 +51,11 @@ Copyright:
 
     <!-- GridSphere build targets -->
     <property name="build.lib"     value="${gridsphere.build}/lib"/>
-    <property name="build.db"      value="${gridsphere.build}/db"/>
     <property name="build.classes" value="${gridsphere.build}/classes"/>
     <property name="build.webapps" value="${gridsphere.build}/webapps"/>
     <property name="build.docs"    value="${gridsphere.build}/docs"/>
     <property name="build.javadoc" value="${build.docs}/javadocs"/>
     <property name="build.tests"   value="${gridsphere.build}/tests"/>
-
 
     <property environment="env"/>
 
@@ -67,18 +65,26 @@ Copyright:
     <target name="setenv" description="Check for libraries and print out config information">
         <mkdir dir="${gridsphere.build}"/>
         <mkdir dir="${build.lib}"/>
-
         <mkdir dir="${build.classes}"/>
         <mkdir dir="${build.webapps}"/>
         <mkdir dir="${build.docs}"/>
 
+        <!-- Check for catalina.sh in CATALINA_HOME/bin -->
         <condition property="catalina.exists">
             <available file="${env.CATALINA_HOME}/bin/catalina.sh"/>
         </condition>
 
         <fail message="Unable to find Tomcat 4.1.+. Make sure you have set $CATALINA_HOME set" unless="catalina.exists"/>
 
-        <echo message="--- Build environment for ${project} ---" />
+        <!-- Check for known OGSA libraries -->
+        <condition property="grid.exists">
+            <and>
+                <available file="${env.CATALINA_HOME}/common/lib/cog-jglobus.jar"/>
+                <available file="${env.CATALINA_HOME}/common/lib/cog-tomcat.jar"/>
+            </and>
+        </condition>
+
+        <echo message="--- Build environment for ${gridsphere.name} ---" />
         <echo message="--- Flags (Note: If the {property name} is displayed,"/>
         <echo message="           then the component is not present)" />
         <echo message=""/>
@@ -149,8 +155,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Compiles all source code in distribution                            -->
     <!-- =================================================================== -->
-    <target name="compile-all" depends="compile-core, compile-portlets, compile-unit-tests" description="Compiles all source code in distribution"/>
-
+    <target name="compile-all" depends="compile-core, compile-grid, compile-portlets, compile-unit-tests" description="Compiles all source code in distribution"/>
 
     <!-- =================================================================== -->
     <!-- Compiles GridSphere core framework source code                      -->
@@ -159,7 +164,21 @@ Copyright:
         <echo>Compiling Core Framework</echo>
         <javac  srcdir="src"
             destdir="${build.classes}"
-            excludes="org/gridlab/gridsphere/portlets/**"
+
+            excludes="org/gridlab/gridsphere/portlets/**, org/gridlab/gridsphere/services/grid/**"
+            classpathref="classpath"
+            debug="${debug}"
+            optimize="${optimize}"
+            deprecation="false"/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Compiles Grid services if OGSA/CoG is present                       -->
+    <!-- =================================================================== -->
+    <target name="compile-grid" depends="setenv" if="${grid.present}" description="Compile GridSphere source code">
+        <echo>Compiling Grid Services</echo>
+        <javac srcdir="src/org/gridlab//gridsphere/services/grid"
+            destdir="${build.classes}"
             classpathref="classpath"
             debug="${debug}"
             optimize="${optimize}"
@@ -453,7 +472,7 @@ Copyright:
                  use="true"
                  maxmemory="180m"
                  windowtitle="${gridsphere.name}"
-                 doctitle="${gridsphere.name}"
+                 doctitle="${gridsphere.api}"
                  bottom="Copyright &#169; 2002,2003 GridLab Project. All Rights Reserved.">
 
             <link href="http://java.sun.com/products/jdk/1.2/docs/api/"
@@ -773,6 +792,7 @@ Copyright:
         <copy file="README" todir="${gridsphere.dist}"/>
         <copy file="LICENSE" todir="${gridsphere.dist}"/>
         <copy file="config/build/build.deploy.xml" tofile="${gridsphere.dist}/build.xml"/>
+        <copy file="config/build.properties" tofile="${gridsphere.dist}/build.properties"/>
 
         <copy todir="${gridsphere.dist}">
             <fileset dir="${gridsphere.build}">
