@@ -61,11 +61,6 @@
     </servlet-mapping>
 
     <servlet-mapping>
-       <servlet-name>DemoPortlet</servlet-name>
-       <url-pattern>/demo</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
        <servlet-name>RSSPortlet</servlet-name>
        <url-pattern>/rss</url-pattern>
     </servlet-mapping>
