@@ -33,6 +33,17 @@ public class ActionLinkTag extends ActionTag {
     }
 
     public int doStartTag() throws JspException {
+        if (!beanId.equals("")) {
+            actionlink = (ActionLinkBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            if (actionlink == null) {
+                actionlink = new ActionLinkBean();
+                this.setBaseComponentBean(actionlink);
+            }
+        } else {
+            actionlink = new ActionLinkBean();
+            this.setBaseComponentBean(actionlink);
+        }
+
         paramBeans = new ArrayList();
         createActionURI();
         if (key != null) {
@@ -46,16 +57,6 @@ public class ActionLinkTag extends ActionTag {
     }
 
     public int doEndTag() throws JspException {
-        if (!beanId.equals("")) {
-            actionlink = (ActionLinkBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
-            if (actionlink == null) {
-                actionlink = new ActionLinkBean();
-                this.setBaseComponentBean(actionlink);
-            }
-        } else {
-            actionlink = new ActionLinkBean();
-            this.setBaseComponentBean(actionlink);
-        }
 
         Iterator it = paramBeans.iterator();
         while (it.hasNext()) {
