@@ -1,0 +1,40 @@
+
+<!--
+
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+    Author:     Jason Novotny
+    Version:    $Id$
+-->
+
+<chapter id="config">
+    <title>Configuration</title>
+    <para>
+
+    </para>
+
+    <sect1>
+        <title>Portal Layout Configuration</title>
+
+    </sect1>
+
+
+    <sect1>
+    	<title>Portlet Service Configuration</title>
+
+   </sect1>
+    
+    <sect1>
+    	<title>GridSphere Properties</title>
+	<para></para>
+    </sect1>
+    
+    <sect1>
+    	<title>Database Configuration</title>
+	<para>
+	</para>
+
+    </sect1>
+
+</chapter>

@@ -6,26 +6,30 @@ $Id$
 
 Requirements
 ------------
-0)    Building the GridSphere distribution requires Ant available at
-http://jakarta.apache.org/ant. In addition, make sure the $ANT_HOME/lib directory contains junit.jar used for testing
-and xalan.jar used to construct the documentation from the XSL style sheets. Both junit.jar and xalan.jar are found in
-the lib directory.
 
-1) You will also need a Tomcat 4.1+ servlet container available at http://jakarta.apache.org/tomcat. In addition to
-providing a hosting environment for GridSphere, Tomcat provides some of the required XML Jars that are needed for
-compilation.
+0) Building the GridSphere distribution requires Ant available at
+http://jakarta.apache.org/ant. In addition, make sure the $ANT_HOME/lib
+directory contains junit.jar used for testing and xalan.jar used to
+construct the documentation from the XSL style sheets. Both junit.jar and
+xalan.jar are found in the lib directory.
 
-2) (Optional) If you wish to build PDF formats of the documentation download a FOP binary from
-http://xml.apache.org/fop/download.html and unpack it and set FOP_HOME to the top level FOP
-directory (just like ANT).
+1) You will also need a Tomcat 4.1+ servlet container available at
+http://jakarta.apache.org/tomcat. In addition to providing a hosting
+environment for GridSphere, Tomcat provides some of the required XML (JAR)
+libraries that are needed for compilation.
+
+2) (Optional) If you wish to build PDF formats of the documentation download a
+FOP binary from http://xml.apache.org/fop/download.html and unpack it and set
+FOP_HOME environment variable to the top level FOP directory (just like ANT).
 
 Compiling and Deploying
 -----------------------
 
-    The Ant build script, build.xml, uses the build.properties file to specify any compilation options. Edit
-    build.properties appropriately for your needs.
+The Ant build script, build.xml, uses the build.properties file to specify any
+compilation options. Edit build.properties appropriately for your needs.
 
-At this point, simply invoking "ant dist" will create the GridSphere distribution.
+At this point, simply invoking "ant dist" will create the GridSphere
+distribution.
 
 The build.xml supports the following basic tasks:
 
@@ -51,15 +55,18 @@ make-test-reports -- runs all Junit tests and creates HTML
 
 To see all the targets invoke "ant --projecthelp".
 
-2) Read the documentation in the docs/ directory found in the build or dist directory for more information on using and
-developing portlets with GridSphere.
+2) Read the compiled documentation found in the build or dist "docs" directory
+for more information on using and developing portlets with  GridSphere.
 
 Testing GridSphere
 ------------------
 
-Many of the portlet services are unit tested using the Junit testing framework http://www.junit.org. Simply invoking
-"ant compile-tests" will compile all the unit tests. Invoking "ant make-test-reports" is a nice way to run all the tests
-and produce a set of HTML reports in the build/reports/html directory.
+Many of the portlet services are unit tested using the Junit testing framework
+http://www.junit.org. Simply invoking "ant compile-tests" will compile all the
+unit tests. Invoking "ant make-test-reports" is a nice way to run all the tests
+and produce a set of HTML reports in the build/reports/html directory. For more
+information on how unit testing is performed, look at the GridSphere design
+document.
 
 
 Thanks,
