@@ -701,4 +701,8 @@ Copyright:
         <java classname="org.gridlab.gridsphere.usermanager.PerfUserManager" classpathref="classpath"/>
     </target>
 
+<!-- ++++++++++++++ START CRUSECONTROL ++++++++++++++++++++ -->
+
+    <target name="cruisecontrol" depends="clean, runtests" description="target for cruisecontrol"/>
+
 </project>
