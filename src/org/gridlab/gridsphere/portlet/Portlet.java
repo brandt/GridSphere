@@ -4,10 +4,7 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import org.gridlab.gridsphere.portlet.impl.PortletProperties;
-import org.gridlab.gridsphere.portlet.impl.SportletConfig;
-import org.gridlab.gridsphere.portlet.impl.SportletRequestImpl;
-import org.gridlab.gridsphere.portlet.impl.SportletResponse;
+import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApp;
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.event.impl.ActionEventImpl;
@@ -68,7 +65,7 @@ import java.util.Vector;
 public abstract class Portlet extends HttpServlet
         implements Servlet, ServletConfig, java.io.Serializable, PortletSessionListener {
 
-    protected transient static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(Portlet.class);
+    protected transient static PortletLog log = SportletLog.getInstance(Portlet.class);
 
     protected PortletConfig portletConfig = null;
     protected PortletSettings portletSettings = null;

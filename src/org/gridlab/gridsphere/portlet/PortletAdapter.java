@@ -138,16 +138,14 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
             portletID = (String)request.getParameter(GridSphereProperties.PORTLETID);
         }
 
-        SportletSettings sportletSettings = (SportletSettings)allPortletSettings.get(portletID);
+        portletSettings = (PortletSettings)allPortletSettings.get(portletID);
+        request.setAttribute(GridSphereProperties.PORTLETSETTINGS, portletSettings);
 
         /*  UNCOMMENT THIS WHEN PREVIOUS MODE IS WORKING
         if (previousMode.getMode() == Portlet.Mode.CONFIGURE.getMode()) {
             sportletSettings.enableConfigurePermission(true);
         }
         */
-
-        this.portletSettings = (PortletSettings)sportletSettings;
-
         String method = (String)request.getAttribute(PortletProperties.PORTLET_ACTION_METHOD);
         if (method != null) return;
 
@@ -176,7 +174,7 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
             throw new PortletException("Received invalid PortletMode command");
         }
 
-        request.removeAttribute(GridSphereProperties.PORTLETMODE);
+        //request.removeAttribute(GridSphereProperties.PORTLETMODE);
     }
 
     /**

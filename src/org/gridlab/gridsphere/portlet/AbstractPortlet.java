@@ -15,7 +15,7 @@ import java.io.PrintWriter;
 
 
 /**
- * Additional extensions to a Portlet Adapter to provide action and window event handling
+ * Additional extensions to a Portlet Adapter to provide action, title, message and window event handling
  */
 public abstract class AbstractPortlet extends PortletAdapter implements ActionListener, MessageListener, WindowListener, PortletTitleListener {
 
@@ -60,6 +60,23 @@ public abstract class AbstractPortlet extends PortletAdapter implements ActionLi
 
             if (method.equals(PortletProperties.DO_TITLE)) {
                 doTitle(request, response);
+            } else if (method.equals(PortletProperties.WINDOW_EVENT)) {
+                WindowEvent winEvent = (WindowEvent)request.getAttribute(PortletProperties.WINDOW_EVENT);
+                switch (winEvent.getEventId()) {
+                    case WindowEvent.WINDOW_MAXIMIZED:
+                        windowMaximized(winEvent);
+                        break;
+                    case WindowEvent.WINDOW_MINIMIZED:
+                        windowMinimized(winEvent);
+                        break;
+                    case WindowEvent.WINDOW_RESTORED:
+                        windowRestored(winEvent);
+                        break;
+                    default:
+                        doErrorMessage(request, response, "Received invalid WindowEvent : " + winEvent.getEventId());
+                        log.error("Received invalid WindowEvent : " + winEvent.getEventId());
+                        throw new PortletException("Received invalid WindowEvent");
+                }
             } else if (method.equals(PortletProperties.ACTION_PERFORMED)) {
                 log.info("in AbstractPortlet: doing actionPerformed()");
 
@@ -84,7 +101,7 @@ public abstract class AbstractPortlet extends PortletAdapter implements ActionLi
      * @param event the action event
      * @throws PortletException if the listener has trouble fulfilling the request
      */
-    public abstract void actionPerformed(ActionEvent event) throws PortletException;
+    public void actionPerformed(ActionEvent event) throws PortletException {}
 
     /**
      * Notifies this listener that the message which the listener is watching for has been performed.
