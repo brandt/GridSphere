@@ -1,28 +1,42 @@
 /*
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
  * @version $Id$
  */
 package org.gridlab.gridsphere.services.user.impl;
 
 import org.gridlab.gridsphere.services.user.AccountRequest;
 import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.core.persistence.BaseObject;
+import org.gridlab.gridsphere.core.persistence.castor.StringVector;
 
 import java.util.List;
 import java.util.Vector;
 
-public class AccountRequestImpl implements AccountRequest {
+public class AccountRequestImpl extends BaseObject implements AccountRequest {
 
-    private int id;
-    private String userID = "";
-    private String givenName = "";
-    private String familyName = "";
-    private String fullName = "";
-    private String emailAddress = "";
-    private String organization = "";
-    private List desiredGroups = new Vector();
-    private List approvedGroups = new Vector();
-    private List userdns = new Vector();
-    private List myproxyUserNames = new Vector();
+    protected transient static PortletLog log = SportletLog.getInstance(AccountRequestImpl.class);
+
+
+    private int ID;
+    private String UserID = "";
+    private String GivenName = "";
+    private String FamilyName = "";
+    private String FullName = "";
+    private String EmailAddress = "";
+    private String Organization = "";
+    private List DesiredGroups = new Vector();
+    private List ApprovedGroups = new Vector();
+    private List Userdns = new Vector();
+    private List MyproxyUserNames = new Vector();
+
+    private Vector DesiredGroupsSV = new Vector();      // half-ready for castor
+    private Vector ApprovedGroupsSV = new Vector();
+    private Vector UserdnsSV = new Vector();            // ready
+    private Vector MyproxyUserNamesSV = new Vector();   // ready
+
 
     /**
      * Returns the internal unique user id.
@@ -30,7 +44,7 @@ public class AccountRequestImpl implements AccountRequest {
      * @return the internal unique id
      */
     public int getID() {
-        return id;
+        return ID;
     }
 
     /**
@@ -39,7 +53,7 @@ public class AccountRequestImpl implements AccountRequest {
      * @param id the internal unique id
      */
     public void setID(int id) {
-        this.id = id;
+        this.ID = id;
     }
 
     /**
@@ -48,7 +62,7 @@ public class AccountRequestImpl implements AccountRequest {
      * @return the user id
      */
     public String getUserID() {
-        return userID;
+        return UserID;
     }
 
     /**
@@ -57,7 +71,7 @@ public class AccountRequestImpl implements AccountRequest {
      * @param userID the user id
      */
     public void setUserID(String userID) {
-        this.userID = userID;
+        this.UserID = userID;
     }
 
     /**
@@ -68,7 +82,7 @@ public class AccountRequestImpl implements AccountRequest {
      * @return the full name
      */
     public String getFullName() {
-        return fullName;
+        return FullName;
     }
 
     /**
@@ -79,7 +93,7 @@ public class AccountRequestImpl implements AccountRequest {
      * @param fullName the full name
      */
     public void setFullName(String fullName) {
-        this.fullName = fullName;
+        this.FullName = fullName;
     }
 
     /**
@@ -88,7 +102,7 @@ public class AccountRequestImpl implements AccountRequest {
      * @param familyName the family name
      */
     public void setFamilyName(String familyName) {
-        this.familyName = familyName;
+        this.FamilyName = familyName;
     }
 
     /**
@@ -97,7 +111,7 @@ public class AccountRequestImpl implements AccountRequest {
      * @return the family name
      */
     public String getFamilyName() {
-        return familyName;
+        return FamilyName;
     }
 
     /**
@@ -106,7 +120,7 @@ public class AccountRequestImpl implements AccountRequest {
      * @return the given name
      */
     public String getGivenName() {
-        return givenName;
+        return GivenName;
     }
 
     /**
@@ -115,7 +129,7 @@ public class AccountRequestImpl implements AccountRequest {
      * @param givenName the given name
      */
     public void setGivenName(String givenName) {
-        this.givenName = givenName;
+        this.GivenName = givenName;
     }
 
     /**
@@ -124,7 +138,7 @@ public class AccountRequestImpl implements AccountRequest {
      * @return the email address
      */
     public String getEmailAddress() {
-        return emailAddress;
+        return EmailAddress;
     }
 
     /**
@@ -133,7 +147,7 @@ public class AccountRequestImpl implements AccountRequest {
      * @param the email address
      */
     public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+        this.EmailAddress = emailAddress;
     }
 
     /**
@@ -142,7 +156,7 @@ public class AccountRequestImpl implements AccountRequest {
      * @param organization the users organizational affiliation
      */
     public void setOrganization(String organization) {
-        this.organization = organization;
+        this.Organization = organization;
     }
 
     /**
@@ -151,8 +165,10 @@ public class AccountRequestImpl implements AccountRequest {
      * @return the users organizational affiliation
      */
     public String getOrganization() {
-        return organization;
+        return Organization;
     }
+
+    // -----
 
     /**
      * Sets the list of myproxy user names that can be used for this user
@@ -160,7 +176,9 @@ public class AccountRequestImpl implements AccountRequest {
      * @param userdns the array of strings containing user DN information
      */
     public void setMyproxyUserNames(List myproxyUserNames) {
-        myproxyUserNames = new Vector(myproxyUserNames);
+        MyproxyUserNames = myproxyUserNames;
+        MyproxyUserNamesSV = this.convertToStringVector(this, MyproxyUserNames, AccountRequestImplMyproxyUserNames.class);
+
     }
 
     /**
@@ -169,8 +187,19 @@ public class AccountRequestImpl implements AccountRequest {
      * @return userdns the array of strings containing user DN information
      */
     public List getMyproxyUserNames() {
-        return myproxyUserNames;
+        return MyproxyUserNames;
     }
+
+    public List getMyproxyUserNamesSV() {
+        return MyproxyUserNamesSV;
+    }
+
+    public void setMyproxyUserNamesSV(Vector myproxyUserNamesSV) {
+        MyproxyUserNamesSV = myproxyUserNamesSV;
+        MyproxyUserNames = this.convertToVector(MyproxyUserNamesSV);
+    }
+
+    // -------
 
     /**
      * Sets the list of myproxy user names that can be used for this user
@@ -178,7 +207,8 @@ public class AccountRequestImpl implements AccountRequest {
      * @param userdns the array of strings containing user DN information
      */
     public void setMyproxyUserDN(List userdns) {
-        this.userdns = userdns;
+        Userdns = userdns;
+        UserdnsSV = this.convertToStringVector(this, Userdns, AccountRequestImplUserdns.class);
     }
 
     /**
@@ -187,8 +217,19 @@ public class AccountRequestImpl implements AccountRequest {
      * @param userdns the array of strings containing user DN information
      */
     public List getMyProxyUserDN() {
-        return userdns;
+        return Userdns;
     }
+
+    public List getUserdnsSV() {
+        return UserdnsSV;
+    }
+
+    public void setUserdnsSV(Vector userdnsSV) {
+        UserdnsSV  =  userdnsSV;
+        Userdns =  this.convertToVector(UserdnsSV);
+    }
+
+    // --------
 
     /**
      * Adds a group the user wishes to join
@@ -196,7 +237,8 @@ public class AccountRequestImpl implements AccountRequest {
      * @param group the group a user wishes to join
      */
     public void setDesiredGroups(List group) {
-        desiredGroups = new Vector(group);
+        DesiredGroups = group;
+        DesiredGroupsSV = this.convertToStringVector(this, DesiredGroups, AccountRequestImplDesiredGroups.class);
     }
 
     /**
@@ -205,8 +247,27 @@ public class AccountRequestImpl implements AccountRequest {
      * @return groups the List of group names the user desires to join, or empty if none
      */
     public List getDesiredGroups() {
-        return desiredGroups;
+        return DesiredGroups;
     }
+
+    /**
+     * returns the list of StringVector objects containing the desired groups,
+     * for castor use only, do not use!
+     */
+    public Vector getDesiredGroupsSV() {
+        return DesiredGroupsSV;
+    }
+
+    /**
+     * set the list of Stringvectors containing the desired groups,
+     * for castor use only, do not use!
+     */
+    public void setDesiredGroupsSV(Vector desiredGroupsSV) {
+        DesiredGroupsSV = desiredGroupsSV;
+        DesiredGroups = this.convertToVector(DesiredGroupsSV);
+    }
+
+    // ----
 
     /**
      * Returns the list of groups the user is authorized to join, or null if none
@@ -214,7 +275,7 @@ public class AccountRequestImpl implements AccountRequest {
      * @return groups the List of group names the user is authorized to join, or empty if none
      */
     public List getApprovedGroups() {
-        return approvedGroups;
+        return ApprovedGroups;
     }
 
     /**
@@ -224,9 +285,9 @@ public class AccountRequestImpl implements AccountRequest {
      */
     public void addApprovedGroup(PortletGroup group) {
         // make sure it's a desired group as well
-        if (desiredGroups.contains(group)) {
-            approvedGroups.add(group);
-        }
+
+        ApprovedGroups.add(group);
+
     }
 
     /**
@@ -237,23 +298,23 @@ public class AccountRequestImpl implements AccountRequest {
     public String toString() {
         int i;
         StringBuffer sb = new StringBuffer();
-        sb.append("Given Name: " + givenName);
-        sb.append("Family Name: " + familyName);
-        sb.append("Full Name: " + fullName);
-        sb.append("Email Address: " + emailAddress);
-        sb.append("Organization: " + organization);
+        sb.append("Given Name: " + GivenName);
+        sb.append("Family Name: " + FamilyName);
+        sb.append("Full Name: " + FullName);
+        sb.append("Email Address: " + EmailAddress);
+        sb.append("Organization: " + Organization);
         sb.append("Requested Groups: ");
-        for (i = 0; i < desiredGroups.size(); i++) {
-            PortletGroup group = (PortletGroup)desiredGroups.get(i);
+        for (i = 0; i < DesiredGroups.size(); i++) {
+            PortletGroup group = (PortletGroup)DesiredGroups.get(i);
             sb.append(group.getName());
         }
         sb.append("Role DNs: ");
-        for (i = 0; i < userdns.size(); i++) {
-            sb.append(userdns.get(i));
+        for (i = 0; i < Userdns.size(); i++) {
+            sb.append(Userdns.get(i));
         }
         sb.append("Myproxy Role Names: ");
-        for (i = 0; i < myproxyUserNames.size(); i++) {
-            sb.append(myproxyUserNames.get(i));
+        for (i = 0; i < MyproxyUserNames.size(); i++) {
+            sb.append(MyproxyUserNames.get(i));
         }
         return sb.toString();
     }
