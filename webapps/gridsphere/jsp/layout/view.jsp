@@ -24,10 +24,10 @@
 <ui:frame>
 <ui:tablerow>
 <ui:tablecell width="15%">
- <ui:text key="LAYOUT_REFRESH"/>
+ <ui:text key="LAYOUT_RESET"/>
 </ui:tablecell>
 <ui:tablecell>
-<ui:text style="alert" key="LAYOUT_REFRESH_WARNING"/>&nbsp;<ui:actionsubmit action="refreshLayout" key="LAYOUT_REFRESH"/>
+<ui:text style="alert" key="LAYOUT_RESET_WARNING"/>&nbsp;<ui:actionsubmit action="refreshLayout" key="LAYOUT_RESET"/>
 </ui:tablecell>
 </ui:tablerow>
 </ui:frame>

@@ -1,0 +1,96 @@
+
+<!--
+
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+    Author:     Jason Novotny
+    Version:    $Id$
+-->
+
+<chapter id="intro">
+    <title>Introduction</title>
+    <para>
+    The GridSphere Administrator's Guide describes how to administer the running GridSphere portal.
+    For more information on installing and developing  portlets, please consult
+    the GridSphere User's Guide and the GridSphere Tutorials. This guide assumes you have succesfully installed
+    GridSphere.
+    </para>
+
+    <sect1>
+        <title>Editing administrator profile</title>
+        <para>
+            When you startup GridSphere for the first time, you may login as the super user with the user name
+            <emphasis>root</emphasis> and an empty password. Now click on the Administration tab and then go to the
+            Users tab. Here you can select the <emphasis>root</emphasis> entry and edit your profile. At the minimum,
+            you should change the password and enter a valid email address. This email will be used in the case that
+            a portlet group is made private on the portal and a user wants to obtain membership.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Creating new users and restricting account creation</title>
+        <para>
+            From the Users tab as the super user, you can create also create/modify/remove users from the portal.
+            By default, when the portal is first initialized, anyone can create a new account for themselves from the
+            login screen. If you wish to restrict new account creation to the portal administrator, then go to the
+            Administration=>Portlets tab to teh "Configure Login" portlet. Here you can select to restrict new account
+            creation if desired.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Editing group information</title>
+        <para>
+            The Administration=>Groups tab shows the "Group Manager" portlet that displays all the known portlet groups.
+            A portlet group is associated with a portlet web application and the administrator can configure
+            which groups are public and private. Normally a new user has access only to the
+            GridSphere group but may join additional groups via the "Profile Manager" portlet in the Welcome=>Settings
+            tab. Users may immediately join any groups that are public on the portal. If the group is private, then the
+            user has the option to request group submission from the portal administrator by sending an email request.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Portlet administration</title>
+        <para>
+            The Administration=>Portlets tab displays the "Portlet Application Manager" portlet that displays the
+            status of all known portlet groups. An admin may stop or restart a portlet group as well as deploy new
+            portlet web applications to the portal. These features use the Tomcat manager web application to
+            perform web application reloading and initialization. If a portlet web application has any portlet services,
+            these features will not work, since the service classes that are deployed to $CATALINA_HOME/shared/lib
+            may not be restarted by the manager web application. We'll be working on this in a future release. For now,
+            this portlet is useful if your webapp is a simple collection of portlets and no portlet services. Otherwise,
+            you are better off restarting the portal from the command line if portlet re-initialization is desired.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Portlet administration</title>
+        <para>
+            The Administration=>Portlets tab displays the "Portlet Application Manager" portlet that displays the
+            status of all known portlet groups. An admin may stop or restart a portlet group as well as deploy new
+            portlet web applications to the portal. These features use the Tomcat manager web application to
+            perform web application reloading and initialization. If a portlet web application has any portlet services,
+            these features will not work, since the service classes that are deployed to
+            <filename>$CATALINA_HOME/shared/lib</filename>
+            may not be restarted by the manager web application. We'll be working on this in a future release. For now,
+            this portlet is useful if your webapp is a simple collection of portlets and no portlet services. Otherwise,
+            you are better off restarting the portal from the command line if portlet re-initialization is desired.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Portlet subscription and customization</title>
+        <para>
+            When deploying new portlets to the portal, there are two ways to import them into your layout. For full
+            customization, you must go to the Welcome=>Subscription tab to the "Subscription" portlet. This allows
+            you to select/deselect the portlets in your subscription. After that, you can go to the Welcome=>Layout
+            tab to the "Layout Manager" portlet and you now have the ability to create/modify/remove tabs and portlets
+            associated with tabs. The second approach is to click on the <emphasis>Reset layout</emphasis> button in
+            the "Layout Manager" portlet and this will reset your layout according to group membership and destroy
+            any customizations that were made previously.
+        </para>
+    </sect1>
+
+</chapter>
