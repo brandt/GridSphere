@@ -169,7 +169,7 @@ public class TableCellTag extends BaseComponentTag {
             if (width != null) cellBean.setWidth(width);
             if (height != null) cellBean.setHeight(height);
             if (align != null) cellBean.setAlign(align);
-            if (valign != null) cellBean.setValign(align);
+            if (valign != null) cellBean.setValign(valign);
             if (rowspan != null) cellBean.setRowspan(rowspan);
             if (colspan != null) cellBean.setColspan(colspan);
             if (cssClass != null) cellBean.setCssClass(cssClass);

@@ -164,6 +164,7 @@ public class TableCellBean extends BeanContainer implements TagBean {
         if (width != null) sb.append(" width=\"" + width + "\"");
         if (height != null) sb.append(" height=\"" + height + "\"");
         if (align != null) sb.append(" layout=\"" + align + "\"");
+        if (valign != null) sb.append(" align=\"" + align + "\"");
         if (valign != null) sb.append(" valign=\"" + valign + "\"");
         if (rowspan != null) sb.append(" rowspan=\"" + rowspan + "\"");
         if (colspan != null) sb.append(" colspan=\"" + colspan + "\"");
