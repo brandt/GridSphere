@@ -19,14 +19,14 @@ import java.util.Properties;
 public class SportletServiceConfig implements PortletServiceConfig {
 
     private Class service;
-    private Properties serviceProperties;
+    private Properties configProperties;
     private ServletConfig servletConfig;
 
     public SportletServiceConfig(Class service,
-                                 Properties serviceProperties,
+                                 Properties configProperties,
                                  ServletConfig servletConfig) {
         this.service = service;
-        this.serviceProperties = serviceProperties;
+        this.configProperties = configProperties;
         this.servletConfig = servletConfig;
     }
 
@@ -37,7 +37,7 @@ public class SportletServiceConfig implements PortletServiceConfig {
      * @return the init parameter
      */
     public String getInitParameter(String name) {
-        return serviceProperties.getProperty(name);
+        return configProperties.getProperty(name);
     }
 
     /**
@@ -46,7 +46,7 @@ public class SportletServiceConfig implements PortletServiceConfig {
      * @return an enumeration of the init parameters
      */
     public Enumeration getInitParameterNames() {
-        return serviceProperties.keys();
+        return configProperties.keys();
     }
 
     /**
