@@ -27,11 +27,6 @@
     <td>
       <table class="portlet-frame" cellspacing="1" width="500">
         <tr>
-          <td class="portlet-frame-title">
-              List Active Credentials
-          </td>
-        </tr>
-        <tr>
           <td class="portlet-frame-actions">
             <input type="button"
                    name="<%=CredentialManagerAdminBean.ACTION_ACTIVE_CREDENTIAL_LIST%>"

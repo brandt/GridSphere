@@ -26,18 +26,6 @@
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td class="portlet-frame-message">
-            Click <span style="portlet-text-alert">Confirm Delete</span> to delete this permission,
-            <span style="portlet-text-alert">Cancel Delete</span> otherwise.
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
           <td class="portlet-frame-title">
               Delete Credential Permission [<%=credentialPermissionAdminBean.getPermittedSubjects()%>]
           </td>
@@ -52,6 +40,12 @@
                    name="<%=CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_DELETE_CANCEL%>"
                    value="Cancel Delete"
                    onClick="javascript:CredentialPermissionPortlet_cancelDeleteCredentialPermission_onClick()"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-message">
+            Click <span style="portlet-text-alert">Confirm Delete</span> to delete this permission,
+            <span style="portlet-text-alert">Cancel Delete</span> otherwise.
           </td>
         </tr>
       </table>

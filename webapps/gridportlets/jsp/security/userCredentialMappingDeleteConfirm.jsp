@@ -27,22 +27,6 @@
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td class="portlet-frame-message">
-            This mapping was <span style="portlet-text-bold">deleted</span>.
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-title">
-              Deleted Credential Mapping [<%=credentialMappingUserBean.getCredentialSubject()%>]
-          </td>
-        </tr>
-        <tr>
           <td class="portlet-frame-actions">
             <input type="button"
                    name="doListUserCredentialMapping"

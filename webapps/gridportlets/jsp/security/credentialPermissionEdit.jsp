@@ -22,19 +22,6 @@
     }
   </script>
 <table class="portlet-pane" cellspacing="1">
-<% if (credentialPermissionAdminBean.isFormInvalid()) { %>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-message-alert">
-            <%=credentialPermissionAdminBean.getFormInvalidMessage()%>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-<% } %>
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
@@ -53,6 +40,11 @@
                    name="<%=CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_EDIT_CANCEL%>"
                    value="Cancel Edit"
                    onClick="javascript:CredentialPermissionPortlet_editCancelCredentialPermission_onClick()"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-message-alert">
+            <%=credentialPermissionAdminBean.getFormInvalidMessage()%>
           </td>
         </tr>
       </table>

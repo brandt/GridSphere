@@ -18,8 +18,8 @@
       <table class="portlet-frame" cellspacing="1" width="100%">
         </tr>
         <tr>
-          <td class="portlet-frame-message">
-              <b>Step 2: Edit Job Resources</b>
+          <td class="portlet-frame-title">
+              Step 2: Edit Job Resources
           </td>
         </tr>
         <tr>

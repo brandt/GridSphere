@@ -17,25 +17,12 @@
 <input type="hidden" name="memory" value="<%=jobManagerBean.getParameter("memory")%>">
 <input type="hidden" name="cpuCount" value="<%=jobManagerBean.getParameter("cpuCount")%>">
 <table class="portlet-pane" cellspacing="1" width="100%">
-<% if (jobManagerBean.isFormInvalid()) { %>
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td class="portlet-frame-message-alert">
-            <%=jobManagerBean.getFormInvalidMessage()%>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-<% } %>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-message">
-              <b>Last Step: Verify Job</b>
+          <td class="portlet-frame-title">
+              Last Step: Verify Job
           </td>
         </tr>
         <tr>
@@ -43,6 +30,11 @@
             <gs:submit name="doEditUserJobResources" value="&lt;&lt; Back"/>
             &nbsp;&nbsp;<gs:submit name="doSubmitEditUserJob" value="Submit Job"/>
             &nbsp;&nbsp;<gs:submit name="doCancelEditUserJob" value="Cancel Edit"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-message-alert">
+            <%=jobManagerBean.getFormInvalidMessage()%>
           </td>
         </tr>
       </table>

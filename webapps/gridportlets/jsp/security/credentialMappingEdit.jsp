@@ -24,31 +24,9 @@
     }
   </script>
 <table class="portlet-pane" cellspacing="1">
-<% if (credentialMappingAdminBean.isFormInvalid()) { %>
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-message-alert">
-            <%=credentialMappingAdminBean.getFormInvalidMessage()%>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-<% } %>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-title">
-<% if (credentialMappingAdminBean.isNewCredentialMapping()) { %>
-              New Credential Mapping
-<% } else { %>
-              Edit Credential Mapping [<%=credentialMappingAdminBean.getCredentialSubject()%>]
-<% } %>
-          </td>
-        </tr>
         <tr>
           <td class="portlet-frame-actions">
             <input type="button"
@@ -59,6 +37,11 @@
                    name="<%=CredentialMappingAdminBean.ACTION_CREDENTIAL_MAPPING_EDIT_CANCEL%>"
                    value="Cancel Edit"
                    onClick="javascript:CredentialMappingPortlet_editCancelCredentialMapping_onClick()"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-message-alert">
+            <%=credentialMappingAdminBean.getFormInvalidMessage()%>
           </td>
         </tr>
       </table>

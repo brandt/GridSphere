@@ -22,8 +22,8 @@
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td class="portlet-frame-message">
-              <b>Step 1: Edit Job Application</b>
+          <td class="portlet-frame-title">
+              Step 1: Edit Job Application
           </td>
         </tr>
         <tr>

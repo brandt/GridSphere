@@ -26,23 +26,6 @@
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td class="portlet-frame-message">
-            Click <span style="portlet-text-alert">Confirm Delete</span> to delete this permission,
-            <span style="portlet-text-alert">Cancel Delete</span> otherwise.
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-title">
-              Delete Credential Mapping [<%=credentialMappingAdminBean.getCredentialSubject()%>]
-          </td>
-        </tr>
-        <tr>
           <td class="portlet-frame-actions">
             <input type="button"
                    name="<%=CredentialMappingAdminBean.ACTION_CREDENTIAL_MAPPING_DELETE_CONFIRM%>"
@@ -52,6 +35,12 @@
                    name="<%=CredentialMappingAdminBean.ACTION_CREDENTIAL_MAPPING_DELETE_CANCEL%>"
                    value="Cancel Delete"
                    onClick="javascript:CredentialMappingPortlet_cancelDeleteCredentialMapping_onClick()"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-message">
+            Click <span style="portlet-text-alert">Confirm Delete</span> to delete this permission,
+            <span style="portlet-text-alert">Cancel Delete</span> otherwise.
           </td>
         </tr>
       </table>

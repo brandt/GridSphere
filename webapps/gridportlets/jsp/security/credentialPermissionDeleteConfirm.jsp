@@ -27,17 +27,6 @@
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td class="portlet-frame-message">
-            This permission was <span style="portlet-text-bold">deleted</span>.
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
           <td class="portlet-frame-title">
               Deleted Credential Permission [<%=credentialPermissionAdminBean.getPermittedSubjects()%>]
           </td>
@@ -52,6 +41,11 @@
                    name="<%=CredentialPermissionAdminBean.ACTION_CREDENTIAL_PERMISSION_EDIT%>"
                    value="New Permission"
                    onClick="javascript:CredentialPermissionPortlet_newCredentialPermission_onClick()"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-message">
+            This permission was <span style="portlet-text-bold">deleted</span>.
           </td>
         </tr>
       </table>

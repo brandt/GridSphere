@@ -11,19 +11,6 @@
 <gs:form action="doListUserActiveCredential">
   <input type="hidden" name="credentialMappingID" value=""/>
 <table class="portlet-pane" cellspacing="1" width="100%">
-<% if (credentialRetrievalUserBean.isFormInvalid()) { %>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-message-alert">
-            <%=credentialRetrievalUserBean.getFormInvalidMessage()%>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-<% } %>
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
@@ -34,6 +21,11 @@
                    name="password"
                    value=""/>
             &nbsp;&nbsp;<gs:submit name="doRetrieveUserCredential" value="Submit"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-message-alert">
+            <%=credentialRetrievalUserBean.getFormInvalidMessage()%>
           </td>
         </tr>
       </table>
@@ -50,23 +42,10 @@
               None of your credentials have been activated yet.
           </td>
         </tr>
-          </td>
-        </tr>
       </table>
     </td>
   </tr>
 <% } else { %>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-title">
-              Your Active Credentials
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">

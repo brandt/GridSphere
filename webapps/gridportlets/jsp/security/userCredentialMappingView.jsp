@@ -37,11 +37,6 @@
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td class="portlet-frame-title">
-              List Credential Mappings
-          </td>
-        </tr>
-        <tr>
           <td class="portlet-frame-actions">
             <input type="button"
                    name="doListUserCredentialMapping"
