@@ -81,6 +81,10 @@
         <description xml:lang="en">Preferred Theme</description>
         <name>user.theme</name>
     </user-attribute>
+    <user-attribute>
+        <description xml:lang="en">User Role</description>
+        <name>user.role</name>
+    </user-attribute>
 <!--
     <security-constraint>
         <portlet-collection>
