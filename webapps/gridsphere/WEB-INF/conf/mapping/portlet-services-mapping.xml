@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<!--
+
+    Portlet Services mapping file controls mappings between layout descriptors and
+    org.gridlab.gridsphere.portlet.service.* classes
+
+    $Id$
+
+-->
+<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
+<mapping>
+
+    <class name="org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceCollection">
+        <map-to xml="portlet-services"/>
+        <field name="PortletServicesList" type="org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDefinition" collection="vector">
+            <bind-xml name="service"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDefinition">
+        <field name="Name" type="string">
+            <bind-xml name="name"/>
+        </field>
+        <field name="Description" type="string">
+            <bind-xml name="description"/>
+        </field>
+        <field name="Interface" type="string">
+            <bind-xml name="interface"/>
+        </field>
+        <field name="UserRequired" type="boolean">
+            <bind-xml name="user-required"/>
+        </field>
+        <field name="Implementation" type="string">
+            <bind-xml name="implementation"/>
+        </field>
+        <field name="ConfigParamList" type="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam" collection="vector">
+            <bind-xml name="service-config"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam">
+        <field name="ParamName" type="string">
+            <bind-xml name="param-name"/>
+        </field>
+        <field name="ParamValue" type="string">
+            <bind-xml name="param-value"/>
+        </field>
+    </class>
+
+</mapping>

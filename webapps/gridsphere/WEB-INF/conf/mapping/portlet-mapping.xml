@@ -1,4 +1,13 @@
 <?xml version="1.0" ?>
+<!--
+
+    Portlet mapping file controls mappings between portlet descriptors and
+    org.gridlab.gridsphere.portletconatiner.descriptor.* classes used in
+    creation of portlets
+
+    $Id$
+
+-->
 <!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
 <mapping>
 
