@@ -149,7 +149,7 @@ public class BannerPortlet extends ActionPortlet {
         if (list == null) {
 
             String alertMsg = this.getLocalizedText(req, "BANNER_NOFILES_START");
-            PortletURI mgrURI = res.createURI("filemanager");
+            PortletURI mgrURI = res.createURI("filemanager", false);
             alertMsg += " " + "<a href=\"" + mgrURI.toString() + "\"/>" + " " + this.getLocalizedText(req, "BANNER_NOFILES_END");
 
             FrameBean alert = event.getFrameBean("alert");
