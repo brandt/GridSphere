@@ -15,7 +15,7 @@
 <form name="AccessControllerPortlet" method="POST" action="<%=aclManagerBean.getGroupViewURI()%>">
   <input type="hidden" name="groupID" value="<%=aclManagerBean.getGroupID()%>"/>
   <input type="hidden" name="groupEntryID" value="<%=aclManagerBean.getGroupEntryID()%>"/>
-  <script language="JAVASCRIPT">
+  <script type="text/javascript">
 
     function AccessControllerPortlet_viewGroup_onClick(groupID) {
       document.AccessControllerPortlet.groupID.value=groupID;

@@ -15,7 +15,7 @@
 <form name="AccessControllerPortlet" method="POST"
       action="<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_VIEW)%>">
   <input type="hidden" name="groupID" value="<%=aclManagerBean.getGroupID()%>"/>
-  <script language="JAVASCRIPT">
+  <script type="text/javascript">
 
     function AccessControllerPortlet_listGroup_onClick() {
       var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_LIST)%>";
@@ -63,9 +63,9 @@
     }
 
     function AccessControllerPortlet_addGroupEntry_onClick() {
-      // If displaying group entry list
-      if (document.AccessControllerPortlet.groupEntryID) {
-        // Clear all selections
+      // If we are showing list of users...
+      if (GridSphere_Object_existsInForm(document.AccessControllerPortlet, "groupEntryID")) {
+        // Clear any selections
         GridSphere_CheckBoxList_clear(document.AccessControllerPortlet.groupEntryID);
       }
       // Then submit action
@@ -87,7 +87,8 @@
     }
 
   </script>
-<table class="portlet-pane" cellspacing="1">
+<% Iterator groupEntries = aclManagerBean.getGroupEntryList().iterator(); %>
+    <table class="portlet-pane" cellspacing="1">
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
@@ -98,30 +99,32 @@
         </tr>
         <tr>
           <td class="portlet-frame-actions">
-            <input type="submit"
+            <input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_LIST%>"
                    value="List Groups"
                    onClick="javascript:AccessControllerPortlet_listGroup_onClick()"/>
-            &nbsp;&nbsp;<input type="submit"
+            &nbsp;&nbsp;<input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_EDIT%>"
                    value="New Group"
                    onClick="javascript:AccessControllerPortlet_newGroup_onClick()"/>
-            &nbsp;&nbsp;<input type="submit"
+            &nbsp;&nbsp;<input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_EDIT%>"
                    value="Edit Group"
                    onClick="javascript:AccessControllerPortlet_editGroup_onClick()"/>
-            &nbsp;&nbsp;<input type="submit"
+            &nbsp;&nbsp;<input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_DELETE%>"
                    value="Delete Group"
                    onClick="javascript:AccessControllerPortlet_deleteGroup_onClick()"/>
-            &nbsp;&nbsp;<input type="submit"
+            &nbsp;&nbsp;<input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_ADD%>"
                    value="Add Users"
                    onClick="javascript:AccessControllerPortlet_addGroupEntry_onClick()"/>
-            &nbsp;&nbsp;<input type="submit"
+<% if (groupEntries.hasNext()) { %>
+            &nbsp;&nbsp;<input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_REMOVE%>"
                    value="Remove Users"
                    onClick="javascript:AccessControllerPortlet_removeGroupEntry_onClick()"/>
+<% } %>
           </td>
         </tr>
       </table>
@@ -160,8 +163,7 @@
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
-<% Iterator groupEntries = aclManagerBean.getGroupEntryList().iterator();
-   if (groupEntries.hasNext()) { %>
+<% if (groupEntries.hasNext()) { %>
         <tr>
           <td class="portlet-frame-header-checkbox">
               <input type="checkbox"
@@ -217,131 +219,3 @@
   </tr>
 </table>
 </form>
-<script type="text/javascript">
-
-  /**************************************************************************
-   * GridSphere Form Action Functions
-   **************************************************************************/
-
-  function GridSphere_Form_submitAction(form, action) {
-    form.action=action;
-    form.submit();
-  }
-
-  /**************************************************************************
-   * GridSpehre Check Box List Functions
-   **************************************************************************/
-
-  function GridSphere_CheckBoxList_checkAll(list) {
-
-    if (list[0].checked == true) {
-
-      // alert("GridSphere CheckBoxList Check All True");
-
-      for (i = 1; i < list.length; i++) {
-
-        list[i].checked = true;
-      }
-
-      // Select first list value if none selected yet
-      if (list[0].value == "") {
-
-        if (list.length > 1) {
-
-          list[0].value = list[1].value;
-        }
-      }
-
-    } else {
-
-      // alert("GridSphere CheckBoxList Check All False");
-
-      GridSphere_CheckBoxList_clear(list);
-    }
-  }
-
-  function GridSphere_CheckBoxList_clear(list) {
-
-    // alert("GridSphere CheckBoxList Clear");
-
-    for (i = 0; i < list.length; i++) {
-
-      list[i].checked = false;
-    }
-
-    // Clear selected value
-    list[0].value = "";
-  }
-
-  function GridSphere_CheckBoxList_checkOne(list)
-  {
-    // alert("GridSphere CheckBoxList Check One");
-
-    // Uncheck "all" option
-    list[0].checked = false;
-
-    // Uncheck those that don't match selection
-    for (i = 1; i < list.length; i++) {
-
-      if (list[i].value != list[0].value) {
-
-        list[i].checked = false;
-      }
-    }
-  }
-
-  function GridSphere_CheckBoxList_onClick(list, newSelection)
-  {
-    // alert("GridSphere CheckBoxList On Click");
-
-    // alert("GridSphere CheckBoxList current selection: " + list[0].value);
-
-    if (newSelection.checked == true) {
-
-      // Save selection only if none made yet
-      if (list[0].value == "") {
-
-        list[0].value = newSelection.value;
-      }
-
-    } else {
-
-      // If saved selection was this one
-      if (list[0].value == newSelection.value) {
-
-        var found = false;
-
-        // Set selection to first checked item other than this
-        for (i = 1; i < list.length && !found; i++) {
-
-          if (list[i].checked == true) {
-
-            if (list[i].value != item.value) {
-
-              list[0].value = list[i].value;
-
-              found = true;
-            }
-          }
-        }
-
-        // If we didn't find a checked value
-        if (!found) {
-
-          // Set selection to none
-          list[0].value = "";
-        }
-      }
-    }
-
-    // alert("GridSphere CheckBoxList new selection: " + selection.value);
-  }
-
-  function GridSphere_CheckBoxList_validateCheckOneOrMore(list)
-  {
-    // alert("GridSphere CheckBoxList Validate Check One Or More");
-
-    return (list[0].value != "");
-  }
-
-</script>

@@ -12,7 +12,7 @@
              scope="request"/>
 <form name="UserManagerPortlet" method="POST" action="<%=userManagerBean.getUserViewURI()%>">
   <input type="hidden" name="userID" value="<%=userManagerBean.getUserID()%>"/>
-  <script language="JAVASCRIPT">
+  <script type="text/javascript">
     function UserManagerPortlet_listUser_onClick() {
       document.UserManagerPortlet.action="<%=userManagerBean.getUserListURI()%>";
       document.UserManagerPortlet.submit();

@@ -15,7 +15,7 @@
 <form name="AccessControllerPortlet" method="POST"
       action="<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_EDIT)%>">
   <input type="hidden" name="groupID" value="<%=aclManagerBean.getGroupID()%>"/>
-  <script language="JAVASCRIPT">
+  <script type="text/javascript">
 
     function AccessControllerPortlet_confirmEditGroup_onClick() {
       var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_EDIT_CONFIRM)%>";

@@ -10,7 +10,7 @@
              scope="request"/>
 <form name="UserManagerPortlet" method="POST" action="<%=userManagerBean.getUserEditURI()%>">
   <input type="hidden" name="userID" value="<%=userManagerBean.getUserID()%>"/>
-  <script language="JAVASCRIPT">
+  <script type="text/javascript">
     function UserManagerPortlet_confirmEditUser_onClick() {
       document.UserManagerPortlet.action="<%=userManagerBean.getUserEditConfirmURI()%>";
       document.UserManagerPortlet.submit();

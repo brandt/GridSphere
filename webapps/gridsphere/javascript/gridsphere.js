@@ -1,9 +1,36 @@
-<script type="text/javascript">
-
   /**************************************************************************
-   * GridSphere Form Action Functions
+   * GridSphere Object Functions
    **************************************************************************/
 
+  /**
+   * Checks if an object with given name exists in form
+   */
+  function GridSphere_Object_existsInForm(form, name) {
+
+    // alert("Testing whether object [" + name + "] exists in form [" + form.name + "]");
+
+    for (var i = 0; i < form.elements.length; ++i) {
+
+      if (form.elements[i].name == name) {
+
+        // alert("Object " + name + " exists");
+
+        return true;
+      }
+    }
+
+    // alert("Object does not exist");
+
+    return false;
+  }
+
+  /**************************************************************************
+   * GridSphere Form Functions
+   **************************************************************************/
+
+  /**
+   * Submits the given action for the given form
+   */
   function GridSphere_Form_submitAction(form, action) {
     form.action=action;
     form.submit();
@@ -15,114 +42,112 @@
 
   function GridSphere_CheckBoxList_checkAll(list) {
 
-    if (list[0].checked == true) {
+      if (list[0].checked == true) {
 
-      // alert("GridSphere CheckBoxList Check All True");
+        // alert("GridSphere CheckBoxList Check All True");
 
-      for (i = 1; i < list.length; i++) {
+        for (i = 1; i < list.length; i++) {
 
-        list[i].checked = true;
-      }
-
-      // Select first list value if none selected yet
-      if (list[0].value == "") {
-
-        if (list.length > 1) {
-
-          list[0].value = list[1].value;
+          list[i].checked = true;
         }
+
+        // Select first list value if none selected yet
+        if (list[0].value == "") {
+
+          if (list.length > 1) {
+
+            list[0].value = list[1].value;
+          }
+        }
+
+      } else {
+
+        // alert("GridSphere CheckBoxList Check All False");
+
+        GridSphere_CheckBoxList_clear(list);
       }
-
-    } else {
-
-      // alert("GridSphere CheckBoxList Check All False");
-
-      GridSphere_CheckBoxList_clear(list);
-    }
   }
 
   function GridSphere_CheckBoxList_clear(list) {
 
-    // alert("GridSphere CheckBoxList Clear");
+    alert("GridSphere CheckBoxList Clear");
 
-    for (i = 0; i < list.length; i++) {
+      for (i = 0; i < list.length; i++) {
 
-      list[i].checked = false;
-    }
+        list[i].checked = false;
+      }
 
-    // Clear selected value
-    list[0].value = "";
+      // Clear selected value
+      list[0].value = "";
   }
 
   function GridSphere_CheckBoxList_checkOne(list)
   {
     // alert("GridSphere CheckBoxList Check One");
 
-    // Uncheck "all" option
-    list[0].checked = false;
+      // Uncheck "all" option
+      list[0].checked = false;
 
-    // Uncheck those that don't match selection
-    for (i = 1; i < list.length; i++) {
+      // Uncheck those that don't match selection
+      for (i = 1; i < list.length; i++) {
 
-      if (list[i].value != list[0].value) {
+        if (list[i].value != list[0].value) {
 
-        list[i].checked = false;
+          list[i].checked = false;
+        }
       }
-    }
   }
 
   function GridSphere_CheckBoxList_onClick(list, newSelection)
   {
     // alert("GridSphere CheckBoxList On Click");
 
-    // alert("GridSphere CheckBoxList current selection: " + list[0].value);
+      if (newSelection.checked == true) {
 
-    if (newSelection.checked == true) {
+        // Save selection only if none made yet
+        if (list[0].value == "") {
 
-      // Save selection only if none made yet
-      if (list[0].value == "") {
+          list[0].value = newSelection.value;
+        }
 
-        list[0].value = newSelection.value;
-      }
+      } else {
 
-    } else {
+        // If saved selection was this one
+        if (list[0].value == newSelection.value) {
 
-      // If saved selection was this one
-      if (list[0].value == newSelection.value) {
+          var found = false;
 
-        var found = false;
+          // Set selection to first checked item other than this
+          for (i = 1; i < list.length && !found; i++) {
 
-        // Set selection to first checked item other than this
-        for (i = 1; i < list.length && !found; i++) {
+            if (list[i].checked == true) {
 
-          if (list[i].checked == true) {
+              if (list[i].value != item.value) {
 
-            if (list[i].value != item.value) {
+                list[0].value = list[i].value;
 
-              list[0].value = list[i].value;
-
-              found = true;
+                found = true;
+              }
             }
           }
-        }
 
-        // If we didn't find a checked value
-        if (!found) {
+          // If we didn't find a checked value
+          if (!found) {
 
-          // Set selection to none
-          list[0].value = "";
+            // Set selection to none
+            list[0].value = "";
+          }
         }
       }
-    }
 
-    // alert("GridSphere CheckBoxList new selection: " + selection.value);
+      // alert("GridSphere CheckBoxList new selection: " + selection.value);
   }
 
   function GridSphere_CheckBoxList_validateCheckOneOrMore(list)
   {
     // alert("GridSphere CheckBoxList Validate Check One Or More");
 
-    return (list[0].value != "");
-  }
+      // alert("Performing validate check one or more on " + list.name);
 
-</script>
+      return (list[0].value != "");
+  }

@@ -1,4 +1,3 @@
-<script language="JavaScript">
 
 // generic check to see if a text input is null
 function isFileValid( form ) {
@@ -41,5 +40,3 @@ function isLoginValid( form ) {
     }  
     return true;
 }
-
-</script>

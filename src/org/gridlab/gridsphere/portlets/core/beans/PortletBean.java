@@ -26,7 +26,7 @@ public class PortletBean {
     protected PortletLog log = null;
     protected User user = null;
     protected PortletSession session = null;
-    protected String actionPerformed = null;
+    protected PortletAction actionPerformed = null;
     protected String nextPage = null;
     protected String nextTitle = null;
     protected boolean isFormInvalid = false;
@@ -107,18 +107,24 @@ public class PortletBean {
         return this.log;
     }
 
-    public String getActionPerformed() {
+    public PortletAction getActionPerformed() {
         return this.actionPerformed;
     }
 
-    public void setActionPerformed(String action) {
-        this.log.debug("Setting next action to " + action);
-        this.actionPerformed = action;
+    public String getActionPerformedName() {
+        if (this.actionPerformed != null && this.actionPerformed instanceof DefaultPortletAction) {
+            return ((DefaultPortletAction)this.actionPerformed).getName();
+        }
+        return "";
     }
 
     public void setActionPerformed(PortletAction action) {
-        this.log.debug("Setting next action to " + action);
-        this.actionPerformed = action.toString();
+        if (this.log.isDebugEnabled()) {
+            if (action instanceof DefaultPortletAction) {
+                this.log.debug("Setting actionPerformed to " + ((DefaultPortletAction)action).getName());
+            }
+        }
+        this.actionPerformed = action;
     }
 
     public String getNextTitle() {
@@ -142,7 +148,6 @@ public class PortletBean {
     public void doAction(PortletAction action)
             throws PortletException {
         setActionPerformed(action);
-        this.log.debug("Action performed = " + action);
     }
 
     public void doDefaultViewAction()

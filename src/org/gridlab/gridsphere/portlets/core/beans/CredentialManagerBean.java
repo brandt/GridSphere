@@ -15,6 +15,21 @@ import java.util.List;
 
 public class CredentialManagerBean extends PortletBean {
 
+    public static final String ACTION_CREDENTIAL_PERMISSION_LIST = "credentialPermissionList";
+    public static final String ACTION_CREDENTIAL_PERMISSION_VIEW = "credentialPermissionView";
+    public static final String ACTION_CREDENTIAL_PERMISSION_EDIT = "credentialPermissionEdit";
+    public static final String ACTION_CREDENTIAL_PERMISSION_DELETE = "credentialPermissionDelete";
+    public static final String ACTION_CREDENTIAL_PERMISSION_DELETE_CONFIRM = "credentialPermissionDeleteConfirm";
+
+    public static final String ACTION_CREDENTIAL_MAPPING_LIST = "credentialMappingList";
+    public static final String ACTION_CREDENTIAL_MAPPING_VIEW = "credentialMappingView";
+    public static final String ACTION_CREDENTIAL_MAPPING_EDIT = "credentialMappingEdit";
+    public static final String ACTION_CREDENTIAL_MAPPING_DELETE = "credentialMappingDelete";
+    public static final String ACTION_CREDENTIAL_MAPPING_DELETE_CONFIRM = "credentialMappingDeleteConfirm";
+
+    public static final String ACTION_ACTIVE_CREDENTIAL_LIST = "activeCredentialList";
+    public static final String ACTION_ACTIVE_CREDENTIAL_VIEW = "activeCredentialView";
+
     // Credential permission pages
     public static final String PAGE_CREDENTIAL_PERMISSION_LIST = "/jsp/credential/credentialPermissionList.jsp";
     public static final String PAGE_CREDENTIAL_PERMISSION_VIEW = "/jsp/credential/credentialPermissionView.jsp";
@@ -78,6 +93,15 @@ public class CredentialManagerBean extends PortletBean {
 
     public void doAction(PortletAction action)
             throws PortletException {
+        super.doAction(action);
+        // Get name of action performed
+        String actionName = getActionPerformedName();
+        // Perform appropriate action
+        if (actionName.equals(ACTION_CREDENTIAL_MAPPING_LIST)) {
+            doListCredentialMapping();
+        } else {
+            doListCredentialMapping();
+        }
     }
 
     public void doDefaultViewAction()

@@ -14,7 +14,7 @@
              scope="request"/>
 <form name="AccessControllerPortlet" method="POST" action="<%=aclManagerBean.getGroupListURI()%>">
   <input type="hidden" name="groupID" value=""/>
-  <script language="JAVASCRIPT">
+  <script type="text/javascript">
 
     function AccessControllerPortlet_listGroup_onClick() {
       var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_LIST)%>";

@@ -9,7 +9,7 @@
              scope="request"/>
 <form name="UserManagerPortlet" method="POST" action="<%=userManagerBean.getUserDeleteURI()%>">
   <input type="hidden" name="userID" value="<%=userManagerBean.getUserID()%>"/>
-  <script language="JAVASCRIPT">
+  <script type="text/javascript">
     function UserManagerPortlet_confirmDeleteUser_onClick() {
       document.UserManagerPortlet.action="<%=userManagerBean.getUserDeleteConfirmURI()%>";
       document.UserManagerPortlet.submit();

@@ -14,7 +14,7 @@
              scope="request"/>
 <form name="AccessControllerPortlet" method="POST" action="<%=aclManagerBean.getGroupDeleteURI()%>">
   <input type="hidden" name="groupID" value="<%=aclManagerBean.getGroupID()%>"/>
-  <script language="JAVASCRIPT">
+  <script type="text/javascript">
 
     function AccessControllerPortlet_confirmDeleteGroup_onClick() {
       var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_DELETE_CONFIRM)%>";

@@ -100,27 +100,22 @@ public class UserManagerBean extends PortletBean {
     public void doAction(PortletAction action)
             throws PortletException {
         super.doAction(action);
-        if (action instanceof DefaultPortletAction) {
-            // Save action to be performed
-            String actionName = ((DefaultPortletAction)action).getName();
-            // Perform appropriate action
-            if (actionName.equals(ACTION_USER_LIST)) {
-                doListUser();
-            } else if (actionName.equals(ACTION_USER_VIEW)) {
-                doViewUser();
-            } else if (actionName.equals(ACTION_USER_EDIT)) {
-                doEditUser();
-            } else if (actionName.equals(ACTION_USER_EDIT_CONFIRM)) {
-                doConfirmEditUser();
-            } else if (actionName.equals(ACTION_USER_DELETE)) {
-                doDeleteUser();
-            } else if (actionName.equals(ACTION_USER_DELETE_CONFIRM)) {
-                doConfirmDeleteUser();
-            } else {
-                doListUser();
-            }
+        // Get name of action performed
+        String actionName = getActionPerformedName();
+        // Perform appropriate action
+        if (actionName.equals(ACTION_USER_LIST)) {
+            doListUser();
+        } else if (actionName.equals(ACTION_USER_VIEW)) {
+            doViewUser();
+        } else if (actionName.equals(ACTION_USER_EDIT)) {
+            doEditUser();
+        } else if (actionName.equals(ACTION_USER_EDIT_CONFIRM)) {
+            doConfirmEditUser();
+        } else if (actionName.equals(ACTION_USER_DELETE)) {
+            doDeleteUser();
+        } else if (actionName.equals(ACTION_USER_DELETE_CONFIRM)) {
+            doConfirmDeleteUser();
         } else {
-            this.log.debug("Action not default portlet action!");
             doListUser();
         }
     }
