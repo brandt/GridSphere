@@ -4,6 +4,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.IncludeBean;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
+import org.apache.jasper.runtime.ServletResponseWrapperInclude;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
@@ -83,7 +84,8 @@ public class IncludeTag extends BaseBeanTag {
             // Very important here... must pass it the appropriate jsp writer!!!
             // Or else this include won't be contained within the parent content
             // but either before or after it.
-            rd.include(request, new StoredPortletResponseImpl((HttpServletResponse)response, pageContext.getOut()));
+            rd.include(request, new ServletResponseWrapperInclude(response, pageContext.getOut()));
+            //rd.include(request, new StoredPortletResponseImpl((HttpServletResponse)response, pageContext.getOut()));
             //rd.include(pageContext.getRequest(), pageContext.getResponse());
         } catch (Exception e) {
             log.error("Unable to include page ", e);
