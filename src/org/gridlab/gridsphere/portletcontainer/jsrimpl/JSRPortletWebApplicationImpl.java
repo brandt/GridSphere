@@ -178,8 +178,8 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
     }
 
     public void destroy() {
-        log.debug("removing application tab :" + webApplicationName);
-        PortletTabRegistry.removeGroupTab(webApplicationName);
+        //log.debug("removing application tab :" + webApplicationName);
+        //PortletTabRegistry.removeGroupTab(webApplicationName);
         log.debug("unloading portlet services: ");
         SportletServiceFactory factory = SportletServiceFactory.getInstance();
         factory.shutdownServices(webApplicationName);
