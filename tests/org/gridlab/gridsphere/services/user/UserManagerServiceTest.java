@@ -40,7 +40,7 @@ public class UserManagerServiceTest extends ServiceTest {
     private User superuser;
 
 
-    public UserManagerServiceTest2(String name) {
+    public UserManagerServiceTest(String name) {
         super(name);
     }
 
