@@ -58,6 +58,11 @@ public class UserManagerPortlet extends ActionPortlet {
 
     public void doListUsers(FormEvent evt)
             throws PortletException {
+
+        if (this.userManagerService.existsUserName("root")) {
+            System.err.println("\nnnnroot user does not exists!!!!\nnnnn");
+        }
+
         PortletRequest req = evt.getPortletRequest();
         List userList = this.userManagerService.getUsers();
         req.setAttribute("userList", userList);
@@ -151,6 +156,7 @@ public class UserManagerPortlet extends ActionPortlet {
         } catch (PortletException e) {
             FrameBean err = evt.getFrameBean("errorFrame");
             err.setValue(e.getMessage());
+            err.setStyle("alert");
             setNextTitle(req, "User Account Manager [Edit User]");
             setNextState(req, DO_VIEW_USER_EDIT);
         }
@@ -241,6 +247,17 @@ public class UserManagerPortlet extends ActionPortlet {
             message.append("Given name cannot be blank<br>");
             isInvalid = true;
         }
+
+        // Validate e-mail
+        String eMail = event.getTextFieldBean("emailAddress").getValue();
+        if (eMail.equals("")) {
+            message.append("Email address cannot be blank<br>");
+            isInvalid = true;
+        } else if ((eMail.indexOf("@") < 0)) {
+            message.append("Please provide a valid E-mail address<br>");
+            isInvalid = true;
+        }
+
 
         if (!isInvalid) {
             isInvalid = isInvalidPassword(event, message);
