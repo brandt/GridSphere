@@ -37,7 +37,7 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
     private ServletContext context = null;
 
     private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
-    private static PortletRegistryManager registry = PortletRegistryManager.getInstance();
+    private static PortletRegistry registry = PortletRegistry.getInstance();
 
     // A multi-valued hashtable with a webapp key and a List value containing portletAppID's
     private Map webapps = new Hashtable();
