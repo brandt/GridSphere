@@ -5,7 +5,12 @@
 package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portletcontainer.descriptor.*;
+
+import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
+import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApp;
+import org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes;
+import org.gridlab.gridsphere.portletcontainer.descriptor.Markup;
+import org.gridlab.gridsphere.portletcontainer.descriptor.AllowsWindowStates;
 import org.exolab.castor.types.AnyNode;
 
 import javax.servlet.ServletConfig;
