@@ -2,4 +2,8 @@
 Changes since GridSphere 1.0
 ============================
 
++ NPE fix to PanelBean so that beans can be created and used in PanelTag
++ Added cellpadding and border attributes to Table, Frame, Panel tags/beans
++ Added subscription and layout manager portlets and layout manager service
++ Made required-group an optional attribute in layout.xml descriptor
 
