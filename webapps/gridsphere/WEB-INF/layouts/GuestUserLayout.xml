@@ -35,16 +35,14 @@
             <portlet-tab label="home">
                	<title lang="en">Home</title>
                 <title lang="it">Inizio</title>
-		<title lang="pl">Start</title>
-		<title lang="hu">Otthon</title>
-		<title lang="de">Start</title>
-		<title lang="cs">Výchozí</title>
+		        <title lang="pl">Start</title>
+		        <title lang="hu">Otthon</title>
+		        <title lang="de">Start</title>
+		        <title lang="cs">Výchozí</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="70%">
-                            <portlet-frame label="banner">
-                                <portlet-class>org.gridlab.gridsphere.portlets.core.file.BannerPortlet.1</portlet-class>
-                            </portlet-frame>
+                            <portlet-content include="/html/main.html"/>
                         </column-layout>
                         <column-layout width="30%">
                             <portlet-frame label="login">
