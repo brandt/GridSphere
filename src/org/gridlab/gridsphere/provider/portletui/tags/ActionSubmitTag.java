@@ -50,6 +50,8 @@ public class ActionSubmitTag extends ActionTag {
 
         actionSubmitBean.setName(createActionURI().toString());
 
+        if (anchor != null) actionSubmitBean.setAnchor(anchor);
+
         if (!key.equals("")) {
             actionSubmitBean.setKey(key);
             value = getLocalizedText(key);

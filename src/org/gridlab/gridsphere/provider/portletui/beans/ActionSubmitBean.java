@@ -44,6 +44,7 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
     public String toEndString() {
         String pname = (name == null) ? "" : name;
         String sname = pname;
+        if (anchor != null) sname += "#" + anchor;
         if (!beanId.equals("")) {
             sname = "ui_" + vbName + "_" + beanId + "_" + pname;
         } else {

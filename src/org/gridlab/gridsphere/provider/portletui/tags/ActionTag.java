@@ -17,6 +17,7 @@ import java.util.List;
 public abstract class ActionTag extends BaseComponentTag {
 
     protected String action = null;
+    protected String anchor = null;
     protected boolean isSecure = false;
     protected PortletURI actionURI = null;
     protected String windowState = null;
@@ -24,6 +25,24 @@ public abstract class ActionTag extends BaseComponentTag {
     protected DefaultPortletAction portletAction = null;
     protected List paramBeans = null;
     protected String label = null;
+
+    /**
+     * Sets the text that should be added at the end of generated URL
+     *
+     * @param anchor the action link key
+     */
+    public void setAnchor(String anchor) {
+        this.anchor = anchor;
+    }
+
+    /**
+     * Returns the anchor used to identify text that should be added at the end of generated URL
+     *
+     * @return the anchor
+     */
+    public String getAnchor() {
+        return anchor;
+    }
 
     /**
      * Sets the label identified with the portlet component to link to

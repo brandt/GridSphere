@@ -79,6 +79,8 @@ public class ActionLinkBean extends ActionBean implements TagBean {
         // now do the string rendering
         action = this.portletURI.toString();
 
+        if (anchor != null) action += "#" + anchor;
+
         //String hlink = "<a href=\"" + action + "\"" + " onClick=\"this.href='" + action + "&JavaScript=enabled'\"/>" + value + "</a>";
         if (style.equalsIgnoreCase("error") || (style.equalsIgnoreCase("err"))) {
             this.cssClass = TextBean.MSG_ERROR;
@@ -98,11 +100,10 @@ public class ActionLinkBean extends ActionBean implements TagBean {
             this.addCssStyle("font-weight: underline;");
         }
         StringBuffer sb = new StringBuffer();
-
-        sb.append("<a href=\"" + action + "\"" + getFormattedCss() + " onClick=\"this.href='" + action + "&JavaScript=enabled'\"/>" + value);
+        sb.append("<a");
+        if (name != null) sb.append(" name=\"" + name + "\"");
+        sb.append(" href=\"" + action + "\"" + getFormattedCss() + " onClick=\"this.href='" + action + "&JavaScript=enabled'\"/>" + value);
         sb.append("</a>");
-
-
         return sb.toString();
     }
 

@@ -22,7 +22,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
     protected PortletURI portletURI = null;
     protected List paramBeanList = new ArrayList();
     protected String label = null;
-
+    protected String anchor = null;
 
     /**
      * Constructs default action bean
@@ -66,6 +66,42 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
      */
     public String getLabel() {
         return label;
+    }
+
+    /**
+     * Sets the text that should be added at the end of generated URL
+     *
+     * @param anchor the action link key
+     */
+    public void setAnchor(String anchor) {
+        this.anchor = anchor;
+    }
+
+    /**
+     * Returns the anchor used to identify text that should be added at the end of generated URL
+     *
+     * @return the anchor
+     */
+    public String getAnchor() {
+        return anchor;
+    }
+
+    /**
+     * Sets the action link name used to identify an anchor
+     *
+     * @param name the action link name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Returns the action link name used to identify an anchor
+     *
+     * @return the action link name
+     */
+    public String getName() {
+        return name;
     }
 
     /**
