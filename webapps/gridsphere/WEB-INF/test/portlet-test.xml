@@ -70,7 +70,7 @@
                     <description>Here is another simple portlet</description>
                     <keywords>portlet hello world</keywords>
                 </language>
-                <allowed-access visibility="PUBLIC" role="USER"/>
+                <access-restrictions visibility="PUBLIC" role="USER"/>
                 <config-param>
                     <param-name>Portlet Master</param-name>
                     <param-value>secondguy@some.com</param-value>

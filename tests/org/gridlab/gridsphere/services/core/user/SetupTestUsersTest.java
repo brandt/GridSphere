@@ -37,8 +37,8 @@ public class SetupTestUsersTest extends SetupRootUserTest {
         super.setUp();
         try {
             super.testLoginRootUser();
-            rootUserService = (UserManagerService) factory.createUserPortletService(UserManagerService.class, rootUser, config, true);
-            rootACLService = (AccessControlManagerService) factory.createUserPortletService(AccessControlManagerService.class, rootUser, config, true);
+            rootUserService = (UserManagerService) factory.createUserPortletService(UserManagerService.class, rootUser, context, true);
+            rootACLService = (AccessControlManagerService) factory.createUserPortletService(AccessControlManagerService.class, rootUser, context, true);
         } catch (PortletServiceException e) {
             fail("Unable to initialize user services");
         }

@@ -32,7 +32,7 @@ public class SetupRootUserTest extends GridSphereServletTest {
     }
 
     public void testLoginRootUser() throws PortletServiceException {
-        LoginService loginService = (LoginService) factory.createUserPortletService(LoginService.class, GuestUser.getInstance(), config, true);
+        LoginService loginService = (LoginService) factory.createUserPortletService(LoginService.class, GuestUser.getInstance(), context, true);
         rootUser = loginService.login("root", "");
         assertNotNull(rootUser);
 
