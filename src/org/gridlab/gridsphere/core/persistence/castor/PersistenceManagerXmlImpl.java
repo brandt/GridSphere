@@ -11,61 +11,66 @@ import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.Unmarshaller;
 import org.exolab.castor.xml.ValidationException;
-import org.gridlab.gridsphere.core.persistence.*;
+
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.xml.sax.InputSource;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
 
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.net.URL;
 
 /**
- * The Class provides easy access to marshal/unmarshal objects to XML files
+ * The PersistenceManagerXmlImpl provides easy access to marshal/unmarshal Java objects to XML files
  */
-public class PersistenceManagerXml  {
+public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
 
-    protected final static PortletLog log = SportletLog.getInstance(PersistenceManagerXml.class);
+    protected final static PortletLog log = SportletLog.getInstance(PersistenceManagerXmlImpl.class);
 
-    private String mappingURL = null;
-    private String descriptorURL = null;
-
-    /**
-     * PersistenceManagerXml default constructor
-     */
-    private PersistenceManagerXml() {}
+    private String mappingPath = null;
+    private String descriptorPath = null;
 
     /**
-     * Creates an instance of PersistenceManagerXml from a descriptor and mapping URL
-     * @param descriptorURL the descriptor location
-     * @param mappingURL the mapping location
+     * PersistenceManagerXmlImpl default constructor
      */
-    private PersistenceManagerXml(String descriptorURL, String mappingURL) {
-        this.mappingURL = mappingURL;
-        this.descriptorURL = descriptorURL;
+    private PersistenceManagerXmlImpl() {}
+
+    /**
+     * Creates an instance of PersistenceManagerXmlImpl from a descriptor and mapping URL
+     * @param descriptorPath the descriptor location
+     * @param mappingPath the mapping location
+     */
+    public PersistenceManagerXmlImpl(String descriptorPath, String mappingPath) {
+        this.descriptorPath = descriptorPath;
+        this.mappingPath = mappingPath;
     }
 
     /**
-     * Returns an instance of a PersistenceManagerXML from a descriptor and mapping URL
-     * @param descriptorURL the descriptor location
-     * @param mappingURL the mapping location
-     * @return an instance of PersistenceManagerXml
-     */
-    public static PersistenceManagerXml createPersistenceManager(String descriptorURL, String mappingURL) {
-        return new PersistenceManagerXml(descriptorURL, mappingURL);
-    }
-
-    /**
-     * Return the mapping URL
+     * Sets the mapping file path
      *
-     * @return the mapping URL
+     * @param mappingPath the mapping file path
      */
-    public String getMappingURL() {
-        return mappingURL;
+    public void setMappingPath(String mappingPath) {
+        this.mappingPath = mappingPath;
+    }
+
+    /**
+     * Return the mapping file path
+     *
+     * @return the mapping file path
+     */
+    public String getMappingPath() {
+        return mappingPath;
+    }
+
+    /**
+     * Sets the descriptor file path
+     *
+     * @param descriptorPath the file path of the descriptor
+     */
+    public void setDescriptorPath(String descriptorPath) {
+        this.descriptorPath = descriptorPath;
     }
 
     /**
@@ -73,39 +78,29 @@ public class PersistenceManagerXml  {
      *
      * @return name of the mappingfile
      */
-    public String getDescriptorURL() {
-        return descriptorURL;
-    }
-
-    /**
-     * Updates an object in the xml file (same as create)
-     *
-     * @throws PersistenceManagerException if the update failed
-     * @param object update 'object'
-     */
-    public void update(Object object) throws IOException, PersistenceManagerException {
-        create(object);
+    public String getDescriptorPath() {
+        return descriptorPath;
     }
 
     /**
      * Marshals the given object to an xml file
      *
      * @param object object to be marshalled
-     * @throws PersistenceManagerException if the configuration was wrong
+     * @throws org.gridlab.gridsphere.core.persistence.PersistenceManagerException if the configuration was wrong
      * @throws IOException if an I/O error occurs
      */
-    public void create(Object object) throws PersistenceManagerException, IOException {
+    public void save(Object object) throws PersistenceManagerException, IOException {
         try {
-            FileWriter filewriter = new FileWriter(descriptorURL);
+            FileWriter filewriter = new FileWriter(descriptorPath);
 
             Marshaller marshal = new Marshaller(filewriter);
             Mapping map = new Mapping();
-            map.loadMapping(mappingURL);
+            map.loadMapping(mappingPath);
             marshal.setMapping(map);
             marshal.marshal(object);
             filewriter.close();
             Class cl = object.getClass();
-            log.debug("Wrote object of type " + cl.getName() + " to XMLFile " + descriptorURL);
+            log.debug("Wrote object of type " + cl.getName() + " to XMLFile " + descriptorPath);
         } catch (ValidationException e) {
             log.error("Unable to marshal object: " + e.getException().toString());
             throw new PersistenceManagerException("Validation Error" + e.getException().toString());
@@ -117,7 +112,6 @@ public class PersistenceManagerXml  {
             e.printStackTrace();
             throw new PersistenceManagerException("Mapping Error" + e.getException().toString());
         }
-
     }
 
     /**
@@ -127,20 +121,18 @@ public class PersistenceManagerXml  {
      * @throws PersistenceManagerException if restore was not succsessful
      * @throws IOException if there was a configurationerror
      */
-    public Object restoreObject() throws  IOException, PersistenceManagerException {
-
+    public Object load() throws  IOException, PersistenceManagerException {
         Object object = null;
-
         try {
-            log.info("Using getConnectionURL() " + descriptorURL);
+            log.info("Using getConnectionURL() " + descriptorPath);
             FileReader filereader = null;
 
-            filereader = new FileReader(descriptorURL);
+            filereader = new FileReader(descriptorPath);
 
             Mapping mapping = new Mapping();
 
-            mapping.loadMapping(mappingURL);
-            log.info("Using  getMappingFile()" + mappingURL);
+            mapping.loadMapping(mappingPath);
+            log.info("Using  getMappingFile()" + mappingPath);
 
             Unmarshaller unmarshal = new Unmarshaller(mapping);
             object = unmarshal.unmarshal(filereader);

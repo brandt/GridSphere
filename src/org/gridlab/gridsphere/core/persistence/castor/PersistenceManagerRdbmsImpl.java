@@ -12,74 +12,41 @@ package org.gridlab.gridsphere.core.persistence.castor;
 import org.exolab.castor.jdo.*;
 import org.exolab.castor.jdo.PersistenceException;
 import org.exolab.castor.mapping.MappingException;
-import org.exolab.castor.util.Logger;
-import org.gridlab.gridsphere.core.persistence.*;
+
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Properties;
-import java.io.FileReader;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.net.URL;
-
 
 /**
  * This class provides methods for storing/getting data to/from rdbms storage.
  */
-public class PersistenceManagerRdbms {
+public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
 
-    protected transient static PortletLog log = SportletLog.getInstance(PersistenceManagerRdbms.class);
-
-    private static PersistenceManagerRdbms instance = new PersistenceManagerRdbms();
-    protected boolean databaseCreated = false;
+    protected transient static PortletLog log = SportletLog.getInstance(PersistenceManagerRdbmsImpl.class);
     protected JDO jdo = null;
-    protected String url = null;
 
-    // @todo need to check settings for rollback !!
+    private PersistenceManagerRdbmsImpl() {}
 
-    private PersistenceManagerRdbms() {
-        log.info("Entering PM");
-
-        String databaseConfigFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_DATABASE_CONFIG);
-        String databaseName = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_DATABASE_NAME);
-
-        url = databaseConfigFile;
-        log.info("Using '" + databaseName + "' as Databasename with the configfile '" + url + "'");
+    public PersistenceManagerRdbmsImpl(String databaseName, String databaseConfigFile) {
+        log.info("Creating PersistenceManagerRdbmsImpl");
+        log.info("Using '" + databaseName + "' as Databasename with the configfile '" + databaseConfigFile + "'");
 
         try {
-            JDO.loadConfiguration(url);
+            JDO.loadConfiguration(databaseConfigFile);
         } catch (MappingException e) {
-            log.error("Unable to get JDO configuration: " + url, e);
+            log.error("Unable to get JDO configuration: " + databaseConfigFile, e);
         }
 
         jdo = new JDO();
-        //PrintWriter writer = new Logger(System.out).setPrefix("test");
-        //jdo.setLogWriter(writer);
-
         jdo.setDatabaseName(databaseName);
         jdo.setTransactionManager(null);
-    }
-
-    public static PersistenceManagerRdbms getInstance() {
-        return instance;
-    }
-
-    /**
-     * Return the connectionURL
-     *
-     * @return filename
-     */
-    public String getConnectionURL() {
-        return url;
     }
 
     /**
@@ -193,7 +160,7 @@ public class PersistenceManagerRdbms {
      * @return the requested object defined by setQuery()
      * @throws PersistenceManagerException is a persistence error occurs
      */
-    public Object restoreObject(String query) throws PersistenceManagerException {
+    public Object restore(String query) throws PersistenceManagerException {
         List resultList = restoreList(query);
         if (resultList.size() > 0) {
             return resultList.get(0);
@@ -288,9 +255,7 @@ public class PersistenceManagerRdbms {
                 db = null;
             }
         }
-
         return object;
-
     }
 
     /**
@@ -299,7 +264,8 @@ public class PersistenceManagerRdbms {
      * @param query oql query
      * @throws PersistenceManagerException is a persistence error occurs
      */
-    public void deleteList(String query) throws PersistenceManagerException {
+    /*
+    private void deleteList(String query) throws PersistenceManagerException {
 
         Database db = null;
         OQLQuery oql = null;
@@ -335,7 +301,9 @@ public class PersistenceManagerRdbms {
             }
         }
     }
+    */
 
+    /*
     public void deleteList(ParameterList list) throws PersistenceManagerException {
 
         Database db = null;
@@ -374,5 +342,5 @@ public class PersistenceManagerRdbms {
             }
         }
     }
-
+         */
 }
