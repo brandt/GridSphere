@@ -392,8 +392,7 @@ public class PortletTitleBar extends BasePortletComponent {
                 stateLink.setHref(portletURI.toString());
                 stateLinks.add(stateLink);
             } catch (IllegalArgumentException e) {
-                errorMessage += "Unable to create window state link: " + windowStates[i] + "\n";
-                hasError = true;
+                // do nothing
             }
 
         }
