@@ -11,7 +11,7 @@ import java.util.List;
 
 public class PortletDefinition {
 
-    private PortletApplication portletApp = new PortletApplication();
+    private PortletApp portletApp = new PortletApp();
     private Vector concreteApps = new Vector();
 
     public Vector getConcreteApps() {
@@ -22,11 +22,11 @@ public class PortletDefinition {
         this.concreteApps = concreteApps;
     }
 
-    public void setPortletApp(PortletApplication portletApp) {
+    public void setPortletApp(PortletApp portletApp) {
         this.portletApp = portletApp;
     }
 
-    public PortletApplication getPortletApp() {
+    public PortletApp getPortletApp() {
         return portletApp;
     }
 

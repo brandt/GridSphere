@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ConcretePortletApplication {
 
-    private String uid = new String();
+    private String id = new String();
     private String name = new String();
     private Vector contextParamList = new Vector();
     private ConcretePortletInfo portletInfo = new ConcretePortletInfo();
@@ -23,8 +23,8 @@ public class ConcretePortletApplication {
      *
      * @returns UID of the ConcretePortletApplication
      */
-    public String getUID() {
-        return uid;
+    public String getID() {
+        return id;
     }
 
     /**
@@ -32,8 +32,8 @@ public class ConcretePortletApplication {
      *
      * @param uid the UID of the ConcretePortletApplication
      */
-    public void setUID(String uid) {
-        this.uid = uid;
+    public void setID(String id) {
+        this.id = id;
     }
 
     /**

@@ -30,4 +30,6 @@ public class PortletCollection {
     public void setPortletDefList(Vector portletDefList) {
         this.PortletDefList = portletDefList;
     }
+
 }
+

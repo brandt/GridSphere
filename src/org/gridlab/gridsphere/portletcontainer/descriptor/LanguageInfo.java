@@ -7,8 +7,6 @@
 
 package org.gridlab.gridsphere.portletcontainer.descriptor;
 
-import org.gridlab.gridsphere.portletcontainer.GridSphere;
-
 import java.util.Vector;
 import java.util.List;
 

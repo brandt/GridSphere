@@ -7,14 +7,11 @@
 
 package org.gridlab.gridsphere.portletcontainer.descriptor;
 
-import org.gridlab.gridsphere.portletcontainer.GridSphere;
-
 import java.util.Vector;
 import java.util.List;
 
 public class ConcretePortletInfo {
 
-    private String href = new String();
     private String defaultLocale = new String();
     private List languageList = new Vector();
     private String name = new String();
@@ -23,24 +20,6 @@ public class ConcretePortletInfo {
     private List groupList = new Vector();
     private List roleList = new Vector();
     private Vector configParamList = new Vector();
-
-    /**
-     * gets the href of a PortletInfo
-     *
-     * @returns href
-     */
-    public String getHref() {
-        return href;
-    }
-
-    /**
-     * sets the href of a portlet
-     *
-     * @param href the Href of the portlet
-     */
-    public void setHref(String href) {
-        this.href = href;
-    }
 
     /**
      * gets the default locale of a portlet

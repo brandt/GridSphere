@@ -20,6 +20,7 @@ import java.util.List;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class PortletDeploymentDescriptor {
 
@@ -82,7 +83,7 @@ public class PortletDeploymentDescriptor {
             Iterator appsIt = apps.iterator();
             while (appsIt.hasNext()) {
                 ConcretePortletApplication capp = (ConcretePortletApplication)appsIt.next();
-                String uid = capp.getUID();
+                String uid = capp.getID();
                 if (concretePortletID.equals(uid)) {
                     return capp;
                 }
@@ -92,15 +93,15 @@ public class PortletDeploymentDescriptor {
     }
 
     public void setConcretePortletApplication(ConcretePortletApplication concApp) {
-        if (getConcretePortletApplication(concApp.getUID()) == null) {
+        if (getConcretePortletApplication(concApp.getID()) == null) {
             // see if an application portlet exists
             Vector defList = pc.getPortletDefList();
             Iterator it = defList.iterator();
             while (it.hasNext()) {
                 PortletDefinition pd = (PortletDefinition)it.next();
                 Vector apps = pd.getConcreteApps();
-                PortletApplication pApp = pd.getPortletApp();
-                if (concApp.getUID().startsWith(pApp.getUID())) {
+                PortletApp pApp = pd.getPortletApp();
+                if (concApp.getID().startsWith(pApp.getID())) {
                     apps.add(concApp);
                     defList.remove(pd);
                     pd.setConcreteApps(apps);
@@ -117,12 +118,12 @@ public class PortletDeploymentDescriptor {
      * @param concretePortletID the concrete portlet ID
      * @return the corresponding PortletApplication or null if none exists
      */
-    public PortletApplication getPortletApplication(String concretePortletID) {
+    public PortletApp getPortletAppDescriptor(String concretePortletID) {
         Iterator it = PortletDef.iterator();
         while (it.hasNext()) {
             PortletDefinition pd = (PortletDefinition)it.next();
-            PortletApplication app = pd.getPortletApp();
-            String uid = app.getUID();
+            PortletApp app = pd.getPortletApp();
+            String uid = app.getID();
             if (concretePortletID.startsWith(uid)) {
                 return app;
             }
@@ -136,8 +137,8 @@ public class PortletDeploymentDescriptor {
      * @param concretePortletID the concrete portlet ID
      * @return the corresponding PortletApplication or null if none exists
      */
-    public void setPortletApplication(PortletApplication portletApp) {
-        if (getPortletApplication(portletApp.getUID()) == null) {
+    public void setPortletAppDescriptor(PortletApp portletApp) {
+        if (getPortletAppDescriptor(portletApp.getID()) == null) {
             PortletDefinition pd = new PortletDefinition();
             Vector defList = pc.getPortletDefList();
             defList.add(pd);
