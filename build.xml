@@ -366,7 +366,7 @@ Copyright:
 
     <target name="configure-database" depends="setenv">
         <mkdir dir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/"/>
-        <copy overwrite="true" file="webapps/gridsphere/WEB-INF/persistence/hibernate.properties" todir="build/webapps/gridsphere/WEB-INF/persistence/"/>
+        <copy overwrite="true" file="webapps/gridsphere/WEB-INF/persistence/hibernate.properties" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/"/>
         <replace file="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/hibernate.properties"
                  token="@GRIDSPHERE_WEBAPP@"
                  value="${env.CATALINA_HOME}/${gswebapp.dir}"/>
@@ -380,11 +380,11 @@ Copyright:
 
         <schemaexport
             properties="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/hibernate.properties"
-            quiet="no"
+            quiet="yes"
             text="no"
             drop="no"
             delimiter=";"
-            output="schema-export.sql">
+            output="build/schema-export.sql">
             <fileset dir="webapps/gridsphere/WEB-INF/persistence/">
                 <include name="**/*.hbm.xml"/>
             </fileset>
@@ -398,7 +398,7 @@ Copyright:
 
         <schemaupdate
             properties="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/hibernate.properties"
-            quiet="no">
+            quiet="yes">
             <fileset dir="webapps/gridsphere/WEB-INF/persistence/">
                 <include name="**/*.hbm.xml"/>
             </fileset>
