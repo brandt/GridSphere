@@ -7,12 +7,15 @@ package org.gridlab.gridsphere.portletcontainer.impl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletRequestImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletResponse;
+import org.gridlab.gridsphere.portlet.impl.SportletRequest;
+import org.gridlab.gridsphere.portlet.impl.SportletContext;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Enumeration;
+import java.util.*;
 
 /**
  * The <code>GridSphereEventImpl</code> is an implementation of the <code>GridSphereEvent</code> interface.
@@ -24,22 +27,22 @@ import java.util.Enumeration;
  */
 public class GridSphereEventImpl implements GridSphereEvent {
 
-    protected PortletRequest portletRequest;
-    protected PortletResponse portletResponse;
+    protected SportletRequest portletRequest;
+    protected SportletResponse portletResponse;
     protected PortletContext portletContext;
 
-    protected int PortletComponentID = -1;
+    protected int portletComponentID = -1;
     protected DefaultPortletAction action = null;
     protected DefaultPortletMessage message = null;
 
-    public GridSphereEventImpl(PortletContext ctx, HttpServletRequest req, HttpServletResponse res) {
+    public GridSphereEventImpl(AccessControlManagerService  aclService, PortletContext ctx, HttpServletRequest req, HttpServletResponse res) {
         portletRequest = new SportletRequestImpl(req);
         portletResponse = new SportletResponse(res, portletRequest);
         portletContext = ctx;
 
         String cidStr = req.getParameter(GridSphereProperties.COMPONENT_ID);
         try {
-            PortletComponentID = new Integer(cidStr).intValue();
+            portletComponentID = new Integer(cidStr).intValue();
         } catch (NumberFormatException e) {
         }
 
@@ -68,6 +71,21 @@ public class GridSphereEventImpl implements GridSphereEvent {
         if (messageStr != null) {
             System.err.println("Received message: " + messageStr);
             message = new DefaultPortletMessage(messageStr);
+        }
+
+        /* This is where we get ACL info and update sportlet request */
+        User user = portletRequest.getUser();
+        if (user instanceof GuestUser) {
+            portletRequest.setRole(aclService.getBaseGroup(), PortletRole.GUEST);
+        } else {
+            List groups = aclService.getGroups(user);
+            Iterator git = groups.iterator();
+            PortletGroup group = null;
+            while (git.hasNext()) {
+                group = (PortletGroup)git.next();
+                PortletRole role = aclService.getRoleInGroup(portletRequest.getUser(), group);
+                portletRequest.setRole(group, role);
+            }
         }
     }
 
@@ -100,7 +118,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
     }
 
     public int getPortletComponentID() {
-        return PortletComponentID;
+        return portletComponentID;
     }
 
 }

@@ -124,10 +124,10 @@
         <field name="Title" type="string">
             <bind-xml name="title"/>
         </field>
-        <field name="PortletMode" type="string">
+        <field name="PortletModeAsString" type="string">
             <bind-xml name="mode" node="attribute"/>
         </field>
-        <field name="WindowState" type="string">
+        <field name="WindowStateAsString" type="string">
             <bind-xml name="state" node="attribute"/>
         </field>
     </class>

@@ -29,5 +29,5 @@ public class GridSphereProperties {
     public static final String USER = "User";
     public static final String PORTLETROLES = "PortletRoles";
     public static final String PORTLETGROUPS = "PortletGroups";
-
+    public static final String GROUPROLES = "GroupRoles";
 }

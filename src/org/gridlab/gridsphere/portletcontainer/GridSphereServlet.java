@@ -126,7 +126,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 
-        GridSphereEvent event = new GridSphereEventImpl(context, req, res);
+        GridSphereEvent event = new GridSphereEventImpl(aclService, context, req, res);
 
         PortletRequest portletReq = event.getPortletRequest();
         PortletResponse portletRes = event.getPortletResponse();
@@ -148,27 +148,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
         }
 
-        /* This is where we get ACL info and update sportlet request */
-        User user = portletReq.getUser();
-        PortletRole role = PortletRole.GUEST;
-        List groups = new ArrayList();
-        if (user instanceof GuestUser) {
-            groups.add(SportletGroup.BASE);
-        } else {
-            groups = aclService.getGroups(user);
-            Iterator git = groups.iterator();
-            PortletGroup group = null;
-            while (git.hasNext()) {
-                group = (PortletGroup)git.next();
-                role = aclService.getRoleInGroup(portletReq.getUser(), group);
-            }
-        }
-
-        portletReq.setAttribute(GridSphereProperties.PORTLETROLES, role);
-        portletReq.setAttribute(GridSphereProperties.PORTLETGROUPS, groups);
-
         // Render layout
-
         layoutEngine.actionPerformed(event);
 
         // Handle any outstanding messages

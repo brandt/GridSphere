@@ -118,6 +118,7 @@ public class PortletTitleBar extends BasePortletComponent {
          * @param mode the portlet mode
          */
         public PortletModeLink(String mode) throws IllegalArgumentException {
+            if (mode == null) return;
 
             // Set the image src
             if (mode.equalsIgnoreCase(Portlet.Mode.CONFIGURE.toString())) {
@@ -155,6 +156,8 @@ public class PortletTitleBar extends BasePortletComponent {
          * @param state the window state
          */
         public PortletStateLink(String state) throws IllegalArgumentException {
+            if (state == null) return;
+
             // Set the image src
             if (state.equalsIgnoreCase(PortletWindow.State.MINIMIZED.toString())) {
                 imageSrc = minimizeImage;
@@ -219,7 +222,27 @@ public class PortletTitleBar extends BasePortletComponent {
      * @param state the portlet window state expressed as a string
      * @see PortletWindow.State
      */
-    public void setWindowState(String state) {
+    public void setWindowState(PortletWindow.State state) {
+        if (state != null) this.windowState = state;
+    }
+
+    /**
+     * Returns the window state of this title bar
+     *
+     * @return the portlet window state expressed as a string
+     * @see PortletWindow.State
+     */
+    public PortletWindow.State getWindowState() {
+        return windowState;
+    }
+
+        /**
+     * Sets the window state of this title bar
+     *
+     * @param state the portlet window state expressed as a string
+     * @see PortletWindow.State
+     */
+    public void setWindowStateAsString(String state) {
         if (state != null) {
             try {
                 this.windowState = PortletWindow.State.toState(state);
@@ -235,7 +258,7 @@ public class PortletTitleBar extends BasePortletComponent {
      * @return the portlet window state expressed as a string
      * @see PortletWindow.State
      */
-    public String getWindowState() {
+    public String getWindowStateAsString() {
         return windowState.toString();
     }
 
@@ -245,7 +268,28 @@ public class PortletTitleBar extends BasePortletComponent {
      * @param mode the portlet mode expressed as a string
      * @see Portlet.Mode
      */
-    public void setPortletMode(String mode) {
+    public void setPortletMode(Portlet.Mode mode) {
+        if (mode != null) this.portletMode = mode;
+    }
+
+    /**
+     * Returns the portlet mode of this title bar
+     *
+     * @return the portlet mode expressed as a string
+     * @see Portlet.Mode
+     */
+    public Portlet.Mode getPortletMode() {
+        return portletMode;
+    }
+
+    /**
+     * Sets the portlet mode of this title bar
+     *
+     * @param mode the portlet mode expressed as a string
+     * @see Portlet.Mode
+     */
+    public void setPortletModeAsString(String mode) {
+        if (mode == null) return;
         try {
             this.portletMode = Portlet.Mode.toMode(mode);
         } catch (IllegalArgumentException e) {
@@ -259,7 +303,7 @@ public class PortletTitleBar extends BasePortletComponent {
      * @return the portlet mode expressed as a string
      * @see Portlet.Mode
      */
-    public String getPortletMode() {
+    public String getPortletModeAsString() {
         return portletMode.toString();
     }
 
@@ -337,14 +381,20 @@ public class PortletTitleBar extends BasePortletComponent {
         }
     }
 
-    public List sort(List list) {
+    /**
+     * Simple sorting algoritm that sorts in increasing order a <code>List</code>
+     * containing objects that implement <code>Comparator</code>
+     * @param list a <code>List</code> to be sorted
+     * @return the sorted list
+     */
+    private List sort(List list) {
         int n = list.size();
         for (int i=0; i < n-1; i++) {
             for (int j=0; j < n-1-i; j++) {
                 Comparator c = (Comparator)list.get(j);
                 Comparator d = (Comparator)list.get(j+1);
                 if (c.compare(c, d) == 1) {
-                    Object tmp = list.get(j);         /* swap a[j] and a[j+1]      */
+                    Object tmp = list.get(j);
                     list.set(j, d);
                     list.set(j+1, tmp);
                 }
@@ -352,11 +402,7 @@ public class PortletTitleBar extends BasePortletComponent {
         }
         return list;
     }
-    /**
-     private boolean greaterThan(Comparator c, Object left, Object right) {
-         return c.compare(left, right) == 1;
-     }
-     **/
+
     /**
      * Creates the portlet window state hyperlinks displayed in the title bar
      *
@@ -428,14 +474,35 @@ public class PortletTitleBar extends BasePortletComponent {
     public List createModeLinks(GridSphereEvent event) {
         int i;
         PortletResponse res = event.getPortletResponse();
+        PortletRequest req = event.getPortletRequest();
         // make modes from supported modes
-
         if (supportedModes.isEmpty()) return null;
+
+        // Unless user is admin or super they should not see configure mode
+        List groups = req.getGroups();
+        Iterator it = groups.iterator();
+        boolean hasConfigurePermission = false;
+        while (it.hasNext()) {
+            PortletGroup group = (PortletGroup)it.next();
+            PortletRole role = req.getRole(group);
+            if (role.isAdmin() || role.isSuper()) {
+                hasConfigurePermission = true;
+            }
+        }
+
 
         String[] portletModes = new String[supportedModes.size()];
         for (i = 0; i < supportedModes.size(); i++) {
             Portlet.Mode mode = (Portlet.Mode)supportedModes.get(i);
-            portletModes[i] = mode.toString();
+            if (mode == Portlet.Mode.CONFIGURE) {
+                if (hasConfigurePermission) {
+                    portletModes[i] = mode.toString();
+                } else {
+                    portletModes[i] = "";
+                }
+            } else {
+                portletModes[i] = mode.toString();
+            }
         }
 
         // create a URI for each of the portlet modes
@@ -482,7 +549,6 @@ public class PortletTitleBar extends BasePortletComponent {
             }
             if (winEvent != null) {
                 try {
-                    //userManager.windowEvent(portletClass, winEvent, req, res);
                     PortletInvoker.windowEvent(portletClass, winEvent, req, res);
                 } catch (PortletException e) {
                     hasError = true;
@@ -495,6 +561,7 @@ public class PortletTitleBar extends BasePortletComponent {
             req.setMode(portletMode);
             req.setAttribute(GridSphereProperties.PREVIOUSMODE, portletMode);
         }
+        req.setAttribute(GridSphereProperties.PORTLETWINDOW, windowState);
         if (evt != null) fireTitleBarEvent(evt);
     }
 
@@ -547,7 +614,7 @@ public class PortletTitleBar extends BasePortletComponent {
 
         req.setMode(portletMode);
         req.setAttribute(GridSphereProperties.PREVIOUSMODE, previousMode);
-
+        req.setAttribute(GridSphereProperties.PORTLETWINDOW, windowState);
         PrintWriter out = res.getWriter();
 
         out.println("<tr><td class=\"window-title\">");
