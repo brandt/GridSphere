@@ -65,7 +65,7 @@ The directory structure is as follows:
                 <filename>WEB-INF/</filename> - contains GridSphere configuration files, layouts, and database
             </member>
             <member>
-                <filename>WEB-INF/Portlets/</filename> - contains empty files whoise filenames identify external portlet applications to load
+                <filename>WEB-INF/Portlets/</filename> - contains empty files; the filenames identify external portlet applications to load
             </member>
             <member>
                 <filename>WEB-INF/group.xml</filename> - contains a group descriptor for the core portlets
