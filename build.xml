@@ -39,6 +39,7 @@ Copyright:
   <property name="docs.dir"       value="${build.dir}/docs"/>
   <property name="javadoc.dir"    value="${build.dir}/javadocs"/>
   <property name="install.war"    value="${build.dir}/webapp"/>
+  <property name="reports.tests"  value="${build.dir}/tests"/>
   <property name="test.cfg.dir"   value="${src.dir}"/>
 
   <property name="exclude.dirs" value=""/>
@@ -70,7 +71,7 @@ Copyright:
   <!-- =================================================================== -->
   <!-- Functions                                                           -->
   <!-- =================================================================== -->
-  <target name="setenv">
+  <target name="setenv" description="Check for libraries and print out config information">
 	<mkdir dir="${build.dir}"/>
     <mkdir dir="${build.lib}"/>
 	<mkdir dir="${classes.dir}"/>
@@ -132,24 +133,27 @@ Copyright:
   <!-- =================================================================== -->
   <!-- Builds and deploys GridSphere                                       -->
   <!-- =================================================================== -->
-  <target name="all" depends="clean,compile,docs,jar,war"/>
+  <target name="all" depends="clean,compile,docs,jar,war" description="Build and deploy GridSphere"/>
 
   <!-- =================================================================== -->
   <!-- Updates GridSphere source code                                      -->
   <!-- =================================================================== -->
-  <target name="update">
+  <target name="update" description="Update code from CVS">
     <cvs command="update -dP"/>
   </target>
 
 
-  <target name="compile" depends="setenv">
-
+  <!-- =================================================================== -->
+  <!-- Compiles GridSphere source code                                      -->
+  <!-- =================================================================== -->
+  <target name="compile" depends="setenv" description="Compile GridSphere source code">
 	<javac  srcdir="${src.dir}"
 		destdir="${classes.dir}"
 		classpathref="classpath"
 		debug="${debug}"
 		optimize="${optimize}"
 		deprecation="${deprecation}">
+        <exclude name="**/test/**" unless="junit.present"/>
 	</javac>
 
   </target>
@@ -157,7 +161,7 @@ Copyright:
   <!-- =================================================================== -->
   <!-- Creates a GridSphere JAR library archive                            -->
   <!-- =================================================================== -->
-  <target name="jar" depends="compile">
+  <target name="jar" depends="compile" description="Create gridsphere.jar">
     <jar jarfile="${build.lib}/${Name}.jar" basedir="${classes.dir}" >
         <include name="org/**" />
         <include name="${conf.dir}/log4j.properties"/>
@@ -168,7 +172,7 @@ Copyright:
   <!-- =================================================================== -->
   <!-- Cleans everything                                                   -->
   <!-- =================================================================== -->
-  <target name="clean">
+  <target name="clean" description="Delete classes and existing library">
     <delete dir="${classes.dir}"/>
 	<delete quiet="true" dir="${dist.dir}"/>
 	<delete quiet="true" dir="${build.dir}"/>
@@ -178,7 +182,7 @@ Copyright:
   <!-- =================================================================== -->
   <!-- Creates the API documentation                                       -->
   <!-- =================================================================== -->
-  <target name="docs" depends="setenv">
+  <target name="docs" depends="setenv" description="Create GridSphere Javadocs">
     <mkdir dir="${javadoc.dir}"/>
     <javadoc packagenames="org.*,javax.*"
              sourcepath="${src.dir}"
@@ -196,7 +200,7 @@ Copyright:
   <!-- =================================================================== -->
   <!-- Creates the war file                                                -->
   <!-- =================================================================== -->
-  <target name="war" depends="jar">
+  <target name="war" depends="jar" description="Create GridSphere WAR for deployment">
     <war warfile="${build.dir}/${Name}.war"
             webxml="${webapp.dir}/WEB-INF/web.xml">
 
@@ -222,7 +226,7 @@ Copyright:
     <!-- ================================================================= -->
     <!-- Deploys GridSphere to a local server                              -->
     <!-- ================================================================= -->
-    <target name="deploy" depends="jar">
+    <target name="deploy" depends="jar" description="Deploys GridSphere to a local server">
         <copy todir="${install.war}/${Name}">
             <fileset dir="${webapp.dir}"/>
         </copy>
@@ -243,7 +247,7 @@ Copyright:
             <fileset dir="${install.war}/${Name}"/>
         </copy>
 
-        <copyfile src="conf/log4j.properties" dest="${env.TOMCAT_HOME}/webapps/${Name}/WEB-INF/conf/log4j.properties" />
+        <copy file="conf/log4j.properties" tofile="${env.TOMCAT_HOME}/webapps/${Name}/WEB-INF/conf/log4j.properties" />
 
     </target>
 
@@ -251,7 +255,23 @@ Copyright:
   <!-- =================================================================== -->
   <!-- Runs all JUnit tests: needs optional.jar and junit in classpath     -->
   <!-- =================================================================== -->
-  <target name="test" if="junit.present" depends="compile">
+  <target name="test" if="junit.present" depends="compile" description="Runs all JUnit tests">
+      <mkdir dir = "${reports.tests}"/>
+      <copy file="${webapp.dir}/WEB-INF/conf/PortletServices.properties" todir="${classes.dir}"/>
+      <junit printsummary="yes" haltonfailure="yes">
+                <classpath>
+                        <path refid="classpath" />
+                        <pathelement location="${src.dir}" />
+                </classpath>
+
+                <formatter type="plain" />
+
+                <batchtest fork="yes" todir="${reports.tests}">
+                        <fileset dir="${src.dir}">
+                           <include name="org/gridlab/gridsphere/tests/**/*.java"/>
+                        </fileset>
+                </batchtest>
+        </junit>
   </target>
 
   <target name="testacl" depends="compile">
