@@ -92,6 +92,7 @@
             layout of a particular group. Currently, the layout descriptor must be hand edited in the text area and then saved.
             The changes will take place when a user logs out and logs back in. This offers a simple yet effective way to edity the guest
             user layout or the layouts of defined groups. In addition, the banner of the portal may be edited allowing
-            an admin to modify the portal header including logo and title information.
+            an admin to modify the portal header including logo and title information. The defualt theme may be selected such that new users
+            or users that have not selected a theme will see the selected default theme.
         </para>
     </sect1>
