@@ -132,8 +132,10 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
             log.debug("Using  getMappingFile()" + mappingPath);
 
             Unmarshaller unmarshal = new Unmarshaller(mapping);
+            unmarshal.setValidation(true);
+            unmarshal.setIgnoreExtraElements(true);
+            unmarshal.setIgnoreExtraAttributes(true);
             object = unmarshal.unmarshal(xmlSource);
-
         } catch (MappingException e) {
             log.error("MappingException using "+descriptorPath+": " + e.getException().toString());
             throw new PersistenceManagerException("Mapping Error" + e.getException().toString());
