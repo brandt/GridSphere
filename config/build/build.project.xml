@@ -69,7 +69,12 @@ Copyright:
             <then>
                 <echo message="Installing for Tomcat"/>
                 <property name="appserver.home" value="${env.CATALINA_HOME}"/>
-                <property name="servlet-api.file" value="${appserver.home}/common/lib/servlet-api.jar"/>
+                <path id="servletpath">
+                    <fileset dir="${appserver.home}/common/lib/">
+                        <include name="*.jar"/>
+                    </fileset>
+
+                </path>
             </then>
         </if>
         <if>
@@ -77,7 +82,13 @@ Copyright:
             <then>
                 <echo message="Installing for Jetty"/>
                 <property name="appserver.home" value="${env.APPSERVER_HOME}"/>
-                <property name="servlet-api.file" value="${appserver.home}/lib/javax.servlet.jar"/>
+                <path id="servletpath">
+                    <fileset file="${appserver.home}/lib/javax.servlet.jar"/>
+                    <fileset dir="${appserver.home}/ext/">
+                        <exclude name="*.LICENSE"/>
+                        <include name="*.jar"/>
+                    </fileset>
+                </path>
             </then>
         </if>
 
@@ -94,7 +105,7 @@ Copyright:
                 <include name="*.jar"/>
             </fileset>
 
-            <fileset file="${servlet-api.file}"/>
+            <path refid="servletpath"/>
             <pathelement path="${java.class.path}"/>
 
         </path>
@@ -150,6 +161,28 @@ Copyright:
             debug="${debug}"
             optimize="${optimize}"
             deprecation="false"/>
+    </target>
+
+    <target name="precompile-jsp" depends="setenv">
+        <taskdef name="jspc50" classname="org.apache.jasper.JspC" classpathref="classpath">
+        </taskdef>
+
+
+        <mkdir dir="${project.build}/jsp/source"/>
+        <mkdir dir="${project.build}/jsp/classes"/>
+        <if>
+            <equals arg1="${gridsphere.useprecompiledjsp}" arg2="true"/>
+            <then>
+
+                <jspc50 outputDir="${project.build}/jsp/source"
+                    uriroot="webapp/"
+                    webXmlFragment="${project.build}/jsp/web.inc"
+                    validateXml="false">
+                </jspc50>
+            </then>
+        </if>
+
+
     </target>
 
     <!-- =================================================================== -->
@@ -340,5 +373,57 @@ Copyright:
     <target name="install" depends="deploy">
         <antcall target="create-database"/>
     </target>
+
+
+    <!-- =================================================================== -->
+    <!-- Creates a portlet template                                          -->
+    <!-- =================================================================== -->
+<!--
+
+        work in progress
+        
+    <target name="create-portlet-template">
+
+        <input message="Please enter the packagename (e.g. org.gridlab.myproject) " addproperty="portlet.packagename"/>
+        <input message="Please enter the classname (e.g. HelloWorld) " addproperty="portlet.classname"/>
+        <input message="Please enter the service you want to use (e.g. HelloService) " addproperty="portlet.servicename"/>
+        <input message="Please enter next state for view mode (e.g. view.jsp)" addproperty="portlet.view"/>
+        <input message="Please enter next state for edit mode (e.g. edit.jsp)" addproperty="portlet.edit"/>
+
+
+        <path id="portlet.package">
+            <pathelement location="src/${portlet.packagename}"/>
+        </path>
+
+        <pathconvert  dirSep="/" property="portletpath" refid="portlet.package">
+            <map from="." to="/"/>
+
+        </pathconvert>
+
+        <echo message="PATH ${portletpath} ${portlet.packagename}"/>
+
+
+        <mkdir dir="src/${portlet.packagename}"/>
+        <copy overwrite="true" file="${gridsphere.home}/config/template/${use.jsr}-portlet.tpl"
+            tofile="src/${portlet.packagename}/${portlet.classname}.java"/>
+
+        <replace file="src/${portlet.packagename}/${portlet.classname}.java"
+            token="@PACKAGENAME@"
+            value="${portlet.packagename}"/>
+
+        <replace file="src/${portlet.classname}/${portlet.classname}.java"
+            token="@SERVICENAME@"
+            value="${portlet.servicename}"/>
+
+        <replace file="src/${portlet.packagename}/${portlet.classname}.java"
+            token="@VIEW@"
+            value="${portlet.view}"/>
+
+        <replace file="src/${portlet.packagename}/${portlet.classname}.java"
+            token="@EDIT@"
+            value="${portlet.edit}"/>
+
+
+    </target>    -->
 
 </project>
