@@ -79,16 +79,6 @@ public class ActionPortlet extends GenericPortlet {
     protected String getNextState(PortletRequest request) {
         String id = getUniqueId();
         String state = (String)request.getAttribute(id+".state");
-        /*
-=======
-        String state = (String) request.getAttribute(id + ".state");
->>>>>>> 1.9
-        if (state == null) {
-            state = DEFAULT_VIEW_PAGE;
-        } else {
-            log.debug("in ActionPortlet: in getNextState: a page has been set to:" + state);
-        }
-        */
         return state;
     }
 
@@ -275,15 +265,17 @@ public class ActionPortlet extends GenericPortlet {
      * @throws java.io.IOException if an I/O error occurs
      */
     public void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
-
-        String id = getUniqueId();
-        String state = (String) request.getAttribute(id + ".state");
-        if (state == null) {
+        String next = getNextState(request);
+        if (next == null) {
             log.debug("in ActionPortlet: state is null-- setting to DEFAULT_VIEW_PAGE");
             setNextState(request, DEFAULT_VIEW_PAGE);
         }
+        doMode(request, response);
+    }
+
+    protected void doMode(RenderRequest request, RenderResponse response) throws PortletException, IOException {
         String next = getNextState(request);
-        log.debug("in ActionPortlet: portlet id= " + id + " doView next page is= " + next);
+        log.debug("in ActionPortlet: portlet id= " + getUniqueId() + " doView next page is= " + next);
         if (next.endsWith(".jsp")) {
             doViewJSP(request, response, next);
         } else {
@@ -309,7 +301,6 @@ public class ActionPortlet extends GenericPortlet {
             }
         }
     }
-
     protected void doDispatch(RenderRequest request,
                               RenderResponse response) throws PortletException, java.io.IOException {
         WindowState state = request.getWindowState();      
@@ -338,8 +329,12 @@ public class ActionPortlet extends GenericPortlet {
      */
     public void doEdit(RenderRequest request, RenderResponse response) throws PortletException, IOException {
         log.debug("ActionPortlet: in doEdit");
-        setNextState(request, DEFAULT_EDIT_PAGE);
-        doView(request, response);
+        String next = getNextState(request);
+        if (next == null) {
+            log.debug("in ActionPortlet: state is null-- setting to DEFAULT_EDIT_PAGE");
+            setNextState(request, DEFAULT_EDIT_PAGE);
+        }
+        doMode(request, response);
     }
 
     /**
@@ -352,8 +347,12 @@ public class ActionPortlet extends GenericPortlet {
      */
     public void doConfigure(RenderRequest request, RenderResponse response) throws PortletException, IOException {
         log.debug("ActionPortlet: in doConfigure");
-        setNextState(request, DEFAULT_CONFIGURE_PAGE);
-        doView(request, response);
+        String next = getNextState(request);
+        if (next == null) {
+            log.debug("in ActionPortlet: state is null-- setting to DEFAULT_CONFIGURE_PAGE");
+            setNextState(request, DEFAULT_CONFIGURE_PAGE);
+        }
+        doMode(request, response);
     }
 
     /**

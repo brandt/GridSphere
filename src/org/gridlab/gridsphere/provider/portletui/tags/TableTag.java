@@ -5,8 +5,8 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletURI;
-import org.gridlab.gridsphere.portlet.jsrimpl.RenderResponseImpl;
 import org.gridlab.gridsphere.portlet.jsrimpl.PortletURLImpl;
 import org.gridlab.gridsphere.provider.portletui.beans.TableBean;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
@@ -15,8 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
-import javax.portlet.RenderResponse;
-import javax.portlet.PortletURL;
+import javax.portlet.*;
 
 /**
  * A <code>TableTag</code> represents a table element and is defined by a <code>DefaultTableModel</code>
@@ -291,13 +290,21 @@ public class TableTag extends BaseComponentTag {
         tableBean.setRowCount(rowCount);
         if (isJSR()) {
             RenderResponse res = (RenderResponse) pageContext.getAttribute("renderResponse");
-            PortletURLImpl url = (PortletURLImpl)res.createActionURL();
+            RenderRequest req = (RenderRequest) pageContext.getAttribute("renderRequest");
+            PortletURLImpl url = (PortletURLImpl)res.createRenderURL();
+            try {
+                url.setPortletMode(req.getPortletMode());
+            } catch (PortletModeException e) {
+                // blah
+            }
             //if (action != null) url.setAction(action);
             tableBean.setURIString(url.toString());
         } else {
+            PortletRequest req = (PortletRequest) pageContext.getAttribute("portletRequest");
             PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
-            PortletURI uri = res.createURI();
+            PortletURI uri = res.createURI((org.gridlab.gridsphere.portlet.Portlet.Mode)req.getMode());
             //if (action != null) uri.addAction(action);
+
             tableBean.setURIString(uri.toString());
         }
         try {
