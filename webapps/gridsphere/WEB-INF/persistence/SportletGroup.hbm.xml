@@ -20,6 +20,7 @@
         </id>
 
         <property name="Name" type="string" column="name"/>
+        <property name="Description" type="string" column="description"/>
         <property name="Public" type="boolean" column="ispublic"/>
 
         <set name="PortletRoleList" table="portletrolelist" lazy="true">
