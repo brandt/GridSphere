@@ -1,4 +1,6 @@
-<%@ page import="java.util.Locale"%>
+<%@ page import="java.util.Locale,
+                 org.gridlab.gridsphere.portlet.PortletRequest,
+                 org.gridlab.gridsphere.portlet.PortletRole"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
@@ -8,7 +10,7 @@
 <jsp:useBean id="username" class="java.lang.String" scope="request"/>
 
 <% Locale locale = (Locale)request.getAttribute("locale"); %>
-
+<% PortletRequest req = (PortletRequest)pageContext.getAttribute("portletRequest"); %>
 <% String flag = "/gridsphere/images/flags/"+locale.getLanguage() +".gif"; %>
 
 <ui:messagebox beanId="msg"/>
@@ -30,7 +32,13 @@
 <ui:frame>
     <ui:tablerow>
         <ui:tablecell><ui:text key="USERNAME"/></ui:tablecell>
-        <ui:tablecell><ui:text beanId="userName"/></ui:tablecell>
+        <ui:tablecell>
+            <% if (req.getRole().equals(PortletRole.SUPER)) { %>
+                <ui:textfield beanId="userNameTF"/>
+            <% } else { %>
+                <ui:text beanId="userName"/>
+            <% } %>
+        </ui:tablecell>
     </ui:tablerow>
     <ui:tablerow>
         <ui:tablecell><ui:text key="FULLNAME"/></ui:tablecell>

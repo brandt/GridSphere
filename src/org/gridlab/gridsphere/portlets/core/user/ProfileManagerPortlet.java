@@ -97,8 +97,13 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 user.getLastLoginTime(), DateFormat.FULL, DateFormat.FULL));
         req.setAttribute("username", user.getUserName());
 
-        TextBean userName = event.getTextBean("userName");
-        userName.setValue(user.getUserName());
+        if (req.getRole().equals(PortletRole.SUPER)) {
+            TextFieldBean userName = event.getTextFieldBean("userNameTF");
+            userName.setValue(user.getUserName());
+        }   else {
+            TextBean userName = event.getTextBean("userName");
+            userName.setValue(user.getUserName());
+        }
         //userName.setDisabled(disable);
 
         TextFieldBean fullName = event.getTextFieldBean("fullName");
@@ -505,13 +510,14 @@ public class ProfileManagerPortlet extends ActionPortlet {
         String locale = event.getListBoxBean("userlocale").getSelectedValue();
 
         // Validate user name
-        /*
-        String userName = event.getTextFieldBean("userName").getValue();
-        if (userName.equals("")) {
-            message.append(this.getLocalizedText(req, "USER_NAME_BLANK") + "<br>");
-            isInvalid = true;
+        String userName = "";
+        if (req.getRole().equals(PortletRole.SUPER)) {
+            userName = event.getTextFieldBean("userNameTF").getValue();
+            if (userName.equals("")) {
+                message.append(this.getLocalizedText(req, "USER_NAME_BLANK") + "<br>");
+                isInvalid = true;
+            }
         }
-        */
 
         // Validate full name
         String fullName = event.getTextFieldBean("fullName").getValue();
@@ -545,6 +551,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         log.debug("creating account request for user: " + user.getID());
         SportletUser acctReq = userManagerService.editUser(user);
         acctReq.setEmailAddress(eMail);
+        if (!userName.equals("")) acctReq.setUserName(userName);
         acctReq.setFullName(fullName);
         if (locale != null) {
             Locale loc = new Locale(locale, "", "");
