@@ -43,6 +43,9 @@ public class PortletApplicationManager extends ActionPortlet {
     public void listPortlets(FormEvent event) throws PortletException {
         FrameBean frame = event.getFrameBean("errorFrame");
 
+        TextFieldBean tomcatPortTF = event.getTextFieldBean("tomcatPortTF");
+        tomcatPortTF.setValue(tomcat.getPort());
+
         List result = new ArrayList();
         try {
             result = tomcat.getPortletAppList();
@@ -217,6 +220,19 @@ public class PortletApplicationManager extends ActionPortlet {
             errMsg.setKey("PORTLET_ERR_DEPLOY");
             errMsg.setStyle("error");
             log.error("Unable to deploy webapp  ", e);
+        }
+        setNextState(req, DEFAULT_VIEW_PAGE);
+    }
+
+    public void configPort(FormEvent event) throws PortletException {
+        PortletRequest req = event.getPortletRequest();
+        TextFieldBean tf = event.getTextFieldBean("tomcatPortTF");
+        String portVal = tf.getValue();
+        try {
+            int port = Integer.parseInt(portVal);
+            tomcat.setPort(portVal);
+        } catch (IllegalArgumentException e) {
+            log.error("Port must be a valid integer!");
         }
         setNextState(req, DEFAULT_VIEW_PAGE);
     }

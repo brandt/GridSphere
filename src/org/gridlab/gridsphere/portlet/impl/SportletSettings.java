@@ -29,6 +29,9 @@ public class SportletSettings implements PortletSettings {
     protected SportletApplicationSettings appSettings = null;
     protected Locale defaultLocale = null;
     protected String defaultTitle = "";
+    protected String defaultTitleShort = "";
+    protected String defaultKeywords = "";
+    protected String defaultDescription = "";
 
     /**
      * Disallow default instantiation
@@ -59,11 +62,13 @@ public class SportletSettings implements PortletSettings {
             LanguageInfo langInfo = (LanguageInfo) it.next();
             if (langInfo.getLocale().startsWith(defaultLocale.toString())) {
                 defaultTitle = langInfo.getTitle();
+                defaultTitleShort = langInfo.getTitleShort();
+                defaultDescription = langInfo.getDescription();
+                defaultKeywords = langInfo.getKeywords();
             }
         }
         // Stick <config-param> in store
         store = concPortletConf.getConfigAttributes();
-
     }
 
     /**
@@ -97,7 +102,7 @@ public class SportletSettings implements PortletSettings {
         String title = defaultTitle;
         while (it.hasNext()) {
             LanguageInfo langInfo = (LanguageInfo) it.next();
-            if (langInfo.getLocale().startsWith(locale.toString())) {
+            if (langInfo.getLocale().equals(locale.getLanguage())) {
                 title = langInfo.getTitle();
                 return title;
             }
@@ -122,16 +127,16 @@ public class SportletSettings implements PortletSettings {
      * @return the title of the portlet
      */
     public String getTitleShort(Locale locale, Client client) {
-        String defaultTitleShort = "";
+        String title = defaultTitleShort;
         Iterator it = langList.iterator();
         while (it.hasNext()) {
             LanguageInfo langInfo = (LanguageInfo) it.next();
-            defaultTitleShort = langInfo.getTitleShort();
-            if (langInfo.getLocale().equals(locale)) {
+            title = langInfo.getTitleShort();
+            if (langInfo.getLocale().equals(locale.getLanguage())) {
                 return langInfo.getTitleShort();
             }
         }
-        return defaultTitleShort;
+        return title;
     }
 
     /**
@@ -142,16 +147,16 @@ public class SportletSettings implements PortletSettings {
      * @return the title of the portlet
      */
     public String getDescription(Locale locale, Client client) {
-        String defaultDescription = "";
+        String desc = defaultDescription;
         Iterator it = langList.iterator();
         while (it.hasNext()) {
             LanguageInfo langInfo = (LanguageInfo)it.next();
-            defaultDescription = langInfo.getDescription();
-            if (langInfo.getLocale().equals(locale)) {
+            desc = langInfo.getDescription();
+            if (langInfo.getLocale().equals(locale.getLanguage())) {
                 return langInfo.getDescription();
             }
         }
-        return defaultDescription;
+        return desc;
     }
 
     /**
@@ -162,16 +167,16 @@ public class SportletSettings implements PortletSettings {
      * @return the title of the portlet
      */
     public String getKeywords(Locale locale, Client client) {
-        String defaultKeywords = "";
+        String words = defaultKeywords;
         Iterator it = langList.iterator();
         while (it.hasNext()) {
             LanguageInfo langInfo = (LanguageInfo) it.next();
-            defaultKeywords = langInfo.getKeywords();
-            if (langInfo.getLocale().equals(locale)) {
+            words = langInfo.getKeywords();
+            if (langInfo.getLocale().equals(locale.getLanguage())) {
                 return langInfo.getKeywords();
             }
         }
-        return defaultKeywords;
+        return words;
     }
 
     /**

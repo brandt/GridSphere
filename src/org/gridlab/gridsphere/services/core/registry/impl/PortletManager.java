@@ -105,7 +105,11 @@ public class PortletManager implements PortletManagerService {
         }
     }
 
-
+    /**
+     * Removes the portlet application
+     *
+     * @param webApplicationName the portlet application name
+     */
     protected synchronized void removePortletWebApplication(String webApplicationName) {
         log.debug("in removePortletWebApplication: " + webApplicationName);
         Iterator it = webapps.iterator();
@@ -134,6 +138,15 @@ public class PortletManager implements PortletManagerService {
 
     }
 
+    /**
+     * Initializes the portlet application
+     *
+     * @param webApplicationName  the name of the portlet application
+     * @param req the portlet request
+     * @param res the portlet response
+     * @throws IOException  if an I/O error occurs
+     * @throws PortletException if a portlet exception occurs
+     */
     public synchronized void initPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         System.err.println("adding web app" + webApplicationName);
         addWebApp(webApplicationName);
@@ -141,12 +154,26 @@ public class PortletManager implements PortletManagerService {
         PortletInvoker.initPortletWebApp(webApplicationName, req, res);
     }
 
+    /**
+     * Destroys the portlet web application and removes from registry
+     *
+     * @param webApplicationName the portlet application name
+     * @param req the portlet request
+     * @param res the portlet response
+     * @throws IOException
+     * @throws PortletException
+     */
     public synchronized void destroyPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         log.debug("in destroyPortletWebApplication: " + webApplicationName);
         PortletInvoker.destroyPortletWebApp(webApplicationName, req, res);
         removePortletWebApplication(webApplicationName);
     }
 
+    /**
+     * Returns the deployed web application names
+     *
+     * @return the known web application names
+     */
     public List getPortletWebApplicationNames() {
         List l = new Vector();
         for (int i = 0; i < webapps.size(); i++) {
@@ -156,6 +183,12 @@ public class PortletManager implements PortletManagerService {
         return l;
     }
 
+    /**
+     * Returns the description of the supplied web application
+     *
+     * @param webApplicationName
+     * @return the description of this web application
+     */
     public String getPortletWebApplicationDescription(String webApplicationName) {
         String webappDesc = "Undefined portlet web application";
         for (int i = 0; i < webapps.size(); i++) {

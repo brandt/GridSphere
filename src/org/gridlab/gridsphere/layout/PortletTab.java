@@ -94,7 +94,6 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         String defTitle = title;
         while (it.hasNext()) {
             PortletTitle t = (PortletTitle)it.next();
-            System.err.println("existing lang=" + t.getLang());
             if (lang.startsWith(t.getLang())) return t.getText();
             if (t.getLang().startsWith(Locale.getDefault().getLanguage())) defTitle = t.getText();
         }

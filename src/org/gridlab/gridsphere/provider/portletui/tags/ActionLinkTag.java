@@ -97,6 +97,7 @@ public class ActionLinkTag extends ActionTag {
             actionlink = (ActionLinkBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (actionlink == null) {
                 actionlink = new ActionLinkBean();
+                actionlink.setStyle(style);
                 this.setBaseComponentBean(actionlink);
             }
         } else {

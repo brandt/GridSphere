@@ -99,46 +99,42 @@ public class SubscriptionPortlet extends ActionPortlet {
                     PortletRole reqrole = conc.getConcretePortletConfig().getRequiredRole();
                     System.err.println(concID + " " + reqrole);
                     if (role.compare(role, reqrole) >= 0) {
-                    // build an interface
-                    CheckBoxBean cb = new CheckBoxBean(req, "portletsCB");
-                    cb.setValue(concID);
-                    if (myNames.contains(concID)) {
+                        // build an interface
+                        CheckBoxBean cb = new CheckBoxBean(req, "portletsCB");
+                        cb.setValue(concID);
+                        if (myNames.contains(concID)) {
                             cb.setSelected(true);
-                    }
-                    // don't allow core portlets to be changed
-                    if (g.equals(PortletGroupFactory.GRIDSPHERE_GROUP)) {
-                        gsPortlets.add(concID);
-                        cb.setDisabled(true);
-                        cb.setSelected(true);
-                    }
+                        }
+                        // don't allow core portlets to be changed
+                        if (g.equals(PortletGroupFactory.GRIDSPHERE_GROUP)) {
+                            gsPortlets.add(concID);
+                            cb.setDisabled(true);
+                            cb.setSelected(true);
+                        }
 
-                    TableRowBean newtr = new TableRowBean();
-                    TableCellBean newtc = new TableCellBean();
-                    newtc.addBean(cb);
-                    newtr.addBean(newtc);
+                        TableRowBean newtr = new TableRowBean();
+                        TableCellBean newtc = new TableCellBean();
+                        newtc.addBean(cb);
+                        newtr.addBean(newtc);
 
-                    TableCellBean newtc2 = new TableCellBean();
-                    TextBean tb = new TextBean();
-                    int li = concID.lastIndexOf(".");
-                    concID = concID.substring(0, li);
-                    li = concID.lastIndexOf(".");
-                    concID = concID.substring(li+1);
-                    tb.setValue(concID);
-                    newtc2.addBean(tb);
-                    newtr.addBean(newtc2);
-                    newtc = new TableCellBean();
-                    TextBean tb2 = new TextBean();
-
-
-                    String locale = (String)req.getSession(true).getAttribute(User.LOCALE);
-                    //Locale loc = conc.getPortletSettings().getDefaultLocale();
-                    Locale loc = new Locale(locale, "", "");
-                    System.err.println("default loc: " + loc.getLanguage());
-
-                    tb2.setValue(conc.getPortletSettings().getDescription(loc, null));
-                    newtc.addBean(tb2);
-                    newtr.addBean(newtc);
-                    model.addTableRowBean(newtr);
+                        TableCellBean newtc2 = new TableCellBean();
+                        TextBean tb = new TextBean();
+                        int li = concID.lastIndexOf(".");
+                        concID = concID.substring(0, li);
+                        li = concID.lastIndexOf(".");
+                        concID = concID.substring(li+1);
+                        tb.setValue(concID);
+                        newtc2.addBean(tb);
+                        newtr.addBean(newtc2);
+                        newtc = new TableCellBean();
+                        TextBean tb2 = new TextBean();
+                        String locale = (String)req.getSession(true).getAttribute(User.LOCALE);
+                        Locale loc = new Locale(locale, "", "");
+                        System.err.println("default loc: " + loc.getLanguage());
+                        tb2.setValue(conc.getPortletSettings().getDescription(loc, null));
+                        newtc.addBean(tb2);
+                        newtr.addBean(newtc);
+                        model.addTableRowBean(newtr);
                     }
                 }
             }

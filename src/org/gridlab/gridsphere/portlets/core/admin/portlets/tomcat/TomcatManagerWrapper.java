@@ -19,6 +19,8 @@ public class TomcatManagerWrapper {
     private final static String USERNAME = "gridsphere";
     private final static String PASSWORD = "gridsphere";
 
+    private String port = "8080";
+
     private static TomcatManagerWrapper instance = new TomcatManagerWrapper();
     private PortletManager pm = PortletManager.getInstance();
 
@@ -29,11 +31,18 @@ public class TomcatManagerWrapper {
         return instance;
     }
 
+    public String getPort() {
+        return port;
+    }
+
+    public void setPort(String port) {
+        this.port = port;
+    }
+
     public TomcatWebAppResult doCommand(String command) throws TomcatManagerException {
-        String show = "";
         TomcatWebAppResult result = null;
         try {
-            URL u = new URL("http://127.0.0.1:8080/manager" + command);
+            URL u = new URL("http://127.0.0.1:" + port + "/manager" + command);
             URLConnection con = u.openConnection();
 
             String up = USERNAME + ":" + PASSWORD;
