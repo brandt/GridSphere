@@ -67,7 +67,7 @@ public class UserPortletManager {
         wrapper.service(concretePortletID, req, res);
     }
 
-    public void actionPerformed(String concretePortletID, PortletAction action, HttpServletRequest req, HttpServletResponse res)
+    public void actionPerformed(String concretePortletID, DefaultPortletAction action, HttpServletRequest req, HttpServletResponse res)
             throws PortletException {
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);

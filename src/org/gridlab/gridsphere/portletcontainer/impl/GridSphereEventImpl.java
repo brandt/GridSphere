@@ -1,22 +1,21 @@
 /*
- * Created by IntelliJ IDEA.
- * User: novotny
- * Date: Dec 11, 2002
- * Time: 9:19:06 PM
- * To change template for new class use 
- * Code Style | Class Templates options (Tools | IDE Options).
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @version $Id$
  */
 package org.gridlab.gridsphere.portletcontainer.impl;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletContext;
 import org.gridlab.gridsphere.portlet.AbstractPortlet;
+import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portletcontainer.*;
+import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletConfig;
+import java.util.Enumeration;
 
 public class GridSphereEventImpl implements GridSphereEvent {
 
@@ -27,6 +26,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
     protected int PortletComponentID = -1;
     protected String ActivePortletID = null;
     protected UserPortletManager userPortletManager = UserPortletManager.getInstance();
+    protected DefaultPortletAction action = null;
 
     public GridSphereEventImpl(PortletContext ctx, HttpServletRequest req, HttpServletResponse res) {
         portletRequest = new SportletRequestImpl(req);
@@ -41,6 +41,22 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
         ActivePortletID = req.getParameter(GridSphereProperties.PORTLETID);
 
+        /* This is where a DefaultPortletAction gets put together if one exists */
+        String actionStr = portletRequest.getParameter(GridSphereProperties.ACTION);
+        action = new DefaultPortletAction(actionStr);
+        String prefix = portletRequest.getParameter(GridSphereProperties.PREFIX);
+        if (prefix != null) {
+            Enumeration enum = portletRequest.getParameterNames();
+            String name, newname, value;
+            while (enum.hasMoreElements()) {
+                name = (String)enum.nextElement();
+                if (name.startsWith(prefix)) {
+                    newname = name.substring(prefix.length()+1);
+                    value = portletRequest.getParameter(name);
+                    action.addParameter(newname, value);
+                }
+            }
+        }
     }
 
     public UserPortletManager getUserPortletManager() {
@@ -59,9 +75,8 @@ public class GridSphereEventImpl implements GridSphereEvent {
         return portletContext;
     }
 
-    public GridSphereEvent.Action getAction() {
-        String action = portletRequest.getParameter(GridSphereProperties.ACTION);
-        return GridSphereEvent.Action.toAction(action);
+    public DefaultPortletAction getAction() {
+        return action;
     }
 
     public boolean hasAction() {
@@ -73,9 +88,8 @@ public class GridSphereEventImpl implements GridSphereEvent {
         return false;
     }
 
-    public SportletURI createNewAction(GridSphereEvent.Action action, int PortletComponentID, String ActivePortletID) {
+    public SportletURI createNewAction(int PortletComponentID, String ActivePortletID) {
         SportletURI sportletURI = new SportletURI(portletResponse, portletRequest.getContextPath());
-        sportletURI.addParameter(GridSphereProperties.ACTION, action.toString());
         String sid = new Integer(PortletComponentID).toString();
         sportletURI.addParameter(GridSphereProperties.COMPONENT_ID, sid);
         if (ActivePortletID != null) {

@@ -175,6 +175,9 @@ public class PortletWrapper {
      * @param session the portlet session
      */
     public void logout(HttpServletRequest req, HttpServletResponse res) throws PortletException {
+
+        //abstractPortlet.logout(session);
+
         req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.LOGOUT);
         try {
             include(req, res);
@@ -192,7 +195,7 @@ public class PortletWrapper {
      * @param event the action event
      * @throws PortletException if the listener has trouble fulfilling the request
      */
-    public void actionPerformed(PortletAction action, HttpServletRequest req, HttpServletResponse res) throws PortletException {
+    public void actionPerformed(DefaultPortletAction action, HttpServletRequest req, HttpServletResponse res) throws PortletException {
         req.setAttribute(PortletProperties.ACTION_EVENT, action);
         req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.SERVICE);
         req.setAttribute(PortletProperties.PORTLET_ACTION_METHOD, PortletProperties.ACTION_PERFORMED);

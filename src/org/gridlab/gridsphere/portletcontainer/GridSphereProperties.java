@@ -16,6 +16,7 @@ public class GridSphereProperties {
     public static final String PORTLETWINDOW = "PortletWindow";
     public static final String PORTLETSETTINGS = "PortletSettings";
     public static final String PORTLETDATA = "PortletData";
+    public static final String PREFIX = "up";
     public static final String USER = "User";
     public static final String PORTLETROLES = "PortletRoles";
     public static final String PORTLETGROUPS = "PortletGroups";

@@ -9,11 +9,13 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletContext;
+import org.gridlab.gridsphere.portlet.impl.GuestUser;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 import org.gridlab.gridsphere.services.registry.PortletRegistryService;
+import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -22,6 +24,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.Iterator;
 
 
 public class GridSphereServlet extends HttpServlet implements ServletContextListener,
@@ -35,6 +38,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     /* GridSphere Portlet Registry Service */
     private static PortletRegistryService registryService = null;
+
+    /* GridSphere Access Control Service */
+    private static AccessControlService aclService = null;
 
     /* GridSphere User Portlet Manager handles portlet lifecycle */
     private static UserPortletManager userPortletManager = null;
@@ -50,7 +56,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public final void init(ServletConfig config) throws ServletException {
         super.init(config);
         this.context = new SportletContext(config);
-
+        log.debug("in init of GridSphereServlet");
         // Create an instance of the registry service used by the UserPortletManager
         try {
             registryService = (PortletRegistryService) factory.createPortletService(PortletRegistryService.class, config, true);
@@ -60,6 +66,17 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         } catch (PortletServiceNotFoundException e) {
             log.error("Failed to find registry service instance in GridSphere: ", e);
             throw new ServletException("Unable to locate portlet registry service: " + e.getMessage());
+        }
+
+        // Create an instance of the ACL service
+        try {
+            aclService = (AccessControlService) factory.createPortletService(AccessControlService.class, config, true);
+        } catch (PortletServiceUnavailableException e) {
+            log.error("Failed to get ACL service instance in GridSphere: ", e);
+            throw new ServletException("Unable to get ACL service instance: " + e.getMessage());
+        } catch (PortletServiceNotFoundException e) {
+            log.error("Failed to find ACL service instance in GridSphere: ", e);
+            throw new ServletException("Unable to getACL service: " + e.getMessage());
         }
 
         // Get an instance of the UserPortletManager
@@ -90,7 +107,31 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         System.err.println(req.getContextPath());
 
+
         GridSphereEvent event = new GridSphereEventImpl(context, req, res);
+
+        /* This is where we get ACL info and update sportlet request */
+        /*
+        SportletRequest sreq = event.getSportletRequest();
+        User user = sreq.getUser();
+        List roles = new ArrayList();
+        List groups = new ArrayList();
+        if (user instanceof GuestUser) {
+            roles.add(PortletRole.GUEST);
+            groups.add(PortletGroup.BASE);
+            sreq.setRoles(PortletGroup.BASE, roles);
+            sreq.setGroups(groups);
+        } else {
+            groups = aclService.getGroups(user);
+            Iterator git = groups.iterator();
+            PortletGroup group = null;
+            while (git.hasNext()) {
+                group = (PortletGroup)git.next();
+                roles = aclService.getRolesInGroup(sreq.getUser(), group);
+                sreq.setRoles(group, roles);
+            }
+        }
+        */
 
         // Render layout
 

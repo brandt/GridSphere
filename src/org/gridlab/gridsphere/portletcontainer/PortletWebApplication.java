@@ -7,6 +7,8 @@ package org.gridlab.gridsphere.portletcontainer;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDefinition;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
 import org.gridlab.gridsphere.portletcontainer.impl.ApplicationPortletImpl;
+import org.gridlab.gridsphere.layout.PortletTab;
+import org.gridlab.gridsphere.layout.PortletLayoutDescriptor;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -20,7 +22,7 @@ public class PortletWebApplication {
     private String webApplicationName = null;
     private Map appPortlets = new Hashtable();
     private RequestDispatcher rd = null;
-
+    private PortletTab webApplicationTab;
 
     public PortletWebApplication(String webApplicationName, ServletContext context) {
         this.webApplicationName = webApplicationName;
@@ -29,7 +31,13 @@ public class PortletWebApplication {
         ServletContext ctx = context.getContext(contextURIPath);
         if (ctx == null) System.err.println("Unable to get ServletContext for: " + contextURIPath);
         rd = ctx.getNamedDispatcher(webApplicationName);
+        // load portlet.xml
+        loadPortlets(ctx);
+        // load layout.xml
+        loadLayout(ctx);
+    }
 
+    protected void loadPortlets(ServletContext ctx) {
         // load in the portlet.xml file
         String portletXMLfile = ctx.getRealPath("") + "/WEB-INF/portlet.xml";
         String portletMappingfile = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING_XML);
@@ -52,8 +60,23 @@ public class PortletWebApplication {
         }
     }
 
+    protected void loadLayout(ServletContext ctx) {
+        // load in the portlet.xml file
+        String portletXMLfile = ctx.getRealPath("") + "/WEB-INF/layout.xml";
+        String portletMappingfile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING_XML);
+        try {
+            webApplicationTab = PortletLayoutDescriptor.loadPortletTab(portletXMLfile, portletMappingfile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public String getWebApplicationName() {
         return webApplicationName;
+    }
+
+    public PortletTab getApplicationTab() {
+        return webApplicationTab;
     }
 
     public ApplicationPortlet getApplicationPortlet(String portletApplicationID) {
