@@ -650,52 +650,6 @@
     </portlet-app-def>
 
     <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.messaging.TextMessagingPortlet">
-            <portlet-name>TextMessaging Portlet</portlet-name>
-            <servlet-name>TextMessagingPortlet</servlet-name>
-            <supports>
-                <view/>
-                <edit/>
-                <help/>
-            </supports>
-        </portlet-app>
-
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.messaging.TextMessagingPortlet.1">
-            <concrete-portlet>
-                <portlet-name>TextMessaging Portlet</portlet-name>
-                <default-locale>en</default-locale>
-                <language locale="en">
-                    <title>Text Messaging</title>
-                    <description>Provides users ability to send messages</description>
-                </language>
-                <language locale="de">
-                    <title>Text Nachrichten</title>
-                    <description>Bietet Benutzern die Möglichkeit Nachrichten zu verschicken</description>
-                </language>
-                <language locale="fr">
-                    <title>Messagerie texte</title>
-                    <description>Permet a l'usager d'envoyer des messages</description>
-                </language>
-                <language locale="it">
-                    <title>Messaggi di testo</title>
-                    <description>Consente agli utenti di inviare messaggi</description>
-                </language>
-                <language locale="cs">
-                    <title>Textové zprávy</title>
-                    <description>Poskytuje uživatel_um možnost posílat textové zprávy</description>
-                </language>
-                <language locale="hu">
-                    <title>Szöveges üzenetküldés</title>
-                    <description>Lehtővé teszi a felhasználók számára az üzenetküldést</description>
-                </language>
-                <language locale="pl">
-                    <title>Wiadomości tekstowe</title>
-                    <description>Pozwala użytkownikowi na wysyłanie wiadomości</description>
-                </language>
-            </concrete-portlet>
-        </concrete-portlet-app>
-    </portlet-app-def>
-    <portlet-app-def>
         <portlet-app id="org.gridlab.gridsphere.portlets.core.file.CommanderPortlet">
             <portlet-name>Commander Portlet</portlet-name>
             <servlet-name>CommanderPortlet</servlet-name>
