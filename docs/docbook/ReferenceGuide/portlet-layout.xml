@@ -92,9 +92,11 @@ double-tabbed pane. An example illustration is shown:
 </para>
 <informalexample id="layout.def"><programlisting>
 &lt;portlet-tabbed-pane&gt; <co id="tab.pane"/>
-    &lt;portlet-tab title="Examples"&gt;<co id="tab.title"/>
+    &lt;portlet-tab&gt;
+        &lt;title lang="en"&gt;Examples&lt;/title&gt; <co id="tab.title"/>
         &lt;portlet-tabbed-pane style="sub-menu"&gt;  <co id="tab.pane2"/>
-            &lt;portlet-tab title="Simple Examples"&gt;
+            &lt;portlet-tab&gt;
+                &lt;title lang="en"&gt;Simple Examples&lt;/title&gt;
                 &lt;table-layout&gt;    <co id="table.layout"/>
                     &lt;row-layout&gt;  <co id="row.layout"/>
                         &lt;column-layout width="50%&gt; <co id="column.layout"/>
@@ -110,7 +112,8 @@ double-tabbed pane. An example illustration is shown:
                     &lt;/row-layout&gt;
                 &lt;/table-layout&gt;
             &lt;/portlet-tab&gt;
-            &lt;portlet-tab title="Demos"&gt;
+            &lt;portlet-tab&gt;
+                &lt;title lang="en"&gt;Demos&lt;/title&gt;
                 &lt;table-layout&gt;
                     &lt;row-layout&gt;
                         &lt;column-layout&gt;
@@ -134,7 +137,9 @@ double-tabbed pane. An example illustration is shown:
             </callout>
             <callout arearefs="tab.title">
             <para>
-                The tab title is the title string that is presented in the portal layout
+                The tab title is the title string that is presented in the portal layout. Multiple
+                tab titles with different locales specified as two character ISO 639 values can be present
+                for localization support.
             </para>
             </callout>
             <callout arearefs="tab.pane2">
