@@ -10,20 +10,45 @@ import org.gridlab.gridsphere.core.persistence.RestoreException;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerXml;
 import org.gridlab.gridsphere.portlet.PortletLog;
 
+import javax.servlet.ServletConfig;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.List;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class PortletDeploymentDescriptor {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletDeploymentDescriptor.class);
     private Vector PortletDef = new Vector();
 
+    public PortletDeploymentDescriptor(ServletConfig config) throws PortletDeploymentDescriptorException {
+            // load in layout.xml file
+            String appRoot = config.getServletContext().getRealPath("") + "/";
+            String portletConfigFile = config.getInitParameter("portlet.xml");
+            String portletMappingFile = config.getInitParameter("portlet-mapping.xml");
+            if (portletConfigFile == null) {
+                portletConfigFile = "WEB-INF/conf/portlet.xml";
+            }
+            if (portletMappingFile == null) {
+                portletMappingFile = "WEB-INF/conf/portlet-mapping.xml";
+            }
+            String fullPath = appRoot + portletConfigFile;
+            String mappingPath = appRoot + portletMappingFile;
+            try {
+                FileInputStream fistream = new FileInputStream(fullPath);
+            } catch (FileNotFoundException e) {
+                log.error("Can't find file: " + fullPath);
+                throw new PortletDeploymentDescriptorException("Unable to create descriptor from " + fullPath + " using " + mappingPath);
+            }
+            load(fullPath, mappingPath);
+        }
+
     /**
      * Constructs a PortletDeploymentDescriptor from a portlet.xml and mapping file
      *
-     * @param portletFilePath localtion of the portlet.xml
-     * @param mapping localtion of the mapping file
+     * @param portletFilePath location of the portlet.xml
+     * @param mappingFilePath location of the mapping file
      * @throws PortletDeploymentDescriptorException if the PortletDeploymentDescriptor cannot be created
      */
     public PortletDeploymentDescriptor(String portletFilePath, String mappingFilePath) throws PortletDeploymentDescriptorException  {
@@ -82,8 +107,6 @@ public class PortletDeploymentDescriptor {
             log.error("ConfigurationError ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") "+e);
             throw new PortletDeploymentDescriptorException("Configuration error: "+e.getMessage());
         }
-
-
         this.PortletDef = (Vector)pc.getPortletDefList();
     }
 
