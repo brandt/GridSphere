@@ -44,12 +44,12 @@ Copyright:
     <property name="deprecation" value="true"/>
 
     <!-- Version properties -->
-    <property name="version"         value="1.0"/>
-    <property name="release"         value="ea-dev" />
-    <property name="version.release" value="${version} ${release}"/>
-    <property name="gridsphere.project"    value="gridsphere"/>
-    <property name="gridsphere.name" value="GridSphere ${version.release}"/>
-    <property name="gridsphere.api" value="GridSphere Portal Framework API ${version.release}" />
+    <property name="version"            value="1.0"/>
+    <property name="release"            value="ea-dev" />
+    <property name="version.release"    value="${version} ${release}"/>
+    <property name="gridsphere.project" value="gridsphere"/>
+    <property name="gridsphere.name"    value="GridSphere ${version.release}"/>
+    <property name="gridsphere.api"     value="GridSphere Portal Framework API ${version.release}" />
 
     <!-- GridSphere build and dist directories -->
 
@@ -827,14 +827,6 @@ Copyright:
             </test>
         </junit>
 
-        <echo message="Making GridSphere Junit Test Reports"/>
-        <mkdir dir="${gridsphere.build}/reports/html"/>
-        <junitreport todir="${gridsphere.build}/reports">
-            <fileset dir="${gridsphere.build}/reports">
-                <include name="TEST-*.xml"/>
-            </fileset>
-            <report format="noframes" todir="${gridsphere.build}/reports/html"/>
-        </junitreport>
     </target>
 
     <target name="test-reports">

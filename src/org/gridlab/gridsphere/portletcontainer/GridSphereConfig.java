@@ -16,11 +16,11 @@ public class GridSphereConfig implements GridSphereConfigProperties {
     public static final String pathtype = System.getProperty("file.separator");
 
     protected static ResourceBundle configBundle = null;
-    protected static final String projectname = "gridsphere";
+    public static final String PROJECT_NAME = "gridsphere";
 
     static {
         try {
-            configBundle = ResourceBundle.getBundle("gridsphere.gridsphere");
+            configBundle = ResourceBundle.getBundle(PROJECT_NAME + "." + PROJECT_NAME);
         } catch (MissingResourceException mre) {
             System.err.println("Config: Missing gridsphere.properties file " + mre.toString());
         }

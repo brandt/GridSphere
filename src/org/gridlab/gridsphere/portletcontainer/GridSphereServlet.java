@@ -88,7 +88,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @throws ServletException if a servlet error occurs
      */
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+        processRequest(req, res);
+    }
 
+    public void processRequest(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         GridSphereEvent event = new GridSphereEventImpl(aclService, context, req, res);
         PortletRequest portletReq = event.getPortletRequest();
         PortletResponse portletRes = event.getPortletResponse();
@@ -145,7 +148,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         layoutEngine.service(event);
     }
-
     /**
      * Handles login requests
      *

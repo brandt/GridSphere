@@ -33,11 +33,7 @@ import java.util.Set;
  */
 public class SportletContext implements PortletContext {
 
-    public final static String PORTLET_CONTAINER = "GridSphere";
-    public final static int MAJOR_VERSION = 0;
-    public final static int MINOR_VERSION = 9;
-
-    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(SportletContext.class);
+    private static PortletLog log = SportletLog.getInstance(SportletContext.class);
     private static SportletServiceFactory factory = SportletServiceFactory.getInstance();
 
     private ServletConfig config = null;
@@ -252,18 +248,25 @@ public class SportletContext implements PortletContext {
      *
      * @return the major version
      */
+    public String getVersionInfo() {
+        return GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_VERSION);
+    }
+
     public int getMajorVersion() {
-        return MAJOR_VERSION;
+        return context.getMajorVersion();
+    }
+
+    public int getMinorVersion() {
+        return context.getMinorVersion();
     }
 
     /**
-     * Returns the minor version of the PortletInfo API that this portlet
-     * container supports.
+     * Returns the release information for this portlet container
      *
      * @return the minor version
      */
-    public int getMinorVersion() {
-        return MINOR_VERSION;
+    public String getReleaseInfo() {
+        return GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_RELEASE);
     }
 
     /**
@@ -274,7 +277,7 @@ public class SportletContext implements PortletContext {
      * @return the string containing at least name and version number
      */
     public String getContainerInfo() {
-        return PORTLET_CONTAINER + "/"
+        return  GridSphereConfig.PROJECT_NAME + "/"
                 + GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_VERSION)
                 + "-" + GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_RELEASE);
     }
