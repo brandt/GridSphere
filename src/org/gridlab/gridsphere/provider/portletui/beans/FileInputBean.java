@@ -16,7 +16,7 @@ import java.io.InputStream;
  */
 public class FileInputBean extends InputBean implements TagBean {
 
-    public static final int MAX_UPLOAD_SIZE = 1024 * 1024;
+    public static final int MAX_UPLOAD_SIZE = 10 * 1024 * 1024;
     public static final String TEMP_DIR = "/tmp";
 
     public static final String SUBMIT_STYLE = "portlet-form-button";
