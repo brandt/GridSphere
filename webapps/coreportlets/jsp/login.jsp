@@ -39,17 +39,17 @@
     <tr>
     <td align="right">Username: </td>
     <td align="left">
-        <gs:textfield name="username" size="8" maxlength="20"></gs:textfield>
+        <input type="text" name="username" size="8" maxlength="20"/>
     </td>
     </tr>
     <tr>
     <td align="right">Password: </td>
     <td align="left">
-        <gs:password name="password" size="8" maxlength="20"></gs:password>
+        <input type="password" name="password" size="8" maxlength="20"/>
     </td>
     </tr>
     <tr>
-    <td colspan=5 align="center"><gs:input type="submit" name="option" value="Login" ></gs:input></td>
+    <td colspan=5 align="center"><input type="submit" name="option" value="Login"/></td>
     </tr>
     </table>
     </gs:form>
