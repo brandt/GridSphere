@@ -55,8 +55,18 @@
         <servlet-class>org.gridlab.gridsphere.portlets.core.AccessControllerPortlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>ServletRedirector</servlet-name>
+        <servlet-class>org.apache.cactus.server.ServletTestRedirector</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ServletTestRunner</servlet-name>
+        <servlet-class>org.apache.cactus.server.runner.ServletTestRunner</servlet-class>
+    </servlet>
+
     <servlet-mapping>
-       <servlet-name>gridsphere</servlet-name>
+        <servlet-name>gridsphere</servlet-name>
        <url-pattern>/gridsphere</url-pattern>
     </servlet-mapping>
 
@@ -88,6 +98,16 @@
     <servlet-mapping>
        <servlet-name>AccessControllerPortlet</servlet-name>
        <url-pattern>/adminstration/access</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ServletRedirector</servlet-name>
+        <url-pattern>/ServletRedirector</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ServletTestRunner</servlet-name>
+        <url-pattern>/ServletTestRunner</url-pattern>
     </servlet-mapping>
 
     <mime-mapping>

@@ -33,4 +33,27 @@
     </variable>
   </tag>
 
+  <tag>
+    <name>getMode</name>
+    <tag-class>org.gridlab.gridsphere.tags.portlet.PortletModeTag</tag-class>
+    <body-content>empty</body-content>
+    <description>
+        displays the current portlet mode
+    </description>
+    <variable>
+        <name-given>portletRequest</name-given>
+        <variable-class>org.gridlab.gridsphere.portlet.PortletRequest</variable-class>
+        <declare>true</declare>
+        <scope>AT_BEGIN</scope>
+        <description>The PortletRequest Object</description>
+    </variable>
+    <variable>
+        <name-given>portletResponse</name-given>
+        <variable-class>org.gridlab.gridsphere.portlet.PortletResponse</variable-class>
+        <declare>true</declare>
+        <scope>AT_BEGIN</scope>
+        <description>The PortletResponse Object</description>
+    </variable>
+  </tag>
+
 </taglib>
