@@ -45,7 +45,7 @@ new-project:
             Once you have a new project you may optionally commit it to CVS issuing the following:
             <screen>
             <prompt>bash$ </prompt><command>cd tutorial</command>
-            <prompt>bash$ </prompt><command>cvs import -m "a hello example" tutorial STARTTAG VENDORTAG <replaceable>tutorial</replaceable>
+            <prompt>bash$ </prompt><command>cvs import -m "a hello example" tutorial VENDORTAG STARTTAG<replaceable>tutorial</replaceable>
             </command>
                 </screen>
             where STARTTAG and VENDORTAG are any labels of your choosing (see CVS documentation for more detailed information)
