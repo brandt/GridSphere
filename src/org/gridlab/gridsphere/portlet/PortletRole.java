@@ -8,7 +8,6 @@ package org.gridlab.gridsphere.portlet;
 import java.io.Serializable;
 import java.util.Comparator;
 
-
 /**
  * The <code>PortletRole</code> describes the supported portlet roles used
  * by the portal. In general, <code>Group</code>s contain <code>User</codes
@@ -18,7 +17,7 @@ import java.util.Comparator;
  *
  * @see org.gridlab.gridsphere.portlet.PortletGroup
  */
-public class PortletRole implements Serializable, Comparator {
+public class PortletRole implements Serializable, Comparator, Cloneable {
 
     private int role;
 
@@ -102,6 +101,12 @@ public class PortletRole implements Serializable, Comparator {
             tagstring = "SUPER";
         }
         return tagstring;
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        PortletRole r = (PortletRole)super.clone();
+        r.role = this.role;
+        return r;
     }
 
     public int compare(Object left, Object right) {

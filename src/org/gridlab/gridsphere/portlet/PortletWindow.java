@@ -20,7 +20,7 @@ public interface PortletWindow {
     /**
      * The <code>State</code> describes the <code>PortletWindow</code> state
      */
-    public static class State implements Serializable, Comparator {
+    public static class State implements Serializable, Comparator, Cloneable {
 
         /**
          * The standard "one-of many" window state on a page.
@@ -137,6 +137,12 @@ public interface PortletWindow {
                 return "RESIZING";
             }
             return "Unknown State!";
+        }
+
+        public Object clone() throws CloneNotSupportedException {
+            PortletWindow.State w = (PortletWindow.State)super.clone();
+            w.state = state;
+            return w;
         }
 
         public int compare(Object left, Object right) {

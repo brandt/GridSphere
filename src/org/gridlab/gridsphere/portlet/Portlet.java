@@ -71,7 +71,7 @@ public abstract class Portlet extends HttpServlet
      * Possible mode values are <code>View</code>, <code>EDIT</code>,
      * <code>HELP</code> and <code>CONFIGURE</code>
      */
-    public static class Mode implements Comparator, Serializable {
+    public static class Mode implements Comparator, Cloneable, Serializable {
 
         protected static final int VIEW_MODE = 1;
         protected static final int CONFIGURE_MODE = 2;
@@ -151,6 +151,12 @@ public abstract class Portlet extends HttpServlet
             else if ( leftID > rightID ) { result = 1; }
             else { result = 0; }
             return result;
+        }
+
+        public Object clone() throws CloneNotSupportedException {
+            Portlet.Mode m = (Portlet.Mode)super.clone();
+            m.mode = this.mode;
+            return m;
         }
 
         public boolean equals(Object o) {

@@ -12,7 +12,7 @@ package org.gridlab.gridsphere.portlet;
  *
  * @see org.gridlab.gridsphere.portlet.PortletRole
  */
-public interface PortletGroup {
+public interface PortletGroup extends Cloneable {
 
     /**
      * Returns the name of this group

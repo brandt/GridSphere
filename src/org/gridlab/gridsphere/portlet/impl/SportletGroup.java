@@ -109,6 +109,12 @@ public class SportletGroup extends BaseObject implements PortletGroup {
         return false;
     }
 
+    public Object clone() throws CloneNotSupportedException {
+        SportletGroup s = (SportletGroup)super.clone();
+        s.Name = this.Name;
+        return s;
+    }
+
     /**
      * Returns a unique hashcode
      *

@@ -25,7 +25,7 @@ public class SportletSettings implements PortletSettings {
     protected ConcretePortlet concPortlet = null;
     protected Hashtable store = new Hashtable();
     protected List langList = new Vector();
-    protected String concretePortletID = null;
+    protected String concretePortletID = new String();
     protected SportletApplicationSettings appSettings = null;
     protected Locale locale = null;
 
