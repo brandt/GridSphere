@@ -350,7 +350,7 @@ Copyright:
   <!-- ================================================================= -->
   <!-- Deploys core portlets to a local server                              -->
   <!-- ================================================================= -->
-  <target name="deploy" depends="deploy-gs, deploy-portlets"/>
+  <target name="deploy" depends="deploy-hsqldb, deploy-gs, deploy-portlets"/>
 
     <!-- ================================================================= -->
     <!-- Deploys GridSphere to a local server                              -->
