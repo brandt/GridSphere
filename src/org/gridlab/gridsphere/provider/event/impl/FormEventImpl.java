@@ -6,6 +6,9 @@
 package org.gridlab.gridsphere.provider.event.impl;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUpload;
+import org.apache.commons.fileupload.DiskFileUpload;
+import org.apache.commons.fileupload.FileUploadException;
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletLog;
@@ -17,10 +20,7 @@ import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /*
  * The <code>FormEventImpl</code> provides methods for creating/retrieving visual beans
@@ -34,6 +34,7 @@ public class FormEventImpl implements FormEvent {
     protected PortletRequest request;
     protected PortletResponse response;
     protected Map tagBeans = null;
+    protected FileItem savedFileItem = null;
 
     /**
      * Constructs a FormEventImpl from a portlet request, a portlet response, and a collection of visual beans
@@ -475,11 +476,23 @@ public class FormEventImpl implements FormEvent {
     protected void createTagBeans(PortletRequest req) {
         log.debug("in createTagBeans");
         if (tagBeans == null) tagBeans = new HashMap();
-
+        Map paramsMap = new HashMap();
+        // check for file upload
+        paramsMap = parseFileUpload(req);
         Enumeration enum = request.getParameterNames();
         while (enum.hasMoreElements()) {
-
             String uiname = (String) enum.nextElement();
+            String[] vals = request.getParameterValues(uiname);
+            paramsMap.put(uiname, vals);
+        }
+
+        //Enumeration enum = request.getParameterNames();
+
+        Iterator it = paramsMap.keySet().iterator();
+
+        while (it.hasNext()) {
+
+            String uiname = (String) it.next();
             String vb = "";
             String name = "";
             String beanId = "";
@@ -507,7 +520,7 @@ public class FormEventImpl implements FormEvent {
             name = vbname.substring(idx+1);
             System.out.println("name :" + name);
 
-            String[] vals = request.getParameterValues(uiname);
+            String[] vals = (String[])paramsMap.get(uiname); //request.getParameterValues(uiname);
             /*for (int i = 0; i < vals.length; i++) {
                 System.err.println("vals[" + i +"] = " + vals[i]);
             }*/
@@ -526,7 +539,6 @@ public class FormEventImpl implements FormEvent {
                 log.debug("Creating a fileinput bean with id:" + beanId);
                 try {
                     FileInputBean bean=null;
-                    FileItem savedFileItem=(FileItem)req.getAttribute("SavedFileItem");
                     if(savedFileItem!=null){
                         bean = new FileInputBean(req, beanId,savedFileItem);
                     }else{
@@ -633,6 +645,39 @@ public class FormEventImpl implements FormEvent {
 
     }
 
+
+    private Map parseFileUpload(PortletRequest req) {
+        Map parameters = new Hashtable();
+        if (FileUpload.isMultipartContent(req)) {
+            //log.debug("Multipart!");
+            DiskFileUpload fileUpload=new DiskFileUpload();
+            List fileItems=null;
+            try {
+                  fileItems= fileUpload.parseRequest(req);
+            } catch (FileUploadException e) {
+                log.debug("Error Parsing multi Part form.Error in workaround!!!");
+            }
+            if (fileItems!=null){
+                for (int i = 0; i < fileItems.size(); i++) {
+                    FileItem item = (FileItem) fileItems.get(i);
+                    String[] tmpstr=new String[1];
+                    if(item.isFormField()) {
+                        tmpstr[0]=item.getString();
+                    }else {
+                        tmpstr[0]="fileinput";
+                        /** FileInput attribute is a FileItem*/
+                        savedFileItem = item;
+                    }
+                    log.debug("Name: "+item.getFieldName()+" Value: "+tmpstr[0]);
+                    parameters.put(item.getFieldName(),tmpstr);
+                }
+
+            }
+
+            //log.debug("End of workaround!!!");
+        }
+        return parameters;
+    }
     /**
      * Returns a bean key identifier using the component identifier
      *
@@ -668,14 +713,6 @@ public class FormEventImpl implements FormEvent {
             TagBean tagBean = (TagBean)it.next();
             log.debug("tag bean id: " + tagBean.getBeanId());
         }
-    }
-
-    /**
-     * @deprecated
-     * @return a button name
-     */
-    public String getSubmitButtonName() {
-        return "";
     }
 
     public Object getTagBean(String name) {

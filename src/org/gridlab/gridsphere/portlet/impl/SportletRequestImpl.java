@@ -35,8 +35,7 @@ public class SportletRequestImpl implements SportletRequest {
     private PortletSession portletSession = null;
     private boolean hasSessionBeenCreated = false;
     private static PortletLog log = SportletLog.getInstance(SportletRequest.class);
-    //Request Parameters from file form
-    private Map parameters = null;
+
 
     /**
      * Cannot instantiate uninitialized SportletRequestImpl
@@ -52,46 +51,7 @@ public class SportletRequestImpl implements SportletRequest {
      */
     public SportletRequestImpl(HttpServletRequest req) {
 
-        if (FileUpload.isMultipartContent(req)) {
-            //log.debug("Multipart!");
-            DiskFileUpload fileUpload=new DiskFileUpload();
-            Map map=new Hashtable();
-            List fileItems=null;
-            try {
-                  fileItems= fileUpload.parseRequest(req);
-            } catch (FileUploadException e) {
-                log.debug("Error Parsing multi Part form.Error in workaround!!!");
-            }
-            if (fileItems!=null){
-                for (int i = 0; i < fileItems.size(); i++) {
-                    FileItem item = (FileItem) fileItems.get(i);
-                    String[] tmpstr=new String[1];
-                    if(item.isFormField()) {
-                        tmpstr[0]=item.getString();
-                    }else {
-                        tmpstr[0]="fileinput";
-                        /** FileInput attribute is a FileItem*/
-                        req.setAttribute("SavedFileItem",item);
-                    }
-                    log.debug("Name: "+item.getFieldName()+" Value: "+tmpstr[0]);
-                    map.put(item.getFieldName(),tmpstr);
-                }
 
-                Map map2=req.getParameterMap();
-                //log.debug("Map new"+map.toString());
-                //log.debug("Map old"+map2.toString());
-                Enumeration keys=req.getParameterNames();
-                while (keys.hasMoreElements()) {
-                    String key2 = (String) keys.nextElement();
-                    if (!map.containsKey(key2)){
-                        map.put(key2,map2.get(key2));
-                    }
-                }
-                //log.debug("Map sum"+map.toString());
-                parameters=map;
-            }
-            //log.debug("End of workaround!!!");
-        }
         this.req = req;
         portletSession = new SportletSession(this,req.getSession(true));
     }
@@ -403,13 +363,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the parameter value
      */
     public final String getParameter(String name) {
-        if (parameters==null)
-            return req.getParameter(name);
-        else
-            if (parameters.get(name)!=null)
-                return ((String[])parameters.get(name))[0];
-            else
-                return null;
+        return req.getParameter(name);
     }
 
     /**
@@ -418,10 +372,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return a map of parameters
      */
     public Map getParameterMap() {
-        if (parameters==null)
-            return req.getParameterMap();
-        else
-            return parameters;
+        return req.getParameterMap();
     }
 
     /**
@@ -430,12 +381,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the enumeration of parameter names
      */
     public Enumeration getParameterNames() {
-        if(parameters==null)
-            return req.getParameterNames();
-        else  {
-            Hashtable tmp=new Hashtable(parameters);
-            return  tmp.keys();
-        }
+        return req.getParameterNames();
     }
 
     /**
@@ -448,11 +394,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the array of parameter values
      */
     public String[] getParameterValues(String name) {
-        if(parameters==null)
-            return req.getParameterValues(name);
-        else{
-            return (String[])parameters.get(name);
-        }
+        return req.getParameterValues(name);
     }
 
     public long getDateHeader(String name) {
