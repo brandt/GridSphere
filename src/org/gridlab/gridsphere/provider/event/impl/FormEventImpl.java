@@ -123,7 +123,7 @@ public class FormEventImpl implements FormEvent {
                         if (basebean instanceof NameBean) {
                             bean = (NameBean)basebean;
                             String[] values = request.getParameterValues("gstag:" + bean.getName());
-                            log.debug("Updated bean: " + bean.getName());
+                            log.debug("Updating bean: " + bean.getName());
                             bean.update(values);
                         }
                     }
@@ -133,7 +133,7 @@ public class FormEventImpl implements FormEvent {
             return tbean;
         } else {
             String[] values = request.getParameterValues("gstag:" + bean.getName());
-            log.debug("Updated bean: " + bean.getName());
+            log.debug("Updating bean: " + bean.getName());
             bean.update(values);
             session.setAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name, bean);
             return bean;

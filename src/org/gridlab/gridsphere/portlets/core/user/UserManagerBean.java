@@ -51,27 +51,27 @@ public class UserManagerBean extends ActionEventHandler {
     private User user = null;
     private Password password = new PasswordEditor();
     private PortletRole userRole = PortletRole.USER;
-
-    // User display
-    private HiddenFieldBean userIDBean;
-    private TextBean userIDViewBean;
-    private TextBean userNameBean;
-    private TextBean familyNameBean;
-    private TextBean givenNameBean;
-    private TextBean fullNameBean;
-    private TextBean emailAddressBean;
-    private TextBean organizationBean;
-    private TextBean userRoleBean;
+    // User id always in page
+    private HiddenFieldBean userIDBean = null;
+    // User view
+    private TextBean userIDViewBean = null;
+    private TextBean userNameBean = null;
+    private TextBean familyNameBean = null;
+    private TextBean givenNameBean = null;
+    private TextBean fullNameBean = null;
+    private TextBean emailAddressBean = null;
+    private TextBean organizationBean = null;
+    private TextBean userRoleBean = null;
     // User edit
-    private TextFieldBean userNameEditBean;
-    private TextFieldBean familyNameEditBean;
-    private TextFieldBean givenNameEditBean;
-    private TextFieldBean fullNameEditBean;
-    private TextFieldBean emailAddressEditBean;
-    private TextFieldBean organizationEditBean;
-    private DropDownListBean userRoleEditBean;
-    private PasswordBean passwordEditBean;
-    private PasswordBean confirmPasswordEditBean;
+    private TextFieldBean userNameEditBean = null;
+    private TextFieldBean familyNameEditBean = null;
+    private TextFieldBean givenNameEditBean = null;
+    private TextFieldBean fullNameEditBean = null;
+    private TextFieldBean emailAddressEditBean = null;
+    private TextFieldBean organizationEditBean = null;
+    private DropDownListBean userRoleEditBean = null;
+    private PasswordBean passwordEditBean = null;
+    private PasswordBean confirmPasswordEditBean = null;
 
     public UserManagerBean() {
     }
@@ -130,6 +130,7 @@ public class UserManagerBean extends ActionEventHandler {
             throws PortletException {
         loadUser();
         try {
+            updateUser();
             validateUser();
             saveUser();
             setTitle("User Account Manager [View User]");
@@ -226,7 +227,6 @@ public class UserManagerBean extends ActionEventHandler {
         }
         // All done
         tableBean.store("userList", request);
-
         return user;
     }
 
@@ -283,10 +283,8 @@ public class UserManagerBean extends ActionEventHandler {
         userRoleBean.store("userRole", portletRequest);
     }
 
-    private void editUser()
-            throws PortletException {
-        System.err.println("Calling editUser()!");
-
+    private void editUser() {
+        log.debug("Entering editUser()");
         // Set user attributes
         PortletRequest portletRequest = getPortletRequest();
 
@@ -298,7 +296,7 @@ public class UserManagerBean extends ActionEventHandler {
         userRoleEditBean.add("Guest Role", "guest");
 
         if (this.user == null) {
-            log.debug("");
+            log.debug("Editing new user");
             userIDBean = new HiddenFieldBean("userID", "");
             userNameEditBean = new TextFieldBean("userName", "");
             familyNameEditBean = new TextFieldBean("familyName", "");
@@ -307,6 +305,7 @@ public class UserManagerBean extends ActionEventHandler {
             emailAddressEditBean = new TextFieldBean("emailAddress", "");
             organizationEditBean = new TextFieldBean("organization", "");
         } else {
+            log.debug("Editing existing user");
             userIDBean = new HiddenFieldBean("userID", this.user.getID());
             userNameEditBean = new TextFieldBean("userName", this.user.getUserName());
             userNameEditBean.setDisabled(true);
@@ -314,7 +313,6 @@ public class UserManagerBean extends ActionEventHandler {
             familyNameEditBean = new TextFieldBean("familyName", this.user.getFamilyName());
             givenNameEditBean = new TextFieldBean("givenName", this.user.getGivenName());
             fullNameEditBean = new TextFieldBean("fullName", this.user.getFullName());
-            resetFullName(fullNameEditBean);
             emailAddressEditBean = new TextFieldBean("emailAddress", this.user.getEmailAddress());
             organizationEditBean = new TextFieldBean("organization", this.user.getOrganization());
         }
@@ -336,88 +334,99 @@ public class UserManagerBean extends ActionEventHandler {
         // Confirm always blank first page
         confirmPasswordEditBean = new PasswordBean("confirmPassword", "", false, false, 20, 16);
         confirmPasswordEditBean.store("confirmPassword", portletRequest);
+        log.debug("Exiting editUser()");
     }
 
-    private void resetFullName(TextBean tagBean) {
-        StringBuffer buffer = new StringBuffer(tagBean.getText());
-        String givenName = user.getGivenName();
-        if (givenName.length() > 0) {
-            buffer.append(givenName);
-            buffer.append(" ");
-        }
-        String familyName = user.getGivenName();
-        buffer.append(familyName);
-        tagBean.setText(buffer.toString());
-    }
-
-    private void resetFullName(TextFieldBean tagBean) {
-        StringBuffer buffer = new StringBuffer(tagBean.getValue());
-        String givenName = user.getGivenName();
-        if (givenName.length() > 0) {
-            buffer.append(givenName);
-            buffer.append(" ");
-        }
-        String familyName = user.getGivenName();
-        buffer.append(familyName);
-        tagBean.setValue(buffer.toString());
+    private void updateUser()
+            throws PortletException {
+        log.debug("Entering updateUser()");
+        // Retrieve user attributes from form
+        userIDBean = getHiddenFieldBean("userID");
+        userNameEditBean = getTextFieldBean("userName");
+        familyNameEditBean = getTextFieldBean("familyName");
+        givenNameEditBean = getTextFieldBean("givenName");
+        fullNameEditBean = getTextFieldBean("fullName");
+        emailAddressEditBean = getTextFieldBean("emailAddress");
+        organizationEditBean = getTextFieldBean("organization");
+        userRoleEditBean = getDropDownListBean("userRole");
+        passwordEditBean = getPasswordBean("password");
+        confirmPasswordEditBean = getPasswordBean("confirmPassword");
+        log.debug("Exiting updateUser()");
     }
 
     private void validateUser()
             throws PortletException {
-        /***
-        // Validate user parameters
-        if (this.userName.equals("")) {
-            throw new PortletException("User name can't be blank.");
+        log.debug("Entering validateUser()");
+        StringBuffer message = new StringBuffer();
+        boolean isInvalid = false;
+        // Validate user name
+        String userName = this.userNameEditBean.getValue();
+        if (userName.equals("")) {
+            message.append("User name cannot be blank.\n");
+            isInvalid = true;
+        } else if (this.userManagerService.existsUserName(userName)) {
+            message.append("A user already exists with the same user name, please use a different name.\n");
+            isInvalid = true;
         }
-        if (this.familyName.equals("")) {
-            throw new PortletException("Family name can't be blank.");
+        // Validate family name
+        String familyName = this.familyNameEditBean.getValue();
+        if (familyName.equals("")) {
+            message.append("Family name cannot be blank\n");
+            isInvalid = true;
         }
-        if (this.givenName.equals("")) {
-            throw new PortletException("Given name can't be blank.");
+        // Validate given name
+        String givenName = this.givenNameEditBean.getValue();
+        if (givenName.equals("")) {
+            message.append("Given name cannot be blank\n");
+            isInvalid = true;
         }
-
-        if (this.userManagerService.existsUserName(userName)) {
-            throw new PortletException("A user already exists with the same user name.");
-        }
-
-        // Validate password parameters
-        validatePassword();
-        ***/
-    }
-
-    private void validatePassword()
-            throws PortletException {
-        /***
-        if (this.passwordValue.length() == 0) {
-            // New users must be given a password
-            if (this.user == null) {
-                throw new PortletException("New users must be given a password.");
+        // Validate password
+        String passwordValue = this.passwordEditBean.getValue();
+        String confirmPasswordValue = this.confirmPasswordEditBean.getValue();
+        // If user is new and no password provide, error
+        if (this.user == null) {
+            if (passwordValue.length() == 0) {
+                message.append("All new users must have a password.\n");
+                isInvalid = true;
+                return;
             }
+        // If user already exists and password unchanged, no problem
+        } else if (passwordValue.length() == 0 && confirmPasswordValue.length() == 0) {
+            return;
+        }
+        // Otherwise, password must match confirmation
+        if (!passwordValue.equals(confirmPasswordValue)) {
+            message.append("Password must match confirmation\n");
+            isInvalid = true;
+        // If they do match, then validate password with our service
         } else {
-            // Validate password parameters if password was altered
-            if (!this.passwordValue.equals(passwordConfirmation)) {
-                throw new PortletException("Password must match confirmation.");
-            }
             try {
                 this.passwordManagerService.validatePassword(passwordValue);
             } catch (InvalidPasswordException e) {
-                throw new PortletException(e.getMessage());
+                message.append(e.getMessage());
+                isInvalid = true;
             }
         }
-        ***/
+        // Throw exception if error was found
+        if (isInvalid) {
+            throw new PortletException(message.toString());
+        }
+        log.debug("Exiting validateUser()");
     }
 
     private void saveUser()
             throws PortletException {
-        // Load user
-        User user = loadUser();
+        log.debug("Entering saveUser()");
         // Account request
         AccountRequest accountRequest = null;
         // If user is new
-        if (user == null) {
+        if (this.user == null) {
+            log.debug("Creating new user");
             // Create new account request
             accountRequest = this.userManagerService.createAccountRequest();
+            accountRequest.setUserName(this.userNameEditBean.getValue());
         } else {
+            log.debug("Updating existing user");
             // Create edit account request
             accountRequest = this.userManagerService.createAccountRequest(user);
         }
@@ -428,25 +437,28 @@ public class UserManagerBean extends ActionEventHandler {
         this.user = this.userManagerService.approveAccountRequest(accountRequest);
         // Save user role
         saveUserRole();
+        log.debug("Exiting saveUser()");
     }
 
     private void editAccountRequest(AccountRequest accountRequest) {
-        accountRequest.setUserName(userNameEditBean.getValue());
-        accountRequest.setFamilyName(familyNameEditBean.getValue());
-        accountRequest.setGivenName(givenNameEditBean.getValue());
-        resetFullName(fullNameEditBean);
-        accountRequest.setFullName(fullNameEditBean.getValue());
-        accountRequest.setEmailAddress(emailAddressEditBean.getValue());
-        accountRequest.setOrganization(organizationEditBean.getValue());
-        String passwordValue = passwordEditBean.getValue();
+        log.debug("Entering editAccountRequest()");
+        accountRequest.setFamilyName(this.familyNameEditBean.getValue());
+        accountRequest.setGivenName(this.givenNameEditBean.getValue());
+        accountRequest.setFullName(this.fullNameEditBean.getValue());
+        accountRequest.setEmailAddress(this.emailAddressEditBean.getValue());
+        accountRequest.setOrganization(this.organizationEditBean.getValue());
+        String passwordValue = this.passwordEditBean.getValue();
         // Save password parameters if password was altered
         if (passwordValue.length() > 0) {
             accountRequest.setPasswordValue(passwordValue);
         }
+        log.debug("Exiting editAccountRequest()");
     }
+
 
     private void saveUserRole()
             throws PortletException {
+        log.debug("Entering saveUserRole()");
         // Create appropriate access request
         GroupRequest accessRequest = this.aclManagerService.createGroupRequest();
         accessRequest.setUser(this.user);
@@ -467,10 +479,12 @@ public class UserManagerBean extends ActionEventHandler {
         // Submit changes
         this.aclManagerService.submitGroupRequest(accessRequest);
         this.aclManagerService.approveGroupRequest(accessRequest);
+        log.debug("Exiting saveUserRole()");
     }
 
     private void deleteUser() {
-        if (user != null) {
+        if (this.user != null) {
+            log.debug("Deleting user...");
             this.userManagerService.deleteAccount(user);
         }
     }

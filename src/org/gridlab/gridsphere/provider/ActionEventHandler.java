@@ -32,6 +32,7 @@ public class ActionEventHandler {
     protected String title = null;
     protected boolean isFormInvalid = false;
     protected String formInvalidMessage = null;
+    protected TextBean errorMessageBean = new TextBean("");
 
     public ActionEventHandler() {
     }
@@ -309,6 +310,8 @@ public class ActionEventHandler {
             // If action is not illegal do error undefined action
             doErrorInvalidAction();
         }
+        // Store any error messages to request
+        this.errorMessageBean.store("errorMessage", this.request);
     }
 
     public void doErrorInvalidAction()
@@ -354,6 +357,7 @@ public class ActionEventHandler {
 
     public void setFormInvalidMessage(String message) {
         this.formInvalidMessage = message;
+        this.errorMessageBean = new TextBean(message);
     }
 
     public Object getPortletRequestAttribute(String name) {

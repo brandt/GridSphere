@@ -83,37 +83,26 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     private void initAccessControl(PortletServiceConfig config)
             throws PortletServiceUnavailableException {
         log.info("Entering initGroups()");
-        // Creating groups
-        initGroup(SportletGroup.SUPER);
-        initGroup(SportletGroup.CORE);
-        log.info("Entering initServices()");
-    }
 
-    private void initGroup(PortletGroup group) {
-        if (group instanceof SportletGroup) {
-            initSportletGroup((SportletGroup) group);
-        }
-    }
+        initSportletGroup((SportletGroup)SportletGroup.SUPER);
+        initSportletGroup((SportletGroup)SportletGroup.CORE);
 
-    private void initSportletGroup(SportletGroup group) {
         List webappNames = pms.getPortletWebApplicationNames();
         Iterator it = webappNames.iterator();
         while (it.hasNext()) {
             String groupName = (String)it.next();
-            SportletGroup testGroup = getSportletGroupByName(groupName);
-            if (testGroup == null) {
-                log.info("Creating group " + groupName);
-                try {
-                    pm.create(group);
-                } catch (PersistenceManagerException e) {
-                    String msg = "Error creating portlet group " + groupName;
-                    log.error(msg, e);
-                }
-            } else {
-                String groupId = testGroup.getID();
-                log.info("Setting group " + groupName + " id to " + groupId);
-                group.setID(groupId);
+            if (!existsGroupWithName(groupName)) {
+                createGroup(groupName);
             }
+        }
+        // Creating groups
+        log.info("Entering initGroups()");
+    }
+
+    private void initSportletGroup(SportletGroup group) {
+        String groupName = group.getName();
+        if (!existsGroupWithName(groupName)) {
+            pm.create(group);
         }
     }
 
@@ -540,6 +529,8 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     }
 
     private void saveSportletUserImpl(SportletUserImpl user) {
+        // Reset full name if necessary
+        resetFullName(user);
         // Create or update user
         if (existsSportletUserImpl(user)) {
             try {
@@ -555,6 +546,21 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
                 String msg = "Error creating user";
                 log.error(msg, e);
             }
+        }
+    }
+
+    private void resetFullName(SportletUserImpl user) {
+        String fullName = user.getFullName();
+        if (fullName.equals("")) {
+            StringBuffer buffer = new StringBuffer("");
+            String givenName = user.getGivenName();
+            if (givenName.length() > 0) {
+                buffer.append(givenName);
+                buffer.append(" ");
+            }
+            String familyName = user.getFamilyName();
+            buffer.append(familyName);
+            user.setFullName(buffer.toString());
         }
     }
 
