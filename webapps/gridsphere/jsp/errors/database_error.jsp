@@ -1,6 +1,6 @@
 <jsp:useBean id="error" class="java.lang.String" scope="request"/>
 
-<%@ include file="/html/pagehead.html" %>
+<%@ include file="/WEB-INF/CustomPortal/layouts/html/pagehead.html" %>
 
 <h1>Error:</h1>
 
