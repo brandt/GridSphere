@@ -193,6 +193,15 @@ Copyright:
     <!-- =================================================================== -->
     <target name="update" description="Update code from CVS">
         <cvs command="update -dP"/>
+
+        <antcall target="deploy-install"/>
+
+        <antcall target="update-database"/>
+
+        <copy todir="${env.CATALINA_HOME}/webapps">
+            <fileset dir="${build.webapps}"/>
+        </copy>
+
     </target>
 
     <!-- +++++++++++++++++ START COMPILE +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
@@ -406,34 +415,24 @@ Copyright:
     </target>
 
     <target name="configure-database" depends="setenv">
-
         <pathconvert targetos="windows" dirsep="/" property="cathome">
             <path location="${env.CATALINA_HOME}"/>
         </pathconvert>
         <replace file="${gridsphere.build}/webapps/gridsphere/WEB-INF/CustomPortal/database/hibernate.properties"
-            token="@GRIDSPHERE_WEBAPP@"
-            value="${cathome}/${gswebapp.dir}"/>
+            token="@GRIDSPHERE_DB@"
+            value="${cathome}/${gswebapp.dir}/WEB-INF/CustomPortal/database/gridsphere"/>
     </target>
 
     <target name="configure-test-database" depends="setenv">
-        <mkdir dir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/"/>
-        <copy overwrite="true" file="webapps/gridsphere/WEB-INF/persistence/hibernate.properties" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/"/>
+        <copy overwrite="true"
+            file="webapps/gridsphere/WEB-INF/CustomPortal/database/hibernate.properties"
+            todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/CustomPortal/database"/>
         <pathconvert targetos="windows" dirsep="/" property="cathome">
             <path location="${env.CATALINA_HOME}"/>
         </pathconvert>
-        <replace file="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/hibernate.properties"
-            token="@GRIDSPHERE_WEBAPP@"
-            value="${cathome}/${gswebapp.dir}"/>
-    </target>
-
-    <target name="create-test-database" depends="configure-test-database, compile">
-        <taskdef name="dbtask"
-            classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
-            classpathref="classpath"/>
-        <dbtask
-            configdir="${env.CATALINA_HOME}/webapps/gridsphere"
-            action="CREATE"/>
-        <echo message="Successfully created test database"/>
+        <replace file="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/CustomPortal/database/hibernate.properties"
+            token="@GRIDSPHERE_DB@"
+            value="${cathome}/${gswebapp.dir}/WEB-INF/CustomPortal/database/gridsphere-test"/>
     </target>
 
     <target name="update-database" depends="configure-database, jar">
@@ -581,21 +580,7 @@ Copyright:
         </copy>
 
     </target>
-<!--
-    <target name="update" depends="" description="Updates deployed GridSphere distribution">
 
-
-        <antcall target="deploy-install"/>
-
-        <antcall target="update-database"/>
-
-        <copy todir="${env.CATALINA_HOME}/webapps">
-            <fileset dir="${build.webapps}"/>
-        </copy>
-
-    </target>
- -->
-   
     <!-- =================================================================== -->
     <!-- Undeploys GridSphere from Tomcat                                    -->
     <!-- =================================================================== -->
@@ -665,7 +650,7 @@ Copyright:
 
         <antcall target="configure-test-database"/>
 
-        <antcall target="create-test-database"/>
+        <antcall target="create-database"/>
 
         <copy todir="${env.CATALINA_HOME}/webapps/gridsphere">
             <fileset dir="${build.webapps}/gridsphere"/>
