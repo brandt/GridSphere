@@ -12,7 +12,7 @@ import java.util.Set;
 
 /**
  * The PortletRegistryService acts as a repository for portlets and makes them available to the portlet
- * container. The Portlet base class is responsible for reading in the associated portlet.xml file and
+ * container. The PortletRegistry service is responsible for reading in the associated portlet.xml file and
  * creating a RegisteredPortlet object which represents the portlet. The PortletRegistryService maintains
  * a Set of RegisteredPortlets and provides operations for the registration, unregistration and querying
  * of RegisteredPortlet objects.
