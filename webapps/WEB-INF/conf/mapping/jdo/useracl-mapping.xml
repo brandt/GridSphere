@@ -15,6 +15,9 @@
       <field name="Oid" type="java.lang.String">
          <sql type="char" name="Oid" />
       </field>
+      <field name="Status" type="integer">
+          <sql type="integer" name="Status"/>
+      </field>
    </class>
 </mapping>
 

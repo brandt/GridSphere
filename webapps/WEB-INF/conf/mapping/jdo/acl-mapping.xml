@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
 <mapping>
-   <class name="org.gridlab.gridsphere.portlet.impl.SportletGroup" identity="Oid" required="true">
+   <class name="org.gridlab.gridsphere.portlet.impl.SportletGroup" identity="Oid">
       <map-to table="Groups" />
       <field name="Name" type="java.lang.String">
          <sql type="char" name="Name" />
@@ -9,12 +9,6 @@
       <field name="Oid" type="java.lang.String">
          <sql type="char" name="Oid" />
       </field>
-    <field name="AccountRequests" type="org.gridlab.gridsphere.services.user.impl.AccountRequestImpl"
-           collection="vector">
-      <sql name="AccountRequestImpl_Oid"
-           many-table="AccountRequestImpl_SportletGroup" many-key="SportletGroup_Oid" />
-    </field>
-
 
    </class>
 </mapping>

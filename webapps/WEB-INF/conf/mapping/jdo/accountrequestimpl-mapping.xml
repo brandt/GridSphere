@@ -26,10 +26,6 @@
          <sql type="char" name="Oid" />
       </field>
 
-      <field name="DesiredGroups" type="org.gridlab.gridsphere.portlet.impl.SportletGroup" collection="vector">
-        <sql name="SportletGroup_Oid" many-table="AccountRequestImpl_SportletGroup" many-key="AccountRequestImpl_Oid" />
-      </field>
-
       <field name="MyproxyUserNamesSV" type="org.gridlab.gridsphere.services.user.impl.AccountRequestImplMyproxyUserNames" collection="vector">
          <sql many-key="Reference"/>
       </field>
@@ -39,6 +35,7 @@
       </field>
 
    </class>
+
 
    <!-- should use inheritence here in castor ! -->
 
