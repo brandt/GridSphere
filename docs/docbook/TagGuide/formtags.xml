@@ -101,9 +101,10 @@
             to trigger a particular sequence of logic operations. An action can come in 2 flavors,
             an actionlink or an actionsubmit. An action tag provides two attributes that are used to
             generate the appropriate action. A label attribute can be used to link to another portlet
-            component. An action attribute provides an action name that is made available to the Portlet via the
-            &ActionEvent; object. Both action tags may also contain one or more actionparam tags to
-            define action parameters.
+            component. Action tags may also specify a secure attribute which indicates if this link or form
+            should specify "http" or "https" access. An action attribute provides an action name that is made
+            available to the Portlet via the &ActionEvent; object. Both action tags may also contain one or
+            more actionparam tags to define action parameters.
         </para>
 
         <sect2 id="actionlinktag">
@@ -133,6 +134,12 @@
                     </tbody>
                     <tbody>
                         <row>
+                            <entry>secure</entry><entry>no</entry><entry>boolean: if set to true, the link is "https",
+                                otherwise it is "http".</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
                             <entry>key</entry><entry>no</entry><entry>string: the key used to identify a value from the
                             localized properties file located in <filename>WEB-INF/classes/Portlet_XX.properties</filename>
                             of the portlet web application.</entry>
@@ -142,6 +149,18 @@
                         <row>
                             <entry>value</entry><entry>no</entry><entry>string: the value that is displayed in the
                             hyperlink. The key attribute should be used wherever possible to provide localized string values.</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>name</entry><entry>no</entry><entry>string: adds a link target name to the hyperlink
+                                that can be specified by the anchor attribute.</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>anchor</entry><entry>no</entry><entry>string: adds an anchor to the actionsubmit element
+                                identified by a "#" plus the anchor for the link target.</entry>
                         </row>
                     </tbody>
                 </tgroup>
@@ -171,9 +190,9 @@
                 specified default values.
                 <screen>
 <![CDATA[
-<ui:actionlink label="login">Click to login</>]]>
+<ui:actionlink secure="true" label="login">Click to login</>]]>
                 </screen>
-                This example would create an html hyperlink pointing to the Login portlet (as defined by
+                This example would create a secure "https" html hyperlink pointing to the Login portlet (as defined by
                 label="login" in the layout descriptor file) with a clickable
                 text value of "Click to login" as specified in the body of the tag.
                 <screen>
@@ -208,6 +227,12 @@
                     </tbody>
                     <tbody>
                         <row>
+                            <entry>secure</entry><entry>no</entry><entry>boolean: if set to true, the link is "https",
+                                otherwise it is "http".</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
                             <entry>key</entry><entry>no</entry><entry>string: the key used to identify a value from the
                             localized properties file located in <filename>WEB-INF/classes/Portlet_XX.properties</filename>
                             of the portlet web application.</entry>
@@ -222,6 +247,12 @@
                     <tbody>
                         <row>
                             <entry>name</entry><entry>no</entry><entry>string: the name of the actionsubmit element.</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>anchor</entry><entry>no</entry><entry>string: adds an anchor to the actionsubmit element
+                                identified by a "#" plus the anchor for the link target.</entry>
                         </row>
                     </tbody>
                 </tgroup>
@@ -298,7 +329,8 @@
                 specifying action parameters. If a form tag contains a actionsubmit tag, then the action specified
                 in the actionsubmit will override any action specified in the form tag. A form tag may also specify
                 a label that will cause the form event to be sent to the portlet component identified by the label
-                as specified in the layout descriptor file.
+                as specified in the layout descriptor file. The form tag also supports the secure attribute to indicate
+                if this form should be processed over http or https.
             </para>
             <example>
                 <title>Usage of form</title>
@@ -311,12 +343,12 @@
                 Creates a form that when submitted will invoke the "doSomeAction" method of the current portlet.
                 <screen>
 <![CDATA[
-<ui:form label="login">
+<ui:form secure="true" label="login">
 ...
 </ui:form>]]>
                 </screen>
-                Creates a form that when submitted will invoke the portlet component as identified by the "login"
-                attribute.
+                Creates a secure form that when submitted will invoke the portlet component as identified by
+                the "login" attribute.
             </example>
         </sect2>
 
