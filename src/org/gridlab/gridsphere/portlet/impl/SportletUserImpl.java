@@ -9,6 +9,8 @@ import org.exolab.castor.jdo.Database;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.portlet.PortletLog;
 
+import javax.servlet.http.HttpSessionBindingListener;
+import javax.servlet.http.HttpSessionBindingEvent;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -23,7 +25,7 @@ import java.util.List;
 /**
  * @table sportletuserimpl
  */
-public class SportletUserImpl extends BaseObject implements SportletUser {
+public class SportletUserImpl extends BaseObject implements SportletUser, HttpSessionBindingListener {
 
     // store used to maintain user attributes
     private transient Hashtable Store = new Hashtable();
@@ -302,7 +304,13 @@ public class SportletUserImpl extends BaseObject implements SportletUser {
         convert2vector();
     }
 
+    public void valueBound(HttpSessionBindingEvent event) {
+        System.err.println("valueBound of SportletUserImpl invoked");
+    }
 
+    public void valueUnbound(HttpSessionBindingEvent event) {
+        System.err.println("valueUnbound of SportletUserImpl invoked");
+    }
 
     /**
      * Returns a string representaation of the User
