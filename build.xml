@@ -254,6 +254,10 @@ Copyright:
         <copy file="${gswebapp.dir}/WEB-INF/classes/log4j.properties"
             tofile="${build.classes}/gridsphere/log4j.properties"/>
 
+        <copy todir="${build.classes}/gridsphere/resources">
+            <fileset dir="config/resources"/>
+        </copy>
+
         <echo message="Configuring GridSphere jar settings:"/>
         <echo message="GridSphere Release  ${version.release}"/>
         <echo message="Replaced CATALINA_HOME with : ${env.CATALINA_HOME}"/>
