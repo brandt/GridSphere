@@ -49,6 +49,7 @@ public class ClientImpl implements Client {
         String browserInfo = "Unknown browser";
         //WAP 2.0 identifification begins here:
         for (int identString=0;identString<15;identString++) {
+            if (userAgent == null) continue;
             if (userAgent.indexOf(WAP_IDENTIFIER[identString])!=-1) {
                 browserInfo=MANUFACTURER_NAMES[identString+4];
                 manufacturer=MANUFACTURER_NAMES[identString+4];
