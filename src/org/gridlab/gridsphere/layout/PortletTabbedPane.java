@@ -496,24 +496,15 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
                 String path = "themes" + File.separator + theme + File.separator + "images" + File.separator;
                 if (tab.isSelected()) {
-                    pane.append("<td height=\"24\" width=\"6\" background=\"" + path + "tab-active-left.gif\">");
-                    pane.append("&nbsp;");
-                    pane.append("</td>");
+                    pane.append("<td height=\"24\" width=\"6\"><img src=\"" + path + "tab-active-left.gif\"></td>");
                     pane.append("<td height=\"24\" nowrap=\"nowrap\" background=\"" + path + "tab-active-middle.gif\">");
                     pane.append("<span class=\"tab-active\">" + replaceBlanks(title) + "</span>");
-                    pane.append("<td height=\"24\" width=\"6\" background=\"" + path + "tab-active-right.gif\">");
-                    pane.append("&nbsp;");
-                    pane.append("</td>");
-
+                    pane.append("<td height=\"24\" width=\"6\"><img src=\"" + path + "tab-active-right.gif\"></td>");
                 } else {
-                    pane.append("<td height=\"24\" width=\"6\" background=\"" + path + "tab-inactive-left.gif\">");
-                    pane.append("&nbsp;");
-                    pane.append("</td>");
+                    pane.append("<td height=\"24\" width=\"6\"><img src=\"" + path + "tab-inactive-left.gif\"></td>");
                     pane.append("<td height=\"24\" nowrap=\"nowrap\" background=\"" + path + "tab-inactive-middle.gif\">");
                     pane.append("<a class=\"tab-menu\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\">" + replaceBlanks(title) + "</a>");
-                    pane.append("<td height=\"24\" width=\"6\" background=\"" + path + "tab-inactive-right.gif\">");
-                    pane.append("&nbsp;");
-                    pane.append("</td>");
+                    pane.append("<td height=\"24\" width=\"6\"><img src=\"" + path + "tab-inactive-right.gif\"></td>");
                 }
 
                 //out.println("<td class=\"tab-empty\"></td>");
