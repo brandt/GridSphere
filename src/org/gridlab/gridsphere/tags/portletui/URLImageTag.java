@@ -6,7 +6,7 @@ package org.gridlab.gridsphere.tags.portletui;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.provider.portletui.beans.URLImageBean;
+import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
@@ -17,7 +17,7 @@ import javax.servlet.jsp.JspWriter;
 public class URLImageTag extends BaseComponentTag {
     private static PortletLog log = SportletLog.getInstance(URLImageTag.class);
 
-    protected URLImageBean urlImageBean = null;
+    protected ImageBean urlImageBean = null;
     protected String url = new String();
     protected String title = new String();
     protected String alt = new String();
@@ -48,18 +48,18 @@ public class URLImageTag extends BaseComponentTag {
 
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
-            urlImageBean = (URLImageBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            urlImageBean = (ImageBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (urlImageBean == null) {
-                urlImageBean = new URLImageBean();
+                urlImageBean = new ImageBean();
                 urlImageBean.setAlt(alt);
                 urlImageBean.setTitle(title);
-                urlImageBean.setUrl(url);
+                urlImageBean.setSrc(url);
             }
         } else {
-            urlImageBean = new URLImageBean();
+            urlImageBean = new ImageBean();
             urlImageBean.setAlt(alt);
             urlImageBean.setTitle(title);
-            urlImageBean.setUrl(url);
+            urlImageBean.setSrc(url);
         }
         try {
             JspWriter out = pageContext.getOut();

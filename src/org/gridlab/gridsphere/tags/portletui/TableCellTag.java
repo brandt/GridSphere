@@ -18,7 +18,7 @@ public class TableCellTag extends BaseComponentTag {
     protected TableCellBean cellBean = null;
     protected String width = null;
     protected String cellSpacing = null;
-    protected String style = TextBean.TEXT_LABEL_STYLE;
+    protected String style = TextBean.MSG_INFO;
 
     public void setWidth(String width) {
         this.width = width;

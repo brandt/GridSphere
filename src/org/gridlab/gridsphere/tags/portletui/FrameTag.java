@@ -18,7 +18,7 @@ import java.util.ArrayList;
  */
 public class FrameTag extends TableTag {
 
-    protected String style = TextBean.TEXT_LABEL_STYLE;
+    protected String style = TextBean.MSG_INFO;
     protected String key = null;
     protected String value = null;
 

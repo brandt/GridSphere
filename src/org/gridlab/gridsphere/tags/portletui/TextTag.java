@@ -18,7 +18,7 @@ public class TextTag extends BaseComponentTag {
 
     protected TextBean textBean = null;
     protected String key = null;
-    protected String style = TextBean.TEXT_LABEL_STYLE;
+    protected String style = TextBean.MSG_INFO;
 
     public void setStyle(String style) {
         this.style = style;
