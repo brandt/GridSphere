@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.provider.ui.beans.TableCellBean;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.PageContext;
 import java.util.List;
 import java.util.Iterator;
 
@@ -27,7 +28,7 @@ public class FrameTag extends TableTag {
         this.cellSpacing = FRAME_SPACING;
 
         if (!beanId.equals("")) {
-            tableBean = (FrameBean)pageContext.getSession().getAttribute(getBeanKey());
+            tableBean = (FrameBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (tableBean != null) {
                 //System.err.println("Found a non-null tableframebean");
                 return SKIP_BODY;

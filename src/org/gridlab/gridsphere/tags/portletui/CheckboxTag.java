@@ -9,10 +9,9 @@ import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
 
 public class CheckboxTag extends BaseComponentTag {
-
-    public static final String CHECKBOX_STYLE = "portlet-frame-text";
 
     protected CheckBoxBean checkbox = null;
     protected boolean selected = false;
@@ -36,21 +35,24 @@ public class CheckboxTag extends BaseComponentTag {
     public int doEndTag() throws JspException {
 
         if (!beanId.equals("")) {
-            checkbox = (CheckBoxBean)pageContext.getSession().getAttribute(getBeanKey());
+            checkbox = (CheckBoxBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (checkbox == null) {
-                checkbox = new CheckBoxBean();
+                System.err.println("did not find checkbox bean!! " + getBeanKey());
+                checkbox = new CheckBoxBean(beanId);
+                checkbox.setSelected(selected);
+                this.setBaseComponentBean(checkbox);
+            } else {
+                System.err.println("found checkbox bean!! " + getBeanKey());
+                System.err.println("isselected = " + checkbox.isSelected());
+                System.err.println("name = " + checkbox.getName());
+                this.updateBaseComponentBean(checkbox);
             }
         } else {
             checkbox = new CheckBoxBean();
+            checkbox.setSelected(selected);
+            this.setBaseComponentBean(checkbox);
         }
-        checkbox.setCssStyle(CHECKBOX_STYLE);
-        checkbox.setSelected(selected);
-        this.setBaseComponentBean(checkbox);
 
-        if (!beanId.equals("")) {
-            //System.err.println("storing bean in the session");
-            store(getBeanKey(), checkbox);
-        }
         //debug();
 
         Object parentTag = getParent();

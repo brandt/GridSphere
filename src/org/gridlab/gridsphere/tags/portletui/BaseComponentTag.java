@@ -183,4 +183,27 @@ public abstract class BaseComponentTag extends BaseBeanTag   {
         componentBean.setReadonly(readonly);
     }
 
+    protected void updateBaseComponentBean(BaseComponentBean componentBean) {
+        if ((backgroundcolor != null) && (componentBean.getBackgroundColor() == null)) {
+            componentBean.setBackgroundColor(backgroundcolor);
+        }
+        if ((color != null) && (!componentBean.getColor().equals(""))) {
+            if (color != null) componentBean.setColor(color);
+        }
+        if ((cssStyle != null) && (!componentBean.getCssStyle().equals(""))) {
+            componentBean.setCssStyle(cssStyle);
+        }
+        if ((font != null) && (!componentBean.getFont().equals(""))) {
+            componentBean.setFont(font);
+        }
+        if ((name != null) && (componentBean.getName() == null)) {
+            componentBean.setName(name);
+        }
+        if ((value != null) && (componentBean.getValue() == null)) {
+            componentBean.setValue(value);
+        }
+
+    }
+
+
 }

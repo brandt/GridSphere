@@ -5,14 +5,10 @@
 
 package org.gridlab.gridsphere.tags.portletui;
 
-import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
-import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class TextFieldTag extends BaseComponentTag {
 
@@ -57,23 +53,24 @@ public class TextFieldTag extends BaseComponentTag {
     public int doEndTag() throws JspException {
         if (cssStyle == null) cssStyle = TEXTFIELD_STYLE;
         if (!beanId.equals("")) {
-            textFieldBean = (TextFieldBean)pageContext.getSession().getAttribute(getBeanKey());
-            if (textFieldBean != null) {
-                update(textFieldBean);
+            textFieldBean = (TextFieldBean)pageContext.getAttribute(getBeanKey());
+            if (textFieldBean == null) {
+                //update(textFieldBean);
+                textFieldBean = new TextFieldBean();
+                textFieldBean.setBeanId(beanId);
             }
-        }
-        if ((beanId.equals("")) || (textFieldBean == null)) {
+        } else {
             textFieldBean = new TextFieldBean();
-
             if (maxlength != 0) textFieldBean.setMaxLength(maxlength);
             if (size != 0) textFieldBean.setSize(size);
             this.setBaseComponentBean(textFieldBean);
         }
-
+       /*
         if (!beanId.equals("")) {
             //System.err.println("storing bean in the session");
             store(getBeanKey(), textFieldBean);
         }
+        */
         //debug();
 
         Object parentTag = getParent();

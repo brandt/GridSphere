@@ -5,15 +5,13 @@
  */
 package org.gridlab.gridsphere.tags.portletui;
 
-import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.RadioButtonBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
 
 public class RadioButtonTag extends BaseComponentTag {
-
-    public static final String RADIO_STYLE = "portlet-frame-text";
 
     protected RadioButtonBean radiobutton = null;
     protected boolean selected = false;
@@ -37,21 +35,20 @@ public class RadioButtonTag extends BaseComponentTag {
     public int doEndTag() throws JspException {
 
         if (!beanId.equals("")) {
-            radiobutton = (RadioButtonBean)pageContext.getSession().getAttribute(getBeanKey());
+            radiobutton = (RadioButtonBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (radiobutton == null) {
                 radiobutton = new RadioButtonBean();
+                radiobutton.setSelected(selected);
+                this.setBaseComponentBean(radiobutton);
+            } else {
+                this.updateBaseComponentBean(radiobutton);
             }
         } else {
             radiobutton = new RadioButtonBean();
+            radiobutton.setSelected(selected);
+            this.setBaseComponentBean(radiobutton);
         }
-        radiobutton.setCssStyle(RADIO_STYLE);
-        radiobutton.setSelected(selected);
-        this.setBaseComponentBean(radiobutton);
 
-        if (!beanId.equals("")) {
-            //System.err.println("storing bean in the session");
-            store(getBeanKey(), radiobutton);
-        }
         //debug();
 
         Object parentTag = getParent();

@@ -3,9 +3,11 @@ package org.gridlab.gridsphere.tags.portletui;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.provider.portletui.beans.TableRowBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TagBean;
+import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
 import javax.swing.table.TableModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +36,7 @@ public class TableRowTag extends ContainerTag {
 
         rowBean = new TableRowBean();
         if (!beanId.equals("")) {
-            rowBean = (TableRowBean)pageContext.getSession().getAttribute(getBeanKey());
+            rowBean = (TableRowBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (rowBean == null) rowBean = new TableRowBean();
         }
 
@@ -49,18 +51,19 @@ public class TableRowTag extends ContainerTag {
 
             Iterator it = list.iterator();
             while (it.hasNext()) {
-                TagBean tagBean = (TagBean)it.next();
-                rowBean.addTagBean(tagBean);
-                rowBean.setCssStyle(tagBean.getCssStyle());
+                BaseComponentBean bean = (BaseComponentBean)it.next();
+                rowBean.addBean(bean);
             }
 
             tableModel.addTableRowBean(rowBean);
 
             tableTag.setTableModel(tableModel);
         }
+        /*
         if (!beanId.equals("")) {
             store(beanId, rowBean);
         }
+        */
         return EVAL_PAGE;
     }
 }

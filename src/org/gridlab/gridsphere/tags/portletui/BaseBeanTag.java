@@ -32,11 +32,14 @@ public abstract class BaseBeanTag extends BodyTagSupport {
         return beanId + "_" + compId;
     }
 
+
     protected void store(String id, Object object) {
+        /*
         if (!beanId.equals("")) {
             //System.err.println("in BaseBeanTag: saving " + id + " into session");
             pageContext.getSession().setAttribute(id, object);
         }
+        */
     }
 
     public void debug() {

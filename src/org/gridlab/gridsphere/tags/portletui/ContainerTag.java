@@ -16,7 +16,6 @@ public abstract class ContainerTag extends BaseBeanTag {
     protected List list = null;
 
     public void addTagBean(TagBean tagBean) {
-        //System.err.println("in the fucking container: adding " + tagBean.toString());
         list.add(tagBean);
     }
 

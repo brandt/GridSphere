@@ -53,12 +53,16 @@ public class PanelTag extends ContainerTag {
 
     public int doStartTag() throws JspException {
         list = new Vector();
-        panelBean = new PanelBean();
+
         if (!beanId.equals("")) {
             panelBean = (PanelBean)pageContext.getSession().getAttribute(getBeanKey());
             if (panelBean != null) {
                 return SKIP_BODY;
+            } else {
+                panelBean = new PanelBean();
             }
+        } else {
+            panelBean = new PanelBean();
         }
         panelBean.setWidth(width);
         panelBean.setCellSpacing(cellSpacing);
@@ -74,15 +78,16 @@ public class PanelTag extends ContainerTag {
         // add all components to pane
         Iterator it = list.iterator();
         while (it.hasNext()) {
-            TagBean t = (TagBean)it.next();
+            BaseComponentBean bc = (BaseComponentBean)it.next();
             //System.err.println("adding " + t.toString() + " to panel");
-            panelBean.addTagBean(t);
+            panelBean.addBean(bc);
         }
 
+        /*
         if (!beanId.equals("")) {
             //System.err.println("setting tablemodel in table");
             store(getBeanKey(), panelBean);
-        }
+        }*/
 
         try {
             JspWriter out = pageContext.getOut();

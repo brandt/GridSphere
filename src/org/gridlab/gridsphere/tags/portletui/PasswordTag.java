@@ -58,9 +58,9 @@ public class PasswordTag extends BaseComponentTag {
     public int doEndTag() throws JspException {
 
         if (!beanId.equals("")) {
-            passwordBean = (PasswordBean)pageContext.getSession().getAttribute(getBeanKey());
+            passwordBean = (PasswordBean)pageContext.getAttribute(getBeanKey());
             if (passwordBean == null) {
-                passwordBean = new PasswordBean();
+                passwordBean = new PasswordBean(beanId);
             }
         } else {
                 passwordBean = new PasswordBean();
@@ -69,10 +69,12 @@ public class PasswordTag extends BaseComponentTag {
         passwordBean.setMaxLength(maxlength);
         passwordBean.setSize(size);
         this.setBaseComponentBean(passwordBean);
-        if (!beanId.equals("")) {
+
+        /*if (!beanId.equals("")) {
             //System.err.println("storing bean in the session");
             store(getBeanKey(), passwordBean);
         }
+        */
         //debug();
 
         Object parentTag = getParent();

@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -17,8 +18,15 @@ public class TextTag extends BaseComponentTag {
 
     protected TextBean textBean = null;
     protected String key = null;
+    protected boolean isError = false;
 
-    public static final String TEXT_STYLE = "portlet-frame-label";
+    public void setError(boolean isError) {
+        this.isError = isError;
+    }
+
+    public boolean getError() {
+        return isError;
+    }
 
     public String getKey() {
         return key;
@@ -29,29 +37,36 @@ public class TextTag extends BaseComponentTag {
     }
 
     public int doStartTag() throws JspException {
-        this.cssStyle = TEXT_STYLE;
-        textBean = new TextBean();
+
         if (!beanId.equals("")) {
            //System.err.println("in TextTag: gettung text bean from session");
-           textBean = (TextBean)pageContext.getSession().getAttribute(getBeanKey());
+           textBean = (TextBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
            if (textBean == null) {
                textBean = new TextBean();
            } else {
                key = textBean.getKey();
                value = textBean.getValue();
            }
+       } else {
+            textBean = new TextBean();
        }
        return EVAL_BODY_INCLUDE;
     }
 
-   public int doEndTag() throws JspException {
+    public int doEndTag() throws JspException {
 
-       //System.err.println("in TextTag:doEnd");
-       if (value != null) textBean.setValue(value);
-       if (key != null) textBean.setKey(key);
-       this.setBaseComponentBean(textBean);
-
-       //debug();
+        //System.err.println("in TextTag:doEnd");
+        if (!beanId.equals("")) {
+            if ((key != null) && (textBean.getKey() == null)) {
+                textBean.setKey(key);
+            }
+            this.updateBaseComponentBean(textBean);
+        } else {
+            if (key != null) textBean.setKey(key);
+            textBean.setError(isError);
+            this.setBaseComponentBean(textBean);
+        }
+        //debug();
 
         if (textBean.getKey() != null) {
             Locale locale = pageContext.getRequest().getLocale();
@@ -73,10 +88,6 @@ public class TextTag extends BaseComponentTag {
             }
         }
 
-        if (!beanId.equals("")) {
-            //System.err.println("storing bean in the session");
-            store(getBeanKey(), textBean);
-        }
         return EVAL_BODY_INCLUDE;
     }
 

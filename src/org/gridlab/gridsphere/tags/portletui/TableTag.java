@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.provider.ui.beans.TableCellBean;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.PageContext;
 import java.util.List;
 import java.util.Iterator;
 
@@ -57,7 +58,7 @@ public class TableTag extends BaseBeanTag {
 
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
-            tableBean = (TableBean)pageContext.getSession().getAttribute(getBeanKey());
+            tableBean = (TableBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
 
             if (tableBean != null) {
                 //System.err.println("Found a non-null tablebean");
@@ -80,10 +81,12 @@ public class TableTag extends BaseBeanTag {
         tableBean.setCellSpacing(cellSpacing);
 
         //tableBean.setTableModel();
+        /*
         if (!beanId.equals("")) {
             //System.err.println("setting tablemodel in table");
             store(getBeanKey(), tableBean);
         }
+        */
 
         Object parent = getParent();
         if (parent instanceof ContainerTag) {

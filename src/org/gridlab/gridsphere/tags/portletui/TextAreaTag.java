@@ -9,13 +9,14 @@ import org.gridlab.gridsphere.provider.portletui.beans.TextAreaBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
 
 public class TextAreaTag extends BaseComponentTag {
 
-    public static final String TEXTAREA_STYLE = "portlet-frame-textarea";
+
     protected TextAreaBean textAreaBean = null;
     protected int cols = 0;
-    protected int rows = 0;;
+    protected int rows = 0;
 
     /**
      *  Gets the number of columns of the TextArea.
@@ -50,19 +51,29 @@ public class TextAreaTag extends BaseComponentTag {
     }
 
     public int doEndTag() throws JspException {
-        //textAreaBean.setCssStyle(TEXTAREA_STYLE);
-        this.cssStyle = TEXTAREA_STYLE;
-        textAreaBean = (TextAreaBean)pageContext.getSession().getAttribute(getBeanKey());
-        if (textAreaBean == null) {
+        if (!beanId.equals("")) {
+            textAreaBean = (TextAreaBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            if (textAreaBean == null) {
+                textAreaBean = new TextAreaBean();
+                textAreaBean.setRows(rows);
+                textAreaBean.setCols(cols);
+                this.setBaseComponentBean(textAreaBean);
+            } else {
+                if ((textAreaBean.getCols() == 0) && (cols != 0)) {
+                    textAreaBean.setCols(cols);
+                }
+                if ((textAreaBean.getRows() == 0) && (rows != 0)) {
+                    textAreaBean.setRows(rows);
+                }
+                this.updateBaseComponentBean(textAreaBean);
+            }
+        } else {
             textAreaBean = new TextAreaBean();
             textAreaBean.setRows(rows);
             textAreaBean.setCols(cols);
             this.setBaseComponentBean(textAreaBean);
         }
-        if (!beanId.equals("")) {
-            //System.err.println("storing bean in the session");
-            store(getBeanKey(), textAreaBean);
-        }
+
         //debug();
 
         Object parentTag = getParent();
