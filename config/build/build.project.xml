@@ -26,7 +26,7 @@ Copyright:
     <property name="project.name" value="@PROJECT_NAME@"/>
     <property name="project.title" value="@PROJECT_TITLE@"/>
 
-    <property name="gridsphere.home" value="../.."/>
+    <!-- ow <property name="gridsphere.home" value="../.."/>  -->
 
     <property name="optimize"    value="false"/>
     <property name="debug"       value="on"/>
@@ -37,11 +37,12 @@ Copyright:
     <property name="release"         value="rc1" />
     <property name="version.release" value="${version} ${release}"/>
 
-    <property name="project"         value="${project.title} ${version.release}"/>
+    <property name="project"     value="${project.title} ${version.release}"/>
     <property name="project.api" value="${project.title} API ${version.release}" />
 
     <!-- GridSphere build and dist directories -->
-    <property name="gridsphere.base" value="../../"/>
+    <!-- home of the source code of gridsphere -->
+    <property name="GRIDSPHERE_PROJECT" value="../../"/>
 
     <!--- Type of SQL Database to use -->
     <property name="DATABASE_TYPE" value="${gridsphere.database.type}"/>
@@ -80,7 +81,7 @@ Copyright:
             <include name="*.jar"/>
         </fileset>
 
-        <fileset dir="${gridsphere.base}/lib">
+        <fileset dir="${GRIDSPHERE_PROJECT}/lib">
             <include name="*.jar"/>
             <include name="ext/*.jar"/>
         </fileset>
@@ -106,7 +107,9 @@ Copyright:
         <mkdir dir="${build.webapp}"/>
         <mkdir dir="${build.docs}"/>
 
-        <property name="GRIDSPHERE_HOME" value="${gridsphere.home}"/>
+        <!-- ow -->
+        <!-- home of deployed gridsphere -->
+        <property name="GRIDSPHERE_HOME" value="${env.CATALINA_HOME}/gridsphere"/>
         <property name="TEST_HOME" value="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/test"/>
 
         <echo message="--- Build environment for ${project} ---" />
@@ -227,7 +230,7 @@ Copyright:
             sourcepath="src:config/database/castor"
             private="true"
             doclet="org.castor.doclet.ddl.DDL"
-            docletpath="${gridsphere.base}/lib/ext/jdom.jar;${gridsphere.base}/lib/ext/castor-doclet.jar"
+            docletpath="${GRIDSPHERE_PROJECT}/lib/ext/jdom.jar;${GRIDSPHERE_PROJECT}/lib/ext/castor-doclet.jar"
             additionalparam=" -J-DFILE=${GRIDSPHERE_HOME}/${project.name}/database/create.sql -J-DDB_TYPE=db2 -J-DLOG=1">
             <classpath refid="classpath"/>
         </javadoc>
@@ -235,7 +238,7 @@ Copyright:
             sourcepath="src:config/database/castor"
             private="true"
             doclet="org.castor.doclet.jdo.JDO"
-            docletpath="${gridsphere.base}/lib/ext/jdom.jar;${gridsphere.base}/lib/ext/castor-doclet.jar"
+            docletpath="${GRIDSPHERE_PROJECT}/lib/ext/jdom.jar;${GRIDSPHERE_PROJECT}/lib/ext/castor-doclet.jar"
             additionalparam="-J-DFILE=${GRIDSPHERE_HOME}/${project.name}/database/docletmapping.xml -J-DLOG=1">
             <classpath refid="classpath"/>
         </javadoc>
@@ -385,7 +388,7 @@ Copyright:
 
         <antcall target="create-real-database"/>
 
-        <copy file="${gridsphere.base}/lib/portlet-widget-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
+        <copy file="${GRIDSPHERE_PROJECT}/lib/portlet-widget-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
 
         <copy todir="${project.webapp}/WEB-INF/lib">
             <fileset dir="lib">
