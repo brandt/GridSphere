@@ -302,7 +302,7 @@ Copyright:
     <!-- =================================================================== -->
     <target name="gridsphere-provider-jar" depends="compile" description="Create lib/gridsphere-provider.jar">
         <jar jarfile="${build.lib}/gridsphere-provider.jar" basedir="${build.classes}">
-            <include name="org/gridlab/gridsphere/provider/event"/>
+            <include name="org/gridlab/gridsphere/provider/event/**"/>
             <include name="org/gridlab/gridsphere/provider/portlet/beans/**"/>
             <include name="org/gridlab/gridsphere/provider/portletui/beans/**"/>
             <include name="org/gridlab/gridsphere/provider/portlet/beans/**"/>
