@@ -304,7 +304,6 @@ public class ActionPortlet extends AbstractPortlet {
      * @throws java.io.IOException if an I/O error occurs
      */
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
-        log.debug("In doView: ");
         String next = getNextState(request);
         log.debug("in ActionPortlet:doView next page is= " + next);
         if (next.endsWith(".jsp"))  {
@@ -389,6 +388,19 @@ public class ActionPortlet extends AbstractPortlet {
         PrintWriter out = response.getWriter();
         String message = getNextError(request);
         out.println(message);
+    }
+
+    protected String getLocalizedText(PortletRequest req, String key) {
+        User user = req.getUser();
+        String loc = (String)user.getAttribute(User.LOCALE);
+        Locale locale = null;
+        if (loc != null) {
+            locale = new Locale(loc, "", "");
+        } else {
+            locale = req.getLocale();
+        }
+        ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
+        return bundle.getString(key);
     }
 
     public String getParameter(PortletRequest request, String param) {
