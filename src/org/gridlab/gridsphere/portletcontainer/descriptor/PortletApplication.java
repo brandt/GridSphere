@@ -6,35 +6,70 @@
 
 package org.gridlab.gridsphere.portletcontainer.descriptor;
 
+import org.gridlab.gridsphere.portlet.PortletLog;
+
 public class PortletApplication {
-    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(PortletApplication.class.getName());
+    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletApplication.class);
 
-    private String Uid;                 // Uid of the Portletapplication
-    private String Name;                // Name of the
-    private Portlet Portlet;            // Portlet
+    private String Uid = new String();                 // Uid of the Portletapplication
+    private String Name = new String();                // Name of the
+    private Portlet Portlet = new Portlet();            // Portlet
 
+    /**
+     * gets the Uid of a PortletApplication
+     *
+     * @returns Uid of the PortletApplication
+     */
     public String getUid() {
         return Uid;
     }
 
+    /**
+     * sets the Uid of a PortletApplication
+     *
+     * @param uid uid of the PortletApplication
+     */
     public void setUid(String uid) {
-        Uid = uid;
+        this.Uid = uid;
     }
 
+    /**
+     * gets the name of a PortletApplication
+     *
+     * @returns name of the PortletApplication
+     */
     public String getName() {
         return Name;
     }
 
+    /**
+     * sets the name of a PortletApplication
+     *
+     * @param name name of a PortletApplication
+     */
     public void setName(String name) {
-        Name = name;
+        this.Name = name;
     }
 
+    /**
+     * gets the portlet of a PortletApplication
+     *
+     * @see portlet
+     * @returns portlet of a PortletApplication
+     */
     public Portlet getPortlet() {
         return Portlet;
     }
 
+
+    /**
+     * sets the portlet of a PortletApplication
+     *
+     * @see portlet
+     * @param portlet portlet of a PortletApplication
+     */
     public void setPortlet(Portlet portlet) {
-        Portlet = portlet;
+        this.Portlet = portlet;
     }
 }
 

@@ -8,6 +8,7 @@ package org.gridlab.gridsphere.portletcontainer.descriptor;
 import org.gridlab.gridsphere.core.persistence.ConfigurationException;
 import org.gridlab.gridsphere.core.persistence.RestoreException;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerXml;
+import org.gridlab.gridsphere.portlet.PortletLog;
 
 import java.util.Iterator;
 import java.util.Vector;
@@ -15,10 +16,10 @@ import java.util.List;
 
 public class PortletDeploymentDescriptor {
 
+    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletDeploymentDescriptor.class);
 
-    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(PortletDeploymentDescriptor.class.getName());
 
-    private Vector PortletApp;
+    private Vector PortletApp = new Vector();
 
     /**
      * construcs PortletDeploymentDescriptor
@@ -71,10 +72,10 @@ public class PortletDeploymentDescriptor {
         try {
              pd = (PortletDefinition)pmx.restoreObject();
         } catch (RestoreException e) {
-            cat.error("RestoreError "+e.getMessage());
+            log.error("RestoreError "+e.getMessage());
             throw new PortletDeploymentDescriptorException("Unable to restore: "+e.getMessage());
         } catch (ConfigurationException e) {
-            cat.error("ConfigurationError "+e);
+            log.error("ConfigurationError "+e);
             throw new PortletDeploymentDescriptorException("Configuration error: "+e.getMessage());
         }
 
