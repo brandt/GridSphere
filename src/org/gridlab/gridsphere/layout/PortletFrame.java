@@ -185,6 +185,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      * @throws IOException if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
+
+        titleBar.setActive(true);
+
         super.actionPerformed(event);
 
         PortletComponentEvent titleBarEvent = event.getLastRenderEvent();

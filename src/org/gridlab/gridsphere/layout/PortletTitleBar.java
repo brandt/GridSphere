@@ -38,6 +38,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     private List allowedWindowStates = new ArrayList();
     private String errorMessage = "";
     private boolean hasError = false;
+    private boolean isActive = false;
 
 
     /**
@@ -189,6 +190,14 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      */
     public String getPortletClass() {
         return portletClass;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
     /**
@@ -529,7 +538,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.actionPerformed(event);
-
+        isActive = true;
         PortletComponentEvent lastEvent = event.getLastRenderEvent();
 
         PortletTitleBarEvent titleBarEvent = new PortletTitleBarEventImpl(this, event, COMPONENT_ID);
@@ -637,7 +646,14 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         req.setAttribute(SportletProperties.PORTLET_WINDOW, windowState);
         PrintWriter out = res.getWriter();
 
-        out.println("<tr><td class=\"window-title\">");
+
+
+        if (isActive) {
+            out.println("<tr><td class=\"window-title-active\">");
+        } else {
+            out.println("<tr><td class=\"window-title-inactive\">");
+        }
+        isActive = false;
         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>");
 
         // Output portlet mode icons
