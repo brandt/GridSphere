@@ -648,6 +648,11 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <name>rows</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>cols</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
