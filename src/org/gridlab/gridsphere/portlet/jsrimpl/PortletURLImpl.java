@@ -245,7 +245,7 @@ public class PortletURLImpl implements PortletURL {
      */
     public String toString () {
         StringBuffer s = new StringBuffer();
-        if (isSecure) {
+        if (req.isSecure() || isSecure) {
             s.append("https://");
         } else {
             s.append("http://");
