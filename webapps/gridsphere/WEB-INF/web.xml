@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!--
+ $Id$
+-->
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/j2ee/dtds/web-app_2.3.dtd">
+
+<web-app>
+
+    <servlet>
+        <servlet-name>gridsphere</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portletcontainer.GridSphereServlet</servlet-class>
+        <init-param>
+            <param-name>gridsphere.properties</param-name>
+            <param-value>WEB-INF/conf/gridsphere.properties</param-value>
+        </init-param>
+        <init-param>
+            <param-name>PortletServices.properties</param-name>
+            <param-value>WEB-INF/conf/PortletServices.properties</param-value>
+        </init-param>
+        <init-param>
+            <param-name>log4j.properties</param-name>
+            <param-value>WEB-INF/conf/log4j.properties</param-value>
+        </init-param>
+        <init-param>
+            <param-name>portlet.xml</param-name>
+            <param-value>WEB-INF/conf/portlet.xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>portlet-mapping.xml</param-name>
+            <param-value>WEB-INF/conf/portlet-mapping.xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>layout.xml</param-name>
+            <param-value>WEB-INF/conf/layout.xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>layout-mapping.xml</param-name>
+            <param-value>WEB-INF/conf/layout-mapping.xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>user-layouts</param-name>
+            <param-value>user-layouts</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <servlet-name>Redirect</servlet-name>
+        <jsp-file>/jsp/redirect.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+       <servlet-name>gridsphere</servlet-name>
+       <url-pattern>/gridsphere</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+       <servlet-name>Redirect</servlet-name>
+       <url-pattern>/servlet/*</url-pattern>
+    </servlet-mapping>
+
+    <mime-mapping>
+      <extension>wbmp</extension>
+      <mime-type>image/vnd.wap.wbmp</mime-type>
+    </mime-mapping>
+
+    <mime-mapping>
+      <extension>wml</extension>
+      <mime-type>text/vnd.wap.wml</mime-type>
+    </mime-mapping>
+
+    <mime-mapping>
+      <extension>wmls</extension>
+      <mime-type>text/vnd.wap.wmlscript</mime-type>
+    </mime-mapping>
+
+
+</web-app>
