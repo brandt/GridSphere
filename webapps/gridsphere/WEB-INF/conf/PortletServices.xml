@@ -6,7 +6,7 @@
         <interface>org.gridlab.gridsphere.services.container.registry.PortletRegistryService</interface>
         <implementation>org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryServiceImpl</implementation>
         <service-config>
-            <param-name>webapp</param-name>
+            <param-name>coreContext</param-name>
             <param-value>coreportlets</param-value>
         </service-config>
     </service>
