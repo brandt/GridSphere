@@ -10,7 +10,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 /**
- * The User interface is an abstract view on the user-specific data.
+ * The Role interface is an abstract view on the user-specific data.
  * Apart from a set of pre-defined, fixed set of attributes,
  * the interface gives access to user data as well.
  */
@@ -20,7 +20,7 @@ public class GuestUser implements User {
     private Hashtable store = new Hashtable();
 
     private static GuestUser instance = null;
-    // Data fields that make up the User object
+    // Data fields that make up the Role object
     private String familyName = null;
     private String fullName = null;
     private String givenName = null;
@@ -30,8 +30,8 @@ public class GuestUser implements User {
     private long lastLoginTime;
 
     private GuestUser() {
-        familyName = "User";
-        fullName = "Guest User";
+        familyName = "Role";
+        fullName = "Guest Role";
         givenName = "Guest";
         emailAddress = "no email";
         id = "500";

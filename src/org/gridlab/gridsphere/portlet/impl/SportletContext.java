@@ -193,7 +193,7 @@ public class SportletContext implements PortletContext {
     }
 
     /**
-     * Returns the major version of the Portlet API that this portlet container supports.
+     * Returns the major version of the PortletInfo API that this portlet container supports.
      *
      * @return the major version
      */
@@ -202,7 +202,7 @@ public class SportletContext implements PortletContext {
     }
 
     /**
-     * Returns the minor version of the Portlet API that this portlet container supports.
+     * Returns the minor version of the PortletInfo API that this portlet container supports.
      *
      * @return the minor version
      */

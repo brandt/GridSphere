@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.portlet;
 
 import java.util.Enumeration;
 import java.util.Locale;
+import java.util.List;
 
 /**
  * The PortletSettings interface provides the portlet with its dynamic configuration.
@@ -38,6 +39,22 @@ public interface PortletSettings {
      * @return the title of the portlet
      */
     public String getTitle(Locale locale, Client client);
+
+    /**
+     * Returns the list of supported groups
+     * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
+     *
+     * @return the list of supported groups
+     */
+    public List getSupportedGroups();
+
+    /**
+     * Returns the list of supported roles
+     * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
+     *
+     * @return the list of supported roles
+     */
+    public List getSupportedRoles();
 
     /**
      * Removes the attribute with the given name.

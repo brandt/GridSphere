@@ -7,7 +7,7 @@ package org.gridlab.gridsphere.portlet;
 import java.util.Enumeration;
 
 /**
- * The User interface is an abstract view on the user-specific data.
+ * The Role interface is an abstract view on the user-specific data.
  * Apart from a set of pre-defined, fixed set of attributes,
  * the interface gives access to user data as well.
  */

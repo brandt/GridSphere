@@ -137,14 +137,14 @@ public interface PortletContext extends ServletContext {
             throws PortletServiceUnavailableException, PortletServiceNotFoundException;
 
     /**
-     * Returns the major version of the Portlet API that this portlet container supports.
+     * Returns the major version of the PortletInfo API that this portlet container supports.
      *
      * @return the major version
      */
     public int getMajorVersion();
 
     /**
-     * Returns the minor version of the Portlet API that this portlet container supports.
+     * Returns the minor version of the PortletInfo API that this portlet container supports.
      *
      * @return the minor version
      */

@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface PortletGroup {
 
+    public boolean isBaseGroup();
+
     public String getName();
 
     public int getGroup();

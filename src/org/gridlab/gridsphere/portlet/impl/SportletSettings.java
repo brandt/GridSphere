@@ -4,14 +4,15 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.gridlab.gridsphere.portlet.AccessDeniedException;
-import org.gridlab.gridsphere.portlet.Client;
-import org.gridlab.gridsphere.portlet.PortletSettings;
-import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
+import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication;
+import org.gridlab.gridsphere.portletcontainer.descriptor.PortletInfo;
+import org.gridlab.gridsphere.portletcontainer.descriptor.ConfigParam;
+import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * The SportletSettings class provides the portlet with its dynamic configuration.
@@ -22,10 +23,67 @@ import java.util.Locale;
 public class SportletSettings implements PortletSettings {
 
     private Hashtable store = new Hashtable();
+    private String title = "";
+    private List roleList = new Vector();
+    private List groupList = new Vector();
 
-    public SportletSettings(PortletDeploymentDescriptor pdd) {
-        // Load settings from portlet deployment descriptor
-        // Somehow get locale specific Titles from portlet.xml
+    /**
+     * SportletSettings constructor
+     * Create a PortletSettings object from a PortletApplication deployment descriptor object
+     *
+     * @param portletApp the PortletApplication deployment descriptor information
+     * @param knownGroups a list of known groups obtained from the AccessControlService
+     * @param knownRoles a list of known roles obtained from the AccessControlService
+     */
+    public SportletSettings(PortletApplication portletApp, List knownGroups, List knownRoles) {
+
+        PortletInfo portlet = portletApp.getPortletInfo();
+        title = portlet.getName();
+        store.put("portlet-description", portlet.getDescription());
+
+        // Stick <config-param> in store
+        Iterator configParamsIt = portlet.getConfigParamList().iterator();
+        while (configParamsIt.hasNext()) {
+            ConfigParam configParam = (ConfigParam)configParamsIt.next();
+            store.put(configParam.getParamName(), configParam.getParamValue());
+        }
+
+        // Get groups list
+        List groups = portlet.getGroupList();
+
+        // Make sure groups exist
+        while (knownGroups.iterator().hasNext()) {
+            PortletGroup pg = (PortletGroup)knownGroups.iterator().next();
+            while (groups.iterator().hasNext()) {
+                if (pg.getName().equalsIgnoreCase((String)groups.iterator().next())) {
+                    groupList.add(pg);
+                    break;
+                }
+            }
+        }
+
+        // groupList should at least contain BASE group if empty
+        if (groupList.isEmpty()) {
+            groupList.add(SportletGroup.getBaseGroup());
+        }
+
+        // Get roles list
+        List roles = portlet.getRoleList();
+        // Make sure roles exist
+        while (knownRoles.iterator().hasNext()) {
+            PortletRole pr = (PortletRole)knownRoles.iterator().next();
+            while (roles.iterator().hasNext()) {
+                if (pr.getRoleName().equalsIgnoreCase((String)roles.iterator().next())) {
+                    roleList.add(pr);
+                    break;
+                }
+            }
+        }
+
+        // roleList should at least contain GUEST role if empty
+        if (roleList.isEmpty()) {
+            roleList.add(SportletRole.getGuestRole());
+        }
     }
 
     /**
@@ -55,8 +113,27 @@ public class SportletSettings implements PortletSettings {
      * @return the title of the portlet
      */
     public String getTitle(Locale locale, Client client) {
-        // XXX: FILL ME IN
-        return null;
+        return title;
+    }
+
+    /**
+     * Returns the list of supported groups
+     * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
+     *
+     * @return the list of supported PortletGroup objects
+     */
+    public List getSupportedGroups() {
+        return groupList;
+    }
+
+    /**
+     * Returns the list of supported roles
+     * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
+     *
+     * @return the list of supported PortletRole objects
+     */
+    public List getSupportedRoles() {
+        return roleList;
     }
 
     /**

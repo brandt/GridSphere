@@ -178,7 +178,7 @@ public class SportletRequestImpl implements SportletRequest {
      *
      * @see GuestUser
      *
-     * @return the User object
+     * @return the Role object
      */
     public User getUser() {
         return user;
@@ -258,7 +258,7 @@ public class SportletRequestImpl implements SportletRequest {
 
     /**
      * Defines which portlet mode is shown next. Once the mode is changed it cannot be
-     * changed back to Portlet.ModeModifier.REQUESTED.
+     * changed back to PortletInfo.ModeModifier.REQUESTED.
      *
      * This function may only be used during event processing, in any other case the call has no effect.
      *

@@ -99,7 +99,7 @@ public interface PortletRequest extends HttpServletRequest {
      * Returns the user object. The user object contains useful information about the user and his or her preferences.
      * If the user has not logged in or does not grant access to the portlet, this method returns null
      *
-     * @return the User object
+     * @return the Role object
      */
     public User getUser();
 
@@ -266,7 +266,7 @@ public interface PortletRequest extends HttpServletRequest {
 
     /**
      * Defines which portlet mode is shown next. Once the mode is changed it cannot be
-     * changed back to Portlet.ModeModifier.REQUESTED.
+     * changed back to PortletInfo.ModeModifier.REQUESTED.
      *
      * This function may only be used during event processing, in any other case the call has no effect.
      *

@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.util.Enumeration;
 
 /**
- * The abstract Portlet is used by the portlet container to invoke the portlet.
+ * The abstract PortletInfo is used by the portlet container to invoke the portlet.
  * Every portlet has to implement this abstract class, either by deriving directly from it,
  * or by using one of the abstract portlet implementations.
  *
@@ -231,14 +231,14 @@ public abstract class Portlet extends HttpServlet
     public abstract void logout(PortletSession session);
 
     /**
-     * Returns the time the response of the Portlet  object was last modified, in milliseconds since midnight
+     * Returns the time the response of the PortletInfo  object was last modified, in milliseconds since midnight
      * January 1, 1970 GMT. If the time is unknown, this method returns a negative number (the default).
      *
      * Portlets that can quickly determine their last modification time should override this method.
      * This makes browser and proxy caches work more effectively, reducing the load on server and network resources.
      *
      * @param request the portlet request
-     * @return long a long integer specifying the time the response of the Portlet
+     * @return long a long integer specifying the time the response of the PortletInfo
      * object was last modified, in milliseconds since midnight, January 1, 1970 GMT, or -1 if the time is not known
      */
     public abstract long getLastModified(PortletRequest request);
@@ -260,13 +260,13 @@ public abstract class Portlet extends HttpServlet
     }
 
     /**
-     * Initializes the Portlet/Servlet using the servlet.xml file and registers the portlet with
+     * Initializes the PortletInfo/Servlet using the servlet.xml file and registers the portlet with
      * the PortletRegistryService
      */
     public final void init(ServletConfig config) throws ServletException {
         super.init(config);
         log.info("in init(ServletConfig)");
-        /*
+/*
             This will register the portlet (servlet) with the registry service on startup.
             I took this path initially thinking I could forward to remote third-party
             portlets outside of gridsphere.jar and provide their context to the registry
@@ -280,7 +280,7 @@ public abstract class Portlet extends HttpServlet
             registryService = (PortletRegistryService)context.getService(PortletRegistryService.class);
             id = registryService.registerPortlet(registeredPortlet);
         } catch (Exception e) {
-            throw new ServletException("Unable to Initialize Portlet " + e.getMessage());
+            throw new ServletException("Unable to Initialize PortletInfo " + e.getMessage());
         }
         */
     }

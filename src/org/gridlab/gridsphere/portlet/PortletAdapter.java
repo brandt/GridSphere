@@ -11,10 +11,10 @@ import java.io.IOException;
 import java.util.Hashtable;
 
 /**
- * The PortletAdapter provides a default implementation for the Portlet interface.
+ * The PortletAdapter provides a default implementation for the PortletInfo interface.
  * It is recommended not to extend the portlet interface directly.
  * Rather, a portlet should derive from this or any other derived class, because changes in
- * the Portlet interface are then mostly likely to be catched by the default implementation,
+ * the PortletInfo interface are then mostly likely to be catched by the default implementation,
  * rather than breaking your portlet implementation.
  *
  * The virtual instance is created and destroyed with the login() and logout() methods, respectively.
@@ -164,14 +164,14 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
     }
 
     /**
-     * Returns the time the response of the Portlet  object was last modified, in milliseconds since midnight
+     * Returns the time the response of the PortletInfo  object was last modified, in milliseconds since midnight
      * January 1, 1970 GMT. If the time is unknown, this method returns a negative number (the default).
      *
      * Portlets that can quickly determine their last modification time should override this method.
      * This makes browser and proxy caches work more effectively, reducing the load on server and network resources.
      *
      * @param request the portlet request
-     * @return long a long integer specifying the time the response of the Portlet
+     * @return long a long integer specifying the time the response of the PortletInfo
      * object was last modified, in milliseconds since midnight, January 1, 1970 GMT, or -1 if the time is not known
      */
     public long getLastModified(PortletRequest request) {
