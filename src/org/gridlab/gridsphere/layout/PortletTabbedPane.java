@@ -22,7 +22,7 @@ import java.io.PrintWriter;
 public class PortletTabbedPane extends BasePortletComponent implements PortletTabListener {
 
     private List tabs = new ArrayList();
-    private int selectedIndex = -1;
+    private int selectedIndex = 0;
     private String style = "menu";
 
     public PortletTabbedPane() {}
@@ -234,7 +234,6 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
 
         String[] links = makeTabLinks(event);
 
-        System.err.println("in tabbed pane: style=" + style);
         if (style.equals("sub-menu")) {
             doRenderSubMenu(event, links);
         } else {
