@@ -82,9 +82,10 @@ public class LoginPortlet extends AbstractPortlet {
                     log.info("YO WE NOT IN PORTAL!");
                     try {
                         // Retrieve login parameters from request
-                        Map parameters = req.getParameterMap();
+                        //Map parameters = req.getParameterMap();
                         // Attempt to login portlet user
-                        User user = loginService.login(parameters);
+                        //User user = loginService.login(parameters);
+                        User user = loginService.login(username, password);
                         // Attach portlet user to portlet session
                         session.setAttribute(GridSphereProperties.USER, user);
                     } catch (AuthenticationException err) {

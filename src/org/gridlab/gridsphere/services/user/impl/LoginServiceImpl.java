@@ -21,6 +21,7 @@ import org.gridlab.gridsphere.services.user.LoginService;
 import org.gridlab.gridsphere.services.user.UserManagerService;
 import org.gridlab.gridsphere.services.security.AuthenticationModule;
 import org.gridlab.gridsphere.services.security.AuthenticationException;
+import org.gridlab.gridsphere.services.security.impl.PasswordAuthenticationModule;
 
 import java.util.Vector;
 import java.util.List;
@@ -40,6 +41,7 @@ public class LoginServiceImpl
     public void init(PortletServiceConfig config) {
         _log.info("Entering init()");
         initServices();
+        initAuthenticationModules();
         _log.info("Exiting init()");
     }
 
@@ -54,6 +56,10 @@ public class LoginServiceImpl
         } catch (Exception e) {
             _log.error("Unable to get instance of password manager service!", e);
         }
+    }
+
+    private void initAuthenticationModules() {
+        authenticationModules.add(new PasswordAuthenticationModule());
     }
 
     public void destroy() {
@@ -126,23 +132,21 @@ public class LoginServiceImpl
 
     private User getUser(String username)
             throws AuthenticationException {
+        _log.debug("Attempting to retrieve user " + username);
         User user = null;
         if (username == null) {
             AuthenticationException ex = new AuthenticationException();
             ex.putInvalidParameter("username", "No username provided.");
             throw ex;
         }
-        username = username.trim();
-        if (username.equals("root")) {
-            user = new SportletUserImpl();
-        } else {
-            user = this.userManager.getUser(username);
-            if (user == null) {
-                AuthenticationException ex = new AuthenticationException();
-                ex.putInvalidParameter("username", "Invalid username provided.");
-                throw ex;
-            }
+        user = this.userManager.getUser(username);
+        if (user == null) {
+            _log.debug("Unable to retrieve user " + username);
+            AuthenticationException ex = new AuthenticationException();
+            ex.putInvalidParameter("username", "Invalid username provided.");
+            throw ex;
         }
+        _log.debug("Successfully retrieved user " + username);
         return user;
     }
 }

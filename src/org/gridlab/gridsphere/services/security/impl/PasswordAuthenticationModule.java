@@ -48,23 +48,21 @@ public class PasswordAuthenticationModule implements AuthenticationModule {
 
     public void authenticate(User user, String password)
             throws AuthenticationException {
+        _log.debug("Entering authenticate");
         // Check that password is not null
         if (password == null) {
-            AuthenticationException ex = new AuthenticationException();
-            ex.putInvalidParameter("password", "Password is not provided.");
-            throw ex;
-        }
-        // Check that password is not blank
-        password = password.trim();
-        if (password.length() == 0) {
-            AuthenticationException ex = new AuthenticationException();
-            ex.putInvalidParameter("password", "Password is blank.");
+            String msg = "Password is not provided.";
+            _log.debug(msg);
+            AuthenticationException ex = new AuthenticationException(msg);
+            ex.putInvalidParameter("password", msg);
             throw ex;
         }
         // Check that password maps to the given user
         if (!this.passwordManager.isPasswordCorrect(user, password)) {
-            AuthenticationException ex = new AuthenticationException();
-            ex.putInvalidParameter("password", "Incorrect password provided.");
+            String msg = "Incorrect password provided.";
+            _log.debug(msg);
+            AuthenticationException ex = new AuthenticationException(msg);
+            ex.putInvalidParameter("password", msg);
             throw ex;
         }
     }

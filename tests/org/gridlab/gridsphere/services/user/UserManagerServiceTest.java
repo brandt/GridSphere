@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.security.acl.impl.UserACL;
+import org.gridlab.gridsphere.services.security.AuthenticationException;
 import org.gridlab.gridsphere.services.user.impl.AccountRequestImpl;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.ConfigurationException;
@@ -29,6 +30,7 @@ public class UserManagerServiceTest extends ServiceTest {
     private static AccessControlService aclService = null;
     private static AccessControlManagerService aclManagerService = null;
     private static UserManagerService userManager = null;
+    private static LoginService loginService = null;
     private PersistenceManagerRdbms pm = null;
     private PortletGroup portal, triana, cactus;
     private User superuser;
@@ -55,6 +57,7 @@ public class UserManagerServiceTest extends ServiceTest {
             aclService = (AccessControlService)factory.createPortletService(AccessControlService.class, null, true);
             aclManagerService = (AccessControlManagerService)factory.createPortletService(AccessControlManagerService.class, null, true);
             userManager = (UserManagerService)factory.createPortletService(UserManagerService.class, null, true);
+            loginService = (LoginService)factory.createPortletService(LoginService.class, null, true);
         } catch (Exception e) {
             log.error("Unable to initialize services: ", e);
         }
@@ -192,7 +195,14 @@ public class UserManagerServiceTest extends ServiceTest {
     }
 
     public User getSuperUser() {
-        return userManager.getUser("root");
+        User superUser = null;
+        //return userManager.getUser("root");
+        try {
+          superUser = loginService.login("root", "");
+        } catch (AuthenticationException e) {
+            fail("Should be able to login as root!");
+        }
+        return superUser;
     }
 
     // === tests

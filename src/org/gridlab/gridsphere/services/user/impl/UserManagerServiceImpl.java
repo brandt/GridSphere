@@ -586,10 +586,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @return requested user object
      */
     public User getUser(String name) {
-        String command =
-                "select u from "+jdoSUImpl+" u where UserID=\"" + name + "\"";
-        return selectUser(command);
-
+        return getSportletUser(name);
     }
 
     /**
@@ -597,7 +594,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     private SportletUserImpl getSportletUser(String name) {
         String command =
-                "select u from "+jdoSUImpl+" u where UserID=\"" + name + "\"";
+                "select u from "+jdoSUImpl+" u where u.UserID=\"" + name + "\"";
         return selectUser(command);
 
     }
@@ -609,7 +606,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public User getUserByID(String ID) {
         String command =
-                "select u from "+jdoSUImpl+" u where ObjectID=\"" + ID + "\"";
+                "select u from "+jdoSUImpl+" u where u.ObjectID=\"" + ID + "\"";
         return selectUser(command);
     }
 

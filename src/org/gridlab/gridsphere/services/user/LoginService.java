@@ -22,9 +22,28 @@ public interface LoginService extends PortletService {
 
     public AuthenticationModule getAuthenticationModule(String name);
 
-    public User login(String username, String password)
+    /**
+     * Login a user with the given login name and password.
+     * Returns the associated user if login succeeds.
+     * Throws an AuthenticationException if login fails.
+     *
+     * @param String The login name or user id.
+     * @param String The login password.
+     * @return User The associated user.
+     * @throws AuthenticationException If login unsuccessful
+     */
+    public User login(String loginName, String loginPassword)
             throws AuthenticationException;
 
+    /**
+     * Login a user with the given login parameters.
+     * Returns the associated user if login succeeds.
+     * Throws an AuthenticationException if login fails.
+     *
+     * @param Map The login parameters.
+     * @return User The associated user.
+     * @throws AuthenticationException If login unsuccessful
+     */
     public User login(Map parameters)
             throws AuthenticationException;
 }
