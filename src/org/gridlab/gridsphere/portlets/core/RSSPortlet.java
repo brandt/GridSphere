@@ -93,6 +93,9 @@ public class RSSPortlet extends AbstractPortlet {
 
         TextAreaBean tab = (TextAreaBean)form.getElementBean("tab");
         System.out.println("TextArea value :"+tab.getValue());
+
+        LabelBean lb = (LabelBean)form.getElementBean("lbb-label");
+        System.out.println("COLOR of the label was:" +lb.getColor());
         //System.out.println("Selected Item lbb (value)"+lbb.getSelectedItem().getValue());
 
 
@@ -236,6 +239,9 @@ public class RSSPortlet extends AbstractPortlet {
         lbb.add("Outlook XP","OutlookX");
         lbb.setSize(7);
         lbb.setMultiple(true);
+        lbb.setLabel("Microsoft");
+        Label label = lbb.getLabel();
+        label.setColor("red");
         lbb.store("lbb",request);
 
         // under the covers, a fieldbean is stored and mapped to f_name
