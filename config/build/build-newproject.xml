@@ -110,7 +110,6 @@
         <copy overwrite="true" file="config/template/portlet-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/portlet.xml"/>
         <copy overwrite="true" file="config/template/layout-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/layout.xml"/>
         <copy overwrite="true" file="config/template/web-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/web.xml"/>
-        <move file="${project.dir}/webapp/WEB-INF/PortletServices.xml" tofile="${project.dir}/webapp/WEB-INF/PortletServices-jsr.xml"/>
     </target>
 
     <target name="checkgs" unless="use.jsr">
