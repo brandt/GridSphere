@@ -1,3 +1,7 @@
+/*
+ * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
+ * @version $Id$
+ */
 package org.gridlab.gridsphere.services.user;
 
 import org.gridlab.gridsphere.portlet.service.spi.ServiceTest;
@@ -19,10 +23,6 @@ import junit.framework.TestResult;
 import java.util.List;
 import java.util.Vector;
 
-/*
- * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
- * @version $Id$
- */
 public class UserManagerServiceTest extends ServiceTest {
 
     private static PortletLog log = SportletLog.getInstance(UserManagerServiceTest.class);
