@@ -63,6 +63,14 @@ public class PortletMessageServiceImpl implements PortletMessageService, Portlet
         messages.put(portletName, l);
     }
 
+    /**
+     * Retrieves the messages for the given portlet name and removes them from the queue
+     *
+     * @para portletName the name of the portlet(s) to send the message to
+     * @return a list of PortletMessage objects
+     *
+     * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
+     */
     public List retrieveMessages(String portletName) throws AccessDeniedException {
         List messageList = new ArrayList();
         List l = (List)messages.get(portletName);
