@@ -27,7 +27,6 @@ public class URLImageTag extends BaseComponentTag {
     }
 
     public void setUrl(String url) {
-        System.out.println("============== URL WAS SET to"+url);
         this.url = url;
     }
 
@@ -36,7 +35,6 @@ public class URLImageTag extends BaseComponentTag {
     }
 
     public void setTitle(String title) {
-        System.out.println("============== TITEL WAS SET TO "+title);
         this.title = title;
     }
 
@@ -49,42 +47,31 @@ public class URLImageTag extends BaseComponentTag {
     }
 
     public int doStartTag() throws JspException {
-
         if (!beanId.equals("")) {
-           urlImageBean = (URLImageBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
-           if (urlImageBean == null) {
-               urlImageBean = new URLImageBean();
-           } else {
-               url = urlImageBean.getUrl();
-               alt = urlImageBean.getAlt();
-               title = urlImageBean.getTitle();
-           }
-       } else {
-            urlImageBean = new URLImageBean(); // worry about this later owehrens
-       }
-       return EVAL_BODY_INCLUDE;
-    }
-
-    public int doEndTag() throws JspException {
-
-        Object parentTag = getParent();
-        if (parentTag instanceof ContainerTag) {
-            ContainerTag containerTag = (ContainerTag)parentTag;
-            containerTag.addTagBean(urlImageBean);
-            //System.err.println("inTextTag: adding " + textBean.toString());
-        } else {
-            try {
-                JspWriter out = pageContext.getOut();
-                out.print(urlImageBean.toString());
-            } catch (Exception e) {
-                throw new JspException(e.getMessage());
+            urlImageBean = (URLImageBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            if (urlImageBean == null) {
+                urlImageBean = new URLImageBean();
+                urlImageBean.setAlt(alt);
+                urlImageBean.setTitle(title);
+                urlImageBean.setUrl(url);
             }
+        } else {
+            urlImageBean = new URLImageBean();
+            urlImageBean.setAlt(alt);
+            urlImageBean.setTitle(title);
+            urlImageBean.setUrl(url);
+        }
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(urlImageBean.toStartString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
         }
 
-        return EVAL_BODY_INCLUDE;
+        return SKIP_BODY;
     }
 
 }
- 
+
 
 

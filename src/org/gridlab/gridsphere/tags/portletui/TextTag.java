@@ -43,13 +43,14 @@ public class TextTag extends BaseComponentTag {
             if (textBean == null) {
                 textBean = new TextBean(beanId);
                 this.setBaseComponentBean(textBean);
+                textBean.setStyle(style);
             }
         } else {
             textBean = new TextBean();
             this.setBaseComponentBean(textBean);
+            textBean.setStyle(style);
         }
 
-        textBean.setStyle(style);
 
         if (key != null) {
             Locale locale = pageContext.getRequest().getLocale();

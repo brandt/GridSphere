@@ -17,8 +17,6 @@ public class TextTag extends BaseTag {
     protected transient static PortletLog log = SportletLog.getInstance(TextTag.class);
 
     protected String text = new String();
-    private TextBean textelement = new TextBean();
-
 
     public String getText() {
         return text;

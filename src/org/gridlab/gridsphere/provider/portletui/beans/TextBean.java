@@ -16,6 +16,9 @@ public class TextBean extends BaseComponentBean implements TagBean {
     public static final String TEXT_MESSAGE_STYLE = "portlet-frame-message";
     public static final String TEXT_ERROR_STYLE = "portlet-frame-message-alert";
 
+    public static final String BOLD = "bold";
+    public static final String ITALIC = "italic";
+
     protected String style = "";
 
     public TextBean() {
@@ -45,6 +48,7 @@ public class TextBean extends BaseComponentBean implements TagBean {
     }
 
     public String toStartString() {
+
         if (style.equalsIgnoreCase("error")) {
             this.cssStyle = TEXT_ERROR_STYLE;
         } else if (style.equalsIgnoreCase("message")) {
@@ -58,6 +62,11 @@ public class TextBean extends BaseComponentBean implements TagBean {
     }
 
     public String toEndString() {
+        if (style.equalsIgnoreCase(BOLD)) {
+            value = "<b>" + value + "</b>";
+        } else if (style.equalsIgnoreCase(ITALIC)) {
+            value = "<i>" + value + "</i>";
+        }
         return value;
     }
 }
