@@ -650,10 +650,11 @@ public class GroupManagerPortlet extends ActionPortlet {
                 // Get next user
                 User user = (User) userIterator.next();
                 //String userID = user.getID();
-                String userName = user.getUserName();
+                String fullName = user.getFullName();
 
                 ListBoxItemBean item = new ListBoxItemBean();
-                item.setValue(userName);
+                item.setName(user.getUserName());
+                item.setValue(fullName);
                 usersNotInGroupListBox.addBean(item);
             }
         }
@@ -781,7 +782,7 @@ public class GroupManagerPortlet extends ActionPortlet {
     private void createSuccessMessage(FormEvent event, String msg) {
         MessageBoxBean msgBox = event.getMessageBoxBean("msg");
         msgBox.setMessageType(MessageStyle.MSG_SUCCESS);
-        msgBox.appendText(msg);
+        msgBox.setValue(msg);
     }
 
 
