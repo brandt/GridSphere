@@ -237,7 +237,7 @@ public abstract class ActionTag extends BaseComponentTag {
             if (compId == null) {
                 portletAction = new DefaultPortletAction(action);
             } else {
-                portletAction = new DefaultPortletAction(compId + "." + action);
+                portletAction = new DefaultPortletAction(compId + "%" + action);
             }
         }
         if (!paramBeans.isEmpty()) {
@@ -256,7 +256,7 @@ public abstract class ActionTag extends BaseComponentTag {
             if (compId == null) {
                 actionURL.setAction(action);
             } else {
-                actionURL.setAction(compId + "." + action);
+                actionURL.setAction(compId + "%" + action);
             }
         }
 
@@ -298,7 +298,7 @@ public abstract class ActionTag extends BaseComponentTag {
             if (compId == null) {
                 portletAction = new DefaultPortletAction(action);
             } else {
-                portletAction = new DefaultPortletAction(compId + "." + action);
+                portletAction = new DefaultPortletAction(compId + "%" + action);
             }
 
             Iterator it = paramBeans.iterator();
