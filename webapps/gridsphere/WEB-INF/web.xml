@@ -90,11 +90,6 @@
        <url-pattern>/adminstration/access</url-pattern>
     </servlet-mapping>
 
-    <servlet-mapping>
-       <servlet-name>Redirect</servlet-name>
-       <url-pattern>/servlet/*</url-pattern>
-    </servlet-mapping>
-
     <mime-mapping>
       <extension>wbmp</extension>
       <mime-type>image/vnd.wap.wbmp</mime-type>
