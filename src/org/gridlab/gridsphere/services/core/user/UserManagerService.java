@@ -9,7 +9,7 @@ import org.gridlab.gridsphere.portlet.service.PortletService;
 
 import java.util.List;
 
-public interface UserManagerService extends PortletService {
+public interface UserManagerService  extends LoginUserModule {
 
     /**
       * Administrators can retrieve all pending account request

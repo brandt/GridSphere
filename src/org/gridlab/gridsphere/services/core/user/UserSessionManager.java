@@ -29,7 +29,6 @@ public class UserSessionManager implements PortletSessionListener {
 
     public PortletSession getSession(User user) {
         return (PortletSession)userSessions.get(user.getID());
-
     }
 
     public void setSession(User user, PortletSession session) {
@@ -42,11 +41,11 @@ public class UserSessionManager implements PortletSessionListener {
         Iterator it = userSessions.keySet().iterator();
         while (it.hasNext()) {
             String u = (String)it.next();
-                PortletSession s = (PortletSession)userSessions.get(u);
-                if (s.getId().equals(session.getId())) {
-                    return u;
-                }
+            PortletSession s = (PortletSession)userSessions.get(u);
+            if (s.getId().equals(session.getId())) {
+                return u;
             }
+        }
         return null;
     }
 

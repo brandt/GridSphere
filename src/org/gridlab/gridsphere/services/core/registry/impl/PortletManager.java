@@ -125,7 +125,9 @@ public class PortletManager implements PortletManagerService {
     }
 
     public synchronized void installPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+        System.err.println("adding web app" + webApplicationName);
         addWebApp(webApplicationName);
+        System.err.println("initing web app" + webApplicationName);
         initPortletWebApplication(webApplicationName, req, res);
     }
 
