@@ -94,6 +94,10 @@ Build include file for the GridSphere Portal source code, see build.xml
     <!-- =================================================================== -->
     <target name="docbook" depends="setenv, check-docbook" description="Builds the GridSphere docbook documentation." unless="docbook.exists">
         <ant dir="${docbook.dir}" target="docbook" inheritAll="false"/>
+	<copy todir="${gridsphere.build}/docs">
+        <fileset dir="docs/docbook/build/docs"/>
+	</copy>
+        <delete dir="docs/docbook/build"/>
     </target>
 
 </project>
