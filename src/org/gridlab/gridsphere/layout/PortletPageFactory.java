@@ -348,7 +348,6 @@ public class PortletPageFactory implements PortletSessionListener {
         User user = req.getUser();
         String theme = (String) user.getAttribute(User.THEME);
         if (theme != null) page.setTheme(theme);
-
     }
 
     public PortletTabbedPane createNewUserPane(PortletRequest req, int cols, String tabName) {
@@ -454,6 +453,7 @@ public class PortletPageFactory implements PortletSessionListener {
         } catch (IOException e) {
 
         }
+        this.setPageTheme(page, req);
         page.init(req, new ArrayList());
 
         return page;
