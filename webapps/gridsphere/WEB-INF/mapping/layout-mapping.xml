@@ -147,12 +147,6 @@
         <field name="Title" type="string">
             <bind-xml name="title"/>
         </field>
-        <field name="PortletModeAsString" type="string">
-            <bind-xml name="mode" node="attribute"/>
-        </field>
-        <field name="WindowStateAsString" type="string">
-            <bind-xml name="state" node="attribute"/>
-        </field>
     </class>
 
 </mapping>
