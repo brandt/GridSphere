@@ -13,7 +13,7 @@
 
         <ui:frame>
             <ui:tablerow header="true">
-                <ui:tablecell width="100">
+                <ui:tablecell width="100%">
                     <ui:text key="BANNER_FILE"/>&nbsp;(<ui:text beanId="fileName"/>)
                 </ui:tablecell>
             </ui:tablerow>
