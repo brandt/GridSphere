@@ -3,9 +3,9 @@
 	"http://castor.exolab.org/jdo-conf.dtd">
 <database name="gridsphere" engine="hsql" >
  <driver class-name="org.hsqldb.jdbcDriver"
-          url="jdbc:hsqldb:@CATALINA_HOME@/gridsphere/db/gridsphere-db">
+          url="jdbc:hsqldb:@GRIDSPHERE_HOME@/db/@DB_DATABASE@-db">
     <param name="user" value="sa" />
     <param name="password" value="" />
   </driver>
-  <mapping href="@CATALINA_HOME@/webapps/gridsphere/WEB-INF/conf/mapping/docletmapping.xml" />
+  <mapping href="@GRIDSPHERE_WEBAPP@/WEB-INF/conf/mapping/docletmapping.xml" />
 </database>
