@@ -122,8 +122,6 @@ a.tab-sub-menu:active {
   color: #ebebeb;
 }
 
-
-
 a.tab-sub-menu-active {
     text-decoration:none;
     font-size:10px;
@@ -131,11 +129,11 @@ a.tab-sub-menu-active {
 }
 
 a.tab-sub-menu-active:link {
-  border: 1px solid #397df3;
+  border: 1px solid #f9a61a;
 }
 
 a.tab-sub-menu-active:visited {
-  border: 1px solid #397df3;
+  border: 1px solid #f9a61a;
 }
 
 a.tab-sub-menu-active:hover {

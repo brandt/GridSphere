@@ -135,5 +135,25 @@ a.tab-sub-menu:active {
   spacing-right: 2px;
 }
 
+a.tab-sub-menu-active {
+    text-decoration:none;
+    font-size:10px;
+    color: white;
+}
 
+a.tab-sub-menu-active:link {
+  border: 1px solid #f9a61a;
+}
+
+a.tab-sub-menu-active:visited {
+  border: 1px solid #f9a61a;
+}
+
+a.tab-sub-menu-active:hover {
+  border: 1px dashed black;
+}
+
+a.tab-sub-menu-active:active {
+  color: #ebebeb;
+}
 
