@@ -100,11 +100,17 @@ public class ActionLinkTag extends ActionTag {
                 actionlink = new ActionLinkBean();
                 actionlink.setStyle(style);
                 this.setBaseComponentBean(actionlink);
+                paramBeans = new ArrayList();
+            }  else {
+                if (actionlink.getParamBeanList() != null) {
+                    paramBeans = actionlink.getParamBeanList();
+                }
             }
         } else {
             actionlink = new ActionLinkBean();
             this.setBaseComponentBean(actionlink);
             actionlink.setStyle(style);
+            paramBeans = new ArrayList();
         }
 
         if (name != null) actionlink.setName(name);
@@ -119,8 +125,6 @@ public class ActionLinkTag extends ActionTag {
                 actionlink.setCssStyle("display: block");
             }
         }
-
-        paramBeans = new ArrayList();
 
         if (key != null) {
             actionlink.setKey(key);

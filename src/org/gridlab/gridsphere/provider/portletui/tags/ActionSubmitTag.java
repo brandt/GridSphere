@@ -58,7 +58,7 @@ public class ActionSubmitTag extends ActionTag {
                     key = actionSubmitBean.getKey();
                 }
                 if (actionSubmitBean.getParamBeanList() != null) {
-                    paramBeans = new ArrayList();
+                    paramBeans = actionSubmitBean.getParamBeanList();
                 }
             }
         } else {
