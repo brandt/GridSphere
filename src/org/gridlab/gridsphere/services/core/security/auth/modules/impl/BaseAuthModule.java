@@ -15,7 +15,7 @@ import java.util.HashMap;
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-public abstract class BaseAuthModule {
+public abstract class BaseAuthModule implements Comparable {
 
     protected Map attributes = new HashMap();
     protected AuthModuleDefinition moduleDef = null;

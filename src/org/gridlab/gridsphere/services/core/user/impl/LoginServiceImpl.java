@@ -281,7 +281,6 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
 
         List modules = this.getActiveAuthModules(user);
 
-
         Collections.sort(modules);
         AuthenticationException authEx = null;
 
