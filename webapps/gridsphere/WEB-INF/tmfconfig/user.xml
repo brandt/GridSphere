@@ -1,28 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<list>
-    <user>
-        <name>Michael Russell</name>
-        <userid>russell</userid>
-        <service>
-            <messagetype>aim</messagetype>
-            <username>gridsphere</username>
-        </service>
-    </user>
-    <user>
-        <name>Oliver Wehrens</name>
-        <userid>wehrens</userid>
-        <preferred>aim</preferred>
-        <service>
-            <messagetype>aim</messagetype>
-            <username>gridportal</username>
-        </service>
-        <service>
-            <messagetype>sms</messagetype>
-            <username>+491744840547</username>
-        </service>
-        <service>
-            <messagetype>mail</messagetype>
-            <username>oliver@wehrens.de</username>
-        </service>
-    </user>
-</list>
+<list/>
