@@ -10,7 +10,5 @@ package org.gridlab.gridsphere.provider.ui.beans;
  */
 public abstract class BaseListBean extends NameBean implements BaseList {
 
-    String name = new String();
-
     public abstract String toString();
 }

@@ -87,12 +87,12 @@ public class FormEventImpl implements FormEvent {
 
     private Object getBean(String name) {
         HttpSession session = request.getSession();
-        log.debug("Try to get bean "+name+" from session.");
+        log.debug("Try to get bean "+GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name+" from session.");
         NameBean bean = (NameBean) session.getAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name);
         if (bean==null) {
-            log.info("does not exists :"+name);
+            log.info("does not exists :"+GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name);
         } else{
-            log.info("Check the bean content:"+name+" ->"+bean.toString());
+            log.info("Check the bean content:"+GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name+" ->"+bean.toString());
             log.info("\n\n\n========"+bean.getName());
         }
         return bean;
@@ -115,7 +115,6 @@ public class FormEventImpl implements FormEvent {
             //if (checkParameterName("gstag:"+bean.getName())) {
             String beanKey = GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name;
             log.debug("Getting Bean '" + beanKey + "' from Session");
-
             if (bean instanceof TableBean) {
                 // has to be that hack since the individal components of a table
                 // are not stored by itself in a session, kind of different

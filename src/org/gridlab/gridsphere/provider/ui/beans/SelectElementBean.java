@@ -55,5 +55,11 @@ public abstract class SelectElementBean extends NameValueDisableBean implements 
      */
     public void update(String[] values) {
         this.selected = (values == null) ? false : true;
+        log.debug("This selectelementbean is ");
+        if (values==null) {
+            log.debug("null ");
+        } else {
+            log.debug("not null");
+        }
     }
 }

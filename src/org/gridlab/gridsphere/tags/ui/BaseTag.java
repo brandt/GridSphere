@@ -195,7 +195,7 @@ public class BaseTag extends TagSupport {
             try {
                 JspWriter out = pageContext.getOut();
                 out.print(htmlelement.toString());
-                //log.debug("Jup we got content :"+htmlelement.toString()+" for "+GridSphereProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID)+":"+bean);
+                log.debug("Jup we got content :"+htmlelement.toString()+" for "+GridSphereProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID)+":"+bean);
             } catch (Exception e) {
                 System.err.println("Error printing tag bean");
                 throw new JspTagException(e.getMessage());
