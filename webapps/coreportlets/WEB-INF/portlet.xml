@@ -108,40 +108,6 @@
 
 <portlet-app-def>
 
-<portlet-app id="org.gridlab.gridsphere.portlets.core.RSSPortlet">
-    <portlet-name>RSS</portlet-name>
-    <servlet-name>RSSPortlet</servlet-name>
-    <portlet-config>
-        <param-name>Portlet Master</param-name>
-        <param-value>yourid@yourdomain.com</param-value>
-    </portlet-config>
-    <cache>
-        <expires>120</expires>
-        <shared>true</shared>
-    </cache>
-</portlet-app>
-
-<concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.RSSPortlet.1">
-    <context-param>
-        <param-name>Portlet Master</param-name>
-        <param-value>yourid@yourdomain.com</param-value>
-    </context-param>
-    <concrete-portlet>
-        <portlet-name>RSS</portlet-name>
-        <default-locale>en</default-locale>
-        <language locale="en_US">
-            <title>RSS Portlet</title>
-            <title-short>RSS</title-short>
-            <description>a rss portlet</description>
-            <keywords>rss portlet</keywords>
-        </language>
-    </concrete-portlet>
-</concrete-portlet-app>
-
-</portlet-app-def>
-
-<portlet-app-def>
-
 <portlet-app id="org.gridlab.gridsphere.portlets.core.UserManagerPortlet">
     <portlet-name>User Account Manager</portlet-name>
     <servlet-name>UserManagerPortlet</servlet-name>

@@ -56,11 +56,6 @@
     </servlet-mapping>
 
     <servlet-mapping>
-       <servlet-name>RSSPortlet</servlet-name>
-       <url-pattern>/rss</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
        <servlet-name>UserManagerPortlet</servlet-name>
        <url-pattern>/adminstration/accounts</url-pattern>
     </servlet-mapping>
