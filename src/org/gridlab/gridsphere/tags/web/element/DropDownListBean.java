@@ -8,9 +8,11 @@ package org.gridlab.gridsphere.tags.web.element;
 import org.gridlab.gridsphere.tags.web.model.SelectList;
 
 import java.util.Iterator;
+import java.util.Vector;
+import java.util.ArrayList;
 
 
-public class DropDownListBean extends BaseListBean implements Updateable {
+public class DropDownListBean extends BaseListBean implements DropDownList {
 
     SelectList list = new SelectList();
 
@@ -34,7 +36,11 @@ public class DropDownListBean extends BaseListBean implements Updateable {
     }
 
     public String toString() {
-        String result = "<select name='"+getTagName()+name+"' size='"+size+"'>";
+        String result = "<select name='"+getTagName()+name+"' size='"+size+"'";
+        if (multiple) {
+            result = result + " multiple='multiple'" ;
+        }
+        result = result +">";
         Iterator it = list.iterator();
         while (it.hasNext()) {
             Selectable item = (Selectable)it.next();
@@ -45,18 +51,36 @@ public class DropDownListBean extends BaseListBean implements Updateable {
     }
 
     public void update(String[] values) {
-        list.unselectAll();
-        list.setSelected(values[0], true);
+        if (!multiple) {
+            list.unselectAll();
+        }
+        for (int i=0;i<values.length;i++) {
+            list.setSelected(values[i], true);
+        }
     }
 
-    public String getSelectedValue() {
-        Selectable item = list.getSelectedItem();
-        return item.getValue();
+    public ArrayList getSelectedValues() {
+        ArrayList result = new ArrayList();
+        Iterator it = list.iterator();
+        while (it.hasNext()) {
+            Selectable item = (Selectable)it.next();
+            if (item.isSelected()) {
+                result.add(item.getValue());
+            }
+        }
+        return result;
     }
 
-    public Selectable getSelectedItem() {
-        return (Selectable)list.getSelectedItem();
+    public ArrayList getSelectedItems() {
+        ArrayList result = new ArrayList();
+        Iterator it = list.iterator();
+        while (it.hasNext()) {
+            Selectable item = (Selectable)it.next();
+            if (item.isSelected()) {
+                result.add(item);
+            }
+        }
+        return result;
     }
-
 
 }

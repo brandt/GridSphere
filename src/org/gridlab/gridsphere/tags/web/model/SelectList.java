@@ -19,8 +19,8 @@ public class SelectList extends DefaultList implements SelectListModel {
         list.add(item);
     }
 
-    public void setSelected(int index) {
-        ((Selectable)list.get(index)).setSelected(true);
+    public void setSelected(int index, boolean flag) {
+        ((Selectable)list.get(index)).setSelected(flag);
     }
 
     public void unselectAll() {
@@ -30,7 +30,7 @@ public class SelectList extends DefaultList implements SelectListModel {
         }
     }
 
-    public Selectable getSelectedItem() {
+    private Selectable getSelectedItem() {
         Iterator it = list.iterator();
         while (it.hasNext()) {
             Selectable item = (Selectable)it.next();
@@ -45,16 +45,15 @@ public class SelectList extends DefaultList implements SelectListModel {
      *
      */
     public void setSelected(String value, boolean flag) {
-        System.out.println("SELECT VALUE :"+value);
         Selectable item = getSelectedItem(value);
         item.setSelected(flag);
     }
 
-    public Selectable getSelectedItem(String value) {
+    private Selectable getSelectedItem(String value) {
         Iterator it = list.iterator();
         while (it.hasNext()) {
             Selectable item = (Selectable)it.next();
-            if (item.getValue().trim().equals(value.trim())) {
+            if (item.getValue().equals(value)) {
                 return item;
             }
         }

@@ -12,7 +12,7 @@ public interface SelectListModel extends DefaultListModel {
 
     public void addElement(Selectable item);
 
-    public void setSelected(int index);
+    public void setSelected(int index, boolean flag);
 
     public void unselectAll();
 
