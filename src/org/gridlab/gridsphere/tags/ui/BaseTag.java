@@ -194,7 +194,7 @@ public class BaseTag extends TagSupport {
                 JspWriter out = pageContext.getOut();
                 out.print(htmlelement.toString());
             } catch (Exception e) {
-                System.err.println("Error using beans bean");
+                System.err.println("Error printing tag bean");
                 throw new JspTagException(e.getMessage());
             }
         }

@@ -81,7 +81,6 @@ public class TextFieldBean extends ReadOnlyBaseBean implements Input {
     }
 
     public String toString() {
-/**
         StringBuffer buffer = new StringBuffer();
         buffer.append("<input type='");
         buffer.append(inputtype);
@@ -105,9 +104,10 @@ public class TextFieldBean extends ReadOnlyBaseBean implements Input {
         buffer.append(checkDisabled());
         buffer.append("/>");
         return getCSS(buffer.toString());
-        **/
+/**
         return getCSS("<input type='" + inputtype + "' name='" + getTagName() + name + "' value='" + value + "' size='"
                 + size + "' maxlength='" + maxlength +"'"+checkReadonly()+checkDisabled()+"/>");
+ **/
     }
 
 }
