@@ -85,6 +85,10 @@ Copyright:
             <include name="ext/*.jar"/>
         </fileset>
 
+        <fileset dir="lib/ext/">
+            <include name="*.jar"/>
+        </fileset>
+
         <pathelement path="${java.class.path}"/>
     </path>
 
@@ -384,6 +388,10 @@ Copyright:
         <copy file="${gridsphere.base}/lib/portlet-widget-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
         <copy file="lib/${project.name}.jar" todir="${project.webapp}/WEB-INF/lib"/>
         <copy file="lib/${project.name}-services.jar" todir="${env.CATALINA_HOME}/shared/lib"/>
+
+        <copy todir="${env.CATALINA_HOME}/shared/lib/">
+          <fileset dir="lib/ext" includes="*.jar" />
+        </copy>
 
     </target>
 
