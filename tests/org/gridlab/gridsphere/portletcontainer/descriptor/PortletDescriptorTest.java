@@ -48,15 +48,12 @@ public class PortletDescriptorTest extends GridSphereServletTest {
         PortletDeploymentDescriptor pdd = null;
 
         // load files from JAR
-        String portletFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/test/portlet-test.xml");
-        String mappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-mapping.xml");
+        String portletFile = config.getServletContext().getRealPath("/WEB-INF/test/portlet-test.xml");
 
         try {
-            pdd = new PortletDeploymentDescriptor(portletFile, mappingFile);
-        } catch (IOException e) {
-            fail("IO error unmarshalling " + portletFile + " using " + mappingFile + " : " + e.getMessage());
-        } catch (PersistenceManagerException e) {
-            fail("Unable to unmarshall " + portletFile + " using " + mappingFile + " : " + e.getMessage());
+            pdd = new PortletDeploymentDescriptor(portletFile);
+        } catch (Exception e) {
+            fail("Error unmarshalling " + portletFile);
         }
         List defs = pdd.getPortletDefinitionList();
 

@@ -42,15 +42,12 @@ public class ServiceDescriptorTest extends GridSphereServletTest {
         SportletServiceDescriptor descriptor = null;
 
         // load files from JAR
-        String serviceFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/test/PortletServices-test.xml");
-        String mappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-services-mapping.xml");
+        String serviceFile = config.getServletContext().getRealPath("/WEB-INF/test/PortletServices-test.xml");
 
         try {
-            descriptor = new SportletServiceDescriptor(serviceFile, mappingFile);
-        } catch (IOException e) {
-            fail("IO error unmarshalling " + serviceFile + " using " + mappingFile + " : " + e.getMessage());
-        } catch (PersistenceManagerException e) {
-            fail("Unable to unmarshall " + serviceFile + " using " + mappingFile + " : " + e.getMessage());
+            descriptor = new SportletServiceDescriptor(serviceFile);
+        } catch (Exception e) {
+            fail("IO error unmarshalling " + serviceFile + " : " + e.getMessage());
         }
         SportletServiceCollection services = descriptor.getServiceCollection();
 
