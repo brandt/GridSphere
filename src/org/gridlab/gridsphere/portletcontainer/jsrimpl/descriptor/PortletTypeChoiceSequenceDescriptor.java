@@ -133,7 +133,7 @@ public class PortletTypeChoiceSequenceDescriptor extends org.exolab.castor.xml.u
         { //-- local scope
         }
         desc.setValidator(fieldValidator);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletTypeChoiceSequenceDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletTypeChoiceSequenceDescriptor()
 
 
       //-----------/

@@ -41,7 +41,7 @@ public class TitleType implements java.io.Serializable {
     public TitleType() {
         super();
         setContent("");
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.TitleType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.TitleType()
 
 
       //-----------/

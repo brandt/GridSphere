@@ -68,7 +68,7 @@ public class SecurityRoleRefType implements java.io.Serializable {
     public SecurityRoleRefType() {
         super();
         _descriptionList = new ArrayList();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityRoleRefType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SecurityRoleRefType()
 
 
       //-----------/
@@ -84,7 +84,7 @@ public class SecurityRoleRefType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _descriptionList.add(vDescription);
-    } //-- void addDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- void addDescription(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method addDescription
@@ -96,7 +96,7 @@ public class SecurityRoleRefType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _descriptionList.add(index, vDescription);
-    } //-- void addDescription(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- void addDescription(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method clearDescription
@@ -128,7 +128,7 @@ public class SecurityRoleRefType implements java.io.Serializable {
         }
 
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description) _descriptionList.get(index);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description getDescription(int)
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description getDescription(int)
 
     /**
      * Method getDescription
@@ -141,7 +141,7 @@ public class SecurityRoleRefType implements java.io.Serializable {
             mArray[index] = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description) _descriptionList.get(index);
         }
         return mArray;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[] getDescription()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description[] getDescription()
 
     /**
      * Method getDescriptionCount
@@ -169,7 +169,7 @@ public class SecurityRoleRefType implements java.io.Serializable {
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.RoleLink getRoleLink()
     {
         return this._roleLink;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.RoleLink getRoleLink()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.RoleLink getRoleLink()
 
     /**
      * Returns the value of field 'roleName'.
@@ -179,7 +179,7 @@ public class SecurityRoleRefType implements java.io.Serializable {
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.RoleName getRoleName()
     {
         return this._roleName;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.RoleName getRoleName()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.RoleName getRoleName()
 
     /**
      * Method isValid
@@ -228,7 +228,7 @@ public class SecurityRoleRefType implements java.io.Serializable {
     {
         boolean removed = _descriptionList.remove(vDescription);
         return removed;
-    } //-- boolean removeDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- boolean removeDescription(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method setDescription
@@ -244,7 +244,7 @@ public class SecurityRoleRefType implements java.io.Serializable {
             throw new IndexOutOfBoundsException();
         }
         _descriptionList.set(index, vDescription);
-    } //-- void setDescription(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- void setDescription(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method setDescription
@@ -258,7 +258,7 @@ public class SecurityRoleRefType implements java.io.Serializable {
         for (int i = 0; i < descriptionArray.length; i++) {
             _descriptionList.add(descriptionArray[i]);
         }
-    } //-- void setDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- void setDescription(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Sets the value of field 'id'.
@@ -278,7 +278,7 @@ public class SecurityRoleRefType implements java.io.Serializable {
     public void setRoleLink(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.RoleLink roleLink)
     {
         this._roleLink = roleLink;
-    } //-- void setRoleLink(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.RoleLink)
+    } //-- void setRoleLink(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.RoleLink)
 
     /**
      * Sets the value of field 'roleName'.
@@ -288,7 +288,7 @@ public class SecurityRoleRefType implements java.io.Serializable {
     public void setRoleName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.RoleName roleName)
     {
         this._roleName = roleName;
-    } //-- void setRoleName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.RoleName)
+    } //-- void setRoleName(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.RoleName)
 
     /**
      * Method unmarshal

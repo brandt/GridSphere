@@ -30,7 +30,7 @@ implements java.io.Serializable
 
     public Preference() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Preference()
 
 
       //-----------/

@@ -55,7 +55,7 @@ public class UserAttributeDescriptor extends UserAttributeTypeDescriptor {
         setExtendsWithoutFlatten(new UserAttributeTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "user-attribute";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttributeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserAttributeDescriptor()
 
 
       //-----------/

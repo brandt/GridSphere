@@ -100,7 +100,7 @@ public class PortletCollectionTypeDescriptor extends org.exolab.castor.xml.util.
         { //-- local scope
         }
         desc.setValidator(fieldValidator);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletCollectionTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletCollectionTypeDescriptor()
 
 
       //-----------/

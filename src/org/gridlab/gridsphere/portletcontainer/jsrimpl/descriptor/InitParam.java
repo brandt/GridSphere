@@ -30,7 +30,7 @@ implements java.io.Serializable
 
     public InitParam() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.InitParam()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.InitParam()
 
 
       //-----------/

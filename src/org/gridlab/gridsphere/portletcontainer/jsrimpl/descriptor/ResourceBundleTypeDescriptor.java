@@ -97,7 +97,7 @@ public class ResourceBundleTypeDescriptor extends org.exolab.castor.xml.util.XML
 
         //-- initialize element descriptors
 
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ResourceBundleTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ResourceBundleTypeDescriptor()
 
 
       //-----------/

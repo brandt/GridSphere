@@ -97,7 +97,7 @@ public class KeywordsTypeDescriptor extends org.exolab.castor.xml.util.XMLClassD
 
         //-- initialize element descriptors
 
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.KeywordsTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.KeywordsTypeDescriptor()
 
 
       //-----------/

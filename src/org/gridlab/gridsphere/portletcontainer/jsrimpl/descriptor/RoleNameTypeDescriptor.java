@@ -97,7 +97,7 @@ public class RoleNameTypeDescriptor extends org.exolab.castor.xml.util.XMLClassD
 
         //-- initialize element descriptors
 
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.RoleNameTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.RoleNameTypeDescriptor()
 
 
       //-----------/

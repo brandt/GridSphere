@@ -30,7 +30,7 @@ implements java.io.Serializable
 
     public Keywords() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Keywords()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Keywords()
 
 
       //-----------/

@@ -30,7 +30,7 @@ implements java.io.Serializable
 
     public ShortTitle() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ShortTitle()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ShortTitle()
 
 
       //-----------/

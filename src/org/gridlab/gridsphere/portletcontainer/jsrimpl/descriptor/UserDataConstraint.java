@@ -30,7 +30,7 @@ implements java.io.Serializable
 
     public UserDataConstraint() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserDataConstraint()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserDataConstraint()
 
 
       //-----------/

@@ -171,7 +171,7 @@ public class CustomWindowStateTypeDescriptor extends org.exolab.castor.xml.util.
         { //-- local scope
         }
         desc.setValidator(fieldValidator);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowStateTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomWindowStateTypeDescriptor()
 
 
       //-----------/

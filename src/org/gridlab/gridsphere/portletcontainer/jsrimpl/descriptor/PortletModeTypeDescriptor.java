@@ -97,7 +97,7 @@ public class PortletModeTypeDescriptor extends org.exolab.castor.xml.util.XMLCla
 
         //-- initialize element descriptors
 
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletModeTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletModeTypeDescriptor()
 
 
       //-----------/

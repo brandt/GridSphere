@@ -204,10 +204,14 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
             }
         }
 
-        System.err.println("I seem to have some render params!!");
+        // before it adds ".1" to real webappName
+        String realWebAppName = webAppName.substring(0,webAppName.length() - 2);
+
+        System.err.println("I seem to have some render params!! " + realWebAppName);
 
         System.err.println("in getPortletDispatcher of jsr query string " + extraInfo);
-        RequestDispatcher rd = context.getRequestDispatcher("/jsrportlets" + extraInfo);
+        // TODO change dangerously hardcoded value!!!
+        RequestDispatcher rd = context.getRequestDispatcher("/jsr/" + realWebAppName  + extraInfo);
         //RequestDispatcher rd = context.getNamedDispatcher(servletName);
 
         if (rd == null) {

@@ -55,7 +55,7 @@ public class ValueDescriptor extends ValueTypeDescriptor {
         setExtendsWithoutFlatten(new ValueTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "value";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ValueDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ValueDescriptor()
 
 
       //-----------/

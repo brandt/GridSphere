@@ -41,7 +41,7 @@ public class NameType implements java.io.Serializable {
     public NameType() {
         super();
         setContent("");
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.NameType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.NameType()
 
 
       //-----------/

@@ -56,7 +56,7 @@ public class UserAttributeType implements java.io.Serializable {
     public UserAttributeType() {
         super();
         _descriptionList = new ArrayList();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttributeType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserAttributeType()
 
 
       //-----------/
@@ -72,7 +72,7 @@ public class UserAttributeType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _descriptionList.add(vDescription);
-    } //-- void addDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- void addDescription(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method addDescription
@@ -84,7 +84,7 @@ public class UserAttributeType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _descriptionList.add(index, vDescription);
-    } //-- void addDescription(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- void addDescription(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method clearDescription
@@ -116,7 +116,7 @@ public class UserAttributeType implements java.io.Serializable {
         }
 
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description) _descriptionList.get(index);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description getDescription(int)
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description getDescription(int)
 
     /**
      * Method getDescription
@@ -129,7 +129,7 @@ public class UserAttributeType implements java.io.Serializable {
             mArray[index] = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description) _descriptionList.get(index);
         }
         return mArray;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[] getDescription()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description[] getDescription()
 
     /**
      * Method getDescriptionCount
@@ -157,7 +157,7 @@ public class UserAttributeType implements java.io.Serializable {
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name getName()
     {
         return this._name;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name getName()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Name getName()
 
     /**
      * Method isValid
@@ -206,7 +206,7 @@ public class UserAttributeType implements java.io.Serializable {
     {
         boolean removed = _descriptionList.remove(vDescription);
         return removed;
-    } //-- boolean removeDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- boolean removeDescription(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method setDescription
@@ -222,7 +222,7 @@ public class UserAttributeType implements java.io.Serializable {
             throw new IndexOutOfBoundsException();
         }
         _descriptionList.set(index, vDescription);
-    } //-- void setDescription(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- void setDescription(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method setDescription
@@ -236,7 +236,7 @@ public class UserAttributeType implements java.io.Serializable {
         for (int i = 0; i < descriptionArray.length; i++) {
             _descriptionList.add(descriptionArray[i]);
         }
-    } //-- void setDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- void setDescription(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Sets the value of field 'id'.
@@ -256,7 +256,7 @@ public class UserAttributeType implements java.io.Serializable {
     public void setName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name name)
     {
         this._name = name;
-    } //-- void setName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name)
+    } //-- void setName(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Name)
 
     /**
      * Method unmarshal

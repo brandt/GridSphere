@@ -44,7 +44,7 @@ public class RoleLinkType implements java.io.Serializable {
     public RoleLinkType() {
         super();
         setContent("");
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.RoleLinkType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.RoleLinkType()
 
 
       //-----------/

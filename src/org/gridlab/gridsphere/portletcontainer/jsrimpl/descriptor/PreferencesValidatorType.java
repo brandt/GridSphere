@@ -43,7 +43,7 @@ public class PreferencesValidatorType implements java.io.Serializable {
     public PreferencesValidatorType() {
         super();
         setContent("");
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletNameType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletNameType()
 
 
       //-----------/

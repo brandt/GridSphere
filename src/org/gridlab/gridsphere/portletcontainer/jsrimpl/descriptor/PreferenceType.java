@@ -61,7 +61,7 @@ public class PreferenceType implements java.io.Serializable {
         super();
         _readOnly = new ReadOnlyType();
         _valueList = new ArrayList();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PreferenceType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PreferenceType()
 
 
       //-----------/
@@ -77,7 +77,7 @@ public class PreferenceType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _valueList.add(vValue);
-    } //-- void addValue(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value)
+    } //-- void addValue(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Value)
 
     /**
      * Method addValue
@@ -89,7 +89,7 @@ public class PreferenceType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _valueList.add(index, vValue);
-    } //-- void addValue(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value)
+    } //-- void addValue(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Value)
 
     /**
      * Method clearValue
@@ -125,7 +125,7 @@ public class PreferenceType implements java.io.Serializable {
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name getName()
     {
         return this._name;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name getName()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Name getName()
 
     /**
      * Returns the value of field 'readOnly'.
@@ -135,7 +135,7 @@ public class PreferenceType implements java.io.Serializable {
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.ReadOnlyType getReadOnly()
     {
         return this._readOnly;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.ReadOnlyType getReadOnly()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.types.ReadOnlyType getReadOnly()
 
     /**
      * Method getValue
@@ -151,7 +151,7 @@ public class PreferenceType implements java.io.Serializable {
         }
 
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value) _valueList.get(index);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value getValue(int)
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Value getValue(int)
 
     /**
      * Method getValue
@@ -164,7 +164,7 @@ public class PreferenceType implements java.io.Serializable {
             mArray[index] = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value) _valueList.get(index);
         }
         return mArray;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value[] getValue()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Value[] getValue()
 
     /**
      * Method getValueCount
@@ -221,7 +221,7 @@ public class PreferenceType implements java.io.Serializable {
     {
         boolean removed = _valueList.remove(vValue);
         return removed;
-    } //-- boolean removeValue(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value)
+    } //-- boolean removeValue(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Value)
 
     /**
      * Sets the value of field 'id'.
@@ -241,7 +241,7 @@ public class PreferenceType implements java.io.Serializable {
     public void setName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name name)
     {
         this._name = name;
-    } //-- void setName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name)
+    } //-- void setName(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Name)
 
     /**
      * Sets the value of field 'readOnly'.
@@ -251,7 +251,7 @@ public class PreferenceType implements java.io.Serializable {
     public void setReadOnly(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.ReadOnlyType readOnly)
     {
         this._readOnly = readOnly;
-    } //-- void setReadOnly(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.ReadOnlyType)
+    } //-- void setReadOnly(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.types.ReadOnlyType)
 
     /**
      * Method setValue
@@ -267,7 +267,7 @@ public class PreferenceType implements java.io.Serializable {
             throw new IndexOutOfBoundsException();
         }
         _valueList.set(index, vValue);
-    } //-- void setValue(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value)
+    } //-- void setValue(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Value)
 
     /**
      * Method setValue
@@ -281,7 +281,7 @@ public class PreferenceType implements java.io.Serializable {
         for (int i = 0; i < valueArray.length; i++) {
             _valueList.add(valueArray[i]);
         }
-    } //-- void setValue(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value)
+    } //-- void setValue(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Value)
 
     /**
      * Method unmarshal

@@ -43,7 +43,7 @@ public class PortletTypeChoice implements java.io.Serializable {
 
     public PortletTypeChoice() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletTypeChoice()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletTypeChoice()
 
 
       //-----------/
@@ -58,7 +58,7 @@ public class PortletTypeChoice implements java.io.Serializable {
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo getPortletInfo()
     {
         return this._portletInfo;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo getPortletInfo()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletInfo getPortletInfo()
 
     /**
      * Returns the value of field 'portletTypeChoiceSequence'.
@@ -68,7 +68,7 @@ public class PortletTypeChoice implements java.io.Serializable {
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletTypeChoiceSequence getPortletTypeChoiceSequence()
     {
         return this._portletTypeChoiceSequence;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletTypeChoiceSequence getPortletTypeChoiceSequence()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletTypeChoiceSequence getPortletTypeChoiceSequence()
 
     /**
      * Method isValid
@@ -116,7 +116,7 @@ public class PortletTypeChoice implements java.io.Serializable {
     public void setPortletInfo(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo portletInfo)
     {
         this._portletInfo = portletInfo;
-    } //-- void setPortletInfo(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo)
+    } //-- void setPortletInfo(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletInfo)
 
     /**
      * Sets the value of field 'portletTypeChoiceSequence'.
@@ -127,7 +127,7 @@ public class PortletTypeChoice implements java.io.Serializable {
     public void setPortletTypeChoiceSequence(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletTypeChoiceSequence portletTypeChoiceSequence)
     {
         this._portletTypeChoiceSequence = portletTypeChoiceSequence;
-    } //-- void setPortletTypeChoiceSequence(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletTypeChoiceSequence)
+    } //-- void setPortletTypeChoiceSequence(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletTypeChoiceSequence)
 
     /**
      * Method unmarshal

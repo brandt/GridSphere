@@ -97,7 +97,7 @@ public class ShortTitleTypeDescriptor extends org.exolab.castor.xml.util.XMLClas
 
         //-- initialize element descriptors
 
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ShortTitleTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ShortTitleTypeDescriptor()
 
 
       //-----------/

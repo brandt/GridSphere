@@ -97,7 +97,7 @@ public class NameTypeDescriptor extends org.exolab.castor.xml.util.XMLClassDescr
 
         //-- initialize element descriptors
 
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.NameTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.NameTypeDescriptor()
 
 
       //-----------/

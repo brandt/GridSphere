@@ -56,7 +56,7 @@ public class SupportsType implements java.io.Serializable {
     public SupportsType() {
         super();
         _portletModeList = new ArrayList();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SupportsType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SupportsType()
 
 
       //-----------/
@@ -72,7 +72,7 @@ public class SupportsType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _portletModeList.add(vPortletMode);
-    } //-- void addPortletMode(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode)
+    } //-- void addPortletMode(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletMode)
 
     /**
      * Method addPortletMode
@@ -84,7 +84,7 @@ public class SupportsType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _portletModeList.add(index, vPortletMode);
-    } //-- void addPortletMode(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode)
+    } //-- void addPortletMode(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletMode)
 
     /**
      * Method clearPortletMode
@@ -120,7 +120,7 @@ public class SupportsType implements java.io.Serializable {
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.MimeType getMimeType()
     {
         return this._mimeType;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.MimeType getMimeType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.MimeType getMimeType()
 
     /**
      * Method getPortletMode
@@ -136,7 +136,7 @@ public class SupportsType implements java.io.Serializable {
         }
 
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode) _portletModeList.get(index);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode getPortletMode(int)
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletMode getPortletMode(int)
 
     /**
      * Method getPortletMode
@@ -149,7 +149,7 @@ public class SupportsType implements java.io.Serializable {
             mArray[index] = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode) _portletModeList.get(index);
         }
         return mArray;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode[] getPortletMode()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletMode[] getPortletMode()
 
     /**
      * Method getPortletModeCount
@@ -206,7 +206,7 @@ public class SupportsType implements java.io.Serializable {
     {
         boolean removed = _portletModeList.remove(vPortletMode);
         return removed;
-    } //-- boolean removePortletMode(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode)
+    } //-- boolean removePortletMode(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletMode)
 
     /**
      * Sets the value of field 'id'.
@@ -226,7 +226,7 @@ public class SupportsType implements java.io.Serializable {
     public void setMimeType(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.MimeType mimeType)
     {
         this._mimeType = mimeType;
-    } //-- void setMimeType(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.MimeType)
+    } //-- void setMimeType(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.MimeType)
 
     /**
      * Method setPortletMode
@@ -242,7 +242,7 @@ public class SupportsType implements java.io.Serializable {
             throw new IndexOutOfBoundsException();
         }
         _portletModeList.set(index, vPortletMode);
-    } //-- void setPortletMode(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode)
+    } //-- void setPortletMode(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletMode)
 
     /**
      * Method setPortletMode
@@ -256,7 +256,7 @@ public class SupportsType implements java.io.Serializable {
         for (int i = 0; i < portletModeArray.length; i++) {
             _portletModeList.add(portletModeArray[i]);
         }
-    } //-- void setPortletMode(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode)
+    } //-- void setPortletMode(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletMode)
 
     /**
      * Method unmarshal

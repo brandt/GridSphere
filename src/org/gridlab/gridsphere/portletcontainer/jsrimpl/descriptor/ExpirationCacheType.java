@@ -48,7 +48,7 @@ public class ExpirationCacheType implements java.io.Serializable {
 
     public ExpirationCacheType() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ExpirationCacheType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ExpirationCacheType()
 
 
       //-----------/

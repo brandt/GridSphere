@@ -136,7 +136,7 @@ public class PortletTypeChoiceDescriptor extends org.exolab.castor.xml.util.XMLC
         { //-- local scope
         }
         desc.setValidator(fieldValidator);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletTypeChoiceDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletTypeChoiceDescriptor()
 
 
       //-----------/

@@ -60,7 +60,7 @@ public class DescriptionType implements java.io.Serializable {
     public DescriptionType() {
         super();
         setContent("");
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DescriptionType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.DescriptionType()
 
 
       //-----------/

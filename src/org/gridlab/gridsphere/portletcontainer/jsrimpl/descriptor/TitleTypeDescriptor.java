@@ -97,7 +97,7 @@ public class TitleTypeDescriptor extends org.exolab.castor.xml.util.XMLClassDesc
 
         //-- initialize element descriptors
 
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.TitleTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.TitleTypeDescriptor()
 
 
       //-----------/

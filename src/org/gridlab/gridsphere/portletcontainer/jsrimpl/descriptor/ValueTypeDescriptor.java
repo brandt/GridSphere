@@ -97,7 +97,7 @@ public class ValueTypeDescriptor extends org.exolab.castor.xml.util.XMLClassDesc
 
         //-- initialize element descriptors
 
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ValueTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ValueTypeDescriptor()
 
 
       //-----------/

@@ -30,7 +30,7 @@ implements java.io.Serializable
 
     public SecurityRoleRef() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityRoleRef()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SecurityRoleRef()
 
 
       //-----------/

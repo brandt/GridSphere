@@ -57,7 +57,7 @@ public class DisplayNameType implements java.io.Serializable {
     public DisplayNameType() {
         super();
         setContent("");
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayNameType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.DisplayNameType()
 
 
       //-----------/

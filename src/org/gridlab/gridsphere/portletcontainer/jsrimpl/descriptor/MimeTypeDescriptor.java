@@ -55,7 +55,7 @@ public class MimeTypeDescriptor extends MimeTypeTypeDescriptor {
         setExtendsWithoutFlatten(new MimeTypeTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "mime-type";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.MimeTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.MimeTypeDescriptor()
 
 
       //-----------/

@@ -30,7 +30,7 @@ implements java.io.Serializable
 
     public PreferencesValidator() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletName()
 
 
       //-----------/

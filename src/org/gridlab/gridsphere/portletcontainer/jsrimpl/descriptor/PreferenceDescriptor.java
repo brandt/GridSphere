@@ -55,7 +55,7 @@ public class PreferenceDescriptor extends PreferenceTypeDescriptor {
         setExtendsWithoutFlatten(new PreferenceTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "preference";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PreferenceDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PreferenceDescriptor()
 
 
       //-----------/

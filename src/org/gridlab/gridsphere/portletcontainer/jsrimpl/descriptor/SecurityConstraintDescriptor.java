@@ -55,7 +55,7 @@ public class SecurityConstraintDescriptor extends SecurityConstraintTypeDescript
         setExtendsWithoutFlatten(new SecurityConstraintTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "security-constraint";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraintDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SecurityConstraintDescriptor()
 
 
       //-----------/

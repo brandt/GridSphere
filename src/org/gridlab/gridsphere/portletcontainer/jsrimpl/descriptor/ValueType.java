@@ -41,7 +41,7 @@ public class ValueType implements java.io.Serializable {
     public ValueType() {
         super();
         setContent("");
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ValueType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ValueType()
 
 
       //-----------/

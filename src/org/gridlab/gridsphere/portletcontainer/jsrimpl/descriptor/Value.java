@@ -30,7 +30,7 @@ implements java.io.Serializable
 
     public Value() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Value()
 
 
       //-----------/

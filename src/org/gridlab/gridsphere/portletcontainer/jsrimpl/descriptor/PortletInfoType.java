@@ -53,7 +53,7 @@ public class PortletInfoType implements java.io.Serializable {
 
     public PortletInfoType() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfoType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletInfoType()
 
 
       //-----------/
@@ -78,7 +78,7 @@ public class PortletInfoType implements java.io.Serializable {
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Keywords getKeywords()
     {
         return this._keywords;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Keywords getKeywords()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Keywords getKeywords()
 
     /**
      * Returns the value of field 'shortTitle'.
@@ -88,7 +88,7 @@ public class PortletInfoType implements java.io.Serializable {
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ShortTitle getShortTitle()
     {
         return this._shortTitle;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ShortTitle getShortTitle()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ShortTitle getShortTitle()
 
     /**
      * Returns the value of field 'title'.
@@ -98,7 +98,7 @@ public class PortletInfoType implements java.io.Serializable {
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Title getTitle()
     {
         return this._title;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Title getTitle()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Title getTitle()
 
     /**
      * Method isValid
@@ -156,7 +156,7 @@ public class PortletInfoType implements java.io.Serializable {
     public void setKeywords(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Keywords keywords)
     {
         this._keywords = keywords;
-    } //-- void setKeywords(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Keywords)
+    } //-- void setKeywords(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Keywords)
 
     /**
      * Sets the value of field 'shortTitle'.
@@ -166,7 +166,7 @@ public class PortletInfoType implements java.io.Serializable {
     public void setShortTitle(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ShortTitle shortTitle)
     {
         this._shortTitle = shortTitle;
-    } //-- void setShortTitle(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ShortTitle)
+    } //-- void setShortTitle(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ShortTitle)
 
     /**
      * Sets the value of field 'title'.
@@ -176,7 +176,7 @@ public class PortletInfoType implements java.io.Serializable {
     public void setTitle(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Title title)
     {
         this._title = title;
-    } //-- void setTitle(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Title)
+    } //-- void setTitle(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Title)
 
     /**
      * Method unmarshal

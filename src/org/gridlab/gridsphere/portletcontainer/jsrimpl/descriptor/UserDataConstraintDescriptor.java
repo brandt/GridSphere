@@ -55,7 +55,7 @@ public class UserDataConstraintDescriptor extends UserDataConstraintTypeDescript
         setExtendsWithoutFlatten(new UserDataConstraintTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "user-data-constraint";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserDataConstraintDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserDataConstraintDescriptor()
 
 
       //-----------/

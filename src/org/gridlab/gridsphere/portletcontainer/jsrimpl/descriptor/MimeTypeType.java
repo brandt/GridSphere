@@ -39,7 +39,7 @@ public class MimeTypeType implements java.io.Serializable {
     public MimeTypeType() {
         super();
         setContent("");
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.MimeTypeType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.MimeTypeType()
 
 
       //-----------/

@@ -102,7 +102,7 @@ public class ExpirationCacheTypeDescriptor extends org.exolab.castor.xml.util.XM
 
         //-- initialize element descriptors
 
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ExpirationCacheTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ExpirationCacheTypeDescriptor()
 
 
       //-----------/

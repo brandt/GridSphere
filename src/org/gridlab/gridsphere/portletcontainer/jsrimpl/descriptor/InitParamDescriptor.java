@@ -55,7 +55,7 @@ public class InitParamDescriptor extends InitParamTypeDescriptor {
         setExtendsWithoutFlatten(new InitParamTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "init-param";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.InitParamDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.InitParamDescriptor()
 
 
       //-----------/

@@ -171,7 +171,7 @@ public class CustomPortletModeTypeDescriptor extends org.exolab.castor.xml.util.
         { //-- local scope
         }
         desc.setValidator(fieldValidator);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletModeTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomPortletModeTypeDescriptor()
 
 
       //-----------/

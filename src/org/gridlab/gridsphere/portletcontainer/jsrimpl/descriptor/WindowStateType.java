@@ -41,7 +41,7 @@ public class WindowStateType implements java.io.Serializable {
     public WindowStateType() {
         super();
         setContent("");
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.WindowStateType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.WindowStateType()
 
 
       //-----------/

@@ -68,6 +68,7 @@ public class JSRPortletDispatcher implements PortletDispatcher {
         } catch (ServletException e) {
             log.error("Unable to perform init on");
         }
+        req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
     }
 
     /**
@@ -90,6 +91,7 @@ public class JSRPortletDispatcher implements PortletDispatcher {
             log.error("Unable to perform destroy on");
             throw new PortletException("Unable to perform destroy on: ", e);
         }
+        req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
     }
 
     /**
@@ -114,6 +116,7 @@ public class JSRPortletDispatcher implements PortletDispatcher {
             log.error("Unable to perform initConcrete");
             throw new PortletException("Unable to perform initConcrete", e);
         }
+        req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
     }
 
     /**
@@ -136,6 +139,7 @@ public class JSRPortletDispatcher implements PortletDispatcher {
             log.error("Unable to perform destroyConcrete");
             throw new PortletException("Unable to perform destroyConcrete", e);
         }
+        req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
     }
 
     /**
@@ -158,6 +162,7 @@ public class JSRPortletDispatcher implements PortletDispatcher {
             log.error("Unable to perform service");
             throw new PortletException("Unable to perform service", e);
         }
+        req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
     }
 
     /**
@@ -174,6 +179,7 @@ public class JSRPortletDispatcher implements PortletDispatcher {
             log.error("Unable to perform login");
             throw new PortletException("Unable to perform login", e);
         }
+        req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
     }
 
     /**
@@ -192,6 +198,7 @@ public class JSRPortletDispatcher implements PortletDispatcher {
             log.error("Unable to perform logout");
             throw new PortletException("Unable to perform logout", e);
         }
+        req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
     }
 
     /**
@@ -209,13 +216,16 @@ public class JSRPortletDispatcher implements PortletDispatcher {
         req.setAttribute(SportletProperties.ACTION_EVENT, action);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.ACTION_PERFORMED);
-
+        log.debug("in JSRPortletDispatcher: actionperformed");
         try {
             include(req, res);
         } catch (ServletException e) {
             log.error("Unable to perform actionPerformed");
             throw new PortletException("Unable to perform actionPerformed", e);
         }
+        req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
+        req.removeAttribute(SportletProperties.PORTLET_ACTION_METHOD);
+        req.removeAttribute(SportletProperties.ACTION_EVENT);
     }
 
     /**
@@ -238,6 +248,9 @@ public class JSRPortletDispatcher implements PortletDispatcher {
             log.error("Unable to perform messageEvent");
             throw new PortletException("Unable to perform messageEvent", e);
         }
+        req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
+        req.removeAttribute(SportletProperties.PORTLET_ACTION_METHOD);
+        req.removeAttribute(SportletProperties.MESSAGE_EVENT);
     }
 
     /**
@@ -265,6 +278,8 @@ public class JSRPortletDispatcher implements PortletDispatcher {
             log.error("Unable to perform doTitle");
             throw new PortletException("Unable to perform doTitle", e);
         }
+        req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
+        req.removeAttribute(SportletProperties.PORTLET_ACTION_METHOD);
     }
 
     /**
@@ -285,6 +300,9 @@ public class JSRPortletDispatcher implements PortletDispatcher {
             log.error("Unable to perform windowEvent");
             throw new PortletException("Unable to perform windowEvent", e);
         }
+        req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
+        req.removeAttribute(SportletProperties.PORTLET_ACTION_METHOD);
+        req.removeAttribute(SportletProperties.WINDOW_EVENT);
     }
 
     /**

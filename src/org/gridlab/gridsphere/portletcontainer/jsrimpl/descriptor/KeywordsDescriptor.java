@@ -55,7 +55,7 @@ public class KeywordsDescriptor extends KeywordsTypeDescriptor {
         setExtendsWithoutFlatten(new KeywordsTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "keywords";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.KeywordsDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.KeywordsDescriptor()
 
 
       //-----------/

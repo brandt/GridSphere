@@ -30,7 +30,7 @@ implements java.io.Serializable
 
     public RoleName() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.RoleName()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.RoleName()
 
 
       //-----------/

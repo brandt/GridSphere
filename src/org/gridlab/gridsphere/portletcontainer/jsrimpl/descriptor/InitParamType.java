@@ -59,7 +59,7 @@ public class InitParamType implements java.io.Serializable {
     public InitParamType() {
         super();
         _descriptionList = new ArrayList();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.InitParamType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.InitParamType()
 
 
       //-----------/
@@ -75,7 +75,7 @@ public class InitParamType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _descriptionList.add(vDescription);
-    } //-- void addDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- void addDescription(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method addDescription
@@ -87,7 +87,7 @@ public class InitParamType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _descriptionList.add(index, vDescription);
-    } //-- void addDescription(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- void addDescription(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method clearDescription
@@ -119,7 +119,7 @@ public class InitParamType implements java.io.Serializable {
         }
 
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description) _descriptionList.get(index);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description getDescription(int)
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description getDescription(int)
 
     /**
      * Method getDescription
@@ -132,7 +132,7 @@ public class InitParamType implements java.io.Serializable {
             mArray[index] = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description) _descriptionList.get(index);
         }
         return mArray;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[] getDescription()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description[] getDescription()
 
     /**
      * Method getDescriptionCount
@@ -160,7 +160,7 @@ public class InitParamType implements java.io.Serializable {
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name getName()
     {
         return this._name;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name getName()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Name getName()
 
     /**
      * Returns the value of field 'value'.
@@ -170,7 +170,7 @@ public class InitParamType implements java.io.Serializable {
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value getValue()
     {
         return this._value;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value getValue()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Value getValue()
 
     /**
      * Method isValid
@@ -219,7 +219,7 @@ public class InitParamType implements java.io.Serializable {
     {
         boolean removed = _descriptionList.remove(vDescription);
         return removed;
-    } //-- boolean removeDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- boolean removeDescription(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method setDescription
@@ -235,7 +235,7 @@ public class InitParamType implements java.io.Serializable {
             throw new IndexOutOfBoundsException();
         }
         _descriptionList.set(index, vDescription);
-    } //-- void setDescription(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- void setDescription(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method setDescription
@@ -249,7 +249,7 @@ public class InitParamType implements java.io.Serializable {
         for (int i = 0; i < descriptionArray.length; i++) {
             _descriptionList.add(descriptionArray[i]);
         }
-    } //-- void setDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- void setDescription(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Sets the value of field 'id'.
@@ -269,7 +269,7 @@ public class InitParamType implements java.io.Serializable {
     public void setName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name name)
     {
         this._name = name;
-    } //-- void setName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Name)
+    } //-- void setName(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Name)
 
     /**
      * Sets the value of field 'value'.
@@ -279,7 +279,7 @@ public class InitParamType implements java.io.Serializable {
     public void setValue(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value value)
     {
         this._value = value;
-    } //-- void setValue(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Value)
+    } //-- void setValue(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Value)
 
     /**
      * Method unmarshal

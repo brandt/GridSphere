@@ -54,7 +54,7 @@ public class CustomWindowStateType implements java.io.Serializable {
     public CustomWindowStateType() {
         super();
         _descriptionList = new ArrayList();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowStateType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomWindowStateType()
 
 
       //-----------/
@@ -70,7 +70,7 @@ public class CustomWindowStateType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _descriptionList.add(vDescription);
-    } //-- void addDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- void addDescription(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method addDescription
@@ -82,7 +82,7 @@ public class CustomWindowStateType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _descriptionList.add(index, vDescription);
-    } //-- void addDescription(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- void addDescription(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method clearDescription
@@ -114,7 +114,7 @@ public class CustomWindowStateType implements java.io.Serializable {
         }
 
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description) _descriptionList.get(index);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description getDescription(int)
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description getDescription(int)
 
     /**
      * Method getDescription
@@ -127,7 +127,7 @@ public class CustomWindowStateType implements java.io.Serializable {
             mArray[index] = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description) _descriptionList.get(index);
         }
         return mArray;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[] getDescription()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description[] getDescription()
 
     /**
      * Method getDescriptionCount
@@ -155,7 +155,7 @@ public class CustomWindowStateType implements java.io.Serializable {
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.WindowState getWindowState()
     {
         return this._windowState;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.WindowState getWindowState()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.WindowState getWindowState()
 
     /**
      * Method isValid
@@ -204,7 +204,7 @@ public class CustomWindowStateType implements java.io.Serializable {
     {
         boolean removed = _descriptionList.remove(vDescription);
         return removed;
-    } //-- boolean removeDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- boolean removeDescription(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method setDescription
@@ -220,7 +220,7 @@ public class CustomWindowStateType implements java.io.Serializable {
             throw new IndexOutOfBoundsException();
         }
         _descriptionList.set(index, vDescription);
-    } //-- void setDescription(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- void setDescription(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method setDescription
@@ -234,7 +234,7 @@ public class CustomWindowStateType implements java.io.Serializable {
         for (int i = 0; i < descriptionArray.length; i++) {
             _descriptionList.add(descriptionArray[i]);
         }
-    } //-- void setDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- void setDescription(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Sets the value of field 'id'.
@@ -254,7 +254,7 @@ public class CustomWindowStateType implements java.io.Serializable {
     public void setWindowState(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.WindowState windowState)
     {
         this._windowState = windowState;
-    } //-- void setWindowState(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.WindowState)
+    } //-- void setWindowState(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.WindowState)
 
     /**
      * Method unmarshal

@@ -30,7 +30,7 @@ implements java.io.Serializable
 
     public SecurityConstraint() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SecurityConstraint()
 
 
       //-----------/

@@ -173,7 +173,7 @@ public class PortletPreferencesTypeDescriptor extends org.exolab.castor.xml.util
             fieldValidator.setValidator(typeValidator);
         }
         desc.setValidator(fieldValidator);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferencesTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletPreferencesTypeDescriptor()
 
 
       //-----------/

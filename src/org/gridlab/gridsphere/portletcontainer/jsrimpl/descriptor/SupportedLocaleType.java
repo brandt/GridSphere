@@ -41,7 +41,7 @@ public class SupportedLocaleType implements java.io.Serializable {
     public SupportedLocaleType() {
         super();
         setContent("");
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SupportedLocaleType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SupportedLocaleType()
 
 
       //-----------/

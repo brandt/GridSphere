@@ -208,7 +208,7 @@ public class SecurityRoleRefTypeDescriptor extends org.exolab.castor.xml.util.XM
         { //-- local scope
         }
         desc.setValidator(fieldValidator);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityRoleRefTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SecurityRoleRefTypeDescriptor()
 
 
       //-----------/

@@ -55,7 +55,7 @@ public class ExpirationCacheDescriptor extends ExpirationCacheTypeDescriptor {
         setExtendsWithoutFlatten(new ExpirationCacheTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "expiration-cache";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ExpirationCacheDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ExpirationCacheDescriptor()
 
 
       //-----------/

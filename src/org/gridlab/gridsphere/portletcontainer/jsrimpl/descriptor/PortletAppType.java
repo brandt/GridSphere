@@ -75,7 +75,7 @@ public class PortletAppType implements java.io.Serializable {
         _customWindowStateList = new ArrayList();
         _userAttributeList = new ArrayList();
         _securityConstraintList = new ArrayList();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletAppType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletAppType()
 
 
       //-----------/
@@ -91,7 +91,7 @@ public class PortletAppType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _customPortletModeList.add(vCustomPortletMode);
-    } //-- void addCustomPortletMode(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode)
+    } //-- void addCustomPortletMode(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomPortletMode)
 
     /**
      * Method addCustomPortletMode
@@ -103,7 +103,7 @@ public class PortletAppType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _customPortletModeList.add(index, vCustomPortletMode);
-    } //-- void addCustomPortletMode(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode)
+    } //-- void addCustomPortletMode(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomPortletMode)
 
     /**
      * Method addCustomWindowState
@@ -114,7 +114,7 @@ public class PortletAppType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _customWindowStateList.add(vCustomWindowState);
-    } //-- void addCustomWindowState(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState)
+    } //-- void addCustomWindowState(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomWindowState)
 
     /**
      * Method addCustomWindowState
@@ -126,7 +126,7 @@ public class PortletAppType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _customWindowStateList.add(index, vCustomWindowState);
-    } //-- void addCustomWindowState(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState)
+    } //-- void addCustomWindowState(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomWindowState)
 
     /**
      * Method addPortlet
@@ -137,7 +137,7 @@ public class PortletAppType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _portletList.add(vPortlet);
-    } //-- void addPortlet(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Portlet)
+    } //-- void addPortlet(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Portlet)
 
     /**
      * Method addPortlet
@@ -149,7 +149,7 @@ public class PortletAppType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _portletList.add(index, vPortlet);
-    } //-- void addPortlet(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Portlet)
+    } //-- void addPortlet(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Portlet)
 
     /**
      * Method addSecurityConstraint
@@ -160,7 +160,7 @@ public class PortletAppType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _securityConstraintList.add(vSecurityConstraint);
-    } //-- void addSecurityConstraint(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint)
+    } //-- void addSecurityConstraint(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SecurityConstraint)
 
     /**
      * Method addSecurityConstraint
@@ -172,7 +172,7 @@ public class PortletAppType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _securityConstraintList.add(index, vSecurityConstraint);
-    } //-- void addSecurityConstraint(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint)
+    } //-- void addSecurityConstraint(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SecurityConstraint)
 
     /**
      * Method addUserAttribute
@@ -183,7 +183,7 @@ public class PortletAppType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _userAttributeList.add(vUserAttribute);
-    } //-- void addUserAttribute(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute)
+    } //-- void addUserAttribute(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserAttribute)
 
     /**
      * Method addUserAttribute
@@ -195,7 +195,7 @@ public class PortletAppType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _userAttributeList.add(index, vUserAttribute);
-    } //-- void addUserAttribute(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute)
+    } //-- void addUserAttribute(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserAttribute)
 
     /**
      * Method clearCustomPortletMode
@@ -291,7 +291,7 @@ public class PortletAppType implements java.io.Serializable {
         }
 
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode) _customPortletModeList.get(index);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode getCustomPortletMode(int)
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomPortletMode getCustomPortletMode(int)
 
     /**
      * Method getCustomPortletMode
@@ -304,7 +304,7 @@ public class PortletAppType implements java.io.Serializable {
             mArray[index] = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode) _customPortletModeList.get(index);
         }
         return mArray;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode[] getCustomPortletMode()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomPortletMode[] getCustomPortletMode()
 
     /**
      * Method getCustomPortletModeCount
@@ -328,7 +328,7 @@ public class PortletAppType implements java.io.Serializable {
         }
 
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState) _customWindowStateList.get(index);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState getCustomWindowState(int)
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomWindowState getCustomWindowState(int)
 
     /**
      * Method getCustomWindowState
@@ -341,7 +341,7 @@ public class PortletAppType implements java.io.Serializable {
             mArray[index] = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState) _customWindowStateList.get(index);
         }
         return mArray;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState[] getCustomWindowState()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomWindowState[] getCustomWindowState()
 
     /**
      * Method getCustomWindowStateCount
@@ -375,7 +375,7 @@ public class PortletAppType implements java.io.Serializable {
         }
 
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition) _portletList.get(index);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Portlet getPortlet(int)
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Portlet getPortlet(int)
 
     /**
      * Method getPortlet
@@ -388,7 +388,7 @@ public class PortletAppType implements java.io.Serializable {
             mArray[index] = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition) _portletList.get(index);
         }
         return mArray;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Portlet[] getPortlet()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Portlet[] getPortlet()
 
     /**
      * Method getPortletCount
@@ -412,7 +412,7 @@ public class PortletAppType implements java.io.Serializable {
         }
 
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint) _securityConstraintList.get(index);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint getSecurityConstraint(int)
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SecurityConstraint getSecurityConstraint(int)
 
     /**
      * Method getSecurityConstraint
@@ -425,7 +425,7 @@ public class PortletAppType implements java.io.Serializable {
             mArray[index] = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint) _securityConstraintList.get(index);
         }
         return mArray;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint[] getSecurityConstraint()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SecurityConstraint[] getSecurityConstraint()
 
     /**
      * Method getSecurityConstraintCount
@@ -449,7 +449,7 @@ public class PortletAppType implements java.io.Serializable {
         }
 
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute) _userAttributeList.get(index);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute getUserAttribute(int)
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserAttribute getUserAttribute(int)
 
     /**
      * Method getUserAttribute
@@ -462,7 +462,7 @@ public class PortletAppType implements java.io.Serializable {
             mArray[index] = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute) _userAttributeList.get(index);
         }
         return mArray;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute[] getUserAttribute()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserAttribute[] getUserAttribute()
 
     /**
      * Method getUserAttributeCount
@@ -529,7 +529,7 @@ public class PortletAppType implements java.io.Serializable {
     {
         boolean removed = _customPortletModeList.remove(vCustomPortletMode);
         return removed;
-    } //-- boolean removeCustomPortletMode(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode)
+    } //-- boolean removeCustomPortletMode(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomPortletMode)
 
     /**
      * Method removeCustomWindowState
@@ -540,7 +540,7 @@ public class PortletAppType implements java.io.Serializable {
     {
         boolean removed = _customWindowStateList.remove(vCustomWindowState);
         return removed;
-    } //-- boolean removeCustomWindowState(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState)
+    } //-- boolean removeCustomWindowState(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomWindowState)
 
     /**
      * Method removePortlet
@@ -551,7 +551,7 @@ public class PortletAppType implements java.io.Serializable {
     {
         boolean removed = _portletList.remove(vPortlet);
         return removed;
-    } //-- boolean removePortlet(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Portlet)
+    } //-- boolean removePortlet(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Portlet)
 
     /**
      * Method removeSecurityConstraint
@@ -562,7 +562,7 @@ public class PortletAppType implements java.io.Serializable {
     {
         boolean removed = _securityConstraintList.remove(vSecurityConstraint);
         return removed;
-    } //-- boolean removeSecurityConstraint(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint)
+    } //-- boolean removeSecurityConstraint(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SecurityConstraint)
 
     /**
      * Method removeUserAttribute
@@ -573,7 +573,7 @@ public class PortletAppType implements java.io.Serializable {
     {
         boolean removed = _userAttributeList.remove(vUserAttribute);
         return removed;
-    } //-- boolean removeUserAttribute(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute)
+    } //-- boolean removeUserAttribute(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserAttribute)
 
     /**
      * Method setCustomPortletMode
@@ -589,7 +589,7 @@ public class PortletAppType implements java.io.Serializable {
             throw new IndexOutOfBoundsException();
         }
         _customPortletModeList.set(index, vCustomPortletMode);
-    } //-- void setCustomPortletMode(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode)
+    } //-- void setCustomPortletMode(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomPortletMode)
 
     /**
      * Method setCustomPortletMode
@@ -603,7 +603,7 @@ public class PortletAppType implements java.io.Serializable {
         for (int i = 0; i < customPortletModeArray.length; i++) {
             _customPortletModeList.add(customPortletModeArray[i]);
         }
-    } //-- void setCustomPortletMode(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode)
+    } //-- void setCustomPortletMode(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomPortletMode)
 
     /**
      * Method setCustomWindowState
@@ -619,7 +619,7 @@ public class PortletAppType implements java.io.Serializable {
             throw new IndexOutOfBoundsException();
         }
         _customWindowStateList.set(index, vCustomWindowState);
-    } //-- void setCustomWindowState(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState)
+    } //-- void setCustomWindowState(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomWindowState)
 
     /**
      * Method setCustomWindowState
@@ -633,7 +633,7 @@ public class PortletAppType implements java.io.Serializable {
         for (int i = 0; i < customWindowStateArray.length; i++) {
             _customWindowStateList.add(customWindowStateArray[i]);
         }
-    } //-- void setCustomWindowState(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState)
+    } //-- void setCustomWindowState(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomWindowState)
 
     /**
      * Sets the value of field 'id'.
@@ -659,7 +659,7 @@ public class PortletAppType implements java.io.Serializable {
             throw new IndexOutOfBoundsException();
         }
         _portletList.set(index, vPortlet);
-    } //-- void setPortlet(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Portlet)
+    } //-- void setPortlet(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Portlet)
 
     /**
      * Method setPortlet
@@ -673,7 +673,7 @@ public class PortletAppType implements java.io.Serializable {
         for (int i = 0; i < portletArray.length; i++) {
             _portletList.add(portletArray[i]);
         }
-    } //-- void setPortlet(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Portlet)
+    } //-- void setPortlet(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Portlet)
 
     /**
      * Method setSecurityConstraint
@@ -689,7 +689,7 @@ public class PortletAppType implements java.io.Serializable {
             throw new IndexOutOfBoundsException();
         }
         _securityConstraintList.set(index, vSecurityConstraint);
-    } //-- void setSecurityConstraint(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint)
+    } //-- void setSecurityConstraint(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SecurityConstraint)
 
     /**
      * Method setSecurityConstraint
@@ -703,7 +703,7 @@ public class PortletAppType implements java.io.Serializable {
         for (int i = 0; i < securityConstraintArray.length; i++) {
             _securityConstraintList.add(securityConstraintArray[i]);
         }
-    } //-- void setSecurityConstraint(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint)
+    } //-- void setSecurityConstraint(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SecurityConstraint)
 
     /**
      * Method setUserAttribute
@@ -719,7 +719,7 @@ public class PortletAppType implements java.io.Serializable {
             throw new IndexOutOfBoundsException();
         }
         _userAttributeList.set(index, vUserAttribute);
-    } //-- void setUserAttribute(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute)
+    } //-- void setUserAttribute(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserAttribute)
 
     /**
      * Method setUserAttribute
@@ -733,7 +733,7 @@ public class PortletAppType implements java.io.Serializable {
         for (int i = 0; i < userAttributeArray.length; i++) {
             _userAttributeList.add(userAttributeArray[i]);
         }
-    } //-- void setUserAttribute(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute)
+    } //-- void setUserAttribute(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserAttribute)
 
     /**
      * Sets the value of field 'version'.

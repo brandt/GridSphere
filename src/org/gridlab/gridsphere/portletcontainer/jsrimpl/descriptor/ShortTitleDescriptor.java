@@ -55,7 +55,7 @@ public class ShortTitleDescriptor extends ShortTitleTypeDescriptor {
         setExtendsWithoutFlatten(new ShortTitleTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "short-title";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ShortTitleDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ShortTitleDescriptor()
 
 
       //-----------/

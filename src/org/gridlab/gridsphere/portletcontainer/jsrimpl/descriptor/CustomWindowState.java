@@ -30,7 +30,7 @@ implements java.io.Serializable
 
     public CustomWindowState() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomWindowState()
 
 
       //-----------/

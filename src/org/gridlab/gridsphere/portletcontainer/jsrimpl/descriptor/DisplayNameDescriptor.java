@@ -55,7 +55,7 @@ public class DisplayNameDescriptor extends DisplayNameTypeDescriptor {
         setExtendsWithoutFlatten(new DisplayNameTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "display-name";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayNameDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.DisplayNameDescriptor()
 
 
       //-----------/

@@ -43,7 +43,7 @@ public class PortletClassType implements java.io.Serializable {
     public PortletClassType() {
         super();
         setContent("");
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletClassType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletClassType()
 
 
       //-----------/

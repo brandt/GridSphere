@@ -30,7 +30,7 @@ implements java.io.Serializable
 
     public ResourceBundle() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ResourceBundle()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ResourceBundle()
 
 
       //-----------/

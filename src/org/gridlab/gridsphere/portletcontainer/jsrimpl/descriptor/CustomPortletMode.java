@@ -30,7 +30,7 @@ implements java.io.Serializable
 
     public CustomPortletMode() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomPortletMode()
 
 
       //-----------/

@@ -55,7 +55,7 @@ public class RoleLinkDescriptor extends RoleLinkTypeDescriptor {
         setExtendsWithoutFlatten(new RoleLinkTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "role-link";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.RoleLinkDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.RoleLinkDescriptor()
 
 
       //-----------/

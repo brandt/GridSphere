@@ -74,7 +74,7 @@ public class ReadOnlyType implements java.io.Serializable {
         super();
         this.type = type;
         this.stringValue = value;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.ReadOnlyType(int, java.lang.String)
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.types.ReadOnlyType(int, java.lang.String)
 
 
       //-----------/
@@ -157,6 +157,6 @@ public class ReadOnlyType implements java.io.Serializable {
             throw new IllegalArgumentException(err);
         }
         return (ReadOnlyType) obj;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.ReadOnlyType valueOf(java.lang.String)
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.types.ReadOnlyType valueOf(java.lang.String)
 
 }

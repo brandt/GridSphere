@@ -55,7 +55,7 @@ public class TitleDescriptor extends TitleTypeDescriptor {
         setExtendsWithoutFlatten(new TitleTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "title";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.TitleDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.TitleDescriptor()
 
 
       //-----------/

@@ -30,7 +30,7 @@ implements java.io.Serializable
 
     public Supports() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Supports()
 
 
       //-----------/

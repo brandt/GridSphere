@@ -172,7 +172,7 @@ public class UserDataConstraintTypeDescriptor extends org.exolab.castor.xml.util
         { //-- local scope
         }
         desc.setValidator(fieldValidator);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserDataConstraintTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserDataConstraintTypeDescriptor()
 
 
       //-----------/

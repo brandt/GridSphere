@@ -55,7 +55,7 @@ public class SecurityRoleRefDescriptor extends SecurityRoleRefTypeDescriptor {
         setExtendsWithoutFlatten(new SecurityRoleRefTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "security-role-ref";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityRoleRefDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SecurityRoleRefDescriptor()
 
 
       //-----------/

@@ -171,7 +171,7 @@ public class SupportsTypeDescriptor extends org.exolab.castor.xml.util.XMLClassD
         { //-- local scope
         }
         desc.setValidator(fieldValidator);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SupportsTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SupportsTypeDescriptor()
 
 
       //-----------/

@@ -97,7 +97,7 @@ public class RoleLinkTypeDescriptor extends org.exolab.castor.xml.util.XMLClassD
 
         //-- initialize element descriptors
 
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.RoleLinkTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.RoleLinkTypeDescriptor()
 
 
       //-----------/

@@ -97,7 +97,7 @@ public class MimeTypeTypeDescriptor extends org.exolab.castor.xml.util.XMLClassD
 
         //-- initialize element descriptors
 
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.MimeTypeTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.MimeTypeTypeDescriptor()
 
 
       //-----------/

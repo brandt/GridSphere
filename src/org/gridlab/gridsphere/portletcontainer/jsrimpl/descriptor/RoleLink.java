@@ -30,7 +30,7 @@ implements java.io.Serializable
 
     public RoleLink() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.RoleLink()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.RoleLink()
 
 
       //-----------/

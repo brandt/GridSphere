@@ -42,7 +42,7 @@ public class KeywordsType implements java.io.Serializable {
     public KeywordsType() {
         super();
         setContent("");
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.KeywordsType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.KeywordsType()
 
 
       //-----------/

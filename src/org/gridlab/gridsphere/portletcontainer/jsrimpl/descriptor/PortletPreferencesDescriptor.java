@@ -55,7 +55,7 @@ public class PortletPreferencesDescriptor extends PortletPreferencesTypeDescript
         setExtendsWithoutFlatten(new PortletPreferencesTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "portlet-preferences";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferencesDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletPreferencesDescriptor()
 
 
       //-----------/

@@ -133,7 +133,7 @@ public class DescriptionTypeDescriptor extends org.exolab.castor.xml.util.XMLCla
         desc.setValidator(fieldValidator);
         //-- initialize element descriptors
 
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DescriptionTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.DescriptionTypeDescriptor()
 
 
       //-----------/

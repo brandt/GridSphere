@@ -83,7 +83,7 @@ public class TransportGuaranteeType implements java.io.Serializable {
         super();
         this.type = type;
         this.stringValue = value;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.TransportGuaranteeType(int, java.lang.String)
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.types.TransportGuaranteeType(int, java.lang.String)
 
 
       //-----------/
@@ -166,6 +166,6 @@ public class TransportGuaranteeType implements java.io.Serializable {
             throw new IllegalArgumentException(err);
         }
         return (TransportGuaranteeType) obj;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.TransportGuaranteeType valueOf(java.lang.String)
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.types.TransportGuaranteeType valueOf(java.lang.String)
 
 }

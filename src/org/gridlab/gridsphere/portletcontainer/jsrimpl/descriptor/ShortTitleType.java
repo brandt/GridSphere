@@ -41,7 +41,7 @@ public class ShortTitleType implements java.io.Serializable {
     public ShortTitleType() {
         super();
         setContent("");
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ShortTitleType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ShortTitleType()
 
 
       //-----------/

@@ -55,7 +55,7 @@ public class CustomWindowStateDescriptor extends CustomWindowStateTypeDescriptor
         setExtendsWithoutFlatten(new CustomWindowStateTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "custom-window-state";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowStateDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomWindowStateDescriptor()
 
 
       //-----------/

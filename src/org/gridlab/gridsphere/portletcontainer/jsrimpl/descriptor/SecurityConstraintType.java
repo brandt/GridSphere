@@ -59,7 +59,7 @@ public class SecurityConstraintType implements java.io.Serializable {
     public SecurityConstraintType() {
         super();
         _displayNameList = new ArrayList();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraintType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SecurityConstraintType()
 
 
       //-----------/
@@ -75,7 +75,7 @@ public class SecurityConstraintType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _displayNameList.add(vDisplayName);
-    } //-- void addDisplayName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName)
+    } //-- void addDisplayName(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.DisplayName)
 
     /**
      * Method addDisplayName
@@ -87,7 +87,7 @@ public class SecurityConstraintType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _displayNameList.add(index, vDisplayName);
-    } //-- void addDisplayName(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName)
+    } //-- void addDisplayName(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.DisplayName)
 
     /**
      * Method clearDisplayName
@@ -119,7 +119,7 @@ public class SecurityConstraintType implements java.io.Serializable {
         }
 
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName) _displayNameList.get(index);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName getDisplayName(int)
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.DisplayName getDisplayName(int)
 
     /**
      * Method getDisplayName
@@ -132,7 +132,7 @@ public class SecurityConstraintType implements java.io.Serializable {
             mArray[index] = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName) _displayNameList.get(index);
         }
         return mArray;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName[] getDisplayName()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.DisplayName[] getDisplayName()
 
     /**
      * Method getDisplayNameCount
@@ -160,7 +160,7 @@ public class SecurityConstraintType implements java.io.Serializable {
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletCollection getPortletCollection()
     {
         return this._portletCollection;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletCollection getPortletCollection()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletCollection getPortletCollection()
 
     /**
      * Returns the value of field 'userDataConstraint'.
@@ -170,7 +170,7 @@ public class SecurityConstraintType implements java.io.Serializable {
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserDataConstraint getUserDataConstraint()
     {
         return this._userDataConstraint;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserDataConstraint getUserDataConstraint()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserDataConstraint getUserDataConstraint()
 
     /**
      * Method isValid
@@ -219,7 +219,7 @@ public class SecurityConstraintType implements java.io.Serializable {
     {
         boolean removed = _displayNameList.remove(vDisplayName);
         return removed;
-    } //-- boolean removeDisplayName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName)
+    } //-- boolean removeDisplayName(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.DisplayName)
 
     /**
      * Method setDisplayName
@@ -235,7 +235,7 @@ public class SecurityConstraintType implements java.io.Serializable {
             throw new IndexOutOfBoundsException();
         }
         _displayNameList.set(index, vDisplayName);
-    } //-- void setDisplayName(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName)
+    } //-- void setDisplayName(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.DisplayName)
 
     /**
      * Method setDisplayName
@@ -249,7 +249,7 @@ public class SecurityConstraintType implements java.io.Serializable {
         for (int i = 0; i < displayNameArray.length; i++) {
             _displayNameList.add(displayNameArray[i]);
         }
-    } //-- void setDisplayName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName)
+    } //-- void setDisplayName(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.DisplayName)
 
     /**
      * Sets the value of field 'id'.
@@ -270,7 +270,7 @@ public class SecurityConstraintType implements java.io.Serializable {
     public void setPortletCollection(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletCollection portletCollection)
     {
         this._portletCollection = portletCollection;
-    } //-- void setPortletCollection(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletCollection)
+    } //-- void setPortletCollection(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletCollection)
 
     /**
      * Sets the value of field 'userDataConstraint'.
@@ -281,7 +281,7 @@ public class SecurityConstraintType implements java.io.Serializable {
     public void setUserDataConstraint(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserDataConstraint userDataConstraint)
     {
         this._userDataConstraint = userDataConstraint;
-    } //-- void setUserDataConstraint(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserDataConstraint)
+    } //-- void setUserDataConstraint(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserDataConstraint)
 
     /**
      * Method unmarshal

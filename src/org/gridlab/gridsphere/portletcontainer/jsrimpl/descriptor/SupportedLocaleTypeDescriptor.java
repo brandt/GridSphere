@@ -97,7 +97,7 @@ public class SupportedLocaleTypeDescriptor extends org.exolab.castor.xml.util.XM
 
         //-- initialize element descriptors
 
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SupportedLocaleTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SupportedLocaleTypeDescriptor()
 
 
       //-----------/

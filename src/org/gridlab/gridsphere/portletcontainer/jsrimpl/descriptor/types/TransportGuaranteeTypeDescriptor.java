@@ -54,7 +54,7 @@ public class TransportGuaranteeTypeDescriptor extends org.exolab.castor.xml.util
         super();
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "transport-guaranteeType";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.TransportGuaranteeTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.types.TransportGuaranteeTypeDescriptor()
 
 
       //-----------/

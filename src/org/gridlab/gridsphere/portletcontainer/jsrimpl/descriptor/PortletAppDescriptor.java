@@ -55,7 +55,7 @@ public class PortletAppDescriptor extends PortletAppTypeDescriptor {
         setExtendsWithoutFlatten(new PortletAppTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "portlet-app";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletAppDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletAppDescriptor()
 
 
       //-----------/

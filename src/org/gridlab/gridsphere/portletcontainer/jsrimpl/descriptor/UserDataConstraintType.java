@@ -55,7 +55,7 @@ public class UserDataConstraintType implements java.io.Serializable {
     public UserDataConstraintType() {
         super();
         _descriptionList = new ArrayList();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserDataConstraintType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserDataConstraintType()
 
 
       //-----------/
@@ -71,7 +71,7 @@ public class UserDataConstraintType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _descriptionList.add(vDescription);
-    } //-- void addDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- void addDescription(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method addDescription
@@ -83,7 +83,7 @@ public class UserDataConstraintType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _descriptionList.add(index, vDescription);
-    } //-- void addDescription(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- void addDescription(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method clearDescription
@@ -115,7 +115,7 @@ public class UserDataConstraintType implements java.io.Serializable {
         }
 
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description) _descriptionList.get(index);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description getDescription(int)
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description getDescription(int)
 
     /**
      * Method getDescription
@@ -128,7 +128,7 @@ public class UserDataConstraintType implements java.io.Serializable {
             mArray[index] = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description) _descriptionList.get(index);
         }
         return mArray;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description[] getDescription()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description[] getDescription()
 
     /**
      * Method getDescriptionCount
@@ -156,7 +156,7 @@ public class UserDataConstraintType implements java.io.Serializable {
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.TransportGuaranteeType getTransportGuarantee()
     {
         return this._transportGuarantee;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.TransportGuaranteeType getTransportGuarantee()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.types.TransportGuaranteeType getTransportGuarantee()
 
     /**
      * Method isValid
@@ -205,7 +205,7 @@ public class UserDataConstraintType implements java.io.Serializable {
     {
         boolean removed = _descriptionList.remove(vDescription);
         return removed;
-    } //-- boolean removeDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- boolean removeDescription(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method setDescription
@@ -221,7 +221,7 @@ public class UserDataConstraintType implements java.io.Serializable {
             throw new IndexOutOfBoundsException();
         }
         _descriptionList.set(index, vDescription);
-    } //-- void setDescription(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- void setDescription(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Method setDescription
@@ -235,7 +235,7 @@ public class UserDataConstraintType implements java.io.Serializable {
         for (int i = 0; i < descriptionArray.length; i++) {
             _descriptionList.add(descriptionArray[i]);
         }
-    } //-- void setDescription(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description)
+    } //-- void setDescription(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Description)
 
     /**
      * Sets the value of field 'id'.
@@ -256,7 +256,7 @@ public class UserDataConstraintType implements java.io.Serializable {
     public void setTransportGuarantee(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.TransportGuaranteeType transportGuarantee)
     {
         this._transportGuarantee = transportGuarantee;
-    } //-- void setTransportGuarantee(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.TransportGuaranteeType)
+    } //-- void setTransportGuarantee(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.types.TransportGuaranteeType)
 
     /**
      * Method unmarshal

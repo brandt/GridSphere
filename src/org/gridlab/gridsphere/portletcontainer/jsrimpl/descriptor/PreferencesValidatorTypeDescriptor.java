@@ -97,7 +97,7 @@ public class PreferencesValidatorTypeDescriptor extends org.exolab.castor.xml.ut
 
         //-- initialize element descriptors
 
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletNameTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletNameTypeDescriptor()
 
 
       //-----------/

@@ -36,7 +36,7 @@ implements java.io.Serializable
 
     public PortletApp() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletApp()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletApp()
 
 
       //-----------/

@@ -45,7 +45,7 @@ public class PortletCollectionType implements java.io.Serializable {
     public PortletCollectionType() {
         super();
         _portletNameList = new ArrayList();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletCollectionType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletCollectionType()
 
 
       //-----------/
@@ -61,7 +61,7 @@ public class PortletCollectionType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _portletNameList.add(vPortletName);
-    } //-- void addPortletName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName)
+    } //-- void addPortletName(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletName)
 
     /**
      * Method addPortletName
@@ -73,7 +73,7 @@ public class PortletCollectionType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _portletNameList.add(index, vPortletName);
-    } //-- void addPortletName(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName)
+    } //-- void addPortletName(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletName)
 
     /**
      * Method clearPortletName
@@ -105,7 +105,7 @@ public class PortletCollectionType implements java.io.Serializable {
         }
 
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName) _portletNameList.get(index);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName getPortletName(int)
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletName getPortletName(int)
 
     /**
      * Method getPortletName
@@ -118,7 +118,7 @@ public class PortletCollectionType implements java.io.Serializable {
             mArray[index] = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName) _portletNameList.get(index);
         }
         return mArray;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName[] getPortletName()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletName[] getPortletName()
 
     /**
      * Method getPortletNameCount
@@ -175,7 +175,7 @@ public class PortletCollectionType implements java.io.Serializable {
     {
         boolean removed = _portletNameList.remove(vPortletName);
         return removed;
-    } //-- boolean removePortletName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName)
+    } //-- boolean removePortletName(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletName)
 
     /**
      * Method setPortletName
@@ -191,7 +191,7 @@ public class PortletCollectionType implements java.io.Serializable {
             throw new IndexOutOfBoundsException();
         }
         _portletNameList.set(index, vPortletName);
-    } //-- void setPortletName(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName)
+    } //-- void setPortletName(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletName)
 
     /**
      * Method setPortletName
@@ -205,7 +205,7 @@ public class PortletCollectionType implements java.io.Serializable {
         for (int i = 0; i < portletNameArray.length; i++) {
             _portletNameList.add(portletNameArray[i]);
         }
-    } //-- void setPortletName(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletName)
+    } //-- void setPortletName(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletName)
 
     /**
      * Method unmarshal

@@ -52,7 +52,7 @@ public class PortletPreferencesType implements java.io.Serializable {
     public PortletPreferencesType() {
         super();
         _preferenceList = new ArrayList();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferencesType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletPreferencesType()
 
 
       //-----------/
@@ -68,7 +68,7 @@ public class PortletPreferencesType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _preferenceList.add(vPreference);
-    } //-- void addPreference(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference)
+    } //-- void addPreference(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Preference)
 
     /**
      * Method addPreference
@@ -80,7 +80,7 @@ public class PortletPreferencesType implements java.io.Serializable {
         throws java.lang.IndexOutOfBoundsException
     {
         _preferenceList.add(index, vPreference);
-    } //-- void addPreference(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference)
+    } //-- void addPreference(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Preference)
 
     /**
      * Method clearPreference
@@ -122,7 +122,7 @@ public class PortletPreferencesType implements java.io.Serializable {
         }
 
         return (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference) _preferenceList.get(index);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference getPreference(int)
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Preference getPreference(int)
 
     /**
      * Method getPreference
@@ -135,7 +135,7 @@ public class PortletPreferencesType implements java.io.Serializable {
             mArray[index] = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference) _preferenceList.get(index);
         }
         return mArray;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference[] getPreference()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Preference[] getPreference()
 
     /**
      * Method getPreferenceCount
@@ -202,7 +202,7 @@ public class PortletPreferencesType implements java.io.Serializable {
     {
         boolean removed = _preferenceList.remove(vPreference);
         return removed;
-    } //-- boolean removePreference(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference)
+    } //-- boolean removePreference(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Preference)
 
     /**
      * Sets the value of field 'id'.
@@ -228,7 +228,7 @@ public class PortletPreferencesType implements java.io.Serializable {
             throw new IndexOutOfBoundsException();
         }
         _preferenceList.set(index, vPreference);
-    } //-- void setPreference(int, org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference)
+    } //-- void setPreference(int, org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Preference)
 
     /**
      * Method setPreference
@@ -242,7 +242,7 @@ public class PortletPreferencesType implements java.io.Serializable {
         for (int i = 0; i < preferenceArray.length; i++) {
             _preferenceList.add(preferenceArray[i]);
         }
-    } //-- void setPreference(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Preference)
+    } //-- void setPreference(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.Preference)
 
     /**
      * Sets the value of field 'preferencesValidator'.

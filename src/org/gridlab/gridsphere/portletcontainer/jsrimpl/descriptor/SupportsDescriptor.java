@@ -55,7 +55,7 @@ public class SupportsDescriptor extends SupportsTypeDescriptor {
         setExtendsWithoutFlatten(new SupportsTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "supports";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SupportsDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SupportsDescriptor()
 
 
       //-----------/

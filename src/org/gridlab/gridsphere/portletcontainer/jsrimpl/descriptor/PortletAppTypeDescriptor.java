@@ -314,7 +314,7 @@ public class PortletAppTypeDescriptor extends org.exolab.castor.xml.util.XMLClas
         { //-- local scope
         }
         desc.setValidator(fieldValidator);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletAppTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletAppTypeDescriptor()
 
 
       //-----------/

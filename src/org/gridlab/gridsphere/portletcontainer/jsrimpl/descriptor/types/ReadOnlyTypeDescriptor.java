@@ -54,7 +54,7 @@ public class ReadOnlyTypeDescriptor extends org.exolab.castor.xml.util.XMLClassD
         super();
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "read-onlyType";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.types.ReadOnlyTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.types.ReadOnlyTypeDescriptor()
 
 
       //-----------/

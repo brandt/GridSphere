@@ -43,7 +43,7 @@ public class ResourceBundleType implements java.io.Serializable {
     public ResourceBundleType() {
         super();
         setContent("");
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ResourceBundleType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ResourceBundleType()
 
 
       //-----------/

@@ -30,7 +30,7 @@ implements java.io.Serializable
 
     public SupportedLocale() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SupportedLocale()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SupportedLocale()
 
 
       //-----------/

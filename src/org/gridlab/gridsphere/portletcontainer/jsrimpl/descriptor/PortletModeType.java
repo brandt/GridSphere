@@ -45,7 +45,7 @@ public class PortletModeType implements java.io.Serializable {
     public PortletModeType() {
         super();
         setContent("");
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletModeType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletModeType()
 
 
       //-----------/

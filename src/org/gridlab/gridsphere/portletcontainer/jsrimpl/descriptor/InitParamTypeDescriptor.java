@@ -207,7 +207,7 @@ public class InitParamTypeDescriptor extends org.exolab.castor.xml.util.XMLClass
         { //-- local scope
         }
         desc.setValidator(fieldValidator);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.InitParamTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.InitParamTypeDescriptor()
 
 
       //-----------/

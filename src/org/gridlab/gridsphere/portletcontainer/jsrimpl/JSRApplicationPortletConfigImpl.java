@@ -28,6 +28,7 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
     private String id = new String();
     private String portletName = new String();
     private PortletApp portletApp = null;
+    private int expiration = 0;
 
     /**
      *  Constructs an instance of ApplicationSportletConfig
@@ -36,6 +37,10 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
         this.id = portletDef.getPortletClass().getContent();
         this.portletName = portletDef.getPortletName().getContent();
         this.portletApp = app;
+        if (portletDef.getExpirationCache() != null) {
+            expiration = portletDef.getExpirationCache().getContent();
+        }
+
     }
 
     /**
@@ -115,6 +120,15 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
         }
         */
         return modes;
+    }
+
+    /**
+     * returns the amount of time in seconds that a portlet's content should be cached
+     *
+     * @return the amount of time in seconds that a portlet's content should be cached
+     */
+    public long getCacheExpires() {
+        return expiration;
     }
 
 }

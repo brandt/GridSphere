@@ -171,7 +171,7 @@ public class UserAttributeTypeDescriptor extends org.exolab.castor.xml.util.XMLC
         { //-- local scope
         }
         desc.setValidator(fieldValidator);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttributeTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserAttributeTypeDescriptor()
 
 
       //-----------/

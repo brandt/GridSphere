@@ -55,7 +55,7 @@ public class CustomPortletModeDescriptor extends CustomPortletModeTypeDescriptor
         setExtendsWithoutFlatten(new CustomPortletModeTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "custom-portlet-mode";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletModeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.CustomPortletModeDescriptor()
 
 
       //-----------/

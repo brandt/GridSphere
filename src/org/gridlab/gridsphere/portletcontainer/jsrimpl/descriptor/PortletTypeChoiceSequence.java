@@ -43,7 +43,7 @@ public class PortletTypeChoiceSequence implements java.io.Serializable {
 
     public PortletTypeChoiceSequence() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletTypeChoiceSequence()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletTypeChoiceSequence()
 
 
       //-----------/
@@ -58,7 +58,7 @@ public class PortletTypeChoiceSequence implements java.io.Serializable {
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo getPortletInfo()
     {
         return this._portletInfo;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo getPortletInfo()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletInfo getPortletInfo()
 
     /**
      * Returns the value of field 'resourceBundle'.
@@ -68,7 +68,7 @@ public class PortletTypeChoiceSequence implements java.io.Serializable {
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ResourceBundle getResourceBundle()
     {
         return this._resourceBundle;
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ResourceBundle getResourceBundle()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ResourceBundle getResourceBundle()
 
     /**
      * Method isValid
@@ -116,7 +116,7 @@ public class PortletTypeChoiceSequence implements java.io.Serializable {
     public void setPortletInfo(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo portletInfo)
     {
         this._portletInfo = portletInfo;
-    } //-- void setPortletInfo(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfo)
+    } //-- void setPortletInfo(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletInfo)
 
     /**
      * Sets the value of field 'resourceBundle'.
@@ -126,7 +126,7 @@ public class PortletTypeChoiceSequence implements java.io.Serializable {
     public void setResourceBundle(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ResourceBundle resourceBundle)
     {
         this._resourceBundle = resourceBundle;
-    } //-- void setResourceBundle(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ResourceBundle)
+    } //-- void setResourceBundle(org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ResourceBundle)
 
     /**
      * Method unmarshal

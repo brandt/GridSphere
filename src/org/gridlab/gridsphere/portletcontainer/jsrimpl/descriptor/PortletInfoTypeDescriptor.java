@@ -204,7 +204,7 @@ public class PortletInfoTypeDescriptor extends org.exolab.castor.xml.util.XMLCla
         { //-- local scope
         }
         desc.setValidator(fieldValidator);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletInfoTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletInfoTypeDescriptor()
 
 
       //-----------/

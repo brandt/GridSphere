@@ -207,7 +207,7 @@ public class SecurityConstraintTypeDescriptor extends org.exolab.castor.xml.util
         { //-- local scope
         }
         desc.setValidator(fieldValidator);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraintTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.SecurityConstraintTypeDescriptor()
 
 
       //-----------/

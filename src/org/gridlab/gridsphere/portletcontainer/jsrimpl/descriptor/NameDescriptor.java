@@ -55,7 +55,7 @@ public class NameDescriptor extends NameTypeDescriptor {
         setExtendsWithoutFlatten(new NameTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "name";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.NameDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.NameDescriptor()
 
 
       //-----------/

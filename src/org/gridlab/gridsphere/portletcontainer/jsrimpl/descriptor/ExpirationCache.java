@@ -30,7 +30,7 @@ implements java.io.Serializable
 
     public ExpirationCache() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ExpirationCache()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ExpirationCache()
 
 
       //-----------/

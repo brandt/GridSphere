@@ -55,7 +55,7 @@ public class PortletCollectionDescriptor extends PortletCollectionTypeDescriptor
         setExtendsWithoutFlatten(new PortletCollectionTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "portlet-collection";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletCollectionDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PortletCollectionDescriptor()
 
 
       //-----------/

@@ -55,7 +55,7 @@ public class ResourceBundleDescriptor extends ResourceBundleTypeDescriptor {
         setExtendsWithoutFlatten(new ResourceBundleTypeDescriptor());
         nsURI = "http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd";
         xmlName = "resource-bundle";
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.ResourceBundleDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.ResourceBundleDescriptor()
 
 
       //-----------/

@@ -30,7 +30,7 @@ implements java.io.Serializable
 
     public DisplayName() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.DisplayName()
 
 
       //-----------/

@@ -133,7 +133,7 @@ public class DisplayNameTypeDescriptor extends org.exolab.castor.xml.util.XMLCla
         desc.setValidator(fieldValidator);
         //-- initialize element descriptors
 
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayNameTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.DisplayNameTypeDescriptor()
 
 
       //-----------/

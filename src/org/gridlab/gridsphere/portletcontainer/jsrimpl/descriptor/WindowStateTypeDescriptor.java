@@ -97,7 +97,7 @@ public class WindowStateTypeDescriptor extends org.exolab.castor.xml.util.XMLCla
 
         //-- initialize element descriptors
 
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.WindowStateTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.WindowStateTypeDescriptor()
 
 
       //-----------/

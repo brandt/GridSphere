@@ -30,7 +30,7 @@ implements java.io.Serializable
 
     public UserAttribute() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.UserAttribute()
 
 
       //-----------/

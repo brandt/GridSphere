@@ -30,7 +30,7 @@ implements java.io.Serializable
 
     public MimeType() {
         super();
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.MimeType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.MimeType()
 
 
       //-----------/

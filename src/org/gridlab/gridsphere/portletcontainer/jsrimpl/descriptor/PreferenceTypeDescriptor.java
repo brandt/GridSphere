@@ -206,7 +206,7 @@ public class PreferenceTypeDescriptor extends org.exolab.castor.xml.util.XMLClas
         { //-- local scope
         }
         desc.setValidator(fieldValidator);
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PreferenceTypeDescriptor()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.PreferenceTypeDescriptor()
 
 
       //-----------/

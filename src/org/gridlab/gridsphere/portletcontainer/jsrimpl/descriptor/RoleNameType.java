@@ -44,7 +44,7 @@ public class RoleNameType implements java.io.Serializable {
     public RoleNameType() {
         super();
         setContent("");
-    } //-- org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.RoleNameType()
+    } //-- org.gridlab.gridsphere.portletcontainer.jsr.descriptor.RoleNameType()
 
 
       //-----------/
