@@ -300,7 +300,7 @@ in lighter color
   Normal text in a table cell
 **********************************************/
 .portlet-section-body {
-  background-color: inherit;
+  background-color: #eeeeee;
   border: none;
   color: inherit;
   font-family: inherit;
