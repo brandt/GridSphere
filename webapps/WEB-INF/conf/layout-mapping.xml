@@ -12,12 +12,33 @@
         </field>
     </class>
 
+    <class name="org.gridlab.gridsphere.layout.BasePortletComponent">
+        <field name="Name" type="string">
+            <bind-xml name="name"/>
+        </field>
+        <field name="Height" type="string">
+            <bind-xml name="height"/>
+        </field>
+        <field name="Width" type="string">
+            <bind-xml name="width"/>
+        </field>
+        <field name="Background" type="string">
+            <bind-xml name="background"/>
+        </field>
+        <field name="Foreground" type="string">
+            <bind-xml name="foreground"/>
+        </field>
+        <field name="PortletInsets" type="org.gridlab.gridsphere.layout.PortletInsets">
+            <bind-xml name="portlet-insets"/>
+        </field>
+        <field name="PortletBorder" type="org.gridlab.gridsphere.layout.PortletBorder">
+            <bind-xml name="portlet-border"/>
+        </field>
+    </class>
+
     <class name="org.gridlab.gridsphere.layout.PortletPanel">
         <map-to xml="portlet-panel"/>
         <field name="LayoutManager" type="org.gridlab.gridsphere.layout.LayoutManager">
-            <bind-xml auto-naming="deriveByClass"/>
-        </field>
-        <field name="PortletComponents" type="org.gridlab.gridsphere.layout.PortletComponent" collection="vector">
             <bind-xml auto-naming="deriveByClass"/>
         </field>
     </class>
@@ -30,11 +51,8 @@
         <field name="Columns" type="integer">
             <bind-xml name="columns"/>
         </field>
-        <field name="Hgap" type="integer">
-            <bind-xml name="hgap"/>
-        </field>
-        <field name="Vgap" type="integer">
-            <bind-xml name="vgap"/>
+        <field name="PortletComponents" type="org.gridlab.gridsphere.layout.PortletComponent" collection="vector">
+            <bind-xml auto-naming="deriveByClass"/>
         </field>
     </class>
 
@@ -49,20 +67,13 @@
         <field name="Vgap" type="integer">
             <bind-xml name="vgap"/>
         </field>
-    </class>
-
-    <class name="org.gridlab.gridsphere.layout.PortletLineBorder">
-        <map-to xml="line-border"/>
-        <field name="Thickness" type="integer">
-            <bind-xml name="thickness"/>
-        </field>
-        <field name="LineColor" type="string">
-            <bind-xml name="color"/>
+        <field name="PortletComponents" type="org.gridlab.gridsphere.layout.PortletComponent" collection="vector">
+            <bind-xml auto-naming="deriveByClass"/>
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.layout.PortletTitleBorder">
-        <map-to xml="title-border"/>
+    <class name="org.gridlab.gridsphere.layout.PortletBorder">
+        <map-to xml="portlet-border"/>
         <field name="TitleColor" type="string">
             <bind-xml name="color"/>
         </field>
@@ -72,14 +83,17 @@
         <field name="Title" type="string">
             <bind-xml name="title"/>
         </field>
+        <field name="Thickness" type="string">
+            <bind-xml name="thickness"/>
+        </field>
+        <field name="LineColor" type="string">
+            <bind-xml name="color"/>
+        </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.layout.PortletFrame">
+    <class name="org.gridlab.gridsphere.layout.PortletFrame" extends="org.gridlab.gridsphere.layout.BasePortletComponent">
         <map-to xml="portlet-frame"/>
-        <field name="PortletBorder" type="org.gridlab.gridsphere.layout.PortletBorder">
-            <bind-xml auto-naming="deriveByClass"/>
-        </field>
-        <field name="PortletClass" type="string">
+        <field name="ConcretePortletClass" type="string">
             <bind-xml name="portlet-class"/>
         </field>
     </class>
@@ -94,14 +108,21 @@
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.layout.PortletImage">
+    <class name="org.gridlab.gridsphere.layout.PortletImage" extends="org.gridlab.gridsphere.layout.BasePortletComponent">
         <map-to xml="portlet-image"/>
         <field name="Image" type="string">
             <bind-xml name="image"/>
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.layout.PortletMinimized">
+    <class name="org.gridlab.gridsphere.layout.PortletText" extends="org.gridlab.gridsphere.layout.BasePortletComponent">
+        <map-to xml="portlet-text"/>
+        <field name="Text" type="string">
+            <bind-xml name="text"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.layout.PortletMinimized" extends="org.gridlab.gridsphere.layout.BasePortletComponent">
         <map-to xml="portlet-minimized"/>
         <field name="Title" type="string">
             <bind-xml name="title"/>
@@ -109,12 +130,15 @@
         <field name="Color" type="string">
             <bind-xml name="color"/>
         </field>
+        <field name="PortletImage" type="org.gridlab.gridsphere.layout.PortletImage">
+            <bind-xml name="portlet-image"/>
+        </field>
         <field name="PortletClass" type="string">
             <bind-xml name="portlet-class"/>
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.layout.PortletDock">
+    <class name="org.gridlab.gridsphere.layout.PortletDock" extends="org.gridlab.gridsphere.layout.BasePortletComponent">
         <map-to xml="portlet-dock"/>
         <field name="Title" type="string">
             <bind-xml name="title"/>
@@ -130,7 +154,7 @@
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.layout.PortletTabbedPane">
+    <class name="org.gridlab.gridsphere.layout.PortletTabbedPane" extends="org.gridlab.gridsphere.layout.BasePortletComponent">
         <map-to xml="portlet-tabbed-pane"/>
         <field name="PortletTabs" type="org.gridlab.gridsphere.layout.PortletTab" collection="vector">
             <bind-xml name="portlet-tab"/>
@@ -151,8 +175,8 @@
         <field name="Selected" type="boolean">
             <bind-xml name="selected"/>
         </field>
-        <field name="Component" type="org.gridlab.gridsphere.layout.PortletComponent">
-            <bind-xml auto-naming="deriveByClass"/>
+        <field name="PortletPanel" type="org.gridlab.gridsphere.layout.PortletPanel">
+            <bind-xml name="portlet-panel"/>
         </field>
     </class>
 
