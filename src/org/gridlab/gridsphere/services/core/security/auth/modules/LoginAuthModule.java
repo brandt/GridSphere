@@ -2,6 +2,7 @@ package org.gridlab.gridsphere.services.core.security.auth.modules;
 
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
+import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
 
 import java.util.Map;
 
@@ -25,6 +26,6 @@ public interface LoginAuthModule extends Comparable {
 
     public boolean isModuleActive();
     
-    public void checkAuthorization(User user, String password) throws AuthorizationException;
+    public void checkAuthentication(User user, String password) throws AuthenticationException;
 
 }

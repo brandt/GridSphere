@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
+import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
@@ -38,14 +39,14 @@ public class PasswordAuthModule extends BaseAuthModule implements LoginAuthModul
         }
     }
 
-    public void checkAuthorization(User user, String password) throws AuthorizationException {
+    public void checkAuthentication(User user, String password) throws AuthenticationException {
 
         log.debug("Entering authenticate");
         // Check that password is not null
         if (password == null) {
             String msg = "Password is not provided.";
             log.debug(msg);
-            AuthorizationException ex = new AuthorizationException(msg);
+            AuthenticationException ex = new AuthenticationException(msg);
             ex.putInvalidParameter("password", msg);
             throw ex;
         }
@@ -55,7 +56,7 @@ public class PasswordAuthModule extends BaseAuthModule implements LoginAuthModul
         } catch (InvalidPasswordException e) {
             String msg = "Incorrect password provided.";
             log.debug(msg);
-            AuthorizationException ex = new AuthorizationException(msg);
+            AuthenticationException ex = new AuthenticationException(msg);
             ex.putInvalidParameter("password", msg);
             throw ex;
         }

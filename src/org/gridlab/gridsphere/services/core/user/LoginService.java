@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.services.core.user;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
+import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 
 import java.util.List;
@@ -46,7 +47,7 @@ public interface LoginService extends PortletService {
      *          If login unsuccessful
      */
     public User login(String loginName, String loginPassword)
-            throws AuthorizationException;
+            throws AuthenticationException, AuthorizationException;
 
 
 }

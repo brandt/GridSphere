@@ -11,12 +11,10 @@ import java.util.Map;
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-public class BaseAuthModule {
+public abstract class BaseAuthModule {
 
     protected Map attributes = null;
     protected AuthModuleDefinition moduleDef = null;
-
-    private BaseAuthModule() {}
 
     public BaseAuthModule(AuthModuleDefinition moduleDef) {
         this.moduleDef = moduleDef;

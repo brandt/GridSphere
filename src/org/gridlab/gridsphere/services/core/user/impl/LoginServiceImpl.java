@@ -17,6 +17,7 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
+import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridlab.gridsphere.services.core.security.auth.modules.impl.AuthModuleEntry;
 import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModulesDescriptor;
@@ -244,7 +245,8 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     /**
      * Login a user with the given login name and password.
      * Returns the associated user if login succeeds.
-     * Throws an AuthenticationException if login fails.
+     * Throws an AuthenticationException if user cannot authenticate fails.
+     * Throws an AuthorizationException if user is not authroized, no account exists, etc.
      *
      * @param loginName     the login name
      * @param loginPassword The login password.
@@ -252,7 +254,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
      * @throws AuthorizationException if login unsuccessful
      */
     public User login(String loginName, String loginPassword)
-            throws AuthorizationException {
+            throws AuthenticationException, AuthorizationException {
         if ((loginName == null) || (loginPassword == null)) {
             throw new AuthorizationException("Username or password is blank");
         }
@@ -278,7 +280,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
             LoginAuthModule mod = (LoginAuthModule) it.next();
             log.debug(mod.getModuleName());
             try {
-                mod.checkAuthorization(user, loginPassword);
+                mod.checkAuthentication(user, loginPassword);
                 success = true;
             } catch (AuthorizationException e) {
                 authEx = e;
