@@ -5,14 +5,21 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.services.container.registry.UserPortletManager;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletContext;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import java.io.PrintWriter;
 import java.io.IOException;
 
-public class PortletBorder {
+public class PortletBorder implements PortletRender {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletBorder.class);
 
+    private UserPortletManager userManager = UserPortletManager.getInstance();
     private String title = "";
     private String titleColor = "#FFFFFF";
     private String font = "Arial, Helvetica, sans-serif";
@@ -87,7 +94,7 @@ public class PortletBorder {
         return windowMode.booleanValue();
     }
 
-    public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
+    public void doRender(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
         log.debug("in doRender()");
         try {
             req.setAttribute(LayoutProperties.TITLE, title);
@@ -97,18 +104,30 @@ public class PortletBorder {
             req.setAttribute(LayoutProperties.TITLECOLOR, titleColor);
             req.setAttribute(LayoutProperties.PORTLETMODE, configMode.toString());
             req.setAttribute(LayoutProperties.WINDOWSTATE, windowMode.toString());
-            ctx.include("/WEB-INF/conf/layout/portlet-border.jsp", req, res);
-        } catch (PortletException e) {
+            RequestDispatcher rd = ctx.getRequestDispatcher("/WEB-INF/conf/layout/portlet-border.jsp");
+            rd.include(req, res);
+
+            //ctx.include("/WEB-INF/conf/layout/portlet-border.jsp", req, res);
+
+        } catch (ServletException e) {
             log.error("Unable to include component JSP", e);
             throw new PortletLayoutException("Unable to include component JSP", e);
         }
     }
 
-    public void doRenderFirst(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
-        doRender(ctx, req, res);
+    public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        log.debug("in doRenderFirst()");
+        PrintWriter out = res.getWriter();
+        out.println("<table width=\"100%\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\" bgcolor=\"" +  lineColor + "\"");
+        out.println("<tr><td><img src=\"images/help.gif\" align=left></td><td height=\"20\" align=left valign=middle>");
     }
 
-    public void doRenderLast(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {}
+    public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        log.debug("in doRenderLast()");
+        PrintWriter out = res.getWriter();
+        out.println("<font color=\"#FFFFFF\" face=\"" + font + "\">&nbsp;" + title);
+        out.println("</font></td><td><img src=\"images/window.gif\" align=right></td></tr></table>");
+    }
 
 
 }

@@ -9,13 +9,16 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletContext;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Vector;
 import java.util.Iterator;
 import java.io.PrintWriter;
 import java.io.IOException;
 
-public class PortletContainer {
+public class PortletContainer implements PortletRender {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletContainer.class);
 
@@ -42,18 +45,22 @@ public class PortletContainer {
         return name;
     }
 
-    public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
+    public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        log.debug("in doRenderFirst()");
         PrintWriter out = res.getWriter();
-        log.debug("in doRender()");
         out.println("<html><head><meta HTTP-EQUIV=\"content-type\" CONTENT=\"text/html; charset=ISO-8859-1\">");
         out.println("<title>" + name + "</title>");
         Iterator it = components.iterator();
         while (it.hasNext()) {
             PortletComponent comp = (PortletComponent)it.next();
-            //comp.doRender(ctx, req, res);
             comp.doRenderFirst(ctx, req, res);
             comp.doRenderLast(ctx, req, res);
         }
+    }
+
+    public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        log.debug("in doRenderLast()");
+        PrintWriter out = res.getWriter();
         out.println("</html>");
     }
 

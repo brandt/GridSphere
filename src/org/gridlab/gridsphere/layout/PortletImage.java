@@ -6,6 +6,9 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.*;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletContext;
 import java.io.PrintWriter;
 import java.io.IOException;
 
@@ -29,21 +32,17 @@ public class PortletImage extends BasePortletComponent {
         return image;
     }
 
-    public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
-        super.doRender(ctx, req, res);
-        req.setAttribute("image", image);
-        try {
-            ctx.include("/WEB-INF/conf/layout/portlet-image.jsp", req, res);
-        } catch (PortletException e) {
-            log.error("Unable to include component JSP", e);
-            throw new PortletLayoutException("Unable to include component JSP", e);
-        }
+    public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        super.doRenderFirst(ctx, req, res);
+        PrintWriter out = res.getWriter();
+        out.println("<table width=\"100%\"><td width=\"1\">");
+        out.println("<spacer type=block width=\"100\"></td><td>");
+        out.println("<img src=\"" + image + "\" align=\"right\">");
+        out.println("</td></table>");
     }
 
-    public void doRenderFirst(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
-        doRender(ctx, req, res);
+    public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        super.doRenderLast(ctx, req, res);
     }
-
-    public void doRenderLast(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {}
 
 }

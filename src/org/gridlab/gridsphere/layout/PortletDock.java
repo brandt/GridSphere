@@ -9,6 +9,9 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletContext;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletContext;
 import java.util.Vector;
 import java.util.List;
 import java.util.Iterator;
@@ -70,25 +73,25 @@ public class PortletDock extends BasePortletComponent {
         return margin;
     }
 
-    public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
-        super.doRender(ctx, req, res);
-        log.debug("in doRender()" + components.size());
+    public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        super.doRenderFirst(ctx, req, res);
+        log.debug("in doRenderFirst()");
         PrintWriter out = res.getWriter();
         out.write("<tr><td>" + title);
         ListIterator compIt = components.listIterator();
         while (compIt.hasNext()) {
             PortletComponent comp = (PortletComponent)compIt.next();
-            comp.doRender(ctx, req, res);
-            margin.doRender(ctx, req, res);
+            comp.doRenderFirst(ctx, req, res);
+            margin.doRenderFirst(ctx, req, res);
+            margin.doRenderLast(ctx, req, res);
+            comp.doRenderLast(ctx, req, res);
         }
         out.write("</td></tr>");
     }
 
-    public void doRenderFirst(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
-        doRender(ctx, req, res);
+    public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        super.doRenderLast(ctx, req, res);
     }
-
-    public void doRenderLast(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {}
 
 
 }

@@ -5,18 +5,25 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletWindow;
-import org.gridlab.gridsphere.portlet.impl.SportletURI;
+import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portletcontainer.PortletErrorMessage;
+import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
 import org.gridlab.gridsphere.services.container.registry.PortletRegistryServiceException;
+import org.gridlab.gridsphere.services.container.registry.UserPortletManager;
 import org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryServiceImpl;
-//import org.gridlab.gridsphere.services.container.caching.CachingService;
-//import org.gridlab.gridsphere.services.container.caching.impl.PortletCachingServiceImpl;
+import org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryManager;
+
 import org.gridlab.gridsphere.event.ActionEvent;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -26,7 +33,7 @@ public class PortletFrame extends BasePortletComponent {
 
     private String portletClass;
     private String windowState = SportletWindow.NORMAL.toString();
-    private String portletMode = Portlet.Mode.VIEW.toString();
+    private String portletMode = null;
 
     public PortletFrame() {
     }
@@ -55,40 +62,35 @@ public class PortletFrame extends BasePortletComponent {
         return portletMode;
     }
 
-    public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
-        super.doRender(ctx, req, res);
-        log.debug("in doRender()");
-        PortletRegistryService registryService = null;
-        //CachingService cachingService = null;
-        try {
-            //cachingService = PortletCachingServiceImpl.getInstance();
-            registryService = PortletRegistryServiceImpl.getInstance();
-        } catch (PortletRegistryServiceException e) {
-            log.error("Failed to get registry instance in PortletFrame: ", e);
-            throw new PortletLayoutException("Unable to get portlet instance");
-        }
+    public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        super.doRenderFirst(ctx, req, res);
+        log.debug("in doRenderFirst()");
+        PortletRegistryManager registryManager = PortletRegistryManager.getInstance();
 
         if (border == null) border = new PortletBorder();
 
-        System.err.println("contacting registry for portlet: " + portletClass);
-        ConcretePortlet concretePortlet = registryService.getConcretePortlet(portletClass);
-        AbstractPortlet abstractPortlet = concretePortlet.getAbstractPortlet();
-        PortletSettings settings = concretePortlet.getSportletSettings();
+        UserPortletManager userPortletManager = UserPortletManager.getInstance();
 
         // Set the portlet ID
-        req.setAttribute(GridSphereProperties.PORTLETID, settings.getConcretePortletID());
-        System.err.println("concrete " + settings.getConcretePortletID());
+        //req.setAttribute(GridSphereProperties.PORTLETID, portletClass);
+
         // Set the portlet window
-        PortletWindow p = SportletWindow.getInstance(windowState);
-        req.setAttribute(GridSphereProperties.PORTLETWINDOW, p);
+        PortletWindow window = SportletWindow.getInstance(windowState);
+        req.setAttribute(GridSphereProperties.PORTLETWINDOW, window);
 
         // Set the portlet mode
-        String prevMode = req.getParameter(GridSphereProperties.PORTLETMODE);
-        if (prevMode == null) prevMode = Portlet.Mode.VIEW.toString();
-        req.getPortletSession().setAttribute(GridSphereProperties.PREVIOUSMODE, prevMode);
-        req.getPortletSession().setAttribute(GridSphereProperties.PORTLETMODE, portletMode);
+        //String prevMode = req.getParameter(GridSphereProperties.PORTLETMODE);
+        //if (prevMode == null) prevMode = Portlet.Mode.VIEW.toString();
+        //req.setAttribute(GridSphereProperties.PREVIOUSMODE, prevMode);
+
+        if (portletMode == null) {
+            portletMode = Portlet.Mode.VIEW.toString();
+        }
+        Portlet.Mode mode = Portlet.Mode.getInstance(portletMode);
+        req.setAttribute(GridSphereProperties.PORTLETMODE, mode);
 
         // Create URI tags that can be used
+        /*
         PortletURI minimizedModeURI = res.createURI(PortletWindow.State.MINIMIZED);
         PortletURI maximizedModeURI = res.createURI(PortletWindow.State.MAXIMIZED);
         PortletURI closedModeURI = res.createURI(PortletWindow.State.CLOSED);
@@ -109,44 +111,50 @@ public class PortletFrame extends BasePortletComponent {
         modeURI.addParameter(GridSphereProperties.PORTLETMODE, Portlet.Mode.CONFIGURE.toString());
         String configure = modeURI.toString();
         req.setAttribute(LayoutProperties.CONFIGUREURI, configure);
+        */
 
-        // set the portlet frame title
-        String title = settings.getTitle(req.getLocale(), req.getClient());
-        border.setTitle(title);
-
-        // render portlet frame
         ///// begin portlet frame
         PrintWriter out = res.getWriter();
         out.println("<table width=\"" + width + "%\"  border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#FFFFFF\"><tr><td>");
         out.println("<table width=\"100%\" border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#999999\">");
         out.println("<tr><td width=\"100%\">");
 
-        border.doRender(ctx, req, res);
+        border.doRenderFirst(ctx, req, res);
 
+        String id = (String)req.getParameter(GridSphereProperties.PORTLETID);
+        if ((id != null) && (id.equals(portletClass))) {
+            userPortletManager.doTitle(portletClass, req, res);
+        } else {
+            String appID = registryManager.getApplicationPortletID(portletClass);
+            ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
+            ConcretePortlet concPortlet = appPortlet.getConcretePortlet(portletClass);
+            PortletSettings settings = concPortlet.getSportletSettings();
+            Client client = (Client)req.getAttribute(GridSphereProperties.CLIENT);
+            String title = settings.getTitle(req.getLocale(), client);
+            border.setTitle(title);
+        }
+
+        border.doRenderLast(ctx, req, res);
 
         out.println("</td></tr>");
         out.println("<tr><td valign=\"top\" align=\"left\"><table width=\"100%\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\" bgcolor=");
         out.println("\"" + bgColor + "\"<tr><td width=\"25%\" valign=\"center\">");
 
-        try {
-            if (abstractPortlet != null) {
-                abstractPortlet.service(req, res);
-            }
-        } catch (PortletException e) {
-            log.error("Failed invoking portlet service method: ", e);
-            throw new PortletLayoutException("Failed invoking portlet service method");
+        PortletErrorMessage error = (PortletErrorMessage)req.getAttribute(GridSphereProperties.PORTLETERROR);
+        if ((error != null) && (error.getPortletID() == portletClass)) {
+            out.println("<b>Error!</b>");
+            out.println(error.getMessage());
+        } else {
+            userPortletManager.service(portletClass, req, res);
         }
 
+        req.removeAttribute(GridSphereProperties.PORTLETMODE);
+
+    }
+
+    public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        PrintWriter out = res.getWriter();
         out.println("</tr></table></td></tr></table></td></tr></table>");
-
-
-        ///// end portlet frame
     }
-
-    public void doRenderFirst(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
-        doRender(ctx, req, res);
-    }
-
-    public void doRenderLast(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {}
 
 }

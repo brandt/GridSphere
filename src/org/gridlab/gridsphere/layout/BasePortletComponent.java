@@ -9,6 +9,9 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletContext;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletContext;
 import java.io.IOException;
 
 public class BasePortletComponent extends PortletContainer implements PortletComponent {
@@ -79,11 +82,8 @@ public class BasePortletComponent extends PortletContainer implements PortletCom
         this.insets = insets;
     }
 
-    /**
-     * @deprecated
-     */
-    public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
-        log.debug("in doRender()");
+    public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        log.debug("in doRenderFirst()");
         req.setAttribute(LayoutProperties.NAME, name);
         req.setAttribute(LayoutProperties.BGCOLOR, bgColor);
         req.setAttribute(LayoutProperties.FGCOLOR, fgColor);
@@ -91,21 +91,7 @@ public class BasePortletComponent extends PortletContainer implements PortletCom
         req.setAttribute(LayoutProperties.WIDTH, width);
     }
 
-    public void doRenderFirst(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
-        log.debug("in doRender()");
-        req.setAttribute(LayoutProperties.NAME, name);
-        req.setAttribute(LayoutProperties.BGCOLOR, bgColor);
-        req.setAttribute(LayoutProperties.FGCOLOR, fgColor);
-        req.setAttribute(LayoutProperties.HEIGHT, height);
-        req.setAttribute(LayoutProperties.WIDTH, width);
-    }
-
-    public void doRenderLast(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
-        log.debug("in doRender()");
-        req.removeAttribute(LayoutProperties.NAME);
-        req.removeAttribute(LayoutProperties.BGCOLOR);
-        req.removeAttribute(LayoutProperties.FGCOLOR);
-        req.removeAttribute(LayoutProperties.HEIGHT);
-        req.removeAttribute(LayoutProperties.WIDTH);
+    public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        log.debug("in doRenderLast()");
     }
 }

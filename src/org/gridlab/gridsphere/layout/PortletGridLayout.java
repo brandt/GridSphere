@@ -9,9 +9,13 @@ import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletContext;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletContext;
 import java.util.Hashtable;
 import java.util.Map;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class PortletGridLayout extends BasePortletComponent implements LayoutManager {
 
@@ -43,9 +47,11 @@ public class PortletGridLayout extends BasePortletComponent implements LayoutMan
         return cols;
     }
 
-    public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
-        super.doRender(ctx, req, res);
-        log.debug("in doRender()");
+    public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        super.doRenderFirst(ctx, req, res);
+        log.debug("in doRenderFirst()");
+        PrintWriter out = res.getWriter();
+
         if (insets == null) insets = new PortletInsets();
 
         int i = 0, j = 0, k = 0;
@@ -53,24 +59,37 @@ public class PortletGridLayout extends BasePortletComponent implements LayoutMan
             throw new PortletLayoutException("Number of components specified exceeds rows * columns");
 
         int max = components.size();
+        PortletComponent p = null;
+
+        int gwidth = 100 / cols;
+
+        out.println("<table width=\"" + gwidth + "%\"  border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#FFFFFF\">");
+
         while ((i < rows) && (k < max)) {
-            insets.doRender(ctx,req,res);
+
+            out.println("<tr>");
+            //insets.doRenderFirst(ctx,req,res);
+            //insets.doRenderLast(ctx,req,res);
             while ((j < cols) && (k < max)) {
-                PortletComponent p = (PortletComponent)components.get(k);
-                p.doRender(ctx, req, res);
+                out.println("<td>");
+                p = (PortletComponent)components.get(k);
+                p.doRenderFirst(ctx, req, res);
+                p.doRenderLast(ctx, req, res);
                 j++; k++;
-                insets.doRender(ctx,req,res);
+                out.println("</td>");
             }
-            i++;
+            j = 0; i++;
+
+           out.println("</tr>");
         }
 
+        out.println("</table>");
     }
 
-    public void doRenderFirst(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
-        doRender(ctx, req, res);
+    public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        super.doRenderLast(ctx, req, res);
+        log.debug("in doRenderLast()");
     }
-
-    public void doRenderLast(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {}
 
 }
 

@@ -10,6 +10,9 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.Map;
 import java.util.Hashtable;
@@ -17,7 +20,8 @@ import java.util.Hashtable;
 public class PortletLayoutEngine {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletLayoutEngine.class);
-    private static PortletLayoutEngine instance = null;
+    private static PortletLayoutEngine instance = new PortletLayoutEngine();
+    private static ServletContext context = null;
 
     private GridSphereConfig gsConfig = null;
 
@@ -26,36 +30,21 @@ public class PortletLayoutEngine {
     private PortletLayoutDescriptor guestLayout = null;
     private String layoutConfigPath = null;
 
-    private boolean reload = false;
     private String error = "";
 
     private Map userLayouts = new Hashtable();
 
-    public PortletLayoutEngine() throws IOException, PortletLayoutDescriptorException {
-        gsConfig = GridSphereConfig.getInstance();
+    private PortletLayoutEngine() {}
 
-        String layoutMappingPath = gsConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING_XML);
-        layoutConfigPath =  gsConfig.getProperty(GridSphereConfigProperties.LAYOUT_XML);
-
-        guestLayout = new PortletLayoutDescriptor(layoutConfigPath, layoutMappingPath);
-    }
-
-    private static synchronized void doSync() {}
-
-    public static PortletLayoutEngine getInstance() throws IOException, PortletLayoutDescriptorException {
-        if (instance == null) {
-            doSync();
-            instance = new PortletLayoutEngine();
-        }
+    public static PortletLayoutEngine getInstance() {
         return instance;
     }
 
-    public void setAutomaticReload(boolean reload) {
-        this.reload = reload;
-    }
-
-    public boolean getAutomaticReload() {
-        return reload;
+    public void init() throws IOException, PortletLayoutDescriptorException {
+        gsConfig = GridSphereConfig.getInstance();
+        String layoutMappingPath = gsConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING_XML);
+        layoutConfigPath =  gsConfig.getProperty(GridSphereConfigProperties.LAYOUT_XML);
+        guestLayout = new PortletLayoutDescriptor(layoutConfigPath, layoutMappingPath);
     }
 
     public PortletContainer getPortletContainer(User user) throws PortletLayoutException {
@@ -85,25 +74,18 @@ public class PortletLayoutEngine {
         return pc;
     }
 
-    public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException {
+    public void doRender(User user, ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException {
         log.debug("in doRender()");
 
         PortletContainer pc = null;
-
-        // Check for user
-        User user = req.getUser();
 
         pc = getPortletContainer(user);
 
         // XXX: How do we signal a user has logged out so we can userLayouts.remove(user)???
 
-        // for now just render
-        if (reload) {
-            //layout.reload();
-        }
-
         try {
-            pc.doRender(ctx, req, res);
+            pc.doRenderFirst(ctx, req, res);
+            pc.doRenderLast(ctx, req, res);
         } catch (IOException e) {
             error = e.getMessage();
             log.error("Caught IOException: ", e);

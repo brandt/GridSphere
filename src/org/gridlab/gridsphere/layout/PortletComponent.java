@@ -31,8 +31,6 @@ public interface PortletComponent extends PortletRender {
 
     public void setPortletBorder(PortletBorder border);
 
-    //public void setPortletMode(Portlet.Mode mode);
-
     public void setName(String name);
 
     public void setPortletInsets(PortletInsets insets);

@@ -9,6 +9,9 @@ import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletContext;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletContext;
 import java.util.Vector;
 import java.util.List;
 import java.io.PrintWriter;
@@ -18,6 +21,7 @@ public class PortletTabbedPane extends BasePortletComponent {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletTabbedPane.class);
 
+    private PortletPanel selectedPanel = null;
     private Vector tabs = new Vector();
 
     public PortletTabbedPane() {}
@@ -202,8 +206,9 @@ public class PortletTabbedPane extends BasePortletComponent {
         return tabs;
     }
 
-    public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
-        log.debug("in doRender()");
+    public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        super.doRenderFirst(ctx, req, res);
+        log.debug("in doRenderFirst()");
 
         PrintWriter out = res.getWriter();
 
@@ -214,19 +219,20 @@ public class PortletTabbedPane extends BasePortletComponent {
             out.println("<th><b>" + title + "</b></th>");
         }
         out.println("</table>");
-        PortletPanel panel = getSelectedPortletPanel();
+        selectedPanel = getSelectedPortletPanel();
 
         out.println("<table width=\"100%\">");
         out.println("<tr><td>");
-        panel.doRender(ctx, req, res);
+        selectedPanel.doRenderFirst(ctx, req, res);
+    }
+
+    public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        super.doRenderLast(ctx, req, res);
+        PrintWriter out = res.getWriter();
+        selectedPanel.doRenderLast(ctx, req, res);
         out.println("</td></tr></table>");
-    }
 
-    public void doRenderFirst(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
-        doRender(ctx, req, res);
     }
-
-    public void doRenderLast(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {}
 
 
 }

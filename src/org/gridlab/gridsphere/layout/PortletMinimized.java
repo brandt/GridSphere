@@ -6,6 +6,9 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.*;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletContext;
 import java.io.PrintWriter;
 import java.io.IOException;
 
@@ -47,23 +50,16 @@ public class PortletMinimized extends BasePortletComponent {
         return portletClass;
     }
 
-    public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
-        super.doRender(ctx, req, res);
-        log.debug("in doRender()");
-        try {
-            req.setAttribute("title", title);
-            req.setAttribute("color", fgColor);
-            ctx.include("/WEB-INF/conf/layout/portlet-minimized.jsp", req, res);
-        } catch (PortletException e) {
-            log.error("Unable to include component JSP", e);
-            throw new PortletLayoutException("Unable to include PortletMinimized component JSP", e);
-        }
+    public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        super.doRenderFirst(ctx, req, res);
+        log.debug("in doRenderFirst()");
+        PrintWriter out = res.getWriter();
+        out.println("portlet minimized");
     }
 
-    public void doRenderFirst(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
-        doRender(ctx, req, res);
+    public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        super.doRenderLast(ctx, req, res);
+        log.debug("in doRenderLast()");
     }
-
-    public void doRenderLast(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {}
 
 }

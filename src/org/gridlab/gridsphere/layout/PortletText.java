@@ -6,6 +6,11 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.*;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletContext;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import java.io.PrintWriter;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -30,21 +35,22 @@ public class PortletText extends BasePortletComponent {
         return text;
     }
 
-    public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
-        log.debug("in doRender()");
+    public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        super.doRenderFirst(ctx, req, res);
+        log.debug("in doRenderFirst()");
         try {
-            ctx.include(text, req, res);
-        } catch (PortletException e) {
-            log.error("Unable to include component JSP", e);
-            throw new PortletLayoutException("Unable to include component JSP", e);
+            RequestDispatcher rd = ctx.getRequestDispatcher(text);
+            if (rd != null) rd.include(req, res);
+        } catch (ServletException e) {
+            log.error("Unable to include text: " + text, e);
+            throw new PortletLayoutException("Unable to include text: " + text, e);
         }
     }
 
-    public void doRenderFirst(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
-        doRender(ctx, req, res);
+    public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        super.doRenderLast(ctx, req, res);
+        log.debug("in doRenderLast()");
     }
-
-    public void doRenderLast(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {}
 
 
 }
