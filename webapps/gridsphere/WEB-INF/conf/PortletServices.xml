@@ -3,8 +3,8 @@
     <service>
         <name>Portlet Registry Service</name>
         <description>Provides a Registry for Portlet Web Applications</description>
-        <interface>org.gridlab.gridsphere.services.container.registry.PortletRegistryService</interface>
-        <implementation>org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryServiceImpl</implementation>
+        <interface>org.gridlab.gridsphere.services.registry.PortletRegistryService</interface>
+        <implementation>org.gridlab.gridsphere.services.registry.impl.PortletRegistryServiceImpl</implementation>
         <service-config>
             <param-name>coreContext</param-name>
             <param-value>coreportlets</param-value>
