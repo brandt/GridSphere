@@ -101,8 +101,8 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
             PortletComponent pc = cid.getPortletComponent();
             if (pc instanceof PortletFrame) {
                 if (portletClassNames.contains(cid.getPortletClass())) {
-                    System.err.println("component has portlet: " + cid.getPortletClass() + cid.getClassName());
-                    removePortletComponent(pc);
+                    log.debug("component has portlet: " + cid.getPortletClass());
+                    removePortletComponent(pc, req);
                 }
             }
         }
@@ -116,12 +116,12 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         Iterator it = cidList.iterator();
         while (it.hasNext()) {
             ComponentIdentifier cid = (ComponentIdentifier)it.next();
-            System.err.println("foun cid: " + cid.getClassName());
+            log.debug("found cid: " + cid.getClassName());
             PortletComponent pc = cid.getPortletComponent();
             if (pc instanceof PortletFrame) {
                 if (portletClassNames.contains(cid.getPortletClass())) {
-                    System.err.println("component has portlet: " + cid.getPortletClass() + cid.getClassName());
-                    removePortletComponent(pc);
+                    log.debug("component has portlet: " + cid.getPortletClass());
+                    removePortletComponent(pc, req);
                 }
             }
         }
@@ -142,8 +142,8 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
             PortletComponent pc = cid.getPortletComponent();
             if (pc instanceof PortletFrame) {
                 if (portletClassNames.equals(cid.getPortletClass())) {
-                    System.err.println("component has portlet: " + cid.getPortletClass() + cid.getClassName());
-                    removePortletComponent(pc);
+                    log.debug("component has portlet: " + cid.getPortletClass());
+                    removePortletComponent(pc, req);
                 }
             }
         }
@@ -207,34 +207,42 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         }
     }
 
-    private void removePortletComponent(PortletComponent pc) {
+    private void removePortletComponent(PortletComponent pc, PortletRequest req) {
+        String loc = req.getLocale().getLanguage();
+        if (pc == null) return;
         PortletComponent parent = pc.getParentComponent();
+
+        /* Perform delete based on parent component */
         if (parent instanceof PortletFrameLayout) {
-            //System.err.println("it's a frame layout");
+            log.info("parent is a frame layout");
 
             PortletFrameLayout layout = (PortletFrameLayout)parent;
-            System.err.println("removing frame from layout");
+            log.info("removing frame layout ");
             layout.removePortletComponent(pc);
-            if (layout.getPortletComponents().size() == 0) {
-                //System.err.println("no more frames- removing frame layout");
-                removePortletComponent(layout);
+            if (layout.getPortletComponents().isEmpty()) {
+                System.err.println("no more frames- removing frame layout");
+                removePortletComponent(layout, req);
             }
 
         }
         if (parent instanceof PortletTab) {
-            //System.err.println("it's a tab");
+            log.info("parent is a tab");
             PortletTab tab = (PortletTab)parent;
+            log.info("removing tab " + tab.getTitle(loc));
             tab.removePortletComponent();
-            removePortletComponent(tab);
+            removePortletComponent(tab, req);
         }
         if (parent instanceof PortletTabbedPane) {
-            //System.err.println("it's a tabbed pane");
+            log.info("parent is a tabbed pane");
             PortletTabbedPane pane = (PortletTabbedPane)parent;
             PortletTab tab = (PortletTab)pc;
-            //System.err.println("removing tab " + tab.getTitle());
-            pane.removeTab(tab);
-            if (pane.getPortletTabs().isEmpty()) {
-                removePortletComponent(pane);
+            log.info("removing tab " + tab.getTitle(loc));
+            if ((tab.getPortletComponent() == null) && pane.getPortletTabs().isEmpty()) {
+                log.info("removing pane " + pane.getLabel());
+                pane.removeTab(tab);
+                removePortletComponent(pane, req);
+            }  else {
+                pane.removeTab(tab);
             }
         }
     }
@@ -360,7 +368,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         if (tab != null) {
             System.err.println("found a tab!!!!");
             PortletTabbedPane pane = (PortletTabbedPane)tab.getParentComponent();
-            System.err.println("trying to remoive tab from pane!!!!");
+            System.err.println("trying to remove tab from pane!!!!");
             pane.removeTab(tab);
         }
     }
