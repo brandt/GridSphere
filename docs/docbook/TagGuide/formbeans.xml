@@ -1,0 +1,111 @@
+<!--
+    Author:     Oliver Wehrens
+    Version:    $Id$
+-->
+
+<chapter id="uibeans">
+    <title>GridSphere UI Visual Bean Library</title>
+
+    <para>
+        GridSphere UI tags are JSP tags that can be used in a JSP page to create user interfaces. The UI tag library
+        descriptor which defines tag parameters and definitions can be found in webapps/gridsphere/WEB-INF/tlds/portletui.tld
+        of the source directory. All tags may contain a beanId attribute. The valueof beanId is
+        a String that identifies the tag so it mey be retrieved as a visual bean in the portlet. See the Tutorial
+        for an example.
+    </para>
+
+    <sect1 id="beanusage"><title>Usage on GridSphere UI Visual Beans</title>
+        <para>
+            Every JSP that wishes to use the tag library must include the following code snippet
+            show below:
+        </para>
+        <example>
+            <title>Usage of visual beans</title>
+        <screen>
+<![CDATA[
+<%@ taglib uri="/portletUI" prefix="ui" %>
+<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
+<portletAPI:init/>
+]]>
+        </screen>
+        <para>
+            Now the tags can be used within a JSP by using the "ui" reference specified in the taglib
+            directive. The portletAPI directive and tag initialization make the portlet objects available to the
+            tags.
+        </para>
+    </example>
+    </sect1>
+
+    <sect1 id="visualbeans">
+        <title>Elementbeans</title>
+        <para>
+            This section describes the beans you can use to build forms easy.
+        </para>
+            <table>
+                <title>attributes of beans</title>
+                <tgroup cols="2">
+                    <thead>
+                        <row>
+                            <entry>attributename</entry><entry>description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>font</entry><entry>font of the tag</entry>
+                        </row>
+                        <row>
+                            <entry>color</entry><entry>color of the tag</entry>
+                        </row>
+                        <row>
+                            <entry>backgroundcolor</entry><entry>backgroundcolor of the tag</entry>
+                        </row>
+                        <row>
+                            <entry>cssstyle</entry><entry>CSS style of the element</entry>
+                        </row>
+                        <row>
+                            <entry>size</entry><entry>size of the inputfield</entry>
+                        </row>
+                        <row>
+                            <entry>maxlength</entry><entry>maximal length of the inputfield</entry>
+                        </row>
+                        <row>
+                            <entry>disabled</entry><entry>if the element is disabled</entry>
+                        </row>
+                        <row>
+                            <entry>readonly</entry><entry>if the element is readonly</entry>
+                        </row>
+                        <row>
+                            <entry>selected</entry><entry>if the element is selected</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+
+
+        <sect2 id="actionlinkbean">
+            <title>ActionLinkBean</title>
+            The actionlinkbean extends from the see textbean. Addtional it provides a method
+            for setting the link (action).
+
+            <table>
+                <title>Methods provided by ActionLinkBean</title>
+                <tgroup cols="2">
+                    <thead>
+                        <row>
+                            <entry>methods</entry><entry>description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>setLink</entry><entry>sets the actionlink</entry>
+                        </row>
+                        <row>
+                            <entry>getLink</entry><entry>returns the actionlink</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </sect2>
+    </sect1>
+
+</chapter>

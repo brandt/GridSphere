@@ -10,12 +10,13 @@
         GridSphere UI tags are JSP tags that can be used in a JSP page to create user interfaces. The UI tag library
         descriptor which defines tag parameters and definitions can be found in webapps/gridsphere/WEB-INF/tlds/portletui.tld
         of the source directory. All tags may contain a beanId attribute. The valueof beanId is
-        a String that identifies the tag so it mey be retrieved as a bean in the portlet. See the Tutorial
+        a String that identifies the tag so it mey be retrieved as a visual bean in the portlet. See the Tutorial
         for an example.
     </para>
 
-    <sect1 id="usage"><title>Usage on GridSphere UI Tags</title>
+    <sect1 id="tagusage"><title>Usage on GridSphere UI Tags</title>
     <example>
+        <title>UI tag usage</title>
         <para>
             Every JSP that wishes to use the tag library must include the following code snippet
             show below:
@@ -185,10 +186,57 @@
             </example>
         </sect2>
 
+        <sect2 id="formtag">
+            <title>Form</title>
+            <para>
+                The form tag is used to create a form and can contain other UI tags as well as actionparam tags
+                specifying action parameters. If a form tag contains a actionsubmit tag, then the action specified
+                in the actionsubmit will override any action specified in the form tag.
+            </para>
+            <example>
+                <title>Usage of form</title>
+                <screen>
+<![CDATA[
+<ui:form action="doSomeAction">
+...
+</ui:form>]]>
+                </screen>
+            </example>
+        </sect2>
+
+        <sect2 id="fileformtag">
+            <title>FileForm</title>
+            <para>
+                The file form tag is used to create a form that is used to accept multi-part mime encoded
+                upload files. Generally, a fileinput tag is nested inside a fileform tag to allow access to
+                the uploaded file from a fileinput bean. Please see <link linkend="fileinputtag">fileinput tag</link>
+                for more information.
+            </para>
+            <example>
+                <title>Usage of fileform</title>
+                <screen>
+<![CDATA[
+<ui:fileform action="uploadFile">
+        <ui:frame>
+            <ui:tablerow>
+                <ui:tablecell width="100">
+                    <ui:text value="File: "/>
+                </ui:tablecell>
+                <ui:tablecell width="60">
+                    <ui:fileinput beanId="userfile" size="20" maxlength="20"/>
+                </ui:tablecell>
+                <ui:tablecell/>
+            </ui:tablerow>
+        </ui:frame>
+ </ui:fileform>]]>
+                </screen>
+            </example>
+        </sect2>
+
     </sect1>
 
 
-    <sect1 id="uitags"><title>UI Tags</title>
+    <sect1 id="otheruitags"><title>UI Tags</title>
      <para>
          The rest of the UI tags generally wrap existing HTML elements, such as the checkbox, radiobutton,
          textfield tags. The panel and frame tags are container tags for other tag elements. A reasonably nice
@@ -272,8 +320,7 @@
     <ui:frame>
         ...
     </ui:frame>
-</ui:panel>
- ]]>
+</ui:panel>]]>
                 </screen>
                 This creates a panel with two frames one on top of the other.
             </example>
@@ -378,23 +425,7 @@
             </example>
         </sect2>
 
-        <sect2 id="formtag">
-            <title>Form</title>
-            <para>
-                This tag is used to create a form and can contain other UI tags as well as actionparam tags
-                specifying action parameters. If a form tag contains a actionsubmit tag, then the action specified
-                in the actionsubmit will override any action specified in the form tag.
-            </para>
-            <example>
-                <title>Usage of form</title>
-                <screen>
-<![CDATA[
-<ui:form action="doSomeAction">
-...
-</gs:form>]]>
-                </screen>
-            </example>
-        </sect2>
+
 
         <sect2 id="fileinputtag">
             <title>FileInput</title>
@@ -441,7 +472,7 @@
             <example>
                 <title>Usage of textfield</title>
                 <screen>
-                    <![CDATA[<ui:textfield beanId="myTextField" value="Initial value" size="15"/>]]>
+<![CDATA[<ui:textfield beanId="myTextField" value="Initial value" size="15"/>]]>
                 </screen>
                 This example creates a textfield with the beanId myTextField such that it can be retrieved in the portlet
                 action method.
@@ -497,7 +528,7 @@
             <example>
                 <title>Usage of textfield</title>
                 <screen>
-                    <![CDATA[<ui:textfield beanId="myTextField" value="Initial value" size="15"/>]]>
+<![CDATA[<ui:textfield beanId="myTextField" value="Initial value" size="15"/>]]>
                 </screen>
                 This example creates a textfield with the beanId myTextField such that it can be retrieved in the portlet
                 action method.
@@ -553,7 +584,7 @@
             <example>
                 <title>Usage of password field</title>
                 <screen>
-                    <![CDATA[<ui:password name="password" value="" size="15"/>]]>
+<![CDATA[<ui:password name="password" value="" size="15"/>]]>
                 </screen>
                 This example creates a password field with the name password, no default value and a size of 15 characters.
             </example>
@@ -784,80 +815,6 @@
         </sect2>
 
 
-    </sect1>
-
-    <!-- ================================================================ -->
-
-    <sect1 id="beans">
-        <title>Elementbeans</title>
-        <para>
-            This section describes the beans you can use to build forms easy.
-        </para>
-            <table>
-                <title>attributes of beans</title>
-                <tgroup cols="2">
-                    <thead>
-                        <row>
-                            <entry>attributename</entry><entry>description</entry>
-                        </row>
-                    </thead>
-                    <tbody>
-                        <row>
-                            <entry>font</entry><entry>font of the tag</entry>
-                        </row>
-                        <row>
-                            <entry>color</entry><entry>color of the tag</entry>
-                        </row>
-                        <row>
-                            <entry>backgroundcolor</entry><entry>backgroundcolor of the tag</entry>
-                        </row>
-                        <row>
-                            <entry>cssstyle</entry><entry>CSS style of the element</entry>
-                        </row>
-                        <row>
-                            <entry>size</entry><entry>size of the inputfield</entry>
-                        </row>
-                        <row>
-                            <entry>maxlength</entry><entry>maximal length of the inputfield</entry>
-                        </row>
-                        <row>
-                            <entry>disabled</entry><entry>if the element is disabled</entry>
-                        </row>
-                        <row>
-                            <entry>readonly</entry><entry>if the element is readonly</entry>
-                        </row>
-                        <row>
-                            <entry>selected</entry><entry>if the element is selected</entry>
-                        </row>
-                    </tbody>
-                </tgroup>
-            </table>
-
-
-        <sect2 id="actionlinkbean">
-            <title>ActionLinkBean</title>
-            The actionlinkbean extends from the see textbean. Addtional it provides a method
-            for setting the link (action).
-
-            <table>
-                <title>Methods provided by ActionLinkBean</title>
-                <tgroup cols="2">
-                    <thead>
-                        <row>
-                            <entry>methods</entry><entry>description</entry>
-                        </row>
-                    </thead>
-                    <tbody>
-                        <row>
-                            <entry>setLink</entry><entry>sets the actionlink</entry>
-                        </row>
-                        <row>
-                            <entry>getLink</entry><entry>returns the actionlink</entry>
-                        </row>
-                    </tbody>
-                </tgroup>
-            </table>
-        </sect2>
     </sect1>
 
 </chapter>
