@@ -9,18 +9,17 @@ import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
 import java.util.*;
+import java.io.UnsupportedEncodingException;
 
 /**
- * Created by IntelliJ IDEA.
- * User: novotny
- * Date: Apr 3, 2004
- * Time: 12:59:58 AM
- * To change this template use File | Settings | File Templates.
+ * GridSphereParameters is the dragon's end. A sick, twisted filter for request parameters owing to
+ * the various rules that must be obeyed in the spec. Initialized in PortletRequestImpl constructor.
  */
 public class GridSphereParameters {
 
     private HttpServletRequest req = null;
     private Map renderParams = null;
+    private Map persistParams = null;
     private Map params = null;
     private String targetedCid = null;
     private List reservedParams = null;
@@ -33,6 +32,7 @@ public class GridSphereParameters {
 
         params = new HashMap();
         renderParams = new HashMap();
+        persistParams = new HashMap();
 
         // create reserved params list
         reservedParams = new ArrayList();
@@ -44,12 +44,13 @@ public class GridSphereParameters {
         parseQueryString(queryString);
 
         this.targetedCid = request.getParameter(SportletProperties.COMPONENT_ID);
-
     }
 
     public void parseQueryString(String queryString) {
 
         queryString = queryString + "&";
+
+        //System.err.println("GP: queryString= " + queryString);
 
         StringTokenizer st = new StringTokenizer(queryString, "&");
 
@@ -63,8 +64,12 @@ public class GridSphereParameters {
                 value = (String) st2.nextElement();
             }
 
-            name = URLDecoder.decode(name);
-            value = URLDecoder.decode(value);
+            try {
+                name = URLDecoder.decode(name, "UTF-8");
+                value = URLDecoder.decode(value, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
 
             if (name.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
                 String sname = name.substring(3);
@@ -94,11 +99,12 @@ public class GridSphereParameters {
         }
     }
 
-    private void overlayRequestParams() {
+    private void parseRequestParams() {
         for (Enumeration parameters = req.getParameterNames(); parameters.hasMoreElements();) {
             String paramName = (String) parameters.nextElement();
             String[] paramValues = (String[]) req.getParameterValues(paramName);
             if (!reservedParams.contains(paramName)) {
+                if (paramName.startsWith("pr_" + SportletProperties.RENDER_PARAM_PREFIX)) continue;
                 if (paramName.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
                     String name = paramName.substring(3);
                     if (!renderParams.containsKey(name)) {
@@ -113,44 +119,79 @@ public class GridSphereParameters {
         }
     }
 
+    /**
+     * Parses the request for double prefixed render params that have been transmitted from the PortletFrame
+     * using JSRApplicationPortletImpl to get its dispatcher.
+     */
+    private void parsePersistParams() {
+        for (Enumeration parameters = req.getParameterNames(); parameters.hasMoreElements();) {
+            String paramName = (String) parameters.nextElement();
+            String[] paramValues = (String[]) req.getParameterValues(paramName);
+            if (!reservedParams.contains(paramName)) {
+                if (paramName.startsWith("pr_" + SportletProperties.RENDER_PARAM_PREFIX)) {
+                    String name = paramName.substring(6);
+                    if (!persistParams.containsKey(name)) {
+                        persistParams.put(name, paramValues);
+                    }
+                }
+            }
+        }
+    }
+
     public Map getParameterMap() {
         String mycid = (String) req.getAttribute(SportletProperties.COMPONENT_ID);
+        String pid = (String) req.getAttribute(SportletProperties.PORTLETID);
+
         Map map = new HashMap();
         // we need to distinguish between a render invocation abnd a render that follows an action
         // In the first case, all params are returned. In the second case, params in action method
         // must not be returned
 
-        // this is a render event
+        //System.err.println("GP: in parameters  mycid= " + mycid + " targetid= " + targetedCid);
+
+        // this is a render event (meaning params are being queried in a render method)
         if (req.getAttribute(SportletProperties.PORTLET_ACTION_METHOD) == null) {
 
             // this is a render that has occured after an action
             if (req.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION) != null) {
-                overlayRequestParams();
-                if (mycid.equals(targetedCid)) map.putAll(renderParams);
-                /*
-                System.err.println("getParamaterMap: returning all params");
-                Iterator it = map.keySet().iterator();
-                while (it.hasNext()) {
-                    String key = (String)it.next();
-                    String[] vals = (String[])map.get(key);
-                    System.err.print("name= " + key + " values= ");
-                    for (int c = 0; c < vals.length; c++) {
-                        System.err.print(vals[c] + " ");
-                    }
+
+                //System.err.println("GP: default action not null");
+
+                // this is the portlet that was being targeted, now during a render
+                if (mycid.equals(targetedCid)) {
+                    //System.err.println("GP: in render event, have an action, this is the target portlet: " + pid);
+                    parseRequestParams();
+
+                    parsePersistParams();
+                    map.putAll(persistParams);
+                    map.putAll(renderParams);
+
+                } else {
+                    //System.err.println("GP: in render event, have an action, this portlet is not targeted");
+                    parsePersistParams();
+                    map.putAll(persistParams);
+
                 }
-                */
                 return Collections.unmodifiableMap(map);
             }
         }
 
         // this is a render triggered by a render URL or an action event
-        overlayRequestParams();
-        map.putAll(params);
+
         if (mycid.equals(targetedCid)) {
+            parseRequestParams();
+            map.putAll(params);
+            parsePersistParams();
+            map.putAll(persistParams);
+            //System.err.println("GP: in render, no action this IS the targeted portlet " + pid);
+
             Iterator it = renderParams.keySet().iterator();
+            // a persist param of the same name should take precedence over a render param
+            // and new render params of the same name should be added to the array
             while (it.hasNext()) {
                 String key = (String) it.next();
                 String[] renderVals = (String[]) renderParams.get(key);
+                //if (persistParams.containsKey())
                 if (map.containsKey(key)) {
                     String[] vals = (String[]) map.get(key);
                     String[] tmp = new String[vals.length + renderVals.length];
@@ -162,7 +203,12 @@ public class GridSphereParameters {
                 }
 
             }
+        } else {
+            //System.err.println("GP: in render, no action this is NOT the targeted portlet" + pid);
+            parsePersistParams();
+            map.putAll(persistParams);
         }
+
         /*
         System.err.println("getParamaterMap: returning params for this portlet");
         Iterator it = map.keySet().iterator();

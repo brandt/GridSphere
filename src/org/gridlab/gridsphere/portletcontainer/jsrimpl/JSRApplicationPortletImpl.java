@@ -178,11 +178,10 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
         Map params = (Map) req.getAttribute(SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid);
         String extraInfo = "";
 
+        //System.err.println("Dispatching: Looking for render params for " + SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid);
         if (params == null) {
             params = new HashMap();
-
         }
-
 
         //params.put(SportletProperties.COMPONENT_ID, cid);
         boolean firstParam = true;
@@ -197,7 +196,13 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
             }
             String name = (String) it.next();
 
-            String encname = URLEncoder.encode(name, "UTF-8");
+            // Render parameters that are passed on from the portlet frame are persistent across client requests
+            // They are render param names already prefixed. We prefix them again so are can be selectively retrieved
+            // in the nasty request parameter filter GridSphereParameters
+
+            String encname = URLEncoder.encode("pr_" + name, "UTF-8");
+            //String encname = URLEncoder.encode(name, "UTF-8");
+
             Object val = params.get(name);
             if (val instanceof String[]) {
                 String[] vals = (String[]) val;
@@ -226,7 +231,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
         //String realWebAppName = webAppName.substring(0, webAppName.length() - 2);
 
        
-        //System.err.println("in getPortletDispatcher of jsr query string " + "/jsr/" + realWebAppName  + extraInfo);
+        //System.err.println("in getPortletDispatcher of jsr query string " + "/jsr/" + webAppName  + extraInfo);
         // TODO change dangerously hardcoded value!!!
         RequestDispatcher rd = context.getRequestDispatcher("/jsr/" + webAppName + extraInfo);
         //RequestDispatcher rd = context.getNamedDispatcher(servletName);

@@ -66,7 +66,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     private boolean isClosing = false;
 
-    private Map renderParams = null;
+    private Map renderParams = new HashMap();
 
     private StringBuffer frame = new StringBuffer();
 
@@ -351,29 +351,13 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
             titleBar.setPortletMode(request.getMode());
 
-
-            // If render parameters have been set, then use them in the triggered portlet
-            /*
-            renderParams = new HashMap();
-            for (Enumeration parameters = request.getParameterNames(); parameters.hasMoreElements();) {
-                String paramName = (String) parameters.nextElement();
-                String[] paramValues = (String[]) request.getParameterValues(paramName);
-                if (paramName.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
-                    if (!renderParams.containsKey(paramName)) {
-                        renderParams.put(paramName, paramValues);
-                    }
-                }
-            }
-            if (!renderParams.isEmpty()) request.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr, renderParams);
-            */
-
             //System.err.println("in PortletFrame action invoked for " + portletClass);
             if (event.hasAction()
                     && (!event.getAction().getName().equals(FRAME_CLOSE_OK_ACTION))
                     && (!event.getAction().getName().equals(FRAME_CLOSE_CANCEL_ACTION))) {
                 DefaultPortletAction action = event.getAction();
 
-                renderParams = null;
+                renderParams.clear();
 
                 try {
                     PortletInvoker.actionPerformed((String)request.getAttribute(SportletProperties.PORTLETID), action, request, res);
@@ -392,9 +376,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             }
 
             // see if render params are set
-            renderParams = (Map)request.getAttribute(SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
-
-            if (renderParams != null) System.err.println("in action " + portletClass + " there are render params! key= " + SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
+            Map tmpParams = (Map)request.getAttribute(SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
+            if (tmpParams != null) renderParams = tmpParams;
 
             List slisteners = Collections.synchronizedList(listeners);
             synchronized (slisteners) {
@@ -543,12 +526,13 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     postframe.append(storedWriter.toString());
                 } else {
                     try {
-                       /*
-                        if ((renderParams != null) && (!renderParams.isEmpty())) {
-                            System.err.println("in render " + portletClass + " there are render params in the frame setting in request! key= " + SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
+
+                        if (!renderParams.isEmpty()) {
+                            //System.err.println("PortletFrame: in " + portletClass + " sending render params");
+                            //System.err.println("in render " + portletClass + " there are render params in the frame setting in request! key= " + SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
                             req.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr, renderParams);
                         }
-                         */
+
                         PortletInvoker.service((String)req.getAttribute(SportletProperties.PORTLETID), req, wrappedResponse);
                         postframe.append(storedWriter.toString());
                     } catch (PortletException e) {
@@ -591,6 +575,10 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         if (cacheExpiration > 0) {
             cacheService.cache(portletClass + id, frame, cacheExpiration);
         }
+    }
+
+    public boolean isTargetedPortlet(PortletRequest req) {
+        return (req.getParameter(SportletProperties.COMPONENT_ID).equals(req.getAttribute(SportletProperties.COMPONENT_ID)));
     }
 
     public StringBuffer getBufferedOutput() {
