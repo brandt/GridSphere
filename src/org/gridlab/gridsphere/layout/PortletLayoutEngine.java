@@ -24,7 +24,8 @@ import java.util.Map;
  * <p>
  * The portlet layout engine is a higher level manager of portlet containers
  * that represent a users customized layout. The portlet layout engine is used
- * by the {@see GridSphereServlet} and the Portlet Layout Service that will
+ * by the {@link org.gridlab.gridsphere.portletcontainer.GridSphereServlet}
+ * and the Portlet Layout Service that will
  * manage the customization of users' layouts. To be implemented...
  * Expect the PortletLayoutEngine methods to change possibly....
  */
@@ -82,7 +83,7 @@ public class PortletLayoutEngine {
     /**
      * Initializes the portlet layout engine by loading in the defined Guest
      * user layout and new user layout templates specified in
-     * {@link  GridSphereConfigProperties}
+     * {@link GridSphereConfigProperties}
      *
      * @throws IOException if an I/O error occurs during the template layout loading
      * @throws DescriptorException if a descriptor parsing error occurs
@@ -187,7 +188,7 @@ public class PortletLayoutEngine {
      * Invoked by the GridSphereServlet to perform portlet login of a users layout
      *
      * @param event the gridsphere event
-     * @see {@link PortletContainer#loginPortlets}
+     * @see org.gridlab.gridsphere.layout.PortletContainer#loginPortlets
      */
     public void loginPortlets(GridSphereEvent event) {
         log.debug("in loginPortlets()");
@@ -203,7 +204,7 @@ public class PortletLayoutEngine {
      * Currently does nothing
      *
      * @param event the gridsphere event
-     * @see {@link PortletContainer#logoutPortlets}
+     * @see PortletContainer#logoutPortlets
      */
     public void logoutPortlets(GridSphereEvent event) {
         log.debug("in logoutPortlets()");

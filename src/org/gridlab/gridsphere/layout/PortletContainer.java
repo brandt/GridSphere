@@ -154,7 +154,7 @@ public class PortletContainer {
     }
 
     /**
-     * Performs login {@link org.gridlab.gridsphere.portlet.Portlet#login(PortletRequest)}
+     * Performs {@link org.gridlab.gridsphere.portlet.Portlet#login(PortletRequest) login}
      * on all the portlets conatined by this PortletContainer
      *
      * @param event a gridsphere event
@@ -178,7 +178,7 @@ public class PortletContainer {
     }
 
     /**
-     * Performs logout {@link org.gridlab.gridsphere.portlet.Portlet#logout(PortletSession)}
+     * Performs {@link org.gridlab.gridsphere.portlet.Portlet#logout(PortletSession) logout}
      * on all the portlets conatined by this PortletContainer
      *
      * @param event a gridsphere event

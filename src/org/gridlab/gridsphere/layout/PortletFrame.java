@@ -20,7 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * PortletFrame provides the visual representation of a portlet. A portlet frame
+ * <code>PortletFrame</code> provides the visual representation of a portlet. A portlet frame
  * contains a portlet title bar unless visible is set to false.
  */
 public class PortletFrame extends BasePortletComponent implements PortletTitleBarListener {
@@ -101,20 +101,20 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
     }
 
     /**
-     * If set to true the ortlet is rendered transparently without a
+     * If set to <code>true</code> the portlet is rendered transparently without a
      * defining border and title bar. This is used for example for the LogoutPortlet
      *
-     * @param transparent if set to true, portlet frame is displayed transparently, false otherwise
+     * @param transparent if set to <code>true</code>, portlet frame is displayed transparently, <code>false</code> otherwise
      */
     public void setTransparent(boolean transparent) {
         this.transparent = transparent;
     }
 
     /**
-     * If set to true the ortlet is rendered transparently without a
+     * If set to <code>true</code> the portlet is rendered transparently without a
      * defining border and title bar. This is used for example for the LogoutPortlet
      *
-     * @return true if the portlet frame is displayed transparently, false otherwise
+     * @return <code>true</code> if the portlet frame is displayed transparently, <code>false</code> otherwise
      */
     public boolean getTransparent() {
         return this.transparent;
@@ -125,8 +125,8 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
      * after Castor unmarshalls from XML, the ordering is determined by a
      * passed in List containing the previous portlet components in the tree.
      *
-     * @param list a list of component identifiers
-     * @return a list of updated component identifiers
+     * @param list a <code>List</code> of component identifiers
+     * @return a <code>List</code> of updated component identifiers
      * @see ComponentIdentifier
      */
     public List init(List list) {
@@ -148,9 +148,10 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
     }
 
     /**
-     * Adds a portlet frame listener to be notified of {@link PortletFrameEvent} events
+     * Adds a portlet frame listener to be notified of portlet frame events
      *
      * @param listener a portlet frame listener
+     * @see PortletFrameEvent
      */
     public void addFrameListener(PortletFrameListener listener) {
         listeners.add(listener);

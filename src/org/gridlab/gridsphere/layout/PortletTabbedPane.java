@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * The PortletTabbedPane represents the visual portlet tabbed pane interface
- * and is a container for {@link PortletTab}.
+ * and is a container for a {@link PortletTab}.
  */
 public class PortletTabbedPane extends BasePortletComponent implements PortletTabListener {
 

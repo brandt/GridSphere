@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Vector;
 
 /**
- * A PortletTitleBar represents the visual display of the portlet title bar
+ * A <code>PortletTitleBar</code> represents the visual display of the portlet title bar
  * within a portlet frame and is contained by {@link PortletFrame}.
  * The title bar contains portlet mode and window state as well as a title.
  */
@@ -299,7 +299,7 @@ public class PortletTitleBar extends BasePortletComponent {
 
     /**
      * Sets configuration information about the supported portlet modes,
-     * allowed window states and title bar obtained from {@link PortletSetings}.
+     * allowed window states and title bar obtained from {@link PortletSettings}.
      * Information is queried from the {@link PortletRegistry}
      */
     protected void doConfig() {

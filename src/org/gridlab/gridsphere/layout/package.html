@@ -11,22 +11,22 @@ language (currently just HTML).
 Portlet components are typically defined in an XML schema known as layout.xml
 and unmarshalled to Java objects using the Castor java data binding libraries.
 <p>
-All Layout components implement a {@link PortletRender} interface responsible for
- rendering the presentation content. In addition, most concrete portlet
- components implement a {@link ComponentLifecyle} interface responsible for
+All Layout components implement a {@link org.gridlab.gridsphere.layout.ComponentRender}
+interface responsible for rendering the presentation content. In addition, most concrete portlet
+ components implement a {@link org.gridlab.gridsphere.layout.ComponentLifecycle} interface responsible for
  handling all component lifecyle methods such as initialization, shutdown, and
  performing actions.
 <p>
 The current list describes the concrete portlet components that are in use:
 <ul>
-<li>{@link PortletFrame}</li>
-<li>{@link PortletGridLayout}</li>
-<li>{@link PortletImage}</li>
-<li>{@link PortletPanel}</li>
-<li>{@link PortletTab}</li>
-<li>{@link PortletTabbedPane}</li>
-<li>{@link PortletText}</li>
-<li>{@link PortletTitlebar}</li>
+<li>{@link org.gridlab.gridsphere.layout.PortletFrame}</li>
+<li>{@link org.gridlab.gridsphere.layout.PortletGridLayout}</li>
+<li>{@link org.gridlab.gridsphere.layout.PortletImage}</li>
+<li>{@link org.gridlab.gridsphere.layout.PortletPanel}</li>
+<li>{@link org.gridlab.gridsphere.layout.PortletTab}</li>
+<li>{@link org.gridlab.gridsphere.layout.PortletTabbedPane}</li>
+<li>{@link org.gridlab.gridsphere.layout.PortletText}</li>
+<li>{@link org.gridlab.gridsphere.layout.PortletTitleBar}</li>
 </ul>
 
 </body>

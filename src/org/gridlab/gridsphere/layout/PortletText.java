@@ -13,7 +13,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import java.io.IOException;
 
 /**
- * PortletText is used to diaplay the contents of an included
+ * <code>PortletText</code> is used to display the contents of an included
  * text file located in the web application.
  */
 public class PortletText extends BasePortletComponent {

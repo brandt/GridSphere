@@ -26,7 +26,8 @@ public class PortletPanel extends BasePortletComponent {
     /**
      * Constructs an instance of PortletPanel with the supplied layout
      *
-     * @param layout the {@link PortletLayout}
+     * @param layout the <code>PortletLayout</code>
+     * @see PortletLayout
      */
     public PortletPanel(PortletLayout layout) {
         this.layout = layout;

@@ -5,7 +5,7 @@
 package org.gridlab.gridsphere.layout;
 
 /**
- * A ComponentIdentifier contains meta information about a {@link PortletComponent}
+ * A <code>ComponentIdentifier</code> contains meta information about a {@link PortletComponent}
  */
 public class ComponentIdentifier {
 

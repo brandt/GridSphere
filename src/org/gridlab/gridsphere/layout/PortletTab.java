@@ -18,10 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A PortletTab represents the visual tab graphical interface and is contained
+ * A <code>PortletTab</code> represents the visual tab graphical interface and is contained
  * by a {@link PortletTabbedPane}. A tab contains a title and any additional
  * portlet component. Generally, it is either a {@link PortletPanel} or another
- * {@link PortletTabbedPane} if a double level tabbed pane is desired.
+ * tabbed pane if a double level tabbed pane is desired.
  */
 public class PortletTab extends BasePortletComponent {
 
@@ -68,7 +68,7 @@ public class PortletTab extends BasePortletComponent {
 
     /**
      *  Creates the portlet tab title links that are rendered by the
-     * {@link PortletTabbedPane} parent.
+     * {@link PortletTabbedPane}
      *
      * @event the gridsphere event
      */

@@ -11,7 +11,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import java.io.IOException;
 
 /**
- * BasePortletComponent represents an abstract portlet component with a particular
+ * <code>BasePortletComponent</code> represents an abstract portlet component with a particular
  * size, layout and theme and is subclasses by concrete portlet component instances.
  */
 public abstract class BasePortletComponent extends BaseComponentLifecycle implements PortletComponent {
