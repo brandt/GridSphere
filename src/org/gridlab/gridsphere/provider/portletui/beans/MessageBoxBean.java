@@ -19,6 +19,7 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
     private String messageType = MessageStyle.MSG_INFO;
     private String width = null;
     private String height = null;
+    private String imageSource = null;
 
     public MessageBoxBean() {
         super(NAME);
@@ -32,6 +33,24 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
     public MessageBoxBean(HttpServletRequest req, String beanId) {
         super(NAME, req);
         this.beanId = beanId;
+    }
+
+    /**
+     * Gets the source of the image which should be displayed.
+     *
+     * @return imagesource
+     */
+    public String getImageSource() {
+        return imageSource;
+    }
+
+    /**
+     * Sets the source of the image displayed along with the messagebox.
+     *
+     * @param imageSource image source
+     */
+    public void setImageSource(String imageSource) {
+        this.imageSource = imageSource;
     }
 
     /**
@@ -195,7 +214,8 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
                     message = getLocalizedText(message);
                 }
 
-                if (format) sb.append("<div class=\"" + messageType + "\">" + message + "</div>"); else sb.append(message);
+                if (format) sb.append("<div class=\"" + messageType + "\">" + message + "</div>");
+                    else sb.append(message);
             }
             result = sb.toString();
         }
@@ -217,7 +237,13 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
         // only return something if we have a message
         if (message != null) {
             sb.append("<div" + getFormattedCss() + ">");
-            sb.append(message);
+            if (imageSource!=null) {
+                sb.append("<table><tr><td valign=\"top\"><img src=\""+imageSource+"\"></td><td>");
+                sb.append(message);
+                sb.append("</td></tr></table>");
+            } else {
+                sb.append(message);
+            }
             sb.append("</div>");
         }
 
