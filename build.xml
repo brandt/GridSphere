@@ -163,8 +163,11 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Builds and deploys GridSphere                                       -->
     <!-- =================================================================== -->
-    <target name="install" depends="license, splash, clean, compile, docs, deploy" description="Build and deploy GridSphere">
+    <target name="install" depends="license, splash, compile, docs, deploy" description="Build and deploy GridSphere">
         <antcall target="create-database"/>
+        <echo message="GridSphere successfully installed."/> 
+        <echo message="Please start up Tomcat and go to http://127.0.0.1/gridsphere/gridsphere"/>
+        <echo message="Login as root with empty password"/>
     </target>
 
     <!-- =================================================================== -->
@@ -398,13 +401,11 @@ Copyright:
     </target>
 
     <target name="configure-database" depends="setenv">
-        <mkdir dir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/"/>
-        <copy overwrite="true" file="webapps/gridsphere/WEB-INF/persistence/hibernate.properties" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/"/>
 
         <pathconvert targetos="windows" dirsep="/" property="cathome">
             <path location="${env.CATALINA_HOME}"/>
         </pathconvert>
-        <replace file="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/hibernate.properties"
+        <replace file="${gridsphere.build}/webapps/gridsphere/WEB-INF/CustomPortal/database/hibernate.properties"
             token="@GRIDSPHERE_WEBAPP@"
             value="${cathome}/${gswebapp.dir}"/>
     </target>
@@ -839,7 +840,7 @@ Copyright:
         <taskdef name="deploytck"
             classname="org.gridlab.gridsphere.tools.DeployGridSphereTCK"
             classpathref="classpath"/>
-        <deploytck wardir="webapps/tck" server="${env.CATALINA_HOME}"/>
+        <deploytck builddir="${gridsphere.build}" wardir="webapps/tck" server="${env.CATALINA_HOME}"/>
     </target>
 
     <target name="splash" description="Display the logo">
