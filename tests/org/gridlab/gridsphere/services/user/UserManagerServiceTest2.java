@@ -63,6 +63,7 @@ public class UserManagerServiceTest2 extends ServiceTest {
             log.error("Unable to initialize services: ", e);
         }
         pm = new PersistenceManagerRdbms();
+        System.out.println("Clean up the tables...");
 
         try {
             pm.deleteList("select u from org.gridlab.gridsphere.services.user.impl.AccountRequestImpl u");

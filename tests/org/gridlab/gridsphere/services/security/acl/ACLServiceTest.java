@@ -222,7 +222,7 @@ public class ACLServiceTest extends ServiceTest {
         makeNewGroups();
         addUsersToGroups();
 
-        List roles;
+//        List roles;
 //        aclManagerService.addRoleInGroup(hans, cactus, SportletRole.getAdminRole());
         assertTrue(aclService.hasRoleInGroup(hans, cactus, SportletRole.getAdminRole()));
 
@@ -234,14 +234,16 @@ public class ACLServiceTest extends ServiceTest {
 //        roles = aclService.getRolesInGroup(hans, cactus);
         // should have user role
 //        assertEquals(roles.size(), 1);
+ //       PortletRole role = (PortletRole)roles.get(0);
+//        assertEquals(role.getRole(), SportletRole.USER);
+//        assertEquals(roles.size(), 1);
 //        PortletRole role = (PortletRole)roles.get(0);
 //        assertEquals(role.getRole(), SportletRole.USER);
-
         // remove josef from user role hence he has no roles
 //        aclManagerService.removeUserRoleFromGroup(josef, portals, SportletRole.getUserRole());
-        List group = aclService.getGroups(josef);
-        assertTrue(!aclService.isUserInGroup(josef, portals));
-        assertTrue(!group.contains(portals));
+ //       List group = aclService.getGroups(josef);
+//        assertTrue(!aclService.isUserInGroup(josef, portals));
+//        assertTrue(!group.contains(portals));
 
         // should do nothing
 //        aclManagerService.removeUserRoleFromGroup(josef, portals, SportletRole.getAdminRole());

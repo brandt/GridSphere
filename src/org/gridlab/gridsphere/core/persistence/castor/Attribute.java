@@ -9,7 +9,8 @@ package org.gridlab.gridsphere.core.persistence.castor;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.core.persistence.UniqueID;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
-
+import org.exolab.castor.xml.Unmarshaller;
+import org.exolab.castor.jdo.conf.Mapping;
 /**
  * @table attribute
  * @key-generator UUID
@@ -66,6 +67,8 @@ public class Attribute extends BaseObject {
     public void setValue(String value) {
         Value = value;
     }
+
+
 
 }
 

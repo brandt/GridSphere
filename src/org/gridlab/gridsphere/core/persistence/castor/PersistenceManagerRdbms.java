@@ -37,11 +37,11 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
         super();
         // @todo read the configfile here, depending on properties setting load different db driver and db
 
-     //   DatabaseName = "postgresportal";
-     //   ConnectionURL = "webapps/WEB-INF/conf/postgresql.xml";
+        DatabaseName = "testdb";
+        ConnectionURL = "webapps/WEB-INF/conf/hsqldb.xml";
 
-           DatabaseName = "portal";
-           ConnectionURL = "webapps/WEB-INF/conf/database.xml";
+      //     DatabaseName = "portal";
+ //          ConnectionURL = "webapps/WEB-INF/conf/database.xml";
 
     }
 
