@@ -196,8 +196,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public void setUserAndGroups(PortletRequest req) {
         // Retrieve user if there is one
         User user = null;
-        if (req.getSession(false) != null) {
-            String uid = (String)req.getSession().getAttribute(SportletProperties.PORTLET_USER);
+        if (req.getPortletSession() != null) {
+            String uid = (String)req.getPortletSession().getAttribute(SportletProperties.PORTLET_USER);
             if (uid != null) {
                 user = userManagerService.getUser(uid);
             }
@@ -225,16 +225,11 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         String password = req.getParameter("password");
 
         try {
-            PortletData data = req.getData();
-            String authModule = data.getAttribute("auth-module");
-            User user = null;
-            if (authModule == null) {
-                user = loginService.login(username, password);
-            } else {
-                user = loginService.login(username, password, authModule);
-            }
+
+             User user = loginService.login(username, password);
+
             req.setAttribute(SportletProperties.PORTLET_USER, user);
-            req.getSession(true).setAttribute(SportletProperties.PORTLET_USER, user.getID());
+            session.setAttribute(SportletProperties.PORTLET_USER, user.getID());
             if (aclService.hasSuperRole(user)) {
                 log.debug("User: " + user.getUserName() + " logged in as SUPER");
                 req.setAttribute(SportletProperties.PORTLET_ROLE, PortletRole.SUPER);
@@ -329,6 +324,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public final void destroy() {
         log.debug("in destroy: Shutting down services");
         userSessionManager.destroy();
+        layoutEngine.destroy();
         // Shutdown services
         factory.shutdownServices();
         // shutdown the persistencemanagers

@@ -93,6 +93,19 @@ public class PortletPageFactory implements PortletSessionListener {
         }
     }
 
+    public void destroy() {
+        Iterator it = guests.keySet().iterator();
+        while (it.hasNext()) {
+            String key = (String)it.next();
+            guests.remove(key);
+        }
+        it = userLayouts.keySet().iterator();
+        while (it.hasNext()) {
+            String key = (String)it.next();
+            userLayouts.remove(key);
+        }
+    }
+
     public PortletPage createFromAllWebApps() {
 
         PortletPage newPage = null;
@@ -216,7 +229,6 @@ public class PortletPageFactory implements PortletSessionListener {
         log.debug("User requesting layout: " + user.getUserName());
 
         if (user instanceof GuestUser) {
-            log.debug("User is a guest user!!");
             return createFromGuestLayoutXML(req);
         }
 
@@ -259,7 +271,9 @@ public class PortletPageFactory implements PortletSessionListener {
     }
 
     public PortletPage createFromGuestLayoutXML(PortletRequest req) {
-        PortletSession session = req.getPortletSession(true);
+        PortletSession session = req.getPortletSession();
+
+
         String id = session.getId();
 
         if (userLayouts.containsKey(id)) {
