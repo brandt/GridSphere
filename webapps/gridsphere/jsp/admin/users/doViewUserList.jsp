@@ -4,18 +4,20 @@
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 
-<jsp:useBean id="userList" class="java.util.List" scope="request"/>
+<% List userList = (List)request.getAttribute("userList"); %>
 
 <ui:form>
-<ui:panel cols="50%,50%">
 
-    <ui:frame>
+<ui:frame>
         <ui:tablerow>
             <ui:tablecell>
                 <ui:actionsubmit action="doNewUser" key="USER_NEW_USER"/>
             </ui:tablecell>
         </ui:tablerow>
-    </ui:frame>
+</ui:frame>
+
+<ui:panel>
+
 
     <ui:table sortable="true" zebra="true" maxrows="20">
                 <ui:tablerow header="true">

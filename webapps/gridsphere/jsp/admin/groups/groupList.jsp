@@ -1,16 +1,18 @@
 <%@ page import="java.util.Iterator,
                  org.gridlab.gridsphere.portlet.PortletGroup,
-                 org.gridlab.gridsphere.portlet.impl.SportletGroup"%>
+                 org.gridlab.gridsphere.portlet.impl.SportletGroup,
+                 java.util.List"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 
-<jsp:useBean id="groupList" class="java.util.List" scope="request"/>
-<jsp:useBean id="groupDescs" class="java.util.List" scope="request"/>
+<% List groupList = (List)request.getAttribute("groupList"); %>
+<% List groupDescs = (List)request.getAttribute("groupDescs"); %> 
 
 <ui:form>
 <ui:panel>
 
+    <% if (request.getAttribute("create") != null) { %>
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
@@ -18,6 +20,7 @@
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
+    <% } %>
 
     <ui:frame>
         <ui:tablerow header="true">

@@ -1,8 +1,6 @@
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
-<jsp:useBean id="canUserCreateAcct" class="java.lang.Boolean" scope="request"/>
-
 <portletAPI:init/>
 
 <ui:form>
@@ -41,7 +39,7 @@
             </ui:tablerow>
     </ui:table>
 
-    <% if (canUserCreateAcct.booleanValue()) { %>
+    <% if (request.getAttribute("canUserCreateAcct") != null)  { %>
     <ui:table>
          <ui:tablerow>
          <ui:tablecell>

@@ -6,9 +6,11 @@
 
 <ui:form>
 
-<h3>New group name</h3>
+<h3>New group</h3>
 <ui:text value="Enter group name:"/>&nbsp;&nbsp;<ui:textfield beanId="groupNameTF"/>
-
+<p>
+<ui:text value="Enter a brief description of group:"/>&nbsp;&nbsp;<ui:textfield beanId="groupDescTF"/>
+</p>
 
 <h3>Group visibility</h3>
 

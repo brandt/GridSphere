@@ -9,8 +9,6 @@
 
 <portletAPI:init/>
 
-<jsp:useBean id="result" class="List" scope="request"/>
-
 <ui:panel>
 
     <ui:frame beanId="errorFrame"/>
@@ -34,6 +32,7 @@
         </ui:tablecell>
     </ui:tablerow>
 
+<% List result = (List)request.getAttribute("result"); %> 
 <% Iterator it = result.iterator(); %>
 <% while (it.hasNext()) { %>
 <% TomcatWebAppDescription description = (TomcatWebAppDescription)it.next(); %>

@@ -4,7 +4,7 @@
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 
-<jsp:useBean id="groupEntryList" class="java.util.List" scope="request"/>
+<% List groupEntryList = (List)request.getAttribute("groupEntryList"); %>
 
 <ui:form>
 <ui:hiddenfield beanId="groupID"/>

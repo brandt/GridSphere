@@ -3,8 +3,8 @@
 
 <ui:text key="LOGIN_CONF_AUTH_MODULES"/>
 
-<jsp:useBean id="supportedModules" class="java.util.List" scope="request"/>
-<jsp:useBean id="activeModules" class="java.util.List" scope="request"/>
+<% List supportedModules = (List)request.getAttribute("supportedModules"); %>
+<% List activeModules = (List)request.getAttribute("activeModules"); %>
 
 <ui:panel>
 

@@ -2,8 +2,8 @@
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
-<jsp:useBean id="tabNames" class="java.util.List" scope="request"/>
-<jsp:useBean id="groupNames" class="java.util.List" scope="request"/>
+<% List tabNames = (List)request.getAttribute("tabNames"); %>
+<% List groupNames = (List)request.getAttribute("groupNames"); %>
 
 <portletAPI:init/>
 <ui:form>

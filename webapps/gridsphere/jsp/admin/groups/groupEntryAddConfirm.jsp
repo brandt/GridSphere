@@ -1,10 +1,10 @@
-<%@ page import="java.util.Iterator,
+<%@ page import="java.util.List, java.util.Iterator,
                  org.gridlab.gridsphere.services.core.security.acl.GroupEntry"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 
-<jsp:useBean id="groupEntryList" class="java.util.List" scope="request"/>
+<% List groupEntryList = (List)request.getAttribute("groupEntryList"); %>
 
 <ui:form>
 <ui:hiddenfield beanId="groupID"/>
