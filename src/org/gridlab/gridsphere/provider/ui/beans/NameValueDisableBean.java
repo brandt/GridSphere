@@ -55,9 +55,7 @@ public abstract class NameValueDisableBean extends LabelBean implements Disablea
      * @param values array of strings representaing the updates
      */
     public void update(String[] values) {
-        if (values == null || values.length == 0) {
-            this.value = "";
-        } else {
+        if (values != null && values.length > 0) {
             this.value = values[0];
         }
     }

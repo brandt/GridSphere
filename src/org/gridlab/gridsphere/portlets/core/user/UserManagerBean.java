@@ -129,19 +129,21 @@ public class UserManagerBean extends ActionEventHandler {
     public void doConfirmEditUser()
             throws PortletException {
         loadUser();
+        updateUser();
         try {
-            updateUser();
             validateUser();
             saveUser();
-            setTitle("User Account Manager [View User]");
-            setPage(PAGE_USER_VIEW);
         } catch (PortletException e) {
+            storeUserEdit();
             setIsFormInvalid(true);
             setFormInvalidMessage(e.getMessage());
             setTitle("User Account Manager [Edit User]");
             setPage(PAGE_USER_EDIT);
+            return;
         }
         viewUser();
+        setTitle("User Account Manager [View User]");
+        setPage(PAGE_USER_VIEW);
     }
 
     public void doCancelEditUser()
@@ -242,45 +244,51 @@ public class UserManagerBean extends ActionEventHandler {
     }
 
     private void viewUser() {
-        System.err.println("Calling setUser()!");
-
-        // Set user attributes
-        PortletRequest portletRequest = getPortletRequest();
+        log.debug("Entering viewUser()");
 
         if (this.user == null) {
 
             // Clear user attributes
-            userIDBean = new HiddenFieldBean("userID", "");
-            userNameBean = new TextBean("");
-            familyNameBean = new TextBean("");
-            givenNameBean = new TextBean("");
-            fullNameBean = new TextBean("");
-            emailAddressBean = new TextBean("");
-            organizationBean = new TextBean("");
-            userRoleBean = new TextBean("");
+            this.userIDBean = new HiddenFieldBean("userID", "");
+            this.userNameBean = new TextBean("");
+            this.familyNameBean = new TextBean("");
+            this.givenNameBean = new TextBean("");
+            this.fullNameBean = new TextBean("");
+            this.emailAddressBean = new TextBean("");
+            this.organizationBean = new TextBean("");
+            this.userRoleBean = new TextBean("");
 
         } else {
 
             // Set attributes
-            userIDBean = new HiddenFieldBean("userID", this.user.getID());
-            userNameBean = new TextBean(this.user.getUserName());
-            familyNameBean = new TextBean(this.user.getFamilyName());
-            givenNameBean = new TextBean(this.user.getGivenName());
-            fullNameBean = new TextBean(this.user.getFullName());
-            emailAddressBean = new TextBean(this.user.getEmailAddress());
-            organizationBean = new TextBean(this.user.getOrganization());
-            userRoleBean = new TextBean(this.userRole.toString());
+            this.userIDBean = new HiddenFieldBean("userID", this.user.getID());
+            this.userNameBean = new TextBean(this.user.getUserName());
+            this.familyNameBean = new TextBean(this.user.getFamilyName());
+            this.givenNameBean = new TextBean(this.user.getGivenName());
+            this.fullNameBean = new TextBean(this.user.getFullName());
+            this.emailAddressBean = new TextBean(this.user.getEmailAddress());
+            this.organizationBean = new TextBean(this.user.getOrganization());
+            this.userRoleBean = new TextBean(this.userRole.toString());
         }
+        // Store beans
+        storeUserView();
+
+        log.debug("Exiting viewUser()");
+    }
+
+    private void storeUserView() {
+        // Set user attributes
+        PortletRequest portletRequest = getPortletRequest();
 
         // Store beans
-        userIDBean.store("userID", portletRequest);
-        userNameBean.store("userName", portletRequest);
-        familyNameBean.store("familyName", portletRequest);
-        givenNameBean.store("givenName", portletRequest);
-        fullNameBean.store("fullName", portletRequest);
-        emailAddressBean.store("emailAddress", portletRequest);
-        organizationBean.store("organization", portletRequest);
-        userRoleBean.store("userRole", portletRequest);
+        this.userIDBean.store("userID", portletRequest);
+        this.userNameBean.store("userName", portletRequest);
+        this.familyNameBean.store("familyName", portletRequest);
+        this.givenNameBean.store("givenName", portletRequest);
+        this.fullNameBean.store("fullName", portletRequest);
+        this.emailAddressBean.store("emailAddress", portletRequest);
+        this.organizationBean.store("organization", portletRequest);
+        this.userRoleBean.store("userRole", portletRequest);
     }
 
     private void editUser() {
@@ -297,60 +305,49 @@ public class UserManagerBean extends ActionEventHandler {
 
         if (this.user == null) {
             log.debug("Editing new user");
-            userIDBean = new HiddenFieldBean("userID", "");
-            userNameEditBean = new TextFieldBean("userName", "");
-            familyNameEditBean = new TextFieldBean("familyName", "");
-            givenNameEditBean = new TextFieldBean("givenName", "");
-            fullNameEditBean = new TextFieldBean("fullName", "");
-            emailAddressEditBean = new TextFieldBean("emailAddress", "");
-            organizationEditBean = new TextFieldBean("organization", "");
+            this.userIDBean = new HiddenFieldBean("userID", "");
+            this.userNameEditBean = new TextFieldBean("userName", "");
+            this.familyNameEditBean = new TextFieldBean("familyName", "");
+            this.givenNameEditBean = new TextFieldBean("givenName", "");
+            this.fullNameEditBean = new TextFieldBean("fullName", "");
+            this.emailAddressEditBean = new TextFieldBean("emailAddress", "");
+            this.organizationEditBean = new TextFieldBean("organization", "");
         } else {
             log.debug("Editing existing user");
-            userIDBean = new HiddenFieldBean("userID", this.user.getID());
-            userNameEditBean = new TextFieldBean("userName", this.user.getUserName());
-            userNameEditBean.setDisabled(true);
-            userNameEditBean.setReadonly(true);
-            familyNameEditBean = new TextFieldBean("familyName", this.user.getFamilyName());
-            givenNameEditBean = new TextFieldBean("givenName", this.user.getGivenName());
-            fullNameEditBean = new TextFieldBean("fullName", this.user.getFullName());
-            emailAddressEditBean = new TextFieldBean("emailAddress", this.user.getEmailAddress());
-            organizationEditBean = new TextFieldBean("organization", this.user.getOrganization());
+            this.userIDBean = new HiddenFieldBean("userID", this.user.getID());
+            this.userNameEditBean = new TextFieldBean("userName", this.user.getUserName());
+            this.userNameEditBean.setDisabled(true);
+            this.userNameEditBean.setReadonly(true);
+            this.familyNameEditBean = new TextFieldBean("familyName", this.user.getFamilyName());
+            this.givenNameEditBean = new TextFieldBean("givenName", this.user.getGivenName());
+            this.fullNameEditBean = new TextFieldBean("fullName", this.user.getFullName());
+            this.emailAddressEditBean = new TextFieldBean("emailAddress", this.user.getEmailAddress());
+            this.organizationEditBean = new TextFieldBean("organization", this.user.getOrganization());
         }
-
-        // Store the beans
-        userIDBean.store("userID", portletRequest);
-        userNameEditBean.store("userName", portletRequest);
-        familyNameEditBean.store("familyName", portletRequest);
-        givenNameEditBean.store("givenName", portletRequest);
-        fullNameEditBean.store("fullName", portletRequest);
-        emailAddressEditBean.store("emailAddress", portletRequest);
-        organizationEditBean.store("organization", portletRequest);
-        userRoleEditBean.store("userRole", portletRequest);
-
         // Password always blank first page
-        passwordEditBean = new PasswordBean("password", "", false, false, 20, 16);
-        passwordEditBean.store("password", portletRequest);
-
+        this.passwordEditBean = new PasswordBean("password", "", false, false, 20, 16);
         // Confirm always blank first page
-        confirmPasswordEditBean = new PasswordBean("confirmPassword", "", false, false, 20, 16);
-        confirmPasswordEditBean.store("confirmPassword", portletRequest);
+        this.confirmPasswordEditBean = new PasswordBean("confirmPassword", "", false, false, 20, 16);
+
+        // Store beans
+        storeUserEdit();
+
         log.debug("Exiting editUser()");
     }
 
-    private void updateUser()
-            throws PortletException {
+    private void updateUser() {
         log.debug("Entering updateUser()");
         // Retrieve user attributes from form
-        userIDBean = getHiddenFieldBean("userID");
-        userNameEditBean = getTextFieldBean("userName");
-        familyNameEditBean = getTextFieldBean("familyName");
-        givenNameEditBean = getTextFieldBean("givenName");
-        fullNameEditBean = getTextFieldBean("fullName");
-        emailAddressEditBean = getTextFieldBean("emailAddress");
-        organizationEditBean = getTextFieldBean("organization");
-        userRoleEditBean = getDropDownListBean("userRole");
-        passwordEditBean = getPasswordBean("password");
-        confirmPasswordEditBean = getPasswordBean("confirmPassword");
+        this.userIDBean = getHiddenFieldBean("userID");
+        this.userNameEditBean = getTextFieldBean("userName");
+        this.familyNameEditBean = getTextFieldBean("familyName");
+        this.givenNameEditBean = getTextFieldBean("givenName");
+        this.fullNameEditBean = getTextFieldBean("fullName");
+        this.emailAddressEditBean = getTextFieldBean("emailAddress");
+        this.organizationEditBean = getTextFieldBean("organization");
+        this.userRoleEditBean = getDropDownListBean("userRole");
+        this.passwordEditBean = getPasswordBean("password");
+        this.confirmPasswordEditBean = getPasswordBean("confirmPassword");
         log.debug("Exiting updateUser()");
     }
 
@@ -362,7 +359,7 @@ public class UserManagerBean extends ActionEventHandler {
         // Validate user name
         String userName = this.userNameEditBean.getValue();
         if (userName.equals("")) {
-            message.append("User name cannot be blank.\n");
+            message.append("User name cannot be blank\n");
             isInvalid = true;
         } else if (this.userManagerService.existsUserName(userName)) {
             message.append("A user already exists with the same user name, please use a different name.\n");
@@ -380,39 +377,61 @@ public class UserManagerBean extends ActionEventHandler {
             message.append("Given name cannot be blank\n");
             isInvalid = true;
         }
-        // Validate password
-        String passwordValue = this.passwordEditBean.getValue();
-        String confirmPasswordValue = this.confirmPasswordEditBean.getValue();
-        // If user is new and no password provide, error
-        if (this.user == null) {
-            if (passwordValue.length() == 0) {
-                message.append("All new users must have a password.\n");
-                isInvalid = true;
-                return;
-            }
-        // If user already exists and password unchanged, no problem
-        } else if (passwordValue.length() == 0 && confirmPasswordValue.length() == 0) {
-            return;
-        }
-        // Otherwise, password must match confirmation
-        if (!passwordValue.equals(confirmPasswordValue)) {
-            message.append("Password must match confirmation\n");
-            isInvalid = true;
-        // If they do match, then validate password with our service
-        } else {
-            try {
-                this.passwordManagerService.validatePassword(passwordValue);
-            } catch (InvalidPasswordException e) {
-                message.append(e.getMessage());
-                isInvalid = true;
-            }
-        }
+
+        isInvalid = isInvalidPassword(message);
         // Throw exception if error was found
         if (isInvalid) {
             throw new PortletException(message.toString());
         }
         log.debug("Exiting validateUser()");
     }
+
+    private boolean isInvalidPassword(StringBuffer message) {
+        // Validate password
+        String passwordValue = this.passwordEditBean.getValue();
+        String confirmPasswordValue = this.confirmPasswordEditBean.getValue();
+        // If user is new and no password provided, error
+        if (this.user == null) {
+            if (passwordValue.length() == 0) {
+                message.append("All new users must have a password.\n");
+                return true;
+            }
+        // If user already exists and password unchanged, no problem
+        } else if (this.user != null &&
+                   passwordValue.length() == 0 &&
+                   confirmPasswordValue.length() == 0) {
+            return false;
+        // Otherwise, password must match confirmation
+        } else if (!passwordValue.equals(confirmPasswordValue)) {
+            message.append("Password must match confirmation\n");
+            return true;
+        // If they do match, then validate password with our service
+        } else {
+            try {
+                this.passwordManagerService.validatePassword(passwordValue);
+            } catch (InvalidPasswordException e) {
+                message.append(e.getMessage());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void storeUserEdit() {
+        // Set user attributes
+        PortletRequest portletRequest = getPortletRequest();
+        // Store the beans
+        this.userIDBean.store("userID", portletRequest);
+        this.userNameEditBean.store("userName", portletRequest);
+        this.familyNameEditBean.store("familyName", portletRequest);
+        this.givenNameEditBean.store("givenName", portletRequest);
+        this.fullNameEditBean.store("fullName", portletRequest);
+        this.emailAddressEditBean.store("emailAddress", portletRequest);
+        this.organizationEditBean.store("organization", portletRequest);
+        this.userRoleEditBean.store("userRole", portletRequest);
+        this.passwordEditBean.store("password", portletRequest);
+        this.confirmPasswordEditBean.store("confirmPassword", portletRequest);
+   }
 
     private void saveUser()
             throws PortletException {

@@ -245,6 +245,7 @@ public class JobManagerBean extends ActionEventHandler {
         User user = getPortletUser();
         try {
             GrmsJobSpecification jobSpecification = getJobSpecification();
+            log.debug(jobSpecification.toString());
             return (GrmsJob) jobManagerService.submitJob(user, jobSpecification);
         } catch (Exception e) {
             this.log.error("Unable to submit user job", e);

@@ -105,6 +105,15 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
             try {
                 pm.create(group);
             } catch (Exception e) {
+                log.error("Error creating group " + groupName, e);
+            }
+        } else {
+            try {
+                SportletGroup realGroup = this.getSportletGroupByName(groupName);
+                group.setID(realGroup.getID());
+                group.setOid(realGroup.getOid());
+            } catch (Exception e) {
+                log.error("Error resetting group " + groupName, e);
             }
         }
     }

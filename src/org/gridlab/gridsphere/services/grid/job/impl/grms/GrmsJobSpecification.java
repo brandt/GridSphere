@@ -17,10 +17,7 @@ import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.jdo.JDO;
 
-import org.gridlab.gridsphere.services.grid.job.JobSpecification;
-import org.gridlab.gridsphere.services.grid.job.Environment;
-import org.gridlab.gridsphere.services.grid.job.Arguments;
-import org.gridlab.gridsphere.services.grid.job.Argument;
+import org.gridlab.gridsphere.services.grid.job.*;
 import org.gridlab.gridsphere.services.grid.data.file.FileHandle;
 import org.gridlab.gridsphere.services.grid.system.Local;
 import org.gridlab.gridsphere.portlet.PortletLog;
@@ -369,6 +366,62 @@ public class GrmsJobSpecification implements JobSpecification {
     private org.gridlab.resmgmt.Simplejob buildSimplejob() {
         // Simplejob contains application and resource
         org.gridlab.resmgmt.Simplejob simplejob = new org.gridlab.resmgmt.Simplejob();
+        // Set executable
+        org.gridlab.resmgmt.Executable application = buildExecutable();
+        simplejob.setExecutable(application);
+        // Set resource
+        org.gridlab.resmgmt.Resource resource = buildResource();
+        simplejob.setResource(resource);
+        // All done
+        return simplejob;
+    }
+
+    private org.gridlab.resmgmt.Executable buildExecutable() {
+        // Executable contains
+        org.gridlab.resmgmt.Executable executable = new org.gridlab.resmgmt.Executable();
+        // Executable type
+        org.gridlab.resmgmt.types.ExecutableTypeType type = buildExecutableType();
+        executable.setType(type);
+        // Executable count
+        executable.setCount(1);
+        // Executable file
+        org.gridlab.resmgmt.ExecutableChoice choice = buildExecutableChoice();
+        executable.setExecutableChoice(choice);
+        // Arguments
+        org.gridlab.resmgmt.Arguments arguments = buildArguments();
+        executable.setArguments(arguments);
+        // Stdout
+        org.gridlab.resmgmt.Stdout stdout = buildStdout();
+        executable.setStdout(stdout);
+        // Stderr
+        org.gridlab.resmgmt.Stderr stderr = buildStderr();
+        executable.setStderr(stderr);
+        // Environment
+        org.gridlab.resmgmt.Environment environment = buildEnvironment();
+        executable.setEnvironment(environment);
+        // All done
+        return executable;
+    }
+
+    private org.gridlab.resmgmt.types.ExecutableTypeType buildExecutableType() {
+        return org.gridlab.resmgmt.types.ExecutableTypeType.SINGLE;
+    }
+
+    private org.gridlab.resmgmt.ExecutableChoice buildExecutableChoice() {
+        FileHandle executable = getExecutable();
+        org.gridlab.resmgmt.ExecutableChoice choice = new org.gridlab.resmgmt.ExecutableChoice();
+        org.gridlab.resmgmt.File file = new org.gridlab.resmgmt.File();
+        file.setUrl(executable.getFileUrl());
+        file.setName(executable.getFileName());
+        file.setType(org.gridlab.resmgmt.types.FileTypeTypeType.IN);
+        choice.setFile(file);
+        return choice;
+    }
+
+/***
+    private org.gridlab.resmgmt.Simplejob buildSimplejob() {
+        // Simplejob contains application and resource
+        org.gridlab.resmgmt.Simplejob simplejob = new org.gridlab.resmgmt.Simplejob();
         // Set application
         org.gridlab.resmgmt.Application application = buildApplication();
         simplejob.setApplication(application);
@@ -409,6 +462,7 @@ public class GrmsJobSpecification implements JobSpecification {
         // All done
         return executable;
     }
+***/
 
     private org.gridlab.resmgmt.Stdout buildStdout() {
         org.gridlab.resmgmt.Stdout stdout = new org.gridlab.resmgmt.Stdout();
@@ -461,6 +515,20 @@ public class GrmsJobSpecification implements JobSpecification {
         }
     }
 
+    private org.gridlab.resmgmt.Environment buildEnvironment() {
+        // Environment contains environment variables
+        org.gridlab.resmgmt.Environment environment = new org.gridlab.resmgmt.Environment();
+        Iterator environmentVariables = getEnvironment().iterateVariables();
+        while (environmentVariables.hasNext()) {
+            EnvironmentVariable environmentVariable
+                    = (EnvironmentVariable)environmentVariables.next();
+            org.gridlab.resmgmt.Variable variable = new org.gridlab.resmgmt.Variable();
+            variable.setName(environmentVariable.getName());
+            variable.setContent(environmentVariable.getValue());
+            environment.addVariable(variable);
+        }
+        return environment;
+    }
 
     private org.gridlab.resmgmt.Resource buildResource() {
         // Resource contains everything else
