@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.ServletParsingService;
 import org.gridlab.gridsphere.services.PortletRegistryService;
 import org.gridlab.gridsphere.portletcontainer.impl.RegisteredSportletImpl;
+import org.apache.log4j.PropertyConfigurator;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -45,10 +46,16 @@ public class GridSphere extends HttpServlet {
 
     public final void init(ServletConfig config) throws ServletException {
         super.init(config);
+        String prefix =  getServletContext().getRealPath("/");
+        String file = getInitParameter("log4j.properties");
+        PropertyConfigurator.configure(prefix+file);
+
         synchronized (this.getClass()) {
             try {
                 configure(config);
                 portletConfig = new SportletConfig(config);
+                log.info("init success");
+
             } catch (Exception e) {
                 log.error("init failed: ", e);
             }
