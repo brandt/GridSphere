@@ -348,7 +348,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates grid portlets required by GridSphere                        -->
     <!-- =================================================================== -->
-    <target name="grid-portlets-jar" depends="compile-portlets" description="Create ${build.lib}/gridportlets.jar">
+    <target name="grid-portlets-jar" depends="compile-portlets" if="${grid.exists}" description="Create ${build.lib}/gridportlets.jar">
         <jar jarfile="${build.lib}/gridportlets.jar" basedir="${build.classes}" >
             <include name="org/gridlab/gridsphere/portlets/PortletBean.class" />
             <include name="org/gridlab/gridsphere/portlets/grid/**" />
