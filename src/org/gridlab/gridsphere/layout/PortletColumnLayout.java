@@ -30,10 +30,55 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
         }
     }
 
-    /**
-     * Renders the component
-     */
+
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+    	String markupName=event.getPortletRequest().getClient().getMarkupName();
+    	if (markupName.equals("html")){
+    		doRenderHTML(event);
+    	}
+    	else
+    	{
+    		doRenderWML(event);
+    	}
+    }
+    public void doRenderWML(GridSphereEvent event) throws PortletLayoutException, IOException {
+        //System.err.println("\t\tin render ColumnLayout");
+        PortletResponse res = event.getPortletResponse();
+        PortletRequest req = event.getPortletRequest();
+        PrintWriter out = res.getWriter();
+
+        PortletComponent p = null;
+
+        // starting of the gridtable
+
+    if (!components.isEmpty()) {
+        //out.println("<table width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"> <!-- START COLUMN -->");
+        
+    	out.println("<p />");
+        //out.println("<tbody>");
+        List scomponents = Collections.synchronizedList(components);
+        synchronized (scomponents) {
+            for (int i = 0; i < scomponents.size(); i++) {
+
+                p = (PortletComponent) scomponents.get(i);
+
+                out.print("<p />");
+                //out.print("<tr><td valign=\"top\" width=\"100%\">");
+
+                if (p.getVisible()) {
+                    p.doRender(event);
+                    //out.println("comp: "+i);
+                }
+
+                //out.println("</td></tr>");
+            }
+        }
+        out.println("<p />");
+        //out.println("</tbody>");
+        //out.println("</table> <!-- END COLUMN -->");
+    }
+    }
+    public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
         //System.err.println("\t\tin render ColumnLayout");
         PortletResponse res = event.getPortletResponse();
         PortletRequest req = event.getPortletRequest();

@@ -18,7 +18,47 @@ import java.util.List;
  */
 public class PortletRowLayout extends PortletFrameLayout implements Cloneable, Serializable {
 
-    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+	public void doRender(GridSphereEvent event) throws PortletLayoutException,IOException {
+    	String markupName=event.getPortletRequest().getClient().getMarkupName();
+    	if (markupName.equals("html")){
+    		doRenderHTML(event);
+    	}
+    	else
+    	{
+    		doRenderWML(event);
+    	}
+	}
+	public void doRenderWML(GridSphereEvent event) throws PortletLayoutException,IOException {
+	    PortletResponse res = event.getPortletResponse();
+        PrintWriter out = res.getWriter();
+        //System.err.println("\t\tin render RowLayout");
+        PortletComponent p = null;
+
+        // starting of the gridtable
+        //out.println(" <!-- START ROW --> ");
+        //out.println("<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">");
+        
+        //out.println("<tbody><tr>");
+        out.println("<p />");
+        List scomponents = Collections.synchronizedList(components);
+        synchronized (scomponents) {
+            for (int i = 0; i < scomponents.size(); i++) {
+                p = (PortletComponent) scomponents.get(i);
+                
+                //out.println("<td valign=\"top\" width=\"" + p.getWidth() + "\">");
+                out.println("<p />");
+
+                if (p.getVisible()) {
+                    p.doRender(event);
+                }
+                //out.println("</td>");
+            }
+            //out.println("</tr></tbody></table>");
+            //out.println("<!-- END ROW -->");
+            out.println("<p />");        
+	}
+	}
+    public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
         //System.err.println("\t\tin render RowLayout");
