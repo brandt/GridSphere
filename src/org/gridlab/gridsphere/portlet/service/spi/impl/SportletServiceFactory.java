@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 
 import javax.servlet.ServletConfig;
 import java.util.Enumeration;
@@ -77,7 +78,7 @@ public class SportletServiceFactory implements PortletServiceFactory {
 
         Properties serviceProperties = new Properties();
         GridSphereConfig gsc = GridSphereConfig.getInstance();
-        String serviceProps = gsc.getProperty("PORTLET_SERVICE_PROPS");
+        String serviceProps = gsc.getProperty(GridSphereConfigProperties.PORTLET_SERVICES);
         //String appRoot = servletConfig.getServletContext().getRealPath("");
         //String serviceProps = servletConfig.getInitParameter("PortletServices.properties");
         //String propsPath = appRoot + "/" + serviceProps;
