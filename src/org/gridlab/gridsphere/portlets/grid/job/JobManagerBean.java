@@ -10,6 +10,9 @@ import org.gridlab.gridsphere.services.grid.job.*;
 import org.gridlab.gridsphere.services.grid.job.impl.grms.*;
 import org.gridlab.gridsphere.services.grid.security.credential.Credential;
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.tags.web.element.HiddenFieldBean;
+import org.gridlab.gridsphere.tags.web.element.TextBean;
+import org.gridlab.gridsphere.tags.web.element.TextFieldBean;
 
 import java.net.MalformedURLException;
 import java.util.List;
@@ -21,15 +24,15 @@ public class JobManagerBean extends ActionEventHandler {
     // User job pages
     public static final String PAGE_USER_JOB_LIST = "/jsp/job/userJobList.jsp";
     public static final String PAGE_USER_JOB_VIEW = "/jsp/job/userJobView.jsp";
-    public static final String PAGE_USER_JOB_EDIT = "/jsp/job/userJobEditApplication.jsp";
-    public static final String PAGE_USER_JOB_APPLICATION_EDIT = "/jsp/job/userJobEditApplication.jsp";
-    public static final String PAGE_USER_JOB_RESOURCES_EDIT = "/jsp/job/userJobEditResources.jsp";
-    public static final String PAGE_USER_JOB_EDIT_VERIFY = "/jsp/job/userJobEditVerify.jsp";
+    public static final String PAGE_USER_JOB_EDIT = "/jsp/job/userJobApplication.jsp";
+    public static final String PAGE_USER_JOB_APPLICATION_EDIT = "/jsp/job/userJobApplication.jsp";
+    public static final String PAGE_USER_JOB_RESOURCES_EDIT = "/jsp/job/userJobResources.jsp";
+    public static final String PAGE_USER_JOB_EDIT_VERIFY = "/jsp/job/userJobVerify.jsp";
     public static final String PAGE_USER_JOB_MIGRATE = "/jsp/job/userJobMigrate.jsp";
-    public static final String PAGE_USER_JOB_SPEC_EDIT = "/jsp/job/userJobEditSpecification.jsp";
-    public static final String PAGE_USER_JOB_SPEC_EDIT_VERIFY = "/jsp/job/userJobSpecEditVerify.jsp";
-    public static final String PAGE_USER_JOB_SPEC_EDIT_SUBMIT = "/jsp/job/userJobSpecEditSubmit.jsp";
-    public static final String PAGE_USER_JOB_SPEC_EDIT_CANCEL = "/jsp/job/userJobSpecEditCancel.jsp";
+    public static final String PAGE_USER_JOB_SPEC_EDIT = "/jsp/job/userJobSpecification.jsp";
+    public static final String PAGE_USER_JOB_SPEC_EDIT_VERIFY = "/jsp/job/userJobSpecVerify.jsp";
+    public static final String PAGE_USER_JOB_SPEC_EDIT_SUBMIT = "/jsp/job/userJobSpecSubmit.jsp";
+    public static final String PAGE_USER_JOB_SPEC_EDIT_CANCEL = "/jsp/job/userJobSpecCancel.jsp";
 
     // Job manager variables
     private JobManagerService jobManagerService = null;
@@ -98,27 +101,27 @@ public class JobManagerBean extends ActionEventHandler {
     public void doListUserJob()
             throws PortletException {
         loadUserJobList();
-        setTitle("Job Manager: List Jobs");
+        setTitle("Job Manager [List Jobs]");
         setPage(PAGE_USER_JOB_LIST);
     }
 
     public void doViewUserJob()
             throws PortletException {
         loadUserJob();
-        setTitle("Job Manager: View Job");
+        setTitle("Job Manager [View Job]");
         setPage(PAGE_USER_JOB_VIEW);
     }
 
     public void doNewUserJob()
             throws PortletException {
-        setTitle("Job Manager: New Job");
+        setTitle("Job Manager [New Job]");
         setPage(PAGE_USER_JOB_EDIT);
     }
 
     public void doStageUserJob()
             throws PortletException {
         loadUserJob();
-        setTitle("Job Manager: Stage Job");
+        setTitle("Job Manager [Stage Job]");
         setPage(PAGE_USER_JOB_EDIT);
     }
 
@@ -127,7 +130,7 @@ public class JobManagerBean extends ActionEventHandler {
         loadUserJob();
         editUserJob();
         validateUserJobApplication();
-        setTitle("Job Manager: Edit Job Application");
+        setTitle("Job Manager [Edit Job Application]");
         setPage(PAGE_USER_JOB_APPLICATION_EDIT);
     }
 
@@ -136,11 +139,11 @@ public class JobManagerBean extends ActionEventHandler {
         loadUserJob();
         editUserJob();
         try {
-            setTitle("Job Manager: Edit Job Resources");
+            setTitle("Job Manager [Edit Job Resources]");
             validateUserJobApplication();
             setPage(PAGE_USER_JOB_RESOURCES_EDIT);
         } catch (Exception e) {
-            setTitle("Job Manager: Edit Job Application");
+            setTitle("Job Manager [Edit Job Application]");
             setPage(PAGE_USER_JOB_APPLICATION_EDIT);
         }
     }
@@ -151,10 +154,10 @@ public class JobManagerBean extends ActionEventHandler {
         editUserJob();
         try {
             validateUserJobResources();
-            setTitle("Job Manager: Verify Job");
+            setTitle("Job Manager [Verify Job]");
             setPage(PAGE_USER_JOB_EDIT_VERIFY);
         } catch (Exception e) {
-            setTitle("Job Manager: Edit Job Resources");
+            setTitle("Job Manager [Edit Job Resources]");
             setPage(PAGE_USER_JOB_RESOURCES_EDIT);
         }
     }
@@ -164,21 +167,20 @@ public class JobManagerBean extends ActionEventHandler {
         loadUserJob();
         editUserJob();
         submitUserJob();
-        setTitle("Job Manager: Submit Job");
-        setPage(PAGE_USER_JOB_RESOURCES_EDIT);
+        doListUserJob();
     }
 
     public void doCancelEditUserJob()
             throws PortletException {
         loadUserJobList();
-        setTitle("Job Manager: List Jobs");
+        setTitle("Job Manager [List Jobs]");
         setPage(PAGE_USER_JOB_LIST);
     }
 
     public void doMigrateUserJob()
             throws PortletException {
         loadUserJob();
-        setTitle("Job Manager: Migrate Job");
+        setTitle("Job Manager [Migrate Job]");
         setPage(PAGE_USER_JOB_MIGRATE);
     }
 
@@ -186,7 +188,7 @@ public class JobManagerBean extends ActionEventHandler {
             throws PortletException {
         loadUserJob();
         migrateUserJob();
-        setTitle("Job Manager: View Job");
+        setTitle("Job Manager [View Job]");
         setPage(PAGE_USER_JOB_VIEW);
     }
 
@@ -209,14 +211,13 @@ public class JobManagerBean extends ActionEventHandler {
     }
 
     public void loadUserJob() {
-        String jobID = getParameter("jobID");
+        String jobID = getActionPerformedParameter("jobID");
         if (!jobID.equals("")) {
             User user = getPortletUser();
             try {
                 this.userJob = jobManagerService.getJob(user, jobID);
             } catch (Exception e) {
                 this.log.error("Unable to load portlet user job list", e);
-                this.userJobList = new Vector();
             }
         }
     }
@@ -247,6 +248,7 @@ public class JobManagerBean extends ActionEventHandler {
             throw new PortletException(e.getMessage());
         }
     }
+
     public List getUserJobList() {
         return this.userJobList;
     }
@@ -258,6 +260,7 @@ public class JobManagerBean extends ActionEventHandler {
 
     public GrmsJobSpecification getJobSpecification()
             throws JobSpecificationException, MalformedURLException {
+        this.log.debug("Entering getJobSpecification");
         GrmsJobSpecification jobSpecification = null;
         String jobSpecificationText = getParameter("jobSpecification");
         if (jobSpecificationText == null) {
@@ -267,11 +270,13 @@ public class JobManagerBean extends ActionEventHandler {
         } else {
             jobSpecification = GrmsJobSpecification.unmarshal(jobSpecificationText);
         }
+        this.log.debug("Exiting getJobSpecification");
         return jobSpecification;
     }
 
     public SingleJobDescription getJobDescription()
             throws JobSpecificationException, MalformedURLException {
+        this.log.debug("Entering getJobDescription");
         GrmsJobSpecification jobSpecification = null;
         SingleJobDescription jobDescription = null;
         String jobSpecificationText = getParameter("jobSpecification");
@@ -281,6 +286,7 @@ public class JobManagerBean extends ActionEventHandler {
             jobSpecification = GrmsJobSpecification.unmarshal(jobSpecificationText);
             jobDescription = (SingleJobDescription) jobSpecification.getJobDescription();
         }
+        this.log.debug("Exiting getJobDescription");
         return jobDescription;
     }
 
@@ -302,6 +308,7 @@ public class JobManagerBean extends ActionEventHandler {
 
     public ResourceDescription getResourceDescription()
             throws JobSpecificationException {
+        this.log.debug("Entering getResourceDescription");
         ResourceDescription resourceDescription = null;
         String jobSpecificationText = getParameter("jobSpecification");
         if (jobSpecificationText == null) {
@@ -313,11 +320,13 @@ public class JobManagerBean extends ActionEventHandler {
                     (SingleJobDescription) jobSpecification.getJobDescription();
             resourceDescription = jobDescription.getResourceDescription();
         }
+        this.log.debug("Exiting getResourceDescription");
         return resourceDescription;
     }
 
     private SingleJobDescription buildJobDescription()
             throws JobSpecificationException, MalformedURLException {
+        this.log.debug("Entering buildJobDescription");
         ResourceDescription resourceDescription =
                 buildResourceDescription();
         ApplicationDescription applicationDescription =
@@ -325,11 +334,13 @@ public class JobManagerBean extends ActionEventHandler {
         SingleJobDescription jobDescription = new SingleJobDescription();
         jobDescription.setResourceDescription(resourceDescription);
         jobDescription.setApplicationDescription(applicationDescription);
+        this.log.debug("Exiting buildJobDescription");
         return jobDescription;
     }
 
     private ResourceDescription buildResourceDescription()
             throws JobSpecificationException {
+        this.log.debug("Entering buildResourceDescription");
         ResourceDescription resourceDescription = new ResourceDescription();
         resourceDescription.setHostName(getParameter("hostName").trim());
         resourceDescription.setJobScheduler(getParameter("jobScheduler").trim());
@@ -340,11 +351,13 @@ public class JobManagerBean extends ActionEventHandler {
         resourceDescription.setOsName(getParameter("osName").trim());
         resourceDescription.setOsVersion(getParameter("osVersion").trim());
         resourceDescription.setOsRelease(getParameter("osRelease").trim());
+        this.log.debug("Exiting buildResourceDescription");
         return resourceDescription;
     }
 
     private ApplicationDescription buildApplicationDescription()
             throws JobSpecificationException, MalformedURLException {
+        this.log.debug("Entering buildApplicationDescription");
         ApplicationDescription applicationDescription = new ApplicationDescription();
         applicationDescription = new ApplicationDescription();
         String executable = getParameter("executable").trim();
@@ -359,10 +372,12 @@ public class JobManagerBean extends ActionEventHandler {
         applicationDescription.setArguments(arguments);
         Environment environment = buildEnvironment();
         applicationDescription.setEnvironment(environment);
+        this.log.debug("Exiting buildApplicationDescription");
         return applicationDescription;
     }
 
     private Arguments buildArguments() {
+        this.log.debug("Entering buildArguments");
         Arguments arguments = new Arguments();
         String argumentsText = getParameter("arguments");
         if (argumentsText != null) {
@@ -374,11 +389,13 @@ public class JobManagerBean extends ActionEventHandler {
                 arguments.addArgument(argument);
             }
         }
+        this.log.debug("Exiting buildArguments");
         return arguments;
     }
 
     private Environment buildEnvironment()
             throws JobSpecificationException {
+        this.log.debug("Entering buildEnvironment");
         Environment environment = new Environment();
         String environmentText = getParameter("environment");
         if (environmentText != null) {
@@ -401,6 +418,7 @@ public class JobManagerBean extends ActionEventHandler {
                 }
             }
         }
+        this.log.debug("Exiting buildEnvironment");
         return environment;
     }
 }

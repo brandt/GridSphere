@@ -58,7 +58,8 @@ public class CredentialRetrievalUserBean extends PortletBean {
     }
 
     private void initView() {
-        setTitle("Credential Retrieval");
+        String retrievalHost = this.credentialManagerService.getCredentialRetrievalHost();
+        setTitle("Retrieve Your Credentials From [" + retrievalHost + "]");
         setPage(PAGE_USER_ACTIVE_CREDENTIAL_LIST);
     }
 

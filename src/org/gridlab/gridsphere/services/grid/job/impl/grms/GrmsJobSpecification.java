@@ -4,14 +4,7 @@
  */
 package org.gridlab.gridsphere.services.grid.job.impl.grms;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +14,7 @@ import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.mapping.MappingException;
 import org.exolab.castor.xml.Unmarshaller;
 import org.exolab.castor.xml.Marshaller;
+import org.exolab.castor.jdo.JDO;
 
 import org.gridlab.gridsphere.services.grid.job.JobSpecification;
 import org.gridlab.gridsphere.services.grid.job.Environment;
@@ -28,6 +22,8 @@ import org.gridlab.gridsphere.services.grid.job.Arguments;
 import org.gridlab.gridsphere.services.grid.job.Argument;
 import org.gridlab.gridsphere.services.grid.data.file.FileHandle;
 import org.gridlab.gridsphere.services.grid.system.Local;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 public class GrmsJobSpecification implements JobSpecification {
 
@@ -319,8 +315,12 @@ public class GrmsJobSpecification implements JobSpecification {
     public static GrmsJobSpecification unmarshal(Reader reader) {
         GrmsJobSpecification jobSpecification = null;
         Mapping mapping = new Mapping();
+        PrintWriter printWriter = new PrintWriter(System.err);
+        mapping.setLogWriter(printWriter);
         try {
-            mapping.loadMapping(getJdoXmlConfiguration());
+            String xmlMappingFile = getJdoXmlConfiguration();
+            System.err.println("Grms Job specification jdo castor mapping file = " + xmlMappingFile);
+            mapping.loadMapping(xmlMappingFile);
             Unmarshaller unmarshaller = new Unmarshaller(mapping);
             unmarshaller.setMapping(mapping);
             jobSpecification = (GrmsJobSpecification)unmarshaller.unmarshal(reader);
@@ -332,9 +332,13 @@ public class GrmsJobSpecification implements JobSpecification {
     }
 
     private static String getJdoXmlConfiguration() {
+        return "/Users/russell/gridsphere/webapps/gridportlets/WEB-INF/jdo/castor/GrmsJobSpecification.xml";
+        /***
+         return "~/gridsphere/webapps/gridportlets/WEB-INF/jdo/castor/GrmsJobSpecification.xml";
         return Local.getJdoCastorPath()
              + Local.FileSeparator
              + "GrmsJobSpecification.xml";
+        ***/
     }
 
 }

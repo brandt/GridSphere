@@ -60,12 +60,12 @@ public class Local {
 
     public static String getHomePath() {
         return getProperty("GRIDPORTLETS_HOME",
-            "~/gridsphere/webapps/gridportlets");
+            "${GRIDSPHERE_HOME}/webapps/gridportlets");
     }
 
     public static String getJdoCastorPath() {
         return getProperty("GRIDPORTLETS_JDO_CASTOR",
-            "~/gridsphere/webapps/gridportlets/WEB-INF/jdo/castor");
+            "${GRIDSPHERE_HOME}/webapps/gridportlets/WEB-INF/jdo/castor");
     }
 
     public static String getLocalHost() {
