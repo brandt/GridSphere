@@ -2,12 +2,17 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
+import org.gridlab.gridsphere.services.core.cache.CacheService;
 
 import java.io.*;
 import java.util.*;
@@ -23,6 +28,8 @@ public class PortletPageFactory implements PortletSessionListener {
     private static PortletPageFactory instance = null;
     private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
     private static PortletRegistry registry = PortletRegistry.getInstance();
+    protected static PortalConfigService portalConfigService = null;
+
     private static PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
 
     private String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
@@ -43,6 +50,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
     private static Map guests = new Hashtable();
 
+
     private PortletPageFactory() throws IOException, PersistenceManagerException {
         String errorLayoutFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/ErrorLayout.xml");
 
@@ -60,6 +68,12 @@ public class PortletPageFactory implements PortletSessionListener {
     public static synchronized PortletPageFactory getInstance() throws IOException, PersistenceManagerException {
         if (instance == null) {
             instance = new PortletPageFactory();
+            PortletServiceFactory factory = SportletServiceFactory.getInstance();
+            try {
+            portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, null, true);
+        } catch (PortletServiceException e) {
+            System.err.println("Unable to init Cache service! " + e.getMessage());
+        }
         }
         return instance;
     }
@@ -203,6 +217,7 @@ public class PortletPageFactory implements PortletSessionListener {
             //tmpPage.setLayoutDescriptor(userLayout + ".tmp");
             PortletTabbedPane tmpPane = (PortletTabbedPane)deepCopy(pane);
             tmpPage.setPortletTabbedPane(tmpPane);
+            this.setPageTheme(tmpPage, req);
             tmpPage.init(req, new ArrayList());
 
             // when deleting must reinit everytime
@@ -289,8 +304,9 @@ public class PortletPageFactory implements PortletSessionListener {
             }
 
             User user = req.getUser();
-            String theme = (String)user.getAttribute(User.THEME);
-            if (theme != null) newPage.setTheme(theme);
+
+            // first use default theme
+            setPageTheme(newPage, req);
             newPage.setPortletTabbedPane(pane);
             //newPage = (PortletPage)templatePage;
             newPage.init(req, new ArrayList());
@@ -310,6 +326,14 @@ public class PortletPageFactory implements PortletSessionListener {
         return newPage;
     }
 
+    protected void setPageTheme(PortletPage page, PortletRequest req) {
+        String defaultTheme = portalConfigService.getPortalConfigSettings().getDefaultTheme();
+        page.setTheme(defaultTheme);
+        User user =  req.getUser();
+        String theme = (String)user.getAttribute(User.THEME);
+        if (theme != null) page.setTheme(theme);
+
+    }
 
     public PortletTabbedPane createNewUserPane(PortletRequest req, int cols, String label) {
 
@@ -437,8 +461,8 @@ public class PortletPageFactory implements PortletSessionListener {
 
         // Need to provide one guest container per users session
         if (userLayouts.containsKey(sessionId)) {
+            page = (PortletPage)userLayouts.get(sessionId);
             log.debug("Returning existing layout for:" + sessionId + " for user=" + user.getUserName());
-            return (PortletPage) userLayouts.get(sessionId);
         } else {
 
             // Now the user is user so remove guest layout
@@ -495,7 +519,13 @@ public class PortletPageFactory implements PortletSessionListener {
             try {
                 //newcontainer = (PortletPage)guestPage.clone();
                 PortletPage guestPage = PortletTabRegistry.getGuestLayoutPage();
+
                 newcontainer = (PortletPage)deepCopy(guestPage);
+
+                String defaultTheme = portalConfigService.getPortalConfigSettings().getDefaultTheme();
+                newcontainer.setTheme(defaultTheme);
+
+                // theme has to be set before it is inited
                 newcontainer.init(req, new ArrayList());
                 guests.put(id, newcontainer);
                 sessionManager.addSessionListener(id, this);

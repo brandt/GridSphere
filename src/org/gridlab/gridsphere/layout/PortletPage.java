@@ -33,11 +33,9 @@ public class PortletPage implements Serializable, Cloneable {
     protected int COMPONENT_ID = -1;
 
     protected transient CacheService cacheService = null;
-    protected transient PortalConfigService portalConfigService = null;
 
     protected PortletContainer footerContainer = null;
     protected PortletContainer headerContainer = null;
-    protected PortletContainer bodyContainer = null;
     protected PortletTabbedPane tabbedPane = null;
 
     // The component ID's of each of the layout components
@@ -87,11 +85,6 @@ public class PortletPage implements Serializable, Cloneable {
         return title;
     }
 
-    /**
-     * Sets the theme of this portlet component
-     *
-     * @param theme the theme of this portlet component
-     */
     public void setTheme(String theme) {
         this.theme = theme;
     }
@@ -159,24 +152,6 @@ public class PortletPage implements Serializable, Cloneable {
         return footerContainer;
     }
 
-    /**
-     * Sets the page body
-     *
-     * @param bodyContainer a portlet container with body components
-     */
-    public void setPortletBody(PortletContainer bodyContainer) {
-        this.bodyContainer = bodyContainer;
-    }
-
-    /**
-     * Returns the page body
-     *
-     * @return a portlet container with body components
-     */
-    public PortletContainer getPortletBody() {
-        return bodyContainer;
-    }
-
     public void setPortletTabbedPane(PortletTabbedPane tabbedPane) {
         this.tabbedPane = tabbedPane;
     }
@@ -229,28 +204,21 @@ public class PortletPage implements Serializable, Cloneable {
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
             cacheService = (CacheService)factory.createPortletService(CacheService.class, null, true);
-            portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, null, true);
         } catch (PortletServiceException e) {
             System.err.println("Unable to init Cache service! " + e.getMessage());
         }
-        theme = portalConfigService.getPortalConfigSettings().getDefaultTheme();
-        
+
         componentIdentifiers = new Vector();
 
         if (headerContainer != null) {
             headerContainer.setTheme(theme);
             list = headerContainer.init(req, list);
         }
+
         if (tabbedPane != null) {
             tabbedPane.setTheme(theme);
             list = tabbedPane.init(req, list);
         }
-
-        if (bodyContainer != null) {
-            bodyContainer.setTheme(theme);
-            list = bodyContainer.init(req, list);
-        }
-
 
         if (footerContainer != null) {
             footerContainer.setTheme(theme);
@@ -336,7 +304,6 @@ public class PortletPage implements Serializable, Cloneable {
     public void destroy() {
         if (headerContainer != null) headerContainer.destroy();
         if (tabbedPane != null) tabbedPane.destroy();
-        if (bodyContainer != null) bodyContainer.destroy();
         if (footerContainer != null) footerContainer.destroy();
     }
 
@@ -442,8 +409,6 @@ public class PortletPage implements Serializable, Cloneable {
         if (headerContainer != null) headerContainer.doRender(event);
         // ..| tabs | here |....
         if (tabbedPane != null) tabbedPane.doRender(event);
-        // The body
-        if (bodyContainer != null) bodyContainer.doRender(event);
         //.... the footer ..........
         if (footerContainer != null) footerContainer.doRender(event);
 
@@ -466,7 +431,6 @@ public class PortletPage implements Serializable, Cloneable {
         c.headerContainer = (this.headerContainer == null) ? null : (PortletContainer)this.headerContainer.clone();
         c.footerContainer = (this.footerContainer == null ) ? null : (PortletContainer)this.footerContainer.clone();
         c.tabbedPane = (this.tabbedPane == null) ? null : (PortletTabbedPane)this.tabbedPane.clone();
-        c.bodyContainer = (this.bodyContainer == null ) ? null : (PortletContainer)this.bodyContainer.clone();
         return c;
     }
 

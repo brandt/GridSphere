@@ -29,7 +29,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected String width = "";
     protected String label = "";
     protected String name = "";
-    protected String theme = "default";
+    protected String theme = "";
     protected boolean isVisible = true;
     protected String roleString = PortletRole.GUEST.toString();
     protected PortletRole requiredRole = PortletRole.GUEST;

@@ -150,13 +150,22 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     public void saveDefaultTheme(FormEvent event) throws PortletException, IOException {
         this.checkSuperRole(event);
+        PortletRequest req = event.getPortletRequest();
         ListBoxBean themesLB = event.getListBoxBean("themesLB");
         String theme = themesLB.getSelectedValue();
+        themesLB.clear();
         if (!theme.equals("")) {
             PortalConfigSettings configSettings = portalConfigService.getPortalConfigSettings();
             configSettings.setDefaultTheme(theme);
             portalConfigService.savePortalConfigSettings(configSettings);
         }
+        PortletPage page = layoutMgr.getPortletPage(req);
+
+        page.setTheme(theme);
+        User user =  req.getUser();
+        theme = (String)user.getAttribute(User.THEME);
+        if (theme != null) page.setTheme(theme);
+        layoutMgr.reloadPage(event.getPortletRequest());
     }
 
     public void importLayout(FormEvent event) throws PortletException, IOException {
