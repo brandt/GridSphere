@@ -156,7 +156,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         String mapping = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-services-mapping.xml");
         if (f.exists()) {
             SportletServiceFactory factory = SportletServiceFactory.getInstance();
-            factory.addServices(descriptor, mapping);
+            factory.addServices(ctx, descriptor, mapping);
         } else {
             log.debug("Did not find PortletServices.xml for: " + ctx.getServletContextName());
         }

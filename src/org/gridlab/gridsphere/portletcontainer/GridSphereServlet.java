@@ -8,6 +8,7 @@ package org.gridlab.gridsphere.portletcontainer;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.layout.PortletErrorFrame;
 import org.gridlab.gridsphere.layout.PortletLayoutEngine;
+import org.gridlab.gridsphere.layout.PortletPageFactory;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletContext;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
@@ -30,10 +31,7 @@ import javax.servlet.http.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -92,14 +90,14 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public synchronized void initializeServices() throws PortletServiceException {
         // discover portlets
         log.debug("Creating portlet manager service");
-        portletManager = (PortletManagerService) factory.createUserPortletService(PortletManagerService.class, GuestUser.getInstance(), getServletConfig(), true);
+        portletManager = (PortletManagerService) factory.createUserPortletService(PortletManagerService.class, GuestUser.getInstance(), getServletConfig().getServletContext(), true);
         // create groups from portlet web apps
         log.debug("Creating access control manager service");
-        aclService = (AccessControlManagerService) factory.createUserPortletService(AccessControlManagerService.class, GuestUser.getInstance(), getServletConfig(), true);
+        aclService = (AccessControlManagerService) factory.createUserPortletService(AccessControlManagerService.class, GuestUser.getInstance(), getServletConfig().getServletContext(), true);
         // create root user in default group if necessary
         log.debug("Creating user manager service");
-        userManagerService = (UserManagerService) factory.createUserPortletService(UserManagerService.class, GuestUser.getInstance(), getServletConfig(), true);
-        loginService = (LoginService) factory.createUserPortletService(LoginService.class, GuestUser.getInstance(), getServletConfig(), true);
+        userManagerService = (UserManagerService) factory.createUserPortletService(UserManagerService.class, GuestUser.getInstance(), getServletConfig().getServletContext(), true);
+        loginService = (LoginService) factory.createUserPortletService(LoginService.class, GuestUser.getInstance(), getServletConfig().getServletContext(), true);
     }
 
     /**
@@ -148,12 +146,14 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
             if (event.getAction().getName().equals(SportletProperties.LOGOUT)) {
                 logout(event);
+                // since event is now invalidated, must create new one
+                event = new GridSphereEventImpl(aclService, context, req, res);
             }
         }
 
-        // Render layout
         layoutEngine.actionPerformed(event);
 
+        // is this a file download operation?
         downloadFile(event);
 
         // Handle any outstanding messages
@@ -186,6 +186,13 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         log.debug("Portlet service factory stats");
         factory.logStatistics();
 
+        log.debug("Portlet page factory stats");
+        try {
+            PortletPageFactory pageFactory = PortletPageFactory.getInstance();
+            pageFactory.logStatistics();
+        } catch (Exception e) {
+            log.error("Unable to get page factory", e);
+        }
 
     }
 
@@ -411,6 +418,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         sessionManager.sessionDestroyed(event);
         //loginService.sessionDestroyed(event.getSession());
         log.debug("sessionDestroyed('" + event.getSession().getId() + "')");
+        HttpSession s = event.getSession();
+        Enumeration enum = s.getAttributeNames();
+        while (enum.hasMoreElements()) {
+            System.err.println(" attr names in session: " + (String)enum.nextElement());
+        }
+
         //HttpSession session = event.getSession();
         //User user = (User) session.getAttribute(SportletProperties.PORTLET_USER);
         //System.err.println("user : " + user.getUserID() + " expired!");

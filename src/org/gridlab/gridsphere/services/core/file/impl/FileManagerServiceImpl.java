@@ -56,6 +56,7 @@ public class FileManagerServiceImpl implements FileManagerService, PortletServic
     }
 
     public void storeFile(User user, FileInputBean inputBean, String fileName) throws IOException, Exception {
+
         String userLoc = getLocationPath(user, "");
         File f = new File(userLoc);
         if (!f.exists()) {

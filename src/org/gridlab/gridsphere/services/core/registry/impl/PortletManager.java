@@ -61,7 +61,7 @@ public class PortletManager implements PortletManagerService {
     public synchronized void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.debug("in init()");
         if (!isInitialized) {
-            context = config.getServletConfig().getServletContext();
+            context = config.getServletContext();
             String webapps = config.getInitParameter(CORE_CONTEXT);
             if (webapps != null) {
                 try {
@@ -146,7 +146,7 @@ public class PortletManager implements PortletManagerService {
     }
 
     public List getPortletWebApplicationNames() {
-        List l = new ArrayList();
+        List l = new Vector();
         for (int i = 0; i < webapps.size(); i++) {
             PortletWebApplication webapp = (PortletWebApplication)webapps.get(i);
             l.add(webapp.getWebApplicationName());
