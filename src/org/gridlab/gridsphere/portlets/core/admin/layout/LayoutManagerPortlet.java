@@ -123,6 +123,12 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     }
 
+    public void saveDefaultTheme(FormEvent event) throws PortletException, IOException {
+        this.checkSuperRole(event);
+        
+
+    }
+
     public void importLayout(FormEvent event) throws PortletException, IOException {
         this.checkSuperRole(event);
 

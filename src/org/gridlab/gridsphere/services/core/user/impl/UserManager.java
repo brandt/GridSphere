@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
-import java.io.IOException;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
@@ -46,8 +45,6 @@ public class UserManager implements UserManagerService {
     private String jdoUser = SportletUserImpl.class.getName();
     private String jdoAccountRequest = AccountRequestImpl.class.getName();
 
-    private PortletServiceConfig config = null;
-
     protected UserManager() {
     }
 
@@ -58,16 +55,15 @@ public class UserManager implements UserManagerService {
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.info("Entering init()");
         if (!isInitialized) {
-            this.config = config;
             aclManager = AccessControlManager.getInstance();
             PortletServiceFactory factory = SportletServiceFactory.getInstance();
             try {
                 passwordManagerService = (PasswordManagerService) factory.createPortletService(PasswordManagerService.class, config.getServletContext(), true);
-        } catch (PortletServiceUnavailableException e) {
+            } catch (PortletServiceUnavailableException e) {
                 throw new PortletServiceUnavailableException("Cannot initialize usermanager service", e);
-        } catch (PortletServiceNotFoundException e) {
+            } catch (PortletServiceNotFoundException e) {
                 throw new PortletServiceUnavailableException("Cannot initialize usermanager service", e);
-        }
+            }
             initRootUser(config);
             log.info("Entering init()");
             isInitialized = true;
@@ -135,29 +131,6 @@ public class UserManager implements UserManagerService {
             }
         }
 
-        // put root in all groups
-        /*
-        List groups = aclManager.getGroups();
-        Iterator it = groups.iterator();
-        while (it.hasNext()) {
-            PortletGroup group = (PortletGroup)it.next();
-            if (!aclManager.isUserInGroup(rootUser, group)) {
-                GroupRequest groupRequest = this.aclManager.createGroupRequest();
-                groupRequest.setUser(rootUser);
-                groupRequest.setGroup(group);
-                groupRequest.setRole(PortletRole.USER);
-
-                // Create access right
-                try {
-                    this.aclManager.submitGroupRequest(groupRequest);
-                } catch (InvalidGroupRequestException e) {
-                    log.error("in ProfileManagerPortlet invalid group request", e);
-                }
-                this.aclManager.approveGroupRequest(groupRequest);
-                log.debug("adding root user to group: " + group.getName());
-            }
-        }
-        */
         log.info("Exiting initRootUser()");
     }
 
@@ -459,7 +432,6 @@ public class UserManager implements UserManagerService {
     }
 
     private SportletUserImpl editSportletUserImpl(AccountRequest request) {
-        /* TODO: Account request id should not be same as user id */
         String userID = request.getID();
         log.debug("in editSportletUser userID: " + userID);
         String userName = request.getUserName();
@@ -552,7 +524,7 @@ public class UserManager implements UserManagerService {
                    + criteria;
         try {
             SportletUserImpl sui = (SportletUserImpl) pm.restore(oql);
-            if (sui==null) {
+            if (sui == null) {
                 log.debug("User does not exist!");
             }
             return (sui != null);
@@ -561,19 +533,6 @@ public class UserManager implements UserManagerService {
             log.error(msg, e);
         }
         return false;
-    }
-
-    public boolean canUserCreateNewAccount() {
-        return Boolean.getBoolean(config.getInitParameter("canUserCreateNewAccount"));
-    }
-
-    public void setUserCreateNewAccount(boolean canUserCreateNewAccount) {       
-        config.setInitParameter("canUserCreateNewAccount", Boolean.toString(canUserCreateNewAccount));
-        try {
-            config.store();
-        } catch (IOException e) {
-            log.error("Unable to set UserManager service entry", e);
-        }
     }
 
 }

@@ -12,7 +12,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 /**
- * The <code>RequiredRoleTag</code> can be used to selectively display presentation based upon a user's role
+ * The <code>HasRoleTag</code> can be used to selectively display presentation based upon a user's role
  */
 public class HasActionTag extends TagSupport {
 

@@ -20,6 +20,8 @@ import org.gridlab.gridsphere.services.core.security.password.PasswordManagerSer
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.AccountRequest;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
@@ -36,11 +38,12 @@ public class LoginPortlet extends ActionPortlet {
     public static final String DO_VIEW_USER_EDIT_LOGIN = "login/createaccount.jsp"; //edit user
     public static final String DO_CONFIGURE = "login/config.jsp"; //configure login 
 
-    private boolean canUserCreateAccount = true;
+    private boolean canUserCreateAccount = false;
 
     private UserManagerService userManagerService = null;
     private AccessControlManagerService aclService = null;
     private PasswordManagerService passwordManagerService = null;
+    private PortalConfigService portalConfigService = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
@@ -48,7 +51,8 @@ public class LoginPortlet extends ActionPortlet {
             userManagerService = (UserManagerService)getPortletConfig().getContext().getService(UserManagerService.class);
             aclService = (AccessControlManagerService)getPortletConfig().getContext().getService(AccessControlManagerService.class);
             passwordManagerService = (PasswordManagerService)getPortletConfig().getContext().getService(PasswordManagerService.class);
-            canUserCreateAccount = userManagerService.canUserCreateNewAccount();
+            portalConfigService = (PortalConfigService)getPortletConfig().getContext().getService(PortalConfigService.class);
+            canUserCreateAccount = portalConfigService.getPortalConfigSettings().getCanUserCreateAccount();
         } catch (PortletServiceException e) {
             throw new UnavailableException("Unable to initialize services");
         }
@@ -298,7 +302,9 @@ public class LoginPortlet extends ActionPortlet {
         } else {
             canUserCreateAccount = false;
         }
-        userManagerService.setUserCreateNewAccount(canUserCreateAccount);
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+        settings.setCanUserCreateAccount(canUserCreateAccount);
+        portalConfigService.savePortalConfigSettings(settings);
         showConfigure(event);
     }
 }

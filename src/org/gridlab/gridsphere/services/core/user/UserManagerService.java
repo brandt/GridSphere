@@ -105,8 +105,4 @@ public interface UserManagerService  extends LoginUserModule {
       */
     public boolean existsUserName(String loginName);
 
-    public boolean canUserCreateNewAccount();
-
-    public void setUserCreateNewAccount(boolean canUserCreateAccount);
-
 }

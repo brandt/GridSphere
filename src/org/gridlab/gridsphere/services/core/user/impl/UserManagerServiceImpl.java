@@ -167,13 +167,4 @@ public class UserManagerServiceImpl implements UserManagerService, PortletServic
         return userManager.existsUserName(loginName);
     }
 
-    public boolean canUserCreateNewAccount() {
-        return userManager.canUserCreateNewAccount();
-    }
-
-    public void setUserCreateNewAccount(boolean canUserCreateAccount) {
-        //authorizer.authorizeSuperUser();
-        userManager.setUserCreateNewAccount(canUserCreateAccount);
-    }
-
 }

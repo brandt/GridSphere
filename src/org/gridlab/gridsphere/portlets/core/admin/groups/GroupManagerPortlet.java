@@ -35,7 +35,7 @@ public class GroupManagerPortlet extends ActionPortlet {
       // JSP pages used by this portlet
     public static final String DO_VIEW_GROUP_LIST = "admin/groups/groupList.jsp";
     public static final String DO_VIEW_GROUP_VIEW = "admin/groups/groupView.jsp";
-    public static final String DO_VIEW_GROUP_EDIT = "admin/groups/groupEdit.jsp";
+    public static final String DO_VIEW_GROUP_EDIT = "admin/groups/groupEditDefaults.jsp";
     public static final String DO_VIEW_GROUP_ENTRY_VIEW = "admin/groups/groupEntryView.jsp";
     public static final String DO_VIEW_GROUP_ENTRY_EDIT = "admin/groups/groupEntryEdit.jsp";
     public static final String DO_VIEW_GROUP_ENTRY_ADD = "admin/groups/groupEntryAdd.jsp";
@@ -551,6 +551,67 @@ public class GroupManagerPortlet extends ActionPortlet {
         log.debug("Exiting doViewCancelRemoveGroupEntry");
     }
 
+    public void doEditDefaultGroups(FormEvent evt) {
+        PortletRequest req = evt.getPortletRequest();
+        User user = req.getUser();
+        List groups = getACLService(user).getGroups();
+        req.setAttribute("groups", groups);
+
+
+        TableBean defaultTable = evt.getFrameBean("defaultTable");
+        defaultTable.setZebra(true);
+        defaultTable.setWidth("50%");
+        DefaultTableModel tm = new DefaultTableModel();
+
+        TableRowBean tr = new TableRowBean();
+        TableCellBean tc = new TableCellBean();
+        tr.setHeader(true);
+
+
+        TextBean text = new TextBean();
+        text.setValue("Default");
+        tc.addBean(text);
+
+        TableCellBean tc2 = new TableCellBean();
+        TextBean text2 = new TextBean();
+        text2.setValue("Group name");
+        tc2.addBean(text2);
+
+        tr.addBean(tc);
+        tr.addBean(tc2);
+        tm.addTableRowBean(tr);
+        Iterator it = groups.iterator();
+        while (it.hasNext()) {
+            PortletGroup g = (PortletGroup)it.next();
+            tr = new TableRowBean();
+            tc = new TableCellBean();
+            CheckBoxBean cb = new CheckBoxBean();
+            cb.setBeanId("groupCB");
+            cb.setValue(g.getName());
+            if (g.equals(PortletGroupFactory.GRIDSPHERE_GROUP)) {
+                cb.setDisabled(true);
+                cb.setSelected(true);
+            }
+            //tc.addBean(cb);
+
+            tc = new TableCellBean();
+            tc.addBean(cb);
+            tr.addBean(tc);
+
+            tc = new TableCellBean();
+            text = new TextBean();
+
+            text.setValue(g.getName());
+            tc.addBean(text);
+
+            tr.addBean(tc);
+
+            tm.addTableRowBean(tr);
+        }
+        defaultTable.setTableModel(tm);
+
+        setNextState(req, DO_VIEW_GROUP_EDIT);
+    }
 
     private PortletGroup loadGroup(FormEvent evt) {
         HiddenFieldBean groupIDBean = evt.getHiddenFieldBean("groupID");
