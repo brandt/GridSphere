@@ -5,6 +5,8 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletResponse;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -50,16 +52,12 @@ public class PortletMinimized extends BasePortletComponent {
         return portletClass;
     }
 
-    public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        super.doRenderFirst(ctx, req, res);
+    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+        super.doRender(event);
         log.debug("in doRenderFirst()");
+        SportletResponse res = event.getSportletResponse();
         PrintWriter out = res.getWriter();
         out.println("portlet minimized");
-    }
-
-    public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        super.doRenderLast(ctx, req, res);
-        log.debug("in doRenderLast()");
     }
 
 }

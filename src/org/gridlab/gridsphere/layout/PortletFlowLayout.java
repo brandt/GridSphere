@@ -5,6 +5,9 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletResponse;
+import org.gridlab.gridsphere.portlet.impl.SportletRequest;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -61,22 +64,26 @@ public class PortletFlowLayout extends BasePortletComponent implements LayoutMan
         return vgap;
     }
 
-    public void doLayoutAction(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+/*
+    public void doLayoutAction(GridSphereEvent event) throws PortletLayoutException, IOException {
         Iterator it = components.iterator();
-        LayoutActionListener p = null;
+        PortletRender p = null;
         while (it.hasNext()) {
-            p = (LayoutActionListener)it.next();
+            p = (PortletRender)it.next();
             p.doLayoutAction(ctx, req, res);
         }
     }
+    */
 
-    public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        super.doRenderFirst(ctx, req, res);
+    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+        super.doRender(event);
+        SportletRequest req = event.getSportletRequest();
+        SportletResponse res = event.getSportletResponse();
         PrintWriter out = res.getWriter();
 
         int i = 0;
         int max = components.size();
-        LayoutActionListener p = null;
+        PortletRender p = null;
 
         int gwidth = 100 / max;
 
@@ -87,9 +94,9 @@ public class PortletFlowLayout extends BasePortletComponent implements LayoutMan
             out.println("<tr>");
 
                 out.println("<td>");
-                p = (LayoutActionListener)components.get(i);
-                p.doRenderFirst(ctx, req, res);
-                p.doRenderLast(ctx, req, res);
+                p = (PortletRender)components.get(i);
+                p.doRender(event);
+
                 out.println("</td>");
              i++;
 
@@ -98,10 +105,6 @@ public class PortletFlowLayout extends BasePortletComponent implements LayoutMan
 
         out.println("</table>");
 
-    }
-
-    public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        super.doRenderLast(ctx, req, res);
     }
 
 

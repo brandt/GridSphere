@@ -5,6 +5,9 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletResponse;
+import org.gridlab.gridsphere.event.WindowListener;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -12,8 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
+import java.util.List;
 
-public class PortletGridLayout extends BasePortletComponent implements LayoutManager  {
+public class PortletGridLayout extends BasePortletComponent implements PortletFrameListener, LayoutManager  {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletGridLayout.class);
 
@@ -25,6 +29,10 @@ public class PortletGridLayout extends BasePortletComponent implements LayoutMan
     public PortletGridLayout(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
+    }
+
+    public String getClassName() {
+        return PortletGridLayout.class.getName();
     }
 
     public void setRows(int rows) {
@@ -43,17 +51,65 @@ public class PortletGridLayout extends BasePortletComponent implements LayoutMan
         return cols;
     }
 
-    public void doLayoutAction(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+    public List init(List list) {
+        this.id = list.size();
         Iterator it = components.iterator();
-        LayoutActionListener p = null;
+        PortletComponent p = null;
         while (it.hasNext()) {
-            p = (LayoutActionListener)it.next();
-            p.doLayoutAction(ctx, req, res);
+            p = (PortletComponent)it.next();
+            //PortletRender a = (PortletRender)p;
+            list.add(p);
+            // invoke init on each component
+            list = p.init(list);
+            // If the component is a frame we want to be notified
+            if (p instanceof PortletFrame) {
+                PortletFrame f = (PortletFrame)p;
+                f.addFrameListener(this);
+            }
+        }
+        return list;
+    }
+
+    public void handleFrameMaximized(PortletFrameEvent event) {
+        Iterator it = components.iterator();
+        PortletComponent p = null;
+        int id = event.getID();
+
+        while (it.hasNext()) {
+            p = (PortletComponent)it.next();
+
+            // check for the frame that has been maximized
+            if (p.getID() == id) {
+                p.setWidth("100%");
+            } else {
+                // If this is not the right frame, make it invisible
+                p.setVisible(false);
+            }
         }
     }
 
-    public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        super.doRenderFirst(ctx, req, res);
+    public void handleFrameMinimized(PortletFrameEvent event) {
+        Iterator it = components.iterator();
+        PortletComponent p = null;
+        int id = event.getID();
+
+        while (it.hasNext()) {
+            p = (PortletComponent)it.next();
+            p.setVisible(true);
+        }
+    }
+
+    public void handleFrameEvent(PortletFrameEvent event) throws PortletLayoutException {
+        if (event.getAction() == PortletFrameEvent.Action.FRAME_MAXIMIZED) {
+            handleFrameMaximized(event);
+        } else if (event.getAction() == PortletFrameEvent.Action.FRAME_MINIMIZED) {
+            handleFrameMinimized(event);
+        }
+    }
+
+    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+        super.doRender(event);
+        SportletResponse res = event.getSportletResponse();
         PrintWriter out = res.getWriter();
 
         if (insets == null) insets = new PortletInsets();
@@ -63,7 +119,7 @@ public class PortletGridLayout extends BasePortletComponent implements LayoutMan
             throw new PortletLayoutException("Number of components specified exceeds rows * columns");
 
         int max = components.size();
-        LayoutActionListener p = null;
+        PortletComponent p = null;
 
         int gwidth = 100 / cols;
 
@@ -76,9 +132,10 @@ public class PortletGridLayout extends BasePortletComponent implements LayoutMan
             //insets.doRenderLast(ctx,req,res);
             while ((j < cols) && (k < max)) {
                 out.println("<td>");
-                p = (LayoutActionListener)components.get(k);
-                p.doRenderFirst(ctx, req, res);
-                p.doRenderLast(ctx, req, res);
+                p = (PortletComponent)components.get(k);
+                if (p.isVisible()) {
+                    p.doRender(event);
+                }
                 j++; k++;
                 out.println("</td>");
             }
@@ -88,10 +145,6 @@ public class PortletGridLayout extends BasePortletComponent implements LayoutMan
         }
 
         out.println("</table>");
-    }
-
-    public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        super.doRenderLast(ctx, req, res);
     }
 
 }

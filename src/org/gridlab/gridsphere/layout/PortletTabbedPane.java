@@ -6,8 +6,15 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletURI;
+import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.impl.SportletURI;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletRequest;
+import org.gridlab.gridsphere.portlet.impl.SportletResponse;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.event.WindowListener;
+import org.gridlab.gridsphere.event.WindowEvent;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -16,10 +23,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Vector;
+import java.util.Iterator;
 
 public class PortletTabbedPane extends BasePortletComponent {
 
-    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletTabbedPane.class);
+    private static PortletLog log = SportletLog.getInstance(PortletTabbedPane.class);
+
+    protected String name = PortletTabbedPane.class.getName();
 
     private PortletPanel selectedPanel = null;
     private Vector tabs = new Vector();
@@ -206,20 +216,39 @@ public class PortletTabbedPane extends BasePortletComponent {
         return tabs;
     }
 
-    public void doLayoutAction(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+    public String getClassName() {
+        return PortletTabbedPane.class.getName();
+    }
+
+    public List init(List list) {
+        log.info("in init()");
+        this.id = list.size();
+        selectedPanel = getSelectedPortletPanel();
+        PortletPanel panel = null;
+        for (int i = 0; i < getTabCount(); i++) {
+            panel = getPortletPanelAt(i);
+            list.add((PortletComponent)panel);
+            list = panel.init(list);
+        }
+        return list;
+    }
+
+    public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
+        SportletRequest req = event.getSportletRequest();
         String tabchange = req.getParameter(GridSphereProperties.PORTLETTAB);
         if (tabchange != null) {
             int idx = indexOfTab(tabchange);
             setSelectedIndex(idx);
         }
         selectedPanel = getSelectedPortletPanel();
-        selectedPanel.doLayoutAction(ctx, req, res);
+        selectedPanel.actionPerformed(event);
     }
 
-    public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        super.doRenderFirst(ctx, req, res);
+    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+        super.doRender(event);
 
-        if (selectedPanel == null) selectedPanel = getSelectedPortletPanel();
+        SportletRequest req = event.getSportletRequest();
+        SportletResponse res = event.getSportletResponse();
 
         int i;
         PrintWriter out = res.getWriter();
@@ -230,13 +259,12 @@ public class PortletTabbedPane extends BasePortletComponent {
         PortletURI sportletURI;
         String modeString;
         for (i = 0; i < tabs.size(); i++) {
-            sportletURI = new SportletURI(res);
+            sportletURI = event.createNewAction(GridSphereEvent.Action.LAYOUT_ACTION, this.id, null);
             try {
                 // Create portlet link Href
                 PortletTab tab = (PortletTab)tabs.get(i);
                 sportletURI.addParameter(GridSphereProperties.PORTLETTAB, tab.getTitle());
                 tabLinks[i] = sportletURI.toString();
-                log.info("tab: " + tabLinks[i]);
             } catch (Exception e) {
                 log.error("Unable to create portlet tab link: " + e.getMessage());
             }
@@ -254,15 +282,8 @@ public class PortletTabbedPane extends BasePortletComponent {
 
         out.println("<table width=\"100%\">");
         out.println("<tr><td>");
-        selectedPanel.doRenderFirst(ctx, req, res);
-    }
-
-    public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        super.doRenderLast(ctx, req, res);
-        PrintWriter out = res.getWriter();
-        selectedPanel.doRenderLast(ctx, req, res);
+        selectedPanel.doRender(event);
         out.println("</td></tr></table>");
-
     }
 
 

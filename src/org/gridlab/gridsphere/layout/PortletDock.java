@@ -5,6 +5,9 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletResponse;
+import org.gridlab.gridsphere.portlet.impl.SportletRequest;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -67,25 +70,20 @@ public class PortletDock extends BasePortletComponent {
         return margin;
     }
 
-    public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        super.doRenderFirst(ctx, req, res);
+    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+        super.doRender(event);
+        SportletRequest req = event.getSportletRequest();
+        SportletResponse res = event.getSportletResponse();
         PrintWriter out = res.getWriter();
         out.write("<tr><td>" + title);
         ListIterator compIt = components.listIterator();
         while (compIt.hasNext()) {
-            LayoutActionListener action = (LayoutActionListener)compIt.next();
-            action.doRenderFirst(ctx, req, res);
-            margin.doRenderFirst(ctx, req, res);
-            margin.doRenderLast(ctx, req, res);
-            action.doRenderLast(ctx, req, res);
+            PortletRender action = (PortletRender)compIt.next();
+            action.doRender(event);
+            margin.doRender(event);
         }
         out.write("</td></tr>");
     }
-
-    public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        super.doRenderLast(ctx, req, res);
-    }
-
 
 }
 

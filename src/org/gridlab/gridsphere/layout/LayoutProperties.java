@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.layout;
 public class LayoutProperties {
 
     /* These are defined by the BasePortletComponent */
+    public static final String ID = "-1";
     public static final String NAME = "name";
     public static final String BGCOLOR = "bgcolor";
     public static final String FGCOLOR = "fgcolor";

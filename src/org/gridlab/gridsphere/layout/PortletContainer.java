@@ -5,6 +5,8 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletResponse;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -14,13 +16,14 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import java.util.ArrayList;
 
-public class PortletContainer implements LayoutActionListener {
+public class PortletContainer implements PortletLifecycle {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletContainer.class);
 
     protected List components = new Vector();
-
+    protected List portletComponents = new ArrayList();
     protected LayoutManager layoutManager;
     protected String name = "";
 
@@ -42,30 +45,63 @@ public class PortletContainer implements LayoutActionListener {
         return name;
     }
 
-    public void doLayoutAction(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        // if there is a layout action do it!
+    public List init(List list) {
+        log.info("in init()");
         Iterator it = components.iterator();
         while (it.hasNext()) {
-            LayoutActionListener action = (LayoutActionListener)it.next();
-            action.doLayoutAction(ctx, req, res);
+            PortletLifecycle cycle = (PortletLifecycle)it.next();
+            list.add(cycle);
+            portletComponents = cycle.init(list);
+        }
+
+        System.err.println("Made a components list!!!! " + portletComponents.size());
+        for (int i = 0; i < portletComponents.size(); i++) {
+            PortletComponent c = (PortletComponent)portletComponents.get(i);
+            System.err.println(c.getClassName() + "  id: " + c.getID());
+        }
+        return portletComponents;
+    }
+
+    public void login() {
+
+    }
+
+    public void logout() {
+
+    }
+
+    public void destroy() {
+        Iterator it = components.iterator();
+        while (it.hasNext()) {
+            PortletComponent comp = (PortletComponent)it.next();
+            comp.destroy();
         }
     }
 
+    public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
 
-    public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        // if there is a layout action do it!
+        if (event.hasAction()) {
+            System.err.println("In PORTLET CONTAINER: ACTION = " + event.getAction().toString());
+            System.err.println("In PORTLET CONTAINER: ID = " + event.getPortletComponentID());
+            PortletLifecycle l = (PortletLifecycle)portletComponents.get(event.getPortletComponentID() - 1);
+
+            if (l != null) {
+                l.actionPerformed(event);
+            }
+        }
+    }
+
+    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+        SportletResponse res = event.getSportletResponse();
         PrintWriter out = res.getWriter();
         out.println("<html><head><meta HTTP-EQUIV=\"content-type\" CONTENT=\"text/html; charset=ISO-8859-1\">");
         out.println("<title>" + name + "</title>");
         Iterator it = components.iterator();
         while (it.hasNext()) {
-            LayoutActionListener action = (LayoutActionListener)it.next();
-            action.doRenderFirst(ctx, req, res);
-            action.doRenderLast(ctx, req, res);
+            PortletRender action = (PortletRender)it.next();
+            action.doRender(event);
         }
-    }
-
-    public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        PrintWriter out = res.getWriter();
         out.println("</html>");
     }
 
@@ -106,9 +142,5 @@ public class PortletContainer implements LayoutActionListener {
     public void setLayout(LayoutManager mgr) {
         layoutManager = mgr;
     }
-
-    public void invalidate() {}
-
-    public void validate() {}
 
 }

@@ -7,15 +7,16 @@ package org.gridlab.gridsphere.layout;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletWindow;
 import org.gridlab.gridsphere.portlet.impl.SportletMode;
-import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
-import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-import org.gridlab.gridsphere.portletcontainer.PortletErrorMessage;
+import org.gridlab.gridsphere.portlet.impl.SportletRequest;
+import org.gridlab.gridsphere.portlet.impl.SportletResponse;
+import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes;
 import org.gridlab.gridsphere.portletcontainer.descriptor.AllowsWindowStates;
 import org.gridlab.gridsphere.portletcontainer.descriptor.Markup;
 import org.gridlab.gridsphere.services.container.registry.UserPortletManager;
 import org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryManager;
+import org.gridlab.gridsphere.event.WindowListener;
+import org.gridlab.gridsphere.layout.impl.PortletFrameEventImpl;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -26,39 +27,30 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 
-public class PortletFrame extends BasePortletComponent {
+public class PortletFrame extends BasePortletComponent implements PortletTitleBarListener {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletFrame.class);
 
-    private String portletClass;
+    protected String name = PortletFrame.class.getName();
 
     // renderPortlet is true in doView and false on minimized
     private boolean renderPortlet = true;
 
-    private Portlet.Mode portletMode = Portlet.Mode.VIEW;
-    private Portlet.Mode previousMode = null;
+    private String COMPONENT_ID = null;
 
     private PortletWindow portletWindow = null;
 
+    private PortletTitleBar titleBar = new PortletTitleBar();
     private List listeners = new ArrayList();
 
-    public PortletFrame() {
+    public PortletFrame() {}
+
+    public void setPortletTitleBar(PortletTitleBar titleBar) {
+        this.titleBar = titleBar;
     }
 
-    public void addActionListener(LayoutActionListener actionListener) {
-        listeners.add(actionListener);
-    }
-
-    public void removeActionListener(LayoutActionListener actionListener) {
-        listeners.remove(actionListener);
-    }
-
-    public void setConcretePortletClass(String portletClass) {
-        this.portletClass = portletClass;
-    }
-
-    public String getConcretePortletClass() {
-        return portletClass;
+    public PortletTitleBar getPortletTitleBar() {
+        return titleBar;
     }
 
     public void setWindowState(String windowState) {
@@ -72,138 +64,88 @@ public class PortletFrame extends BasePortletComponent {
         return portletWindow.toString();
     }
 
-    public void setPortletMode(String pMode) {
-        try {
-        this.portletMode = SportletMode.getInstance(pMode);
-        } catch (Exception e) {
+    public String getClassName() {
+        return PortletFrame.class.getName();
+    }
+
+    public List init(List list) {
+        COMPONENT_ID = String.valueOf(list.size());
+        this.id = list.size();
+        list.add((PortletComponent)titleBar);
+        list = titleBar.init(list);
+        titleBar.addTitleBarListener(this);
+        return list;
+    }
+
+    public void addFrameListener(PortletFrameListener listener) {
+        listeners.add(listener);
+    }
+
+    protected void fireFrameEvent(PortletFrameEvent event) throws PortletLayoutException {
+        Iterator it = listeners.iterator();
+        PortletFrameListener l;
+        while (it.hasNext()) {
+            l = (PortletFrameListener)it.next();
+            l.handleFrameEvent(event);
         }
     }
 
-    public String getPortletMode() {
-        return portletMode.toString();
+    /**
+     * Notifies this listener that a portlet window has been maximized.
+     *
+     * @param event the window event
+     */
+    public void handleTitleBarEvent(PortletTitleBarEvent event) throws PortletLayoutException {
+
+        if (event.getAction() == PortletTitleBarEvent.Action.MODE_MODIFY) {
+            //previousMode = portletMode;
+            //portletMode = event.getMode();
+        }
+        if (event.getAction() == PortletTitleBarEvent.Action.WINDOW_MODIFY) {
+
+            PortletWindow.State state = event.getState();
+            PortletFrameEvent evt = null;
+            if (state == PortletWindow.State.MINIMIZED) {
+                renderPortlet = false;
+                evt = new PortletFrameEventImpl(PortletFrameEvent.Action.FRAME_MINIMIZED, this.id);
+            } else if (state == PortletWindow.State.RESIZING) {
+                renderPortlet = true;
+                evt = new PortletFrameEventImpl(PortletFrameEvent.Action.FRAME_RESIZED, this.id);
+            } else if (state == PortletWindow.State.MAXIMIZED) {
+                renderPortlet = true;
+                evt = new PortletFrameEventImpl(PortletFrameEvent.Action.FRAME_MAXIMIZED, this.id);
+            }
+            fireFrameEvent(evt);
+        }
     }
 
-    /*
-    public void init() {
-        if (border == null) border = new PortletBorder();
-        border.setPortletClass(portletClass);
-        border.setPortletWindow(portletWindow);
-        border.setPortletMode(portletMode);
-
-        border.addLayoutListener(this);
-
-    }
-    */
-
-    public void doLayoutAction(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+    public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
 
         // process events
+        SportletRequest req = event.getSportletRequest();
+        SportletResponse res = event.getSportletResponse();
+        req.setAttribute(GridSphereProperties.COMPONENT_ID, COMPONENT_ID);
+        UserPortletManager userPortletManager = UserPortletManager.getInstance();
 
-        String id = (String)req.getParameter(GridSphereProperties.PORTLETID);
-        if ((id != null) && (id.equals(portletClass))) {
-
-            // change portlet mode if necessary
-            String newmode = req.getParameter(GridSphereProperties.PORTLETMODE);
-            if (newmode != null) {
-                // Perform access control on portlet modes
-                previousMode = portletMode;
-                try {
-                portletMode = Portlet.Mode.getInstance(newmode);
-                } catch (Exception e) {}
-            }
-
-            // change window state if necessary
-            String newwindow = req.getParameter(GridSphereProperties.PORTLETWINDOW);
-            String minStr = PortletWindow.State.MINIMIZED.toString();
-            String maxStr = PortletWindow.State.MAXIMIZED.toString();
-            String resStr = PortletWindow.State.RESIZING.toString();
-            String winstateStr;
-            if (newwindow != null) {
-                try {
-                portletWindow = new SportletWindow(newwindow);
-                } catch (Exception e) {}
-
-                // if it's minimized then don't render portlet's service method
-                winstateStr = portletWindow.getWindowState().toString();
-                if (winstateStr.equalsIgnoreCase(minStr)) {
-                    renderPortlet = false;
-                } else if (winstateStr.equalsIgnoreCase(resStr)) {
-                    renderPortlet = true;
-                } else if (winstateStr.equalsIgnoreCase(maxStr)) {
-                    renderPortlet = true;
-                }
-            }
-
-            UserPortletManager userPortletManager = UserPortletManager.getInstance();
-
-            // now perform actionPerformed on Portlet if it has an action
-            String actionStr = req.getParameter(GridSphereProperties.ACTION);
-            if (actionStr != null) {
-                DefaultPortletAction action = new DefaultPortletAction(actionStr);
-                userPortletManager.actionPerformed(portletClass, action, req, res);
+        // now perform actionPerformed on Portlet if it has an action
+        String actionStr = req.getParameter(GridSphereProperties.ACTION);
+        if (actionStr != null) {
+            DefaultPortletAction action = new DefaultPortletAction(actionStr);
+            try {
+            userPortletManager.actionPerformed(titleBar.getPortletClass(), action, req, res);
+            } catch (PortletException e) {
+                System.err.println("titleBar.getPortletClass()= " + titleBar.getPortletClass() + "  " + actionStr);
             }
         }
 
     }
 
 
-    public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        super.doRenderFirst(ctx, req, res);
-
-        // Set the portlet ID
-        req.setAttribute(GridSphereProperties.PORTLETID, portletClass);
-
-        PortletRegistryManager registryManager = PortletRegistryManager.getInstance();
-
-
-        String id = (String)req.getParameter(GridSphereProperties.PORTLETID);
-        if ((id != null) && (id.equals(portletClass))) {
-
-        }
-
-
-        if (border == null) border = new PortletBorder();
-        border.setPortletClass(portletClass);
-        border.setPortletWindow(portletWindow);
-        border.setPortletMode(portletMode);
-
-        UserPortletManager userPortletManager = UserPortletManager.getInstance();
-
-        //PortletDataManager dataManager = PortletDataManager.getInstance();
-
-        // Set the portlet window
-        //PortletWindow window = SportletWindow.getInstance(windowState);
-        //req.setAttribute(GridSphereProperties.PORTLETWINDOW, window);
-
-        // Set the portlet mode
-        //String prevMode = req.getParameter(GridSphereProperties.PORTLETMODE);
-        //if (prevMode == null) prevMode = Portlet.Mode.VIEW.toString();
-        //req.setAttribute(GridSphereProperties.PREVIOUSMODE, prevMode);
-
-
-        // Where do we get portlet mode?
-        // Assume that a GuestUser is view
-        // Only if user is logged in do they get non-view modes
-
-
-
-        // get Mode from UserPortletManager
-        //Portlet.Mode portletMode = req.//dataManager.getPortletMode(portletClass, req, res);
-        //if (portletMode == null) {
-         //   Portlet.Mode portletMode = Portlet.Mode.getInstance(savedPortletMode);
-        //}
-
-        // get data from UserPortletManager
-        //PortletData portletData = userPortletManager.getPortletData(portletClass, req, res);
-        //req.setAttribute(GridSphereProperties.PORTLETDATA, portletData);
-
-
-
-        req.setAttribute(GridSphereProperties.PORTLETMODE, portletMode);
-        previousMode = portletMode;
-        req.setAttribute(GridSphereProperties.PREVIOUSMODE, previousMode);
-
-        req.setAttribute(GridSphereProperties.PORTLETWINDOW, portletWindow);
+    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+        super.doRender(event);
+        SportletRequest req = event.getSportletRequest();
+        SportletResponse res = event.getSportletResponse();
+        req.setAttribute(GridSphereProperties.COMPONENT_ID, COMPONENT_ID);
 
         ///// begin portlet frame
         PrintWriter out = res.getWriter();
@@ -211,27 +153,29 @@ public class PortletFrame extends BasePortletComponent {
         out.println("<table width=\"100%\" border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#999999\">");
         out.println("<tr><td width=\"100%\">");
 
-        border.doRenderFirst(ctx, req, res);
-        border.doRenderLast(ctx, req, res);
+        titleBar.doRender(event);
 
         out.println("</td></tr>");
         out.println("<tr><td valign=\"top\" align=\"left\"><table width=\"100%\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\" bgcolor=");
         out.println("\"" + bgColor + "\"<tr><td width=\"25%\" valign=\"center\">");
 
         PortletErrorMessage error = (PortletErrorMessage)req.getAttribute(GridSphereProperties.PORTLETERROR);
-        if ((error != null) && (error.getPortletID() == portletClass)) {
+        if ((error != null) && (error.getPortletID() == titleBar.getPortletClass())) {
             out.println("<b>Error!</b>");
             out.println(error.getMessage());
         } else {
-            if (renderPortlet)
-                userPortletManager.service(portletClass, req, res);
+            if (renderPortlet) {
+                PortletRegistryManager registryManager = PortletRegistryManager.getInstance();
+                UserPortletManager userPortletManager = UserPortletManager.getInstance();
+                try {
+                    userPortletManager.service(titleBar.getPortletClass(), req, res);
+                } catch (PortletException e) {
+                    out.println(e.getMessage());
+                }
+            }
         }
-
-    }
-
-    public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        PrintWriter out = res.getWriter();
         out.println("</tr></table></td></tr></table></td></tr></table>");
+
     }
 
 }

@@ -7,9 +7,13 @@ package org.gridlab.gridsphere.layout;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.GuestUser;
 import org.gridlab.gridsphere.portlet.impl.PortletProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletRequest;
+import org.gridlab.gridsphere.portlet.impl.SportletResponse;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.portletcontainer.descriptor.PortletCollection;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
 
 import javax.servlet.ServletContext;
@@ -18,19 +22,21 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PortletLayoutEngine {
 
+    //private static int MAX_LAYOUT_ENGINES;
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletLayoutEngine.class);
+
     private static PortletLayoutEngine instance = new PortletLayoutEngine();
-    private static ServletContext context = null;
 
-    private GridSphereConfig gsConfig = null;
+    private String layoutMappingPath;
 
-    private PortletLayoutDescriptor templateLayout = null;
-    private String templateLayoutPath, layoutMappingPath;
     private PortletLayoutDescriptor guestLayout = null;
     private String guestLayoutPath = null;
+    private PortletContainer guestContainer;
     private String userLayoutDir = null;
 
     private String error = "";
@@ -39,17 +45,23 @@ public class PortletLayoutEngine {
 
     private PortletLayoutEngine() {}
 
+    /**
+     *
+     */
     public static PortletLayoutEngine getInstance() {
         return instance;
     }
 
     public void init() throws IOException, DescriptorException {
-        gsConfig = GridSphereConfig.getInstance();
+        GridSphereConfig gsConfig = GridSphereConfig.getInstance();
         userLayoutDir = gsConfig.getProperty(GridSphereConfigProperties.USER_LAYOUT_DIR);
         layoutMappingPath = gsConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING_XML);
         guestLayoutPath =  gsConfig.getProperty(GridSphereConfigProperties.LAYOUT_XML);
         guestLayout = new PortletLayoutDescriptor(guestLayoutPath, layoutMappingPath);
+        guestContainer = guestLayout.getPortletContainer();
+        guestContainer.init(new ArrayList());
     }
+
 
     public PortletContainer getPortletContainer(User user) throws PortletLayoutException {
         // if user is guest then use guest template
@@ -57,7 +69,7 @@ public class PortletLayoutEngine {
         PortletContainer pc = null;
 
         if (user instanceof GuestUser) {
-            pc = guestLayout.getPortletContainer();
+            return guestContainer;
 
             // Check if we have user's layout already
         } else if (userLayouts.containsKey(user)) {
@@ -70,6 +82,9 @@ public class PortletLayoutEngine {
             try {
                 pld = loadUserLayout(user);
                 pc = pld.getPortletContainer();
+                pc.init(new ArrayList());
+                // initialize the user's portlet collection
+
             } catch (Exception e) {
                 log.error("Unable to loadUserLayout for user: " + user, e);
                 throw new PortletLayoutException("Unable to deserailize user layout from layout descriptor: " + e.getMessage());
@@ -79,24 +94,18 @@ public class PortletLayoutEngine {
         return pc;
     }
 
-    public void service(User user, ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException {
+    public void service(GridSphereEvent event) throws PortletLayoutException {
         log.debug("in service()");
         boolean doLayoutAction = false;
         PortletContainer pc = null;
 
+        User user = event.getSportletRequest().getUser();
         pc = getPortletContainer(user);
-
-        String actionType = req.getParameter(GridSphereProperties.ACTION_TYPE);
-        if ((actionType != null) && (actionType.equals(PortletProperties.LAYOUT_EVENT))) {
-            doLayoutAction = true;
-        }
 
         // XXX: How do we signal a user has logged out so we can userLayouts.remove(user)???
         try {
-            //if (doLayoutAction)
-                pc.doLayoutAction(ctx, req, res);
-            pc.doRenderFirst(ctx, req, res);
-            pc.doRenderLast(ctx, req, res);
+            pc.actionPerformed(event);
+            pc.doRender(event);
         } catch (IOException e) {
             error = e.getMessage();
             log.error("Caught IOException: ", e);

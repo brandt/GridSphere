@@ -5,6 +5,8 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletResponse;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -32,17 +34,14 @@ public class PortletImage extends BasePortletComponent {
         return image;
     }
 
-    public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        super.doRenderFirst(ctx, req, res);
+    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+        super.doRender(event);
+        SportletResponse res = event.getSportletResponse();
         PrintWriter out = res.getWriter();
         out.println("<table width=\"100%\"><td width=\"1\">");
         out.println("<spacer type=block width=\"100\"></td><td>");
         out.println("<img src=\"" + image + "\" align=\"right\">");
         out.println("</td></table>");
-    }
-
-    public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        super.doRenderLast(ctx, req, res);
     }
 
 }

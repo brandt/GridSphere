@@ -12,11 +12,14 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PortletLayoutDescriptor extends Descriptor {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletLayoutDescriptor.class);
     private PortletContainer pc = null;
+    private List containerElements = new ArrayList();
 
     public PortletLayoutDescriptor() throws IOException, DescriptorException {
         GridSphereConfig gsConfig = GridSphereConfig.getInstance();
@@ -43,6 +46,10 @@ public class PortletLayoutDescriptor extends Descriptor {
      */
     public PortletContainer getPortletContainer() {
         return pc;
+    }
+
+    public List getPortletContainerList() {
+        return containerElements;
     }
 
     /**

@@ -5,16 +5,21 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletRequest;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
-public class BasePortletComponent extends PortletContainer implements PortletComponent, LayoutActionListener {
+public class BasePortletComponent extends PortletContainer implements PortletComponent {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(BasePortletComponent.class);
 
+    protected int id = 0;
     protected String width;
     protected String height;
     protected String name;
@@ -22,6 +27,16 @@ public class BasePortletComponent extends PortletContainer implements PortletCom
     protected String bgColor = "#CCCCCC";
     protected PortletBorder border;
     protected PortletInsets insets;
+    protected boolean isVisible = true;
+    protected String className = BasePortletComponent.class.getName();
+
+    public String getClassName() {
+        return className;
+    }
+
+    public int getID() {
+        return id;
+    }
 
     public String getBackground() {
         return bgColor;
@@ -79,20 +94,27 @@ public class BasePortletComponent extends PortletContainer implements PortletCom
         this.insets = insets;
     }
 
-    public void doLayoutAction(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+    public void setVisible(boolean isVisible) {
+        this.isVisible = isVisible;
+    }
+
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+    public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
 
     }
 
-    public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+        SportletRequest req = event.getSportletRequest();
+        String sid = new Integer(id).toString();
+        req.setAttribute(LayoutProperties.ID, sid);
         req.setAttribute(LayoutProperties.NAME, name);
         req.setAttribute(LayoutProperties.BGCOLOR, bgColor);
         req.setAttribute(LayoutProperties.FGCOLOR, fgColor);
         req.setAttribute(LayoutProperties.HEIGHT, height);
         req.setAttribute(LayoutProperties.WIDTH, width);
-    }
-
-    public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-
     }
 
 }

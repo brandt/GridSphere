@@ -5,6 +5,10 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletContext;
+import org.gridlab.gridsphere.portlet.impl.SportletRequest;
+import org.gridlab.gridsphere.portlet.impl.SportletResponse;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -12,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 public class PortletText extends BasePortletComponent {
 
@@ -25,6 +30,11 @@ public class PortletText extends BasePortletComponent {
         setText(text);
     }
 
+    public List init(List list) {
+        this.id = list.size();
+        return list;
+    }
+
     public void setText(String text) {
         this.text = text;
     }
@@ -33,20 +43,17 @@ public class PortletText extends BasePortletComponent {
         return text;
     }
 
-    public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        super.doRenderFirst(ctx, req, res);
+    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+        super.doRender(event);
+        PortletContext ctx = event.getPortletContext();
+        SportletRequest req = event.getSportletRequest();
+        SportletResponse res = event.getSportletResponse();
         try {
-            RequestDispatcher rd = ctx.getRequestDispatcher(text);
-            if (rd != null) rd.include(req, res);
+            ctx.include(text, req, res);
         } catch (ServletException e) {
             log.error("Unable to include text: " + text, e);
             throw new PortletLayoutException("Unable to include text: " + text, e);
         }
     }
-
-    public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        super.doRenderLast(ctx, req, res);
-    }
-
 
 }
