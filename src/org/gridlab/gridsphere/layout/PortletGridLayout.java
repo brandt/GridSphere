@@ -75,9 +75,9 @@ public class PortletGridLayout extends BaseLayoutManager {
 
         // cycle through to find a max window
         for (int i=0;i<numComponents;i++) {
-            p = (PortletComponent)components.get(portletCount);
+            p = (PortletComponent)components.get(i);
             if (p.getWidth().equals("100%")) {
-                i=numComponents;
+                i=numComponents+1;
             }
         }
         // ok this one is maximized show only this window
