@@ -4,7 +4,7 @@
  */
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface TAElement extends ReadOnly {
+public interface TextArea extends ReadOnly {
 
     /**
      * Sets the number of columns of the TextArea.
