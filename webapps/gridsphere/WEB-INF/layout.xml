@@ -26,7 +26,6 @@
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
-             <!--           <column-layout width="50%"/>  -->
                     </row-layout>
                 </table-layout>
             </portlet-tab>
@@ -49,25 +48,6 @@
                     </row-layout>
                 </table-layout>
             </portlet-tab>
-            <portlet-tab label="utilities">
-                <title lang="en">Utilities</title>
-                <title lang="it">Utilità</title>
-                <title lang="pl">Narzędzia</title>
-                <title lang="hu">Segédprogramok</title>
-                <title lang="fr">Utilitaires</title>
-                <title lang="de">Utilities</title>
-                <title lang="cs">Pomůcky</title>
-                <table-layout>
-                    <row-layout>
-                        <column-layout width="50%">
-                            <portlet-frame label="commander">
-                                <portlet-class>org.gridlab.gridsphere.portlets.core.file.CommanderPortlet.1</portlet-class>
-                            </portlet-frame>
-                        </column-layout>
-                    </row-layout>
-                </table-layout>
-            </portlet-tab>
-        </portlet-tabbed-pane>
     </portlet-tab>
     <portlet-tab label="admin" required-role="ADMIN">
         <title lang="en">Administration</title>

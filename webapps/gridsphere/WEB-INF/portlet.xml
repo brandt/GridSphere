@@ -629,33 +629,5 @@
         </concrete-portlet-app>
     </portlet-app-def>
 
-    <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.file.CommanderPortlet">
-            <portlet-name>Commander Portlet</portlet-name>
-            <servlet-name>CommanderPortlet</servlet-name>
-            <supports>
-                <markup name="html">
-                    <view/>
-                    <help/>
-                </markup>
-            </supports>
-        </portlet-app>
-
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.file.CommanderPortlet.1">
-            <concrete-portlet>
-                <portlet-name>Commander Portlet</portlet-name>
-                <default-locale>en</default-locale>
-                <language locale="en">
-                    <title>Commander</title>
-                    <description>Provides users with a secure virtual filesystem</description>
-                </language>
-                <language locale="pl">
-                    <title>Commander</title>
-                    <description>Udostępnia użytkownikowi bezpieczny wirtualny system plików</description>
-                </language>
-            </concrete-portlet>
-        </concrete-portlet-app>
-    </portlet-app-def>
-
 </portlet-app-collection>
 
