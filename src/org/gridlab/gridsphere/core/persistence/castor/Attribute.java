@@ -11,21 +11,27 @@ import org.gridlab.gridsphere.core.persistence.UniqueID;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 
 /**
- * @table Attribute
+ * @table attribute
  * @key-generator UUID
  * @depends org.gridlab.gridsphere.portlet.impl.SportletUserImpl
  */
 public class Attribute extends BaseObject {
 
-    private String Key;
-    private String Value;
-    private SportletUserImpl User;
+    /**
+     * @sql-size 256
+     * @sql-name key
+     */
+    private String Key = new String();
+    /**
+     * @sql-size 256
+     * @sql-name value
+     */
+    private String Value  = new String();
 
     /**
-     * @primary-key
-     * @sql-size 128
+     * @sql-name sportletuser
      */
-    private String Oid;
+    private SportletUserImpl User = new SportletUserImpl();
 
     public Attribute () {
         super();

@@ -23,14 +23,26 @@ public class BaseObject implements org.exolab.castor.jdo.TimeStampable, org.exol
 
     protected transient static PortletLog log = SportletLog.getInstance(BaseObject.class);
 
-    // the needed Oid
-    private String Oid;
+    /**
+     * @primary-key
+     * @sql-size 128
+     * @get-method getOid
+     * @set-method setOid
+     * @sql-name objectid
+     */
+    private String ObjectID;
+
     // timestamp
-    private long timestamp;
+    /**
+     * @get-method jdoGetTimeStamp
+     * @set-method jdoSetTimeStamp
+     * @sql-name timestamp
+     */
+    private transient long timestamp;
 
     public BaseObject() {
         super();
-        this.Oid = UniqueID.get();
+        this.ObjectID = UniqueID.get();
     }
 
     /**
@@ -62,7 +74,7 @@ public class BaseObject implements org.exolab.castor.jdo.TimeStampable, org.exol
      * @return Object ID
      */
     public String getOid() {
-        return Oid;
+        return ObjectID;
     }
 
     /**
@@ -71,7 +83,7 @@ public class BaseObject implements org.exolab.castor.jdo.TimeStampable, org.exol
      * @param oid Object ID
      */
     public void setOid(String oid) {
-        Oid = oid;
+        ObjectID = oid;
     }
 
     public void jdoPersistent(Database database) {

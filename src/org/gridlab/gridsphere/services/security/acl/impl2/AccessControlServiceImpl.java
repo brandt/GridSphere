@@ -91,7 +91,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
             if (i!=0) {
                 command = command +" and ";
             }
-            command = command + " u.Oid=\""+((UserACL)acl.get(i)).getUserID()+"\"";
+            command = command + " u.ObjectID=\""+((UserACL)acl.get(i)).getUserID()+"\"";
         }
         //log.info(command);
         return listACL(command);
@@ -156,7 +156,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
 
     private PortletGroup getGroupByID(String id) throws PortletServiceException {
         String command =
-            "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g where g.Oid=\""+id+"\"";
+            "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g where g.ObjectID=\""+id+"\"";
         PortletGroup g = null;
         try {
             g = (PortletGroup)pm.restoreObject(command);

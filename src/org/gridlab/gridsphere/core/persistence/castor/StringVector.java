@@ -18,9 +18,20 @@ import java.util.Vector;
 public class StringVector extends BaseObject {
     protected transient static PortletLog log = SportletLog.getInstance(StringVector.class);
 
-    private String Id;
-    private String Value;
-    private Object Reference;
+    /**
+     * @sql-size 50
+     * @sql-name id
+     */
+    private String Id  = new String() ;
+    /**
+     * @sql-size 128
+     * @sql-name value
+     */
+    private String Value  = new String();
+    /**
+     * @sql-name
+     */
+    private transient Object Reference = new Object();
 
     public StringVector() {
         super();

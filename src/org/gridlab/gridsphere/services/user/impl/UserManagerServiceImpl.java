@@ -176,7 +176,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             String userid = request.getID();
             AccountRequestImpl requestImpl = null;
             String command =
-                "select ar from org.gridlab.gridsphere.services.user.impl.AccountRequestImpl ar where ar.Oid="+userid;
+                "select ar from org.gridlab.gridsphere.services.user.impl.AccountRequestImpl ar where ar.ObjectID="+userid;
             try {
                 requestImpl = (AccountRequestImpl)pm.restoreObject(command);
             } catch (PersistenceException e) {
@@ -234,7 +234,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             String userid = request.getID();
             AccountRequestImpl requestImpl = null;
             String command =
-                "select ar from org.gridlab.gridsphere.services.user.impl.AccountRequestImpl ar where ar.Oid="+userid;
+                "select ar from org.gridlab.gridsphere.services.user.impl.AccountRequestImpl ar where ar.ObjectID="+userid;
             String command2 =
                 "select acl from org.gridlab.gridsphere.services.security.acl.impl2.UserACL acl where "+
                 "UserID=\""+request.getID()+"\"";
@@ -356,7 +356,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     private User getUserByID(String ID) {
         String command =
-            "select u from org.gridlab.gridsphere.portlet.impl.SportletUserImpl u where Oid=\""+ID+"\"";
+            "select u from org.gridlab.gridsphere.portlet.impl.SportletUserImpl u where ObjectID=\""+ID+"\"";
         return getUser(command);
     }
 
@@ -452,7 +452,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public boolean existsUserID(String ID){
         String command =
-                "select user from org.gridlab.gridsphere.portlet.impl.SportletUserImpl user where Oid=\""+ID+"\"";
+                "select user from org.gridlab.gridsphere.portlet.impl.SportletUserImpl user where ObjectID=\""+ID+"\"";
         SportletUser user = null;
         try {
             user = (SportletUser)pm.restoreObject(command);

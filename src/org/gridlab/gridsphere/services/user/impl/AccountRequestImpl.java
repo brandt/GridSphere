@@ -22,28 +22,64 @@ import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import java.util.List;
 import java.util.Vector;
 
+/**
+ * @table arimpl
+ *
+ */
 public class AccountRequestImpl extends BaseObject implements AccountRequest {
 
     protected transient static PortletLog log = SportletLog.getInstance(AccountRequestImpl.class);
 
+    /**
+     * @sq-size 32
+     * @sql-name userid
+     */
     private String UserID = "";
+    /**
+     * @sql-size 30
+     * @sql-name givenname
+     */
     private String GivenName = "";
+    /**
+     * @sql-size 50
+     * @sql-name familyname
+     */
     private String FamilyName = "";
+    /**
+     * @sql-size 256
+     * @sql-name fullname
+     */
     private String FullName = "";
+    /**
+     * @sql-size 128
+     * @sql-name emailaddress
+     */
     private String EmailAddress = "";
+    /**
+     * @sql-size 256
+     * @sql-name organization
+     */
     private String Organization = "";
-    private List DesiredGroups = new Vector();
-    private List Userdns = new Vector();
-    private List MyproxyUserNames = new Vector();
 
-    //@todo desiredgroups can be deleted
+    private transient List Userdns = new Vector();
+    private transient List MyproxyUserNames = new Vector();
+
+    /**
+     * @field-type org.gridlab.gridsphere.services.user.impl.AccountRequestImplUserdns
+     * @sql-name userdnssv
+     * @many-key reference
+     */
     private Vector UserdnsSV = new Vector();            // ready
+    /**
+     * @field-type org.gridlab.gridsphere.services.user.impl.AccountRequestImplMyproxyUserNames
+     * @sql-name myproxyusernamessv
+     * @many-key reference
+     */
     private Vector MyproxyUserNamesSV = new Vector();   // ready
 
 
     public AccountRequestImpl() {
         super();
-        //log.info("created accountrequestimpl with OID: "+getOid());
     }
 
     public AccountRequestImpl(User user) {
@@ -91,7 +127,6 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
     public void setUserID(String userID) {
         this.UserID = userID;
     }
-
 
 
     /**
@@ -219,7 +254,6 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
         MyproxyUserNames = this.convertToVector(MyproxyUserNamesSV);
     }
 
-    // -------
 
     /**
      * Sets the list of myproxy user names that can be used for this user
@@ -247,8 +281,6 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
         Userdns =  this.convertToVector(UserdnsSV);
     }
 
-    // ----
-
     //@todo should be done using the aclmanager service!
     /**
      * Adds a user with status 'candidate' to a group
@@ -264,7 +296,6 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
         } catch (PersistenceException e) {
             e.printStackTrace();
         }
-        //log.info("added request for"+getFullName()+" for group "+group.getName());
     }
 
     /**
@@ -281,10 +312,6 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
         sb.append("Email Address: " + EmailAddress);
         sb.append("Organization: " + Organization);
         sb.append("Requested Groups: ");
-        for (i = 0; i < DesiredGroups.size(); i++) {
-            PortletGroup group = (PortletGroup)DesiredGroups.get(i);
-            sb.append(group.getName());
-        }
         sb.append("Role DNs: ");
         for (i = 0; i < Userdns.size(); i++) {
             sb.append(Userdns.get(i));

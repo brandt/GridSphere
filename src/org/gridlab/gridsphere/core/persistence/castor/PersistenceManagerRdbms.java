@@ -35,9 +35,13 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
 
     public PersistenceManagerRdbms() {
         super();
-        // @todo read the configfile here
-        DatabaseName = "portal";
-        ConnectionURL = "webapps/WEB-INF/conf/database.xml";
+        // @todo read the configfile here, depending on properties setting load different db driver and db
+
+     //   DatabaseName = "postgresportal";
+     //   ConnectionURL = "webapps/WEB-INF/conf/postgresql.xml";
+
+           DatabaseName = "portal";
+           ConnectionURL = "webapps/WEB-INF/conf/database.xml";
 
     }
 
@@ -423,7 +427,6 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
                 while (results.hasMore()) {
                     db.remove(results.next());
                 }
-
             }
 
             db.commit();

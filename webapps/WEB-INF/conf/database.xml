@@ -10,6 +10,7 @@
     <mapping href="webapps/WEB-INF/conf/mapping/jdo/useracl-mapping.xml"/>
     <mapping href="webapps/WEB-INF/conf/mapping/jdo/sportletuserimpl-mapping.xml"/>
     <mapping href="webapps/WEB-INF/conf/mapping/jdo/accountrequestimpl-mapping.xml"/>
-
-
 </database>
+
+
+

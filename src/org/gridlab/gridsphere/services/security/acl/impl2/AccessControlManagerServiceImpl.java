@@ -98,7 +98,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
      */
     public void renameGroup(PortletGroup group, String newGroupName) throws PortletServiceException {
         String command =
-                "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g where g.Oid="+group.getID();
+                "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g where g.ObjectID="+group.getID();
         try {
             SportletGroup pg = (SportletGroup)pm.restoreObject(command);
             pg.setName(newGroupName);
@@ -116,7 +116,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     public void removeGroup(PortletGroup group) throws PortletServiceException {
         String groupid = group.getID();
         String command =
-            "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g where g.Oid="+groupid;
+            "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g where g.ObjectID="+groupid;
         delete(command);
 
         // @todo delete all acls here!!!

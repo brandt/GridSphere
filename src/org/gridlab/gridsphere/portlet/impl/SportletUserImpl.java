@@ -21,22 +21,54 @@ import java.util.List;
  * the interface gives access to user profile data.
  */
 
-
+/**
+ * @table sportletuserimpl
+ */
 public class SportletUserImpl extends BaseObject implements SportletUser {
 
     // store used to maintain user attributes
-    private Hashtable Store = new Hashtable();
+    private transient Hashtable Store = new Hashtable();
 
     // Data fields that make up the Role object
-    private String FamilyName;
-    private String FullName;
-    private String GivenName;
-    private String EmailAddress;
-    private String UserID;
-    private String Organization;
-    private long LastLoginTime;
-    private List ACL = new Vector();
+    /**
+     * @sql-size 50
+     * @sql-name familyname
+     */
+    private String FamilyName = new String();
+    /**
+     * @sql-size 100
+     * @sql-name fullname
+     */
+    private String FullName = new String();
+    /**
+     * @sql-size 30
+     * @sql-name givenname
+     */
+    private String GivenName = new String();
+    /**
+     * @sql-size 128
+     * @sql-name emailaddress
+     */
+    private String EmailAddress = new String();
+    /**
+     * @sql-size 32
+     * @sql-name userid
+     */
+    private String UserID = new String();
+    /**
+     * @sql-size 256
+     * @sql-name organization
+     */
+    private String Organization = new String();
 
+    /**
+     * @sql-name lastlogintime
+     */
+    private long LastLoginTime = 0;
+
+    /**
+     * @field-type org.gridlab.gridsphere.core.persistence.castor.Attribute
+     */
     public Vector Attributes = new Vector();
 
     /**
@@ -220,6 +252,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser {
         this.LastLoginTime = lastLoginTime;
     }
 
+    /*
     public List getACL() {
         return ACL;
     }
@@ -227,7 +260,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser {
     public void setACL(List acl) {
         ACL = acl;
     }
-
+    */
     private void convert2vector() {
         Enumeration allkeys = Store.keys();
         Attribute ha = null;

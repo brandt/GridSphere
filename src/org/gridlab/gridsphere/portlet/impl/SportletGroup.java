@@ -14,12 +14,20 @@ import org.gridlab.gridsphere.services.user.impl.AccountRequestImpl;
 import java.util.Vector;
 import java.util.Random;
 
+/**
+ * @table sportletgroup
+ */
 public class SportletGroup extends BaseObject implements PortletGroup {
 
     public static final String SUPER = "0";
     public static final String BASE = "1";
 
-    private String Name = "BASE";
+    /**
+     * @sql-size 128
+     * @sql-name base
+     */
+    private String Name = new String();
+
     private static final SportletGroup baseGroup = new SportletGroup(BASE, "BASE");
     private static final SportletGroup superGroup = new SportletGroup(SUPER, "SUPER");
 

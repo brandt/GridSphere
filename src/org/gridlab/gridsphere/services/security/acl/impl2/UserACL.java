@@ -12,14 +12,33 @@ import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
+/**
+ * @table useracl
+ */
 public class UserACL extends BaseObject  {
 
     protected transient static PortletLog cat = SportletLog.getInstance(UserACL.class);
 
-    private int RoleID;
-    private String UserID;
-    private String GroupID;
-    private int Status;         // 0 not approved; 1 approved
+    /**
+     * @sql-name roleid
+     */
+    private int RoleID = 0;
+
+    /**
+     * @sql-size 50
+     * @sql-name userid
+     */
+    private String UserID  = new String();
+    /**
+     * @sql-size 50
+     * @sql-name groupid
+     */
+    private String GroupID  = new String();
+    /**
+     * @sql-name status
+     */
+    private int Status = 0;         // 0 not approved; 1 approved
+
     public static final int STATUS_NOT_APPROVED = 0;
     public static final int STATUS_APPROVED = 1;
 
