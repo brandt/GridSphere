@@ -101,6 +101,9 @@ Copyright:
         <mkdir dir="${build.webapp}"/>
         <mkdir dir="${build.docs}"/>
 
+        <property name="GRIDSPHERE_HOME" value="${env.CATALINA_HOME}/gridsphere"/>
+        <property name="TEST_HOME" value="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/test"/>
+
         <echo message="--- Build environment for ${project} ---" />
         <echo message="--- Flags (Note: If the {property name} is displayed,"/>
         <echo message="           then the component is not present)" />
@@ -109,6 +112,8 @@ Copyright:
         <echo message="ANT_HOME is set to = ${env.ANT_HOME}"/>
         <echo message="JAVA_HOME is set to = ${env.JAVA_HOME}"/>
         <echo message="CATALINA_HOME is set to = ${env.CATALINA_HOME}"/>
+        <echo message="TEST_HOME is set to = ${TEST_HOME}"/>
+        <echo message="GRIDSPHERE_HOME is set to = ${GRIDSPHERE_HOME}"/>
 
         <echo message="--- Property values ---" />
         <echo message="debug=${debug}" />
@@ -164,9 +169,9 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Configures the database by making doclet mappings and the database  -->
+    <!-- Creates castor definitions                                          -->
     <!-- =================================================================== -->
-    <target name="configure-database" depends="create-mapping, create-database">
+    <target name="configure-database" depends="doclet-mapping">
         <property name="DATABASE_FILE"
                   value="${GRIDSPHERE_HOME}/database/${DATABASE_TYPE}db.xml"/>
         <echo message="Preprocessing Database file: ${DATABASE_FILE}"/>
@@ -178,50 +183,92 @@ Copyright:
                  value="${DATABASE_NAME}"/>
     </target>
 
+    <target name="configure-test-database" depends="doclet-mapping">
+        <property name="DATABASE_FILE"
+            value="${GRIDSPHERE_HOME}/database/${DATABASE_TYPE}db-test.xml"/>
+        <echo message="Preprocessing Database file: ${DATABASE_FILE}"/>
+        <replace file="${DATABASE_FILE}"
+            token="@GRIDSPHERE_HOME@"
+            value="${GRIDSPHERE_HOME}"/>
+       <replace file="${DATABASE_FILE}"
+            token="@TEST_HOME@"
+            value="${TEST_HOME}"/>
+        <replace file="${DATABASE_FILE}"
+            token="@DATABASE_NAME@"
+            value="${DATABASE_NAME}"/>
+    </target>
+
     <target name="check-mapping">
         <echo message="force mapping: ${var_force_mapping}"/>
-        <condition property="mapping.exists">
-            <available file="${GRIDSPHERE_HOME}/mapping/mapping.xml"/>
+        <condition property="var_force_mapping">
+            <not>
+                <available file="${GRIDSPHERE_HOME}/mapping/${project.name}mapping.xml"/>
+            </not>
         </condition>
     </target>
 
-    <target name="create-mapping" depends="check-mapping" unless="mapping.exists">
-        <javadoc sourcepath="src"
+    <target name="doclet-mapping" depends="check-mapping" if="var_force_mapping">
+        <javadoc
+            sourcepath="src"
             private="true"
             doclet="org.castor.doclet.ddl.DDL"
             docletpath="${gridsphere.home}/lib/ext/jdom.jar;${gridsphere.home}/lib/ext/castor-doclet.jar"
-            additionalparam=" -J-DFILE=${GRIDSPHERE_HOME}/database/dbcreate.sql -J-DDB_TYPE=db2 -J-DLOG=1">
+            additionalparam=" -J-DFILE=${GRIDSPHERE_HOME}/database/${project.name}create.sql -J-DDB_TYPE=db2 -J-DLOG=1">
             <classpath refid="classpath"/>
         </javadoc>
-        <javadoc sourcepath="src"
+        <javadoc
+            sourcepath="src"
             private="true"
             doclet="org.castor.doclet.jdo.JDO"
             docletpath="${gridsphere.home}/lib/ext/jdom.jar;${gridsphere.home}/lib/ext/castor-doclet.jar"
-            additionalparam="-J-DFILE=${GRIDSPHERE_HOME}/mapping/mapping.xml -J-DLOG=1">
+            additionalparam="-J-DFILE=${GRIDSPHERE_HOME}/mapping/${project.name}mapping.xml -J-DLOG=1">
             <classpath refid="classpath"/>
         </javadoc>
     </target>
 
-    <target name="check-database-exists">
-        <echo message="force database: ${database.exists}"/>
-        <condition property="database.exists">
-            <available file="${GRIDSPHERE_HOME}/database/${DATABASE_NAME}.script"/>
+    <target name="check-real-database-exists">
+        <echo message="force database: ${var_force_database}"/>
+        <condition property="var_force_database">
+            <not>
+                <available file="${GRIDSPHERE_HOME}/database/${project.name}.script"/>
+            </not>
         </condition>
     </target>
 
-    <target name="create-database" depends="check-database-exists" unless="database.exists">
-        <echo message="Creating Database at: ${GRIDSPHERE_HOME}/database/${DATABASE_NAME}"/>
-        <echo message="Using script: ${GRIDSPHERE_HOME}/database/dbcreate.sql"/>
+    <target name="check-test-database-exists">
+        <echo message="force database: ${var_force_database}"/>
+        <condition property="var_force_database">
+            <not>
+                <available file="${TEST_HOME}/database/${project.name}-test.script"/>
+            </not>
+        </condition>
+    </target>
+
+    <target name="create-real-database" depends="configure-database, check-real-database-exists" if="var_force_database">
+        <echo message="Creating Database at: ${GRIDSPHERE_HOME}/database/${project.name}"/>
+        <echo message="Using script: ${GRIDSPHERE_HOME}/database/${project.name}create.sql"/>
         <sql driver="org.hsqldb.jdbcDriver"
-           url="jdbc:hsqldb:${GRIDSPHERE_HOME}/database/${DATABASE_NAME}"
+           url="jdbc:hsqldb:${GRIDSPHERE_HOME}/database/${project.name}"
            userid="sa"
            password=""
            onerror="continue"
-           src="${GRIDSPHERE_HOME}/database/dbcreate.sql">
+           src="${GRIDSPHERE_HOME}/database/${project.name}create.sql">
            <classpath refid="classpath"/>
         </sql>
     </target>
 
+    <target name="create-test-database" depends="configure-test-database, check-test-database-exists" if="var_force_database">
+        <echo message="Creating Database at: ${TEST_HOME}/database/${project.name}-test"/>
+        <echo message="Using script: ${GRIDSPHERE_HOME}/database/${project.name}create.sql"/>
+        <sql driver="org.hsqldb.jdbcDriver"
+           url="jdbc:hsqldb:${TEST_HOME}/database/${project.name}-test"
+           userid="sa"
+           password=""
+           onerror="continue"
+           src="${GRIDSPHERE_HOME}/database/${project.name}create.sql">
+           <classpath refid="classpath"/>
+        </sql>
+    </target>
     <!-- =================================================================== -->
     <!-- Creates a @PROJECT_TITLE@ JAR library archive configured for Tomcat -->
     <!-- =================================================================== -->
