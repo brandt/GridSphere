@@ -29,19 +29,17 @@
       document.AccessControllerPortlet.submit();
     }
   </script>
-<table border="0" cellspacing="1" cellpadding="2" width="100%">
+<table class="portlet-pane" cellspacing="1">
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td align="center" bgcolor="#6666FF">
-            <font color="WHITE"><strong>
+          <td class="portlet-frame-title">
               List Groups
-            </strong></font>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-actions">
             <input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_LIST%>"
                    value="List Groups"
@@ -57,32 +55,24 @@
   </tr>
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td width="200" bgcolor="#6666FF">
-            <font color="WHITE">
+          <td class="portlet-frame-header" width="200">
               Name
-            </font>
           </td>
-          <td width="200" bgcolor="#6666FF">
-            <font color="WHITE">
+          <td class="portlet-frame-header" width="200">
               Label
-            </font>
           </td>
-          <td width="*" bgcolor="#6666FF">
-            <font color="WHITE">
+          <td class="portlet-frame-header" width="*" >
               Description
-            </font>
           </td>
         </tr>
 <% List groupList = aclManagerBean.getGroupList();
    int numGroups = groupList.size();
    if (numGroups == 0) { %>
         <tr>
-          <td bgcolor="WHITE" colspan="3">
-            <font color="DARKRED">
+          <td id="portlet-frame-alert" colspan="3">
               No group accounts in database.
-            </font>
           </td>
         </tr>
 <% } else {
@@ -93,16 +83,16 @@
            continue;
        } %>
         <tr>
-          <td bgcolor="WHITE">
-            <a href="javascript:AccessControllerPortlet_viewGroup_onClick('<%=group.getID()%>')">
+          <td class="portlet-frame-value">
+              <a href="javascript:AccessControllerPortlet_viewGroup_onClick('<%=group.getID()%>')">
+                <%=group.getName()%>
+              </a>
+          </td>
+          <td class="portlet-frame-value">
+               <%=group.getName()%>
+          </td>
+          <td class="portlet-frame-value">
               <%=group.getName()%>
-            </a>
-          </td>
-          <td bgcolor="WHITE">
-            <%=group.getName()%>
-          </td>
-          <td bgcolor="WHITE">
-            <%=group.getName()%>
           </td>
         </tr>
 <%   }
