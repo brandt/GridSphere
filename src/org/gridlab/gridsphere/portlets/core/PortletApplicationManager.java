@@ -52,15 +52,14 @@ public class PortletApplicationManager extends ActionPortlet {
         List webapps = portletManager.getPortletWebApplicationNames();
         List result = new ArrayList();
         try {
-            System.err.println("beofre get portlet app list");
             result = tomcat.getPortletAppList(webapps);
             event.getPortletRequest().setAttribute("result", result);
             System.err.println("result is OK");
         } catch (TomcatManagerException e) {
             log.error("Unable to retrieve list of portlets. Make sure tomcat-users.xml has been edited according to the UserGuide.");
-            FrameBean error = event.getFrameBean("errorFrame");
-            error.setValue("Unable to retrieve list of portlets. Make sure tomcat-users.xml has been edited according to the UserGuide.");
-            error.setStyle(FrameBean.ERROR_TYPE);
+            event.getPortletRequest().setAttribute("result", result);
+            frame.setValue("Unable to retrieve list of portlets. Make sure tomcat-users.xml has been edited according to the UserGuide.");
+            frame.setStyle(FrameBean.ERROR_TYPE);
         }
 
         //if (result != null) log.debug("result: " + result.getReturnCode() + " " + result.getDescription());
@@ -109,7 +108,6 @@ public class PortletApplicationManager extends ActionPortlet {
                 List webappsList = portletManager.getPortletWebApplicationNames();
                 if ((idx = portletWar.lastIndexOf(".")) > 0) {
                     webAppName = portletWar.substring(0, idx);
-                    System.err.println(webAppName);
                     if ((idx = webAppName.lastIndexOf("/")) > 0) {
                         webAppContext = webAppName.substring(idx);
                         webAppName = webAppContext.substring(1);
