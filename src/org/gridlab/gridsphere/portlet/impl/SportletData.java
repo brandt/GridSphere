@@ -8,7 +8,8 @@ package org.gridlab.gridsphere.portlet.impl;
 import org.exolab.castor.jdo.Database;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.portlet.PortletData;
 
 import java.io.IOException;
@@ -31,8 +32,7 @@ import java.util.Vector;
 public class SportletData extends BaseObject implements PortletData {
 
     protected transient Hashtable store = new Hashtable();
-    private transient PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
-
+    private transient PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
     /**
      * Saves the hashtable (for castor)
      *

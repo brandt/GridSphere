@@ -33,7 +33,7 @@ public class PortletManager implements PortletManagerService {
 
     // A multi-valued hashtable with a webapp key and a List value containing portletAppID's
     private Map webapps = new Hashtable();
-    //private UserPortletManager userPortletManager = UserPortletManager.getInstance();
+    //private UserPortletManager userPortletManager = UserPortletManager.getDefault();
 
     /**
      * Default instantiation disallowed

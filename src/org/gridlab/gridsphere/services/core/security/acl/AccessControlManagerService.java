@@ -24,8 +24,15 @@ public interface AccessControlManagerService extends PortletService {
 
     public PortletGroup getGroup(String groupId);
 
+    /**
+     * @deprecated
+     */
     public PortletGroup getBaseGroup();
 
+    /**
+     *
+     * @deprecated
+     */
     public PortletGroup getSuperGroup();
 
     public PortletGroup getGroupByName(String groupName);

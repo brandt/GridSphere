@@ -4,7 +4,6 @@
  */
 package org.gridlab.gridsphere.portlet.service.spi.impl;
 
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
 import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
@@ -22,13 +21,12 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServic
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.gridlab.gridsphere.services.core.user.impl.GridSphereUserManager;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.*;
-import java.net.URL;
 
 /**
  * The <code>SportletServiceFactory</code> provides a factory for the creation
@@ -48,8 +46,6 @@ public class SportletServiceFactory implements PortletServiceFactory {
 
     // Hash of all services key = service interface name, value = SportletServiceDefinition
     private Hashtable allServices = new Hashtable();
-
-    private Hashtable serviceFactories = new Hashtable();
 
     /**
      * Private constructor. Use getDefault() instead.
@@ -75,7 +71,7 @@ public class SportletServiceFactory implements PortletServiceFactory {
             descriptor = new SportletServiceDescriptor(servicesPath, mappingPath);
         } catch (IOException e) {
             log.error("IO error unmarshalling " + servicesPath + " using " + mappingPath + " : " + e.getMessage());
-        } catch (DescriptorException e) {
+        } catch (PersistenceManagerException e) {
             log.error("Unable to unmarshall " + servicesPath + " using " + mappingPath + " : " + e.getMessage());
         }
         SportletServiceCollection serviceCollection = descriptor.getServiceCollection();

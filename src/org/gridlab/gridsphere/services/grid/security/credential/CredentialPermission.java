@@ -13,7 +13,7 @@
 package org.gridlab.gridsphere.services.grid.security.credential;
 
 import org.gridlab.gridsphere.core.persistence.BaseObject;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbmsImpl;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletLog;

@@ -24,16 +24,13 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.core.mail.MailMessage;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 
 import java.util.Map;
 import java.util.List;
@@ -44,7 +41,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
 
     private static PortletLog log = SportletLog.getInstance(GridSphereUserManager.class);
     private static GridSphereUserManager instance = new GridSphereUserManager();
-    private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
+    private PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
     private PasswordManagerService passwordManagerService = DbmsPasswordManagerService.getInstance();
     private List authenticationModules = new Vector();
 
@@ -266,7 +263,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
                    + jdoAccountRequest
                    + " accountRequest where accountRequest.ObjectID=" + oid;
         try {
-            return (AccountRequest)pm.restoreObject(oql);
+            return (AccountRequest)pm.restore(oql);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving account request";
             log.error(msg, e);
@@ -379,7 +376,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
                    + " accountRequest where accountRequest.ObjectID="
                    + requestImpl.getOid();
         try {
-            return (pm.restoreObject(oql) != null);
+            return (pm.restore(oql) != null);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving account request";
             log.error(msg, e);
@@ -506,7 +503,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
                    + " user "
                    + criteria;
         try {
-            return (SportletUserImpl)pm.restoreObject(oql);
+            return (SportletUserImpl)pm.restore(oql);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving user with criteria " + criteria;
             log.error(msg, e);
@@ -580,7 +577,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
                    + " user "
                    + criteria;
         try {
-            return (pm.restoreObject(oql) != null);
+            return (pm.restore(oql) != null);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving account request";
             log.error(msg, e);
@@ -642,7 +639,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
                    + " groupRequest "
                    + criteria;
         try {
-            return (GroupRequestImpl)pm.restoreObject(oql);
+            return (GroupRequestImpl)pm.restore(oql);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving account request";
             log.error(msg, e);
@@ -657,7 +654,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
                   + " groupRequest where groupRequest.ObjectID="
                   + requestImpl.getOid();
        try {
-           return (pm.restoreObject(oql) != null);
+           return (pm.restore(oql) != null);
        } catch (PersistenceManagerException e) {
            String msg = "Error retrieving account request";
            log.error(msg, e);
@@ -853,7 +850,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
                    + " groupEntry "
                    + criteria;
         try {
-            return (GroupEntryImpl)pm.restoreObject(oql);
+            return (GroupEntryImpl)pm.restore(oql);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving access right";
             log.error(msg, e);
@@ -868,7 +865,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
                   + " groupEntry where groupEntry.ObjectID="
                   + rightImpl.getOid();
        try {
-           return (pm.restoreObject(oql) != null);
+           return (pm.restore(oql) != null);
        } catch (PersistenceManagerException e) {
            String msg = "Error retrieving access right";
            log.error(msg, e);
@@ -948,10 +945,18 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         return selectSportletGroup("where portletGroup.ObjectID=\"" + id + "\"");
     }
 
+    /**
+     *
+     * @deprecated
+     */
     public PortletGroup getBaseGroup() {
         return SportletGroup.BASE;
     }
 
+    /**
+     *
+     * @deprecated
+     */
     public PortletGroup getSuperGroup() {
         return SportletGroup.SUPER;
     }
@@ -974,7 +979,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         // Generate object query
         String oql = oqlBuffer.toString();
         try {
-            return (SportletGroup)pm.restoreObject(oql);
+            return (SportletGroup)pm.restore(oql);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving portlet groups";
             log.error(msg, e);

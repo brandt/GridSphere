@@ -8,7 +8,9 @@ package org.gridlab.gridsphere.portlet.impl;
 import org.exolab.castor.jdo.Database;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbmsImpl;
 
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
@@ -31,7 +33,7 @@ import java.util.Vector;
  */
 public class SportletUserImpl extends BaseObject implements SportletUser, HttpSessionBindingListener {
 
-    private transient PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
+    private transient PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
 
     // store used to maintain user attributes
     private transient Hashtable store = new Hashtable();

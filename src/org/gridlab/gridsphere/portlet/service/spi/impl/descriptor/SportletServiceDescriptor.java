@@ -4,8 +4,9 @@
  */
 package org.gridlab.gridsphere.portlet.service.spi.impl.descriptor;
 
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.Descriptor;
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
 import java.io.IOException;
 
@@ -14,11 +15,10 @@ import java.io.IOException;
  * descriptor class mappings that are used by Castor to unmarshall the
  * services descriptor file.
  */
-public class SportletServiceDescriptor extends Descriptor {
+public class SportletServiceDescriptor {
 
     private SportletServiceCollection services = null;
-
-    private String descriptorPath, mappingPath;
+    private PersistenceManagerXml pmXML = null;
 
     /**
      * Constructor disallows non-argument instantiation
@@ -26,8 +26,9 @@ public class SportletServiceDescriptor extends Descriptor {
     private SportletServiceDescriptor() {
     }
 
-    public SportletServiceDescriptor(String descriptorFile, String mappingFile) throws IOException, DescriptorException {
-        services = (SportletServiceCollection) load(descriptorFile, mappingFile);
+    public SportletServiceDescriptor(String descriptorFile, String mappingFile) throws IOException, PersistenceManagerException {
+        pmXML = PersistenceManagerFactory.createPersistenceManagerXml(descriptorFile, mappingFile);
+        services = (SportletServiceCollection) pmXML.load();
     }
 
     /**
@@ -43,10 +44,10 @@ public class SportletServiceDescriptor extends Descriptor {
      * Saves the portlet service descriptor
      *
      * @throws IOException if an I/O error occurs
-     * @throws DescriptorException if a Castor error occurs during the marshalling
+     * @throws PersistenceManagerException if a Castor error occurs during the marshalling
      */
-    public void save() throws IOException, DescriptorException {
-        save(descriptorPath, mappingPath, services);
+    public void save() throws IOException, PersistenceManagerException {
+        pmXML.save(services);
     }
 
 }

@@ -6,7 +6,9 @@
 package org.gridlab.gridsphere.portletcontainer.impl;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbmsImpl;
 import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portlet.PortletData;
 import org.gridlab.gridsphere.portlet.PortletLog;
@@ -22,7 +24,7 @@ import org.gridlab.gridsphere.portletcontainer.PortletDataManager;
 public class SportletDataManager implements PortletDataManager {
 
     private static PortletLog log = SportletLog.getInstance(PortletDataManager.class);
-    private static PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
+    private static PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
     private static PortletDataManager instance = new SportletDataManager();
 
     /**
@@ -55,7 +57,7 @@ public class SportletDataManager implements PortletDataManager {
                 "select u from " + SportletData.class.getName() + " u where u.UserID=\"" + user.getID() + "\" and u.PortletID=\"" + portletID + "\"";
 
         // get sportlet data if it exists
-        SportletData pd = (SportletData) pm.restoreObject(command);
+        SportletData pd = (SportletData) pm.restore(command);
 
         // or create one
         if (pd == null) {

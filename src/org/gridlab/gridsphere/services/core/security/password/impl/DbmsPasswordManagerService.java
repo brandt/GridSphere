@@ -10,22 +10,19 @@ package org.gridlab.gridsphere.services.core.security.password.impl;
 
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.services.core.security.password.*;
-import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.AccountRequest;
 import org.gridlab.gridsphere.services.core.user.impl.AccountRequestImpl;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.security.password.Password;
 import org.gridlab.gridsphere.services.core.security.password.PasswordBean;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 
 import java.util.List;
 import java.util.Date;
@@ -36,7 +33,7 @@ public class DbmsPasswordManagerService
 
     private static PasswordManagerService instance = new DbmsPasswordManagerService();
     private static PortletLog _log = SportletLog.getInstance(DbmsPasswordManagerService.class);
-    private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
+    private PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
     private String userPasswordImpl = DbmsUserPassword.class.getName();
     private String requestPasswordImpl = DbmsRequestPassword.class.getName();
     private long defaultPasswordLifetime = -1;
@@ -120,7 +117,7 @@ public class DbmsPasswordManagerService
                      + this.userPasswordImpl
                      + " pw where pw.user=" + user.getID();
         try {
-            password = (DbmsPassword)this.pm.restoreObject(query);
+            password = (DbmsPassword)this.pm.restore(query);
         } catch (PersistenceManagerException e) {
             _log.error("Unable to retrieve password for user", e);
         }
@@ -137,7 +134,7 @@ public class DbmsPasswordManagerService
                      + this.requestPasswordImpl
                      + " pw where pw.user=" + request.getID();
         try {
-            password = (DbmsRequestPassword)this.pm.restoreObject(query);
+            password = (DbmsRequestPassword)this.pm.restore(query);
         } catch (PersistenceManagerException e) {
             _log.error("Unable to retrieve password for user", e);
         }

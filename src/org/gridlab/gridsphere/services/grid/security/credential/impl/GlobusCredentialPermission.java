@@ -5,8 +5,9 @@
 package org.gridlab.gridsphere.services.grid.security.credential.impl;
 
 import org.gridlab.gridsphere.core.persistence.BaseObject;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbmsImpl;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
@@ -26,7 +27,7 @@ import org.apache.regexp.RESyntaxException;
  */
 public class GlobusCredentialPermission extends BaseObject implements CredentialPermission {
 
-    private transient static PersistenceManagerRdbms _pm = PersistenceManagerRdbms.getInstance();
+    private transient static PersistenceManagerRdbms _pm = PersistenceManagerFactory.createGridSphereRdbms();
     private transient static PortletLog _log = SportletLog.getInstance(GlobusCredentialPermission.class);
     private transient static String _jdoCredentialPermissionImpl = GlobusCredentialPermission.class.getName();
 

@@ -479,6 +479,7 @@ public class PortletTitleBar extends BasePortletComponent {
         if (supportedModes.isEmpty()) return null;
 
         // Unless user is admin or super they should not see configure mode
+        /*
         List groups = req.getGroups();
         Iterator it = groups.iterator();
         boolean hasConfigurePermission = false;
@@ -489,7 +490,12 @@ public class PortletTitleBar extends BasePortletComponent {
                 hasConfigurePermission = true;
             }
         }
+        */
 
+        // Unless user is a super they shoudl not see configure mode
+        //User user = req.getUser();
+
+        boolean hasConfigurePermission = true;
 
         String[] portletModes = new String[supportedModes.size()];
         for (i = 0; i < supportedModes.size(); i++) {

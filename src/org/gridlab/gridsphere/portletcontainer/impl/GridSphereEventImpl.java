@@ -76,7 +76,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
         /* This is where we get ACL info and update sportlet request */
         User user = portletRequest.getUser();
         if (user instanceof GuestUser) {
-            portletRequest.setRole(aclService.getBaseGroup(), PortletRole.GUEST);
+
         } else {
             List groups = aclService.getGroups(user);
             Iterator git = groups.iterator();

@@ -7,7 +7,9 @@ package org.gridlab.gridsphere.services.core.user.impl;
 
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbmsImpl;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRole;
@@ -148,7 +150,7 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
      * This is an alias for the setUserID method, which for all intensive
      * purposes represents the name required for this user to login.
      *
-     * @param String the user id
+     * @param name the user id
      */
     public void setUserName(String name) {
         this.UserID = name;
@@ -366,7 +368,7 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
     public void addToGroup(PortletGroup group, PortletRole role) {
         UserACL acl;
         acl = new UserACL(this.getID(), role.getRole(), group.getID());
-        PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
+        PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
         try {
             pm.create(acl);
         } catch (PersistenceManagerException e) {

@@ -4,7 +4,6 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl;
 
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletSettings;
@@ -13,6 +12,7 @@ import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.PortletDeploymentDescriptor;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletDefinition;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
 import java.io.IOException;
 import java.util.Hashtable;
@@ -169,7 +169,7 @@ class ConcreteSportlet implements ConcretePortlet {
         try {
             portletDD.setConcretePortlet(this);
             portletDD.save();
-        } catch (DescriptorException e) {
+        } catch (PersistenceManagerException e) {
             log.error("Unable to save concrete portlet descriptor! " + concreteID, e);
         }
     }

@@ -5,10 +5,11 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl.descriptor;
 
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.Descriptor;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,23 +21,21 @@ import java.util.List;
  * marshalling/unmarshalling the XML portlet schema represntation and the
  * associated Java classes using Castor.
  */
-public class PortletDeploymentDescriptor extends Descriptor {
+public class PortletDeploymentDescriptor {
 
+    private static PersistenceManagerXml pmXML = null;
     private SportletCollection sportletCollection = null;
-    private String mappingFilePath = null;
-    private String portletFilePath = null;
 
     /**
      * Constructs a PortletDeploymentDescriptor from a portlet.xml and mapping file
      *
      * @param portletFilePath location of the portlet.xml
      * @param mappingFilePath location of the mapping file
-     * @throws DescriptorException if the PortletDeploymentDescriptor cannot be created
+     * @throws PersistenceManagerException if the PortletDeploymentPersistenceManager cannot be created
      */
-    public PortletDeploymentDescriptor(String portletFilePath, String mappingFilePath) throws IOException, DescriptorException {
-        this.mappingFilePath = mappingFilePath;
-        this.portletFilePath = portletFilePath;
-        sportletCollection = (SportletCollection) load(portletFilePath, mappingFilePath);
+    public PortletDeploymentDescriptor(String portletFilePath, String mappingFilePath) throws IOException, PersistenceManagerException {
+        pmXML = PersistenceManagerFactory.createPersistenceManagerXml(portletFilePath, mappingFilePath);
+        sportletCollection = (SportletCollection) pmXML.load();
     }
 
     /**
@@ -84,7 +83,7 @@ public class PortletDeploymentDescriptor extends Descriptor {
         }
     }
 
-    public void save() throws IOException, DescriptorException {
-        save(portletFilePath, mappingFilePath, sportletCollection);
+    public void save() throws IOException, PersistenceManagerException {
+        pmXML.save(sportletCollection);
     }
 }

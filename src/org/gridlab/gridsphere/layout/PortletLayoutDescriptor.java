@@ -5,8 +5,9 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.Descriptor;
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
 import java.io.IOException;
 
@@ -15,7 +16,9 @@ import java.io.IOException;
  * unmarshalling a container of portlet components into/from an XML descriptor
  * using Castor XML data binding capabilities.
  */
-public class PortletLayoutDescriptor extends Descriptor {
+public class PortletLayoutDescriptor {
+
+    private static PersistenceManagerXml pmXML = null;
 
     /**
      * Constructs an instance of PortletLayoutDescriptor
@@ -32,10 +35,11 @@ public class PortletLayoutDescriptor extends Descriptor {
      * @return the portlet container
      *
      * @throws IOException if an I/O error occurs
-     * @throws DescriptorException if a descriptor error occurs
+     * @throws PersistenceManagerException if a descriptor error occurs
      */
-    public static PortletContainer loadPortletContainer(String layoutDescriptorPath, String layoutMappingPath) throws IOException, DescriptorException {
-        return (PortletContainer) load(layoutDescriptorPath, layoutMappingPath);
+    public static PortletContainer loadPortletContainer(String layoutDescriptorPath, String layoutMappingPath) throws IOException, PersistenceManagerException {
+        pmXML = PersistenceManagerFactory.createPersistenceManagerXml(layoutDescriptorPath, layoutMappingPath);
+        return (PortletContainer) pmXML.load();
     }
 
     /**
@@ -47,10 +51,11 @@ public class PortletLayoutDescriptor extends Descriptor {
      * @return the portlet tab
      *
      * @throws IOException if an I/O error occurs
-     * @throws DescriptorException if a descriptor error occurs
+     * @throws PersistenceManagerException if a descriptor error occurs
      */
-    public static PortletTab loadPortletTab(String descriptorPath, String mappingPath) throws IOException, DescriptorException {
-        return (PortletTab) load(descriptorPath, mappingPath);
+    public static PortletTab loadPortletTab(String descriptorPath, String mappingPath) throws IOException, PersistenceManagerException {
+        pmXML = PersistenceManagerFactory.createPersistenceManagerXml(descriptorPath, mappingPath);
+        return (PortletTab) pmXML.load();
     }
 
     /**
@@ -61,10 +66,12 @@ public class PortletLayoutDescriptor extends Descriptor {
      * @param mappingPath location of the mapping file
      *
      * @throws IOException if an I/O error occurs
-     * @throws DescriptorException if a descriptor error occurs
+     * @throws PersistenceManagerException if a descriptor error occurs
      */
-    public static void savePortletContainer(PortletContainer pc, String descriptorPath, String mappingPath) throws IOException, DescriptorException {
-        save(descriptorPath, mappingPath, pc);
+    public static void savePortletContainer(PortletContainer pc, String descriptorPath, String mappingPath) throws IOException, PersistenceManagerException {
+        pmXML.setDescriptorPath(descriptorPath);
+        pmXML.setMappingPath(mappingPath);
+        pmXML.save(pc);
     }
 
     /**
@@ -75,9 +82,11 @@ public class PortletLayoutDescriptor extends Descriptor {
      * @param mappingPath location of the mapping file
      *
      * @throws IOException if an I/O error occurs
-     * @throws DescriptorException if a descriptor error occurs
+     * @throws PersistenceManagerException if a descriptor error occurs
      */
-    public static void savePortletTab(PortletTab tab, String descriptorPath, String mappingPath) throws IOException, DescriptorException {
-        save(descriptorPath, mappingPath, tab);
+    public static void savePortletTab(PortletTab tab, String descriptorPath, String mappingPath) throws IOException, PersistenceManagerException {
+        pmXML.setDescriptorPath(descriptorPath);
+        pmXML.setMappingPath(mappingPath);
+        pmXML.save(tab);
     }
 }

@@ -4,7 +4,7 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
@@ -88,9 +88,9 @@ public class PortletLayoutEngine {
      * {@link GridSphereConfigProperties}
      *
      * @throws IOException if an I/O error occurs during the template layout loading
-     * @throws DescriptorException if a descriptor parsing error occurs
+     * @throws PersistenceManagerException if a descriptor parsing error occurs
      */
-    public void init() throws IOException, DescriptorException {
+    public void init() throws IOException, PersistenceManagerException {
 
         File layDir = new File(userLayoutDir);
         if (!layDir.exists()) {
@@ -252,7 +252,7 @@ public class PortletLayoutEngine {
         out.println("<b>" + error + "</b>");
     }
 
-    protected PortletContainer createNewUserLayout(User user) throws DescriptorException, IOException {
+    protected PortletContainer createNewUserLayout(User user) throws PersistenceManagerException, IOException {
 
         String layoutPath = getUserLayoutPath(user);
 
@@ -266,11 +266,11 @@ public class PortletLayoutEngine {
         return PortletLayoutDescriptor.loadPortletContainer(layoutPath, layoutMappingFile);
     }
 
-    public void saveUserLayout(User user) throws DescriptorException, IOException {
+    public void saveUserLayout(User user) throws PersistenceManagerException, IOException {
 
         PortletContainer pc = (PortletContainer) userLayouts.get(user);
         if (pc == null) {
-            throw new DescriptorException("PortletLayout does not exist for user: " + user.getID());
+            throw new PersistenceManagerException("PortletLayout does not exist for user: " + user.getID());
         }
         String userLayoutPath = getUserLayoutPath(user);
         PortletLayoutDescriptor.savePortletContainer(pc, userLayoutPath, layoutMappingFile);

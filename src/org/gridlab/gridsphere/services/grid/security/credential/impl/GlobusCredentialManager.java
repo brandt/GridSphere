@@ -14,7 +14,7 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbmsImpl;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 
@@ -43,7 +43,7 @@ public final class GlobusCredentialManager
     private static GlobusCredentialManager _instance = null;
 
     private static PortletLog _log = SportletLog.getInstance(GlobusCredentialManager.class);
-    private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
+    private PersistenceManagerRdbmsImpl pm = PersistenceManagerFactory.createGridSphereRdbms();
     private GlobusCredentialRetrievalClient retrievalClient = null;
     private Map activeCredentialMaps = Collections.synchronizedSortedMap(new TreeMap());
     private String credentialPermissionImpl = GlobusCredentialPermission.class.getName();
@@ -175,7 +175,7 @@ public final class GlobusCredentialManager
                          + this.credentialPermissionImpl
                          + " cp where cp.permittedSubjects=\"" + pattern + "\"";
             _log.debug(query);
-            return (CredentialPermission)this.pm.restoreObject(query);
+            return (CredentialPermission)this.pm.restore(query);
         } catch (PersistenceManagerException e) {
             _log.error("Error retrieving credential permission", e);
             return null;
@@ -289,7 +289,7 @@ public final class GlobusCredentialManager
                          + " cmr where "
                          + criteria;
             _log.debug(query);
-            return (GlobusCredentialMappingRequest)this.pm.restoreObject(query);
+            return (GlobusCredentialMappingRequest)this.pm.restore(query);
         } catch (PersistenceManagerException e) {
             _log.error("Error retrieving credential mapping request ", e);
             return null;
@@ -404,7 +404,7 @@ public final class GlobusCredentialManager
                          + this.credentialMappingImpl
                          + " cm where cm.subject=\"" + dn + "\"";
             _log.debug(query);
-            return (GlobusCredentialMapping)this.pm.restoreObject(query);
+            return (GlobusCredentialMapping)this.pm.restore(query);
         } catch (PersistenceManagerException e) {
             _log.error("Error retrieving credential mapping " + e);
             return null;
