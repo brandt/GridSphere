@@ -41,13 +41,16 @@ public class SecureDirectory extends HttpServlet {
             File secureDir = new File(secureDirPath);
             if (secureDirPath != null && secureDir.isDirectory()) {
                 inited = true;
-                if (DEBUG)
+
+               if (DEBUG)
                     log("Initialization OK (Strong protection " + (strongProtection ? "enabled" : "DISABLED (better enable it check web.xml) !!!") + "). Setting secureDirPath to " + secureDirPath);
             } else {
                 if (DEBUG)
-                    log("Initialization problem, please check if " + getServletContext().getRealPath(SECURE_CONTEXT_PATH) + " exists and if it is directory !!!");
+
+                   log("Initialization problem, please check if " + getServletContext().getRealPath(SECURE_CONTEXT_PATH) + " exists and if it is directory !!!");
             }
-        }
+
+       }
         dateFormat = DateFormat.getDateInstance();
         dateFormat.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
     }
@@ -73,13 +76,15 @@ public class SecureDirectory extends HttpServlet {
             if (!(new File(userDirPath).isDirectory())) {
                 if (DEBUG)
                     log("Request blocked (userDirPath=" + userDirPath + " is not directory) !!! Request: " + request.getRequestURI() + "\nIP: " + request.getRemoteAddr() + "\n");
-                response.setStatus(403);
+
+               response.setStatus(403);
             } else {
                 String resourcePath = util.substitute("s!" + request.getContextPath() + request.getServletPath() + "!!", request.getRequestURI());
                 File resource = new File(userDirPath + resourcePath);
                 if (!resource.canRead() || resource.isDirectory()) {
                     if (DEBUG)
                         log("Request blocked (Not found, resource=" + userDirPath + resourcePath + ") !!! Request: " + request.getRequestURI() + "\nIP: " + request.getRemoteAddr() + "\n");
+
                     response.setStatus(404);
                 } else {
                     Enumeration params = request.getParameterNames();
@@ -105,6 +110,7 @@ public class SecureDirectory extends HttpServlet {
                     ServletOutputStream output = response.getOutputStream();
                     FileInputStream input = new FileInputStream(resource);
                     rewrite(input, output);
+                    input.close();
                 }
             }
         }
@@ -171,5 +177,4 @@ public class SecureDirectory extends HttpServlet {
             output.write(buf, 0, numRead);
         }
     }
-
 }
