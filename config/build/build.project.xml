@@ -307,8 +307,8 @@ Copyright:
             <fileset dir="webapp"/>
         </copy>
 
-        <copy file="${GRIDSPHERE_PROJECT}/lib/gridsphere-provider.jar" todir="${project.webapp}/WEB-INF/lib"/>
-        <copy file="${GRIDSPHERE_PROJECT}/lib/gridsphere-ui-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
+        <copy file="${GRIDSPHERE_PROJECT}/build/lib/gridsphere-provider.jar" todir="${project.webapp}/WEB-INF/lib"/>
+        <copy file="${GRIDSPHERE_PROJECT}/build/lib/gridsphere-ui-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
 
         <copy todir="${project.webapp}/WEB-INF/lib">
             <fileset dir="lib">
