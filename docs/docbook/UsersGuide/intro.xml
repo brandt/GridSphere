@@ -64,7 +64,7 @@ Version:    $Id$
 	the unit tests.
     </para>
     <orderedlist>
-        <listitem><para>Download &Ant; 1.5+ distribution</para></listitem>
+        <listitem><para>Download &Ant; 1.6+ distribution</para></listitem>
         <listitem><para>Unzip ant into your preferred location and set the ANT_HOME environment to point to this location</para></listitem>
         <listitem><para>Copy junit.jar from your GRIDSPHERE_HOME/lib into ANT_HOME/lib (only necessary if you want to run the tests)</para></listitem>
         <listitem><para>Add ANT_HOME/bin to your PATH environment</para></listitem>
@@ -76,7 +76,7 @@ Version:    $Id$
     <para>The Jakarta Tomcat servlet container is required to provide a hosting environment for the GridSphere framework.
     </para>
     <orderedlist>
-        <listitem><para>Download Jakarta &Tomcat; distribution</para></listitem>
+        <listitem><para>Download Jakarta &Tomcat; distribution (Tomcat 4.1+ or Tomcat 5.0.25+)</para></listitem>
         <listitem><para>Unzip tomcat into your preferred location and set the CATALINA_HOME environment to point to this location <important>If using Windows, set the path with forward slashes e.g C:/MyApps/MyTomcat-4.29!</important></para></listitem>
         <listitem><para>The Portlet Manager Portlet requires the Tomcat manager webapp to be configured to
     allow the gridsphere user to manage web applications. You must modify
