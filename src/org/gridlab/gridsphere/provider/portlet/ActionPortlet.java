@@ -110,7 +110,7 @@ public class ActionPortlet extends AbstractPortlet {
     public String getNextTitle(PortletRequest request) {
         String id = request.getPortletSettings().getConcretePortletID();
         log.debug("ActionPortlet in getNextTitle: setting title attribute " + id+".title");
-        String title = (String)request.getSession().getAttribute(id+".title");
+        String title = (String)request.getAttribute(id+".title");
         if (title == null) {
             Locale locale = request.getLocale();
             title = getPortletSettings().getTitle(locale, null);
@@ -131,7 +131,7 @@ public class ActionPortlet extends AbstractPortlet {
         this.log.debug("Setting title to " + title);
         String id = request.getPortletSettings().getConcretePortletID();
         //System.err.println("in setNextT: in attribute " + id + ".title");
-        request.getPortletSession(true).setAttribute(id + ".title", title);
+        request.setAttribute(id + ".title", title);
     }
 
     /**
