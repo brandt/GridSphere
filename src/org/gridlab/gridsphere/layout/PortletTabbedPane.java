@@ -342,13 +342,13 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                     out.println("<td class=\"tab-empty\">&nbsp;</td>");
                 }  else {
                     // if role is < required role we try selecting the next possible tab
-                    System.err.println("in PortletTabbedPane menu: role is < required role we try selecting the next possible tab");
-
+                    //System.err.println("in PortletTabbedPane menu: role is < required role we try selecting the next possible tab");
                     if (tab.isSelected()) {
-                        int index = (i + 1) % tabs.size();
+                        int index = (i + 1);
                         PortletTab newtab = (PortletTab) stabs.get(index);
-                        this.setSelectedPortletTab(newtab);
-
+                        if (index < tabs.size()) {
+                            this.setSelectedPortletTab(newtab);
+                        }
                     }
                 }
             }
@@ -401,10 +401,11 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                 } else {
                     //System.err.println("in PortletTabbedPane submenu: role is < required role we try selecting the next possible tab");
                     if (tab.isSelected()) {
-                        int index = (i + 1) % tabs.size();
+                        int index = (i + 1);
                         PortletTab newtab = (PortletTab) stabs.get(index);
-                        this.setSelectedPortletTab(newtab);
-
+                        if (index < tabs.size()) {
+                            this.setSelectedPortletTab(newtab);
+                        }
                     }
                 }
             }
