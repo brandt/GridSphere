@@ -33,10 +33,10 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     private String portletClass = null;
 
     private transient PortletWindow.State windowState = PortletWindow.State.NORMAL;
-    //private List supportedModes = new Vector();
+
     private transient Portlet.Mode portletMode = Portlet.Mode.VIEW;
     private transient Portlet.Mode previousMode = Portlet.Mode.VIEW;
-    private List allowedWindowStates = new Vector();
+    private transient List allowedWindowStates = new Vector();
     private String errorMessage = "";
     private boolean hasError = false;
     private boolean isActive = false;
@@ -162,6 +162,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         public static final String minimizeImage = "images/window_minimize.gif";
         public static final String maximizeImage = "images/window_maximize.gif";
         public static final String resizeImage = "images/window_resize.gif";
+
         public static final String closeSymbol = "X"; //WAP 2.0
         public static final String minimizeSymbol = "_"; //WAP 2.0
         public static final String maximizeSymbol = "="; //WAP 2.0
@@ -425,7 +426,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
                 // get window states from application portlet config
 
-                allowedWindowStates = sort(appConfig.getAllowedWindowStates());
+                allowedWindowStates = new ArrayList(appConfig.getAllowedWindowStates());
+                allowedWindowStates = sort(allowedWindowStates);
 
                 if (canModify) {
                     if (!allowedWindowStates.contains(PortletWindow.State.CLOSED)) {
@@ -475,6 +477,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         //String[] windowStates = new String[allowedWindowStates.size()];
         List windowStates = new ArrayList();
         for (int i = 0; i < allowedWindowStates.size(); i++) {
+
             tmp = (PortletWindow.State) allowedWindowStates.get(i);
             windowStates.add(tmp);
             // remove current state from list
