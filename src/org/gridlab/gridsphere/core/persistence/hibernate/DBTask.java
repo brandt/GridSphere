@@ -60,6 +60,7 @@ public class DBTask extends Task {
     private String hibernatePropertiesFileName = "hibernate.properties";
 
     private String configDir = "";
+
     private String action = "";
 
     /**
@@ -69,7 +70,7 @@ public class DBTask extends Task {
      * @param configDir full path to the configuration directory
      */
     public void setConfigDir(String configDir) {
-        SportletLog.setConfigureURL(configDir + "/classes/log4j.properties");
+        SportletLog.setConfigureURL(configDir + "/WEB-INF/classes/log4j.properties");
         this.configDir = configDir;
     }
 
@@ -107,24 +108,44 @@ public class DBTask extends Task {
     /**
      * Loads properties from a given directory.
      *
-     * @param path
      * @return
      * @throws BuildException
      */
-    private Properties loadProperties() throws BuildException {
+    private Properties loadGSProperties() throws BuildException {
         Properties prop = new Properties();
 
-        String hibPath = configDir + File.separator + "CustomPortal" +
+        String hibPath = configDir + File.separator + "WEB-INF" + File.separator + "CustomPortal" +
                 File.separator + "database" + File.separator + hibernatePropertiesFileName;
 
-        String templateHibernatePath = configDir + File.separator + "persistence" + File.separator + hibernatePropertiesFileName;
+        try {
+            FileInputStream fis = new FileInputStream(hibPath);
+            prop.load(fis);
+            log.info("Using database configuration information from: " + hibPath);
+        } catch (IOException e) {
+            throw new BuildException("DB Error:" + CONFIGFILE_ERROR + " (" + hibPath + ")");
+        }
+        return prop;
+    }
+
+    /**
+     * Loads properties from a given directory.
+     *
+     * @return
+     * @throws BuildException
+     */
+    private Properties loadProjectProperties() throws BuildException {
+        Properties prop = new Properties();
+        String hibPath = configDir + File.separator + "WEB-INF" + File.separator + "persistence" + File.separator + hibernatePropertiesFileName;
 
         try {
+            
             File hibFile = new File(hibPath);
+            /*
             if (!hibFile.exists()) {
-                log.info("Copying template hibernate properties file from " + templateHibernatePath + " to " + hibPath);
-                GridSphereConfig.copyFile(new File(templateHibernatePath), hibFile);
+                log.info("Copying template hibernate properties file from " + hibPath + " to " + hibPath);
+                GridSphereConfig.copyFile(new File(hibPath), hibFile);
             }
+            */
             FileInputStream fis = new FileInputStream(hibPath);
             prop.load(fis);
             log.info("Using database configuration information from: " + hibPath);
@@ -166,13 +187,14 @@ public class DBTask extends Task {
         try {
             cfg = new Configuration();
             cfg.setProperties(props);
-            String mappingPath = configDir + File.separator + "persistence";
+            String mappingPath = configDir + File.separator  + "WEB-INF" + File.separator + "persistence";
             File mappingdir = new File(mappingPath);
             String[] children = mappingdir.list();
             if (children == null) {
                 // Either dir does not exist or is not a directory
                 // so this means we do not have a db here...
             } else {
+                log.info("Using mapping directory: " + mappingPath);
                 for (int i = 0; i < children.length; i++) {
                     // Get filename of file or directory
                     String filename = children[i];
@@ -201,7 +223,12 @@ public class DBTask extends Task {
 
         try {
             // try to load the properties
-            Properties properties = loadProperties();
+            Properties properties = null;
+            if (configDir.endsWith("gridsphere")) {
+                properties = loadGSProperties();
+            } else {
+                properties = loadProjectProperties();
+            }
 
             // test the db connection
             this.testDBConnection(properties);

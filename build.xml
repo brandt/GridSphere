@@ -396,7 +396,7 @@ Copyright:
             classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
             classpathref="classpath"/>
         <dbtask
-            configdir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF"
+            configdir="${env.CATALINA_HOME}/webapps/gridsphere"
             action="CREATE"/>
     </target>
 
@@ -426,7 +426,7 @@ Copyright:
             classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
             classpathref="classpath"/>
         <dbtask
-            configdir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF"
+            configdir="${env.CATALINA_HOME}/webapps/gridsphere"
             action="CREATE"/>
         <echo message="Successfully created test database"/>
     </target>

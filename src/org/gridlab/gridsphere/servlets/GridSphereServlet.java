@@ -143,7 +143,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 // checking if database setup is correct
                 DBTask dt = new DBTask();
                 dt.setAction(DBTask.ACTION_CHECKDB);
-                dt.setConfigDir(GridSphereConfig.getServletContext().getRealPath("/WEB-INF"));
+                dt.setConfigDir(GridSphereConfig.getServletContext().getRealPath(""));
                 try {
                     dt.execute();
                 } catch (Exception e) {
