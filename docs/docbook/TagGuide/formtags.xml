@@ -1,5 +1,5 @@
 <!--
-    Author:     Oliver Wehrens
+    Author:     Jason Novotny, Oliver Wehrens
     Version:    $Id$
 -->
 
@@ -10,7 +10,7 @@
         GridSphere UI tags are JSP tags that can be used in a JSP page to create user interfaces. The UI tag library
         descriptor which defines tag parameters and definitions can be found in webapps/gridsphere/WEB-INF/tlds/portletui.tld
         of the source directory. All tags may contain a beanId attribute. The valueof beanId is
-        a String that identifies the tag so it mey be retrieved as a visual bean in the portlet. See the Tutorial
+        a String that identifies the tag so it may be retrieved as a visual bean in the portlet. See the Tutorial
         for an example.
     </para>
 
@@ -45,7 +45,7 @@
             the portlet. See the section on <link linkend="uibeans">visual beans</link> for more details.
         </para>
         <table>
-            <title>Attributes to actionlink</title>
+            <title>Base Tag Attributes</title>
             <tgroup cols="3">
                 <thead>
                     <row>
@@ -1042,7 +1042,7 @@
             <example>
                 <title>Usage of listbox</title>
                 <screen>
-<![CDATA[<ui:listbox bean="name of listboxbean"/>]]>
+<![CDATA[<ui:listbox bean="myListbox"/>]]>
                 </screen>
                 This example creates a listbox from the bean.
             </example>
