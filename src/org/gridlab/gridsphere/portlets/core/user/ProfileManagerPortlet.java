@@ -252,34 +252,54 @@ public class ProfileManagerPortlet extends ActionPortlet {
         model.addTableRowBean(trMessaging);
 
         List services = tms.getServices();
-        for (int i=0;i<services.size();i++) {
-            TmfService tmfservice = (TmfService) services.get(i);
 
-            // tablerow
-            TableRowBean trService = new TableRowBean();
 
-            // NAME
-            TableCellBean tcServiceName = new TableCellBean();
-            // make text
-            TextBean servicename = new TextBean();
+        if (services.size()==0) {
+            TableRowBean noServiceRow = new TableRowBean();
+            TableCellBean noServiceCell1 = new TableCellBean();
+            TableCellBean noServiceCell2 = new TableCellBean();
+            String localeText = this.getLocalizedText(req, "PROFILE_MESSAGING_NO_SERVICE_CONFIGURED");
+            TextBean noServiceText = new TextBean();
+            noServiceText.setValue(localeText);
+            noServiceCell1.addBean(noServiceText);
+            TextBean noServiceText2 = new TextBean();
+            noServiceText2.setValue("&nbsp;");
+            noServiceCell2.addBean(noServiceText2);
+            noServiceRow.addBean(noServiceCell1);
+            noServiceRow.addBean(noServiceCell2);
+            model.addTableRowBean(noServiceRow);
 
-            String localeText = this.getLocalizedText(req, tmfservice.getDescription());
-            servicename.setValue(localeText);
-            tcServiceName.addBean(servicename);
-            trService.addBean(tcServiceName);
+        } else {
 
-            // INPUT
-            TableCellBean tcServiceInput = new TableCellBean();
-            // make inputfield
-            TextFieldBean servicename_input = new TextFieldBean();
-            TmfUser user = tms.getUser(req.getUser().getUserID());
-            if (user!=null) {
-                servicename_input.setValue(user.getUserNameForMessagetype(tmfservice.getMessageType()));
+            for (int i=0;i<services.size();i++) {
+                TmfService tmfservice = (TmfService) services.get(i);
+
+                // tablerow
+                TableRowBean trService = new TableRowBean();
+
+                // NAME
+                TableCellBean tcServiceName = new TableCellBean();
+                // make text
+                TextBean servicename = new TextBean();
+
+                String localeText = this.getLocalizedText(req, tmfservice.getDescription());
+                servicename.setValue(localeText);
+                tcServiceName.addBean(servicename);
+                trService.addBean(tcServiceName);
+
+                // INPUT
+                TableCellBean tcServiceInput = new TableCellBean();
+                // make inputfield
+                TextFieldBean servicename_input = new TextFieldBean();
+                TmfUser user = tms.getUser(req.getUser().getUserID());
+                if (user!=null) {
+                    servicename_input.setValue(user.getUserNameForMessagetype(tmfservice.getMessageType()));
+                }
+                servicename_input.setDisabled(readonly);
+                tcServiceInput.addBean(servicename_input);
+                trService.addBean(tcServiceInput);
+                model.addTableRowBean(trService);
             }
-            servicename_input.setDisabled(readonly);
-            tcServiceInput.addBean(servicename_input);
-            trService.addBean(tcServiceInput);
-            model.addTableRowBean(trService);
         }
         return model;
     }
