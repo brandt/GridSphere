@@ -88,7 +88,10 @@ An external portlet web application specifies a group definition in an XML descr
             </callout>
             <callout arearefs="gvisibility.def">
             <para>
-                The group visibility specifies if any user can add themselves to this group or if it requires administrator approval.
+                The group visibility specifies if any user can add themselves to this group or if it requires administrator approval. Valid values
+                are "PUBLIC", where any user will see the group and have the ability to subscribe to it. If visibility is "PRIVATE", the user will see
+                the group existence but requires administrator approval to add them. A group that is "HIDDEN" will not be displayed at all to users and requires
+                an administrator to add members.
             </para>
             </callout>
             <callout arearefs="groleinfo.def">

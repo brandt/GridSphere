@@ -97,7 +97,7 @@ double-tabbed pane. An example illustration is shown:
     &lt;portlet-tab&gt;
         &lt;title lang="en"&gt;Examples&lt;/title&gt; <co id="tab.title"/>
         &lt;portlet-tabbed-pane style="sub-menu"&gt;  <co id="tab.pane2"/>
-            &lt;portlet-tab&gt;
+            &lt;portlet-tab order="50"&gt; <co id="tab.order"/>
                 &lt;title lang="en"&gt;Simple Examples&lt;/title&gt;
                 &lt;table-layout&gt;    <co id="table.layout"/>
                     &lt;row-layout&gt;  <co id="row.layout"/>
