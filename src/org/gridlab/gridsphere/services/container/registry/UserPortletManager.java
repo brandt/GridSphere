@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.PortletWrapper;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryManager;
+import org.gridlab.gridsphere.event.WindowEvent;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,35 +37,31 @@ public class UserPortletManager {
         return userPortletMgr;
     }
 
-    public void init(HttpServletRequest req, HttpServletResponse res) {
-        log.info("in init()");
+    public void init(HttpServletRequest req, HttpServletResponse res) throws PortletException {
         concPortletMgr.initConcretePortlets(req, res);
     }
 
-    public void destroy(HttpServletRequest req, HttpServletResponse res) {
-        log.info("in destroy()");
+    public void destroy(HttpServletRequest req, HttpServletResponse res) throws PortletException {
         concPortletMgr.destroyConcretePortlets(req, res);
     }
 
-    public void initUserPortlets(HttpServletRequest req, HttpServletResponse res) {
+    public void initUserPortlets(HttpServletRequest req, HttpServletResponse res) throws PortletException {
         User user = (User)req.getSession().getAttribute(GridSphereProperties.USER);
         //if (userPortletsHash
         // foreach portlet p in User u
         //   login(p.id, req, res);
     }
 
-    public void destroyUserPortlets(HttpServletRequest req, HttpServletResponse res) {
+    public void destroyUserPortlets(HttpServletRequest req, HttpServletResponse res) throws PortletException {
             // foreach portlet p in User u
         //   logout(p.id, req, res);
     }
 
-    public void initUserPortlet(String concretePortletID, HttpServletRequest req, HttpServletResponse res) {
-        log.info("in initUserPortlet()");
+    public void initUserPortlet(String concretePortletID, HttpServletRequest req, HttpServletResponse res) throws PortletException {
         login(concretePortletID, req, res);
     }
 
     public void service(String concretePortletID, HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        log.info("in service()");
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         PortletWrapper wrapper = appPortlet.getPortletWrapper();
@@ -73,7 +70,6 @@ public class UserPortletManager {
 
     public void actionPerformed(String concretePortletID, PortletAction action, HttpServletRequest req, HttpServletResponse res)
             throws PortletException {
-        log.info("in actionPerformed()");
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         PortletWrapper wrapper = appPortlet.getPortletWrapper();
@@ -81,38 +77,35 @@ public class UserPortletManager {
     }
 
     public void doTitle(String concretePortletID, HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        log.info("in doTitle()");
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         PortletWrapper wrapper = appPortlet.getPortletWrapper();
         wrapper.doTitle(req, res);
     }
 
-    public void destroyUserPortlet(String concretePortletID, HttpServletRequest req, HttpServletResponse res) {
-        log.info("in destroyUserPortlet()");
+    public void windowEvent(String concretePortletID, WindowEvent winEvent, HttpServletRequest req, HttpServletResponse res) throws PortletException {
+        String appID = registry.getApplicationPortletID(concretePortletID);
+        ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
+        PortletWrapper wrapper = appPortlet.getPortletWrapper();
+        wrapper.windowEvent(winEvent, req, res);
+    }
+
+    public void destroyUserPortlet(String concretePortletID, HttpServletRequest req, HttpServletResponse res) throws PortletException {
         logout(concretePortletID, req, res);
     }
 
-    protected void login(String concretePortletID, HttpServletRequest req, HttpServletResponse res) {
+    protected void login(String concretePortletID, HttpServletRequest req, HttpServletResponse res) throws PortletException {
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         PortletWrapper wrapper = appPortlet.getPortletWrapper();
-        try {
-            wrapper.login(req, res);
-        } catch (Exception e) {
-            // do something here
-        }
+        wrapper.login(req, res);
     }
 
-    protected void logout(String concretePortletID, HttpServletRequest req, HttpServletResponse res) {
+    protected void logout(String concretePortletID, HttpServletRequest req, HttpServletResponse res) throws PortletException {
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         PortletWrapper wrapper = appPortlet.getPortletWrapper();
-        try {
-            wrapper.logout(req, res);
-        } catch (Exception e) {
-            // do something here
-        }
+        wrapper.logout(req, res);
     }
 
 }
