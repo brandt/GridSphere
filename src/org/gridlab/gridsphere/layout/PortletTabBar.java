@@ -148,7 +148,7 @@ public class PortletTabBar extends BasePortletComponent {
 
     public void setSelectedIndex(int index) {
         unselectLastTab();
-        if (index<0) {index=0;};
+        //if (index<0) {index=0;};
         PortletTabPage tabPage = (PortletTabPage)tabPages.get(index);
         tabPage.setSelected(true);
     }
@@ -203,10 +203,31 @@ public class PortletTabBar extends BasePortletComponent {
         return list;
     }
 
+    public void login(GridSphereEvent event) {
+        super.login(event);
+        PortletPanel panel = null;
+        for (int i = 0; i < getTabPageCount(); i++) {
+            panel = getPortletPanelAt(i);
+            LayoutManager manager = panel.getLayoutManager();
+            manager.login(event);
+        }
+    }
+
+    public void logout(GridSphereEvent event) {
+        super.logout(event);
+        PortletPanel panel = null;
+        for (int i = 0; i < getTabPageCount(); i++) {
+            panel = getPortletPanelAt(i);
+            LayoutManager manager = panel.getLayoutManager();
+            manager.logout(event);
+        }
+    }
+
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
         SportletRequest req = event.getSportletRequest();
         String tabchange = req.getParameter(GridSphereProperties.PORTLETTAB);
         if (tabchange != null) {
+            System.err.println("changing tab index to : " + tabchange);
             int idx = indexOfTabPage(tabchange);
             setSelectedIndex(idx);
         }

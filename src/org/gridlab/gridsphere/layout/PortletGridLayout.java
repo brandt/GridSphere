@@ -12,26 +12,16 @@ import java.io.PrintWriter;
 
 public class PortletGridLayout extends BaseLayoutManager {
 
-    private int rows = 1;
     private int cols = 1;
 
     public PortletGridLayout() {}
 
-    public PortletGridLayout(int rows, int cols) {
-        this.rows = rows;
+    public PortletGridLayout(int cols) {
         this.cols = cols;
     }
 
     public String getClassName() {
         return PortletGridLayout.class.getName();
-    }
-
-    public void setRows(int rows) {
-        this.rows = rows;
-    }
-
-    public int getRows() {
-        return rows;
     }
 
     public void setColumns(int cols) {
@@ -48,9 +38,7 @@ public class PortletGridLayout extends BaseLayoutManager {
 
         if (insets == null) insets = new PortletInsets();
 
-        int i = 0, j = 0, k = 0;
-        if (components.size() > rows*cols)
-            throw new PortletLayoutException("Number of components specified exceeds rows * columns");
+        int j = 0, k = 0;
 
         //out.println("row: "+rows+" columns "+cols);
 
@@ -62,12 +50,11 @@ public class PortletGridLayout extends BaseLayoutManager {
         //out.println("<table width=\"" + gwidth + "%\" border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#FFFFFF\">");
         out.println("<table border=\"0\" width=\"100%\">");
 
-        while ((i < rows) && (k < max)) {
-
+        while (k < max) {
             out.println("<tr>");
             //insets.doRenderFirst(ctx,req,res);
             //insets.doRenderLast(ctx,req,res);
-            while ((j < cols) && (k < max)) {
+            while (j < cols) {
                 p = (PortletComponent)components.get(k);
                 //@todo need that for defined with in the porlet component (oliver)
 
@@ -82,8 +69,7 @@ public class PortletGridLayout extends BaseLayoutManager {
                 j++; k++;
                 out.println("</td>");
             }
-            j = 0; i++;
-
+            j = 0;
            out.println("</tr>");
         }
 

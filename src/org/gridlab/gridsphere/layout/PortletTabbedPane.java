@@ -203,6 +203,24 @@ public class PortletTabbedPane extends BasePortletComponent {
         return list;
     }
 
+    public void login(GridSphereEvent event) {
+        super.login(event);
+        PortletTabBar tabBar = null;
+        for (int i = 0; i < getTabCount(); i++) {
+            tabBar = getPortletTabBarAt(i);
+            tabBar.login(event);
+        }
+    }
+
+    public void logout(GridSphereEvent event) {
+        super.logout(event);
+        PortletTabBar tabBar = null;
+        for (int i = 0; i < getTabCount(); i++) {
+            tabBar = getPortletTabBarAt(i);
+            tabBar.logout(event);
+        }
+    }
+
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
         SportletRequest req = event.getSportletRequest();
         String tabchange = req.getParameter(GridSphereProperties.PORTLETTAB);
