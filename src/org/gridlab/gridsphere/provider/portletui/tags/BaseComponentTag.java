@@ -149,6 +149,7 @@ public abstract class BaseComponentTag extends BaseBeanTag   {
         componentBean.setBeanId(beanId);
         if (cssStyle != null) componentBean.setCssStyle(cssStyle);
         componentBean.setDisabled(disabled);
+        componentBean.setReadOnly(readonly);
         if (name != null) componentBean.setName(name);
         if (value != null) componentBean.setValue(value);
         if (supportsJavaScript()) {
