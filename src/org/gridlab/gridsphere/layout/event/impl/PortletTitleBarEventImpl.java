@@ -20,8 +20,6 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
 
     private PortletTitleBarEvent.Action action;
     private int id;
-    private Portlet.Mode mode;
-    private PortletWindow.State state;
     private PortletRequest req;
 
     /**

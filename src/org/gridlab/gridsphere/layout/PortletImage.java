@@ -46,7 +46,7 @@ public class PortletImage extends BasePortletComponent {
     /**
      * Returns the "img src" location of the image location
      *
-     * @param image the "img src" location of the image location
+     * @return the "img src" location of the image location
      */
     public String getImage() {
         return image;

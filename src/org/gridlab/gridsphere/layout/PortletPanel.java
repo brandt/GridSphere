@@ -62,7 +62,7 @@ public class PortletPanel extends BasePortletComponent {
     /**
      * Returns the portlet layout to use for arranging the components in the panel
      *
-     * @returns PortletLayout concrete instance
+     * @return the concrete portlet layout instance
      */
     public PortletLayout getLayout() {
         return layout;

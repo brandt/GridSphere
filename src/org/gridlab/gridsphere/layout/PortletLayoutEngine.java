@@ -194,12 +194,14 @@ public class PortletLayoutEngine {
      */
     public void loginPortlets(GridSphereEvent event) {
         log.debug("in loginPortlets()");
+        /*
         try {
             PortletContainer pc = getPortletContainer(event);
-            //pc.loginPortlets(event);
+            pc.loginPortlets(event);
         } catch (PortletException e) {
             log.error("Unable to login portlets", e);
         }
+        */
     }
 
     /**

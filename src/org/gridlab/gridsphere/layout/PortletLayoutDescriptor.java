@@ -17,8 +17,6 @@ import java.io.IOException;
  */
 public class PortletLayoutDescriptor extends Descriptor {
 
-    private static PortletLayoutDescriptor instance = new PortletLayoutDescriptor();
-
     /**
      * Constructs an instance of PortletLayoutDescriptor
      */
@@ -76,8 +74,8 @@ public class PortletLayoutDescriptor extends Descriptor {
      * @param descriptorPath location of the layout.xml
      * @param mappingPath location of the mapping file
      *
-     * @throws <code>IOException</code> if an I/O error occurs
-     * @throws <code>DescriptorException</code> if a descriptor error occurs
+     * @throws IOException if an I/O error occurs
+     * @throws DescriptorException if a descriptor error occurs
      */
     public static void savePortletTab(PortletTab tab, String descriptorPath, String mappingPath) throws IOException, DescriptorException {
         save(descriptorPath, mappingPath, tab);

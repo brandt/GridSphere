@@ -51,7 +51,7 @@ public interface PortletTabEvent {
     /**
      * Returns the component id of the portlet tab
      *
-     * @returns the component id of the portlet tab
+     * @return the component id of the portlet tab
      */
     public int getID();
 

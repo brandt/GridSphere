@@ -39,7 +39,7 @@ public class PortletText extends BasePortletComponent {
     /**
      * Returns the text file path of the included file
      *
-     * @param textFilePath the relative path of the text file
+     * @return the relative path of the text file
      */
     public String getInclude() {
         return text;

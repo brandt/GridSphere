@@ -41,7 +41,7 @@ public class PortletTab extends BasePortletComponent {
      * portlet component.
      *
      * @param title the title of the portlet tab
-     * @portletComponent any portlet component to represent beneath the tab
+     * @param portletComponent any portlet component to represent beneath the tab
      */
     public PortletTab(String title, PortletComponent portletComponent) {
         this.title = title;
@@ -70,7 +70,7 @@ public class PortletTab extends BasePortletComponent {
      *  Creates the portlet tab title links that are rendered by the
      * {@link PortletTabbedPane}
      *
-     * @event the gridsphere event
+     * @param event the gridsphere event
      */
     public String createTabTitleLink(GridSphereEvent event) {
         PortletRequest req = event.getPortletRequest();

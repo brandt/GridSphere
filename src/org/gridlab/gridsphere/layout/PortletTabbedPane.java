@@ -212,8 +212,6 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
      * @param event the gridspher event
      */
     protected String[] createTabLinks(GridSphereEvent event) {
-        PortletRequest req = event.getPortletRequest();
-
         // Make tab links
         String[] tabLinks = new String[tabs.size()];
         for (int i = 0; i < tabs.size(); i++) {
