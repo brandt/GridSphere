@@ -234,6 +234,7 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
         // Render tabs titles
         out.println("<table class=\"tab-pane\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
         out.println("<tr>");
+        out.println("<td class=\"tab-empty\">&nbsp;</td>");
 
         PortletTab tab;
         for (int i = 0; i < tabs.size(); i++) {
@@ -250,7 +251,7 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
             }
             out.println("<td class=\"tab-empty\">&nbsp;</td>");
         }
-        out.println("</tr></table>");
+        out.println("<td class=\"tab-fillup\">&nbsp</td></tr></table>");
 
         PortletTab selectedTab = (PortletTab) tabs.get(selectedIndex);
         if (selectedTab != null)
