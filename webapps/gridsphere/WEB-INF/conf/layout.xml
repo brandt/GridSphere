@@ -18,7 +18,6 @@
 <!-- Login -->
 <portlet-frame>
     <width>60</width>
-    <portlet-title-bar/>
     <portlet-class>org.gridlab.gridsphere.portlets.core.LoginPortlet.1</portlet-class>
 </portlet-frame>
 
@@ -51,46 +50,68 @@
     <portlet-tab>
         <title>Configuration</title>
         <selected>true</selected>
-        <portlet-panel>
-            <grid-layout>
-                <columns>1</columns>
-                <rows>3</rows>
-                <portlet-insets>
-                    <width>2</width>
-                    <height>2</height>
-                </portlet-insets>
-                <portlet-frame>
-                    <name>HalloWelt</name>
-                    <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.624.2</portlet-class>
-                </portlet-frame>
-
-                <portlet-frame>
-                    <name>HelloWorld</name>
-                    <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.2</portlet-class>
-                </portlet-frame>
-
-                <portlet-frame>
-                    <name>HelloWorld</name>
-                    <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.4</portlet-class>
-                </portlet-frame>
-            </grid-layout>
-          </portlet-panel>
-
-        </portlet-tab>
-        <portlet-tab>
-            <title>Cactus</title>
-            <selected>false</selected>
-            <portlet-panel>
-                <flow-layout>
-                    <align>1</align>
-                    <hgap>1</hgap>
-                    <vgap>1</vgap>
-                    <portlet-frame>
-                        <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.624.2</portlet-class>
-                    </portlet-frame>
-                </flow-layout>
-            </portlet-panel>
-        </portlet-tab>
-    </portlet-tabbed-pane>
+        <portlet-tab-bar>
+            <portlet-tab-page>
+                <title>Configuration</title>
+                <selected>true</selected>
+                <portlet-panel>
+                    <grid-layout>
+                        <columns>1</columns>
+                        <rows>3</rows>
+                        <portlet-frame>
+                            <name>HalloWelt</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.624.2</portlet-class>
+                        </portlet-frame>
+                        <portlet-frame>
+                            <name>HelloWorld</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.2</portlet-class>
+                        </portlet-frame>
+                        <portlet-frame>
+                            <name>HelloWorld</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.4</portlet-class>
+                        </portlet-frame>
+                    </grid-layout>
+                </portlet-panel>
+            </portlet-tab-page>
+            <portlet-tab-page>
+                <title>Whatever</title>
+                <selected>false</selected>
+                <portlet-panel>
+                    <grid-layout>
+                        <columns>1</columns>
+                        <rows>2</rows>
+                        <portlet-frame>
+                            <name>HelloWorld</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.2</portlet-class>
+                        </portlet-frame>
+                        <portlet-frame>
+                            <name>HelloWorld</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.4</portlet-class>
+                        </portlet-frame>
+                    </grid-layout>
+                </portlet-panel>
+            </portlet-tab-page>
+        </portlet-tab-bar>
+    </portlet-tab>
+    <portlet-tab>
+        <title>Cactus</title>
+        <portlet-tab-bar>
+            <portlet-tab-page>
+                <title>Cactus</title>
+                <selected>false</selected>
+                <portlet-panel>
+                    <flow-layout>
+                        <align>1</align>
+                        <hgap>1</hgap>
+                        <vgap>1</vgap>
+                        <portlet-frame>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.624.2</portlet-class>
+                        </portlet-frame>
+                    </flow-layout>
+                </portlet-panel>
+            </portlet-tab-page>
+        </portlet-tab-bar>
+    </portlet-tab>
+</portlet-tabbed-pane>
 
 </portlet-layout>
