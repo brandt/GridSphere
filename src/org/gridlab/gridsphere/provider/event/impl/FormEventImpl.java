@@ -19,11 +19,17 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.ui.beans.*;
+import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
+import org.gridlab.gridsphere.provider.portletui.beans.PasswordBean;
+
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.HashMap;
 
 public class FormEventImpl implements FormEvent {
 
@@ -35,6 +41,11 @@ public class FormEventImpl implements FormEvent {
 
     public FormEventImpl(PortletRequest request) {
         this.request = request;
+    }
+
+    public FormEventImpl(PortletRequest request, PortletResponse response) {
+        this.request = request;
+        this.response = response;
     }
 
     public FormEventImpl(ActionEvent evt) {
@@ -53,6 +64,11 @@ public class FormEventImpl implements FormEvent {
     public  DefaultPortletAction getAction() {
         return event.getAction();
     }
+
+    public org.gridlab.gridsphere.provider.portletui.beans.TagBean getNewTagBean(String name) {
+        return null;
+    }
+
 
     /**
      * Returns the name of the pressed submit button. To use this for form has to follow the convention
@@ -86,7 +102,7 @@ public class FormEventImpl implements FormEvent {
         return false;
     }
 
-    private Object getBean(String name) {
+    private TagBean getBean(String name) {
         HttpSession session = request.getSession();
         log.debug("Try to get bean "+SportletProperties.PORTLETID+":"+request.getAttribute(SportletProperties.PORTLETID)+":"+name+" from session.");
         NameBean bean = (NameBean) session.getAttribute(SportletProperties.PORTLETID+":"+request.getAttribute(SportletProperties.PORTLETID)+":"+name);
@@ -189,6 +205,20 @@ public class FormEventImpl implements FormEvent {
             }
         }
         System.out.println("--------------------\n");
+    }
+
+    public void store() {}
+
+    public CheckBoxBean getCheckBoxBean(String beanId) {
+        return null;
+    }
+
+    public TextFieldBean getTextFieldBean(String beanId) {
+        return null;
+    }
+
+    public PasswordBean getPasswordBean(String beanId) {
+        return null;
     }
 
 }
