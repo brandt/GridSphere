@@ -62,6 +62,7 @@ public class ActionPortlet extends AbstractPortlet {
     protected void setNextState(PortletRequest request, String state) {
         String id = request.getPortletSettings().getConcretePortletID();
         request.setAttribute(id + ".state", state);
+        log.error("in ActionPortlet in setNextState: setting state to " + state);
     }
 
     /**
@@ -75,8 +76,11 @@ public class ActionPortlet extends AbstractPortlet {
         String id = request.getPortletSettings().getConcretePortletID();
         String state = (String)request.getAttribute(id+".state");
         if (state == null) {
-            log.debug("no page was set!!");
+            state = DEFAULT_VIEW_PAGE;
+            /*
+            log.debug("no state was set!!");
             Portlet.Mode m = request.getMode();
+            System.err.println("in getNEXTSTATE id=" + id + " mode=" + m);
             if (m.equals(Portlet.Mode.VIEW)) {
                 state = DEFAULT_VIEW_PAGE;
             } else if (m.equals(Portlet.Mode.HELP)) {
@@ -87,10 +91,11 @@ public class ActionPortlet extends AbstractPortlet {
                 state = DEFAULT_EDIT_PAGE;
             } else {
                 state = DEFAULT_VIEW_PAGE;
-                log.error("in ActionPortlet: couldn't get portlet mode in getNextpage()");
+                log.error("in ActionPortlet: couldn't get portlet mode in getNextState()");
             }
+            */
         } else {
-            log.debug("a page has been set to:" + state);
+            log.debug("in ActionPortlet: in getNextState: a page has been set to:" + state);
         }
         return state;
     }
@@ -104,7 +109,7 @@ public class ActionPortlet extends AbstractPortlet {
      */
     public String getNextTitle(PortletRequest request) {
         String id = request.getPortletSettings().getConcretePortletID();
-        log.debug("setting in attribute " + id+".title");
+        log.debug("ActionPortlet in getNextTitle: setting title attribute " + id+".title");
         String title = (String)request.getSession().getAttribute(id+".title");
         if (title == null) {
             String locStr = (String)request.getPortletSession(true).getAttribute(User.LOCALE);
@@ -305,8 +310,15 @@ public class ActionPortlet extends AbstractPortlet {
      * @throws java.io.IOException if an I/O error occurs
      */
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
+
+        String id = request.getPortletSettings().getConcretePortletID();
+        String state = (String)request.getAttribute(id+".state");
+        if (state == null) {
+            log.debug("in ActionPortlet: state is null-- setting to DEFAULT_VIEW_PAGE");
+            setNextState(request, DEFAULT_VIEW_PAGE);
+        }
         String next = getNextState(request);
-        log.debug("in ActionPortlet:doView next page is= " + next);
+        log.debug("in ActionPortlet: portlet id= " + id + " doView next page is= " + next);
         if (next.endsWith(".jsp"))  {
             doViewJSP(request, response, next);
         } else {
@@ -341,7 +353,8 @@ public class ActionPortlet extends AbstractPortlet {
      * @throws java.io.IOException if an I/O error occurs
      */
     public void doEdit(PortletRequest request, PortletResponse response) throws PortletException, IOException {
-        log.debug("in doEdit");
+        log.debug("ActionPortlet: in doEdit");
+        setNextState(request, DEFAULT_EDIT_PAGE);
         doView(request, response);
     }
 
@@ -354,7 +367,8 @@ public class ActionPortlet extends AbstractPortlet {
      * @throws java.io.IOException if an I/O error occurs
      */
     public void doConfigure(PortletRequest request, PortletResponse response) throws PortletException, IOException {
-        log.debug("in doConfigure");
+        log.debug("ActionPortlet: in doConfigure");
+        setNextState(request, DEFAULT_CONFIGURE_PAGE);
         doView(request, response);
     }
 
@@ -367,7 +381,8 @@ public class ActionPortlet extends AbstractPortlet {
      * @throws java.io.IOException if an I/O error occurs
      */
     public void doHelp(PortletRequest request, PortletResponse response) throws PortletException, IOException {
-        log.debug("in doHelp");
+        log.debug("ActionPortlet: in doHelp");
+        setNextState(request, DEFAULT_HELP_PAGE);
         doView(request, response);
     }
 
@@ -383,7 +398,6 @@ public class ActionPortlet extends AbstractPortlet {
         log.debug("in doTitle");
         PrintWriter out = response.getWriter();
         String title = getNextTitle(request);
-
         out.println(title);
     }
 
