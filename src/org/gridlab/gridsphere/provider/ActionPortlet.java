@@ -50,7 +50,7 @@ public class ActionPortlet extends AbstractPortlet {
      * @param request the <code>Portletrequest</code>
      * @param page the next page to display
      */
-    protected void setNextPage(PortletRequest request, String page) {
+    protected void setNextPresentation(PortletRequest request, String page) {
         String id = request.getPortletSettings().getConcretePortletID();
         request.setAttribute(id + ".page", page);
     }
@@ -62,7 +62,7 @@ public class ActionPortlet extends AbstractPortlet {
      * @param request the <code>PortletRequest</code>
      * @return the next page to display, either the JSP to include or a method to invoke
      */
-    protected String getNextPage(PortletRequest request) {
+    protected String getNextPresentation(PortletRequest request) {
         String id = request.getPortletSettings().getConcretePortletID();
         String state = (String)request.getAttribute(id+".page");
         if (state == null) {
@@ -203,7 +203,7 @@ public class ActionPortlet extends AbstractPortlet {
                             + "."
                             + action
                             + "()";
-        setNextPage(req, ERROR_PAGE);
+        setNextPresentation(req, ERROR_PAGE);
         this.log.error(errorMessage);
     }
 
@@ -222,7 +222,7 @@ public class ActionPortlet extends AbstractPortlet {
     }
 
     /**
-     * Uses #getNextPage to either render a JSP or invoke the specified render action method
+     * Uses #getNextPresentation to either render a JSP or invoke the specified render action method
      *
      * @param request the portlet request
      * @param response the portlet response
@@ -230,7 +230,7 @@ public class ActionPortlet extends AbstractPortlet {
      * @throws IOException if an I/O error occurs
      */
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
-        String next = getNextPage(request);
+        String next = getNextPresentation(request);
         log.debug("in ActionPortlet:doView next page is= " + next);
         if (next.endsWith(".jsp"))  {
             doViewJSP(request, response, next);
@@ -242,7 +242,7 @@ public class ActionPortlet extends AbstractPortlet {
             doAction(request, response, next, paramTypes, arguments);
             formEvent.store();
 
-            next = getNextPage(request);
+            next = getNextPresentation(request);
             log.error("in doView: next page is= " + next);
             doViewJSP(request, response, next);
         }
