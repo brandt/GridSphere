@@ -12,9 +12,8 @@ import org.gridlab.gridsphere.tags.web.element.ActionLinkBean;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.tagext.TagSupport;
 
-public class ActionLinkTag extends TagSupport {
+public class ActionLinkTag extends BaseTag {
 
     private String action;
     private String label;
@@ -37,17 +36,22 @@ public class ActionLinkTag extends TagSupport {
         return label;
     }
 
-    public ActionLinkBean getActionlink() {
+    /*
+    public ActionLinkBean getActionLink() {
         return actionlink;
     }
 
-    public void setActionlink(ActionLinkBean actionlink) {
+    public void setActionLink(ActionLinkBean actionlink) {
         this.actionlink = actionlink;
     }
+    */
 
     public void createActionURI() {
         PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
         someURI = res.createURI();
+        if (bean.equals("")) {
+            this.htmlelement = new ActionLinkBean(someURI, action, label);
+        }
         DefaultPortletAction portletAction = new DefaultPortletAction(action);
         pageContext.setAttribute("_action", portletAction);
     }
