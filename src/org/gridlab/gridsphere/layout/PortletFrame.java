@@ -361,6 +361,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 renderParams.clear();
                 onlyRender = false;
 
+                System.err.println("clearing render params");
+
                 try {
                     PortletInvoker.actionPerformed((String)request.getAttribute(SportletProperties.PORTLETID), action, request, res);
                 } catch (PortletException e) {
@@ -428,9 +430,23 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     }
 
     private void addRenderParams(PortletRequest req) {
+        // first get rid of existing render params
+        Iterator it;
+        if (onlyRender) {
+            it = renderParams.keySet().iterator();
+            while (it.hasNext()) {
+                String key = (String)it.next();
+                if (key.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
+                    if (req.getParameter(key) == null) {
+                        //System.err.println("removing existing render param " + key);
+                        renderParams.remove(key);
+                    }
+                }
+            }
+        }
         Map tmpParams = (Map)req.getParameterMap();
             if (tmpParams != null) {
-                Iterator it = tmpParams.keySet().iterator();
+                it = tmpParams.keySet().iterator();
                 while (it.hasNext()) {
                     String key = (String)it.next();
                     String[] paramValues = req.getParameterValues( key );
@@ -441,6 +457,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 }
             }
     }
+
     /**
      * Renders the portlet frame component
      *
@@ -460,6 +477,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 addRenderParams(req);
             }
         }
+        onlyRender = true;
 
         User user = req.getUser();
         if (!(user instanceof GuestUser)) {
