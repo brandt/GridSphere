@@ -67,7 +67,20 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     }
 
     private SessionFactory getProjectFactory(String persistenceConfigDir) {
-        Properties hibernateProperties = loadProperties(persistenceConfigDir + File.separator + "hibernate.properties");
+
+        Properties hibernateProperties = null;
+
+        String filename = persistenceConfigDir + File.separator + "hibernate.properties";
+        File file = new File(filename);
+
+        // if there is no prop file use the one from gridsphere
+        if (!file.exists()) {
+            hibernateProperties = loadProperties();
+            log.info("PersistenceManager: no hibernate.properties defined, using the gridsphere defaults!");
+        } else {
+            hibernateProperties = loadProperties(filename);
+        }
+
         Configuration cfg = loadConfiguration(persistenceConfigDir, hibernateProperties);
         SessionFactory factory = null;
 
