@@ -8,9 +8,8 @@ import org.gridlab.gridsphere.portlet.PortletRole;
  */
 public class SportletRoleInfo {
 
-    private transient PortletRole portletRole;
+    private String portletRole;
     private String portletClass = new String();
-    private String role = new String();
     private String oid = new String();
 
     public String getOid() {
@@ -22,20 +21,19 @@ public class SportletRoleInfo {
     }
 
     public PortletRole getPortletRole() {
-        return portletRole;
+        return PortletRole.toPortletRole(portletRole);
     }
 
     public void setPortletRole(PortletRole portletRole) {
-        this.portletRole = portletRole;
+        this.portletRole = portletRole.toString();
     }
 
     public String getRole() {
-        return portletRole.getName();
+        return portletRole;
     }
 
     public void setRole(String role) {
-        portletRole = PortletRole.toPortletRole(role);
-        this.role = role;
+        portletRole = role;
     }
 
     /**
@@ -50,9 +48,9 @@ public class SportletRoleInfo {
     /**
      * Sets the concrete PortletClass.
      *
-     * @param concreteID id od the portletclass
+     * @param portletClass id od the portletclass
      */
-    public void setPortletClass(String concreteID) {
+    public void setPortletClass(String portletClass) {
         this.portletClass = portletClass;
     }
 

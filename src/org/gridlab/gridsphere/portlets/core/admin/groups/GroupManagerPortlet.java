@@ -207,13 +207,13 @@ public class GroupManagerPortlet extends ActionPortlet {
 
                         //tb2.setValue(conc.getPortletSettings().getDescription(loc, null));
                         ListBoxItemBean item = new ListBoxItemBean();
-                        item.setValue("USER");
+                        item.setValue(PortletRole.USER.getName());
                         lb.addBean(item);
                         item = new ListBoxItemBean();
-                        item.setValue("ADMIN");
+                        item.setValue(PortletRole.ADMIN.getName());
                         lb.addBean(item);
                         item = new ListBoxItemBean();
-                        item.setValue("SUPER");
+                        item.setValue(PortletRole.SUPER.getName());
                         lb.addBean(item);
                         newtc = new TableCellBean();
                         newtc.addBean(lb);
@@ -253,6 +253,7 @@ public class GroupManagerPortlet extends ActionPortlet {
                     if (cb.isSelected()) {
                         String reqRole = lb.getSelectedValue();
                         SportletRoleInfo portletRoleInfo = new SportletRoleInfo();
+                        System.err.println("concID= " + concID);
                         portletRoleInfo.setPortletClass(concID);
                         portletRoleInfo.setPortletRole(PortletRole.toPortletRole(reqRole));
                         portletRoles.add(portletRoleInfo);
@@ -260,6 +261,12 @@ public class GroupManagerPortlet extends ActionPortlet {
                 }
             }
         }
+
+        it = portletRoles.iterator();
+            while (it.hasNext()) {
+                SportletRoleInfo info = (SportletRoleInfo)it.next();
+                System.err.println("role= " + info.getRole() + " class=" + info.getPortletClass());
+            }
 
         User user = evt.getPortletRequest().getUser();
         TextFieldBean groupTF = evt.getTextFieldBean("groupNameTF");
@@ -595,8 +602,8 @@ public class GroupManagerPortlet extends ActionPortlet {
             if (groupEntryUser.getID().equals(root.getID())) {
                 layoutMgr.addApplicationTab(evt.getPortletRequest(), group.getName());
             }
-            layoutMgr.addApplicationTab(groupEntryUser, group.getName());
-            layoutMgr.reloadPage(evt.getPortletRequest());
+            //layoutMgr.addGroupTab(groupEntryUser, group.getName());
+            //layoutMgr.reloadPage(evt.getPortletRequest());
         } else {
             log.debug("Unable to get user: " + groupEntryUserID);
         }
