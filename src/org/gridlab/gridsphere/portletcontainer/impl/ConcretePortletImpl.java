@@ -44,8 +44,8 @@ public class ConcretePortletImpl implements ConcretePortlet {
     private List groupList = new Vector();
     private List languageList = new Vector();
     private String defaultLocale = "en_US";
-    private PortletGroup ownerGroup = SportletGroup.getBaseGroup();
-    private PortletRole ownerRole = SportletRole.getGuestRole();
+    private PortletGroup ownerGroup = PortletGroup.BASE;
+    private PortletRole ownerRole = PortletRole.GUEST;
     private SportletSettings sportletSettings = null;
     private PortletApp portletApp = null;
 
@@ -134,9 +134,9 @@ public class ConcretePortletImpl implements ConcretePortlet {
 
         // Get groups list
         List groups = concPortInfo.getGroupList();
-
+        Iterator knownGroupsIt = knownGroups.iterator();
         // Make sure groups exist
-        while (knownGroups.iterator().hasNext()) {
+        while (knownGroupsIt.hasNext()) {
             PortletGroup pg = (PortletGroup)knownGroups.iterator().next();
             while (groups.iterator().hasNext()) {
                 if (pg.getName().equalsIgnoreCase((String)groups.iterator().next())) {
@@ -148,25 +148,29 @@ public class ConcretePortletImpl implements ConcretePortlet {
 
         // groupList should at least contain BASE group if empty
         if (groupList.isEmpty()) {
-            groupList.add(SportletGroup.getBaseGroup());
+            groupList.add(PortletGroup.BASE);
         }
 
         // Get roles list
+        /*
         List roles = concPortInfo.getRoleList();
+        Iterator knownRolesIt = knownRoles.iterator();
         // Make sure roles exist
-        while (knownRoles.iterator().hasNext()) {
-            PortletRole pr = (PortletRole)knownRoles.iterator().next();
-            while (roles.iterator().hasNext()) {
-                if (pr.getRoleName().equalsIgnoreCase((String)roles.iterator().next())) {
+        while (knownRolesIt.hasNext()) {
+            PortletRole pr = (PortletRole)knownRolesIt.next();
+            Iterator rolesIt = roles.iterator();
+            while (rolesIt.hasNext()) {
+                if (pr.getRoleName().equalsIgnoreCase((String)rolesIt.next())) {
                     roleList.add(pr);
                     break;
                 }
             }
         }
+        */
 
         // roleList should at least contain GUEST role if empty
         if (roleList.isEmpty()) {
-            roleList.add(SportletRole.getGuestRole());
+            roleList.add(PortletRole.GUEST);
         }
 
         owner = concPortInfo.getOwner();
@@ -183,7 +187,7 @@ public class ConcretePortletImpl implements ConcretePortlet {
 
         String roleName = owner.getGroupName();
         it = knownRoles.iterator();
-
+        /*
         while (it.hasNext()) {
             PortletRole role = (PortletRole)it.next();
             if (role.getRoleName().equalsIgnoreCase(groupName)) {
@@ -191,7 +195,7 @@ public class ConcretePortletImpl implements ConcretePortlet {
                 break;
             }
         }
-
+        */
         owner.setGroup(ownerGroup);
         owner.setRole(ownerRole);
 
