@@ -9,6 +9,7 @@
     <ant dir="DevelopersGuide" target="install" inheritAll="false"/> 
     <ant dir="UsersGuide" target="install" inheritAll="false"/>
     <ant dir="TagGuide" target="install" inheritAll="false"/>
+    <ant dir="FAQ" target="install" inheritAll="false"/>
 </target>
 
 </project>
