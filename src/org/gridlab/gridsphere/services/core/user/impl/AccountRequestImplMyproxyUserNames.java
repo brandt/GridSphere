@@ -15,10 +15,9 @@ import org.gridlab.gridsphere.core.persistence.castor.StringVector;
 public class AccountRequestImplMyproxyUserNames extends StringVector {
 
     /**
-     * @field-type org.gridlab.gridsphere.services.user.impl.AccountRequestImpl
      * @sql-name reference
      */
-    private AccountRequestImpl Reference;
+    private org.gridlab.gridsphere.services.core.user.impl.AccountRequestImpl Reference;
 
 }
 

@@ -12,8 +12,8 @@ import org.gridlab.gridsphere.services.grid.security.credential.CredentialMappin
 import org.gridlab.gridsphere.services.grid.security.credential.CredentialMappingRequest;
 import org.gridlab.gridsphere.services.grid.security.credential.CredentialMapping;
 
-/*
- *  credentialmappingrequest
+/**
+ * @table credentialmappingrequest
  */
 public class GlobusCredentialMappingRequest
         extends GlobusCredentialMapping

@@ -1,11 +1,11 @@
 <%@ page import="org.gridlab.gridsphere.services.grid.security.credential.CredentialPermission,
-                 org.gridlab.gridsphere.portlets.core.beans.CredentialPermissionBean,
+                 org.gridlab.gridsphere.portlets.grid.beans.CredentialPermissionBean,
                  java.util.List" %>
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 <jsp:useBean id="credentialPermissionBean"
-             class="org.gridlab.gridsphere.portlets.core.beans.CredentialPermissionBean"
+             class="org.gridlab.gridsphere.portlets.grid.beans.CredentialPermissionBean"
              scope="request"/>
 <% List credentialPermissionList = credentialPermissionBean.getCredentialPermissionList(); %>
     <form name="CredentialPermissionPortlet" method="POST"

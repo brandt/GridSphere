@@ -6,12 +6,13 @@
  * To change template for new class use 
  * Code Style | Class Templates options (Tools | IDE Options).
  */
-package org.gridlab.gridsphere.portlets.core.beans;
+package org.gridlab.gridsphere.portlets.grid.beans;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.services.grid.security.credential.*;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.grid.security.credential.CredentialManagerService;
+import org.gridlab.gridsphere.portlets.core.beans.PortletBean;
 
 import java.util.List;
 

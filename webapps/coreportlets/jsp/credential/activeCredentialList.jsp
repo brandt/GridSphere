@@ -1,11 +1,11 @@
 <%@ page import="org.gridlab.gridsphere.services.grid.security.credential.Credential,
-                 org.gridlab.gridsphere.portlets.core.beans.ActiveCredentialBean,
+                 org.gridlab.gridsphere.portlets.grid.beans.ActiveCredentialBean,
                  java.util.List" %>
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 <jsp:useBean id="activeCredentialBean"
-             class="org.gridlab.gridsphere.portlets.core.beans.ActiveCredentialBean"
+             class="org.gridlab.gridsphere.portlets.grid.beans.ActiveCredentialBean"
              scope="request"/>
 <form name="ActiveCredentialPortlet" method="POST"
       action="<%=activeCredentialBean.getPortletActionURI(ActiveCredentialBean.ACTION_ACTIVE_CREDENTIAL_LIST)%>">
