@@ -14,16 +14,11 @@ import org.gridlab.gridsphere.portlets.core.tomcat.TomcatWebAppResult;
 import org.gridlab.gridsphere.tags.event.FileFormEvent;
 import org.gridlab.gridsphere.tags.event.FileFormException;
 import org.gridlab.gridsphere.tags.event.impl.FileFormEventImpl;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.FileUpload;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
-import java.io.File;
 import java.util.List;
 import java.util.Map;
-import java.util.Iterator;
 
 /**
  * The PortletApplicationManager is a wrapper for the Tomcat manager webapp in 4.1.X which allows dynamic
@@ -71,8 +66,6 @@ public class PortletApplicationManager extends AbstractPortlet {
                 } catch (FileFormException ffe) {
                     log.error("Unable to save file from form: " + ffe.getMessage());
                 }
-
-
 
                 /* Remove old portlet web app if it exists */
                 int idx = -1;
