@@ -39,14 +39,13 @@ class ApplicationPortletImpl implements ApplicationPortlet {
     private ApplicationPortletImpl() {}
 
     /**
-     * Constructs an ApplicationPortletImpl
+     * Constructs an instance of ApplicationPortletImpl
      *
-     * @param pdd a <code>PortletDeploymentDescriptor</code>
      * @param portletDef a <code>SportletDefinition</code>
      * @param webApplication the web application name for this application portlet
      * @param context the <code>ServletContext</code> containing this application portlet
      */
-    public ApplicationPortletImpl(PortletDeploymentDescriptor pdd, SportletDefinition portletDef,
+    public ApplicationPortletImpl(SportletDefinition portletDef,
                                   String webApplication, ServletContext context) {
 
         this.webAppName = webApplication;
@@ -76,7 +75,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
         concretePortlets = new Vector();
         while (it.hasNext()) {
             ConcreteSportletDefinition concSportlet = (ConcreteSportletDefinition) it.next();
-            ConcretePortlet concretePortlet = new ConcreteSportlet(pdd, appPortletConfig, concSportlet);
+            ConcretePortlet concretePortlet = new ConcreteSportlet(appPortletConfig, concSportlet);
             concretePortlets.add(concretePortlet);
         }
         applicationPortletID = appPortletConfig.getApplicationPortletID();

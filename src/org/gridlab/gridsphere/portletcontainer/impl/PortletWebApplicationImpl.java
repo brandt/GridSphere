@@ -105,7 +105,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         // Iterate thru portlet definitions for portlet applications
         while (portletDefs.hasNext()) {
             SportletDefinition portletDef = (SportletDefinition) portletDefs.next();
-            ApplicationPortlet portletApp = new ApplicationPortletImpl(pdd, portletDef, webApplicationName, ctx);
+            ApplicationPortlet portletApp = new ApplicationPortletImpl(portletDef, webApplicationName, ctx);
             String portletAppID = portletApp.getApplicationPortletID();
             appPortlets.put(portletAppID, portletApp);
         }
