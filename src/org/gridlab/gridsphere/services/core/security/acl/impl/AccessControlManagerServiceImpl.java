@@ -32,8 +32,6 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     private String jdoGroupRequest = GroupRequestImpl.class.getName();
     private String jdoPortletGroup = SportletGroup.class.getName();
 
-    private static boolean isInitialized = false;
-
     public AccessControlManagerServiceImpl() {
 
     }
@@ -43,57 +41,8 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     }
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-        if (!isInitialized) {
-            initGroups();
-        }
-        isInitialized = true;
+
     }
-
-    private void initGroups() {
-        log.info("Entering initGroups()");
-
-        //initSportletGroup((SportletGroup)SportletGroup.SUPER);
-        //initSportletGroup((SportletGroup) PortletGroupFactory.GRIDSPHERE_GROUP);
-
-        // NO MORE CREATING GROUPS FROM WEBAPP NAMES
-        /*
-        List webappNames = pms.getPortletWebApplicationNames();
-        Iterator it = webappNames.iterator();
-        while (it.hasNext()) {
-            String groupName = (String)it.next();
-            System.err.println(groupName);
-            if (!existsGroupWithName(groupName)) {
-                log.info("creating group " + groupName);
-                registry.getAllConcretePortletIDs();
-                createGroup(groupName);
-            }
-        }
-        */
-
-        // Creating groups
-        log.info("Entering initGroups()");
-    }
-    /*
-    private void initSportletGroup(SportletGroup group) {
-        String groupName = group.getName();
-        if (!existsGroupWithName(groupName)) {
-            try {
-                log.info("Creating group...." + groupName);
-                pm.create(group);
-            } catch (Exception e) {
-                log.error("Error creating group " + groupName, e);
-            }
-        } else {
-            try {
-                log.info("Resetting group...." + groupName);
-                PortletGroup realGroup = this.getGroupByName(groupName);
-                group.setID(realGroup.getID());
-            } catch (Exception e) {
-                log.error("Error resetting group " + groupName, e);
-            }
-        }
-    }
-     */
 
     public void destroy() {
         log.info("Calling destroy()");
@@ -429,19 +378,19 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
             PortletGroup group = (PortletGroup)it.next();
             Set roleList = group.getPortletRoleList();
             Iterator roleIt = roleList.iterator();
-            System.err.println("group= " + group.getName());
+            //System.err.println("group= " + group.getName());
             while (roleIt.hasNext()) {
                 SportletRoleInfo roleInfo = (SportletRoleInfo)roleIt.next();
-                System.err.println("class= " + roleInfo.getPortletClass());
+                //System.err.println("class= " + roleInfo.getPortletClass());
                 if (roleInfo.getPortletClass().equals(portletID)) {
                     // check if user has this group
                     found = true;
                     if (userGroups.contains(group)) {
-                        System.err.println("group= " + group.getName());
+                        //System.err.println("group= " + group.getName());
                         PortletRole usersRole = this.getRoleInGroup(user, group);
-                        System.err.println("usersRole= " + usersRole);
+                        //System.err.println("usersRole= " + usersRole);
                         PortletRole reqRole = PortletRole.toPortletRole(roleInfo.getRole());
-                        System.err.println("reqRole= " + reqRole);
+                        //System.err.println("reqRole= " + reqRole);
                         if (usersRole.compare(usersRole, reqRole) >= 0) {
                             if (checkAdmin) {
                                 if (usersRole.compare(usersRole, PortletRole.ADMIN) >= 0) {
