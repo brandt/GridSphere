@@ -24,8 +24,8 @@ public interface PortletGroup {
     public boolean isBaseGroup();
 
     /**
-     * Tests to see if this group object is a <code>BSUPER</code>
-     * group that every user is a member of by default.
+     * Tests to see if this group object is a <code>SUPER</code>
+     * group that every super user is a member of by default.
      *
      * @return <code>true</code> if this group is a <code>SUPER</group>,
      * returns <code>false</code> otherwise.

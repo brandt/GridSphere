@@ -110,7 +110,7 @@ public abstract class PortletAdapter extends Portlet {
      * @throws IOException if the streaming causes an I/O problem
      */
     public void service(PortletRequest request, PortletResponse response) throws PortletException, IOException {
-        // There must be a portlet ID to knwo which portlet to service
+        // There must be a portlet ID to know which portlet to service
         String portletID = (String) request.getAttribute(GridSphereProperties.PORTLETID);
         if (portletID == null) {
             // it may be in the request parameter

@@ -36,13 +36,10 @@ public interface SportletRequest extends PortletRequest {
      * If no group is specified, the roles the user has in the <code>BASE</code>
      * group are returned.
      *
-     * @param group the PortletGroup to query the user's roles or null if
-     * <code>BASE</code> group
-     * @param roles an array of PortletRole objects
-     *
-     * @see PortletRole
+     * @param group the user's <code>PortletGroup</code>
+     * @param role the user's <code>PortletRole</code>
      */
-    public void setRoles(PortletGroup group, List roles);
+    public void setRole(PortletGroup group, PortletRole role);
 
     /**
      * Returns the roles this user has in the supplied <code>PortletGroup</code>.
@@ -51,11 +48,9 @@ public interface SportletRequest extends PortletRequest {
      *
      * @param group the <code>PortletGroup</code> to query the user's roles or null if
      * <code>BASE</code> group
-     * @return an array of <code>PortletRole</code> objects
-     *
-     * @see PortletRole
+     * @return the user's <code>PortletRole</code>
      */
-    public List getRoles(PortletGroup group);
+    public PortletRole getRole(PortletGroup group);
 
     /**
      * Returns the <code>PortletGroup</code> objects representing the users
@@ -99,10 +94,10 @@ public interface SportletRequest extends PortletRequest {
     public void setPreviousMode(Portlet.Mode previousMode);
 
     /**
-     * Returns the window that the portlet is running in.
+     * Returns the window state that the portlet is running in.
      *
-     * @param window the portlet window
+     * @param state the portlet window state
      */
-    public void setWindow(PortletWindow window);
+    public void setWindowState(PortletWindow.State state);
 
 }

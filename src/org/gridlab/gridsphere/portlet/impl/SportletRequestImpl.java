@@ -201,31 +201,31 @@ public class SportletRequestImpl implements SportletRequest {
      * Returns the roles this user has in the supplied PortletGroup. If no group
      * is specified, the roles the user has in the BASE group are returned.
      *
-     * @param group the PortletGroup to query the user's roles or null if BASE group
+     * @param group the PortletGroup to query the user's roles
      * @return an array of PortletRole objects
      *
      * @see PortletRole
      */
-    public List getRoles(PortletGroup group) {
-        List roles = (List) req.getAttribute(GridSphereProperties.PORTLETROLES);
-        if (roles == null) {
-            roles = new ArrayList();
-            roles.add(PortletRole.GUEST);
-        }
-        return roles;
+    public PortletRole getRole(PortletGroup group) {
+        Map authMap = (Map) req.getAttribute(GridSphereProperties.GROUPROLES);
+        if ((group == null) || (authMap == null)) return PortletRole.GUEST;
+
+        PortletRole role = (PortletRole)authMap.get(group);
+        return (role == null) ? PortletRole.GUEST : role;
     }
 
     /**
      * Sets the roles this user has in the supplied PortletGroup. If no group
      * is specified, the roles the user has in the BASE group are returned.
      *
-     * @param group the PortletGroup to query the user's roles or null if BASE group
-     * @param roles an array of PortletRole objects
-     *
-     * @see PortletRole
+     * @param group the PortletGroup
+     * @param role a PortletRole objects
      */
-    public void setRoles(PortletGroup group, List roles) {
-        req.setAttribute(GridSphereProperties.PORTLETROLES, roles);
+    public void setRole(PortletGroup group, PortletRole role) {
+        Map authMap = (Map)req.getAttribute(GridSphereProperties.GROUPROLES);
+        if (authMap == null) authMap =  new HashMap();
+        authMap.put(group, role);
+        req.setAttribute(GridSphereProperties.GROUPROLES, authMap);
     }
 
 
@@ -325,17 +325,17 @@ public class SportletRequestImpl implements SportletRequest {
      *
      * @return the portlet window
      */
-    public PortletWindow getWindow() {
-        return (PortletWindow) req.getAttribute(GridSphereProperties.PORTLETWINDOW);
+    public PortletWindow.State getWindowState() {
+        return (PortletWindow.State) req.getAttribute(GridSphereProperties.PORTLETWINDOW);
     }
 
     /**
-     * Returns the window that the portlet is running in.
+     * Returns the window state that the portlet is running in.
      *
-     * @param window the portlet window
+     * @param state the portlet window state
      */
-    public void setWindow(PortletWindow window) {
-        req.setAttribute(GridSphereProperties.PORTLETWINDOW, window);
+    public void setWindowState(PortletWindow.State state) {
+        req.setAttribute(GridSphereProperties.PORTLETWINDOW, state);
     }
 
     /**

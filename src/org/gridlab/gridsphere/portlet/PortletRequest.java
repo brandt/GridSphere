@@ -122,15 +122,14 @@ public interface PortletRequest extends HttpServletRequest {
      * <code>BASE</code> group are returned.
      *
      * @param group the <code>PortletGroup </code>to query the user's roles
-     * or <code>null</code> if <code>BASE</code> group
-     * @return an array of PortletRole objects
+     * @return the user's <code>PortletRole</code>
      */
-    public List getRoles(PortletGroup group);
+    public PortletRole getRole(PortletGroup group);
 
     /**
      * Returns the PortletGroup objects representing the users group membership
      *
-     * @return an array of PortletGroup objects
+     * @return an array of <code>PortletGroup</code> objects
      */
     public List getGroups();
 
@@ -302,10 +301,10 @@ public interface PortletRequest extends HttpServletRequest {
     public Portlet.Mode getPreviousMode();
 
     /**
-     * Returns the window that the portlet is running in.
+     * Returns the window state that the portlet is running in.
      *
-     * @return the portlet window
+     * @return the portlet window state
      */
-    public PortletWindow getWindow();
+    public PortletWindow.State getWindowState();
 
 }
