@@ -33,17 +33,24 @@ listed below may be used in creating a layout descriptor. For more details on co
             </para>
         </listitem>
     </varlistentry>
-    <varlistentry><term>PortletPanel</term>
+    <varlistentry><term>PortletTableLayout</term>
         <listitem>
             <para>
-                A panel contains a portlet layout which is responsible for component layout
+                Lays out components within a table
             </para>
         </listitem>
     </varlistentry>
-    <varlistentry><term>PortletGridLayout</term>
+    <varlistentry><term>PortletRowLayout</term>
         <listitem>
             <para>
-                Lays out components in a grid
+                Lays out components inside of a row
+            </para>
+        </listitem>
+    </varlistentry>
+    <varlistentry><term>PortletColumnLayout</term>
+        <listitem>
+            <para>
+                Lays out components inside of a column
             </para>
         </listitem>
     </varlistentry>
@@ -90,27 +97,33 @@ double-tabbed pane. An example illustration is shown:
         &lt;portlet-tabbed-pane style="sub-menu"&gt;  <co id="tab.pane2"/>
             &lt;portlet-tab&gt;
                 &lt;title&gt;Simple Examples&lt;/title&gt;
-                &lt;portlet-panel&gt;
-                    &lt;grid-layout columns="50,50"&gt;    <co id="grid.layout"/>
-                        &lt;portlet-frame&gt; <co id="frame"/>
-                            &lt;portlet-class&gt;org.myorg.portlets.examples.simpleone.1&lt;/portlet-class&gt;
-                        &lt;/portlet-frame&gt;
-                        &lt;portlet-frame label="simpletwo"&gt; <co id="label"/>
-                            &lt;portlet-class&gt;org.myorg.portlets.examples.simpletwo.1&lt;/portlet-class&gt;
-                        &lt;/portlet-frame&gt;
-                    &lt;/grid-layout&gt;
-                &lt;/portlet-panel&gt;
+                &lt;table-layout&gt;    <co id="table.layout"/>
+                    &lt;row-layout&gt;  <co id="row.layout"/>
+                        &lt;column-layout width="50%&gt; <co id="column.layout"/>
+                            &lt;portlet-frame&gt; <co id="frame"/>
+                                &lt;portlet-class&gt;org.myorg.portlets.examples.simpleone.1&lt;/portlet-class&gt;
+                            &lt;/portlet-frame&gt;
+                        &lt;/column-layout width="50%&gt;
+                        &lt;column-layout width="50%&gt;
+                            &lt;portlet-frame label="simpletwo"&gt; <co id="label"/>
+                                &lt;portlet-class&gt;org.myorg.portlets.examples.simpletwo.1&lt;/portlet-class&gt;
+                            &lt;/portlet-frame&gt;
+                        &lt;/column-layout&gt;
+                    &lt;/row-layout&gt;
+                &lt;/table-layout&gt;
             &lt;/portlet-tab&gt;
             &lt;portlet-tab&gt;
                 &lt;title&gt;Demos&lt;/title&gt;
-                &lt;portlet-panel&gt;
-                    &lt;grid-layout&gt;
-                        &lt;portlet-frame&gt;
-                            &lt;name&gt;DemoPortlet&lt;/name&gt;
-                            &lt;portlet-class&gt;org.gridlab.gridsphere.portlets.examples.DemoPortlet.1&lt;/portlet-class&gt;
-                        &lt;/portlet-frame&gt;
-                    &lt;/grid-layout&gt;
-                &lt;/portlet-panel&gt;
+                &lt;table-layout&gt;
+                    &lt;row-layout&gt;
+                        &lt;column-layout&gt;
+                            &lt;portlet-frame&gt;
+                                &lt;name&gt;DemoPortlet&lt;/name&gt;
+                                &lt;portlet-class&gt;org.gridlab.gridsphere.portlets.examples.DemoPortlet.1&lt;/portlet-class&gt;
+                            &lt;/portlet-frame&gt;
+                        &lt;/column-layout&gt;
+                    &lt;/row-layout&gt;
+                &lt;/table-layout&gt;
             &lt;/portlet-tab&gt;
         &lt;/portlet-tabbed-pane&gt;
     &lt;/portlet-tab&gt;
@@ -133,15 +146,25 @@ double-tabbed pane. An example illustration is shown:
                 <varname>portlet-panel</varname>
             </para>
             </callout>
-            <callout arearefs="grid.layout">
+            <callout arearefs="table.layout">
             <para>
-                Currently, the only supported panel layout is the grid layout. The <varname>columns</varname>
-                is a comma delimited list of values that represent the column sizes and must all add up to 100.
+                The table layout lays out components into a table using nested row-layout and column-layouts.
+            </para>
+            </callout>
+            <callout arearefs="row.layout">
+            <para>
+                The row layout lays out components into a table row using nested column-layouts.
+            </para>
+            </callout>
+            <callout arearefs="column.layout">
+            <para>
+                The table layout lays out components into a column whose width is defined by the width attribute as
+                a relative percentage.
             </para>
             </callout>
             <callout arearefs="frame">
             <para>
-                The portlet frame is specified as the concrete portlet id representing the portlet class
+                The portlet frame is specified as the concrete portlet id representing the portlet class.
             </para>
             </callout>
             <callout arearefs="label">
