@@ -124,7 +124,7 @@ public class MessagingServicesPortlet extends ActionPortlet {
         FrameBean serviceFrame = event.getFrameBean("serviceframe");
         serviceFrame.setTableModel(getMessagingService(event));
         List services = tms.getActiveServices();
-        event.getPortletRequest().setAttribute("services", new Integer(services.size()));
+        event.getPortletRequest().setAttribute("services", new String()+services.size());
         setNextState(event.getPortletRequest(), "admin/messaging/view.jsp");
     }
 
