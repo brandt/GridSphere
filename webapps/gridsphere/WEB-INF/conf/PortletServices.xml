@@ -7,7 +7,7 @@
         <implementation>org.gridlab.gridsphere.services.registry.impl.PortletRegistryServiceImpl</implementation>
         <service-config>
             <param-name>coreContext</param-name>
-            <param-value>coreportlets</param-value>
+            <param-value>coreportlets, gsmanager</param-value>
         </service-config>
     </service>
 
@@ -15,6 +15,7 @@
         <name>Access Control Service</name>
         <description>Provides Access Control for Portlets</description>
         <interface>org.gridlab.gridsphere.services.security.acl.AccessControlService</interface>
+        <secure-wrapper>org.gridlab.gridsphere.services.user.impl.AccessControlServiceProxy</secure-wrapper>
         <implementation>org.gridlab.gridsphere.services.security.acl.impl.AccessControlServiceImpl</implementation>
     </service>
 
