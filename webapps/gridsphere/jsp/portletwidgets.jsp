@@ -103,7 +103,6 @@ the <code>actionPerformed(ActionEvent event)</code> portlet method.
     </tr>
     </table>
 
-
 <h4>Action Parameters</h4>
 Parameters can be associated with forms and actionlinks and can be used to perform action logic in
 the <code>actionPerformed(ActionEvent event)</code> portlet via the
@@ -131,19 +130,10 @@ Example:
 <gs:actionparam name="aparamname" value="aparamvalue"/>
     <table cellspacing=2 cellpadding=2 border=0>
     <tr>
-    <td align="right">Username: </td>
-    <td align="left">
-        <gs:textfield name="username" size="8" maxlength="20"></gs:textfield>
-    </td>
+    <td colspan=5 align="center"><gs:actionsubmit value="Yes"></gs:actionsubmit></td>
     </tr>
     <tr>
-    <td align="right">Password: </td>
-    <td align="left">
-        <gs:password name="password" size="8" maxlength="20"></gs:password>
-    </td>
-    </tr>
-    <tr>
-    <td colspan=5 align="center"><gs:input type="submit" name="option" value="Login"></gs:input></td>
+    <td colspan=5 align="center"><gs:actionsubmit value="No"></gs:actionsubmit></td>
     </tr>
     </table>
 

@@ -1,4 +1,4 @@
-<%@ page import="org.gridlab.gridsphere.portletcontainer.GridSphereProperties,
+<%@ page import="org.gridlab.gridsphere.portlet.impl.SportletProperties,
                  org.gridlab.gridsphere.portlet.*,
                  org.gridlab.gridsphere.portlets.core.LoginPortlet"%>
 

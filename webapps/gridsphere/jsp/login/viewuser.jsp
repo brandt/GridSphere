@@ -1,12 +1,13 @@
 
 <%@ page import="org.gridlab.gridsphere.portlet.*,
-                 org.gridlab.gridsphere.portletcontainer.GridSphereProperties"%>
+                 org.gridlab.gridsphere.portlet.impl.SportletProperties,
+                 org.gridlab.gridsphere.portlet.impl.SportletProperties"%>
 
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
 <portletAPI:init/>
 
-<% User user = (User)session.getAttribute(GridSphereProperties.USER); %>
+<% User user = (User)session.getAttribute(SportletProperties.PORTLET_USER); %>
 
 <table border=0 cellpadding=0 cellspacing=0 >
 <tr>
