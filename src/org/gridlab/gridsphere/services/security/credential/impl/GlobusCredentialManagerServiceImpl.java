@@ -20,6 +20,8 @@ import org.gridlab.gridsphere.services.security.credential.CredentialManagerServ
 import org.gridlab.gridsphere.core.security.*;
 import org.gridlab.gridsphere.core.security.impl.GlobusCredential;
 import org.gridlab.gridsphere.core.security.impl.GlobusCredentialRetrievalClient;
+import org.gridlab.gridsphere.core.security.impl.GlobusCredentialMapping;
+import org.gridlab.gridsphere.core.security.impl.GlobusCredentialPermission;
 
 /** Globus imports **/
 import org.globus.security.GlobusProxy;
@@ -37,6 +39,8 @@ public class GlobusCredentialManagerServiceImpl extends AbstractCredentialManage
 
     public void init(PortletServiceConfig config) {
         _log.info("Entering init()");
+        setCredentialPermissionImpl(GlobusCredentialPermission.class.getName());
+        setCredentialMappingImpl(GlobusCredentialMapping.class.getName());
         setCredentialRetrievalClient(config);
         _log.info("Exiting init()");
     }

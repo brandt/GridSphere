@@ -13,69 +13,48 @@
 package org.gridlab.gridsphere.core.security;
 
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.security.Credential;
-import org.gridlab.gridsphere.core.security.CredentialNotActiveException;
-import org.gridlab.gridsphere.core.security.CredentialPermission;
-import org.gridlab.gridsphere.core.security.CredentialPermissionNotFoundException;
-import org.gridlab.gridsphere.core.security.CredentialNotPermittedException;
-import org.gridlab.gridsphere.core.security.CredentialMap;
-import org.gridlab.gridsphere.core.security.CredentialMapNotFoundException;
-import org.gridlab.gridsphere.core.security.CredentialExpiredException;
-import org.gridlab.gridsphere.core.security.CredentialRetrievalClient;
-import org.gridlab.gridsphere.core.security.CredentialRetrievalException;
-
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.Vector;
 
 public interface CredentialManager {
 
-    /****** CREDENTIAL PERMISSION METHODS *******/
+    /****** CREDENTIAL PERMISSION PERSISTENCE METHODS *******/
 
     public List getCredentialPermissions();
 
-    public CredentialPermission getCredentialPermission(String oid);
+    public CredentialPermission getCredentialPermission(String permission);
 
-    public CredentialPermission getCredentialPermissionWithSubjectPattern(String pattern);
+    public void createCredentialPermission(CredentialPermission permission);
 
-    public void saveCredentialPermission(CredentialPermission permission);
+    public void updateCredentialPermission(CredentialPermission permission);
 
-    public void removeCredentialPermission(String oid);
+    public void deleteCredentialPermission(String permission);
 
     /****** CREDENTIAL PERMISSION CONVENIENCE METHODS *******/
 
+    public List getPermittedCredentialSubjects();
+
     public boolean isCredentialPermitted(String subject);
 
-    /****** CREDENTIAL MAP PERSISTENCE METHODS *******/
+    /****** CREDENTIAL MAPPING PERSISTENCE METHODS *******/
 
-    public List getCredentialMaps();
+    public List getCredentialMappings();
 
-    public CredentialMap getCredentialMap(String oid);
+    public CredentialMapping getCredentialMapping(String subject);
 
-    public void saveCredentialMap(CredentialMap map)
+    public void createCredentialMapping(CredentialMapping mapping)
             throws CredentialNotPermittedException;
 
-    public void removeCredentialMap(String oid);
+    public void updateCredentialMapping(CredentialMapping mapping)
+            throws CredentialNotPermittedException;
 
-    public List getCredentialMaps(User user);
+    public void deleteCredentialMapping(String subject);
 
-    public void removeCredentialMaps(User user);
+    public List getCredentialMappings(User user);
 
-    public CredentialMap getCredentialMapWithSubject(String subject);
+    public void deleteCredentialMappings(User user);
 
-    public void removeCredentialMapWithSubject(String subject);
-
-    /****** CREDENTIAL MAP CONVENIENCE METHODS *******/
+    /****** CREDENTIAL MAPPING CONVENIENCE METHODS *******/
 
     public User getCredentialUser(String subject);
 
@@ -89,19 +68,19 @@ public interface CredentialManager {
     public List getCredentialTags(User user);
 
     public String getCredentialTag(String subject)
-            throws CredentialMapNotFoundException;
+            throws MappingNotFoundException;
 
     public void setCredentialTag(String subject, String tag)
-            throws CredentialMapNotFoundException;
+            throws MappingNotFoundException;
 
     public List getCredentialHosts(String subject)
-            throws CredentialMapNotFoundException;
+            throws MappingNotFoundException;
 
     public void addCredentialHost(String subject, String host)
-            throws CredentialMapNotFoundException;
+            throws MappingNotFoundException;
 
     public void removeCredentialHost(String subject, String host)
-            throws CredentialMapNotFoundException;
+            throws MappingNotFoundException;
 
     public List getCredentialSubjectsForHost(String host);
 
@@ -131,6 +110,8 @@ public interface CredentialManager {
     public void destroyCredential(String subject);
 
     public void destroyCredentials(User user);
+
+    /****** CREDENTIAL USEAGE METHODS *******/
 
     public List getActiveCredentials(User user);
 

@@ -14,64 +14,39 @@ package org.gridlab.gridsphere.core.security;
 
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.User;
 
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 
-public final class CredentialPermission extends BaseObject {
-
-    private String subjectPattern= null;
-    private String description = null;
-
-    /**
-     * The default constructor is private so that it can never be called.
-     */
-    private CredentialPermission() {
-    }
+/**
+ * @table credentialpermission
+ */
+public interface CredentialPermission {
 
     /**
-     * Constructs a <code>CredentialPermission</code> with the given subject pattern.
      */
-    public CredentialPermission(String subjectPattern) {
-        this.subjectPattern = subjectPattern;
-        this.description = "";
-    }
+    public String getPermittedSubjects();
 
-    /** 
-     * Returns the subject pattern described by this credential permission.
-     *
-     * @return <code>String</code> The subject patternt.
+    /**
      */
-    public String getSubjectPattern() {
-        return this.subjectPattern;
-    }
+    public void setPermittedSubjects(String pattern);
 
-    /** 
-     * Returns the description of this credential permission.
-     *
-     * @return <code>String</code> The description.
+    /**
      */
-    public String getDescription() {
-        return this.description;
-    }
+    public String getDescription();
 
-    /** 
-     * Sets the description of this credential permission.
-     *
-     * @param <code>String</code> The description.
+    /**
      */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    
-    /** 
-     * Returns true if the given credential subject matches the subject pattern 
-     * described by this credential permission, false otherwise.
-     * <p>
-     * <strong>NOTE: NOT YET IMPLEMENTED</strong>
-     * <p>
-     * @param <code>String</code> The credential subject in question.
+    public void setDescription(String description);
+
+    /**
      */
-    public boolean isSubjectPermitted(String subject) {
-        return false;
-    }
+    public boolean isCredentialPermitted(String subject);
+
 }
