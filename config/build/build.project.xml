@@ -179,7 +179,7 @@ Copyright:
     <!-- Database stuff                                         -->
     <!-- =================================================================== -->
 
-    <target name="createdatabase" depends="setenv">
+    <target name="create-database" depends="setenv">
           <taskdef name="schemaexport"
               classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask"
               classpathref="classpath"/>
@@ -198,7 +198,7 @@ Copyright:
       </target>
 
 
-        <target name="updatedatabase" depends="setenv, compile">
+        <target name="update-database" depends="setenv, compile">
         <taskdef name="schemaupdate"
             classname="net.sf.hibernate.tool.hbm2ddl.SchemaUpdateTask"
             classpathref="classpath"/>
