@@ -28,6 +28,7 @@ public class TableTagImpl extends BaseComponentTagImpl implements TableTag {
     protected boolean isZebra = false;
     protected int rowCount = 0;
     protected int maxRows = -1;
+    protected int currentPage = 0;
 
     /**
      * Sets the table model associated with this table
@@ -169,6 +170,14 @@ public class TableTagImpl extends BaseComponentTagImpl implements TableTag {
 
     public boolean getZebra() {
         return isZebra;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
     }
 
     public void incrementRowCount() {
