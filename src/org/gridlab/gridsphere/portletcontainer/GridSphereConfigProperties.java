@@ -88,6 +88,11 @@ public interface GridSphereConfigProperties {
      */
     public static final String GRIDSPHERE_LAYOUT_MAPPING = "GRIDSPHERE_LAYOUT_MAPPING";
 
+    /**
+     * Default theme to use
+     */
+    public static final String GRIDSPHERE_DEFAULT_THEME = "GRIDSPHERE_DEFAULT_THEME";
+
 
     /**
      * Directory containing user layouts
