@@ -1,11 +1,11 @@
 <%@ page import="org.gridlab.gridsphere.portlet.User,
-                 org.gridlab.gridsphere.portlets.core.beans.UserManagerBean,
+                 org.gridlab.gridsphere.portlets.core.user.UserManagerBean,
                  java.util.List" %>
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 <jsp:useBean id="userManagerBean"
-             class="org.gridlab.gridsphere.portlets.core.beans.UserManagerBean"
+             class="org.gridlab.gridsphere.portlets.core.user.UserManagerBean"
              scope="request"/>
 <gs:form action="doDeleteUser">
   <input type="hidden" name="userID" value="<%=userManagerBean.getUserID()%>"/>

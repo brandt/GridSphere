@@ -1,5 +1,5 @@
 <%@ page import="org.gridlab.gridsphere.portlet.User,
-                 org.gridlab.gridsphere.portlets.core.beans.UserManagerBean,
+                 org.gridlab.gridsphere.portlets.core.user.UserManagerBean,
                  java.util.List,
                  org.gridlab.gridsphere.portlet.PortletRole,
                  org.gridlab.gridsphere.portlet.PortletGroup,
@@ -7,20 +7,12 @@
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
-<jsp:useBean id="userManagerBean"
-             class="org.gridlab.gridsphere.portlets.core.beans.UserManagerBean"
-             scope="request"/>
 <gs:form action="doViewUser">
-  <input type="hidden" name="userID" value="<%=userManagerBean.getUserID()%>"/>
-<table class="portlet-pane" cellspacing="1">
+<gs:hiddenfield bean="userID"/>
+<table class="portlet-pane" cellspacing="1" width="100%">
   <tr>
     <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-title">
-              View User [<%=userManagerBean.getUserName()%>]
-          </td>
-        </tr>
+       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-actions">
             <gs:submit name="doListUser" value="List Users"/>
@@ -37,50 +29,50 @@
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-label" width="200">
-             User Name:&nbsp;
+             <gs:text text="User Name:"/>
           </td>
           <td class="portlet-frame-text">
-             <%=userManagerBean.getUserName()%>
+             <gs:text bean="userName"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             Family Name:&nbsp;
+             <gs:text text="Family Name:"/>
           </td>
           <td class="portlet-frame-text">
-             <%=userManagerBean.getFamilyName()%>
+             <gs:text bean="familyName"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             Given Name:&nbsp;
+             <gs:text text="Given Name:"/>
           </td>
           <td class="portlet-frame-text">
-             <%=userManagerBean.getGivenName()%>
+             <gs:text bean="givenName"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             Email Address:&nbsp;
+             <gs:text text="Email Address:"/>
           </td>
           <td class="portlet-frame-text">
-             <%=userManagerBean.getEmailAddress()%>
+             <gs:text bean="emailAddress"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-             Organization:&nbsp;
+             <gs:text text="Organization:"/>
           </td>
           <td class="portlet-frame-text">
-             <%=userManagerBean.getOrganization()%>
+             <gs:text bean="organization"/>
           </td>
         </tr>
         <tr>
           <td class="portlet-frame-label">
-            Base Role:&nbsp;
+            Base Role:
           </td>
           <td class="portlet-frame-text">
-             <%=userManagerBean.getRoleInBaseGroup()%>
+             <gs:text bean="userRole"/>
           </td>
         </tr>
       </table>

@@ -142,7 +142,7 @@
 
     <portlet-app-def>
 
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.UserManagerPortlet">
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.user.UserManagerPortlet">
             <portlet-name>User Account Manager</portlet-name>
             <servlet-name>UserManagerPortlet</servlet-name>
             <portlet-config>
@@ -155,7 +155,7 @@
             </cache>
         </portlet-app>
 
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.UserManagerPortlet.1">
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.user.UserManagerPortlet.1">
             <context-param>
                 <param-name>Portlet Master</param-name>
                 <param-value>yourid@yourdomain.com</param-value>

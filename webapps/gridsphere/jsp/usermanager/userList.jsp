@@ -1,23 +1,18 @@
 <%@ page import="org.gridlab.gridsphere.portlet.User,
-                 org.gridlab.gridsphere.portlets.core.beans.UserManagerBean,
+                 org.gridlab.gridsphere.portlets.core.user.UserManagerBean,
                  java.util.List,
                  org.gridlab.gridsphere.portlet.PortletURI" %>
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 <jsp:useBean id="userManagerBean"
-             class="org.gridlab.gridsphere.portlets.core.beans.UserManagerBean"
+             class="org.gridlab.gridsphere.portlets.core.user.UserManagerBean"
              scope="request"/>
 <gs:form action="doListUser">
-<table class="portlet-pane" cellspacing="1">
+<table class="portlet-pane" cellspacing="1" width="100%">
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-title">
-              List Users
-          </td>
-        </tr>
         <tr>
           <td class="portlet-frame-actions">
             <gs:submit name="doListUser" value="List Users"/>
@@ -54,23 +49,23 @@
          </td>
        </tr>
 <%   for (int ii = 0; ii < numUsers; ++ii) {
-       User user = (User)userList.get(ii); %>
+       User user = (User)userList.get(ii);
+       String userID = user.getID();
+       String userName = user.getUserName();%>
         <tr>
           <td class="portlet-frame-text">
-            <% PortletURI actionURI = userManagerBean.getPortletActionURI("doViewUser");
-               actionURI.addParameter("userID", user.getID()); %>
-            <a href="<%=actionURI%>">
-              <%=user.getUserID()%>
-            </a>
+            <gs:actionlink action="doViewUser" label="<%=userName%>">
+              <gs:actionparam name="userID" value="<%=userID%>"/>
+            </gs:actionlink>
           </td>
           <td class="portlet-frame-text">
-            <%=user.getFullName()%>
+            <gs:label text="<%=user.getFullName()%>"/>
           </td>
           <td class="portlet-frame-text">
-            <%=user.getEmailAddress()%>
+            <gs:label text="<%=user.getEmailAddress()%>"/>
           </td>
           <td class="portlet-frame-text">
-            <%=user.getOrganization()%>
+            <gs:label text="<%=user.getOrganization()%>"/>
           </td>
         </tr>
 <%   }

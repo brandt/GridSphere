@@ -1,16 +1,16 @@
 <%@ page import="org.gridlab.gridsphere.portlet.User,
-                 org.gridlab.gridsphere.portlets.core.beans.UserManagerBean,
+                 org.gridlab.gridsphere.portlets.core.user.UserManagerBean,
                  java.util.List,
                  org.gridlab.gridsphere.portlet.PortletRole" %>
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 <jsp:useBean id="userManagerBean"
-             class="org.gridlab.gridsphere.portlets.core.beans.UserManagerBean"
+             class="org.gridlab.gridsphere.portlets.core.user.UserManagerBean"
              scope="request"/>
 <gs:form action="doEditUser">
   <input type="hidden" name="userID" value="<%=userManagerBean.getUserID()%>"/>
-<table class="portlet-pane" cellspacing="1">
+<table class="portlet-pane" cellspacing="1" width="100%">
 <% if (userManagerBean.isFormInvalid()) { %>
   <tr>
     <td>
@@ -27,15 +27,6 @@
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-title">
-<% if (userManagerBean.isNewUser()) { %>
-              New User
-<% } else { %>
-              Edit User [<%=userManagerBean.getUserName()%>]
-<% } %>
-          </td>
-        </tr>
         <tr>
           <td class="portlet-frame-actions">
             <gs:submit name="doConfirmEditUser" value="Save User"/>

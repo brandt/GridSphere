@@ -47,7 +47,7 @@
 
     <servlet>
         <servlet-name>UserManagerPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.UserManagerPortlet</servlet-class>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.user.UserManagerPortlet</servlet-class>
     </servlet>
 
     <servlet>
