@@ -62,8 +62,10 @@
         distribution and contain the <filename>GuestUserLayout.xml</filename>
         which defines the guest layout. Initially before a user has logged in, they will see
         the layout as presented in <filename>GuestUserLayout.xml</filename>. The guest layout contains the Login portlet
-        to allow poeple to login and little else. This file may be edited to provide additional portlets to guest portal
+        to allow people to login and little else. This file may be edited to provide additional portlets to guest portal
         users.
+        Users' layouts are persisted and stored in <filename>$CATALINA_HOME/webapps/gridsphere/WEB-INF/layouts/users</filename>.
+        Simply removing any of these layout files will force a new one to be created when a user logs in.
     </sect1>
 
     <sect1>

@@ -23,7 +23,11 @@
           From inside the GridSphere source directory, you should be able to issue:
           <programlisting>ant install</programlisting> which will
         compile the framework code, create documentation if necessary and deploy GridSphere
-        to a Tomcat container. Once this has completed succesfully, you should be able to start
+        to a Tomcat container. You may notice lots of verbose logging during the document creation
+          phase and the database creation. You can safely ignore all [schemaexport] statements that
+          say <programlisting>"[schemaexport] Unsuccessful: Table not found:"</programlisting>
+          At the end of installing you should see <programlisting>BUILD SUCCESSFUL</programlisting>.
+          Once this has completed succesfully, you should be able to start
         up Tomcat by issuing the following:
           <programlisting>
               cd $CATALINA_HOME
@@ -62,15 +66,6 @@
   </sect1>
 
   <sect1>
-      <title>Uninstalling GridSphere</title>
-      <para>
-          GridSphere can be "undeployed" which will eliminate the gridsphere web application and
-          associated libraries from the Tomcat container. Simply issue:
-          <programlisting>ant undeploy</programlisting> from inside the GridSphere source directory
-      </para>
-  </sect1>
-
-    <sect1>
       <title>Testing the GridSphere Framework</title>
         <para>
             In order to ensure higher code quality, unit tests of core framework functionality and
