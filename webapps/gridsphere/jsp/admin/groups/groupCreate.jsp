@@ -12,7 +12,7 @@
 
 <ui:hiddenfield beanId="groupId"/>
 
-<h3>Group information</h3>
+<h3><ui:text key="GROUP_INFO" style="nostyle"/></h3>
 <ui:text key="GROUP_CREATE_NAME"/>&nbsp;&nbsp;<ui:textfield beanId="groupNameTF"/>
 <p>
 <ui:text key="GROUP_DESC_MSG"/>&nbsp;&nbsp;<ui:textfield beanId="groupDescTF"/>
@@ -35,12 +35,11 @@
     <ui:text value="PRIVATE"/>
 <% } %>
 
-<h3>Select portlets</h3>
+<h3><ui:text key="GROUP_SELECT_PORTLETS" style="nostyle"/></h3>
 
 <ui:text key="GROUP_SELECT_MSG"/>
 <p>
 <ui:panel beanId="panel"/>
-
 
 <ui:actionsubmit action="doMakeGroup" key="SAVE"/>
 <ui:actionsubmit action="doViewListGroup" key="CANCEL"/>

@@ -27,6 +27,7 @@ import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
 import javax.servlet.UnavailableException;
 import java.util.*;
+import java.io.IOException;
 
 public class GroupManagerPortlet extends ActionPortlet {
 
@@ -36,6 +37,8 @@ public class GroupManagerPortlet extends ActionPortlet {
     public static final String DO_VIEW_GROUP_EDIT = "admin/groups/groupEditDefaults.jsp";
     public static final String DO_VIEW_GROUP_ENTRY_EDIT = "admin/groups/groupEntryEdit.jsp";
     public static final String DO_VIEW_GROUP_CREATE = "admin/groups/groupCreate.jsp";
+    public static final String DO_VIEW_GROUP_LAYOUT = "admin/groups/groupLayout.jsp";
+
 
     // Portlet services
     private UserManagerService userManagerService = null;
@@ -74,7 +77,6 @@ public class GroupManagerPortlet extends ActionPortlet {
             throws PortletException {
         log.debug("Entering doViewListGroup");
         PortletRequest req = evt.getPortletRequest();
-        User user = req.getUser();
         List groupList = new ArrayList();
         List groups = aclManagerService.getGroups();
         PortletGroup coreGroup = aclManagerService.getCoreGroup();
@@ -129,10 +131,9 @@ public class GroupManagerPortlet extends ActionPortlet {
         PortletRole role = req.getRole();
         while (it.hasNext()) {
 
-
             String g = (String) it.next();
 
-            if ((g.equals(coreGroup.getName())) && (!role.equals(PortletRole.SUPER))) continue;
+            if (g.equals(coreGroup.getName()) && ((group != null) && (!group.equals(coreGroup))))  continue;
 
             TableRowBean tr = new TableRowBean();
             tr.setHeader(true);
@@ -276,7 +277,7 @@ public class GroupManagerPortlet extends ActionPortlet {
     }
 
     public void doMakeGroup(FormEvent evt) throws PortletException {
-        //this.checkSuperRole(evt);
+        PortletRequest req = evt.getPortletRequest();
         AccessControlManagerServiceImpl aclService = AccessControlManagerServiceImpl.getInstance();
         List webappNames = portletMgr.getWebApplicationNames();
         Iterator it = webappNames.iterator();
@@ -366,23 +367,38 @@ public class GroupManagerPortlet extends ActionPortlet {
 
             aclService.createGroup(newgroup);
 
-            // now create new group layout if group does not exist
-
-            if (PortletTabRegistry.getGroupTabs(groupTF.getValue()) == null) {
-                PortletTabRegistry.newGroupTab(groupTF.getValue(), portletRoles);
-            }
+            req.setAttribute("groupId", newgroup.getID());
             createSuccessMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_NEWGROUP_SUCCESS"));
             if (!newgroup.getPublic()) {
                 createSuccessMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_VISIBILITY_MOREDESC") + " " + newgroup.getName());
             }
+            PortletTabRegistry.newEmptyGroupTab(groupTF.getValue());
         } catch (Exception e) {
             log.error("Unable to save new group layout: ", e);
         }
-
-
+        setNextState(req, DO_VIEW_GROUP_LAYOUT);
     }
 
+    public void doMakeTemplateLayout(FormEvent evt) {
 
+        String groupId = evt.getAction().getParameter("groupId");
+
+        AccessControlManagerServiceImpl aclService = AccessControlManagerServiceImpl.getInstance();
+        PortletGroup group = aclService.getGroup(groupId);
+        if (group != null) {
+            Set portletRoles = group.getPortletRoleList();
+            try {
+                // now create new group layout
+                PortletTabRegistry.newTemplateGroupTab(group.getName(), portletRoles);
+                User user = evt.getPortletRequest().getUser();
+                if (aclService.isUserInGroup(user, group)) layoutMgr.refreshPage(evt.getPortletRequest());
+            } catch (Exception e) {
+                log.error("Unable to save new group layout: ", e);
+            }
+        } else {
+            log.debug("No group exists for group id: " + groupId);
+        }
+    }
 
     public void doViewViewGroup(FormEvent evt)
             throws PortletException {
@@ -467,12 +483,6 @@ public class GroupManagerPortlet extends ActionPortlet {
         // Create access right
         aclManagerService.saveGroupEntry(groupRequest);
 
-        /*
-        loadGroup(evt);
-        entry = aclManagerService.getGroupEntry(groupEntryIDBean.getValue());
-        viewGroupEntry(evt, entry);
-        */
-
         setNextState(req, "doViewViewGroup");
     }
 
@@ -487,10 +497,6 @@ public class GroupManagerPortlet extends ActionPortlet {
 
         List groupEntries = aclManagerService.getGroupEntries(group);
         req.setAttribute("groupEntryList", groupEntries);
-
-
-
-        log.debug("Exiting doViewRemoveGroupEntry");
     }
 
     public void doEditDefaultGroups(FormEvent evt) {
@@ -509,7 +515,6 @@ public class GroupManagerPortlet extends ActionPortlet {
         TableRowBean tr = new TableRowBean();
         TableCellBean tc = new TableCellBean();
         tr.setHeader(true);
-
 
         TextBean text = new TextBean();
         text.setValue("Default");
