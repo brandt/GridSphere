@@ -24,7 +24,7 @@ public class UserData {
         this.leftPath = "/";
         this.rightPath = "/";
         this.state = "explore";
-        this.correct = new Boolean(false);
+        this.correct = Boolean.FALSE;
     }
 
     public Boolean getCorrect() {

@@ -21,7 +21,7 @@ public class PortletGroupFactory {
 
     private PortletGroupFactory() {}
 
-    public static PortletGroup GRIDSPHERE_GROUP = SportletGroup.CORE;
+    public static final PortletGroup GRIDSPHERE_GROUP = SportletGroup.CORE;
 
     public static synchronized PortletGroup createPortletGroup(String groupName) {
         return new SportletGroup(groupName);

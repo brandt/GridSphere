@@ -25,10 +25,10 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 public abstract class BasePortletComponent extends BaseComponentLifecycle implements PortletComponent, Serializable {
 
     protected PortletComponent parent;
-    protected String defaultWidth = new String();
-    protected String width = new String();
-    protected String label = new String();
-    protected String name = new String();
+    protected String defaultWidth = "";
+    protected String width = "";
+    protected String label = "";
+    protected String name = "";
     protected String theme = "default";
     protected boolean isVisible = true;
     protected String roleString = PortletRole.GUEST.toString();
@@ -245,6 +245,14 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletRequest req = event.getPortletRequest();
         req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
+
+    }
+
+    public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
+
+    }
+
+    public void doRenderWML(GridSphereEvent event) throws PortletLayoutException, IOException {
 
     }
 

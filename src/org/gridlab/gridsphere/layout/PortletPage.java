@@ -5,10 +5,7 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.portlet.PortletException;
-import org.gridlab.gridsphere.portlet.PortletMessage;
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
@@ -389,6 +386,17 @@ public class PortletPage implements Serializable, Cloneable {
      * @throws IOException if an I/O error occurs during rendering
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+
+        PortletRequest req = event.getPortletRequest();
+        Client client = req.getClient();
+
+        // handle any client logic to determin which markup to display
+
+        doRenderHTML(event);
+    }
+
+    public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
+
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = null;
 
@@ -398,7 +406,6 @@ public class PortletPage implements Serializable, Cloneable {
             // means the writer has already been obtained
             return;
         }
-
         res.setContentType("text/html; charset=utf-8");
 
         // page header
@@ -425,7 +432,6 @@ public class PortletPage implements Serializable, Cloneable {
 
         out.println("</body></html>");
     }
-
 
     public Object clone() throws CloneNotSupportedException {
         int i;

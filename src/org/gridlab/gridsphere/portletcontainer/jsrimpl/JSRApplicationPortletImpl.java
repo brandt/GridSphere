@@ -99,7 +99,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
         JSRConcretePortletConfigImpl concConfig = new JSRConcretePortletConfigImpl(portletDef);
 
         log.debug("creating JSRConcretePortletImpl");
-        JSRConcretePortletImpl concPortlet = new JSRConcretePortletImpl(pdd, portletDef, appConfig, concConfig);
+        JSRConcretePortletImpl concPortlet = new JSRConcretePortletImpl(pdd, portletDef, concConfig);
         concPortlets.add(concPortlet);
     }
 
@@ -205,7 +205,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
                 extraInfo +=  encname + "=" + encvalue;
             } else if (val instanceof String) {
                 String aval = (String) params.get(name);
-                if ((aval != null) && (aval != "")) {
+                if ((aval != null) && (!aval.equals(""))) {
                     String encvalue = URLEncoder.encode(aval);
                     extraInfo += encname + "=" + encvalue;
                 } else {

@@ -35,7 +35,6 @@ public class SportletContext implements PortletContext {
     private static PortletLog log = SportletLog.getInstance(SportletContext.class);
     private static SportletServiceFactory factory = SportletServiceFactory.getInstance();
 
-    private ServletConfig config = null;
     private ServletContext context = null;
 
     /**
@@ -48,7 +47,6 @@ public class SportletContext implements PortletContext {
      * Constructs an instance of SportletContext from a <code>ServletConfig</code>
      */
     public SportletContext(ServletConfig config) {
-        this.config = config;
         this.context = config.getServletContext();
     }
 

@@ -42,7 +42,7 @@ public class PortletManager implements PortletManagerService {
     private PortletManager() {}
 
 
-    private class WebappComparator implements Comparator {
+    private static class WebappComparator implements Comparator {
 
         public int compare(Object webapp1, Object webapp2) {
 
@@ -109,44 +109,28 @@ public class PortletManager implements PortletManagerService {
             String portletsPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/Portlets");
             File f = new File(portletsPath);
             if (f.exists() && f.isDirectory()) {
-                String webapps[] = f.list();
+                String webappFiles[] = f.list();
 
                 // sort webapps by priority
-                Arrays.sort(webapps, new WebappComparator());
+                Arrays.sort(webappFiles, new WebappComparator());
 
                 // get rid of any priority numbers
                 String webapp;
                 int idx = 0;
-                for (int i = 0; i < webapps.length; i++) {
-                    webapp = webapps[i];
+                for (int i = 0; i < webappFiles.length; i++) {
+                    webapp = webappFiles[i];
                     if ((idx = webapp.lastIndexOf(".")) > 0) {
-                        webapps[i] = webapp.substring(0, idx);
+                        webappFiles[i] = webapp.substring(0, idx);
                     }
                 }
 
-                if (webapps != null) {
+                if (webappFiles != null) {
                     try {
-                        for (int i = 0; i < webapps.length; i++) {
-                            webapp = webapps[i];
+                        for (int i = 0; i < webappFiles.length; i++) {
+                            webapp = webappFiles[i];
                             PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
                             addWebApp(portletWebApp);
                         }
-                        /*
-                        StringTokenizer st = new StringTokenizer(webapps, ",");
-                        if (st.countTokens() == 0) {
-                        webapp = webapps.trim();
-                        log.debug("adding webapp: " + webapp);
-                        PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
-                        addWebApp(portletWebApp);
-                        } else {
-                        while (st.hasMoreTokens()) {
-                        webapp = (String) st.nextToken().trim();
-                        log.debug("adding webapp: " + webapp);
-                        PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
-                        addWebApp(portletWebApp);
-                        }
-                        }
-                        */
                     } catch (PortletException e) {
                         log.error("Unable to create portlet web application ", e);
                     }
@@ -165,7 +149,7 @@ public class PortletManager implements PortletManagerService {
      * @param portletWebApp the portlet web application name
      */
     public synchronized void addWebApp(PortletWebApplication portletWebApp) {
-        System.err.println("adding webapp: " + portletWebApp.getWebApplicationName());
+        log.debug("adding webapp: " + portletWebApp.getWebApplicationName());
         Collection appPortlets = portletWebApp.getAllApplicationPortlets();
         Iterator it = appPortlets.iterator();
         while (it.hasNext()) {

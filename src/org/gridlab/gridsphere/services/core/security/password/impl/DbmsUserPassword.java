@@ -14,8 +14,8 @@ public class DbmsUserPassword implements DbmsPassword {
     private SportletUserImpl user;
     // used for JSR/Tomcat/Realm
     private String userName;
-    private String value = new String();
-    private String hint = new String();
+    private String value = "";
+    private String hint = "";
     private long lifetime = -1;
     private Date dateExpires = null;
     private Date dateCreated = null;

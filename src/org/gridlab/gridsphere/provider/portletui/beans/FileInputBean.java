@@ -21,7 +21,7 @@ public class FileInputBean extends InputBean implements TagBean {
 
     public static final String SUBMIT_STYLE = "portlet-form-button";
 
-    public static String NAME = "fi";
+    public static final String NAME = "fi";
 
     private FileItem savedFileItem = null;
 

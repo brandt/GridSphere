@@ -112,8 +112,7 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
      * @return <code>true</code> if this role is <code>GUEST</code>, <code>false otherwise</code>
      */
     public boolean isGuest() {
-        if (roleName == GUEST_ROLE_STRING) return true;
-        return false;
+        return (roleName.equals(GUEST_ROLE_STRING)) ? true : false;
     }
 
     /**
@@ -122,8 +121,7 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
      * @return <code>true</code> if this role is <code>USER</code>, <code>false otherwise</code>
      */
     public boolean isUser() {
-        if (roleName == USER_ROLE_STRING) return true;
-        return false;
+        return (roleName.equals(USER_ROLE_STRING)) ? true : false;
     }
 
     /**
@@ -132,8 +130,7 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
      * @return <code>true</code> if this role is <code>ADMIN</code>, <code>false otherwise</code>
      */
     public boolean isAdmin() {
-        if (roleName== ADMIN_ROLE_STRING) return true;
-        return false;
+        return (roleName.equals(ADMIN_ROLE_STRING)) ? true : false;
     }
 
     /**
@@ -142,8 +139,7 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
      * @return <code>true</code> if this role is <code>SUPER</code>, <code>false otherwise</code>
      */
     public boolean isSuper() {
-        if (roleName == SUPER_ROLE_STRING) return true;
-        return false;
+        return (roleName.equals(SUPER_ROLE_STRING)) ? true : false;
     }
 
     public String toString() {

@@ -51,12 +51,12 @@ public class PortletPreferencesImpl implements PortletPreferences
     /**
      * The PortletId this data belongs to
      */
-    private String portletId = new String();
+    private String portletId = "";
 
      /**
      * The unique userid this data belongs to
      */
-    private String userId = new String();
+    private String userId = "";
     // key/value pairs
 
     private Map attributes = new HashMap();

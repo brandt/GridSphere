@@ -280,7 +280,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         */
         // check if the session was invalidated
         HttpSession httpSession = this.getHttpServletRequest().getSession(false);
-
+        
         if ((portletSession != null) && (httpSession == null)) {
             portletSession = null;
         } else if (httpSession != null) {

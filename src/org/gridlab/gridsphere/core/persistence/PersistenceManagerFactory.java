@@ -21,9 +21,9 @@ public class PersistenceManagerFactory {
 
     protected transient static PortletLog log = SportletLog.getInstance(PersistenceManagerFactory.class);
 
-    public static String GRIDSPHERE_DATABASE_NAME = "gridsphere";
+    public static final String GRIDSPHERE_DATABASE_NAME = "gridsphere";
 
-    protected static Map databases = new HashMap();
+    protected static final Map databases = new HashMap();
 
     private PersistenceManagerFactory() {
         log.debug("Entering PersistenceManagerFactory");

@@ -23,6 +23,7 @@ import java.util.StringTokenizer;
 import org.apache.oro.text.perl.Perl5Util;
 
 public class SecureDirectoryServiceImpl implements SecureDirectoryService, PortletServiceProvider {
+
     private Perl5Util util = new Perl5Util();
     private static boolean inited = false;
     private final static int BUFFER_SIZE = 8 * 1024; //8 kB
@@ -62,7 +63,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
         resource = util.substitute("s!\\\\!/!g", resource);
         resource = util.substitute("s!^/!!", resource);
         if ((userDirectoryPath = getUserDirectoryPath(userID)) != null) {
-            String filePath = userDirectoryPath + "/" + appName + "/" + resource;
+            String filePath = userDirectoryPath + File.separator + appName + File.separator + resource;
             File file = new File(filePath);
             if (!file.exists() || file.isDirectory())
                 return null;
@@ -103,7 +104,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
             path = util.substitute("s!^\\.[\\/]!!", path);
         } while (util.match("m!^/|\\.\\.|^\\.[\\/]!", path));
         if ((userDirectoryPath = getUserDirectoryPath(userID)) != null) {
-            String dirPath = userDirectoryPath + "/" + (appName == null ? "" : appName + "/") + path;
+            String dirPath = userDirectoryPath + File.separator + appName + File.separator + path;
             File directory = new File(dirPath);
             if (!directory.exists() || !directory.isDirectory())
                 return null;
@@ -138,7 +139,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
         } while (util.match("m!^/|\\.\\.|^\\.[\\/]!", resource));
         String userDirectoryPath;
         if ((userDirectoryPath = getUserDirectoryPath(userID)) != null) {
-            String filePath = userDirectoryPath + "/" + appName;
+            String filePath = userDirectoryPath + File.separator + appName;
             File file = new File(filePath);
             if (!file.exists()) {
                 if (!file.mkdir()) {
@@ -151,14 +152,14 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
             boolean canCreate = true;
             if (util.match("m!/!", resource)) {
                 String tmpPath = util.substitute("s!/[^/]*$!!", resource);
-                File dirTree = new File(filePath + "/" + tmpPath);
+                File dirTree = new File(filePath + File.separator + tmpPath);
                 if (!dirTree.exists()) {
                     canCreate = dirTree.mkdirs();
                 } else if (!dirTree.isDirectory())
                     canCreate = false;
             }
             if (canCreate) {
-                filePath += "/" + resource;
+                filePath += File.separator + resource;
                 file = new File(filePath);
                 return file;
             } else {
@@ -292,7 +293,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
     }
 
     private String getUserDirectoryPath(String userID) {
-        String userDirectoryPath = secureDirPath + "/" + userID;
+        String userDirectoryPath = secureDirPath + File.separator + userID;
         File userDirectory = new File(userDirectoryPath);
         if (!userDirectory.exists()) {
             log.debug("Creating directory for userID: " + userDirectoryPath);
@@ -321,7 +322,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
             } else if (!file.isDirectory()) {
                 return false;
             }
-            file = new File(filePath + "/" + resource);
+            file = new File(filePath + File.separator + resource);
             if (!file.isDirectory())
                 return false;
             if (!recursive)
@@ -393,7 +394,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
         resourceSource = util.substitute("s!^/!!", resourceSource);
         String userDirectoryPath;
         if ((userDirectoryPath = getUserDirectoryPath(userID)) != null) {
-            String filePath = userDirectoryPath + "/" + appName;
+            String filePath = userDirectoryPath + File.separator + appName;
             File file = new File(filePath);
             if (!file.exists()) {
                 if (!file.mkdir())
@@ -402,7 +403,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
             } else if (!file.isDirectory()) {
                 return false;
             }
-            file = new File(filePath + "/" + resourceSource);
+            file = new File(filePath + File.separator + resourceSource);
             if (!file.isDirectory()) {
                 return writeFromFile(userID, appName, resourceDestination, file);
             } else {
@@ -418,7 +419,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
     private boolean copyDirectory(String userID, String appName, File file, String destination) {
         File[] files = file.listFiles();
         boolean toRet = true;
-        String directoryPath = getUserDirectoryPath(userID) + "/" + appName + "/" + destination;
+        String directoryPath = getUserDirectoryPath(userID) + File.separator + appName + File.separator + destination;
         File dirTree = new File(directoryPath);
         if (!dirTree.exists())
             if (!dirTree.mkdirs())
@@ -426,7 +427,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
 
         for (int i = 0; i < files.length; ++i) {
             if (files[i].isDirectory()) {
-                if (!copyDirectory(userID, appName, files[i], destination + files[i].getName() + "/"))
+                if (!copyDirectory(userID, appName, files[i], destination + files[i].getName() + File.separator))
                     toRet = false;
             } else {
                 if (!writeFromFile(userID, appName, destination + files[i].getName(), files[i]))

@@ -231,7 +231,7 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
      * @return formatted css string for style/class attribute
      */
     protected String getFormattedCss() {
-        String result = new String();
+        String result = "";
         if (this.cssStyle != null) {
             result = result + " style=\"" + this.cssStyle + "\"";
         }

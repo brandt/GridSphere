@@ -14,8 +14,6 @@ import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRPortletWebApplicationImpl;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRApplicationPortletImpl;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.*;
-import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
-import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManager;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 
 import javax.portlet.*;
@@ -37,13 +35,12 @@ import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.PrintWriter;
 import java.util.*;
 import java.util.ResourceBundle;
 
 public class PortletServlet  extends HttpServlet
-        implements Servlet, ServletConfig, Serializable, ServletContextListener,
+        implements Servlet, ServletConfig, ServletContextListener,
         HttpSessionAttributeListener, HttpSessionListener, HttpSessionActivationListener {
 
     protected transient static PortletLog log = SportletLog.getInstance(PortletServlet.class);
@@ -62,7 +59,7 @@ public class PortletServlet  extends HttpServlet
     protected Map portletConfigHash = null;
 
     /* require an acl service to get role info */
-    private AccessControlManagerService aclService = null;
+    //private AccessControlManagerService aclService = null;
 
     private PortletPreferencesManager prefsManager = null;
 
@@ -72,7 +69,7 @@ public class PortletServlet  extends HttpServlet
         // load descriptor files
         log.debug("in init of PortletServlet");
 
-        aclService = AccessControlManager.getInstance();
+        //aclService = AccessControlManager.getInstance();
 
         //registry = PortletRegistry.getInstance();
 
@@ -186,9 +183,7 @@ public class PortletServlet  extends HttpServlet
                 (JSRApplicationPortletImpl)registry.getApplicationPortlet(portletClassName);
 
         Supports[] supports = appPortlet.getSupports();
-        CustomPortletMode[] customModes =  portletWebApp.getCustomPortletModes();
-        CustomWindowState[] customStates = portletWebApp.getCustomWindowStates();
-
+  
 
         // perform user conversion from gridsphere to JSR model
         User user = (User)request.getAttribute(SportletProperties.PORTLET_USER);

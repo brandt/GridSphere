@@ -33,12 +33,12 @@ public class SportletUserImpl implements SportletUser, HttpSessionBindingListene
     // store used to maintain user attributes
     private Map attributes = new HashMap();
 
-    private String UserID = new String();
-    private String FamilyName = new String();
-    private String FullName = new String();
-    private String GivenName = new String();
-    private String EmailAddress = new String();
-    private String Organization = new String();
+    private String UserID = "";
+    private String FamilyName = "";
+    private String FullName = "";
+    private String GivenName = "";
+    private String EmailAddress = "";
+    private String Organization = "";
     private long LastLoginTime = 0;
 
     public String getOid() {
@@ -318,6 +318,10 @@ public class SportletUserImpl implements SportletUser, HttpSessionBindingListene
             b &= (((SportletUserImpl) obj).Organization == this.Organization);
         }
         return b;
+    }
+
+    public int hashCode() {
+        return UserID.hashCode();
     }
 
 }

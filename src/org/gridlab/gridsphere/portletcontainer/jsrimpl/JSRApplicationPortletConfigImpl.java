@@ -11,11 +11,8 @@ import org.gridlab.gridsphere.portlet.PortletWindow;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletApp;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -25,9 +22,8 @@ import java.util.List;
  */
 public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig {
 
-    private String id = new String();
-    private String portletName = new String();
-    private PortletApp portletApp = null;
+    private String id = "";
+    private String portletName = "";
     private int expiration = 0;
 
     /**
@@ -36,7 +32,6 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
     public JSRApplicationPortletConfigImpl(PortletApp app, PortletDefinition portletDef) {
         this.id = portletDef.getPortletClass().getContent();
         this.portletName = portletDef.getPortletName().getContent();
-        this.portletApp = app;
         if (portletDef.getExpirationCache() != null) {
             expiration = portletDef.getExpirationCache().getContent();
         }

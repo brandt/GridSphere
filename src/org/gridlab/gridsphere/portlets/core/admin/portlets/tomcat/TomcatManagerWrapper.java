@@ -82,7 +82,7 @@ public class TomcatManagerWrapper {
             while ((line = reader.readLine()) != null) {
                 result.addWebAppDescriptor(line);
             }
-
+            reader.close();
 
         } catch (IOException e) {
             throw new TomcatManagerException("Unable to perform command: ", e);

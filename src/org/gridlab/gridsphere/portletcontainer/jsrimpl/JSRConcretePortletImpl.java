@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.portletcontainer.jsrimpl;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletSettings;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
@@ -15,8 +14,6 @@ import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
 
 import java.io.IOException;
-import java.util.Hashtable;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -28,9 +25,7 @@ public class JSRConcretePortletImpl implements ConcretePortlet {
     private static PortletLog log = SportletLog.getInstance(JSRConcretePortletImpl.class);
 
     private PortletDeploymentDescriptor2 portletDD = null;
-    private PortletDefinition portletDef = null;
     private JSRConcretePortletConfigImpl concConfig = null;
-    private JSRApplicationPortletConfigImpl appConfig = null;
     private String concreteID = null;
     private String portletName = null;
     //private String concreteID = null;
@@ -41,14 +36,11 @@ public class JSRConcretePortletImpl implements ConcretePortlet {
      * Constructs an instance of ConcreteSportlet
      *
      * @param pdd a <code>PortletDeploymentDescriptor2</code>
-     * @param appConfig an application portlet configuration
      * @param portletDef a concrete portlet descriptor
      */
-    public JSRConcretePortletImpl(PortletDeploymentDescriptor2 pdd, PortletDefinition portletDef,  JSRApplicationPortletConfigImpl appConfig, JSRConcretePortletConfigImpl concConfig) throws PortletException  {
+    public JSRConcretePortletImpl(PortletDeploymentDescriptor2 pdd, PortletDefinition portletDef, JSRConcretePortletConfigImpl concConfig)  {
         this.portletDD = pdd;
-        this.portletDef = portletDef;
         this.concConfig = concConfig;
-        this.appConfig = appConfig;
         concreteID = portletDef.getPortletClass().getContent();
         portletName = portletDef.getPortletName().getContent();
     }

@@ -39,12 +39,12 @@ public class SportletData implements PortletData {
     /**
      * The unique userid this data belongs to
      */
-    private String UserID = new String();
+    private String UserID = "";
 
     /**
      * The PortletId this data belongs to
      */
-    private String PortletID = new String();
+    private String PortletID = "";
 
     /**
      * Default constructor cannot be instantiated

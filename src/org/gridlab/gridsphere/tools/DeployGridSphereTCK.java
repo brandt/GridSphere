@@ -151,29 +151,7 @@ public class DeployGridSphereTCK extends Task {
                     tempJar.write(buffer, 0, bytesRead);
                 }
 
-
-
-            /*
-                File file = new File(destination, entry.getName());
-                File dirF = new File(file.getParent());
-                    dirF.mkdirs();
-                    if (entry.isDirectory()) {
-                        file.mkdirs();
-                    } else {
-                        byte[] buffer = new byte[1024];
-                        int length = 0;
-                        InputStream fis = jarFile.getInputStream(entry);
-                        FileOutputStream fos = new FileOutputStream(file);
-                        while ((length = fis.read(buffer)) >= 0) {
-                            fos.write(buffer, 0, length);
-                        }
-                        fos.close();
-                    }
-                 */
-
-
                 }
-            //tempJar.putNextEntry(new JarEntry("stub"));
 
             tempJar.close();
             jarFile.close();
@@ -338,5 +316,6 @@ public class DeployGridSphereTCK extends Task {
                 done = true;
             }
         }
+        bis.close();
     }
 }

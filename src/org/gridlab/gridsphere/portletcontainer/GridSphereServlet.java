@@ -70,7 +70,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
 
     private static PortletRegistry registry = PortletRegistry.getInstance();
-    int testpageNo = 1;
 
     private boolean isTCK = false;
     /**
@@ -117,8 +116,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         GridSphereEvent event = new GridSphereEventImpl(aclService, context, req, res);
         PortletRequest portletReq = event.getPortletRequest();
         PortletResponse portletRes = event.getPortletResponse();
-
-        boolean database = true;
 
         // If first time being called, instantiate all portlets
         if (firstDoGet.equals(Boolean.TRUE)) {

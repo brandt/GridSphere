@@ -40,7 +40,6 @@ public class ActionFormEventImpl extends BaseFormEventImpl implements ActionForm
         this.action = action;
         this.request = request;
         this.response = response;
-        this.tagBeans = tagBeans;
         // Unless tagBeans is null, don't recreate them
         if (tagBeans == null) {
             tagBeans = new HashMap();

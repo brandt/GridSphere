@@ -10,11 +10,11 @@ package org.gridlab.gridsphere.portletcontainer.impl.descriptor;
 
 public class LanguageInfo {
 
-    private String locale = new String();
-    private String keywords = new String();
-    private String description = new String();
-    private String title = new String();
-    private String titleShort = new String();
+    private String locale = "";
+    private String keywords = "";
+    private String description = "";
+    private String title = "";
+    private String titleShort = "";
 
     /**
      * Creates an instance of LanguageInfo

@@ -4,11 +4,9 @@
  */
 package org.gridlab.gridsphere.portletcontainer.impl;
 
-import org.gridlab.gridsphere.layout.PortletLayoutEngine;
 import org.gridlab.gridsphere.layout.PortletTabRegistry;
 import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
@@ -20,7 +18,6 @@ import org.gridlab.gridsphere.portletcontainer.impl.descriptor.SportletDefinitio
 import org.gridlab.gridsphere.services.core.security.acl.impl.descriptor.PortletGroupDescriptor;
 import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManager;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import java.io.File;
 import java.util.Collection;
@@ -41,9 +38,6 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
     protected Map appPortlets = new Hashtable();
     protected String webAppDescription;
     private boolean isJSR = false;
-
-    // PortletLayout engine handles layout.xml
-    private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
 
     /**
      * Default instantiation is disallowed

@@ -373,7 +373,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     && (!event.getAction().getName().equals(FRAME_CLOSE_OK_ACTION))
                     && (!event.getAction().getName().equals(FRAME_CLOSE_CANCEL_ACTION))) {
                 DefaultPortletAction action = event.getAction();
-                if (action.getName() != "") {
+                if (!action.getName().equals("")) {
                     try {
                         PortletInvoker.actionPerformed(portletClass, action, req, res);
                     } catch (Exception e) {
@@ -576,7 +576,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             out.println(frame.toString());
         }
         if (cacheExpiration > 0) {
-            cacheService.cache(portletClass + id, frame, cacheExpiration, false);
+            cacheService.cache(portletClass + id, frame, cacheExpiration);
         }
     }
 

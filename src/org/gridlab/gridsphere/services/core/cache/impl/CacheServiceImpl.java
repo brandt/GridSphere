@@ -57,7 +57,7 @@ public class CacheServiceImpl implements PortletServiceProvider, CacheService {
         public long delay;
         public Object cached;
 
-        public CacheObject(String key, Object cached, long delay, boolean rolling) {
+        public CacheObject(String key, Object cached, long delay) {
             this.key = key;
             this.cached = cached;
             this.delay = delay;
@@ -71,7 +71,7 @@ public class CacheServiceImpl implements PortletServiceProvider, CacheService {
         }
     }
 
-    public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
+    public synchronized void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         String isCachingOnStr = config.getInitParameter("isCachingOn");
         if (!isCachingOnStr.equals("true") ||
@@ -91,19 +91,14 @@ public class CacheServiceImpl implements PortletServiceProvider, CacheService {
         key2object = new HashMap();
     }
 
-    public void destroy() {
+    public synchronized void destroy() {
         key2object.clear();
         timerService.cancel("org.gridlab.gridslide.service.CacheService");
     }
 
-    public synchronized void cache(String key, Object object, long timeout, boolean rolling) {
+    public synchronized void cache(String key, Object object, long timeout) {
         if (isCachingOn)
-            key2object.put(key.intern(), new CacheObject(key.intern(), object, timeout, rolling));
-    }
-
-    public synchronized void cache(String key, Object object, Date timeout) {
-        if (isCachingOn)
-            key2object.put(key.intern(), new CacheObject(key.intern(), object, timeout.getTime(), false));
+            key2object.put(key.intern(), new CacheObject(key.intern(), object, timeout));
     }
 
     public synchronized Object getCached(String key) {

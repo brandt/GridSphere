@@ -56,7 +56,6 @@ public class AuthorizationUtility {
 
     public AuthorizationUtility(User user) {
         this.user = user;
-        this.caller = caller;
     }
 
     public AuthorizationUtility(User user, Class caller) {
@@ -80,7 +79,7 @@ public class AuthorizationUtility {
 
     /**
      * Throws AuthorizationException if supplied user not a super user.
-     * @param String The method being called.
+     * @param method the method being called.
      */
     public void authorizeSuperUser(String method)
             throws AuthorizationException {
@@ -96,7 +95,7 @@ public class AuthorizationUtility {
      * Throws AuthorizationException if supplied user is not a super user
      * or an admin user within the specified group.
      *
-     * @param PortletGroup The portlet group within which the user should
+     * @param group The portlet group within which the user should
      *        be an admin if they are not a super user.
      */
     public void authorizeSuperOrAdminUser(PortletGroup group)
@@ -114,9 +113,9 @@ public class AuthorizationUtility {
      * Throws AuthorizationException if supplied user is not a super user
      * or an admin user within the specified group.
      *
-     * @param PortletGroup The portlet group within which the user should
+     * @param group the portlet group within which the user should
      *        be an admin if they are not a super user.
-     * @param String The method being called.
+     * @param method the method being called.
      */
     public void authorizeSuperOrAdminUser(PortletGroup group, String method)
             throws AuthorizationException {
@@ -133,7 +132,7 @@ public class AuthorizationUtility {
      * Throws AuthorizationException if supplied user not a super user
      * or not the same user as specified in this method.
      *
-     * @param User The user this supplied user should be equal to if
+     * @param user the user this supplied user should be equal to if
      *        if the supplied user is not a super user.
      */
     public void authorizeSuperOrSameUser(User user)
@@ -150,9 +149,9 @@ public class AuthorizationUtility {
      * Throws AuthorizationException if supplied user not a super user
      * or not the same user as specified in this method.
      *
-     * @param User The user this supplied user should be equal to if
+     * @param user the user this supplied user should be equal to if
      *        if the supplied user is not a super user.
-     * @param String The method being called.
+     * @param method the method being called.
      */
     public void authorizeSuperOrSameUser(User user, String method)
              throws AuthorizationException {

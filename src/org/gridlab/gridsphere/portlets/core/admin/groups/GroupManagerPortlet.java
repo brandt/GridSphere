@@ -398,7 +398,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         TextFieldBean groupDescTF = evt.getTextFieldBean("groupDescTF");
 
         try {
-            if ((groupTF.getValue() != "") && !portletRoles.isEmpty()) {
+            if ((!groupTF.getValue().equals("")) && !portletRoles.isEmpty()) {
                 this.getACLService(user).createGroup(groupTF.getValue(), groupDescTF.getValue(), portletRoles);
                 // now create new group layout
                 PortletTabRegistry.newGroupTab(groupTF.getValue(), portletRoles);

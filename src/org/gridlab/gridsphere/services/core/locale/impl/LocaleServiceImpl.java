@@ -6,6 +6,7 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 
 import java.util.Locale;
 import java.util.StringTokenizer;
+import java.util.Collections;
 
 /**
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>

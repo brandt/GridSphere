@@ -125,7 +125,7 @@ public class ActionPortlet extends GenericPortlet {
      * @param title the title display in the portlet
      */
     public void setNextTitle(PortletRequest request, String title) {
-        this.log.debug("Setting title to " + title);
+        log.debug("Setting title to " + title);
         String id = getUniqueId();
         //System.err.println("in setNextT: in attribute " + id + ".title");
         request.setAttribute(id + ".title", title);
@@ -242,27 +242,27 @@ public class ActionPortlet extends GenericPortlet {
         Class thisClass = this.getClass();
         // Call method specified by action name
         try {
-            if (this.log.isDebugEnabled()) {
-                this.log.debug("Getting action method " + thisClass.getName() + "." + methodName + "()");
+            if (log.isDebugEnabled()) {
+                log.debug("Getting action method " + thisClass.getName() + "." + methodName + "()");
             }
 
             Method method = thisClass.getMethod(methodName, parameterTypes);
-            this.log.debug("Invoking action method: " + methodName);
+            log.debug("Invoking action method: " + methodName);
 
             method.invoke(thisObject, arguments);
         } catch (NoSuchMethodException e) {
             String error = "No such method: " + methodName + "\n" + e.getMessage();
-            this.log.error(error, e);
+            log.error(error, e);
             // If action is not illegal do error undefined action
             doErrorInvalidAction(request, error);
         } catch (IllegalAccessException e) {
             String error = "Error accessing action method: " + methodName + "\n" + e.getMessage();
-            this.log.error(error, e);
+            log.error(error, e);
             // If action is not illegal do error undefined action
             doErrorInvalidAction(request, error);
         } catch (InvocationTargetException e) {
             String error = "Error invoking action method: " + methodName + "\n" + e.getMessage();
-            this.log.error(error, e);
+            log.error(error, e);
             // If action is not illegal do error undefined action
             doErrorInvalidAction(request, error);
         }
@@ -681,10 +681,10 @@ public class ActionPortlet extends GenericPortlet {
 
     public Boolean getParameterAsBoolean(PortletRequest request, String param) {
         String value = request.getParameter(param);
-        if (value == null) return new Boolean(false);
-        if (value.equals("")) return new Boolean(false);
-        if (value.equals("true")) return new Boolean(true);
-        return new Boolean(false);
+        if (value == null) return Boolean.FALSE;
+        if (value.equals("")) return Boolean.FALSE;
+        if (value.equals("true")) return Boolean.TRUE;
+        return Boolean.FALSE;
     }
 
     public Boolean[] getParameterValuesAsBoolean(PortletRequest request, String param) {
@@ -695,9 +695,9 @@ public class ActionPortlet extends GenericPortlet {
             Boolean objs[] = new Boolean[values.length];
             for (int ii = 0; ii < values.length; ++ii) {
                 String value = values[ii];
-                if (value.equals("")) objs[ii] = new Boolean(false);
-                if (value.equals("true")) objs[ii] = new Boolean(true);
-                objs[ii] = new Boolean(false);
+                if (value.equals("")) objs[ii] = Boolean.FALSE;
+                if (value.equals("true")) objs[ii] = Boolean.TRUE;
+                objs[ii] = Boolean.FALSE;
             }
             return objs;
         }

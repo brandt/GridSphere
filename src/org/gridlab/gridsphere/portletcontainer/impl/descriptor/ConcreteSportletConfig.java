@@ -26,9 +26,9 @@ import java.util.Locale;
  */
 public class ConcreteSportletConfig implements ConcretePortletConfig {
 
-    private String defaultLocale = new String();
+    private String defaultLocale = "";
     private List languageList = new ArrayList();
-    private String name = new String();
+    private String name = "";
     private AccessRestrictions accessRestrictions = new AccessRestrictions();
     private ConfigParamList configParamList = new ConfigParamList();
 

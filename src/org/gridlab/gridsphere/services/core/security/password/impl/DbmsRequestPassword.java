@@ -17,8 +17,8 @@ public class DbmsRequestPassword  implements DbmsPassword {
 
     private String oid = null;
     private AccountRequestImpl user;
-    private String value = new String();
-    private String hint = new String();
+    private String value = "";
+    private String hint = "";
     private long lifetime = -1;
     private Date dateExpires = null;
     private Date dateCreated = null;

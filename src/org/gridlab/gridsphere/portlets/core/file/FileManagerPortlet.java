@@ -193,6 +193,7 @@ public class FileManagerPortlet extends ActionPortlet {
                     sb.append(line);
                     sb.append("\n");
                 }
+                reader.close();
                 fileTextArea.setValue(sb.toString());
                 setNextState(req, "filemanager/edit.jsp");
             } catch (FileNotFoundException e) {

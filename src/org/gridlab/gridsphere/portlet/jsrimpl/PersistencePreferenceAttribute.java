@@ -12,7 +12,7 @@ public class PersistencePreferenceAttribute {
 
     private String oid = null;
     protected boolean readonly = false;
-    protected String name = new String();
+    protected String name = "";
     protected List values = new ArrayList();
 
     public String getOid() {

@@ -12,16 +12,12 @@ import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityRoleRe
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName;
 import org.gridlab.gridsphere.portlet.PortletRole;
 
-import java.util.Hashtable;
 import java.util.Locale;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
 
 public class JSRConcretePortletConfigImpl implements ConcretePortletConfig {
 
-    private PortletDefinition portletDef = null;
     private Locale[] supportedLocales = null;
     private Map descsMap = null;
     private Map dispsMap = null;
@@ -29,7 +25,6 @@ public class JSRConcretePortletConfigImpl implements ConcretePortletConfig {
     private String portletName = "Unknown portlet";
 
     public JSRConcretePortletConfigImpl(PortletDefinition portletDef) {
-        this.portletDef = portletDef;
 
         // supported locales
         supportedLocales = new Locale[portletDef.getSupportedLocaleCount()];

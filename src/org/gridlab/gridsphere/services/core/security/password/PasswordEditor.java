@@ -20,8 +20,8 @@ public class PasswordEditor implements Password {
     private Date dateCreated = null;
     private Date dateLastModified = null;
 
-    private transient String hint = new String();
-    private transient String value = new String();
+    private transient String hint = "";
+    private transient String value = "";
     private transient boolean validation = true;
 
     private transient boolean isDirty = false;

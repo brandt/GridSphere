@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.portlets.core.file;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.services.core.secdir.SecureDirectoryService;
 import org.gridlab.gridsphere.services.core.secdir.ResourceInfo;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
@@ -17,9 +18,8 @@ import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
 import org.apache.oro.text.perl.Perl5Util;
 
 import javax.servlet.UnavailableException;
-import java.io.StringBufferInputStream;
-import java.io.File;
-import java.io.IOException;
+
+import java.io.*;
 import java.util.*;
 
 public class CommanderPortlet extends ActionPortlet {
@@ -358,9 +358,9 @@ public class CommanderPortlet extends ActionPortlet {
         UserData userData = (UserData) userDatas.get(user.getID());
 
         try {
-            StringBufferInputStream stringBufferInputStream = new StringBufferInputStream(fileData);
+            ByteArrayInputStream bais = new ByteArrayInputStream(fileData.getBytes());
             SecureDirectoryService secureDirectoryService = (SecureDirectoryService) getPortletConfig().getContext().getService(SecureDirectoryService.class);
-            secureDirectoryService.writeFromStream(request.getUser().getID(), rootDir, userData.getPath(userData.getEditSide()) + userData.getEditFile().getName(), stringBufferInputStream);
+            secureDirectoryService.writeFromStream(request.getUser().getID(), rootDir, userData.getPath(userData.getEditSide()) + userData.getEditFile().getName(), bais);
             readDirectories(event, userData);
             userData.setState("explore");
         } catch (PortletServiceUnavailableException e) {
@@ -426,16 +426,13 @@ public class CommanderPortlet extends ActionPortlet {
                 userData.setRightResourceList(rightResourceList);
                 userData.setLeftURIs(leftURIs);
                 userData.setRightURIs(rightURIs);
-                userData.setCorrect(new Boolean(true));
+                userData.setCorrect(Boolean.TRUE);
             } else {
-                userData.setCorrect(new Boolean(false));
+                userData.setCorrect(Boolean.FALSE);
             }
-        } catch (PortletServiceUnavailableException e) {
+        } catch (PortletServiceException e) {
             log.error("Secure service unavailable", e);
-            userData.setCorrect(new Boolean(false));
-        } catch (PortletServiceNotFoundException e) {
-            log.error("Secure service not found", e);
-            userData.setCorrect(new Boolean(false));
+            userData.setCorrect(Boolean.FALSE);
         }
     }
 

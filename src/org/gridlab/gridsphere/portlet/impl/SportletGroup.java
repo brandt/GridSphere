@@ -36,9 +36,9 @@ public class SportletGroup implements Serializable, Cloneable, PortletGroup {
      */
     public static final PortletGroup CORE = new SportletGroup(SportletGroup.CORE_GROUP);
 
-    private String Name = new String();
+    private String Name = "";
     private boolean isPublic = true;
-    private String description = new String();
+    private String description = "";
     private Set portletRoleList = new HashSet();
 
     /**

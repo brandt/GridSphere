@@ -12,11 +12,9 @@ import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
 
-public class GroupRequestBean
-        implements GroupRequest {
+public class GroupRequestBean implements GroupRequest {
 
-    private GroupEntry entry = null;
-    private String id = new String();
+    private String id = "";
     private User user = null;
     private PortletGroup group = null;
     private String role = null;
@@ -27,7 +25,6 @@ public class GroupRequestBean
     }
 
     public GroupRequestBean(GroupEntry entry) {
-        this.entry = entry;
         this.id = entry.getID();
         this.user = entry.getUser();
         this.group = entry.getGroup();

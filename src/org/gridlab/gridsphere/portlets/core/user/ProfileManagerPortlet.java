@@ -48,25 +48,21 @@ public class ProfileManagerPortlet extends ActionPortlet {
     private AccessControlManagerService aclManagerService = null;
     private LocaleService localeService = null;
     private LayoutManagerService layoutMgr = null;
-    private PortletRegistry portletRegistry = null;
     private TextMessagingService tms = null;
 
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
-        this.log.debug("Entering initServices()");
         try {
             this.userManagerService = (UserManagerService)config.getContext().getService(UserManagerService.class);
             this.aclManagerService = (AccessControlManagerService)config.getContext().getService(AccessControlManagerService.class);
             this.passwordManagerService = (PasswordManagerService)config.getContext().getService(PasswordManagerService.class);
             this.localeService = (LocaleService)config.getContext().getService(LocaleService.class);
-            this.portletRegistry = PortletRegistry.getInstance();
             this.layoutMgr = (LayoutManagerService)config.getContext().getService(LayoutManagerService.class);
             this.tms = (TextMessagingService) config.getContext().getService(TextMessagingService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
-        this.log.debug("Exiting initServices()");
 
     }
 
@@ -128,7 +124,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
     public DefaultTableModel setUserTable(FormEvent event, boolean disable) {
         PortletRequest req = event.getPortletRequest();
         User user = req.getUser();
-        PortletSession session = event.getPortletRequest().getPortletSession(true);
 
         //String logintime = DateFormat.getDateTimeInstance().format(new Date(user.getLastLoginTime()));
         req.setAttribute("logintime", DateUtil.getLocalizedDate(user,
@@ -325,9 +320,8 @@ public class ProfileManagerPortlet extends ActionPortlet {
         } else {
 
             for (int i=0;i<services.size();i++) {
-                Object o = services.get(i);
 
-                org.gridlab.gridsphere.tmf.config.TmfService tmfservice = (org.gridlab.gridsphere.tmf.config.TmfService) services.get(i);
+                TmfService tmfservice = (TmfService) services.get(i);
 
                 // tablerow
                 TableRowBean trService = new TableRowBean();

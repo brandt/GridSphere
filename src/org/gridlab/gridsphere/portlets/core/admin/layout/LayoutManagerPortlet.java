@@ -65,6 +65,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
             sb.append(line);
             sb.append("\n");
         }
+        reader.close();
         ta.setValue(sb.toString());
 
         Map tabs = PortletTabRegistry.getApplicationTabs();
@@ -114,7 +115,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
         TextAreaBean ta = event.getTextAreaBean("bannerTA");
         String newText = ta.getValue();
         String filename = this.getPortletConfig().getContext().getRealPath("/html/pagehead.html");
-        BufferedReader reader = new BufferedReader(new FileReader(filename));
 
         FileWriter f = new FileWriter(filename);
 
@@ -196,6 +196,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
             sb.append(line);
             sb.append("\n");
         }
+        reader.close();
         ta.setValue(sb.toString());
 
         setNextState(req, EDIT_JSP);
@@ -266,6 +267,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
             sb.append(line);
             sb.append("\n");
         }
+        reader.close();
         ta.setValue(sb.toString());
 
         setNextState(req, EDIT_JSP);

@@ -22,14 +22,12 @@ import org.gridlab.gridsphere.services.core.timer.TimerService;
  */
 public class TimerServiceImpl implements PortletServiceProvider, TimerService {
 
-    Map timerMap;
+    private Map timerMap = new HashMap();
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-        timerMap = new HashMap();
-
     }
 
-    public void destroy() {
+    public synchronized void destroy() {
         Iterator timerIter = timerMap.values().iterator();
         while (timerIter.hasNext()) {
             Timer timer = (Timer) timerIter.next();

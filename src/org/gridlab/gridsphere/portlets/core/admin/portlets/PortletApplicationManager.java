@@ -84,43 +84,7 @@ public class PortletApplicationManager extends ActionPortlet {
         TomcatWebAppResult result = null;
 
         try {
-           if (action.getName().equals("install")) {
-                log.debug("In actionPerformed doing an install");
-
-
-                String portletWar = null;
-                /*
-                FileFormEvent fileformEvent = new FileFormEventImpl(event);
-                try {
-                    portletWar = fileformEvent.saveFile(PortletManagerService.WEB_APPLICATION_PATH);
-                } catch (FileFormException ffe) {
-                    log.error("Unable to save file from form: " + ffe.getMessage());
-                }
-                */
-                /* Remove old portlet web app if it exists */
-                int idx = -1;
-                String webAppContext = null;
-                String webAppName = null;
-                List webappsList = portletManager.getPortletWebApplicationNames();
-                if ((idx = portletWar.lastIndexOf(".")) > 0) {
-                    webAppName = portletWar.substring(0, idx);
-                    if ((idx = webAppName.lastIndexOf("/")) > 0) {
-                        webAppContext = webAppName.substring(idx);
-                        webAppName = webAppContext.substring(1);
-                        if (webappsList.contains(webAppName)) {
-                            portletManager.destroyPortletWebApplication(webAppName, req, res);
-                            result = tomcat.removeWebApp(req, webAppName);
-                        }
-                    }
-                }
-
-                //String portletWar = warFile.getAbsolutePath();
-                if (webAppContext != null) {
-                    //result = tomcat.installWebApp(webAppContext, portletWar);
-                    //result = tomcat.startWebApp(webAppName);
-                    portletManager.initPortletWebApplication(webAppName, req, res);
-                }
-            } else if ((operation != null) && (appName!= null)) {
+            if ((operation != null) && (appName!= null)) {
                 if (operation.equals("start")) {
                     result = tomcat.startWebApp(req, appName);
                     portletManager.destroyPortletWebApplication(appName, req, res);

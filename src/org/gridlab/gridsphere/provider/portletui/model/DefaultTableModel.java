@@ -45,9 +45,9 @@ public class DefaultTableModel extends BaseBean implements TagBean {
             tableRow = new TableRowBean();
             String key = (String) it.next();
             Object obj = paramMap.get(key);
-            if (obj instanceof List) {
+            //if (obj instanceof List) {
 
-            }
+            //}
             if (obj instanceof String) {
                 String value = (String) paramMap.get(key);
                 TextBean tb1 = new TextBean();

@@ -8,13 +8,14 @@ import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.io.Serializable;
 
 /**
  * The <code>DefaultPortletAction</code> is a portlet action with default parameters.
  * You can use this portlet action to pass parameters in your action or create your own portlet action.
  * This default implementation demonstrates how to implement it.
  */
-public final class DefaultPortletAction implements PortletAction {
+public final class DefaultPortletAction implements PortletAction, Serializable {
 
     private Map store = new HashMap();
     private String name;
@@ -82,6 +83,10 @@ public final class DefaultPortletAction implements PortletAction {
             return (((DefaultPortletAction) obj).getName().equals(this.getName()));
         }
         return false;
+    }
+
+    public int hashCode() {
+        return name.hashCode();
     }
 
     public String toString() {

@@ -9,7 +9,6 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
-import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 import org.gridlab.gridsphere.services.core.user.AccountRequest;
 import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
@@ -31,15 +30,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
     private LayoutManagerService layoutMgr = null;
     private UserManagerService userManagerService = null;
 
-    public class TabDataBean {
-        private String name = "";
-        private String cid = "";
-
-    }
-
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
-        this.log.debug("Entering initServices()");
         try {
             this.layoutMgr = (LayoutManagerService)config.getContext().getService(LayoutManagerService.class);
             this.userManagerService = (UserManagerService)config.getContext().getService(UserManagerService.class);
@@ -47,8 +39,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
-        this.log.debug("Exiting initServices()");
-        //portletMgr = PortletManager.getInstance();
 
         DEFAULT_VIEW_PAGE = "doRender";
         DEFAULT_HELP_PAGE = "layout/help.jsp";

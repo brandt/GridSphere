@@ -308,9 +308,9 @@ public class BannerPortlet extends ActionPortlet {
             }
             userData.setLeftResourceList(resourceList);
             userData.setLeftURIs(URIs);
-            userData.setCorrect(new Boolean(true));
+            userData.setCorrect(Boolean.TRUE);
         } else {
-            userData.setCorrect(new Boolean(false));
+            userData.setCorrect(Boolean.FALSE);
         }
     }
 

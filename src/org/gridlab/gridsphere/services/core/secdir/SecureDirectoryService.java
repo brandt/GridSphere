@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.InputStream;
 
 public interface SecureDirectoryService extends PortletService {
+    
     public String getFileUrl(String userID, String appName, String resource);
 
     public String getFileUrl(String userID, String appName, String resource, String saveAs);

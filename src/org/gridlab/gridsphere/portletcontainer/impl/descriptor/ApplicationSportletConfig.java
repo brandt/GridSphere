@@ -22,9 +22,9 @@ import java.util.List;
  */
 public class ApplicationSportletConfig implements ApplicationPortletConfig {
 
-    private String id = new String();
-    private String portletName = new String();
-    private String servletName = new String();
+    private String id = "";
+    private String portletName = "";
+    private String servletName = "";
 
     // configuration hash exported to clients
     private ConfigParamList configParamList = new ConfigParamList();

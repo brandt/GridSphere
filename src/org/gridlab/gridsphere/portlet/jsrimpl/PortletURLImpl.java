@@ -321,7 +321,7 @@ public class PortletURLImpl implements PortletURL {
             url += "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + action;
         }
 
-        boolean firstParam = true;
+        //boolean firstParam = true;
         Iterator it = set.iterator();
         //try {
         while (it.hasNext()) {
@@ -349,14 +349,14 @@ public class PortletURLImpl implements PortletURL {
                 url +=  encname + "=" + encvalue;
             } else if (val instanceof String) {
                 String aval = (String) store.get(name);
-                if ((aval != null) && (aval != "")) {
+                if ((aval != null) && (!aval.equals(""))) {
                     String encvalue = URLEncoder.encode(aval);
                     url += encname + "=" + encvalue;
                 } else {
                     url += encname;
                 }
             }
-            firstParam = false;
+            //firstParam = false;
         }
         /*
         } catch (UnsupportedEncodingException e) {
