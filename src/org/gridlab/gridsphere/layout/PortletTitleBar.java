@@ -105,10 +105,12 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         public static final String configImage = "images/window_configure.gif";
         public static final String editImage = "images/window_edit.gif";
         public static final String helpImage = "images/window_help.gif";
+        public static final String viewImage = "images/window_view.gif";
 
         public static final String configAlt = "Configure";
         public static final String editAlt = "Edit";
         public static final String helpAlt = "Help";
+        public static final String viewAlt = "View";
 
         /**
          * Constructs an instance of PortletModeLink with the supplied portlet mode
@@ -128,6 +130,9 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             } else if (mode.equalsIgnoreCase(Portlet.Mode.HELP.toString())) {
                 imageSrc = helpImage;
                 altTag = helpAlt;
+            } else if (mode.equalsIgnoreCase(Portlet.Mode.VIEW.toString())) {
+                imageSrc = viewImage;
+                altTag = viewAlt;
             } else {
                 throw new IllegalArgumentException("No matching Portlet.Mode found for received portlet mode: " + mode);
             }
@@ -443,13 +448,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             }
         }
 
-        for (int i = 0; i < windowStates.length; i++) {
-            // remove current state from list
-            if (windowStates[i].equalsIgnoreCase(windowState.toString())) {
-                windowStates[i] = "";
-            }
-        }
-
         // create a URI for each of the window states
         PortletStateLink stateLink;
         List stateLinks = new Vector();
@@ -483,44 +481,49 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         // make modes from supported modes
         if (supportedModes.isEmpty()) return null;
 
+
         // Unless user is a super they shoudl not see configure mode
         boolean hasConfigurePermission = false;
         PortletRole role = req.getRole();
         if (role.isAdmin() || role.isSuper()) {
             hasConfigurePermission = true;
         }
-
-        String[] portletModes = new String[supportedModes.size()];
+        List smodes = new ArrayList();
+        Portlet.Mode mode;
         for (i = 0; i < supportedModes.size(); i++) {
-            Portlet.Mode mode = (Portlet.Mode)supportedModes.get(i);
-            if (mode == Portlet.Mode.CONFIGURE) {
+            mode = (Portlet.Mode)supportedModes.get(i);
+            if (mode.equals(Portlet.Mode.CONFIGURE)) {
                 if (hasConfigurePermission) {
-                    portletModes[i] = mode.toString();
-                } else {
-                    portletModes[i] = "";
+                    smodes.add(mode);
                 }
             } else {
-                portletModes[i] = mode.toString();
+                smodes.add(mode);
             }
+
+            // remove current mode from list
+            smodes.remove(portletMode);
         }
 
-        // create a URI for each of the portlet modes
-        PortletURI portletURI;
-        PortletModeLink modeLink;
         List portletLinks = new ArrayList();
-        for (i = 0; i < portletModes.length; i++) {
+        for (i = 0; i < smodes.size(); i++) {
+            // create a URI for each of the portlet modes
+            PortletURI portletURI;
+            PortletModeLink modeLink;
+            mode = (Portlet.Mode)smodes.get(i);
             portletURI = res.createURI();
             portletURI.addParameter(GridSphereProperties.COMPONENT_ID, this.componentIDStr);
             portletURI.addParameter(GridSphereProperties.PORTLETID, portletClass);
             try {
-                modeLink = new PortletModeLink(portletModes[i]);
-                portletURI.addParameter(GridSphereProperties.PORTLETMODE, portletModes[i]);
+                modeLink = new PortletModeLink(mode.toString());
+                portletURI.addParameter(GridSphereProperties.PORTLETMODE, mode.toString());
                 modeLink.setHref(portletURI.toString());
                 portletLinks.add(modeLink);
             } catch (IllegalArgumentException e) {
-
+                //log.debug("Unable to get mode for : " + mode.toString());
             }
+
         }
+
         return portletLinks;
     }
 

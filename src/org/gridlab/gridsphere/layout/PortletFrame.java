@@ -37,8 +37,10 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     private List listeners = new ArrayList();
     private PortletErrorFrame errorFrame = new PortletErrorFrame();
     private boolean transparent = false;
-    private String innerPadding = "";
-    private String outerPadding = "";
+    private String innerPadding = "0";
+    private String outerPadding = "0";
+    private String roleString = "GUEST";
+    private PortletRole requiredRole = PortletRole.GUEST;
 
     private transient PortletDataManager dataManager = SportletDataManager.getInstance();
 
@@ -123,6 +125,24 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     }
 
     /**
+     * Allows a required role to be associated with viewing this portlet
+     *
+     * @param roleString the required portlet role expresses as a <code>String</code>
+     */
+    public void setRequiredRole(String roleString) {
+        this.roleString = roleString;
+    }
+
+    /**
+     * Allows a required role to be associated with viewing this portlet
+     *
+     * @return the required portlet role expresses as a <code>String</code>
+     */
+    public String getRequiredRole() {
+        return roleString;
+    }
+
+    /**
      * Initializes the portlet frame component. Since the components are isolated
      * after Castor unmarshalls from XML, the ordering is determined by a
      * passed in List containing the previous portlet components in the tree.
@@ -145,6 +165,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             titleBar.setPortletClass(portletClass);
             list = titleBar.init(list);
             titleBar.addTitleBarListener(this);
+        }
+        try {
+            requiredRole = PortletRole.toPortletRole(roleString);
+        } catch (IllegalArgumentException e) {
+            requiredRole = PortletRole.GUEST;
         }
         return list;
     }
@@ -207,8 +232,12 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.actionPerformed(event);
+
         // process events
         PortletRequest req = event.getPortletRequest();
+        PortletRole role = req.getRole();
+        if (role.compare(role, requiredRole) < 0) return;
+
         PortletResponse res = event.getPortletResponse();
 
         req.setAttribute(GridSphereProperties.PORTLETID, portletClass);
@@ -265,7 +294,12 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.doRender(event);
+
         PortletRequest req = event.getPortletRequest();
+
+        PortletRole role = req.getRole();
+        if (role.compare(role, requiredRole) < 0) return;
+
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
 
@@ -348,6 +382,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         f.transparent = this.transparent;
         f.innerPadding = this.innerPadding;
         f.portletClass = this.portletClass;
+        f.roleString = this.roleString;
+        f.requiredRole = this.requiredRole;
         f.renderPortlet = this.renderPortlet;
         return f;
     }

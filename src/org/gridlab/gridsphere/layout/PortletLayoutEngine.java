@@ -11,7 +11,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-import org.exolab.castor.jdo.PersistenceException;
+import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
 import java.io.*;
 import java.util.*;
@@ -25,8 +25,6 @@ import java.util.*;
  * The portlet layout engine is a higher level manager of portlet containers
  * that represent a users customized layout. The portlet layout engine is used
  * by the {@link org.gridlab.gridsphere.portletcontainer.GridSphereServlet}
- * and the Portlet Layout Service that will
- * manage the customization of users' layouts. To be implemented...
  * Expect the PortletLayoutEngine methods to change possibly....
  */
 public class PortletLayoutEngine {
@@ -35,13 +33,13 @@ public class PortletLayoutEngine {
 
     private static PortletLayoutEngine instance = new PortletLayoutEngine();
     private static int MAX_GUEST_CONTAINERS = 50;
-    private String layoutMappingFile = null;
+    private String layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING);
 
-    private PortletContainer guestContainer = null;
-    private PortletContainer errorContainer = null;
+    private PortletPage guestContainer = null;
+    private PortletPage errorContainer = null;
+    private PortletPage templateContainer = null;
     private static int counter = 0;
     private String newuserLayoutPath;
-    private PortletContainer newuserContainer;
 
     private String userLayoutDir = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_DIR);
 
@@ -51,7 +49,7 @@ public class PortletLayoutEngine {
     private Map userLayouts = new HashMap();
 
     // Store application tabs in a hash
-    private Map applicationTabs = new HashMap();
+    private  Map applicationTabs = new HashMap();
 
     private Map guests = new HashMap();
 
@@ -60,12 +58,14 @@ public class PortletLayoutEngine {
      */
     private PortletLayoutEngine() {
         String errorLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_DIR) + "/ErrorLayout.xml";
-        layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING);
+        String templateLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_DIR) + "/TemplateLayout.xml";
+
         newuserLayoutPath = GridSphereConfig.getProperty(GridSphereConfigProperties.NEW_USER_LAYOUT);
         String guestLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GUEST_USER_LAYOUT);
         try {
             errorContainer = PortletLayoutDescriptor.loadPortletContainer(errorLayoutFile, layoutMappingFile);
             guestContainer = PortletLayoutDescriptor.loadPortletContainer(guestLayoutFile, layoutMappingFile);
+            templateContainer = PortletLayoutDescriptor.loadPortletContainer(templateLayoutFile, layoutMappingFile);
             errorContainer.init(new ArrayList());
         } catch (IOException e) {
             error = "Caught IOException trying to unmarshall GuestUserLayout.xml" + e.getMessage();
@@ -85,18 +85,16 @@ public class PortletLayoutEngine {
         return instance;
     }
 
-    public void addApplicationTab(String webAppName, String tabXMLfile) {
-        /*
+    public synchronized void addApplicationTab(String webAppName, String tabXMLfile) {
         try {
-            PortletTab webAppTab = PortletLayoutDescriptor.loadPortletTab(tabXMLfile, layoutMappingPath);
+            PortletTab webAppTab = PortletLayoutDescriptor.loadPortletTab(tabXMLfile, layoutMappingFile);
             applicationTabs.put(webAppName, webAppTab);
         } catch (Exception e) {
-            Don't worry- already logged
+            log.error("Unable to add: " + webAppName + " tab");
         }
-        */
     }
 
-    public void removeApplicationTab(String webAppName) {
+    public  synchronized void removeApplicationTab(String webAppName) {
         applicationTabs.remove(webAppName);
     }
 
@@ -107,13 +105,9 @@ public class PortletLayoutEngine {
         }
     }
 
-    public PortletContainer getPortletContainer(User user)  {
-          return null;
-    }
-
-    protected PortletContainer getPortletContainer(GridSphereEvent event)  {
+    protected PortletPage getPortletContainer(GridSphereEvent event)  {
         // if user is guest then use guest template
-        PortletContainer pc = null;
+        PortletPage pc = null;
 
         PortletRequest req = event.getPortletRequest();
         User user = req.getUser();
@@ -129,34 +123,30 @@ public class PortletLayoutEngine {
         if (user instanceof GuestUser) {
             String id = session.getId();
             if (guests.containsKey(id)) {
-                System.err.println("Returning guest conatiner for:" + id);
-                return (PortletContainer)guests.get(id);
+                return (PortletPage)guests.get(id);
             } else {
-                System.err.println("creating new conatiner for:" + id);
-
-                PortletContainer newcontainer = null;
+                PortletPage newcontainer = null;
                 try {
 
                     synchronized (new Integer(counter)) {
                         counter = (counter >= MAX_GUEST_CONTAINERS) ? 0 : counter++;
-                        newcontainer = (PortletContainer)guestContainer.clone();
+                        //newcontainer = (PortletPage)guestContainer.clone();
+                        newcontainer = guestContainer;
                     }
                     newcontainer.init(new ArrayList());
                     guests.put(id, newcontainer);
                 } catch (Exception e) {
-                    System.err.println("Unable to make deepcopy!!");
                     e.printStackTrace();
                 }
                 return newcontainer;
             }
 
             // Check if we have user's layout already
-        } else if (userLayouts.containsKey(user)) {
+        }
+        if (userLayouts.containsKey(user)) {
 
-            pc = (PortletContainer) userLayouts.get(user);
+            pc = (PortletPage) userLayouts.get(user);
             // If not we try to load it in (creating new one if necessary)
-        } else {
-
         }
         return pc;
     }
@@ -169,7 +159,7 @@ public class PortletLayoutEngine {
      */
     public void service(GridSphereEvent event) throws IOException {
         log.debug("in service()");
-        PortletContainer pc = null;
+        PortletPage pc = null;
 
         // XXX: How do we signal a user has logged out so we can userLayouts.remove(user)???
         // XXX By jove I've got it! Via loggedIn method of UserService which in turn creates a hash of something
@@ -187,7 +177,7 @@ public class PortletLayoutEngine {
         }
     }
 
-    public void setPortletContainer(User user, PortletContainer container) {
+    public void setPortletContainer(User user, PortletPage container) {
 
     }
 
@@ -199,21 +189,21 @@ public class PortletLayoutEngine {
      * Invoked by the GridSphereServlet to perform portlet login of a users layout
      *
      * @param event the gridsphere event
-     * @see org.gridlab.gridsphere.layout.PortletContainer#loginPortlets
+     * @see org.gridlab.gridsphere.layout.PortletPage#loginPortlets
      */
     public void loginPortlets(GridSphereEvent event) {
         log.debug("in loginPortlets()");
         User user = event.getPortletRequest().getUser();
-        PortletContainer pc = null;
+        PortletPage pc = null;
         try {
-                pc = createNewUserLayout(user);
-                pc.init(new ArrayList());
-                pc.loginPortlets(event);
-            } catch (Exception e) {
-                log.error("Unable to loadUserLayout for user: " + user, e);
-                //throw new PortletLayoutException("Unable to deserialize user layout from layout descriptor: " + e.getMessage());
-            }
-            userLayouts.put(user, pc);
+            pc = createNewUserLayout(user);
+            pc.init(new ArrayList());
+            pc.loginPortlets(event);
+        } catch (Exception e) {
+            log.error("Unable to loadUserLayout for user: " + user, e);
+            //throw new PortletLayoutException("Unable to deserialize user layout from layout descriptor: " + e.getMessage());
+        }
+        userLayouts.put(user, pc);
     }
 
     /**
@@ -221,12 +211,12 @@ public class PortletLayoutEngine {
      * Currently does nothing
      *
      * @param event the gridsphere event
-     * @see PortletContainer#logoutPortlets
+     * @see PortletPage#logoutPortlets
      */
     public void logoutPortlets(GridSphereEvent event) throws IOException {
         log.debug("in logoutPortlets()");
         try {
-            PortletContainer pc = getPortletContainer(event);
+            PortletPage pc = getPortletContainer(event);
             pc.logoutPortlets(event);
         } catch (PortletException e) {
             log.error("Unable to logout portlets", e);
@@ -242,7 +232,7 @@ public class PortletLayoutEngine {
      */
     public void actionPerformed(GridSphereEvent event) throws IOException {
         log.debug("in actionPerformed()");
-        PortletContainer pc = null;
+        PortletPage pc = null;
 
         // XXX: How do we signal a user has logged out so we can userLayouts.remove(user)???
         try {
@@ -269,24 +259,39 @@ public class PortletLayoutEngine {
         out.println("<b>" + error + "</b>");
     }
 
-    protected PortletContainer createNewUserLayout(User user) throws PersistenceManagerException, IOException {
+    protected PortletPage createNewUserLayout(User user) throws PersistenceManagerException, IOException {
+        System.err.println("in createNewUserL");
+        /*
+        PortletPage newContainer = null;
+        PortletTab newTab = null;
+
+        PortletTab coreTab = (PortletTab)applicationTabs.get("gridsphere");
+        try {
+            newContainer = (PortletPage)templateContainer.clone();
+            newTab = (PortletTab)coreTab.clone();
+            newContainer.getTabbedPane(newTab);
+
+        } catch (CloneNotSupportedException e) {
+            log.error("Unable to make a clone of the templateContainer", e);
+
+        }
+        System.err.println("made a clone!!!!!");
+        return newContainer;
+        */
 
         String layoutPath = getUserLayoutPath(user);
-
         File f = new File(layoutPath);
-        System.err.println("creating : " + layoutPath);
-        System.err.println("newuser layout: " + newuserLayoutPath);
-        // if no layout file exists for user, make new one from template
         if (!f.exists()) {
             f.createNewFile();
             copyFile(new File(newuserLayoutPath), f);
         }
         return PortletLayoutDescriptor.loadPortletContainer(layoutPath, layoutMappingFile);
+
     }
 
     public void saveUserLayout(User user) throws PersistenceManagerException, IOException {
 
-        PortletContainer pc = (PortletContainer) userLayouts.get(user);
+        PortletPage pc = (PortletPage) userLayouts.get(user);
         if (pc == null) {
             throw new PersistenceManagerException("PortletLayout does not exist for user: " + user.getID());
         }
@@ -344,15 +349,12 @@ public class PortletLayoutEngine {
         }
         catch(Exception e)
         {
-            System.out.println("Exception in ObjectCloner = " + e);
             throw(e);
         }
         finally
         {
             oos.close();
             ois.close();
-
-
         }
     }
 
