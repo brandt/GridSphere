@@ -8,7 +8,6 @@ import junit.framework.TestSuite;
 import junit.framework.Test;
 import junit.framework.TestCase;
 
-import org.gridlab.gridsphere.services.security.acl.ACLServiceTest;
 import org.gridlab.gridsphere.services.user.UserManagerServiceTest;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDescriptorTest;
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.ServiceDescriptorTest;
