@@ -60,6 +60,8 @@ Copyright:
     <property name="build.javadoc" value="${build.docs}/javadocs"/>
     <property name="build.tests"   value="${gridsphere.build}/tests"/>
 
+    <property name="GRIDSPHERE_HOME" value=""/>
+
     <property environment="env"/>
 
     <!-- =================================================================== -->
@@ -233,7 +235,7 @@ Copyright:
     <target name="gridsphere-junit-jar" depends="compile-core" description="Create gridsphere.jar">
 
         <property name="CATALINA_HOME" value="Unit Testing"/>
-        <property name="GRIDSPHERE_HOME" value="Unit Testing"/>
+        <property name="GRIDSPHERE_HOME" value="${gridsphere.build}/gridsphere"/>
         <property name="GRIDSPHERE_WEBAPP" value="${gridsphere.build}/${gswebapp.dir}"/>
         <property name="DB_DATABASE" value="junit"/>
 
@@ -437,7 +439,7 @@ Copyright:
 
     <target name="create-db" depends="doclet-mapping">
         <sql driver="org.hsqldb.jdbcDriver"
-           url="jdbc:hsqldb:${build.db}/gridsphere-db"
+           url="jdbc:hsqldb:${GRIDSPHERE_HOME}/db/gridsphere-db"
            userid="sa"
            password=""
            onerror="continue"
