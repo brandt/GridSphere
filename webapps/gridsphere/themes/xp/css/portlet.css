@@ -302,7 +302,7 @@ in lighter color
    /* font-family:verdana, arial, sans-serif; */
    font-family:inherit;
    font-variant:small-caps;
-   color:indianred;
+   color:darkred;
    background-color:inherit;
    font-style:normal;
    font-weight:bold;
@@ -323,7 +323,7 @@ in lighter color
    /* font-family:verdana, arial, sans-serif; */
    font-family:inherit;
    font-variant:small-caps;
-   color:orangered;
+   color:darkorange;
    background-color:inherit;
    font-style:italic;
    font-weight:bold;
@@ -346,7 +346,7 @@ in lighter color
    font-family:inherit;
    font-variant:small-caps;
    letter-spacing:2px;
-   color:palevioletred;
+   color:black;
    background-color:inherit;
    font-style:normal;
    font-weight:bold;
