@@ -6,18 +6,19 @@ This XML snippet is included into an ant build file.
 It includes a rule, docbook-setup, that ensures that the necessary
 DocBook distributions are unpacked and ready to process the XML.
 
-Very important to keep this synchronized with .cvsignore to prevent
-problems using Team support inside the Eclipse IDE.
-
+This script was initially provided by the Tapestry project
+http://jakarta.apache.org/proposals/tapestry
 -->
 
 <property file="../../../config/build.properties"/>
 
-<property name="html.install.dir" value="../../../web/doc/${root.filename}"/>
+
+<property name="docs.dir" value="../../../build/docs"/>
+<property name="html.install.dir" value="../../../build/docs/${root.filename}"/>
 
 <!-- The base name for the DTD distribution (the directory and tar file
      will match). -->
-     
+
 <property name="docbook.dtd.base" value="docbook-xml-4.2"/>
 
 <!-- Base name for the XSL distribution. -->
@@ -28,10 +29,17 @@ problems using Team support inside the Eclipse IDE.
 <property name="docbook.xsl.dir" value="../common/${docbook.xsl.base}"/>
 
 <property name="docbook.chunked.xsl"
-	value="../common/Tapestry-${docbook.xsl.base}-Chunked.xsl"/>
-	
+	value="../common/GridSphere-${docbook.xsl.base}-Chunked.xsl"/>
+
+<property name="docbook.nonchunked.xsl"
+	value="../common/GridSphere-${docbook.xsl.base}.xsl"/>
+
 <property name="docbook.fop.xsl"
-	value="../common/Tapestry-${docbook.xsl.base}-Fop.xsl"/>
+	value="../common/GridSphere-${docbook.xsl.base}-Fop.xsl"/>
+
+<property environment="env"/>
+<property name="fop.dir" value="${env.FOP_HOME}"/>
+
 
 <xmlcatalog id="docbook.catalog">
 	<dtd publicId="-//OASIS//DTD DocBook XML V4.1//EN" location="${docbook.dtd.dir}/docbookx.dtd"/>
@@ -43,23 +51,29 @@ problems using Team support inside the Eclipse IDE.
 	<available property="docbook.xsl.available" file="${docbook.xsl.dir}" type="dir"/>
 	<antcall target="docbook-setup-inner"/>
 
-	<copy 
-		file="../common/Tapestry.xsl.template" 
-		tofile="${docbook.chunked.xsl}">
+	<copy file="../common/GridSphere.xsl.template"
+		  tofile="${docbook.chunked.xsl}">
 		<filterset>
 			<filter token="docbook.xsl.base" value="${docbook.xsl.base}"/>
 			<filter token="format" value="chunk"/>
 		</filterset>
 	</copy>
-	
-	<copy
-		file="../common/Tapestry.fop-xsl.template"
-		tofile="${docbook.fop.xsl}">
+
+    <copy file="../common/GridSphere.xsl.template"
+		  tofile="${docbook.nonchunked.xsl}">
 		<filterset>
+			<filter token="docbook.xsl.base" value="${docbook.xsl.base}"/>
+			<filter token="format" value="docbook"/>
+		</filterset>
+	</copy>
+
+	<copy file="../common/GridSphere.fop-xsl.template"
+		  tofile="${docbook.fop.xsl}">
+        <filterset>
 			<filter token="docbook.xsl.base" value="${docbook.xsl.base}"/>
 		</filterset>
 	</copy>
-	
+
 </target>
 
 <target name="docbook-setup-inner" depends="docbook-unpack-dtd,docbook-unpack-xsl">
@@ -70,11 +84,11 @@ problems using Team support inside the Eclipse IDE.
 	<mkdir dir="../common/${docbook.dtd.base}"/>
 	<unzip src="../common/dist/${docbook.dtd.base}.zip" dest="../common/${docbook.dtd.base}"/>
 </target>
-  	
+
 <target name="docbook-unpack-xsl" unless="docbook.xsl.available">
 	<echo>Unpacking DocBook XSL distribution ...</echo>
 	<unzip src="../common/dist/${docbook.xsl.base}.zip" dest="../common"/>
-	
+
 </target>
 
 <property name="html.output.dir" value="html"/>
@@ -84,13 +98,14 @@ problems using Team support inside the Eclipse IDE.
 
 <target name="setup">
  <mkdir dir="${html.output.dir}"/>
+ <mkdir dir="${images.src.dir}"/>
  <mkdir dir="${common-images.dest.dir}"/>
 </target>
 
 <target name="clean">
   <delete dir="${html.output.dir}"/>
 </target>
-  
+
 <target name="copy-images" depends="setup">
     <copy todir="${images.dest.dir}" >
       <fileset dir="${images.src.dir}"/>
@@ -119,36 +134,36 @@ problems using Team support inside the Eclipse IDE.
        <include name="*.xml"/>
      </srcfiles>
     </uptodate>
-    
+
     <antcall target="generate-fo-from-xml"/>
-    
+
     <uptodate property="pdf.uptodate"
     	srcfile="${html.output.dir}/${root.filename}.fop"
     	targetfile="${html.output.dir}/${root.filename}.pdf"/>
-    	
+
     <antcall target="convert-fo-to-pdf"/>
-    
+
 </target>
 
 <target name="generate-fo-from-xml" unless="uptodate.fop">
 	<echo>
-	
+
 Generating Flow Objects from ${root.filename}.xml ...
 
 </echo>
-        
-    <style destdir="${html.output.dir}"
+
+    <xslt destdir="${html.output.dir}"
     	style="${docbook.fop.xsl}"
-    	processor="trax" 
+    	processor="trax"
     	force="true"
     	in="${root.filename}.xml"
     	out="${html.output.dir}/${root.filename}.fop">
     	<xmlcatalog refid="docbook.catalog"/>
-    </style>
+    </xslt>
 </target>
 
-    
-<target name="convert-fo-to-pdf" unless="pdf.uptodate">    
+
+<target name="convert-fo-to-pdf" unless="pdf.uptodate">
 <echo>
 
 Converting Flow Objects to PDF ...
@@ -167,33 +182,39 @@ Converting Flow Objects to PDF ...
 		</classpath>
 		<arg line="-fo ${root.filename}.fop"/>
 		<arg line="-pdf ${root.filename}.pdf"/>
-	</java>      
+	</java>
 
 </target>
 
 <!-- Invoked using antcall, setting the property root.filename -->
 
 <target name="html" depends="docbook-setup,copy-images">
-    <copy todir="${html.output.dir}" file="../common/Tapestry.css"/>
-   
+    <copy todir="${html.output.dir}" file="../common/GridSphere.css"/>
+
    <uptodate property="uptodate.html"
      targetfile="${html.output.dir}/${root.filename}.html">
      <srcfiles dir=".">
        <include name="*.xml"/>
      </srcfiles>
     </uptodate>
-    
+
+</target>
+
+<target name="html-chunked" depends="html">
     <antcall target="generate-html-chunked"/>
-    
+</target>
+
+<target name="html-nonchunked" depends="html">
+    <antcall target="generate-html-nonchunked"/>
 </target>
 
 <target name="generate-html-chunked" unless="uptodate.html">
     <echo>
-    
+
 Generating HTML from ${root.filename}.xml ...
 
 </echo>
-        
+
     <style destdir="${html.output.dir}"
     	style="${docbook.chunked.xsl}"
     	processor="trax"
@@ -202,13 +223,33 @@ Generating HTML from ${root.filename}.xml ...
     	<param name="base.dir" expression="${basedir}/${html.output.dir}/"/>
     	<param name="root.filename" expression="${root.filename}"/>
 		<param name="use.id.as.filename" expression="1"/>
-    	<xmlcatalog refid="docbook.catalog"/>		
+    	<xmlcatalog refid="docbook.catalog"/>
     </style>
-  
+
+</target>
+
+<target name="generate-html-nonchunked" unless="uptodate.html">
+    <echo>
+
+Generating HTML from ${root.filename}.xml ...
+
+</echo>
+
+    <style destdir="${html.output.dir}"
+    	style="${docbook.nonchunked.xsl}"
+    	processor="trax"
+    	force="true"
+    	includes="${root.filename}.xml">
+    	<param name="base.dir" expression="${basedir}/${html.output.dir}/"/>
+    	<param name="root.filename" expression="${root.filename}"/>
+		<param name="use.id.as.filename" expression="1"/>
+    	<xmlcatalog refid="docbook.catalog"/>
+    </style>
+
 </target>
 
 
-<target name="install" depends="html,pdf" 
+<target name="install" depends="html-chunked,pdf"
 	description="Build and install documentation.">
 	<mkdir dir="${html.install.dir}"/>
   	<copy todir="${html.install.dir}">
@@ -216,5 +257,14 @@ Generating HTML from ${root.filename}.xml ...
   	  	<exclude name="*.fop"/>
   	  </fileset>
   	</copy>
+    <delete dir="${html.output.dir}"/>
 </target>
 
+
+<target name="install-index" depends="html-nonchunked,pdf"
+	description="Build and install documentation.">
+  	<copy todir="${docs.dir}">
+  	  <fileset dir="${html.output.dir}"/>
+  	</copy>
+    <delete dir="${html.output.dir}"/>
+</target>
