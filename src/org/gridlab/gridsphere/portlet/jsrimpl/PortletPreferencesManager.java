@@ -9,7 +9,7 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.jsrimpl.PortletPreferencesImpl;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.PersistencePreference;
 
 import javax.portlet.PortletPreferences;
 
@@ -41,8 +41,8 @@ public class PortletPreferencesManager {
      * Returns the users portlet data for the specified portlet
      *
      * @param defaultPreferences a default portlet preferences obtained from the portlet descriptor
-     * @param user the <code>User</code>
-     * @param portletID the concrete portlet id
+     * @param user               the <code>User</code>
+     * @param portletID          the concrete portlet id
      * @return the PortletPreferences for this portlet or null if none exists.
      */
     public PortletPreferences getPortletPreferences(PortletPreferences defaultPreferences, User user, String portletID) {
@@ -50,20 +50,32 @@ public class PortletPreferencesManager {
         if (user instanceof GuestUser) return null;
 
         String command =
-                "select u from " + PortletPreferencesImpl.class.getName() + " u where u.UserID='" + user.getID() + "' and u.PortletID='" + portletID + "'";
+                "select u from " + PersistencePreference.class.getName() + " u where u.UserID='" + user.getID() + "' and u.PortletID='" + portletID + "'";
 
         // get sportlet data if it exists
-        PortletPreferencesImpl prefs = null;
+        PersistencePreference prefs = null;
         try {
-            prefs = (PortletPreferencesImpl) pm.restore(command);
+            prefs = (PersistencePreference) pm.restore(command);
 
-            // or create one
+            PortletPreferencesImpl portletprefdefault = null;
             if (prefs == null) {
-                prefs = new PortletPreferencesImpl(pm);
-                prefs.setPortletID(portletID);
-                prefs.setUserID(user.getID());
-                pm.create(prefs);
+                // try get one from the xml
+
+                // your part jason, to get from xml here
+
+                // we have no prefs in the xml so create one in the db...
+                if (portletprefdefault == null) {
+                    prefs = new PersistencePreference(pm);
+                    prefs.setPortletId(portletID);
+                    prefs.setUserId(user.getID());
+                } else {
+                    // we got one from xml, save it to db for the user
+                    prefs = new PersistencePreference(pm, portletprefdefault);
+                }
+
+                prefs.store();
             }
+
         } catch (Exception e) {
             return defaultPreferences;
         }
