@@ -19,7 +19,6 @@ import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 import java.util.*;
 import java.io.IOException;
 
-
 /**
  * The <code>LayoutManagerService</code> manages users layouts
  */
@@ -28,8 +27,6 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
     private PortletLog log = SportletLog.getInstance(LayoutManagerServiceImpl.class);
 
     private PortletPageFactory pageFactory = null;
-
-    private PortletRegistry portletRegistry = null;
 
     private Map userPortlets = new Hashtable();
 
@@ -325,7 +322,6 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         List tabs = pane.getPortletTabs();
         for (int i = 0; i < tabs.size(); i++) {
             PortletTab tab = (PortletTab)tabs.get(i);
-            System.err.println(" tab title= " + tab.getTitle());
             if (tab.getTitle().equals(tabName)) {
                 return tab;
             } else {
