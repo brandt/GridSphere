@@ -115,6 +115,10 @@ public interface PortletComponent extends ComponentLifecycle {
      */
     public String getRequiredRoleAsString();
 
+    public void setCanModify(boolean canModify);
+
+    public boolean getCanModify();
+
     public void addComponentListener(PortletComponent component);
 
     public PortletComponent getParentComponent();

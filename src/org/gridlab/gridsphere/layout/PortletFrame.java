@@ -31,6 +31,10 @@ import java.util.*;
  */
 public class PortletFrame extends BasePortletComponent implements Serializable, Cloneable {
 
+    public static final String FRAME_CLOSE_OK_ACTION = "close";
+
+    public static final String FRAME_CLOSE_CANCEL_ACTION = "cancelClose";
+
     private CacheService cacheService = null;
 
     // renderPortlet is true in doView and false on minimized
@@ -188,9 +192,10 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             // if title bar is not assigned a label and we have one then use it
             if ((!label.equals("")) && (titleBar.getLabel().equals(""))) titleBar.setLabel(label + "TB");
             titleBar.setPortletClass(portletClass);
+            titleBar.setCanModify(canModify);
+            titleBar.setTheme(theme);
             list = titleBar.init(req, list);
             titleBar.addComponentListener(this);
-            titleBar.setTheme(theme);
         }
         // invalidate cache 
         req.setAttribute(CacheService.NO_CACHE, "true");
@@ -285,11 +290,12 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
                     // check for portlet closing action
                     if (event.hasAction()) {
-                        if (event.getAction().getName().equals("close")) {
+                        if (event.getAction().getName().equals(FRAME_CLOSE_OK_ACTION)) {
                             isClosing = false;
                             frameEvent = new PortletFrameEventImpl(this, request, PortletFrameEvent.FrameAction.FRAME_CLOSED, COMPONENT_ID);
+                            request.setAttribute(SportletProperties.INIT_PAGE, "true");
                         }
-                        if (event.getAction().getName().equals("cancelClose")) {
+                        if (event.getAction().getName().equals(FRAME_CLOSE_CANCEL_ACTION)) {
                             isClosing = false;
                         }
                     }
@@ -363,7 +369,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             cacheService.removeCached(portletClass + id);
 
             //System.err.println("in PortletFrame action invoked for " + portletClass);
-            if (event.hasAction()) {
+            if (event.hasAction()
+                    && (!event.getAction().getName().equals(FRAME_CLOSE_OK_ACTION))
+                    && (!event.getAction().getName().equals(FRAME_CLOSE_CANCEL_ACTION))) {
                 DefaultPortletAction action = event.getAction();
                 if (action.getName() != "") {
                     try {
@@ -522,11 +530,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
                     portletURI.addParameter(PortletWindow.State.CLOSED.toString(), Boolean.TRUE.toString());
 
-                    postframe.append("<p><input class=\"portlet-form-button\" type=\"submit\" name=\"" + SportletProperties.DEFAULT_PORTLET_ACTION + "=close\" value=\"" + ok + "\"");
+                    postframe.append("<p><input class=\"portlet-form-button\" type=\"submit\" name=\"" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + FRAME_CLOSE_OK_ACTION + "\" value=\"" + ok + "\"");
                     portletURI = res.createURI();
 
                     portletURI.addParameter(PortletWindow.State.CLOSED.toString(), Boolean.FALSE.toString());
-                    postframe.append("<input class=\"portlet-form-button\" type=\"submit\" name=\"" + SportletProperties.DEFAULT_PORTLET_ACTION + "=cancelClose\" value=\"" + cancel + "\"");
+                    postframe.append("<input class=\"portlet-form-button\" type=\"submit\" name=\"" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + FRAME_CLOSE_CANCEL_ACTION + "\" value=\"" + cancel + "\"");
                     postframe.append("</p></form>");
                 } else {
 

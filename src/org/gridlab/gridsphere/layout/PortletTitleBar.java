@@ -381,7 +381,14 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 supportedModes = sort(appConfig.getSupportedModes());
 
                 // get window states from application portlet config
+
                 allowedWindowStates = sort(appConfig.getAllowedWindowStates());
+                System.err.println("in titlebar can Modify = " + canModify);
+                if (canModify) {
+                    if (!allowedWindowStates.contains(PortletWindow.State.CLOSED)) {
+                        allowedWindowStates.add(PortletWindow.State.CLOSED);
+                    }
+                }
             }
         }
     }

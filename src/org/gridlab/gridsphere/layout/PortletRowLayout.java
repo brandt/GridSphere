@@ -21,19 +21,23 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable, S
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
-
+        System.err.println("\t\tin render RowLayout");
         PortletComponent p = null;
 
         // starting of the gridtable
         out.println(" <!-- START ROW --> ");
         out.println("<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">");
+        //out.println("<table width=\"" + width + "\" cellspacing=\"0\" cellpadding=\"0\">");
         out.println("<tbody><tr>");
         List scomponents = Collections.synchronizedList(components);
         synchronized(scomponents) {
         for (int i=0;i<scomponents.size();i++) {
             p = (PortletComponent) scomponents.get(i);
+            //out.println("<td valign=\"top\">");
             //System.out.println("\n\n\n\n\n WIDTH "+p.getWidth()+"\n\n\n\n");
             out.println("<td valign=\"top\" width=\""+p.getWidth()+"\">");
+
+
             if (p.getVisible()) {
                 p.doRender(event);
             }

@@ -67,6 +67,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
                 } else {
                 // all the components have the same theme
                 p.setTheme(theme);
+                p.setCanModify(canModify);
                 // invoke init on each component
                 list = p.init(req, list);
 
@@ -76,7 +77,38 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
                 }
             }
         }
+
         return list;
+    }
+
+    protected void customActionPerformed(GridSphereEvent event) throws
+            PortletLayoutException, IOException {
+
+    }
+
+    public void actionPerformed(GridSphereEvent event) throws
+            PortletLayoutException, IOException {
+
+        super.actionPerformed(event);
+
+        PortletComponentEvent compEvt = event.getLastRenderEvent();
+        if ((compEvt != null) && (compEvt instanceof PortletFrameEvent)) {
+            PortletFrameEvent frameEvent = (PortletFrameEvent)compEvt;
+            handleFrameEvent(frameEvent);
+        }
+
+        customActionPerformed(event);
+
+        List slisteners = Collections.synchronizedList(listeners);
+        synchronized (slisteners) {
+            Iterator it = slisteners.iterator();
+            PortletComponent comp;
+            while (it.hasNext()) {
+                comp = (PortletComponent) it.next();
+                event.addNewRenderEvent(compEvt);
+                comp.actionPerformed(event);
+            }
+        }
     }
 
     public void remove(PortletComponent pc, PortletRequest req) {
@@ -131,6 +163,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      * @param event a portlet frame event
      */
     public void handleFrameMaximized(PortletFrameEvent event) {
+        System.err.println("in frame layout: frame has been maximized");
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
         Iterator it = scomponents.iterator();
@@ -205,6 +238,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      * @param event a portlet frame event
      */
     public void handleFrameClosed(PortletFrameEvent event) {
+        System.err.println("Portlet FrameLAyout: in frame closed");
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
         Iterator it = scomponents.iterator();
@@ -215,9 +249,11 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
             // check for the frame that has been closed
             if (p.getComponentID() == id) {
                 if (p instanceof PortletFrame) {
-                    this.remove(p, event.getRequest());
-
+                    components.remove(p);
+                    //this.remove(p, event.getRequest());
+                    /*
                     try {
+                        System.err.println("removing and reinit page");
                         PortletPageFactory pageFactory = PortletPageFactory.getInstance();
                         PortletPage page = pageFactory.createPortletPage(event.getRequest());
                         page.init(event.getRequest(), new Vector());
@@ -225,6 +261,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
                     } catch (Exception e) {
                         //log.error("Unable to save portlet page", e);
                     }
+                    */
                     return;
                 }
             }

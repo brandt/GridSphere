@@ -238,16 +238,21 @@ public class PortletPageFactory implements PortletSessionListener {
                     //if (g.getName().equals(webappName)) {
                     log.debug("adding group layout: " + g.getName());
                     PortletTabbedPane portletTabs = PortletTabRegistry.getGroupTabs(g.getName());
-                    tabs = portletTabs.getPortletTabs();
-                    for (int j = 0; j < tabs.size(); j++) {
-                        PortletTab tab = (PortletTab)tabs.get(j);
-                        System.err.println("adding tab: " + tab.getTitle("en"));
-                        //pane.addTab(g.getName(), (PortletTab)tab.clone());
-                        pane.addTab((PortletTab)deepCopy(tab));
+                    if (portletTabs != null) {
+                        tabs = portletTabs.getPortletTabs();
+                        for (int j = 0; j < tabs.size(); j++) {
+                            PortletTab tab = (PortletTab)tabs.get(j);
+                            System.err.println("adding tab: " + tab.getTitle("en"));
+                            //pane.addTab(g.getName(), (PortletTab)tab.clone());
+                            pane.addTab((PortletTab)deepCopy(tab));
+                        }
                     }
                     //}
                 }
             //}
+            User user = req.getUser();
+            String theme = (String)user.getAttribute(User.THEME);
+            if (theme != null) newPage.setTheme(theme);
             newPage.setPortletTabbedPane(pane);
             //newPage = (PortletPage)templatePage;
             newPage.init(req, new ArrayList());

@@ -35,6 +35,8 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected PortletRole requiredRole = PortletRole.GUEST;
     protected List listeners = null;
     protected StringBuffer bufferedOutput = new StringBuffer();
+    protected boolean canModify = false;
+
 
     /**
      * Initializes the portlet component. Since the components are isolated
@@ -154,6 +156,14 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      */
     public String getWidth() {
         return width;
+    }
+
+    public void setCanModify(boolean canModify) {
+        this.canModify = canModify;
+    }
+
+    public boolean getCanModify() {
+        return canModify;
     }
 
     /**
