@@ -92,51 +92,57 @@ public class FormEventImpl implements FormEvent {
     }
 
     /**
-     * Gets back the prev. saved bean with the modifications from the userinterface.
+     * Gets back the prev. saved bean with the modifications from the userinterface.  Returns null
+     * if none object was found.
      * @param name name of the bean
      * @return updated elementbean
      */
     public Object getTagBean(String name) {
         HttpSession session = request.getSession();
         NameBean bean = (NameBean) getBean(name);
-        //System.out.println("Getting Bean " + name + " from Session");
-        //if (checkParameterName("gstag:"+bean.getName())) {
-        String beanKey = GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name;
-        log.debug("Getting Bean '" + beanKey + "' from Session");
+        if (bean==null) {
+            return null;
+        } else {
+            //System.out.println("Getting Bean " + name + " from Session");
+            //if (checkParameterName("gstag:"+bean.getName())) {
+            String beanKey = GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name;
+            log.debug("Getting Bean '" + beanKey + "' from Session");
 
-        if (bean instanceof TableBean) {
-            // has to be that hack since the individal components of a table
-            // are not stored by itself in a session, kind of different
-            // later to modify all the methods to do recursion
-            TableBean tbean = (TableBean)bean;
-            Iterator it = tbean.iterator();
-            while (it.hasNext()) {
-                TableRowBean trb = (TableRowBean)it.next();
-                Iterator rowit = trb.iterator();
-                while (rowit.hasNext()) {
-                    TableCellBean tcb = (TableCellBean)rowit.next();
-                    Iterator cellit = tcb.iterator();
-                    while (cellit.hasNext()) {
-                        BaseElementBean basebean = (BaseElementBean)cellit.next();
-                        // check if we actually can update this (could be textbean which is not updatable at all)
-                        // @TODO instanceof updatable
-                        if (basebean instanceof NameBean) {
-                            bean = (NameBean)basebean;
-                            String[] values = request.getParameterValues("gstag:" + bean.getName());
-                            log.debug("Updating bean: " + bean.getName());
-                            bean.update(values);
+            if (bean instanceof TableBean) {
+                // has to be that hack since the individal components of a table
+                // are not stored by itself in a session, kind of different
+                // later to modify all the methods to do recursion
+                TableBean tbean = (TableBean)bean;
+                Iterator it = tbean.iterator();
+                while (it.hasNext()) {
+                    TableRowBean trb = (TableRowBean)it.next();
+                    Iterator rowit = trb.iterator();
+                    while (rowit.hasNext()) {
+                        TableCellBean tcb = (TableCellBean)rowit.next();
+                        Iterator cellit = tcb.iterator();
+                        while (cellit.hasNext()) {
+                            BaseElementBean basebean = (BaseElementBean)cellit.next();
+                            // check if we actually can update this (could be textbean which is not updatable at all)
+                            // @TODO instanceof updatable
+                            if (basebean instanceof NameBean) {
+                                bean = (NameBean)basebean;
+                                String[] values = request.getParameterValues("gstag:" + bean.getName());
+                                log.debug("Updating bean: " + bean.getName());
+                                bean.update(values);
+                            }
                         }
                     }
                 }
+                session.setAttribute(beanKey, tbean);
+                return tbean;
+            } else {
+                session.setAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name, bean);
+                String[] values = request.getParameterValues("gstag:" + bean.getName());
+                log.debug("Updating bean: " + bean.getName());
+                bean.update(values);
+                session.setAttribute(beanKey, bean);
+                return bean;
             }
-            session.setAttribute(beanKey, tbean);
-            return tbean;
-        } else {
-            String[] values = request.getParameterValues("gstag:" + bean.getName());
-            log.debug("Updating bean: " + bean.getName());
-            bean.update(values);
-            session.setAttribute(beanKey, bean);
-            return bean;
         }
     }
 
@@ -171,24 +177,9 @@ public class FormEventImpl implements FormEvent {
                 for (int i = 0; i < values.length; i++) {
                     System.out.println("            - " + values[i]);
                 }
-
             }
         }
         System.out.println("--------------------\n");
     }
 
-    /**
-     * Retrieves bean from the current session.
-     * @param beanname name of the bean
-     * @return bean
-     */
-    public Object getStoredTagBean(String beanname) {
-        String beanKey = GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+beanname;
-        log.debug("GET FROM SESSION FOR STORED TAG : "+ beanKey);
-        Object ob = request.getSession().getAttribute(beanKey);
-        return ob;
-    }
-
 }
-
-

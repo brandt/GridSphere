@@ -24,16 +24,9 @@ public interface FormEvent extends ActionEvent {
      */
     public Object getTagBean(String name);
 
-    /**
+   /**
      * For debugging
      */
     public void printRequestParameter();
-
-    /**
-     * Retrieves bean from the current session.
-     * @param beanname name of the bean
-     * @return bean
-     */
-    public Object getStoredTagBean(String beanname);
 
 }
