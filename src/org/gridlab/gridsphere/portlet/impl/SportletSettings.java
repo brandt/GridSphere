@@ -77,22 +77,23 @@ public class SportletSettings implements PortletSettings {
     }
 
     /**
-     * Returns the title of this window for the provided locale, or null if none exists.
+     * Returns the title of this window for the provided locale, or whatever exists.
      *
      * @param locale the locale-centric title
      * @param client the given client
      * @return the title of the portlet
      */
     public String getTitle(Locale locale, Client client) {
-
+        String defaultTitle = "";
         Iterator it = langList.iterator();
         while (it.hasNext()) {
             LanguageInfo langInfo = (LanguageInfo) it.next();
+            defaultTitle = langInfo.getTitle();
             if (langInfo.getLocale().startsWith(locale.toString())) {
                 return langInfo.getTitle();
             }
         }
-        return null;
+        return defaultTitle;
     }
 
     /**
@@ -105,54 +106,63 @@ public class SportletSettings implements PortletSettings {
     }
 
     /**
-     * Returns the short title of this window for the provided locale, or null if none exists.
+     * Returns the short title of this window for the provided locale, or whatever exists.
      *
      * @param locale the locale-centric title
      * @param client the given client
      * @return the title of the portlet
      */
     public String getTitleShort(Locale locale, Client client) {
-        while (langList.iterator().hasNext()) {
-            LanguageInfo langInfo = (LanguageInfo) langList.iterator().next();
+        String defaultTitleShort = "";
+        Iterator it = langList.iterator();
+        while (it.hasNext()) {
+            LanguageInfo langInfo = (LanguageInfo) it.next();
+            defaultTitleShort = langInfo.getTitleShort();
             if (langInfo.getLocale().equals(locale)) {
                 return langInfo.getTitleShort();
             }
         }
-        return null;
+        return defaultTitleShort;
     }
 
     /**
-     * Returns the description of this window for the provided locale, or null if none exists.
+     * Returns the description of this window for the provided locale, or whatever exists.
      *
      * @param locale the locale-centric title
      * @param client the given client
      * @return the title of the portlet
      */
     public String getDescription(Locale locale, Client client) {
-        while (langList.iterator().hasNext()) {
-            LanguageInfo langInfo = (LanguageInfo) langList.iterator().next();
+        String defaultDescription = "";
+        Iterator it = langList.iterator();
+        while (it.hasNext()) {
+            LanguageInfo langInfo = (LanguageInfo)it.next();
+            defaultDescription = langInfo.getDescription();
             if (langInfo.getLocale().equals(locale)) {
                 return langInfo.getDescription();
             }
         }
-        return null;
+        return defaultDescription;
     }
 
     /**
-     * Returns the keywords of this window for the provided locale, or null if none exists.
+     * Returns the keywords of this window for the provided locale, or whatever exists.
      *
      * @param locale the locale-centric title
      * @param client the given client
      * @return the title of the portlet
      */
     public String getKeywords(Locale locale, Client client) {
-        while (langList.iterator().hasNext()) {
-            LanguageInfo langInfo = (LanguageInfo) langList.iterator().next();
+        String defaultKeywords = "";
+        Iterator it = langList.iterator();
+        while (it.hasNext()) {
+            LanguageInfo langInfo = (LanguageInfo) it.next();
+            defaultKeywords = langInfo.getKeywords();
             if (langInfo.getLocale().equals(locale)) {
                 return langInfo.getKeywords();
             }
         }
-        return null;
+        return defaultKeywords;
     }
 
     /**
