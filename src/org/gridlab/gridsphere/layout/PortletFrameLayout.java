@@ -114,6 +114,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
     }
 
     public void remove(PortletComponent pc, PortletRequest req) {
+        System.err.println("in PFL removing portlet calling parents remove");
         components.remove(pc);
         if (getPortletComponents().isEmpty()) {
             parent.remove(this, req);

@@ -48,6 +48,7 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
         // toss all known modes into list
 
         // custom modes
+        /*
         List cModes = new ArrayList();
         if (customModes != null) {
             for (int i = 0; i < customModes.length; i++) {
@@ -55,6 +56,7 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
                 cModes.add(newmode);
             }
         }
+        */
 
         // defined portlet modes
         for (int i = 0; i < supports.length; i++) {
@@ -66,7 +68,7 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
                 modesAllowed.add(m.getContent());
             }
             String mimeType = (String)s.getMimeType().getContent();
-            modesAllowed.addAll(cModes);
+            //modesAllowed.addAll(cModes);
             tmpMarkups.put(mimeType, modesAllowed);
         }
 

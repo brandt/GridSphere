@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.portletcontainer.jsrimpl;
 import org.gridlab.gridsphere.layout.PortletTabRegistry;
 import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
@@ -126,7 +127,10 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
                 PortletGroupDescriptor groupDescriptor = new PortletGroupDescriptor(groupXMLfile);
                 SportletGroup group = groupDescriptor.getPortletGroup();
                 AccessControlManager aclManager = AccessControlManager.getInstance();
-                aclManager.createGroup(group);
+                PortletGroup g = aclManager.getGroupByName(group.getName());
+                if (g == null) {
+                    aclManager.createGroup(group);
+                }
             } catch (Exception e) {
                 throw new PortletException("Unable to deserialize group.xml for: " + webApplicationName, e);
             }

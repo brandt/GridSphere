@@ -23,6 +23,14 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
     public PortletColumnLayout() {
     }
 
+    public void remove(PortletComponent pc, PortletRequest req) {
+        System.err.println("removing portlet in column");
+        components.remove(pc);
+        if (getPortletComponents().isEmpty() && (!canModify)) {
+            parent.remove(this, req);
+        }
+    }
+
     /**
      * Renders the component
      */
@@ -43,20 +51,20 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
             out.println("<tbody>");
             List scomponents = Collections.synchronizedList(components);
             synchronized(scomponents) {
-            for (int i=0;i<scomponents.size();i++) {
+                for (int i=0;i<scomponents.size();i++) {
 
-                p = (PortletComponent) scomponents.get(i);
+                    p = (PortletComponent) scomponents.get(i);
 
-                //out.print("<tr><td valign=\"top\" width=\"" + p.getWidth() + "\">");
-                out.print("<tr><td valign=\"top\" width=\"100%\">");
+                    //out.print("<tr><td valign=\"top\" width=\"" + p.getWidth() + "\">");
+                    out.print("<tr><td valign=\"top\" width=\"100%\">");
 
-                if (p.getVisible()) {
-                    p.doRender(event);
-                    //out.println("comp: "+i);
+                    if (p.getVisible()) {
+                        p.doRender(event);
+                        //out.println("comp: "+i);
+                    }
+
+                    out.println("</td></tr>");
                 }
-
-                out.println("</td></tr>");
-            }
             }
             out.println("</tbody>");
             out.println("</table> <!-- END COLUMN -->");

@@ -178,6 +178,8 @@ public class PortletPageFactory implements PortletSessionListener {
             } catch (Exception e) {
                 log.error("Unable to make a clone of the templatePage", e);
             }
+        } else {
+            return null;
         }
 
         // check for portlets no longer in groups and remove if necessary
@@ -195,37 +197,46 @@ public class PortletPageFactory implements PortletSessionListener {
         }
 
         // create tmp page
-        try {
         PortletPage tmpPage = new PortletPage();
-        //tmpPage.setLayoutDescriptor(userLayout + ".tmp");
-        tmpPage.setPortletTabbedPane((PortletTabbedPane)deepCopy(pane));
-        tmpPage.init(req, new ArrayList());
-        List complist = tmpPage.getComponentIdentifierList();
+        try {
 
-        it = complist.iterator();
-        while (it.hasNext()) {
-            ComponentIdentifier cid = (ComponentIdentifier)it.next();
-            if (cid.getPortletComponent() instanceof PortletFrame) {
-                if (!allowedPortlets.contains(cid.getPortletClass())) {
-                    PortletComponent pc = cid.getPortletComponent();
-                    PortletComponent parent = pc.getParentComponent();
-                    System.err.println("removing portlet class= " + cid.getPortletClass());
-                    //parent.remove(pc, req);
+            //tmpPage.setLayoutDescriptor(userLayout + ".tmp");
+            PortletTabbedPane tmpPane = (PortletTabbedPane)deepCopy(pane);
+            tmpPage.setPortletTabbedPane(tmpPane);
+            tmpPage.init(req, new ArrayList());
+
+            // when deleting must reinit everytime
+            int i = 0;
+            boolean found = false;
+            while (i < tmpPage.getComponentIdentifierList().size()) {
+                found = false;
+                System.err.println("i= " + i);
+                it = tmpPage.getComponentIdentifierList().iterator();
+                System.err.println("rem");
+                while (it.hasNext() && (!found)) {
+                    found = false;
+                    ComponentIdentifier cid = (ComponentIdentifier)it.next();
+                    if (cid.getPortletComponent() instanceof PortletFrame) {
+                        System.err.println("found frame = " + cid.getPortletClass());
+                        if (!allowedPortlets.contains(cid.getPortletClass())) {
+                            PortletComponent pc = cid.getPortletComponent();
+                            PortletComponent parent = pc.getParentComponent();
+                            System.err.println("removing portlet class= " + cid.getPortletClass());
+                            parent.remove(pc, req);
+                            tmpPage.init(req, new ArrayList());
+                            found = true;
+                        }
+                    }
                 }
+                i++;
             }
-        }
-
-        pane.save();
-
+            tmpPane.save();
+            return tmpPane;
         } catch (Exception e) {
             log.error("Unable to save user pane!", e);
         }
 
-
-        return pane;
-    }
-
-    public void checkPortletsInUserPane() {
+        return null;
 
     }
 

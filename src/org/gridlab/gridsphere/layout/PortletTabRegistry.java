@@ -58,10 +58,10 @@ public class PortletTabRegistry {
 
     private PortletTabRegistry() {}
 
-    public synchronized static void addGroupTab(String webAppName, String tabXMLfile) throws IOException, PersistenceManagerException {
+    public synchronized static void addGroupTab(String groupName, String tabXMLfile) throws IOException, PersistenceManagerException {
         PortletTabbedPane webAppTabs = PortletLayoutDescriptor.loadPortletTabs(tabXMLfile, layoutMappingFile);
-        tabDescriptors.put(webAppName, tabXMLfile);
-        groupTabs.put(webAppName, webAppTabs);
+        tabDescriptors.put(groupName, tabXMLfile);
+        groupTabs.put(groupName, webAppTabs);
     }
 
     public static void reloadGuestLayout() throws IOException, PersistenceManagerException {

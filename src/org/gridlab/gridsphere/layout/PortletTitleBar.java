@@ -37,7 +37,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     private transient PortletWindow.State windowState = PortletWindow.State.NORMAL;
     //private List supportedModes = new Vector();
     private transient Portlet.Mode portletMode = Portlet.Mode.VIEW;
-    private transient Portlet.Mode previousMode = null;
+    private transient Portlet.Mode previousMode = Portlet.Mode.VIEW;
     private List allowedWindowStates = new Vector();
     private String errorMessage = "";
     private boolean hasError = false;
@@ -365,6 +365,9 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         compId.setClassName(this.getClass().getName());
         list.add(compId);
         doConfig();
+        windowState = PortletWindow.State.NORMAL;
+        portletMode = Portlet.Mode.VIEW;
+        previousMode = Portlet.Mode.VIEW;
         return list;
     }
 

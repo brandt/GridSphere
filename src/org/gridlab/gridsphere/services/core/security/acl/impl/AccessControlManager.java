@@ -478,34 +478,10 @@ public class AccessControlManager implements AccessControlManagerService {
         return (getGroupByName(groupName) != null);
     }
 
-    public PortletGroup createGroup(String groupName) {
-        SportletGroup group = getSportletGroupByName(groupName);
-        if (group == null) {
-            group = new SportletGroup();
-            group.setName(groupName);
-            group.setPublic(true);
-            try {
-                pm.create(group);
-            } catch (PersistenceManagerException e) {
-                String msg = "Error creating portlet group " + groupName;
-                log.error(msg, e);
-            }
-        }
-        return group;
-    }
-
-    public PortletGroup createGroup(String groupName, String groupDescription, Set portletRoleList) {
-        SportletGroup group = getSportletGroupByName(groupName);
-        if (group == null) {
-            group = new SportletGroup();
-            group.setName(groupName);
-            group.setDescription(groupDescription);
-            group.setPublic(true);
-        }
-        Iterator it = portletRoleList.iterator();
+    public PortletGroup createGroup(SportletGroup portletGroup) {
+        Iterator it = portletGroup.getPortletRoleList().iterator();
         while (it.hasNext()) {
             SportletRoleInfo info = (SportletRoleInfo)it.next();
-            System.err.println("XXX role= " + info.getRole() + " class=" + info.getPortletClass()+" OID "+info.getOid());
             try {
                 if (info.getOid() == null) {
                     pm.create(info);
@@ -516,44 +492,16 @@ public class AccessControlManager implements AccessControlManagerService {
                 log.error("Error creating SportletRoleInfo "+info.getRole(), e);
             }
         }
-        group.setPortletRoleList(portletRoleList);
+        portletGroup.setPortletRoleList(portletGroup.getPortletRoleList());
         try {
-            if (group.getOid()==null) {
-                pm.create(group);
+            if (portletGroup.getOid()==null) {
+                pm.create(portletGroup);
             } else {
-                pm.update(group);
+                pm.update(portletGroup);
             }
         } catch (PersistenceManagerException e) {
-            String msg = "Error creating portlet group " + groupName;
+            String msg = "Error creating portlet group " + portletGroup.getName();
             log.error(msg, e);
-        }
-
-        return group;
-    }
-
-    public PortletGroup createGroup(SportletGroup portletGroup) {
-        System.err.println("in createGroup " + portletGroup.getName());
-        SportletGroup group = getSportletGroupByName(portletGroup.getName());
-        if (group == null) {
-            Iterator it = portletGroup.getPortletRoleList().iterator();
-            while (it.hasNext()) {
-                SportletRoleInfo info = (SportletRoleInfo)it.next();
-                System.err.println("XXX role= " + info.getRole() + " class=" + info.getPortletClass()+" OID "+info.getOid());
-                try {
-                    pm.create(info);
-                } catch (PersistenceManagerException e) {
-                    log.error("Error creating SportletRoleInfo "+info.getRole(), e);
-                }
-            }
-            portletGroup.setPortletRoleList(portletGroup.getPortletRoleList());
-            try {
-                pm.create(portletGroup);
-            } catch (PersistenceManagerException e) {
-                String msg = "Error creating portlet group " + portletGroup.getName();
-                log.error(msg, e);
-            }
-        } else {
-            System.err.println("this group exists!!!");
         }
         return portletGroup;
     }

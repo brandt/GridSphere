@@ -5,6 +5,7 @@ package org.gridlab.gridsphere.portlets.core.admin.groups;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
+import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
@@ -15,6 +16,7 @@ import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerSer
 import org.gridlab.gridsphere.services.core.security.acl.GroupAction;
 import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
+import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManager;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
@@ -124,7 +126,8 @@ public class GroupManagerPortlet extends ActionPortlet {
             if (!group.isPublic()) req.setAttribute("isPrivate", "true");
 
             portletRoleList = group.getPortletRoleList();
-
+            HiddenFieldBean gid = event.getHiddenFieldBean("groupId");
+            gid.setValue(groupId);
         }
 
 
@@ -184,7 +187,7 @@ public class GroupManagerPortlet extends ActionPortlet {
                     String concID = conc.getConcretePortletID();
 
                     PortletRole reqrole = conc.getConcretePortletConfig().getRequiredRole();
-                    log.debug("subscribed to portlet: " + concID + " " + reqrole);
+                    //log.debug("subscribed to portlet: " + concID + " " + reqrole);
                     if (role.compare(role, reqrole) >= 0) {
                         // build an interface
                         CheckBoxBean cb = new CheckBoxBean();
@@ -281,6 +284,7 @@ public class GroupManagerPortlet extends ActionPortlet {
 
     public void doMakeGroup(FormEvent evt) throws PortletException {
         this.checkSuperRole(evt);
+        AccessControlManager aclService = AccessControlManager.getInstance();
         List webappNames = portletMgr.getWebApplicationNames();
         Iterator it = webappNames.iterator();
         Set portletRoles = new HashSet();
@@ -300,13 +304,11 @@ public class GroupManagerPortlet extends ActionPortlet {
                 while (cit.hasNext()) {
                     ConcretePortlet conc = (ConcretePortlet)cit.next();
                     String concID = conc.getConcretePortletID();
-                    System.err.println("a concID=" + concID);
                     ListBoxBean lb = evt.getListBoxBean(concID + "LB");
                     CheckBoxBean cb = evt.getCheckBoxBean(concID + "CB");
                     if (cb.isSelected()) {
                         String reqRole = lb.getSelectedValue();
                         SportletRoleInfo portletRoleInfo = new SportletRoleInfo();
-                        System.err.println("concID= " + concID);
                         portletRoleInfo.setPortletClass(concID);
                         portletRoleInfo.setPortletRole(PortletRole.toPortletRole(reqRole));
                         portletRoles.add(portletRoleInfo);
@@ -318,17 +320,48 @@ public class GroupManagerPortlet extends ActionPortlet {
         it = portletRoles.iterator();
         while (it.hasNext()) {
             SportletRoleInfo info = (SportletRoleInfo)it.next();
-            System.err.println("role= " + info.getRole() + " class=" + info.getPortletClass());
         }
 
-        User user = evt.getPortletRequest().getUser();
         TextFieldBean groupTF = evt.getTextFieldBean("groupNameTF");
         TextFieldBean groupDescTF = evt.getTextFieldBean("groupDescTF");
-      
+        HiddenFieldBean gid = evt.getHiddenFieldBean("groupId");
+        RadioButtonBean groupVisibility = evt.getRadioButtonBean("groupVisibility");
+
+        SportletGroup newgroup = new SportletGroup();
+        if (!gid.getValue().equals("")) {
+            newgroup.setOid(gid.getValue());
+
+            PortletGroup oldgroup = aclService.getGroup(gid.getValue());
+
+            // if group name has been modified update group tab
+            if (!oldgroup.getName().equals(groupTF.getValue())) {
+
+                String tabfile = PortletTabRegistry.getTabDescriptorPath(oldgroup.getName());
+                PortletTabRegistry.removeGroupTab(oldgroup.getName());
+                try {
+                    PortletTabRegistry.addGroupTab(groupTF.getValue(), tabfile);
+                } catch (Exception e) {
+                    log.error("unable to save group tab: " + groupTF.getValue(), e);
+                }
+            }
+        }
+
         try {
             if ((!groupTF.getValue().equals("")) && !portletRoles.isEmpty()) {
-                this.getACLService(user).createGroup(groupTF.getValue(), groupDescTF.getValue(), portletRoles);
+
+                newgroup.setName(groupTF.getValue());
+                newgroup.setDescription(groupDescTF.getValue());
+                newgroup.setPortletRoleList(portletRoles);
+                if (groupVisibility.getSelectedValue().equals("PRIVATE")) {
+                    newgroup.setPublic(false);
+                } else {
+                    newgroup.setPublic(true);
+                }
+
+                aclService.createGroup(newgroup);
+
                 // now create new group layout if group does not exist
+
                 if (PortletTabRegistry.getGroupTabs(groupTF.getValue()) == null) {
                     PortletTabRegistry.newGroupTab(groupTF.getValue(), portletRoles);
                 }
