@@ -308,7 +308,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
         // This insures that if no portlet component id (cid)
         // is set, then the selected tab index is the startIndex = 0
-        if (event.getPortletComponentID() < 1) {
+        if (event.getPortletComponentID() < 0) {
             selectedIndex = startIndex;
         }
 

@@ -17,6 +17,8 @@ public class PortletTabEventImpl implements PortletTabEvent {
     private PortletTab portletTab;
     private int id;
 
+    private PortletTabEventImpl() {}
+
     /**
      * Constructs an instance of PortletTabEventImpl from a portlet tab, a
      * tab event action and the portlet tab component id
