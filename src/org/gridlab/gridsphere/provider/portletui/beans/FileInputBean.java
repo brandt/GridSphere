@@ -51,7 +51,6 @@ public class FileInputBean extends InputBean implements TagBean {
         this.inputtype = "file";
         this.request = request;
         this.beanId = beanId;
-        createFileUpload();
     }
 
     public FileInputBean(PortletRequest request, String beanId, FileItem fileItem) throws IOException {
@@ -61,55 +60,7 @@ public class FileInputBean extends InputBean implements TagBean {
         this.request = request;
         this.beanId = beanId;
         savedFileItem = fileItem;
-        createFileUpload();
     }
-
-
-    /**
-     * Creates a file upload handler
-     *
-     * @throws IOException
-     */
-    protected void createFileUpload() throws IOException {
-
-        if (savedFileItem != null) {
-            // Create a new file upload handler
-            DiskFileUpload upload = new DiskFileUpload();
-
-            // Set upload parameters
-            upload.setSizeMax(MAX_UPLOAD_SIZE);
-            upload.setRepositoryPath(TEMP_DIR);
-
-            // Parse the request
-            List items = null;
-            try {
-                items = upload.parseRequest(request);
-            } catch (FileUploadException e) {
-                name = "<b>Unable to parse uploaded file!</b>";
-            }
-            // Process the uploaded fields
-            Iterator iter = items.iterator();
-
-            try {
-                while (iter.hasNext()) {
-                    FileItem item = (FileItem) iter.next();
-                    if (!item.isFormField()) {
-                        savedFileItem = item;
-
-                    }
-                }
-            } catch (Exception e) {
-                throw new IOException("Unable to save file: " + e);
-            }
-        }
-        if (savedFileItem == null) throw new IOException("No file has been saved!");
-
-        value = savedFileItem.getName();
-        //savedFileItem.getStoreLocation();
-
-        //System.err.println("saved file :" + value);
-    }
-
 
     /**
      * Returns the uploaded file name
@@ -151,7 +102,7 @@ public class FileInputBean extends InputBean implements TagBean {
 
         try {
             if (!file.exists()) file.createNewFile();
-            //savedFileItem.write(filePath);
+            if (savedFileItem != null) savedFileItem.write(file);
         } catch (Exception e) {
             throw new IOException("Unable to save file: " + e);
         }
@@ -164,6 +115,6 @@ public class FileInputBean extends InputBean implements TagBean {
      * @throws IOException
      */
     public InputStream getInputStream() throws IOException {
-        return savedFileItem.getInputStream();
+        return (savedFileItem != null) ? savedFileItem.getInputStream() : null;
     }
 }

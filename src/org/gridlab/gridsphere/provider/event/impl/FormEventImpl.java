@@ -20,6 +20,7 @@ import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 
 import java.io.IOException;
+import java.io.File;
 import java.util.*;
 
 /*
@@ -650,13 +651,18 @@ public class FormEventImpl implements FormEvent {
         Map parameters = new Hashtable();
         if (FileUpload.isMultipartContent(req)) {
             //log.debug("Multipart!");
-            DiskFileUpload fileUpload=new DiskFileUpload();
+            DiskFileUpload upload=new DiskFileUpload();
+             // Set upload parameters
+            upload.setSizeMax(FileInputBean.MAX_UPLOAD_SIZE);
+            upload.setRepositoryPath(FileInputBean.TEMP_DIR);
             List fileItems=null;
             try {
-                  fileItems= fileUpload.parseRequest(req);
-            } catch (FileUploadException e) {
-                log.debug("Error Parsing multi Part form.Error in workaround!!!");
+                  fileItems= upload.parseRequest(req);
+
+            } catch (Exception e) {
+             log.error("Error Parsing multi Part form.Error in workaround!!!", e);
             }
+
             if (fileItems!=null){
                 for (int i = 0; i < fileItems.size(); i++) {
                     FileItem item = (FileItem) fileItems.get(i);
@@ -674,7 +680,6 @@ public class FormEventImpl implements FormEvent {
 
             }
 
-            //log.debug("End of workaround!!!");
         }
         return parameters;
     }
