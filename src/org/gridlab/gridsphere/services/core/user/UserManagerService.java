@@ -8,7 +8,7 @@
  */
 package org.gridlab.gridsphere.services.core.user;
 
-import org.gridlab.gridsphere.services.security.password.InvalidPasswordException;
+import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.core.mail.MailMessage;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletService;
