@@ -2,7 +2,8 @@
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
 <jsp:useBean id="name" class="java.lang.String" scope="request"/>
-<jsp:useBean id="allowImport" class="java.lang.Boolean" scope="request"/>
+
+<% Boolean allowImport = (Boolean)request.getAttribute("allowImport"); %>
 
 <portletAPI:init/>
 
