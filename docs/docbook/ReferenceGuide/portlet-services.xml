@@ -240,7 +240,7 @@ For more details on methods provided by the services, consult the Javadoc API
     <varlistentry><term>RequestService</term>
         <listitem>
             <para>
-                Provides asimple service for tracking requests nad providing persistence.
+                Provides a simple service for tracking requests and providing persistence.
             </para>
         </listitem>
     </varlistentry>
