@@ -80,10 +80,21 @@ public class LayoutManagerPortlet extends ActionPortlet {
         Map groups = PortletTabRegistry.getGroupTabs();
         it = groups.keySet().iterator();
         List groupNames = new ArrayList();
+        List groupDescs = new ArrayList();
+        User user = req.getUser();
+
+        AccessControlManagerService aclService = getACLService(user);
+
+        String name;
+        PortletGroup group;
         while (it.hasNext()) {
-            groupNames.add((String)it.next());
+            name = (String)it.next();
+            groupNames.add(name);
+            group = aclService.getGroupByName(name);
+            if (group != null) groupDescs.add(group.getDescription());
         }
         req.setAttribute("groupNames", groupNames);
+        req.setAttribute("groupDescs", groupDescs);
 
         setNextState(req, VIEW_JSP);
     }
@@ -112,13 +123,45 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     }
 
+    public void importLayout(FormEvent event) throws PortletException, IOException {
+        this.checkSuperRole(event);
+
+        ListBoxBean appsLB = event.getListBoxBean("appsLB");
+        String val = appsLB.getSelectedValue();
+
+        HiddenFieldBean groupHF = event.getHiddenFieldBean("layoutHF");
+        String thisgroup = groupHF.getValue();
+        String thisFile = PortletTabRegistry.getTabDescriptorPath(thisgroup);
+
+        String groupFile = PortletTabRegistry.getTabDescriptorPath(val);
+        System.err.println("copying " + groupFile + " to " + thisFile);
+        if (groupFile != null) {
+            BufferedReader reader =  new BufferedReader(new FileReader(groupFile));
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(thisFile), "UTF-8"));
+            String line = null;
+            while (line == reader.readLine()) {
+                out.write(line);
+                out.newLine();
+            }
+            out.close();
+        }
+
+        editGroup(event, thisgroup);
+
+    }
+
     public void editGroupLayout(FormEvent event) throws PortletException, IOException {
-        PortletRequest req = event.getPortletRequest();
 
         String group = event.getAction().getParameter("group");
 
-        String groupLayoutPath = PortletTabRegistry.getTabDescriptorPath(group);
+        editGroup(event, group);
 
+    }
+
+    public void editGroup(FormEvent event, String group) throws PortletException, IOException {
+        String groupLayoutPath = PortletTabRegistry.getTabDescriptorPath(group);
+        PortletRequest req = event.getPortletRequest();
+        
         Boolean allowImport = Boolean.TRUE;
 
         if (PortletTabRegistry.getApplicationTabs(group) != null) {
@@ -134,13 +177,14 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         ListBoxBean appsLB = event.getListBoxBean("appsLB");
 
-        Map tabs = PortletTabRegistry.getApplicationTabs();
+        Map tabs = PortletTabRegistry.getGroupTabs();
 
-        List tabNames = new ArrayList();
         Iterator it = tabs.keySet().iterator();
         while (it.hasNext()) {
             ListBoxItemBean item = new ListBoxItemBean();
-            item.setName((String)it.next());
+            String name = (String)it.next();
+            item.setName(name);
+            item.setValue(name);
             appsLB.addBean(item);
         }
 

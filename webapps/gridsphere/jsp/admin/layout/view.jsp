@@ -3,6 +3,7 @@
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
 <% List groupNames = (List)request.getAttribute("groupNames"); %>
+<% List groupDescs = (List)request.getAttribute("groupDescs"); %>
 
 <portletAPI:init/>
 <ui:form>
@@ -24,22 +25,41 @@
 
 <ui:text value="The following group layouts exist:"/>
 
+<ui:frame>
+<ui:tablerow header="true">
+    <ui:tablecell><ui:text value="Group name"/></ui:tablecell>
+    <ui:tablecell><ui:text value="Group description"/></ui:tablecell>
+    <ui:tablecell><ui:text value="Edit layout"/></ui:tablecell>
+    <ui:tablecell><ui:text value="Delete layout"/></ui:tablecell>
+</ui:tablerow>
 <p>
 
 <%  Iterator it = groupNames.iterator();
-    while (it.hasNext()) {
+    Iterator cit = groupDescs.iterator();
+    while (it.hasNext() && cit.hasNext()) {
     String group = (String)it.next();
+    String groupDesc = (String)cit.next();
 %>
-
+<ui:tablerow>
+<ui:tablecell>
 <ui:text value="<%= group %>"/>
+</ui:tablecell>
+<ui:tablecell>
+    <ui:text value="<%= groupDesc %>"/>
+</ui:tablecell>
+<ui:tablecell>
 <ui:actionlink action="editGroupLayout" value="Edit">
     <ui:actionparam name="group" value="<%= group %>"/>
 </ui:actionlink>
+</ui:tablecell>
+<ui:tablecell>
 <ui:actionlink action="deleteLayout" value="Delete">
     <ui:actionparam name="group" value="<%= group %>"/>
 </ui:actionlink>
-
-<p>
-
+</ui:tablecell>
+</ui:tablerow>
 <% } %>
+
+</ui:frame>
+
 </ui:form>

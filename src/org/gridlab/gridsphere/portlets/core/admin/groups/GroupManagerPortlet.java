@@ -820,11 +820,20 @@ public class GroupManagerPortlet extends ActionPortlet {
 
         PortletGroup group = getACLService(user).getGroup(groupId);
 
+        List users = getACLService(user).getUsers(group);
+        if (users != null) {
+            MessageBoxBean msg = event.getMessageBoxBean("msg");
+            msg.setMessageType("error");
+            msg.setValue("You must remove all users in the group before deleting it");
+
+        } else {
+
         // delete group from acl service
         getACLService(user).deleteGroup(group);
 
         // delete group from layout registry
         PortletTabRegistry.removeGroupTab(group.getName());
+        }
     }
 
     public AccessControlManagerService getACLService(User user) {

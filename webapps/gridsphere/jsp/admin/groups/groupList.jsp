@@ -10,6 +10,9 @@
 <% List groupDescs = (List)request.getAttribute("groupDescs"); %> 
 
 <ui:form>
+
+<ui:messagebox beanId="msg"/>
+
 <ui:panel>
 
     <% if (request.getAttribute("create") != null) { %>
