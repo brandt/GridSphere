@@ -16,6 +16,7 @@
     </td>
     <td>
     <ui:listbox beanId="localeLB"/>
+    <ui:actionsubmit action="selectLang" value="ok" hideifjs="true"/>
     </td>
     </tr>
     </table>
