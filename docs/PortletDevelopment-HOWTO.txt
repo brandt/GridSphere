@@ -283,7 +283,7 @@ are defined by the PortletRequest:
  + Portlet.Mode getPreviousMode() -- return the previous portlet mode of this portlet
  + User getUser() -- return the User object
  + PortletWindow getWindow() -- return the portlet window representing the window state of this portlet
- + void setModeModifier(Portlet.ModeModifier modeModifier) -- sets the next portlet mode to display
+ + void setMode(Portlet.Mode mode) -- sets the next portlet mode to display
 
 Client
 The Client defines the user's browser type and supported mime-types. The purpose of the client object is to allow

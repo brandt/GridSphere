@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- $Id$ -->
+<!-- Top-level buildfile for GridSphere. -->
+
+<project name="GridSphere Module" default="docbook">
+
+<target name="docbook"
+	description="Builds the GridSphere documentation.">
+    <ant dir="Index" target="install-index" inheritAll="false"/>
+	<!-- <ant dir="DevelopersGuide" target="install" inheritAll="false"/> -->
+	<ant dir="UsersGuide" target="install" inheritAll="false"/>
+</target>
+
+</project>

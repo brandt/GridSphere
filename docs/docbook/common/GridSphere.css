@@ -7,7 +7,7 @@ IMG
 
 BODY
 {
-  background-color: #839cd1;
+  background-color: brown;   /*  #839cd1; */
 }
 
 BODY, TABLE, TD, P
@@ -20,7 +20,7 @@ BODY, TABLE, TD, P
 
 A
 {
-	color:white;
+	color:orange;
 }
 
 /* Inside programlisting blocks (with a light background), use

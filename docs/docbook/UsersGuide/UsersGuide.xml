@@ -4,9 +4,9 @@
   "http://www.oasis-open.org/docbook/xml/4.1/docbookx.dtd" [
   <!-- Useful snippets -->
   
-<!ENTITY % TapestryLinks SYSTEM "../common/TapestryLinks.xml">
+<!ENTITY % GridSphereLinks SYSTEM "../common/GridSphereLinks.xml">
   
-  %TapestryLinks;
+  %GridSphereLinks;
   
 <!-- Each chapter is in its own file -->
   

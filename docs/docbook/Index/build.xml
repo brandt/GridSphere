@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project [
+    <!ENTITY docbook-setup SYSTEM "file:../common/docbook-setup.xml">
+]>
+
+<project name="The GridSphere Documentation Project" default="install-index">
+
+<property name="root.filename" value="index"/>
+
+&docbook-setup;
+    
+</project>
+
+

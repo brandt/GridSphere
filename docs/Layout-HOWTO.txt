@@ -24,25 +24,13 @@ BasePortletComponent -- Implements PortletComponent and extends PortletContainer
                         that other portlet components inherit from
 
 
-PortletInsets  -- Provides a component to create a block of space defined by its height and width
-
-PortletBorder -- Provides a border around another portlet component that has a title bar and optionally
-                 support for icons to minimize, maximize, help, etc.
-
 PortletImage --  A simple widget to display images expressed as a file of JPEG, GIF, etc. format
 
 PortletText -- Another simple widget to display text that is expressed as the name of a file to include
 
-PortletMinimized -- Shows an icon witha description. This is intended to represnt minimized portlets that are
-                    displayed in the portlet dock
-
-PortletDock -- Displays minimized portlets and any other useful components
-
 PortletPanel -- A panel contains a LayoutManager which is responsible for component layout
 
-PortletFlowLayout -- The flow layout lays components out either top down or left right
-
-PortletGridLayout -- The grid layout lays components in a grid defined by the number of rows and columns
+PortletGridLayout -- The grid layout lays components in a grid defined by the number and wiidth of columns
 
 PortletTabbedPane -- A tabbed pane contains PortletTabs similar to Java Swing
 

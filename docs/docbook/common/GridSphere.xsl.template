@@ -2,8 +2,9 @@
 <!-- $Id$ -->
 <!--
 
-  A stylesheet used commonly for Tapestry documentation.
-  
+  A stylesheet used for GridSphere documentation.
+ 
+  A big thanks to Tapestry project http://jakarta.apache.org/proposals/tapestry 
   -->
   
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -33,15 +34,15 @@
 <xsl:param name="callout.graphics" select="1"/>
 <xsl:param name="callout.graphics.path">standard-images/callouts/</xsl:param>
 
-<!-- The Tapestry documentation is inside a frameset and we want to keep the
+<!-- The GridSphere documentation is inside a frameset and we want to keep the
      frameset even when the use clicks a link "outside" the documentation.  -->
      
 <xsl:param name="ulink.target">_self</xsl:param>
 
 <!-- This stylesheet allows the generated HTML to blend into
-     the Tapestry web page. -->
+     the GridSphere web page. -->
      
-<xsl:param name="html.stylesheet">Tapestry.css</xsl:param>
+<xsl:param name="html.stylesheet">GridSphere.css</xsl:param>
 
 </xsl:stylesheet>
 
