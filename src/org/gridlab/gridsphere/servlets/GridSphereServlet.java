@@ -178,10 +178,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
         }
 
-        checkUserHasCookie(event);
-
         setUserAndGroups(portletReq);
 
+        checkUserHasCookie(event);
+        
         setTCKUser(portletReq);
 
         // Handle user login and logout
