@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
 import java.util.*;
+import java.io.UnsupportedEncodingException;
 
 
 /**
@@ -191,23 +192,27 @@ public class SportletURI implements PortletURI {
             return s.append(servletPath + url).toString();
         }
         boolean firstParam = true;
-        it = set.iterator();
-        while (it.hasNext()) {
-            if (!firstParam)
-                url += "&";
-            String name = (String) it.next();
+        try {
+            it = set.iterator();
+            while (it.hasNext()) {
+                if (!firstParam)
+                    url += "&";
+                String name = (String) it.next();
 
-            String encname = URLEncoder.encode(name);
-            String val = (String) store.get(name);
-            if (val != null) {
-                String encvalue = URLEncoder.encode(val);
-                url += encname + "=" + encvalue;
-            } else {
-                url += encname;
+                String encname = URLEncoder.encode(name, "UTF-8");
+                String val = (String) store.get(name);
+                if (val != null) {
+                    String encvalue = URLEncoder.encode(val, "UTF-8");
+                    url += encname + "=" + encvalue;
+                } else {
+                    url += encname;
+                }
+                firstParam = false;
             }
-            firstParam = false;
+        } catch (UnsupportedEncodingException e) {
+            System.err.println("UTF-8 unsupported encoding!");
+            e.printStackTrace();
         }
-
         if (redirect) {
             newURL = res.encodeRedirectURL(url);
         } else {
