@@ -21,7 +21,7 @@ import java.util.List;
 /**
  *
  */
-public class NoteServiceImpl implements NoteService, PortletServiceProvider  {
+public class NoteServiceImpl implements NoteService, PortletServiceProvider {
 
     private static PortletLog log = SportletLog.getInstance(NoteServiceImpl.class);
 
@@ -44,7 +44,7 @@ public class NoteServiceImpl implements NoteService, PortletServiceProvider  {
     public Note getNoteByOid(String Oid) {
         Note result = null;
         try {
-            result = (Note)pm.restore("from "+Note.class.getName()+" as note where note.oid='"+Oid+"'");
+            result = (Note) pm.restore("from " + Note.class.getName() + " as note where note.oid='" + Oid + "'");
         } catch (PersistenceManagerException e) {
             e.printStackTrace();
         }
@@ -54,25 +54,15 @@ public class NoteServiceImpl implements NoteService, PortletServiceProvider  {
     private boolean noteExists(User user, String name) {
         Note result = null;
         try {
-            result = (Note)pm.restore("from "+Note.class.getName()+" as note where note.name='"+name+"' and note.Userid='"+user.getID()+"'");
+            result = (Note) pm.restore("from " + Note.class.getName() + " as note where note.name='" + name + "' and note.Userid='" + user.getID() + "'");
         } catch (PersistenceManagerException e) {
             e.printStackTrace();
         }
-        return (result!=null);
-    }
-
-    private boolean noteExists(Note note) {
-        Note result = null;
-        try {
-            result = (Note)pm.restore("from "+Note.class.getName()+" as note where note.name='"+note.getName()+"' and note.Userid='"+note.getUserid()+"'");
-        } catch (PersistenceManagerException e) {
-            e.printStackTrace();
-        }
-        return (result!=null);
+        return (result != null);
     }
 
     public String addNote(User user, String name, String text) {
-        if (!noteExists(user, name))  {
+        if (!noteExists(user, name)) {
             Note Note = new Note();
             Note.setName(name);
             Note.setContent(text);
@@ -82,10 +72,10 @@ public class NoteServiceImpl implements NoteService, PortletServiceProvider  {
                 return "";
             } catch (PersistenceManagerException e) {
                 e.printStackTrace();
-                return "Problem creating note "+name+" in storage.";
+                return "Error: Problem creating note " + name + " in storage.";
             }
         }
-        return "Note with name "+name+" already exists.";
+        return "Error: Note with name " + name + " already exists.";
     }
 
     public void deleteNote(Note Note) {
@@ -99,8 +89,8 @@ public class NoteServiceImpl implements NoteService, PortletServiceProvider  {
     public List getNotes(User user) {
         List result = null;
         try {
-            String oql = "from "+Note.class.getName()+" as note where note.Userid='"+user.getID()+"'";
-            log.debug("Query with "+oql);
+            String oql = "from " + Note.class.getName() + " as note where note.Userid='" + user.getID() + "'";
+            log.debug("Query with " + oql);
             result = pm.restoreList(oql);
         } catch (PersistenceManagerException e) {
             e.printStackTrace();
@@ -112,25 +102,22 @@ public class NoteServiceImpl implements NoteService, PortletServiceProvider  {
         List result = null;
         try {
             String oql =
-                    "from "+Note.class.getName()+" as note where note.Userid='"+user.getID()+"' and (note.content like '%"+searchstring+"%' or note.name like '%"+searchstring+"%')";
-            log.debug("Query with "+oql);
+                    "from " + Note.class.getName() + " as note where note.Userid='" + user.getID() + "' and (note.content like '%" + searchstring + "%' or note.name like '%" + searchstring + "%')";
+            log.debug("Query with " + oql);
             result = pm.restoreList(oql);
         } catch (PersistenceManagerException e) {
             e.printStackTrace();
         }
-       return result;
+        return result;
     }
 
     public String update(Note Note) {
-        if (!noteExists(Note)) {
-            try {
-                pm.update(Note);
-            } catch (PersistenceManagerException e) {
-                e.printStackTrace();
-                return "Error updating note "+Note.getName();
-            }
-            return "";
+        try {
+            pm.update(Note);
+        } catch (PersistenceManagerException e) {
+            e.printStackTrace();
+            return "Error: updating note " + Note.getName() + " failed.";
         }
-        return "A Note with the name "+Note.getName()+" already exists.";
+        return "";
     }
 }

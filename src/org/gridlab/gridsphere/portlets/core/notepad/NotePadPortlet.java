@@ -9,9 +9,7 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.event.FormEvent;
-import org.gridlab.gridsphere.provider.portletui.beans.HiddenFieldBean;
-import org.gridlab.gridsphere.provider.portletui.beans.TextAreaBean;
-import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
+import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.services.core.note.NoteService;
 import org.gridlab.gridsphere.services.core.note.Note;
 
@@ -66,7 +64,7 @@ public class NotePadPortlet extends ActionPortlet {
     public void doShowEdit(FormEvent event) throws PortletException {
         PortletRequest request = event.getPortletRequest();
         HiddenFieldBean oid = event.getHiddenFieldBean("noteoid");
-        log.debug("\n\n\n\n EDIT NOTE "+oid.getValue()+"\n\n\n");
+        TextFieldBean search = event.getTextFieldBean("search");
         request.setAttribute("np_action", "edit");
         request.setAttribute("note", noteservice.getNoteByOid(oid.getValue()));
         setNextState(request, "notepad/viewNote.jsp");
@@ -77,10 +75,22 @@ public class NotePadPortlet extends ActionPortlet {
         User user = request.getUser();
         TextAreaBean content = event.getTextAreaBean("content");
         TextFieldBean head = event.getTextFieldBean("head");
+        TextFieldBean search = event.getTextFieldBean("search");
         String message = noteservice.addNote(user, head.getValue(), content.getValue());
-        request.setAttribute("message", message);
-        request.setMode(Portlet.Mode.VIEW);
-        setNextState(request, "showList");
+        if (message.equals("")) {
+            request.setMode(Portlet.Mode.VIEW);
+            setNextState(request, "showList");
+        } else {
+            FrameBean frame = event.getFrameBean("errorFrame");
+            frame.setValue(message);
+            frame.setStyle(FrameBean.ERROR_TYPE);
+            request.setAttribute("np_action", "new");
+            Note note = new Note();
+            note.setName("");
+            note.setContent(content.getValue());
+            request.setAttribute("note", note);
+            setNextState(request, "notepad/viewNote.jsp");
+        }
     }
 
     public void doCancel(FormEvent event) throws PortletException {
@@ -100,12 +110,14 @@ public class NotePadPortlet extends ActionPortlet {
         PortletRequest request = event.getPortletRequest();
         HiddenFieldBean oid = event.getHiddenFieldBean("noteoid");
         TextAreaBean content = event.getTextAreaBean("content");
-        TextFieldBean head = event.getTextFieldBean("head");
         Note Note = noteservice.getNoteByOid(oid.getValue());
         Note.setContent(content.getValue());
-        Note.setName(head.getValue());
         String message = noteservice.update(Note);
-        request.setAttribute("message", message);
+        if (!message.equals("")) {
+            FrameBean frame = event.getFrameBean("errorFrame");
+            frame.setValue(message);
+        }
+        TextFieldBean search = event.getTextFieldBean("search");
         request.setAttribute("np_action", "view");
         request.setAttribute("note", Note);
         setNextState(request, "notepad/viewNote.jsp");
@@ -115,10 +127,8 @@ public class NotePadPortlet extends ActionPortlet {
         PortletRequest request = event.getPortletRequest();
         TextFieldBean search = event.getTextFieldBean("search");
         List result = noteservice.searchNotes(request.getUser(), search.getValue());
+        request.setAttribute("search", search.getValue());
         request.setAttribute("notes", result);
         setNextState(request, "notepad/main.jsp");
     }
 }
-
-
-
