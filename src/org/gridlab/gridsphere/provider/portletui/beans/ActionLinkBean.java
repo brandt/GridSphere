@@ -71,6 +71,7 @@ public class ActionLinkBean extends ActionBean implements TagBean {
     public String toEndString() {
 
         // now if we added some params which should be actions....
+        /*
         if (paramBeanList != null) {
             Iterator it = paramBeanList.iterator();
             while (it.hasNext()) {
@@ -78,7 +79,7 @@ public class ActionLinkBean extends ActionBean implements TagBean {
                 this.portletURI.addParameter(apBean.getName(), apBean.getValue());
             }
         }
-
+        */
         // now do the string rendering
         action = this.portletURI.toString();
 

@@ -19,7 +19,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
 
     protected String action = null;
     protected boolean isSecure = false;
-    protected PortletURI portletURI = null;
+    protected String portletURI = null;
     protected List paramBeanList = new ArrayList();
     protected String label = null;
     protected String anchor = null;
@@ -127,7 +127,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
      *
      * @param portletURI the portlet uri
      */
-    public void setPortletURI(PortletURI portletURI) {
+    public void setPortletURI(String portletURI) {
         this.portletURI = portletURI;
     }
 
@@ -136,7 +136,7 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
      *
      * @return returns the action
      */
-    public PortletURI getPortletURI() {
+    public String getPortletURI() {
         return portletURI;
     }
 
