@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.services.user.impl;
 
 import org.gridlab.gridsphere.services.user.AccountRequest;
+import org.gridlab.gridsphere.portlet.PortletGroup;
 
 import java.util.List;
 import java.util.Vector;
@@ -221,10 +222,10 @@ public class AccountRequestImpl implements AccountRequest {
      *
      * @param group the group name to approve
      */
-    public void addApprovedGroup(String groupName) {
+    public void addApprovedGroup(PortletGroup group) {
         // make sure it's a desired group as well
-        if (desiredGroups.contains(groupName)) {
-            approvedGroups.add(groupName);
+        if (desiredGroups.contains(group)) {
+            approvedGroups.add(group);
         }
     }
 
@@ -243,7 +244,8 @@ public class AccountRequestImpl implements AccountRequest {
         sb.append("Organization: " + organization);
         sb.append("Requested Groups: ");
         for (i = 0; i < desiredGroups.size(); i++) {
-            sb.append(desiredGroups.get(i));
+            PortletGroup group = (PortletGroup)desiredGroups.get(i);
+            sb.append(group.getName());
         }
         sb.append("User DNs: ");
         for (i = 0; i < userdns.size(); i++) {

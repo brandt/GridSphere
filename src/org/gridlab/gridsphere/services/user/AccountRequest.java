@@ -134,7 +134,7 @@ public interface AccountRequest {
     /**
      * Sets the list of groups the user wishes to join
      *
-     * @param groups the array of strings containg the groups the user wishes to join
+     * @param groups the list of PortletGroups the user wishes to join
      */
     public void setDesiredGroups(List groups);
 
