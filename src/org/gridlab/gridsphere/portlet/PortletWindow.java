@@ -38,17 +38,6 @@ public interface PortletWindow {
         public static final PortletWindow.State MINIMIZED = new PortletWindow.State(PortletWindow.State.MINIMIZED_STATE);
 
         /**
-         *  The window is or will be closed and thus is not shown on the portal page anymore.
-         */
-        public static final PortletWindow.State CLOSED = new PortletWindow.State(PortletWindow.State.CLOSED_STATE);
-
-        /**
-         * Allows the portlet window to be detached of the normal content view of the portal and thus
-         * be shown in a separate window.
-         */
-        public static final PortletWindow.State DETACHED = new PortletWindow.State(PortletWindow.State.DETACHED_STATE);
-
-        /**
          * Allows the portlet window to be resized
          */
         public static final PortletWindow.State RESIZING = new PortletWindow.State(PortletWindow.State.RESIZING_STATE);
@@ -60,9 +49,6 @@ public interface PortletWindow {
         private static final int MINIMIZED_STATE = 1;
         private static final int RESIZING_STATE = 2;
         private static final int MAXIMIZED_STATE = 3;
-        private static final int CLOSED_STATE = 4;
-        private static final int DETACHED_STATE = 5;
-
 
         private int state = NORMAL_STATE;
 
@@ -105,10 +91,6 @@ public interface PortletWindow {
                 return PortletWindow.State.MINIMIZED;
             } else if ("MAXIMIZED".equalsIgnoreCase(windowState)) {
                 return PortletWindow.State.MAXIMIZED;
-            } else if ("CLOSED".equalsIgnoreCase(windowState)) {
-                return PortletWindow.State.CLOSED;
-            } else if ("DETACHED".equalsIgnoreCase(windowState)) {
-                return PortletWindow.State.DETACHED;
             } else if ("RESIZING".equalsIgnoreCase(windowState)) {
                 return PortletWindow.State.RESIZING;
             } else {
@@ -129,10 +111,6 @@ public interface PortletWindow {
                 return "MAXIMIZED";
             } else if (state == MINIMIZED_STATE) {
                 return "MINIMIZED";
-            } else if (state == CLOSED_STATE) {
-                return "CLOSED";
-            } else if (state == DETACHED_STATE) {
-                return "DETACHED";
             } else if (state == RESIZING_STATE) {
                 return "RESIZING";
             }
@@ -165,8 +143,26 @@ public interface PortletWindow {
         public int hashCode() {
             return state;
         }
+
+        private Object readResolve () {
+            PortletWindow.State s = PortletWindow.State.NORMAL;
+            switch (state) {
+                case NORMAL_STATE:
+                    s = PortletWindow.State.NORMAL;
+                    break;
+                case MINIMIZED_STATE:
+                    s = PortletWindow.State.MINIMIZED;
+                    break;
+                case MAXIMIZED_STATE:
+                    s = PortletWindow.State.MAXIMIZED;
+                    break;
+                case RESIZING_STATE:
+                    s = PortletWindow.State.RESIZING;
+                    break;
+            }
+            return s;
+        }
+
     }
-
-
 
 }

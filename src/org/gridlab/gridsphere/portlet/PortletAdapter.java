@@ -131,7 +131,7 @@ public abstract class PortletAdapter extends Portlet {
 
         Portlet.Mode mode = request.getMode();
         if (mode == null) mode = Portlet.Mode.VIEW;
-        log.info("Displaying mode: " + mode);
+        log.debug("Displaying mode: " + mode);
         try {
             if (mode != null) {
                 switch (mode.getMode()) {

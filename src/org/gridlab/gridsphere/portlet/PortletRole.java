@@ -6,6 +6,7 @@
 package org.gridlab.gridsphere.portlet;
 
 import java.io.Serializable;
+import java.io.ObjectStreamException;
 import java.util.Comparator;
 
 /**
@@ -129,6 +130,25 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
 
     public int hashCode() {
         return role;
+    }
+
+    private Object readResolve () {
+        PortletRole r = PortletRole.GUEST;
+        switch (role) {
+            case GUEST_ROLE:
+                r = PortletRole.GUEST;
+                break;
+            case USER_ROLE:
+                r = PortletRole.USER;
+                break;
+            case ADMIN_ROLE:
+                r = PortletRole.ADMIN;
+                break;
+            case SUPER_ROLE:
+                r = PortletRole.SUPER;
+                break;
+        }
+        return r;
     }
 
 }

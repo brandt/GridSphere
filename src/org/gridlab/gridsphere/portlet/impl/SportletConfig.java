@@ -121,19 +121,19 @@ public class SportletConfig implements PortletConfig {
         Object attrvalue;
         Enumeration enum, eenum;
 
-        log.info("PortletConfig Information");
-        log.info("portlet name: " + this.getName());
-        log.info("servlet name: " + this.getServletName());
-        log.info("config init parameters: ");
+        log.debug("PortletConfig Information");
+        log.debug("portlet name: " + this.getName());
+        log.debug("servlet name: " + this.getServletName());
+        log.debug("config init parameters: ");
         enum = this.getInitParameterNames();
         while (enum.hasMoreElements()) {
             name = (String) enum.nextElement();
             vals = getInitParameter(name);
-            log.info("\t\tname=" + name + " value=" + vals);
+            log.debug("\t\tname=" + name + " value=" + vals);
         }
-        log.info("PortletContext Information:");
-        log.info("Container Info: " + context.getContainerInfo());
-        log.info("major version: " + context.getMajorVersion() + " minor version: " + context.getMinorVersion());
+        log.debug("PortletContext Information:");
+        log.debug("Container Info: " + context.getContainerInfo());
+        log.debug("major version: " + context.getMajorVersion() + " minor version: " + context.getMinorVersion());
         /*
         log.info("Server Info: " + context.getServerInfo());
         enum = context.getAttributeNames();

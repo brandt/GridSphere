@@ -20,7 +20,7 @@ import java.util.Comparator;
 /**
  * A portlet is a small Java program that runs within a portlet container.
  * Portlets receive and respond to requests from the portlet container.
- * There is ever only one portlet object instance per portlet configuration in the web deployment descriptor.
+ * There is ever only one portlet object instance per portlet configuration in the ui deployment descriptor.
  * There may be many PortletSettings objects parameterisng the same portlet object according to the
  * Flyweight pattern, provided on a per-request basis. A concrete parameterization of a portlet object
  * is referred to as a concrete portlet. The settings of concrete portlets may change at any time caused
@@ -169,6 +169,26 @@ public abstract class Portlet extends HttpServlet
         public int hashCode() {
             return mode;
         }
+
+        private Object readResolve () {
+            Portlet.Mode m = Portlet.Mode.VIEW;
+            switch (mode) {
+                case VIEW_MODE:
+                    m = Portlet.Mode.VIEW;
+                    break;
+                case CONFIGURE_MODE:
+                    m = Portlet.Mode.CONFIGURE;
+                    break;
+                case EDIT_MODE:
+                    m = Portlet.Mode.EDIT;
+                    break;
+                case HELP_MODE:
+                    m = Portlet.Mode.HELP;
+                    break;
+            }
+            return m;
+        }
+
     }
 
     /**
@@ -296,7 +316,7 @@ public abstract class Portlet extends HttpServlet
     }
 
     /**
-     * Initializes the PortletConfig using the web.xml file entry for this portlet
+     * Initializes the PortletConfig using the ui.xml file entry for this portlet
      */
     public final void init(ServletConfig config) throws ServletException {
         super.init(config);
