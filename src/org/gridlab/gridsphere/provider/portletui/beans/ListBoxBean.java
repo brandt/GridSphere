@@ -118,8 +118,8 @@ public class ListBoxBean extends BeanContainer implements TagBean {
     }
 
     /**
-     * Returns the selected values of the list.
-     * @return selected values of the list
+     * Returns the selected value of the list. This is only useful with multiple selection disabled.
+     * @return selected value of the list, null if nothing is selected
      */
     public String getSelectedValue() {
         Iterator it = container.iterator();
