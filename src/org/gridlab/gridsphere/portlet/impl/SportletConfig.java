@@ -26,7 +26,7 @@ public class SportletConfig implements PortletConfig {
     /**
      * Constructor creates a PortletConfig from a portlet.xml file
      */
-    public SportletConfig(ServletConfig servletConfig) throws Exception {
+    public SportletConfig(ServletConfig servletConfig) {
         this.servletConfig = servletConfig;
         this.context = new SportletContext(servletConfig);
     }

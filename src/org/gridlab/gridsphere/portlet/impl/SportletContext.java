@@ -30,25 +30,15 @@ public class SportletContext implements PortletContext {
     public final static int MAJOR_VERSION = 0;
     public final static int MINOR_VERSION = 9;
 
-    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletContext.class);
+    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(SportletContext.class);
     private static SportletServiceFactory factory = SportletServiceFactory.getInstance();
 
     private ServletConfig config = null;
     private ServletContext context = null;
     private static Properties props = null;
 
-    public SportletContext(ServletConfig config) throws Exception {
-        if (config == null) throw new Exception("ServletConfig is null");
+    public SportletContext(ServletConfig config) {
         this.config = config;
-        this.context = config.getServletContext();
-        if (context == null) throw new Exception("ServletContext is null");
-        props = new Properties();
-        String serviceProps = config.getInitParameter("PortletServices.properties");
-        if (serviceProps == null) serviceProps = "WEB-INF/conf/PortletServices.properties";
-        String appRoot = context.getRealPath("");
-        String fullPath = appRoot + "/" + serviceProps;
-        FileInputStream fistream = new FileInputStream(fullPath);
-        props.load(fistream);
     }
 
     /**

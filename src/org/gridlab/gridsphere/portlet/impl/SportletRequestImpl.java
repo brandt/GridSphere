@@ -58,7 +58,6 @@ public class SportletRequestImpl implements SportletRequest {
         portletWindow = (PortletWindow)req.getAttribute(GridSphereProperties.PORTLETWINDOW);
         this.portletWindow = new SportletWindow();
         this.client = new ClientImpl(req);
-
     }
 
     /**
@@ -161,13 +160,14 @@ public class SportletRequestImpl implements SportletRequest {
     }
 
     /**
-     *
      * Returns the data of the concrete portlet instance
      * If the portlet is run in CONFIGURE mode, the portlet data is not accessible and this method will return null.
      *
      * @return the PortletData
      */
     public PortletData getData() {
+        if (mode.getMode() == Portlet.Mode.CONFIGURE)
+            return null;
         return portletData;
     }
 
@@ -268,20 +268,33 @@ public class SportletRequestImpl implements SportletRequest {
         this.modeModifier = modeModifier;
     }
 
-    public Portlet.Mode getMode() {
-        return mode;
-    }
-
     /**
      * Returns the mode that the portlet is running in.
      *
      * @return the portlet mode
      */
+    public Portlet.Mode getMode() {
+        return mode;
+    }
+
+    /**
+     * Sets the mode that the portlet is running in.
+     *
+     * @param the portlet mode
+     */
     public void setMode(Portlet.Mode mode) {
         this.mode = mode;
     }
 
-
+    /**
+     * Returns the value of the parameter with the given name, or null if no such parameter exists.
+     *
+     * You should only use this method when you are sure the parameter has only one value.
+     * If not, use getParameterValues(String)
+     *
+     * @param name the parameter name
+     * @return the parameter value
+     */
     public final String getParameter(java.lang.String name) {
         return req.getParameter(name);
     }
