@@ -8,7 +8,7 @@
 
 <ui:messagebox beanId="msg"/>
 
-<h3>Manage users in group: <ui:text beanId="groupName" style="nostyle"/></h3>
+<h3><ui:text key="GROUP_MANAGE_MSG" style="nostyle"/>&nbsp; <ui:text beanId="groupName" style="nostyle"/></h3>
 
 <% if (groupEntryList.size() > 0) { %>
 <h3><ui:text key="GROUP_MODIFY_USERS" style="nostyle"/></h3>
