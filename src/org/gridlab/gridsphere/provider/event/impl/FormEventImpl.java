@@ -362,7 +362,7 @@ public class FormEventImpl implements FormEvent {
         if (tagBeans.containsKey(beanKey)) {
             return (IncludeBean) tagBeans.get(beanKey);
         }
-        IncludeBean includeBean = new IncludeBean(beanId);
+        IncludeBean includeBean = new IncludeBean(request, beanId);
         tagBeans.put(beanKey, includeBean);
         return includeBean;
     }
