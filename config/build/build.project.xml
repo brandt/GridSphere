@@ -27,6 +27,7 @@ Copyright:
     <property name="project.title" value="@PROJECT_TITLE@"/>
 
     <property name="gridsphere.home" value="../.."/>
+
     <property name="optimize"    value="false"/>
     <property name="debug"       value="on"/>
     <property name="deprecation" value="true"/>
@@ -45,6 +46,7 @@ Copyright:
     <property name="DATABASE_TYPE" value="${gridsphere.database.type}"/>
 
     <!-- GridSphere build targets -->
+    <property name="build.home"    value="${project.build}/home"/>
     <property name="build.classes" value="${project.build}/classes"/>
     <property name="build.webapp" value="${project.build}/webapp"/>
     <property name="build.docs"    value="${project.build}/docs"/>
@@ -85,6 +87,7 @@ Copyright:
 
         <!-- Make build directories -->
         <mkdir dir="${project.build}"/>
+        <mkdir dir="${build.home}"/>
         <mkdir dir="${build.classes}"/>
         <mkdir dir="${build.webapp}"/>
         <mkdir dir="${build.docs}"/>
@@ -120,10 +123,15 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
+    <!-- Compiles all source code in distribution                            -->
+    <!-- =================================================================== -->
+    <target name="compile-all" depends="compile, compile-tests" description="Compiles all source code in distribution"/>
+
+    <!-- =================================================================== -->
     <!-- Compiles @PROJECT_TITLE@ source code                                -->
     <!-- =================================================================== -->
-    <target name="compile" depends="setenv" description="Compile ${project.title} source code">
-        <echo>Compiling ${project.title} source code</echo>
+    <target name="compile" depends="setenv" description="Compile @PROJECT_TITLE@ source code">
+        <echo>Compiling @PROJECT_TITLE@ source code</echo>
         <javac  srcdir="src"
             destdir="${build.classes}"
             classpathref="classpath"
@@ -133,9 +141,87 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
+    <!-- Compiles JUnit tests                                                -->
+    <!-- =================================================================== -->
+    <target name="compile-tests" depends="compile-core" description="Compiles all JUnit tests">
+        <echo>Compiling JUnit Tests</echo>
+        <javac srcdir="tests"
+            destdir="${build.classes}"
+            classpathref="classpath"
+            debug="${debug}"
+            optimize="${optimize}"
+            deprecation="${deprecation}">
+        </javac>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Configures the database by making doclet mappings and the database  -->
+    <!-- =================================================================== -->
+    <target name="configure-database" depends="create-mapping, create-database">
+        <property name="DATABASE_FILE"
+                  value="${GRIDSPHERE_HOME}/database/${DATABASE_TYPE}db.xml"/>
+        <echo message="Preprocessing Database file: ${DATABASE_FILE}"/>
+        <replace file="${DATABASE_FILE}"
+                 token="@GRIDSPHERE_HOME@"
+                 value="${GRIDSPHERE_HOME}"/>
+        <replace file="${DATABASE_FILE}"
+                 token="@DATABASE_NAME@"
+                 value="${DATABASE_NAME}"/>
+    </target>
+
+    <target name="check-mapping">
+        <echo message="force mapping: ${var_force_mapping}"/>
+        <condition property="mapping.exists">
+            <available file="${GRIDSPHERE_HOME}/mapping/mapping.xml"/>
+        </condition>
+    </target>
+
+    <target name="create-mapping" depends="check-mapping" unless="mapping.exists">
+        <javadoc sourcepath="src"
+            private="true"
+            doclet="org.castor.doclet.ddl.DDL"
+            docletpath="${gridsphere.home}/lib/ext/jdom.jar;${gridsphere.home}/lib/ext/castor-doclet.jar"
+            additionalparam=" -J-DFILE=${GRIDSPHERE_HOME}/database/dbcreate.sql -J-DDB_TYPE=db2 -J-DLOG=1">
+            <classpath refid="classpath"/>
+        </javadoc>
+        <javadoc sourcepath="src"
+            private="true"
+            doclet="org.castor.doclet.jdo.JDO"
+            docletpath="${gridsphere.home}/lib/ext/jdom.jar;${gridsphere.home}/lib/ext/castor-doclet.jar"
+            additionalparam="-J-DFILE=${GRIDSPHERE_HOME}/mapping/mapping.xml -J-DLOG=1">
+            <classpath refid="classpath"/>
+        </javadoc>
+    </target>
+
+    <target name="check-database-exists">
+        <echo message="force database: ${database.exists}"/>
+        <condition property="database.exists">
+            <available file="${GRIDSPHERE_HOME}/database/${DATABASE_NAME}.script"/>
+        </condition>
+    </target>
+
+    <target name="create-database" depends="check-database-exists" unless="database.exists">
+        <echo message="Creating Database at: ${GRIDSPHERE_HOME}/database/${DATABASE_NAME}"/>
+        <echo message="Using script: ${GRIDSPHERE_HOME}/database/dbcreate.sql"/>
+        <sql driver="org.hsqldb.jdbcDriver"
+           url="jdbc:hsqldb:${GRIDSPHERE_HOME}/database/${DATABASE_NAME}"
+           userid="sa"
+           password=""
+           onerror="continue"
+           src="${GRIDSPHERE_HOME}/database/dbcreate.sql">
+           <classpath refid="classpath"/>
+        </sql>
+    </target>
+
+    <!-- =================================================================== -->
     <!-- Creates a @PROJECT_TITLE@ JAR library archive configured for Tomcat -->
     <!-- =================================================================== -->
-    <target name="jar" depends="compile" description="Creates ${project.name} JAR">
+    <target name="jar" depends="portlets-jar, services-jar" description="Creates @PROJECT_NAME@ JAR"/>
+
+    <!-- =================================================================== -->
+    <!-- Creates a @PROJECT_TITLE@ JAR library archive configured for Tomcat -->
+    <!-- =================================================================== -->
+    <target name="portlets-jar" depends="compile" description="Creates @PROJECT_NAME@ portlets JAR">
         <echo>Creating ${project.name} JAR for Tomcat</echo>
 
         <mkdir dir="${build.classes}/${project.name}"/>
@@ -150,6 +236,23 @@ Copyright:
      </target>
 
     <!-- =================================================================== -->
+    <!-- Creates a @PROJECT_TITLE@ JAR library archive configured for Tomcat -->
+    <!-- =================================================================== -->
+    <target name="services-jar" depends="compile" description="Creates @PROJECT_NAME@ services JAR">
+        <echo>Creating ${project.name} JAR for Tomcat</echo>
+
+        <mkdir dir="${build.classes}/${project.name}"/>
+
+        <copy file="config/log4j.properties"
+                  tofile="${build.classes}/${project.name}/log4j.properties"/>
+
+        <jar jarfile="lib/${project.name}-services.jar" basedir="${build.classes}" >
+            <include name="org/**" />
+            <include name="${project.name}/**" />
+        </jar>
+     </target>
+
+    <!-- =================================================================== -->
     <!-- Cleans everything                                                   -->
     <!-- =================================================================== -->
     <target name="clean" description="Delete classes and existing library">
@@ -157,16 +260,15 @@ Copyright:
         <delete quiet="true" dir="${project.dist}"/>
     </target>
 
-    <target name="docs" depends="javadocs" description="Create ${project.title} Documentation"/>
+    <target name="docs" depends="javadocs" description="Create @PROJECT_TITLE@ Documentation"/>
 
     <!-- =================================================================== -->
     <!-- Creates all the @PROJECT_TITLE@ API documentation                   -->
     <!-- =================================================================== -->
-    <target name="javadocs" depends="setenv" description="Create ${project.title} Javadocs">
+    <target name="javadocs" depends="setenv" description="Create @PROJECT_TITLE@ Javadocs">
         <delete quiet="true" dir="${build.javadoc}"/>
         <mkdir dir="${build.javadoc}"/>
-        <javadoc packagenames="org.gridlab.gridsphere.*"
-                 sourcepath="src"
+        <javadoc sourcepath="src"
                  classpathref="classpath"
                  destdir="${build.javadoc}"
                  author="true"
@@ -181,9 +283,9 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Creates @PROJECT_TITLE@ the  WAR file                               -->
+    <!-- Creates the @PROJECT_TITLE@  WAR file                               -->
     <!-- =================================================================== -->
-    <target name="war" depends="jar" description="Create ${project.name} WAR">
+    <target name="war" depends="jar" description="Create @PROJECT_TITLE@ WAR">
         <war warfile="${project.build}/${project.name}.war" update="true"
             webxml="${webapp.dir}/WEB-INF/web.xml">
             <fileset dir="${gswebapp.dir}">
@@ -193,9 +295,9 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Deploys @PROJECT_TITLE@ portlet to a local server                   -->
+    <!-- Deploys @PROJECT_TITLE@ portlets to a local server                   -->
     <!-- =================================================================== -->
-    <target name="deploy" depends="jar" if="${catalina.exists}" description="Deploys ${project.title} portlet to a local server">
+    <target name="deploy" depends="jar, configure-database" if="${catalina.exists}" description="Deploys @PROJECT_TITLE@ portlet to a local server">
         <property name="project.webapp" value="${env.CATALINA_HOME}/webapps"/>
         <copy todir="${project.webapp}">
             <fileset dir="webapp"/>

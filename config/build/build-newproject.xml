@@ -17,7 +17,7 @@
         <input message="Please enter the Project Name e.g. the lowercase directory name e.g. coolportlets" addproperty="project.name"/>
         <antcall target="check-project-exists"/>
         <fail if="${new-project-exists}" message="Unable to find projects/${project.name}!"/>
-        <copy file="config/build/build.project.xml" tofile="${project.dir}/build.xml"/>
+        <copy file="config/build/build.project.xml" tofile="${project.dir}/build.xml" overwrite="true"/>
         <replace file="${project.dir}/build.xml"
                  token="@PROJECT_TITLE@"
                  value="${project.title}"/>
