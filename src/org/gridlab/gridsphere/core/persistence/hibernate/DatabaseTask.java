@@ -26,6 +26,7 @@ import java.util.Properties;
 /*
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
  * @version $Id$
+ * @deprecated 
  */
 
 /**
@@ -71,7 +72,7 @@ public class DatabaseTask extends Task {
         Properties prop = new Properties();
         String propfilename = configDir + File.separator + "hibernate.properties";
 
-        
+        log.info("config is: "+this.configDir);
         // try to load configfile
         try {
             FileInputStream fis = new FileInputStream(new File(propfilename));
