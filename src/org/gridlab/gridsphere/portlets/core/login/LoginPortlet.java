@@ -60,7 +60,7 @@ public class LoginPortlet extends ActionPortlet {
         if (user instanceof GuestUser) {
             out.println(getPortletSettings().getTitle(request.getLocale(), null));
         } else {
-            getPortletConfig().getContext().include("login/login_title.jsp", request, response);
+            getPortletConfig().getContext().include("/jsp/login/login_title.jsp", request, response);
         }
         /*
          ResourceBundle resBundle = ResourceBundle.getBundle("Portlet", locale);
