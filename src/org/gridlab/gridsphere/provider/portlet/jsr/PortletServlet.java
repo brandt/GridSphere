@@ -192,13 +192,14 @@ public class PortletServlet  extends HttpServlet
 
         // perform user conversion from gridsphere to JSR model
         User user = (User)request.getAttribute(SportletProperties.PORTLET_USER);
-        Map userInfo = (Map)request.getAttribute(PortletRequest.USER_INFO);
+        Map userInfo;
 
         if (user instanceof GuestUser) {
             userInfo = null;
         } else {
             userInfo = new HashMap();
             userInfo.put("user.name", user.getUserName());
+            userInfo.put("user.name.nickName", user.getUserName());
             userInfo.put("user.name.id", user.getID());
             userInfo.put("user.email", user.getEmailAddress());
             userInfo.put("user.name.given", user.getGivenName());
@@ -206,16 +207,19 @@ public class PortletServlet  extends HttpServlet
             userInfo.put("user.lastlogintime", new Long(user.getLastLoginTime()).toString());
             userInfo.put("user.name.full", user.getFullName());
             userInfo.put("user.name.family", user.getFamilyName());
+            request.setAttribute(PortletRequest.USER_INFO, userInfo);
         }
 
+        /*
         UserAttribute[] userAttrs = portletWebApp.getUserAttributes();
         for (int i = 0; i < userAttrs.length; i++) {
             UserAttribute userAttr = userAttrs[i];
             String name = userAttr.getName().getContent();
             userInfo.put(name, "");
         }
-
         request.setAttribute(PortletRequest.USER_INFO, userInfo);
+        */
+
 
         // portlet preferences
 
