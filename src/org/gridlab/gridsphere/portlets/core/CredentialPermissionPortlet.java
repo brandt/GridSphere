@@ -11,7 +11,6 @@ package org.gridlab.gridsphere.portlets.core;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portlets.core.beans.CredentialPermissionBean;
-import org.gridlab.gridsphere.services.security.credential.CredentialPermissionOldBean;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
