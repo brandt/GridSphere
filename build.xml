@@ -622,9 +622,6 @@ Copyright:
         </copy>
 
         <!-- preprocess database file -->
-
-
-
         <copy todir="${env.CATALINA_HOME}/shared/lib">
             <fileset dir="lib">
                 <include name="*.jar"/>
@@ -646,7 +643,7 @@ Copyright:
            userid="sa"
            password=""
            onerror="continue"
-           src="${GRIDSPHERE_HOME}/db/dbcreate.sql">
+           src="${build.db}/dbcreate.sql">
            <classpath refid="classpath"/>
         </sql>
 
