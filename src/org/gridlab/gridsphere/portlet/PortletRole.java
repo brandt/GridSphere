@@ -82,8 +82,8 @@ public class PortletRole  {
         return false;
     }
 
-    public boolean equals(String object) {
-        if (object == null) {
+    public boolean equals(Object object) {
+        if ((object == null) || (!(object instanceof PortletRole))) {
             return false;
         }
         String thisRole = toString();
@@ -91,12 +91,7 @@ public class PortletRole  {
         return thisRole.equals(thatRole);
     }
 
-    public boolean equals(PortletRole object) {
-        if (object == null) {
-            return false;
-        }
-        String thisRole = toString();
-        String thatRole = ((PortletRole)object).toString();
-        return thisRole.equals(thatRole);
+    public int hashCode() {
+        return role;
     }
 }

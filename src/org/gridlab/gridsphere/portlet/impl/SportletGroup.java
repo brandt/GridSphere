@@ -31,12 +31,6 @@ public class SportletGroup extends BaseObject implements PortletGroup {
     // @todo why did we need the baseGroup thing??
     // @todo elimnate the sportletgroup(id, name) thing
 
-    public SportletGroup(String ID, String groupName) {
-        super();
-        this.Name = groupName;
-        setOid(ID);
-    }
-
     public SportletGroup(String groupName) {
         super();
         this.Name = groupName;
@@ -53,7 +47,6 @@ public class SportletGroup extends BaseObject implements PortletGroup {
     public String getID() {
         return getOid();
     }
-
 
     public void setID(String id) {
         setOid(id);
@@ -74,6 +67,7 @@ public class SportletGroup extends BaseObject implements PortletGroup {
         return false;
     }
 
+    /*
     public boolean equals(String object) {
         if (object == null) {
             return false;
@@ -82,16 +76,19 @@ public class SportletGroup extends BaseObject implements PortletGroup {
         String thatGroup = (String)object;
         return thisGroup.equals(thatGroup);
     }
+    */
 
-    public boolean equals(PortletGroup object) {
-        if (object == null) {
+    public boolean equals(Object object) {
+        if ((object == null) || (!(object instanceof SportletGroup))) {
             return false;
         }
-        String thisGroup = toString();
         String thatGroup = ((PortletGroup)object).toString();
-        return thisGroup.equals(thatGroup);
+        return Name.equals(thatGroup);
     }
 
+    public int hashCode() {
+        return Name.hashCode();
+    }
 
     public String toString() {
         return Name;
