@@ -11,7 +11,7 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.impl.SportletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletResponse;
 import org.gridlab.gridsphere.portlet.impl.SportletWindow;
-import org.gridlab.gridsphere.portlet.impl.GuestUser;
+import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletDataManager;
 //import org.gridlab.gridsphere.portletcontainer.UserPortletManager;

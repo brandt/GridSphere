@@ -6,7 +6,7 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.layout.impl.PortletTitleBarEventImpl;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.GuestUser;
+import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portlet.impl.SportletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletResponse;
 import org.gridlab.gridsphere.portlet.impl.SportletURI;

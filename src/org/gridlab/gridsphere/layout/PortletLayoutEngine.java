@@ -9,7 +9,7 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.impl.GuestUser;
+import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletRequest;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;

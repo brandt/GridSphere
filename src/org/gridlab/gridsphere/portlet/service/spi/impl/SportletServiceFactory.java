@@ -7,7 +7,7 @@ package org.gridlab.gridsphere.portlet.service.spi.impl;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.impl.GuestUser;
+import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
