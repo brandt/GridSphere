@@ -33,19 +33,56 @@
         // Have to match to what we know
         if (authModuleName.equals("PASSWORD_AUTH_MODULE")) { %>
 
-        <%@ include file="/jsp/login/module/include/password.jsp" %>
+
+            <ui:frame>
+                <ui:tablerow>
+                    <ui:tablecell width="5%">
+                        <ui:checkbox beanId="passCheck"
+                                     name="passwordModule"
+                                     value="Hello"
+                                     disabled="<%= disabled %>"
+                                     selected="<%= active %>"/>
+                    </ui:tablecell>
+                    <ui:tablecell width="45%">
+                        <ui:text key="LOGIN_PASS_MODULE"/>
+                    </ui:tablecell>
+                    <ui:tablecell width="50%"/>
+                </ui:tablerow>
+            </ui:frame>
 
         <%      }
 
                 if (authModuleName.equals("LDAP_AUTH_MODULE")) { %>
 
-        <%@ include file="/jsp/login/module/include/ldap.jsp" %>
+            <ui:frame>
+                <ui:tablerow>
+                    <ui:tablecell width="5%">
+                        <ui:checkbox beanId="ldapCheck" name="ldapModule" value="Hello" selected="<%= active %>"/>
+                    </ui:tablecell>
+                    <ui:tablecell width="45%">
+                        <ui:text key="LOGIN_LDAP_MODULE"/>
+                    </ui:tablecell>
+                    <ui:tablecell width="50%">
+                        <ui:actionlink action="configLdapModule" key="LOGIN_MODULE_ACTION"/>
+                    </ui:tablecell>
+                </ui:tablerow>
+            </ui:frame>
 
         <%      }
 
                 if (authModuleName.equals("MYPROXY_AUTH_MODULE")) { %>
 
-        <%@ include file="/jsp/login/module/include/myproxy.jsp" %>
+            <ui:frame>
+                <ui:tablerow>
+                    <ui:tablecell width="5%">
+                        <ui:checkbox beanId="myproxyCheck" name="myproxyModule" value="Hello" selected="<%= active %>"/>
+                    </ui:tablecell>
+                    <ui:tablecell width="45%">
+                        <ui:text key="LOGIN_MYPROXY_MODULE"/>
+                    </ui:tablecell>
+                    <ui:tablecell width="50%"/>
+                </ui:tablerow>
+            </ui:frame>
 
         <%      }
    } %>
