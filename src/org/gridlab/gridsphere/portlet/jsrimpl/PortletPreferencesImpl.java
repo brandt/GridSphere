@@ -61,6 +61,8 @@ public class PortletPreferencesImpl implements PortletPreferences
 
     private Map attributes = new HashMap();
 
+    private boolean isRender = false;
+
     public PortletPreferencesImpl() {}
 
     public PortletPreferencesImpl(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences portletPrefs, ClassLoader loader) {
@@ -107,6 +109,10 @@ public class PortletPreferencesImpl implements PortletPreferences
 
     public void setOid(String oid) {
         this.oid = oid;
+    }
+
+    public void setRender(boolean isRender) {
+        this.isRender = isRender;
     }
 
     /**
@@ -161,7 +167,7 @@ public class PortletPreferencesImpl implements PortletPreferences
     public String getValue(String key, String def) {
         if (key == null) throw new IllegalArgumentException("key is NULL");
         PersistencePreferenceAttribute ppa = (PersistencePreferenceAttribute)attributes.get(key);
-        if (ppa == null) return def;
+        if ((ppa == null) || (ppa.getAValues().length == 0)) return def;
         return ppa.getValue();
     }
 
@@ -196,7 +202,7 @@ public class PortletPreferencesImpl implements PortletPreferences
     public String[] getValues(String key, String[] def) {
         if (key == null) throw new IllegalArgumentException("key is NULL");
         PersistencePreferenceAttribute ppa = (PersistencePreferenceAttribute)attributes.get(key);
-        if (ppa == null) return def;
+        if ((ppa == null) || (ppa.getAValues().length == 0)) return def;
         return ppa.getAValues();
     }
 
@@ -222,8 +228,6 @@ public class PortletPreferencesImpl implements PortletPreferences
     public void setValue(String key, String value)  throws ReadOnlyException {
         if (key == null) throw new IllegalArgumentException("key is NULL");
 
-        // TODO use request value to determin if this value can be set
-
         PersistencePreferenceAttribute ppa = (PersistencePreferenceAttribute)attributes.get(key);
         if (ppa == null) {
             ppa = new PersistencePreferenceAttribute();
@@ -232,6 +236,7 @@ public class PortletPreferencesImpl implements PortletPreferences
             ppa.setValue(value);
             attributes.put(key, ppa);
         } else {
+            if (ppa.isReadOnly()) throw new ReadOnlyException("PortletPreference is read-only!");
             ppa.setValue(value);
         }
     }
@@ -260,7 +265,6 @@ public class PortletPreferencesImpl implements PortletPreferences
     public void setValues(String key, String[] values) throws ReadOnlyException {
         if (key == null) throw new IllegalArgumentException("key is NULL");
 
-        // TODO use request value to determine if this value can be set
         PersistencePreferenceAttribute ppa = (PersistencePreferenceAttribute)attributes.get(key);
         if (ppa == null) {
             ppa = new PersistencePreferenceAttribute();
@@ -269,6 +273,7 @@ public class PortletPreferencesImpl implements PortletPreferences
             ppa.setAValues(values);
             attributes.put(key, ppa);
         } else {
+            if (ppa.isReadOnly()) throw new ReadOnlyException("PortletPreference is read-only!");
             ppa.setAValues(values);
         }
     }
@@ -330,6 +335,7 @@ public class PortletPreferencesImpl implements PortletPreferences
         if (key == null) throw new IllegalArgumentException("key is NULL");
         PersistencePreferenceAttribute ppa = (PersistencePreferenceAttribute)attributes.get(key);
         if (ppa != null) {
+            if (ppa.isReadOnly()) throw new ReadOnlyException("PortletPreference is read-only!");
             Preference defaultPref = (Preference)defaultPrefsMap.get(key);
             if (defaultPref != null) {
                 Value[] defvals = defaultPref.getValue();
@@ -375,6 +381,7 @@ public class PortletPreferencesImpl implements PortletPreferences
      * @see  javax.portlet.PreferencesValidator
      */
     public void store() throws java.io.IOException, ValidatorException {
+        if (isRender) throw new IllegalStateException("Cannot persist PortletPreferences in render method!");
         if (validator != null) validator.validate(this);
         try {
             if (this.getOid() != null) {

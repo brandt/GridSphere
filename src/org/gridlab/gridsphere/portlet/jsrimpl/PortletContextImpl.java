@@ -122,12 +122,11 @@ public class PortletContextImpl implements PortletContext
      *
      */
     public PortletRequestDispatcher getNamedDispatcher(String name) {
-        try {
-            RequestDispatcher rd = context.getNamedDispatcher(name);
+        RequestDispatcher rd = context.getNamedDispatcher(name);
+        if (rd != null) {
             return new PortletRequestDispatcherImpl(rd);
-        } catch (Exception e) {
-            return null;
         }
+        return null;
     }
 
 

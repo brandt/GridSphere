@@ -23,9 +23,9 @@ import java.io.IOException;
  * @see javax.portlet.RenderRequest
  * @see javax.portlet.PortletResponse
  */
-public class RenderResponseImpl extends PortletResponseImpl implements RenderResponse
-{
-    protected String contentType = null;
+public class RenderResponseImpl extends PortletResponseImpl implements RenderResponse {
+
+    protected String contentType = null;  // needed as servlet 2.3 does not have a response.getContentType
 
     /**
      * Constructs an instance of SportletResponse using an
@@ -36,6 +36,22 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
     public RenderResponseImpl(HttpServletRequest req, HttpServletResponse res, PortalContext portalContext) {
         super(req, res, portalContext);
         contentType = req.getContentType();
+    }
+
+    private boolean isValidContentType(String type) {
+        return type.equals("text/html");
+    }
+
+    // Jakarta Pluto method
+    private String stripCharacterEncoding(String type) {
+        int xs = type.indexOf(';');
+        String strippedType;
+        if (xs == -1) {
+            strippedType = type;
+        } else {
+            strippedType = type.substring(0, xs);
+        }
+        return strippedType.trim();
     }
 
     /**
@@ -63,6 +79,8 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      *           if no content type is set
      */
     public String getContentType() {
+        // in servlet 2.4 we could simply use this:
+        // return this._getHttpServletResponse().getContentType();
         return contentType;
     }
 
@@ -148,8 +166,12 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @see  #getContentType
      */
     public void setContentType(String type) {
-        this.contentType = type;
-        super.getResponse().setContentType(type);
+        String mimeType = stripCharacterEncoding(type);
+        if (!isValidContentType(mimeType)) {
+            throw new IllegalArgumentException(mimeType);
+        }
+        this.getHttpServletResponse().setContentType(mimeType);
+        this.contentType = mimeType;
     }
 
 
@@ -166,7 +188,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      *
      */
     public String getCharacterEncoding() {
-        return super.getResponse().getCharacterEncoding();
+        return this.getHttpServletResponse().getCharacterEncoding();
     }
 
 
@@ -196,7 +218,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @see #getPortletOutputStream
      */
     public java.io.PrintWriter getWriter() throws java.io.IOException {
-        return super.getResponse().getWriter();
+        return this.getHttpServletResponse().getWriter();
     }
 
 
@@ -206,7 +228,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @return  Locale of this response
      */
     public java.util.Locale getLocale() {
-        return super.getResponse().getLocale();
+        return this.getHttpServletResponse().getLocale();
     }
 
 
@@ -233,8 +255,9 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @see 		#reset
      */
     public void setBufferSize(int size) {
-        super.getResponse().setBufferSize(size);
+        this.getHttpServletResponse().setBufferSize(size);
     }
+
 
 
     /**
@@ -249,7 +272,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @see 		#reset
      */
     public int getBufferSize() {
-        return super.getResponse().getBufferSize();
+        return this.getHttpServletResponse().getBufferSize();
     }
 
 
@@ -266,7 +289,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @see 		#reset
      */
     public void flushBuffer() throws java.io.IOException {
-        super.getResponse().flushBuffer();
+        this.getHttpServletResponse().flushBuffer();
     }
 
 
@@ -284,9 +307,8 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @see 		#reset
      */
     public void resetBuffer() {
-        super.getResponse().resetBuffer();
+        this.getHttpServletResponse().resetBuffer();
     }
-
 
     /**
      * Returns a boolean indicating if the response has been
@@ -301,7 +323,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @see 		#reset
      */
     public boolean isCommitted() {
-        return super.getResponse().isCommitted();
+        return this.getHttpServletResponse().isCommitted();
     }
 
 
@@ -319,7 +341,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @see 		#isCommitted
      */
     public void reset() {
-        super.getResponse().reset();
+        this.getHttpServletResponse().reset();
     }
 
 
@@ -349,7 +371,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @see #getWriter
      */
     public java.io.OutputStream getPortletOutputStream() throws java.io.IOException {
-        return super.getResponse().getOutputStream();
+        return getOutputStream();
     }
 
 }

@@ -1,10 +1,16 @@
 
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+
 import javax.portlet.PortletContext;
 import javax.portlet.PortletSession;
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletSessionUtil;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
+import java.util.Vector;
 
 
 /**
@@ -34,45 +40,12 @@ import javax.servlet.http.HttpSession;
  * attributes set in the portlet session are visible in the <code>HttpSession</code>
  * and vice versa.
  */
-public class PortletSessionImpl implements PortletSession
+public class PortletSessionImpl implements PortletSession, HttpSession
 {
 
-    /**
-     * This constant defines an application wide scope for the session attribute.
-     * <code>APPLICATION_SCOPE</code> session attributes enable Portlets
-     * within one portlet application to share data.
-     * <p>
-     * Portlets may need to prefix attributes set in this scope with some
-     * ID, to avoid overwriting each other's attributes in the
-     * case where two portlets of the same portlet definition
-     * are created.
-     * <p>
-     * Value: <code>0x01</code>
-     */
-    public static final int APPLICATION_SCOPE = 0x01;
-
-    /**
-     * This constant defines the scope of the session attribute to be
-     * private to the portlet and its included resources.
-     * <p>
-     * Value: <code>0x02</code>
-     */
-    public static final int PORTLET_SCOPE = 0x02;
-
     private PortletContext ctx = null;
-    private PortletRequest request = null;
+    private HttpServletRequest request = null;
     private HttpSession session = null;
-
-    /**
-     * Constructs an instance of SportletSession from a
-     * <code>HttpSession</code>
-     *
-     * @param session the <code>HttpSession</code>
-     */
-    public PortletSessionImpl(HttpSession session, PortletContext ctx) {
-        this.session = session;
-        this.ctx = ctx;
-    }
 
     /**
      * Constructs an instance of SportletSession from a
@@ -81,7 +54,7 @@ public class PortletSessionImpl implements PortletSession
      * @param request the <code>PortletRequest</code> used to get ConcretePortletID
      * @param session the <code>HttpSession</code>
      */
-    public PortletSessionImpl(PortletRequest request, HttpSession session, PortletContext ctx) {
+    public PortletSessionImpl(HttpServletRequest request, HttpSession session, PortletContext ctx) {
         this.request = request;
         this.session = session;
         this.ctx = ctx;
@@ -109,28 +82,6 @@ public class PortletSessionImpl implements PortletSession
         return session.getAttribute(name);
     }
 
-
-    /**
-     * Returns the object bound with the specified name in this session,
-     * or <code>null</code> if no object is bound under the name in the given scope.
-     *
-     * @param name		a string specifying the name of the object
-     * @param scope               session scope of this attribute
-     *
-     * @return			the object with the specified name
-     *
-     * @exception IllegalStateException	if this method is called on an
-     *					invalidated session
-     * @exception  IllegalArgumentException
-     *                            if name is <code>null</code>.
-     */
-
-    public Object getAttribute(String name, int scope) throws IllegalStateException, IllegalArgumentException {
-        if (name == null) throw new IllegalArgumentException("name is NULL");
-        return session.getAttribute(name);
-    }
-
-
     /**
      * Returns an <code>Enumeration</code> of String objects containing the names of
      * all the objects bound to this session under the <code>PORTLET_SCOPE</code>, or an
@@ -147,29 +98,6 @@ public class PortletSessionImpl implements PortletSession
      */
 
     public java.util.Enumeration getAttributeNames() throws IllegalStateException {
-        return session.getAttributeNames();
-    }
-
-
-    /**
-     * Returns an <code>Enumeration</code> of String objects containing the names of
-     * all the objects bound to this session in the given scope, or an
-     * empty <code>Enumeration</code> if no attributes are available in the
-     * given scope.
-     *
-     * @param scope               session scope of the attribute names
-     *
-     * @return			an <code>Enumeration</code> of
-     *				<code>String</code> objects specifying the
-     *				names of all the objects bound to
-     *				this session, or an empty <code>Enumeration</code>
-     *                            if no attributes are available in the given scope.
-     *
-     * @exception IllegalStateException	if this method is called on an
-     *					invalidated session
-     */
-
-    public java.util.Enumeration getAttributeNames(int scope) throws IllegalStateException {
         return session.getAttributeNames();
     }
 
@@ -298,29 +226,6 @@ public class PortletSessionImpl implements PortletSession
         session.removeAttribute(name);
     }
 
-
-    /**
-     * Removes the object bound with the specified name and the given scope from
-     * this session. If the session does not have an object
-     * bound with the specified name, this method does nothing.
-     *
-     * @param name   the name of the object to be
-     *               removed from this session
-     * @param scope  session scope of this attribute
-     *
-     * @exception IllegalStateException
-     *                   if this method is called on a
-     *                   session which has been invalidated
-     * @exception  IllegalArgumentException
-     *                            if name is <code>null</code>.
-     */
-
-    public void removeAttribute(String name, int scope) throws IllegalStateException, IllegalArgumentException {
-        if (name == null) throw new IllegalArgumentException("name is NULL");
-        session.removeAttribute(name);
-    }
-
-
     /**
      * Binds an object to this session under the <code>PORTLET_SCOPE</code>, using the name specified.
      * If an object of the same name in this scope is already bound to the session,
@@ -361,7 +266,7 @@ public class PortletSessionImpl implements PortletSession
      * Binds an object to this session in the given scope, using the name specified.
      * If an object of the same name in this scope is already bound to the session,
      * that object is replaced.
-     *
+     * <p/>
      * <p>After this method has been executed, and if the new object
      * implements <code>HttpSessionBindingListener</code>,
      * the container calls
@@ -371,26 +276,132 @@ public class PortletSessionImpl implements PortletSession
      * <p>If an object was already bound to this session
      * that implements <code>HttpSessionBindingListener</code>, its
      * <code>HttpSessionBindingListener.valueUnbound</code> method is called.
-     *
+     * <p/>
      * <p>If the value is <code>null</code>, this has the same effect as calling
      * <code>removeAttribute()</code>.
      *
+     * @param name  the name to which the object is bound;
+     *              this cannot be <code>null</code>.
+     * @param value the object to be bound
+     * @param scope session scope of this attribute
+     * @throws IllegalStateException    if this method is called on a
+     *                                  session which has been invalidated
+     * @throws IllegalArgumentException if name is <code>null</code>.
+     */
+     public void setAttribute(java.lang.String name, java.lang.Object value, int scope) throws IllegalStateException {
+        if (name == null) {
+            throw new IllegalArgumentException("name must not be null");
+        }
+        if (scope == PortletSession.APPLICATION_SCOPE) {
+            session.setAttribute(name, value);
+        } else {
+            session.setAttribute("javax.portlet.p." + request.getAttribute(SportletProperties.COMPONENT_ID) + "?" + name, value);
+        }
+    }
+
+    /**
+     * Returns the object bound with the specified name in this session,
+     * or <code>null</code> if no object is bound under the name in the given scope.
      *
-     * @param name		the name to which the object is bound;
-     *				this cannot be <code>null</code>.
-     * @param value		the object to be bound
+     * @param name		a string specifying the name of the object
      * @param scope               session scope of this attribute
      *
-     * @exception IllegalStateException	if this method is called on a
-     *					session which has been invalidated
+     * @return			the object with the specified name
+     *
+     * @exception IllegalStateException	if this method is called on an
+     *					invalidated session
      * @exception  IllegalArgumentException
      *                            if name is <code>null</code>.
      */
-
-    public void setAttribute(String name, Object value, int scope) throws IllegalStateException, IllegalArgumentException {
-        if (name == null) throw new IllegalArgumentException("name is NULL");
-        session.setAttribute(name, value);
+    public java.lang.Object getAttribute(String name, int scope) throws java.lang.IllegalStateException {
+        if (name == null) {
+            throw new IllegalArgumentException("name must not be null");
+        }
+        if (scope == PortletSession.APPLICATION_SCOPE) {
+            return session.getAttribute(name);
+        } else {
+            Object attribute = session.getAttribute("javax.portlet.p." + (String)request.getAttribute(SportletProperties.COMPONENT_ID) + "?" + name);
+            if (attribute == null) {
+                // not sure, if this should be done for all attributes or only javax.servlet.
+                attribute = session.getAttribute(name);
+            }
+            return attribute;
+        }
     }
+
+    /**
+     * Returns an <code>Enumeration</code> of String objects containing the names of
+     * all the objects bound to this session in the given scope, or an
+     * empty <code>Enumeration</code> if no attributes are available in the
+     * given scope.
+     *
+     * @param scope               session scope of the attribute names
+     *
+     * @return			an <code>Enumeration</code> of
+     *				<code>String</code> objects specifying the
+     *				names of all the objects bound to
+     *				this session, or an empty <code>Enumeration</code>
+     *                            if no attributes are available in the given scope.
+     *
+     * @exception IllegalStateException	if this method is called on an
+     *					invalidated session
+     */
+    public java.util.Enumeration getAttributeNames(int scope) {
+        if (scope == PortletSession.APPLICATION_SCOPE) {
+            return session.getAttributeNames();
+        } else {
+            Enumeration attributes = session.getAttributeNames();
+
+            Vector portletAttributes = new Vector();
+
+            /* Fix that ONLY attributes of PORTLET_SCOPE are returned. */
+            int prefix_length = "javax.portlet.p.".length();
+            String compId = (String)request.getAttribute(SportletProperties.COMPONENT_ID);
+
+            while (attributes.hasMoreElements()) {
+                String attribute = (String) attributes.nextElement();
+
+                int attributeScope = PortletSessionUtil.decodeScope(attribute);
+
+                if (attributeScope == PortletSession.PORTLET_SCOPE && attribute.startsWith(compId, prefix_length)) {
+                    String portletAttribute = PortletSessionUtil.decodeAttributeName(attribute);
+
+                    if (portletAttribute != null) { // it is in the portlet's namespace
+                        portletAttributes.add(portletAttribute);
+                    }
+                }
+            }
+
+            return portletAttributes.elements();
+        }
+    }
+
+    /**
+     * Removes the object bound with the specified name and the given scope from
+     * this session. If the session does not have an object
+     * bound with the specified name, this method does nothing.
+     *
+     * @param name   the name of the object to be
+     *               removed from this session
+     * @param scope  session scope of this attribute
+     *
+     * @exception IllegalStateException
+     *                   if this method is called on a
+     *                   session which has been invalidated
+     * @exception  IllegalArgumentException
+     *                            if name is <code>null</code>.
+     */
+    public void removeAttribute(String name, int scope) throws java.lang.IllegalStateException {
+        if (name == null) {
+            throw new IllegalArgumentException("name must not be null");
+        }
+        if (scope == PortletSession.APPLICATION_SCOPE) {
+            session.removeAttribute(name);
+        } else {
+            session.removeAttribute("javax.portlet.p." + (String)request.getAttribute(SportletProperties.COMPONENT_ID) + "?" + name);
+        }
+    }
+
 
 
     /**
@@ -417,6 +428,38 @@ public class PortletSessionImpl implements PortletSession
         return ctx;
     }
 
+        // javax.servlet.http.HttpSession implementation ----------------------------------------------
+    public javax.servlet.ServletContext getServletContext()
+    {
+        // TBD, open issue. it would be good if we could also implement the ServletContext interface at the PortletContextImpl
+        return session.getServletContext();
+    }
+
+    public javax.servlet.http.HttpSessionContext getSessionContext()
+    {
+        return session.getSessionContext();
+    }
+
+    public Object getValue(String name)
+    {
+        return this.getAttribute(name, PORTLET_SCOPE);
+    }
+
+    public String[] getValueNames()
+    {
+        // TBD
+        return null;
+    }
+
+    public void putValue(String name, Object value)
+    {
+        this.setAttribute(name, value, PORTLET_SCOPE);
+    }
+
+    public void removeValue(String name)
+    {
+        this.removeAttribute(name, PORTLET_SCOPE);
+    }
 }
 
 

@@ -18,6 +18,7 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpSession;
 import javax.servlet.ServletInputStream;
 import java.util.*;
 import java.io.IOException;
@@ -44,6 +45,10 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     protected Supports[] supports = null;
     protected String contextPath = "/";
     protected boolean hasReader = false;
+    protected boolean included = false;
+
+    private PortletSession portletSession;
+
     protected Map props = null;
     //protected boolean included = true;
 
@@ -62,6 +67,23 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         contextPath = contextPath.substring(l);
         this.supports = supports;
         props = new HashMap();
+    }
+
+
+    public void setIncluded(boolean included) {
+        this.included = included;
+    }
+
+    public boolean isIncluded() {
+        return included;
+    }
+
+    /**
+     * Is this attribute name a reserved name (by the J2EE spec)?.
+     * Reserved names begin with "java." or "javax.".
+     */
+    private boolean isNameReserved(String name) {
+        return name.startsWith("java.") || name.startsWith("javax.");
     }
 
     /**
@@ -166,7 +188,8 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @return the portlet session
      */
     public PortletSession getPortletSession() {
-        return new PortletSessionImpl(this.getHttpServletRequest().getSession(true), portletContext);
+        return getPortletSession(true);
+        //return new PortletSessionImpl(this.getHttpServletRequest().getSession(true), portletContext);
     }
 
     /**
@@ -187,12 +210,30 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @return the portlet session
      */
     public PortletSession getPortletSession (boolean create) {
+       /*
         if ((this.getHttpServletRequest().getSession() == null) && (create == false)) {
             return null;
         }
         return new PortletSessionImpl(this.getHttpServletRequest().getSession(true), portletContext);
-    }
+        */
+        // check if the session was invalidated
+        HttpSession httpSession = this.getHttpServletRequest().getSession(false);
 
+        if ((portletSession != null) && (httpSession == null)) {
+            portletSession = null;
+        } else if (httpSession != null) {
+            create = true;
+        }
+
+        if (create && portletSession == null) {
+            httpSession = this.getHttpServletRequest().getSession(create);
+            if (httpSession != null) {
+                portletSession = new PortletSessionImpl(this.getHttpServletRequest(), this.getHttpServletRequest().getSession(true), portletContext);
+            }
+        }
+
+        return portletSession;
+    }
 
     /**
      * Returns the value of the specified request property
@@ -753,28 +794,86 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         return this.getHttpServletRequest().getServerPort();
     }
 
+    public int getContentLength() {
+        if (included) return 0;
+        return this.getHttpServletRequest().getContentLength();
+    }
+
+    public String getProtocol() {
+        return null;
+    }
+
+    public String getRemoteAddr() {
+        return null;
+    }
+
+    public String getRemoteHost() {
+        return null;
+    }
+
+    public String getRealPath(String s) {
+        return null;
+    }
+
+    public StringBuffer getRequestURL() {
+        return null;
+    }
+
+    public String getCharacterEncoding() {
+        return null;
+    }
+
+    public void setCharacterEncoding(String s) throws UnsupportedEncodingException {
+        // do nothing
+    }
+
+    public String getContentType() {
+        if (included) return null;
+        return this.getHttpServletRequest().getContentType();
+    }
+
+    public String getQueryString() {
+        String attr = (String)super.getAttribute("javax.servlet.include.query_string");
+        return(attr != null) ? attr : super.getQueryString();
+    }
+
+    public String getPathInfo() {
+        String attr = (String)super.getAttribute("javax.servlet.include.path_info");
+        return(attr != null) ? attr : super.getPathInfo();
+    }
+
+    public String getRequestURI() {
+        String attr = (String)super.getAttribute("javax.servlet.include.request_uri");
+        return(attr != null) ? attr : super.getRequestURI();
+    }
+
+    public String getServletPath() {
+        String attr = (String)super.getAttribute("javax.servlet.include.servlet_path");
+        return(attr != null) ? attr : super.getServletPath();
+    }
+
+    public String getPathTranslated() {
+        return null;
+    }
+
     public ServletInputStream getInputStream() throws IOException {
-        //if (included) {
-        //    return null;
-        //} else {
-            // the super class will ensure that a IllegalStateException is thrown if getReader() was called earlier
-            javax.servlet.ServletInputStream stream = getHttpServletRequest().getInputStream();
-            hasReader = true;
-            return stream;
-        //}
+        if (included) return null;
+
+        javax.servlet.ServletInputStream stream = getHttpServletRequest().getInputStream();
+        hasReader = true;
+        return stream;
+
     }
 
     public BufferedReader getReader() throws UnsupportedEncodingException, IOException {
-        //if (included) {
-        //    return null;
-        //} else {
+        if (included) return null;
 
         BufferedReader reader = getHttpServletRequest().getReader();
 
         hasReader = true;
 
         return reader;
-        //}
+
     }
 
     private HttpServletRequest getHttpServletRequest() {

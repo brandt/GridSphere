@@ -47,7 +47,7 @@ public class PortletPreferencesManager {
      * @param user               the <code>User</code>
      * @return the PortletPreferences for this portlet or null if none exists.
      */
-    public javax.portlet.PortletPreferences getPortletPreferences(JSRApplicationPortletImpl appPortlet, User user, ClassLoader loader) {
+    public javax.portlet.PortletPreferences getPortletPreferences(JSRApplicationPortletImpl appPortlet, User user, ClassLoader loader, boolean isRender) {
 
         if (user instanceof GuestUser) return null;
 
@@ -75,6 +75,7 @@ public class PortletPreferencesManager {
         } catch (Exception e) {
             log.error("Error attempting to restore persistent preferences: ", e);
         }
+        prefs.setRender(isRender);
         return prefs;
     }
 

@@ -11,11 +11,7 @@ import javax.portlet.Portlet;
 import javax.portlet.PortletContext;
 import javax.portlet.PortletConfig;
 import javax.servlet.ServletConfig;
-import java.util.Hashtable;
-import java.util.ResourceBundle;
-import java.util.ListResourceBundle;
-import java.util.Locale;
-import java.util.MissingResourceException;
+import java.util.*;
 
 /**
  * The <CODE>PortletConfig</CODE> interface provides the portlet with
@@ -57,8 +53,38 @@ public class PortletConfigImpl implements PortletConfig
             };
         }
 
-        protected Object[][] getContents() {
+        public Object[][] getContents() {
             return resources;
+        }
+    }
+
+    private static class ResourceBundleImpl extends ResourceBundle {
+        private HashMap data;
+
+        public ResourceBundleImpl(ResourceBundle bundle, ResourceBundle defaults) {
+            data = new HashMap();
+
+            importData(defaults);
+            importData(bundle);
+        }
+
+        private void importData(ResourceBundle bundle) {
+            if (bundle != null) {
+                for (Enumeration enum = bundle.getKeys(); enum.hasMoreElements
+                        ();) {
+                    String key   = (String)enum.nextElement();
+                    Object value = bundle.getObject(key);
+                    data.put(key, value);
+                }
+            }
+        }
+
+        protected Object handleGetObject(String key) {
+            return data.get(key);
+        }
+
+        public Enumeration getKeys() {
+            return new Enumerator(data.keySet());
         }
     }
 
@@ -149,13 +175,16 @@ public class PortletConfigImpl implements PortletConfig
      * @return   the resource bundle for the given locale
      *
      */
-    public java.util.ResourceBundle getResourceBundle(java.util.Locale locale) {
+    public ResourceBundle getResourceBundle(java.util.Locale locale) {
         if (resources == null) {
             return infoBundle;
         }
         ResourceBundle resourceBundle = null;
         try {
-            resourceBundle=ResourceBundle.getBundle(resources, locale, classLoader);
+            resourceBundle = ResourceBundle.getBundle(resources, locale, classLoader);
+            if (infoBundle != null) {
+                return new ResourceBundleImpl(resourceBundle, infoBundle);
+            }
         } catch (MissingResourceException e) {
             System.err.println("Unable to find resource bundle: " + resources + " for locale: " + locale);
             if (infoBundle != null) {

@@ -124,7 +124,9 @@ public abstract class PortletResponseImpl extends HttpServletResponseWrapper imp
         return this.getHttpServletResponse().encodeURL(path);
     }
 
-    private HttpServletResponse getHttpServletResponse() {
+
+
+    protected HttpServletResponse getHttpServletResponse() {
         return (HttpServletResponse)super.getResponse();
     }
 

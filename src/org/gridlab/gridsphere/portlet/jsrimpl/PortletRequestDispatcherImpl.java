@@ -58,9 +58,18 @@ public class PortletRequestDispatcherImpl implements PortletRequestDispatcher {
             throws PortletException, java.io.IOException {
         if ((request instanceof PortletRequestImpl) && (response instanceof PortletResponseImpl)) {
             try {
-                rd.include((PortletRequestImpl)request, (PortletResponseImpl)response);
-            } catch (ServletException e) {
-                throw new PortletException(e);
+                ((PortletRequestImpl) request).setIncluded(true);
+                rd.include((PortletRequestImpl) request, (PortletResponseImpl) response);
+            } catch (java.io.IOException e) {
+                throw e;
+            } catch (javax.servlet.ServletException e) {
+                if (e.getRootCause() != null) {
+                    throw new PortletException(e.getRootCause());
+                } else {
+                    throw new PortletException(e);
+                }
+            } finally {
+                ((PortletRequestImpl) request).setIncluded(false);
             }
         }
     }
