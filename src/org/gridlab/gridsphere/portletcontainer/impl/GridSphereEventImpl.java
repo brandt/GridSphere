@@ -53,7 +53,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
         String name, newname, value;
         String actionStr = portletRequest.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
         if (actionStr != null) {
-            log.info("Received action: " + actionStr);
+            log.debug("Received action=" + actionStr);
 
             action = new DefaultPortletAction(actionStr);
             String prefix = portletRequest.getParameter(SportletProperties.PREFIX);
@@ -76,9 +76,27 @@ public class GridSphereEventImpl implements GridSphereEvent {
             while (enum.hasMoreElements()) {
                 name = (String) enum.nextElement();
                 if (name.startsWith(SportletProperties.DEFAULT_PORTLET_ACTION)) {
-                    newname = name.substring(SportletProperties.DEFAULT_PORTLET_ACTION.length() + 1);
+                    // check for parameter names and values
+                    StringTokenizer st = new StringTokenizer(name, "&");
+                    newname = st.nextToken().substring(SportletProperties.DEFAULT_PORTLET_ACTION.length() + 1);
                     action = new DefaultPortletAction(newname);
+                    log.debug("Received action=" + action);
+                    String paramName = "";
+                    String paramVal = "";
+                    while (st.hasMoreTokens()) {
+                        // now check for "=" separating name and value
+                        String namevalue = st.nextToken();
+                        int hasvalue = namevalue.indexOf("=");
+                        if (hasvalue > 0) {
+                            paramName = namevalue.substring(0, hasvalue);
+                            paramVal = namevalue.substring(hasvalue+1);
+                            action.addParameter(paramName, paramVal);
+                        } else {
+                            action.addParameter(namevalue, paramVal);
+                        }
+                    }
                 }
+
             }
         }
 
