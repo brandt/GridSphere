@@ -35,6 +35,12 @@
                     <description>Portlet provides login capabilities</description>
                     <keywords>portlet login</keywords>
                 </language>
+                <language locale="cs">
+                    <title>P?ihlá?ení</title>
+                    <title-short>P?ihlá?ení</title-short>
+                    <description>Portlet pro p?ihlá?ení u?ivatele do systému</description>
+                    <keywords>p?ihlá?ení</keywords>
+                </language>
                 <language locale="de">
                     <title>Anmelden</title>
                     <title-short>Anmelden</title-short>
@@ -66,6 +72,12 @@
                     <title-short>Logout</title-short>
                     <description>Portlet provides logout capabilities</description>
                     <keywords>portlet logout</keywords>
+                </language>
+                <language locale="cs">
+                    <title>Odhl?ení</title>
+                    <title-short>Odhlá?ení</title-short>
+                    <description>Portlet poskytuje mo?nost odhlá?ení</description>
+                    <keywords>portlet odhlá?ení logout</keywords>
                 </language>
                 <language locale="de">
                     <title>Abmelden</title>
