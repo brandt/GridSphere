@@ -389,7 +389,7 @@ Copyright:
     </target>
 
     <target name="create-database" depends="setenv, configure-database">
-        <delete dir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/database"/>
+        <!-- <delete dir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/database"/> -->
         <taskdef name="schemaexport"
             classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask"
             classpathref="classpath"/>
