@@ -10,32 +10,27 @@ import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRole;
-import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
-import org.gridlab.gridsphere.portlet.impl.SportletUser;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.core.persistence.*;
-import org.gridlab.gridsphere.core.persistence.castor.Transaction;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManager;
-import org.gridlab.gridsphere.core.persistence.castor.Result;
-import org.gridlab.gridsphere.core.persistence.castor.Query;
+import org.gridlab.gridsphere.core.persistence.castor.*;
+
+import java.util.Random;
+
 
 public class AccessControlManagerServiceImpl implements PortletServiceProvider, AccessControlManagerService {
-    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(AccessControlManagerServiceImpl.class.getName());
 
-    PersistenceInterface pm = null;
+    protected transient static PortletLog log = SportletLog.getInstance(AccessControlManagerServiceImpl.class);
 
-    public AccessControlManagerServiceImpl() throws PortletServiceException  {
+    private PersistenceManagerRdbms pm = null;
+
+    public AccessControlManagerServiceImpl() {
         super();
-        try {
-            pm = new PersistenceManager("/Users/wehrens/gridsphere/webapps/WEB-INF/conf/database.xml","portal");
-            cat.info("AccessControlManagerServiceImpl done");
-        } catch (ConfigurationException e) {
-            throw new PortletServiceException(e.toString());
-        }
-
+        pm = new PersistenceManagerRdbms();
     }
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
@@ -45,28 +40,17 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     }
 
     /**
-     *  creates a new unique ID
+     * executes any delete command
+     * @param command
+     * @throws PortletServiceException
      */
-    private int getNewID() {
-        Long l = new Long(System.currentTimeMillis()) ;
-        return l.intValue();
-    }
-
     private void delete(String command) throws PortletServiceException {
-
         try {
-            pm.begin();
-            Query query = pm.getQuery();
-            Result res = query.execute(command);
-            while (res.hasMore()) {
-                pm.delete(res.next());
-            }
-            pm.commit();
+            pm.deleteList(command);
         } catch (PersistenceException e) {
-            pm.close();
-            throw new PortletServiceException(e.toString());
+            log.equals("Delete error "+e);
+            throw new PortletServiceException("Delete Exception "+e);
         }
-        pm.close();
     }
 
     /**
@@ -77,34 +61,22 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     public void addUserToSuperRole(User user) {
 
 
-
     }
 
     /**
      * Creates a new group
      *
-     * @param groupName the name of the new group
+     * @param Name the name of the new group
+     * @throws PortletServiceException
      */
     public void createNewGroup(String Name) throws PortletServiceException {
-
-
-        Groups ga = new Groups();
-        ga.setName(Name);
-        ga.setID(this.getNewID());
-
-        cat.debug("Group "+ga.getName()+" ID " +ga.getID());
-
+        SportletGroup ga = new SportletGroup(Name);
         try {
-            pm.begin();
             pm.create(ga);
-            pm.commit();
         } catch (PersistenceException e) {
-            pm.close();
-            cat.error("Transaction Exception "+e);
+            log.error("Transaction Exception "+e);
             throw new PortletServiceException(e.toString());
         }
-
-        pm.close();
     }
 
     /**
@@ -115,26 +87,15 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
      * @throws PortletServiceException
      */
     public void renameGroup(PortletGroup group, String newGroupName) throws PortletServiceException {
-
         String command =
-                "select g from org.gridlab.gridsphere.services.security.acl.impl2.Groups g where g.ID="+group.getID();
-        Transaction tx = null;
-
+                "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g where g.Oid="+group.getID();
         try {
-            pm.begin();
-            Query query = pm.getQuery();
-            Result res = query.execute(command);
-            Groups ga = (Groups)res.next();
-            ga.setName(newGroupName);
-            pm.commit();
+            SportletGroup pg = (SportletGroup)pm.restoreObject(command);
+            pg.setName(newGroupName);
+            pm.update(pg);
         } catch (PersistenceException e) {
-            pm.close();
-            cat.error("Transaction Exception "+e);
-            throw new PortletServiceException(e.toString());
+            throw new  PortletServiceException("Persistence Error:"+e.toString());
         }
-
-        pm.close();
-
     }
 
     /**
@@ -143,49 +104,50 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
      * @param group the PortletGroup
      */
     public void removeGroup(PortletGroup group) throws PortletServiceException {
-
         String command =
-            "select g from org.gridlab.gridsphere.services.security.acl.impl2.Groups g where g.ID="+group.getID();
-
+            "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g where g.Oid="+group.getID();
         delete(command);
 
     }
 
     /**
-     * Add a role to a user in a group
+     * Add a role to a user in a group or changes the status of that user to
+     * that specific role
      *
      * @param user the User object
      * @param group the PortletGroup
-     * @param role the PortletRole
      */
-    public void addRoleInGroup(User user, PortletGroup group, PortletRole role) throws PortletServiceException {
+    public void addRoleInGroup(User user, PortletGroup group) throws PortletServiceException {
+        // all users need to make an accountrequest to get in groups, without it ... no
 
-        UserACL ur = new UserACL(user.getID(), role.getID(), group.getID());
+        String command = "select acl from org.gridlab.gridsphere.services.security.acl.impl2.UserACL acl where "+
+                "UserID=\""+user.getID()+"\" and GroupID=\""+group.getID()+"\"";
 
+        UserACL useracl = null;
         try {
-            pm.begin();
-            pm.create(ur);
-            pm.commit();
+            useracl = (UserACL)pm.restoreObject(command);
+            if (useracl==null) {
+                log.error("User "+user.getFullName()+" did not requested a role with an accountrequest change");
+            } else {
+                useracl.setStatus(useracl.STATUS_APPROVED);
+                pm.update(useracl);
+                log.info("Approved ACL for user "+user.getFullName()+" in group "+group.getName());
+            }
+
         } catch (PersistenceException e) {
-            pm.close();
-            cat.error("TransactionException "+e);
+            log.error("TransactionException "+e);
             throw new PortletServiceException(e.toString());
         }
-        cat.info("created user "+user.getUserID()+" in group "+group.getName());
-        cat.info("userid "+ur.getUserID()+" groupid "+ur.getGroupID());
-        pm.close();
-
     }
 
     /**
-     * Add a user to a group with a specified role
+     * Add a user to a group with the user role
      *
      * @param user the User object
      * @param group the PortletGroup
-     * @param role the PortletRole
      */
-    public void addUserToGroup(User user, PortletGroup group, PortletRole role) throws PortletServiceException {
-        addRoleInGroup(user, group, role); // can have a standardrole here
+    public void addUserToGroup(User user, PortletGroup group) throws PortletServiceException {
+        addRoleInGroup(user, group);
     }
 
 
@@ -199,25 +161,8 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         String command =
             "select r from org.gridlab.gridsphere.services.security.acl.impl2.UserACL r where r.UserID="+user.getID()+
             " and r r.GroupID="+group.getID();
-
         delete(command);
     }
 
-    /**
-     * Remove a specified user role from a group
-     *
-     * @param user the User object
-     * @param group the PortletGroup
-     * @param role the PortletRole
-     */
-
-    public void removeUserRoleFromGroup(User user, PortletGroup group, PortletRole role) throws PortletServiceException {
-
-        String command =
-            "select r from org.gridlab.gridsphere.services.security.acl.impl2.UserACL r where r.UserID="+user.getID()+
-            " and r r.GroupID="+group.getID()+" and r.RoleID="+role.getID();
-
-        delete(command);
-    }
 }
 

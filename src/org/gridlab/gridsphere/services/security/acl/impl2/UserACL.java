@@ -9,24 +9,29 @@ package org.gridlab.gridsphere.services.security.acl.impl2;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 public class UserACL extends BaseObject  {
-    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(UserACL.class.getName());
 
+    protected transient static PortletLog cat = SportletLog.getInstance(UserACL.class);
 
-    private String UserID;
     private int RoleID;
-    private int GroupID;
+    private String UserID;
+    private String GroupID;
+    private int Status;         // 0 not approved; 1 approved
+    public static final int STATUS_NOT_APPROVED = 0;
+    public static final int STATUS_APPROVED = 1;
 
     public UserACL() {
         super();
     };
 
-    public UserACL(String userid, int roleid, int groupid) {
+    public UserACL(String userid, int roleid, String groupid) {
         this.UserID = userid;
         this.RoleID = roleid;
         this.GroupID = groupid;
-        cat.info("new useracl "+userid+" role: "+roleid+" group "+groupid);
+        this.Status = STATUS_NOT_APPROVED;
     }
 
     public String getUserID() {
@@ -45,12 +50,20 @@ public class UserACL extends BaseObject  {
         RoleID = roleID;
     }
 
-    public int getGroupID() {
+    public String getGroupID() {
         return GroupID;
     }
 
-    public void setGroupID(int groupID) {
+    public void setGroupID(String groupID) {
         GroupID = groupID;
+    }
+
+    public int getStatus() {
+        return Status;
+    }
+
+    public void setStatus(int status) {
+        Status = status;
     }
 }
 

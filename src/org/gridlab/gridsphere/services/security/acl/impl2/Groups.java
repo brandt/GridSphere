@@ -6,11 +6,11 @@
 
 package org.gridlab.gridsphere.services.security.acl.impl2;
 
-import org.gridlab.gridsphere.core.persistence.BaseObject;
-import org.gridlab.gridsphere.portlet.PortletGroup;
 
-public class Groups extends BaseObject implements PortletGroup {
-    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(Groups.class.getName());
+import org.gridlab.gridsphere.core.persistence.BaseObject;
+
+
+public class Groups extends BaseObject {
 
     private String Name = "";
     private int ID = 0;

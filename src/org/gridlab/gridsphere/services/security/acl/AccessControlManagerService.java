@@ -46,9 +46,10 @@ public interface AccessControlManagerService extends PortletService {
      *
      * @param user the Role object
      * @param group the PortletGroup
-     * @param role the PortletRole
+     *
      */
-    public void addRoleInGroup(User user, PortletGroup group, PortletRole role) throws PortletServiceException ;
+    //@todo can be deleted
+    public void addRoleInGroup(User user, PortletGroup group) throws PortletServiceException ;
 
     /**
      * Add a user to a group with a specified role
@@ -61,18 +62,9 @@ public interface AccessControlManagerService extends PortletService {
     /**
      * Removes a user from a group
      *
-     * @param user the Role object
+     * @param user the user object
      * @param group the PortletGroup
      */
     public void removeUserFromGroup(User user, PortletGroup group) throws PortletServiceException ;
-
-    /**
-     * Remove a specified user role from a group
-     *
-     * @param user the Role object
-     * @param group the PortletGroup
-     * @param role the PortletRole
-     */
-    public void removeUserRoleFromGroup(User user, PortletGroup group, PortletRole role) throws PortletServiceException ;
 
 }

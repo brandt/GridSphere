@@ -12,35 +12,30 @@ import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletRole;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.core.persistence.*;
-import org.gridlab.gridsphere.core.persistence.castor.Result;
-import org.gridlab.gridsphere.core.persistence.castor.Query;
-import org.gridlab.gridsphere.core.persistence.castor.Transaction;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManager;
+import org.gridlab.gridsphere.core.persistence.castor.*;
+import org.gridlab.gridsphere.portletcontainer.descriptor.Role;
 
 import java.util.List;
 import java.util.Vector;
 
 public class AccessControlServiceImpl  implements AccessControlService, PortletServiceProvider {
 
-    protected transient static PortletLog cat = SportletLog.getInstance(AccessControlServiceImpl.class);
+    protected transient static PortletLog log = SportletLog.getInstance(AccessControlServiceImpl.class);
 
-    PersistenceInterface pm = null;
+    PersistenceManagerRdbms pm = null;
 
     public AccessControlServiceImpl() throws PersistenceException {
         super();
 
-        try {
-            pm = new PersistenceManager("/Users/wehrens/gridsphere/webapps/WEB-INF/conf/database.xml","portal");
-         } catch (ConfigurationException e) {
-            cat.error("Configuration Error "+e);
-            throw new PersistenceException();
-        }
-        cat.info("AccessControlServiceImpl constructor done ");
+        pm = new PersistenceManagerRdbms();
+
+        log.info("AccessControlServiceImpl constructor done ");
     }
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
@@ -50,10 +45,56 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
     }
 
     /**
+     * returns true if a oql query is succsessfull
+     * @param command oql query
+     * @return true/false
+     */
+    private boolean queryACL(String command) {
+        UserACL acl = null;
+        try {
+            acl = (UserACL)pm.restoreObject(command);
+        } catch (PersistenceException e) {
+            log.error("PM Exception: "+e);
+        }
+
+        if (acl!=null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private List listACL(String command) {
+        List result = null;
+        try {
+            result = pm.restoreList(command);
+        } catch (PersistenceException e) {
+            log.error("PM Exception: "+e);
+        }
+        return result;
+    }
+
+    /**
      * Returns list of super users
      */
     public List getSuperUsers() throws  PortletServiceException {
-        return null;
+    // @todo check the length of the second query string, could get too long!
+
+        String command =
+            "select u from org.gridlab.gridsphere.services.security.acl.impl2.UserACL u where u.RoleID=\""+SportletRole.getSuperRole().getRole()+
+                "\" and u.Status="+UserACL.STATUS_APPROVED;
+        //log.info(command);
+        List acl = listACL(command);
+
+        command = "select u from org.gridlab.gridsphere.portlet.impl.SportletUserImpl u where ";
+        for (int i=0;i<acl.size();i++) {
+            if (i!=0) {
+                command = command +" and ";
+            }
+            command = command + " u.Oid=\""+((UserACL)acl.get(i)).getUserID()+"\"";
+        }
+        //log.info(command);
+        return listACL(command);
     }
 
     public boolean isSuperUser(User user) {
@@ -73,7 +114,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
         String oql = "select r from org.gridlab.gridpshere.services.security.acl.impl2.UserRole r where r.userid="+
                 user.getID()+" and r.groupid="+group.getID()+" and r.roleid="+role.getID();
 
-        return false;
+        return (queryACL(oql));
     }
 
     /**
@@ -88,10 +129,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
         String command =
             "select u from org.gridlab.gridsphere.services.security.acl.impl2.UserACL u where u.RoleID=\""+role.getID()+
             " and u.GroupID="+group.getID();
-
-
-
-        return null;
+        return listACL(command);
     }
 
     /**
@@ -113,21 +151,16 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
     public List getAllGroups() throws PortletServiceException {
 
         String command =
-            "select g from org.gridlab.gridsphere.services.security.acl.impl2.Groups g";
-        Vector v = new Vector();
+            "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g";
+        List result = null;
+
         try {
-            pm.begin();
-            Query query = pm.getQuery();
-            Result res = query.execute(command);
-            while (res.hasMore()) {
-                v.add(res.next());
-            }
-            pm.commit();
+            result = pm.restoreList(command);
         } catch (PersistenceException e) {
-            cat.error("Transaction error "+e);
+            log.error("Transaction error "+e);
             throw new PortletServiceException();
         }
-        return v;
+        return result;
     }
 
     /**
@@ -158,22 +191,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
             "select u from org.gridlab.gridsphere.services.security.acl.impl2.UserACL u where u.UserID=\""+user.getID()+
             "\" and u.GroupID="+group.getID();
 
-        cat.info("string:"+command);
-        try {
-            pm.begin();
-            Query query = pm.getQuery();
-            Result res = query.execute(command);
-            if (res.hasMore()) {
-                pm.close();
-                return true;
-            } else {
-                pm.close();
-                return false;
-            }
-        } catch (PersistenceException e) {
-            pm.close();
-            throw new PortletServiceException(e.toString());
-        }
+       return queryACL(command);
 
     }
 
