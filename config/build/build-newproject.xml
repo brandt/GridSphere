@@ -71,12 +71,6 @@
             <fileset dir="config/database"/>
         </copy>
 
-        <!-- must copy the BaseObject.java source file for castordoclet to work -->
-        <copy file="src/org/gridlab/gridsphere/core/persistence/BaseObject.java" tofile="${project.dir}/config/database/castor/BaseObject.java"/>
-        <copy file="src/org/gridlab/gridsphere/core/persistence/castor/Attribute.java" tofile="${project.dir}/config/database/castor/Attribute.java"/>
-        <copy file="src/org/gridlab/gridsphere/portlet/impl/SportletDataAttribute.java" tofile="${project.dir}/config/database/castor/SportletDataAttribute.java"/>
-        <copy file="src/org/gridlab/gridsphere/portlet/impl/SportletData.java" tofile="${project.dir}/config/database/castor/SportletData.java"/>
-
         <property name="DATABASE_NAME"
                   value="${project.name}"/>
         <property name="DATABASE_FILE"
