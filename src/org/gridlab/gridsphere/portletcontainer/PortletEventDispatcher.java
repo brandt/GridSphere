@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.portletcontainer;
 
 import org.gridlab.gridsphere.event.WindowEvent;
+import org.gridlab.gridsphere.event.MessageEvent;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
@@ -74,5 +75,13 @@ public class PortletEventDispatcher {
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         PortletWrapper wrapper = appPortlet.getPortletWrapper();
         wrapper.windowEvent(winEvent, req, res);
+    }
+
+    public void portletMessageEvent(String concretePortletID, MessageEvent msgEvent) throws PortletException {
+        log.info("in portletMessageEvent " + concretePortletID);
+        String appID = registry.getApplicationPortletID(concretePortletID);
+        ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
+        PortletWrapper wrapper = appPortlet.getPortletWrapper();
+        wrapper.messageEvent(msgEvent, req, res);
     }
 }

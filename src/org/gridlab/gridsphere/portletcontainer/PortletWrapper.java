@@ -177,9 +177,6 @@ public class PortletWrapper {
      * @param session the portlet session
      */
     public void logout(HttpServletRequest req, HttpServletResponse res) throws PortletException {
-
-        //abstractPortlet.logout(session);
-
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.LOGOUT);
         try {
             include(req, res);
@@ -216,15 +213,15 @@ public class PortletWrapper {
      *
      * @throws PortletException if the listener has trouble fulfilling the request
      */
-    public void messageReceived(MessageEvent event, HttpServletRequest req, HttpServletResponse res) throws PortletException {
+    public void messageEvent(MessageEvent event, HttpServletRequest req, HttpServletResponse res) throws PortletException {
         req.setAttribute(SportletProperties.MESSAGE_EVENT, event);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.MESSAGE_RECEIVED);
         try {
             include(req, res);
         } catch (Exception e) {
-            log.error("Unable to perform messageReceived");
-            throw new PortletException("Unable to perform messageReceived", e);
+            log.error("Unable to perform messageEvent");
+            throw new PortletException("Unable to perform messageEvent", e);
         }
     }
 

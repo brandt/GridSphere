@@ -39,7 +39,7 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
     private ServletContext context = null;
 
     private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
-    private PortletRegistryManager registry = PortletRegistryManager.getInstance();
+    private static PortletRegistryManager registry = PortletRegistryManager.getInstance();
 
     //private TomcatManagerWrapper tomcat = TomcatManagerWrapper.getInstance();
     private static ConcretePortletManager concPortletMgr = ConcretePortletManager.getInstance();
@@ -128,7 +128,6 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
 
     public void initPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws PortletException {
 
-        System.err.println("Work mother fuker &%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
         // Can do authorization check on user here
         //User user = req.getUser();
         //List userRoles = req.getRoles(PortletGroup.SUPER);
@@ -152,7 +151,7 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
      *
      * @return the list of web application names
      */
-    public List listPortletWebApplications() {
+    public List getPortletWebApplications() {
         List l = new ArrayList();
         Set set = webapps.keySet();
         Iterator it = set.iterator();

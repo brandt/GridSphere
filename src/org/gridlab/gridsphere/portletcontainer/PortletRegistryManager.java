@@ -27,10 +27,6 @@ public class PortletRegistryManager {
         allApplicationPortlets.remove(applicationPortletID);
     }
 
-    public void reloadApplicationPortlet(String applicationPortletID) {
-        allApplicationPortlets.remove(applicationPortletID);
-    }
-
     public ApplicationPortlet getApplicationPortlet(String applicationPortletID) {
         return (ApplicationPortlet) allApplicationPortlets.get(applicationPortletID);
     }

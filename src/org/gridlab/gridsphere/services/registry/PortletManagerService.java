@@ -31,6 +31,8 @@ public interface PortletManagerService extends PortletService {
 
     public void destroyPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws PortletException;
 
+    public void destroyAllPortletWebApplications(PortletRequest req, PortletResponse res) throws PortletException;
+
     /**
      * Removes a portlet web application from the registry
      *
@@ -45,6 +47,6 @@ public interface PortletManagerService extends PortletService {
      *
      * @return the list of web application names
      */
-    public List listPortletWebApplications();
+    public List getPortletWebApplications();
 
 }

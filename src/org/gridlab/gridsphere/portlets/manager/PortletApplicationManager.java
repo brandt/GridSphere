@@ -60,11 +60,20 @@ public class PortletApplicationManager extends AbstractPortlet {
         if (action.getName().equals("install")) {
             System.err.println("In actionPerformed doing an install");
             FileFormEvent fileformEvent = new FileFormEventImpl(event);
+            File warFile = null;
             try {
-                fileformEvent.saveFile(PortletManagerService.WEB_APPLICATION_PATH);
+                warFile = fileformEvent.saveFile(PortletManagerService.WEB_APPLICATION_PATH);
             } catch (FileFormException ffe) {
-                event.getPortletRequest().setAttribute("ERROR", ffe.getMessage());
+                log.error("Unable to save file from form: " + ffe.getMessage());
             }
+
+            portletManager.removePortletWebApplication("coreportlets", req, res);
+            result = tomcat.removeWebApp("coreportlets");
+
+            String portletWar = warFile.getAbsolutePath();
+            log.debug("Received WAR File: " + portletWar);
+            result = tomcat.installWebApp(appName, portletWar);
+            portletManager.installPortletWebApplication(appName, req, res);
         } else if ((operation != null) && (appName!= null)) {
             if (operation.equals("start")) {
                 result = tomcat.startWebApp(appName);
@@ -84,17 +93,13 @@ public class PortletApplicationManager extends AbstractPortlet {
             } else if (operation.equals("undeploy")) {
                 result = tomcat.undeployWebApp(appName);
                 portletManager.removePortletWebApplication(appName, req, res);
-            } else if (operation.equals("install")) {
-                String warFile = (String)params.get("warfile");
-                result = tomcat.installWebApp(appName, warFile);
-                portletManager.installPortletWebApplication(appName, req, res);
             }
         }
         if (result != null) System.err.println("result: " + result.getReturnCode() + " " + result.getDescription());
     }
 
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
-        List webapps = portletManager.listPortletWebApplications();
+        List webapps = portletManager.getPortletWebApplications();
         for (int i = 0; i < webapps.size(); i++) {
             System.err.println("webapp " + i + " " + webapps.get(i));
         }

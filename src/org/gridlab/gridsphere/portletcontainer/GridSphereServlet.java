@@ -12,6 +12,9 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 import org.gridlab.gridsphere.services.registry.PortletManagerService;
+import org.gridlab.gridsphere.services.user.UserManagerService;
+import org.gridlab.gridsphere.services.user.LoginService;
+import org.gridlab.gridsphere.services.security.AuthenticationException;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContextEvent;
@@ -39,7 +42,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     /* GridSphere Access Control Service */
     //private static AccessControlService aclService = null;
 
-    //private static UserManagerService userManager = null;
+    private static LoginService loginService = null;
 
     /* GridSphere User Portlet Manager handles portlet lifecycle */
     //private static UserPortletManager userPortletManager = null;
@@ -78,9 +81,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             log.error("Failed to find ACL service instance in GridSphere: ", e);
             throw new ServletException("Unable to getACL service: " + e.getMessage());
         }
+        */
 
         try {
-            userManager = (UserManagerService) factory.createPortletService(UserManagerService.class, config, true);
+            loginService = (LoginService) factory.createPortletService(LoginService.class, config, true);
         } catch (PortletServiceUnavailableException e) {
             log.error("Failed to get registry instance in GridSphere: ", e);
             throw new ServletException("Unable to get portlet instance: " + e.getMessage());
@@ -88,7 +92,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             log.error("Failed to find registry service instance in GridSphere: ", e);
             throw new ServletException("Unable to locate portlet registry service: " + e.getMessage());
         }
-        */
+
         // Get an instance of the UserPortletManager
         //userPortletManager = UserPortletManager.getInstance();
 
@@ -181,7 +185,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         if ((username.trim().equals("portal")) && (password.trim().equals("schmortal"))) {
             log.info("YO WE IN PORTAL!");
-            //User user = userService.loginUser(nam, password);
             SportletUser user = new SportletUserImpl();
             user.setUserID(username);
             user.setID("45");
@@ -194,16 +197,13 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             session.setAttribute(GridSphereProperties.USER, (User) user);
         } else {
             log.info("normally the login method of UserManagerService gets called right now -- when it works");
-            /*
             try {
-                User user = userManager.login(username, password);
+                User user = loginService.login(username, password);
                 session.setAttribute(GridSphereProperties.USER, user);
             } catch (AuthenticationException err) {
                 if(log.isDebugEnabled()) log.debug(err.getMessage());
                 req.setAttribute(LOGIN_ERROR_FLAG, LOGIN_ERROR_UNKNOWN);
             }
-            */
-
         }
         layoutEngine.loginPortlets(event);
     }
