@@ -1,5 +1,6 @@
 /*
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
  * @version $Id$
  */
 package org.gridlab.gridsphere.portlet.impl;
@@ -7,6 +8,7 @@ package org.gridlab.gridsphere.portlet.impl;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
 
 /**
@@ -153,6 +155,14 @@ public class SportletUserImpl extends BaseObject implements SportletUser  {
         this.Id = id;
     }
 
+    /**
+     * get the internal unique user id
+     *
+     * @return internal Id
+     */
+    public String getUserID() {
+        return Id;
+    }
 
     /**
      * Returns the user id of the user, or null if the user id is not available.
