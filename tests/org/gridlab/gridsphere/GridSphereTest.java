@@ -14,7 +14,7 @@ import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDescriptorTest;
 import org.gridlab.gridsphere.services.core.user.SetupRootUserTest;
 import org.gridlab.gridsphere.services.core.user.SetupTestGroupsTest;
 import org.gridlab.gridsphere.services.core.user.SetupTestUsersTest;
-import org.gridlab.gridsphere.services.core.user.UserManagerServiceTest;
+import org.gridlab.gridsphere.services.core.user.SetupUsersRolesTest;
 
 import java.net.URL;
 
@@ -36,14 +36,14 @@ public class GridSphereTest extends ServletTestCase {
         PropertyConfigurator.configure(propsUrl);
 
         TestSuite suite = new TestSuite();
-        suite.addTest(new TestSuite(GridSphereServletTest.class));
-        suite.addTest(new TestSuite(PortletDescriptorTest.class));
-        suite.addTest(new TestSuite(ServiceDescriptorTest.class));
-        suite.addTest(new TestSuite(SetupRootUserTest.class));
-        suite.addTest(new TestSuite(SetupTestUsersTest.class));
-        //suite.addTest(new TestSuite(UserManagerServiceTest.class));
-        //suite.addTest(new TestSuite(AccessControlManagerServiceTest.class));
-        //suite.addTest(new TestSuite(CredentialManagerServiceTest.class));
+
+        suite.addTest(new GridSphereServletTest("testInitGridSphere"));
+        suite.addTest(new PortletDescriptorTest("testPortletDescriptor"));
+        suite.addTest(new ServiceDescriptorTest("testServiceDescriptor"));
+        suite.addTest(new SetupRootUserTest("testLoginRootUser"));
+        suite.addTest(new SetupTestUsersTest("testCreateTestUsers"));
+        suite.addTest(new SetupUsersRolesTest("testHasSuperRole"));
+        suite.addTest(new SetupUsersRolesTest("testAssignRoles"));
         return suite;
     }
 
