@@ -22,7 +22,7 @@ import java.util.Vector;
  * <p/>
  * The portlet layout engine is a higher level manager of portlet containers
  * that represent a users customized layout. The portlet layout engine is used
- * by the {@link org.gridlab.gridsphere.portletcontainer.GridSphereServlet}
+ * by the {@link org.gridlab.gridsphere.servlets.GridSphereServlet}
  * Expect the PortletLayoutEngine methods to change possibly....
  */
 public class PortletLayoutEngine {

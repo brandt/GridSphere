@@ -46,7 +46,7 @@ public class PortletException extends ServletException {
      * @param cause the root cause
      */
     public PortletException(String text, Throwable cause) {
-        super(text);
+        super(text, cause);
         this.text = text;
         this.cause = cause;
     }
@@ -71,6 +71,10 @@ public class PortletException extends ServletException {
         return text;
     }
 
+    public Throwable getCause() {
+        return ((cause != null) ? cause.getCause() : null);
+    }
+
     /**
      * Return the exception message
      *
@@ -81,24 +85,23 @@ public class PortletException extends ServletException {
     }
 
     public void printStackTrace() {
-        super.printStackTrace();
+        //super.printStackTrace();
         if (cause != null) {
             cause.printStackTrace();
         }
     }
 
     public void printStackTrace(PrintStream ps) {
-        super.printStackTrace(ps);
+        //super.printStackTrace(ps);
         if (cause != null) {
             ps.println();
             ps.println();
-            ps.println("Caused by:");
             cause.printStackTrace(ps);
         }
     }
 
     public void printStackTrace(PrintWriter pw) {
-        super.printStackTrace(pw);
+        //super.printStackTrace(pw);
         pw.println(text);
         if (cause != null) {
             pw.println();
@@ -108,4 +111,18 @@ public class PortletException extends ServletException {
             cause.printStackTrace(pw);
         }
     }
+
+    /**
+     * Returns the exception that caused this servlet exception.
+     *
+     *
+     * @return                  the <code>Throwable</code>
+     *                          that caused this servlet exception
+     *
+     */
+
+    public Throwable getRootCause() {
+        return cause;
+    }
+
 }

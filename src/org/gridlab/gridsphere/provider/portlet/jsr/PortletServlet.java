@@ -54,6 +54,7 @@ import javax.servlet.http.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.File;
 import java.util.*;
 
 public class PortletServlet extends HttpServlet
@@ -83,6 +84,12 @@ public class PortletServlet extends HttpServlet
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
+        String propsFile = config.getServletContext().getRealPath("/WEB-INF/classes/log4j.properties");
+        File f = new File(propsFile);
+        if (f.exists()) {
+            System.err.println("configuring to use " + propsFile);
+            SportletLog.setConfigureURL(propsFile);
+        }
         // load descriptor files
         log.debug("in init of PortletServlet");
 
@@ -151,7 +158,6 @@ public class PortletServlet extends HttpServlet
                     log.error("in PortletServlet: service(): Unable to INIT portlet " + portletClass, e);
                     // PLT.5.5.2.1 Portlet that fails to initialize must not be placed in active service
                     it.remove();
-                    //throw new ServletException(e);
                 }
             }
 
@@ -190,6 +196,7 @@ public class PortletServlet extends HttpServlet
                 log.debug("in PortletServlet: service(): No PortletID found in request!");
                 return;
             }
+            request.setAttribute(SportletProperties.PORTLETID, portletClassName);
         }
 
         log.debug("have a portlet id " + portletClassName + " component id= " + compId);
@@ -215,16 +222,16 @@ public class PortletServlet extends HttpServlet
         while (it.hasNext()) {
             org.gridlab.gridsphere.portlet.Portlet.Mode mode = (org.gridlab.gridsphere.portlet.Portlet.Mode)it.next();
             if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.VIEW) {
-            m = PortletMode.VIEW;
-        } else if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.EDIT) {
-            m = PortletMode.EDIT;
-        } else if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.HELP) {
-            m = PortletMode.HELP;
-        } else if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.CONFIGURE) {
-            m = new PortletMode("config");
-        } else {
-            m = new PortletMode(mode.toString());
-        }
+                m = PortletMode.VIEW;
+            } else if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.EDIT) {
+                m = PortletMode.EDIT;
+            } else if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.HELP) {
+                m = PortletMode.HELP;
+            } else if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.CONFIGURE) {
+                m = new PortletMode("config");
+            } else {
+                m = new PortletMode(mode.toString());
+            }
             myModes.add(m.toString());
         }
         org.gridlab.gridsphere.portlet.Portlet.Mode mode = (org.gridlab.gridsphere.portlet.Portlet.Mode) request.getAttribute(SportletProperties.PORTLET_MODE);
@@ -255,14 +262,18 @@ public class PortletServlet extends HttpServlet
         } else {
             userInfo = new HashMap();
             userInfo.put("user.name", user.getUserName());
-            userInfo.put("user.name.nickName", user.getUserName());
-            userInfo.put("user.name.id", user.getID());
+            //userInfo.put("user.name.nickName", user.getUserName());
+            userInfo.put("user.id", user.getID());
             userInfo.put("user.email", user.getEmailAddress());
-            userInfo.put("user.name.given", user.getGivenName());
             userInfo.put("user.organization", user.getOrganization());
             userInfo.put("user.lastlogintime", new Long(user.getLastLoginTime()).toString());
             userInfo.put("user.name.full", user.getFullName());
-            userInfo.put("user.name.family", user.getFamilyName());
+            userInfo.put("user.timezone", user.getAttribute(User.TIMEZONE));
+            userInfo.put("user.locale", user.getAttribute(User.LOCALE));
+            userInfo.put("user.theme", user.getAttribute(User.THEME));
+
+            //userInfo.put("user.name.given", user.getGivenName());
+            //userInfo.put("user.name.family", user.getFamilyName());
             request.setAttribute(PortletRequest.USER_INFO, userInfo);
         }
 
@@ -303,7 +314,6 @@ public class PortletServlet extends HttpServlet
                         doTitle(portlet, renderRequest, renderResponse);
                     } catch (PortletException e) {
                         log.error("Error during doTitle:", e);
-                        throw new ServletException(e);
                     }
                 } else if (action.equals(SportletProperties.WINDOW_EVENT)) {
                     // do nothing
@@ -320,15 +330,14 @@ public class PortletServlet extends HttpServlet
                         portlet.processAction(actionRequest, actionResponse);
                     } catch (Exception e) {
                         log.error("Error during processAction:", e);
-                        request.setAttribute(SportletProperties.PORTLETERROR + portletClassName, e.getMessage());
-                        throw new ServletException(e);
+                        request.setAttribute(SportletProperties.PORTLETERROR + portletClassName, new org.gridlab.gridsphere.portlet.PortletException(e));
                     }
                     Map params = ((ActionResponseImpl) actionResponse).getRenderParameters();
                     String cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
                     actionRequest.setAttribute("renderParams" + "_" + portletClassName + "_" + cid, params);
                     log.debug("placing render params in attribute: " + "renderParams" + "_" + portletClassName + "_" + cid);
                     //actionRequest.clearParameters();
-                    redirect(request, response, actionRequest, actionResponse, portalContext);
+                    //redirect(request, response, actionRequest, actionResponse, portalContext);
                 }
             } else {
                 PortletPreferences prefs = prefsManager.getPortletPreferences(appPortlet, user, Thread.currentThread().getContextClassLoader(), true);
@@ -353,8 +362,14 @@ public class PortletServlet extends HttpServlet
                             log.error("in PortletServlet(): destroy caught unavailable exception: ", d);
                         }
                     } catch (Exception e) {
-                        request.setAttribute(SportletProperties.PORTLETERROR + portletClassName, e.getMessage());
-                        log.error("in PortletServlet(): doRender() caught exception: ", e);
+                        System.err.println("set error = " + SportletProperties.PORTLETERROR + portletClassName);
+                        org.gridlab.gridsphere.portlet.PortletException ex = new org.gridlab.gridsphere.portlet.PortletException(e);
+                        ex.printStackTrace();
+                        if (request.getAttribute(SportletProperties.PORTLETERROR + portletClassName) == null) {
+                            request.setAttribute(SportletProperties.PORTLETERROR + portletClassName, e);
+                        }
+                        log.error("in PortletServlet(): doRender() caught exception");
+                        throw new ServletException(e);
                     }
                 }
             }
@@ -398,21 +413,6 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
             }
         } catch (IOException e) {
             log.error("printing title failed", e);
-        }
-    }
-
-
-    protected void doRender(Portlet portlet, RenderRequest request, RenderResponse response) {
-        PortletMode mode = request.getPortletMode();
-        if (mode == null) {
-            mode = PortletMode.VIEW;
-            //request.setPortletMode(mode);
-        }
-        log.debug("Displaying mode: " + mode);
-        try {
-            portlet.render(request, response);
-        } catch (Exception e) {
-            log.error("in PortletServlet(): doRender() caught exception in mode: " + mode, e);
         }
     }
 

@@ -500,8 +500,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         // Unless user is admin they should not see configure mode
         boolean hasConfigurePermission = false;
-        PortletRole role = req.getRole();
-        System.err.println("checking user perm: " + role);
+        //PortletRole role = req.getRole();
+
         /*
         if (role.isAdmin() || role.isSuper()) {
             hasConfigurePermission = true;

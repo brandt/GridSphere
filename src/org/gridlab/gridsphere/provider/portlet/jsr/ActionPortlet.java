@@ -128,40 +128,6 @@ public class ActionPortlet extends GenericPortlet {
     }
 
     /**
-     * Sets the error to display in the portlet
-     *
-     * @param request the <code>PortletRequest</code>
-     * @param error   the error text to display in the portlet
-     */
-    protected void setNextError(PortletRequest request, String error) {
-        String id = getUniqueId();
-        request.setAttribute(id + ".error", error);
-    }
-
-    /**
-     * Returns true of an error has occured
-     *
-     * @param request the <code>PortletRequest</code>
-     * @return true if an error has occurred, false otherwise
-     */
-    protected boolean hasError(PortletRequest request) {
-        String id = getUniqueId();
-        return (request.getAttribute(id + ".error") == null) ? false : true;
-    }
-
-    /**
-     * Return the error to display in the portlet
-     *
-     * @param request the <code>PortletRequest</code>
-     * @return the error text to display in the portlet
-     */
-    protected String getNextError(PortletRequest request) {
-        String id = getUniqueId();
-        String error = (String) request.getAttribute(id + ".error");
-        return error;
-    }
-
-    /**
      * Sets the tag beans obtained from the FormEvent. Used internally and should not
      * normally need to be invoked by portlet developers.
      *
@@ -206,15 +172,17 @@ public class ActionPortlet extends GenericPortlet {
 
         log.debug("method name to invoke: " + methodName);
 
-        try {
+       // try {
             doAction(actionRequest, actionResponse, methodName, parameterTypes, arguments);
             formEvent.store();
             setTagBeans(actionRequest, formEvent.getTagBeans());
-        } catch (PortletException e) {
+       // } catch (PortletException e) {
+        //    throw e;
+            /*
             if (hasError(actionRequest)) {
                 setNextState(actionRequest, ERROR_PAGE);
-            }
-        }
+            }*/
+       // }
     }
 
     /**
@@ -249,33 +217,28 @@ public class ActionPortlet extends GenericPortlet {
             log.debug("Invoking action method: " + methodName);
 
             method.invoke(thisObject, arguments);
+
         } catch (NoSuchMethodException e) {
             String error = "No such method: " + methodName + "\n" + e.getMessage();
             log.error(error, e);
             // If action is not illegal do error undefined action
-            doErrorInvalidAction(request, error);
+            //doErrorInvalidAction(request, error);
+            throw new PortletException(e);
         } catch (IllegalAccessException e) {
             String error = "Error accessing action method: " + methodName + "\n" + e.getMessage();
             log.error(error, e);
             // If action is not illegal do error undefined action
-            doErrorInvalidAction(request, error);
+            //doErrorInvalidAction(request, error);
+            throw new PortletException(e);
         } catch (InvocationTargetException e) {
-            String error = "Error invoking action method: " + methodName + "\n" + e.getMessage();
+            String error = "Error invoking action method: " + methodName;
             log.error(error, e);
+            request.setAttribute(SportletProperties.PORTLETERROR + request.getAttribute(SportletProperties.PORTLETID), e.getTargetException());
             // If action is not illegal do error undefined action
-            doErrorInvalidAction(request, error);
+            //doErrorInvalidAction(request, error);
+            throw new PortletException(e.getTargetException());
         }
-    }
 
-    /**
-     * Sets an approriate error message to be displayed in the next render cycle
-     *
-     * @param req          the portlet request
-     * @param errorMessage the error message
-     */
-    public void doErrorInvalidAction(PortletRequest req, String errorMessage) {
-        setNextTitle(req, "Error: Undefined Action");
-        setNextError(req, errorMessage);
     }
 
     /**
@@ -285,7 +248,7 @@ public class ActionPortlet extends GenericPortlet {
      * @param response the portlet response
      * @param jsp      the JSP page to include
      */
-    public void doViewJSP(RenderRequest request, RenderResponse response, String jsp) {
+    public void doViewJSP(RenderRequest request, RenderResponse response, String jsp) throws PortletException {
         log.debug("Including JSP page:" + jsp);
         response.setContentType("text/html; charset=utf-8");
         try {
@@ -295,7 +258,10 @@ public class ActionPortlet extends GenericPortlet {
                 getPortletConfig().getPortletContext().getRequestDispatcher("/jsp/" + jsp).include(request, response);
             }
         } catch (Exception e) {
-            log.error("Unable to include resource : " + e.getMessage());
+            request.setAttribute(SportletProperties.PORTLETERROR + request.getAttribute(SportletProperties.PORTLETID), e);
+            //log.error("Unable to include resource : " + e.getMessage());
+            //setNextError(request, "Unable to include resource " + jsp);
+            throw new PortletException(e);
         }
 
     }
@@ -332,22 +298,21 @@ public class ActionPortlet extends GenericPortlet {
             if (next != null) {
                 log.debug("in doView: next page is= " + next);
                 doViewJSP(request, response, next);
-
+               /*
                 if (hasError(request)) {
                     PrintWriter out = response.getWriter();
                     log.debug("hasError = true");
                     String message = getNextError(request);
                     out.println(message);
                 }
+                */
             }
-
-
         }
     }
 
     protected void doDispatch(RenderRequest request,
                               RenderResponse response) throws PortletException, java.io.IOException {
-        WindowState state = request.getWindowState();
+        WindowState state = request.getWindowState();      
         try {
             super.doDispatch(request, response);
         } catch (PortletException e) {
@@ -355,11 +320,12 @@ public class ActionPortlet extends GenericPortlet {
                 PortletMode mode = request.getPortletMode();
                 if (mode.toString().equalsIgnoreCase("CONFIG")) {
                     doConfigure(request, response);
-                } else {
-                    throw new PortletException("unknown portlet mode: " + mode);
+                    return;
                 }
             }
+            throw e;
         }
+
     }
 
     /**
@@ -404,12 +370,14 @@ public class ActionPortlet extends GenericPortlet {
         doView(request, response);
     }
 
+    /*
     public void doError(RenderRequest request, RenderResponse response) throws PortletException, IOException {
         log.debug("in doError");
         PrintWriter out = response.getWriter();
         String message = getNextError(request);
         out.println(message);
     }
+    */
 
     protected String getLocalizedText(PortletRequest req, String key) {
         Locale locale = req.getLocale();

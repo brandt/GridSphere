@@ -73,7 +73,7 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
                             windowClosed(winEvent);
                             break;
                         default:
-                            doError(request, response, "Received invalid WindowEvent : " + winEvent.getEventId());
+                            //doError(request, response, "Received invalid WindowEvent : " + winEvent.getEventId());
                             log.error("Received invalid WindowEvent : " + winEvent.getEventId());
                     }
                 } else if (method.equals(SportletProperties.ACTION_PERFORMED)) {
@@ -88,9 +88,10 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
                     messageReceived(evt);
                 }
             } catch (Exception e) {
-                log.error("in AbstractPortlet: service()", e);
-                request.setAttribute(SportletProperties.PORTLETERROR + getPortletSettings().getConcretePortletID(), e.getMessage());
-
+                log.error("in AbstractPortlet: service()");
+                if (request.getAttribute(SportletProperties.PORTLETERROR + getPortletSettings().getConcretePortletID()) == null) {
+                    request.setAttribute(SportletProperties.PORTLETERROR + getPortletSettings().getConcretePortletID(), e);
+                }
                 //doError(request, response, e);
             }
         }

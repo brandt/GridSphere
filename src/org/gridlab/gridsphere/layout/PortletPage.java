@@ -39,7 +39,7 @@ public class PortletPage implements Serializable, Cloneable {
     protected PortletTabbedPane tabbedPane = null;
 
     // The component ID's of each of the layout components
-    protected List componentIdentifiers = null;
+    protected List componentIdentifiers = new Vector();
 
     // The list of portlets a user has-- generally contained within a PortletFrame/PortletTitleBar combo
     //protected List portlets = new ArrayList();
@@ -211,8 +211,6 @@ public class PortletPage implements Serializable, Cloneable {
             System.err.println("Unable to init Cache service! " + e.getMessage());
         }
 
-        componentIdentifiers = new Vector();
-
         if (headerContainer != null) {
             headerContainer.setTheme(theme);
             list = headerContainer.init(req, list);
@@ -362,7 +360,6 @@ public class PortletPage implements Serializable, Cloneable {
                             if (!(user instanceof GuestUser)) {
                                 String portletClass = ((PortletFrame)comp).getPortletClass();
                                 boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
-                                System.err.println("hasRole = " + hasrole);
                                 if (!hasrole) {
                                     System.err.println("User " + user + " does not have required role!");
                                     return;
@@ -373,14 +370,13 @@ public class PortletPage implements Serializable, Cloneable {
                             if (!(user instanceof GuestUser)) {
                                 String portletClass = ((PortletTitleBar)comp).getPortletClass();
                                 boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
-                                System.err.println("hasRole = " + hasrole);
                                 if (!hasrole) {
                                     System.err.println("User " + user + " does not have required role!");
                                     return;
                                 }
                             }
                         }
-                        System.err.println("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
+                        //System.err.println("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
                         comp.actionPerformed(event);
                     }
                 }

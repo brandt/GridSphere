@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.portlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+import javax.servlet.http.Cookie;
 
 /**
  * A <code>SportletResponse</code> provides an implementation of the
@@ -141,6 +142,10 @@ public class SportletResponse extends HttpServletResponseWrapper implements Port
         return this.getHttpServletResponse().getContentType();
     }
     */
+
+    public void addCookie(Cookie cookie) {
+        this.getHttpServletResponse().addCookie(cookie);
+    }
     
     private HttpServletResponse getHttpServletResponse() {
         return (HttpServletResponse) super.getResponse();

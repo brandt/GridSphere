@@ -12,6 +12,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.File;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Locale;
@@ -327,11 +328,14 @@ public abstract class Portlet extends HttpServlet
         return this.portletSettings;
     }
 
-    /**
-     * Initializes the PortletConfig using the ui.xml file entry for this portlet
-     */
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
+        String propsFile = config.getServletContext().getRealPath("/WEB-INF/classes/log4j.properties");
+        File f = new File(propsFile);
+        if (f.exists()) {
+            System.err.println("configuring to use " + propsFile);
+            SportletLog.setConfigureURL(propsFile);
+        }
     }
 
     public void init() throws ServletException {

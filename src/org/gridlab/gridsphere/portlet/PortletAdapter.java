@@ -33,7 +33,7 @@ public abstract class PortletAdapter extends Portlet {
     private Map allPortletSettings = new Hashtable();
 
     /* require an acl service to get role info */
-    private AccessControlManagerService aclService = null;
+    //private transient AccessControlManagerService aclService = null;
 
     /* the datamanger injects PortletData into the request */
     private transient PortletDataManager dataManager = null;
@@ -61,12 +61,14 @@ public abstract class PortletAdapter extends Portlet {
         this.portletConfig = config;
         PortletContext ctx = portletConfig.getContext();
         dataManager = SportletDataManager.getInstance();
+        /*
         try {
-            aclService = (AccessControlManagerService) ctx.getService(AccessControlManagerService.class, GuestUser.getInstance());
+            aclService = (AccessControlManagerService) ctx.getService(AccessControlManagerService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to get an instance of AccessControlManagerService");
             throw new UnavailableException("Unable to get an instance of AccessControlManagerService");
         }
+        */
     }
 
     /**
@@ -216,9 +218,9 @@ public abstract class PortletAdapter extends Portlet {
                     throw new IllegalArgumentException("Received invalid PortletMode command: " + mode);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             log.error("in PortletAdapter: service()", e);
-            doError(request, response, e);
+            e.printStackTrace();           
+            request.setAttribute(SportletProperties.PORTLETERROR + getPortletSettings().getConcretePortletID(), e.getMessage());
         }
     }
 
@@ -279,34 +281,6 @@ public abstract class PortletAdapter extends Portlet {
     }
 
     /**
-     * Helper method to handle any errors that occured during processing
-     *
-     * @param request  the portlet request
-     * @param response the portlet response
-     * @throws IOException if an I/O error occurs
-     */
-    protected void doError(PortletRequest request, PortletResponse response, String message)
-            throws IOException {
-        PrintWriter out = response.getWriter();
-        out.println("<b>Received Portlet Error</b><br>");
-        out.println(message);
-    }
-
-    /**
-     * Helper method to handle any errors that occured during processing
-     *
-     * @param request  the portlet request
-     * @param response the portlet response
-     * @throws IOException if an I/O error occurs
-     */
-    protected void doError(PortletRequest request, PortletResponse response, Exception exception)
-            throws IOException {
-        PrintWriter out = response.getWriter();
-        out.println("<b>Received Portlet Error</b><br>");
-        exception.printStackTrace(out);
-    }
-
-    /**
      * Helper method to serve up the CONFIGURE mode.
      *
      * @param request  the portlet request
@@ -358,8 +332,7 @@ public abstract class PortletAdapter extends Portlet {
      */
     public void doView(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
-        PrintWriter out = response.getWriter();
-        out.println("<center>Blank Portlet</center>");
+        throw new PortletException("doView method not implemented!");
     }
 
     /**

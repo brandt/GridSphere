@@ -44,7 +44,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     private boolean renderPortlet = true;
     private String portletClass = null;
     private PortletTitleBar titleBar = null;
-    private PortletErrorFrame errorFrame = new PortletErrorFrame();
+    //private PortletErrorFrame errorFrame = new PortletErrorFrame();
     private boolean transparent = false;
     private String innerPadding = "";   // has to be empty and not 0!
     private String outerPadding = "";   // has to be empty and not 0!
@@ -395,15 +395,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
                 try {
                     PortletInvoker.actionPerformed(portletClass, action, req, res);
-                } catch (Exception e) {
-                    errorFrame.setException(e);
+                } catch (PortletException e) {
+                    // catch it and keep processing
+
                 }
-                String message = (String) req.getAttribute(SportletProperties.PORTLETERROR + portletClass);
-                if (message != null) {
-                    errorFrame.setMessage(message);
-                }
-                //}
-                // in case portlet mode got reset
+
             }
 
             List slisteners = Collections.synchronizedList(listeners);
@@ -466,12 +462,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         frame = new StringBuffer();
 
         req.setAttribute(SportletProperties.PORTLETID, portletClass);
-
-        if (errorFrame.hasError()) {
-            errorFrame.doRender(event);
-            errorFrame.clearError();
-            return;
-        }
 
         // Set the portlet data
         /*
@@ -536,49 +526,50 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 postframe.append("<tr><td >");
             }
 
-            if (errorFrame.hasError()) {
-                errorFrame.doRender(event);
+
+            // TODO try to cache portlet's rendering---
+            storedWriter = new StringWriter();
+            writer = new PrintWriter(storedWriter);
+            PortletResponse wrappedResponse = new StoredPortletResponseImpl(res, writer);
+
+            if (isClosing) {
+
+                PortletURI portletURI = res.createURI();
+                portletURI.addParameter(SportletProperties.COMPONENT_ID, String.valueOf(titleBar.getComponentID()));
+                portletURI.addParameter(SportletProperties.PORTLET_WINDOW, PortletWindow.State.CLOSED.toString());
+                postframe.append("<form action=\"" + portletURI.toString() + "\" method=\"POST\"");
+                Locale locale = req.getLocale();
+                ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
+                String value = bundle.getString("UNSUBSCRIBE_MESSAGE");
+                String ok = bundle.getString("OK");
+                String cancel = bundle.getString("CANCEL");
+                postframe.append("<p><b>" + value + "</b></p>");
+
+                portletURI = res.createURI();
+
+                portletURI.addParameter(PortletWindow.State.CLOSED.toString(), Boolean.TRUE.toString());
+
+                postframe.append("<p><input class=\"portlet-form-button\" type=\"submit\" name=\"" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + FRAME_CLOSE_OK_ACTION + "\" value=\"" + ok + "\"");
+                portletURI = res.createURI();
+
+                portletURI.addParameter(PortletWindow.State.CLOSED.toString(), Boolean.FALSE.toString());
+                postframe.append("<input class=\"portlet-form-button\" type=\"submit\" name=\"" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + FRAME_CLOSE_CANCEL_ACTION + "\" value=\"" + cancel + "\"");
+                postframe.append("</p></form>");
             } else {
-                // TODO try to cache portlet's rendering---
-                storedWriter = new StringWriter();
-                writer = new PrintWriter(storedWriter);
-                PortletResponse wrappedResponse = new StoredPortletResponseImpl(res, writer);
 
-                if (isClosing) {
-
-                    PortletURI portletURI = res.createURI();
-                    portletURI.addParameter(SportletProperties.COMPONENT_ID, String.valueOf(titleBar.getComponentID()));
-                    portletURI.addParameter(SportletProperties.PORTLET_WINDOW, PortletWindow.State.CLOSED.toString());
-                    postframe.append("<form action=\"" + portletURI.toString() + "\" method=\"POST\"");
-                    Locale locale = req.getLocale();
-                    ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
-                    String value = bundle.getString("UNSUBSCRIBE_MESSAGE");
-                    String ok = bundle.getString("OK");
-                    String cancel = bundle.getString("CANCEL");
-                    postframe.append("<p><b>" + value + "</b></p>");
-
-                    portletURI = res.createURI();
-
-                    portletURI.addParameter(PortletWindow.State.CLOSED.toString(), Boolean.TRUE.toString());
-
-                    postframe.append("<p><input class=\"portlet-form-button\" type=\"submit\" name=\"" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + FRAME_CLOSE_OK_ACTION + "\" value=\"" + ok + "\"");
-                    portletURI = res.createURI();
-
-                    portletURI.addParameter(PortletWindow.State.CLOSED.toString(), Boolean.FALSE.toString());
-                    postframe.append("<input class=\"portlet-form-button\" type=\"submit\" name=\"" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + FRAME_CLOSE_CANCEL_ACTION + "\" value=\"" + cancel + "\"");
-                    postframe.append("</p></form>");
+                //System.err.println("in portlet frame render: class= " + portletClass + " setting prev mode= " + req.getPreviousMode() + " cur mode= " + req.getMode());
+                if (hasError(req)) {
+                    doRenderError(postframe, req);
                 } else {
-
-                    //System.err.println("in portlet frame render: class= " + portletClass + " setting prev mode= " + req.getPreviousMode() + " cur mode= " + req.getMode());
                     try {
                         PortletInvoker.service(portletClass, req, wrappedResponse);
                         postframe.append(storedWriter.toString());
                     } catch (PortletException e) {
-                        errorFrame.setError("Unable to invoke service method", e);
-                        errorFrame.doRender(event);
+                        doRenderError(postframe, req);
                     }
                 }
             }
+
             postframe.append("</td></tr>");
         } else {
             postframe.append("<tr><td class=\"window-content-minimize\">");      // now the portlet content begins
@@ -604,13 +595,42 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         }
         frame.append(postframe);
         out = res.getWriter();
-        if (errorFrame.hasError()) {
-            errorFrame.doRender(event);
-        } else {
-            out.println(frame.toString());
-        }
+
+        out.println(frame.toString());
+
         if (cacheExpiration > 0) {
             cacheService.cache(portletClass + id, frame, cacheExpiration);
+        }
+    }
+
+    public boolean hasError(PortletRequest req) {
+        return (((Exception)req.getAttribute(SportletProperties.PORTLETERROR + portletClass) != null) ? true : false);
+    }
+
+    public void doRenderError(StringBuffer postframe, PortletRequest req) {
+        Throwable ex = (Throwable)req.getAttribute(SportletProperties.PORTLETERROR + portletClass);
+        if (ex != null) {
+            postframe.append("<p><b>An error occured!</b><p>");
+            StringWriter sw = new StringWriter();
+            PrintWriter w = new PrintWriter(sw);
+            //StackTraceElement[] elem = ex.getStackTrace();
+            //ex.printStackTrace(w);
+           /*
+            Throwable t = null;
+            while ((t = ex.getCause()) != null) {
+                ex = ex.getCause();
+
+            }
+            */
+            ex.printStackTrace(w);
+            /*
+            for (int i = 0; i < elem.length; i++) {
+                System.err.println("stack # " + elem[i]);
+            }
+            postframe.append(elem[0].toString());
+            */
+            w.close();
+            postframe.append(sw.toString());
         }
     }
 
@@ -618,7 +638,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         PortletFrame f = (PortletFrame) super.clone();
         f.titleBar = (this.titleBar == null) ? null : (PortletTitleBar) this.titleBar.clone();
         f.outerPadding = this.outerPadding;
-        f.errorFrame = this.errorFrame;
         f.transparent = this.transparent;
         f.innerPadding = this.innerPadding;
         f.portletClass = this.portletClass;
@@ -677,14 +696,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
             try {
                 PortletInvoker.messageEvent(portletClass, msg, req, res);
-            } catch (IOException ioex) {
-                errorFrame.setException(new PortletException("IO Exception occured:", ioex));
-            } catch (PortletException e) {
-                errorFrame.setException(e);
-            }
-            String message = (String) req.getAttribute(SportletProperties.PORTLETERROR + portletClass);
-            if (message != null) {
-                errorFrame.setMessage(message);
+            } catch (Exception ioex) {
+                // do nothing the render will take care of displaying the error    
             }
 
         } else {
