@@ -37,6 +37,8 @@ Copyright:
         </classpath>
     </taskdef>
 
+    <property name="FindBugs.home" value="/Users/novotny/Jakarta/findbugs-0.7.4" />
+
     <property file="build.properties"/>
 
     <property name="optimize" value="false"/>
@@ -650,10 +652,6 @@ Copyright:
                 <exclude name="coreportlets.jar"/>
             </fileset>
         </copy>
-
-
-        <copy file="docs/design.pdf" todir="build/docs"/>
-        <copy file="docs/jetspeed-eval.pdf" todir="build/docs"/>
 
         <mkdir dir="${env.CATALINA_HOME}/webapps/gridsphere/docs"/>
         <copy todir="${env.CATALINA_HOME}/webapps/gridsphere/docs">
