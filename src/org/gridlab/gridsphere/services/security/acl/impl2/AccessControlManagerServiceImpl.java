@@ -226,6 +226,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
      * @param group the PortletGroup
      * @param role the PortletRole
      */
+
     public void removeUserRoleFromGroup(User user, PortletGroup group, PortletRole role) throws PortletServiceException {
 
         String command =
