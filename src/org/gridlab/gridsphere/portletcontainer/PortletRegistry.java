@@ -67,12 +67,12 @@ public class PortletRegistry {
      */
     public ApplicationPortlet getApplicationPortlet(String applicationPortletID) {
         int idx = applicationPortletID.indexOf("#");
-        String portletName = "";
-        String webapp = "";
+        //String portletName = "";
+        //String webapp = "";
         if (idx > 0) {
-            webapp = applicationPortletID.substring(0, idx);
-            portletName = applicationPortletID.substring(idx+1);
-            System.err.println("webapp= " + webapp + " pname= " + portletName);
+            //webapp = applicationPortletID.substring(0, idx);
+            //portletName = applicationPortletID.substring(idx+1);
+            //System.err.println("webapp= " + webapp + " pname= " + portletName);
             return (ApplicationPortlet)allApplicationPortlets.get(applicationPortletID);
         }
         Collection coll = allApplicationPortlets.values();
