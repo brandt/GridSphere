@@ -32,6 +32,7 @@ Version: $Id$
   background-color: #6699CC;
   border: none;
   color: #ffffff;
+  font-family: inherit;
   font-weight: bold;
   text-align: center;
   padding-top: 1;
@@ -44,6 +45,7 @@ Version: $Id$
   background-color: #CCCCCC;
   border: none;
   color: #000000;
+  font-family: inherit;
   padding-top: 2;
   padding-right: 2;
   padding-left: 2;
@@ -54,6 +56,7 @@ Version: $Id$
   background-color: #ffffff;
   border: none;
   color: #000000;
+  font-family: inherit;
   padding-top: 4;
   padding-right: 4;
   padding-left: 4;
@@ -64,6 +67,7 @@ Version: $Id$
   background-color: #ffffff;
   border: none;
   color: darkred;
+  font-family: inherit;
   padding-top: 4;
   padding-right: 4;
   padding-left: 4;
@@ -74,15 +78,28 @@ Version: $Id$
   background-color: #6699CC;
   border-none;
   color: #ffffff;
+  font-family: inherit;
   font-weight: bold;
   text-align: center;
   padding: 1;
+}
+
+.portlet-frame-header-checkbox {
+  background-color: #6699CC;
+  border-none;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: -1;
+  text-align: center;
+  vertical-align: middle;
+  width: 12;
 }
 
 .portlet-frame-label {
   background-color: #CCCCCC;
   border: none;
   color: #000000;
+  font-family: inherit;
   text-align: left;
   padding-top: 1;
   padding-right: 2;
@@ -94,6 +111,7 @@ Version: $Id$
   background-color: #CCCCCC;
   border: none;
   color: darkred;
+  font-family: inherit;
   text-align: left;
   padding-top: 1;
   padding-right: 2;
@@ -105,6 +123,7 @@ Version: $Id$
   background-color: #ffffff;
   border: none;
   color: #000000;
+  font-family: inherit;
   text-align: left;
   padding-top: 1;
   padding-right: 2;
@@ -116,6 +135,7 @@ Version: $Id$
   background-color: #ffffff;
   border: none;
   color: darkred;
+  font-family: inherit;
   text-align: left;
   padding-top: 1;
   padding-right: 2;
@@ -127,6 +147,7 @@ Version: $Id$
   background-color: #ffffff;
   border: none;
   color: #000000;
+  font-family: inherit;
   text-align: left;
   padding-top: 1;
   padding-right: 2;
@@ -168,4 +189,31 @@ Version: $Id$
   padding-right: 2;
   padding-left: 2;
   padding-bottom: 1;
+}
+
+.portlet-frame-entry-checkbox {
+  background-color: #cccccc;
+  border: none;
+  color: #000000;
+  font-family: inherit;
+  font-size: -1;
+  text-align: center;
+  vertical-align: middle;
+  width: 12;
+}
+
+/***************************************************************************
+ * Portlet Text Tags
+ ***************************************************************************/
+
+.portlet-text-bold {
+  font-weight: bold;
+}
+
+.portlet-text-italic {
+  font-weight: italic;
+}
+
+.portlet-text-alert {
+  color: darkred;
 }
