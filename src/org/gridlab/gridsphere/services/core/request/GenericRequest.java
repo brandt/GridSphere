@@ -3,10 +3,22 @@
  */
 package org.gridlab.gridsphere.services.core.request;
 
+import java.util.Date;
+
 public class GenericRequest {
 
     private String oid = null;
     private String userID = "";
+    private String label = "";
+    private Date lifetime = null;
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
 
     public String getOid() {
         return oid;
@@ -24,4 +36,11 @@ public class GenericRequest {
         this.userID = userID;
     }
 
+    public Date getLifetime() {
+        return lifetime;
+    }
+
+    public void setLifetime(Date lifetime) {
+        this.lifetime = lifetime;
+    }
 }

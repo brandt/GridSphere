@@ -20,7 +20,8 @@
         </id>
 
         <property name="userID" type="string" column="userid"/>
+        <property name="label" type="string" column="label"/>
+         <property name="lifetime" type="timestamp" column="lifetime"/>
+
     </class>
-
-
 </hibernate-mapping>
