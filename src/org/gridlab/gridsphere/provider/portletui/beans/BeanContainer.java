@@ -10,24 +10,24 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
 
-public class TagBeanContainer extends BaseBean {
+public class BeanContainer extends BaseComponentBean {
 
     public List container  = new Vector();
 
-    public TagBeanContainer() {
+    public BeanContainer() {
         super();
 
     }
 
-    public void addTagBean(TagBean bean) {
+    public void addBean(BaseComponentBean bean) {
         container.add(bean);
     }
 
-    public void removeTagBean(TagBean bean) {
+    public void removeBean(BaseComponentBean bean) {
         container.remove(bean);
     }
 
-    public List getTagBeans() {
+    public List getBeans() {
         return container;
     }
 
@@ -35,7 +35,7 @@ public class TagBeanContainer extends BaseBean {
         Iterator it = container.iterator();
         StringBuffer sb = new StringBuffer();
         while (it.hasNext()) {
-            TagBean tagBean = (TagBean)it.next();
+            BaseComponentBean tagBean = (BaseComponentBean)it.next();
             if (tagBean.toString() != null) sb.append(tagBean.toString());
             //System.err.println("its the tagbean out: " + tagBean.toString());
         }

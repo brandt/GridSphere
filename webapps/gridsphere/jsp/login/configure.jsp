@@ -53,7 +53,7 @@
 <ui:frame>
     <ui:tablerow>
         <ui:tablecell width="100">
-            <ui:actionsubmit action="config_auth_module" name="apply" key="LOGIN_CONFIG_ACTION"/>
+            <ui:actionsubmit action="configAuthModules" name="apply" key="LOGIN_CONFIG_ACTION"/>
         </ui:tablecell>
     </ui:tablerow>
 </ui:frame>

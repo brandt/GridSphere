@@ -3,7 +3,7 @@
         <ui:frame>
             <ui:tablerow>
                 <ui:tablecell>
-                    <ui:errortext beanId="errorMsg"/>
+                    <ui:text beanId="errorMsg" error="true"/>
                 </ui:tablecell>
             </ui:tablerow>
         </ui:frame>

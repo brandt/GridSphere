@@ -7,9 +7,9 @@
 
 <portletAPI:init/>
 
-<jsp:useBean id="user" class="org.gridlab.gridsphere.portlet.User" scope="request"/>
+<% User user = (User)request.getAttribute("user"); %>
 
-<% if (user instanceof GuestUser) { %>
+<% if ((user == null) || (user instanceof GuestUser)) { %>
 
 <%@ include file="showlogin.jsp" %>
 

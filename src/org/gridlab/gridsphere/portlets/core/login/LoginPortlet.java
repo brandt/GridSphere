@@ -7,34 +7,40 @@ package org.gridlab.gridsphere.portlets.core.login;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TagBeanFactory;
+import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
+import org.gridlab.gridsphere.provider.ActionPortlet;
+import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.portlets.core.GPDKPortlet;
 
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.services.core.user.LoginService;
+import org.gridlab.gridsphere.services.core.security.auth.LoginAuthModule;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-public class LoginPortlet extends GPDKPortlet {
+public class LoginPortlet extends ActionPortlet {
 
     public static final String LOGIN_ERROR_FLAG = "LOGIN_FAILED";
     public static final Integer LOGIN_ERROR_UNKNOWN = new Integer(-1);
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
+        DEFAULT_VIEW_PAGE = "login/login.jsp";
+        DEFAULT_CONFIGURE_PAGE = "login/configure.jsp";
     }
 
     public void initConcrete(PortletSettings settings) throws UnavailableException {
         super.initConcrete(settings);
     }
 
-
-    public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
+    public void doViewUser(FormEvent event) throws PortletException, IOException {
+        PortletRequest request = event.getPortletRequest();
         User user = request.getUser();
         request.setAttribute("user", user);
-        super.doView(request, response);
+        setNextPage(request, DEFAULT_VIEW_PAGE);
     }
 
     public void doConfigure(PortletRequest request, PortletResponse response) throws PortletException, IOException {
@@ -65,5 +71,61 @@ public class LoginPortlet extends GPDKPortlet {
          String welcome = resBundle.getString("LOGIN_SUCCESS");
          out.println(welcome + ", " + user.getFullName());
          */
+    }
+
+    public void gs_login(FormEvent event) throws PortletException {
+        PortletRequest req = event.getPortletRequest();
+        TextBean errorMsg = event.getTextBean("errorMsg");
+        String errorKey = (String)req.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
+        if ((errorKey != null) && (errorMsg != null)) {
+            errorMsg.setKey(errorKey);
+            errorMsg.setError(true);
+        }
+        setNextPage(req, "doViewUser");
+    }
+
+    public void configAuthModules(FormEvent event) throws PortletException {
+        PortletRequest req = event.getPortletRequest();
+
+        LoginService loginService = (LoginService)getConfig().getContext().getService(LoginService.class, req.getUser());
+
+        CheckBoxBean passCheck = event.getCheckBoxBean("passCheck");
+        CheckBoxBean ldapCheck = event.getCheckBoxBean("ldapCheck");
+        CheckBoxBean myproxyCheck = event.getCheckBoxBean("myproxyCheck");
+
+        List authModules = new ArrayList();
+        Iterator it = loginService.getSupportedAuthModules().iterator();
+        while (it.hasNext()) {
+            LoginAuthModule authModule = (LoginAuthModule)it.next();
+            String modName = authModule.getModuleName();
+            if (modName.equals("PASSWORD_AUTH_MODULE")) {
+                if (passCheck.isSelected()) {
+                    log.debug("adding PASSWORD_AUTH_MODULE");
+                    authModules.add(authModule);
+                }
+            }
+            if (modName.equals("LDAP_AUTH_MODULE")) {
+                if (ldapCheck.isSelected()) {
+                    log.debug("adding LDAP_AUTH_MODULE");
+                    authModules.add(authModule);
+                }
+            }
+            if (modName.equals("MYPROXY_AUTH_MODULE")) {
+                if (myproxyCheck.isSelected()) {
+                    log.debug("adding MYPROXY_AUTH_MODULE");
+                    authModules.add(authModule);
+                }
+            }
+        }
+
+        if (!authModules.isEmpty()) {
+            loginService.setActiveAuthModules(authModules);
+        }
+
+        //setNextPage(CONFIGURE_PAGE);
+    }
+
+    public void configLdapModule(FormEvent event) {
+        //setNextPage();
     }
 }
