@@ -1,0 +1,12 @@
+INSTALL
+-------
+
+1) Add the following to $CATALINA_HOME/conf/server.xml:
+
+<Context path="/gridsphere" docBase="gridsphere" debug="0"
+                 reloadable="false" crossContext="true">
+     <Logger className="org.apache.catalina.logger.FileLogger"
+                 prefix="localhost_gridsphere_log." suffix=".txt"
+                 timestamp="true"/>
+</Context>
+ 

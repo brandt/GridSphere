@@ -338,6 +338,8 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public PortletData getPortletData(User user, String portletID) {
 
+        if (user instanceof GuestUser) return null;
+
         String command =
             "select u from "+jdoPDImpl+" u where u.UserID=\""+user.getID()+"\" and u.PortletID=\""+portletID+"\"";
 
