@@ -1,0 +1,223 @@
+<!-- =======================================================================
+
+   Build file for the GridSphere Portal Distribution
+
+Notes:
+   This is a build file for use with the Jakarta Ant build tool.
+
+Prerequisites:
+
+   jakarta-ant from http://jakarta.apache.org
+
+Build Instructions:
+   Invoke "ant help"
+
+Copyright:
+  2002,2003
+
+- $Id$
+
+============================================================================ -->
+
+<project name="GridSphere" default="help" basedir=".">
+
+    <property file="build.properties"/>
+
+    <property environment="env"/>
+
+    <patternset id="dist.portlets" >
+      <include name="webapps/*.war"/>
+    </patternset>
+
+    <patternset id="extra.jars" >
+      <include name="lib/ext/*.jar"/>
+    </patternset>
+
+    <property name="newproject" value="projects/newproject"/>
+
+    <!-- =================================================================== -->
+    <!-- Checks if Tomcat 4.1 has been installed                                              -->
+    <!-- =================================================================== -->
+    <target name="check-catalina" unless="catalina.exists">
+        <condition property="catalina.exists">
+            <available file="${env.CATALINA_HOME}/bin/catalina.sh"/>
+        </condition>
+        <fail>Unable to find Tomcat 4.1.+. Make sure you have set $CATALINA_HOME</fail>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Sets the CLASSPATH                                                  -->
+    <!-- =================================================================== -->
+    <path id="classpath">
+        <!-- this is for the servlet JARs in Tomcat 4.1.x -->
+        <fileset dir="${env.CATALINA_HOME}/common/lib">
+            <include name="*.jar"/>
+        </fileset>
+
+        <!-- this is for the XML JARs in Tomcat 4.1.x -->
+        <fileset dir="${env.CATALINA_HOME}/common/endorsed">
+            <include name="*.jar"/>
+        </fileset>
+
+        <fileset dir="lib/ext">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement path="${java.class.path}"/>
+    </path>
+
+    <!-- =================================================================== -->
+    <!-- Set environment information and cretae projects directory           -->
+    <!-- =================================================================== -->
+    <target name="setenv" depends="check-catalina" description="Check for libraries and print out config information">
+
+        <available property="cog.present"
+            classname="org.globus.common.Version"
+            classpathref="classpath"/>
+
+        <available property="log4j.present"
+            classname="org.apache.log4j.Logger"
+            classpathref="classpath"/>
+
+        <available property="junit.present"
+            classname="junit.framework.TestCase"
+            classpathref="classpath"/>
+
+        <echo message="--- Build environment for ${project} ---" />
+        <echo message="--- Flags (Note: If the {property name} is displayed,"/>
+        <echo message="           then the component is not present)" />
+        <echo message=""/>
+
+        <echo message="ANT_HOME is set to = ${env.ANT_HOME}"/>
+        <echo message="JAVA_HOME is set to = ${env.JAVA_HOME}"/>
+        <echo message="CATALINA_HOME is set to = ${env.CATALINA_HOME}"/>
+
+        <echo message="=== Required Libraries ===" />
+        <echo message="log4j.present=$log4j.present"/>
+
+        <echo message=""/>
+        <echo message="--- Optional Libraries ---" />
+        <echo message="junit.present=$junit.present"/>
+        <echo message=""/>
+
+        <echo message="optimize=${optimize}" />
+
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Print usage information                                             -->
+    <!-- =================================================================== -->
+    <target name="help" description="shows help about useful target">
+        <echo message="target                 description"/>
+        <echo message="-----------------------------------------------------------------"/>
+        <echo message="deploy                Deploys GridSphere and portlet projects"/>
+        <echo message="deploy-gridsphere     Deploys GridSphere                     "/>
+        <echo message="undeploy              Undeploys GridSphere                   "/>
+        <echo message="newproject            Creates a new portlet project          "/>
+        <echo message="remove                Removes GridSphere including database  "/>
+    </target>
+
+    <target name="check-database-exists">
+        <condition property="var_force_database">
+            <not>
+                <available file="${GRIDSPHERE_HOME}/database/${DATABASE_NAME}.script"/>
+            </not>
+        </condition>
+    </target>
+
+    <target name="create-database" depends="check-database-exists" if="var_force_database">
+        <echo message="Creating Database at: ${GRIDSPHERE_HOME}/database/${DATABASE_NAME}"/>
+        <echo message="Using script: ${GRIDSPHERE_HOME}/database/dbcreate.sql"/>
+        <sql driver="org.hsqldb.jdbcDriver"
+            url="jdbc:hsqldb:${GRIDSPHERE_HOME}/database/${DATABASE_NAME}"
+            userid="sa"
+            password=""
+            onerror="continue"
+            src="${GRIDSPHERE_HOME}/database/dbcreate.sql">
+            <classpath refid="classpath"/>
+        </sql>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates a new portlet project "newproject" in projects directory    -->
+    <!-- =================================================================== -->
+    <target name="new-project" description="Creates a new portlet project in projects directory">
+        <ant antfile="config/build/build-newproject.xml" target="new-project"/>
+    </target>
+
+
+    <!-- =================================================================== -->
+    <!-- Deploys GridSphere and Portlet Projects                             -->
+    <!-- =================================================================== -->
+    <target name="deploy" depends="deploy-gridsphere" description="Deploys GridSphere and Portlet Projects">
+        <ant dir="projects" target="deploy" inheritAll="false"/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Deploys GridSphere to Tomcat                                        -->
+    <!-- =================================================================== -->
+    <target name="deploy-gridsphere" description="Deploys GridSphere to a local server">
+        <!-- Make core gridsphere directory if necessary -->
+        <echo message="Deploying GridSphere to Tomcat servlet container at ${env.CATALINA_HOME}"/>
+
+        <property name="GRIDSPHERE_HOME" value="${env.CATALINA_HOME}/gridsphere"/>
+        <property name="DATABASE_TYPE" value="${database.type}"/>
+
+        <mkdir dir="${GRIDSPHERE_HOME}"/>
+        <copy todir="${GRIDSPHERE_HOME}">
+            <fileset dir="config"/>
+        </copy>
+
+        <!-- copy GS and dist portlets to Tomcat -->
+        <copy todir="${env.CATALINA_HOME}/webapps">
+            <fileset dir="webapps">
+                <patternset refid="dist.portlets"/>
+            </fileset>
+        </copy>
+
+        <copy todir="${env.CATALINA_HOME}/shared/lib">
+            <fileset dir="lib/ext">
+                <include name="*.jar"/>
+            </fileset>
+        </copy>
+
+        <antcall target="create-database"/>
+
+        <copy file="${build.lib}/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
+
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Undeploys GridSphere and Portlet Projects                             -->
+    <!-- =================================================================== -->
+    <target name="undeploy" depends="undeploy-gridsphere" description="Undeploys GridSphere and Portlet Projects">
+        <ant dir="projects" target="undeploy" inheritAll="false"/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Undeploys GridSphere to Tomcat                                        -->
+    <!-- =================================================================== -->
+    <target name="undeploy-gridsphere" description="Undeploys GridSphere from a local server">
+        <!-- Make core gridsphere directory if necessary -->
+        <echo message="Undeploying GridSphere from Tomcat servlet container at ${env.CATALINA_HOME}"/>
+
+        <!-- copy GS and dist portlets to Tomcat -->
+        <delete>
+            <fileset dir="${env.CATALINA_HOME}/webapps">
+                <patternset refid="dist.portlets"/>
+            </fileset>
+        </delete>
+
+        <!-- remove third-party jars -->
+        <delete>
+            <fileset dir="${env.CATALINA_HOME}/shared/lib">
+                <patternset refid="extra.jars"/>
+            </fileset>
+        </delete>
+    </target>
+
+    <target name="remove-gridsphere" depends="undeploy" description="Eliminates GridSphere entirely including database">
+        <echo>Removing GridSphere Database</echo>
+        <delete dir="${env.CATALINA_HOME}/gridsphere"/>
+    </target>
+
+</project>

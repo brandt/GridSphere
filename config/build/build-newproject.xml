@@ -1,0 +1,61 @@
+
+<project name="New Project" default="new-project" basedir=".">
+
+    <target name="check-project-exists">
+        <condition property="new-project-exists">
+            <not>
+                <available file="${project.dir}/build.xml"/>
+            </not>
+        </condition>
+        <fail if="${new-project-exists}" message="This project already exists! Please delete the old one in ${project.dir}"/>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates a new portlet project  in projects directory                -->
+    <!-- =================================================================== -->
+    <target name="new-project" description="Creates a new portlet project in projects directory">
+        <echo>Creating a New Portlet Project</echo>
+        <mkdir dir="projects"/>
+        <input message="Please enter a Project Title e.g. Cool Portlets" addproperty="project.title"/>
+
+        <input message="Please enter a Project Name this will be used for your portlet web application and should probably be lowercase e.g. coolportlets" addproperty="project.name"/>
+
+        <property name="project.dir" value="projects/${project.name}"/>
+
+        <antcall target="check-project-exists"/>
+
+        <mkdir dir="${project.dir}"/>
+
+        <copy file="config/build/build.project.xml" tofile="${project.dir}/build.xml"/>
+        <copy file="config/build/build.properties" tofile="${project.dir}/build.properties"/>
+        <replace file="${project.dir}/build.xml"
+                 token="@PROJECT_TITLE@"
+                 value="${project.title}"/>
+        <replace file="${project.dir}/build.xml"
+                 token="@PROJECT_NAME@"
+                 value="${project.name}"/>
+
+
+        <mkdir dir="${project.dir}/src"/>
+        <mkdir dir="${project.dir}/lib"/>
+        <mkdir dir="${project.dir}/config"/>
+        <copy file="config/log4j.properties" tofile="${project.dir}/config/log4j.properties"/>
+
+        <mkdir dir="${project.dir}/webapp"/>
+        <mkdir dir="${project.dir}/webapp/WEB-INF"/>
+
+        <copy todir="${project.dir}/webapp/WEB-INF">
+            <fileset dir="config/template"/>
+        </copy>
+
+        <replace file="${project.dir}/webapp/WEB-INF/web.xml" token="@PROJECT_TITLE@"
+            value="${project.title}"/>
+
+        <mkdir dir="${project.dir}/webapp/html"/>
+        <mkdir dir="${project.dir}/webapp/jsp"/>
+
+        <echo>Creation of new portlet project ${portlet.title} in projects/${project.name} is complete.</echo>
+        <echo>Please edit src/ webapps/ and webapps/WEB-INF/{web.xml, layout.xml, PortletServices.xml} appropriately</echo>
+    </target>
+
+</project>
