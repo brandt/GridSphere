@@ -1,0 +1,138 @@
+<!--
+
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+    Author:     Jason Novotny
+    Version:    $Id$
+-->
+
+<chapter id="portlet-auth">
+    <title id="portlet-auth-title">GridSphere Authentication Modules</title>
+  <para>
+  GridSphere provides a pluggable way to specify "authetication modules" used for authenticating users to the portal.
+      The model is very similar to the PAM (Pluggable Authentication Modules) approach used in Unix in that modules 
+ may be "stackable" such that each module that is selected as active also has a priority associated with it. This 
+      makes it possible for instance to default to the GridSphere password based authentication module if some other module
+      with a higher priority fails at first.      
+  </para>
+    <para>
+        The following major design parameters were used to develop the authentication modules approach.
+        <itemizedlist>
+        <listitem>
+             <para>
+                An authentication module is described by an XML descriptor file called <filename>authmodules.xml</filename>
+                located in WEB-INF directory of web application. As a proprietary extension, GridSphere will load in
+                authentication modules specified in a third-party portlet application if one exists.
+            </para>
+        </listitem>
+        <listitem>
+            <para>
+                All authentication modules conform to a common interface, such that a new authentication module
+                implementation can be supported if it implements the  <emphasis>LoginAuthModule</emphasis> interface.
+            </para>
+        </listitem>
+        <listitem>
+           <para>
+                A key method of the <emphasis>LoginAuthModule</emphasis> interface is the
+               <interface>void checkAuthentication(User user, String password) throws AuthenticationException</interface>
+               which assumes that any authentication decision may be made basded upon a user object (which contains profile information
+               i.e. name, email, organization) and a password value.
+            </para>
+        </listitem>
+        <listitem>
+           <para>
+                Authentication modules that are <emphasis>ACTIVE</emphasis> will be executed upon attempted login. Modules
+                can be set active either in the descriptor, or via the Login Configuration portlet at run-time. By default,
+                the password authentication module which uses the password stored in the gridsphere database is active.
+            </para>
+        </listitem>
+        <listitem>
+           <para>
+                A module has a priority number associated with it. All active modules are executed until authentication is
+                successful starting with the module with the highest priority == lowest priority number associated with it.
+            </para>
+        </listitem>
+        <listitem>
+           <para>
+                Generic configuration attributes may be associated with an authentication module
+            </para>
+        </listitem>
+        </itemizedlist>
+    </para>
+    <para>
+        Below is the <filename>authmodules.xml</filename> descriptor that is bundled in GridSphere and defines the default
+        <emphasis>PasswordAuthModule</emphasis>.
+    </para>
+  <informalexample id="authmodule.def"><programlisting>
+      &lt;auth-modules&gt;
+          &lt;auth-module&gt; <co id="auth.mod"/>
+              &lt;name&gt;PasswordAuth&lt;/name&gt;  <co id="auth.name"/>
+              &lt;description lang="en"&gt;Hashed password based authentication using GridSphere database&lt;/description&gt; <co id="auth.desc"/>
+              &lt;implementation&gt;org.gridlab.gridsphere.services.core.security.auth.modules.impl.PasswordAuthModule&lt;/implementation&gt; <co id="auth.impl"/>
+              &lt;active&gt;true&lt;/active&gt; <co id="auth.active"/>
+              &lt;priority&gt;100&lt;/priority&gt; <co id="auth.pri"/>
+              &lt;auth-config&gt; <co id="auth.config"/>
+                  &lt;param-name&gt;aname&lt;/param-name&gt;
+                  &lt;param-value&gt;avalue&lt;/param-value&gt;
+              &lt;/auth-config&gt;
+          &lt;/auth-module&gt;
+      &lt;/auth-modules&gt;
+    </programlisting>
+      <calloutlist>
+            <callout arearefs="auth.mod">
+            <para>
+                Every authentication module must begin with a <emphasis>auth-module</emphasis> element.
+            </para>
+            </callout>
+            <callout arearefs="auth.name">
+            <para>
+                A name for this authentication module.
+            </para>
+            </callout>
+          <callout arearefs="auth.desc">
+            <para>
+                A human understandable description of the authentication module that will be displayed in the Login configuration portlets
+                for administrators to see. To support additional locales, just add additional description elements.
+            </para>
+            </callout>
+          <callout arearefs="auth.impl">
+            <para>
+                Every authentication module must specify an implementation class of the <interface>LoginAuthModule</interface> interface
+            </para>
+            </callout>
+          <callout arearefs="auth.active">
+            <para>
+                If active is true, this module will be executed with the priority assigned to it.
+            </para>
+            </callout>
+          <callout arearefs="auth.pri">
+            <para>
+                Every authentication module must specify a priority. The core GS <emphasis>PasswordAuthModule</emphasis>
+                has a priority of 100, so a priority number that higher will be executed after the password authentication module.
+                One that is lower will be performed beforehand.
+            </para>
+            </callout>
+          <callout arearefs="auth.config">
+            <para>
+                Configuration parameters may be used to provide some parametrization to the module. For instance to specify some third-party
+                authentication service or to pass in additional variables that you don't wish to hardcode in the implementation class itself.
+            </para>
+            </callout>
+    </calloutlist>
+
+
+ </informalexample>
+
+    <para>
+        Developing a new authentication module is pretty straightforward. You would first create or add new entry to authmodules.xml
+        describing the authentication module as explained above. The real work is the implementation of the
+    <emphasis>LoginAuthModule</emphasis> interface. For convenience, it is recommended to subclass from
+        <emphasis>org.gridlab.gridsphere.services.core.security.auth.modules.impl.BaseAuthModule</emphasis> which provides
+        additional help for handling auth module configuration attributes. For additional examples, please look at the
+        <filename>PasswordAuthModule.java</filename> class that is found in the GridSphere source code or the
+        <filename>CredAuthModule.java</filename> source in the <emphasis>gridportlets</emphasis> codebase which handles
+        authentication using grid certificates and the MyProxy service.
+    </para>
+
+</chapter>
