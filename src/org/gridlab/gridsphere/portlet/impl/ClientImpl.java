@@ -43,14 +43,16 @@ public class ClientImpl implements Client {
         // Mozilla 1.0:  Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-US; rv:1.0.1) Gecko/20020826
         // Opera 6.0b2:  Mozilla/4.0 (compatible; MSIE 5.0; Mac_PowerPC) Opera 6.0  [en]
 
-        int i = userAgent.indexOf(" ");
-
-        //System.err.println("mozilla version: " + mozillaVersion);
-        int j = userAgent.lastIndexOf(")");
         String browserInfo = "Unknown browser";
+        if (userAgent!=null){
+            int i = userAgent.indexOf(" ");
 
-        if (j >= 0) {
-            browserInfo = userAgent.substring(j + 1).trim();
+            //System.err.println("mozilla version: " + mozillaVersion);
+            int j = userAgent.lastIndexOf(")");
+
+            if (j >= 0) {
+                browserInfo = userAgent.substring(j + 1).trim();
+            }
         }
             //System.err.println("browser info: " + browserInfo);
         mimeType = req.getHeader("accept");
@@ -65,7 +67,7 @@ public class ClientImpl implements Client {
         if (browserInfo.startsWith("Opera")) {
             manufacturer = MANUFACTURER_NAMES[0];
         } else if (browserInfo.startsWith("Gecko")) {
-            i = browserInfo.indexOf(" ");
+            int i = browserInfo.indexOf(" ");
             if (i > 0) {
                 if (browserInfo.substring(i).trim().startsWith("Netscape")) {
                     manufacturer = MANUFACTURER_NAMES[1];
@@ -79,7 +81,7 @@ public class ClientImpl implements Client {
             manufacturer = MANUFACTURER_NAMES[3];
         }
 
-        i = mimeType.indexOf("html");
+        int i = mimeType.indexOf("html");
         if (i < 0) {
             // IE 5.2 on  Mac OS X
             if (mimeType.equals("*/*")) {
