@@ -39,16 +39,16 @@
 
     <portlet-app-def>
         <portlet-app id="org.gridlab.gridsphere.portlets.core.file.BannerPortlet">
-            <portlet-name>File Viewer Portlet</portlet-name>
-            <servlet-name>FileViewPortlet</servlet-name>
+            <portlet-name>Banner Portlet</portlet-name>
+            <servlet-name>BannerPortlet</servlet-name>
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.file.BannerPortlet.1">
             <concrete-portlet>
-                <portlet-name>File Viewer Portlet</portlet-name>
+                <portlet-name>Banner Portlet</portlet-name>
                 <default-locale>en</default-locale>
                 <language locale="en">
-                    <title>File Viewer</title>
+                    <title>Banner</title>
                     <description>Displays a file in a portlet</description>
                 </language>
                 <config-param>

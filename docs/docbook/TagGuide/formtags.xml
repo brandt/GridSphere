@@ -411,16 +411,6 @@
                     </thead>
                     <tbody>
                         <row>
-                            <entry>rows</entry><entry>no</entry><entry>integer: the number of rows</entry>
-                        </row>
-                    </tbody>
-                    <tbody>
-                        <row>
-                            <entry>cols</entry><entry>no</entry><entry>integer: the number of columns</entry>
-                        </row>
-                    </tbody>
-                    <tbody>
-                        <row>
                             <entry>width</entry><entry>no</entry><entry>integer: the width of the panel</entry>
                         </row>
                     </tbody>
@@ -435,7 +425,7 @@
                 <title>Usage of panel</title>
                 <screen>
 <![CDATA[
-<ui:panel rows="2" cols="1">
+<ui:panel>
     <ui:frame>
         ...
     </ui:frame>
@@ -445,6 +435,20 @@
 </ui:panel>]]>
                 </screen>
                 This creates a panel with two frames one on top of the other.
+                <screen>
+<![CDATA[
+<ui:panel>
+    <ui:tablerow>
+        <ui:tablecell>
+            <ui:frame>
+                ...
+            </ui:frame>
+            <ui:frame>
+                ...
+            </ui:frame>
+</ui:panel>]]>
+                </screen>
+                This creates a panel with two frames side by side
             </example>
         </sect2>
 

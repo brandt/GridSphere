@@ -54,7 +54,7 @@
     </servlet>
 
     <servlet>
-        <servlet-name>FileViewPortlet</servlet-name>
+        <servlet-name>BannerPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.file.BannerPortlet</servlet-class>
     </servlet>
 
