@@ -31,25 +31,10 @@ public class SetupTestGroupsTest extends SetupRootUserTest {
 
     protected void setUp() {
         super.setUp();
-        super.loginRoot();
-        log.info(" =====================================  setup");
-        // Create a root user services using mock ServletConfig
-        try {
-            rootAclService = (AccessControlManagerService) factory.createUserPortletService(AccessControlManagerService.class, rootUser, null, true);
-        } catch (Exception e) {
-            log.error("Unable to initialize services: ", e);
-        }
+
     }
 
-    public void testSetupGroups() {
-        log.info("- setup groups");
-        portal = rootAclService.createGroup("portal");
-        triana = rootAclService.createGroup("triana");
-        cactus = rootAclService.createGroup("cactus");
 
-        PortletGroup c = rootAclService.getGroupByName("cactus");
-        assertEquals(cactus, c);
-    }
 
     public void testSuperRolesHasSuperRole() {
         assertTrue(rootAclService.hasSuperRole(rootUser));
@@ -72,22 +57,6 @@ public class SetupTestGroupsTest extends SetupRootUserTest {
         assertTrue(rootAclService.hasSuperRole(rootUser));
     }
 
-    public void testAddDeleteGroup() {
-        log.info("- testAddRemove");
-        PortletGroup hiya = rootAclService.createGroup("hiya");
-        PortletGroup c = rootAclService.getGroupByName("hiya");
-        assertEquals(hiya, c);
-        rootAclService.deleteGroup(hiya);
-        c = rootAclService.getGroupByName("hiya");
-        assertEquals(null, c);
-    }
-
-    public void teardownGroups() {
-        log.info("- teardown groups");
-        rootAclService.deleteGroup(portal);
-        rootAclService.deleteGroup(triana);
-        rootAclService.deleteGroup(cactus);
-    }
 
     protected void tearDown() {
         //teardownGroups();

@@ -13,8 +13,8 @@ import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.PortletWindow;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.*;
+import org.gridlab.gridsphere.GridSphereScenarios;
 
 import java.io.IOException;
 import java.util.Hashtable;
@@ -25,8 +25,6 @@ import java.util.List;
  * properties file.
  */
 public class PortletDescriptorTest extends ServletTestCase {
-
-    private final static String separator = System.getProperty("file.separator");
 
     public PortletDescriptorTest(String name) {
         super(name);
@@ -40,12 +38,17 @@ public class PortletDescriptorTest extends ServletTestCase {
         return new TestSuite(PortletDescriptorTest.class);
     }
 
+    public void setUp() {
+        GridSphereScenarios scenario = new GridSphereScenarios(this);
+        scenario.setupGridSphereServlet();
+    }
+
     public void testPortletDescriptor() {
         PortletDeploymentDescriptor pdd = null;
 
         // load files from JAR
-        String portletFile = GridSphereConfig.getProperty(GridSphereConfigProperties.TEST_HOME) + separator + "portlet-test.xml";
-        String mappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING);
+        String portletFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/test/portlet-test.xml");
+        String mappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-mapping.xml");
 
         try {
             pdd = new PortletDeploymentDescriptor(portletFile, mappingFile);

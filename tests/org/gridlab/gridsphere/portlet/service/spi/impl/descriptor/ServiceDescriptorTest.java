@@ -5,12 +5,12 @@
 package org.gridlab.gridsphere.portlet.service.spi.impl.descriptor;
 
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
+import org.gridlab.gridsphere.GridSphereScenarios;
+import org.apache.cactus.ServletTestCase;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
  * This is the base fixture for service testing. Provides a service factory and the
  * properties file.
  */
-public class ServiceDescriptorTest extends TestCase {
+public class ServiceDescriptorTest extends ServletTestCase {
 
 
     public ServiceDescriptorTest(String name) {
@@ -34,12 +34,18 @@ public class ServiceDescriptorTest extends TestCase {
         return new TestSuite(ServiceDescriptorTest.class);
     }
 
+    public void setUp() {
+        GridSphereScenarios scenario = new GridSphereScenarios(this);
+        scenario.setupGridSphereServlet();
+    }
+
     public void testServiceDescriptor() {
         SportletServiceDescriptor descriptor = null;
 
         // load files from JAR
-        String serviceFile = GridSphereConfig.getProperty(GridSphereConfigProperties.TEST_HOME) + System.getProperty("file.separator") + "PortletServices-test.xml";
-        String mappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.SERVICES_MAPPING);
+        String serviceFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/test/PortletServices-test.xml");
+        String mappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-services-mapping.xml");
+
         try {
             descriptor = new SportletServiceDescriptor(serviceFile, mappingFile);
         } catch (IOException e) {

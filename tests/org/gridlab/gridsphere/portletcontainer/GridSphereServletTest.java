@@ -9,9 +9,9 @@ import junit.framework.TestSuite;
 import org.apache.cactus.ServletTestCase;
 import org.gridlab.gridsphere.portlet.PortletContext;
 import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletContext;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.GridSphereScenarios;
 
 /**
  * This is the base fixture for service testing. Provides a service factory and the
@@ -29,7 +29,6 @@ public class GridSphereServletTest extends ServletTestCase {
     }
 
     protected void setUp() {
-
     }
 
     public static void main(String[] args) {
@@ -37,22 +36,8 @@ public class GridSphereServletTest extends ServletTestCase {
     }
 
     public void testInitGridSphere() {
-        gsServlet = new GridSphereServlet();
-        assertNotNull(gsServlet);
-        try {
-            gsServlet.init(config);
-        } catch (Exception e) {
-            fail("Unable to perform init() of GridSphereServlet!");
-        }
-        this.context = new SportletContext(config);
-        assertNotNull(context);
-        try {
-            gsServlet.initializeServices();
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail("Unable to initialize GridSphere Portlet services!");
-            log.error("Unable to initialize GridSphere Portlet services!", e);
-        }
+        GridSphereScenarios scenario = new GridSphereScenarios(this);
+        scenario.setupGridSphereServlet();
     }
 
     public static Test suite() {

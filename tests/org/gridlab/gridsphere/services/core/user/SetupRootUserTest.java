@@ -7,13 +7,13 @@ package org.gridlab.gridsphere.services.core.user;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.service.spi.impl.GridSphereServiceTest;
-import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.GridSphereScenarios;
+import org.apache.cactus.ServletTestCase;
 
-public class SetupRootUserTest extends GridSphereServiceTest {
+public class SetupRootUserTest extends ServletTestCase {
 
-    private static LoginService loginService = null;
-
+    private GridSphereScenarios scenario = null;
     protected User rootUser = null;
 
     public SetupRootUserTest(String name) {
@@ -29,34 +29,16 @@ public class SetupRootUserTest extends GridSphereServiceTest {
     }
 
     protected void setUp() {
-        super.setUp();
-        super.testServiceFactoryCreate();
+       scenario = new GridSphereScenarios(this);
+       scenario.setupGridSphereServlet();
     }
 
-    public void testCreateRootUser() {
-        log.info(" =====================================  setup");
-        loginRoot();
-    }
-
-    public void loginRoot() {
-        try {
-            loginService = (LoginService) factory.createPortletService(LoginService.class, config, true);
-        } catch (Exception e) {
-            String msg = "Unable to get login service instance";
-            log.error(msg, e);
-            fail(msg);
-        }
-        try {
-            rootUser = loginService.login("root", "");
-        } catch (AuthorizationException e) {
-            String msg = "Unable to login as root";
-            log.error(msg, e);
-            fail(msg);
-        }
+    public void testLoginRootUser() throws PortletServiceException {
+        scenario.loginRoot();
     }
 
     protected void tearDown() {
-        super.tearDown();
+
     }
 
 }

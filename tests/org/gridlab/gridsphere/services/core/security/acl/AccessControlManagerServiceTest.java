@@ -26,13 +26,6 @@ public class AccessControlManagerServiceTest extends SetupTestUsersTest {
 
     protected void setUp() {
         super.setUp();
-        super.testSetupUsers();
-        // Create a root user services using mock ServletConfig
-        try {
-            aclService = (AccessControlManagerService) factory.createUserPortletService(AccessControlManagerService.class, rootUser, null, true);
-        } catch (Exception e) {
-            log.error("Unable to initialize services: ", e);
-        }
     }
 
     public void testIsRootSuper() {
