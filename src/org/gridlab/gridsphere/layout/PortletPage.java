@@ -268,7 +268,7 @@ public class PortletPage implements Serializable, Cloneable {
                 String pid = f.getPortletClass();
 
                 // remove any cached portlet
-                cacheService.removeCached(pid + id);
+                cacheService.removeCached(f.getComponentID() + pid + id);
                 //portlets.add(f.getPortletID());
                 PortletInvoker.login(pid, event.getPortletRequest(), event.getPortletResponse());
             }
@@ -297,7 +297,7 @@ public class PortletPage implements Serializable, Cloneable {
                 String pid = f.getPortletClass();
 
                 // remove any cached portlet
-                cacheService.removeCached(pid + id);
+                cacheService.removeCached(f.getComponentID() + pid + id);
                 PortletInvoker.logout(pid, req, res);
             }
         }

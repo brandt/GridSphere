@@ -273,7 +273,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         String id = request.getPortletSession(true).getId();
 
         // remove cached output
-        cacheService.removeCached(portletClass + id);
+        cacheService.removeCached(this.getComponentID() + portletClass + id);
         frame = null;
 
         hasTitleBarEvent = false;
@@ -424,7 +424,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         String id = event.getPortletRequest().getPortletSession(true).getId();
 
-        frame = (StringBuffer) cacheService.getCached(portletClass + id);
+        frame = (StringBuffer) cacheService.getCached(this.getComponentID() + portletClass + id);
         String nocache = (String) req.getAttribute(CacheService.NO_CACHE);
         if ((frame != null) && (nocache == null)) {
             return;
@@ -570,7 +570,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         //out.println(frame.toString());
 
         if (cacheExpiration > 0) {
-            cacheService.cache(portletClass + id, frame, cacheExpiration);
+            cacheService.cache(this.getComponentID() + portletClass + id, frame, cacheExpiration);
         }
     }
 
