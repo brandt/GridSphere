@@ -7,7 +7,6 @@ package org.gridlab.gridsphere.portletcontainer.jsrimpl;
 import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.jsrimpl.PortalContextImpl;
-import org.gridlab.gridsphere.portlet.jsrimpl.PortletPreferencesImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
@@ -19,22 +18,17 @@ import org.gridlab.gridsphere.portletcontainer.impl.SportletDispatcher;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDeploymentDescriptor2;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityRoleRef;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Description;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.DisplayName;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SupportedLocale;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.portlet.Portlet;
 import javax.portlet.PortalContext;
 import java.util.Locale;
-import java.util.ResourceBundle;
 import java.util.List;
 import java.util.Map;
-import java.util.Hashtable;
 import java.util.Vector;
 import java.util.Iterator;
 import java.net.URLEncoder;
@@ -61,8 +55,6 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
     private JSRApplicationPortletConfigImpl appConfig = null;
     private ServletContext context = null;
     private PortalContext portalContext = null;
-    private ClassLoader loader = null;
-    private static PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
 
     /**
      * Default constructor is private
@@ -77,14 +69,13 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
      * @param webApplication the ui application name for this application portlet
      * @param context the <code>ServletContext</code> containing this application portlet
      */
-    public JSRApplicationPortletImpl(PortletDeploymentDescriptor2 pdd, PortletDefinition portletDef, String servletName, String webApplication, ServletContext context, ClassLoader loader) throws PortletException {
+    public JSRApplicationPortletImpl(PortletDeploymentDescriptor2 pdd, PortletDefinition portletDef, String servletName, String webApplication, ServletContext context) throws PortletException {
         this.portletDef = portletDef;
         this.webAppName = webApplication;
         this.servletName = servletName;
         this.portletClassName = portletDef.getPortletClass().getContent();
         this.portletName = portletDef.getPortletName().getContent();
         this.context = context;
-        this.loader = loader;
 
         SupportedLocale[] locales = portletDef.getSupportedLocale();
         supportedLocales = new Locale[locales.length];
@@ -213,11 +204,8 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
             }
         }
 
+        System.err.println("I seem to have some render params!!");
 
-
-            System.err.println("I seem to have some render params!!");
-
-        //context.
         System.err.println("in getPortletDispatcher of jsr query string " + extraInfo);
         RequestDispatcher rd = context.getRequestDispatcher("/jsrportlets" + extraInfo);
         //RequestDispatcher rd = context.getNamedDispatcher(servletName);
@@ -303,10 +291,9 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
         return portletDef.getSecurityRoleRef();
     }
 
-    public javax.portlet.PortletPreferences getPortletPreferences() {
-        PortletPreferences prefDesc = portletDef.getPortletPreferences();
-        javax.portlet.PortletPreferences prefs = new PortletPreferencesImpl(prefDesc, pm, loader);
-        return prefs;
+    public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences getPortletPreferences() {
+        org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences prefDesc = portletDef.getPortletPreferences();
+        return prefDesc;
     }
 
     public Portlet getPortletInstance() {

@@ -62,7 +62,7 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
         //rd = context.getNamedDispatcher(webApplicationName);
 
         // load portlet.xml
-        loadJSRPortlets(context, loader);
+        loadJSRPortlets(context);
 
         // load layout.xml
         //loadLayout(context);
@@ -77,7 +77,7 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
      *
      * @param ctx the <code>ServletContext</code>
      */
-    protected void loadJSRPortlets(ServletContext ctx, ClassLoader loader) throws PortletException {
+    protected void loadJSRPortlets(ServletContext ctx) throws PortletException {
         // load in the portlet.xml file
         String portletXMLfile = ctx.getRealPath("/WEB-INF/portlet.xml");
         //String portletMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING);
@@ -98,7 +98,7 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
 
         // Iterate thru portlet definitions for portlet applications
         for (int i = 0; i < portletDefs.length; i++) {
-            ApplicationPortlet portletApp = new JSRApplicationPortletImpl(pdd, portletDefs[i], servletName, webApplicationName, ctx, loader);
+            ApplicationPortlet portletApp = new JSRApplicationPortletImpl(pdd, portletDefs[i], servletName, webApplicationName, ctx);
             String portletClass = portletApp.getApplicationPortletID();
             portletDefinitions.put(portletClass, portletDefs[i]);
             appPortlets.put(portletClass, portletApp);
