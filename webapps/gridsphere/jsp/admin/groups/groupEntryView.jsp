@@ -11,7 +11,6 @@
             <ui:tablecell>
                     <ui:actionsubmit action="doViewViewGroup" key="GROUP_GO_BACK"/>
                     <ui:actionsubmit action="doViewEditGroupEntry" key="GROUP_ROLE_CHANGE"/>
-                    <ui:actionsubmit action="doViewConfirmRemoveGroupEntry" key="GROUP_REMOVE_USER"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
