@@ -37,7 +37,7 @@ public class PortletTitleBar extends BasePortletComponent {
     private List listeners = new ArrayList();
 
     private PortletSettings settings;
-    private List modeList = null;
+
     private String[] windowStates = null;
     private String errorMessage = "";
     private boolean hasError = false;
@@ -361,6 +361,24 @@ public class PortletTitleBar extends BasePortletComponent {
                 windowStates[i] = "";
             }
         }
+
+        // get rid of resized if window state is normal
+        if (windowState == PortletWindow.State.NORMAL) {
+            for (int i = 0; i < windowStates.length; i++) {
+                // remove current state from list
+                if (windowStates[i].equalsIgnoreCase(PortletWindow.State.RESIZING.toString())) {
+                    windowStates[i] = "";
+                }
+            }
+        }
+
+        for (int i = 0; i < windowStates.length; i++) {
+            // remove current state from list
+            if (windowStates[i].equalsIgnoreCase(windowState.toString())) {
+                windowStates[i] = "";
+            }
+        }
+
         // create a URI for each of the window states
         PortletStateLink stateLink;
         List stateLinks = new Vector();
