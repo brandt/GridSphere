@@ -47,6 +47,16 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <name>name</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>anchor</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>secure</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -112,6 +122,11 @@
         </attribute>
         <attribute>
             <name>name</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>anchor</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
