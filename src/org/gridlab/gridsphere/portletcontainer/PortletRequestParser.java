@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.portletcontainer;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.GuestUser;
+import org.gridlab.gridsphere.portlet.impl.ClientImpl;
 import org.gridlab.gridsphere.portletcontainer.descriptor.Markup;
 import org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes;
 import org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryManager;
@@ -23,6 +24,7 @@ public final class PortletRequestParser implements PortletAction {
 
     private String concreteID;
     private User user = null;
+    private Client client = null;
     private HttpServletRequest req = null;
 
     /**
@@ -38,6 +40,8 @@ public final class PortletRequestParser implements PortletAction {
             //Portlet.Mode mode = Portlet.Mode.VIEW;
             //req.setAttribute(GridSphereProperties.PORTLETMODE, mode);
 
+        client = new ClientImpl(req);
+        req.setAttribute(GridSphereProperties.CLIENT, client);
 
         if (concreteID != null) {
             PortletRegistryManager registry = PortletRegistryManager.getInstance();
@@ -80,6 +84,10 @@ public final class PortletRequestParser implements PortletAction {
 
     public Portlet.Mode getPortletMode() {
         return (Portlet.Mode)req.getAttribute(GridSphereProperties.PORTLETMODE);
+    }
+
+    public Client getClient() {
+        return client;
     }
 
     public User getUser() {
