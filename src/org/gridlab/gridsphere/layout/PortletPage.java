@@ -56,6 +56,7 @@ public class PortletPage implements Serializable, Cloneable {
     private Hashtable labelsHash = new Hashtable();
     private Hashtable portletHash = new Hashtable();
 
+    private boolean isFlushed = true;
     /**
      * Constructs an instance of PortletPage
      */
@@ -420,6 +421,16 @@ public class PortletPage implements Serializable, Cloneable {
         PortletRequest req = event.getPortletRequest();
         Client client = req.getClient();
 
+        // this ensures that one render request is handled at a time  for a client
+        while (!isFlushed) {
+            try {
+                Thread.sleep(100);
+            } catch (Exception e) {
+
+            }
+        }
+        isFlushed = false;
+
         // handle any client logic to determin which markup to display
     	String markupName=event.getPortletRequest().getClient().getMarkupName();
     	if (markupName.equals("html")) {
@@ -427,6 +438,8 @@ public class PortletPage implements Serializable, Cloneable {
     	} else {
     		doRenderWML(event);
     	}
+        isFlushed = true;
+
     }
     public void doRenderWML(GridSphereEvent event) throws PortletLayoutException, IOException {
 
@@ -516,6 +529,7 @@ public class PortletPage implements Serializable, Cloneable {
         out.println("<script language=\"JavaScript\" src=\"javascript/gridsphere.js\"></script>");
         out.println("</head><body>");
 
+
         // A Portal page in 3 lines -- voila!
         //  -------- header ---------
         if (headerContainer != null) {
@@ -536,6 +550,7 @@ public class PortletPage implements Serializable, Cloneable {
         }
 
         out.println("</body></html>");
+        out.flush();
     }
 
     public Object clone() throws CloneNotSupportedException {
