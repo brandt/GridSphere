@@ -96,6 +96,13 @@ public class TextBean extends BaseComponentBean implements TagBean {
 
     public String toEndString() {
         String text = "";
+        String dir = "ltr";
+        if (locale != null) {
+            ComponentOrientation orientation = ComponentOrientation.getOrientation(locale);
+            if (!orientation.isLeftToRight()) {
+                dir = "rtl";
+            }
+        }
         if (value == null) return "";
         if (style.equalsIgnoreCase("error") || (style.equalsIgnoreCase("err"))) {
             this.cssClass = MessageStyle.MSG_ERROR;
@@ -110,23 +117,17 @@ public class TextBean extends BaseComponentBean implements TagBean {
         } else if (style.equalsIgnoreCase("nostyle")) {
             return value;
         } else if (style.equalsIgnoreCase(MessageStyle.MSG_BOLD)) {
-            return "<b>" + value + "</b>";
+            return "<b dir=\"" + dir + "\" >" + value + "</b>";
         } else if (style.equalsIgnoreCase(MessageStyle.MSG_ITALIC)) {
-            return "<i>" + value + "</i>";
+            return "<i dir=\"" + dir + "\" >" + value + "</i>";
         } else if (style.equalsIgnoreCase(MessageStyle.MSG_UNDERLINE)) {
-            return "<u>" + value + "</u>";
+            return "<u dir=\"" + dir + "\" >" + value + "</u>";
         }
-        if (locale != null) {
-            ComponentOrientation orientation = ComponentOrientation.getOrientation(locale);
-            if (orientation.isLeftToRight()) {
-                text = "<span " + getFormattedCss();
-            } else {
-                text = "<span dir=\"rtl\"" + getFormattedCss();
-            }
-        } else {
-            text = "<span " + getFormattedCss();
-        }
+
+        text = "<span dir=\"" + dir + "\" " + getFormattedCss();
+
         text += ">" + value + "</span>";
+        
         return text;
     }
 }
