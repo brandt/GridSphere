@@ -15,6 +15,7 @@ import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Enumeration;
+import java.util.List;
 
 public class DemoPortlet extends AbstractPortlet {
 
@@ -91,8 +92,8 @@ public class DemoPortlet extends AbstractPortlet {
         Portlet.Mode mode = request.getMode();
         Portlet.Mode prev = request.getPreviousMode();
 
-        PortletGroup[] groups = request.getGroups();
-        PortletRole[] roles = request.getRoles(null);
+        List groups = request.getGroups();
+        List roles = request.getRoles(null);
 
         PortletWindow window = request.getWindow();
 

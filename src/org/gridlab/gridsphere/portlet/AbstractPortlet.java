@@ -82,8 +82,8 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
             } else if (method.equals(PortletProperties.ACTION_PERFORMED)) {
                 log.info("in AbstractPortlet: doing actionPerformed()");
 
-                // Set the appropiate portlet settings
-                PortletAction action = (PortletAction)request.getAttribute(PortletProperties.ACTION_EVENT);
+                // Set the appropiate portlet action
+                DefaultPortletAction action = (DefaultPortletAction)request.getAttribute(PortletProperties.ACTION_EVENT);
                 ActionEvent evt = new ActionEventImpl(action, request, response);
                 actionPerformed(evt);
             }
