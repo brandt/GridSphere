@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-layout>
+
+<container-name>GridSphere Portal</container-name>
+
+<!-- Title -->
+
+<portlet-image>
+    <image>title.jpg</image>
+</portlet-image>
+
+<!-- Portlet Dock -->
+<portlet-dock>
+    <title>My Dock</title>
+    <orientation>1</orientation>
+    <portlet-insets>
+        <width>4</width>
+        <height>4</height>
+    </portlet-insets>
+
+    <portlet-minimized>
+        <title>Hello</title>
+        <color>red</color>
+        <portlet-class>portletclass</portlet-class>
+    </portlet-minimized>
+
+    <portlet-minimized>
+        <title>Bye</title>
+        <color>green</color>
+        <portlet-class>portletclass</portlet-class>
+    </portlet-minimized>
+
+</portlet-dock>
+
+<!-- Tabbed Panes -->
+<portlet-tabbed-pane>
+    <portlet-tab>
+        <title>Configuration</title>
+        <foreground>red</foreground>
+            <background>blue</background>
+
+                <portlet-panel>
+                    <grid-layout>
+                        <columns>2</columns>
+                        <rows>2</rows>
+                        <hgap>1</hgap>
+                        <vgap>1</vgap>
+                    </grid-layout>
+                    <portlet-frame>
+                        <line-border>
+                            <color>blue</color>
+                            <thickness>2</thickness>
+                        </line-border>
+                        <portlet-class>someclass</portlet-class>
+                    </portlet-frame>
+                </portlet-panel>
+
+        </portlet-tab>
+        <portlet-tab>
+            <title>Cactus</title>
+            <foreground>green</foreground>
+            <background>blue></background>
+
+                <portlet-panel>
+                    <flow-layout>
+                        <align>1</align>
+                        <hgap>1</hgap>
+                        <vgap>1</vgap>
+                    </flow-layout>
+
+                        <portlet-frame>
+                            <title-border>
+                                <color>blue</color>
+                                <font>helvetica</font>
+                                <title>Hello World</title>
+                            </title-border>
+                            <portlet-class>portletclass</portlet-class>
+                        </portlet-frame>
+
+                </portlet-panel>
+
+        </portlet-tab>
+    </portlet-tabbed-pane>
+
+</portlet-layout>
