@@ -340,13 +340,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             if (user instanceof GuestUser) {
                 req.setMode(Portlet.Mode.VIEW);
             } else {
-                if (titleBar != null) {
-                    Portlet.Mode mode = titleBar.getPortletMode();
-                    //System.err.println("mode = " + mode);
-                    req.setMode(mode);
-                } else {
-                    req.setMode(Portlet.Mode.VIEW);
-                }
+                Portlet.Mode mode = titleBar.getPortletMode();
+                //System.err.println("mode = " + mode);
+                req.setMode(mode);
             }
 
             titleBar.setPortletMode(req.getMode());
@@ -442,7 +438,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         } else {
             //out.print("border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"");        // this is the main table around one portlet
             //out.print(" cellspacing=\""+getOuterPadding()+"\" style=\"padding:"+getOuterPadding()+"px\"  class=\"window-main\" ");        // this is the main table around one portlet
-            writer.print(" cellspacing=\"0\" style=\"margin:" + getOuterPadding() + "px\"  class=\"window-main\" ");        // this is the main table around one portlet
+            writer.print(" cellspacing=\"0\" style=\"margin:" + getOuterPadding() + "px\" class=\"window-main\" ");        // this is the main table around one portlet
             //out.print("cellpadding=\""+getOuterPadding()+"\" class=\"window-main\" ");        // this is the main table around one portlet
         }
 
@@ -531,15 +527,13 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         // piece together portlet frame + title depending on whether title was set during doXXX method
         // or not
-        String titleStr = (String) req.getAttribute(SportletProperties.PORTLET_TITLE);
-        if (titleStr == null) {
-            if (titleBar != null) {
+        if (!transparent) {
+            String titleStr = (String) req.getAttribute(SportletProperties.PORTLET_TITLE);
+            if (titleStr == null) {
                 titleStr = titleBar.getTitle();
             }
-        }
 
-        frame.append(preframe);
-        if (titleBar != null) {
+            frame.append(preframe);
             frame.append(titleBar.getPreBufferedTitle());
             frame.append(titleStr);
             frame.append(titleBar.getPostBufferedTitle());
