@@ -33,6 +33,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     private GridSphereUserManager userManager = GridSphereUserManager.getInstance();
     private UserSessionManager userSessionManager = UserSessionManager.getInstance();
     private PortletLog log = SportletLog.getInstance(LoginServiceImpl.class);
+    private static boolean inited = false;
     private Map authModules = new HashMap();
     private List activeModules = new ArrayList();
     PortletServiceAuthorizer authorizer = null;
@@ -75,16 +76,18 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
      * @throws PortletServiceUnavailableException if an error occurs during initialization
      */
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-        //loginManager.init(config);
-        Enumeration enum = config.getInitParameterNames();
-        while (enum.hasMoreElements()) {
-            String authModuleName = (String)enum.nextElement();
-            String authClassName = config.getInitParameter(authModuleName);
-            LoginAuthModule authModule = createNewAuthModule(authModuleName, authClassName);
-            if (authModule != null) authModules.put(authModuleName, authModule);
+        log.debug("in login service init");
+        if (!inited) {
+            Enumeration enum = config.getInitParameterNames();
+            while (enum.hasMoreElements()) {
+                String authModuleName = (String)enum.nextElement();
+                String authClassName = config.getInitParameter(authModuleName);
+                LoginAuthModule authModule = createNewAuthModule(authModuleName, authClassName);
+                if (authModule != null) authModules.put(authModuleName, authModule);
+            }
+            LoginAuthModule activeModule = (LoginAuthModule)authModules.get("PASSWORD_AUTH_MODULE");
+            activeModules.add(activeModule);
         }
-        LoginAuthModule activeModule = (LoginAuthModule)authModules.get("PASSWORD_AUTH_MODULE");
-        activeModules.add(activeModule);
     }
 
     private LoginAuthModule createNewAuthModule(String authModuleName, String authClassName) {

@@ -70,6 +70,10 @@ public class NewFormEventImpl implements FormEvent {
         return event.getAction();
     }
 
+    public String getActionString() {
+        return event.getActionString();
+    }
+
     public CheckBoxBean getCheckBoxBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
@@ -78,6 +82,16 @@ public class NewFormEventImpl implements FormEvent {
         CheckBoxBean cb = new CheckBoxBean(request, beanId);
         tagBeans.put(beanKey, cb);
         return cb;
+    }
+
+    public RadioButtonBean getRadioButtonBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (RadioButtonBean)tagBeans.get(beanKey);
+        }
+        RadioButtonBean rb = new RadioButtonBean(request, beanId);
+        tagBeans.put(beanKey, rb);
+        return rb;
     }
 
     public TextFieldBean getTextFieldBean(String beanId) {

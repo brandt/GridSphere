@@ -10,6 +10,7 @@
 package org.gridlab.gridsphere.provider.event.impl;
 
 import org.gridlab.gridsphere.event.ActionEvent;
+import org.gridlab.gridsphere.event.impl.ActionEventImpl;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.portlet.PortletResponse;
@@ -70,6 +71,10 @@ public class FormEventImpl implements FormEvent {
 
     public  DefaultPortletAction getAction() {
         return event.getAction();
+    }
+
+    public  String getActionString() {
+        return event.getActionString();
     }
 
     public org.gridlab.gridsphere.provider.portletui.beans.TagBean getNewTagBean(String name) {
