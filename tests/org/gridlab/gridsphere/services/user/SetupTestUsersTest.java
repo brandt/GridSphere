@@ -101,10 +101,14 @@ public class SetupTestUsersTest extends SetupTestGroupsTest {
     public void testAddRemoveUsers() {
         AccountRequest franzReq = rootUserService.createAccountRequest();
         franzReq.setUserName("franz");
+        franzReq.setUserID("franz");
+        franzReq.setGivenName("Franz");
+        franzReq.setPasswordValue("");
+        franzReq.setPasswordValidation(false);
         try {
             rootUserService.submitAccountRequest(franzReq);
         } catch (InvalidAccountRequestException e) {
-            fail("Unable to submit account request");
+            fail("Unable to submit account request" + e.getMessage());
         }
         List reqs = rootUserService.getAccountRequests();
         boolean isthere = reqs.contains(franzReq);
