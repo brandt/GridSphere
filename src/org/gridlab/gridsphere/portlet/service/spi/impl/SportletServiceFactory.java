@@ -180,7 +180,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             if (serviceDef.isLoadOnStartup()) {
                 log.debug("loading service : " + serviceDef.getServiceInterface());
                 try {
-                    createPortletService(Class.forName(serviceDef.getServiceImplementation(), true, loader), ctx, true);
+                    createPortletService(Class.forName(serviceDef.getServiceInterface(), true, loader), ctx, true);
                 } catch (ClassNotFoundException e) {
                     log.error("Unable to find class : " + serviceDef.getServiceImplementation());
                 }
