@@ -48,7 +48,6 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
         if (!beanId.equals("")) {
             sname = "ui_" + vbName + "_" + beanId + "_" + pname;
         } else {
-            //sname = SportletProperties.DEFAULT_PORTLET_ACTION + "=" + action;
             sname = action;
         }
         return "name=\"" + sname + "\" value=\"" + value + "\">";

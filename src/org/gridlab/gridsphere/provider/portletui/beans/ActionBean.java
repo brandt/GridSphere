@@ -19,9 +19,10 @@ import java.util.List;
  */
 public abstract class ActionBean extends BaseComponentBean implements TagBean {
 
-    protected String action = "no action specified";
+    protected String action = null;
     protected PortletURI portletURI = null;
     protected List paramBeanList = new ArrayList();
+    protected String label = null;
 
     /**
      * Constructs default action bean
@@ -47,6 +48,24 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
     public ActionBean(PortletRequest req, String beanId) {
         this.request = req;
         this.beanId = beanId;
+    }
+
+    /**
+     * Sets the label identified with the portlet component to link to
+     *
+     * @param label the action link key
+     */
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    /**
+     * Returns the label identified with the portlet component to link to
+     *
+     * @return the label
+     */
+    public String getLabel() {
+        return label;
     }
 
     /**
@@ -130,21 +149,6 @@ public abstract class ActionBean extends BaseComponentBean implements TagBean {
      */
     public void removeParamBean(ActionParamBean paramBean) {
         paramBeanList.remove(paramBean);
-    }
-
-    /**
-     * Creates a <code>PortletURI</code> containing the associated action link
-     */
-    protected void createLink() {
-        DefaultPortletAction portletAction = new DefaultPortletAction(action);
-        Iterator it = paramBeanList.iterator();
-        ActionParamBean paramBean = null;
-        while (it.hasNext()) {
-            paramBean = (ActionParamBean)it.next();
-            portletAction.addParameter(paramBean.getName(), paramBean.getValue());
-        }
-        portletURI.addAction(portletAction);
-        action = portletURI.toString();
     }
 
 }
