@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.services.container.registry.impl;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
@@ -25,6 +26,8 @@ import java.util.*;
  */
 public class PortletRegistryServiceImpl implements PortletRegistryService, PortletServiceProvider {
 
+    public final static String CORE_CONTEXT = "coreContext";
+
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletRegistryServiceImpl.class);
     private static PortletRegistryService registryService = null;
     private ServletContext context = null;
@@ -41,8 +44,8 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.info("in init()");
         this.context = config.getServletConfig().getServletContext();
-        String webapp = "coreportlets";
-        addPortletWebApplication(webapp);
+        String webapp = config.getInitParameter(CORE_CONTEXT);
+        addWebApp(webapp);
     }
 
     public void destroy() {
@@ -54,12 +57,15 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
      *
      * @param the web application name
      */
-    public void addPortletWebApplication(String webApplicationName) {
+    public void addPortletWebApplication(User user, String webApplicationName) {
+        addWebApp(webApplicationName);
+    }
+
+    protected void addWebApp(String webApplicationName) {
         PortletWebApplication portletWebApp = new PortletWebApplication(webApplicationName, context);
         Collection appPortlets = portletWebApp.getAllApplicationPortlets();
         Iterator it = appPortlets.iterator();
         while (it.hasNext()) {
-            //appIds.add(appPortlets[i].getPortletAppID());
             ApplicationPortlet appPortlet = (ApplicationPortlet)it.next();
             webapps.put(webApplicationName, appPortlet);
             manager.addApplicationPortlet(appPortlet);
@@ -67,11 +73,11 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
     }
 
     /**
-     * Remnoves a portlet web application from the registry
+     * Removes a portlet web application from the registry
      *
      * @param the web application name
      */
-    public void removePortletWebApplication(String webApplicationName) {
+    public void removePortletWebApplication(User user, String webApplicationName) {
         ArrayList appIds = (ArrayList)webapps.get(webApplicationName);
         for (int i = 0; i < appIds.size(); i++) {
             manager.removeApplicationPortlet((String)appIds.get(i));
@@ -80,12 +86,28 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
     }
 
     /**
+     * Reloads a portlet web application from the registry
+     *
+     * @param the web application name
+     */
+    public void reloadPortletWebApplication(User user, String webApplicationName) {
+        removePortletWebApplication(user, webApplicationName);
+        addPortletWebApplication(user, webApplicationName);
+    }
+
+    /**
      * Lists all the portlet web applications in the registry
      *
      * @return the list of web application names
      */
-    public String[] listPortletWebApplications() {
-        return (String[])webapps.keySet().toArray();
+    public List listPortletWebApplications() {
+        List l = new ArrayList();
+        Set set = webapps.keySet();
+        Iterator it = set.iterator();
+        while (it.hasNext()) {
+            l.add((String)it.next());
+        }
+        return l;
     }
 
 }

@@ -5,6 +5,9 @@
 package org.gridlab.gridsphere.services.container.registry;
 
 import org.gridlab.gridsphere.portlet.service.PortletService;
+import org.gridlab.gridsphere.portlet.User;
+
+import java.util.List;
 
 /**
  * The PortletRegistryService acts as a repository for portlets and makes them available to the portlet
@@ -20,20 +23,27 @@ public interface PortletRegistryService extends PortletService {
      *
      * @param the web application name
      */
-    public void addPortletWebApplication(String webApplicationName);
+    public void addPortletWebApplication(User user, String webApplicationName);
 
     /**
-     * Remnoves a portlet web application from the registry
+     * Removes a portlet web application from the registry
      *
      * @param the web application name
      */
-    public void removePortletWebApplication(String webApplicationName);
+    public void removePortletWebApplication(User user, String webApplicationName);
+
+    /**
+     * Reloads a portlet web application from the registry
+     *
+     * @param the web application name
+     */
+    public void reloadPortletWebApplication(User user, String webApplicationName);
 
     /**
      * Lists all the portlet web applications in the registry
      *
      * @return the list of web application names
      */
-    public String[] listPortletWebApplications();
+    public List listPortletWebApplications();
 
 }
