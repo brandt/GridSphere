@@ -62,7 +62,7 @@ public class ActionPortlet extends AbstractPortlet {
     protected void setNextState(PortletRequest request, String state) {
         String id = request.getPortletSettings().getConcretePortletID();
         request.setAttribute(id + ".state", state);
-        log.error("in ActionPortlet in setNextState: setting state to " + state);
+        log.debug("in ActionPortlet in setNextState: setting state to " + state);
     }
 
     /**
