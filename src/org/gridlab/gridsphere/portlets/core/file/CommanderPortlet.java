@@ -1,6 +1,6 @@
 /**
  * @author <a href="mailto:tkucz@icis.pcz.pl">Tomasz Kuczynski</a>
- * @version 0.9 2004/03/30
+ * @version 0.91 2004/03/30
  */
 package org.gridlab.gridsphere.portlets.core.file;
 
@@ -12,28 +12,24 @@ import org.gridlab.gridsphere.services.core.secdir.SecureDirectoryService;
 import org.gridlab.gridsphere.services.core.secdir.ResourceInfo;
 import org.apache.oro.text.perl.Perl5Util;
 import org.apache.oro.text.perl.MalformedPerl5PatternException;
+import org.apache.commons.fileupload.DiskFileUpload;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.FileItem;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringBufferInputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.Enumeration;
-
-import com.oreilly.servlet.MultipartRequest;
+import java.util.*;
 
 public class CommanderPortlet extends AbstractPortlet {
     private static final int MAX_REQUEST_SIZE = 5 * 1024 * 1024; //5 Mb
     private Perl5Util util = new Perl5Util();
     private static Map userDatas = java.util.Collections.synchronizedMap(new HashMap());
-    private static String tmpdir;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
-        tmpdir = config.getServletContext().getRealPath("/WEB-INF/secure");
     }
 
     public void actionPerformed(ActionEvent event) {
@@ -54,33 +50,52 @@ public class CommanderPortlet extends AbstractPortlet {
             userData.setPath(sideParam, newDir);
             readDirectories(request, event.getPortletResponse(), userData);
         } else if (action.equals("explorer")) {
-            String sideParam = request.getParameter("side");
             try {
-                MultipartRequest multipartRequest = new MultipartRequest(request, tmpdir + "/" + userID, MAX_REQUEST_SIZE);
-                SecureDirectoryService secureDirectoryService = (SecureDirectoryService) getPortletConfig().getContext().getService(SecureDirectoryService.class);
-                String formAction = multipartRequest.getParameter("formAction");
-                if (formAction.equals("upload")) {
-                    String name = "file";
-                    String filename = multipartRequest.getFilesystemName(name);
+                HashMap requestData = new HashMap();
 
-                    File tmpFile = multipartRequest.getFile(name);
-                    if (tmpFile != null) {
-                        String path = userData.getPath(sideParam);
-                        secureDirectoryService.writeFromFile(request.getUser(), "commander", path + filename, tmpFile);
-                        tmpFile.delete();
+                DiskFileUpload upload = new DiskFileUpload();
+                upload.setSizeThreshold(MAX_REQUEST_SIZE);
+                List items = upload.parseRequest(request);
+
+                Iterator iter = items.iterator();
+                while (iter.hasNext()) {
+                    FileItem item = (FileItem) iter.next();
+                    if (item.isFormField()) {
+                        requestData.put(item.getFieldName(), item.getString());
+                    } else {
+                        requestData.put(item.getFieldName(), item);
+                    }
+                }
+                SecureDirectoryService secureDirectoryService = (SecureDirectoryService) getPortletConfig().getContext().getService(SecureDirectoryService.class);
+                String sideParam = request.getParameter("side");
+                String formAction = (String) requestData.get("formAction");
+
+                if (formAction.equals("upload")) {
+                    FileItem fileItem = (FileItem) requestData.get("file");
+                    String filename = fileItem.getName();
+
+                    if (util.match("m!/([^/]+)$!", filename)) {
+                        filename = util.group(1);
                     }
 
+                    filename = util.substitute("s! !!g", filename);
+
+                    String path = userData.getPath(sideParam);
+                    File file = secureDirectoryService.getFile(request.getUser(), "commander", path + filename);
+                    fileItem.write(file);
                 } else if (formAction.equals("touch")) {
-                    String resourceName = multipartRequest.getParameter("resourceName");
+                    String resourceName = (String) requestData.get("resourceName");
                     if (resourceName != null && !resourceName.equals("")) {
                         String path = userData.getPath(sideParam);
+                        resourceName = util.substitute("s! !!g", resourceName);
                         File newFile = secureDirectoryService.getFile(request.getUser(), "commander", path + resourceName);
                         newFile.createNewFile();
                     }
                 } else if (formAction.equals("mkdir")) {
-                    String resourceName = multipartRequest.getParameter("resourceName");
+                    String resourceName = (String) requestData.get("resourceName");
                     if (resourceName != null && !resourceName.equals("")) {
                         String path = userData.getPath(sideParam);
+                        resourceName = util.substitute("s! !!g", resourceName);
                         File newDirectory = secureDirectoryService.getFile(request.getUser(), "commander", path + resourceName);
                         newDirectory.mkdir();
                     }
@@ -95,11 +110,14 @@ public class CommanderPortlet extends AbstractPortlet {
                             userData.getLeftResourceList() :
                             userData.getRightResourceList());
 
-                    Enumeration params = multipartRequest.getParameterNames();
-                    while (params.hasMoreElements()) {
-                        String param = (String) params.nextElement();
-                        if (util.match("m!^" + sideParam + "_(\\d)+$!", param)) {
-                            secureDirectoryService.saveResourceMove(request.getUser(), "commander", sourcePath + resources[Integer.parseInt(util.group(1))].getResource(), destinationPath + resources[Integer.parseInt(util.group(1))].getResource());
+                    Iterator params = items.iterator();
+                    while (params.hasNext()) {
+                        FileItem item = (FileItem) params.next();
+                        if (item.isFormField()) {
+                            String param = item.getFieldName();
+                            if (util.match("m!^" + sideParam + "_(\\d)+$!", param)) {
+                                secureDirectoryService.saveResourceMove(request.getUser(), "commander", sourcePath + resources[Integer.parseInt(util.group(1))].getResource(), destinationPath + resources[Integer.parseInt(util.group(1))].getResource());
+                            }
                         }
                     }
                 } else if (formAction.equals("copy")) {
@@ -113,11 +131,14 @@ public class CommanderPortlet extends AbstractPortlet {
                             userData.getLeftResourceList() :
                             userData.getRightResourceList());
 
-                    Enumeration params = multipartRequest.getParameterNames();
-                    while (params.hasMoreElements()) {
-                        String param = (String) params.nextElement();
-                        if (util.match("m!^" + sideParam + "_(\\d)+$!", param)) {
-                            secureDirectoryService.saveResourceCopy(request.getUser(), "commander", sourcePath + resources[Integer.parseInt(util.group(1))].getResource(), destinationPath + resources[Integer.parseInt(util.group(1))].getResource());
+                    Iterator params = items.iterator();
+                    while (params.hasNext()) {
+                        FileItem item = (FileItem) params.next();
+                        if (item.isFormField()) {
+                            String param = item.getFieldName();
+                            if (util.match("m!^" + sideParam + "_(\\d)+$!", param)) {
+                                secureDirectoryService.saveResourceCopy(request.getUser(), "commander", sourcePath + resources[Integer.parseInt(util.group(1))].getResource(), destinationPath + resources[Integer.parseInt(util.group(1))].getResource());
+                            }
                         }
                     }
                 } else if (formAction.equals("delete")) {
@@ -131,27 +152,31 @@ public class CommanderPortlet extends AbstractPortlet {
                             userData.getPath("right") :
                             userData.getPath("left"));
 
-                    Enumeration params = multipartRequest.getParameterNames();
-                    while (params.hasMoreElements()) {
-                        String param = (String) params.nextElement();
-                        try {
-                            if (util.match("m!^" + sideParam + "_(\\d)+$!", param)) {
-                                String resourcePath = path + resources[Integer.parseInt(util.group(1))].getResource();
-                                if (!util.match("m#^" + resourcePath + "#", checkPath))
-                                    secureDirectoryService.deleteResource(request.getUser(), "commander", resourcePath, true);
-
+                    Iterator params = items.iterator();
+                    while (params.hasNext()) {
+                        FileItem item = (FileItem) params.next();
+                        if (item.isFormField()) {
+                            String param = item.getFieldName();
+                            try {
+                                if (util.match("m!^" + sideParam + "_(\\d)+$!", param)) {
+                                    String resourcePath = path + resources[Integer.parseInt(util.group(1))].getResource();
+                                    if (!util.match("m#^" + resourcePath + "#", checkPath))
+                                        secureDirectoryService.deleteResource(request.getUser(), "commander", resourcePath, true);
+                                }
+                            } catch (MalformedPerl5PatternException e) {
                             }
-                        } catch (MalformedPerl5PatternException e) {
                         }
                     }
                 }
                 readDirectories(request, event.getPortletResponse(), userData);
-            } catch (IOException e) {
-                log.error("Unable to parse request data", e);
+            } catch (FileUploadException e) {
+                log.error("Unable to parse request", e);
             } catch (PortletServiceUnavailableException e) {
                 log.error("Secure service unavailable", e);
             } catch (PortletServiceNotFoundException e) {
                 log.error("Secure service not found", e);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
             }
         } else if (action.equals("editfile")) {
             String sideParam = request.getParameter("side");
