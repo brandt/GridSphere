@@ -8,12 +8,14 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.TagSupport;
+import javax.servlet.jsp.tagext.BodyTagSupport;
 
-public class FormTag extends TagSupport {
+public class FormTag extends BodyTagSupport {
 
     private boolean isMultipart = false;
     private String action = new String();
     private String method = "POST";
+    private PortletURI someURI;
 
     public void setAction(String action) {
         this.action =action;
@@ -39,29 +41,28 @@ public class FormTag extends TagSupport {
         return isMultipart;
     }
 
-    public String createActionURI() {
-        PortletResponse res = (PortletResponse)pageContext.getAttribute("portletResponse");
-        PortletURI someURI = res.createURI();
-        DefaultPortletAction anAction = new DefaultPortletAction(action);
-        someURI.addAction(anAction);
-        pageContext.setAttribute("_uri", someURI);
-        return someURI.toString();
+    public void createActionURI() {
+            PortletResponse res = (PortletResponse)pageContext.getAttribute("portletResponse");
+            someURI = res.createURI();
+            DefaultPortletAction portletAction = new DefaultPortletAction(action);
+            pageContext.setAttribute("_action", portletAction);
     }
 
     public int doStartTag() throws JspException {
         createActionURI();
+        return EVAL_BODY_BUFFERED;
+    }
+
+    public int doEndTag() throws JspTagException {
+
         try {
             JspWriter out = pageContext.getOut();
 
-            //out.print("<script language=\"JavaScript\">");
-            //out.print("function hello() {");
-            //out.print("    alert(\"How's it going?\")");
-            //out.print("}");
-            //out.print("</script>");
-
             out.print("<form ");
             out.print("action=\"");
-            out.print(createActionURI());
+            DefaultPortletAction action = (DefaultPortletAction)pageContext.getAttribute("_action");
+            someURI.addAction(action);
+            if (someURI != null) out.print(someURI.toString());
             out.print("\" method=\"");
             out.print(method);
             out.print("\"");
@@ -69,16 +70,8 @@ public class FormTag extends TagSupport {
                 out.print(" enctype=\"multipart/form-data\"");
             }
             out.println(">");
-            //out.print(" onSubmit=\"hello()\" >");
-        } catch (Exception e) {
-            throw new JspTagException(e.getMessage());
-        }
-        return EVAL_BODY_INCLUDE;
-    }
 
-    public int doEndTag() throws JspTagException {
-        try {
-            JspWriter out = pageContext.getOut();
+            bodyContent.writeOut(getPreviousOut());
             out.print("</form>");
         } catch (Exception e) {
             throw new JspTagException(e.getMessage());
