@@ -18,6 +18,12 @@ Version:    $Id$
 </sect1>
 
 <sect1>
+    <title>GridSphere core services</title>
+    Several service options can be configured in <filename></filename>
+
+
+</sect1>
+<sect1>
     <title>Initialized Portlet Web Applications</title>
         When deployed, GridSphere requires access to deployed portlet web applications. Since portlets are packaged according
         to the web application repository (WAR) format defined in the Java 2.3 Servlet Specification, the names of the

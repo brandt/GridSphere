@@ -80,13 +80,15 @@ Version:    $Id$
         <listitem><para>Unzip tomcat into your preferred location and set the CATALINA_HOME environment to point to this location <important>If using Windows, set the path with forward slashes e.g C:/MyApps/MyTomcat-4.29!</important></para></listitem>
         <listitem><para>The Portlet Manager Portlet requires the Tomcat manager webapp to be configured to
     allow the gridsphere user to manage web applications. You must modify
-            <filename>$CATALINA_HOME/conf/tomcat-users.xml</filename> and make sure the following line is there:
+            <filename>$CATALINA_HOME/conf/tomcat-users.xml</filename> and create a user with the manger role. An example is shown:
             <programlisting><literallayout>
 <![CDATA[
 <user username="gridsphere" password="gridsphere" roles="manager"/>
  ]]>
             </literallayout></programlisting>
-        </para>
+         </para>
+            <para>You must edit the file <filename>webapps/gridsphere/WEB-INF/GridSphereServices.xml</filename> and edit the
+            user name and password used in the first Portlet Manager Service entry to be the name and password used in the tomcat-users.xml.</para>
             <para>To ensure that clients can't access the manager webapp directly, modify
                 <filename>$CATALINA_HOME/conf/server.xml</filename>
 	with the following where $CATALINA_HOME is replaced with the actual path to Tomcat e.g. "/usr/local/tomcat":
