@@ -54,7 +54,7 @@
 
         <replace file="${project.dir}/build.xml"
                  token="@USE_JSR@"
-                 value="${use.jsr}"/>
+                 value="${which}"/>
 
         <copy file="config/build/build.properties" tofile="${project.dir}/build.properties" filtering="true"/>
         <replace file="${project.dir}/build.properties"
@@ -87,6 +87,7 @@
         <copy file="config/template/hibernate.properties" todir="${project.dir}/webapp/WEB-INF/persistence"/>
 
         <antcall target="checkjsr"/>
+        <antcall target="checkgs"/>
 
         <replace file="${project.dir}/webapp/WEB-INF/web.xml" token="@PROJECT_TITLE@"
             value="${project.title}"/>
@@ -104,10 +105,17 @@
     </target>
 
     <target name="checkjsr" if="use.jsr">
+        <echo message="goddamn it"/>
         <copy overwrite="true" file="config/template/gridsphere-portlet-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/gridsphere-portlet.xml"/>
         <copy overwrite="true" file="config/template/portlet-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/portlet.xml"/>
         <copy overwrite="true" file="config/template/layout-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/layout.xml"/>
         <copy overwrite="true" file="config/template/web-jsr.xml" tofile="${project.dir}/webapp/WEB-INF/web.xml"/>
+        <move file="${project.dir}/webapp/WEB-INF/PortletServices.xml" tofile="${project.dir}/webapp/WEB-INF/PortletServices-jsr.xml"/>
     </target>
+
+    <target name="checkgs" unless="use.jsr">
+        <delete file="${project.dir}/webapp/WEB-INF/portlet.xml"/>
+    </target>
+
 
 </project>
