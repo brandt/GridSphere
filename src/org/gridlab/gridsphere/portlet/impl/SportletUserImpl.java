@@ -5,21 +5,28 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
+import org.exolab.castor.jdo.Database;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
+import org.gridlab.gridsphere.core.persistence.castor.Attribute;
+import org.gridlab.gridsphere.portlet.PortletLog;
 
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * The Role interface is an abstract view on the user-specific data.
  * Apart from a set of pre-defined, fixed set of attributes,
  * the interface gives access to user data as well.
  */
-public class SportletUserImpl extends BaseObject implements SportletUser  {
+
+
+public class SportletUserImpl extends BaseObject implements SportletUser {
+
+    protected transient static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(SportletUserImpl.class);
 
     // store used to maintain user attributes
-    private Hashtable store = new Hashtable();
+    private Hashtable Store = new Hashtable();
 
     // Data fields that make up the Role object
     private String FamilyName;
@@ -30,25 +37,14 @@ public class SportletUserImpl extends BaseObject implements SportletUser  {
     private String UserID;
     private long LastLoginTime;
 
-    /**
-     * Returns the value of the attribute with the given name,
-     * or null if no attribute with the given name exists.
-     *
-     * @param name the attribute name
-     * @return the attribute value
-     */
-    public Object getAttribute(String name) {
-        return store.get(name);
+    public Vector Attributes = new Vector();
+
+    public void setAttribute(String name, Object value) {
+        Store.put(name, value);
     }
 
-    /**
-     * Sets the value of the attribute with the given name.
-     *
-     * @param name the attribute name
-     * @param value the attribute value
-     */
-    public void setAttribute(String name, Object value) {
-        store.put(name, value);
+    public Object getAttribute(String name) {
+        return Store.get(name);
     }
 
     /**
@@ -58,7 +54,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser  {
      * @return an enumeration of attribute names
      */
     public Enumeration getAttributeNames() {
-        return store.keys();
+        return Store.elements();
     }
 
     /**
@@ -191,6 +187,43 @@ public class SportletUserImpl extends BaseObject implements SportletUser  {
      */
     public void setLastLoginTime(long lastLoginTime) {
         this.LastLoginTime = lastLoginTime;
+    }
+
+    private void convert2vector() {
+        Enumeration allkeys = Store.keys();
+        Attribute ha = null;
+        while (allkeys.hasMoreElements()) {
+            String key = (String) allkeys.nextElement();
+            ha = new Attribute(key, (String) Store.get(key));
+            ha.setUser(this);
+            Attributes.add(ha);
+        }
+    }
+
+    private void convert2hash() {
+        for (int i = 0; i < Attributes.size(); i++) {
+            Attribute ha = (Attribute) Attributes.get(i);
+            Store.put((String) ha.getKey(), (String) ha.getValue());
+        }
+    }
+
+    public Vector getAttributes() {
+        return Attributes;
+    }
+
+    public void setAttributes(Vector attributes) {
+        Attributes = attributes;
+    }
+
+    public void jdoBeforeCreate(Database database) throws Exception {
+        super.jdoBeforeCreate(database);
+        convert2vector();
+    }
+
+    public Class jdoLoad(short i) throws Exception {
+        convert2hash();
+        return super.jdoLoad(i);
+
     }
 
     /**
