@@ -46,11 +46,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>ManagerPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.manager.PortletApplicationManager</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>RSSPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.RSSPortlet</servlet-class>
     </servlet>
@@ -78,11 +73,6 @@
     <servlet-mapping>
        <servlet-name>DemoPortlet</servlet-name>
        <url-pattern>/demo</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-       <servlet-name>ManagerPortlet</servlet-name>
-       <url-pattern>/appmanager</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

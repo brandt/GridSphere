@@ -35,6 +35,7 @@ Copyright:
     <property name="conf.dir"       value="conf"/>
     <property name="gswebapp.dir"   value="webapps/gridsphere"/>
     <property name="corewebapp.dir" value="webapps/coreportlets"/>
+    <property name="manwebapp.dir"  value="webapps/gsmanager"/>
     <property name="test.dir"       value="tests"/>
     <property name="perf.dir"       value="perf"/>
     <property name="dist.dir"       value="${Name}-${version}" />
@@ -260,15 +261,26 @@ Copyright:
     <!-- =================================================================== -->
     <target name="core-portlets-jar" depends="compile" description="Create ${build.lib}/coreportlets.jar">
         <jar jarfile="${build.lib}/coreportlets.jar" basedir="${classes.dir}" >
-            <include name="org/gridlab/gridsphere/portlets/**" />
+            <include name="org/gridlab/gridsphere/portlets/core/**" />
             <include name="${conf.dir}/log4j.properties"/>
         </jar>
     </target>
 
     <!-- =================================================================== -->
+    <!-- Creates GridSphere manager portlet                                  -->
+    <!-- =================================================================== -->
+    <target name="manager-portlet-jar" depends="compile" description="Create ${build.lib}/coreportlets.jar">
+        <jar jarfile="${build.lib}/gsmanager-portlet.jar" basedir="${classes.dir}" >
+            <include name="org/gridlab/gridsphere/portlets/manager/**" />
+            <include name="${conf.dir}/log4j.properties"/>
+        </jar>
+    </target>
+
+
+    <!-- =================================================================== -->
     <!-- Creates all JAR's                                                   -->
     <!-- =================================================================== -->
-    <target name="jar" depends="gridsphere-jar, portlet-api-jar, portlet-widgets-jar" description="Creates all jars"/>
+    <target name="jar" depends="gridsphere-jar, portlet-api-jar, portlet-widgets-jar, manager-portlet-jar" description="Creates all jars"/>
 
 
 <!-- +++++++++++++++++ END JARCREATION +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
@@ -439,7 +451,7 @@ Copyright:
     <!-- ================================================================= -->
     <!-- Deploys core portlets to a local server                              -->
     <!-- ================================================================= -->
-    <target name="deploy" depends="deploy-prepare, db-hsqldb, deploy-gs, deploy-portlets" description="deploys gs"/>
+    <target name="deploy" depends="deploy-prepare, db-hsqldb, deploy-gs, deploy-portlets, deploy-manager-portlet" description="deploys gs"/>
 
 
     <!-- ================================================================= -->
@@ -511,6 +523,20 @@ Copyright:
         <copy file="${build.lib}/coreportlets.jar" todir="${env.CATALINA_HOME}/webapps/coreportlets/WEB-INF/lib"/>
         <copy todir="${env.CATALINA_HOME}/webapps/coreportlets">
             <fileset dir="${build.war}/coreportlets"/>
+        </copy>
+    </target>
+
+    <!-- ================================================================= -->
+    <!-- Deploys GS manager portlet to a local server                           -->
+    <!-- ================================================================= -->
+    <target name="deploy-manager-portlet" depends="manager-portlet-jar" description="Deploys GridSphere manager portlet to a local server">
+        <copy todir="${build.war}/gsmanager">
+            <fileset dir="${manwebapp.dir}"/>
+        </copy>
+        <copy file="${build.lib}/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/${manwebapp.dir}/WEB-INF/lib"/>
+        <copy file="${build.lib}/gsmanager-portlet.jar" todir="${env.CATALINA_HOME}/${manwebapp.dir}/WEB-INF/lib"/>
+        <copy todir="${env.CATALINA_HOME}/${manwebapp.dir}">
+            <fileset dir="${build.war}/gsmanager"/>
         </copy>
     </target>
 
