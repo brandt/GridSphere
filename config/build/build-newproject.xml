@@ -16,8 +16,8 @@
         <echo>Updating a Portlet Project</echo>
         <input message="Please enter a Project Title e.g. Cool Portlets" addproperty="project.title"/>
 
-        <input message="Please enter the Project Name e.g. the lowercase directory name e.g. coolportlets" addproperty="newproject.name"/>
-        <property name="newproject.dir" value="projects/${newproject.name}"/>
+        <input message="Please enter the Project Name e.g. the lowercase directory name e.g. coolportlets" addproperty="project.name"/>
+        <property name="newproject.dir" value="projects/${project.name}"/>
         <echo message="Overwriting ${newproject.dir}/build.xml"/>
         <copy file="config/build/build.properties" tofile="${newproject.dir}/build.properties" overwrite="true"/>
         <copy file="config/build/build.project.xml" tofile="${newproject.dir}/build.xml" overwrite="true"/>
@@ -26,7 +26,7 @@
                  value="${project.title}"/>
         <replace file="${newproject.dir}/build.xml"
                  token="@PROJECT_NAME@"
-                 value="${newproject.name}"/>
+                 value="${project.name}"/>
     </target>
 
     <!-- =================================================================== -->
@@ -37,9 +37,9 @@
         <mkdir dir="projects"/>
         <input message="Please enter a Project Title e.g. Cool Portlets" addproperty="project.title"/>
 
-        <input message="Please enter a Project Name this will be used for your portlet web application and should be lowercase e.g. coolportlets" addproperty="newproject.name"/>
+        <input message="Please enter a Project Name this will be used for your portlet web application and should be lowercase e.g. coolportlets" addproperty="project.name"/>
 
-        <property name="project.dir" value="projects/${newproject.name}"/>
+        <property name="project.dir" value="projects/${project.name}"/>
 
         <antcall target="check-project-exists"/>
         <fail if="${new-project-exists}" message="This project already exists! Please delete the old one in ${project.dir}"/>
