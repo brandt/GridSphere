@@ -88,7 +88,7 @@ Copyright:
 	<fileset dir="${env.ANT_HOME}/lib">
  	    <include name="*.jar"/>
         </fileset>
-	
+
         <!-- this is for the servlet JARs in Tomcat 4.1.x -->
         <fileset dir="${env.CATALINA_HOME}/common/lib">
             <include name="activation.jar"/>
@@ -619,6 +619,7 @@ Copyright:
         <copy overwrite="true" todir="${env.CATALINA_HOME}/shared/lib">
             <fileset dir="lib">
                 <exclude name="*.LICENSE"/>
+                <exclude name="*.txt"/>
             </fileset>
             <fileset dir="${build.lib}">
                 <exclude name="gridsphere-test.jar"/>
@@ -629,6 +630,8 @@ Copyright:
             </fileset>
         </copy>
 
+        <copy file="webapps/log4j.xml" todir="${env.CATALINA_HOME}/common/classes"/>
+        
         <mkdir dir="${env.CATALINA_HOME}/webapps/gridsphere/docs"/>
         <copy todir="${env.CATALINA_HOME}/webapps/gridsphere/docs">
             <fileset dir="${gridsphere.build}/docs"/>
@@ -639,7 +642,6 @@ Copyright:
         <copy overwrite="true" file="${build.lib}/coreportlets.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
 
     </target>
-
 
     <!-- =================================================================== -->
     <!-- Deploys GridSphere to Tomcat                                        -->
