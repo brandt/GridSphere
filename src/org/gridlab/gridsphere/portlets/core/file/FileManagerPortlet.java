@@ -63,7 +63,7 @@ public class FileManagerPortlet extends ActionPortlet {
 
     public void uploadFile(FormEvent event) throws PortletException {
         log.debug("in FileManagerPortlet: doUploadFile");
-        checkUserMethod(event);
+        checkUserRole(event);
         try {
             FileInputBean fi = event.getFileInputBean("userfile");
             User user = event.getPortletRequest().getUser();
@@ -101,7 +101,7 @@ public class FileManagerPortlet extends ActionPortlet {
 
     public void deleteFile(FormEvent event) throws PortletException {
         log.debug("in FileManagerPortlet: deleteFile");
-        checkUserMethod(event);
+        checkUserRole(event);
         // Files can be deleted from edit or view pages
         // In view page the file is in a listbox
         ListBoxBean lb = event.getListBoxBean("filelist");
@@ -127,7 +127,7 @@ public class FileManagerPortlet extends ActionPortlet {
 
     public void saveFile(FormEvent event) throws PortletException {
         log.debug("in FileManagerPortlet: saveFile");
-        checkUserMethod(event);
+        checkUserRole(event);
         User user = event.getPortletRequest().getUser();
         //PortletRequest req = event.getPortletRequest();
         //String fname = event.getPortletAction().getParameter("fileName");
@@ -154,7 +154,7 @@ public class FileManagerPortlet extends ActionPortlet {
 
     public void downloadFile(FormEvent event) throws PortletException {
         log.debug("in FileManagerPortlet: downloadFile");
-        checkUserMethod(event);
+        checkUserRole(event);
         ListBoxBean lb = event.getListBoxBean("filelist");
         List files = lb.getSelectedValues();
         PortletRequest req = event.getPortletRequest();
@@ -169,7 +169,7 @@ public class FileManagerPortlet extends ActionPortlet {
     }
 
     public void editFile(FormEvent event) throws PortletException {
-        checkUserMethod(event);
+        checkUserRole(event);
         log.debug("in FileManagerPortlet: viewFile");
         ListBoxBean lb = event.getListBoxBean("filelist");
         PortletRequest req = event.getPortletRequest();
