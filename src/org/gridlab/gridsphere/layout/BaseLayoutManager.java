@@ -1,5 +1,6 @@
 /*
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:wehren@aei.mpg.de">Oliver Wehrens</a>
  * @version $Id$
  */
 package org.gridlab.gridsphere.layout;
@@ -78,6 +79,9 @@ public abstract class BaseLayoutManager extends BasePortletComponent implements 
 
         while (it.hasNext()) {
             p = (PortletComponent)it.next();
+            if (p.getComponentID() == id) {
+                p.setWidth("");
+            }
             p.setVisible(true);
         }
     }
