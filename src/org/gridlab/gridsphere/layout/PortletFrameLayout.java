@@ -157,6 +157,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      * @param event a portlet frame event
      */
     public void handleFrameMinimized(PortletFrameEvent event) {
+        //System.err.println("in PortletFrameLayout Minimized");
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
             Iterator it = scomponents.iterator();
@@ -166,18 +167,13 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
                 p = (PortletComponent) it.next();
                 if (p.getComponentID() == id) {
                     p.setWidth("");
-                    if (p instanceof PortletFrame) {
-                        PortletFrame f = (PortletFrame)p;
-                        System.err.println(f.getPortletClass());
-                    }
-
-                } else {
-                    p.setWidth(p.getDefaultWidth());
-                    p.setVisible(true);
                 }
+                p.setWidth(p.getDefaultWidth());
+                p.setVisible(true);
             }
         }
     }
+
 
     /**
      * Performed when a frame restore event has been received
@@ -185,6 +181,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      * @param event a portlet frame event
      */
     public void handleFrameRestore(PortletFrameEvent event) {
+        //System.err.println("in PortletFrameLayout Resized");
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
             Iterator it = scomponents.iterator();
