@@ -23,9 +23,7 @@ public class SportletSettings implements PortletSettings {
     private Hashtable store = new Hashtable();
     private List roleList = new Vector();
     private List groupList = new Vector();
-    private List langList;
-
-
+    private List langList = new Vector();
 
     /**
      * SportletSettings constructor
@@ -39,7 +37,7 @@ public class SportletSettings implements PortletSettings {
 
         ConcretePortletInfo portlet = portletApp.getConcretePortletInfo();
 
-        List langList = portlet.getLanguageList();
+        langList = portlet.getLanguageList();
 
         // Stick <config-param> in store
         Iterator configParamsIt = portletApp.getConfigParamList().iterator();
@@ -113,9 +111,10 @@ public class SportletSettings implements PortletSettings {
      * @return the title of the portlet
      */
     public String getTitle(Locale locale, Client client) {
-        while (langList.iterator().hasNext()) {
-            LanguageInfo langInfo = (LanguageInfo)langList.iterator().next();
-            if (langInfo.getLocale().equals(locale)) {
+        Iterator it = langList.iterator();
+        while (it.hasNext()) {
+            LanguageInfo langInfo = (LanguageInfo)it.next();
+            if (langInfo.getLocale().equals(locale.toString())) {
                 return langInfo.getTitle();
             }
         }
