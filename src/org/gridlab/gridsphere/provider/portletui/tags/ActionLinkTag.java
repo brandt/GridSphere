@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ActionLinkBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -19,6 +20,39 @@ public class ActionLinkTag extends ActionTag {
 
     protected ActionLinkBean actionlink = null;
     protected String key = null;
+    protected String style = TextBean.MSG_INFO;
+
+    /**
+     * Sets the style of the text: Available styles are
+     * <ul>
+     * <li>nostyle</li>
+     * <li>error</li>
+     * <li>info</li>
+     * <li>status</li>
+     * <li>alert</li>
+     * <li>success</li>
+     *
+     * @param style the text style
+     */
+    public void setStyle(String style) {
+        this.style = style;
+    }
+
+    /**
+     * Returns the style of the text: Available styles are
+     * <ul>
+     * <li>nostyle</li>
+     * <li>error</li>
+     * <li>info</li>
+     * <li>status</li>
+     * <li>alert</li>
+     * <li>success</li>
+     *
+     * @return the text style
+     */
+    public String getStyle() {
+        return style;
+    }
 
     /**
      * Sets the action link key used to locate localized text
@@ -48,6 +82,7 @@ public class ActionLinkTag extends ActionTag {
         } else {
             actionlink = new ActionLinkBean();
             this.setBaseComponentBean(actionlink);
+            actionlink.setStyle(style);
         }
 
         paramBeans = new ArrayList();

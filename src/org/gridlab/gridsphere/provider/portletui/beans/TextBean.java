@@ -21,6 +21,10 @@ public class TextBean extends BaseComponentBean implements TagBean {
     public static final String MSG_ALERT = "portlet-msg-alert";
     public static final String MSG_SUCCESS = "portlet-msg-success";
 
+    public static final String MSG_ITALIC = "italic";
+    public static final String MSG_BOLD = "bold";
+    public static final String MSG_UNDERLINE = "underline";
+
     protected String style = "info";
 
     /**
@@ -103,6 +107,12 @@ public class TextBean extends BaseComponentBean implements TagBean {
             this.cssStyle = MSG_SUCCESS;
         } else if (style.equalsIgnoreCase("nostyle")) {
             return value;
+        } else if (style.equalsIgnoreCase(TextBean.MSG_BOLD)) {
+            return "<b>" + value + "</b>";
+        } else if (style.equalsIgnoreCase(TextBean.MSG_ITALIC)) {
+            return "<i>" + value + "</i>";
+        } else if (style.equalsIgnoreCase(TextBean.MSG_UNDERLINE)) {
+            return "<u>" + value + "</u>";
         }
         return "<span class=\"" + cssStyle + "\">" + value + "</span>";
     }

@@ -26,6 +26,11 @@ public class TableCellBean extends BeanContainer implements TagBean {
         this.cssStyle = TABLE_CELL_STYLE;
     }
 
+    public TableCellBean(BaseComponentBean compBean) {
+        super();
+        this.addBean(compBean);
+    }
+
     /**
      * Constructs a table cell bean from a supplied portlet request and bean identifier
      *

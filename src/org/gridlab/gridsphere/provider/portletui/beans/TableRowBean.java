@@ -22,6 +22,14 @@ public class TableRowBean extends BeanContainer {
     }
 
     /**
+     * Constructs a default table row bean
+     */
+    public TableRowBean(BaseComponentBean compBean) {
+        super();
+        this.addBean(compBean);
+    }
+
+    /**
      * Constructs a table row bean from a supplied portlet request and bean identifier
      *
      * @param req the portlet request

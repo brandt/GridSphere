@@ -47,6 +47,11 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <name>style</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>portletMode</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
