@@ -10,6 +10,8 @@ import org.gridlab.gridsphere.portlet.impl.GuestUser;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
 import org.gridlab.gridsphere.services.container.parsing.ServletParsingService;
+import org.gridlab.gridsphere.event.impl.ActionEventImpl;
+import org.gridlab.gridsphere.event.ActionEvent;
 
 
 import javax.servlet.ServletConfig;
@@ -32,7 +34,6 @@ import java.util.Properties;
 public class GridSphere extends HttpServlet {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(GridSphere.class);
-    private static Properties props = new Properties();
 
     private static SportletServiceFactory factory = SportletServiceFactory.getInstance();
 
@@ -52,7 +53,6 @@ public class GridSphere extends HttpServlet {
         synchronized (this.getClass()) {
             try {
                 configure(config);
-                portletConfig = new SportletConfig(config);
                 log.info("init success");
 
             } catch (Exception e) {
@@ -68,25 +68,13 @@ public class GridSphere extends HttpServlet {
 
         log.info("configure() in GridSphere");
         log.info("Application Server info:");
-        log.info(context.getServerInfo() + context.getMajorVersion() + context.getMinorVersion());
-
-        String appRoot = context.getRealPath("");
-        String serviceProps = config.getInitParameter("PortletServices.properties");
-        String propsPath = appRoot + "/" + serviceProps;
-        try {
-            fistream = new FileInputStream(propsPath);
-        } catch (FileNotFoundException e) {
-            System.err.println("ERROR: Unable to find properties file: " + propsPath);
-            System.err.println("Make sure location is specified in server.xml " + propsPath);
-        }
-        props.load(fistream);
 
         // Start services
 
         parseService =
-                (ServletParsingService) factory.createPortletService(ServletParsingService.class, props, config, true);
+                (ServletParsingService) factory.createPortletService(ServletParsingService.class, config, true);
         registryService =
-                (PortletRegistryService) factory.createPortletService(PortletRegistryService.class, props, config, true);
+                (PortletRegistryService) factory.createPortletService(PortletRegistryService.class, config, true);
 
         Iterator it = registryService.getRegisteredPortlets().iterator();
         while (it.hasNext()) {
@@ -101,6 +89,10 @@ public class GridSphere extends HttpServlet {
             abPortlet.init(portletConfig);
             abPortlet.initConcrete(portletSettings);
         }
+
+        // Get a portlet config object
+        portletConfig = parseService.getPortletConfig(config);
+
         // read portlet.xml and retrieve portlet info
         log.info("configure() in GridSphere");
 
@@ -142,8 +134,7 @@ public class GridSphere extends HttpServlet {
         portletRequest = parseService.getPortletRequest(req);
         portletResponse = parseService.getPortletResponse(res);
 
-        // Get the action tag indicating the portlet to execute
-        String action = portletRequest.getParameter(GridSphereProperties.ACTION);
+
 
         // Check if user is guest
         User user = portletRequest.getUser();
@@ -181,6 +172,20 @@ public class GridSphere extends HttpServlet {
         //helloPortlet.login(portletRequest);
 
         // For now, use cheesy request parameters.. not sure what else...
+
+
+        // Here is some code for handling actions
+        DefaultPortletAction action = (DefaultPortletAction)portletRequest.getAttribute(GridSphereProperties.ACTION);
+        ActionEvent actionEvent = new ActionEventImpl(action, ActionEvent.ACTION_NOTYETPERFORMED, portletRequest, portletResponse);
+        String portletID = action.getPortletID();
+
+        AbstractPortlet coolPortlet = registryService.getActivePortlet(portletID);
+        coolPortlet.actionNotYetPerformed(actionEvent);
+
+        actionEvent.setEventType(ActionEvent.ACTION_PERFORMED);
+        coolPortlet.actionPerformed(actionEvent);
+
+
 
         // Check for LOGIN
         String login = (String) portletRequest.getAttribute(GridSphereProperties.LOGIN);
