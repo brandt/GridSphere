@@ -75,7 +75,7 @@ public class FileManagerPortlet extends ActionPortlet {
             log.debug("fileinputbean value=" + fi.getValue());
         } catch (Exception e) {
 	        FrameBean errMsg = event.getFrameBean("errorFrame");
-	        errMsg.setValue("Unable to store uploaded file " + e.getMessage());
+	        errMsg.setValue(this.getLocalizedText(event.getPortletRequest(), "FILE_UPLOAD_FAIL"));
 	        errMsg.setStyle("error");
 	        log.error("Unable to store uploaded file ", e);
         }
@@ -130,7 +130,7 @@ public class FileManagerPortlet extends ActionPortlet {
         } catch (IOException e) {
             log.error("Error saving file:" + fileName, e);
             FrameBean error = event.getFrameBean("editError");
-            error.setValue("Unable to save file: " + fileName);
+            error.setValue(this.getLocalizedText(event.getPortletRequest(), "FILE_SAVE_FAIL") + " " + fileName);
         }
     }
 
@@ -161,7 +161,7 @@ public class FileManagerPortlet extends ActionPortlet {
             try {
                 req.setAttribute("fileName", file);
                 TextBean textBean = event.getTextBean("msg");
-                textBean.setValue("Displaying file: " + file);
+                textBean.setValue(this.getLocalizedText(req, "FILE_DISPLAY") + " " + file);
                 TextAreaBean fileTextArea = event.getTextAreaBean("fileTextArea");
                 HiddenFieldBean hidden = event.getHiddenFieldBean("fileName");
                 hidden.setValue(file);
@@ -178,14 +178,14 @@ public class FileManagerPortlet extends ActionPortlet {
             } catch (FileNotFoundException e) {
                 log.error("Error opening file:" + file, e);
                 FrameBean error = event.getFrameBean("errorFrame");
-                error.setValue("Unable to open file: " + file);
+                error.setValue(this.getLocalizedText(req, "FILE_OPEN_FAIL")+ " " + file);
                 error.setStyle(FrameBean.ERROR_TYPE);
                 setNextState(req, DEFAULT_VIEW_PAGE);
             } catch (IOException e) {
                 log.error("Error opening file:" + file, e);
                 FrameBean error = event.getFrameBean("errorFrame");
                 error.setStyle(FrameBean.ERROR_TYPE);
-                error.setValue("Unable to open file: " + file);
+                error.setValue(this.getLocalizedText(req, "FILE_OPEN_FAIL")+ " " + file);
                 setNextState(req, DEFAULT_VIEW_PAGE);
             }
         }

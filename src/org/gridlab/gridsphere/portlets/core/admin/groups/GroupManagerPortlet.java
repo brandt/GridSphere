@@ -67,7 +67,10 @@ public class GroupManagerPortlet extends ActionPortlet {
         Iterator it = groupList.iterator();
         while (it.hasNext()) {
             PortletGroup g = (PortletGroup)it.next();
-            groupDescs.add(this.aclManagerService.getGroupDescription(g));
+            System.err.println("group= " + g.getName());
+            String desc = this.aclManagerService.getGroupDescription(g);
+            System.err.println("desc=" + desc);
+            groupDescs.add(desc);
         }
         req.setAttribute("groupList", groupList);
         req.setAttribute("groupDescs", groupDescs);
@@ -214,7 +217,9 @@ public class GroupManagerPortlet extends ActionPortlet {
         HiddenFieldBean groupIDBean = evt.getHiddenFieldBean("groupID");
         String groupId = groupIDBean.getValue();
         if (groupId == null) {
-            groupId = evt.getAction().getParameter("groupEntryID");
+            String groupEntryId = evt.getAction().getParameter("groupEntryID");
+            GroupEntry entry = this.aclManagerService.getGroupEntry(groupEntryId);
+            groupId = entry.getGroup().getID();
         }
         return loadGroup(evt, groupId);
     }
@@ -233,7 +238,9 @@ public class GroupManagerPortlet extends ActionPortlet {
         // Load group
         if (!groupID.equals("")) {
             group = this.aclManagerService.getGroup(groupID);
+            System.err.println("group= " + group.getName());
             groupDescription = this.aclManagerService.getGroupDescription(group);
+            System.err.println("desc=" + groupDescription);
         }
 
         if (groupID.equals("")) {

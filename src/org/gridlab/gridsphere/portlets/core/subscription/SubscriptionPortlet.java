@@ -73,7 +73,7 @@ public class SubscriptionPortlet extends ActionPortlet {
             tr.setHeader(true);
             TableCellBean tc3 = new TableCellBean();
             TextBean text3 = new TextBean();
-            text3.setValue("Subscribe");
+            text3.setValue(this.getLocalizedText(req, "SUBSCRIPTION_SUBSCRIBE"));
             tc3.addBean(text3);
             tr.addBean(tc3);
             TableCellBean tc = new TableCellBean();
@@ -83,7 +83,7 @@ public class SubscriptionPortlet extends ActionPortlet {
             tr.addBean(tc);
             tc = new TableCellBean();
             text = new TextBean();
-            text.setValue("Description");
+            text.setValue(this.getLocalizedText(req, "SUBSCRIPTION_DESC"));
             tc.addBean(text);
             tr.addBean(tc);
             model.addTableRowBean(tr);
@@ -110,6 +110,7 @@ public class SubscriptionPortlet extends ActionPortlet {
                     if (g.equals(PortletGroupFactory.GRIDSPHERE_GROUP)) {
                         gsPortlets.add(concID);
                         cb.setDisabled(true);
+                        cb.setSelected(true);
                     }
 
                     TableRowBean newtr = new TableRowBean();
@@ -128,7 +129,13 @@ public class SubscriptionPortlet extends ActionPortlet {
                     newtr.addBean(newtc2);
                     newtc = new TableCellBean();
                     TextBean tb2 = new TextBean();
+
+                    user.getAttribute(User.LOCALE);
+
                     Locale loc = conc.getPortletSettings().getDefaultLocale();
+
+                        System.err.println("default loc: " + loc.getDisplayLanguage());
+
                     tb2.setValue(conc.getPortletSettings().getDescription(loc, null));
                     newtc.addBean(tb2);
                     newtr.addBean(newtc);
@@ -170,42 +177,11 @@ public class SubscriptionPortlet extends ActionPortlet {
             // don't allow users to remove core portlets
             if (!newlist.contains(pid) && (!gsPortlets.contains(pid))) {
                 removePortlets.add(pid);
-                System.err.println("removing " + pid);
+                //System.err.println("removing " + pid);
             }
         }
 
         layoutMgr.removeSubscribedPortlets(req, removePortlets);
-
-        // add new portlets to new tab
-        /*
-        if (!newportlets.isEmpty()) {
-            PortletPage page = layoutMgr.getPortletPage(req);
-
-            PortletTabbedPane pane = page.getPortletTabbedPane();
-            PortletTab tab = pane.getPortletTab("Untitled");
-            if (tab == null) {
-                tab = new PortletTab();
-                tab.setTitle("Untitled");
-                pane.addTab(tab);
-            }
-
-            PortletTableLayout table = new PortletTableLayout();
-
-            it = newportlets.iterator();
-            while (it.hasNext()) {
-                String pid = (String)it.next();
-                PortletRowLayout row = new PortletRowLayout();
-                PortletColumnLayout col = new PortletColumnLayout();
-                PortletFrame frame = new PortletFrame();
-                frame.setPortletClass(pid);
-                col.addPortletComponent(frame);
-                row.addPortletComponent(col);
-                table.addPortletComponent(row);
-            }
-            tab.setPortletComponent(table);
-            layoutMgr.reloadPage(req);
-        }
-        */
 
         // remove portlets
         if (!removePortlets.isEmpty()) {

@@ -88,10 +88,10 @@ public class BannerPortlet extends ActionPortlet {
         FrameBean alert = event.getFrameBean("alert");
         try {
             getPortletSettings().store();
-            alert.setValue("Display file settings have been saved");
+            alert.setValue(this.getLocalizedText(req, "BANNER_CONFIGURE"));
         } catch (IOException e) {
             log.error("Unable to save portlet settings", e);
-            alert.setValue("Unable to save display file settings!");
+            alert.setValue(this.getLocalizedText(req, "BANNER_FAILURE"));
             alert.setStyle("error");
         }
         setNextState(req, CONFIGURE_JSP);
@@ -116,10 +116,10 @@ public class BannerPortlet extends ActionPortlet {
         FrameBean alert = event.getFrameBean("alert");
         try {
             data.store();
-            alert.setValue("Display file settings have been saved");
+            alert.setValue(this.getLocalizedText(req, "BANNER_CONFIGURE"));
         } catch (IOException e) {
             log.error("Unable to save portlet data");
-            alert.setValue("Unable to save display file settings!");
+            alert.setValue(this.getLocalizedText(req, "BANNER_FAILURE"));
             alert.setStyle("error");
         }
 
@@ -140,9 +140,9 @@ public class BannerPortlet extends ActionPortlet {
         String[] list = userStorage.getUserFileList(user);
         if (list == null) {
 
-            String alertMsg = "No files listed. Please use";
+            String alertMsg = this.getLocalizedText(req, "BANNER_NOFILES_START");
             PortletURI mgrURI = res.createURI("filemanager");
-            alertMsg += " " + "<a href=\"" + mgrURI.toString() + "\"/>" + " to upload files";
+            alertMsg += " " + "<a href=\"" + mgrURI.toString() + "\"/>" + " " + this.getLocalizedText(req, "BANNER_NOFILES_END");
 
             FrameBean alert = event.getFrameBean("alert");
             alert.setValue(alertMsg);
@@ -184,12 +184,12 @@ public class BannerPortlet extends ActionPortlet {
         try {
             if (fileURL.equals("")) {
                 out = response.getWriter();
-                out.println("Unable to locate file!");
+                out.println(this.getLocalizedText(request, "BANNER_FILE_NOTFOUND"));
             } else {
                 getPortletConfig().getContext().include(fileURL, request, response);
             }
         } catch (IOException e) {
-            out.println("Unable to locate file: " + fileURL + "!");
+            out.println(this.getLocalizedText(request, "BANNER_FILE_NOTFOUND")+ " " + fileURL + "!");
             log.error("Unable to find file: " + fileURL);
         }
     }

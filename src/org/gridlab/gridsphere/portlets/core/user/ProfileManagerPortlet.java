@@ -14,6 +14,7 @@ import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerSer
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.security.acl.InvalidGroupRequestException;
 import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
+import org.gridlab.gridsphere.services.core.security.acl.GroupAction;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.security.password.Password;
 import org.gridlab.gridsphere.services.core.security.auth.LoginAuthModule;
@@ -21,6 +22,9 @@ import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.AccountRequest;
 import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
 import org.gridlab.gridsphere.services.core.user.LoginService;
+import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
+import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
+import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 
 import javax.servlet.UnavailableException;
 import java.util.*;
@@ -39,7 +43,9 @@ public class ProfileManagerPortlet extends ActionPortlet {
     private UserManagerService userManagerService = null;
     private AccessControlManagerService aclManagerService = null;
     private PasswordManagerService passwordManagerService = null;
+    private LayoutManagerService layoutMgr = null;
     private List supportedLocales = null;
+    private PortletRegistry portletRegistry = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
@@ -48,15 +54,13 @@ public class ProfileManagerPortlet extends ActionPortlet {
             this.userManagerService = (UserManagerService)config.getContext().getService(UserManagerService.class);
             this.aclManagerService = (AccessControlManagerService)config.getContext().getService(AccessControlManagerService.class);
             this.passwordManagerService = (PasswordManagerService)config.getContext().getService(PasswordManagerService.class);
+            this.portletRegistry = PortletRegistry.getInstance();
+            this.layoutMgr = (LayoutManagerService)config.getContext().getService(LayoutManagerService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
         this.log.debug("Exiting initServices()");
 
-        DEFAULT_VIEW_PAGE = "doViewUser";
-        DEFAULT_EDIT_PAGE = "doEditUser";
-        DEFAULT_HELP_PAGE = HELP_JSP;
-        DEFAULT_CONFIGURE_PAGE = "doConfigureSettings";
     }
 
     public void initConcrete(PortletSettings settings) throws UnavailableException {
@@ -69,6 +73,10 @@ public class ProfileManagerPortlet extends ActionPortlet {
             supportedLocales.add(s.trim());
         }
 
+        DEFAULT_VIEW_PAGE = "doViewUser";
+        DEFAULT_EDIT_PAGE = "doEditUser";
+        DEFAULT_HELP_PAGE = HELP_JSP;
+        DEFAULT_CONFIGURE_PAGE = "doConfigureSettings";
     }
 
     public void doViewUser(FormEvent event) {
@@ -82,14 +90,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
     public void doEditUser(FormEvent event) {
         PortletRequest req = event.getPortletRequest();
         DefaultTableModel model = setUserTable(event, false);
-        TableRowBean msgTR = new TableRowBean();
-        TableCellBean msgTC = new TableCellBean();
-        TextBean msgTB = new TextBean();
-        msgTB.setStyle(TextBean.MSG_ALERT);
-        msgTB.setValue("Please logout and log back in if you add or remove groups");
-        msgTC.addBean(msgTB);
-        msgTR.addBean(msgTC);
-        model.addTableRowBean(msgTR);
         FrameBean groupsFrame = event.getFrameBean("groupsFrame");
         groupsFrame.setTableModel(model);
         setNextState(req, EDIT_USER_JSP);
@@ -114,10 +114,10 @@ public class ProfileManagerPortlet extends ActionPortlet {
             try {
                 getPortletSettings().store();
             } catch (IOException e) {
-                msg.setValue("Unable to save locale settings!");
+                msg.setKey("PROFILE_SAVE_ERROR");
                 msg.setStyle("error");
             }
-            msg.setValue("Saved locale settings");
+            msg.setKey("PROFILE_SAVE_SUCCESS");
             msg.setStyle("success");
         }
     }
@@ -146,6 +146,8 @@ public class ProfileManagerPortlet extends ActionPortlet {
         email.setValue(user.getEmailAddress());
         email.setDisabled(disable);
 
+        TextFieldBean localeTF = event.getTextFieldBean("mylocale");
+
         // fill in locale
         String selectedValue = "";
         ListBoxBean localeLB = event.getListBoxBean("userLocale");
@@ -154,27 +156,21 @@ public class ProfileManagerPortlet extends ActionPortlet {
         if (selectedValue != null) localeLB.clear();
 
         String locale = (String)user.getAttribute(User.LOCALE);
-        Locale userLocale = null;
         if (locale == null) {
-            ListBoxItemBean unknown = new ListBoxItemBean();
-            unknown.setValue("Unspecified");
-            unknown.setSelected(true);
-            unknown.setDisabled(true);
-            localeLB.addBean(unknown);
-        } else {
-            userLocale = new Locale(locale, "", "");
+            locale = "en";
         }
+        Locale userLocale = new Locale(locale, "", "");
+
+        localeTF.setValue(userLocale.getDisplayLanguage());
+        localeTF.setDisabled(disable);
 
         String dispVal = "";
         for (int i = 0; i < supportedLocales.size(); i++) {
             ListBoxItemBean item = new ListBoxItemBean();
             String localeVal = (String)supportedLocales.get(i);
             Locale loc = new Locale(localeVal, "", "");
-            if (locale != null) {
-                dispVal = loc.getDisplayLanguage(loc);
-            } else {
-                dispVal = loc.getDisplayLanguage();
-            }
+            dispVal = loc.getDisplayLanguage(userLocale);
+
             //System.err.println("selectedValue: " + selectedValue + " localeVal=" + localeVal);
             if (selectedValue != null) {
                 if (localeVal.equals(selectedValue)) item.setSelected(true);
@@ -193,9 +189,14 @@ public class ProfileManagerPortlet extends ActionPortlet {
         tr.setHeader(true);
         TableCellBean tcGroups = new TableCellBean();
         TextBean tbGroups = new TextBean();
-        tbGroups.setValue("Groups:");
+
+        String text = this.getLocalizedText(req, "PROFILE_GROUPS");
+        tbGroups.setValue(text);
+        //tbGroups.setValue("Groups:");
+        //tbGroups.setKey("PROFILE_GROUPS");
         TextBean tbGroupsDesc = new TextBean();
-        tbGroupsDesc.setValue("Group Description:");
+        String desc =  this.getLocalizedText(req, "PROFILE_GROUP_DESC");
+        tbGroupsDesc.setValue(desc);
         tcGroups.addBean(tbGroups);
         TableCellBean tcGroupsDesc = new TableCellBean();
         tcGroupsDesc.addBean(tbGroupsDesc);
@@ -281,22 +282,29 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
         List groupEntries = aclManagerService.getGroupEntries(user);
         Iterator geIt = groupEntries.iterator();
+        List usergroups = new ArrayList();
         while (geIt.hasNext()) {
             GroupEntry ge = (GroupEntry)geIt.next();
-            if (!ge.getGroup().equals(PortletGroupFactory.GRIDSPHERE_GROUP)) aclManagerService.deleteGroupEntry(ge);
+            if (!ge.getGroup().equals(PortletGroupFactory.GRIDSPHERE_GROUP)) {
+                aclManagerService.deleteGroupEntry(ge);
+                usergroups.add(ge.getGroup().getName());
+            }
         }
 
         // approve all selected group requests
         Iterator it = groups.iterator();
         while (it.hasNext()) {
             String groupStr = (String)it.next();
-            log.debug("requesting group= " + groupStr);
             PortletGroup g = this.aclManagerService.getGroupByName(groupStr);
-            GroupRequest groupRequest = this.aclManagerService.createGroupRequest();
+            GroupEntry ge = this.aclManagerService.getGroupEntry(user, g);
+            if (!usergroups.contains(g.getName())) {
+
+            GroupRequest groupRequest = this.aclManagerService.createGroupRequest(ge);
             groupRequest.setUser(user);
 
             groupRequest.setGroup(g);
             groupRequest.setRole(PortletRole.USER);
+            groupRequest.setGroupAction(GroupAction.ADD);
 
             // Create access right
             try {
@@ -305,6 +313,32 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 log.error("in ProfileManagerPortlet invalid group request", e);
             }
             this.aclManagerService.approveGroupRequest(groupRequest);
+                usergroups.remove(g.getName());
+            }
+            this.layoutMgr.addApplicationTab(req, g.getName());
+            this.layoutMgr.reloadPage(req);
+        }
+
+        // subtract groups
+
+        it = usergroups.iterator();
+        while (it.hasNext()) {
+            String groupStr = (String)it.next();
+            PortletGroup g = this.aclManagerService.getGroupByName(groupStr);
+            GroupEntry entry = this.aclManagerService.getGroupEntry(user, g);
+            GroupRequest groupRequest = this.aclManagerService.createGroupRequest(entry);
+            groupRequest.setGroupAction(GroupAction.REMOVE);
+
+            // Create access right
+            try {
+                this.aclManagerService.submitGroupRequest(groupRequest);
+            } catch (InvalidGroupRequestException e) {
+                log.error("in ProfileManagerPortlet invalid group request", e);
+            }
+            this.aclManagerService.approveGroupRequest(groupRequest);
+            List portletIds =  portletRegistry.getAllConcretePortletIDs(req.getRole(), g.getName());
+            this.layoutMgr.removePortlets(req, portletIds);
+            this.layoutMgr.reloadPage(req);
         }
 
 
