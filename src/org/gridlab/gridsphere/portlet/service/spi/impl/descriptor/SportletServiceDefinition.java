@@ -229,6 +229,7 @@ public class SportletServiceDefinition {
         sb.append("service interface: " + this.serviceInterface + "\n");
         sb.append("service implementation: " + this.serviceImplementation + "\n");
         sb.append("user required: " + this.userRequired + "\n");
+        sb.append("load on startup: " + this.loadOnStartup + "\n");
         sb.append("config properties: ");
         Iterator it = this.configParamList.iterator();
         ConfigParam c;
