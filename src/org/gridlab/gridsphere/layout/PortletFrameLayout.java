@@ -253,9 +253,9 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
                 if (p.getComponentID() == id) {
                     if (p instanceof PortletFrame) {
                         it.remove();
-                    } else {
-                        p.setVisible(true);   
                     }
+                }  else {
+                    p.setVisible(true);
                 }
             }
         }
