@@ -24,6 +24,15 @@ public class PersistencePreferenceAttribute {
         this.oid = oid;
     }
 
+
+    public void setReadOnly(boolean readonly) {
+        this.readonly = readonly;
+    }
+
+    public void setValues(List values) {
+        this.values = values;
+    }
+
     public boolean isReadOnly() {
         return readonly;
     }

@@ -9,7 +9,6 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.PersistencePreference;
 
 import javax.portlet.PortletPreferences;
 

@@ -2,7 +2,6 @@ package org.gridlab.gridsphere.portlet.jsrimpl;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.portlet.jsrimpl.Enumerator;
 
 import javax.portlet.PortletPreferences;
 import javax.portlet.ReadOnlyException;
@@ -29,6 +28,10 @@ public class PersistencePreference implements PortletPreferences {
 
     private PersistenceManagerRdbms pm = null;
 
+
+    public PersistencePreference() {
+        super();
+    }
 
     public PersistencePreference(PersistenceManagerRdbms pm) {
         super();
