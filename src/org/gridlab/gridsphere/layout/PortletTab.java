@@ -32,8 +32,6 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     private boolean selected = false;
     private PortletComponent portletComponent = null;
 
-    private PortletRole requiredRole = PortletRole.GUEST;
-
     /**
      * Constructs an instance of PortletTab
      */
@@ -68,10 +66,6 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      */
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public PortletRole getRequiredRole() {
-        return requiredRole;
     }
 
     /**
@@ -154,11 +148,6 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         compId.setClassName(this.getClass().getName());
         list.add(compId);
         portletComponent.addComponentListener(this);
-        try {
-            requiredRole = PortletRole.toPortletRole(roleString);
-        } catch (IllegalArgumentException e) {
-            requiredRole = PortletRole.GUEST;
-        }
         return portletComponent.init(list);
     }
 
@@ -198,7 +187,6 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
 
     public Object clone() throws CloneNotSupportedException {
         PortletTab t = (PortletTab)super.clone();
-        t.requiredRole = (PortletRole)this.requiredRole.clone();
         t.portletComponent = (this.portletComponent == null) ? null : (PortletComponent)this.portletComponent.clone();
         t.title = this.title;
         t.selected = this.selected;

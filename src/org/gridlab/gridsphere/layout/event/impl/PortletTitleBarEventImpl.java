@@ -8,9 +8,7 @@ import org.gridlab.gridsphere.layout.PortletComponent;
 import org.gridlab.gridsphere.layout.PortletTitleBar;
 import org.gridlab.gridsphere.layout.event.ComponentAction;
 import org.gridlab.gridsphere.layout.event.PortletTitleBarEvent;
-import org.gridlab.gridsphere.portlet.Portlet;
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletWindow;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
@@ -21,7 +19,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
  */
 public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
 
-    private ComponentAction action;
+    private ComponentAction action = null;
     private int id;
     private PortletRequest req;
     private PortletTitleBar titleBar = null;
@@ -36,11 +34,14 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
     public PortletTitleBarEventImpl(PortletTitleBar titleBar, GridSphereEvent event, int id) {
         this.titleBar = titleBar;
         this.req = event.getPortletRequest();
-        this.id = id;
-        if (req.getParameter(SportletProperties.PORTLET_MODE) != null) {
-            action = PortletTitleBarEvent.TitleBarAction.MODE_MODIFY;
-        } else if (req.getParameter(SportletProperties.PORTLET_WINDOW) != null) {
-            action = PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY;
+        User user = req.getUser();
+        if (!(user instanceof GuestUser)) {
+            this.id = id;
+            if (req.getParameter(SportletProperties.PORTLET_MODE) != null) {
+                action = PortletTitleBarEvent.TitleBarAction.MODE_MODIFY;
+            } else if (req.getParameter(SportletProperties.PORTLET_WINDOW) != null) {
+                action = PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY;
+            }
         }
     }
 
@@ -65,6 +66,13 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
             try {
                 mode = Portlet.Mode.toMode(pMode);
             } catch (Exception e) {
+
+            }
+            PortletRole role = req.getRole();
+            if (mode.equals(Portlet.Mode.CONFIGURE)) {
+                if (role.compare(role, PortletRole.ADMIN) <  0) {
+                    return null;
+                }
             }
             return mode;
         }

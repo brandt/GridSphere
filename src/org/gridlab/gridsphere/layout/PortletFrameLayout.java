@@ -46,6 +46,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
         PortletComponent p = null;
         while (it.hasNext()) {
             p = (PortletComponent) it.next();
+
             // all the components have the same theme
             p.setTheme(theme);
             // invoke init on each component

@@ -290,9 +290,9 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
             tab = (PortletTab) tabs.get(i);
 
-            PortletRole requiredRole = tab.getRequiredRole();
+            PortletRole tabRole = tab.getRequiredRole();
 
-            if (userRole.compare(userRole, requiredRole) >= 0) {
+            if (userRole.compare(userRole, tabRole) >= 0) {
 
                 String title = tab.getTitle();
                 if (tab.isSelected()) {

@@ -538,10 +538,16 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.actionPerformed(event);
         isActive = true;
+
+        PortletRequest req = event.getPortletRequest();
+        User user = req.getUser();
+
+        if (user instanceof GuestUser) return;
+
         PortletComponentEvent lastEvent = event.getLastRenderEvent();
 
         PortletTitleBarEvent titleBarEvent = new PortletTitleBarEventImpl(this, event, COMPONENT_ID);
-        PortletRequest req = event.getPortletRequest();
+
         if (titleBarEvent.getAction() == PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY) {
             PortletResponse res = event.getPortletResponse();
             windowState = titleBarEvent.getState();

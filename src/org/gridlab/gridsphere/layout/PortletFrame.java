@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
 import org.gridlab.gridsphere.layout.event.PortletFrameListener;
 import org.gridlab.gridsphere.layout.event.PortletTitleBarEvent;
 import org.gridlab.gridsphere.layout.event.impl.PortletFrameEventImpl;
+import org.gridlab.gridsphere.layout.event.impl.PortletTitleBarEventImpl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
@@ -40,15 +41,34 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     private PortletRole requiredRole = PortletRole.GUEST;
 
-    // keep track of teh original width
+    // keep track of the original width
     private String originalWidth = "";
 
     private transient PortletDataManager dataManager = null;
 
+    private boolean hasTitleBarEvent = false;
     /**
      * Constructs an instance of PortletFrame
      */
     public PortletFrame() {
+    }
+
+    /**
+     * Sets the portlet title bar contained by this portlet frame
+     *
+     * @param titleBar the portlet title bar
+     */
+    public void setPortletTitleBar(PortletTitleBar titleBar) {
+        this.titleBar = titleBar;
+    }
+
+    /**
+     * Returns the portlet title bar contained by this portlet frame
+     *
+     * @return the portlet title bar
+     */
+    public PortletTitleBar getPortletTitleBar() {
+        return titleBar;
     }
 
     /**
@@ -146,7 +166,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         list.add(compId);
         this.originalWidth = width;
         // if the portlet frame is transparent then it doesn't get a title bar
-        if (transparent == false) titleBar = new PortletTitleBar();
+        if ((transparent == false) && (titleBar == null)) titleBar = new PortletTitleBar();
         if (titleBar != null) {
             // if title bar is not assigned a label and we have one then use it
             if ((!label.equals("")) && (titleBar.getLabel().equals(""))) titleBar.setLabel(label+"TB");
@@ -187,9 +207,20 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
 
-        titleBar.setActive(true);
+        if (titleBar != null)
 
         super.actionPerformed(event);
+
+        if ((titleBar != null) && (!hasTitleBarEvent)) {
+            titleBar.setActive(true);
+            PortletTitleBarEvent tbEvent = new PortletTitleBarEventImpl(titleBar, event, COMPONENT_ID);
+            if (tbEvent.getAction() != null) {
+                hasTitleBarEvent = true;
+                titleBar.actionPerformed(event);
+            }
+        }
+
+        hasTitleBarEvent = false;
 
         PortletComponentEvent titleBarEvent = event.getLastRenderEvent();
 
@@ -235,20 +266,22 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
             req.setAttribute(SportletProperties.PORTLETID, portletClass);
 
-            String newmode = req.getParameter(SportletProperties.PORTLET_MODE);
-            if (newmode != null) {
-                req.setMode(Portlet.Mode.toMode(newmode));
+            // Override if user is a guest
+            User user = req.getUser();
+            if (user instanceof GuestUser) {
+                req.setMode(Portlet.Mode.VIEW);
             } else {
                 if (titleBar != null) {
                     Portlet.Mode mode = titleBar.getPortletMode();
+                    System.err.println("setting mode in " + portletClass + " to " + mode.toString());
                     req.setMode(mode);
                 } else {
                     req.setMode(Portlet.Mode.VIEW);
                 }
             }
 
+
             // Set the portlet data
-            User user = req.getUser();
             PortletData data = null;
             if (!(user instanceof GuestUser)) {
                 try {
@@ -298,9 +331,13 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      * @throws IOException if an I/O error occurs during rendering
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
-        super.doRender(event);
-
         PortletRequest req = event.getPortletRequest();
+        PortletRole userRole = req.getRole();
+        if (userRole.compare(userRole, requiredRole) < 0) {
+            return;
+        }
+
+        super.doRender(event);
 
         PortletRole role = req.getRole();
         if (role.compare(role, requiredRole) < 0) return;

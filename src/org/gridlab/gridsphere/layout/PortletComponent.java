@@ -4,6 +4,7 @@
  */
 package org.gridlab.gridsphere.layout;
 
+import org.gridlab.gridsphere.portlet.PortletRole;
 
 
 /**
@@ -38,20 +39,6 @@ public interface PortletComponent extends ComponentLifecycle {
      * @param label the portlet component label
      */
     public void setLabel(String label);
-
-    /**
-     * Returns the portlet component height
-     *
-     * @return the portlet component height
-     */
-    public String getHeight();
-
-    /**
-     * Sets the portlet component height
-     *
-     * @param height the portlet component height
-     */
-    public void setHeight(String height);
 
     /**
      * Sets the portlet component width
@@ -102,6 +89,20 @@ public interface PortletComponent extends ComponentLifecycle {
      * @return the theme of this portlet component
      */
     public String getTheme();
+
+    /**
+     * Allows a required role to be associated with viewing this portlet
+     *
+     * @param requiredRole the required portlet role expresses as a <code>String</code>
+     */
+    public void setRequiredRole(PortletRole requiredRole);
+
+    /**
+     * Allows a required role to be associated with viewing this portlet
+     *
+     * @return the required portlet role expresses as a <code>PortletRole</code>
+     */
+    public PortletRole getRequiredRole();
 
     public void addComponentListener(PortletComponent component);
 }

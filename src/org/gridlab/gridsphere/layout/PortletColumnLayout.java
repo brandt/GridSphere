@@ -5,6 +5,8 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
@@ -16,8 +18,6 @@ import java.util.List;
  * that organizes portlets into a column.
  */
 public class PortletColumnLayout extends PortletFrameLayout implements Cloneable {
-
-    private String originalWidth = "";
 
     public PortletColumnLayout() {
     }
@@ -32,7 +32,6 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
      * @see ComponentIdentifier
      */
     public List init(List list) {
-        originalWidth = width;
         return  super.init(list);
     }
 
@@ -41,25 +40,32 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletResponse res = event.getPortletResponse();
+        PortletRequest req = event.getPortletRequest();
         PrintWriter out = res.getWriter();
 
         PortletComponent p = null;
 
         // starting of the gridtable
-        out.println("<table width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"> <!-- START COLUMN -->");
-        out.println("<tbody>");
-        for (int i=0;i<components.size();i++) {
-            out.print("<tr><td valign=\"top\">");
 
-            p = (PortletComponent) components.get(i);
-            if (p.getVisible()) {
-                p.doRender(event);
-                //out.println("comp: "+i);
+        if (!components.isEmpty()) {
+            out.println("<table width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"> <!-- START COLUMN -->");
+
+            out.println("<tbody>");
+            for (int i=0;i<components.size();i++) {
+                out.print("<tr><td valign=\"top\">");
+
+                p = (PortletComponent) components.get(i);
+
+                if (p.getVisible()) {
+                    p.doRender(event);
+                    //out.println("comp: "+i);
+                }
+
+                out.println("</td></tr>");
             }
-            out.println("</td></tr>");
+            out.println("</tbody>");
+            out.println("</table> <!-- END COLUMN -->");
         }
-        out.println("</tbody>");
-        out.println("</table> <!-- END COLUMN -->");
     }
 
     public Object clone() throws CloneNotSupportedException {

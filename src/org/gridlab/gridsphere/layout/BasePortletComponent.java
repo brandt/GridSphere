@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
@@ -21,12 +22,12 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
 
     protected String defaultWidth = new String();
     protected String width = new String();
-    protected String height = new String();
     protected String label = new String();
     protected String name = new String();
     protected String theme = "xp";
     protected boolean isVisible = true;
     protected String roleString = "GUEST";
+    protected PortletRole requiredRole = null;
     protected List listeners = new Vector();
 
     /**
@@ -40,6 +41,13 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      */
     public List init(List list) {
         defaultWidth = width;
+         if (roleString != null) {
+            try {
+                requiredRole = PortletRole.toPortletRole(roleString);
+            } catch (IllegalArgumentException e) {
+                requiredRole = PortletRole.GUEST;
+            }
+        }
         if ((label == null) || label.equals("")) {
             return super.init(list);
 
@@ -105,21 +113,21 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     }
 
     /**
-     * Returns the portlet component height
+     * Allows a required role to be associated with viewing this portlet
      *
-     * @return the portlet component height
+     * @param requiredRole the required portlet role expresses as a <code>String</code>
      */
-    public String getHeight() {
-        return height;
+    public void setRequiredRole(PortletRole requiredRole) {
+        this.requiredRole = requiredRole;
     }
 
     /**
-     * Sets the portlet component height
+     * Allows a required role to be associated with viewing this portlet
      *
-     * @param height the portlet component height
+     * @return the required portlet role expresses as a <code>PortletRole</code>
      */
-    public void setHeight(String height) {
-        this.height = height;
+    public PortletRole getRequiredRole() {
+        return requiredRole;
     }
 
     /**
@@ -216,12 +224,12 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     public Object clone() throws CloneNotSupportedException {
             BasePortletComponent b = (BasePortletComponent)super.clone();
             b.width = this.width;
-            b.height = this.height;
             b.isVisible = this.isVisible;
             b.name = this.name;
             b.theme = this.theme;
             b.label = this.label;
             b.roleString = this.roleString;
+            b.requiredRole = ((this.requiredRole != null) ? (PortletRole)this.requiredRole.clone() : null);
             return b;
     }
 
