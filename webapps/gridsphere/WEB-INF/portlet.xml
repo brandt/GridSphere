@@ -236,10 +236,6 @@
          <portlet-app id="org.gridlab.gridsphere.portlets.core.layout.LayoutManagerPortlet">
              <portlet-name>Layout Manager Portlet</portlet-name>
              <servlet-name>LayoutPortlet</servlet-name>
-             <supports>
-                 <view/>
-                 <edit/>
-             </supports>
          </portlet-app>
 
          <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.layout.LayoutManagerPortlet.1">
@@ -250,6 +246,10 @@
                      <title>Layout Manager</title>
                      <description>Provides user layout customization</description>
                  </language>
+                 <config-param>
+                    <param-name>supported-themes</param-name>
+                    <param-value>xp</param-value>
+                </config-param>
              </concrete-portlet>
          </concrete-portlet-app>
      </portlet-app-def>
@@ -258,10 +258,6 @@
         <portlet-app id="org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet">
             <portlet-name>Profile Manager Portlet</portlet-name>
             <servlet-name>ProfileManagerPortlet</servlet-name>
-            <supports>
-                <view/>
-                <edit/>
-            </supports>
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet.1">
