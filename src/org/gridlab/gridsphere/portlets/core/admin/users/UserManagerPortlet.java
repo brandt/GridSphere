@@ -198,7 +198,6 @@ public class UserManagerPortlet extends ActionPortlet {
         StringBuffer message = new StringBuffer();
         boolean isInvalid = false;
         // Validate user name
-
         String userName = event.getTextFieldBean("userName").getValue();
         if (userName.equals("")) {
             createErrorMessage(event, this.getLocalizedText(req, "USER_NAME_BLANK") + "<br>");
@@ -220,6 +219,7 @@ public class UserManagerPortlet extends ActionPortlet {
         */
         // Validate given name
         String givenName = event.getTextFieldBean("fullName").getValue();
+
         if (givenName.equals("")) {
             createErrorMessage(event, this.getLocalizedText(req, "USER_FULLNAME_BLANK") + "<br>");
             isInvalid = true;
@@ -238,11 +238,10 @@ public class UserManagerPortlet extends ActionPortlet {
             isInvalid = true;
         }
 
-
-        if (!isInvalid) {
-            isInvalid = isInvalidPassword(event, newuser);
+        
+        if (isInvalidPassword(event, newuser)){
+        	isInvalid = true;
         }
-
         // Throw exception if error was found
         if (isInvalid) {
             throw new PortletException(message.toString());
@@ -416,7 +415,8 @@ public class UserManagerPortlet extends ActionPortlet {
     private void createErrorMessage(FormEvent event, String msg) {
         MessageBoxBean msgBox = event.getMessageBoxBean("msg");
         msgBox.setMessageType(MessageStyle.MSG_ERROR);
-        msgBox.setValue(msg);
+        String msgOld = msgBox.getValue();
+        msgBox.setValue((msgOld!=null?msgOld:"")+msg);
     }
 
     private void createSuccessMessage(FormEvent event, String msg) {
