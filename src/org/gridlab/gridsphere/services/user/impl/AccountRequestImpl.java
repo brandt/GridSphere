@@ -9,18 +9,18 @@ import org.gridlab.gridsphere.services.user.AccountRequest;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.core.persistence.castor.StringVector;
 
 import java.util.List;
 import java.util.Vector;
+import java.util.Random;
 
 public class AccountRequestImpl extends BaseObject implements AccountRequest {
 
     protected transient static PortletLog log = SportletLog.getInstance(AccountRequestImpl.class);
 
-
-    private int ID;
     private String UserID = "";
     private String GivenName = "";
     private String FamilyName = "";
@@ -36,13 +36,18 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
     private Vector MyproxyUserNamesSV = new Vector();   // ready
 
 
+    public AccountRequestImpl() {
+        super();
+        log.info("created accountrequestimpl with OID: "+getOid());
+    }
+
     /**
      * Returns the internal unique user id.
      *
      * @return the internal unique id
      */
-    public int getID() {
-        return ID;
+    public String getID() {
+        return getOid();
     }
 
     /**
@@ -50,8 +55,8 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
      *
      * @param id the internal unique id
      */
-    public void setID(int id) {
-        this.ID = id;
+    public void setID(String id) {
+        setOid(id);
     }
 
     /**
@@ -235,8 +240,11 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
      * @param group the group a user wishes to join
      */
     public void setDesiredGroups(List group) {
-        DesiredGroups = group;
-        DesiredGroupsSV = this.convertToStringVector(this, DesiredGroups, AccountRequestImplDesiredGroups.class);
+        //DesiredGroups = group;
+        for (int i=0;i<group.size();i++) {
+            addDesiredGroups((PortletGroup)group.get(i));
+        }
+
     }
 
     /**
@@ -245,24 +253,18 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
      * @return groups the List of group names the user desires to join, or empty if none
      */
     public List getDesiredGroups() {
+       // log.info("called getDesiredGroups ");
         return DesiredGroups;
     }
 
-    /**
-     * returns the list of StringVector objects containing the desired groups,
-     * for castor use only, do not use!
-     */
-    public Vector getDesiredGroupsSV() {
-        return DesiredGroupsSV;
-    }
-
-    /**
-     * set the list of Stringvectors containing the desired groups,
-     * for castor use only, do not use!
-     */
-    public void setDesiredGroupsSV(Vector desiredGroupsSV) {
-        DesiredGroupsSV = desiredGroupsSV;
-        DesiredGroups = this.convertToVector(DesiredGroupsSV);
+    public void addDesiredGroups(PortletGroup pg) {
+//        log.info("called addDesiredGroups "+pg.getName());
+        if (!DesiredGroups.contains(pg)) {
+            DesiredGroups.add(pg);
+            SportletGroup sg = (SportletGroup)pg;
+            sg.addAccountRequest(this);
+            log.info("called addDesiredGroups for "+this.getFullName()+" and group "+sg.getName());
+        }
     }
 
     // ----
