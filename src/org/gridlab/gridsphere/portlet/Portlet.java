@@ -65,7 +65,7 @@ import java.util.Vector;
  * When the administration is done, the portlet will be newly initialized.
  */
 public abstract class Portlet extends HttpServlet
-        implements Servlet, ServletConfig, java.io.Serializable, PortletSessionListener {
+        implements Servlet, ServletConfig, java.io.Serializable {
 
     protected transient static PortletLog log = SportletLog.getInstance(Portlet.class);
 
@@ -243,10 +243,6 @@ public abstract class Portlet extends HttpServlet
      */
     public abstract void service(PortletRequest request, PortletResponse response)
             throws PortletException, IOException;
-
-    public abstract void sessionCreated(HttpSessionEvent event);
-
-    public abstract void sessionDestroyed(HttpSessionEvent event);
 
     /**
      * Description copied from interface: PortletSessionListener

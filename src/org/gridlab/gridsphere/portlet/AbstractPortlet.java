@@ -10,7 +10,6 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.PortletProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletSession;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 
 import javax.servlet.http.HttpSessionEvent;
 import java.io.IOException;
@@ -35,21 +34,6 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
      */
     public PortletConfig getConfig() {
         return super.getPortletConfig();
-    }
-
-    public void sessionCreated(HttpSessionEvent event) {
-        PortletSessionManager sessionManager = PortletSessionManager.getInstance();
-        sessionManager.addSession(event.getSession());
-        log.info("sessionCreated('" + event.getSession().getId() + "')");
-    }
-
-    public void sessionDestroyed(HttpSessionEvent event) {
-        log.info("in PortlsessionDestroyed('" + event.getSession().getId() + "')");
-        PortletSession session = new SportletSession(event.getSession());
-        // This may seem weird but the portlet destroyed method must create
-
-
-        logout(session);
     }
 
     /**

@@ -183,10 +183,6 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
         //request.removeAttribute(GridSphereProperties.PORTLETMODE);
     }
 
-    public abstract void sessionCreated(HttpSessionEvent event);
-
-    public abstract void sessionDestroyed(HttpSessionEvent event);
-
     /**
      * Description copied from interface: PortletSessionListener
      * Called by the portlet container to ask the portlet to initialize a personalized user experience.
