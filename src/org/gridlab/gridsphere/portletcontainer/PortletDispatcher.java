@@ -130,7 +130,6 @@ public class PortletDispatcher {
      * @param settings the portlet settings
      */
     public void destroyConcrete(PortletSettings settings, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
-        log.info("in destroyConcrete");
         req.setAttribute(SportletProperties.PORTLET_SETTINGS, settings);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.DESTROY_CONCRETE);
         try {

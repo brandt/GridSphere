@@ -254,7 +254,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public void attributeAdded(HttpSessionBindingEvent event) {
 
-        log.info("attributeAdded('" + event.getSession().getId() + "', '" +
+        log.debug("attributeAdded('" + event.getSession().getId() + "', '" +
                 event.getName() + "', '" + event.getValue() + "')");
 
     }
@@ -267,7 +267,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public void attributeRemoved(HttpSessionBindingEvent event) {
 
-        log.info("attributeRemoved('" + event.getSession().getId() + "', '" +
+        log.debug("attributeRemoved('" + event.getSession().getId() + "', '" +
                 event.getName() + "', '" + event.getValue() + "')");
 
     }
@@ -280,7 +280,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public void attributeReplaced(HttpSessionBindingEvent event) {
 
-        log.info("attributeReplaced('" + event.getSession().getId() + "', '" +
+        log.debug("attributeReplaced('" + event.getSession().getId() + "', '" +
                 event.getName() + "', '" + event.getValue() + "')");
 
     }
@@ -293,7 +293,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     public void contextDestroyed(ServletContextEvent event) {
 
-        log.info("contextDestroyed()");
+        log.debug("contextDestroyed()");
         //this.context = null;
 
     }
@@ -307,7 +307,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public void contextInitialized(ServletContextEvent event) {
 
         //this.context = event.getServletContext();
-        log.info("contextInitialized()");
+        log.debug("contextInitialized()");
 
     }
 
@@ -317,7 +317,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event The session event
      */
     public void sessionCreated(HttpSessionEvent event) {
-        log.info("sessionCreated('" + event.getSession().getId() + "')");
+        log.debug("sessionCreated('" + event.getSession().getId() + "')");
     }
 
 
@@ -327,7 +327,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event The session event
      */
     public void sessionDestroyed(HttpSessionEvent event) {
-        log.info("sessionDestroyed('" + event.getSession().getId() + "')");
+        log.debug("sessionDestroyed('" + event.getSession().getId() + "')");
         HttpSession session = event.getSession();
         //User user = (User) session.getAttribute(GridSphereProperties.USER);
         //System.err.println("user : " + user.getUserID() + " expired!");

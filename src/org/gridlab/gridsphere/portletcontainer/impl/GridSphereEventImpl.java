@@ -41,7 +41,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
         try {
             portletComponentID = new Integer(cidStr).intValue();
         } catch (NumberFormatException e) {
-            portletComponentID = 0;
+           // portletComponentID = 0;
         }
 
         /* This is where a DefaultPortletAction gets put together if one exists */

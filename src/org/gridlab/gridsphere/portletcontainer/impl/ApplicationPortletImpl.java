@@ -83,7 +83,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
         portletName = appPortletConfig.getPortletName();
         servletName = appPortletConfig.getServletName();
 
-        log.info("Creating request dispatcher for " + servletName);
+        log.debug("Creating request dispatcher for " + servletName);
         RequestDispatcher rd = context.getNamedDispatcher(servletName);
         if (rd == null) {
             log.error("Unable to create a dispatcher for portlet: " + portletName);

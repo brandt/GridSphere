@@ -34,7 +34,7 @@ public class PortletInvoker {
      * @throws PortletException if a portlet/servlet error occurs
      */
     public static final void init(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
-        log.info("in init " + concretePortletID);
+        log.debug("in init " + concretePortletID);
         String appID = getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
@@ -58,7 +58,7 @@ public class PortletInvoker {
      * @throws PortletException if a portlet/servlet error occurs
      */
     public static final void initConcrete(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
-        log.info("in initConcrete " + concretePortletID);
+        log.debug("in initConcrete " + concretePortletID);
         String appID = getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
@@ -82,7 +82,7 @@ public class PortletInvoker {
      * @throws PortletException if a portlet/servlet error occurs
      */
     public static final void destroy(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
-        log.info("in destroy " + concretePortletID);
+        log.debug("in destroy " + concretePortletID);
         String appID = getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
@@ -104,7 +104,7 @@ public class PortletInvoker {
      * @throws PortletException if a portlet/servlet error occurs
      */
     public static final void destroyConcrete(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
-        log.info("in destroyConcrete " + concretePortletID);
+        log.debug("in destroyConcrete " + concretePortletID);
         String appID = getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
@@ -128,7 +128,7 @@ public class PortletInvoker {
      * @throws PortletException if a portlet/servlet error occurs
      */
     public static final void login(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
-        log.info("in login " + concretePortletID);
+        log.debug("in login " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
@@ -170,7 +170,7 @@ public class PortletInvoker {
      * @throws PortletException if a portlet/servlet error occurs
      */
     public static final void service(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
-        log.info("in service " + concretePortletID);
+        log.debug("in service " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
@@ -191,7 +191,7 @@ public class PortletInvoker {
      * @throws PortletException if a portlet/servlet error occurs
      */
     public static final void actionPerformed(String concretePortletID, DefaultPortletAction action, PortletRequest req, PortletResponse res) throws IOException, PortletException {
-        log.info("in actionPerformed " + concretePortletID);
+        log.debug("in actionPerformed " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
@@ -212,7 +212,7 @@ public class PortletInvoker {
      * @throws PortletException if a portlet/servlet error occurs
      */
     public static final void doTitle(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
-        log.info("in doTitle " + concretePortletID);
+        log.debug("in doTitle " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
@@ -233,7 +233,7 @@ public class PortletInvoker {
      * @throws PortletException if a portlet/servlet error occurs
      */
     public static final void windowEvent(String concretePortletID, WindowEvent winEvent, PortletRequest req, PortletResponse res) throws IOException, PortletException {
-        log.info("in windowEvent " + concretePortletID);
+        log.debug("in windowEvent " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
@@ -254,7 +254,7 @@ public class PortletInvoker {
      * @throws PortletException if a portlet/servlet error occurs
      */
     public static final void messageEvent(String concretePortletID, DefaultPortletMessage msgEvent, PortletRequest req, PortletResponse res) throws IOException, PortletException {
-        log.info("in messageEvent " + concretePortletID);
+        log.debug("in messageEvent " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
