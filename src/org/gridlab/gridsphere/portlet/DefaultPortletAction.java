@@ -55,8 +55,4 @@ public final class DefaultPortletAction implements PortletAction {
         return store;
     }
 
-    public String getPortletID() {
-        return (String)store.get("portletID");
-    }
-
 }

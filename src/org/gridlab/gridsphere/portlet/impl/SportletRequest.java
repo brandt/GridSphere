@@ -204,14 +204,8 @@ public class SportletRequest implements PortletRequest {
      * @return the User object
      */
     public User getUser() {
-        User user;
-        session = req.getSession(false);
-        if (session == null) {
-            user = GuestUser.getInstance();
-        } else {
-            user = (User)session.getAttribute(GridSphereProperties.USER);
-            if (user == null) user = GuestUser.getInstance();
-        }
+        User user = (User)portletSession.getAttribute(GridSphereProperties.USER);
+        if (user == null) user = GuestUser.getInstance();
         return user;
     }
 
