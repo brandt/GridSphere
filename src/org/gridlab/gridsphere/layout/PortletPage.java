@@ -362,6 +362,7 @@ public class PortletPage implements Serializable, Cloneable {
                         compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
                     }
                 } catch (NumberFormatException e) {
+                    System.err.println("unable to convert cid=" + cid);
                     compIntId = -1;
                 }
             }

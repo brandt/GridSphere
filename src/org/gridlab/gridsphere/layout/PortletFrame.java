@@ -358,7 +358,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     && (!event.getAction().getName().equals(FRAME_CLOSE_CANCEL_ACTION))) {
                 DefaultPortletAction action = event.getAction();
 
-                System.err.println("clearing render params");
                 renderParams.clear();
                 onlyRender = false;
 
