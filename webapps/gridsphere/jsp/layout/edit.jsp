@@ -12,7 +12,7 @@ Theme configuration
 <ui:frame>
 <ui:tablerow>
 <ui:tablecell>
-Select a theme: <ui:listbox beanId="themeLB"/> <ui:actionsubmit action="saveTheme" value="Save theme"/>
+<ui:text value="Select a theme: "/><ui:listbox beanId="themeLB"/> <ui:actionsubmit action="saveTheme" value="Save theme"/>
 </ui:tablecell>
 </ui:tablerow>
 </ui:frame>
