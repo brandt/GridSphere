@@ -606,14 +606,9 @@ Copyright:
 <!-- +++++++++++++++ START DEPLOY  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
     <!-- =================================================================== -->
-    <!-- Deploys GridSphere and all GridSphere portlets to Tomcat            -->
-    <!-- =================================================================== -->
-    <target name="deploy-tomcat" depends="deploy-gridsphere, deploy-portlets" description="deploys gs"/>
-
-    <!-- =================================================================== -->
     <!-- Deploys GridSphere to Tomcat                                        -->
     <!-- =================================================================== -->
-    <target name="deploy-gridsphere" depends="gridsphere-tomcat-jar, all-non-gridsphere-jars" description="Deploys GridSphere to a local server">
+    <target name="deploy" depends="gridsphere-tomcat-jar, all-non-gridsphere-jars, deploy-portlets" description="Deploys GridSphere to a local server">
         <!-- Make core gridsphere directory if necessary -->
         <mkdir dir="${GRIDSPHERE_HOME}"/>
         <mkdir dir="${GRIDSPHERE_HOME}/creds"/>
