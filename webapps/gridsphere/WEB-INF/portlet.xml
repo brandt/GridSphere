@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app-collection>
+
+    <portlet-app-def>
+
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.PortletApplicationManager">
+            <portlet-name>Application Manager Portlet</portlet-name>
+            <servlet-name>ManagerPortlet</servlet-name>
+            <portlet-config>
+                <param-name>Portlet Master</param-name>
+                <param-value>yourid@yourdomain.com</param-value>
+            </portlet-config>
+            <allows>
+                <maximized/>
+                <minimized/>
+                <resizing/>
+            </allows>
+            <supports>
+                <view/>
+                <edit/>
+                <help/>
+                <configure/>
+            </supports>
+        </portlet-app>
+
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.PortletApplicationManager.1">
+            <context-param>
+                <param-name>foobar</param-name>
+                <param-value>a value</param-value>
+            </context-param>
+            <concrete-portlet>
+                <portlet-name>Application Manager Portlet</portlet-name>
+                <default-locale>en</default-locale>
+                <language locale="en_US">
+                    <title>Portlet Application Manager</title>
+                    <description>Displays Portlet Variables and Settings</description>
+                </language>
+            </concrete-portlet>
+        </concrete-portlet-app>
+
+    </portlet-app-def>
+
+    <portlet-app-def>
+
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.LoginPortlet">
+            <portlet-name>Login</portlet-name>
+            <servlet-name>LoginPortlet</servlet-name>
+            <portlet-config>
+                <param-name>Portlet Master</param-name>
+                <param-value>yourid@yourdomain.com</param-value>
+            </portlet-config>
+            <cache>
+                <expires>120</expires>
+                <shared>true</shared>
+            </cache>
+            <supports>
+                <view/>
+                <edit/>
+                <help/>
+                <configure/>
+            </supports>
+        </portlet-app>
+
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.LoginPortlet.1">
+            <context-param>
+                <param-name>Portlet Master</param-name>
+                <param-value>yourid@yourdomain.com</param-value>
+            </context-param>
+            <concrete-portlet>
+                <portlet-name>Login</portlet-name>
+                <default-locale>en</default-locale>
+                <language locale="en_US">
+                    <title>Login</title>
+                    <title-short>Login</title-short>
+                    <description>Portlet provides login capabilities</description>
+                    <keywords>portlet login</keywords>
+                </language>
+            </concrete-portlet>
+        </concrete-portlet-app>
+
+    </portlet-app-def>
+
+    <portlet-app-def>
+
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.LogoutPortlet">
+            <portlet-name>Logout</portlet-name>
+            <servlet-name>LogoutPortlet</servlet-name>
+            <portlet-config>
+                <param-name>Portlet Master</param-name>
+                <param-value>yourid@yourdomain.com</param-value>
+            </portlet-config>
+            <cache>
+                <expires>120</expires>
+                <shared>true</shared>
+            </cache>
+        </portlet-app>
+
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.LogoutPortlet.1">
+            <context-param>
+                <param-name>Portlet Master</param-name>
+                <param-value>yourid@yourdomain.com</param-value>
+            </context-param>
+            <concrete-portlet>
+                <portlet-name>Logout</portlet-name>
+                <default-locale>en</default-locale>
+                <language locale="en_US">
+                    <title>Logout</title>
+                    <title-short>Logout</title-short>
+                    <description>Portlet provides logout capabilities</description>
+                    <keywords>portlet logout</keywords>
+                </language>
+            </concrete-portlet>
+        </concrete-portlet-app>
+
+    </portlet-app-def>
+
+    <portlet-app-def>
+
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.SubscriptionPortlet">
+            <portlet-name>Subscription</portlet-name>
+            <servlet-name>SubscriptionPortlet</servlet-name>
+        </portlet-app>
+
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.SubscriptionPortlet.1">
+            <context-param>
+                <param-name>Portlet Master</param-name>
+                <param-value>yourid@yourdomain.com</param-value>
+            </context-param>
+            <concrete-portlet>
+                <portlet-name>Subscription</portlet-name>
+                <default-locale>en</default-locale>
+                <language locale="en_US">
+                    <title>Subscription</title>
+                    <title-short>Subscription</title-short>
+                    <description>Portlet provides subscription capabilities</description>
+                    <keywords>portlet subscription</keywords>
+                </language>
+            </concrete-portlet>
+        </concrete-portlet-app>
+
+    </portlet-app-def>
+
+    <portlet-app-def>
+
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.UserManagerPortlet">
+            <portlet-name>User Account Manager</portlet-name>
+            <servlet-name>UserManagerPortlet</servlet-name>
+            <portlet-config>
+                <param-name>Portlet Master</param-name>
+                <param-value>yourid@yourdomain.com</param-value>
+            </portlet-config>
+            <cache>
+                <expires>120</expires>
+                <shared>false</shared>
+            </cache>
+        </portlet-app>
+
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.UserManagerPortlet.1">
+            <context-param>
+                <param-name>Portlet Master</param-name>
+                <param-value>yourid@yourdomain.com</param-value>
+            </context-param>
+            <concrete-portlet>
+                <portlet-name>User Account Manager</portlet-name>
+                <default-locale>en</default-locale>
+                <language locale="en_US">
+                    <title>User Account Manager</title>
+                    <title-short>UserManager</title-short>
+                    <description>Provides tools for administering user accounts</description>
+                    <keywords>user account administration</keywords>
+                </language>
+            </concrete-portlet>
+        </concrete-portlet-app>
+
+    </portlet-app-def>
+
+    <portlet-app-def>
+
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.AccessControllerPortlet">
+            <portlet-name>Access Control Manager</portlet-name>
+            <servlet-name>AccessControllerPortlet</servlet-name>
+            <portlet-config>
+                <param-name>Portlet Master</param-name>
+                <param-value>yourid@yourdomain.com</param-value>
+            </portlet-config>
+            <cache>
+                <expires>120</expires>
+                <shared>false</shared>
+            </cache>
+        </portlet-app>
+
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.AccessControllerPortlet.1">
+            <context-param>
+                <param-name>Portlet Master</param-name>
+                <param-value>yourid@yourdomain.com</param-value>
+            </context-param>
+            <concrete-portlet>
+                <portlet-name>Access Control Manager</portlet-name>
+                <default-locale>en</default-locale>
+                <language locale="en_US">
+                    <title>Access Control Manager</title>
+                    <title-short>AccessControlManager</title-short>
+                    <description>Provides tools for administering access to portlets</description>
+                    <keywords>access control user group role administration</keywords>
+                </language>
+            </concrete-portlet>
+        </concrete-portlet-app>
+
+    </portlet-app-def>
+
+</portlet-app-collection>
