@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.apache.commons.fileupload.FileUpload;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletInputStream;
@@ -15,7 +14,10 @@ import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 
 /**
@@ -33,7 +35,7 @@ public class SportletRequestImpl implements SportletRequest {
     private PortletSession portletSession = null;
     private boolean hasSessionBeenCreated = false;
     private static PortletLog log = SportletLog.getInstance(SportletRequest.class);
-    private Hashtable Parameters =null;
+
     /**
      * Cannot instantiate uninitialized SportletRequestImpl
      */
@@ -358,10 +360,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the parameter value
      */
     public final String getParameter(String name) {
-        if (Parameters==null)
-            return req.getParameter(name);
-        else
-            return ((String[])Parameters.get(name))[0];
+        return req.getParameter(name);
     }
 
     /**
@@ -370,26 +369,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return a map of parameters
      */
     public Map getParameterMap() {
-        if (Parameters==null)
-            return req.getParameterMap();
-        else
-            return Parameters;
-    }
-
-    /**
-     * Adds Parameters To request
-     * @param hTable
-     */
-    public void addParameterMap(Hashtable hTable) {
-        Map map2=req.getParameterMap();
-        Enumeration keys=req.getParameterNames();
-        while (keys.hasMoreElements()) {
-            String key2 = (String) keys.nextElement();
-            if (!hTable.containsKey(key2)){
-                hTable.put(key2,map2.get(key2));
-            }
-        }
-        Parameters=hTable;
+        return req.getParameterMap();
     }
 
     /**
@@ -398,10 +378,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the enumeration of parameter names
      */
     public Enumeration getParameterNames() {
-        if(Parameters==null)
-            return req.getParameterNames();
-        else
-            return Parameters.keys();
+        return req.getParameterNames();
     }
 
     /**
@@ -414,11 +391,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the array of parameter values
      */
     public String[] getParameterValues(String name) {
-        if(Parameters==null)
-            return req.getParameterValues(name);
-        else{
-            return (String[])Parameters.get(name);
-        }
+        return req.getParameterValues(name);
     }
 
     public long getDateHeader(String name) {
@@ -622,11 +595,4 @@ public class SportletRequestImpl implements SportletRequest {
         log.debug("\trequest path info: " + req.getPathInfo());
     }
 
-    /**
-     * Is the Request Mulitpart? (generaly file upload)
-     * @return  true if the request is Multipart else flase
-     */
-    public boolean isMultipart(){
-        return FileUpload.isMultipartContent(req);
-    }
 }
