@@ -24,6 +24,7 @@ Version: $Id$
 
 .portlet-frame {
   background-color: #000000;
+  border: none;
   padding: 0;
 }
 
