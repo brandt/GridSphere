@@ -10,6 +10,8 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
+import javax.servlet.ServletContext;
+import javax.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -20,6 +22,7 @@ import java.io.Serializable;
 public class PortletContent extends BasePortletComponent implements Serializable, Cloneable {
 
     private String textFile = null;
+    private String context = null;
 
     /**
      * Constructs an instance of PortletContent
@@ -47,6 +50,24 @@ public class PortletContent extends BasePortletComponent implements Serializable
     }
 
     /**
+     * Returns the web application context if not specified assumes included file is located in gridsphere context
+     *
+     * @return the web application context
+     */
+    public String getContext() {
+        return context;
+    }
+
+    /**
+     * Sets the web application context if not specified assumes included file is located in gridsphere context
+     *
+     * @param context the web application context
+     */
+    public void setContext(String context) {
+        this.context = context;
+    }
+
+    /**
      * Renders the portlet text component
      *
      * @param event a gridsphere event
@@ -55,14 +76,27 @@ public class PortletContent extends BasePortletComponent implements Serializable
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.doRender(event);
-        PortletContext ctx = event.getPortletContext();
+        ServletContext ctx = event.getPortletContext();
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
+        
+        if (context != null) {
+            if (!context.startsWith("/")) {
+                context = "/" + context;
+            }
+            ctx = ctx.getContext(context);
+        }
         if (textFile != null) {
+            RequestDispatcher rd = null;
+            rd = ctx.getRequestDispatcher(textFile);
             try {
-                ctx.include(textFile, req, res);
-            } catch (PortletException e) {
-                throw new PortletLayoutException("Unable to include text: " + textFile, e);
+                if (rd != null) {
+                    rd.include(req, res);
+                } else {
+                    throw new PortletException("Unable to include resource: RequestDispatcher is null");
+                }
+            } catch (Exception e) {
+                throw new PortletLayoutException("Unable to include textfile: " + textFile, e);
             }
         }
     }
