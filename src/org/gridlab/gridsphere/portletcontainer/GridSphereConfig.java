@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
 /**
  * GridSphere properties file
  */
-public class GridSphereConfig {
+public class GridSphereConfig implements GridSphereConfigProperties {
 
     public static final String pathtype = System.getProperty("file.separator");
 
