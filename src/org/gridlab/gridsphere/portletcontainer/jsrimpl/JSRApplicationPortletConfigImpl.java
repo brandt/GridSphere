@@ -9,10 +9,7 @@ package org.gridlab.gridsphere.portletcontainer.jsrimpl;
 import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletWindow;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletApp;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
-import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.*;
 
 import java.util.*;
 
@@ -41,21 +38,8 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
         }
 
         Supports[] supports = portletDef.getSupports();
-        CustomPortletMode[] customModes = app.getCustomPortletMode();
 
         Map tmpMarkups = new HashMap();
-        // toss all known modes into list
-
-        // custom modes
-        /*
-        List cModes = new ArrayList();
-        if (customModes != null) {
-            for (int i = 0; i < customModes.length; i++) {
-                String newmode = customModes[i].getPortletMode().getContent();
-                cModes.add(newmode);
-            }
-        }
-        */
 
         // defined portlet modes
         for (int i = 0; i < supports.length; i++) {
@@ -95,6 +79,12 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
         }
         tmpMarkups = null;
 
+        CustomWindowState[] customStates = app.getCustomWindowState();
+        if (customStates != null) {
+            for (int i = 0; i < customStates.length; i++) {
+                states.add(PortletWindow.State.toState(customStates[i].getWindowState().getContent()));
+            }
+        }
         states.add(PortletWindow.State.MAXIMIZED);
         states.add(PortletWindow.State.MINIMIZED);
         states.add(PortletWindow.State.RESIZING);
