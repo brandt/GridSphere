@@ -22,7 +22,7 @@ import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowSt
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.SecurityConstraint;
 import org.gridlab.gridsphere.services.core.security.acl.impl.descriptor.PortletGroupDescriptor;
-import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManager;
+import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -65,14 +65,16 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
 
         //rd = context.getNamedDispatcher(webApplicationName);
 
+        // load services xml
+        loadServices(webApplicationName, context, loader);
+        
         // load portlet.xml
         loadJSRPortlets(context);
 
         // load group.xml
         loadGroup(context);
 
-        // load services xml
-        loadServices(webApplicationName, context, loader);
+
 
     }
 
@@ -126,7 +128,7 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
             try {
                 PortletGroupDescriptor groupDescriptor = new PortletGroupDescriptor(groupXMLfile);
                 SportletGroup group = groupDescriptor.getPortletGroup();
-                AccessControlManager aclManager = AccessControlManager.getInstance();
+                AccessControlManagerServiceImpl aclManager = AccessControlManagerServiceImpl.getInstance();
                 PortletGroup g = aclManager.getGroupByName(group.getName());
                 if (g == null) {
                     aclManager.createGroup(group);

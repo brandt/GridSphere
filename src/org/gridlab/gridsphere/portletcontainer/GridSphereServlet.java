@@ -70,7 +70,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
 
-    private static PortletRegistry registry = PortletRegistry.getInstance();
+    //private static PortletRegistry registry = PortletRegistry.getInstance();
 
     private boolean isTCK = false;
     /**
@@ -89,15 +89,16 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     public synchronized void initializeServices() throws PortletServiceException {
         // discover portlets
-        log.debug("Creating portlet manager service");
-        portletManager = (PortletManagerService) factory.createUserPortletService(PortletManagerService.class, GuestUser.getInstance(), getServletConfig().getServletContext(), true);
         // create groups from portlet web apps
         log.debug("Creating access control manager service");
-        aclService = (AccessControlManagerService) factory.createUserPortletService(AccessControlManagerService.class, GuestUser.getInstance(), getServletConfig().getServletContext(), true);
+        aclService = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, getServletConfig().getServletContext(), true);
         // create root user in default group if necessary
         log.debug("Creating user manager service");
-        userManagerService = (UserManagerService) factory.createUserPortletService(UserManagerService.class, GuestUser.getInstance(), getServletConfig().getServletContext(), true);
-        loginService = (LoginService) factory.createUserPortletService(LoginService.class, GuestUser.getInstance(), getServletConfig().getServletContext(), true);
+        userManagerService = (UserManagerService) factory.createPortletService(UserManagerService.class, getServletConfig().getServletContext(), true);
+        loginService = (LoginService) factory.createPortletService(LoginService.class, getServletConfig().getServletContext(), true);
+        log.debug("Creating portlet manager service");
+        portletManager = (PortletManagerService) factory.createPortletService(PortletManagerService.class, getServletConfig().getServletContext(), true);
+
     }
 
     /**

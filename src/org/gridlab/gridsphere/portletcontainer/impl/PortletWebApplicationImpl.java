@@ -17,7 +17,7 @@ import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.PortletDeploymentDescriptor;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.SportletDefinition;
 import org.gridlab.gridsphere.services.core.security.acl.impl.descriptor.PortletGroupDescriptor;
-import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManager;
+import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl;
 
 import javax.servlet.ServletContext;
 import java.io.File;
@@ -84,15 +84,14 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         }
         log.debug("context path: " + ctx.getRealPath(""));
         this.webAppDescription = ctx.getServletContextName();
-
+        // load services xml
+        loadServices(ctx);
         // load portlet.xml
         loadPortlets(ctx);
         // load layout.xml
         loadLayout(ctx);
         // load group.xml
         loadGroup(ctx);
-        // load services xml
-        loadServices(ctx);
     }
 
     /**
@@ -175,7 +174,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
             try {
                 PortletGroupDescriptor groupDescriptor = new PortletGroupDescriptor(groupXMLfile);
                 SportletGroup group = groupDescriptor.getPortletGroup();
-                AccessControlManager aclManager = AccessControlManager.getInstance();
+                AccessControlManagerServiceImpl aclManager = AccessControlManagerServiceImpl.getInstance();
                 PortletGroup g = aclManager.getGroupByName(group.getName());
                 if (g == null) {
                     aclManager.createGroup(group);
