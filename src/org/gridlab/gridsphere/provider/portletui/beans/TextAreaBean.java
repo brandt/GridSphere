@@ -29,6 +29,17 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
     /**
      * Constructs a text area bean from a supplied portlet request and bean identifier
      *
+     * @param beanId the bean identifier
+     */
+    public TextAreaBean(String beanId) {
+        super(NAME);
+        this.cssClass = TextBean.MSG_INFO;
+        this.beanId = beanId;
+    }
+
+    /**
+     * Constructs a text area bean from a supplied portlet request and bean identifier
+     *
      * @param req the portlet request
      * @param beanId the bean identifier
      */

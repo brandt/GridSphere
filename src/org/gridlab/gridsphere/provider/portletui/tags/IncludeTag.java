@@ -22,12 +22,12 @@ import javax.servlet.http.HttpServletResponse;
  * Includes jsp pages from any web application.
  */
 
-public class IncludeTag extends BaseBeanTag {
+public class  IncludeTag extends BaseBeanTag {
 
     private static PortletLog log = SportletLog.getInstance(IncludeTag.class);
-    private IncludeBean includeBean = null;
-    private ServletContext servletContext = null;
-    private String page = null;
+    protected IncludeBean includeBean = null;
+    protected ServletContext servletContext = null;
+    protected String page = null;
 
     public ServletContext getServletContext() {
         return servletContext;

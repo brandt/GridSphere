@@ -33,7 +33,12 @@ public abstract class BaseFormEventImpl {
     //protected FileItem savedFileItem = null;
     protected List fileItems = null;
 
+    protected BaseFormEventImpl() {
+
+    }
+
     public BaseFormEventImpl(HttpServletRequest request, HttpServletResponse response) {
+        //log.debug("BaseFormEventImpl()");
         this.request = request;
         this.response = response;
     }
@@ -289,6 +294,23 @@ public abstract class BaseFormEventImpl {
         return includeBean;
     }
 
+
+    /**
+     * Return an existing <code>ActionComponentBean</code> or create a new one
+     *
+     * @param beanId the bean identifier
+     * @return a IncludeBean
+     */
+    public ActionComponentBean getActionComponentBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (ActionComponentBean) tagBeans.get(beanKey);
+        }
+        ActionComponentBean bean = new ActionComponentBean(request, beanId);
+        tagBeans.put(beanKey, bean);
+        return bean;
+    }
+
     /**
      * Return an existing <code>TableBean</code> or create a new one
      *
@@ -434,7 +456,7 @@ public abstract class BaseFormEventImpl {
      * @param req the PortletRequest
      */
     protected void createTagBeans(HttpServletRequest req) {
-        log.debug("in createTagBeans");
+        //log.debug("in createTagBeans");
         if (tagBeans == null) tagBeans = new HashMap();
         Map paramsMap = new HashMap();
         // check for file upload
@@ -462,38 +484,54 @@ public abstract class BaseFormEventImpl {
 
             String vbname = uiname.substring(3);
 
+
             int idx = vbname.indexOf("_");
 
             if (idx > 0) {
                 vb = vbname.substring(0, idx);
-                //System.out.println("vb type :" + vb);
             }
 
             vbname = vbname.substring(idx + 1);
             idx = vbname.indexOf("_");
 
+            String beanKey = "";
+
             if (idx > 0) {
                 beanId = vbname.substring(0, idx);
-                //System.out.println("beanId :" + beanId);
+                log.debug("Parsing beanId...");
+                int index = beanId.lastIndexOf(".");
+                if (index > -1 && index != beanId.length()) {
+                    beanKey = beanId;
+                    beanId = beanId.substring(index+1);
+                } else {
+                    beanKey = getBeanKey(beanId);
+                }
+                log.debug("beanId = " + beanId);
+                log.debug("beankey = " + beanKey);
+            } else {
+                beanKey = getBeanKey(beanId);
+
             }
 
             name = vbname.substring(idx + 1);
-            System.out.println("name :" + name);
+            //log.debug("vbname: " + name);
 
             String[] vals = (String[]) paramsMap.get(uiname);
             
-            String beanKey = getBeanKey(beanId);
+
+            //log.debug("Adding bean " + beanId + " with bean key " + beanKey);
+
             if (vb.equals(TextFieldBean.NAME)) {
-                log.debug("Creating a textfieldbean bean with id:" + beanId);
+                //log.debug("Creating a textfieldbean bean with id:" + beanId);
                 TextFieldBean bean = new TextFieldBean(req, beanId);
                 bean.setValue(vals[0]);
-                log.debug("setting new value" + vals[0]);
+                //log.debug("setting new value" + vals[0]);
                 bean.setName(name);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
             } else if (vb.equals(FileInputBean.NAME)) {
                 this.printRequestAttributes();
-                log.debug("Creating a fileinput bean with id:" + beanId);
+                //log.debug("Creating a fileinput bean with id:" + beanId);
                 try {
                     FileInputBean bean = null;
                     FileItem fileItem = null;
@@ -524,7 +562,7 @@ public abstract class BaseFormEventImpl {
             } else if (vb.equals(CheckBoxBean.NAME)) {
                 CheckBoxBean bean = (CheckBoxBean) tagBeans.get(beanKey);
                 if (bean == null) {
-                    log.debug("Creating a checkbox bean with id:" + beanId);
+                    //log.debug("Creating a checkbox bean with id:" + beanId);
                     bean = new CheckBoxBean(req, beanId);
                     bean.setValue(vals[0]);
                     for (int i = 0; i < vals.length; i++) {
@@ -534,7 +572,7 @@ public abstract class BaseFormEventImpl {
                     bean.setName(name);
                 } else {
                     /*is this called anytime ? */
-                    log.debug("Using existing checkbox bean with id:" + beanId);
+                    //log.debug("Using existing checkbox bean with id:" + beanId);
                     bean.addSelectedValue(vals[0]);
                 }
                 bean.setSelected(true);
@@ -542,7 +580,7 @@ public abstract class BaseFormEventImpl {
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
             } else if (vb.equals(ListBoxBean.NAME)) {
-                log.debug("Creating a listbox bean with id:" + beanId);
+                //log.debug("Creating a listbox bean with id:" + beanId);
                 ListBoxBean bean = new ListBoxBean(req, beanId);
                 bean.setName(name);
                 for (int i = 0; i < vals.length; i++) {
@@ -550,7 +588,7 @@ public abstract class BaseFormEventImpl {
                     item.setName(vals[i]);
                     item.setValue(vals[i]);
                     item.setSelected(true);
-                    log.debug("adding an item bean: " + vals[i]);
+                    //log.debug("adding an item bean: " + vals[i]);
                     bean.addBean(item);
                 }
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
@@ -558,34 +596,34 @@ public abstract class BaseFormEventImpl {
             } else if (vb.equals(RadioButtonBean.NAME)) {
                 RadioButtonBean bean = (RadioButtonBean) tagBeans.get(beanKey);
                 if (bean == null) {
-                    log.debug("Creating a new radiobutton bean with id:" + beanId);
+                    //log.debug("Creating a new radiobutton bean with id:" + beanId);
                     bean = new RadioButtonBean(req, beanId);
                     bean.setValue(vals[0]);
                     bean.addSelectedValue(vals[0]);
                     bean.setName(name);
                 } else {
-                    log.debug("Using existing radiobutton bean with id:" + beanId);
+                    //log.debug("Using existing radiobutton bean with id:" + beanId);
                     bean.addSelectedValue(vals[0]);
                 }
                 bean.setSelected(true);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
             } else if (vb.equals(PasswordBean.NAME)) {
-                log.debug("Creating a passwordbean bean with id:" + beanId);
+                //log.debug("Creating a passwordbean bean with id:" + beanId);
                 PasswordBean bean = new PasswordBean(req, beanId);
                 bean.setValue(vals[0]);
                 bean.setName(name);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
             } else if (vb.equals(TextAreaBean.NAME)) {
-                log.debug("Creating a textareabean bean with id:" + beanId);
+                //log.debug("Creating a textareabean bean with id:" + beanId);
                 TextAreaBean bean = new TextAreaBean(req, beanId);
                 bean.setValue(vals[0]);
                 bean.setName(name);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
             } else if (vb.equals(HiddenFieldBean.NAME)) {
-                log.debug("Creating a hidden bean bean with id:" + beanId);
+                //log.debug("Creating a hidden bean bean with id:" + beanId);
                 HiddenFieldBean bean = new HiddenFieldBean(req, beanId);
                 bean.setValue(vals[0]);
                 bean.setName(name);
@@ -615,8 +653,7 @@ public abstract class BaseFormEventImpl {
 
     }
 
-
-    private Map parseFileUpload(HttpServletRequest req) {
+    protected Map parseFileUpload(HttpServletRequest req) {
         Map parameters = new Hashtable();
         if (FileUpload.isMultipartContent(req)) {
             //log.debug("Multipart!");
@@ -639,7 +676,7 @@ public abstract class BaseFormEventImpl {
                     } else {
                         tmpstr[0] = "fileinput";
                     }
-                    log.debug("Name: " + item.getFieldName() + " Value: " + tmpstr[0]);
+                    //log.debug("Name: " + item.getFieldName() + " Value: " + tmpstr[0]);
                     parameters.put(item.getFieldName(), tmpstr);
                 }
             }
@@ -655,7 +692,9 @@ public abstract class BaseFormEventImpl {
      */
     protected String getBeanKey(String beanId) {
         String compId = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
-        return beanId + "_" + compId;
+        String beanKey = beanId + "_" + compId;
+        //log.debug("getBeanKey(" + beanId + ") = " + beanKey);
+        return beanKey;
     }
 
     /**
@@ -676,11 +715,11 @@ public abstract class BaseFormEventImpl {
      * Logs all tag bean identifiers, primarily used for debugging
      */
     public void printTagBeans() {
-        log.debug("in print tag beans:");
+        //log.debug("in print tag beans:");
         Iterator it = tagBeans.values().iterator();
         while (it.hasNext()) {
             TagBean tagBean = (TagBean) it.next();
-            log.debug("tag bean id: " + tagBean.getBeanId());
+            //log.debug("tag bean id: " + tagBean.getBeanId());
         }
     }
 

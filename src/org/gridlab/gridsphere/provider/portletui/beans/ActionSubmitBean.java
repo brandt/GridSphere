@@ -27,6 +27,17 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
     /**
      * Constructs an action submit bean from a supplied portlet request and bean identifier
      *
+     * @param beanId the bean identifier
+     */
+    public ActionSubmitBean(String beanId) {
+        super(NAME);
+        this.cssClass = SUBMIT_STYLE;
+        this.beanId = beanId;
+    }
+
+    /**
+     * Constructs an action submit bean from a supplied portlet request and bean identifier
+     *
      * @param req the portlet request
      * @param beanId the bean identifier
      */

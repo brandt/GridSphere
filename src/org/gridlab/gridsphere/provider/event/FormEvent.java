@@ -182,6 +182,13 @@ public interface FormEvent extends ActionEvent {
     public IncludeBean getIncludeBean(String beanId);
 
     /***
+     * Return an existing <code>ActionComponentBean</code> or create a new one
+     * @param beanId
+     * @return
+     */
+    public ActionComponentBean getActionComponentBean(String beanId);
+
+    /***
      * Return an existing <code>MessageBoxBean</code> or create a new one
      * @param beanId
      * @return

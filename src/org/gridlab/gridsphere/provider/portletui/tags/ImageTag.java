@@ -15,6 +15,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * The <code>ImageTag</code> represents an href img element

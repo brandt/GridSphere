@@ -5,8 +5,11 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.PortletLog;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletRequest;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -17,6 +20,7 @@ import java.util.ResourceBundle;
  */
 public abstract class BaseBean implements TagBean {
 
+    private transient static PortletLog log = SportletLog.getInstance(BaseBean.class);
     protected String beanId = "";
     protected String vbName = "undefined";
     protected HttpServletRequest request = null;
@@ -55,6 +59,14 @@ public abstract class BaseBean implements TagBean {
         this.beanId = beanId;
     }
 
+    public HttpServletRequest getRequest() {
+        return request;
+    }
+
+    public void setRequest(HttpServletRequest request) {
+        this.request = request;
+    }
+
     public abstract String toStartString();
 
     public abstract String toEndString();
@@ -65,9 +77,16 @@ public abstract class BaseBean implements TagBean {
     }
 
     protected String getBeanKey() {
-        String compId = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
-        //System.err.println("in BaseBeanImpl: beankey: " + beanId + "_" + compId);
-        return beanId + "_" + compId;
+        String cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
+        String compId = (String)request.getAttribute("compId");
+        String beanKey = null;
+        if (compId == null) {
+            beanKey = beanId + "_" + cid;
+        } else {
+            beanKey = compId + "." + beanId + "_" + cid;
+        }
+        //log.debug("getBeanKey(" + beanId + ") = " + beanKey);
+        return beanKey;
     }
 
     protected String getLocalizedText(String key) {

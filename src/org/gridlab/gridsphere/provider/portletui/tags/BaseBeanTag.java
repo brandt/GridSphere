@@ -5,9 +5,12 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.PortletLog;
 
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
+import javax.servlet.ServletRequest;
 import java.util.Enumeration;
 
 /**
@@ -15,6 +18,8 @@ import java.util.Enumeration;
  * a bean identifier and a flag for indicating whether JavaScript is enabled.
  */
 public abstract class BaseBeanTag extends BodyTagSupport {
+
+    private transient static PortletLog log = SportletLog.getInstance(BaseBeanTag.class);
 
     protected String beanId = "";
 
@@ -42,9 +47,17 @@ public abstract class BaseBeanTag extends BodyTagSupport {
      * @return the unique bean key
      */
     protected String getBeanKey() {
-        String compId = (String) pageContext.findAttribute(SportletProperties.COMPONENT_ID);
-        //System.err.println("in BaseBeanTag: beankey: " + beanId + "_" + compId);
-        return beanId + "_" + compId;
+        String cid = (String) pageContext.findAttribute(SportletProperties.COMPONENT_ID);
+        ServletRequest request = pageContext.getRequest();
+        String compId = (String)request.getAttribute("compId");
+        String beanKey = null;
+        if (compId == null) {
+            beanKey = beanId + "_" + cid;
+        } else {
+            beanKey = compId + "." + beanId + "_" + cid;
+        }
+        //log.debug("getBeanKey(" + beanId + ") = " + beanKey);
+        return beanKey;
     }
 
     /**

@@ -1,6 +1,5 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portlet.PortletResponse;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -15,9 +14,9 @@ import javax.servlet.jsp.JspWriter;
 
 public class IncludeBean extends BaseBean implements TagBean {
 
-    private ServletContext servletContext = null;
-    private JspWriter jspWriter = null;
-    private String page = null;
+    protected ServletContext servletContext = null;
+    protected JspWriter jspWriter = null;
+    protected String page = null;
 
     /**
      * Constructs default include bean

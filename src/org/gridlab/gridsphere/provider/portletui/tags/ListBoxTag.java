@@ -12,6 +12,7 @@ import org.gridlab.gridsphere.provider.portletui.tags.ContainerTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -94,7 +95,7 @@ public class ListBoxTag extends ContainerTag {
         if (!beanId.equals("")) {
             listbox = (ListBoxBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (listbox == null) {
-                listbox = new ListBoxBean(beanId);
+                listbox = new ListBoxBean((HttpServletRequest)pageContext.getRequest(), beanId);
                 listbox.setSize(size);
                 listbox.setOnChange(onChange);
                 this.setBaseComponentBean(listbox);

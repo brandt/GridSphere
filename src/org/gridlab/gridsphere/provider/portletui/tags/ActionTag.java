@@ -18,6 +18,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagExtraInfo;
 import javax.servlet.jsp.tagext.VariableInfo;
 import javax.servlet.jsp.tagext.TagData;
+import javax.servlet.ServletRequest;
 import java.util.Iterator;
 import java.util.List;
 
@@ -229,8 +230,15 @@ public abstract class ActionTag extends BaseComponentTag {
             }
         }
 
+        ServletRequest request = pageContext.getRequest();
+        String compId = (String)request.getAttribute("compId");
+
         if (action != null) {
-            portletAction = new DefaultPortletAction(action);
+            if (compId == null) {
+                portletAction = new DefaultPortletAction(action);
+            } else {
+                portletAction = new DefaultPortletAction(compId + "." + action);
+            }
         }
         if (!paramBeans.isEmpty()) {
             String id = createUniquePrefix(2);
@@ -243,9 +251,13 @@ public abstract class ActionTag extends BaseComponentTag {
                 //actionURL.setParameter(pbean.getName(), pbean.getValue());
             }
         }
-        
+
         if (action != null) {
-            actionURL.setAction(action);
+            if (compId == null) {
+                actionURL.setAction(action);
+            } else {
+                actionURL.setAction(compId + "." + action);
+            }
         }
 
         //if (!action.equals("render"))
@@ -280,7 +292,15 @@ public abstract class ActionTag extends BaseComponentTag {
             actionURI = res.createURI(isSecure);
         }
         if (action != null) {
-            portletAction = new DefaultPortletAction(action);
+
+            ServletRequest request = pageContext.getRequest();
+            String compId = (String)request.getAttribute("compId");
+            if (compId == null) {
+                portletAction = new DefaultPortletAction(action);
+            } else {
+                portletAction = new DefaultPortletAction(compId + "." + action);
+            }
+
             Iterator it = paramBeans.iterator();
 
             if (!paramBeans.isEmpty()) {

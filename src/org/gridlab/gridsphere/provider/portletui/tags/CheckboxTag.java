@@ -11,6 +11,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * A <code>CheckBoxTag</code> provides a checkbox element
@@ -42,7 +43,7 @@ public class CheckboxTag extends BaseComponentTag {
         if (!beanId.equals("")) {
             checkbox = (CheckBoxBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (checkbox == null) {
-                checkbox = new CheckBoxBean(beanId);
+                checkbox = new CheckBoxBean((HttpServletRequest)pageContext.getRequest(), beanId);
                 checkbox.setSelected(selected);
                 this.setBaseComponentBean(checkbox);
             } else {

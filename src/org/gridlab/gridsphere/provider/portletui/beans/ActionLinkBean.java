@@ -27,6 +27,13 @@ public class ActionLinkBean extends ActionBean implements TagBean {
     /**
      * Constructs an action link bean from a portlet request and supplied bean identifier
      */
+    public ActionLinkBean(String beanId) {
+        this.beanId = beanId;
+    }
+
+    /**
+     * Constructs an action link bean from a portlet request and supplied bean identifier
+     */
     public ActionLinkBean(HttpServletRequest req, String beanId) {
         this.request = req;
         this.beanId = beanId;

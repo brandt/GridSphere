@@ -36,6 +36,10 @@ public class FormEventImpl extends BaseFormEventImpl implements FormEvent {
     protected PortletRequest portletRequest;
     protected PortletResponse portletResponse;
 
+    protected FormEventImpl() {
+
+    }
+
     /**
      * Constructs a FormEventImpl from a portlet request, a portlet response, and a collection of visual beans
      *
@@ -45,6 +49,7 @@ public class FormEventImpl extends BaseFormEventImpl implements FormEvent {
      */
     public FormEventImpl(PortletRequest request, PortletResponse response, Map tagBeans) {
         super(request, response);
+        //log.debug("FormEventImpl()");
         this.portletRequest = request;
         this.portletResponse = response;
         this.tagBeans = tagBeans;
@@ -65,6 +70,7 @@ public class FormEventImpl extends BaseFormEventImpl implements FormEvent {
      */
     public FormEventImpl(ActionEvent evt) {
         super(evt.getPortletRequest(), evt.getPortletResponse());
+        //log.debug("FormEventImpl()");
         this.event = evt;
         portletRequest = evt.getPortletRequest();
         portletResponse = evt.getPortletResponse();

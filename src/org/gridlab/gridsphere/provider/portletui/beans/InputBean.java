@@ -4,11 +4,15 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+
 /**
  * An abstract <code>InputBean</code> provides a generic input HTML element
  */
 public abstract class InputBean extends BaseComponentBean implements TagBean {
 
+    private transient static PortletLog log = SportletLog.getInstance(InputBean.class);
     public static final String INPUT_STYLE = "portlet-form-input-field";
 
     protected String inputtype = "";
@@ -87,7 +91,18 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
         String pname = (name == null) ? "" : name;
         String sname = pname;
         if (!beanId.equals("")) {
-            sname = "ui_" + vbName + "_" + beanId + "_" + pname;
+            if (request == null) {
+                //log.debug("request is null");
+                sname = "ui_" + vbName + "_" + beanId + "_" + pname;
+            } else {
+                //log.debug("request not null");
+                String compId = (String)request.getAttribute("compId");
+                if (compId == null) {
+                    sname = "ui_" + vbName + "_" + beanId + "_" + pname;
+                } else {
+                    sname = "ui_" + vbName + "_" + compId + "." + beanId + "_" + pname;
+                }
+            }
         }
 
         sb.append("name=\"" + sname + "\" ");

@@ -37,6 +37,19 @@ public class FileInputBean extends InputBean implements TagBean {
     /**
      * Constructs a file input bean from a portlet request and bean identifier
      *
+     * @param beanId the bean identifier
+     * @throws IOException if an I/O exception occurs
+     */
+    public FileInputBean(String beanId) throws IOException {
+        super(NAME);
+        this.cssClass = SUBMIT_STYLE;
+        this.inputtype = "file";
+        this.beanId = beanId;
+    }
+
+    /**
+     * Constructs a file input bean from a portlet request and bean identifier
+     *
      * @param request the portlet request
      * @param beanId the bean identifier
      * @throws IOException if an I/O exception occurs
@@ -56,6 +69,14 @@ public class FileInputBean extends InputBean implements TagBean {
         this.request = request;
         this.beanId = beanId;
         savedFileItem = fileItem;
+    }
+
+    public FileItem getFileItem() {
+        return savedFileItem;
+    }
+
+    public void setFileItem(FileItem item) {
+        savedFileItem = item;
     }
 
     /**

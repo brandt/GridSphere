@@ -99,7 +99,16 @@ public class ListBoxBean extends BeanContainer implements TagBean {
         String pname = (name == null) ? "" : name;
         String sname = pname;
         if (!beanId.equals("")) {
-            sname = "ui_" + vbName + "_" + beanId + "_" + pname;
+            if (request == null) {
+                sname = "ui_" + vbName + "_" + beanId + "_" + pname;
+            } else {
+                String compId = (String)request.getAttribute("compId");
+                if (compId == null) {
+                    sname = "ui_" + vbName + "_" + beanId + "_" + pname;
+                } else {
+                    sname = "ui_" + vbName + "_" + compId + "." + beanId + "_" + pname;
+                }
+            }
         }
         sb.append("<select name='" + sname + "' size='" + size + "'");
         if (isMultiple) {
