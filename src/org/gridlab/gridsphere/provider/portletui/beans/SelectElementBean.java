@@ -54,7 +54,7 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
         }
         */
         if (selected) {
-            return " " + select + "='" + select + "' ";
+            return " " + select + " ";
         } else {
             return "";
         }
