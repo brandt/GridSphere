@@ -77,7 +77,8 @@ public class NotePadPortlet extends ActionPortlet {
         User user = request.getUser();
         TextAreaBean content = event.getTextAreaBean("content");
         TextFieldBean head = event.getTextFieldBean("head");
-        noteservice.addNote(user, head.getValue(), content.getValue());
+        String message = noteservice.addNote(user, head.getValue(), content.getValue());
+        request.setAttribute("message", message);
         request.setMode(Portlet.Mode.VIEW);
         setNextState(request, "showList");
     }
@@ -103,7 +104,8 @@ public class NotePadPortlet extends ActionPortlet {
         Note Note = noteservice.getNoteByOid(oid.getValue());
         Note.setContent(content.getValue());
         Note.setName(head.getValue());
-        noteservice.update(Note);
+        String message = noteservice.update(Note);
+        request.setAttribute("message", message);
         request.setAttribute("np_action", "view");
         request.setAttribute("note", Note);
         setNextState(request, "notepad/viewNote.jsp");

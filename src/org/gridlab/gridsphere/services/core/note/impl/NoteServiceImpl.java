@@ -51,16 +51,41 @@ public class NoteServiceImpl implements NoteService, PortletServiceProvider  {
         return result;
     }
 
-    public void addNote(User user, String name, String text) {
-        Note Note = new Note();
-        Note.setName(name);
-        Note.setContent(text);
-        Note.setUserid(user.getID());
+    private boolean noteExists(User user, String name) {
+        Note result = null;
         try {
-            pm.create(Note);
+            result = (Note)pm.restore("from "+Note.class.getName()+" as note where note.name='"+name+"' and note.Userid='"+user.getID()+"'");
         } catch (PersistenceManagerException e) {
             e.printStackTrace();
         }
+        return (result!=null);
+    }
+
+    private boolean noteExists(Note note) {
+        Note result = null;
+        try {
+            result = (Note)pm.restore("from "+Note.class.getName()+" as note where note.name='"+note.getName()+"' and note.Userid='"+note.getUserid()+"'");
+        } catch (PersistenceManagerException e) {
+            e.printStackTrace();
+        }
+        return (result!=null);
+    }
+
+    public String addNote(User user, String name, String text) {
+        if (!noteExists(user, name))  {
+            Note Note = new Note();
+            Note.setName(name);
+            Note.setContent(text);
+            Note.setUserid(user.getID());
+            try {
+                pm.create(Note);
+                return "";
+            } catch (PersistenceManagerException e) {
+                e.printStackTrace();
+                return "Problem creating note "+name+" in storage.";
+            }
+        }
+        return "Note with name "+name+" already exists.";
     }
 
     public void deleteNote(Note Note) {
@@ -96,14 +121,16 @@ public class NoteServiceImpl implements NoteService, PortletServiceProvider  {
        return result;
     }
 
-    public void update(Note Note) {
-        try {
-            pm.update(Note);
-        } catch (PersistenceManagerException e) {
-            e.printStackTrace();
+    public String update(Note Note) {
+        if (!noteExists(Note)) {
+            try {
+                pm.update(Note);
+            } catch (PersistenceManagerException e) {
+                e.printStackTrace();
+                return "Error updating note "+Note.getName();
+            }
+            return "";
         }
+        return "A Note with the name "+Note.getName()+" already exists.";
     }
 }
-
-
-

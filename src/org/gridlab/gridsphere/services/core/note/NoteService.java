@@ -15,7 +15,7 @@ public interface NoteService {
      * @param name
      * @param text
      */
-    void addNote(User user, String name, String text);
+    String addNote(User user, String name, String text);
 
     /**
      * Deletes the given note
@@ -41,7 +41,7 @@ public interface NoteService {
      * updates the given sheet
      * @param note
      */
-    void update(Note note);
+    String update(Note note);
 
     /**
      * retrns als notes containing the searchstring
