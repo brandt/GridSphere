@@ -57,7 +57,9 @@ public class SportletServiceFactory implements PortletServiceFactory {
     }
 
     /**
-     * createPortletServiceFactory instantiates the given class and initializes it
+     * createPortletServiceFactory instantiates the given class and initializes it. The portlet service properties
+     * file must be specified in the ServletContext as an InitParameter with the "PortletServices.properties" key.
+     * If no properties file is found or any error occurs an exception is thrown.
      *
      * @param service the class of the service
      * @param servletConfig the servlet configuration
@@ -89,7 +91,9 @@ public class SportletServiceFactory implements PortletServiceFactory {
     }
 
     /**
-     * createPortletServiceFactory instantiates the given class and initializes it
+     * createPortletServiceFactory instantiates the given class and initializes it. If the portlet serviceProperties
+     * is null then the location of the must be specified in the ServletContext as an InitParameter with the
+     * "PortletServices.properties" key. If no properties file is found or any error occurs an exception is thrown.
      *
      * @param service the class of the service
      * @param serviceProperties the service properties

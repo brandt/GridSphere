@@ -33,7 +33,7 @@ public interface PortletServiceFactory {
             throws PortletServiceUnavailableException, PortletServiceNotFoundException;
 
     /**
-     * createPortletServiceFactory instantiates the given class and initializes it
+     * createPortletServiceFactory instantiates the given class and initializes it. The properties
      *
      * @param service the class of the service
      * @param serviceProperties the service properties
