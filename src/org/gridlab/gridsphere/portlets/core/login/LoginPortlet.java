@@ -34,9 +34,9 @@ public class LoginPortlet extends ActionPortlet {
     public static final Integer LOGIN_ERROR_UNKNOWN = new Integer(-1);
 
     public static final String DO_VIEW_USER_EDIT_LOGIN = "login/createaccount.jsp"; //edit user
-    public static final String DO_CONFIGURE = "login/config.jsp"; //edit user
+    public static final String DO_CONFIGURE = "login/config.jsp"; //configure login 
 
-    private static boolean canUserCreateAccount = true;
+    private boolean canUserCreateAccount = true;
 
     private UserManagerService userManagerService = null;
     private AccessControlManagerService aclService = null;
@@ -48,6 +48,15 @@ public class LoginPortlet extends ActionPortlet {
             userManagerService = (UserManagerService)getPortletConfig().getContext().getService(UserManagerService.class);
             aclService = (AccessControlManagerService)getPortletConfig().getContext().getService(AccessControlManagerService.class);
             passwordManagerService = (PasswordManagerService)getPortletConfig().getContext().getService(PasswordManagerService.class);
+            String createAllowed = config.getInitParameter("canUserCreateAccount");
+            if (createAllowed != null) {
+                    if (createAllowed.equalsIgnoreCase("false")) {
+                            canUserCreateAccount = false;
+                    }
+                    if (createAllowed.equalsIgnoreCase("true")) {
+                            canUserCreateAccount = true;
+                    }
+            }
         } catch (PortletServiceException e) {
             throw new UnavailableException("Unable to initialize services");
         }
