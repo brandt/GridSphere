@@ -246,6 +246,16 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <name>border</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>cellpadding</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>cellspacing</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -382,6 +392,16 @@
         </description>
         <attribute>
             <name>beanId</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>border</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>cellpadding</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -536,6 +556,16 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <name>border</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>cellpadding</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>cellspacing</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
@@ -591,11 +621,6 @@
         </attribute>
         <attribute>
             <name>width</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>cellspacing</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
