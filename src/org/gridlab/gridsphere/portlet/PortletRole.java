@@ -1,9 +1,9 @@
 /*
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
  * @version $Id$
  */
 package org.gridlab.gridsphere.portlet;
-
 
 public interface PortletRole {
 
@@ -12,6 +12,8 @@ public interface PortletRole {
     public boolean isAdminRole();
 
     public boolean isSuperRole();
+
+    public boolean isCandidateRole();
 
     public int getRole();
 
