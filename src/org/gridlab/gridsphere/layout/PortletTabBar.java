@@ -1,10 +1,6 @@
 /*
- * Created by IntelliJ IDEA.
- * User: novotny
- * Date: Dec 20, 2002
- * Time: 4:00:34 PM
- * To change template for new class use
- * Code Style | Class Templates options (Tools | IDE Options).
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @version $Id$
  */
 package org.gridlab.gridsphere.layout;
 
@@ -238,17 +234,17 @@ public class PortletTabBar extends BasePortletComponent {
         req.setAttribute(LayoutProperties.TABLINKS, tabLinks);
 
         // Render tabs titles
-        out.println("<div id=\"tab-pane\">");
-        out.println("<div class=\"tab-menu\">");
+        out.println("<div id=\"tab-sub-pane\">");
+        out.println("<div class=\"tab--sub-menu\">");
 
         PortletTabPage tabPage;
         for (i = 0; i < tabPages.size(); i++) {
             String title = getTitleAt(i);
             tabPage = (PortletTabPage)tabPages.get(i);
             if (tabPage.isSelected()) {
-                out.println("<span id=\"tab-active\">" + title + "</span>");
+                out.println("<span id=\"tab-sub-active\">" + title + "</span>");
             } else {
-                out.println("<span id=\"tab-inactive\"><a class=\"tab-menu\" href=\"" + tabLinks[i] + "\" >" +  title + "</a></span>");
+                out.println("<span id=\"tab-sub-inactive\"><a class=\"tab-sub-menu\" href=\"" + tabLinks[i] + "\" >" +  title + "</a></span>");
             }
         }
 

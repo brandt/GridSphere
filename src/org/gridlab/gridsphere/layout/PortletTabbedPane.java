@@ -256,7 +256,7 @@ public class PortletTabbedPane extends BasePortletComponent {
             }
         }
 
-        out.println("</div></div><div id=\"tab-bar\"></div>");
+        out.println("</div></div>");//<div id=\"tab-bar\"></div>");
 
         selectedTabBar.doRender(event);
     }
