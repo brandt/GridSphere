@@ -1,4 +1,4 @@
-package org.gridlab.gridsphere.portletcontainer.jsrimpl;
+package org.gridlab.gridsphere.portlet.jsrimpl;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;

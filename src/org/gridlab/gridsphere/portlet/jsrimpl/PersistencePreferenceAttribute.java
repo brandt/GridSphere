@@ -1,4 +1,4 @@
-package org.gridlab.gridsphere.portletcontainer.jsrimpl;
+package org.gridlab.gridsphere.portlet.jsrimpl;
 
 import javax.portlet.ReadOnlyException;
 import java.util.ArrayList;
