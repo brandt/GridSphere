@@ -73,19 +73,5 @@ public interface PortletURI {
      * @return the URI as a string
      */
     public String toString();
-    /**
-     * Adds ActionParameter to the URI.
-     *
-     * @param name name of the parameter
-     * @param value value of the parameter
-     */
-    public void addActionParameter(String name, String value);
-
-    /**
-     * Removes an actionParameter from the URI
-     * @param name name of the parameter to be removed
-     */
-    public void removeActionParameter(String name);
-
 
 }
