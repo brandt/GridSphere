@@ -7,6 +7,8 @@ package org.gridlab.gridsphere.portlet;
 
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * The <code>PortletRole</code> describes the supported portlet roles used
@@ -71,6 +73,19 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
         } else {
             throw new IllegalArgumentException("Unable to create PortletRole corresponding to: " + portletRole);
         }
+    }
+
+    /**
+     * Returns a locale-specific <code>String</code> representation of
+     * the portlet role
+     *
+     * @return the locale-specific role expressed as a <code>String</code>
+     */
+    public String getText(Locale locale) {
+        ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
+        String key = toString();
+        String value = bundle.getString(key);
+        return value;
     }
 
     public String getOid() {
