@@ -21,24 +21,24 @@ public class GuestUser implements User {
 
     private static GuestUser instance = new GuestUser();
     // Data fields that make up the Role object
-    private String familyName = null;
-    private String fullName = null;
-    private String givenName = null;
-    private String emailAddress = null;
-    private String id = null;
-    private String userID = null;
-    private String organization = null;
-    private long lastLoginTime;
+    private String FamilyName = null;
+    private String FullName = null;
+    private String GivenName = null;
+    private String EmailAddress = null;
+    private String Id = null;
+    private String UserID = null;
+    private String Organization = null;
+    private long LastLoginTime;
 
     private GuestUser() {
-        familyName = "Role";
-        fullName = "Guest Role";
-        givenName = "Guest";
-        emailAddress = "no email";
-        id = "500";
-        userID = "guest";
-        organization = "guest";
-        lastLoginTime = -1;
+        FamilyName = "Role";
+        FullName = "Guest Role";
+        GivenName = "Guest";
+        EmailAddress = "no email";
+        Id = "500";
+        UserID = "guest";
+        Organization = "guest";
+        LastLoginTime = -1;
     }
 
     public static GuestUser getInstance() {
@@ -82,7 +82,7 @@ public class GuestUser implements User {
      * @return the family name
      */
     public String getFamilyName() {
-        return familyName;
+        return FamilyName;
     }
 
     /**
@@ -93,7 +93,7 @@ public class GuestUser implements User {
      * @return the full name
      */
     public String getFullName() {
-        return fullName;
+        return FullName;
     }
 
     /**
@@ -102,7 +102,7 @@ public class GuestUser implements User {
      * @return the given name
      */
     public String getGivenName() {
-        return givenName;
+        return GivenName;
     }
 
     /**
@@ -111,7 +111,7 @@ public class GuestUser implements User {
      * @return the email address
      */
     public String getEmailAddress() {
-        return emailAddress;
+        return EmailAddress;
     }
 
     /**
@@ -120,7 +120,7 @@ public class GuestUser implements User {
      * @return the internal unique id
      */
     public String getID() {
-        return id;
+        return Id;
     }
 
     /**
@@ -129,11 +129,11 @@ public class GuestUser implements User {
      * @return the user id
      */
     public String getUserID() {
-        return userID;
+        return UserID;
     }
 
     public String getOrganization() {
-        return organization;
+        return Organization;
     }
 
     /**
@@ -143,7 +143,23 @@ public class GuestUser implements User {
      * @return the last login time
      */
     public long getLastLoginTime() {
-        return lastLoginTime;
+        return LastLoginTime;
     }
 
+    /**
+     * Returns a string representaation of the User
+     *
+     * @return User information represented as a String
+     */
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("FamilyName: " + FamilyName + "\n");
+        sb.append("FullName: " + FullName + "\n");
+        sb.append("GivenName: " + GivenName + "\n");
+        sb.append("EmailAddress: " + EmailAddress + "\n");
+        sb.append("Id: " + Id + "\n");
+        sb.append("UserID: " + UserID + "\n");
+        sb.append("LastLoginTime: " + LastLoginTime + "\n");
+        return sb.toString();
+    }
 }

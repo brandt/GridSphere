@@ -187,47 +187,4 @@ public class ClientImpl implements Client {
         return sb.toString();
     }
 
-    // Primarily used for debugging
-    public void logRequest(HttpServletRequest req) {
-        String name, paramvalue, headervals;
-        Object attrvalue;
-        Enumeration enum, eenum;
-
-        log.debug("PortletRequest Information");
-        log.debug("\trequest headers: ");
-
-        enum = req.getHeaderNames();
-        while (enum.hasMoreElements()) {
-            name = (String) enum.nextElement();
-            eenum = (Enumeration) req.getHeaders(name);
-            headervals = "";
-            while (eenum.hasMoreElements()) {
-                headervals += " " + (String) eenum.nextElement();
-            }
-            log.debug("\t\tname=" + name + " values=" + headervals);
-        }
-        log.debug("\tcontent type: " + req.getContentType());
-        if (req.getCookies() != null)
-            log.debug("\tcookies are present");
-        log.debug("\trequest method: " + req.getMethod());
-        log.debug("\tremote host: " + req.getRemoteHost() + " " + req.getRemoteAddr());
-        log.debug("\trequest scheme: " + req.getScheme());
-        log.debug("\trequest attribute names: ");
-        enum = req.getAttributeNames();
-        while (enum.hasMoreElements()) {
-            name = (String) enum.nextElement();
-            attrvalue = (Object) req.getAttribute(name);
-            log.debug("\t\tname=" + name + " object type=" + attrvalue.getClass().getName());
-        }
-        log.debug("\trequest parameter names: note if a parameter has multiple values, only the first element is displayed ");
-        enum = req.getParameterNames();
-        while (enum.hasMoreElements()) {
-            name = (String) enum.nextElement();
-            paramvalue = req.getParameter(name);
-            log.debug("\t\tname=" + name + " value=" + paramvalue);
-        }
-        log.debug("\trequest parameter info: ");
-        log.debug("\trequest path info: " + req.getPathInfo());
-    }
-
 }

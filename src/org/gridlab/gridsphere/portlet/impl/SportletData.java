@@ -37,7 +37,6 @@ public class SportletData extends BaseObject implements PortletData  {
     protected transient Hashtable store = new Hashtable();
     private transient PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
 
-
     /**
      * Saves the hashtable (for castor)
      *
@@ -63,7 +62,6 @@ public class SportletData extends BaseObject implements PortletData  {
     private String PortletID = new String();
 
     public SportletData() {};
-
 
     /**
      * Returns the value of the attribute with the given name, or null if no such attribute exists.
@@ -116,7 +114,6 @@ public class SportletData extends BaseObject implements PortletData  {
         pm.update(this);
     }
 
-
     private void convert2vector() {
         Enumeration allkeys = store.keys();
         SportletDataAttribute ha = null;
@@ -144,7 +141,6 @@ public class SportletData extends BaseObject implements PortletData  {
     }
 
     public void jdoBeforeCreate(Database database) throws Exception {
-
         //super.jdoBeforeCreate(database);
         convert2vector();
     }

@@ -29,9 +29,11 @@ public class SportletResponse implements PortletResponse {
     // if user goes to /GridSphere, the actual servlet name then
     // getServletName returns some crazy "org.apache.catalina.INVOKER.GridSphere"
 
-    public SportletResponse(HttpServletResponse res, HttpServletRequest req) {
+    public SportletResponse(HttpServletResponse res, PortletRequest req) {
         this.res = res;
         this.req = req;
+        String mimeType = req.getClient().getMimeType();
+        res.setContentType(mimeType);
         sportletURI = new SportletURI(res);
     }
 
@@ -124,7 +126,6 @@ public class SportletResponse implements PortletResponse {
      * </li></ul>
      */
     protected void addURIParameters() {
-        //sportletURI.addParameter(GridSphereProperties.PORTLETID, (String)req.getAttribute(GridSphereProperties.PORTLETID));
         sportletURI.addParameter(GridSphereProperties.COMPONENT_ID, (String)req.getAttribute(GridSphereProperties.COMPONENT_ID));
     }
 
