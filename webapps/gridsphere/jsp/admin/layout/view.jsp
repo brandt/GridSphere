@@ -57,9 +57,11 @@
 </ui:actionlink>
 </ui:tablecell>
 <ui:tablecell>
+<% if (!group.equals("gridsphere")) { %>
 <ui:actionlink action="deleteLayout" key="DELETE">
     <ui:actionparam name="group" value="<%= group %>"/>
 </ui:actionlink>
+<% } %>
 </ui:tablecell>
 </ui:tablerow>
 <% } %>
