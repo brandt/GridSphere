@@ -382,7 +382,7 @@ in lighter color
 .portlet-section-body {
   background-color: #CCCCFF;
   border: none;
-  color: #000000;
+  color: inherit;
   font-family: inherit;
   text-align: left;
   padding-top: 1;

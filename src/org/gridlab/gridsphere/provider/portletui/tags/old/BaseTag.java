@@ -2,7 +2,7 @@
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-package org.gridlab.gridsphere.tags.ui;
+package org.gridlab.gridsphere.provider.portletui.tags.old;
 
 import org.gridlab.gridsphere.provider.ui.beans.TagBean;
 import org.gridlab.gridsphere.portlet.PortletRequest;

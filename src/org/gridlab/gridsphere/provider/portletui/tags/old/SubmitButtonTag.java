@@ -3,9 +3,9 @@
  * @version $Id$
  */
 
-package org.gridlab.gridsphere.tags.ui;
+package org.gridlab.gridsphere.provider.portletui.tags.old;
 
-import org.gridlab.gridsphere.tags.ui.BaseTag;
+import org.gridlab.gridsphere.provider.portletui.tags.old.BaseTag;
 
 import javax.servlet.jsp.JspException;
 

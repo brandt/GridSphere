@@ -1,6 +1,7 @@
-package org.gridlab.gridsphere.tags.ui;
+package org.gridlab.gridsphere.provider.portletui.tags.old;
 
 import org.gridlab.gridsphere.provider.ui.beans.TextFieldBean;
+import org.gridlab.gridsphere.provider.portletui.tags.old.BaseTag;
 
 import javax.servlet.jsp.JspException;
 

@@ -45,7 +45,7 @@ Copyright:
 
     <!-- Version properties -->
     <property name="version"            value="1.0"/>
-    <property name="release"            value="ea-dev" />
+    <property name="release"            value="rc-1" />
     <property name="version.release"    value="${version} ${release}"/>
     <property name="gridsphere.project" value="gridsphere"/>
     <property name="gridsphere.name"    value="GridSphere ${version.release}"/>
@@ -272,8 +272,6 @@ Copyright:
             <exclude name="org/gridlab/gridsphere/event/**"/>
             <!-- don't include portlet widgets tag library -->
             <exclude name="org/gridlab/gridsphere/provider/**"/>
-
-            <exclude name="org/gridlab/gridsphere/tags/**"/>
             <!-- don't include GridSphere portlets  -->
             <exclude name="org/gridlab/gridsphere/portlets/**"/>
         </jar>
@@ -294,9 +292,10 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates the GridSphere test JAR                                     -->
     <!-- =================================================================== -->
-    <target name="portlet-widget-tags-jar" depends="compile" description="Create lib/portlet-widget-tags.jar">
-        <jar jarfile="lib/portlet-widget-tags.jar" basedir="${build.classes}" >
-            <include name="org/gridlab/gridsphere/tags/**"/>
+    <target name="gridsphere-ui-tags-jar" depends="compile" description="Create lib/gridsphere-ui-tags.jar">
+        <jar jarfile="lib/gridsphere-ui-tags.jar" basedir="${build.classes}" >
+            <include name="org/gridlab/gridsphere/provider/portletui/tags/**"/>
+	    <include name="org/gridlab/gridsphere/provider/portlet/tags/**"/>
             <metainf dir="${gswebapp.dir}/WEB-INF/tlds"/>
         </jar>
     </target>
@@ -307,6 +306,9 @@ Copyright:
     <target name="gridsphere-provider-jar" depends="compile" description="Create lib/gridsphere-provider.jar">
         <jar jarfile="lib/gridsphere-provider.jar" basedir="${build.classes}" >
             <include name="org/gridlab/gridsphere/provider/**"/>
+            <!-- don't include portlet widgets tag library -->
+            <exclude name="org/gridlab/gridsphere/provider/portletui/tags/**"/>
+            <exclude name="org/gridlab/gridsphere/provider/portlet/tags/**"/>
         </jar>
     </target>
 
@@ -322,7 +324,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates all JAR's                                                   -->
     <!-- =================================================================== -->
-    <target name="jar" depends="portlet-widget-tags-jar, gridsphere-provider-jar, portlet-jar, coreportlets-jar" description="Creates all jars"/>
+    <target name="jar" depends="gridsphere-ui-tags-jar, gridsphere-provider-jar, portlet-jar, coreportlets-jar" description="Creates all jars"/>
 
     <!-- =================================================================== -->
     <!-- Cleans everything                                                   -->
@@ -385,7 +387,7 @@ Copyright:
         <echo message="force mapping: ${var_force_mapping}"/>
         <condition property="var_force_mapping">
             <not>
-                <available file="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/database/docletmapping.xml"/>
+                <available file="${build.webapps}/gridsphere/WEB-INF/database/docletmapping.xml"/>
             </not>
         </condition>
     </target>
@@ -498,12 +500,6 @@ Copyright:
                  doctitle="${gridsphere.api}"
                  bottom="Copyright &#169; 2002,2003 GridLab Project. All Rights Reserved.">
 
-            <link href="http://java.sun.com/j2se/1.4.1/docs/api/" />
-            <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/" />
-
-            <link href="http://jakarta.apache.org/log4j/docs/api/" />
-
-            <link href="http://www.junit.org/junit/javadoc/3.8/" />
 
             <group title="GridSphere Framework API"
                    packages="org.gridlab.gridsphere:org.gridlab.gridsphere.*"/>
@@ -523,8 +519,8 @@ Copyright:
             <group title="GridSphere Portal Component Library"
                    packages="org.gridlab.gridsphere.layout:org.gridlab.gridsphere.layout.*"/>
 
-            <group title="GridSphere UI Tag Library"
-                   packages="org.gridlab.gridsphere.tags:org.gridlab.gridsphere.tags.*"/>
+            <group title="GridSphere Portlet Provider Library"
+                   packages="org.gridlab.gridsphere.provider:org.gridlab.gridsphere.provider.*"/>
 
             <group title="GridSphere Portlet Service Library"
                    packages="org.gridlab.gridsphere.services:org.gridlab.gridsphere.services.*"/>
@@ -642,7 +638,7 @@ Copyright:
             <fileset dir="build/docs"/>
         </copy>
 
-        <copy overwrite="true" file="lib/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
+        <copy overwrite="true" file="lib/gridsphere-ui-tags.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
         <copy overwrite="true" file="lib/coreportlets.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
 
     </target>

@@ -30,7 +30,7 @@
         <ui:frame>
             <ui:tablerow>
                 <ui:tablecell width="100">
-                    <ui:actionsubmit action="gs_login" name="login" key="LOGIN_ACTION"/>
+                    <ui:actionsubmit action="gs_login" key="LOGIN_ACTION"/>
                 </ui:tablecell>
                 <ui:tablecell/>
             </ui:tablerow>

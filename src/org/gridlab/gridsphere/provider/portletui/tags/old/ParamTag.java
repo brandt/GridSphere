@@ -2,11 +2,12 @@
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-package org.gridlab.gridsphere.tags.ui;
+package org.gridlab.gridsphere.provider.portletui.tags.old;
 
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.provider.ui.beans.ActionLinkBean;
 import org.gridlab.gridsphere.provider.ui.beans.ParamBean;
+import org.gridlab.gridsphere.provider.portletui.tags.old.BaseTag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;

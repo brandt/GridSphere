@@ -1,4 +1,4 @@
-package org.gridlab.gridsphere.tags.ui;
+package org.gridlab.gridsphere.provider.portletui.tags.old;
 
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletResponse;
