@@ -18,6 +18,7 @@ import java.util.Vector;
 import java.util.List;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class PortletLayoutDescriptor {
 
@@ -25,7 +26,7 @@ public class PortletLayoutDescriptor {
     private PortletContainer pc = null;
     private String layoutPath, layoutMappingPath;
 
-    public PortletLayoutDescriptor(PortletConfig config) throws PortletLayoutDescriptorException {
+    public PortletLayoutDescriptor(PortletConfig config) throws IOException, PortletLayoutDescriptorException {
         // load in layout.xml file
         String appRoot = config.getServletContext().getRealPath("") + "/";
         String portletConfigFile = config.getInitParameter("layout.xml");
@@ -48,7 +49,7 @@ public class PortletLayoutDescriptor {
      * @param mappingFilePath location of the mapping file
      * @throws PortletLayoutDescriptorException if the PortletLayoutDescriptor cannot be created
      */
-    public PortletLayoutDescriptor(String layoutPath, String layoutMappingPath) throws PortletLayoutDescriptorException  {
+    public PortletLayoutDescriptor(String layoutPath, String layoutMappingPath) throws IOException, PortletLayoutDescriptorException  {
         load(layoutPath, layoutMappingPath);
     }
 
@@ -61,7 +62,7 @@ public class PortletLayoutDescriptor {
         return pc;
     }
 
-    public void reload() throws PortletLayoutDescriptorException {
+    public void reload() throws IOException, PortletLayoutDescriptorException {
         load(layoutPath, layoutMappingPath);
     }
 
@@ -72,7 +73,7 @@ public class PortletLayoutDescriptor {
      * @param mapping the location of the portlet xml mapping file
      * @throws PortletDeploymentDescriptorException if the PortletDeploymentDescriptor cannot be created
      */
-    public void load(String url, String mapping) throws PortletLayoutDescriptorException  {
+    public void load(String url, String mapping) throws IOException, PortletLayoutDescriptorException  {
         PersistenceManagerXml pmx = PersistenceManagerXml.getInstance();
 
         // where is the portlet.xml ?
@@ -94,7 +95,7 @@ public class PortletLayoutDescriptor {
      * Save the layout deployment descriptor to layout.xml
      * <b>not implemented yet</b>
      */
-    public void save(String url, String mapping) throws PortletLayoutDescriptorException {
+    public void save(String url, String mapping) throws IOException, PortletLayoutDescriptorException {
         PersistenceManagerXml pmx = PersistenceManagerXml.getInstance();
 
         // where is the portlet.xml ?
