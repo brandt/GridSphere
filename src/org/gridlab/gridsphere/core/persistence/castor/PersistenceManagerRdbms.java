@@ -49,7 +49,6 @@ public class PersistenceManagerRdbms {
     private PersistenceManagerRdbms() {
         log.info("Entering PM");
 
-        String databaseDir = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_DATABASE_DIR);
         String databaseConfigFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_DATABASE_CONFIG);
         String databaseName = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_DATABASE_NAME);
 
@@ -87,8 +86,7 @@ public class PersistenceManagerRdbms {
      * Creates an object to the database
      *
      * @param object to be marshalled
-     * @throws ConfigurationException if configuration is wrong
-     * @throws CreateException is creation went wrong
+     * @throws PersistenceManagerException is a persistence error occurs
      */
     public void create(Object object) throws PersistenceManagerException {
 
@@ -99,6 +97,8 @@ public class PersistenceManagerRdbms {
             db.begin();
             db.create(object);
             db.commit();
+            db.close();
+            db = null;
         } catch (PersistenceException e) {
             log.error("PersistenceException " + e);
             throw new PersistenceManagerException("Persistence Error " + e);
@@ -118,8 +118,7 @@ public class PersistenceManagerRdbms {
      * Updates a given object
      *
      * @param object to be updated
-     * @throws ConfigurationException if configurations are not set
-     * @throws UpdateException if updated failed
+     * @throws PersistenceManagerException is a persistence error occurs
      */
     public void update(Object object) throws PersistenceManagerException {
         Database db = null;
@@ -129,6 +128,8 @@ public class PersistenceManagerRdbms {
             db.begin();
             db.update(object);
             db.commit();
+            db.close();
+            db = null;
         } catch (PersistenceException e) {
             log.error("PersistenceException " + e);
             throw new PersistenceManagerException("Persistence Error: " + e);
@@ -136,20 +137,18 @@ public class PersistenceManagerRdbms {
             if (db != null) {
                 try {
                     db.close();
-                } catch (PersistenceException e) {
-                    db = null;
-                }
+                } catch (PersistenceException e) { }
+                db = null;
             }
         }
 
     }
 
     /**
-     * restores objects from storage
+     * Restores objects from storage
      *
-     * @throws ConfigurationException if configurations are not set
-     * @throws RestoreException if restore failes for some reason
      * @return list of objects from OQL query
+     * @throws PersistenceManagerException is a persistence error occurs
      */
     public List restoreList(String query) throws PersistenceManagerException {
         OQLQuery oql = null;
@@ -166,6 +165,8 @@ public class PersistenceManagerRdbms {
                 list.add(results.next());
             }
             db.commit();
+            db.close();
+            db = null;
         } catch (DatabaseNotFoundException e) {
             log.error("Exception! " + e);
             throw new PersistenceManagerException("Database not found: " + e);
@@ -179,21 +180,18 @@ public class PersistenceManagerRdbms {
             if (db != null) {
                 try {
                     db.close();
-                } catch (PersistenceException e) {
-                    db = null;
-                }
+                } catch (PersistenceException e) {}
+                db = null;
             }
         }
-
         return list;
     }
 
     /**
-     * unmarshales the queried object
+     * Unmarshals the queried object
      *
-     * @throws ConfigurationException if configuration failes
-     * @throws RestoreException if restore failed
-     * @return requested object defined by setQuery()
+     * @return the requested object defined by setQuery()
+     * @throws PersistenceManagerException is a persistence error occurs
      */
     public Object restoreObject(String query) throws PersistenceManagerException {
         List resultList = restoreList(query);
@@ -208,10 +206,8 @@ public class PersistenceManagerRdbms {
      * deletes a the given object from storage
      *
      * @param object object to be deleted
-     * @throws ConfigurationException if configurations are not set
-     * @throws DeleteException if deletion failed
+     * @throws PersistenceManagerException is a persistence error occurs
      */
-
     public void delete(Object object) throws PersistenceManagerException {
         Database db = null;
         try {
@@ -230,7 +226,8 @@ public class PersistenceManagerRdbms {
 
             db.remove(deleteObject);
             db.commit();
-
+            db.close();
+            db = null;
         } catch (NoSuchMethodException e) {
             log.info("Exception " + e);
             throw new PersistenceManagerException("Mapping Error :" + e);
@@ -253,9 +250,8 @@ public class PersistenceManagerRdbms {
             if (db != null) {
                 try {
                     db.close();
-                } catch (PersistenceException e) {
-                    db = null;
-                }
+                } catch (PersistenceException e) {}
+                db = null;
             }
         }
     }
@@ -276,6 +272,8 @@ public class PersistenceManagerRdbms {
             db.begin();
             object = db.load(cl, Oid);
             db.commit();
+            db.close();
+            db = null;
         } catch (DatabaseNotFoundException e) {
             log.error("Exception! " + e);
             throw new PersistenceManagerException("Database not found: " + e);
@@ -286,9 +284,8 @@ public class PersistenceManagerRdbms {
             if (db != null) {
                 try {
                     db.close();
-                } catch (PersistenceException e) {
-                    db = null;
-                }
+                } catch (PersistenceException e) {}
+                db = null;
             }
         }
 
@@ -300,8 +297,7 @@ public class PersistenceManagerRdbms {
      * deletes objects which are matching against the query
      *
      * @param query oql query
-     * @throws ConfigurationException
-     * @throws DeleteException  if something went wrong during deletion
+     * @throws PersistenceManagerException is a persistence error occurs
      */
     public void deleteList(String query) throws PersistenceManagerException {
 
@@ -319,6 +315,8 @@ public class PersistenceManagerRdbms {
                 db.remove(results.next());
             }
             db.commit();
+            db.close();
+            db = null;
         } catch (DatabaseNotFoundException e) {
             log.error("Exception! " + e);
             throw new PersistenceManagerException("Database not found: " + e);
@@ -328,13 +326,12 @@ public class PersistenceManagerRdbms {
         } catch (NoSuchElementException e) {
             log.error("NoSuchElementException!" + e);
             throw new PersistenceManagerException("No such element error: " + e);
-        }    finally {
+        } finally {
             if (db != null) {
                 try {
                     db.close();
-                } catch (PersistenceException e) {
-                    db = null;
-                }
+                } catch (PersistenceException e) {}
+                db = null;
             }
         }
     }
@@ -358,6 +355,8 @@ public class PersistenceManagerRdbms {
                 }
             }
             db.commit();
+            db.close();
+            db = null;
         } catch (PersistenceException e) {
             //db.rollback();
             log.error("PersistenceException!" + e);
@@ -370,9 +369,8 @@ public class PersistenceManagerRdbms {
             if (db != null) {
                 try {
                     db.close();
-                } catch (PersistenceException e) {
-                    db = null;
-                }
+                } catch (PersistenceException e) {}
+                db = null;
             }
         }
     }
