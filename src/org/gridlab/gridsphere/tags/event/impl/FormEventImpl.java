@@ -13,11 +13,11 @@ import org.gridlab.gridsphere.tags.event.FormEvent;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.tags.event.FormEvent;
-import org.gridlab.gridsphere.tags.web.element.CheckBoxBean;
-import org.gridlab.gridsphere.tags.web.element.NameBean;
+import org.gridlab.gridsphere.tags.web.element.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
+import java.util.Iterator;
 
 public class FormEventImpl implements FormEvent {
 
@@ -93,16 +93,41 @@ public class FormEventImpl implements FormEvent {
     public Object getTagBean(String name, PortletRequest request) {
         HttpSession session = request.getSession();
         NameBean bean = (NameBean) getBean(name, request);
-        System.out.println("Getting Bean " + name + " from Session");
+        //System.out.println("Getting Bean " + name + " from Session");
         //if (checkParameterName("gstag:"+bean.getName())) {
-        String[] values = request.getParameterValues("gstag:" + bean.getName());
-        //if (values.length>0) {
-        System.out.println("Updated bean: " + bean.getName());
-        bean.update(values);
-        session.setAttribute(name, bean);
-        //}
-        //}
-        return bean;
+        if (bean instanceof TableBean) {
+            // has to be that hack since the individal components of a table
+            // are not stored by itself in a session, kind of different
+            // later to modify all the methods to do recursion
+            TableBean tbean = (TableBean)bean;
+            Iterator it = tbean.iterator();
+            while (it.hasNext()) {
+                TableRowBean trb = (TableRowBean)it.next();
+                Iterator rowit = trb.iterator();
+                while (rowit.hasNext()) {
+                    TableCellBean tcb = (TableCellBean)rowit.next();
+                    Iterator cellit = tcb.iterator();
+                    while (cellit.hasNext()) {
+                        BaseElementBean basebean = (BaseElementBean)cellit.next();
+                        // check if we actually can update this (could be textbean which is not updatable at all)
+                        // @TODO instanceof updatable
+                        if (basebean instanceof NameBean) {
+                            bean = (NameBean)basebean;
+                            String[] values = request.getParameterValues("gstag:" + bean.getName());
+                            //System.out.println("Updated bean: " + bean.getName());
+                            bean.update(values);
+                        }
+                    }
+                }
+            }
+            return tbean;
+        } else {
+            String[] values = request.getParameterValues("gstag:" + bean.getName());
+            //System.out.println("Updated bean: " + bean.getName());
+            bean.update(values);
+            session.setAttribute(name, bean);
+            return bean;
+        }
     }
 
     public CheckBoxBean getCheckBox(String name) {

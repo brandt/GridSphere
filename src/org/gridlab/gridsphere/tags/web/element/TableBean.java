@@ -6,10 +6,11 @@
 package org.gridlab.gridsphere.tags.web.element;
 
 import org.gridlab.gridsphere.tags.web.model.DefaultList;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 
 import java.util.Iterator;
 
-public class TableBean extends BaseElementBean implements Updateable {
+public class TableBean extends NameBean implements Updateable {
 
     protected String tablestring = "table";
 
@@ -17,6 +18,10 @@ public class TableBean extends BaseElementBean implements Updateable {
 
     public void add(TagBean bean) {
         list.addBean(bean);
+    }
+
+    public Iterator iterator() {
+        return list.iterator();
     }
 
     public void update(String[] values) {
@@ -51,6 +56,6 @@ public class TableBean extends BaseElementBean implements Updateable {
         }
         result = result + "</"+tablestring+">";
         return result;
-
     }
+
 }

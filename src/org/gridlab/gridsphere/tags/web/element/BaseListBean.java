@@ -26,9 +26,5 @@ public abstract class BaseListBean extends NameBean implements BaseList {
         this.name = name;
     }
 
-    protected String getTagName() {
-        return "gstag:";
-    }
-
     public abstract String toString();
 }
