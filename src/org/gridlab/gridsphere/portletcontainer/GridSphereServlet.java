@@ -6,7 +6,6 @@ package org.gridlab.gridsphere.portletcontainer;
 
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.layout.PortletErrorFrame;
 import org.gridlab.gridsphere.layout.PortletLayoutEngine;
 import org.gridlab.gridsphere.layout.PortletPageFactory;
 import org.gridlab.gridsphere.portlet.*;
@@ -65,8 +64,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     /* Session manager maps users to sessions */
     private UserSessionManager userSessionManager = UserSessionManager.getInstance();
-
-    private PortletErrorFrame errorMsg = new PortletErrorFrame();
 
     private PortletContext context = null;
     private static Boolean firstDoGet = Boolean.TRUE;
