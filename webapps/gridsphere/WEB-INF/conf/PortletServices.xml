@@ -29,6 +29,7 @@
         <name>User Manager Service</name>
         <description>Provides User Administration Capabilities</description>
         <interface>org.gridlab.gridsphere.services.user.UserManagerService</interface>
+        <secure-wrapper>org.gridlab.gridsphere.services.user.impl.UserManagerServiceProxy</secure-wrapper>
         <implementation>org.gridlab.gridsphere.services.user.impl.UserManagerServiceImpl</implementation>
     </service>
 
