@@ -625,20 +625,6 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @param user userobject to be examined
      * @return true is the user is usperuser, false otherwise
      */
-    public boolean isRootUser(User user) {
-        if (user.getID().equals("0")) {
-            return isSuperUser(user);
-        }
-        return false;
-    }
-
-
-    /**
-     * checks if the user is superuser
-     *
-     * @param user userobject to be examined
-     * @return true is the user is usperuser, false otherwise
-     */
     public boolean isSuperUser(User user) {
         try {
             return aclService.hasRoleInGroup(user, PortletGroup.SUPER, PortletRole.SUPER);

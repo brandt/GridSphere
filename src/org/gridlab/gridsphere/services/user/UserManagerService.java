@@ -184,15 +184,6 @@ public interface UserManagerService extends PortletService {
      */
     public boolean existsUser(String userName);
 
-
-    /**
-     * checks if the user is the root user
-     *
-     * @param user userobject to be examined
-     * @return true is the user is usperuser, false otherwise
-     */
-    public boolean isRootUser(User user);
-
     /**
      * checks if the user is super user
      *
