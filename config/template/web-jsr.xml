@@ -22,7 +22,7 @@
 
     <servlet-mapping>
        <servlet-name>PortletServlet</servlet-name>
-       <url-pattern>/jsrportlets/@PROJECT_NAME@</url-pattern>
+       <url-pattern>/jsr/@PROJECT_NAME@</url-pattern>
     </servlet-mapping>
 
     <mime-mapping>
