@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.GuestUser;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletRequest;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
@@ -100,22 +101,22 @@ public class PortletLayoutEngine {
         return pc;
     }
 
-    public void service(GridSphereEvent event) throws PortletLayoutException {
+    public void service(GridSphereEvent event) throws IOException {
         log.debug("in service()");
         boolean doLayoutAction = false;
         PortletContainer pc = null;
 
-        pc = getPortletContainer(event);
-
         // XXX: How do we signal a user has logged out so we can userLayouts.remove(user)???
         try {
+            pc = getPortletContainer(event);
             pc.actionPerformed(event);
             pc = getPortletContainer(event);
             pc.doRender(event);
-        } catch (IOException e) {
+        } catch (PortletLayoutException e) {
             error = e.getMessage();
-            log.error("Caught IOException: ", e);
-            throw new PortletLayoutException("Caught IOException", e);
+            SportletRequest req = event.getSportletRequest();
+            req.logRequest();
+            log.error("Caught LayoutException: ", e);
         }
     }
 

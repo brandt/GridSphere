@@ -159,6 +159,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         } else {
             req.setMode(titleBar.getPortletMode());
         }
+        req.setModeModifier(Portlet.ModeModifier.CURRENT);
 
         // Set the portlet data
         PortletData data = null;

@@ -14,6 +14,7 @@ import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.portletcontainer.descriptor.AllowsWindowStates;
 import org.gridlab.gridsphere.portletcontainer.descriptor.Markup;
 import org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes;
+import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApp;
 import org.gridlab.gridsphere.event.impl.WindowEventImpl;
 import org.gridlab.gridsphere.event.WindowEvent;
 
@@ -93,7 +94,6 @@ public class PortletTitleBar extends BasePortletComponent {
         PortletRegistryManager registryManager = PortletRegistryManager.getInstance();
         String appID = registryManager.getApplicationPortletID(portletClass);
         ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
-
         SupportsModes supportedModes = appPortlet.getPortletApplicationDescriptor().getSupportsModes();
         modeList = supportedModes.getMarkupList();
         ConcretePortlet concPortlet = appPortlet.getConcretePortlet(portletClass);
