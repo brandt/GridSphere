@@ -169,8 +169,8 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
         if (type == null) throw new IllegalArgumentException("supplied content type is null!");
         String mimeType = stripCharacterEncoding(type);
         List mimeTypes = (List)req.getAttribute(SportletProperties.MIME_TYPES);
-        if (!mimeTypes.contains(type)) {
-            throw new IllegalArgumentException(mimeType);
+        if (!mimeTypes.contains(mimeType)) {
+            throw new IllegalArgumentException("Unsupported mimeType: " + type);
         }
         this.getHttpServletResponse().setContentType(mimeType);
         this.contentType = mimeType;
