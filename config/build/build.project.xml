@@ -179,12 +179,21 @@ Copyright:
     </target>
 
     <target name="create-database" depends="setenv, configure-database, compile">
-        <taskdef name="createdb"
-            classname="org.gridlab.gridsphere.core.persistence.hibernate.DatabaseTask"
+        <taskdef name="dbtask"
+            classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
             classpathref="classpath"/>
-        <createdb
-            configdir="${env.CATALINA_HOME}"
-            webappname="${project.name}"/>
+        <dbtask
+            configdir="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/persistence/"
+            action="CREATE"/>
+    </target>
+
+    <target name="update-database" depends="setenv, configure-database, compile">
+        <taskdef name="dbtask"
+            classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
+            classpathref="classpath"/>
+        <dbtask
+            configdir="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/persistence/"
+            action="UPDATE"/>
     </target>
 
     <!-- =================================================================== -->
