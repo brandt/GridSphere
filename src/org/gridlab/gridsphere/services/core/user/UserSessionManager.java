@@ -4,8 +4,6 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 
-import javax.servlet.http.HttpSessionListener;
-import javax.servlet.http.HttpSessionEvent;
 import java.util.*;
 
 /**
@@ -27,23 +25,30 @@ public class UserSessionManager implements PortletSessionListener {
         return instance;
     }
 
-    public PortletSession getSession(User user) {
-        return (PortletSession)userSessions.get(user.getID());
+    public List getSessions(User user) {
+        return (List)userSessions.get(user.getID());
     }
 
-    public void setSession(User user, PortletSession session) {
+    public void addSession(User user, PortletSession session) {
         log.error("Setting session for user " + user.getID());
-        userSessions.put(user.getID(), session);
+        List sessions = null;
+        if (userSessions.containsKey(user.getID())) {
+            sessions = (List)userSessions.get(user.getID());
+        } else {
+            sessions = new ArrayList();
+        }
+        sessions.add(session);
+        userSessions.put(user.getID(), sessions);
         sessionManager.addSessionListener(session.getId(), this);
     }
 
     public String getUserIdFromSession(PortletSession session) {
         Iterator it = userSessions.keySet().iterator();
         while (it.hasNext()) {
-            String u = (String)it.next();
-            PortletSession s = (PortletSession)userSessions.get(u);
+            String userId = (String)it.next();
+            PortletSession s = (PortletSession)userSessions.get(userId);
             if (s.getId().equals(session.getId())) {
-                return u;
+                return userId;
             }
         }
         return null;
@@ -78,9 +83,9 @@ public class UserSessionManager implements PortletSessionListener {
             Iterator it = userSessions.keySet().iterator();
             while (it.hasNext()) {
                 User u = (User)it.next();
-                PortletSession s = (PortletSession)userSessions.get(u);
+                PortletSession s = (PortletSession)userSessions.get(u.getID());
                 if (s.getId().equals(session.getId())) {
-                    userSessions.remove(u);
+                    userSessions.remove(u.getID());
                     break;
                 }
             }
@@ -89,11 +94,15 @@ public class UserSessionManager implements PortletSessionListener {
         dumpSessions();
     }
 
-    public void removeSession(User user) {
+    public void removeSessions(User user) {
         log.error("Removing session for user " + user.getID());
-        PortletSession s = getSession(user);
-        if (s != null) s.invalidate();
-        userSessions.remove(user);
+        List userSessions = getSessions(user);
+        Iterator it = userSessions.iterator();
+        while (it.hasNext()) {
+            PortletSession session = (PortletSession)it.next();
+            if (session != null) session.invalidate();
+        }
+        userSessions.remove(user.getID());
     }
 
     public void dumpSessions() {

@@ -37,7 +37,7 @@ import java.util.*;
 public class SportletServiceFactory implements PortletServiceFactory, PortletSessionListener {
 
     private static PortletLog log = SportletLog.getInstance(SportletServiceFactory.class);
-    private static SportletServiceFactory instance = new SportletServiceFactory();
+    private static SportletServiceFactory instance = null;
     private static GridSphereUserManager userManager = GridSphereUserManager.getInstance();
     private static PortletSessionManager portletSessionManager = PortletSessionManager.getInstance();
     private static UserSessionManager userSessionManager = UserSessionManager.getInstance();
@@ -62,8 +62,8 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
     private SportletServiceFactory() {
         // Reads in the service definitions from the xml file and stores them in allServices
         // organized according to service interface keys and service definition values
-        String servicesPath = GridSphereConfig.getProperty(GridSphereConfigProperties.SERVICES_DESCRIPTOR);
-        String servicesMappingPath = GridSphereConfig.getProperty(GridSphereConfigProperties.SERVICES_MAPPING);
+        String servicesPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/PortletMaster.xml");
+        String servicesMappingPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-services-mapping.xml");
         addServices(servicesPath, servicesMappingPath);
     }
 
@@ -107,7 +107,10 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         }
     }
 
-    public static SportletServiceFactory getInstance() {
+    public static synchronized SportletServiceFactory getInstance() {
+        if (instance == null) {
+            instance = new SportletServiceFactory();
+        }
         return instance;
     }
 
@@ -299,8 +302,12 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             log.debug("service: " + s);
         }
 
-        PortletSession session = userSessionManager.getSession(user);
-        if (session != null) portletSessionManager.addSessionListener(session.getId(), this);
+        List sessions = userSessionManager.getSessions(user);
+        Iterator it = sessions.iterator();
+        while (it.hasNext()) {
+            PortletSession session = (PortletSession)it.next();
+            if (session != null) portletSessionManager.addSessionListener(session.getId(), this);
+        }
 
         return psp;
     }
