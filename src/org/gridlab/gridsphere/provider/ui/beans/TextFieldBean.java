@@ -57,7 +57,7 @@ public class TextFieldBean extends ReadOnlyBaseBean implements Input {
 
     /**
      * Sets the (html) inputtype of the field
-     * @param ioputtype (html) inputtype of the field
+     * @param inputtype (html) inputtype of the field
      *
      */
     public void setInputtype(String inputtype) {

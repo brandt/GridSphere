@@ -10,7 +10,6 @@
 package org.gridlab.gridsphere.provider.event.impl;
 
 import org.gridlab.gridsphere.event.ActionEvent;
-import org.gridlab.gridsphere.event.impl.ActionEventImpl;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.portlet.PortletResponse;
@@ -30,6 +29,9 @@ import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
 import org.gridlab.gridsphere.provider.portletui.beans.PasswordBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextAreaBean;
+import org.gridlab.gridsphere.provider.portletui.beans.FileInputBean;
+import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
+import org.gridlab.gridsphere.provider.portletui.beans.HiddenFieldBean;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
@@ -38,6 +40,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
+import java.io.IOException;
 
 public class FormEventImpl implements FormEvent {
 
@@ -196,7 +199,7 @@ public class FormEventImpl implements FormEvent {
     /**
      * Prints out all request parameters (debug)
      */
-    public void printRequestParameter() {
+    public void printRequestParameters() {
         System.out.println("\n\n show request params\n--------------------\n");
         Enumeration enum = request.getParameterNames();
         while (enum.hasMoreElements()) {
@@ -246,6 +249,18 @@ public class FormEventImpl implements FormEvent {
     }
 
     public TextAreaBean getTextAreaBean(String beanId) {
+        return null;
+    }
+
+    public FileInputBean getFileInputBean(String beanId) throws IOException {
+        return null;
+    }
+
+    public ListBoxBean getListBoxBean(String beanId) {
+        return null;
+    }
+
+    public HiddenFieldBean getHiddenFieldBean(String beanId) {
         return null;
     }
 

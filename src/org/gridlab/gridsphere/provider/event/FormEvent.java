@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 
 import java.util.Map;
+import java.io.IOException;
 
 public interface FormEvent extends ActionEvent {
 
@@ -17,11 +18,15 @@ public interface FormEvent extends ActionEvent {
 
     public FrameBean getFrameBean(String beanID);
 
-    public ErrorFrameBean getErrorFrameBean(String beanID);
+    public FileInputBean getFileInputBean(String beanId) throws IOException;
+
+    public ErrorFrameBean getErrorFrameBean(String beanId);
 
     public CheckBoxBean getCheckBoxBean(String beanId);
 
     public TextFieldBean getTextFieldBean(String beanId);
+
+    public HiddenFieldBean getHiddenFieldBean(String beanId);
 
     public PasswordBean getPasswordBean(String beanId);
 
@@ -29,6 +34,7 @@ public interface FormEvent extends ActionEvent {
 
     public TextBean getTextBean(String beanId);
 
+    public ListBoxBean getListBoxBean(String beanId);
 
    /**
     * Returns the name of the pressed submit button.
@@ -53,7 +59,7 @@ public interface FormEvent extends ActionEvent {
     /**
      * For debugging
      */
-    public void printRequestParameter();
+    public void printRequestParameters();
 
     public void store();
 

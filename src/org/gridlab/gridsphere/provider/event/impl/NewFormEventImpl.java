@@ -24,6 +24,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
+import java.io.IOException;
 
 public class NewFormEventImpl implements FormEvent {
 
@@ -43,6 +44,8 @@ public class NewFormEventImpl implements FormEvent {
             tagBeans = new HashMap();
             createTagBeans(request);
         }
+        printRequestParameters();
+
         printTagBeans();
     }
 
@@ -104,6 +107,26 @@ public class NewFormEventImpl implements FormEvent {
         return tf;
     }
 
+    public HiddenFieldBean getHiddenFieldBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (HiddenFieldBean)tagBeans.get(beanKey);
+        }
+        HiddenFieldBean hf = new HiddenFieldBean(request, beanId);
+        tagBeans.put(beanKey, hf);
+        return hf;
+    }
+
+    public FileInputBean getFileInputBean(String beanId) throws IOException {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (FileInputBean)tagBeans.get(beanKey);
+        }
+        FileInputBean fi = new FileInputBean(request, beanId);
+        tagBeans.put(beanKey, fi);
+        return fi;
+    }
+
     public PasswordBean getPasswordBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
@@ -154,6 +177,26 @@ public class NewFormEventImpl implements FormEvent {
         return tb;
     }
 
+    public ListBoxBean getListBoxBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (ListBoxBean)tagBeans.get(beanKey);
+        }
+        ListBoxBean lb = new ListBoxBean(request, beanId);
+        tagBeans.put(beanKey, lb);
+        return lb;
+    }
+
+    public ListBoxItemBean getListBoxItemBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (ListBoxItemBean)tagBeans.get(beanKey);
+        }
+        ListBoxItemBean lb = new ListBoxItemBean(request, beanId);
+        tagBeans.put(beanKey, lb);
+        return lb;
+    }
+
     public TagBean getNewTagBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         return (TagBean)tagBeans.get(beanKey);
@@ -183,7 +226,7 @@ public class NewFormEventImpl implements FormEvent {
     /**
      * Prints out all request parameters (debug)
      */
-    public void printRequestParameter() {
+    public void printRequestParameters() {
         System.out.println("\n\n show request params\n--------------------\n");
         Enumeration enum = request.getParameterNames();
         while (enum.hasMoreElements()) {
@@ -233,7 +276,7 @@ public class NewFormEventImpl implements FormEvent {
     protected void createTagBeans(PortletRequest req) {
         log.debug("in createTagBeans");
         if (tagBeans == null) tagBeans = new HashMap();
-        printRequestParameter();
+
 
         Enumeration enum = request.getParameterNames();
         while (enum.hasMoreElements()) {
@@ -280,12 +323,37 @@ public class NewFormEventImpl implements FormEvent {
                 bean.setName(name);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
+            } else if (vb.equals(FileInputBean.NAME)) {
+                this.printRequestAttributes();
+                log.debug("Creating a fileinput bean with id:" + beanId);
+                try {
+                    FileInputBean bean = new FileInputBean(req, beanId);
+                    bean.setName(name);
+                    tagBeans.put(beanKey, bean);
+                } catch (IOException e) {
+                    log.error("Unable to create file input bean: " + e);
+                }
+                //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
+
             } else if (vb.equals(CheckBoxBean.NAME)) {
                 log.debug("Creating a checkbox bean with id:" + beanId);
                 CheckBoxBean bean = new CheckBoxBean(req, beanId);
                 bean.setSelected(true);
                 bean.setValue(vals[0]);
                 bean.setName(name);
+                //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
+                tagBeans.put(beanKey, bean);
+            } else if (vb.equals(ListBoxBean.NAME)) {
+                log.debug("Creating a listbox bean with id:" + beanId);
+                ListBoxBean bean = new ListBoxBean(req, beanId);
+                bean.setName(name);
+                for (int i = 0; i < vals.length; i++) {
+                    ListBoxItemBean item = new ListBoxItemBean(req, beanId);
+                    item.setValue(vals[i]);
+                    item.setSelected(true);
+                    log.debug("adding an item bean: " + vals[i]);
+                    bean.addBean(item);
+                }
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
             } else if (vb.equals(RadioButtonBean.NAME)) {
@@ -306,6 +374,13 @@ public class NewFormEventImpl implements FormEvent {
             } else if (vb.equals(TextAreaBean.NAME)) {
                 log.debug("Creating a textareabean bean with id:" + beanId);
                 TextAreaBean bean = new TextAreaBean(req, beanId);
+                bean.setValue(vals[0]);
+                bean.setName(name);
+                //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
+                tagBeans.put(beanKey, bean);
+            } else if (vb.equals(HiddenFieldBean.NAME)) {
+                log.debug("Creating a hidden bean bean with id:" + beanId);
+                HiddenFieldBean bean = new HiddenFieldBean(req, beanId);
                 bean.setValue(vals[0]);
                 bean.setName(name);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);

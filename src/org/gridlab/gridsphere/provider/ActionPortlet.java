@@ -10,6 +10,7 @@ import java.io.*;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
+import java.util.Locale;
 
 /**
  * An <code>ActionPortlet</code> provides an abstraction on top of
@@ -98,6 +99,10 @@ public class ActionPortlet extends AbstractPortlet {
     public String getNextTitle(PortletRequest request) {
         String id = request.getPortletSettings().getConcretePortletID();
         String state = (String)request.getAttribute(id+".title");
+        if (state == null) {
+            Locale locale = request.getLocale();
+            state = getPortletSettings().getTitle(locale, null);
+        }
         return state;
     }
 
@@ -111,6 +116,28 @@ public class ActionPortlet extends AbstractPortlet {
         this.log.debug("Setting title to " + title);
         String id = request.getPortletSettings().getConcretePortletID();
         request.setAttribute(id + ".title", title);
+    }
+
+    /**
+     * Sets the error to display in the portlet
+     *
+     * @param request the <code>PortletRequest</code>
+     * @param error the error text to display in the portlet
+     */
+    protected void setNextError(PortletRequest request, String error) {
+        String id = request.getPortletSettings().getConcretePortletID();
+        request.setAttribute(id + ".error", error);
+    }
+
+    protected boolean hasError(PortletRequest request) {
+        String id = request.getPortletSettings().getConcretePortletID();
+        return (request.getAttribute(id+".error") == null) ? false : true;
+    }
+
+    protected String getNextError(PortletRequest request) {
+        String id = request.getPortletSettings().getConcretePortletID();
+        String error = (String)request.getAttribute(id+".error");
+        return error;
     }
 
     /**
@@ -161,6 +188,9 @@ public class ActionPortlet extends AbstractPortlet {
 
         formEvent.store();
         setTagBeans(req, formEvent.getTagBeans());
+        if (hasError(req)) {
+            setNextPresentation(req, ERROR_PAGE);
+        }
     }
 
     protected void doAction(PortletRequest request, PortletResponse response,
@@ -206,8 +236,7 @@ public class ActionPortlet extends AbstractPortlet {
                             + "."
                             + action
                             + "()";
-        req.setAttribute(ACTION_PORTLET_ERROR, errorMessage);
-        setNextPresentation(req, ERROR_PAGE);
+        setNextError(req, errorMessage);
         this.log.error(errorMessage);
     }
 
@@ -237,6 +266,7 @@ public class ActionPortlet extends AbstractPortlet {
      * @throws IOException if an I/O error occurs
      */
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
+        log.debug("In doView: ");
         String next = getNextPresentation(request);
         log.debug("in ActionPortlet:doView next page is= " + next);
         if (next.endsWith(".jsp"))  {
@@ -248,10 +278,14 @@ public class ActionPortlet extends AbstractPortlet {
             Object[] arguments = new Object[] { formEvent };
             doAction(request, response, next, paramTypes, arguments);
             formEvent.store();
-
+            if (hasError(request)) {
+                log.debug("hasError = true");
+                doError(formEvent);
+            } else {
             next = getNextPresentation(request);
             log.error("in doView: next page is= " + next);
             doViewJSP(request, response, next);
+            }
         }
     }
 
@@ -294,12 +328,19 @@ public class ActionPortlet extends AbstractPortlet {
         doView(request, response);
     }
 
+    public void doTitle(PortletRequest request, PortletResponse response) throws PortletException, IOException {
+        log.debug("in doTitle");
+        PrintWriter out = response.getWriter();
+        String title = getNextTitle(request);
+        out.println(title);
+    }
+
     public void doError(FormEvent formEvent) throws PortletException, IOException {
         log.debug("in doError");
         PortletResponse response = formEvent.getPortletResponse();
         PortletRequest request = formEvent.getPortletRequest();
         PrintWriter out = response.getWriter();
-        String message = (String)request.getAttribute(ACTION_PORTLET_ERROR);
+        String message = getNextError(request);
         out.println(message);
     }
 
