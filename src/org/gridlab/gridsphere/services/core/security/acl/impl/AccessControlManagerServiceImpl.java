@@ -8,7 +8,6 @@
  */
 package org.gridlab.gridsphere.services.core.security.acl.impl;
 
-import org.gridlab.gridsphere.core.mail.MailMessage;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
@@ -109,25 +108,12 @@ public class AccessControlManagerServiceImpl implements AccessControlManagerServ
         aclManager.submitGroupRequest(request);
     }
 
-    public void submitGroupRequest(GroupRequest request, MailMessage mailMessage)
-            throws InvalidGroupRequestException {
-        aclManager.submitGroupRequest(request, mailMessage);
-    }
-
     public void approveGroupRequest(GroupRequest request) {
         aclManager.approveGroupRequest(request);
     }
 
-    public void approveGroupRequest(GroupRequest request, MailMessage mailMessage) {
-        aclManager.approveGroupRequest(request, mailMessage);
-    }
-
     public void denyGroupRequest(GroupRequest request) {
         aclManager.denyGroupRequest(request);
-    }
-
-    public void denyGroupRequest(GroupRequest request, MailMessage mailMessage) {
-        aclManager.denyGroupRequest(request, mailMessage);
     }
 
     /*** GROUP ENTRY METHODS ***/

@@ -4,7 +4,6 @@
  */
 package org.gridlab.gridsphere.services.core.user.impl;
 
-import org.gridlab.gridsphere.core.mail.MailMessage;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
@@ -18,7 +17,6 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.*;
-import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
@@ -186,25 +184,6 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
         log.info("Calling destroy()");
     }
 
-    private User getAuthUser(String loginName)
-            throws AuthorizationException {
-        log.debug("Attempting to retrieve user " + loginName);
-        if (loginName == null) {
-            AuthorizationException ex = new AuthorizationException();
-            ex.putInvalidParameter("username", "No username provided.");
-            throw ex;
-        }
-        User user = getUserByUserName(loginName);
-        if (user == null) {
-            log.debug("Unable to retrieve user " + loginName);
-            AuthorizationException ex = new AuthorizationException();
-            ex.putInvalidParameter("username", "Invalid username provided.");
-            throw ex;
-        }
-        log.debug("Successfully retrieved user " + loginName);
-        return user;
-    }
-
     public List selectAccountRequests(String criteria) {
         String oql = "select accountRequest from "
                    + this.jdoAccountRequest
@@ -253,11 +232,6 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     }
 
     public void submitAccountRequest(AccountRequest request)
-            throws InvalidAccountRequestException {
-        submitAccountRequest(request, null);
-    }
-
-    public void submitAccountRequest(AccountRequest request, MailMessage mailMessage)
             throws InvalidAccountRequestException {
          if (request instanceof AccountRequestImpl) {
              // Save account request if not already saved
@@ -352,10 +326,6 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     }
 
     public User approveAccountRequest(AccountRequest request) {
-        return approveAccountRequest(request, null);
-    }
-
-    public User approveAccountRequest(AccountRequest request, MailMessage mailMessage) {
         if (request instanceof AccountRequestImpl) {
             // Edit user from account request
             SportletUserImpl user = editSportletUserImpl(request);
@@ -395,10 +365,6 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     }
 
     public void denyAccountRequest(AccountRequest request) {
-        denyAccountRequest(request, null);
-    }
-
-    public void denyAccountRequest(AccountRequest request, MailMessage mailMessage) {
         if (request instanceof AccountRequestImpl) {
             // Delete account request
             deleteAccountRequest(request);
@@ -416,10 +382,6 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     }
 
     public void deleteAccount(User user) {
-        deleteAccount(user, null);
-    }
-
-    public void deleteAccount(User user, MailMessage mailMessage) {
         if (user instanceof SportletUserImpl) {
             // First delete user password
             this.passwordManagerService.deletePassword(user);
@@ -704,11 +666,6 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
 
     public void submitGroupRequest(GroupRequest request)
             throws InvalidGroupRequestException {
-        submitGroupRequest(request, null);
-    }
-
-    public void submitGroupRequest(GroupRequest request, MailMessage mailMessage)
-            throws InvalidGroupRequestException {
         if (request instanceof GroupRequestImpl) {
             // First validate accesss request
             validateGroupRequest(request);
@@ -749,10 +706,6 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     }
 
     public void approveGroupRequest(GroupRequest request) {
-        approveGroupRequest(request, null);
-    }
-
-    public void approveGroupRequest(GroupRequest request, MailMessage mailMessage) {
         if (request instanceof GroupRequestImpl) {
             GroupRequestImpl requestImpl = (GroupRequestImpl)request;
             // Get request attributes
@@ -784,10 +737,6 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     }
 
     public void denyGroupRequest(GroupRequest request) {
-        denyGroupRequest(request, null);
-    }
-
-    public void denyGroupRequest(GroupRequest request, MailMessage mailMessage) {
         if (request instanceof GroupRequestImpl) {
             // Delete account request
             deleteGroupRequest(request);

@@ -50,16 +50,10 @@ public interface AccessControlManagerService extends PortletService {
     public void submitGroupRequest(GroupRequest request)
             throws InvalidGroupRequestException;
 
-    public void submitGroupRequest(GroupRequest request, MailMessage mailMessage)
-            throws InvalidGroupRequestException;
 
     public void approveGroupRequest(GroupRequest request);
 
-    public void approveGroupRequest(GroupRequest request, MailMessage mailMessage);
-
     public void denyGroupRequest(GroupRequest request);
-
-    public void denyGroupRequest(GroupRequest request, MailMessage mailMessage);
 
     /*** GROUP ENTRY METHODS ***/
 
