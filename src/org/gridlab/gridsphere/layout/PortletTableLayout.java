@@ -103,17 +103,16 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
                    out.print("class=\""+this.style+"\" ");
         }
         out.println("border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tbody>");
-        out.println("<tr>");
         for (int i=0;i<components.size();i++) {
             p = (PortletComponent) components.get(i);
-            out.println("<td valign=\"top\" width=\""+p.getWidth()+"%\">");
+            out.println("<tr><td valign=\"top\" width=\"100%\">");
             if (p.getVisible()) {
                 p.doRender(event);
                 //out.println("grid comp: "+i);
             }
-            out.println("</td> ");
+            out.println("</td> </tr>");
         }
-        out.println("</tr></tbody></table>");
+        out.println("</tbody></table>");
 
     }
 
@@ -124,4 +123,3 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
     }
 
 }
-
