@@ -1,5 +1,6 @@
 /*
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @author <a href="mailto:oliver@wehrens.e">Oliver Wehrens</a>
  * @version $Id$
  */
 package org.gridlab.gridsphere.portlet.impl;
@@ -16,6 +17,10 @@ public class SportletGroup implements PortletGroup {
     public SportletGroup(int group, String groupName) {
         this.group = group;
         this.groupName = groupName;
+    }
+
+    public SportletGroup() {
+        super();
     }
 
     public static PortletGroup getBaseGroup() {
