@@ -331,7 +331,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates the GridSphere test JAR                                     -->
     <!-- =================================================================== -->
-    <target name="portlet-widget-tags-jar" depends="compile" description="Create lib/gridsphere-provider.jar">
+    <target name="portlet-widget-tags-jar" depends="compile" description="Create lib/portlet-widget-tags.jar">
         <jar jarfile="lib/portlet-widget-tags.jar" basedir="${build.classes}" >
             <include name="org/gridlab/gridsphere/tags/**"/>
             <metainf dir="${gswebapp.dir}/WEB-INF/tlds"/>
