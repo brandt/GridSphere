@@ -6,15 +6,13 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
 
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.PropertyConfigurator;
-import org.gridlab.gridsphere.portlet.PortletLog;
+import org.apache.log4j.Logger;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Priority;
 
-import java.net.URL;
-import java.util.Hashtable;
 import java.util.Map;
+import java.util.HashMap;
 
 /**
  * The <code>PortletLog</code> provides the portlet with the ability to log
@@ -36,21 +34,19 @@ import java.util.Map;
  */
 public class SportletLog implements PortletLog {
 
-    static {
-        //LogManager.setRepositorySelector();
-        URL propsURL = SportletLog.class.getResource("/gridsphere/log4j.properties");
-        PropertyConfigurator.configure(propsURL);
+    public static void setConfigureURL(String url) {
+        PropertyConfigurator.configure(url);
     }
 
-    private static Map logMap = new Hashtable();
+    private Logger logger;
 
-    private Log logger;
+    private static Map loggers = new HashMap();
 
     /**
      * Constructor not accessible. Use getDefault instead.
      */
     private SportletLog(Class clazz) {
-        logger = LogFactory.getLog(clazz);
+        logger = LogManager.getLogger(clazz);
     }
 
     /**
@@ -59,11 +55,10 @@ public class SportletLog implements PortletLog {
      * @return the PortletLog
      */
     public static synchronized PortletLog getInstance(Class clazz) {
-        SportletLog log = (SportletLog) logMap.get(clazz);
-        if (log != null) return log;
-        log = new SportletLog(clazz);
-        logMap.put(clazz, new SportletLog(clazz));
-        return log;
+        if (!loggers.containsKey(clazz)) {
+            loggers.put(clazz, new SportletLog(clazz));
+        }
+        return (PortletLog)loggers.get(clazz);
     }
 
     /**
@@ -108,7 +103,7 @@ public class SportletLog implements PortletLog {
      * @return true for the moment
      */
     public boolean isWarnEnabled() {
-        return logger.isWarnEnabled();
+        return logger.isEnabledFor(Priority.WARN);
     }
 
     /**
@@ -126,7 +121,7 @@ public class SportletLog implements PortletLog {
      * @return true if the log is enabled, false otherwise
      */
     public boolean isErrorEnabled() {
-        return logger.isErrorEnabled();
+        return logger.isEnabledFor(Priority.ERROR);
     }
 
     /**
