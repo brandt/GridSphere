@@ -41,6 +41,7 @@ Copyright:
     <property name="project.api" value="${project.title} API ${version.release}" />
 
     <!-- GridSphere build and dist directories -->
+    <property name="gridsphere.base" value="@GRIDSPHERE_BASE@"/>
 
     <!--- Type of SQL Database to use -->
     <property name="DATABASE_TYPE" value="${gridsphere.database.type}"/>
@@ -79,7 +80,7 @@ Copyright:
             <include name="*.jar"/>
         </fileset>
 
-        <fileset dir="@GRIDSPHERE_BASE@/lib">
+        <fileset dir="${gridsphere.base}/lib">
             <include name="*.jar"/>
             <include name="ext/*.jar"/>
         </fileset>
@@ -371,7 +372,7 @@ Copyright:
 
         <antcall target="create-real-database"/>
 
-        <copy file="${gridsphere.home}/lib/portlet-widget-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
+        <copy file="${gridsphere.base}/lib/portlet-widget-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
         <copy file="lib/${project.name}.jar" todir="${project.webapp}/WEB-INF/lib"/>
 
     </target>
