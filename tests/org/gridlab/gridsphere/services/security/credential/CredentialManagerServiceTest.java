@@ -31,6 +31,7 @@ import org.gridlab.gridsphere.services.security.credential.CredentialMapping;
 import org.gridlab.gridsphere.services.security.credential.CredentialNotPermittedException;
 import org.gridlab.gridsphere.services.security.credential.impl.GlobusHostMapping;
 import org.gridlab.gridsphere.services.security.credential.impl.GlobusCredentialMapping;
+import org.gridlab.gridsphere.services.security.AuthenticationException;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -94,8 +95,21 @@ public class CredentialManagerServiceTest extends ServiceTest {
         deleteUsers();
     }
 
+    private User getSuperUser() {
+        User superUser = null;
+        //return userManager.getUser("root");
+        try {
+            superUser = userManager.login("root", "");
+        } catch (AuthenticationException e) {
+            String msg = "Unable to login as root!";
+            log.error(msg, e);
+            fail(msg);
+        }
+        return superUser;
+    }
+
     private void createUsers() {
-        this.rootUser = this.userManager.getUser("root");
+        this.rootUser = getSuperUser();
         this.testUser = createTestUser(this.rootUser);
     }
 

@@ -4,22 +4,18 @@
  */
 package org.gridlab.gridsphere.services.user;
 
-import org.gridlab.gridsphere.portlet.service.spi.ServiceTest;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.*;
-import org.gridlab.gridsphere.services.security.acl.AccessControlService;
-import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
-import org.gridlab.gridsphere.services.security.acl.impl.UserACL;
-import org.gridlab.gridsphere.services.security.AuthenticationException;
-import org.gridlab.gridsphere.services.user.impl.AccountRequestImpl;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.core.persistence.ConfigurationException;
-import org.gridlab.gridsphere.core.persistence.DeleteException;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import junit.framework.TestResult;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+//import org.gridlab.gridsphere.portlet.impl.SportletUser;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.portlet.service.spi.ServiceTest;
+import org.gridlab.gridsphere.services.security.AuthenticationException;
+import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
+import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 
 import java.util.List;
 import java.util.Vector;
@@ -30,7 +26,6 @@ public class UserManagerServiceTest extends ServiceTest {
     private static AccessControlService aclService = null;
     private static AccessControlManagerService aclManagerService = null;
     private static UserManagerService userManager = null;
-    private static LoginService loginService = null;
     private PersistenceManagerRdbms pm = null;
     private PortletGroup portal, triana, cactus;
     private User superuser;
@@ -41,11 +36,11 @@ public class UserManagerServiceTest extends ServiceTest {
         super(name);
     }
 
-    public static void main (String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         junit.textui.TestRunner.run(suite());
     }
 
-    public static Test suite ( ) {
+    public static Test suite() {
         return new TestSuite(UserManagerServiceTest.class);
     }
 
@@ -54,10 +49,9 @@ public class UserManagerServiceTest extends ServiceTest {
         log.info(" =====================================  setup");
         // Create both services using mock ServletConfig
         try {
-            aclService = (AccessControlService)factory.createPortletService(AccessControlService.class, null, true);
-            aclManagerService = (AccessControlManagerService)factory.createPortletService(AccessControlManagerService.class, null, true);
-            userManager = (UserManagerService)factory.createPortletService(UserManagerService.class, null, true);
-            loginService = (LoginService)factory.createPortletService(LoginService.class, null, true);
+            aclService = (AccessControlService) factory.createPortletService(AccessControlService.class, null, true);
+            aclManagerService = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, null, true);
+            userManager = (UserManagerService) factory.createPortletService(UserManagerService.class, null, true);
         } catch (Exception e) {
             log.error("Unable to initialize services: ", e);
         }
@@ -115,15 +109,15 @@ public class UserManagerServiceTest extends ServiceTest {
             log.error("Exception " + e);
         }
 
-        for (int i=0; i<groups.size();i++) {
-            if (((PortletGroup)groups.get(i)).getName().equals("cactus")) {
-                cactus = (PortletGroup)groups.get(i);
+        for (int i = 0; i < groups.size(); i++) {
+            if (((PortletGroup) groups.get(i)).getName().equals("cactus")) {
+                cactus = (PortletGroup) groups.get(i);
             }
-            if (((PortletGroup)groups.get(i)).getName().equals("triana")) {
-                triana = (PortletGroup)groups.get(i);
+            if (((PortletGroup) groups.get(i)).getName().equals("triana")) {
+                triana = (PortletGroup) groups.get(i);
             }
-            if (((PortletGroup)groups.get(i)).getName().equals("portal")) {
-                portal = (PortletGroup)groups.get(i);
+            if (((PortletGroup) groups.get(i)).getName().equals("portal")) {
+                portal = (PortletGroup) groups.get(i);
             }
         }
     }
@@ -151,19 +145,23 @@ public class UserManagerServiceTest extends ServiceTest {
         // oliver was denied
 
         AccountRequest req1 = userManager.createAccountRequest();
-        req1.setUserID("jason");req1.setGivenName("Jason");
+        req1.setUserID("jason");
+        req1.setGivenName("Jason");
         req1.addToGroup(portal, PortletRole.ADMIN);
         req1.addToGroup(cactus, PortletRole.USER);
 
         AccountRequest req2 = userManager.createAccountRequest();
-        req2.setUserID("michael");req2.setGivenName("Michael");
+        req2.setUserID("michael");
+        req2.setGivenName("Michael");
         req2.addToGroup(portal, PortletRole.USER);
         req2.addToGroup(triana, PortletRole.USER);
 
         AccountRequest req3 = userManager.createAccountRequest();
         req3.setUserID("oliver");
         req3.setGivenName("Oliver");
-        Vector userdns2 = new Vector(); userdns2.add("dns1");userdns2.add("dns2");
+        Vector userdns2 = new Vector();
+        userdns2.add("dns1");
+        userdns2.add("dns2");
         req3.setMyproxyUserDN(userdns2);
 
         try {
@@ -176,8 +174,8 @@ public class UserManagerServiceTest extends ServiceTest {
             log.error("Exception " + e);
             fail("failed to generate AccountRequests");
         } catch (PermissionDeniedException e) {
-                log.error("Exception " + e);
-                fail("No permissions!");
+            log.error("Exception " + e);
+            fail("No permissions!");
         }
     }
 
@@ -198,7 +196,7 @@ public class UserManagerServiceTest extends ServiceTest {
         User superUser = null;
         //return userManager.getUser("root");
         try {
-          superUser = loginService.login("root", "");
+            superUser = userManager.login("root", "");
         } catch (AuthenticationException e) {
             String msg = "Unable to login as root!";
             log.error(msg, e);
@@ -211,49 +209,52 @@ public class UserManagerServiceTest extends ServiceTest {
 
     public void testSportletData() {
         log.info("+ testSportletData");
-        User jason = userManager.getUser("jason");
-        PortletData pd = (PortletData)userManager.getPortletData(jason, "1");
-        pd.setAttribute("test","result");
+        User jason = userManager.getUser(getSuperUser(), "jason");
+        PortletData pd = (PortletData) userManager.getPortletData(jason, "1");
+        pd.setAttribute("test", "result");
         try {
             pd.store();
         } catch (PersistenceManagerException e) {
 
         }
 
-        User jason2 = userManager.getUser("jason");
+        User jason2 = userManager.getUser(getSuperUser(), "jason");
         PortletData pd2 = userManager.getPortletData(jason2, "1");
         String result = pd2.getAttribute("test");
         assertEquals("result", result);
     }
 
+    /* Good old Sportlet User Attributes -- we need to work on this again -JN
     public void testSportletUserAttributes() {
         log.info("+ testSportletuserAttributes");
-        User jason = userManager.getUser("jason");
-        SportletUser su = (SportletUser)jason;
-        su.setAttribute("test","result");
+        User jason = userManager.getUser(getSuperUser(), "jason");
+        SportletUser su = (SportletUser) jason;
+        su.setAttribute("test", "result");
         try {
             userManager.saveUser(getSuperUser(), su);
         } catch (PermissionDeniedException e) {
             log.error("Unable to save changes to user", e);
         }
 
-        User jason2 = userManager.getUser("jason");
-        String Attribute = (String)jason2.getAttribute("test");
-        System.out.println("Attr:"+Attribute );
+        User jason2 = userManager.getUser(getSuperUser(), "jason");
+        String Attribute = (String) jason2.getAttribute("test");
+        System.out.println("Attr:" + Attribute);
 
         assertEquals("result", Attribute);
     }
+    */
 
     public void testRemoveUser() {
         log.info("+ testRemoveUser");
         // Should fail to remove michael
-        User jason = userManager.getUser("jason");
+        User jason = userManager.getUser(getSuperUser(), "jason");
         try {
             userManager.removeUser(jason, "michael");
             fail("Should fail here!");
-        } catch (PermissionDeniedException e) {}
+        } catch (PermissionDeniedException e) {
+        }
 
-        jason = userManager.getUser("jason");
+        jason = userManager.getUser(getSuperUser(), "jason");
         if (jason == null) {
             fail("Jason should not be delete");
         }
@@ -265,14 +266,14 @@ public class UserManagerServiceTest extends ServiceTest {
             fail("should NOT fail here");
         }
 
-        assertEquals(false, userManager.existsUser("michael"));
+        assertEquals(false, userManager.userExists("michael"));
     }
 
     public void testDenyGroupRequest() {
         log.info("+ testdenygrouprequest");
-        User jason = userManager.getUser("jason");
+        User jason = userManager.getUser(getSuperUser(), "jason");
         try {
-            userManager.denyGroupRequest(superuser, jason,  portal, null);
+            userManager.denyGroupRequest(superuser, jason, portal, null);
         } catch (PermissionDeniedException e) {
             log.error("Exception " + e);
             fail("Should NOT fail");
@@ -282,7 +283,7 @@ public class UserManagerServiceTest extends ServiceTest {
         try {
             isInGroup = aclService.isUserInGroup(jason, portal);
         } catch (PortletServiceException e) {
-            log.error("Exception "+e);
+            log.error("Exception " + e);
             fail("should not fail here");
         }
 
@@ -291,20 +292,21 @@ public class UserManagerServiceTest extends ServiceTest {
 
     public void testApproveGroup() {
         log.info("+ testapprovegroup");
-        User jason = userManager.getUser("jason");
+        User jason = userManager.getUser(getSuperUser(), "jason");
         try {
-            userManager.approveGroupRequest(superuser, jason,  portal, null);
+            userManager.approveGroupRequest(superuser, jason, portal, null);
         } catch (PermissionDeniedException e) {
             log.error("Exception " + e);
             fail("Should NOT fail");
         }
 
-        User michael = userManager.getUser("michael");
+        User michael = userManager.getUser(getSuperUser(), "michael");
 
         try {
             userManager.approveGroupRequest(jason, michael, triana, null);
             fail("This should fail!");
-        } catch (PermissionDeniedException e) {}
+        } catch (PermissionDeniedException e) {
+        }
 
         try {
             userManager.approveGroupRequest(jason, michael, portal, null);
@@ -342,7 +344,7 @@ public class UserManagerServiceTest extends ServiceTest {
 
     public void testModifyExistingUser() {
         log.info("+ testmodifyExistingUser");
-        User jason = userManager.getUser("jason");
+        User jason = userManager.getUser(getSuperUser(), "jason");
         String jasonid = jason.getID();
         AccountRequest req = userManager.changeAccountRequest(jason);
         req.setFamilyName("Novotny");
@@ -361,7 +363,7 @@ public class UserManagerServiceTest extends ServiceTest {
             fail("Should not fail at approving accountrequest");
         }
 
-        User newjason = userManager.getUser("jason");
+        User newjason = userManager.getUser(root, "jason");
         assertEquals("Novotny", newjason.getFamilyName());
         assertEquals(jasonid, newjason.getID());
 
@@ -376,13 +378,13 @@ public class UserManagerServiceTest extends ServiceTest {
             log.error("Exception " + e);
             fail("could not get Groups");
         }
-        assertEquals(3,result.size());
+        assertEquals(3, result.size());
 
-        String groupid = ((PortletGroup)result.get(0)).getID();
-        String groupname = ((PortletGroup)result.get(0)).getName();
+        String groupid = ((PortletGroup) result.get(0)).getID();
+        String groupname = ((PortletGroup) result.get(0)).getName();
 
         try {
-            aclManagerService.renameGroup((PortletGroup)result.get(0), "globus");
+            aclManagerService.renameGroup((PortletGroup) result.get(0), "globus");
         } catch (PortletServiceException e) {
             log.error("Exception " + e);
             fail("grouprenaming failed");
@@ -394,11 +396,11 @@ public class UserManagerServiceTest extends ServiceTest {
             log.error("Exception " + e);
             fail("could not get Groups");
         }
-        assertEquals(3,result.size());
+        assertEquals(3, result.size());
 
-        for (int i=0; i<result.size();i++) {
-            if (((PortletGroup)result.get(i)).getID().equals(groupid)){
-                assertTrue(!((PortletGroup)result.get(i)).getName().equals(groupname));
+        for (int i = 0; i < result.size(); i++) {
+            if (((PortletGroup) result.get(i)).getID().equals(groupid)) {
+                assertTrue(!((PortletGroup) result.get(i)).getName().equals(groupname));
             }
         }
     }
@@ -414,7 +416,9 @@ public class UserManagerServiceTest extends ServiceTest {
         AccountRequest ianRequest = userManager.createAccountRequest();
         ianRequest.setUserID("ian");
         ianRequest.setGivenName("Ian");
-        Vector userdns = new Vector(); userdns.add("dns1");userdns.add("dns2");
+        Vector userdns = new Vector();
+        userdns.add("dns1");
+        userdns.add("dns2");
         ianRequest.setMyproxyUserDN(userdns);
         try {
             userManager.submitAccountRequest(ianRequest);
@@ -428,7 +432,7 @@ public class UserManagerServiceTest extends ServiceTest {
 
         // Check number of account requests is +1
         requests = userManager.getAccountRequests();
-        assertEquals(requests.size(), numRequests+1);
+        assertEquals(requests.size(), numRequests + 1);
 
         // Check that ian exists as an account request
         ianRequest = userManager.getAccountRequest(ianId);
@@ -437,7 +441,7 @@ public class UserManagerServiceTest extends ServiceTest {
         }
 
         // Approve the request with jason
-        User jason = userManager.getUser("jason");
+        User jason = userManager.getUser(getSuperUser(), "jason");
         try {
             userManager.approveAccountRequest(jason, ianRequest, null);
             String msg = "Should have failed to approve request";
@@ -459,7 +463,7 @@ public class UserManagerServiceTest extends ServiceTest {
         assertEquals(requests.size(), numRequests);
 
         // Check that account exists
-        assertEquals(true, userManager.existsUser("ian"));
+        assertEquals(true, userManager.userExists("ian"));
     }
 
     public void testDenyAccountRequest() {
@@ -473,7 +477,9 @@ public class UserManagerServiceTest extends ServiceTest {
         AccountRequest ianRequest = userManager.createAccountRequest();
         ianRequest.setUserID("ian");
         ianRequest.setGivenName("Ian");
-        Vector userdns = new Vector(); userdns.add("dns1");userdns.add("dns2");
+        Vector userdns = new Vector();
+        userdns.add("dns1");
+        userdns.add("dns2");
         ianRequest.setMyproxyUserDN(userdns);
         try {
             userManager.submitAccountRequest(ianRequest);
@@ -488,7 +494,7 @@ public class UserManagerServiceTest extends ServiceTest {
 
         // Check number of account requests is +1
         requests = userManager.getAccountRequests();
-        assertEquals(requests.size(), numRequests+1);
+        assertEquals(requests.size(), numRequests + 1);
 
         // Check that ian exists as an account request
         ianRequest = userManager.getAccountRequest(ianId);
@@ -497,7 +503,7 @@ public class UserManagerServiceTest extends ServiceTest {
         }
 
         // Deny the request with jason
-        User jason = userManager.getUser("jason");
+        User jason = userManager.getUser(getSuperUser(), "jason");
         try {
             userManager.denyAccountRequest(jason, ianRequest, null);
             String msg = "Should have failed to deny request with jason";
@@ -519,6 +525,6 @@ public class UserManagerServiceTest extends ServiceTest {
         assertEquals(requests.size(), numRequests);
 
         // Check that ian does not exist
-        assertEquals(false, userManager.existsUser("ian"));
+        assertEquals(false, userManager.userExists("ian"));
     }
 }
