@@ -3,7 +3,7 @@
 
 <portlet-app-def>
 
-<portlet-app id="org.gridlab.gridsphere.portlets.core.HelloWorld">
+<portlet-app id="org.gridlab.gridsphere.portlets.examples.HelloWorld">
     <portlet-name>Hello World Portlet Application</portlet-name>
     <servlet-name>HelloWorld</servlet-name>
     <portlet-config>
@@ -35,7 +35,7 @@
     </supports>
 </portlet-app>
 
-<concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.HelloWorld.1">
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.examples.HelloWorld.1">
     <context-param>
         <param-name>foobar</param-name>
         <param-value>a value</param-value>
@@ -59,7 +59,7 @@
     </concrete-portlet>
 </concrete-portlet-app>
 
-<concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.HelloWorld.2">
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.examples.HelloWorld.2">
     <context-param>
         <param-name>foobar</param-name>
         <param-value>another value</param-value>
@@ -87,7 +87,7 @@
 
 <portlet-app-def>
 
-<portlet-app id="org.gridlab.gridsphere.portlets.core.HalloWelt">
+<portlet-app id="org.gridlab.gridsphere.portlets.examples.HalloWelt">
     <portlet-name>Hallo Welt Portlet Application</portlet-name>
     <servlet-name>HalloWelt</servlet-name>
     <allows>
@@ -105,7 +105,7 @@
     </supports>
 </portlet-app>
 
-<concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.HalloWelt.1">
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.examples.HalloWelt.1">
     <context-param>
         <param-name>Portlet Master</param-name>
         <param-value>yourid@yourdomain.com</param-value>
@@ -270,7 +270,7 @@
 
 <portlet-app-def>
 
-<portlet-app id="org.gridlab.gridsphere.portlets.core.DemoPortlet">
+<portlet-app id="org.gridlab.gridsphere.portlets.examples.DemoPortlet">
     <portlet-name>Demo Portlet</portlet-name>
     <servlet-name>DemoPortlet</servlet-name>
     <portlet-config>
@@ -298,7 +298,7 @@
     </supports>
 </portlet-app>
 
-<concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.DemoPortlet.1">
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.examples.DemoPortlet.1">
     <context-param>
         <param-name>foobar</param-name>
         <param-value>a value</param-value>
