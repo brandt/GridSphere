@@ -118,7 +118,7 @@ Copyright:
   <!-- =================================================================== -->
   <!-- Builds and deploys GridSphere                                       -->
   <!-- =================================================================== -->
-  <target name="all" depends="clean,compile,docs,jar,gridsphere-war,core-war" description="Build and deploy GridSphere"/>
+  <target name="all" depends="clean,compile,docs,jar,deploy" description="Build and deploy GridSphere"/>
 
   <!-- =================================================================== -->
   <!-- Updates GridSphere source code                                      -->
@@ -134,8 +134,9 @@ Copyright:
   <target name="compile" depends="setenv" description="Compile GridSphere source code">
 
     <!-- backup, deploy and preprocess the properties file -->
-    <copy file="webapps/gridsphere/WEB-INF/conf/gridsphere.properties" tofile="webapps/gridsphere/WEB-INF/conf/gridsphere.properties.bak"/>
-    <copy file="webapps/gridsphere/WEB-INF/conf/gridsphere.properties" tofile="${classes.dir}/${Name}/gridsphere.properties"/>
+    <copy file="${gswebapp.dir}/WEB-INF/conf/gridsphere.properties" tofile="${gswebapp.dir}/WEB-INF/conf/gridsphere.properties.bak"/>
+    <copy file="${gswebapp.dir}/WEB-INF/conf/gridsphere.properties" tofile="${classes.dir}/${Name}/gridsphere.properties"/>
+    <copy file="${gswebapp.dir}/WEB-INF/conf/PortletServices.properties" tofile="${classes.dir}/${Name}/PortletServices.properties"/>
     <copy file="conf/log4j.properties" tofile="${classes.dir}/log4j.properties" />
 
     <!-- <copy file="${webapp.dir}/WEB-INF/conf/${Name}.properties" tofile="${env.TOMCAT_HOME}/webapps/${Name}/WEB-INF/conf/${Name}.properties" />  -->
@@ -369,7 +370,6 @@ Copyright:
     <!-- Compiles and runs all JUnit tests: needs optional.jar and junit in classpath     -->
     <!-- =================================================================== -->
     <target name="compiletests" if="junit.present" depends="compile" description="Compiles all JUnit tests">
-        <mkdir dir = "${reports.tests}"/>
         <copy file="${gswebapp.dir}/WEB-INF/conf/PortletServices.properties" todir="${classes.dir}"/>
         <javac  srcdir="${test.dir}"
 		    destdir="${classes.dir}"
@@ -401,7 +401,7 @@ Copyright:
     <!-- Runs all JUnit tests: needs optional.jar and junit in classpath     -->
     <!-- =================================================================== -->
     <target name="runtests" depends="compiletests" if="junit.present" description="Runs all JUnit tests">
-    <java fork="yes" classname="junit.textui.TestRunner"
+    <java fork="no" classname="junit.textui.TestRunner"
             taskname="junit" failonerror="true">
         <arg value="org.gridlab.gridsphere.AllJUnitTests"/>
         <classpath>
