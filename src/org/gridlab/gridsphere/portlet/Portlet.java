@@ -7,10 +7,12 @@ package org.gridlab.gridsphere.portlet;
 import org.gridlab.gridsphere.portlet.impl.SportletConfig;
 import org.gridlab.gridsphere.portlet.impl.SportletSettings;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.PortletRegistryService;
 import org.gridlab.gridsphere.portletcontainer.impl.RegisteredSportlet;
 import org.gridlab.gridsphere.portletcontainer.impl.RegisteredSportletImpl;
 import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -272,6 +274,13 @@ public abstract class Portlet extends HttpServlet
      */
     public final void init(ServletConfig config) throws ServletException {
         super.init(config);
+        log.info("in init(ServletConfig)");
+        /*
+            This will register the portlet (servlet) with the registry service on startup.
+            I took this path initially thinking I could forward to remote third-party
+            portlets outside of gridsphere.jar and provide their context to the registry
+            service too. Now I've moved this to GridSphere.java  so the portlet container
+            controls the entire loading and initialization/shutdown of the portlets.
         try {
             RegisteredPortlet registeredPortlet = new RegisteredSportletImpl(config);
             portletConfig = registeredPortlet.getPortletConfig();
@@ -280,8 +289,9 @@ public abstract class Portlet extends HttpServlet
             registryService = (PortletRegistryService)context.getService(PortletRegistryService.class);
             id = registryService.registerPortlet(registeredPortlet);
         } catch (Exception e) {
-            throw new ServletException("Unable to Initialize Portlet");
+            throw new ServletException("Unable to Initialize Portlet " + e.getMessage());
         }
+        */
     }
 
     public final void init() throws ServletException {

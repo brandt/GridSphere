@@ -198,7 +198,9 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      *
      * @param request the portlet request
      * @param response the portlet response
-     * @throws
+     *
+     * @throws PortletException if an error occurs during processing
+     * @throws IOException if an I/O error occurs
      */
     public void doConfigure(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
@@ -210,6 +212,9 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      *
      * @param request the portlet request
      * @param response the portlet response
+     *
+     * @throws PortletException if an error occurs during processing
+     * @throws IOException if an I/O error occurs
      */
     public void doEdit(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
@@ -221,6 +226,9 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      *
      * @param request the portlet request
      * @param response the portlet response
+     *
+     * @throws PortletException if an error occurs during processing
+     * @throws IOException if an I/O error occurs
      */
     public void doHelp(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
@@ -232,6 +240,9 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      *
      * @param request the portlet request
      * @param response the portlet response
+     *
+     * @throws PortletException if an error occurs during processing
+     * @throws IOException if an I/O error occurs
      */
     public void doView(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
