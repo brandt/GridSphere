@@ -120,7 +120,18 @@ Copyright:
         <mkdir dir="${build.webapps}"/>
         <mkdir dir="${build.docs}"/>
 
-        <property name="GRIDSPHERE_HOME" value="${env.CATALINA_HOME}/gridsphere"/>
+
+        <if>
+         <equals arg1="${gridsphere.home}" arg2="" />
+         <then>
+            <property name="GRIDSPHERE_HOME" value="${env.CATALINA_HOME}/gridsphere"/>
+         </then>
+         <else>
+           <property name="GRIDSPHERE_HOME" value="${gridsphere.home}/gridsphere"/>
+         </else>
+        </if>
+
+
         <property name="TEST_HOME" value="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/test"/>
 
 
