@@ -35,4 +35,8 @@ public interface TableTag extends ComponentTag {
     void setWidth(String width);
 
     String getWidth();
+
+    void setSortable(boolean isSortable);
+
+    boolean getSortable();
 }

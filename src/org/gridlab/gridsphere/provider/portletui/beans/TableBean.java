@@ -19,6 +19,8 @@ public class TableBean extends BaseComponentBean implements TagBean {
     protected String border = null;
     protected String width = null;
     protected String align = null;
+    protected boolean isSortable = false;
+    protected String sortableId = "t1";
 
     /**
      * Constructs a default table bean
@@ -156,10 +158,30 @@ public class TableBean extends BaseComponentBean implements TagBean {
         return border;
     }
 
+    public void setSortable(boolean isSortable) {
+        this.isSortable = isSortable;
+    }
+
+    public boolean getSortable() {
+        return isSortable;
+    }
+
+    public void setSortableID(String sortableId) {
+        this.sortableId = sortableId;
+    }
+
+    public String getSortableID() {
+        return sortableId;
+    }
+
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         //if (defaultModel == null) return "";
-        sb.append("<table " + getFormattedCss() + " ");
+        if (isSortable) {
+           sb.append("<table class=\"sortable\" id=\" " + sortableId + "\" ");
+        } else {
+            sb.append("<table " + getFormattedCss() + " ");
+        }
         if (cellSpacing != null) sb.append(" cellspacing=\"" + cellSpacing + "\" ");
         if (cellPadding != null) sb.append(" cellpadding=\"" + cellPadding + "\" ");
         if (border != null) sb.append(" border=\"" + border + "\" ");

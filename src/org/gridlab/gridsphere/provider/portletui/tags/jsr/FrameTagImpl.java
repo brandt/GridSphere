@@ -117,6 +117,11 @@ public class FrameTagImpl extends TableTagImpl implements FrameTag {
             if (border != null) tableBean.setBorder(border);
             tableBean.setCssClass(cssClass);
             tableBean.setCssStyle(cssStyle);
+            tableBean.setSortable(sortable);
+            if (sortable) {
+                tableBean.setSortable(sortable);
+                tableBean.setSortableID("td" + this.getUniqueId("gs_tableNum"));
+            }
             this.setBaseComponentBean(tableBean);
             if (key != null) {
                 tableBean.setKey(key);

@@ -90,5 +90,19 @@ public abstract class BaseBeanTag extends BodyTagSupport implements BeanTag {
         }
     }
 
+    protected String getUniqueId(String varName) {
+        String uniqueId = (String) pageContext.getAttribute(varName, PageContext.REQUEST_SCOPE);
+
+        // use a counter to continually increase form number to provide unique form name
+        int ctr = 0;
+        if (uniqueId == null) {
+            ctr = 1;
+        } else {
+            ctr = Integer.parseInt(uniqueId) + 1;
+        }
+        uniqueId = String.valueOf(ctr);
+        pageContext.setAttribute(varName, uniqueId, PageContext.REQUEST_SCOPE);
+        return uniqueId;
+    }
 
 }

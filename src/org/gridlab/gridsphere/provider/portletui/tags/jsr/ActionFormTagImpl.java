@@ -77,19 +77,9 @@ public class ActionFormTagImpl extends ActionTagImpl implements ActionFormTag {
             if (isMultipart) {
                 out.print(" enctype=\"multipart/form-data\"");
             }
-            String noName = (String) pageContext.getAttribute("gs_formNumber", PageContext.REQUEST_SCOPE);
-            if (name == null) {
-                // use a counter to continually increase form number to provide unique form name
-                int ctr = 0;
-                if (noName == null) {
-                    ctr = 1;
-                } else {
-                    ctr = Integer.parseInt(noName) + 1;
-                }
-                noName = String.valueOf(ctr);
 
-                pageContext.setAttribute("gs_formNumber", noName, PageContext.REQUEST_SCOPE);
-                name = "form" + noName;
+            if (name == null) {                
+                name = "form" + this.getUniqueId("gs_formNumber");
             }
 
             out.print(" name=\"" + name + "\"");

@@ -24,6 +24,7 @@ public class TableTagImpl extends BaseComponentTagImpl implements TableTag {
     protected String border = null;
     protected String width = null;
     protected String align = null;
+    protected boolean sortable = false;
 
     /**
      * Sets the table model associated with this table
@@ -151,6 +152,14 @@ public class TableTagImpl extends BaseComponentTagImpl implements TableTag {
         return width;
     }
 
+    public void setSortable(boolean isSortable) {
+        sortable = isSortable;
+    }
+
+    public boolean getSortable() {
+        return sortable;
+    }
+
     public int doStartTag() throws JspException {
 
         boolean includeBody = true;
@@ -169,6 +178,11 @@ public class TableTagImpl extends BaseComponentTagImpl implements TableTag {
             if (cellSpacing != null) tableBean.setCellSpacing(cellSpacing);
             if (cellPadding != null) tableBean.setCellPadding(cellPadding);
             if (border != null) tableBean.setBorder(border);
+            if (sortable) {
+                tableBean.setSortable(sortable);
+                tableBean.setSortableID("td" + this.getUniqueId("gs_tableNum"));
+            }
+
         }
 
         try {
