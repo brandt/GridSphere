@@ -54,7 +54,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     public void doShowLayout(FormEvent event) throws PortletException, IOException {
         PortletRequest req = event.getPortletRequest();
-        PortletResponse res = event.getPortletResponse();
 
         TextAreaBean ta = event.getTextAreaBean("bannerTA");
 

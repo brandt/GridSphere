@@ -131,6 +131,7 @@ public interface SportletProperties {
      */
     public static final String WINDOW_RESTORED = "org.gridlab.gridsphere.portlet.lifecycle.windowRestored";
 
+    public static final String INIT_PAGE = "org.gridlab.gridsphere.layout.INIT_PAGE";
     /**
      * Command to perform the doTitle method on a portlet
      */

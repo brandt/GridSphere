@@ -15,6 +15,7 @@ import org.gridlab.gridsphere.layout.*;
 
 import javax.servlet.UnavailableException;
 import java.util.*;
+import java.io.IOException;
 
 public class LayoutManagerPortlet extends ActionPortlet {
 
@@ -25,6 +26,12 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     // Portlet services
     private LayoutManagerService layoutMgr = null;
+
+    public class TabDataBean {
+        private String name = "";
+        private String cid = "";
+
+    }
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
@@ -37,7 +44,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         this.log.debug("Exiting initServices()");
         //portletMgr = PortletManager.getInstance();
 
-        DEFAULT_VIEW_PAGE = "doShowLayout";
+        DEFAULT_VIEW_PAGE = "doRender";
         DEFAULT_HELP_PAGE = "layout/help.jsp";
 
     }
@@ -46,16 +53,89 @@ public class LayoutManagerPortlet extends ActionPortlet {
         super.initConcrete(settings);
     }
 
-    public void refreshLayout(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
-        layoutMgr.refreshPage(req);
+    public void createNewTab(FormEvent event) throws PortletException, IOException {
+
+        String tabName = event.getTextFieldBean("userTabTF").getValue();
+        RadioButtonBean rb = event.getRadioButtonBean("colsRB");
+        String rbtype = rb.getSelectedValue();
+
+        System.err.println("rbtype= " + rbtype);
+        int cols = Integer.valueOf(rbtype).intValue();
+        PortletTabbedPane pane = layoutMgr.createUserTabbedPane(event.getPortletRequest(), cols, tabName);
+
+
+        PortletTab tab = pane.getLastPortletTab();
+       
+        pane.save();
+        PortletPage page = layoutMgr.getPortletPage(event.getPortletRequest());
+        PortletTabbedPane mypane = page.getPortletTabbedPane();
+        List tabs = mypane.getPortletTabs();
+        tabs.add(0, tab);
+        layoutMgr.reloadPage(event.getPortletRequest());
     }
 
-    public void doShowLayout(FormEvent event) {
+    public void deleteTab(FormEvent event) throws IOException {
+        String label = event.getAction().getParameter("tabid");
+
+        PortletTabbedPane pane = layoutMgr.getUserTabbedPane(event.getPortletRequest());
+        List tabs = pane.getPortletTabs();
+        Iterator it = tabs.iterator();
+        while (it.hasNext()) {
+            PortletTab tab = (PortletTab)it.next();
+            if (tab.getLabel().equals(label)) {
+                it.remove();
+            }
+        }
+        pane.save();
+        PortletPage page = layoutMgr.getPortletPage(event.getPortletRequest());
+        PortletTabbedPane mypane = page.getPortletTabbedPane();
+        it = mypane.getPortletTabs().iterator();
+        while (it.hasNext()) {
+            PortletTab tab = (PortletTab)it.next();
+            if (tab.getLabel().equals(label)) {
+                it.remove();
+            }
+        }
+        layoutMgr.reloadPage(event.getPortletRequest());
+    }
+
+    public void saveTab(FormEvent event) throws IOException {
+
+        String lang = event.getPortletRequest().getLocale().getLanguage();
+        String name = event.getPortletRequest().getParameter("myTF");
+        String label = event.getAction().getParameter("tabid");
+
+        PortletTabbedPane pane = layoutMgr.getUserTabbedPane(event.getPortletRequest());
+        List tabs = pane.getPortletTabs();
+        Iterator it = tabs.iterator();
+        while (it.hasNext()) {
+            PortletTab tab = (PortletTab)it.next();
+            if (tab.getLabel().equals(label)) {
+                tab.setTitle(lang, name);
+            }
+        }
+        pane.save();
+        PortletPage page = layoutMgr.getPortletPage(event.getPortletRequest());
+        PortletTabbedPane mypane = page.getPortletTabbedPane();
+        it = mypane.getPortletTabs().iterator();
+        while (it.hasNext()) {
+            PortletTab tab = (PortletTab)it.next();
+            if (tab.getLabel().equals(label)) {
+                tab.setTitle(lang, name);
+            }
+        }
+        layoutMgr.reloadPage(event.getPortletRequest());
+    }
+
+    public void doRender(FormEvent event) {
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
-        ListBoxBean themeLB = event.getListBoxBean("themeLB");
 
+        req.setAttribute("lang", req.getLocale().getLanguage());
+        MessageBoxBean messageBox = event.getMessageBoxBean("messageBox");
+        messageBox.appendText("This portlet is under development!");
+
+        ListBoxBean themeLB = event.getListBoxBean("themeLB");
         String theme = layoutMgr.getTheme(req);
         themeLB.clear();
         String themes = getPortletSettings().getAttribute("supported-themes");
@@ -68,205 +148,14 @@ public class LayoutManagerPortlet extends ActionPortlet {
             themeLB.addBean(lb);
         }
 
-        // put tab configuration in request
-        List tabNames = layoutMgr.getTabNames(req);
-        String tabName = event.getHiddenFieldBean("tabHF").getValue();
-        if (tabName == null) {
-            tabName = (String)tabNames.get(0);
-            System.err.println("Set tab: " + tabName);
-            event.getHiddenFieldBean("tabHF").setValue(tabName);
+        PortletTabbedPane pane = layoutMgr.getUserTabbedPane(req);
+        List tabs;
+        if (pane != null) {
+            tabs = pane.getPortletTabs();
         } else {
-            System.err.println("found a tab: " + tabName);
+            tabs = new ArrayList();
         }
-        ListBoxBean seltabsLB = event.getListBoxBean("seltabsLB");
-        seltabsLB.clear();
-        TableCellBean tabsTC = event.getTableCellBean("tabsTC");
-        for (int i = 0; i < tabNames.size(); i++) {
-            ListBoxItemBean item = new ListBoxItemBean();
-            item.setValue((String)tabNames.get(i));
-            item.setName(String.valueOf(i));
-            seltabsLB.addBean(item);
-            TextFieldBean tf = new TextFieldBean();
-            tf.setBeanId("tab" + i);
-            tf.setValue((String)tabNames.get(i));
-            tabsTC.addBean(tf);
-            if ((tabNames.get(i)).equals(tabName)) item.setSelected(true);
-        }
-
-        ListBoxBean deltabsLB = event.getListBoxBean("deltabsLB");
-        deltabsLB.clear();
-        for (int i = 0; i < tabNames.size(); i++) {
-            ListBoxItemBean item = new ListBoxItemBean();
-            item.setValue((String)tabNames.get(i));
-            item.setName(String.valueOf(i));
-            deltabsLB.addBean(item);
-        }
-        //req.setAttribute("tabNames", tabNames);
-
-        // put sub tab configuration in request
-        List subtabNames = layoutMgr.getSubTabNames(req, tabName);
-        String subtabName = event.getHiddenFieldBean("subtabHF").getValue();
-        if (subtabName == null) {
-            subtabName = (String)subtabNames.get(0);
-            event.getHiddenFieldBean("subtabHF").setValue(subtabName);
-        }
-        ListBoxBean selsubtabsLB = event.getListBoxBean("selsubtabsLB");
-        selsubtabsLB.clear();
-        TableCellBean subtabsTC = event.getTableCellBean("subtabsTC");
-        for (int i = 0; i < subtabNames.size(); i++) {
-            ListBoxItemBean item = new ListBoxItemBean();
-            item.setValue((String)subtabNames.get(i));
-            //item.setName(String.valueOf(i));
-            selsubtabsLB.addBean(item);
-            TextFieldBean tf = new TextFieldBean();
-            tf.setBeanId("subtab" + i);
-            tf.setValue((String)subtabNames.get(i));
-            subtabsTC.addBean(tf);
-            if ((subtabNames.get(i)).equals(subtabName)) item.setSelected(true);
-        }
-
-        ListBoxBean delsubtabsLB = event.getListBoxBean("delsubtabsLB");
-        delsubtabsLB.clear();
-        for (int i = 0; i < subtabNames.size(); i++) {
-            ListBoxItemBean item = new ListBoxItemBean();
-            item.setValue((String)subtabNames.get(i));
-            item.setName(String.valueOf(i));
-            delsubtabsLB.addBean(item);
-        }
-
-
-        //req.setAttribute("subtabNames", subtabNames);
-
-        // create portlet frame layout
-        FrameBean frame = event.getFrameBean("portletLayout");
-        DefaultTableModel model = new DefaultTableModel();
-
-
-
-        System.err.println(subtabName);
-        PortletTableLayout table = layoutMgr.getPortletLayout(req, subtabName);
-        PortletComponent c = null;
-        int j = 0;
-
-        // this needs fixing with the portlets available to the user and not the ones that are
-        // already in their layout
-        List pnames = layoutMgr.getSubscribedPortlets(req);
-
-        if (table != null) {
-            List rowlayouts = table.getPortletComponents();
-            Iterator it = rowlayouts.iterator();
-            int k = 0;
-            // iterate over <row-layout>
-            while (it.hasNext()) {
-                c = (PortletComponent)it.next();
-                if (c instanceof PortletRowLayout) {
-                    TableRowBean tr = new TableRowBean();
-
-                    PortletRowLayout row = (PortletRowLayout)c;
-                    List collayouts = row.getPortletComponents();
-                    Iterator colit = collayouts.iterator();
-                    // iterate over <column-layout>
-                    while (colit.hasNext()) {
-                        c = (PortletComponent)colit.next();
-                        if (c instanceof PortletColumnLayout) {
-                            PortletColumnLayout col = (PortletColumnLayout)c;
-                            List pframes = col.getPortletComponents();
-                            if (pframes.isEmpty()) {
-                                TableCellBean tc = new TableCellBean();
-                                ListBoxBean lb = new ListBoxBean();
-                                lb.setBeanId("portletframeLB" + j);
-
-                                Iterator pnit = pnames.iterator();
-                                // Create a listbox with all portlets available
-                                while (pnit.hasNext()) {
-                                    String concID = (String)pnit.next();
-                                    ListBoxItemBean item = new ListBoxItemBean();
-                                    item.setName(concID);
-                                    int li = concID.lastIndexOf(".");
-                                    String display = concID.substring(0, li);
-                                    li = display.lastIndexOf(".");
-                                    display = display.substring(li+1);
-                                    item.setValue(display);
-                                    lb.addBean(item);
-                                }
-                                tc.addBean(lb);
-                                tr.addBean(tc);
-
-
-                            } else {
-                                Iterator pit = pframes.iterator();
-                                // iterate over <portlet-frame> -- in principle should be one
-                                while (pit.hasNext()) {
-                                    TableCellBean tc = new TableCellBean();
-                                    c = (PortletComponent)pit.next();
-                                    if (c instanceof PortletFrame) {
-                                        PortletFrame pframe = (PortletFrame)c;
-                                        ListBoxBean lb = new ListBoxBean();
-                                        lb.setBeanId("portletframeLB" + j);
-
-                                        Iterator pnit = pnames.iterator();
-                                        // Create a listbox with all portlets available
-                                        while (pnit.hasNext()) {
-                                            String concID = (String)pnit.next();
-                                            ListBoxItemBean item = new ListBoxItemBean();
-                                            item.setName(concID);
-                                            int li = concID.lastIndexOf(".");
-                                            String display = concID.substring(0, li);
-                                            li = display.lastIndexOf(".");
-                                            display = display.substring(li+1);
-                                            item.setValue(display);
-                                            if (pframe.getPortletClass().equals(concID)) item.setSelected(true);
-                                            lb.addBean(item);
-                                        }
-
-                                        tc.addBean(lb);
-                                        tr.addBean(tc);
-
-
-                                        j++;
-                                    } else {
-                                        log.error("Unable to find a <portlet-frame> beneath the <portlet-column> in descriptor");
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-
-                    TableCellBean tc = new TableCellBean();
-                    ActionSubmitBean delrow = new ActionSubmitBean();
-
-                    delrow.setValue(this.getLocalizedText(req, "LAYOUT_DELROW"));
-                    DefaultPortletAction portletAction = new DefaultPortletAction("delTableRow");
-                    portletAction.addParameter("idx", String.valueOf(k));
-
-                    PortletURI uri = res.createURI();
-                    uri.addAction(portletAction);
-                    delrow.setName(uri.toString());
-                    delrow.setAction(portletAction.toString());
-                    ActionSubmitBean newcell = new ActionSubmitBean();
-                    portletAction = new DefaultPortletAction("addNewPortlet");
-                    portletAction.addParameter("idx", String.valueOf(k));
-                    uri = res.createURI();
-                    uri.addAction(portletAction);
-                    newcell.setName(uri.toString());
-                    newcell.setAction(portletAction.toString());
-                    newcell.setValue(this.getLocalizedText(req, "LAYOUT_ADDPORTLET"));
-                    tc.addBean(delrow);
-                    tc.addBean(newcell);
-                    tr.addBean(tc);
-                    model.addTableRowBean(tr);
-                    k++;
-                }
-
-
-            }
-
-            frame.setTableModel(model);
-        } else {
-            log.error("Unable to find a <table-layout> beneath the <portlet-tab title=" + (String)subtabNames.get(0) + " in descriptor");
-        }
-
+        req.setAttribute("tabs", tabs);
         setNextState(req, VIEW_JSP);
     }
 
@@ -278,317 +167,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
         layoutMgr.reloadPage(req);
 
     }
-
-    public void saveTabs(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
-        List tabNames = layoutMgr.getTabNames(req);
-        for (int i = 0; i < tabNames.size(); i++) {
-            TextFieldBean tf = event.getTextFieldBean("tab" + i);
-            String newtitle = tf.getValue();
-            if (newtitle == null) newtitle = "Untitled " + i + 1;
-            tabNames.set(i, newtitle);
-            System.err.println("settng " + (String)tabNames.get(i));
-        }
-
-        layoutMgr.setTabNames(req, tabNames);
-        layoutMgr.reloadPage(req);
-
-    }
-
-    public void deleteTab(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
-        List tabNames = null;
-        ListBoxBean tabsLB = event.getListBoxBean("deltabsLB");
-        String tabnum = "";
-        if (tabsLB.getSelectedValue() != null) {
-            tabnum = tabsLB.getSelectedValue();
-            System.err.println("retrieve tab num:" + tabnum);
-            tabNames = layoutMgr.getTabNames(req);
-            //System.err.println("retrieved tab names:" + tabnum);
-
-        if (tabNames != null) {
-            int tabNum = Integer.parseInt(tabnum);
-            String tabName = (String)tabNames.get(tabNum);
-            System.err.println("removing tab:" + tabName);
-            layoutMgr.removeTab(req, tabName);
-            layoutMgr.reloadPage(req);
-        }
-        }
-
-    }
-
-    public void deleteSubTab(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
-        ListBoxBean tabsLB = event.getListBoxBean("delsubtabsLB");
-        HiddenFieldBean hf = event.getHiddenFieldBean("tabHF");
-        String tabNameHF = hf.getValue();
-        List tabNames = null;
-        String tabnum = "";
-        System.err.println("in delete sub tab");
-        if (tabsLB.getSelectedValue() != null) {
-            tabnum = tabsLB.getSelectedValue();
-            System.err.println("retrieve tab num:" + tabnum);
-            tabNames = layoutMgr.getSubTabNames(req, tabNameHF);
-            if (tabNames != null) {
-                int tabNum = Integer.parseInt(tabnum);
-                String tabName = (String)tabNames.get(tabNum);
-                System.err.println("removing sub tab:" + tabName);
-
-                // must have at least one sub tab
-                if (tabNames.size() > 1) {
-                    layoutMgr.removeTab(req, tabName);
-                    layoutMgr.reloadPage(req);
-                }
-            }
-        }
-    }
-
-    public void createTab(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
-        PortletPage page = layoutMgr.getPortletPage(req);
-        PortletTabbedPane pane = page.getPortletTabbedPane();
-        PortletTab toptab = new PortletTab();
-        String tabName = event.getTextFieldBean("newTab").getValue();
-        if (!tabName.equals("")) {
-            String lang = req.getLocale().getLanguage();
-            toptab.setTitle(lang, tabName);
-            toptab.setLabel(tabName);
-
-            PortletTab tab = new PortletTab();
-            String title = this.getLocalizedText(req, "LAYOUT_UNTITLED_TAB");
-            tab.setTitle(lang, title);
-            PortletTabbedPane newpane = new PortletTabbedPane();
-            newpane.setStyle("sub-menu");
-            toptab.setPortletComponent(newpane);
-            PortletTableLayout table = new PortletTableLayout();
-            PortletRowLayout row = new PortletRowLayout();
-            PortletColumnLayout col = new PortletColumnLayout();
-            row.addPortletComponent(col);
-            table.addPortletComponent(row);
-            tab.setPortletComponent(table);
-            newpane.addTab(tab);
-            pane.addTab(toptab);
-            layoutMgr.reloadPage(req);
-        }
-    }
-
-    public void createSubTab(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
-        PortletPage page = layoutMgr.getPortletPage(req);
-        PortletTabbedPane pane = page.getPortletTabbedPane();
-
-        HiddenFieldBean tabHF = event.getHiddenFieldBean("tabHF");
-        String tabname = tabHF.getValue();
-
-        System.err.println("getting tab " + tabname);
-        if (!tabname.equals("")) {
-            PortletTab toptab = pane.getPortletTab(tabname);
-            PortletTabbedPane subpane = (PortletTabbedPane)toptab.getPortletComponent();
-
-            PortletTab tab = new PortletTab();
-            String subtabName = event.getTextFieldBean("newSubTab").getValue();
-            String lang = req.getLocale().getLanguage();
-            tab.setTitle(lang, subtabName);
-            tab.setLabel(subtabName);
-
-            PortletTableLayout table = new PortletTableLayout();
-            PortletRowLayout row = new PortletRowLayout();
-            PortletColumnLayout col = new PortletColumnLayout();
-            row.addPortletComponent(col);
-            table.addPortletComponent(row);
-            tab.setPortletComponent(table);
-            subpane.addTab(tab);
-            layoutMgr.reloadPage(req);
-        }
-    }
-
-    public void selectTab(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
-        ListBoxBean tabsLB = event.getListBoxBean("seltabsLB");
-        HiddenFieldBean tabsHF = event.getHiddenFieldBean("tabHF");
-
-        //event.getHiddenFieldBean("tabHF").setValue("howdy ho");
-
-        String selTab = tabsLB.getSelectedValue();
-
-        List tabNames = layoutMgr.getTabNames(req);
-        String tabname = (String)tabNames.get(Integer.parseInt(selTab));
-        tabsHF.setValue(tabname);
-
-        HiddenFieldBean subtabHF = event.getHiddenFieldBean("subtabHF");
-        List subtabNames = layoutMgr.getSubTabNames(req, tabname);
-        selTab = (String)subtabNames.get(0);
-
-        subtabHF.setValue(selTab);
-
-    }
-
-    public void selectSubTab(FormEvent event) {
-        ListBoxBean tabsLB = event.getListBoxBean("selsubtabsLB");
-        HiddenFieldBean subtabHF = event.getHiddenFieldBean("subtabHF");
-        String selTab = tabsLB.getSelectedValue();
-        subtabHF.setValue(selTab);
-    }
-
-
-    public void saveSubTabs(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
-
-        String tabName = event.getHiddenFieldBean("tabHF").getValue();
-
-        List tabNames = layoutMgr.getSubTabNames(req, tabName);
-        for (int i = 0; i < tabNames.size(); i++) {
-            TextFieldBean tf = event.getTextFieldBean("subtab" + i);
-            String newtitle = tf.getValue();
-            String title = this.getLocalizedText(req, "LAYOUT_UNTITLED_TAB");
-            if (newtitle == null) newtitle = title + " " + i + 1;
-            tabNames.set(i, newtitle);
-            System.err.println("setting " + (String)tabNames.get(i));
-        }
-
-        layoutMgr.setSubTabNames(req, tabName, tabNames);
-        layoutMgr.reloadPage(req);
-    }
-
-    public void saveTabName(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
-        TextFieldBean tabTF = event.getTextFieldBean("tabTF");
-        String tabName = tabTF.getValue();
-        HiddenFieldBean hf = event.getHiddenFieldBean("tabNumHF");
-        List tabs = layoutMgr.getTabNames(req);
-        int tabNum = Integer.parseInt(hf.getValue());
-        tabs.set(tabNum, tabName);
-        layoutMgr.setTabNames(req, tabs);
-        applyChanges(event);
-        setNextState(req, "editTab");
-    }
-
-    public void addTableRow(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
-        String subtabName = event.getHiddenFieldBean("subtabHF").getValue();
-        PortletTableLayout table = layoutMgr.getPortletLayout(req, subtabName);
-        PortletColumnLayout col = new PortletColumnLayout();
-        PortletRowLayout row = new PortletRowLayout();
-        row.addPortletComponent(col);
-        table.addPortletComponent(row);
-        //List comps = table.getPortletComponents();
-
-    }
-
-    public void delTableRow(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
-        String subtabName = event.getHiddenFieldBean("subtabHF").getValue();
-        PortletTableLayout table = layoutMgr.getPortletLayout(req, subtabName);
-        List comps = table.getPortletComponents();
-
-        String idx = event.getAction().getParameter("idx");
-        try {
-            comps.remove(Integer.parseInt(idx));
-        } catch (Exception e) {
-            //
-        }
-
-    }
-
-    public void addNewPortlet(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
-        String subtabName = event.getHiddenFieldBean("subtabHF").getValue();
-        PortletTableLayout table = layoutMgr.getPortletLayout(req, subtabName);
-        List comps = table.getPortletComponents();
-
-        String idx = event.getAction().getParameter("idx");
-
-        try {
-            PortletComponent c = (PortletComponent)comps.get(Integer.parseInt(idx));
-            if (c instanceof PortletRowLayout) {
-                PortletRowLayout row = (PortletRowLayout)c;
-                PortletColumnLayout col = new PortletColumnLayout();
-                //PortletFrame frame = new PortletFrame();
-                //col.addPortletComponent(frame);
-                row.addPortletComponent(col);
-
-            }
-        } catch (Exception e) {
-            // can't parse string to int then forget it
-        }
-
-    }
-
-    public void savePortletFrames(FormEvent event) {
-
-        PortletRequest req = event.getPortletRequest();
-        String subtabName = event.getHiddenFieldBean("subtabHF").getValue();
-        PortletTableLayout table = layoutMgr.getPortletLayout(req, subtabName);
-        List comps = table.getPortletComponents();
-
-        //String idx = event.getAction().getParameter("idx");
-
-        try {
-            Iterator rowit = comps.iterator();
-            int j = 0;
-            while (rowit.hasNext()) {
-                PortletComponent c = (PortletComponent)rowit.next();
-                if (c instanceof PortletRowLayout) {
-                    PortletRowLayout row = (PortletRowLayout)c;
-
-                    List rowcomps = row.getPortletComponents();
-                    Iterator colit = rowcomps.iterator();
-                    while (colit.hasNext()) {
-                        c = (PortletComponent)colit.next();
-                        if (c instanceof PortletColumnLayout) {
-
-                            PortletColumnLayout col = (PortletColumnLayout)c;
-                            List frames = col.getPortletComponents();
-                            ListBoxBean lb = event.getListBoxBean("portletframeLB" + j);
-                            String value = lb.getSelectedValue();
-
-                            //System.err.println("portlet value " + value);
-                            if (value != null) {
-                                if (frames.isEmpty()) {
-                                    PortletFrame f = new PortletFrame();
-                                    f.setPortletClass(value);
-                                    col.addPortletComponent(f);
-                                } else {
-                                    PortletFrame f = (PortletFrame)frames.get(0);
-                                    f.setPortletClass(value);
-                                }
-                            }
-                        }
-                        j++;
-
-                    }
-                }
-
-            }
-        } catch (Exception e) {
-            // can't parse string to int then forget it
-        }
-        layoutMgr.reloadPage(req);
-    }
-
-    public void saveSubTabName(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
-        TextFieldBean tabTF = event.getTextFieldBean("subtabTF");
-        String subtabName = tabTF.getValue();
-        HiddenFieldBean hf = event.getHiddenFieldBean("tabNumHF");
-        List tabs = layoutMgr.getTabNames(req);
-        int tabNum = Integer.parseInt(hf.getValue());
-        String tabName = (String)tabs.get(tabNum);
-        HiddenFieldBean subhf = event.getHiddenFieldBean("subtabNumHF");
-        List subtabs = layoutMgr.getSubTabNames(req, tabName);
-        int subtabNum = Integer.parseInt(subhf.getValue());
-        subtabs.set(subtabNum, subtabName);
-        layoutMgr.setSubTabNames(req, tabName, subtabs);
-        applyChanges(event);
-        setNextState(req, "editSubTab");
-    }
-
-    public void applyChanges(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
-
-        layoutMgr.reloadPage(req);
-    }
-
 
     public void doConfigureLayout(FormEvent event) throws PortletException {
         PortletRequest req = event.getPortletRequest();
