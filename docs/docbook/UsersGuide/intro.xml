@@ -34,7 +34,7 @@
         the GridSphere framework</para>
         </listitem>
         <listitem><para>Jakarta Tomcat Servlet Container &Tomcat; 4.1.18+ is
-            required. (Currently, only Tomcat 4.1.18 fully supports the Manager web
+            required. (Currently, only Tomcat 4.1.18+ fully supports the Manager web
             application that allows for dynamic portlet management.)
             (Make sure you get the full Tomcat version and not the Light Edition (LE))
             (Also do NOT download Tomcat 5 since that uses the Servlet 2.4 API. which has not yet been tested)
@@ -48,8 +48,8 @@
 	replace the bundled libaries.
 	</para>
 	<itemizedlist>
-	<listitem><para>&Castor; is used to provide Java to XML bindings and Java to SQL persistence</para></listitem>
-	<listitem><para>&Castordoclets; is used to create Castor mappings from Javadoc tags</para></listitem>
+	<listitem><para>&Castor; is used to provide Java to XML bindings</para></listitem>
+    <listitem><para>&Hibernate; is used to provide SQL based database support</para></listitem>
     <listitem><para>&JUnit; provides a unit testing framework</para></listitem>
     <listitem><para>&Cactus; provides a unit testing framework for testing GridSphere in a servlet container</para></listitem>
     <listitem><para>&Log4J; provides an optimized logging library</para></listitem>
@@ -66,7 +66,7 @@
 	the unit tests.
 	</para>
 	<orderedlist>
-	<listitem><para>Download &Ant; 1.5 distribution</para></listitem>
+	<listitem><para>Download &Ant; 1.5+ distribution</para></listitem>
 	<listitem><para>Unzip ant into your preferred location and set the ANT_HOME environment to point to this location</para></listitem>
 	<listitem><para>Copy junit.jar from your GRIDSPHERE_HOME/lib into ANT_HOME/lib (only necessary if you want to run the tests)</para></listitem>
 	<listitem><para>Add ANT_HOME/bin to your PATH environment</para></listitem>
@@ -79,7 +79,7 @@
 	for the GridSphere framework.
 	</para>
 	<orderedlist>
-	<listitem><para>Download Jakarta &Tomcat; 4.1.18 distribution</para></listitem>
+	<listitem><para>Download Jakarta &Tomcat; 4.1.18+ distribution</para></listitem>
 	<listitem><para>Unzip tomcat into your preferred location and set the CATALINA_HOME environment to point to this location</para></listitem>
 	<listitem><para>GridSphere requires access to the ServletContext objects of other portlet web applications.
 	To allow this, modify $CATALINA_HOME/conf/server.xml and make sure the following line is there:
