@@ -95,7 +95,7 @@ double-tabbed pane. An example illustration is shown:
                         &lt;portlet-frame&gt; <co id="frame"/>
                             &lt;portlet-class&gt;org.myorg.portlets.examples.simpleone.1&lt;/portlet-class&gt;
                         &lt;/portlet-frame&gt;
-                        &lt;portlet-frame&gt;
+                        &lt;portlet-frame label="simpletwo"&gt; <co id="label"/>
                             &lt;portlet-class&gt;org.myorg.portlets.examples.simpletwo.1&lt;/portlet-class&gt;
                         &lt;/portlet-frame&gt;
                     &lt;/grid-layout&gt;
@@ -144,11 +144,16 @@ double-tabbed pane. An example illustration is shown:
                 The portlet frame is specified as the concrete portlet id representing the portlet class
             </para>
             </callout>
+            <callout arearefs="label">
+            <para>
+                Assigning a label to a component means that it can be linked to in the portal and made bookmarkable.
+            </para>
+            </callout>
     </calloutlist>
 </informalexample>
 <para>
 To learn more about possible attributes and component relationships, look at the
-<filename>config/mapping/layout-mapping.xml</filename> file in the GridSphere source. This defines the
+<filename>layout-mapping.xml</filename> file in the GridSphere source. This defines the
 relationship between the portlet component classes and the XML descriptions.
 </para>
 </sect1>

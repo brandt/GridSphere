@@ -12,12 +12,12 @@
 Portlet services encapsulate business or logic operations that can be re-used among portlets.
 The use of portlet services helps to minimize the amount of logic placed in a portlet and present it as
 a reusable library to other portlets. In addition, portlet services offer the following major advantages:
-    <itemizedlist>
-        <listitem>Persistence using built-in persistence framework makes it easy to serialize objects to a relational database</listitem>
-        <listitem>Method level security using built-in access control model makes it easy to provide "secure service" proxies that
-        perform the proper operations based on the user's role</listitem>
-        <listitem>Integration with testing framework makes it easy to write JUnit tests</listitem>
-    </itemizedlist>
+    <simplelist>
+        <member>Persistence using built-in persistence framework makes it easy to serialize objects to a relational database</member>
+        <member>Method level security using built-in access control model makes it easy to provide "secure service" proxies that
+        perform the proper operations based on the user's role</member>
+        <member>Integration with testing framework makes it easy to write JUnit tests</member>
+    </simplelist>
 </para>
 <sect1>
     <title>Portlet Service Architecture</title>
@@ -47,7 +47,8 @@ shutdown. A <link linkend='portlet-services-descriptor'>portlet services descrip
     </para>
     <para>
     <programlisting>
-        ExampleService = (ExampleService)getPortletConfig().getContext().getService(ExampleService.class);
+        ExampleService =
+           (ExampleService)getPortletConfig().getContext().getService(ExampleService.class);
     </programlisting>
     </para>
     <para>
@@ -58,10 +59,9 @@ shutdown. A <link linkend='portlet-services-descriptor'>portlet services descrip
     A <emphasis>User Service</emphasis> allows a service to provide logic appropriate for the user's request. For exaple,
     the method <methodname>deleteUser(User <varname>user</varname>)</methodname> in the <classname>UserManagerService</classname>
     requires that a user with the role <constant>SUPER</constant> requested the service instance. For any other service
-    instance, the method will fail with a <classname>PortletServiceAuthorizationException</classname>. User serces not only help
-    provide a libarry that will "do the right thing" based on a client's role, but it makes the services much more
+    instance, the method will fail with a <classname>PortletServiceAuthorizationException</classname>. User services not only help
+    provide a library that will "do the right thing" based on a client's role, but it makes the services much more
     robust and secure for other portlet developers to take advantage of.
-    The only difference in the implementation
 </para>
 </sect1>
 
@@ -81,15 +81,21 @@ the services provided by this portlet web application. The following example sho
                &lt;name&gt;Login Service&lt;/name&gt;       <co id="service.name.def"/>
                &lt;description&gt;Provides Login Capabilities&lt;/description&gt;   <co id="service.desc.def"/>
                &lt;interface&gt;org.gridlab.gridsphere.services.core.user.LoginService&lt;/interface&gt;   <co id="service.iface.def"/>
-               &lt;implementation&gt;org.gridlab.gridsphere.services.core.user.impl.LoginServiceImpl&lt;/implementation&gt;  <co id="service.impl.def"/>
+               &lt;implementation&gt;
+                    org.gridlab.gridsphere.services.core.user.impl.LoginServiceImpl
+               &lt;/implementation&gt;  <co id="service.impl.def"/>
            &lt;/service&gt;
 
            &lt;service&gt;
                &lt;name&gt;Access Control Manager Service&lt;/name&gt;
                &lt;user-required&gt;true&lt;/user-required&gt;   <co id="service.user.def"/>
                &lt;description&gt;Provides Authorization Capabilities to Portal Users&lt;/description&gt;
-               &lt;interface&gt;org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService&lt;/interface&gt;
-               &lt;implementation&gt;org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl&lt;/implementation&gt;
+               &lt;interface&gt;
+                       org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService
+               &lt;/interface&gt;
+               &lt;implementation&gt;
+                       org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl
+               &lt;/implementation&gt;
                &lt;service-config&gt;         <co id="service.config.def"/>
                 &lt;param-name&gt;some parameter&lt;/param-name&gt;
                 &lt;param-value&gt;some value&lt;/param-value&gt;

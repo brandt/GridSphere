@@ -44,8 +44,8 @@ new-project:
             <filename>projects</filename> directory in the gridsphere home directory.
             Once you have a new project you may optionally commit it to CVS issuing the following:
             <screen>
-            <prompt>bash$</prompt><command>cd tutorial</command>
-            <prompt>bash$</prompt><command>cvs import -m "a hello example" hello STARTTAG VENDORTAG <replaceable>hello</replaceable>
+            <prompt>bash$ </prompt><command>cd tutorial</command>
+            <prompt>bash$ </prompt><command>cvs import -m "a hello example" tutorial STARTTAG VENDORTAG <replaceable>tutorial</replaceable>
             </command>
                 </screen>
             where STARTTAG and VENDORTAG are any labels of your choosing (see CVS documentation for more detailed information)
@@ -60,8 +60,8 @@ new-project:
                 After creating the new project you are ready to write your first portlet. First you need to create
                 a directory for the portlet source code. We create a portlets directory containing a tutorial directory.
                 <screen>
-            <prompt>bash$</prompt><command>cd src</command>
-            <prompt>bash$</prompt><command>mkdir -p portlets/examples</command>
+            <prompt>bash$ </prompt><command>cd src</command>
+            <prompt>bash$ </prompt><command>mkdir -p portlets/examples</command>
                 </screen>
                 Now create a source file <filename>HelloWorld.java</filename> inside the
                 <filename>portlets/examples</filename> directory that looks like the following:

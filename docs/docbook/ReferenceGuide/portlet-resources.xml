@@ -23,8 +23,9 @@
     </itemizedlist>
 </para>
 <para>
-    Currently the <ulink url="http://www.jcp.org/jsr/detail/168.jsp">Portlet Jave Specification Request</ulink> (JSR) has yet to be finalized so several implementations exist. The
-    <ulink url="http://jakarta.apache.org/jetspeed">Jetspeed</ulink> project provides an open-source portlet implementation.
+    As of this writing, September 1st, the <ulink url="http://www.jcp.org/jsr/detail/168.jsp">Portlet Jave Specification Request</ulink>
+    (JSR) has just been made available and the next release of
+    <ulink url="http://jakarta.apache.org/jetspeed">Jetspeed</ulink> will provide an open-source portlet implementation.
 
 </para>
 </chapter>

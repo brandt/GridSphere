@@ -94,18 +94,22 @@
     <sect1 id="visbeans"><title>Supported Visual Beans</title>
         <para>
         The following lists the supported visual beans that can be obtained via the &FormEvent;
-        interface. More information on each of th ebeans methods can be found in the Javadoc API
+        interface. More information on each of the beans methods can be found in the Javadoc API
         </para>
         <itemizedlist>
+            <listitem>ActionLinkBean</listitem>
+            <listitem>ActionSubmitBean</listitem>
             <listitem>CheckBoxBean</listitem>
-            <listitem>ErrorFrameBean</listitem>
             <listitem>FileInputBean</listitem>
             <listitem>FrameBean</listitem>
             <listitem>HiddenFieldBean</listitem>
+            <listitem>ImageBean</listitem>
             <listitem>ListBoxBean</listitem>
             <listitem>PanelBean</listitem>
             <listitem>PasswordBean</listitem>
-            <listitem>RenderLinkBean</listitem>
+            <listitem>TableBean</listitem>
+            <listitem>TableCellBean</listitem>
+            <listitem>TableRowBean</listitem>
             <listitem>TextBean</listitem>
             <listitem>TextAreaBean</listitem>
             <listitem>TextFieldBean</listitem>

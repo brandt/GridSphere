@@ -47,6 +47,9 @@
         <table>
             <title>Base Tag Attributes</title>
             <tgroup cols="3">
+                <colspec colwidth="*"/>
+                <colspec colwidth="*"/>
+                <colspec colwidth="4*"/>
                 <thead>
                     <row>
                         <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
@@ -84,23 +87,7 @@
                 </tbody>
                 <tbody>
                     <row>
-                        <entry>color</entry><entry>no</entry><entry>string: the foreground color of this component</entry>
-                    </row>
-                </tbody>
-                <tbody>
-                    <row>
-                        <entry>bgcolor</entry><entry>no</entry><entry>string: the background color of this component</entry>
-                    </row>
-                </tbody>
-                <tbody>
-                    <row>
                         <entry>cssStyle</entry><entry>no</entry><entry>string: the CSS style to use for rendering this
-                        component</entry>
-                    </row>
-                </tbody>
-                <tbody>
-                    <row>
-                        <entry>font</entry><entry>no</entry><entry>string: the font to use when rendering text for this
                         component</entry>
                     </row>
                 </tbody>
@@ -126,6 +113,9 @@
             <table>
                 <title>Attributes to actionlink</title>
                 <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
                     <thead>
                         <row>
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
@@ -203,6 +193,9 @@
             <table>
                 <title>Attributes to actionsubmit</title>
                 <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
                     <thead>
                         <row>
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
@@ -252,6 +245,9 @@
             <table>
                 <title>Attributes to actionparam</title>
                 <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
                     <thead>
                         <row>
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
@@ -371,7 +367,8 @@
                 <ui:frame>
                    <ui:tablerow>
                       <ui:tablecell width="5%">
-                          <ui:checkbox beanId="myCheckbox" value="somevalue" selected="true"/>
+                          <ui:checkbox beanId="myCheckbox" value="somevalue"
+                                       selected="true"/>
                       </ui:tablecell>
                    </ui:tablerow>
                 </ui:frame>
@@ -404,6 +401,9 @@
             <table>
                 <title>Attributes to panel</title>
                 <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
                     <thead>
                         <row>
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
@@ -460,6 +460,9 @@
             <table>
                 <title>Attributes to table</title>
                 <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
                     <thead>
                         <row>
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
@@ -508,6 +511,9 @@
             <table>
                 <title>Attributes to table row</title>
                 <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
                     <thead>
                         <row>
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
@@ -545,6 +551,9 @@
             <table>
                 <title>Attributes to table cell</title>
                 <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
                     <thead>
                         <row>
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
@@ -587,14 +596,19 @@
             <title>Frame</title>
             <para>
                 A frame tag is a stylized table tag that performs the same purpose, but provides
-                a default CSS look and feel. In general the frame tag should be used instead of the table tag
-                to create a common look and feel. A table tag may contain nested
+                a default CSS look and feel and can be used to render messages if the key or value attribute
+                has been specified.
+                In general the frame tag should be used instead of the table tag
+                to create a common look and feel. A frame tag may contain nested
                 <link linkend="tablerowtag">table row tags</link> that themselves may contain
                 <link linkend="tablecelltag">table cell tags</link>.
             </para>
             <table>
                 <title>Attributes to frame</title>
                 <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
                     <thead>
                         <row>
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
@@ -608,6 +622,25 @@
                     <tbody>
                         <row>
                             <entry>cellspacing</entry><entry>no</entry><entry>integer: the cellspacing table width</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>key</entry><entry>no</entry><entry>string: name of the key to lookup localized text from
+                            the <filename>WEB-INF/classes/Portlet_XX.properties</filename> localized properties file</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>value</entry><entry>no</entry><entry>string: actual text to display</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>style</entry><entry>no</entry><entry>string: the style to display text in.
+                                Possible values include <constant>error</constant>, <constant>info</constant>
+                            <constant>alert</constant>, <constant>status</constant> and <constant>success</constant>.
+                            The default style used is <constant>info</constant></entry>
                         </row>
                     </tbody>
                 </tgroup>
@@ -630,6 +663,20 @@
 </ui:panel>]]>
                 </screen>
                 This creates a frame consisting of a table row with two table cells displaying text messages
+                <screen>
+<![CDATA[<ui:panel>
+    <ui:frame value="Something bad happened!" style="error">
+</ui:panel>]]>
+                </screen>
+                This creates a frame that displays the specified error message in the error style.
+                <screen>
+<![CDATA[<ui:panel>
+    <ui:frame beanId="errorMessage">
+</ui:panel>]]>
+                </screen>
+                This creates a frame that uses the "errorMessge bean to render itself. The errorMessage bean is created
+                and values are set in the portlet. If no beanId of "errorMessage" has been defined (as in when the page
+                is first displayed) then no frame will be rendered.
             </example>
         </sect2>
 
@@ -641,6 +688,9 @@
             <table>
                 <title>Attributes to checkbox</title>
                 <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
                     <thead>
                         <row>
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
@@ -696,6 +746,9 @@
             <table>
                 <title>Attributes to hiddenfield</title>
                 <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
                     <thead>
                         <row>
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
@@ -723,6 +776,51 @@
             </example>
         </sect2>
 
+        <sect2 id="imagetag">
+            <title>Image</title>
+            <para>
+                This tag displays an image
+            </para>
+            <table>
+                <title>Attributes to image</title>
+                <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
+                    <thead>
+                        <row>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>src</entry><entry>no</entry><entry>string: the image source location</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>alt</entry><entry>no</entry><entry>string: a text to display when the image is highlighted</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>title</entry><entry>no</entry><entry>string: a title to associate with the image</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of image</title>
+                <screen>
+                    <![CDATA[
+                    <ui:image src="picture.gif" title="My picture" alt="My Picture"/>
+         ]]>
+                </screen>
+                This creates an image link displaying picture.gif with the supplied title and alt text.
+            </example>
+        </sect2>
+
+
         <sect2 id="fileinputtag">
             <title>FileInput</title>
             <para>
@@ -731,6 +829,9 @@
             <table>
                 <title>Attributes to fileinput</title>
                 <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
                     <thead>
                         <row>
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
@@ -783,6 +884,9 @@
             <table>
                 <title>Attributes to textfield</title>
                 <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
                     <thead>
                         <row>
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
@@ -839,6 +943,9 @@
             <table>
                 <title>Attributes to password field</title>
                 <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
                     <thead>
                         <row>
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
@@ -891,11 +998,14 @@
             <title>RadioButton</title>
             <para>
                 This tag shows a radiobutton. You can group multiple radiobuttons simple by giving
-                the radiobuttons the same name. see radiobuttonlist.
+                the radiobuttons the same name.
             </para>
             <table>
                 <title>Attributes to radiobutton</title>
                 <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
                     <thead>
                         <row>
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
@@ -948,6 +1058,9 @@
             <table>
                 <title>Attributes to textarea</title>
                 <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
                     <thead>
                         <row>
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
@@ -988,10 +1101,11 @@
             <example>
                 <title>Usage of textarea</title>
                 <screen>
-<![CDATA[<ui:textarea name="myTextArea" value="This is text" rows="120" cols="30"  disabled="false" />
- <ui:textarea name="myTextArea"rows="120" cols="30"  disabled="false">this is text</>]]>
+<![CDATA[<ui:textarea name="myTextArea" value="This is text" rows="120"
+                                        cols="30"  disabled="false" />
+ <ui:textarea name="myTextArea" rows="120" cols="30"  disabled="false">this is text</>]]>
                 </screen>
-                This creates a 120x30 textinputfield with the name 'inputfield' and the text 'This is text'.
+                This creates a 120x30 text area with the name 'myTextArea' and the text 'This is text'.
                 The second example uses the tag body to specify the displayed text.
             </example>
         </sect2>
@@ -1004,6 +1118,9 @@
             <table>
                 <title>Attributes to text</title>
                 <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
                     <thead>
                         <row>
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
@@ -1022,8 +1139,10 @@
                     </tbody>
                     <tbody>
                         <row>
-                            <entry>error</entry><entry>no</entry><entry>boolean: if true the text is rendered in the
-                            default look and feel used to present errors and warnings</entry>
+                            <entry>style</entry><entry>no</entry><entry>string: the style to display text in.
+                                Possible values include <constant>error</constant>, <constant>info</constant>
+                            <constant>alert</constant>, <constant>status</constant> and <constant>success</constant>.
+                            The default style used is <constant>info</constant></entry>
                         </row>
                     </tbody>
                 </tgroup>
@@ -1032,8 +1151,8 @@
                 <title>Usage of text</title>
                 <screen>
 <![CDATA[<ui:text key="GREETING_MSG"/>
-<ui:text value="something bad happened" error="true"/>
-<ui:text error="true">something bad happened</>]>
+<ui:text value="something bad happened" style="error"/>
+<ui:text style="error">something bad happened</>]]>
                 </screen>
                 The first example prints a localized message using the GREETING_MSG as a key. The
                 second example displays a message using the error look and feel and the third example is the
@@ -1049,6 +1168,9 @@
             <table>
                 <title>Attributes to listbox</title>
                 <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
                     <thead>
                         <row>
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
@@ -1074,6 +1196,9 @@
             <table>
                 <title>Attributes to listboxitem</title>
                 <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
                     <thead>
                         <row>
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>

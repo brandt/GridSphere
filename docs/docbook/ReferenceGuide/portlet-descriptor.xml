@@ -11,12 +11,12 @@
 <chapter id="portlet-descriptor">
     <title>Portlet Descriptor</title>
     <para>
-        The Portlet Descriptor known as <filename>portlet.xml</filename> defines the application
+        The Portlet descriptor known as <filename>portlet.xml</filename> defines the application
         portlet definitions and one or more concrete portlet definitions. The following section describes
         the available elements and attributes that can be used inside a portlet descriptor.
     </para>
     <para>
-        The Portlet Descriptor has the following structure:
+        The Portlet descriptor has the following structure:
     </para>
     <informalexample id="portlet.def">
         <programlisting>

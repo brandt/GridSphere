@@ -140,7 +140,7 @@ for the standard &ServletException;.
     The <methodname>doView</methodname> method is invoked for a portlet when it is in <emphasis>VIEW</emphasis> mode.
 </para><para>
     <programlisting>
-    <prompt>void</prompt> <methodname>doView</methodname>(PortletRequest <emphasis>req</emphasis>,PortletResponse <emphasis>res</emphasis> )
+    <prompt>void</prompt> <methodname>doView</methodname>(PortletRequest <emphasis>req</emphasis>, PortletResponse <emphasis>res</emphasis> )
     </programlisting>
 </para></listitem>
 
@@ -148,7 +148,7 @@ for the standard &ServletException;.
     The <methodname>doEdit</methodname> method is invoked for a portlet when it is in <emphasis>EDIT</emphasis> mode.
 </para><para>
     <programlisting>
-    <prompt>void</prompt> <methodname>doEdit</methodname>(PortletRequest <emphasis>req</emphasis>,PortletResponse <emphasis>res</emphasis> )
+    <prompt>void</prompt> <methodname>doEdit</methodname>(PortletRequest <emphasis>req</emphasis>, PortletResponse <emphasis>res</emphasis> )
     </programlisting>
 </para></listitem>
 
@@ -157,7 +157,7 @@ for the standard &ServletException;.
     This mode is allowed only for portlet administrators and is intended to provide additional portlet configuration.
 </para><para>
     <programlisting>
-    <prompt>void</prompt> <methodname>doEdit</methodname>(PortletRequest <emphasis>req</emphasis>,PortletResponse <emphasis>res</emphasis> )
+    <prompt>void</prompt> <methodname>doEdit</methodname>(PortletRequest <emphasis>req</emphasis>, PortletResponse <emphasis>res</emphasis> )
     </programlisting>
 </para></listitem>
 
@@ -165,7 +165,7 @@ for the standard &ServletException;.
     The <methodname>doHelp</methodname> method is invoked for a portlet when it is in <emphasis>HELP</emphasis> mode.
 </para><para>
     <programlisting>
-    <prompt>void</prompt> <methodname>doHelp</methodname>(PortletRequest <emphasis>req</emphasis>,PortletResponse <emphasis>res</emphasis> )
+    <prompt>void</prompt> <methodname>doHelp</methodname>(PortletRequest <emphasis>req</emphasis>, PortletResponse <emphasis>res</emphasis> )
     </programlisting>
 </para></listitem>
 
@@ -174,7 +174,7 @@ for the standard &ServletException;.
     implemented by a portlet developer to provide a customized title.
 </para><para>
     <programlisting>
-    <prompt>void</prompt> <methodname>doTitle</methodname>(PortletRequest <emphasis>req</emphasis>,PortletResponse <emphasis>res</emphasis> )
+    <prompt>void</prompt> <methodname>doTitle</methodname>(PortletRequest <emphasis>req</emphasis>, PortletResponse <emphasis>res</emphasis> )
     </programlisting>
 </para></listitem>
 
