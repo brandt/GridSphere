@@ -17,3 +17,6 @@ Changes since GridSphere 1.0
 + LoginPortlet configure mode can disallow anonymous account registration
 + More localized text in properties files 
 + Added Administrator's docbook guide
++ Upgraded docbook-xsl to 1.62.4 and docbook-xml to 4.3.CR1
++ GridSphere libs are placed in build/lib and not lib now
+
