@@ -58,12 +58,6 @@
         <servlet-class>org.gridlab.gridsphere.portlets.core.file.BannerPortlet</servlet-class>
     </servlet>
 
-
-    <servlet>
-        <servlet-name>ManagerPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager</servlet-class>
-    </servlet>
-
     <servlet>
         <servlet-name>UserManagerPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet</servlet-class>
@@ -117,11 +111,6 @@
     <servlet-mapping>
        <servlet-name>FileManagerPortlet</servlet-name>
        <url-pattern>/file/manager</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>ManagerPortlet</servlet-name>
-        <url-pattern>/appmanager</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

@@ -2,24 +2,6 @@
 <portlet-app-collection>
 
     <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager">
-            <portlet-name>Application Manager Portlet</portlet-name>
-            <servlet-name>ManagerPortlet</servlet-name>
-        </portlet-app>
-
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1">
-            <concrete-portlet>
-                <portlet-name>Application Manager Portlet</portlet-name>
-                <default-locale>en</default-locale>
-                <language locale="en">
-                    <title>Portlet Application Manager</title>
-                    <description>Displays Portlet Variables and Settings</description>
-                </language>
-            </concrete-portlet>
-        </concrete-portlet-app>
-    </portlet-app-def>
-
-    <portlet-app-def>
         <portlet-app id="org.gridlab.gridsphere.portlets.core.file.FileManagerPortlet">
             <portlet-name>File Manager Portlet</portlet-name>
             <servlet-name>FileManagerPortlet</servlet-name>
