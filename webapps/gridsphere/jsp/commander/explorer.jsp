@@ -1,9 +1,10 @@
+<%@ page import="org.gridlab.gridsphere.services.core.secdir.ResourceInfo,
+                java.util.Date"%>
 <jsp:useBean id="userData" class="org.gridlab.gridsphere.portlets.core.file.UserData" scope="request" />
 <jsp:useBean id="formURIs" class="java.util.HashMap" scope="request"/>
 <jsp:useBean id="leftEditURIs" class="java.util.List" scope="request"/>
 <jsp:useBean id="rightEditURIs" class="java.util.List" scope="request"/>
-<%@page import="org.gridlab.gridsphere.services.core.secdir.ResourceInfo,
-                java.util.Date"%>
+
 <table border="1" cellpadding="2" cellspacing="0" width="100%">
 <% if(!userData.getCorrect().booleanValue()){ %>
   <tr>
@@ -51,7 +52,7 @@
           <input type="submit" name="formAction" value="mkdir"/>
         </td>
         <td class="portlet-msg-info" style="text-align: center">
-          <input type="submit" name="formAction" value="touch"/>
+          <input type="submit" name="formAction" value="new file"/>
         </td>
       </tr>
      </table>
@@ -66,8 +67,10 @@
   <%
       String[] URIs=userData.getLeftURIs();
       ResourceInfo[] resources=userData.getLeftResourceList();
-      for(int i=0;i<URIs.length;++i){
-          if(resources[i].isDirectory()){
+
+      if(URIs!=null && resources!=null){
+          for(int i=0;i<URIs.length;++i){
+              if(resources[i].isDirectory()){
           %>
   <tr>
     <td class="portlet-msg-info" style="text-align: center" width="20">
@@ -114,7 +117,14 @@
     </td>
    </tr>
               <%
+              }
           }
+      }else{
+    %>
+     <tr>
+       <td class="portlet-msg-info" colspan="5" style="text-align: center"><br/>Unable to read directory <a href="<%= formURIs.get("leftFix") %>">go to root directory</a></td>
+     </tr>
+    <%
       }
     %>
     </form>
@@ -150,7 +160,7 @@
           <input type="submit" name="formAction" value="mkdir"/>
         </td>
         <td class="portlet-msg-info" style="text-align: center">
-          <input type="submit" name="formAction" value="touch"/>
+          <input type="submit" name="formAction" value="new file"/>
         </td>
       </tr>
      </table>
@@ -165,8 +175,10 @@
   <%
       URIs=userData.getRightURIs();
       resources=userData.getRightResourceList();
-      for(int i=0;i<URIs.length;++i){
-          if(resources[i].isDirectory()){
+
+      if(URIs!=null && resources!=null){
+          for(int i=0;i<URIs.length;++i){
+              if(resources[i].isDirectory()){
           %>
   <tr>
     <td class="portlet-msg-info" style="text-align: center" width="20">
@@ -213,7 +225,14 @@
     </td>
    </tr>
               <%
+              }
           }
+      }else{
+    %>
+     <tr>
+       <td class="portlet-msg-info" colspan="5" style="text-align: center"><br/>Unable to read directory <a href="<%= formURIs.get("rightFix") %>">go to root directory</a></td>
+     </tr>
+    <%
       }
     %>
     </form>

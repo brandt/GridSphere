@@ -1,6 +1,6 @@
 /**
  * @author <a href="mailto:tkucz@icis.pcz.pl">Tomasz Kuczynski</a>
- * @version 0.91 2004/03/30
+ * @version 0.9 2004/03/30
  */
 package org.gridlab.gridsphere.portlets.core.file;
 
@@ -49,6 +49,10 @@ public class CommanderPortlet extends AbstractPortlet {
             }
             userData.setPath(sideParam, newDir);
             readDirectories(request, event.getPortletResponse(), userData);
+        } else if (action.equals("fix")) {
+            String sideParam = request.getParameter("side");
+            userData.setPath(sideParam, "/");
+            readDirectories(request, event.getPortletResponse(), userData);
         } else if (action.equals("explorer")) {
             try {
                 HashMap requestData = new HashMap();
@@ -83,7 +87,7 @@ public class CommanderPortlet extends AbstractPortlet {
                     String path = userData.getPath(sideParam);
                     File file = secureDirectoryService.getFile(request.getUser(), "commander", path + filename);
                     fileItem.write(file);
-                } else if (formAction.equals("touch")) {
+                } else if (formAction.equals("new file")) {
                     String resourceName = (String) requestData.get("resourceName");
                     if (resourceName != null && !resourceName.equals("")) {
                         String path = userData.getPath(sideParam);
@@ -148,9 +152,9 @@ public class CommanderPortlet extends AbstractPortlet {
                             userData.getLeftResourceList() :
                             userData.getRightResourceList());
 
-                    String checkPath = (sideParam.equals("left") ?
-                            userData.getPath("right") :
-                            userData.getPath("left"));
+//                    String checkPath = (sideParam.equals("left") ?
+//                            userData.getPath("right") :
+//                            userData.getPath("left"));
 
                     Iterator params = items.iterator();
                     while (params.hasNext()) {
@@ -160,8 +164,8 @@ public class CommanderPortlet extends AbstractPortlet {
                             try {
                                 if (util.match("m!^" + sideParam + "_(\\d)+$!", param)) {
                                     String resourcePath = path + resources[Integer.parseInt(util.group(1))].getResource();
-                                    if (!util.match("m#^" + resourcePath + "#", checkPath))
-                                        secureDirectoryService.deleteResource(request.getUser(), "commander", resourcePath, true);
+//                                    if (!util.match("m#^" + resourcePath + "#", checkPath))
+                                    secureDirectoryService.deleteResource(request.getUser(), "commander", resourcePath, true);
                                 }
                             } catch (MalformedPerl5PatternException e) {
                             }
@@ -279,15 +283,11 @@ public class CommanderPortlet extends AbstractPortlet {
                         }
                     }
                 }
-                if (leftURIs != null && rightURIs != null) {
-                    userData.setLeftResourceList(leftResourceList);
-                    userData.setRightResourceList(rightResourceList);
-                    userData.setLeftURIs(leftURIs);
-                    userData.setRightURIs(rightURIs);
-                    userData.setCorrect(new Boolean(true));
-                } else {
-                    userData.setCorrect(new Boolean(false));
-                }
+                userData.setLeftResourceList(leftResourceList);
+                userData.setRightResourceList(rightResourceList);
+                userData.setLeftURIs(leftURIs);
+                userData.setRightURIs(rightURIs);
+                userData.setCorrect(new Boolean(true));
             } else {
                 userData.setCorrect(new Boolean(false));
             }
@@ -320,9 +320,24 @@ public class CommanderPortlet extends AbstractPortlet {
         uri.addAction("commit");
         URIs.put("commit", uri.toString());
 
-        if (userData.getCorrect().booleanValue()) {
-            ResourceInfo[] resources = userData.getLeftResourceList();
-            String[] leftEditURIs = new String[resources.length];
+        uri = response.createURI();
+        uri.addAction("fix");
+        uri.addParameter("side", "left");
+        URIs.put("leftFix", uri.toString());
+
+        uri = response.createURI();
+        uri.addAction("fix");
+        uri.addParameter("side", "right");
+        URIs.put("rightFix", uri.toString());
+
+        String[] leftEditURIs;
+        String[] rightEditURIs;
+
+        ResourceInfo[] resources = userData.getLeftResourceList();
+
+        leftEditURIs = new String[resources != null && resources.length > 0 ? resources.length : 1];
+
+        if (resources != null) {
             for (int i = 0; i < resources.length; ++i) {
                 if (!resources[i].isDirectory()) {
                     uri = response.createURI();
@@ -332,9 +347,13 @@ public class CommanderPortlet extends AbstractPortlet {
                     leftEditURIs[i] = uri.toString();
                 }
             }
-            request.setAttribute("leftEditURIs", Arrays.asList(leftEditURIs));
-            resources = userData.getRightResourceList();
-            String[] rightEditURIs = new String[resources.length];
+        }
+
+        request.setAttribute("leftEditURIs", Arrays.asList(leftEditURIs));
+
+        resources = userData.getRightResourceList();
+        rightEditURIs = new String[resources != null && resources.length > 0 ? resources.length : 1];
+        if (resources != null) {
             for (int i = 0; i < resources.length; ++i) {
                 if (!resources[i].isDirectory()) {
                     uri = response.createURI();
@@ -344,9 +363,10 @@ public class CommanderPortlet extends AbstractPortlet {
                     rightEditURIs[i] = uri.toString();
                 }
             }
-            request.setAttribute("rightEditURIs", Arrays.asList(rightEditURIs));
-
         }
+
+        request.setAttribute("rightEditURIs", Arrays.asList(rightEditURIs));
+
         request.setAttribute("formURIs", URIs);
         request.setAttribute("userData", userData);
     }
