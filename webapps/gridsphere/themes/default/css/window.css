@@ -65,16 +65,6 @@ Version: $Id$
   height: 100%;
 }
 
-
-input[type=submit] {
-  margin-top: 2px;
-}
-
-input, select, textarea {
-  font-size: inherit;
-  font-family: courier, courier new, monospaced;
-}
-
 /*
 
 component themes
