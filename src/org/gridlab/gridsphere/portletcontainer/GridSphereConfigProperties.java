@@ -12,6 +12,11 @@ public interface GridSphereConfigProperties {
     public static final String TOMCAT_HOME = "TOMCAT_HOME";
 
     /**
+     *  Location of Catalina
+     */
+    public static final String CATALINA_HOME = "CATALINA_HOME";
+
+    /**
      * Location of GridSphere web application
      */
     public static final String GRIDSPHERE_WEBAPP = "GRIDSPHERE_WEBAPP";

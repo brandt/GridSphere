@@ -4,8 +4,6 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
-import javax.servlet.ServletConfig;
-import java.io.File;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -20,6 +18,7 @@ public class GridSphereConfig implements GridSphereConfigProperties {
     protected ResourceBundle configBundle = null;
     protected String gridspheredir = null;
     protected String tomcathome = null;
+    protected String catalinahome = null;
     protected final String projectname = "gridsphere";
 
     private GridSphereConfig() {
@@ -29,14 +28,20 @@ public class GridSphereConfig implements GridSphereConfigProperties {
             System.err.println("Config: Missing gridsphere.properties file " + mre.toString());
         }
 
-        String tomcathome = configBundle.getString("TOMCAT_HOME");
-        gridspheredir = tomcathome + pathtype + projectname;
-        File gsfile = new File(gridspheredir);
-
-        /* Create the base directory if necessary */
-        if (!gsfile.exists()) {
-            System.err.println("Can't find directory " + gridspheredir);
+        tomcathome = configBundle.getString("TOMCAT_HOME");
+        String catalinahome = configBundle.getString("CATALINA_HOME");
+        if (catalinahome != "") {
+            gridspheredir = catalinahome + pathtype + projectname;
+        } else {
+            gridspheredir = tomcathome + pathtype + projectname;
         }
+
+        /*
+        File gsfile = new File(gridspheredir);
+        if (!gsfile.exists()) {
+            gsfile.mkdir();
+        }
+        */
     }
 
     public static GridSphereConfig getInstance() {

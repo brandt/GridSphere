@@ -9,6 +9,7 @@ public class GridSphereProperties {
     public static final String ID = "ID";
     public static final String CLIENT = "Client";
     public static final String PORTLETMODE = "PortletMode";
+    public static final String PORTLETERROR = "PortletError";
     public static final String PREVIOUSMODE = "PreviousMode";
     public static final String MODEMODIFIER = "ModeModifier";
     public static final String PORTLETWINDOW = "PortletWindow";
