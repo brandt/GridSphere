@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
+import java.util.List;
+import java.util.Iterator;
 
 /**
  * A <code>RadioButtonTag</code> represents a radio button element
@@ -44,12 +46,19 @@ public class RadioButtonTag extends BaseComponentTag {
             radiobutton = (RadioButtonBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (radiobutton == null) {
                 radiobutton = new RadioButtonBean((HttpServletRequest) pageContext.getRequest(), beanId);
-                radiobutton.setSelected(selected);
                 this.setBaseComponentBean(radiobutton);
             } else {
                 //this.updateBaseComponentBean(radiobutton);
                 this.overrideBaseComponentBean(radiobutton);
             }
+            List vals = radiobutton.getSelectedValues();
+            if (vals.contains(value)) {
+                radiobutton.setSelected(true);
+            } else {
+                //if (!selected) selected = radiobutton.isSelected();
+                if (vals.isEmpty()) radiobutton.setSelected(selected);
+            }
+
         } else {
             radiobutton = new RadioButtonBean();
             radiobutton.setSelected(selected);
