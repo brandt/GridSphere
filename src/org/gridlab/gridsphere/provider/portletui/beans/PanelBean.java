@@ -19,6 +19,10 @@ public class PanelBean extends BeanContainer implements TagBean {
     protected String cellSpacing = PANEL_SPACING;
     protected String width = PANEL_WIDTH;
 
+    private String cols = "100%";
+    private String[] colArray;
+    private int numCols = 1;
+
     /**
      * Constructs a default panel bean
      */
@@ -57,6 +61,60 @@ public class PanelBean extends BeanContainer implements TagBean {
     }
 
     /**
+     * Sets the number of columns in the panel
+     *
+     * @param cols the number of columns
+     */
+    public void setCols(String cols) {
+        this.cols = cols;
+    }
+
+    /**
+     * Returns the number of columns in the panel
+     *
+     * @return the number of columns in the panel
+     */
+    public String getCols() {
+        return cols;
+    }
+
+    /**
+     * Sets the number of columns in the panel
+     *
+     * @param numCols the number of columns
+     */
+    public void setNumCols(int numCols) {
+        this.numCols = numCols;
+    }
+
+    /**
+     * Returns the number of columns in the panel
+     *
+     * @return the number of columns in the panel
+     */
+    public int getNumCols() {
+        return numCols;
+    }
+
+    /**
+     * Sets the column array specifying column widths
+     *
+     * @param colArray the column array specifying column widths
+     */
+    public void setColArray(String[] colArray) {
+        this.colArray = colArray;
+    }
+
+    /**
+     * Returns the number of columns in the panel
+     *
+     * @return the number of columns in the panel
+     */
+    public String[] getColArray() {
+        return colArray;
+    }
+
+    /**
      * Sets the panel (table) cell spacing
      *
      * @param cellSpacing the panel cell spacing
@@ -88,21 +146,23 @@ public class PanelBean extends BeanContainer implements TagBean {
 
         int numRows = container.size();
         int i = 0;
-        //System.err.println("in PanelBean: # of tags: " + container.size());
-        while (i < container.size()) {
+        int j = 0;
+
+        while (i < numRows) {
             sb.append("<tr>");
-            int j = 0;
-            while ((j < numRows) && (i < container.size())) {
-                //sb.append("<td>");
+            while ((j < numCols) && (i < numRows)) {
                 TagBean tagBean = (TagBean)container.get(i);
-                //System.err.println("in PanelBean: its " + tagBean.toString());
+                System.err.println("in panel bean colArray " + i + " " + colArray[j]);
+                sb.append("<td width=\"" + colArray[j] +"\">");
                 sb.append(tagBean.toStartString());
                 sb.append(tagBean.toEndString());
-                //sb.append("</td>");
+                sb.append("</td>");
                 j++; i++;
             }
+            j = 0;
             sb.append("</tr>");
         }
+
         sb.append("</table>");
         return sb.toString();
     }
