@@ -119,6 +119,8 @@ Copyright:
         <mkdir dir="${build.docs}"/>
 
         <property name="GRIDSPHERE_HOME" value="${env.CATALINA_HOME}/gridsphere"/>
+        <property name="TEST_HOME" value="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/test"/>
+
 
         <echo message="--- Build environment for ${gridsphere.name} ---" />
         <echo message="--- Flags (Note: If the {property name} is displayed,"/>
@@ -220,7 +222,6 @@ Copyright:
     <!-- =================================================================== -->
     <target name="gridsphere-jar" depends="compile" description="Makes gridsphere JAR">
         <echo message="Configuring Database"/>
-        <property name="TEST_HOME" value="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/test"/>
 
         <property name="DATABASE_CONFIG" value="${GRIDSPHERE_HOME}/database/${DATABASE_TYPE}db.xml"/>
         <property name="DATABASE_NAME" value="gridsphere"/>
