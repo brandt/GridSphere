@@ -59,6 +59,7 @@ Copyright:
     <pathelement location="${jsse.jar}"/>
     <pathelement location="${jcert.jar}"/>
     <pathelement location="${pkcs11.jar}"/>
+    <pathelement location="${lib.dir}"/>
     <fileset dir="${env.TOMCAT_HOME}/common/lib">
       <include name="*.jar"/>
     </fileset>
