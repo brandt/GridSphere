@@ -4,9 +4,9 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
+import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.DiskFileUpload;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 
 import java.io.File;

@@ -22,7 +22,6 @@ import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
 import javax.servlet.UnavailableException;
 import java.util.List;
-import java.util.Enumeration;
 
 public class UserManagerPortlet extends ActionPortlet {
 

@@ -6,7 +6,6 @@
 package org.gridlab.gridsphere.portlet;
 
 import java.util.Enumeration;
-import java.util.Iterator;
 
 /**
  * The <code>User</code> interface is an abstract view on the user-specific data.

@@ -11,8 +11,6 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 /**
  * An <code>ActionSubmitTag</code> provides a button element that includes a <code>DefaultPortletAction</code> and may

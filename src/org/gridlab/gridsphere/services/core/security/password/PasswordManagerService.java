@@ -11,8 +11,6 @@ package org.gridlab.gridsphere.services.core.security.password;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.services.core.user.AccountRequest;
 
-import java.util.List;
-
 public interface PasswordManagerService {
 
     public Password getPassword(User user);

@@ -6,6 +6,7 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
+
 import java.util.List;
 
 /**

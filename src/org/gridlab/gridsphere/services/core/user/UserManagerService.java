@@ -3,7 +3,6 @@
  */
 package org.gridlab.gridsphere.services.core.user;
 
-import org.gridlab.gridsphere.core.mail.MailMessage;
 import org.gridlab.gridsphere.portlet.User;
 
 import java.util.List;

@@ -6,8 +6,6 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.User;
 
-import java.util.Locale;
-
 /**
  * The <code>SportletUser</code> extends the immutable <code>User</code>
  * and provides all the setter- methods to set user attributes.

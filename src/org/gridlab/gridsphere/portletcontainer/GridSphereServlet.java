@@ -20,15 +20,20 @@ import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.user.LoginService;
-import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
+import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import javax.activation.FileDataSource;
-import javax.activation.DataHandler;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**

@@ -4,9 +4,9 @@
  */
 package org.gridlab.gridsphere.provider.portletui.tags;
 
-import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
 
 import java.util.Locale;
 import java.util.ResourceBundle;

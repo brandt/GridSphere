@@ -19,8 +19,8 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServic
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDescriptor;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
-import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManager;
+import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 
 import javax.servlet.ServletConfig;
 import java.io.IOException;

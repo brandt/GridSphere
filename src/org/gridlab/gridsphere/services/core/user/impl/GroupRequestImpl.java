@@ -11,8 +11,8 @@ import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.services.core.security.acl.GroupAction;
-import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
+import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 
 public class GroupRequestImpl implements GroupRequest {
 

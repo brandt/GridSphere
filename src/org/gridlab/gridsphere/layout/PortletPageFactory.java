@@ -7,7 +7,6 @@ import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
-import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 
 import java.io.*;
 import java.util.ArrayList;

@@ -10,8 +10,8 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.services.core.file.FileManagerService;
 import org.gridlab.gridsphere.provider.portletui.beans.FileInputBean;
+import org.gridlab.gridsphere.services.core.file.FileManagerService;
 
 import java.io.*;
 

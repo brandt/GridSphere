@@ -6,8 +6,6 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.FrameBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.User;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
