@@ -21,7 +21,8 @@
         </ui:tablerow>
         <ui:tablerow>
             <ui:tablecell cssStyle="portlet-frame-message-alert">
-                The following user(s) were removed from [<ui:text beanId="groupLabel"/>]
+                <ui:text value="The following user(s) were removed from" style="alert"/>
+                <ui:text beanId="groupLabel" style="alert"/>]
             </ui:tablecell>
         </ui:tablerow>
       </ui:frame>
@@ -29,13 +30,13 @@
 <ui:frame>
         <ui:tablerow header="true">
             <ui:tablecell>
-                User Name
+                <ui:text value="User Name"/>
             </ui:tablecell>
             <ui:tablecell>
-                Full Name
+                <ui:text value="Full Name"/>
             </ui:tablecell>
             <ui:tablecell>
-                Role In Group
+                <ui:text value="Role In Group"/>
             </ui:tablecell>
         </ui:tablerow>
 

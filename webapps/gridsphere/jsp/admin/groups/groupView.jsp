@@ -25,7 +25,7 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell width="200">
-                Group Name:
+                <ui:text value="Group Name:"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:text beanId="groupName"/>
@@ -34,7 +34,7 @@
 
         <ui:tablerow>
             <ui:tablecell>
-                Group Description:
+                <ui:text value="Group Description:"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:text beanId="groupDescription"/>
@@ -49,13 +49,13 @@
     <ui:frame>
         <ui:tablerow header="true">
             <ui:tablecell>
-            Login Name
+            <ui:text value="Login Name"/>
             </ui:tablecell>
             <ui:tablecell>
-            Full Name
+            <ui:text value="Full Name"/>
             </ui:tablecell>
             <ui:tablecell>
-            Role In Group
+            <ui:text value="Role In Group"/>
             </ui:tablecell>
         </ui:tablerow>
 
@@ -70,10 +70,10 @@
                             </ui:actionlink>
                         </ui:tablecell>
                         <ui:tablecell>
-                            <%= groupEntry.getUser().getFullName() %>
+                            <ui:text value="<%= groupEntry.getUser().getFullName() %>"/>
                         </ui:tablecell>
                         <ui:tablecell>
-                            <%= groupEntry.getRole() %>
+                            <ui:text value="<%= groupEntry.getRole().toString() %>"/>
                         </ui:tablecell>
                 </ui:tablerow>
 

@@ -14,7 +14,8 @@
         </ui:tablerow>
         <ui:tablerow>
             <ui:tablecell>
-                Select the user you would like to add and their role in: <ui:text beanId="groupLabel"/>
+                <ui:text value="Select the user you would like to add and their role in: "/>
+                <ui:text beanId="groupLabel"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
@@ -24,7 +25,7 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                Portlet Group:
+                <ui:text value="Portlet Group:"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:text beanId="groupLabel"/>
@@ -32,7 +33,7 @@
         </ui:tablerow>
         <ui:tablerow>
             <ui:tablecell>
-                User To Add:
+                <ui:text value="User To Add:"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:listbox beanId="usersNotInGroupList"/>
@@ -40,7 +41,7 @@
         </ui:tablerow>
         <ui:tablerow>
             <ui:tablecell>
-                Role In Group:
+                <ui:text value="Role In Group:"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:listbox beanId="groupEntryRole"/>

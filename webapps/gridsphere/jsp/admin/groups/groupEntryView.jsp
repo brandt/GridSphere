@@ -18,8 +18,8 @@
 
     <ui:frame>
          <ui:tablerow>
-                <ui:tablecell cssStyle="portlet-frame-label" width="200">
-                Group Name:
+                <ui:tablecell width="200">
+                    <ui:text value="Group Name:"/>
                 </ui:tablecell>
                 <ui:tablecell>
                     <ui:text beanId="groupName"/>
@@ -28,7 +28,7 @@
 
             <ui:tablerow>
                 <ui:tablecell>
-                Group Label:
+                    <ui:text value="Group Label:"/>
                 </ui:tablecell>
                 <ui:tablecell>
                     <ui:text beanId="groupLabel"/>
@@ -39,19 +39,19 @@
     <ui:frame>
             <ui:tablerow header="true">
                 <ui:tablecell>
-                User Name:
+                    <ui:text value="User Name:"/>
                 </ui:tablecell>
                 <ui:tablecell>
-                Full Name:
+                    <ui:text value="Full Name:"/>
                 </ui:tablecell>
                 <ui:tablecell>
-                Role In Group:
+                    <ui:text value="Role In Group:"/>
                 </ui:tablecell>
             </ui:tablerow>
 
             <ui:tablerow>
                 <ui:tablecell>
-                    <gs:text beanId="groupEntryUserName"/>
+                    <ui:text beanId="groupEntryUserName"/>
                 </ui:tablecell>
                 <ui:tablecell>
                     <ui:text beanId="groupEntryUserFullName"/>

@@ -19,20 +19,21 @@
         </ui:tablerow>
         <ui:tablerow>
             <ui:tablecell>
-                The following users were added to [<ui:text beanId="groupLabel"/>].
+                <ui:text value="The following users were added to "/>
+                <ui:text beanId="groupLabel"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
     <ui:frame>
         <ui:tablerow header="true">
             <ui:tablecell>
-            Login Name
+                <ui:text value="Login Name"/>
             </ui:tablecell>
             <ui:tablecell>
-            Full Name
+                <ui:text value="Full Name"/>
             </ui:tablecell>
             <ui:tablecell>
-            Role In Group
+                <ui:text value="Role In Group"/>
             </ui:tablecell>
         </ui:tablerow>
 <%
@@ -47,10 +48,10 @@
                             </ui:actionlink>
                         </ui:tablecell>
                         <ui:tablecell>
-                            <%= groupEntry.getUser().getFullName() %>
+                            <ui:text value="<%= groupEntry.getUser().getFullName() %>"/>
                         </ui:tablecell>
                         <ui:tablecell>
-                            <%= groupEntry.getRole() %>
+                            <ui:text value="<%= groupEntry.getRole().toString() %>"/>
                         </ui:tablecell>
                 </ui:tablerow>
 

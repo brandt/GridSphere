@@ -22,8 +22,9 @@
             </ui:tablecell>
         </ui:tablerow>
         <ui:tablerow>
-            <ui:tablecell style="message">
-                Select the users you would like to remove from [<ui:text beanId="groupLabel"/>]
+            <ui:tablecell>
+                <ui:text value="Select the users you would like to remove from "/>
+                <ui:text beanId="groupLabel"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
@@ -31,16 +32,16 @@
     <ui:frame>
         <ui:tablerow header="true">
             <ui:tablecell>
-                Selection
+                <ui:text value="Selection"/>
             </ui:tablecell>
             <ui:tablecell>
-                User Name
+                <ui:text value="User Name"/>
             </ui:tablecell>
             <ui:tablecell>
-                Full Name
+                <ui:text value="Full Name"/>
             </ui:tablecell>
             <ui:tablecell>
-                Role In Group
+                <ui:text value="Role In Group"/>
             </ui:tablecell>
         </ui:tablerow>
 
@@ -59,10 +60,10 @@
                             </ui:actionlink>
                         </ui:tablecell>
                         <ui:tablecell>
-                            <%= groupEntry.getUser().getFullName() %>
+                            <ui:text value="<%= groupEntry.getUser().getFullName() %>"/>
                         </ui:tablecell>
                         <ui:tablecell>
-                            <%= groupEntry.getRole() %>
+                            <ui:text value="<%= groupEntry.getRole() %>"/>
                         </ui:tablecell>
                 </ui:tablerow>
 

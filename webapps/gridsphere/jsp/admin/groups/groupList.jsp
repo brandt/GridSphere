@@ -13,10 +13,10 @@
     <ui:frame>
         <ui:tablerow header="true">
             <ui:tablecell>
-                Group Name
+                <ui:text value="Group Name"/>
             </ui:tablecell>
             <ui:tablecell>
-                Group Description
+                <ui:text value="Group Description"/>
             </ui:tablecell>
         </ui:tablerow>
 
