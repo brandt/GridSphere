@@ -42,7 +42,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
     private UserManagerService userManagerService = null;
     private AccessControlManagerService aclManagerService = null;
     private LayoutManagerService layoutMgr = null;
-    private List supportedLocales = null;
     private PortletRegistry portletRegistry = null;
     private TextMessagingService tms = null;
 
@@ -65,14 +64,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
     public void initConcrete(PortletSettings settings) throws UnavailableException {
         super.initConcrete(settings);
-        String locales = settings.getAttribute("supported-locales");
-        StringTokenizer st = new StringTokenizer(locales, ",");
-        supportedLocales = new Vector();
-        while (st.hasMoreElements()) {
-            String s = (String)st.nextElement();
-            supportedLocales.add(s.trim());
-        }
-
         DEFAULT_VIEW_PAGE = "doViewUser";
         DEFAULT_EDIT_PAGE = "doEditUser";
         DEFAULT_HELP_PAGE = HELP_JSP;
@@ -150,43 +141,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
         email.setValue(user.getEmailAddress());
         email.setDisabled(disable);
 
-        TextFieldBean localeTF = event.getTextFieldBean("mylocale");
-
-        // fill in locale
-        String selectedValue = "";
-        ListBoxBean localeLB = event.getListBoxBean("userLocale");
-
-        selectedValue = localeLB.getSelectedValue();
-        if (selectedValue != null) localeLB.clear();
-
-        String locale = (String)user.getAttribute(User.LOCALE);
-        if (locale == null) {
-            locale = "en";
-        }
-        Locale userLocale = new Locale(locale, "", "");
-
-        localeTF.setValue(userLocale.getDisplayLanguage());
-        localeTF.setDisabled(disable);
-
-        String dispVal = "";
-        for (int i = 0; i < supportedLocales.size(); i++) {
-            ListBoxItemBean item = new ListBoxItemBean();
-            String localeVal = (String)supportedLocales.get(i);
-            Locale loc = new Locale(localeVal, "", "");
-            dispVal = loc.getDisplayLanguage(userLocale);
-
-            //System.err.println("selectedValue: " + selectedValue + " localeVal=" + localeVal);
-            if (selectedValue != null) {
-                if (localeVal.equals(selectedValue)) item.setSelected(true);
-            } else {
-                if (localeVal.equals(locale)) item.setSelected(true);
-            }
-            item.setName(localeVal);
-            item.setValue(dispVal);
-            item.setDisabled(disable);
-            localeLB.addBean(item);
-        }
-
         DefaultTableModel model = new DefaultTableModel();
 
         // fill in groups model
@@ -198,8 +152,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
         String text = this.getLocalizedText(req, "PROFILE_GROUPS");
         tbGroups.setValue(text);
-        //tbGroups.setValue("Groups:");
-        //tbGroups.setKey("PROFILE_GROUPS");
+
         TextBean tbGroupsDesc = new TextBean();
         String desc =  this.getLocalizedText(req, "PROFILE_GROUP_DESC");
         tbGroupsDesc.setValue(desc);
@@ -339,13 +292,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         TextFieldBean emailTF =  event.getTextFieldBean("email");
         String email = emailTF.getValue();
 
-        // fill in locale
-        ListBoxBean localeLB = event.getListBoxBean("userLocale");
-        String language = localeLB.getSelectedValue();
-
         AccountRequest acctReq = userManagerService.createAccountRequest(user);
-        acctReq.setAttribute(User.LOCALE, language);
-
         if (email != null) acctReq.setEmailAddress(email);
         if (username != null) acctReq.setUserName(username);
         if (fullname != null) acctReq.setFullName(fullname);

@@ -46,7 +46,7 @@ public class FileManagerPortlet extends ActionPortlet {
         // set the list box size to number of files plus padding
         if (list == null) {
             ListBoxItemBean item = new ListBoxItemBean();
-            item.setValue("empty directory");
+            item.setValue(this.getLocalizedText(request, "FILE_EMPTY_DIRECTORY"));
             item.setDisabled(true);
             lb.setSize(4);
             lb.addBean(item);

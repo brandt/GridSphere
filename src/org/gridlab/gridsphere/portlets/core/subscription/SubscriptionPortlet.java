@@ -16,7 +16,6 @@ import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridlab.gridsphere.layout.*;
 
 import javax.servlet.UnavailableException;
 import java.util.*;

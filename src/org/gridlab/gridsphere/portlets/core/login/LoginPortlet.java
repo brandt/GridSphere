@@ -78,7 +78,7 @@ public class LoginPortlet extends ActionPortlet {
         PrintWriter out = response.getWriter();
 
         if (user instanceof GuestUser) {
-            out.println(getPortletSettings().getTitle(request.getLocale(), null));
+            out.println(getNextTitle(request));
         } else {
             out.println(getLocalizedText(request, "LOGIN_CONFIGURE"));
             //getPortletConfig().getContext().include("/jsp/login/login_title.jsp", request, response);
