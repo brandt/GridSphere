@@ -87,7 +87,6 @@ public class GridSphereEventImpl implements GridSphereEvent {
                 log.debug("Group: " + group.toString() + " Role: " + role.toString());
             }
         }
-
     }
 
     public PortletRequest getPortletRequest() {

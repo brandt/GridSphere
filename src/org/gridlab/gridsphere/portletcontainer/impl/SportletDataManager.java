@@ -56,13 +56,13 @@ public class SportletDataManager implements PortletDataManager {
     public PortletData getPortletData(User user, String portletID) throws PersistenceManagerException {
 
         String appID = PortletRegistry.getApplicationPortletID(portletID);
-        System.err.println("appID: " + appID);
         PersistenceManagerRdbms pm = null;
         if (appID != null) {
             ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
-            String webApp = appPortlet.getWebApplicationName();
-            System.err.println("webapp: " + webApp);
-            pm = PersistenceManagerFactory.createProjectPersistenceManagerRdbms(webApp);
+            if (appPortlet != null) {
+                String webApp = appPortlet.getWebApplicationName();
+                pm = PersistenceManagerFactory.createProjectPersistenceManagerRdbms(webApp);
+            }
         }
         if (user instanceof GuestUser) return null;
 
