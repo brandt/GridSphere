@@ -8,7 +8,7 @@
 -->
 
 <chapter id="portlet-lifecycle">
-    <title>Portlet Lifecycle</title>
+    <title id="portlet-lifecycle-title">Portlet Lifecycle</title>
 
 
 <para>
@@ -18,21 +18,20 @@ and the presentation rendering. Just as servlets have <methodname>init</methodna
 shutdown of concrete and application portlets. For every request made by a user, the <methodname>service</methodname> method is
 invoked which is responsible for invoking the appropriate <link linkend='portlet-action'>portlet action method</link>
 if one exists followed by the appropriate <link linkend='portlet-render'>portlet render method</link> for all portlets
-that are currently displayed on the portal page. All lifecycle methods throw a &PortletException; which acts as a proxy
-for the standard &ServletException;.
+that are currently displayed on the portal page. All lifecycle methods throw a &PortletException;
 </para>
 
 <itemizedlist>
 <listitem><para>
     Application portlet initialization is the first phase of startup. The portlet is
-    instantiated with the &PortletConfig; information described in
-    <link linkend='portlet-objects' endterm="portlet-objects-title"/>
+    instantiated with the &PortletConfig; object
     </para><para>
     <programlisting>
     <prompt>void</prompt> <methodname>init</methodname>(PortletConfig <emphasis>config</emphasis>)
     </programlisting>
 </para></listitem>
 <listitem><para>
+    <important>Concrete portlets only exist in the WebSphere portlet model</important>
     The concrete portlet is placed into service and parametrized with a &PortletSettings; object described in
     <link linkend='portlet-objects' endterm="portlet-objects-title"/>
     <programlisting>
@@ -50,6 +49,7 @@ for the standard &ServletException;.
 </para></listitem>
 
 <listitem><para>
+    <important>Concrete portlets only exist in the WebSphere portlet model</important>
     The concrete portlet is taken out of service either dynamically when a portlet web application is unloaded or
     when the portal is shutdown
     </para><para>
@@ -68,7 +68,7 @@ for the standard &ServletException;.
 
 </itemizedlist>
 
-<sect1><title id="portlet-action">Portlet Action Methods</title>
+<sect1><title id="portlet-action">WebSphere Portlet Action Methods</title>
     <para>
         The Action methods handle any events that a portlet may have triggered. Any kind of form or hyperlink
         triggered event will cause the <methodname>actionPerformed</methodname> method to be executed. Other
@@ -124,16 +124,30 @@ for the standard &ServletException;.
 </itemizedlist>
 </sect1>
 
+<sect1><title id="portlet-action-jsr">JSR 168 Portlet Action Methods</title>
+    <para>
+        Under JSR 168 specification, the <methodname>processAction</methodname> method is invoked when the portlet
+        receives an action. It is not possible to receive window state events or portlet messaging events under JSR 168.
+    </para>
+<itemizedlist>
+<listitem><para>
+    The <methodname>processAction</methodname> method is invoked when the portlet receives an action and must be
+    implemented by the portlet developer. This method is performed before any rendering is done via doView,
+    doEdit, etc.
+    </para><para>
+    <programlisting>
+    <prompt>void</prompt> <methodname>processAction</methodname>(ActionRequest <emphasis>request</emphasis>, ActionResponse <emphasis>response</emphasis>)
+    </programlisting>
+</para></listitem>
+
+</itemizedlist>
+</sect1>
+
 <sect1>
-    <title id="portlet-render">Portlet Render Methods</title>
+    <title id="portlet-render">WebSphere and JSR 168 Portlet Render Methods</title>
     <para>
     The portlet container will render portlet presentation for all portlets that are currently visible in the page
-    based on the mode they are in as described previously. A portlet developer can override these methods to
-    provide customized layout by either printing to the output stream of the &PortletResponse; directly or by using a
-    &PortletContext; to perform an <methodname>include</methodname> on a chosen resource e.g. HTML or a JSP. The
-    <methodname>doTitle</methodname> is invoked by the layout engine during portlet rendering. If
-    <methodname>doTitle</methodname> is not overriden, then the title obtained from the concrete portlet desfinition is
-    used.
+    based on the mode they are in as described previously.
     </para>
 <itemizedlist>
 <listitem><para>
@@ -154,10 +168,11 @@ for the standard &ServletException;.
 
 <listitem><para>
     The <methodname>doConfigure</methodname> method is invoked for a portlet when it is in <emphasis>CONFIGURE</emphasis> mode.
-    This mode is allowed only for portlet administrators and is intended to provide additional portlet configuration.
+    This mode is allowed only for portlet administrators and is intended to provide additional portlet configuration. Configure mode
+    is supported in the WebSphere portlet API, but must be added as a custom mode using JSR 168.
 </para><para>
     <programlisting>
-    <prompt>void</prompt> <methodname>doEdit</methodname>(PortletRequest <emphasis>req</emphasis>, PortletResponse <emphasis>res</emphasis> )
+    <prompt>void</prompt> <methodname>doConfigure</methodname>(PortletRequest <emphasis>req</emphasis>, PortletResponse <emphasis>res</emphasis> )
     </programlisting>
 </para></listitem>
 

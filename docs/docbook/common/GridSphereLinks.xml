@@ -60,6 +60,9 @@
 <!ENTITY PersistenceManager "<classname>PersistenceManager</classname>">
 <!-- JSR classes -->
 <!ENTITY PortletPreferences "<classname>PortletPreferences</classname>">
+<!ENTITY GenericPortlet "<classname>GenericPortlet</classname>">
+<!ENTITY PortletServlet "<classname>PortletServlet</classname>">
+
 
 <!-- Common Tapestry classes -->
 

@@ -13,8 +13,8 @@
     Portlets are defined as visual components that can be assimilated into portal web pages. Portlets
     provide "mini-applications" that can either display informational content or provide access to other services. The
     GridSphere portal allows users to customize their workspace by adding and removing portlets as needed. In addition
-    to standard window states like minimized or maximized, portlets can also provide various "modes". The standard portlet
-    modes are <emphasis>view</emphasis>, <emphasis>edit</emphasis>, <emphasis>configure</emphasis> and
+    to standard window states like minimized or maximized, portlets can also provide various "modes" such as
+    <emphasis>view</emphasis>, <emphasis>edit</emphasis>, <emphasis>configure</emphasis> and
     <emphasis>help</emphasis>. As an example, consider a stock quote portlet that allows users to
     customize their stock quote information. View mode would display a user's stock information. Help mode provides users
     with informational content about the stock quote portlet and how to use it. Edit mode allows users to change the list
@@ -22,25 +22,18 @@
     administrators to change persistent settings such as the stock quote service that is contacted.
     </para>
     <para>
-    In the GridSphere framework, portlets inherit from servlets which are defined in Sun's Servlet Specification.
-    Hence, the GridSphere framework is packaged as a web application that provides a portlet container for managing
-    deployed portlets. Portlets are intended to be administered dynamically and portlet administrators can deploy
-    and undeploy portlets to the container.
+    As of GridSphere 2.0, two portlet development models are supported. The original portlet model was based upon the
+    <trademark class='registered'>IBM WebSphere</trademark> Portlet API v4.1+ which means that existing WebSphere portlet
+    applications can be easily ported for use within GridSphere. In addition, GridSphere provides an implementation
+    of the JSR 168 Portlet API standard supported by IBM, Sun, Oracle, Plumtree, and many other application server vendors.
+    The GridSphere framework is packaged as a web application that provides a portlet container for managing
+    deployed portlets. GridSphere provides a collection of core portlets as well as a development environment for the
+    creation of new portlet applications, both the WebSphere model and the JSR 168 standard.
     </para>
     <para>
-    Because portlets extend from servlets, portlets are packaged as web applications according to the Java Servlet
-    Specification as Web ARchive (WAR) files just as any other distributable web application. Within a Portlet Web
-    Application, a portlet descriptor file explained in more detail in the next section, is used to describe the
-    portlet's properties and initialization information. A Portlet definition consists of an application portlet and
-    one or more concrete portlets. Application portlets are defined to be the portlets as servlets where a single
-    instance exists for the duration of the portlet container. A concrete portlet instance is an application portlet
-    parameterized with additional data found in the portlets's deployment descriptor (see next section). For
-    instance, it's possible to provide access to multiple stock quote portlets that may have different configuration
-    settings or allow access to a different set of groups, etc.
-    </para>
-    <para>
-    The GridSphere framework provides built-in support for access control based upon the Role Based Access
-    Control (RBAC) model. GridSphere uses portlet web applications to define groups. Users may belong to one or more
+    GridSphere provides built-in support for role based access control. A group is defined by a name, description and a
+    collection of portlets that a user has access to including role access rights on a per portlet basis. Users may
+    belong to one or more
     groups (meaning they have access to one or more portlet web applications) and they have a <emphasis>role</emphasis>
     within each group. the four supported roles are <emphasis>GUEST</emphasis>, <emphasis>USER</emphasis>,
     <emphasis>ADMIN</emphasis> and <emphasis>SUPER</emphasis>. A user with the GUEST role will obtain a generic view of
@@ -48,13 +41,14 @@
     portlet personalized with their settings. A user with the ADMIN role can have access to a portlet's CONFIGURE mode
     described earlier and presumably configure a portlet's initialization settings. A user possesing the SUPER role can
     essentially do anything they want to any portlet and is essentially equivalent to having root access in an
-    operating system.
+    operating system. A portlet application may provide an optional group descriptor file, group.xml, which
+        defines an initial group and access rules for the portlet collection.
     </para>
     <para>
-    The Portlet API explained in greater detail in <link linkend='portlet-objects' endterm="portlet-objects-title"/>
-    provides a much richer interface for web programming than the standard servlet model. In addition to providing
-    information about the current portlet mode and window state, the API provides access to the portal user including
-    group and role information using the <link linkend='portlet-objects'>GridSphere access control model</link>.
+    This document is intended as a reference guide on the GridSphere portal and does not cover too much portlet
+        development. Please see the GridSphere tutorials for developing portlets within GridSphere or see
+   <link linkend='portlet-resources' endterm="portlet-resources-title"/> for a useful set of web links offering more
+        information.
     </para>
     <para>
     The Portlet Services API described in <link linkend='portlet-services' endterm="portlet-services-title"/>
@@ -63,24 +57,12 @@
     additional functionality.
     </para>
     <para>
-<!--
-    <figure>
-        <title>Portlet Web Applications and the Portlet Lifecycle</title>
-        <graphic fileref="lifecycle.png"/>
-    </figure> -->
-    </para>
-
-    <para>
-    The following inheritance hierarchy describes the relationship between servlets and portlets:
-            <itemizedlist>
-            <listitem>&HttpServlet;</listitem>
-            <listitem>&Portlet;</listitem>
-            <listitem>&PortletAdapter;</listitem>
-            <listitem>&AbstractPortlet;</listitem>
-            <listitem><classname>com.mycom.MyPortlet</classname></listitem>
-            </itemizedlist>
-    In general to reap the benefits of the GridSphere portlet model, a developer would create a new portlet
-    which subclasses from the &AbstractPortlet; class and implement the lifecycle methods detailed in the next section.
+    The <link linkend='portlet-services' endterm="portlet-services-title"/> section is generally applicable to both
+        WebSphere and JSR 168 developed portlets. The GridSphere portal container supports both APIs by using the WebSphere
+        portlet API to bootstrap a special &PortletServlet; that is a WebSphere style portlet that is responsible for
+        loading JSR 168 portlets. Please read the paper 
+        <ulink url="http://www.gridsphere.org/gridsphere/wp-4/Documents/France/gridsphere.pdf">GridSphere: An Advanced Portal Framework</ulink>
+        for more technical details.
     </para>
 
 </chapter>

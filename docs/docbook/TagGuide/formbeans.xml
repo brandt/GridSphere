@@ -105,6 +105,7 @@
             <listitem>HiddenFieldBean</listitem>
             <listitem>ImageBean</listitem>
             <listitem>ListBoxBean</listitem>
+            <listitem>MessageBoxBean</listitem>
             <listitem>PanelBean</listitem>
             <listitem>PasswordBean</listitem>
             <listitem>TableBean</listitem>

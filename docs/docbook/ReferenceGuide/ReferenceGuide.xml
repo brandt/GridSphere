@@ -12,8 +12,7 @@
 
 <!ENTITY portlet-intro SYSTEM "portlet-intro.xml">
 <!ENTITY portlet-lifecycle SYSTEM "portlet-lifecycle.xml">
-<!ENTITY portlet-objects SYSTEM "portlet-objects.xml">
-<!ENTITY portlet-descriptor SYSTEM "portlet-descriptor.xml">
+<!ENTITY portlet-group SYSTEM "portlet-group.xml">
 <!ENTITY portlet-layout SYSTEM "portlet-layout.xml">
 <!ENTITY portlet-services SYSTEM "portlet-services.xml">
 <!ENTITY portlet-persistence SYSTEM "portlet-persistence.xml">
@@ -42,8 +41,7 @@
 
   &portlet-intro;
   &portlet-lifecycle;
-  &portlet-descriptor;
-  &portlet-objects;
+  &portlet-group;
   &portlet-layout;
   &portlet-services;
   &portlet-persistence;

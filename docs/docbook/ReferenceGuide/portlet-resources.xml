@@ -8,7 +8,7 @@
 -->
 
 <chapter id="portlet-resources">
-    <title>Additional Portlet Resources</title>
+    <title id="portlet-resources-title">Additional Portlet Resources</title>
   <para>
   Many resources exist on both the WebSphere portlet model and the JSR 168 Portlet API standard. The fololowing lists
       websites useful for both models as well as generic portlet and web application sites.

@@ -1,0 +1,101 @@
+<!--
+
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+    Author:     Jason Novotny
+    Version:    $Id$
+-->
+
+<chapter id="portlet-group"><title id="portlet-group-title">Portlet Groups</title>
+<para>
+As discussed in the introduction, GridSphere provides a concept for portlet groups that a user may belong to.
+A group can be created via the "Group Manager Portlet" or a webapp can define a group descriptor used to create
+    a portlet group upon loading the webapp.
+</para>
+
+
+<sect1><title>Specifying a Group Descriptor</title>
+<para>
+An external portlet web application specifies a group definition in an XML descriptor file found in
+<filename>WEB-INF/group.xml</filename>. An example illustration is shown:
+</para>
+<informalexample id="group.def"><programlisting>
+&lt;portlet-group&gt;  <co id="group.def"/>
+    &lt;group-name&gt;GridSphere&lt;/group-name&gt; <co id="gname.def"/>
+    &lt;group-description&gt;Core GridSphere Group&lt;/group-description&gt; <co id="gdesc.def"/>
+    &lt;group-visibility&gt;PUBLIC&lt;/group-visibility&gt;  <co id="gvisibility.def"/>
+    &lt;portlet-role-info&gt; <co id="groleinfo.def"/>
+        &lt;portlet-class&gt;org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet.1&lt;/portlet-class&gt; <co id="gclass.def"/>
+        &lt;required-role&gt;USER&lt;/required-role&gt;  <co id="grole.def"/>
+    &lt;/portlet-role-info&gt;
+    &lt;portlet-role-info&gt;
+        &lt;portlet-class&gt;org.gridlab.gridsphere.portlets.core.subscription.SubscriptionPortlet.1&lt;/portlet-class&gt;
+        &lt;required-role&gt;USER&lt;/required-role&gt;
+    &lt;/portlet-role-info&gt;
+    &lt;portlet-role-info&gt;
+        &lt;portlet-class&gt;org.gridlab.gridsphere.portlets.core.layout.UserLayoutPortlet.1&lt;/portlet-class&gt;
+        &lt;required-role&gt;USER&lt;/required-role&gt;
+    &lt;/portlet-role-info&gt;
+    &lt;portlet-role-info&gt;
+        &lt;portlet-class&gt;org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1&lt;/portlet-class&gt;
+        &lt;required-role&gt;SUPER&lt;/required-role&gt;
+    &lt;/portlet-role-info&gt;
+    &lt;portlet-role-info&gt;
+        &lt;portlet-class&gt;org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet.1&lt;/portlet-class&gt;
+        &lt;required-role&gt;SUPER&lt;/required-role&gt;
+    &lt;/portlet-role-info&gt;
+    &lt;portlet-role-info&gt;
+        &lt;portlet-class&gt;org.gridlab.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet.1&lt;/portlet-class&gt;
+        &lt;required-role&gt;ADMIN&lt;/required-role&gt;
+    &lt;/portlet-role-info&gt;
+    &lt;portlet-role-info&gt;
+        &lt;portlet-class&gt;org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet.1&lt;/portlet-class&gt;
+        &lt;required-role&gt;ADMIN&lt;/required-role&gt;
+    &lt;/portlet-role-info&gt;
+&lt;/portlet-group&gt;
+</programlisting>
+    <calloutlist>
+            <callout arearefs="group.def">
+            <para>
+                Every group descriptor must begin with a <emphasis>portlet-group</emphasis> element
+            </para>
+            </callout>
+            <callout arearefs="gname.def">
+            <para>
+                A group must provide a group name
+            </para>
+            </callout>
+            <callout arearefs="gdesc.def">
+            <para>
+                The group definition should say something meaningful about this group. Users will see the group name
+                and description.
+            </para>
+            </callout>
+            <callout arearefs="gvisibility.def">
+            <para>
+                The group visibility specifies if any user can add themselves to this group or if it requires administrator approval.
+            </para>
+            </callout>
+            <callout arearefs="groleinfo.def">
+            <para>
+                A portlet-group may contain one or more portlet-role-info elements that defines a portlet and associated role information
+            </para>
+            </callout>
+            <callout arearefs="gclass.def">
+            <para>
+                The portlet-class element defines the fully qualified portlet class name of this portlet    
+            </para>
+            </callout>
+            <callout arearefs="grole.def">
+            <para>
+                The required-role element may be one of USER, ADMIN, or SUPER defining which role a user must have to
+                view this portlet.
+            </para>
+            </callout>
+    </calloutlist>
+</informalexample>
+</sect1>
+</chapter>
+
+

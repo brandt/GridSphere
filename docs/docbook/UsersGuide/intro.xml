@@ -73,8 +73,7 @@ Version:    $Id$
 
 <sect1>
     <title>Installing Jakarta Tomcat</title>
-    <para>The Jakarta Tomcat servlet container is required to provide a hosting environment
-	for the GridSphere framework.
+    <para>The Jakarta Tomcat servlet container is required to provide a hosting environment for the GridSphere framework.
     </para>
     <orderedlist>
         <listitem><para>Download Jakarta &Tomcat; distribution</para></listitem>
