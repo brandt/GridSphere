@@ -168,7 +168,6 @@ public class TableBean extends BaseComponentBean implements TagBean {
     }
 
     public String toEndString() {
-        if (defaultModel == null) return "";
         return "</table>";
     }
 
