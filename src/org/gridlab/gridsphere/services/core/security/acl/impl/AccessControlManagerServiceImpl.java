@@ -231,26 +231,8 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     }
 
     public PortletGroup createGroup(SportletGroup portletGroup) {
-        Iterator it = portletGroup.getPortletRoleList().iterator();
-        while (it.hasNext()) {
-            SportletRoleInfo info = (SportletRoleInfo) it.next();
-            try {
-                if (info.getOid() == null) {
-                    pm.create(info);
-                } else {
-                    pm.update(info);
-                }
-            } catch (PersistenceManagerException e) {
-                log.error("Error creating SportletRoleInfo " + info.getRole(), e);
-            }
-        }
-        portletGroup.setPortletRoleList(portletGroup.getPortletRoleList());
         try {
-            if (portletGroup.getOid() == null) {
-                pm.create(portletGroup);
-            } else {
-                pm.update(portletGroup);
-            }
+            pm.saveOrUpdate(portletGroup);
         } catch (PersistenceManagerException e) {
             String msg = "Error creating portlet group " + portletGroup.getName();
             log.error(msg, e);
@@ -386,7 +368,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
                 SportletRoleInfo roleInfo = (SportletRoleInfo)roleIt.next();
                 //System.err.println("class= " + roleInfo.getPortletID());
                 String pid = roleInfo.getPortletClass();
-               
+
                 if (pid.equals(portletId))  {
                     // check if user has this group
                     found = true;
@@ -439,7 +421,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
                             if (checkAdmin) {
                                 if (usersRole.compare(usersRole, PortletRole.ADMIN) >= 0) {
                                     return true;
-                                } 
+                                }
                             } else {
                                 return true;
                             }
