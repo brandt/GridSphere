@@ -1238,7 +1238,16 @@
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
                         </row>
                     </thead>
-
+                    <tbody>
+                        <row>
+                            <entry>multiple</entry><entry>no</entry><entry>boolean: indicates if multiple selection is possible</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>size</entry><entry>no</entry><entry>integer: the number of items to display in the listbox, default is 1</entry>
+                        </row>
+                    </tbody>
                 </tgroup>
             </table>
             <example>
@@ -1266,6 +1275,21 @@
                             <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
                         </row>
                     </thead>
+                    <tbody>
+                        <row>
+                            <entry>name</entry><entry>no</entry><entry>string: a name identifier</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>value</entry><entry>no</entry><entry>string: the list item value to be displayed</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>selected</entry><entry>no</entry><entry>boolean: indicates if this element is selected</entry>
+                        </row>
+                    </tbody>
                 </tgroup>
             </table>
             <example>
@@ -1278,6 +1302,72 @@
                 </screen>
                 This example creates a listbox containing two listbox item elements, one of which
                 is initially selected.
+            </example>
+        </sect2>
+
+        <sect2 id="imagetag">
+            <title>Image</title>
+            <para>
+                This tag creates an image same as using &lt;img src="..."/&gt; in HTML can be nested inside
+                an actionlink tag to provide a clickable image.
+            </para>
+            <table>
+                <title>Attributes to image</title>
+                <tgroup cols="3">
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="*"/>
+                    <colspec colwidth="4*"/>
+                    <thead>
+                        <row>
+                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>src</entry><entry>no</entry><entry>string: the location of the image to be used</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>alt</entry><entry>no</entry><entry>string: an alt tag</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>title</entry><entry>no</entry><entry>string: text to be displayed when mouse hovers over image</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>border</entry><entry>no</entry><entry>integer: the border size</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>height</entry><entry>no</entry><entry>integer: the image height</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>width</entry><entry>no</entry><entry>integer: the image widthe</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>align</entry><entry>no</entry><entry>integer: the image alignment: top, bottom, left, right</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of image</title>
+                <screen>
+<![CDATA[<ui:actionlink action="doSomething>
+    <ui:image src="/mywebapp/html/images/cool.jpg" title="a cool image" border="0"/>
+</ui:actionlink>]]>
+                </screen>
+                This example creates a clickable image that will trigger the doSomething method of the portlet to be
+                invoked. The image is located under the webapp directory in the supplied src attribute and has no border.
             </example>
         </sect2>
 
