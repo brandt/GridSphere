@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletConfig;
 import java.util.Collection;
 import java.util.Set;
 import java.util.List;
@@ -23,9 +24,15 @@ import java.util.List;
  */
 public interface PortletUserRegistryService extends PortletService {
 
-    public void login(PortletRequest request);
+    public void loginPortlets(PortletRequest request);
 
-    public void logout(PortletRequest request);
+    public void logoutPortlets(PortletRequest request);
+
+    public void reloadPortlets() throws PortletRegistryServiceException;
+
+    public void initializePortlets();
+
+    public void shutdownPortlets();
 
     /**
      * Returns the collection of registered portlets
@@ -38,10 +45,12 @@ public interface PortletUserRegistryService extends PortletService {
 
     public void removePortlet(PortletRequest request, String concretePortletID);
 
+    public PortletConfig getPortletConfig(ServletConfig servletConfig, String concretePortletID);
+
     public PortletData getPortletData(PortletRequest request, String concretePortletID);
 
     public PortletSettings getPortletSettings(PortletRequest request, String concretePortletID);
 
-    public List getSupportedModes(PortletRequest request, String concretePortletID);
+    //public List getSupportedModes(PortletRequest request, String concretePortletID);
 
 }

@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.services.container.registry;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
+import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 
 import java.util.Collection;
 import java.util.Set;
@@ -21,36 +22,75 @@ import java.util.List;
  */
 public interface PortletRegistryService extends PortletService {
 
+    public void loadPortlets() throws PortletRegistryServiceException;
+
     /**
-     * Returns the collection of registered portlets
+     * Returns the collection of application portlets
      *
-     * @return the registered portlets
+     * @return the application portlets
+     */
+    public List getApplicationPortlets();
+
+    /**
+     * Return a application portlet given its identifier
+     *
+     * @param applicationPortletID the application portlet ID
+     * @return the application portlet
+     */
+    public ApplicationPortlet getApplicationPortlet(String applicationPortletID);
+
+    /**
+     * Returns the collection of concrete portlets
+     *
+     * @return the concrete portlets
      */
     public List getConcretePortlets();
 
     /**
-     * Return a registered portlet given its identifier
+     * Returns the collection of locally managed registered portlets
      *
-     * @return the registered portlet
+     * @return the local concrete portlets
+     */
+    public List getLocalConcretePortlets();
+
+    /**
+     * Return a concrete portlet given its identifier
+     *
+     * @param concretePortletID the concrete portlet ID
+     * @return the concrete portlet
      */
     public ConcretePortlet getConcretePortlet(String concretePortletID);
 
-
+    /**
+     * Return an active portlet that acts as a wrapper for an abstract portlet
+     *
+     */
     public AbstractPortlet getActivePortlet(String concretePortletID);
 
     /**
-     * Registers a portlet with the PortletRegistryService
+     * Registers a application portlet with the PortletRegistryService
      *
+     * @param registryID the string identifier for this ApplicationPortlet
      * @param registeredPortlet the registered portlet
      * @return the portletID
      */
-    public String registerPortlet(ConcretePortlet registeredPortlet);
+    public String registerApplicationPortlet(String registryID, ApplicationPortlet appPortlet);
 
     /**
-     * Unregisters a portlet with the PortletRegistryService
+     * Registers a list of application portlets with the PortletRegistryService
      *
+     * @param registryID the string identifier for this ApplicationPortlet
+     * @param a List containing ApplicationPortlet components
+     * @return the portletID
+     */
+    public void registerApplicationPortlets(String registryID, List applicationPortlets);
+
+    /**
+     * Unregisters a portlet application with the PortletRegistryService
+     *
+     * @param registryID the string identifier for this ApplicationPortlet
      * @param portletID the portlet ID
      */
-    public void unregisterPortlet(String portletID);
+    public void unregisterApplicationPortlet(String registryID, String portletID);
 
 }

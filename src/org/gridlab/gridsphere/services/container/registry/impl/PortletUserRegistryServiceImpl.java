@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletSettings;
 import org.gridlab.gridsphere.portlet.impl.SportletData;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
+import org.gridlab.gridsphere.portlet.impl.SportletConfig;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
@@ -16,13 +17,21 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
 import org.gridlab.gridsphere.services.container.registry.PortletUserRegistryService;
+import org.gridlab.gridsphere.services.container.registry.PortletRegistryServiceException;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
+import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.descriptor.Owner;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.UnavailableException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import java.net.URL;
+import java.net.MalformedURLException;
+import java.net.URLClassLoader;
+import java.io.File;
 
 /**
  * Manages user portlet instances characterized by a user's list of concrete portlet ID's and the persistent UserData
@@ -36,6 +45,9 @@ public class PortletUserRegistryServiceImpl implements PortletUserRegistryServic
     private static PortletRegistryService registryService = null;
     private static AccessControlService aclService = null;
 
+    private String rootPath = null;
+
+    private ServletConfig config = null;
 
     //private Map userPortlets = new Hashtable();
 
@@ -106,11 +118,17 @@ public class PortletUserRegistryServiceImpl implements PortletUserRegistryServic
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.info("in init()");
         // Need a portlet registry service
+        this.config = config.getServletConfig();
+        rootPath = config.getServletConfig().getServletContext().getRealPath("");
+        try {
+            registryService = PortletRegistryServiceImpl.getInstance();
+        } catch (PortletRegistryServiceException e) {
+            throw new PortletServiceUnavailableException("Unable to get instance of PortletRegistryService");
+        }
         try {
             aclService = (AccessControlService) factory.createPortletService(AccessControlService.class, config.getServletConfig(), true);
-            registryService = (PortletRegistryService) factory.createPortletService(PortletRegistryService.class, config.getServletConfig(), true);
         } catch (PortletServiceException e) {
-            throw new PortletServiceUnavailableException("Unable to get instance of PortletRegistryService");
+            throw new PortletServiceUnavailableException("Unable to get instance of AccessControlService");
         }
     }
 
@@ -121,7 +139,7 @@ public class PortletUserRegistryServiceImpl implements PortletUserRegistryServic
     /**
      * Login retrieves the user's PortletData for their list of portlets
      */
-    public void login(PortletRequest request) {
+    public void loginPortlets(PortletRequest request) {
         log.info("in login()");
 
         User user = request.getUser();
@@ -138,7 +156,7 @@ public class PortletUserRegistryServiceImpl implements PortletUserRegistryServic
     /**
      * Logout serializes user's PortletData of their list of portlets
      */
-    public void logout(PortletRequest request) {
+    public void logoutPortlets(PortletRequest request) {
         log.info("in logout()");
 
         // based on user.getID() get their UserPortlet and then getPortlets
@@ -148,6 +166,47 @@ public class PortletUserRegistryServiceImpl implements PortletUserRegistryServic
             String portletID = (String) it.next();
             AbstractPortlet portlet = registryService.getActivePortlet(portletID);
             portlet.logout(request.getPortletSession());
+        }
+    }
+
+
+    public void reloadPortlets() throws PortletRegistryServiceException {
+        registryService.loadPortlets();
+        initializePortlets();
+    }
+
+    public void initializePortlets() {
+
+        Iterator it = registryService.getLocalConcretePortlets().iterator();
+        try {
+            while (it.hasNext()) {
+                ConcretePortlet concretePortlet = (ConcretePortlet) it.next();
+
+                System.err.println("portlet name: " + concretePortlet.getPortletName());
+                AbstractPortlet abPortlet = concretePortlet.getAbstractPortlet();
+                PortletConfig portletConfig = getPortletConfig(config, concretePortlet.getConcretePortletAppID());
+                PortletSettings portletSettings = concretePortlet.getSportletSettings();
+                abPortlet.init(portletConfig);
+                abPortlet.initConcrete(portletSettings);
+            }
+        } catch (UnavailableException e) {
+            log.error("Caught Unavailable exception: ", e);
+        }
+    }
+
+    public void shutdownPortlets() {
+        // Shut down all PortletInfo Services.
+        log.info("Shutting down GridSphere");
+
+        // Destroy all portlets
+        Iterator it = registryService.getLocalConcretePortlets().iterator();
+        while (it.hasNext()) {
+            ConcretePortlet concPortlet = (ConcretePortlet)it.next();
+            AbstractPortlet ab = concPortlet.getAbstractPortlet();
+            PortletSettings portletSettings = concPortlet.getSportletSettings();
+            PortletConfig portletConfig = getPortletConfig(config, concPortlet.getConcretePortletAppID());
+            ab.destroyConcrete(portletSettings);
+            ab.destroy(portletConfig);
         }
     }
 
@@ -170,12 +229,48 @@ public class PortletUserRegistryServiceImpl implements PortletUserRegistryServic
         String uid = request.getUser().getID();
     }
 
-    public PortletSettings getPortletSettings(PortletRequest request, String concretePortletID) {
+
+
+    /*
+    public List getSupportedModes(PortletRequest request, String concretePortletID) {
         User user = request.getUser();
-        SportletSettings sportletSettings = null;
-        ConcretePortlet regPortlet = registryService.getConcretePortlet(concretePortletID);
+
+        ConcretePortlet concretePortlet = registryService.getConcretePortlet(concretePortletID);
+        ApplicationPortlet appPortlet = registryService.getApplicationPortlet(concretePortletID);
+
+        List modeList = appPortlet.;
+
 
         Owner owner = regPortlet.getPortletOwner();
+        PortletRole ownerRole = owner.getRole();
+        PortletGroup ownerGroup = owner.getGroup();
+        if (modeList.contains(Portlet.Mode.CONFIGURE)) {
+            try {
+                if (!aclService.hasRoleInGroup(user, ownerGroup, ownerRole))
+                    modeList.remove(Portlet.Mode.CONFIGURE);
+            } catch (PortletServiceException e) {
+                log.error("Unable to get access control service", e);
+            }
+        }
+        return modeList;
+    }
+    */
+
+    public PortletConfig getPortletConfig(ServletConfig servletConfig, String concretePortletID) {
+        int index = concretePortletID.lastIndexOf(".");
+        String appPortletID = concretePortletID.substring(0, index);
+        System.err.println(appPortletID);
+        ApplicationPortlet appPortlet = registryService.getApplicationPortlet(appPortletID);
+        return new SportletConfig(servletConfig, appPortlet.getPortletApplication());
+    }
+
+    public PortletSettings getPortletSettings(PortletRequest request, String concretePortletID) {
+        User user = request.getUser();
+
+        ConcretePortlet concretePortlet = registryService.getConcretePortlet(concretePortletID);
+        SportletSettings sportletSettings = concretePortlet.getSportletSettings();
+
+        Owner owner = concretePortlet.getPortletOwner();
 
         Portlet.Mode mode = request.getMode();
 
@@ -183,18 +278,15 @@ public class PortletUserRegistryServiceImpl implements PortletUserRegistryServic
             PortletRole ownerRole = owner.getRole();
             PortletGroup ownerGroup = owner.getGroup();
             try {
-            /*
-            if (aclService.hasSuperRole(user)) {
-                return regPortlet.getPortletSettings(true);
-            }
-            */
-            if (aclService.hasRoleInGroup(user, ownerGroup, ownerRole))
-                return regPortlet.getPortletSettings(true);
-            } catch (PortletServiceException e) {
+                if ((aclService.isSuperUser(user)) || (aclService.hasRoleInGroup(user, ownerGroup, ownerRole))) {
+                    sportletSettings = concretePortlet.getSportletSettings();
+                    sportletSettings.enableConfigurePermission(true);
+                }
+            }catch (PortletServiceException e) {
                 log.error("Unable to get access control service", e);
             }
         }
-        return regPortlet.getPortletSettings(false);
+        return sportletSettings;
     }
 
     public PortletData getPortletData(PortletRequest request, String concretePortletID) {
@@ -208,27 +300,6 @@ public class PortletUserRegistryServiceImpl implements PortletUserRegistryServic
             data.enableConfigurePermission(true);
         }
         return data;
-    }
-
-    public List getSupportedModes(PortletRequest request, String concretePortletID) {
-        User user = request.getUser();
-        // Get supported modes from portlet registry
-        ConcretePortlet regPortlet = registryService.getConcretePortlet(concretePortletID);
-        List modeList = regPortlet.getSupportedPortletModes();
-
-        // Perform checks
-        Owner owner = regPortlet.getPortletOwner();
-        PortletRole ownerRole = owner.getRole();
-        PortletGroup ownerGroup = owner.getGroup();
-        if (modeList.contains(Portlet.Mode.CONFIGURE)) {
-            try {
-                if (!aclService.hasRoleInGroup(user, ownerGroup, ownerRole))
-                    modeList.remove(Portlet.Mode.CONFIGURE);
-            } catch (PortletServiceException e) {
-                log.error("Unable to get access control service", e);
-            }
-        }
-        return modeList;
     }
 
 }
