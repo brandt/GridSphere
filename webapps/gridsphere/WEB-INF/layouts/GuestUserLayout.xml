@@ -24,11 +24,21 @@
             <portlet-tab label="home">
                 <title>Home</title>
                 <portlet-panel>
-                    <grid-layout>
-                        <portlet-frame label="login">
-                            <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
-                        </portlet-frame>
-                    </grid-layout>
+                    <table-layout>
+                        <row-layout>
+                            <column-layout width="70%">
+                                <portlet-frame>
+                                    <portlet-class>org.gridlab.gridsphere.portlets.core.file.BannerPortlet.1</portlet-class>
+                                </portlet-frame>
+                            </column-layout>
+
+                            <column-layout width="30%">
+                                <portlet-frame>
+                                    <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
+                                </portlet-frame>
+                            </column-layout>
+                        </row-layout>
+                    </table-layout>
                 </portlet-panel>
             </portlet-tab>
         </portlet-tabbed-pane>

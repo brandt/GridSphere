@@ -38,6 +38,32 @@
     </portlet-app-def>
 
     <portlet-app-def>
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.file.BannerPortlet">
+            <portlet-name>File Viewer Portlet</portlet-name>
+            <servlet-name>FileViewPortlet</servlet-name>
+        </portlet-app>
+
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.file.BannerPortlet.1">
+            <concrete-portlet>
+                <portlet-name>File Viewer Portlet</portlet-name>
+                <default-locale>en</default-locale>
+                <language locale="en">
+                    <title>File Viewer</title>
+                    <description>Displays a file in a portlet</description>
+                </language>
+                <config-param>
+                    <param-name>title</param-name>
+                    <param-value>Welcome to GridSphere</param-value>
+                </config-param>
+                <config-param>
+                    <param-name>file</param-name>
+                    <param-value>/jsp/banner/main.html</param-value>
+                </config-param>
+            </concrete-portlet>
+        </concrete-portlet-app>
+    </portlet-app-def>
+
+    <portlet-app-def>
         <portlet-app id="org.gridlab.gridsphere.portlets.core.login.LoginPortlet">
             <portlet-name>Login</portlet-name>
             <servlet-name>LoginPortlet</servlet-name>

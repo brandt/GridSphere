@@ -4,7 +4,7 @@
     <portlet-tab>
         <title>Welcome</title>
         <portlet-tabbed-pane style="sub-menu">
-            <portlet-tab>
+            <portlet-tab label="home">
                 <title>Home</title>
                 <portlet-panel>
                     <table-layout>
@@ -17,6 +17,13 @@
                             <column-layout width="70%">
                                 <portlet-frame>
                                     <portlet-class>org.gridlab.gridsphere.portlets.core.file.FileManagerPortlet.1</portlet-class>
+                                </portlet-frame>
+                            </column-layout>
+                        </row-layout>
+                        <row-layout>
+                            <column-layout>
+                                <portlet-frame>
+                                    <portlet-class>org.gridlab.gridsphere.portlets.core.file.BannerPortlet.1</portlet-class>
                                 </portlet-frame>
                             </column-layout>
                         </row-layout>
