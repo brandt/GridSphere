@@ -99,7 +99,7 @@ Copyright:
         <!-- Make build directories -->
         <mkdir dir="src"/>
         <mkdir dir="lib"/>
-	<mkdir dir="lib/ext"/>
+	    <mkdir dir="lib/ext"/>
         <mkdir dir="${project.build}"/>
         <mkdir dir="${build.home}"/>
         <mkdir dir="${build.classes}"/>
@@ -307,8 +307,7 @@ Copyright:
             <fileset dir="webapp"/>
         </copy>
 
-        <mkdir dir="${GRIDSPHERE_HOME}/${project.name}/database"/>
-
+        <copy file="${GRIDSPHERE_PROJECT}/lib/gridsphere-provider.jar" todir="${project.webapp}/WEB-INF/lib"/>
         <copy file="${GRIDSPHERE_PROJECT}/lib/gridsphere-ui-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
 
         <copy todir="${project.webapp}/WEB-INF/lib">
