@@ -12,14 +12,15 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletRequestImpl;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
+import org.apache.commons.fileupload.DiskFileUpload;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.FileItem;
 
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /*
  * The <code>FormEventImpl</code> provides methods for creating/retrieving visual beans
@@ -33,7 +34,7 @@ public class NewFormEventImpl implements FormEvent {
     protected PortletRequest request;
     protected PortletResponse response;
     protected Map tagBeans = null;
-
+    protected FileItem savedFileItem=null;          /* FileItem for FileUpload */
     /**
      * Constructs a FormEventImpl from a portlet request, a portlet response, and a collection of visual beans
      *
@@ -62,7 +63,10 @@ public class NewFormEventImpl implements FormEvent {
      */
     public NewFormEventImpl(ActionEvent evt) {
         event = evt;
-        request = evt.getPortletRequest();
+        PortletRequest req=evt.getPortletRequest();
+        /*This must be the first function!!*/
+        correctRequestParameters((SportletRequestImpl)req);
+        request = req;
         response = evt.getPortletResponse();
         // Only create tag beans from request when initialized with action event
         createTagBeans(evt.getPortletRequest());
@@ -71,7 +75,38 @@ public class NewFormEventImpl implements FormEvent {
 
         printTagBeans();
     }
+/**
+ * Workaround for Multipart Correct the Portletrequest Parameters. We use fileUpload lib
+ * @param req PortletRequest
+ */
+private void correctRequestParameters(SportletRequestImpl req){
+    if (req.isMultipart()) {
+        //log.debug("Multipart!!!!!!!!!!!!!");
+        DiskFileUpload fileUpload=new DiskFileUpload();
+        try {
+             List fileItems= fileUpload.parseRequest(req);
+            Hashtable hTable=new Hashtable();
+            for (int i = 0; i < fileItems.size(); i++) {
+                FileItem item = (FileItem) fileItems.get(i);
+                String[] tmpstr=new String[1];
+                if(item.isFormField()) {
+                    tmpstr[0]=item.getString();
+                }else {
+                    tmpstr[0]="fileinput";
+                    savedFileItem=item;
+                }
+                hTable.put(item.getFieldName(),tmpstr);
+                //log.debug("Name: "+item.getFieldName()+" Value: "+item.getString());
+            }
+            req.addParameterMap(hTable);
+        } catch (FileUploadException e) {
+            //log.debug("Error in file form workaround!!!");
+        }
+       //log.debug("End of workaround!!!");
 
+    }
+    //else log.debug("Not Multipart!!!!!!!!!!!!!");
+}
     /**
      * Returns the portlet request
      *
@@ -492,7 +527,7 @@ public class NewFormEventImpl implements FormEvent {
 
             if (idx > 0) {
                 vb = vbname.substring(0, idx);
-                //System.out.println("vb type :" + vb);
+            //    System.out.println("vb type :" + vb);
             }
 
             vbname = vbname.substring(idx+1);
@@ -511,6 +546,7 @@ public class NewFormEventImpl implements FormEvent {
                 System.err.println("vals[" + i +"] = " + vals[i]);
             }*/
 
+
             String beanKey = getBeanKey(beanId);
             if (vb.equals(TextFieldBean.NAME)) {
                 log.debug("Creating a textfieldbean bean with id:" + beanId);
@@ -524,7 +560,12 @@ public class NewFormEventImpl implements FormEvent {
                 this.printRequestAttributes();
                 log.debug("Creating a fileinput bean with id:" + beanId);
                 try {
-                    FileInputBean bean = new FileInputBean(req, beanId);
+                    FileInputBean bean=null;
+                    if(savedFileItem!=null){
+                        bean = new FileInputBean(req, beanId,savedFileItem);
+                    }else{
+                        bean = new FileInputBean(req, beanId);
+                    }
                     bean.setName(name);
                     tagBeans.put(beanKey, bean);
                 } catch (IOException e) {
