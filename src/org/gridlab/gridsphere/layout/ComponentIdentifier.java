@@ -13,7 +13,7 @@ public class ComponentIdentifier {
     private int id;
     private String className;
     private String portletClass;
-    private PortletLifecycle lifecycle;
+    private PortletComponent component;
 
     public void setComponentID(int id) {
         this.id = id;
@@ -44,12 +44,12 @@ public class ComponentIdentifier {
         this.portletClass = portletClass;
     }
 
-    public void setPortletLifecycle(PortletLifecycle lifecycle) {
-        this.lifecycle = lifecycle;
+    public void setPortletComponent(PortletComponent component) {
+        this.component = component;
     }
 
-    public PortletLifecycle getPortletLifecycle() {
-        return lifecycle;
+    public PortletComponent getPortletComponent() {
+        return component;
     }
 
 }

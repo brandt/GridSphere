@@ -22,6 +22,11 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.HashMap;
 
+/**
+ * The portlet layout engine is responsible for managing user's layouts. It also manages
+ * portlet web application default layout configurations that can be potentially added to a user layout
+ * via the Layout Service
+ */
 public class PortletLayoutEngine {
 
     private static PortletLog log = SportletLog.getInstance(PortletLayoutEngine.class);
@@ -30,14 +35,21 @@ public class PortletLayoutEngine {
 
     private String layoutMappingPath;
 
-    private PortletLayoutDescriptor guestLayout = null;
-    private String guestLayoutPath = null;
     private PortletContainer guestContainer;
+
+
+    private String newuserLayoutPath;
+    private PortletContainer newuserContainer;
+
     private String userLayoutDir = null;
 
     private String error = "";
 
+    // Store user layouts in a hash
     private Map userLayouts = new HashMap();
+
+    // Store application tabs in a hash
+    private Map applicationTabs = new HashMap();
 
     private PortletLayoutEngine() {}
 
@@ -48,19 +60,31 @@ public class PortletLayoutEngine {
         return instance;
     }
 
-    public void init() throws IOException, DescriptorException {
-        userLayoutDir = GridSphereConfig.getProperty(GridSphereConfigProperties.USER_LAYOUT_DIR);
-        layoutMappingPath = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING_XML);
-        guestLayoutPath =  GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_XML);
-        guestLayout = new PortletLayoutDescriptor(guestLayoutPath, layoutMappingPath);
-        guestContainer = guestLayout.getPortletContainer();
-        guestContainer.init(new ArrayList());
+    public void addApplicationTab(String webApplicationName, PortletTab tab) {
+        applicationTabs.put(webApplicationName, tab);
     }
 
-    public PortletContainer getPortletContainer(User user) {
-        if (!userLayouts.containsKey(user)) return null;
-        PortletLayoutDescriptor pld = (PortletLayoutDescriptor)userLayouts.get(user);
-        return pld.getPortletContainer();
+    public void removeApplicationTab(String webApplicationName) {
+        applicationTabs.remove(webApplicationName);
+    }
+
+    public void init() throws IOException, DescriptorException {
+        userLayoutDir = GridSphereConfig.getProperty(GridSphereConfigProperties.USER_LAYOUT_DIR);
+        if (userLayoutDir == null) {
+            throw new DescriptorException("Unable to get user layout directory info from web.xml. Please specify user-layouts-dir in web.xml.");
+        }
+        File layDir = new File(userLayoutDir);
+        if (!layDir.exists()) {
+            layDir.mkdir();
+        }
+        layoutMappingPath = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING_XML);
+        String guestLayoutPath =  GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_XML);
+        guestContainer = PortletLayoutDescriptor.loadPortletContainer(guestLayoutPath, layoutMappingPath);
+        guestContainer.init(new ArrayList());
+
+        newuserLayoutPath =  GridSphereConfig.getProperty(GridSphereConfigProperties.NEW_USER_LAYOUT_XML);
+        newuserContainer = PortletLayoutDescriptor.loadPortletContainer(newuserLayoutPath, layoutMappingPath);
+        newuserContainer.init(new ArrayList());
     }
 
     public void removeUser(User user) {
@@ -72,7 +96,6 @@ public class PortletLayoutEngine {
 
     public PortletContainer getPortletContainer(GridSphereEvent event) throws PortletLayoutException {
         // if user is guest then use guest template
-        PortletLayoutDescriptor pld = null;
         PortletContainer pc = null;
 
         User user = event.getSportletRequest().getUser();
@@ -83,21 +106,18 @@ public class PortletLayoutEngine {
             // Check if we have user's layout already
         } else if (userLayouts.containsKey(user)) {
 
-            pld = (PortletLayoutDescriptor)userLayouts.get(user);
-            pc = pld.getPortletContainer();
-
+            pc = (PortletContainer)userLayouts.get(user);
             // If not we try to load it in (creating new one if necessary)
         } else {
             try {
-                pld = loadUserLayout(user);
-                pc = pld.getPortletContainer();
+                pc = createNewUserLayout(user);
                 pc.init(new ArrayList());
-                pc.login(event);
+                pc.loginPortlets(event);
             } catch (Exception e) {
                 log.error("Unable to loadUserLayout for user: " + user, e);
                 throw new PortletLayoutException("Unable to deserialize user layout from layout descriptor: " + e.getMessage());
             }
-            userLayouts.put(user, pld);
+            userLayouts.put(user, pc);
         }
         return pc;
     }
@@ -117,6 +137,10 @@ public class PortletLayoutEngine {
             req.logRequest();
             log.error("Caught LayoutException: ", e);
         }
+    }
+
+    public PortletContainer getUserLayout(User user) {
+        return (PortletContainer)userLayouts.get(user);
     }
 
     public void actionPerformed(GridSphereEvent event) throws IOException {
@@ -147,16 +171,7 @@ public class PortletLayoutEngine {
         out.println("<b>" + error + "</b>");
     }
 
-    protected PortletLayoutDescriptor loadUserLayout(User user) throws DescriptorException, IOException {
-        // load in layout.xml file
-
-        if (userLayoutDir == null) {
-            throw new DescriptorException("Unable to get user layout directory info from web.xml. Please specify user-layouts-dir in web.xml.");
-        }
-        File layDir = new File(userLayoutDir);
-        if (!layDir.exists()) {
-            layDir.mkdir();
-        }
+    protected PortletContainer createNewUserLayout(User user) throws DescriptorException, IOException {
 
         String layoutPath = getUserLayoutPath(user);
 
@@ -165,22 +180,19 @@ public class PortletLayoutEngine {
         // if no layout file exists for user, make new one from template
         if (!f.exists()) {
             f.createNewFile();
-            copyFile(new File(guestLayoutPath), f);
+            copyFile(new File(newuserLayoutPath), f);
         }
-
-        PortletLayoutDescriptor userLayout = new PortletLayoutDescriptor(layoutPath, layoutMappingPath);
-
-        return userLayout;
+        return PortletLayoutDescriptor.loadPortletContainer(layoutPath, layoutMappingPath);
     }
 
     public void saveUserLayout(User user) throws DescriptorException, IOException {
 
-        PortletLayoutDescriptor pld = (PortletLayoutDescriptor)userLayouts.get(user);
-        if (pld == null) {
+        PortletContainer pc = (PortletContainer)userLayouts.get(user);
+        if (pc == null) {
             throw new DescriptorException("Layout does not exist for user: " + user.getID());
         }
         String userLayoutPath = getUserLayoutPath(user);
-        pld.save(userLayoutPath, layoutMappingPath);
+        PortletLayoutDescriptor.savePortletContainer(pc, userLayoutPath, layoutMappingPath);
     }
 
     protected String getUserLayoutPath(User user) {

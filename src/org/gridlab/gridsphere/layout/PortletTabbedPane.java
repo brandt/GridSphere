@@ -142,24 +142,6 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
         return list;
     }
 
-    public void login(GridSphereEvent event) {
-        super.login(event);
-        PortletTab tab = null;
-        for (int i = 0; i < getTabCount(); i++) {
-            tab = getPortletTabAt(i);
-            tab.login(event);
-        }
-    }
-
-    public void logout(GridSphereEvent event) {
-        super.logout(event);
-        PortletTab tab = null;
-        for (int i = 0; i < getTabCount(); i++) {
-            tab = getPortletTabAt(i);
-            tab.logout(event);
-        }
-    }
-
     public void handlePortletTabEvent(PortletTabEvent event) {
         if (event.getAction() == PortletTabEvent.Action.TAB_SELECTED) {
             PortletTab selectedTab = event.getPortletTab();

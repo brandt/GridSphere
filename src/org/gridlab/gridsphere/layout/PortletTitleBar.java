@@ -85,7 +85,7 @@ public class PortletTitleBar extends BasePortletComponent {
     public List init(List list) {
         COMPONENT_ID = list.size();
         ComponentIdentifier compId = new ComponentIdentifier();
-        compId.setPortletLifecycle(this);
+        compId.setPortletComponent(this);
         compId.setPortletClass(portletClass);
         compId.setComponentID(list.size());
         compId.setClassName(this.getClass().getName());

@@ -15,10 +15,6 @@ public abstract class BasePortletLifecycle implements PortletLifecycle {
 
     public List init(List list) { return list; }
 
-    public void login(GridSphereEvent event) {}
-
-    public void logout(GridSphereEvent event) {}
-
     public void destroy() {}
 
     public int getComponentID() {

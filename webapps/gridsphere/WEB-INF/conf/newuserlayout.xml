@@ -10,7 +10,14 @@
 </portlet-image>
 -->
 
-<portlet-text include="/html/pagehead.html"/>
+<portlet-panel>
+    <grid-layout columns="80,20">
+        <portlet-text include="/html/pagehead.html"/>
+        <portlet-frame transparent="true">
+            <portlet-class>org.gridlab.gridsphere.portlets.core.LogoutPortlet.1</portlet-class>
+        </portlet-frame>
+    </grid-layout>
+</portlet-panel>
 
 <!-- Tabbed Panes -->
 <portlet-tabbed-pane selected="0" style="menu">

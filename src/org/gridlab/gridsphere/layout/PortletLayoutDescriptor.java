@@ -7,9 +7,8 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.Descriptor;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,15 +16,7 @@ import java.util.List;
 
 public class PortletLayoutDescriptor extends Descriptor {
 
-    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletLayoutDescriptor.class);
-    private PortletContainer pc = null;
-    private List containerElements = new ArrayList();
-
-    public PortletLayoutDescriptor() throws IOException, DescriptorException {
-        String layoutDescriptorPath = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_XML);
-        String layoutMappingPath = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING_XML);
-        pc = (PortletContainer)load(layoutDescriptorPath, layoutMappingPath);
-    }
+    private static PortletLayoutDescriptor instance = new PortletLayoutDescriptor();
 
     /**
      * Constructs a PortletLayoutDescriptor from an xml descriptor and a mapping file
@@ -34,28 +25,35 @@ public class PortletLayoutDescriptor extends Descriptor {
      * @param layoutMappingPath location of the mapping file
      * @throws DescriptorException if the PortletLayoutDescriptor cannot be created
      */
-    public PortletLayoutDescriptor(String layoutDescriptorPath, String layoutMappingPath) throws IOException, DescriptorException  {
-        pc = (PortletContainer)load(layoutDescriptorPath, layoutMappingPath);
-    }
+    private PortletLayoutDescriptor() {}
 
     /**
-     * Returns the portlet container associated with this descriptor
+     * Loads the portlet container associated with this descriptor
+     *
+     * @param layoutDescriptorPath location of the layout.xml
+     * @param layoutMappingPath location of the mapping file
      *
      * @return the portlet container
      */
-    public PortletContainer getPortletContainer() {
-        return pc;
+    public static PortletContainer loadPortletContainer(String layoutDescriptorPath, String layoutMappingPath) throws IOException, DescriptorException {
+        return (PortletContainer)load(layoutDescriptorPath, layoutMappingPath);
     }
 
-    public List getPortletContainerList() {
-        return containerElements;
+    public static PortletTab loadPortletTab(String layoutDescriptorPath, String layoutMappingPath) throws IOException, DescriptorException {
+        return (PortletTab)load(layoutDescriptorPath, layoutMappingPath);
     }
 
     /**
      *
      */
-    public void save(String descriptorPath, String mappingPath) throws IOException, DescriptorException {
+    public static void savePortletContainer(PortletContainer pc, String descriptorPath, String mappingPath) throws IOException, DescriptorException {
        save(descriptorPath, mappingPath, pc);
     }
 
+    /**
+     *
+     */
+    public static void savePortletContainer(PortletTab tab, String descriptorPath, String mappingPath) throws IOException, DescriptorException {
+       save(descriptorPath, mappingPath, tab);
+    }
 }

@@ -108,8 +108,8 @@
 
     <class name="org.gridlab.gridsphere.layout.PortletText" extends="org.gridlab.gridsphere.layout.BasePortletComponent">
         <map-to xml="portlet-text"/>
-        <field name="Text" type="string">
-            <bind-xml name="text"/>
+        <field name="Include" type="string">
+            <bind-xml name="include" node="attribute"/>
         </field>
     </class>
 

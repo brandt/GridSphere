@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 
-public class PortletTab extends BasePortletLifecycle {
+public class PortletTab extends BasePortletComponent {
 
     private String title;
     private boolean selected = false;
@@ -53,7 +53,7 @@ public class PortletTab extends BasePortletLifecycle {
     public List init(List list) {
         COMPONENT_ID = list.size();
         ComponentIdentifier compId = new ComponentIdentifier();
-        compId.setPortletLifecycle(this);
+        compId.setPortletComponent(this);
         compId.setComponentID(list.size());
         compId.setClassName(this.getClass().getName());
         list.add(compId);

@@ -71,7 +71,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         COMPONENT_ID = list.size();
         componentIDStr = String.valueOf(COMPONENT_ID);
         ComponentIdentifier compId = new ComponentIdentifier();
-        compId.setPortletLifecycle(this);
+        compId.setPortletComponent(this);
         compId.setPortletClass(portletClass);
         compId.setComponentID(list.size());
         compId.setClassName(this.getClass().getName());
@@ -83,24 +83,6 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             titleBar.addTitleBarListener(this);
         }
         return list;
-    }
-
-    public void login(GridSphereEvent event) {
-        UserPortletManager userPortletManager = event.getUserPortletManager();
-        try {
-            userPortletManager.initUserPortlet(portletClass, event.getSportletRequest(), event.getSportletResponse());
-        } catch (PortletException e) {
-            error = new PortletErrorMessage(e);
-        }
-    }
-
-    public void logout(GridSphereEvent event) {
-        UserPortletManager userPortletManager = event.getUserPortletManager();
-        try {
-            userPortletManager.destroyUserPortlet(portletClass, event.getSportletRequest(), event.getSportletResponse());
-        } catch (PortletException e) {
-            error = new PortletErrorMessage(e);
-        }
     }
 
     public void addFrameListener(PortletFrameListener listener) {
@@ -159,18 +141,23 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         if (newmode != null) {
             req.setMode(Portlet.Mode.getInstance(newmode));
         } else {
-            req.setMode(titleBar.getPortletMode());
+            if (titleBar != null) {
+                req.setMode(titleBar.getPortletMode());
+            } else {
+                req.setMode(Portlet.Mode.VIEW);
+            }
         }
         req.setModeModifier(Portlet.ModeModifier.CURRENT);
 
         // Set the portlet data
+        /*
         PortletData data = null;
         try {
             UserManagerService userManager = (UserManagerService)ctx.getService(UserManagerService.class);
             data = userManager.getPortletData(req.getUser(), portletClass);
         } catch (PortletServiceException e) {}
-
         req.setData(data);
+        */
 
         // now perform actionPerformed on Portlet if it has an action
         String actionStr = req.getParameter(GridSphereProperties.ACTION);

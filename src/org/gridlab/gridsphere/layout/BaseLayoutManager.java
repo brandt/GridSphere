@@ -40,26 +40,6 @@ public abstract class BaseLayoutManager extends BasePortletComponent implements 
         return list;
     }
 
-    public void login(GridSphereEvent event) {
-        super.login(event);
-        Iterator it = components.iterator();
-        PortletLifecycle p = null;
-        while (it.hasNext()) {
-            p = (PortletLifecycle)it.next();
-            p.login(event);
-        }
-    }
-
-    public void logout(GridSphereEvent event) {
-        super.logout(event);
-        Iterator it = components.iterator();
-        PortletLifecycle p = null;
-        while (it.hasNext()) {
-            p = (PortletLifecycle)it.next();
-            p.logout(event);
-        }
-    }
-
     public void destroy() {}
 
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {}

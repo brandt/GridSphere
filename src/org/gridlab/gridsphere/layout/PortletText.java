@@ -19,20 +19,11 @@ public class PortletText extends BasePortletComponent {
 
     public PortletText() {}
 
-    public PortletText(String text) {
-        setText(text);
-    }
-
-    public List init(List list) {
-        COMPONENT_ID = list.size();
-        return list;
-    }
-
-    public void setText(String text) {
+    public void setInclude(String text) {
         this.text = text;
     }
 
-    public String getText() {
+    public String getInclude() {
         return text;
     }
 
