@@ -38,9 +38,7 @@ public class RSSNews {
     public Document getRSSFeed(RSSFeed feed) {
         Document doc = new Document(new Element("rss"));
 
-        if (feed.getLastfetched()>System.currentTimeMillis()-1000*getFetchinterval()) {
-            doc = feed.getFeed();
-        } else {
+        if ((System.currentTimeMillis()-feed.getLastfetched()>1000*getFetchinterval()) || feed.getLastfetched()==0) {
             try {
                 SAXBuilder builder = new SAXBuilder(false);
                 URL feedurl = new URL(feed.getUrl());
@@ -48,11 +46,16 @@ public class RSSNews {
                 feed.setFeed(doc);
                 System.out.println("CACHED TIME :"+feed.getLastfetched());
                 System.out.println("CURRENT TIME: "+System.currentTimeMillis());
+                long diff = System.currentTimeMillis()-feed.getLastfetched();
+                System.out.println("DIFF :"+diff);
                 feed.setLastfetched(System.currentTimeMillis());
+                System.out.println("FETCHINTERVALL: "+getFetchinterval());
                 System.out.println("############################# Fetched feed from :"+feed.getUrl());
             } catch (MalformedURLException e) {
             } catch (JDOMException e) {
             }
+        } else {
+            doc = feed.getFeed();
         }
         return doc;
 
