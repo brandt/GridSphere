@@ -61,18 +61,23 @@ public class PortletManager implements PortletManagerService {
             context = config.getServletConfig().getServletContext();
             String webapps = config.getInitParameter(CORE_CONTEXT);
             if (webapps != null) {
+                try {
                 String webapp;
                 StringTokenizer st = new StringTokenizer(webapps, ",");
                 if (st.countTokens() == 0) {
                     webapp = webapps.trim();
-                    System.err.println("adding webapp:" + webapp);
+                    log.debug("adding webapp:" + webapp);
                     addWebApp(webapp);
                 } else {
                     while (st.hasMoreTokens()) {
                         webapp = (String) st.nextToken().trim();
-                        System.err.println("adding webapp:" + webapp);
+                        log.debug("adding webapp:" + webapp);
                         addWebApp(webapp);
                     }
+                }
+                } catch (PortletException e) {
+                    //e.getMessage();
+                    throw new PortletServiceUnavailableException("Unable to load core portlet web applications: " + e.getMessage(), e);
                 }
             }
             isInitialized = true;
@@ -84,7 +89,7 @@ public class PortletManager implements PortletManagerService {
      *
      * @param webApplicationName the portlet web application name
      */
-    protected void addWebApp(String webApplicationName) {
+    protected void addWebApp(String webApplicationName) throws PortletException {
         PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webApplicationName, context);
         Collection appPortlets = portletWebApp.getAllApplicationPortlets();
         Iterator it = appPortlets.iterator();

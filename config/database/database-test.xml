@@ -6,6 +6,5 @@
           url="jdbc:hsqldb:@TEST_HOME@/database/@DATABASE_NAME@">
     <param name="user" value="sa" />
     <param name="password" value="" />
-  </driver>
-  <mapping href="@GRIDSPHERE_HOME@/@PROJECT_NAME@/database/docletmapping.xml" />
-</database>
+ </driver>
+<mapping href="@GRIDSPHERE_HOME@/@PROJECT_NAME@/database/docletmapping.xml" />

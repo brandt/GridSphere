@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+    User Layout Descriptor
+
+    This descriptor defines the guest user's portal layout configuration
+
+    $Id$
+-->
+
+<container-layout>
+
+    <container-name>GridSphere Portal</container-name>
+
+    <portlet-text include="/html/pagehead.html"/>
+
+    <portlet-error-frame/>
+
+</container-layout>

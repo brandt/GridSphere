@@ -13,9 +13,6 @@
 
     <class name="org.gridlab.gridsphere.portletcontainer.impl.descriptor.SportletCollection">
         <map-to xml="portlet-app-collection"/>
-        <field name="GroupOwnerName" type="string">
-            <bind-xml name="groupowner" node="attribute"/>
-        </field>
         <field name="PortletDefinitionList" type="org.gridlab.gridsphere.portletcontainer.impl.descriptor.SportletDefinition" collection="arraylist">
             <bind-xml name="portlet-app-def"/>
         </field>

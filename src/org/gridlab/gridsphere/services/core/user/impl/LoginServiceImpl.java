@@ -68,4 +68,5 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
             throws AuthenticationException {
         return loginManager.login(parameters);
     }
+
 }

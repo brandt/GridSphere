@@ -73,6 +73,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
             initRootUser(config);
             initAuthenticationModules();
             log.info("Entering init()");
+            isInitialized = true;
         }
     }
 
@@ -1110,7 +1111,6 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     }
 
     public PortletRole getRoleInGroup(User user, PortletGroup group) {
-        System.err.println("I am being called with : " + user.getUserName() + group.toString());
         if (hasSuperRole(user)) {
             return PortletRole.SUPER;
         } else {

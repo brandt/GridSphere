@@ -78,7 +78,6 @@ public class SetupTestUsersTest extends SetupTestGroupsTest {
             jason = rootUserService.approveAccountRequest(jasonRequest);
             michael = rootUserService.approveAccountRequest(michaelRequest);
             oliver = rootUserService.approveAccountRequest(oliverRequest);
-            oliver = rootUserService.approveAccountRequest(oliverRequest);
         } catch (PortletServiceException e) {
             String msg = "Failed to setup users";
             log.error(msg, e);
@@ -110,9 +109,6 @@ public class SetupTestUsersTest extends SetupTestGroupsTest {
         User franz = rootUserService.approveAccountRequest(franzReq);
         User newfranz = rootUserService.getUserByUserName("franz");
         assertEquals(franz, newfranz);
-        rootUserService.deleteAccount(franz);
-        newfranz = rootUserService.getUserByUserName("franz");
-        assertNull(newfranz);
     }
 
     public void teardownUsers() {

@@ -227,7 +227,7 @@ Copyright:
         </javadoc>
     </target>
 
-    <target name="check-real-database-exists">
+    <target name="check-real-database-exists" if="use.persistence">
         <echo message="force database: ${var_force_database}"/>
         <condition property="var_force_database">
             <not>
@@ -360,7 +360,7 @@ Copyright:
         <echo>Deploying @PROJECT_NAME@ to Tomcat</echo>
         <!-- Copy the gridsphere web app to build directory -->
         <property name="project.webapp" value="${env.CATALINA_HOME}/webapps/${project.name}"/>
-        <copy todir="${project.webapp}">
+        <copy overwrite="true" todir="${project.webapp}">
             <fileset dir="webapp"/>
         </copy>
 
