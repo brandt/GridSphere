@@ -83,10 +83,14 @@ public class PortletLayoutEngine {
         try {
             page = getPortletPage(event);
             int numcomps = page.getComponentIdentifierList().size();
+            /*
             if (event.getPortletComponentID() < 0 || event.getPortletComponentID() > numcomps) {
                 event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, "-1");
             }
-            page.doRender(event);
+            */
+            //if (!event.getPortletComponentID().equals("")) {
+                page.doRender(event);
+            //}
         } catch (PortletLayoutException e) {
             log.error("Caught LayoutException: ", e);
             doRenderError(event.getPortletRequest(), event.getPortletResponse(), e);
@@ -143,9 +147,12 @@ public class PortletLayoutEngine {
         try {
             page = getPortletPage(event);
             int numcomps = page.getComponentIdentifierList().size();
+            /*
             if (event.getPortletComponentID() < 0 || event.getPortletComponentID() > numcomps) {
                 event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, "-1");
-            } else {
+            }
+            */
+            if (!event.getPortletComponentID().equals("")) {
                 page.actionPerformed(event);
             }
         } catch (PortletLayoutException e) {

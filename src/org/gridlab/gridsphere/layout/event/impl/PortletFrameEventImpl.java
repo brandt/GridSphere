@@ -5,6 +5,9 @@
 package org.gridlab.gridsphere.layout.event.impl;
 
 import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
+import org.gridlab.gridsphere.layout.event.ComponentAction;
+import org.gridlab.gridsphere.layout.PortletComponent;
+import org.gridlab.gridsphere.layout.PortletFrame;
 
 /**
  * A <code>PortletFrameEventImpl</code> is the concrete implementation of
@@ -12,8 +15,9 @@ import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
  */
 public class PortletFrameEventImpl implements PortletFrameEvent {
 
-    private PortletFrameEvent.Action action;
+    private ComponentAction action;
     private int id;
+    private PortletFrame frame = null;
 
     /**
      * Constructs an instance of PortletFrameEventImpl from an action
@@ -22,7 +26,8 @@ public class PortletFrameEventImpl implements PortletFrameEvent {
      * @param action a window action
      * @param id the component id of the PortletFrame
      */
-    public PortletFrameEventImpl(PortletFrameEvent.Action action, int id) {
+    public PortletFrameEventImpl(PortletFrame frame, ComponentAction action, int id) {
+        this.frame = frame;
         this.action = action;
         this.id = id;
     }
@@ -32,8 +37,12 @@ public class PortletFrameEventImpl implements PortletFrameEvent {
      *
      * @return the window action
      */
-    public PortletFrameEvent.Action getAction() {
+    public ComponentAction getAction() {
         return action;
+    }
+
+    public PortletComponent getPortletComponent() {
+        return frame;
     }
 
     /**

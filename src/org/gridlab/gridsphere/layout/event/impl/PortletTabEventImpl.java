@@ -5,7 +5,9 @@
 package org.gridlab.gridsphere.layout.event.impl;
 
 import org.gridlab.gridsphere.layout.PortletTab;
+import org.gridlab.gridsphere.layout.PortletComponent;
 import org.gridlab.gridsphere.layout.event.PortletTabEvent;
+import org.gridlab.gridsphere.layout.event.ComponentAction;
 
 /**
  * A <code>PortletTabEventImpl</code> is the concrete implementation of
@@ -13,7 +15,7 @@ import org.gridlab.gridsphere.layout.event.PortletTabEvent;
  */
 public class PortletTabEventImpl implements PortletTabEvent {
 
-    private PortletTabEvent.Action action;
+    private ComponentAction action;
     private PortletTab portletTab;
     private int id;
 
@@ -28,7 +30,7 @@ public class PortletTabEventImpl implements PortletTabEvent {
      * @param id the portlet component id
      * @see PortletTab
      */
-    public PortletTabEventImpl(PortletTab portletTab, PortletTabEvent.Action action, int id) {
+    public PortletTabEventImpl(PortletTab portletTab, ComponentAction action, int id) {
         this.action = action;
         this.portletTab = portletTab;
         this.id = id;
@@ -39,7 +41,7 @@ public class PortletTabEventImpl implements PortletTabEvent {
      *
      * @return the portlet tab event action
      */
-    public PortletTabEvent.Action getAction() {
+    public ComponentAction getAction() {
         return action;
     }
 
@@ -48,7 +50,7 @@ public class PortletTabEventImpl implements PortletTabEvent {
      *
      * @return the PortletTab that was selcted
      */
-    public PortletTab getPortletTab() {
+    public PortletComponent getPortletComponent() {
         return portletTab;
     }
 

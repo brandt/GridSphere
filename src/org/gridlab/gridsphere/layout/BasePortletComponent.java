@@ -7,18 +7,19 @@ package org.gridlab.gridsphere.layout;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Vector;
+import java.util.Iterator;
 
 /**
  * <code>BasePortletComponent</code> represents an abstract portlet component with a particular
  * size, layout and theme and is subclasses by concrete portlet component instances.
  */
-public abstract class BasePortletComponent extends BaseComponentLifecycle implements Serializable, PortletComponent {
+public abstract class BasePortletComponent extends BaseComponentLifecycle implements PortletComponent, Serializable {
 
     protected String width = new String();
     protected String height = new String();
@@ -27,6 +28,27 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected String theme = "xp";
     protected boolean isVisible = true;
     protected String roleString = "GUEST";
+    protected List listeners = new Vector();
+
+    /**
+     * Initializes the portlet component. Since the components are isolated
+     * after Castor unmarshalls from XML, the ordering is determined by a
+     * passed in List containing the previous portlet components in the tree.
+     *
+     * @param list a list of component identifiers
+     * @return a list of updated component identifiers
+     * @see ComponentIdentifier
+     */
+    public List init(List list) {
+        if ((label == null) || label.equals("")) {
+            return super.init(list);
+
+        } else {
+            this.COMPONENT_ID = list.size();
+            componentIDStr = label;
+            return list;
+        }
+    }
 
     /**
      * Returns the portlet component name
@@ -176,6 +198,10 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletRequest req = event.getPortletRequest();
         req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
+    }
+
+    public void addComponentListener(PortletComponent component) {
+        listeners.add(component);
     }
 
     public Object clone() throws CloneNotSupportedException {

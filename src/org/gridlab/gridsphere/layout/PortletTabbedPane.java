@@ -8,6 +8,8 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.layout.event.PortletTabEvent;
 import org.gridlab.gridsphere.layout.event.PortletTabListener;
+import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
+import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.PortletRequest;
@@ -19,6 +21,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.Iterator;
 
 /**
  * The <code>PortletTabbedPane</code> represents the visual portlet tabbed pane interface
@@ -148,6 +151,25 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     }
 
     /**
+     * Sets the selected portlet tab title in this tabbed pane
+     *
+     * @param tabTitle the selected portlet tab title
+     */
+    public void setSelectedPortletTab(String tabTitle) {
+        PortletTab portletTab;
+
+        for (int i = 0; i < tabs.size(); i++) {
+            portletTab = (PortletTab) tabs.get(i);
+            if (portletTab.getTitle().equals(tabTitle)) {
+                selectedIndex = i;
+                portletTab.setSelected(true);
+            } else {
+                portletTab.setSelected(false);
+            }
+        }
+    }
+
+    /**
      * Returns a list containing the portlet tabs
      *
      * @return a list containing the portlet tabs
@@ -184,10 +206,33 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      * @param event the portlet tab event
      */
     public void handlePortletTabEvent(PortletTabEvent event) {
-        if (event.getAction() == PortletTabEvent.Action.TAB_SELECTED) {
-            PortletTab selectedTab = event.getPortletTab();
+        if (event.getAction() == PortletTabEvent.TabAction.TAB_SELECTED) {
+            PortletTab selectedTab = (PortletTab)event.getPortletComponent();
             setSelectedPortletTab(selectedTab);
         }
+    }
+
+    /**
+     * Gives notification that a portlet tab event has occured
+     *
+     * @param event the portlet tab event
+     */
+    public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
+        super.actionPerformed(event);
+        PortletComponentEvent compEvt = event.getLastRenderEvent();
+        if ((compEvt != null) && (compEvt instanceof PortletTabEvent)) {
+            PortletTabEvent tabEvent = (PortletTabEvent)compEvt;
+            handlePortletTabEvent(tabEvent);
+        }
+
+        Iterator it = listeners.iterator();
+        PortletComponent comp;
+        while (it.hasNext()) {
+            comp = (PortletComponent) it.next();
+            event.addNewRenderEvent(compEvt);
+            comp.actionPerformed(event);
+        }
+
     }
 
     /**
@@ -207,15 +252,18 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         return tabLinks;
     }
 
+    /**
+     * Replace blank spaces in title with '&nbsp;'
+     *
+     * @param title the tab title
+     * @return a title without blank spaces
+     */
     private String replaceBlanks(String title) {
-
         String result = new String();
-
         StringTokenizer st = new StringTokenizer(title);
         while(st.hasMoreTokens()) {
             result += st.nextToken()+"&nbsp;";
         }
-
         return result;
     }
 
@@ -324,7 +372,8 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
         // This insures that if no portlet component id (cid)
         // is set, then the selected tab index is the startIndex = 0
-        if (event.getPortletComponentID() < 0) {
+
+        if (event.getPortletComponentID().equals("")) {
             this.setSelectedPortletTab((PortletTab)tabs.get(selectedIndex));
         }
 

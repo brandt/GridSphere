@@ -10,7 +10,7 @@ import org.gridlab.gridsphere.layout.PortletTab;
  * A <code>PortletTabEvent</code> is triggered by a <code>PortletTab</code>
  * when a tab has been selected.
  */
-public interface PortletTabEvent {
+public interface PortletTabEvent  extends PortletComponentEvent {
 
     /**
      *  An Action defines a single tab event action:
@@ -18,9 +18,9 @@ public interface PortletTabEvent {
      * <ul><li>TAB_SELECTED</li></ul>
      *
      */
-    public static final class Action {
+    public static final class TabAction implements ComponentAction {
 
-        public static final Action TAB_SELECTED = new Action(1);
+        public static final TabAction TAB_SELECTED = new TabAction(1);
 
         private int action = 0;
 
@@ -29,24 +29,14 @@ public interface PortletTabEvent {
          *
          * @param action a unique integer id
          */
-        private Action(int action) {
+        private TabAction(int action) {
             this.action = action;
         }
+
+        public int getID() {
+            return action;
+        }
     }
-
-    /**
-     * Returns the portlet tab event action
-     *
-     * @return the portlet tab event action
-     */
-    public Action getAction();
-
-    /**
-     * Returns the PortletTab that was selected
-     *
-     * @return the PortletTab that was selcted
-     */
-    public PortletTab getPortletTab();
 
     /**
      * Returns the component id of the portlet tab

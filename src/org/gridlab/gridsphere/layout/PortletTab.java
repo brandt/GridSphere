@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.layout.event.PortletTabEvent;
 import org.gridlab.gridsphere.layout.event.PortletTabListener;
+import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 import org.gridlab.gridsphere.layout.event.impl.PortletTabEventImpl;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 
 /**
  * A <code>PortletTab</code> represents the visual tab graphical interface and is contained
@@ -31,7 +33,6 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     private String title = "";
     private boolean selected = false;
     private PortletComponent portletComponent = null;
-    private List listeners = new ArrayList();
 
     private PortletRole requiredRole = PortletRole.GUEST;
 
@@ -151,8 +152,10 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
         compId.setComponentID(list.size());
+        compId.setComponentLabel(label);
         compId.setClassName(this.getClass().getName());
         list.add(compId);
+        portletComponent.addComponentListener(this);
         try {
             requiredRole = PortletRole.toPortletRole(roleString);
         } catch (IllegalArgumentException e) {
@@ -169,13 +172,19 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      * @throws IOException if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
+
         super.actionPerformed(event);
-        PortletTabListener tabListener;
-        PortletTabEvent tabEvent = new PortletTabEventImpl(this, PortletTabEvent.Action.TAB_SELECTED, COMPONENT_ID);
-        for (int i = 0; i < listeners.size(); i++) {
-            tabListener = (PortletTabListener) listeners.get(i);
-            tabListener.handlePortletTabEvent(tabEvent);
+
+        PortletComponentEvent compEvt = event.getLastRenderEvent();
+        PortletTabEvent tabEvent = new PortletTabEventImpl(this, PortletTabEvent.TabAction.TAB_SELECTED, COMPONENT_ID);
+        Iterator it = listeners.iterator();
+        PortletComponent comp;
+        while (it.hasNext()) {
+            comp = (PortletComponent) it.next();
+            event.addNewRenderEvent(tabEvent);
+            comp.actionPerformed(event);
         }
+
     }
 
     /**

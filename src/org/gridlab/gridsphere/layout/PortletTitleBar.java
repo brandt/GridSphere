@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.event.WindowEvent;
 import org.gridlab.gridsphere.event.impl.WindowEventImpl;
 import org.gridlab.gridsphere.layout.event.PortletTitleBarEvent;
 import org.gridlab.gridsphere.layout.event.PortletTitleBarListener;
+import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 import org.gridlab.gridsphere.layout.event.impl.PortletTitleBarEventImpl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
@@ -32,7 +33,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     private List supportedModes = new ArrayList();
     private Portlet.Mode portletMode = Portlet.Mode.VIEW;
     private Portlet.Mode previousMode = null;
-    private List listeners = new ArrayList();
+    //private List listeners = new ArrayList();
     private PortletSettings settings = null;
     private List allowedWindowStates = new ArrayList();
     private String errorMessage = "";
@@ -343,6 +344,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         compId.setPortletComponent(this);
         compId.setPortletClass(portletClass);
         compId.setComponentID(list.size());
+        compId.setComponentLabel(label);
         compId.setClassName(this.getClass().getName());
         list.add(compId);
         String pname = portletClass.substring(0, portletClass.length() - 1);
@@ -526,11 +528,16 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * @throws IOException if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
-        PortletTitleBarEvent evt = new PortletTitleBarEventImpl(event, COMPONENT_ID);
+        System.err.println("PortletTitleBar received an event!!!!");
+        super.actionPerformed(event);
+
+        PortletComponentEvent lastEvent = event.getLastRenderEvent();
+
+        PortletTitleBarEvent titleBarEvent = new PortletTitleBarEventImpl(this, event, COMPONENT_ID);
         PortletRequest req = event.getPortletRequest();
-        if (evt.getAction() == PortletTitleBarEvent.Action.WINDOW_MODIFY) {
+        if (titleBarEvent.getAction() == PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY) {
             PortletResponse res = event.getPortletResponse();
-            windowState = evt.getState();
+            windowState = titleBarEvent.getState();
             WindowEvent winEvent = null;
 
             if (windowState == PortletWindow.State.MAXIMIZED) {
@@ -548,14 +555,23 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                     errorMessage += "Failed to invoke window event method of portlet: " + portletClass;
                 }
             }
-        } else if (evt.getAction() == PortletTitleBarEvent.Action.MODE_MODIFY) {
+        } else if (titleBarEvent.getAction() == PortletTitleBarEvent.TitleBarAction.MODE_MODIFY) {
             previousMode = portletMode;
-            portletMode = evt.getMode();
+            portletMode = titleBarEvent.getMode();
             req.setMode(portletMode);
             req.setAttribute(SportletProperties.PREVIOUS_MODE, portletMode);
         }
         req.setAttribute(SportletProperties.PORTLET_WINDOW, windowState);
-        if (evt != null) fireTitleBarEvent(evt);
+
+        Iterator it = listeners.iterator();
+        PortletComponent comp;
+        while (it.hasNext()) {
+            comp = (PortletComponent) it.next();
+            event.addNewRenderEvent(titleBarEvent);
+            comp.actionPerformed(event);
+        }
+
+        //if (evt != null) fireTitleBarEvent(evt);
     }
 
     /**

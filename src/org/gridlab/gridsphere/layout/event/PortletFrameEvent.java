@@ -8,7 +8,7 @@ package org.gridlab.gridsphere.layout.event;
  * A <code>PortletFrameEvent</code> is created by a <code>PortletFrame</code>
  * when a window event has been triggered.
  */
-public interface PortletFrameEvent {
+public interface PortletFrameEvent extends PortletComponentEvent {
 
     /**
      * An Action defines an immutable set of known window events.
@@ -19,11 +19,11 @@ public interface PortletFrameEvent {
      * <li>FRAME_RESTORED</li>
      * </ul>
      */
-    public static final class Action {
+    public static final class FrameAction implements ComponentAction {
 
-        public static final Action FRAME_MAXIMIZED = new Action(1);
-        public static final Action FRAME_RESTORED = new Action(2);
-        public static final Action FRAME_MINIMIZED = new Action(3);
+        public static final FrameAction FRAME_MAXIMIZED = new FrameAction(1);
+        public static final FrameAction FRAME_RESTORED = new FrameAction(2);
+        public static final FrameAction FRAME_MINIMIZED = new FrameAction(3);
 
         private int action = 0;
 
@@ -32,8 +32,12 @@ public interface PortletFrameEvent {
          *
          * @param action a unique integer id
          */
-        private Action(int action) {
+        private FrameAction(int action) {
             this.action = action;
+        }
+
+        public int getID() {
+            return action;
         }
     }
 
@@ -42,7 +46,7 @@ public interface PortletFrameEvent {
      *
      * @return the PortletFrameEvent.Action
      */
-    public Action getAction();
+    public ComponentAction getAction();
 
     /**
      * Returns the component id of  the PortletFrame that triggered the event

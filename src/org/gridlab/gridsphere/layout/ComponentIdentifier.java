@@ -12,6 +12,7 @@ import java.io.Serializable;
 public class ComponentIdentifier implements Serializable, Cloneable {
 
     private int id = -1;
+    private String label = "";
     private String className = null;
     private String portletClass = null;
     private PortletComponent component = null;
@@ -43,6 +44,24 @@ public class ComponentIdentifier implements Serializable, Cloneable {
      */
     public int getComponentID() {
         return id;
+    }
+
+    /**
+     * Returns the component label of this component or null if none exists
+     *
+     * @return the component label of this component or null if none exists
+     */
+    public String getComponentLabel() {
+        return label;
+    }
+
+    /**
+     * Sets the component label of this component or null if none exists
+     *
+     * @param label the component label of this component or null if none exists
+     */
+    public void setComponentLabel(String label) {
+        this.label = label;
     }
 
     /**
@@ -117,6 +136,7 @@ public class ComponentIdentifier implements Serializable, Cloneable {
         c.component = (this.component == null) ? null : (PortletComponent)this.component.clone();
         c.className = (this.className == null) ? null : this.className;
         c.id = this.id;
+        c.label = (this.label == label) ? null : this.label;
         c.portletClass = (this.portletClass == null) ? null : this.portletClass;
         return c;
     }

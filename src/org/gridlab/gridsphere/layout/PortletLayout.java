@@ -17,7 +17,7 @@ import java.util.List;
  * The <code>PortletTableLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>
  * that organizes portlets into a grid with a provided number of rows and columns.
  */
-public interface PortletLayout extends ComponentLifecycle {
+public interface PortletLayout extends PortletComponent {
 
     /**
      * Sets the list of new portlet component to the layout

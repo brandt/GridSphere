@@ -5,10 +5,7 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
-import org.gridlab.gridsphere.layout.event.PortletFrameListener;
-import org.gridlab.gridsphere.layout.event.PortletTitleBarEvent;
-import org.gridlab.gridsphere.layout.event.PortletTitleBarListener;
+import org.gridlab.gridsphere.layout.event.*;
 import org.gridlab.gridsphere.layout.event.impl.PortletFrameEventImpl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
@@ -29,13 +26,12 @@ import java.util.List;
  * <code>PortletFrame</code> provides the visual representation of a portlet. A portlet frame
  * contains a portlet title bar unless visible is set to false.
  */
-public class PortletFrame extends BasePortletComponent implements Serializable, PortletTitleBarListener, Cloneable {
+public class PortletFrame extends BasePortletComponent implements Serializable, Cloneable {
 
     // renderPortlet is true in doView and false on minimized
     private boolean renderPortlet = true;
     private String portletClass = null;
     private PortletTitleBar titleBar = null;
-    private List listeners = new ArrayList();
     private PortletErrorFrame errorFrame = new PortletErrorFrame();
     private boolean transparent = false;
     private String innerPadding = "";   // has to be empty and not 0!
@@ -141,14 +137,17 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         compId.setPortletComponent(this);
         compId.setPortletClass(portletClass);
         compId.setComponentID(list.size());
+        compId.setComponentLabel(label);
         compId.setClassName(this.getClass().getName());
         list.add(compId);
         // if the portlet frame is transparent then it doesn't get a title bar
         if (transparent == false) titleBar = new PortletTitleBar();
         if (titleBar != null) {
+            // if title bar is not assigned a label and we have one then use it
+            if ((!label.equals("")) && (titleBar.getLabel().equals(""))) titleBar.setLabel(label+"TB");
             titleBar.setPortletClass(portletClass);
             list = titleBar.init(list);
-            titleBar.addTitleBarListener(this);
+            titleBar.addComponentListener(this);
         }
         try {
             requiredRole = PortletRole.toPortletRole(roleString);
@@ -158,15 +157,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         return list;
     }
 
-    /**
-     * Adds a portlet frame listener to be notified of portlet frame events
-     *
-     * @param listener a portlet frame listener
-     * @see PortletFrameEvent
-     */
-    public void addFrameListener(PortletFrameListener listener) {
-        listeners.add(listener);
-    }
 
     /**
      * Fires a frame event notification
@@ -189,8 +179,10 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      * @param event the portolet title bar event
      * @throws PortletLayoutException if a portlet layout exception occurs during processing
      */
-    public void handleTitleBarEvent(PortletTitleBarEvent event) throws PortletLayoutException {
-        if (event.getAction() == PortletTitleBarEvent.Action.WINDOW_MODIFY) {
+    public void handleTitleBarEvent(GridSphereEvent event) throws PortletLayoutException {
+
+        /*
+        if (event.getAction() == PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY) {
             PortletWindow.State state = event.getState();
             PortletFrameEvent evt = null;
             if (state == PortletWindow.State.MINIMIZED) {
@@ -203,8 +195,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 renderPortlet = true;
                 evt = new PortletFrameEventImpl(PortletFrameEvent.Action.FRAME_MAXIMIZED, COMPONENT_ID);
             }
-            fireFrameEvent(evt);
+           // fireFrameEvent(evt);
         }
+        */
     }
 
     /**
@@ -217,57 +210,102 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.actionPerformed(event);
 
-        // process events
-        PortletRequest req = event.getPortletRequest();
-        PortletRole role = req.getRole();
+        PortletComponentEvent titleBarEvent = event.getLastRenderEvent();
 
-        if (role.compare(role, requiredRole) < 0) return;
+        if ((titleBarEvent != null) && (titleBarEvent instanceof PortletTitleBarEvent)) {
+            PortletTitleBarEvent tbEvt = (PortletTitleBarEvent)titleBarEvent;
+            if (titleBarEvent.getAction() == PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY) {
+                PortletWindow.State state = tbEvt.getState();
+                PortletFrameEvent frameEvent = null;
+                if (state == PortletWindow.State.MINIMIZED) {
+                    renderPortlet = false;
+                    frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_MINIMIZED, COMPONENT_ID);
+                } else if (state == PortletWindow.State.RESIZING) {
+                    renderPortlet = true;
+                    frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_RESTORED, COMPONENT_ID);
+                } else if (state == PortletWindow.State.MAXIMIZED) {
+                    renderPortlet = true;
+                    frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_MAXIMIZED, COMPONENT_ID);
+                }
 
-        PortletResponse res = event.getPortletResponse();
+                Iterator it = listeners.iterator();
+                PortletComponent comp;
+                while (it.hasNext()) {
+                    comp = (PortletComponent) it.next();
+                    event.addNewRenderEvent(frameEvent);
+                    comp.actionPerformed(event);
+                }
 
-        req.setAttribute(SportletProperties.PORTLETID, portletClass);
+            }
 
-        String newmode = req.getParameter(SportletProperties.PORTLET_MODE);
-        if (newmode != null) {
-            req.setMode(Portlet.Mode.toMode(newmode));
         } else {
-            if (titleBar != null) {
-                Portlet.Mode mode = titleBar.getPortletMode();
-                req.setMode(mode);
+
+            // process events
+            PortletRequest req = event.getPortletRequest();
+
+            req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
+
+            PortletRole role = req.getRole();
+
+            if (role.compare(role, requiredRole) < 0) return;
+
+            PortletResponse res = event.getPortletResponse();
+
+            req.setAttribute(SportletProperties.PORTLETID, portletClass);
+
+            String newmode = req.getParameter(SportletProperties.PORTLET_MODE);
+            if (newmode != null) {
+                req.setMode(Portlet.Mode.toMode(newmode));
             } else {
-                req.setMode(Portlet.Mode.VIEW);
+                if (titleBar != null) {
+                    Portlet.Mode mode = titleBar.getPortletMode();
+                    req.setMode(mode);
+                } else {
+                    req.setMode(Portlet.Mode.VIEW);
+                }
             }
-        }
 
-        // Set the portlet data
-        User user = req.getUser();
-        PortletData data = null;
-        if (!(user instanceof GuestUser)) {
-            try {
-                data = dataManager.getPortletData(req.getUser(), portletClass);
-                req.setAttribute(SportletProperties.PORTLET_DATA, data);
-            } catch (PersistenceManagerException e) {
-                errorFrame.setError("Unable to retrieve user's portlet data!", e);
-            }
-        }
-
-        // now perform actionPerformed on Portlet if it has an action
-        if (event.hasAction()) {
-            DefaultPortletAction action = event.getAction();
-            if (action.getName() != "") {
+            // Set the portlet data
+            User user = req.getUser();
+            PortletData data = null;
+            if (!(user instanceof GuestUser)) {
                 try {
-                    PortletInvoker.actionPerformed(portletClass, action, req, res);
-                } catch (PortletException e) {
-                    errorFrame.setException(e);
-                }
-                String message = (String)req.getAttribute(SportletProperties.PORTLETERROR);
-                if (message != null) {
-                    errorFrame.setMessage(message);
+                    data = dataManager.getPortletData(req.getUser(), portletClass);
+                    req.setAttribute(SportletProperties.PORTLET_DATA, data);
+                } catch (PersistenceManagerException e) {
+                    errorFrame.setError("Unable to retrieve user's portlet data!", e);
                 }
             }
-            // in case portlet mode got reset
+
+            // now perform actionPerformed on Portlet if it has an action
+
+            System.err.println("in PortletFrame action invoked for " + portletClass);
+            if (event.hasAction()) {
+                DefaultPortletAction action = event.getAction();
+                if (action.getName() != "") {
+                    try {
+                        PortletInvoker.actionPerformed(portletClass, action, req, res);
+                    } catch (PortletException e) {
+                        errorFrame.setException(e);
+                    }
+                    String message = (String)req.getAttribute(SportletProperties.PORTLETERROR);
+                    if (message != null) {
+                        errorFrame.setMessage(message);
+                    }
+                }
+                // in case portlet mode got reset
+            }
+            if (titleBar != null) titleBar.setPortletMode(req.getMode());
+
+            Iterator it = listeners.iterator();
+            PortletComponent comp;
+            while (it.hasNext()) {
+                comp = (PortletComponent) it.next();
+                event.addNewRenderEvent(titleBarEvent);
+                comp.actionPerformed(event);
+            }
         }
-        if (titleBar != null) titleBar.setPortletMode(req.getMode());
+
     }
 
     /**

@@ -4,6 +4,8 @@
  */
 package org.gridlab.gridsphere.layout;
 
+import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
+
 /**
  * The <code>PortletComponent</code> defines the interfaces provided by a portlet component.
  */
@@ -94,4 +96,5 @@ public interface PortletComponent extends ComponentLifecycle {
      */
     public String getTheme();
 
+    public void addComponentListener(PortletComponent component);
 }

@@ -5,6 +5,9 @@
 package org.gridlab.gridsphere.layout.event.impl;
 
 import org.gridlab.gridsphere.layout.event.PortletTitleBarEvent;
+import org.gridlab.gridsphere.layout.event.ComponentAction;
+import org.gridlab.gridsphere.layout.PortletTitleBar;
+import org.gridlab.gridsphere.layout.PortletComponent;
 import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletWindow;
@@ -19,9 +22,10 @@ import org.gridlab.gridsphere.portlet.impl.SportletProperties;
  */
 public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
 
-    private PortletTitleBarEvent.Action action;
+    private ComponentAction action;
     private int id;
     private PortletRequest req;
+    private PortletTitleBar titleBar = null;
 
     /**
      * Constructs an instance of a PortletTitleBarEventImpl from a general
@@ -30,13 +34,14 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
      * @param event the GridSphereEvent
      * @param id the portlet title bar component id
      */
-    public PortletTitleBarEventImpl(GridSphereEvent event, int id) {
+    public PortletTitleBarEventImpl(PortletTitleBar titleBar, GridSphereEvent event, int id) {
+        this.titleBar = titleBar;
         this.req = event.getPortletRequest();
         this.id = id;
         if (req.getParameter(SportletProperties.PORTLET_MODE) != null) {
-            action = PortletTitleBarEvent.Action.MODE_MODIFY;
+            action = PortletTitleBarEvent.TitleBarAction.MODE_MODIFY;
         } else if (req.getParameter(SportletProperties.PORTLET_WINDOW) != null) {
-            action = PortletTitleBarEvent.Action.WINDOW_MODIFY;
+            action = PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY;
         }
     }
 
@@ -45,7 +50,7 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
      *
      * @return the portlet title bar event action
      */
-    public PortletTitleBarEvent.Action getAction() {
+    public ComponentAction getAction() {
         return action;
     }
 
@@ -83,6 +88,10 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
             return state;
         }
         return null;
+    }
+
+    public PortletComponent getPortletComponent() {
+        return titleBar;
     }
 
     /**

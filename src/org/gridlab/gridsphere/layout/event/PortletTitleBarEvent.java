@@ -11,34 +11,31 @@ import org.gridlab.gridsphere.portlet.PortletWindow;
  * A <code>PortletTitleBarEvent</code> is created by a <code>PortletTitleBar</code>
  * when a title bar event has been triggered.
  */
-public interface PortletTitleBarEvent {
+public interface PortletTitleBarEvent extends PortletComponentEvent {
 
     /**
      * Action is an immutable representing the window state and portlet mode
      * of the portlet title bar.
      */
-    public static final class Action {
+    public static final class TitleBarAction implements ComponentAction {
 
-        public static final Action WINDOW_MODIFY = new Action(1);
+        public static final TitleBarAction WINDOW_MODIFY = new TitleBarAction(1);
 
-        public static final Action MODE_MODIFY = new Action(5);
+        public static final TitleBarAction MODE_MODIFY = new TitleBarAction(5);
 
         private int action = 0;
 
         /**
          * Action cannot be instantiated outside of this class
          */
-        private Action(int action) {
+        private TitleBarAction(int action) {
             this.action = action;
         }
-    }
 
-    /**
-     * Returns the portlet title bar event action
-     *
-     * @return the portlet title bar event action
-     */
-    public Action getAction();
+        public int getID() {
+            return action;
+        }
+    }
 
     /**
      * Returns the portlet title bar mode

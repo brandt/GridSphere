@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
 import org.gridlab.gridsphere.layout.event.PortletFrameListener;
+import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
@@ -27,7 +28,7 @@ import java.util.List;
  * @see PortletFrameEvent
  */
 public abstract class PortletFrameLayout extends BasePortletComponent implements
-        Serializable, PortletLayout, PortletFrameListener, Cloneable {
+        Serializable, PortletLayout, Cloneable {
 
     protected List components = new ArrayList();
 
@@ -50,11 +51,15 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
             p.setTheme(theme);
             // invoke init on each component
             list = p.init(list);
+
+            p.addComponentListener(this);
+            /*
             // If the component is a frame we want to be notified
             if (p instanceof PortletFrame) {
                 PortletFrame f = (PortletFrame) p;
                 f.addFrameListener(this);
             }
+            */
         }
         return list;
     }
@@ -74,6 +79,20 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      */
     public void actionPerformed(GridSphereEvent event) throws
             PortletLayoutException, IOException {
+
+        PortletComponentEvent compEvt = event.getLastRenderEvent();
+        if ((compEvt != null) && (compEvt instanceof PortletFrameEvent)) {
+            PortletFrameEvent frameEvent = (PortletFrameEvent)compEvt;
+            handleFrameEvent(frameEvent);
+        }
+
+        Iterator it = listeners.iterator();
+        PortletComponent comp;
+        while (it.hasNext()) {
+            comp = (PortletComponent) it.next();
+            event.addNewRenderEvent(compEvt);
+            comp.actionPerformed(event);
+        }
     }
 
     /**
@@ -142,11 +161,11 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      */
     public void handleFrameEvent(PortletFrameEvent event)
             throws PortletLayoutException {
-        if (event.getAction() == PortletFrameEvent.Action.FRAME_MAXIMIZED) {
+        if (event.getAction() == PortletFrameEvent.FrameAction.FRAME_MAXIMIZED) {
             handleFrameMaximized(event);
-        } else if (event.getAction() == PortletFrameEvent.Action.FRAME_MINIMIZED) {
+        } else if (event.getAction() == PortletFrameEvent.FrameAction.FRAME_MINIMIZED) {
             handleFrameMinimized(event);
-        } else if (event.getAction() == PortletFrameEvent.Action.FRAME_RESTORED) {
+        } else if (event.getAction() == PortletFrameEvent.FrameAction.FRAME_RESTORED) {
             handleFrameRestore(event);
         }
     }

@@ -5,10 +5,12 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Iterator;
 
 /**
  * A <code>PortletPanel</code> is used to compose a collection of portlet components
@@ -47,6 +49,7 @@ public class PortletPanel extends BasePortletComponent implements Serializable, 
         if (layout == null) {
             return super.init(list);
         } else {
+            layout.addComponentListener(this);
             return layout.init(list);
         }
     }
@@ -69,6 +72,25 @@ public class PortletPanel extends BasePortletComponent implements Serializable, 
         return layout;
     }
 
+     /**
+     * Performs an action on this portlet component
+     *
+     * @param event a gridsphere event
+     * @throws PortletLayoutException if a layout error occurs during rendering
+     * @throws IOException if an I/O error occurs during rendering
+     */
+    public void actionPerformed(GridSphereEvent event) throws
+            PortletLayoutException, IOException {
+
+        PortletComponentEvent compEvt = event.getLastRenderEvent();
+        Iterator it = listeners.iterator();
+        PortletComponent comp;
+        while (it.hasNext()) {
+            comp = (PortletComponent) it.next();
+            event.addNewRenderEvent(compEvt);
+            comp.actionPerformed(event);
+        }
+    }
     /**
      * Renders the portlet panel component
      *

@@ -15,9 +15,7 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * The <code>PortletPage</code> is the generic container for a collection of
@@ -38,7 +36,7 @@ public class PortletPage implements Serializable, Cloneable {
     protected PortletTabbedPane tabbedPane = null;
 
     // The component ID's of each of the layout components
-    protected List componentIdentifiers = new ArrayList();
+    protected List componentIdentifiers = new Vector();
 
     // The list of portlets a user has-- generally contained within a PortletFrame/PortletTitleBar combo
     //protected List portlets = new ArrayList();
@@ -49,6 +47,7 @@ public class PortletPage implements Serializable, Cloneable {
     private String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
     private String layoutDescriptor = null;
 
+    private Hashtable labelsHash = new Hashtable();
     /**
      * Constructs an instance of PortletPage
      */
@@ -200,6 +199,21 @@ public class PortletPage implements Serializable, Cloneable {
 
         }
         componentIdentifiers = list;
+
+        // Now go thru and create a labels hash
+
+        Iterator it = componentIdentifiers.iterator();
+        while (it.hasNext()) {
+            ComponentIdentifier cid = (ComponentIdentifier)it.next();
+            String compLabel = cid.getComponentLabel();
+
+            System.err.println("iteration thru component identifioers cid: " + cid.getComponentID() + " label=" + compLabel);
+            if (!compLabel.equals("")) {
+                // create a labels to integer component id mapping
+                labelsHash.put(compLabel, new Integer(cid.getComponentID()));
+            }
+        }
+
         return componentIdentifiers;
     }
 
@@ -266,15 +280,35 @@ public class PortletPage implements Serializable, Cloneable {
      * @throws IOException if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
-
+        System.err.println("in actionPerformed PortletPage");
         // if there is a layout action do it!
-        if (event.getPortletComponentID() > -1) {
+        if (!event.getPortletComponentID().equals("")) {
 
             // the component id determines where in the list the portlet component is
-            ComponentIdentifier compId = (ComponentIdentifier) componentIdentifiers.get(event.getPortletComponentID());
-            if (compId == null) {
-                //log.warn("Event has invalid component id associated with it!");
+
+            // first check the hash
+            ComponentIdentifier compId = null;
+            String cid = event.getPortletComponentID();
+            System.err.println("cid=" + cid);
+            int compIntId = -1;
+            if (labelsHash.containsKey(cid)) {
+                System.err.println("labels hash has cid");
+                Integer cint = (Integer) labelsHash.get(cid);
+                compIntId =  cint.intValue();
+                compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
             } else {
+                // try converting to integer
+                System.err.println("try converting to int");
+                try {
+                    compIntId = Integer.parseInt(cid);
+                    compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
+                } catch (NumberFormatException e) {
+                    compIntId = -1;
+                    System.err.println("go home");
+                }
+            }
+
+            if (compId != null) {
                 PortletComponent comp = compId.getPortletComponent();
                 // perform an action if the component is non null
                 if (comp == null) {
