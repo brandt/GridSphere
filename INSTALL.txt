@@ -7,13 +7,11 @@ $Id$
 Requirements
 ------------
 
-1) Building the GridSphere distribution requires JDK 1.3.1 or JDK 1.4.2 
+1) Building the GridSphere distribution requires JDK 1.4.2 
 (JDK 1.4.1 ships with a broken xalan.jar). You will also need Ant 1.6+ 
 available at http://jakarta.apache.org/ant. In addition, make sure
 the $ANT_HOME/lib directory contains junit.jar used for testing and
 xalan.jar used to construct the documentation from the XSL style sheets.
-If you are using JDK 1.3.1 you will need to download Xalan from
- http://xml.apache.org/xalan-j/index.html and put xalan.jar in $ANT_HOME/lib.
 You can optionally copy junit.jar from gridsphere/lib/ext into $ANT_HOME/lib
 to run the unit tests.
 
