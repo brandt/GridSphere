@@ -319,7 +319,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         } else {
 
-            titleBar.actionPerformed(event);
+            if (titleBar != null) titleBar.actionPerformed(event);
 
             // process events
             PortletRequest req = event.getPortletRequest();
