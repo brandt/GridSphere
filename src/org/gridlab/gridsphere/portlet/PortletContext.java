@@ -175,6 +175,23 @@ public interface PortletContext extends ServletContext {
             throws PortletServiceUnavailableException, PortletServiceNotFoundException;
 
     /**
+     * This function looks up a portlet service with the given classname.
+     * The returned service is a service wrapper that contains the User object
+     * which can be used for method level access control. An implementation of the
+     * service is provided with the appropiae access control restrictions on the supplied
+     *
+     * @param service the classname of the service to load
+     * @param User the user requesting a service instance
+     * @return the portlet service
+     *
+     * @throws PortletServiceUnavailableException
+     *      if an exception has occurrred that interferes with the portlet service's normal initialization
+     * @throws PortletServiceNotFoundException if the PortletService is not found
+     */
+    public PortletService getService(Class service, User user)
+            throws PortletServiceUnavailableException, PortletServiceNotFoundException;
+
+    /**
      * Returns the major version of the PortletInfo API that this portlet container supports.
      *
      * @return the major version
