@@ -190,7 +190,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             }
             timezoneList.addBean(item);
         }
-        timezoneList.setSize(10);
+        timezoneList.setSize(6);
         timezoneList.sortByValue();
         timezoneList.setDisabled(disable);
         timezoneList.setMultipleSelection(false);

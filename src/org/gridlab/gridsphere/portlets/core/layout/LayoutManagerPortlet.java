@@ -11,6 +11,9 @@ import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
+import org.gridlab.gridsphere.services.core.user.AccountRequest;
+import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
+import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.layout.*;
 
 import javax.servlet.UnavailableException;
@@ -26,6 +29,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     // Portlet services
     private LayoutManagerService layoutMgr = null;
+    private UserManagerService userManagerService = null;
 
     public class TabDataBean {
         private String name = "";
@@ -38,6 +42,8 @@ public class LayoutManagerPortlet extends ActionPortlet {
         this.log.debug("Entering initServices()");
         try {
             this.layoutMgr = (LayoutManagerService)config.getContext().getService(LayoutManagerService.class);
+            this.userManagerService = (UserManagerService)config.getContext().getService(UserManagerService.class);
+
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
@@ -163,9 +169,18 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletRequest req = event.getPortletRequest();
         ListBoxBean themeLB = event.getListBoxBean("themeLB");
         String theme = themeLB.getSelectedValue();
-        layoutMgr.setTheme(req, theme);
-        layoutMgr.reloadPage(req);
 
+        User user = req.getUser();
+        AccountRequest acctReq = userManagerService.createAccountRequest(user);
+        acctReq.setAttribute(User.THEME, theme);
+        try {
+            userManagerService.submitAccountRequest(acctReq);
+        } catch (InvalidAccountRequestException e) {
+            log.error("in ProfileManagerPortlet invalid account request", e);
+        }
+        user = userManagerService.approveAccountRequest(acctReq);
+        layoutMgr.setTheme(req, theme);
+        layoutMgr.reloadPage(req);       
     }
 
     public void doConfigureLayout(FormEvent event) throws PortletException {
