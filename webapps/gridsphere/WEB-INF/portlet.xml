@@ -260,6 +260,7 @@
             <servlet-name>ProfileManagerPortlet</servlet-name>
             <supports>
                 <view/>
+                <edit/>
             </supports>
         </portlet-app>
 
