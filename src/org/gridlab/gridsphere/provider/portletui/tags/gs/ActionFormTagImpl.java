@@ -4,19 +4,16 @@
  */
 package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
-import org.gridlab.gridsphere.provider.portletui.tags.ActionFormTag;
-
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.PageContext;
 import java.util.ArrayList;
 
 /**
  * The <code>ActionFormTag</code> provides a UI form tag that can also include <code>ActionParam</code> tags
  * nested within it.
  */
-public class ActionFormTagImpl extends ActionTagImpl implements ActionFormTag {
+public class ActionFormTagImpl extends ActionTagImpl {
 
     protected boolean isMultipart = false;
     protected String method = "POST";

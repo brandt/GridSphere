@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.provider.portletui.tags.gs;
 
 import org.gridlab.gridsphere.provider.portletui.beans.FrameBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TableBean;
 import org.gridlab.gridsphere.provider.portletui.tags.FrameTag;
 import org.gridlab.gridsphere.provider.portletui.tags.PanelTag;
 
@@ -95,6 +96,13 @@ public class FrameTagImpl extends TableTagImpl implements FrameTag {
                 //this.cssClass = TextBean.MSG_SUCCESS;
             }
         }
+        // get any parameter values if data is divided
+        if (maxRows > 0) {
+            String curPage = pageContext.getRequest().getParameter(TableBean.CURRENT_PAGE);
+            if (curPage != null) {
+                currentPage = Integer.valueOf(curPage).intValue();
+            }
+        }
         if (!beanId.equals("")) {
             tableBean = (FrameBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (tableBean == null) {
@@ -122,10 +130,6 @@ public class FrameTagImpl extends TableTagImpl implements FrameTag {
                 tableBean.setSortable(sortable);
                 tableBean.setSortableID("td" + this.getUniqueId("gs_tableNum"));
             }
-            if (maxRows > 0) {
-                System.err.println("set max row " + maxRows);
-                tableBean.setMaxRows(maxRows);
-            }
             this.setBaseComponentBean(tableBean);
             if (key != null) {
                 tableBean.setKey(key);
@@ -133,7 +137,12 @@ public class FrameTagImpl extends TableTagImpl implements FrameTag {
                 ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
                 tableBean.setValue(bundle.getString(tableBean.getKey()));
             }
+            tableBean.setMaxRows(maxRows);
         }
+
+        tableBean.setCurrentPage(currentPage);
+        tableBean.setRowCount(rowCount);
+
 
         PanelTag panelTag = (PanelTag) findAncestorWithClass(this, PanelTagImpl.class);
         if (panelTag != null) {
@@ -165,15 +174,14 @@ public class FrameTagImpl extends TableTagImpl implements FrameTag {
     }
 
     public int doEndTag() throws JspException {
-
+        tableBean.setRowCount(rowCount);
         if (!beanId.equals("")) {
             tableBean = (FrameBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (tableBean == null) {
                 return EVAL_PAGE;
             }
         }
-        System.err.println("row count " + rowCount);
-        tableBean.setRowCount(rowCount);
+        rowCount = 0;
         try {
             JspWriter out = pageContext.getOut();
             out.print(tableBean.toEndString());

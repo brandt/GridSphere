@@ -106,22 +106,42 @@ public class TableRowTagImpl extends BaseComponentTagImpl implements TableRowTag
         return isZebra;
     }
 
+    public void release() {
+        rowBean = null;
+        isHeader = false;
+        align = null;
+        valign = null;
+        isZebra = false;
+        super.release();
+    }
+
     public int doStartTag() throws JspException {
 
         Tag parent = this.getParent();
         if (parent instanceof TableTag) {
             TableTag tableTag = (TableTag)parent;
             int maxrows = tableTag.getMaxrows();
+
+            // logic to determine if alternate (darkened row) should be set
             if (tableTag.getZebra()) {
                 if ((tableTag.getRowCount() % 2) == 0) isZebra = true;
             }
+
+            // logic to determine what rows to display if table is broken into pages
             if (!isHeader) {
                 tableTag.incrementRowCount();
             }
-            if ((maxrows > 0) && (tableTag.getRowCount() > maxrows)) {
-                return EVAL_PAGE;
+            // need to determine which rows to display
+
+            int currpage = tableTag.getCurrentPage();
+            if (!isHeader) {
+                if (maxrows > 0) {
+                    if ((tableTag.getRowCount() <= maxrows * currpage) || (tableTag.getRowCount() > maxrows * (currpage + 1) )) {
+                        return EVAL_PAGE;
+                    }
+                }
             }
-            System.err.println("\t\trow count " + tableTag.getRowCount());
+
         }
 
         if (!beanId.equals("")) {
@@ -147,14 +167,14 @@ public class TableRowTagImpl extends BaseComponentTagImpl implements TableRowTag
     }
 
     public int doEndTag() throws JspException {
-
+        super.doEndTag();
         try {
             JspWriter out = pageContext.getOut();
             out.print(rowBean.toEndString());
         } catch (Exception e) {
             throw new JspException(e.getMessage());
         }
-
+        super.doEndTag();
         return EVAL_PAGE;
     }
 }

@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.TableCellBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TableRowBean;
 import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
 import org.gridlab.gridsphere.provider.portletui.tags.TableCellTag;
+import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -114,6 +115,15 @@ public class TableCellTagImpl extends BaseComponentTagImpl implements TableCellT
         return cellBean;
     }
 
+    public void release() {
+        cellBean = null;
+        width = null;
+        height = null;
+        align = null;
+        valign = null;
+        super.release();
+    }
+
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
             cellBean = (TableCellBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
@@ -150,6 +160,7 @@ public class TableCellTagImpl extends BaseComponentTagImpl implements TableCellT
         } catch (Exception e) {
             throw new JspException(e.getMessage());
         }
+        super.doEndTag();
         return EVAL_PAGE;
     }
 }

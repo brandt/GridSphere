@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
 import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
 import org.gridlab.gridsphere.provider.portletui.tags.ListBoxItemTag;
+import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
 
 import javax.servlet.jsp.JspException;
 import java.util.Iterator;

@@ -8,10 +8,15 @@ import org.gridlab.gridsphere.provider.portletui.beans.TableBean;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
 import org.gridlab.gridsphere.provider.portletui.tags.TableTag;
+import org.gridlab.gridsphere.provider.portletui.tags.PanelTag;
+import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
+import org.gridlab.gridsphere.portlet.PortletResponse;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.Tag;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * A <code>TableTag</code> represents a table element and is defined by a <code>DefaultTableModel</code>
@@ -28,6 +33,8 @@ public class TableTagImpl extends BaseComponentTagImpl implements TableTag {
     protected boolean isZebra = false;
     protected int rowCount = 0;
     protected int maxRows = -1;
+    protected int currentPage = 0;
+    protected boolean isShowAll = false;
 
     /**
      * Sets the table model associated with this table
@@ -181,15 +188,60 @@ public class TableTagImpl extends BaseComponentTagImpl implements TableTag {
 
     public void incrementRowCount() {
         this.rowCount++;
+        tableBean.setRowCount(rowCount);
+
     }
 
     public int getRowCount() {
         return rowCount;
     }
 
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+
+    public void release() {
+        tableBean = null;
+        cellSpacing = null;
+        cellPadding = null;
+        border = null;
+        width = null;
+        align = null;
+        sortable = false;
+        isZebra = false;
+        rowCount = 0;
+        maxRows = -1;
+        currentPage = 0;
+        super.release();
+    }
+
     public int doStartTag() throws JspException {
 
+        super.doStartTag();
+
         boolean includeBody = true;
+
+        // get any parameter values if data is divided
+        if (maxRows > 0) {
+            String curPage = pageContext.getRequest().getParameter(TableBean.CURRENT_PAGE);
+            if (curPage != null) {
+                currentPage = Integer.valueOf(curPage).intValue();
+            }
+            String showAll = pageContext.getRequest().getParameter(TableBean.SHOW_ALL);
+            if (showAll != null) {
+                maxRows = 0;
+                isShowAll = true;
+            }
+            String showpages = pageContext.getRequest().getParameter(TableBean.SHOW_PAGES);
+            if (showpages != null) {
+                isShowAll = false;
+            }
+        }
 
         if (!beanId.equals("")) {
             tableBean = (TableBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
@@ -198,8 +250,9 @@ public class TableTagImpl extends BaseComponentTagImpl implements TableTag {
             } else {
                 includeBody = false;
             }
+
         } else {
-            tableBean = new TableBean();
+            tableBean = new TableBean((HttpServletRequest)pageContext.getRequest());
             if (align != null) tableBean.setAlign(align);
             if (width != null) tableBean.setWidth(width);
             if (cellSpacing != null) tableBean.setCellSpacing(cellSpacing);
@@ -211,6 +264,10 @@ public class TableTagImpl extends BaseComponentTagImpl implements TableTag {
             }
             tableBean.setMaxRows(maxRows);
         }
+        tableBean.setCurrentPage(currentPage);
+        tableBean.setRowCount(0);
+        tableBean.setShowall(isShowAll);
+
 
         try {
             JspWriter out = pageContext.getOut();
@@ -227,13 +284,16 @@ public class TableTagImpl extends BaseComponentTagImpl implements TableTag {
 
     public int doEndTag() throws JspException {
         tableBean.setRowCount(rowCount);
+        tableBean.setPortletResponse((PortletResponse) pageContext.getAttribute("portletResponse"));
         try {
             JspWriter out = pageContext.getOut();
             out.print(tableBean.toEndString());
+            rowCount = 0;
         } catch (Exception e) {
             throw new JspException(e.getMessage());
         }
 
+        super.doEndTag();
         return EVAL_PAGE;
     }
 }
