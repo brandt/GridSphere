@@ -55,4 +55,11 @@ public interface PortletFrameEvent extends PortletComponentEvent {
      */
     public int getID();
 
+    /**
+     * Used in the case of portlet frame resize when it needs to know the original width of the frame
+     *
+     * @return  the portlet frame original width
+     */
+    public String getOriginalWidth();
+
 }

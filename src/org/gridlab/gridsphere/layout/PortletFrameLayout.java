@@ -131,6 +131,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
             if (p.getComponentID() == id) {
                 p.setWidth("");
             }
+            p.setWidth(p.getDefaultWidth());
             p.setVisible(true);
         }
     }
@@ -147,7 +148,12 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
         while (it.hasNext()) {
             p = (PortletComponent) it.next();
             if (p.getComponentID() == id) {
-                p.setWidth("");
+                if (p instanceof PortletFrame) {
+                    PortletFrame f = (PortletFrame)p;
+                    f.setWidth(event.getOriginalWidth());
+                }
+                p.setWidth(p.getDefaultWidth());
+                //p.setWidth("");
             } else {
                 p.setVisible(true);
             }

@@ -9,15 +9,31 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 /**
  * The <code>PortletColumnLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>
  * that organizes portlets into a column.
  */
 public class PortletColumnLayout extends PortletFrameLayout implements Cloneable {
-    protected String width = new String();
+
+    private String originalWidth = "";
 
     public PortletColumnLayout() {
+    }
+
+    /**
+     * Initializes the portlet component. Since the components are isolated
+     * after Castor unmarshalls from XML, the ordering is determined by a
+     * passed in List containing the previous portlet components in the tree.
+     *
+     * @param list a list of component identifiers
+     * @return a list of updated component identifiers
+     * @see ComponentIdentifier
+     */
+    public List init(List list) {
+        originalWidth = width;
+        return  super.init(list);
     }
 
     /**
@@ -48,11 +64,10 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
 
     public Object clone() throws CloneNotSupportedException {
         PortletColumnLayout g = (PortletColumnLayout)super.clone();
-        g.width = this.width;
         return g;
     }
 
 }
- 
+
 
 

@@ -68,6 +68,13 @@ public interface PortletComponent extends ComponentLifecycle {
     public String getWidth();
 
     /**
+     * Returns the default portlet component width
+     *
+     * @return the default portlet component width
+     */
+    public String getDefaultWidth();
+
+    /**
      * When set to true the portlet component is visible and will be rendered
      *
      * @param isVisible if <code>true</code> portlet component is rendered,

@@ -443,7 +443,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             tmp = (PortletWindow.State)windowStates.get(i);
             portletURI = res.createURI();
             portletURI.addParameter(SportletProperties.COMPONENT_ID, this.componentIDStr);
-            portletURI.addParameter(SportletProperties.PORTLETID, portletClass);
+            //portletURI.addParameter(SportletProperties.PORTLETID, portletClass);
             try {
                 stateLink = new PortletStateLink(tmp, locale);
                 portletURI.addParameter(SportletProperties.PORTLET_WINDOW, tmp.toString());
@@ -505,7 +505,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             mode = (Portlet.Mode)smodes.get(i);
             portletURI = res.createURI();
             portletURI.addParameter(SportletProperties.COMPONENT_ID, this.componentIDStr);
-            portletURI.addParameter(SportletProperties.PORTLETID, portletClass);
+            //portletURI.addParameter(SportletProperties.PORTLETID, portletClass);
             try {
                 modeLink = new PortletModeLink(mode, locale);
                 portletURI.addParameter(SportletProperties.PORTLET_MODE, mode.toString());
@@ -653,10 +653,11 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         }
 
         // Invoke doTitle of portlet whose action was perfomed
-        String actionStr = req.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
+        //String actionStr = req.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
         out.println("<td class=\"window-title-name\">");
-        if (actionStr != null) {
+        //if (actionStr != null) {
             try {
+                System.err.println("invoking  doTitle:" + title);
                 PortletInvoker.doTitle(portletClass, req, res);
                 //out.println(" (" + portletMode.toString() + ") ");
             } catch (PortletException e) {
@@ -664,9 +665,9 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 hasError = true;
             }
 
-        } else {
-            out.println(title);
-        }
+        //} else {
+        //    out.println(title);
+        //}
 
         out.println("</td>");
 

@@ -27,7 +27,7 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable {
         out.println("<tbody><tr>") ;
         for (int i=0;i<components.size();i++) {
             p = (PortletComponent) components.get(i);
-            System.out.println("\n\n\n\n\n WIDTH "+p.getWidth()+"\n\n\n\n");
+            //System.out.println("\n\n\n\n\n WIDTH "+p.getWidth()+"\n\n\n\n");
             out.println("<td valign=\"top\" width=\""+p.getWidth()+"\">");
             if (p.getVisible()) {
                 p.doRender(event);
@@ -40,7 +40,6 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable {
 
     public Object clone() throws CloneNotSupportedException {
         PortletRowLayout g = (PortletRowLayout)super.clone();
-        g.width = this.width;
         return g;
     }
 }

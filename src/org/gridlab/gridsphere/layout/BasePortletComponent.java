@@ -21,6 +21,7 @@ import java.util.Iterator;
  */
 public abstract class BasePortletComponent extends BaseComponentLifecycle implements PortletComponent, Serializable {
 
+    protected String defaultWidth = new String();
     protected String width = new String();
     protected String height = new String();
     protected String label = new String();
@@ -40,6 +41,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      * @see ComponentIdentifier
      */
     public List init(List list) {
+        defaultWidth = width;
         if ((label == null) || label.equals("")) {
             return super.init(list);
 
@@ -138,6 +140,15 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      */
     public String getWidth() {
         return width;
+    }
+
+    /**
+     * Returns the default portlet component width
+     *
+     * @return the default portlet component width
+     */
+    public String getDefaultWidth() {
+        return defaultWidth;
     }
 
     /**

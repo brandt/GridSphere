@@ -39,6 +39,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     private PortletRole requiredRole = PortletRole.GUEST;
 
+    // keep track of teh original width
+    private String originalWidth = "";
+
     private transient PortletDataManager dataManager = null;
 
     /**
@@ -140,6 +143,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         compId.setComponentLabel(label);
         compId.setClassName(this.getClass().getName());
         list.add(compId);
+        this.originalWidth = width;
         // if the portlet frame is transparent then it doesn't get a title bar
         if (transparent == false) titleBar = new PortletTitleBar();
         if (titleBar != null) {
@@ -189,13 +193,14 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             PortletTitleBarEvent tbEvt = (PortletTitleBarEvent)titleBarEvent;
             if (titleBarEvent.getAction() == PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY) {
                 PortletWindow.State state = tbEvt.getState();
-                PortletFrameEvent frameEvent = null;
+                PortletFrameEventImpl frameEvent = null;
                 if (state == PortletWindow.State.MINIMIZED) {
                     renderPortlet = false;
                     frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_MINIMIZED, COMPONENT_ID);
                 } else if (state == PortletWindow.State.RESIZING) {
                     renderPortlet = true;
                     frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_RESTORED, COMPONENT_ID);
+                    frameEvent.setOriginalWidth(originalWidth);
                 } else if (state == PortletWindow.State.MAXIMIZED) {
                     renderPortlet = true;
                     frameEvent = new PortletFrameEventImpl(this, PortletFrameEvent.FrameAction.FRAME_MAXIMIZED, COMPONENT_ID);

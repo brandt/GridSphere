@@ -17,6 +17,7 @@ public class PortletFrameEventImpl implements PortletFrameEvent {
 
     private ComponentAction action;
     private int id;
+    private String width = "";
     private PortletFrame frame = null;
 
     /**
@@ -54,4 +55,21 @@ public class PortletFrameEventImpl implements PortletFrameEvent {
         return id;
     }
 
+    /**
+     * Used in the case of portlet frame resize when it needs to know the original width of the frame
+     *
+     * @param originalWidth  the portlet frame original width
+     */
+    public void setOriginalWidth(String originalWidth) {
+        this.width = originalWidth;
+    }
+
+    /**
+     * Used in the case of portlet frame resize when it needs to know the original width of the frame
+     *
+     * @return  the portlet frame original width
+     */
+    public String getOriginalWidth() {
+        return width;
+    }
 }
