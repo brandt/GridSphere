@@ -1,8 +1,13 @@
+/**
+ * @author <a href="oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
+ * @version $Id$
+ */
 package org.gridlab.gridsphere.tags.web;
 
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
+import org.gridlab.gridsphere.tags.web.element.ActionLink;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -14,6 +19,7 @@ public class ActionTag extends TagSupport {
     private String action;
     private String label;
     private PortletURI someURI;
+    private ActionLink actionlink = new ActionLink();
 
     public void setAction(String action) {
         this.action = action;
@@ -31,6 +37,14 @@ public class ActionTag extends TagSupport {
         return label;
     }
 
+    public ActionLink getActionlink() {
+        return actionlink;
+    }
+
+    public void setActionlink(ActionLink actionlink) {
+        this.actionlink = actionlink;
+    }
+
     public void createActionURI() {
         PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
         someURI = res.createURI();
@@ -44,19 +58,16 @@ public class ActionTag extends TagSupport {
     }
 
     public int doEndTag() throws JspTagException {
+        DefaultPortletAction action = (DefaultPortletAction) pageContext.getAttribute("_action");
+        someURI.addAction(action);
+        actionlink.setLink(someURI.toString());
+        actionlink.setLabel(label);
         try {
             JspWriter out = pageContext.getOut();
-            out.print("<a href= \"");
-            DefaultPortletAction action = (DefaultPortletAction) pageContext.getAttribute("_action");
-            someURI.addAction(action);
-            if (someURI != null) out.print(someURI.toString());
-            out.print("\">");
-            out.print(label);
-            out.print("</a>");
+            out.println(actionlink);
         } catch (Exception e) {
             throw new JspTagException(e.getMessage());
         }
         return EVAL_PAGE;
     }
-
 }

@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.tags.web;
 
 import org.gridlab.gridsphere.tags.web.validator.NoValidation;
 import org.gridlab.gridsphere.tags.web.validator.Validator;
+import org.gridlab.gridsphere.tags.web.element.BaseElement;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.jsp.JspException;
@@ -19,9 +20,13 @@ public class InputTag extends TagSupport {
     protected String value = "";
     protected String name = "name";
     protected boolean isChecked = false;
+    protected boolean isDisabled = false;
+    protected boolean isReadonly = false;
     protected Validator validator = new NoValidation();
     protected int size = 20;
     protected int maxLength = 20;
+    protected BaseElement htmlelement;
+    protected String element;
 
     public static final String TEXT = "text";
     public static final String PASSWORD = "password";
@@ -88,6 +93,24 @@ public class InputTag extends TagSupport {
         return isChecked;
     }
 
+    public void setDisabled(boolean isDisabled) {
+        this.isDisabled = isDisabled;
+    }
+
+    public boolean getDisabled() {
+        return isDisabled;
+    }
+
+    public void setReadonly (boolean isReadonly) {
+        this.isReadonly = isReadonly;
+    }
+
+    public boolean getReadonly() {
+        return isReadonly;
+    }
+
+
+
     public void setMaxlength(int maxLength) {
         this.maxLength = maxLength;
     }
@@ -104,6 +127,14 @@ public class InputTag extends TagSupport {
         return size;
     }
 
+    public String getElement() {
+        return element;
+    }
+
+    public void setElement(String element) {
+        this.element = element;
+    }
+
     public void setValidator(String validatorClass) {
         try {
             validator = (Validator) Class.forName(validatorClass).newInstance();
@@ -118,24 +149,7 @@ public class InputTag extends TagSupport {
     public int doStartTag() throws JspException {
         try {
             JspWriter out = pageContext.getOut();
-            ServletRequest req = pageContext.getRequest();
-            out.print("<input");
-            out.print(" type=\"" + type + "\"");
-            out.print(" name=\"" + name + "\"");
-            if ((type.equals(TEXT)) || (type.equals(PASSWORD))) {
-                out.print(" size=\"" + size + "\"");
-                out.print(" maxlen=\"" + maxLength + "\"");
-            }
-            String oldvalue = req.getParameter(name);
-            if (oldvalue != null) value = oldvalue;
-            out.print(" value=" + "\"" + value + "\"");
-            if ((type.equals(RADIO)) || (type.equals(CHECKBOX))) {
-                if (isChecked) {
-                    out.print(" checked");
-                }
-            }
-            out.print(">");
-
+            out.print(htmlelement);
         } catch (Exception e) {
             throw new JspTagException(e.getMessage());
         }

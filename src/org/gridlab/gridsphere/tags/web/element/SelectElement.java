@@ -9,6 +9,10 @@ public abstract class SelectElement extends BaseNameValue implements Selectable 
 
     protected boolean selected = false;
 
+    public SelectElement() {
+        super();
+    }
+
     public SelectElement(String name, String value, boolean selected, boolean disabled) {
         this.name = name;
         this.value = value;
