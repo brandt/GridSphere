@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
+<!--
+ $Id$
+-->
+
 <!DOCTYPE web-app
     PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
     "http://java.sun.com/j2ee/dtds/web-app_2.3.dtd">
@@ -10,13 +14,19 @@
         <servlet-class>org.gridlab.gridsphere.portletcontainer.GridSphere</servlet-class>
         <init-param>
             <param-name>PortletServices.properties</param-name>
-                <param-value>WEB-INF/conf/PortletServices.properties</param-value>
+            <param-value>WEB-INF/conf/PortletServices.properties</param-value>
+        </init-param>
+        <init-param>
             <param-name>log4j.properties</param-name>
-                <param-value>WEB-INF/conf/log4j.properties</param-value>
+            <param-value>WEB-INF/conf/log4j.properties</param-value>
+        </init-param>
+        <init-param>
             <param-name>portlet.xml</param-name>
-                <param-value>WEB-INF/conf/portlet.xml</param-value>
+            <param-value>WEB-INF/conf/portlet.xml</param-value>
+        </init-param>
+        <init-param>
             <param-name>portlet-mapping.xml</param-name>
-                <param-value>WEB-INF/conf/portlet-mapping.xml</param-value>
+            <param-value>WEB-INF/conf/portlet-mapping.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
