@@ -129,8 +129,20 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     }
 
 
+    public void setHeaders(HttpServletResponse res) {
+        res.setContentType("text/html; charset=utf-8"); // Necessary to display UTF-8 encoded characters
+        /*
+        res.setHeader("Cache-Control","no-cache"); //Forces caches to obtain a new copy of the page from the origin server
+        res.setHeader("Cache-Control","no-store"); //Directs caches not to store the page under any circumstance
+        res.setDateHeader("Expires", 0); //Causes the proxy cache to see the page as "stale"
+        res.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
+        */
+    }
+
     public void processRequest(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-        res.setContentType("text/html; charset=utf-8");
+
+        setHeaders(res);
+
         GridSphereEvent event = new GridSphereEventImpl(context, req, res);
         PortletRequest portletReq = event.getPortletRequest();
 
@@ -138,7 +150,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         if (firstDoGet.equals(Boolean.TRUE)) {
 
             synchronized (firstDoGet) {
-
+                firstDoGet = Boolean.FALSE;
                 log.debug("Testing Database");
                 // checking if database setup is correct
                 DBTask dt = new DBTask();
@@ -166,7 +178,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
                     PortletResponse portletRes = event.getPortletResponse();
                     PortletInvoker.initAllPortlets(portletReq, portletRes);
-                    
+
                     // deep inside a service is used which is why this must follow the factory.init
                     layoutEngine.init();
                 } catch (Exception e) {
@@ -177,14 +189,13 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                     return;
                 }
                 coreGroup = aclService.getCoreGroup();
-                firstDoGet = Boolean.FALSE;
             }
         }
 
         setUserAndGroups(portletReq);
 
         checkUserHasCookie(event);
-        
+
         setTCKUser(portletReq);
 
         // Handle user login and logout
@@ -259,6 +270,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             SportletUserImpl u = new SportletUserImpl();
             u.setUserName("tckuser");
             u.setUserID("tckuser");
+            u.setID("500");
             Map l = new HashMap();
             l.put(coreGroup, PortletRole.USER);
             req.setAttribute(SportletProperties.PORTLET_USER, u);
