@@ -47,7 +47,11 @@
     <servlet>
         <servlet-name>HelloWorld</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.HelloWorld</servlet-class>
-	<load-on-startup>2</load-on-startup>
+        <init-param>
+            <param-name>foo</param-name>
+            <param-value>bar</param-value>
+        </init-param>
+        <load-on-startup>2</load-on-startup>
     </servlet>
 
     <servlet>

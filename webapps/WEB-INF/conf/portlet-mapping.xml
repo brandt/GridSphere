@@ -25,8 +25,8 @@
         <field name="Name" type="string">
             <bind-xml name="portlet-app-name" attribute="element"/>
         </field>
-        <field name="ConfigParamList" type="org.gridlab.gridsphere.portletcontainer.descriptor.ConfigParam" collection="vector">
-            <bind-xml name="config-param"/>
+        <field name="ContextParamList" type="org.gridlab.gridsphere.portletcontainer.descriptor.ConfigParam" collection="vector">
+            <bind-xml name="context-param"/>
         </field>
         <field name="ConcretePortletInfo" type="org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletInfo">
             <bind-xml name="concrete-portlet"/>
@@ -45,6 +45,9 @@
         </field>
         <field name="LanguageList" type="org.gridlab.gridsphere.portletcontainer.descriptor.LanguageInfo" collection="vector">
             <bind-xml name="language"/>
+        </field>
+        <field name="OwnerList" type="org.gridlab.gridsphere.portletcontainer.descriptor.Owner">
+            <bind-xml name="owner"/>
         </field>
         <field name="GroupList" type="org.gridlab.gridsphere.portletcontainer.descriptor.Group" collection="vector">
             <bind-xml name="group"/>
@@ -104,6 +107,15 @@
         </field>
         <field name="ParamValue" type="string">
             <bind-xml name="param-value"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.Owner">
+        <field name="GroupName" type="string">
+            <bind-xml name="group-name"/>
+        </field>
+        <field name="RoleName" type="string">
+            <bind-xml name="role-name"/>
         </field>
     </class>
 

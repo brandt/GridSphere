@@ -12,14 +12,14 @@
 
 <concrete-portlet-app uid="org.gridlab.gridsphere.portlets.core.HelloWorld.666.2">
     <portlet-app-name>Concrete Hello World - Portlet Sample #1</portlet-app-name>
-    <config-param>
+    <context-param>
         <param-name>Portlet Master</param-name>
         <param-value>master@domain.com</param-value>
-    </config-param>
-    <config-param>
+    </context-param>
+    <context-param>
         <param-name>Portlet Mistress</param-name>
         <param-value>mistress@domain.com</param-value>
-    </config-param>
+    </context-param>
     <concrete-portlet href="Portlet_1902648613">
         <portlet-name>Hello World</portlet-name>
         <default-locale>en</default-locale>
@@ -46,10 +46,10 @@
 
 <concrete-portlet-app uid="org.gridlab.gridsphere.portlets.core.HelloWorld.666.4">
     <portlet-app-name>Concrete Hello World - Portlet Sample #2</portlet-app-name>
-    <config-param>
+    <context-param>
         <param-name>Portlet Master</param-name>
         <param-value>secondguy@some.com</param-value>
-    </config-param>
+    </context-param>
     <concrete-portlet href="Portlet_1902648615">
         <portlet-name>Hello World</portlet-name>
         <default-locale>en</default-locale>

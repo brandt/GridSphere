@@ -12,10 +12,10 @@
 
 <concrete-portlet-app uid="org.gridlab.gridsphere.portlets.core.HelloWorld.666.2">
     <portlet-app-name>Concrete Hello World - Portlet Sample #1</portlet-app-name>
-    <config-param>
+    <context-param>
         <param-name>Portlet Master</param-name>
         <param-value>yourid@yourdomain.com</param-value>
-    </config-param>
+    </context-param>
     <concrete-portlet href="Portlet_1902648613">
         <portlet-name>Hello World</portlet-name>
         <default-locale>en</default-locale>
@@ -23,6 +23,38 @@
             <title>Hello World - Sample Portlet #1</title>
             <title-short>Hello World</title-short>
             <description>Hello World - Sample Portlet #1</description>
+            <keywords>portlet hello world</keywords>
+        </language>
+        <owner>
+            <group-name>CACTUS</group-name>
+            <role-name>ADMIN</role-name>
+        <owner>
+        <group>
+            <group-name>ANY</group-name>
+        </group>
+        <role>
+            <role-name>GUEST</role-name>
+        </role>
+        <config-param>
+            <param-name>Portlet Master</param-name>
+            <param-value>yourid@yourdomain.com</param-value>
+        </config-param>
+    </concrete-portlet>
+</concrete-portlet-app>
+
+<concrete-portlet-app uid="org.gridlab.gridsphere.portlets.core.HelloWorld.666.4">
+    <portlet-app-name>Concrete Hello World - Portlet Sample #2</portlet-app-name>
+    <context-param>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </context-param>
+    <concrete-portlet href="Portlet_1902648613">
+        <portlet-name>Hello World 2</portlet-name>
+        <default-locale>en</default-locale>
+        <language locale="en_US">
+            <title>Hello World - Sample Portlet #2</title>
+            <title-short>Hello World</title-short>
+            <description>Hello World - Sample Portlet #2</description>
             <keywords>portlet hello world</keywords>
         </language>
         <group>
@@ -47,10 +79,10 @@
 
 <concrete-portlet-app uid="org.gridlab.gridsphere.portlets.core.HalloWelt.624.2">
     <portlet-app-name>Concrete Hallo Welt - Portlet Sample #1</portlet-app-name>
-    <config-param>
+    <context-param>
         <param-name>Portlet Master</param-name>
         <param-value>yourid@yourdomain.com</param-value>
-    </config-param>
+    </context-param>
     <concrete-portlet href="Portlet_1902648613">
         <portlet-name>Hallo Welt</portlet-name>
         <default-locale>en</default-locale>
