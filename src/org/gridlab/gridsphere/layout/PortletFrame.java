@@ -32,9 +32,10 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
 
     private PortletWindow portletWindow = null;
     private String portletClass = null;
-    private PortletTitleBar titleBar = new PortletTitleBar();
+    private PortletTitleBar titleBar = null;
     private List listeners = new ArrayList();
     private PortletErrorMessage error = null;
+    private boolean transparent = false;
 
     public PortletFrame() {}
 
@@ -46,12 +47,12 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         return portletClass;
     }
 
-    public void setPortletTitleBar(PortletTitleBar titleBar) {
-        this.titleBar = titleBar;
+    public void setTransparent(boolean transparent) {
+        this.transparent = transparent;
     }
 
-    public PortletTitleBar getPortletTitleBar() {
-        return titleBar;
+    public boolean getTransparent() {
+        return this.transparent;
     }
 
     public void setWindowState(String windowState) {
@@ -75,6 +76,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         compId.setComponentID(list.size());
         compId.setClassName(this.getClass().getName());
         list.add(compId);
+        if (transparent == false) titleBar = new PortletTitleBar();
         if (titleBar != null) {
             titleBar.setPortletClass(portletClass);
             list = titleBar.init(list);
@@ -197,7 +199,9 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         out.println("<!-- PORTLET STARTS HERE -->");
         //out.println("<div class=\"window-main\">");
         out.println("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");        // this is the main table around one portlet
-        titleBar.doRender(event);
+        req.setMode(Portlet.Mode.VIEW);
+        req.setPreviousMode(Portlet.Mode.VIEW);
+        if (titleBar != null) titleBar.doRender(event);
         //req.setMode(titleBar.getPortletMode());
 
 

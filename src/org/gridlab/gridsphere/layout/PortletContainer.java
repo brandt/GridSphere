@@ -110,6 +110,7 @@ public class PortletContainer implements PortletLifecycle {
         out.println("  <title>" + name + "</title>");
         out.println("  <link type=\"text/css\" href=\"themes/"+uiTheme+"/css"+
          "/default.css\" rel=\"STYLESHEET\"/>");
+        out.println("<script language=\"JavaScript\" src=\"javascript/gridsphere.js\"/>");
         out.println("</head>\n<body>");
 
         // for css title
