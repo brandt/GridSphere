@@ -171,11 +171,12 @@ public class SportletURI implements PortletURI {
      */
     public String toString() {
         StringBuffer s = new StringBuffer();
-        if (isSecure) {
+        if (req.isSecure() || isSecure) {
             s.append("https://");
         } else {
             s.append("http://");
         }
+        //s.append(req.getServerName());
         s.append(req.getServerName() + ":" + req.getServerPort());
 
         // add the action params
