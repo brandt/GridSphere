@@ -465,7 +465,7 @@
                 </language>
                 <config-param>
                     <param-name>supported-themes</param-name>
-                    <param-value>default, swamp</param-value>
+                    <param-value>default, swamp, purple</param-value>
                 </config-param>
             </concrete-portlet>
         </concrete-portlet-app>
