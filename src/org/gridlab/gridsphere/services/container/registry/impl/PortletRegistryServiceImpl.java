@@ -15,7 +15,7 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridlab.gridsphere.portletcontainer.RegisteredPortletException;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortletException;
 import org.gridlab.gridsphere.portletcontainer.impl.ConcreteSportlet;
 import org.gridlab.gridsphere.portletcontainer.descriptor.*;
 import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
@@ -95,7 +95,7 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
         }
 
 
-        } catch (RegisteredPortletException e) {
+        } catch (ConcretePortletException e) {
                 throw new PortletServiceUnavailableException("Unable to create registered portlet: " + e.getMessage());
         }
     }

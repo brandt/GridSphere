@@ -64,8 +64,8 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         try {
-            aclService = (AccessControlService) factory.createPortletService(AccessControlService.class, null, config.getServletConfig(), true);
-            aclManagerService = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, null, config.getServletConfig(), true);
+            aclService = (AccessControlService) factory.createPortletService(AccessControlService.class, config.getServletConfig(), true);
+            aclManagerService = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, config.getServletConfig(), true);
             log.info("in init()");
         } catch (PortletServiceNotFoundException e) {
             throw new PortletServiceUnavailableException("Unable to find portlet services: AccessControlService and AccessControlManagerService");

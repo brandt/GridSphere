@@ -13,7 +13,7 @@ import org.gridlab.gridsphere.services.container.registry.PortletRegistryService
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDefinition;
 import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication;
-import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 
@@ -36,7 +36,7 @@ public class ServletParsingServiceImpl implements PortletServiceProvider, Servle
         log.info("in destroy()");
     }
 
-    public PortletRequest getPortletRequest(RegisteredPortlet regPortlet, HttpServletRequest request) {
+    public PortletRequest getPortletRequest(ConcretePortlet regPortlet, HttpServletRequest request) {
 
       /*
         request.setAttribute(GridSphereProperties.PORTLETSETTINGS, portletSettings);
