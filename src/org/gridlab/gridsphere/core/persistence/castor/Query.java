@@ -9,8 +9,8 @@ package org.gridlab.gridsphere.core.persistence.castor;
 import org.exolab.castor.jdo.Database;
 import org.exolab.castor.jdo.OQLQuery;
 import org.exolab.castor.jdo.QueryResults;
-import org.gridlab.gridsphere.core.persistence.QueryException;
 import org.gridlab.gridsphere.core.persistence.QueryInterface;
+import org.gridlab.gridsphere.core.persistence.QueryException;
 
 public class Query implements QueryInterface {
 

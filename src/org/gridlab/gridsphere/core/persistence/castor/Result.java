@@ -9,8 +9,8 @@ package org.gridlab.gridsphere.core.persistence.castor;
 import org.exolab.castor.jdo.QueryResults;
 import org.exolab.castor.jdo.OQLQuery;
 import org.exolab.castor.jdo.PersistenceException;
-import org.gridlab.gridsphere.core.persistence.QueryException;
 import org.gridlab.gridsphere.core.persistence.ResultInterface;
+import org.gridlab.gridsphere.core.persistence.QueryException;
 
 import java.util.NoSuchElementException;
 

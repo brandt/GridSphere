@@ -7,7 +7,7 @@ package org.gridlab.gridsphere.portlet.service.spi.impl.descriptor;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerXml;
-import org.gridlab.gridsphere.core.persistence.PersistenceException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import java.io.IOException;
@@ -39,11 +39,12 @@ public abstract class Descriptor {
         // the mapping xml file
         pmx.setMappingFile(mappingPath);
 
+
         // try to get it
         try {
              object = pmx.restoreObject();
-        } catch (PersistenceException e) {
-            log.error("PersistenceException ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") ", e);
+        } catch (PersistenceManagerException e) {
+            log.error("PersistenceManagerException ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") ", e);
             throw new DescriptorException("Unable to load descriptor: "+e.getMessage());
         }
         return object;
@@ -67,8 +68,8 @@ public abstract class Descriptor {
         // try to get it
         try {
              pmx.update(object);
-        } catch (PersistenceException e) {
-            log.error("PersistenceException: ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") ", e);
+        } catch (PersistenceManagerException e) {
+            log.error("PersistenceManagerException: ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") ", e);
             throw new DescriptorException("Unable to save: "+e.getMessage());
         }
     }

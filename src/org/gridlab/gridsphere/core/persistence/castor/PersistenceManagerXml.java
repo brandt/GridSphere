@@ -24,29 +24,62 @@ import java.util.List;
 /**
  * The Class provides easy access to marshal/unmarshal objects to XML files
  */
-public class PersistenceManagerXml implements PersistenceManagerInterface  {
+public class PersistenceManagerXml  {
 
     protected transient static PortletLog log = SportletLog.getInstance(PersistenceManagerXml.class);
 
-    private static PersistenceManagerXml instance;
-
-    private String URL = null;
-    private String MappingFile = null;
+    private static PersistenceManagerXml instance = new PersistenceManagerXml();
+    private String mappingFile = null;
+    private String Url = null;
 
     /**
      * PersistenceManagerXml default constructor
      */
     private PersistenceManagerXml() {}
 
-    private static synchronized void doSync() {}
-
     public static PersistenceManagerXml getInstance() {
-        if (instance == null) {
-            doSync();
-            instance = new PersistenceManagerXml();
-        }
         return instance;
     }
+
+    /**
+     * Return the connectionURL
+     *
+     * @return filename
+     */
+    public String getConnectionURL() {
+        return Url;
+    }
+
+    /**
+     * Sets the connection URL
+     *
+     * @param url
+     *
+     */
+    public void setConnectionURL(String url) {
+        Url = url;
+    }
+
+
+    /**
+     * Sets the mapping file
+     *
+     * @param mappingFile file containing the mapping
+     */
+    public void setMappingFile(String mappingFile) {
+        this.mappingFile = mappingFile;
+    }
+
+
+    /**
+     * Returns the filename of the mappingfile
+     *
+     * @return name of the mappingfile
+     */
+    public String getMappingFile() {
+        return mappingFile;
+    }
+
 
     /**
      * Checks if all setting for marshalling xml data are done
@@ -61,50 +94,12 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
     }
 
     /**
-     * Return the connectionURL, which is here the XMLFilename
-     *
-     * @return filename
-     */
-    public String getConnectionURL() {
-        return URL;
-    }
-
-    /**
-     * Sets the xml outputfile
-     *
-     * @param url where to write the file
-     *
-     */
-    public void setConnectionURL(String url) {
-        URL = url;
-    }
-
-    /**
-     * Sets the mapping file
-     *
-     * @param mappingFile file containing the mapping
-     */
-    public void setMappingFile(String mappingFile) {
-        MappingFile = mappingFile;
-    }
-
-
-    /**
-     * Returns the filename of the mappingfile
-     *
-     * @return name of the mappingfile
-     */
-    public String getMappingFile() {
-        return MappingFile;
-    }
-
-    /**
      * Updates an object in the xml file (same as create)
      *
      * @throws UpdateException if the update failed
      * @param object update 'object'
      */
-    public void update(Object object) throws IOException, PersistenceException {
+    public void update(Object object) throws IOException, PersistenceManagerException {
         create(object);
     }
 
@@ -115,7 +110,7 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
      * @throws ConfigurationException if the configuration was wrong
      * @param object object to be marshalled
      */
-    public void create(Object object) throws IOException, PersistenceException {
+    public void create(Object object) throws PersistenceManagerException, IOException {
 
         checkSetting();
 
@@ -132,18 +127,15 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
             filewriter.close();
             Class cl = object.getClass();
             log.debug("Wrote object of type " + cl.getName() + " to XMLFile " + getConnectionURL());
-        } catch (IOException e) {
-            log.error("Exception " + e);
-            throw new CreateException("IO Error");
         } catch (ValidationException e) {
             log.error("Unable to marshal object: ", e);
-            throw new PersistenceException("Validation Error", e);
+            throw new PersistenceManagerException("Validation Error", e);
         } catch (MarshalException e) {
             log.error("Unable to marshal object: ", e);
-            throw new PersistenceException("Marshal Error", e);
+            throw new PersistenceManagerException("Marshal Error", e);
         } catch (MappingException e) {
             log.error("Unable to marshal object: ", e);
-            throw new PersistenceException("Mapping Error", e);
+            throw new PersistenceManagerException("Mapping Error", e);
         }
 
     }
@@ -155,7 +147,7 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
      * @throws ConfigurationException if there was a configurationerror
      * @return object which was unmarshalled
      */
-    public Object restoreObject() throws IOException, PersistenceException {
+    public Object restoreObject() throws IOException, PersistenceManagerException {
 
         checkSetting();
 
@@ -165,18 +157,17 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
             FileReader filereader = new FileReader(getConnectionURL());
             Mapping mapping = new Mapping();
             mapping.loadMapping(getMappingFile());
-
             Unmarshaller unmarshal = new Unmarshaller(mapping);
             object = unmarshal.unmarshal(filereader);
         } catch (MappingException e) {
             log.error("Exception ", e);
-            throw new PersistenceException("Mapping Error", e);
+            throw new PersistenceManagerException("Mapping Error", e);
         } catch (MarshalException e) {
             log.error("MarshalException ", e);
-            throw new PersistenceException("Marshal Error", e);
+            throw new PersistenceManagerException("Marshal Error", e);
         } catch (ValidationException e) {
             log.error("ValidationException ", e);
-            throw new PersistenceException("Validation Error", e);
+            throw new PersistenceManagerException("Validation Error", e);
         }
         return object;
     }
@@ -189,23 +180,12 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
      * @throws IOException if an I/O error occured
      * @throws PersistenceException if config was wrong
      */
-    public List restoreList() throws IOException, PersistenceException {
+    public List restoreList() throws IOException, PersistenceManagerException {
         List list = new ArrayList();
         list.add(restoreObject());
         return list;
-
     }
 
-    /**
-     * deletes object in xml file storage (<b>not implemented yet</b>)
-     * deletes the file
-     *
-     * @param object object to be deleted
-     */
-    public void delete(Object object) throws IOException, PersistenceException {
-
-
-    }
 }
 
 

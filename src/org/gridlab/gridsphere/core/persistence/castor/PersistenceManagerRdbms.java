@@ -29,29 +29,56 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 
-public class PersistenceManagerRdbms implements PersistenceManagerInterface {
+public class PersistenceManagerRdbms {
 
     protected transient static PortletLog log = SportletLog.getInstance(PersistenceManagerRdbms.class);
 
-    String ConnectionURL = new String();
-    String DatabaseName = new String();
-    String Query = new String();
+    private static PersistenceManagerRdbms instance = new PersistenceManagerRdbms();
+    protected String Query = new String();
+    protected boolean databaseCreated = false;
+    protected JDO jdo = null;
+    protected String Url = null;
+    //protected PersistencePropertiesRdbms props = new PersistencePropertiesRdbms();
 
     // @todo need to check settings for rollback !!
 
-    public PersistenceManagerRdbms() {
+    private PersistenceManagerRdbms() {
         super();
         log.info("Entering PM");
-        DatabaseName = GridSphereConfig.getInstance().getProperty(GridSphereConfigProperties.PERSISTENCE_DBNAME);
-        ConnectionURL = GridSphereConfig.getInstance().getProperty(GridSphereConfigProperties.PERSISTENCE_CONFIGFILE);
+        String DatabaseName = GridSphereConfig.getInstance().getProperty(GridSphereConfigProperties.PERSISTENCE_DBNAME);
+        String ConnectionURL = GridSphereConfig.getInstance().getProperty(GridSphereConfigProperties.PERSISTENCE_CONFIGFILE);
         log.info("Using '" + DatabaseName + "' as Databasename with the configfile '" + ConnectionURL + "'");
+        this.Url = ConnectionURL;
+        try {
+            JDO.loadConfiguration(Url);
+            jdo = new JDO(DatabaseName);
+            jdo.setTransactionManager(null);
+        } catch (MappingException e) {
+            log.error("Unable to get JDO: ",e);
+        }
     }
 
+    public static PersistenceManagerRdbms getInstance() {
+        return instance;
+    }
 
-    public PersistenceManagerRdbms(String databasename, String url) {
-        super();
-        DatabaseName = databasename;
-        ConnectionURL = url;
+    /**
+     * Return the connectionURL
+     *
+     * @return filename
+     */
+    public String getConnectionURL() {
+        return Url;
+    }
+
+    /**
+     * Sets the connection URL
+     *
+     * @param url
+     *
+     */
+    public void setConnectionURL(String url) {
+        Url = url;
     }
 
     /**
@@ -73,76 +100,15 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface {
     }
 
     /**
-     * Loads the configuration for the database
-     *
-     * @param url filename of the dbconfig file
-     */
-    public void setConnectionURL(String url) {
-        ConnectionURL = url;
-    }
-
-    /**
-     * returns the connectionURL
-     * @return connectionurl or null if not set
-     */
-    public String getConnectionURL() {
-        return ConnectionURL;
-    }
-
-    /**
-     * return the databasename of the current connection
-     *
-     * @return databasenase or null if not set
-     */
-    public String getDatabaseName() {
-        return DatabaseName;
-    }
-
-    /**
-     * sets the database name for the current connection
-     *
-     * @param databaseName name of the database
-     */
-    public void setDatabaseName(String databaseName) {
-        DatabaseName = databaseName;
-    }
-
-    /**
-     * returns a Databasehandle to the database
-     *
-     * @return databasehandle
-     */
-    private Database getDatabase() throws
-            DatabaseNotFoundException, PersistenceException, MappingException {
-        JDO.loadConfiguration(this.getConnectionURL());
-
-        JDO jdo = new JDO(this.getDatabaseName());
-        jdo.setTransactionManager(null);
-        Database db = jdo.getDatabase();
-        return db;
-
-    }
-
-    /**
      * checks if all variables have been set
      *
      */
-    private void checkSettings() throws ConfigurationException {
+    private void checkSettings() throws PersistenceManagerException {
 
         String msg = null;
 
-        if (getConnectionURL().equals(null)) {
-            msg = "Connection URL not specified";
-        }
-        if (getDatabaseName().equals(null)) {
-            msg = "Databasename not specified";
-        }
-
-        //if (getQuery().equals(null)) { msg ="Query not specified";}
-
-        if (msg != null) {
-            throw new ConfigurationException(msg);
-        }
+        if (getConnectionURL().equals(null))
+            throw new PersistenceManagerException("Connection URL not specified");
     }
 
     /**
@@ -152,7 +118,7 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface {
      * @throws ConfigurationException if configuration is wrong
      * @throws CreateException is creation went wrong
      */
-    public void create(Object object) throws ConfigurationException, CreateException {
+    public void create(Object object) throws PersistenceManagerException {
         checkSettings();
         Database db = null;
 
@@ -160,17 +126,14 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface {
         //log.info("Name: "+sa.getName());
 
         try {
-            db = getDatabase();
+            db = jdo.getDatabase();
             db.begin();
             db.create(object);
             db.commit();
             db.close();
         } catch (PersistenceException e) {
             log.error("PersistenceException " + e);
-            throw new CreateException("Persistence Error " + e);
-        } catch (MappingException e) {
-            log.error("MappingException " + e);
-            throw new CreateException("Mapping Error " + e);
+            throw new PersistenceManagerException("Persistence Error " + e);
         }
 
     }
@@ -183,25 +146,21 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface {
      * @throws ConfigurationException if configurations are not set
      * @throws UpdateException if updated failed
      */
-    public void update(Object object) throws ConfigurationException, UpdateException {
+    public void update(Object object) throws PersistenceManagerException {
 
         checkSettings();
 
         Database db = null;
         // get Database
         try {
-            db = getDatabase();
-
+            db = jdo.getDatabase();
             db.begin();
             db.update(object);
             db.commit();
             db.close();
         } catch (PersistenceException e) {
             log.error("PersistenceException " + e);
-            throw new UpdateException("Persistence Error: " + e);
-        } catch (MappingException e) {
-            log.error("MappingException " + e);
-            throw new UpdateException("Mapping Error: " + e);
+            throw new PersistenceManagerException("Persistence Error: " + e);
         }
     }
 
@@ -214,7 +173,7 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface {
      * @throws RestoreException if restore failes for some reason
      * @return list of objects from OQL query
      */
-    public List restoreList(String query) throws ConfigurationException, RestoreException {
+    public List restoreList(String query) throws PersistenceManagerException {
         setQuery(query);
         return restoreList();
     }
@@ -226,7 +185,7 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface {
      * @throws RestoreException if restore failes for some reason
      * @return list of objects from OQL query
      */
-    public List restoreList() throws ConfigurationException, RestoreException {
+    public List restoreList() throws PersistenceManagerException {
 
         checkSettings();
 
@@ -236,8 +195,7 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface {
         List list = new ArrayList();
 
         try {
-            db = getDatabase();
-
+            db = jdo.getDatabase();
             db.begin();
             oql = db.getOQLQuery(getQuery());
             results = oql.execute();
@@ -248,17 +206,13 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface {
             db.close();
         } catch (DatabaseNotFoundException e) {
             log.error("Exception! " + e);
-            throw new RestoreException("Database not found: " + e);
+            throw new PersistenceManagerException("Database not found: " + e);
         } catch (PersistenceException e) {
             log.error("PersistenceException!" + e);
-            throw new RestoreException("Persistence Error: " + e);
+            throw new PersistenceManagerException("Persistence Error: " + e);
         } catch (NoSuchElementException e) {
             log.error("NoSuchElementException!" + e);
-            throw new RestoreException("No such element error: " + e);
-        } catch (MappingException e) {
-            log.error("MappingException!" + e);
-            throw new RestoreException("Mapping Error: " + e);
-
+            throw new PersistenceManagerException("No such element error: " + e);
         }
 
         return list;
@@ -271,7 +225,7 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface {
      * @throws RestoreException if restore failed
      * @return requested object defined by setQuery()
      */
-    public Object restoreObject() throws ConfigurationException, RestoreException {
+    public Object restoreObject() throws PersistenceManagerException {
         List resultList = restoreList();
         if (resultList.size() > 0) {
             return resultList.get(0);
@@ -280,7 +234,7 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface {
         }
     }
 
-    public Object restoreObject(String oql) throws ConfigurationException, RestoreException {
+    public Object restoreObject(String oql) throws PersistenceManagerException {
         this.setQuery(oql);
         return restoreObject();
 
@@ -295,57 +249,48 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface {
      * @throws DeleteException if deletion failed
      */
 
-    public void delete(Object object) throws ConfigurationException, DeleteException {
+    public void delete(Object object) throws PersistenceManagerException {
 
         checkSettings();
 
         Database db = null;
         try {
-            db = getDatabase();
+            db = jdo.getDatabase();
             db.begin();
 
             Class cl = object.getClass();
             String Oid = null;
 
-            try {
-                Method m = cl.getMethod("getOid", null);
+            Method m = cl.getMethod("getOid", null);
 
-                Oid = (String) m.invoke(object, null);
-                log.debug("got " + Oid + " from object via reflection");
-            } catch (NoSuchMethodException e) {
-                log.info("Exception " + e);
-            } catch (SecurityException e) {
-                log.info("Exception " + e);
-            } catch (IllegalAccessException e) {
-                log.info("Exception " + e);
-            } catch (IllegalArgumentException e) {
-                log.info("Exception " + e);
-            } catch (InvocationTargetException e) {
-                log.info("Exception " + e);
-            }
+            Oid = (String) m.invoke(object, null);
+            log.debug("got " + Oid + " from object via reflection");
+
             Object deleteObject = db.load(object.getClass(), Oid);
 
             db.remove(deleteObject);
             db.commit();
             db.close();
 
-        } catch (DatabaseNotFoundException e) {
-            log.error("Database not found " + e);
-            throw new DeleteException("Database not found :" + e);
-        } catch (ObjectNotPersistentException e) {
-            log.error("object not persistent " + e);
-            throw new DeleteException("Object not persistent Error :" + e);
-        } catch (TransactionNotInProgressException e) {
-            log.error("Transation not in progress " + e);
-            throw new DeleteException("Transaction not in progress Error :" + e);
+        } catch (NoSuchMethodException e) {
+            log.info("Exception " + e);
+            throw new PersistenceManagerException("Mapping Error :" + e);
+        } catch (SecurityException e) {
+            log.info("Exception " + e);
+            throw new PersistenceManagerException("Mapping Error :" + e);
+        } catch (IllegalAccessException e) {
+            log.info("Exception " + e);
+            throw new PersistenceManagerException("Mapping Error :" + e);
+        } catch (IllegalArgumentException e) {
+            log.info("Exception " + e);
+            throw new PersistenceManagerException("Mapping Error :" + e);
+        } catch (InvocationTargetException e) {
+            log.info("Exception " + e);
+            throw new PersistenceManagerException("Mapping Error :" + e);
         } catch (PersistenceException e) {
-            log.error("Persistent error " + e);
-            throw new DeleteException("Persistence Error :" + e);
-        } catch (MappingException e) {
-            log.error("Mapping Exception " + e);
-            throw new DeleteException("Mapping Error :" + e);
+            log.info("Exception " + e);
+            throw new PersistenceManagerException("Mapping Error :" + e);
         }
-
     }
 
     /**
@@ -355,19 +300,21 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface {
      * @param Oid object id of the object
      * @return requested object or null if not found
      */
-    public Object getObjectByOid(Class cl, String Oid) {
+    public Object getObjectByOid(Class cl, String Oid) throws PersistenceManagerException {
 
         Database db = null;
         Object object = null;
         try {
-            db = getDatabase();
+            db = jdo.getDatabase();
             db.begin();
             object = db.load(cl, Oid);
             db.commit();
+        } catch (DatabaseNotFoundException e) {
+            log.error("Exception! " + e);
+            throw new PersistenceManagerException("Database not found: " + e);
         } catch (PersistenceException e) {
-            log.error("Exception " + e);
-        } catch (MappingException e) {
-            log.error("Exception " + e);
+            log.error("Exception! " + e);
+            throw new PersistenceManagerException("Persisetnce Exception: " + e);
         }
 
         return object;
@@ -381,7 +328,7 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface {
      * @throws ConfigurationException
      * @throws DeleteException  if something went wrong during deletion
      */
-    public void deleteList(String query) throws ConfigurationException, DeleteException {
+    public void deleteList(String query) throws PersistenceManagerException {
 
         checkSettings();
 
@@ -390,7 +337,7 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface {
         QueryResults results = null;
 
         try {
-            db = getDatabase();
+            db = jdo.getDatabase();
 
             db.begin();
             oql = db.getOQLQuery(query);
@@ -402,21 +349,17 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface {
             db.close();
         } catch (DatabaseNotFoundException e) {
             log.error("Exception! " + e);
-            throw new DeleteException("Database not found: " + e);
+            throw new PersistenceManagerException("Database not found: " + e);
         } catch (PersistenceException e) {
             log.error("PersistenceException!" + e);
-            throw new DeleteException("Persistence Error: " + e);
+            throw new PersistenceManagerException("Persistence Error: " + e);
         } catch (NoSuchElementException e) {
             log.error("NoSuchElementException!" + e);
-            throw new DeleteException("No such element error: " + e);
-        } catch (MappingException e) {
-            log.error("MappingException!" + e);
-            throw new DeleteException("Mapping Error: " + e);
+            throw new PersistenceManagerException("No such element error: " + e);
         }
-
     }
 
-    public void deleteList(ParameterList list) throws ConfigurationException, DeleteException {
+    public void deleteList(ParameterList list) throws PersistenceManagerException {
 
         Database db = null;
         OQLQuery oql = null;
@@ -425,7 +368,7 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface {
         checkSettings();
 
         try {
-            db = getDatabase();
+            db = jdo.getDatabase();
             db.begin();
 
             while (list.hasMore()) {
@@ -444,15 +387,11 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface {
         } catch (PersistenceException e) {
             //db.rollback();
             log.error("PersistenceException!" + e);
-            throw new DeleteException("Persistence Error: " + e);
-        } catch (MappingException e) {
-            //db.rollback();
-            log.error("MappingException!" + e);
-            throw new DeleteException("Mapping Error: " + e);
+            throw new PersistenceManagerException("Persistence Error: " + e);
         } catch (NoSuchElementException e) {
             //db.rollback();
             log.error("NoSuchElementException!" + e);
-            throw new DeleteException("NoSuchElement Error: " + e);
+            throw new PersistenceManagerException("NoSuchElement Error: " + e);
         }
     }
 
