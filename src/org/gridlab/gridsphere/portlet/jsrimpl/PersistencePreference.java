@@ -21,8 +21,8 @@ public class PersistencePreference implements PortletPreferences {
 
     private String oid = null;
 
-    private String portletId = null;
-    private String userId = null;
+    private String portletId = new String();
+    private String userId = new String();
     // key/value pairs
     private Map attributes = new HashMap();
 

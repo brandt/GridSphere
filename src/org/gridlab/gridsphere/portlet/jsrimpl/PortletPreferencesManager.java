@@ -49,7 +49,7 @@ public class PortletPreferencesManager {
         if (user instanceof GuestUser) return null;
 
         String command =
-                "select u from " + PersistencePreference.class.getName() + " u where u.UserID='" + user.getID() + "' and u.PortletID='" + portletID + "'";
+                "select u from " + PersistencePreference.class.getName() + " u where u.userId='" + user.getID() + "' and u.portletId='" + portletID + "'";
 
         // get sportlet data if it exists
         PersistencePreference prefs = null;
