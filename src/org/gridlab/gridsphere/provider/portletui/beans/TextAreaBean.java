@@ -7,8 +7,8 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 public class TextAreaBean extends BaseComponentBean implements TagBean {
 
-    private int cols;
-    private int rows;
+    private int cols = 0;
+    private int rows = 0;;
 
     public TextAreaBean() {
     }
@@ -46,9 +46,17 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
     }
 
     public String toString() {
-        return "<textarea name='" + name + "' cols='" + cols + "' rows='" + rows + "' " + checkDisabled() + " " + checkReadonly() + ">" +
-                value + "</textarea>";
-
+        StringBuffer sb = new StringBuffer();
+        sb.append("<textarea ");
+        sb.append("name=\"" + name + "\" ");
+        if (cols != 0) sb.append(" cols=\"" + cols + "\" ");
+        if (rows != 0) sb.append(" rows=\"" + rows + "\" ");
+        sb.append(" " + checkDisabled());
+        sb.append(" " + checkReadonly());
+        sb.append(">");
+        if (value != null) sb.append(value);
+        sb.append("</textarea>");
+        return sb.toString();
     }
 
 }

@@ -19,8 +19,8 @@ public class TextFieldTag extends BaseComponentTag {
     protected TextFieldBean textFieldBean = null;
     public static final String TEXTFIELD_STYLE = "portlet-frame-text";
 
-    protected int size = 10;
-    protected int maxlength = 15;
+    protected int size = 0;
+    protected int maxlength = 0;
 
     /**
      * Returns the (html) size of the field.
@@ -64,8 +64,8 @@ public class TextFieldTag extends BaseComponentTag {
         }
 
         textFieldBean.setCssStyle(TEXTFIELD_STYLE);
-        textFieldBean.setMaxLength(maxlength);
-        textFieldBean.setSize(size);
+        if (maxlength != 0) textFieldBean.setMaxLength(maxlength);
+        if (size != 0) textFieldBean.setSize(size);
         this.setBaseComponentBean(textFieldBean);
 
         if (!beanId.equals("")) {

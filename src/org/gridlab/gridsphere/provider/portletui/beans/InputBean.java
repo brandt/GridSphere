@@ -8,7 +8,7 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
 
     protected int size;
     protected String inputtype = "";
-    protected int maxlength;
+    protected int maxlength = 0;
 
     public int getSize() {
         return size;
@@ -27,8 +27,17 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
     }
 
     public String toString() {
-        return "<input type='" + inputtype + "' name='" + name + "' value='" + value + "' size='"
-                + size + "' maxlength='" + maxlength +"'"+checkReadonly()+checkDisabled()+"/>";
+        StringBuffer sb = new StringBuffer();
+        sb.append("<input ");
+        sb.append("type=\"" + inputtype + "\" ");
+        sb.append("name=\"" + name + "\" ");
+        sb.append("value=\"" + value + "\" ");
+        if (size != 0) sb.append("size=\"" + size + "\" ");
+        if (maxlength != 0) sb.append("maxlength=\"" + maxlength + "\" ");
+        sb.append(checkReadonly());
+        sb.append(checkDisabled());
+        sb.append("/>");
+        return sb.toString();
     }
 
 }
