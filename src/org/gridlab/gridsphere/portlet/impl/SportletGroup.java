@@ -124,7 +124,7 @@ public class SportletGroup implements PortletGroup {
     public boolean equals(Object object) {
         if (object != null && (object.getClass().equals(this.getClass()))) {
             PortletGroup portletGroup = (PortletGroup) object;
-            return (Name == portletGroup.getName());
+            return Name.equals(portletGroup.getName());
         }
         return false;
     }

@@ -7,6 +7,9 @@ package org.gridlab.gridsphere.portlet;
 
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 
+import java.util.List;
+import java.util.ArrayList;
+
 
 /**
  * The <code>PortletGroup</code> interface describes portlet group used by the
@@ -20,7 +23,9 @@ public class PortletGroupFactory {
 
     public static PortletGroup GRIDSPHERE_GROUP = SportletGroup.CORE;
 
-    public static PortletGroup createPortletGroup(String groupName) {
+    public List groups = new ArrayList();
+
+    public static synchronized PortletGroup createPortletGroup(String groupName) {
         return new SportletGroup(groupName);
     }
 
