@@ -103,24 +103,6 @@ public interface UserManagerService extends PortletService {
     public AccountRequest changeAccountRequest(User user);
 
     /**
-     * Returns the users portlet data for the specified portlet
-     *
-     * @param User the user
-     * @param portletID the concrete portlet id
-     * @return the PortletData for this portlet or null if none exists.
-     */
-    public PortletData getPortletData(User user, String portletID);
-
-    /**
-     * Makes the users persistent portlet data persistent
-     *
-     * @param User the user
-     * @param portletID the concrete portlet id
-     * @param data the PortletData
-     */
-    public void setPortletData(User user, String portletID, PortletData data);
-
-    /**
      * Retrieves a user object with the given username from this service.
      * Requires a user with the "super user" privileges, since this
      * by-passes the normal login mechanism of retrieving a user object.

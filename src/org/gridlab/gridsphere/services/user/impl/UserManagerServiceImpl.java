@@ -9,8 +9,14 @@ import org.gridlab.gridsphere.core.mail.MailMessage;
 import org.gridlab.gridsphere.core.mail.MailUtils;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.*;
+import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.impl.SportletGroup;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletUser;
+import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
@@ -51,7 +57,7 @@ class UserManagerServiceImpl implements PortletServiceProvider, UserManagerServi
     private String jdoUserACL = new String();   // object name for UserACL
     private String jdoARImpl = new String();    // ... for AccountRequest
     private String jdoSUImpl = new String();    // ... for SportletUserImpl
-    private String jdoPDImpl = new String();    // ... for SportletData
+
 
     private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
 
@@ -72,7 +78,6 @@ class UserManagerServiceImpl implements PortletServiceProvider, UserManagerServi
         jdoSUImpl = SportletUserImpl.class.getName();
         jdoARImpl = AccountRequestImpl.class.getName();
         jdoUserACL = UserACL.class.getName();
-        jdoPDImpl = SportletData.class.getName();
     }
 
     /**
@@ -472,59 +477,6 @@ class UserManagerServiceImpl implements PortletServiceProvider, UserManagerServi
             }
         } else {
             throw new PermissionDeniedException("Permission Denied!");
-        }
-    }
-
-    /**
-     * Returns the users portlet data for the specified portlet
-     *
-     * @param User the user
-     * @param portletID the concrete portlet id
-     * @return the PortletData for this portlet or null if none exists.
-     */
-    public PortletData getPortletData(User user, String portletID) {
-
-        if (user instanceof GuestUser) return null;
-
-        String command =
-                "select u from " + jdoPDImpl + " u where u.UserID=\"" + user.getID() + "\" and u.PortletID=\"" + portletID + "\"";
-
-        SportletData pd = null;
-        try {
-            pd = (SportletData) pm.restoreObject(command);
-        } catch (PersistenceManagerException e) {
-
-        }
-
-        if (pd == null) {
-            pd = new SportletData();
-            pd.setPortletID(portletID);
-            pd.setUserID(user.getID());
-            try {
-                pm.create(pd);
-            } catch (PersistenceManagerException e) {
-
-            }
-        }
-        return pd;
-    }
-
-    /**
-     * Makes the users persistent portlet data persistent
-     *
-     * @param User the user
-     * @param portletID the concrete portlet id
-     * @param data the PortletData
-     */
-    public void setPortletData(User user, String portletID, PortletData data) {
-
-        SportletData sd = (SportletData) data;
-        //sd.setPortletID(portletID);
-        //sd.setUserID(user.getID());
-        try {
-            pm.update(sd);
-        } catch (PersistenceManagerException e) {
-            log.error("Persistence Exception !" + e);
         }
     }
 
