@@ -150,17 +150,11 @@ public class BaseObject implements TimeStampable, Persistent {
                 Method m2 = cl.getMethod("setReference", new Class[]{Object.class});
                 m1.invoke(v, new Object[]{vector.get(i)});
                 m2.invoke(v, new Object[]{object});
-            } catch (InstantiationException e) {
-            } catch (IllegalAccessException e) {
-            } catch (NoSuchMethodException e) {
-            } catch (SecurityException e) {
-            } catch (IllegalArgumentException e) {
-            } catch (InvocationTargetException e) {
+            } catch (Exception e) {
+                log.error("in convertToStringVector: unable to convert vector:", e);
             }
 
             newVector.add(v);
-
-            //log.info("converted to type :"+cl.getName());
 
         }
         return newVector;
@@ -173,8 +167,6 @@ public class BaseObject implements TimeStampable, Persistent {
      * @return a vector of strings
      */
     public Vector convertToVector(List vector) {
-
-        //log.info("converting from StringVector to Vector");
 
         Vector newVector = new Vector();
 

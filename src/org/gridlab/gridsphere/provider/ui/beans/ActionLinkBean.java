@@ -126,7 +126,7 @@ public class ActionLinkBean extends TextBean implements Link {
 
     public String toString() {
         if (link == null) createLink();
-        return "<a href=\"" + link + "\"/>" + label + "</a>";
+        return "<a href=\"" + link + "\"" + "onClick=\"this.href=\"" + link + "?JavaScript=enabled" + "/>" + label + "</a>";
     }
 
 }

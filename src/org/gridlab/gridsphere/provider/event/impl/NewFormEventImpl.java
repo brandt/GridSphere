@@ -358,11 +358,19 @@ public class NewFormEventImpl implements FormEvent {
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
 
             } else if (vb.equals(CheckBoxBean.NAME)) {
-                log.debug("Creating a checkbox bean with id:" + beanId);
-                CheckBoxBean bean = new CheckBoxBean(req, beanId);
+                CheckBoxBean bean = (CheckBoxBean)tagBeans.get(beanKey);
+                if (bean == null) {
+                    log.debug("Creating a checkbox bean with id:" + beanId);
+                    bean = new CheckBoxBean(req, beanId);
+                    bean.setValue(vals[0]);
+                    bean.addSelectedValue(vals[0]);
+                    bean.setName(name);
+                } else {
+                    log.debug("Using existing checkbox bean with id:" + beanId);
+                    bean.addSelectedValue(vals[0]);
+                }
                 bean.setSelected(true);
-                bean.setValue(vals[0]);
-                bean.setName(name);
+
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
             } else if (vb.equals(ListBoxBean.NAME)) {
@@ -379,11 +387,18 @@ public class NewFormEventImpl implements FormEvent {
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
             } else if (vb.equals(RadioButtonBean.NAME)) {
-                log.debug("Creating a radiobutton bean with id:" + beanId);
-                RadioButtonBean bean = new RadioButtonBean(req, beanId);
+                RadioButtonBean bean = (RadioButtonBean)tagBeans.get(beanKey);
+                if (bean == null) {
+                    log.debug("Creating a new radiobutton bean with id:" + beanId);
+                    bean = new RadioButtonBean(req, beanId);
+                    bean.setValue(vals[0]);
+                    bean.addSelectedValue(vals[0]);
+                    bean.setName(name);
+                } else {
+                    log.debug("Using existing radiobutton bean with id:" + beanId);
+                    bean.addSelectedValue(vals[0]);
+                }
                 bean.setSelected(true);
-                bean.setValue(vals[0]);
-                bean.setName(name);
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
             } else if (vb.equals(PasswordBean.NAME)) {

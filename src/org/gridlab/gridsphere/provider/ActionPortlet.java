@@ -284,9 +284,9 @@ public class ActionPortlet extends AbstractPortlet {
                 log.debug("hasError = true");
                 doError(formEvent);
             } else {
-            next = getNextState(request);
-            log.error("in doView: next page is= " + next);
-            doViewJSP(request, response, next);
+                next = getNextState(request);
+                log.debug("in doView: next page is= " + next);
+                doViewJSP(request, response, next);
             }
         }
     }

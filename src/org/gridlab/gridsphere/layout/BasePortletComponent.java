@@ -22,6 +22,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
 
     protected String width = new String();
     protected String height = new String();
+    protected String label = new String();
     protected String name = new String();
     protected String theme = GridSphereConfig.getProperty(GridSphereConfigProperties.DEFAULT_THEME);
     protected boolean isVisible = true;
@@ -43,6 +44,24 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Returns the portlet component label
+     *
+     * @return the portlet component label
+     */
+    public String getLabel() {
+        return label;
+    }
+
+    /**
+     * Sets the portlet component label
+     *
+     * @param label the portlet component label
+     */
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     /**

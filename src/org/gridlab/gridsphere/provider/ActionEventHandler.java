@@ -18,6 +18,9 @@ import java.util.*;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * @deprecated This class is no longer supported
+ */
 public class ActionEventHandler {
 
     protected PortletConfig config = null;
@@ -36,6 +39,9 @@ public class ActionEventHandler {
     protected String formInvalidMessage = null;
     protected TextBean errorMessageBean = new TextBean("");
 
+   /**
+    * @deprecated This class is no longer supported
+    */
     public ActionEventHandler() {
     }
 

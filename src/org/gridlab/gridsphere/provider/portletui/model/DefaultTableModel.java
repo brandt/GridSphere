@@ -66,13 +66,13 @@ public class DefaultTableModel extends BaseBean implements TagBean {
         return dataList;
     }
 
-    public String toString() {
+    public String toStartString() {
         StringBuffer sb = new StringBuffer();
         Iterator it = dataList.iterator();
         while (it.hasNext()) {
-            //System.err.println("printing DTM rows");
             TableRowBean trb = (TableRowBean)it.next();
-            sb.append(trb.toString());
+            sb.append(trb.toStartString());
+            sb.append(trb.toEndString());
         }
         return sb.toString();
     }

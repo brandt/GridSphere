@@ -211,19 +211,9 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
         String result = new String();
 
-        /*String[] splittedresult = title.split(" ");
-
-        for (int i=0;i<splittedresult.length;i++) {
-
-            result = result +splittedresult[i];
-            if (i<splittedresult.length-1) {
-                result = result +"&nbsp;";
-            }
-        }
-        */
         StringTokenizer st = new StringTokenizer(title);
         while(st.hasMoreTokens()) {
-            result = result + st.nextToken()+"&nbsp;";
+            result += st.nextToken()+"&nbsp;";
         }
 
         return result;
@@ -264,7 +254,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                     out.println("<td><img src=\"themes/" + theme + "/images/tab-active-right.gif\"/></td>");
                 } else {
                     out.println("<td><img src=\"themes/" + theme + "/images/tab-inactive-left.gif\"/></td>");
-                    out.println("<td class=\"tab-inactive\"><a class=\"tab-menu\" href=\"" + links[i] + "\" >" + replaceBlanks(title) + "</a>");
+                    out.println("<td class=\"tab-inactive\"><a class=\"tab-menu\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\"/>" + replaceBlanks(title) + "</a>");
                     out.println("<td><img src=\"themes/" + theme + "/images/tab-inactive-right.gif\"/></td>");
                 }
                 out.println("<td class=\"tab-empty\">&nbsp;</td>");
@@ -306,10 +296,10 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                 String title = tab.getTitle();
                 if (tab.isSelected()) {
                     out.println("<td> <span class=\"tab-sub-active\">");
-                    out.println("<a class=\"tab-sub-menu-active\" href=\""+links[i]+ "\" >"+ title + "</a></span></td>");
+                    out.println("<a class=\"tab-sub-menu-active\" href=\""+links[i]+ "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\"/>" + title + "</a></span></td>");
                 } else {
                     out.println("<td> <span class=\"tab-sub-inactive\">");
-                    out.println("<a class=\"tab-sub-menu\" href=\"" + links[i] + "\" >" + title + "</a>");
+                    out.println("<a class=\"tab-sub-menu\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\"/>" + title + "</a>");
                     out.println("</span></td>");
                 }
             }

@@ -11,6 +11,9 @@ import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+/**
+ * @deprecated This class is no longer supported
+ */
 public abstract class ActionEventPortlet extends AbstractPortlet {
 
     private String portletBeanName = null;

@@ -15,6 +15,9 @@ import java.util.*;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * @deprecated  This class is no longer supported
+ */
 public class PortletBean {
 
     protected PortletConfig config = null;
@@ -31,9 +34,15 @@ public class PortletBean {
     protected boolean isFormInvalid = false;
     protected String formInvalidMessage = "";
 
+    /**
+     * @deprecated This class is no longer supported
+     */
     public PortletBean() {
     }
 
+    /**
+     * @deprecated This class is no longer supported
+     */
     public PortletBean(PortletConfig config, PortletRequest request, PortletResponse response)
             throws PortletException {
         init(config, request, response);

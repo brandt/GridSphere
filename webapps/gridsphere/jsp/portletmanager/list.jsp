@@ -1,7 +1,7 @@
 <%@ page import="java.util.List,
                  java.util.Iterator,
                  org.gridlab.gridsphere.portlets.core.tomcat.TomcatWebAppResult,
-                 org.gridlab.gridsphere.portlets.core.tomcat.TomcatWebAppDescription"%>
+                 org.gridlab.gridsphere.portlets.core.tomcat.TomcatWebAppDescription" %>
 
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
@@ -12,7 +12,7 @@
 
 <ui:panel>
 
-    <ui:errorframe beanId="errorFrame"/>
+    <ui:frame beanId="errorFrame"/>
 
     <ui:frame>
     <ui:tablerow>

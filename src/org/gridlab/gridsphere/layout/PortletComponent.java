@@ -24,6 +24,20 @@ public interface PortletComponent extends ComponentLifecycle {
     public void setName(String name);
 
     /**
+     * Returns the portlet component label
+     *
+     * @return the portlet component label
+     */
+    public String getLabel();
+
+    /**
+     * Sets the portlet component label
+     *
+     * @param label the portlet component label
+     */
+    public void setLabel(String label);
+
+    /**
      * Returns the portlet component height
      *
      * @return the portlet component height
