@@ -38,8 +38,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     private List listeners = new ArrayList();
     private PortletErrorFrame errorFrame = new PortletErrorFrame();
     private boolean transparent = false;
-    private String innerPadding = "0";
-    private String outerPadding = "0";
+    private String innerPadding = "";   // has to be empty and not 0!
+    private String outerPadding = "";   // has to be empty and not 0!
 
     private PortletRole requiredRole = PortletRole.GUEST;
 
@@ -315,7 +315,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
            out.print(" cellspacing=\"0\" class=\"window-main\" ");
         } else {
             //out.print("border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"");        // this is the main table around one portlet
-            out.print(" cellspacing=\""+getOuterPadding()+"\" style=\"padding:"+getOuterPadding()+"px\"  class=\"window-main\" ");        // this is the main table around one portlet
+            //out.print(" cellspacing=\""+getOuterPadding()+"\" style=\"padding:"+getOuterPadding()+"px\"  class=\"window-main\" ");        // this is the main table around one portlet
+            out.print(" cellspacing=\"0\" style=\"margin:"+getOuterPadding()+"px\"  class=\"window-main\" ");        // this is the main table around one portlet
             //out.print("cellpadding=\""+getOuterPadding()+"\" class=\"window-main\" ");        // this is the main table around one portlet
         }
 
