@@ -139,8 +139,8 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     }
 
     public Object clone() throws CloneNotSupportedException {
-            System.err.println("in base portlet comp clone");
             BasePortletComponent b = (BasePortletComponent)super.clone();
+
             b.width = this.width;
             b.height = this.height;
             b.isVisible = this.isVisible;

@@ -20,6 +20,11 @@ public class ComponentIdentifier implements Cloneable {
     public ComponentIdentifier() {
     }
 
+    public ComponentIdentifier(ComponentIdentifier cid) {
+        cid.className = this.className;
+        cid.component = this.component;
+    }
+
     /**
      * Sets the portlet component id
      *

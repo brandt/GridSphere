@@ -287,7 +287,6 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             }
         }
 
-
         // now perform actionPerformed on Portlet if it has an action
         if (event.hasAction()) {
             DefaultPortletAction action = event.getAction();

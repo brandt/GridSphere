@@ -4,9 +4,7 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portlet.PortletException;
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
@@ -175,6 +173,8 @@ public class PortletContainer implements Cloneable {
                 portlets.add(f.getPortletClass());
             }
         }
+
+        // set ACL stuff
     }
 
     /**
@@ -242,6 +242,8 @@ public class PortletContainer implements Cloneable {
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletResponse res = event.getPortletResponse();
+
+        res.setContentType("text/html");
         PrintWriter out = res.getWriter();
 
         res.setContentType("text/html");
@@ -264,29 +266,33 @@ public class PortletContainer implements Cloneable {
     }
 
 
-    public Object clone() throws CloneNotSupportedException {
+    public PortletContainer(PortletContainer c) {
         int i;
-        PortletContainer c = (PortletContainer)super.clone();	// clone the stack
-        c.COMPONENT_ID = this.COMPONENT_ID;
-        c.theme = this.theme;
-        c.componentIdentifiers = new ArrayList(this.componentIdentifiers.size());
+        //PortletContainer c = (PortletContainer)super.clone();
+        //PortletContainer c = new PortletContainer();
+        c.theme = theme;
+        //c.COMPONENT_ID = this.COMPONENT_ID;
+        //c.theme = this.theme;
+        //c.setComponentIdentifierList(this.);
+        List compList = new ArrayList(this.componentIdentifiers.size());
         for (i = 0; i < this.componentIdentifiers.size(); i++) {
             ComponentIdentifier cid = (ComponentIdentifier)this.componentIdentifiers.get(i);
-            c.componentIdentifiers.add(cid.clone());
+            compList.add(new ComponentIdentifier(cid));
         }
+        c.componentIdentifiers = compList;
+        c.name = name;
 
-        c.name = this.name;
-        c.portlets = new ArrayList(this.portlets.size());
-        for (i = 0; i < this.portlets.size(); i++) {
-            String pclass = (String)this.portlets.get(i);
-            c.portlets.add(pclass);
-        }
-        c.components = new ArrayList(this.components.size());
+        ArrayList componentsList = new ArrayList(this.components.size());
+        try {
         for (i = 0; i < this.components.size(); i++) {
             PortletComponent comp = (PortletComponent)this.components.get(i);
             PortletComponent newcomp = (PortletComponent)comp.clone();
-            c.components.add(newcomp);
+            componentsList.add(newcomp);
         }
-        return c;
+        } catch (Exception e) {
+
+        }
+        c.components = componentsList;
+        //return c;
     }
 }

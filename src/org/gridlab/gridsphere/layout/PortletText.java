@@ -14,7 +14,7 @@ import java.io.IOException;
 
 /**
  * <code>PortletText</code> is used to display the contents of an included
- * text file located in the web application.
+ * text file located in the ui application.
  */
 public class PortletText extends BasePortletComponent implements Cloneable {
 

@@ -12,9 +12,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The <code>PortletLayoutEngine</code> is a singleton that is responsible for managing
@@ -103,7 +101,7 @@ public class PortletLayoutEngine {
         String guestLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GUEST_USER_LAYOUT);
 
         guestContainer = PortletLayoutDescriptor.loadPortletContainer(guestLayoutFile, layoutMappingFile);
-        guestContainer.init(new ArrayList());
+        //guestContainer.init(new ArrayList());
 
         newuserLayoutPath = GridSphereConfig.getProperty(GridSphereConfigProperties.NEW_USER_LAYOUT);
 
@@ -140,8 +138,9 @@ public class PortletLayoutEngine {
                 String guestLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GUEST_USER_LAYOUT);
                 PortletContainer newcontainer = null;
                 try {
-                 //newcontainer = PortletLayoutDescriptor.loadPortletContainer(guestLayoutFile, layoutMappingFile);
-                 newcontainer = (PortletContainer)guestContainer.clone();
+                 newcontainer = PortletLayoutDescriptor.loadPortletContainer(guestLayoutFile, layoutMappingFile);
+                 //newcontainer = new PortletContainer(guestContainer);
+                 //newcontainer = (PortletContainer)guestContainer.clone();
 
                  newcontainer.init(new ArrayList());
                  guests.put(id, newcontainer);
@@ -210,14 +209,12 @@ public class PortletLayoutEngine {
      */
     public void loginPortlets(GridSphereEvent event) {
         log.debug("in loginPortlets()");
-        /*
         try {
             PortletContainer pc = getPortletContainer(event);
             pc.loginPortlets(event);
         } catch (PortletException e) {
             log.error("Unable to login portlets", e);
         }
-        */
     }
 
     /**

@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.layout.event.PortletTitleBarEvent;
 import org.gridlab.gridsphere.layout.event.PortletTitleBarListener;
 import org.gridlab.gridsphere.layout.event.impl.PortletTitleBarEventImpl;
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portletcontainer.*;
 
 import java.io.IOException;
@@ -34,6 +35,7 @@ public class PortletTitleBar extends BasePortletComponent implements Cloneable {
     private List allowedWindowStates = new ArrayList();
     private String errorMessage = "";
     private boolean hasError = false;
+    private PortletGroup group;
 
     /**
      * Link is an abstract representation of a hyperlink with an href, image and
@@ -354,7 +356,7 @@ public class PortletTitleBar extends BasePortletComponent implements Cloneable {
 
     /**
      * Sets configuration information about the supported portlet modes,
-     * allowed window states and title bar obtained from {@link PortletSettings}.
+     * allowed window states and title bar and web app name obtained from {@link PortletSettings}.
      * Information is queried from the {@link PortletRegistry}
      */
     protected void doConfig() {
@@ -363,16 +365,18 @@ public class PortletTitleBar extends BasePortletComponent implements Cloneable {
         ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
         if (appPortlet != null) {
             ApplicationPortletConfig appConfig = appPortlet.getApplicationPortletConfig();
+            group = PortletGroupFactory.createPortletGroup(appPortlet.getWebApplicationName());
+            if (appConfig != null) {
+                // get supported modes from application portlet config
+                supportedModes = sort(appConfig.getSupportedModes());
 
-            // get supported modes from application portlet config
-            supportedModes = sort(appConfig.getSupportedModes());
-
-            ConcretePortlet concPortlet = appPortlet.getConcretePortlet(portletClass);
-            settings = concPortlet.getPortletSettings();
-
-            // get window states from application portlet config
-            allowedWindowStates = sort(appConfig.getAllowedWindowStates());
-
+                ConcretePortlet concPortlet = appPortlet.getConcretePortlet(portletClass);
+                if (concPortlet != null) {
+                    settings = concPortlet.getPortletSettings();
+                }
+                // get window states from application portlet config
+                allowedWindowStates = sort(appConfig.getAllowedWindowStates());
+            }
         }
     }
 
@@ -473,24 +477,17 @@ public class PortletTitleBar extends BasePortletComponent implements Cloneable {
         // make modes from supported modes
         if (supportedModes.isEmpty()) return null;
 
-        // Unless user is admin or super they should not see configure mode
-        /*
-        List groups = req.getGroups();
-        Iterator it = groups.iterator();
-        boolean hasConfigurePermission = false;
-        while (it.hasNext()) {
-            PortletGroup group = (PortletGroup)it.next();
-            PortletRole role = req.getRole(group);
-            if (role.isAdmin() || role.isSuper()) {
-                hasConfigurePermission = true;
-            }
-        }
-        */
-
         // Unless user is a super they shoudl not see configure mode
-        //User user = req.getUser();
-
+        List l = req.getGroups();
+        Iterator it = l.iterator();
         boolean hasConfigurePermission = true;
+        while (it.hasNext()) {
+            PortletGroup g = (PortletGroup)it.next();
+        }
+        PortletRole role = req.getRole(group);
+        if (role.isAdmin() || role.isSuper()) {
+            hasConfigurePermission = true;
+        }
 
         String[] portletModes = new String[supportedModes.size()];
         for (i = 0; i < supportedModes.size(); i++) {
@@ -597,9 +594,7 @@ public class PortletTitleBar extends BasePortletComponent implements Cloneable {
         // get the appropriate title for this client
         Client client = req.getClient();
 
-        if (settings == null) {
-            doConfig();
-        } else {
+        if (settings != null) {
             title = settings.getTitle(req.getLocale(), client);
         }
 

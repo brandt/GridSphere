@@ -13,7 +13,7 @@ import java.io.PrintWriter;
 /**
  * A <code>PortletImage</code> is a wrapper for an image file to be displayed in the portal
  * page. A <code>PortletImage</code> is defined by an "img src" location of the image in the
- * web application directory
+ * ui application directory
  */
 public class PortletImage extends BasePortletComponent implements Cloneable {
 
