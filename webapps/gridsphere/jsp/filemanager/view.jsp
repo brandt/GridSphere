@@ -5,6 +5,7 @@
 
     <ui:panel>
         <ui:errorframe beanId="errorFrame"/>
+
         <ui:fileform action="uploadFile">
         <ui:frame>
             <ui:tablerow>
@@ -47,7 +48,7 @@
                 <ui:tablecell/>
                 <ui:tablecell>
                     <ui:actionsubmit action="deleteFile" value="Delete file"/>
-                    <ui:actionsubmit action="editFile" value="View file"/>
+                    <ui:actionsubmit action="editFile" value="Edit file"/>
                     <ui:actionsubmit action="downloadFile" value="Download file"/>
                 </ui:tablecell>
                 <ui:tablecell/>

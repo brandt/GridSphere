@@ -74,15 +74,23 @@ public class FileManagerPortlet extends ActionPortlet {
 
     public void deleteFile(FormEvent event) throws PortletException {
         log.debug("in FileManagerPortlet: deleteFile");
+
+        // Files can be deleted from edit or view pages
+        // In view page the file is in a listbox
         ListBoxBean lb = event.getListBoxBean("filelist");
         List files = lb.getSelectedValues();
         User user = event.getPortletRequest().getUser();
         Iterator it = files.iterator();
-
+       String fname = null;
         while (it.hasNext()) {
-            String fname = (String)it.next();
+            fname = (String)it.next();
             userStorage.deleteFile(user, fname);
         }
+
+        // In edit page the file is in a hidden field
+        HiddenFieldBean hf = event.getHiddenFieldBean("fileName");
+        fname = hf.getValue();
+        if (fname != null) userStorage.deleteFile(user, fname);
     }
 
     public void cancelEdit(FormEvent event) throws PortletException {

@@ -81,7 +81,9 @@ public class FileManagerServiceImpl implements FileManagerService, PortletServic
         String userLoc = getLocationPath(user, "");
         File f = new File(userLoc);
         if (f.exists()) {
-            return f.list();
+            String[] list = f.list();
+            if (list.length == 0) return new String[] {"empty directory"};
+            return list;
         } else {
             return new String[] {"empty directory"};
         }
