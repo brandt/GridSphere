@@ -41,7 +41,7 @@
                         </portlet-frame>
                         <portlet-frame>
                             <name>RSS</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.examples.NewsPortlet.1</portlet-class>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.RSSPortlet.1</portlet-class>
                         </portlet-frame>
                         <portlet-frame>
                             <name>DemoPortlet</name>
