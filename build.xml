@@ -172,7 +172,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Compiles core framework                                              -->
     <!-- =================================================================== -->
-    <target name="compile" depends="setenv" description="Compile core frameowrk">
+    <target name="compile" depends="setenv" description="Compile core framework">
         <echo>Compiling core framework</echo>
         <javac srcdir="src"
             destdir="${build.classes}"
@@ -203,7 +203,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Internal target to create the GridSphere JAR library archive        -->
     <!-- =================================================================== -->
-    <target name="gridsphere-jar">
+    <target name="gridsphere-jar" depends="compile" description="Makes gridsphere JAR">
 
         <mkdir dir="${build.classes}/gridsphere"/>
         <copy file="config/gridsphere.properties"
@@ -246,16 +246,16 @@ Copyright:
         <echo message="Replaced GRIDSPHERE_RELEASE with : ${release}"/>
         <echo message="Replaced DB implementation with : ${DATABASE_TYPE}"/>
 
-        <jar jarfile="lib/gridsphere.jar" basedir="${build.classes}" >
+        <jar jarfile="lib/gridsphere.jar" basedir="${build.classes}">
             <include name="org/**" />
             <include name="gridsphere/**" />
             <!-- don't include portlet API -->
             <exclude name="org/gridlab/gridsphere/portlet/**"/>
             <exclude name="org/gridlab/gridsphere/event/**"/>
-            <!-- don't include portlets -->
+            <!-- don't include grid portlets or serivces -->
             <exclude name="org/gridlab/gridsphere/portlets/grid/**"/>
+            <exclude name="org/gridlab/gridsphere/services/grid/**"/>
             <!-- don't include portlet widgets tag library -->
-            <exclude name="org/gridlab/gridsphere/provider/**"/>
             <exclude name="org/gridlab/gridsphere/tags/**"/>
         </jar>
      </target>
@@ -276,7 +276,6 @@ Copyright:
     <!-- =================================================================== -->
     <target name="portlet-widgets-jar" depends="compile" description="Create lib/portlet-widget-tags.jar">
         <jar jarfile="lib/portlet-widget-tags.jar" basedir="${build.classes}" >
-            <include name="org/gridlab/gridsphere/provider/**" />
             <include name="org/gridlab/gridsphere/tags/**" />
             <metainf dir="${gswebapp.dir}/WEB-INF/tlds"/>
         </jar>
@@ -540,9 +539,7 @@ Copyright:
         </copy>
 
         <copy todir="${env.CATALINA_HOME}/shared/lib">
-            <fileset dir="lib/ext">
-                <exclude name="**/servlet*.jar"/>
-            </fileset>
+            <fileset dir="lib/ext"/>
             <fileset dir="lib">
                 <exclude name="ext/**"/>
             </fileset>
@@ -563,6 +560,10 @@ Copyright:
     <!-- =================================================================== -->
     <target name="run-tests" depends="compile-tests, deploy" description="Runs all JUnit tests">
         <echo message="Running the GridSphere Junit Tests"/>
+
+        <copy file="config/test/cactus.properties"
+            tofile="${build.classes}/gridsphere/cactus.properties"/>
+
         <mkdir dir="${gridsphere.build}/reports"/>
 
         <mkdir dir="${TEST_HOME}"/>
