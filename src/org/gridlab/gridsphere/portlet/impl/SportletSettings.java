@@ -77,18 +77,17 @@ public class SportletSettings implements PortletSettings {
     }
 
     /**
-     * Returns the title of this window for the provided locale, or whatever exists.
+     * Returns the title of this window for the provided locale, or null if none exists.
      *
      * @param locale the locale-centric title
      * @param client the given client
-     * @return the title of the portlet
+     * @return the title of the portlet or null if none exists for the provided locale and client
      */
     public String getTitle(Locale locale, Client client) {
-        String defaultTitle = "";
+        String defaultTitle = null;
         Iterator it = langList.iterator();
         while (it.hasNext()) {
             LanguageInfo langInfo = (LanguageInfo) it.next();
-            defaultTitle = langInfo.getTitle();
             if (langInfo.getLocale().startsWith(locale.toString())) {
                 return langInfo.getTitle();
             }
