@@ -3,9 +3,10 @@
  * @version $Id$
  */
 
-package org.gridlab.gridsphere.tags.web;
+package org.gridlab.gridsphere.tags.ui;
 
-import org.gridlab.gridsphere.tags.web.element.TextBean;
+import org.gridlab.gridsphere.tags.ui.BaseTag;
+import org.gridlab.gridsphere.provider.ui.beans.TextBean;
 
 import javax.servlet.jsp.JspException;
 
