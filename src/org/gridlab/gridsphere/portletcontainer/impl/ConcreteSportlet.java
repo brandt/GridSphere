@@ -9,12 +9,9 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.impl.*;
-import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication;
-import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
-import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication;
-import org.gridlab.gridsphere.portletcontainer.descriptor.Owner;
+import org.gridlab.gridsphere.portletcontainer.descriptor.*;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridlab.gridsphere.portletcontainer.RegisteredPortletException;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortletException;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 
 import javax.servlet.ServletConfig;
@@ -47,6 +44,7 @@ public class ConcreteSportlet implements ConcretePortlet {
     private List groupList = new Vector();
     private List portletModes = new Vector();
     private List windowStates = new Vector();
+    private Cacheable cacheable = null;
     private PortletGroup ownerGroup = SportletGroup.getBaseGroup();
     private PortletRole ownerRole = SportletRole.getGuestRole();
 
@@ -56,7 +54,7 @@ public class ConcreteSportlet implements ConcretePortlet {
     public ConcreteSportlet(PortletDeploymentDescriptor pdd,
                               PortletApplication portletApp,
                               ConcretePortletApplication concreteApp,
-                              AccessControlService aclService) throws RegisteredPortletException {
+                              AccessControlService aclService) throws ConcretePortletException {
 
         log.info("in ConcreteSportlet construcor");
 
@@ -83,8 +81,20 @@ public class ConcreteSportlet implements ConcretePortlet {
         // Check that cappID = appID and cappname = appname
         if ((!appNo.equals(cappNo)) || (!appname.equals(cappname))) {
             log.error("<portlet-app uid=" + appname + appNo + " does not match <concrete-portlet-app uid=" + cappname + cappNo);
-            throw new RegisteredPortletException("<portlet-app uid=" + appname + appNo + " does not match <concrete-portlet-app uid=" + cappname + cappNo);
+            throw new ConcretePortletException("<portlet-app uid=" + appname + appNo + " does not match <concrete-portlet-app uid=" + cappname + cappNo);
         }
+
+        cacheable = new Cacheable();
+        String shared = portletApp.getPortletInfo().getCacheInfo().getShared();
+        if ((shared != null) && (shared.equalsIgnoreCase("yes") || shared.equalsIgnoreCase("true"))) {
+            cacheable.setShared(true);
+        } else {
+            cacheable.setShared(false);
+        }
+
+        // get long value from deployment description
+        long expiration = portletApp.getPortletInfo().getCacheInfo().getExpires();
+        cacheable.setExpiration(expiration);
 
         portletClass = cappname;
         portletName = concreteApp.getName();
@@ -93,7 +103,7 @@ public class ConcreteSportlet implements ConcretePortlet {
             abstractPortlet = (AbstractPortlet) Class.forName(portletClass).newInstance();
         } catch (Exception e) {
             log.error("Unable to create AbstractPortlet: " + portletClass, e);
-            throw new RegisteredPortletException("Unable to create instance of portlet: " + portletClass);
+            throw new ConcretePortletException("Unable to create instance of portlet: " + portletClass);
         }
 
          // SINCE ACL SERVICE DOESN"T WORK YET
@@ -102,8 +112,10 @@ public class ConcreteSportlet implements ConcretePortlet {
         //knownGroups = aclService.getAllGroups();
         //knownRoles = aclService.getAllRoles();
 
+        ConcretePortletInfo concPortInfo = concreteApp.getConcretePortletInfo();
+
         // Get groups list
-        List groups = concreteApp.getConcretePortletInfo().getGroupList();
+        List groups = concPortInfo.getGroupList();
 
         // Make sure groups exist
         while (knownGroups.iterator().hasNext()) {
@@ -122,7 +134,7 @@ public class ConcreteSportlet implements ConcretePortlet {
         }
 
         // Get roles list
-        List roles = concreteApp.getConcretePortletInfo().getRoleList();
+        List roles = concPortInfo.getRoleList();
         // Make sure roles exist
         while (knownRoles.iterator().hasNext()) {
             PortletRole pr = (PortletRole)knownRoles.iterator().next();
@@ -139,7 +151,7 @@ public class ConcreteSportlet implements ConcretePortlet {
             roleList.add(SportletRole.getGuestRole());
         }
 
-        owner = concreteApp.getConcretePortletInfo().getOwner();
+        owner = concPortInfo.getOwner();
         String groupName = owner.getGroupName();
         Iterator it = knownGroups.iterator();
 
@@ -164,6 +176,7 @@ public class ConcreteSportlet implements ConcretePortlet {
 
         owner.setGroup(ownerGroup);
         owner.setRole(ownerRole);
+
 
         sportletSettings = new SportletSettings(pdd, concreteApp, knownGroups, knownRoles);
     }
@@ -268,5 +281,15 @@ public class ConcreteSportlet implements ConcretePortlet {
     public List getAllowedPortletWindowStates() {
         return windowStates;
     }
+
+    /**
+     * Return the cacheable portlet info consisting of:
+     * expires: -1 = never expires 0 = always expires # = number of seconds until expiration
+     * shared: true if portlet output shared among all users or false if not
+     */
+    public Cacheable getCacheablePortletInfo() {
+        return cacheable;
+    }
+
 
 }
