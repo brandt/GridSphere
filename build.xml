@@ -47,7 +47,7 @@ Copyright:
 
     <!-- Version properties -->
     <property name="version" value="2.0"/>
-    <property name="release" value="BETA 2"/>
+    <property name="release" value="ALPHA 1"/>
     <property name="version.release" value="${version} ${release}"/>
     <property name="gridsphere.project" value="gridsphere"/>
     <property name="gridsphere.name" value="GridSphere ${version.release}"/>
