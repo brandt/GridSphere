@@ -91,7 +91,7 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
 
     public String toEndString() {
         String result = (value != null) ? value : "";
-        return result + " </textarea>";
+        return result + "</textarea>";
     }
 
 }
