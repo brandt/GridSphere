@@ -32,4 +32,17 @@ $Id$
 
     <!-- Footer components (if any) -->
 
+    <portlet-footer>
+        <table-layout style="header">
+            <row-layout>
+                <column-layout width="40%"/>
+                <column-layout width="60%">
+                    <portlet-frame transparent="true" outer-padding="0" label="date">
+                        <portlet-class>org.gridlab.gridsphere.portlets.core.date.DatePortlet.1</portlet-class>
+                    </portlet-frame>
+                </column-layout>
+            </row-layout>
+        </table-layout>
+    </portlet-footer>
+
 </page-layout>
