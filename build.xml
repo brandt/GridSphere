@@ -315,35 +315,12 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates the GridSphere UI tags JAR                                  -->
     <!-- =================================================================== -->
-    <target name="gridsphere-ui-tags-jar" depends="compile" description="Create lib/gridsphere-ui-tags.jar">
-        <jar jarfile="${build.lib}/gridsphere-ui-tags.jar" basedir="${build.classes}">
+    <target name="gridsphere-tags-jar" depends="compile" description="Create lib/gridsphere-tags.jar">
+        <jar jarfile="${build.lib}/gridsphere-tags.jar" basedir="${build.classes}">
             <include name="gridsphere/log4j.properties"/>
-            <include name="org/gridlab/gridsphere/provider/portlet/ActionPortlet.class"/>
+            <include name="org/gridlab/gridsphere/provider/portlet/**"/>
             <include name="org/gridlab/gridsphere/provider/portletui/tags/**"/>
-            <exclude name="org/gridlab/gridsphere/provider/portletui/tags/jsr/**"/>
-            <include name="org/gridlab/gridsphere/provider/portlet/tags/gs/**"/>
-            <metainf dir="${gswebapp.dir}/WEB-INF/tlds">
-                <exclude name="**/portletjsrui.tld"/>
-                <exclude name="**/portlet.tld"/>
-            </metainf>
-        </jar>
-    </target>
-
-    <!-- =================================================================== -->
-    <!-- Creates the GridSphere JSR UI tags JAR                              -->
-    <!-- =================================================================== -->
-    <target name="gridsphere-jsr-tags-jar" depends="compile" description="Create lib/gridsphere-jsr-tags.jar">
-        <jar jarfile="${build.lib}/gridsphere-jsr-tags.jar" basedir="${build.classes}">
-            <include name="gridsphere/log4j.properties"/>
-            <include name="org/gridlab/gridsphere/provider/portlet/ActionPortlet.class"/>
-            <include name="org/gridlab/gridsphere/provider/portlet/jsr/**"/>
-            <include name="org/gridlab/gridsphere/provider/portletui/tags/**"/>
-            <exclude name="org/gridlab/gridsphere/provider/portletui/tags/gs/**"/>
-            <include name="org/gridlab/gridsphere/provider/portlet/tags/jsr/**"/>
-            <metainf dir="${gswebapp.dir}/WEB-INF/tlds">
-                <exclude name="**/portletui.tld"/>
-                <exclude name="**/portletapi.tld"/>
-            </metainf>
+            <metainf dir="${gswebapp.dir}/WEB-INF/tlds"/>
         </jar>
     </target>
 
@@ -374,7 +351,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates all JAR's                                                   -->
     <!-- =================================================================== -->
-    <target name="jar" depends="gridsphere-ui-tags-jar, gridsphere-jsr-tags-jar, gridsphere-provider-jar, portlet-api-jar, portlet-jar, coreportlets-jar" description="Creates all jars"/>
+    <target name="jar" depends="gridsphere-tags-jar, gridsphere-provider-jar, portlet-api-jar, portlet-jar, coreportlets-jar" description="Creates all jars"/>
 
     <!-- =================================================================== -->
     <!-- Cleans everything                                                   -->
@@ -647,9 +624,8 @@ Copyright:
                 <exclude name="*.LICENSE"/>
             </fileset>
             <fileset dir="${build.lib}">
-                <exclude name="gridsphere-test.jar"/>
-                <exclude name="gridsphere-ui-tags.jar"/>
-                <exclude name="gridsphere-jsr-tags.jar"/>
+                <exclude name="gridsphere-test.jar"/>             
+                <exclude name="gridsphere-tags.jar"/>
                 <exclude name="gridsphere-provider.jar"/>
                 <exclude name="coreportlets.jar"/>
             </fileset>
@@ -665,7 +641,7 @@ Copyright:
         </copy>
 
         <copy overwrite="true" file="${build.lib}/gridsphere-provider.jar" todir="${env.CATALINA_HOME}/shared/lib"/>
-        <copy overwrite="true" file="${build.lib}/gridsphere-ui-tags.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
+        <copy overwrite="true" file="${build.lib}/gridsphere-tags.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
         <copy overwrite="true" file="${build.lib}/coreportlets.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
 
     </target>
