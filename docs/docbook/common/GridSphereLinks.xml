@@ -30,17 +30,16 @@
 <!ENTITY JDK '<ulink url="http://java.sun.com/j2se">http://java.sun.com/j2se</ulink>'>
 <!ENTITY Ant '<ulink url="http://jakarta.apache.org/ant">Ant</ulink>'>
 <!ENTITY Tomcat '<ulink url="http://jakarta.apache.org/tomcat">Tomcat</ulink>'>
-<!ENTITY DocBook '<ulink url="http://docbook.sourceforge.net/">DocBook</ulink>'>
-<!ENTITY Eclipse '<ulink url="http://www.eclipse.org">Eclipse</ulink>'>
-<!ENTITY Fop '<ulink url="http://xml.apache.org/fop">FOP</ulink>'>
+<!ENTITY Castor '<ulink url="http://exolab.castor.org">Castor</ulink>'>
+<!ENTITY HSQL '<ulink url="http://exolab.castor.org">Hypersonic SQL</ulink>'>
 <!ENTITY Log4J '<ulink url="http://jakarta.apache.org/log4j">Log4J</ulink>'>
-<!ENTITY JBoss '<ulink url="http://www.jboss.org">JBoss</ulink>'>
-<!ENTITY Jetty '<ulink url="http://sf.net/projects/jetty">Jetty</ulink>'>
 <!ENTITY JUnit '<ulink url="http://www.junit.org">JUnit</ulink>'>
-<!ENTITY OGNL '<ulink url="http://www.ognl.org">OGNL</ulink>'>
-<!ENTITY Saxon '<ulink url="http://sf.net/projects/saxon">Saxon</ulink>'>
-<!ENTITY TapestryHomePage '<ulink url="http://tapestry.sf.net">Tapestry Home Page</ulink>'>
-<!ENTITY TapestryProjectPage '<ulink url="http://sf.net/projects/tapestry">Tapestry Project Page</ulink>'>
+<!ENTITY Commons '<ulink url="http://jakarta.apache.org/commons">Jakarta Commons</ulink>'>
+
+<!ENTITY DocBook '<ulink url="http://docbook.sourceforge.net/">DocBook</ulink>'>
+<!ENTITY Fop '<ulink url="http://xml.apache.org/fop">FOP</ulink>'>
+
+<!ENTITY GridSphereProjPage '<ulink url="http://www.gridsphere.org">GridSphere Project Page</ulink>'>
 
 <!-- Other useful stuff -->
 
