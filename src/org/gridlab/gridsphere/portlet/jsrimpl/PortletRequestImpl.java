@@ -64,6 +64,11 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         contextPath = this.portletContext.getRealPath("");
         int l = contextPath.lastIndexOf(File.separator);
         contextPath = contextPath.substring(l);
+        // handle windows file.separator "\" to "/"
+        if (contextPath.indexOf("\\") != -1) {
+            contextPath = contextPath.replace('\\', '/');
+        }
+        
         //this.supports = supports;
         props = new HashMap();
         /*
