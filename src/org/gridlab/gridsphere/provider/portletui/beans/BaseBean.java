@@ -55,10 +55,6 @@ public abstract class BaseBean implements TagBean {
         this.beanId = beanId;
     }
 
-    public void setPortletRequest(PortletRequest request) {
-        this.request = request;
-    }
-
     public abstract String toStartString();
 
     public abstract String toEndString();

@@ -113,7 +113,6 @@ public class DataGridTag extends ContainerTag {
             dataGridBean.setHeader(getLocalizedText(key, "DataGrid"));
         }
 
-
         dataGridBean.setPortletRequest(request);
 
         try {

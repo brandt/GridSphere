@@ -22,7 +22,6 @@ public class ActionLinkTag extends ActionTag {
 
     protected ActionLinkBean actionlink = null;
     protected String key = null;
-    protected String name = null;
     protected String style = TextBean.MSG_INFO;
     protected ImageBean imageBean = null;
 
@@ -74,24 +73,6 @@ public class ActionLinkTag extends ActionTag {
      */
     public String getKey() {
         return key;
-    }
-
-    /**
-     * Sets the action link name used to identify an anchor
-     *
-     * @param name the action link name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Returns the action link name used to identify an anchor
-     *
-     * @return the action link name
-     */
-    public String getName() {
-        return name;
     }
 
     /**

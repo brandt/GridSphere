@@ -38,6 +38,11 @@ public class DataGridBean extends BeanContainer implements TagBean {
         this.beanId = beanId;
     }
 
+    // TODO place Oliver's hack here and not in base bean
+    public void setPortletRequest(PortletRequest request) {
+        this.request = request;
+    }
+
     /**
      * Returns the startposition of the scrolling
      * @return startpositio of the scrolling
