@@ -83,18 +83,19 @@ public class ClientImpl implements Client {
             manufacturer = MANUFACTURER_NAMES[3];
         }
 
-        int i = mimeType.indexOf("html");
-        if (i < 0) {
-            // IE 5.2 on  Mac OS X
-            if (mimeType.indexOf("*/*") >= 0) {
+        if (mimeType != null) {
+            int i = mimeType.indexOf("html");
+            if (i < 0) {
+                // IE 5.2 on  Mac OS X
+                if (mimeType.indexOf("*/*") >= 0) {
+                    mimeType = MIME_TYPES[0];
+                    markupName = MARKUP_TYPES[0];
+                }
+            } else {
                 mimeType = MIME_TYPES[0];
                 markupName = MARKUP_TYPES[0];
             }
-        } else {
-            mimeType = MIME_TYPES[0];
-            markupName = MARKUP_TYPES[0];
         }
-
         // make up version for now
         version = "1.0";
         // make up model for now

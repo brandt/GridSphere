@@ -193,4 +193,6 @@ public interface SportletProperties {
     public static final String FILE_DOWNLOAD_NAME = "org.gridlab.gridsphere.portletcontainer.FILE_DOWNLOAD_NAME";
 
     public static final String FILE_DOWNLOAD_PATH = "org.gridlab.gridsphere.portletcontainer.FILE_DOWNLOAD_PATH";
+
+    public static final String RESPONSE_COMMITTED = "org.gridlab.gridsphere.RESPONSE_COMMITTED";
 }
