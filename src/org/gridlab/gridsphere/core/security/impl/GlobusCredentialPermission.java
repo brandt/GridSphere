@@ -39,8 +39,10 @@ public class GlobusCredentialPermission extends BaseObject implements Credential
     /**
      * @sql-size 256
      * @sql-name permittedsubjects
+     * @required
      */
-    private String pattern= null;
+    private String permittedSubjects= null;
+
     /**
      * @sql-size 256
      * @sql-name description
@@ -55,13 +57,13 @@ public class GlobusCredentialPermission extends BaseObject implements Credential
     /**
      */
     public String getPermittedSubjects() {
-        return this.pattern;
+        return this.permittedSubjects;
     }
 
     /**
      */
     public void setPermittedSubjects(String pattern) {
-        this.pattern = pattern;
+        this.permittedSubjects = pattern;
     }
 
     /**
@@ -106,7 +108,7 @@ public class GlobusCredentialPermission extends BaseObject implements Credential
         }
         return answer;
         ***/
-        Regex ex = new Regex(this.pattern);
+        Regex ex = new Regex(this.permittedSubjects);
         return ex.search(subject);
     }
 }

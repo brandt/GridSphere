@@ -25,20 +25,25 @@ public class GlobusCredentialMapping extends BaseObject implements CredentialMap
     private transient static PortletLog _log = SportletLog.getInstance(CredentialMapping.class);
 
     /**
-     * @field-type User
-     * @many-key parent
-     */
-    private User user = null;
-    /**
      * @sql-size 256
      * @sql-name subject
+     * @required
      */
     private String subject= null;
+
+    /**
+     * @sql-size 15
+     * @sql-name user
+     * @required
+     */
+    private String user = null;
+
     /**
      * @sql-size 15
      * @sql-name tag
      */
     private String tag = null;
+
     /**
      * @sql-size 256
      * @sql-name description
@@ -58,27 +63,6 @@ public class GlobusCredentialMapping extends BaseObject implements CredentialMap
 
     /**
      */
-    public GlobusCredentialMapping(User user, String subject) {
-        this.user = user;
-        this.subject = subject;
-        this.tag = user.getUserID();
-        this.description = "";
-    }
-
-    /**
-     */
-    public User getUser() {
-        return this.user;
-    }
-
-    /**
-     */
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    /**
-     */
     public String getSubject() {
         return this.subject;
     }
@@ -91,10 +75,22 @@ public class GlobusCredentialMapping extends BaseObject implements CredentialMap
 
     /**
      */
+    public String getUser() {
+        return this.user;
+    }
+
+    /**
+     */
+    public void setUser(String userId) {
+        this.user = user;
+    }
+
+    /**
+     */
     public String getTag() {
         String tag = null;
         if (this.tag == null) {
-            return this.user.getUserID();
+            return this.user;
         } else {
             tag = this.tag;
         }

@@ -26,6 +26,8 @@ public interface CredentialManager {
 
     public void createCredentialPermission(CredentialPermission permission);
 
+    public void createCredentialPermission(String subjectPattern);
+
     public void updateCredentialPermission(CredentialPermission permission);
 
     public void deleteCredentialPermission(String permission);
@@ -45,6 +47,9 @@ public interface CredentialManager {
     public void createCredentialMapping(CredentialMapping mapping)
             throws CredentialNotPermittedException;
 
+    public void createCredentialMapping(String subject, User user)
+            throws CredentialNotPermittedException;
+
     public void updateCredentialMapping(CredentialMapping mapping)
             throws CredentialNotPermittedException;
 
@@ -59,11 +64,6 @@ public interface CredentialManager {
     public User getCredentialUser(String subject);
 
     public List getCredentialSubjects(User user);
-
-    public void addCredentialSubject(User user, String subject)
-            throws CredentialNotPermittedException;
-
-    public void removeCredentialSubject(User user, String subject);
 
     public List getCredentialTags(User user);
 

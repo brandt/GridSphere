@@ -7,9 +7,9 @@
       <sql name="objectid" />
       <bind-xml name="ObjectID" />
     </field>
-    <field name="pattern" type="string">
-      <sql name="pattern" />
-      <bind-xml name="pattern" />
+    <field name="permittedSubjects" type="string" required="true">
+      <sql name="permittedsubjects" />
+      <bind-xml name="permittedSubjects" />
     </field>
     <field name="description" type="string">
       <sql name="description" />
@@ -22,13 +22,13 @@
       <sql name="objectid" />
       <bind-xml name="ObjectID" />
     </field>
-    <field name="user" type="org.gridlab.gridsphere.portlet.User">
-      <sql name="user" />
-      <bind-xml name="user" />
-    </field>
-    <field name="subject" type="string">
+    <field name="subject" type="string" required="true">
       <sql name="subject" />
       <bind-xml name="subject" />
+    </field>
+    <field name="user" type="string" required="true">
+      <sql name="user" />
+      <bind-xml name="user" />
     </field>
     <field name="tag" type="string">
       <sql name="tag" />
@@ -49,12 +49,12 @@
       <sql name="objectid" />
       <bind-xml name="ObjectID" />
     </field>
-    <field name="parent" type="org.gridlab.gridsphere.core.security.impl.GlobusCredentialMapping">
-      <sql name="mapping" />
+    <field name="parent" type="org.gridlab.gridsphere.core.security.impl.GlobusCredentialMapping" get-method="getParent" set-method="setParent">
+      <sql name="parent" />
       <bind-xml name="parent" />
     </field>
-    <field name="hostAddress" type="string">
-      <sql name="hostddress" />
+    <field name="hostAddress" type="string" required="true">
+      <sql name="hostaddress" />
       <bind-xml name="hostAddress" />
     </field>
   </class>

@@ -23,13 +23,17 @@ import java.util.Vector;
  */
 public class GlobusHostMapping extends BaseObject {
 
-    /**s
-     * @sql-name mapping
+    /**
+     * @sql-name parent
+     * @get-method getParent
+     * @set-method setParent
      */
     private GlobusCredentialMapping parent = null;
+
     /**
      * @sql-size 256
-     * @sql-name hostddress
+     * @sql-name hostaddress
+     * @required
      */
     private String hostAddress= null;
 

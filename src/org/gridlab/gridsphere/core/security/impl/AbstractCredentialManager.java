@@ -29,7 +29,6 @@ import org.gridlab.gridsphere.core.security.CredentialMapping;
 import org.gridlab.gridsphere.core.security.MappingNotFoundException;
 import org.gridlab.gridsphere.core.security.CredentialRetrievalClient;
 import org.gridlab.gridsphere.core.security.CredentialRetrievalException;
-import org.gridlab.gridsphere.core.security.impl.GlobusCredentialMapping;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -44,8 +43,8 @@ public abstract class AbstractCredentialManager implements CredentialManager {
     private CredentialRetrievalClient retrievalClient = null;
     private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
     private Map credentials = Collections.synchronizedSortedMap(new TreeMap());
-    private String jdoCredentialPermissionImpl = null;
-    private String jdoCredentialMappingImpl = null;
+    private String credentialPermissionImpl = null;
+    private String credentialMappingImpl = null;
 
 
     /****** CREDENTIAL PERMISSION PERSISTENCE METHODS *******/
@@ -53,7 +52,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
     public List getCredentialPermissions() {
         try {
             String query = "select cp from "
-                         + this.jdoCredentialPermissionImpl
+                         + this.credentialPermissionImpl
                          + " cp";
             _log.debug(query);
             return this.pm.restoreList(query);
@@ -66,13 +65,27 @@ public abstract class AbstractCredentialManager implements CredentialManager {
     public CredentialPermission getCredentialPermission(String pattern) {
         try {
             String query = "select cp from "
-                         + this.jdoCredentialPermissionImpl
+                         + this.credentialPermissionImpl
                          + " cp where cp.pattern=" + pattern;
             _log.debug(query);
             return (CredentialPermission)this.pm.restoreObject(query);
         } catch (PersistenceManagerException e) {
             _log.error("Error retrieving credential permission", e);
             return null;
+        }
+    }
+
+    public void createCredentialPermission(String pattern) {
+        CredentialPermission permission = getCredentialPermission(pattern);
+        if (permission == null) {
+            // Create new permission of proper type
+            try {
+                permission = (CredentialPermission)Class.forName(this.credentialPermissionImpl).newInstance();
+            } catch (Exception e) {
+                _log.error("Error creating instance of credential permission", e);
+            }
+            permission.setPermittedSubjects(pattern);
+            createCredentialPermission(permission);
         }
     }
 
@@ -107,7 +120,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         List permittedSubjects = null;
         try {
             String query = "select cp.pattern from "
-                         + this.jdoCredentialPermissionImpl;
+                         + this.credentialPermissionImpl;
             _log.debug(query);
             permittedSubjects = this.pm.restoreList(query);
         } catch (PersistenceManagerException e) {
@@ -119,19 +132,13 @@ public abstract class AbstractCredentialManager implements CredentialManager {
 
     public boolean isCredentialPermitted(String subject) {
         boolean answer = false;
-        try {
-            String query = "select cp.pattern from "
-                         + this.jdoCredentialPermissionImpl
-                         + " cp where " + subject + " like cp.pattern";
-            _log.debug(query);
-            String pattern = (String)this.pm.restoreObject(query);
-            if (_log.isDebugEnabled()) {
-                _log.debug("Credential permission for subject "
-                           + subject + " has pattern " + pattern);
+        Iterator permissions = getCredentialPermissions().iterator();
+        while (permissions.hasNext()) {
+            CredentialPermission permission = (CredentialPermission)permissions.next();
+            if (permission.isCredentialPermitted(subject)) {
+                answer = true;
+                break;
             }
-            answer = true;
-        } catch (PersistenceManagerException e) {
-            _log.error("No credential permission exists for subject " + subject, e);
         }
         return answer;
     }
@@ -141,7 +148,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
     public List getCredentialMappings() {
         try {
             String query = "select cm from "
-                         + this.jdoCredentialMappingImpl
+                         + this.credentialMappingImpl
                          + " cm";
             _log.debug(query);
             return this.pm.restoreList(query);
@@ -154,7 +161,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
     public CredentialMapping getCredentialMapping(String subject) {
         try {
             String query = "select cm from "
-                         + this.jdoCredentialMappingImpl
+                         + this.credentialMappingImpl
                          + " cm where cm.subject=" + subject;
             _log.debug(query);
             return (CredentialMapping)this.pm.restoreObject(query);
@@ -164,13 +171,28 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         }
     }
 
+    public void createCredentialMapping(String subject, User user)
+            throws CredentialNotPermittedException {
+        CredentialMapping mapping = getCredentialMapping(subject);
+        if (mapping == null) {
+            // Create new mapping of proper type
+            try {
+                mapping = (CredentialMapping)Class.forName(this.credentialMappingImpl).newInstance();
+            } catch (Exception e) {
+                _log.error("Error creating instance of credential mapping", e);
+            }
+            mapping.setSubject(subject);
+            mapping.setUser(user.getID());
+            createCredentialMapping(mapping);
+        }
+    }
+
     public void createCredentialMapping(CredentialMapping mapping)
             throws CredentialNotPermittedException {
         String subject = mapping.getSubject();
         if (isCredentialPermitted(subject)) {
-            GlobusCredentialMapping mappingImpl = (GlobusCredentialMapping)mapping;
             try {
-                this.pm.create(mappingImpl);
+                this.pm.create(mapping);
             } catch (PersistenceManagerException e) {
                 _log.error("Error saving credential mapping " + e);
             }
@@ -183,9 +205,8 @@ public abstract class AbstractCredentialManager implements CredentialManager {
             throws CredentialNotPermittedException {
         String subject = mapping.getSubject();
         if (isCredentialPermitted(subject)) {
-            GlobusCredentialMapping mappingImpl = (GlobusCredentialMapping)mapping;
             try {
-                this.pm.update(mappingImpl);
+                this.pm.update(mapping);
             } catch (PersistenceManagerException e) {
                 _log.error("Error saving credential mapping " + e);
             }
@@ -212,7 +233,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
     public List getCredentialMappings(User user) {
         try {
             String query = "select cm from "
-                         + this.jdoCredentialMappingImpl
+                         + this.credentialMappingImpl
                          + " cm where cm.user=" + user;
             _log.debug(query);
             return this.pm.restoreList(query);
@@ -225,7 +246,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
     public void deleteCredentialMappings(User user) {
         try {
             String query = "delete cm from "
-                         + this.jdoCredentialMappingImpl
+                         + this.credentialMappingImpl
                          + " cm where cm.user=" + user;
             _log.debug(query);
             this.pm.deleteList(query);
@@ -239,7 +260,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
     public User getCredentialUser(String subject) {
         User user = null;
         String query = "select cm.user from "
-                     + this.jdoCredentialMappingImpl
+                     + this.credentialMappingImpl
                      + " cm where cm.subject=" + subject;
         _log.debug(query);
         try {
@@ -253,7 +274,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
     public List getCredentialSubjects(User user) {
         List subjects = null;
         String query = "select cm.subject from "
-                     + this.jdoCredentialMappingImpl
+                     + this.credentialMappingImpl
                      + " cm where cm.user=" + user;
         _log.debug(query);
         try {
@@ -265,28 +286,10 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         return subjects;
     }
 
-    public void addCredentialSubject(User user, String subject)
-            throws CredentialNotPermittedException {
-        CredentialMapping mapping = getCredentialMapping(subject);
-        if (mapping == null) {
-            mapping = new GlobusCredentialMapping();
-            mapping.setSubject(subject);
-            mapping.setUser(user);
-            createCredentialMapping(mapping);
-        }
-    }
-
-    public void removeCredentialSubject(User user, String subject) {
-        CredentialMapping mapping = getCredentialMapping(subject);
-        if (mapping != null) {
-            deleteCredentialMapping(mapping);
-        }
-    }
-
     public List getCredentialTags(User user) {
         List tags = new Vector();
         String query = "select cm.tag from "
-                     + this.jdoCredentialMappingImpl
+                     + this.credentialMappingImpl
                      + " cm where cm.user=" + user;
         _log.debug(query);
         try {
@@ -302,7 +305,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
             throws MappingNotFoundException {
         String tag = null;
         String query = "select cm.tag from "
-                     + this.jdoCredentialMappingImpl
+                     + this.credentialMappingImpl
                      + " cm where cm.subject=" + subject;
         _log.debug(query);
         try {
@@ -332,7 +335,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
             throws MappingNotFoundException {
         List hosts = null;
         String query = "select cm.subject from "
-                     + this.jdoCredentialMappingImpl
+                     + this.credentialMappingImpl
                      + " cm where cm.subject=" + subject;
         _log.debug(query);
         try {
@@ -410,10 +413,15 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         // Iterate through the credential mappings associated with user
         Iterator iterator = getCredentialMappings(user).iterator();
         while (iterator.hasNext()) {
-            // For each mapping, get the credential tag and subject
+            // For each mapping, check that a retrieval tag exists
             CredentialMapping mapping = (CredentialMapping)iterator.next();
             Credential credential = null;
             String tag = mapping.getTag();
+            // If no retrieval tag, try next credential
+            if (tag == null) {
+                continue;
+            }
+            // Get subject for this credential
             String subject = mapping.getSubject();
             try {
                 // Retrieve credential based on credential tag, subject, and given password
@@ -473,7 +481,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         // Get user's credential collection
         Map userCredentials = getUserCredentials(user);
         // Add this credential to that collection
-        userCredentials.put(user.getUserID(), credential);
+        userCredentials.put(user.getID(), credential);
     }
 
     public void storeCredentials(List credentials)
@@ -674,19 +682,19 @@ public abstract class AbstractCredentialManager implements CredentialManager {
     /*** PROTECTED METHODS ***/
 
     protected String getCredentialPermissionImpl() {
-        return this.jdoCredentialPermissionImpl;
+        return this.credentialPermissionImpl;
     }
 
     protected void setCredentialPermissionImpl(String impl) {
-        this.jdoCredentialPermissionImpl = impl;
+        this.credentialPermissionImpl = impl;
     }
 
     protected String getCredentialMappingImpl() {
-        return this.jdoCredentialMappingImpl;
+        return this.credentialMappingImpl;
     }
 
     protected void setCredentialMappingImpl(String impl) {
-        this.jdoCredentialMappingImpl = impl;
+        this.credentialMappingImpl = impl;
     }
 
     protected CredentialRetrievalClient getCredentialRetrievalClient() {
@@ -698,7 +706,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
     }
 
     protected Map getUserCredentials(User user) {
-        String userID = user.getUserID();
+        String userID = user.getID();
         // Get user's credentials
         Map userCredentials = (Map)this.credentials.get(userID);
         // If mapping is empty, create new mapping

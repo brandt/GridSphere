@@ -18,19 +18,19 @@ public interface CredentialMapping {
 
     /**
      */
-    public User getUser();
-
-    /**
-     */
-    public void setUser(User user);
-
-    /**
-     */
     public String getSubject();
 
     /**
      */
     public void setSubject(String subject);
+
+    /**
+     */
+    public String getUser();
+
+    /**
+     */
+    public void setUser(String userId);
 
     /**
      */
