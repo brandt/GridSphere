@@ -18,15 +18,22 @@ public class HelloWorld extends AbstractPortlet {
     }
 
     public void actionPerformed(ActionEvent evt) {
+        PortletMessage msg = new DefaultPortletMessage("yo dude");
+        try {
+            getPortletConfig().getContext().send("org.gridlab.gridsphere.portlets.HalloWelt.1", msg);
+        } catch (AccessDeniedException e) {
+            getPortletLog().info("Access denied to send a message: " + e.getMessage());
+        }
     }
 
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
-
         PrintWriter out = response.getWriter();
         String value = portletSettings.getApplicationSettings().getAttribute("foobar");
         out.println(value);
-
-        getPortletConfig().getContext().include("/jsp/hello.jsp", request, response);
+        getPortletConfig().getContext().include("/jsp/hello_view.jsp", request, response);
     }
 
+    public void doEdit(PortletRequest request, PortletResponse response) throws PortletException, IOException {
+        getPortletConfig().getContext().include("/jsp/hello_edit.jsp", request, response);
+    }
 }

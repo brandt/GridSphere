@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.portlets.examples;
 
 import org.gridlab.gridsphere.event.ActionEvent;
+import org.gridlab.gridsphere.event.MessageEvent;
 import org.gridlab.gridsphere.portlet.*;
 
 import javax.servlet.UnavailableException;
@@ -24,6 +25,9 @@ public class HalloWelt extends AbstractPortlet {
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         PrintWriter out = response.getWriter();
         out.println("<br>Hello, World Zwei</br>");
+        String msg = (String)request.getSession().getAttribute("message");
+        if (msg == null) msg = "No message";
+        out.print("received message: " + msg);
         out.println("<table><tr><td>1</td></tr><tr><td>2</td></tr></table>");
     }
 
@@ -31,4 +35,12 @@ public class HalloWelt extends AbstractPortlet {
         PrintWriter out = response.getWriter();
         out.println("<br>now in edit mode</br>");
     }
+
+    public void messageReceived(MessageEvent event) throws PortletException {
+            PortletRequest request = event.getPortletRequest();
+            PortletMessage msg = event.getMessage();
+            request.getSession().setAttribute("message", msg.toString());
+            getPortletLog().info("Received a message!");
+    }
+
 }
