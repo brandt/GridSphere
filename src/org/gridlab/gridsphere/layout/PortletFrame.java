@@ -651,8 +651,10 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 }
             }
         }
-        if ((cacheExpiration > 0) || (cacheExpiration == -1)) {
-            cacheService.cache(this.getComponentID() + portletClass + id, frame, cacheExpiration);
+        if (nocache == null) {
+            if ((cacheExpiration > 0) || (cacheExpiration == -1)) {
+                cacheService.cache(this.getComponentID() + portletClass + id, frame, cacheExpiration);
+            }
         }
     }
 
