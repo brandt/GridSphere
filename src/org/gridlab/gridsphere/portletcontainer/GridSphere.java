@@ -34,6 +34,8 @@ public class GridSphere extends HttpServlet {
 
     private static SportletServiceFactory factory = SportletServiceFactory.getInstance();
 
+    //private PortletActionFactory factory = new SportletActionFactory().getInstance();
+
     private static PortletConfig portletConfig = null;
     private static PortletRegistryService registryService = null;
     private static PortletUserRegistryService userRegistryService = null;
@@ -105,74 +107,15 @@ public class GridSphere extends HttpServlet {
         }
     }
 
-    public void setupNewUser(SportletRequest sreq, PortletResponse res) {
-
-        //PortletSettings settings = userRegistryService.getPortletSettings(portletRequest, portletID);
-        //sreq.setPortletSettings(settings);
-
-    }
-
-
-    /**
-     * Provide user login. Calls login() method on all portlets that are
-     * in a users profile
-     * For now, just login all known portlets
-     */
-    public final void doLogin(PortletRequest req, PortletResponse res) {
-        Iterator it = userRegistryService.getPortlets(req).iterator();
-        while (it.hasNext()) {
-            AbstractPortlet ab = (AbstractPortlet) it.next();
-            ab.login(req);
-        }
-    }
-
-    /**
-     * Log a user out of the portal. Calls logout() method on all portlets that are
-     * in a users profile
-     * For now, just logout of all known portlets
-     */
-    public final void doLogout(PortletRequest req, PortletResponse res) {
-        Iterator it = userRegistryService.getPortlets(req).iterator();
-        while (it.hasNext()) {
-            AbstractPortlet ab = (AbstractPortlet) it.next();
-            ab.logout(req.getPortletSession());
-        }
-    }
 
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 
-
         // Need to translate servlet objects into portlet counterparts--
-
-        //props.setPreviousMode(props.getPreviousMode());
-        SportletRequest portletRequest = new SportletRequest(req);
-        portletRequest.logRequest();
-
-       /*
-        SportletSettings sportletSettings;
-
-        PortletWindow portletWindow = new SportletWindow();
-
-        Portlet.Mode mode = Portlet.Mode.VIEW;
-        Portlet.Mode previousMode = Portlet.Mode.VIEW;
-        Portlet.ModeModifier modeModifier = Portlet.ModeModifier.CURRENT;
-
-
-        portletRequest.setAttribute(GridSphereProperties.PORTLETSETTINGS, portletSettings);
-        portletRequest.setAttribute(GridSphereProperties.PORTLETWINDOW, portletWindow);
-        portletRequest.setAttribute(GridSphereProperties.MODEMODIFIER, modeModifier);
-        portletRequest.setAttribute(GridSphereProperties.PORTLETMODE, mode);
-        portletRequest.setAttribute(GridSphereProperties.PREVIOUSMODE, previousMode);
-
-
-        portletRequest.setAttribute(GridSphereProperties.CLIENT, client);
-         */
-
-
-
-        //portletRequest = parseService.getPortletRequest(regPortlet, req);
-        //portletResponse = parseService.getPortletResponse(res);
+        PortletRequest portletRequest = new SportletRequest(req);
         PortletResponse portletResponse = new SportletResponse(res, portletRequest);
+
+        ActionEvent actionEvent = null;
+        AbstractPortlet activePortlet = null;
 
         try {
 
@@ -181,37 +124,38 @@ public class GridSphere extends HttpServlet {
                 throw initFailure;
             }
 
-            // Here is some code for handling actions
-            DefaultPortletAction action = (DefaultPortletAction)req.getAttribute(GridSphereProperties.ACTION);
-            if (action == null) {
-                doRender(portletRequest, portletResponse);
+            GridSpherePortletAction gspAction = new GridSpherePortletAction(portletRequest);
+
+            if (gspAction.hasAction()) {
+
+                System.err.println("Received ACTION: " + gspAction.toString());
+
+                String portletID = gspAction.getConcretePortletID();
+                // Get the active portlet instance
+                activePortlet = registryService.getActivePortlet(portletID);
+
+                // Get the user's portlet settings
+                PortletSettings portletSettings = userRegistryService.getPortletSettings(portletRequest, portletID);
+
+                // Set the portlet data (when this works)
+
+                //PortletData portletData = userRegistryService.getPortletData(req, portletID);
+                //req.setAttribute(GridSphereProperties.PORTLETDATA, portletData);
+
+
             }
-                //setupNewUser(portletRequest, portletResponse);
-
-            String portletID = action.getPortletID();
-            PortletSettings portletSettings = userRegistryService.getPortletSettings(portletRequest, portletID);
-            PortletData portletData = userRegistryService.getPortletData(portletRequest, portletID);
-
-            if (action.getName().equals(PortletAction.LOGIN)) {
-                doLogin(portletRequest, portletResponse);
-            }
-
-            if (action.getName().equals(PortletAction.LOGOUT)) {
-                doLogout(portletRequest, portletResponse);
-            }
-
-            ActionEvent actionEvent = new ActionEventImpl(action, ActionEvent.ACTION_NOTYETPERFORMED,
-                                                          portletRequest, portletResponse);
-
-            AbstractPortlet activePortlet = registryService.getActivePortlet(portletID);
-            activePortlet.actionNotYetPerformed(actionEvent);
-
-            actionEvent.setEventType(ActionEvent.ACTION_PERFORMED);
-            activePortlet.actionPerformed(actionEvent);
 
             // Render layout
             doRender(portletRequest, portletResponse);
-            //doPortletLifecycle(portletRequest, portletResponse);
+
+            if (gspAction.hasAction()) {
+                DefaultPortletAction portletAction = gspAction.getPortletAction();
+                actionEvent = new ActionEventImpl(portletAction, portletRequest, portletResponse);
+
+                // do actionPerformed
+                activePortlet.actionPerformed(actionEvent);
+
+            }
 
         } catch (Exception e) {
             handleException(portletResponse, e);
@@ -224,6 +168,42 @@ public class GridSphere extends HttpServlet {
         // Make a layout
         log.info("in doRender()");
         layoutEngine.doRender(req, res);
+    }
+
+    public void doAction(String action, PortletRequest req, PortletResponse res) throws IOException, ServletException {
+
+        System.err.println("Received ACTION: " + action);
+
+        //setupNewUser(portletRequest, portletResponse);
+
+        String portletID = req.getParameter(GridSphereProperties.PORTLETID);
+        System.err.println("portlet id: " + portletID);
+
+        // Get the active portlet instance
+        AbstractPortlet activePortlet = registryService.getActivePortlet(portletID);
+
+        // Get the user's portlet settings
+        PortletSettings portletSettings = userRegistryService.getPortletSettings(req, portletID);
+
+        // Set the portlet data (when this works)
+
+        //PortletData portletData = userRegistryService.getPortletData(req, portletID);
+        //req.setAttribute(GridSphereProperties.PORTLETDATA, portletData);
+
+        // Check if a secure form submission is required, then pass tokens
+        DefaultPortletAction dpa = new DefaultPortletAction(action);
+       // ActionEvent actionEvent = new ActionEventImpl(dpa, ActionEvent.ACTION_NOTYETPERFORMED, req, res);
+        /*
+        if (dpa.isSensitive()) {
+            activePortlet.actionNotYetPerformed(actionEvent);
+        }
+        */
+        // Render layout
+        doRender(req, res);
+
+        //PortletAction a = actionEvent.getAction();
+        //activePortlet.actionPerformed(actionEvent);
+
     }
 
     public void doPortletLifecycle(PortletRequest req, PortletResponse res) throws IOException, ServletException {
@@ -266,6 +246,7 @@ public class GridSphere extends HttpServlet {
 
 
         // Here is some code for handling actions
+        /*
         DefaultPortletAction action = (DefaultPortletAction)req.getAttribute(GridSphereProperties.ACTION);
         ActionEvent actionEvent = new ActionEventImpl(action, ActionEvent.ACTION_NOTYETPERFORMED, req, res);
         String portletID = action.getPortletID();
@@ -275,7 +256,7 @@ public class GridSphere extends HttpServlet {
 
         actionEvent.setEventType(ActionEvent.ACTION_PERFORMED);
         coolPortlet.actionPerformed(actionEvent);
-
+         */
         // Check for LOGIN
         /*
         String login = (String) req.getAttribute(GridSphereProperties.LOGIN);
@@ -305,7 +286,7 @@ public class GridSphere extends HttpServlet {
             AbstractPortlet ab = (AbstractPortlet) it.next();
 
             // First execute portlet business logic
-            ab.actionPerformed(actionEvent);
+            //ab.actionPerformed(actionEvent);
             out.println("<b>portlet</b>");
             // Second forward to presentation logic
             ab.service(req, res);
