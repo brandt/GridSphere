@@ -18,6 +18,7 @@ import org.gridlab.gridsphere.layout.PortletLayoutEngine;
 import org.gridlab.gridsphere.layout.PortletErrorFrame;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletMessageManager;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -220,6 +221,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * Shuts down the GridSphere portlet container
      */
     public final void destroy() {
+        // shutdown the persistencemanagers
+        PersistenceManagerFactory.shutdown();
         // Shutdown services
         SportletServiceFactory.getInstance().shutdownServices();
         System.gc();
