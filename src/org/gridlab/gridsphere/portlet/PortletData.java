@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.portlet;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Enumeration;
 
 /**
@@ -25,9 +26,9 @@ public interface PortletData {
     public String getAttribute(String name);
 
     /**
-     * Returns an enumeration of all available attributes names.
+     * Returns an iterator of all available attributes names.
      *
-     * @return an enumeration of all available attributes names
+     * @return an iterator of all available attributes names
      */
     public Enumeration getAttributeNames();
 

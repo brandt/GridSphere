@@ -213,41 +213,13 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the User object
      */
     public User getUser() {
-        User user = (User) req.getSession(true).getAttribute(SportletProperties.PORTLET_USER);
+        User user = (User) req.getAttribute(SportletProperties.PORTLET_USER);
         if (user == null) {
             user = GuestUser.getInstance();
-            req.getSession().setAttribute(SportletProperties.PORTLET_USER, user);
+            req.setAttribute(SportletProperties.PORTLET_USER, user);
         }
         return user;
     }
-
-    /**
-     * Returns the roles this user has in the supplied PortletGroup. If no group
-     * is specified, the roles the user has in the BASE group are returned.
-     *
-     * @param group the PortletGroup to query the user's roles
-     * @return an array of PortletRole objects
-     *
-     * @see PortletRole
-     */
-    /*
-    public PortletRole getRole(PortletGroup group) {
-        Map authMap = (Map) req.getAttribute(SportletProperties.GROUPROLES);
-        if ((group == null) || (authMap == null)) {
-            return PortletRole.GUEST;
-        }
-        Set set = authMap.keySet();
-        Iterator it = set.iterator();
-        PortletRole role = null;
-        while (it.hasNext()) {
-            PortletGroup g = (PortletGroup)it.next();
-            if (g.getName().equals(group.getName())) {
-                role = (PortletRole)authMap.get(g);
-            }
-        }
-        return (role == null) ? PortletRole.GUEST : role;
-    }*/
-
 
     public PortletRole getRole() {
         PortletRole role = (PortletRole)req.getAttribute(SportletProperties.PORTLET_ROLE);

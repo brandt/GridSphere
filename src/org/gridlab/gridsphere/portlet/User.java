@@ -6,6 +6,7 @@
 package org.gridlab.gridsphere.portlet;
 
 import java.util.Enumeration;
+import java.util.Iterator;
 
 /**
  * The <code>User</code> interface is an abstract view on the user-specific data.
@@ -13,6 +14,11 @@ import java.util.Enumeration;
  * the interface gives access to user profile data.
  */
 public interface User {
+
+    /**
+     * Users locale preference stored as an attribute with this key
+     */
+    public static final String LOCALE = "gridsphere.user.locale";
 
     /**
      * Returns the value of the attribute with the given name,

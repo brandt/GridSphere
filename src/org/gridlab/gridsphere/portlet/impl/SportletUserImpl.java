@@ -12,10 +12,7 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The <code>SportletUserImpl</code> implements the <code>User</code> interface

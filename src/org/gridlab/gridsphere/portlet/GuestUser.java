@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.portlet;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 
 /**
  * A <code>GuestUser</code> is defined as a <code>User</code> that has not
