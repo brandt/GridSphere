@@ -25,7 +25,7 @@
     while (it.hasNext()) {
         LoginAuthModule loginAuthModule = (LoginAuthModule)it.next();
         String authModuleName = loginAuthModule.getModuleName();
-
+        System.err.println("auth mod name: " + authModuleName);
         // active boolean is available to individual module pages
         boolean active = false;
 

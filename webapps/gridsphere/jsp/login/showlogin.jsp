@@ -1,6 +1,7 @@
 <ui:form>
     <ui:panel>
-        <ui:errorframe beanId="errorFrame"/>
+
+        <ui:frame beanId="errorFrame"/>
 
         <ui:frame>
             <ui:tablerow>

@@ -1,13 +1,10 @@
-<%@ page import="org.gridlab.gridsphere.portlet.User,
-                 org.gridlab.gridsphere.portlet.impl.SportletProperties,
-                 org.gridlab.gridsphere.portlet.GuestUser"%>
+<%@ page import="org.gridlab.gridsphere.portlet.GuestUser"%>
 
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
 <portletAPI:init/>
-
-<% User user = (User)request.getAttribute("user"); %>
+<jsp:useBean id="user" class="org.gridlab.gridsphere.portlet.User" scope="request"/>
 
 <% if ((user == null) || (user instanceof GuestUser)) { %>
 

@@ -4,7 +4,7 @@
 <portletAPI:init/>
 
     <ui:panel>
-        <ui:errorframe beanId="errorFrame"/>
+        <ui:frame beanId="errorFrame"/>
 
         <ui:fileform action="uploadFile">
         <ui:frame>

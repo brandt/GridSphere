@@ -7,7 +7,7 @@
     <ui:hiddenfield beanId="fileName"/>
     <ui:panel>
 
-        <ui:errorframe beanId="editError"/>
+        <ui:frame beanId="editError"/>
 
         <ui:frame>
         <ui:tablerow>
