@@ -181,6 +181,8 @@ public interface FormEvent extends ActionEvent {
 
     public IncludeBean getIncludeBean(String beanId);
 
+    public MessageBoxBean getMessageBoxBean(String beanId);
+
     /**
      * Stores any created beans into the request
      */

@@ -5,10 +5,9 @@
  */
 package org.gridlab.gridsphere.provider.event.impl;
 
+import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
-import org.apache.commons.fileupload.DiskFileUpload;
-import org.apache.commons.fileupload.FileUploadException;
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletLog;
@@ -20,13 +19,13 @@ import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 
 import java.io.IOException;
-import java.io.File;
 import java.util.*;
 
 /*
  * The <code>FormEventImpl</code> provides methods for creating/retrieving visual beans
  * from the <code>PortletRequest</code>
  */
+
 public class FormEventImpl implements FormEvent {
 
     protected transient static PortletLog log = SportletLog.getInstance(FormEventImpl.class);
@@ -40,7 +39,7 @@ public class FormEventImpl implements FormEvent {
     /**
      * Constructs a FormEventImpl from a portlet request, a portlet response, and a collection of visual beans
      *
-     * @param request the portlet request
+     * @param request  the portlet request
      * @param response the portlet response
      * @param tagBeans a collection of tag beans
      */
@@ -107,7 +106,7 @@ public class FormEventImpl implements FormEvent {
      *
      * @return the portlet action
      */
-    public  DefaultPortletAction getAction() {
+    public DefaultPortletAction getAction() {
         if (event == null) {
             return null;
         }
@@ -135,7 +134,7 @@ public class FormEventImpl implements FormEvent {
     public ActionLinkBean getActionLinkBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (ActionLinkBean)tagBeans.get(beanKey);
+            return (ActionLinkBean) tagBeans.get(beanKey);
         }
         ActionLinkBean al = new ActionLinkBean(request, beanId);
         tagBeans.put(beanKey, al);
@@ -151,7 +150,7 @@ public class FormEventImpl implements FormEvent {
     public ActionParamBean getActionParamBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (ActionParamBean)tagBeans.get(beanKey);
+            return (ActionParamBean) tagBeans.get(beanKey);
         }
         ActionParamBean ap = new ActionParamBean(request, beanId);
         tagBeans.put(beanKey, ap);
@@ -167,7 +166,7 @@ public class FormEventImpl implements FormEvent {
     public ActionSubmitBean getActionSubmitBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (ActionSubmitBean)tagBeans.get(beanKey);
+            return (ActionSubmitBean) tagBeans.get(beanKey);
         }
         ActionSubmitBean as = new ActionSubmitBean(request, beanId);
         tagBeans.put(beanKey, as);
@@ -183,7 +182,7 @@ public class FormEventImpl implements FormEvent {
     public CheckBoxBean getCheckBoxBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (CheckBoxBean)tagBeans.get(beanKey);
+            return (CheckBoxBean) tagBeans.get(beanKey);
         }
         CheckBoxBean cb = new CheckBoxBean(request, beanId);
         tagBeans.put(beanKey, cb);
@@ -199,7 +198,7 @@ public class FormEventImpl implements FormEvent {
     public RadioButtonBean getRadioButtonBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (RadioButtonBean)tagBeans.get(beanKey);
+            return (RadioButtonBean) tagBeans.get(beanKey);
         }
         RadioButtonBean rb = new RadioButtonBean(request, beanId);
         tagBeans.put(beanKey, rb);
@@ -215,7 +214,7 @@ public class FormEventImpl implements FormEvent {
     public PanelBean getPanelBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (PanelBean)tagBeans.get(beanKey);
+            return (PanelBean) tagBeans.get(beanKey);
         }
         PanelBean pb = new PanelBean(request, beanId);
         tagBeans.put(beanKey, pb);
@@ -231,7 +230,7 @@ public class FormEventImpl implements FormEvent {
     public TextFieldBean getTextFieldBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (TextFieldBean)tagBeans.get(beanKey);
+            return (TextFieldBean) tagBeans.get(beanKey);
         }
         TextFieldBean tf = new TextFieldBean(request, beanId);
         tagBeans.put(beanKey, tf);
@@ -247,7 +246,7 @@ public class FormEventImpl implements FormEvent {
     public HiddenFieldBean getHiddenFieldBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (HiddenFieldBean)tagBeans.get(beanKey);
+            return (HiddenFieldBean) tagBeans.get(beanKey);
         }
         HiddenFieldBean hf = new HiddenFieldBean(request, beanId);
         tagBeans.put(beanKey, hf);
@@ -263,7 +262,7 @@ public class FormEventImpl implements FormEvent {
     public FileInputBean getFileInputBean(String beanId) throws IOException {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (FileInputBean)tagBeans.get(beanKey);
+            return (FileInputBean) tagBeans.get(beanKey);
         }
         FileInputBean fi = new FileInputBean(request, beanId);
         tagBeans.put(beanKey, fi);
@@ -279,7 +278,7 @@ public class FormEventImpl implements FormEvent {
     public PasswordBean getPasswordBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (PasswordBean)tagBeans.get(beanKey);
+            return (PasswordBean) tagBeans.get(beanKey);
         }
         PasswordBean pb = new PasswordBean(request, beanId);
         tagBeans.put(beanKey, pb);
@@ -295,7 +294,7 @@ public class FormEventImpl implements FormEvent {
     public TextAreaBean getTextAreaBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (TextAreaBean)tagBeans.get(beanKey);
+            return (TextAreaBean) tagBeans.get(beanKey);
         }
         TextAreaBean ta = new TextAreaBean(request, beanId);
         tagBeans.put(beanKey, ta);
@@ -311,7 +310,7 @@ public class FormEventImpl implements FormEvent {
     public FrameBean getFrameBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (FrameBean)tagBeans.get(beanKey);
+            return (FrameBean) tagBeans.get(beanKey);
         }
         FrameBean fb = new FrameBean(request, beanId);
         //System.err.println("Creating new frame bean" + beanId + " bean key= " + beanKey);
@@ -328,7 +327,7 @@ public class FormEventImpl implements FormEvent {
     public TextBean getTextBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (TextBean)tagBeans.get(beanKey);
+            return (TextBean) tagBeans.get(beanKey);
         }
         TextBean tb = new TextBean(request, beanId);
         tagBeans.put(beanKey, tb);
@@ -344,7 +343,7 @@ public class FormEventImpl implements FormEvent {
     public ImageBean getImageBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (ImageBean)tagBeans.get(beanKey);
+            return (ImageBean) tagBeans.get(beanKey);
         }
         ImageBean ib = new ImageBean(request, beanId);
         tagBeans.put(beanKey, ib);
@@ -361,7 +360,7 @@ public class FormEventImpl implements FormEvent {
     public TableBean getTableBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (TableBean)tagBeans.get(beanKey);
+            return (TableBean) tagBeans.get(beanKey);
         }
         TableBean tb = new TableBean(request, beanId);
         tagBeans.put(beanKey, tb);
@@ -377,7 +376,7 @@ public class FormEventImpl implements FormEvent {
     public TableRowBean getTableRowBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (TableRowBean)tagBeans.get(beanKey);
+            return (TableRowBean) tagBeans.get(beanKey);
         }
         TableRowBean tr = new TableRowBean(request, beanId);
         tagBeans.put(beanKey, tr);
@@ -393,7 +392,7 @@ public class FormEventImpl implements FormEvent {
     public TableCellBean getTableCellBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (TableCellBean)tagBeans.get(beanKey);
+            return (TableCellBean) tagBeans.get(beanKey);
         }
         TableCellBean tc = new TableCellBean(request, beanId);
         tagBeans.put(beanKey, tc);
@@ -409,7 +408,7 @@ public class FormEventImpl implements FormEvent {
     public ListBoxBean getListBoxBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (ListBoxBean)tagBeans.get(beanKey);
+            return (ListBoxBean) tagBeans.get(beanKey);
         }
         ListBoxBean lb = new ListBoxBean(request, beanId);
         tagBeans.put(beanKey, lb);
@@ -425,7 +424,7 @@ public class FormEventImpl implements FormEvent {
     public ListBoxItemBean getListBoxItemBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (ListBoxItemBean)tagBeans.get(beanKey);
+            return (ListBoxItemBean) tagBeans.get(beanKey);
         }
         ListBoxItemBean lb = new ListBoxItemBean(request, beanId);
         tagBeans.put(beanKey, lb);
@@ -441,7 +440,7 @@ public class FormEventImpl implements FormEvent {
     public IncludeBean getIncludeBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (IncludeBean)tagBeans.get(beanKey);
+            return (IncludeBean) tagBeans.get(beanKey);
         }
         IncludeBean includeBean = new IncludeBean(request, response, beanId);
         tagBeans.put(beanKey, includeBean);
@@ -532,7 +531,7 @@ public class FormEventImpl implements FormEvent {
                 //System.out.println("vb type :" + vb);
             }
 
-            vbname = vbname.substring(idx+1);
+            vbname = vbname.substring(idx + 1);
             idx = vbname.indexOf("_");
 
             if (idx > 0) {
@@ -540,10 +539,10 @@ public class FormEventImpl implements FormEvent {
                 //System.out.println("beanId :" + beanId);
             }
 
-            name = vbname.substring(idx+1);
+            name = vbname.substring(idx + 1);
             System.out.println("name :" + name);
 
-            String[] vals = (String[])paramsMap.get(uiname); //request.getParameterValues(uiname);
+            String[] vals = (String[]) paramsMap.get(uiname); //request.getParameterValues(uiname);
             /*for (int i = 0; i < vals.length; i++) {
                 System.err.println("vals[" + i +"] = " + vals[i]);
             }*/
@@ -561,10 +560,10 @@ public class FormEventImpl implements FormEvent {
                 this.printRequestAttributes();
                 log.debug("Creating a fileinput bean with id:" + beanId);
                 try {
-                    FileInputBean bean=null;
-                    if(savedFileItem!=null){
-                        bean = new FileInputBean(req, beanId,savedFileItem);
-                    }else{
+                    FileInputBean bean = null;
+                    if (savedFileItem != null) {
+                        bean = new FileInputBean(req, beanId, savedFileItem);
+                    } else {
                         bean = new FileInputBean(req, beanId);
                     }
                     bean.setName(name);
@@ -575,7 +574,7 @@ public class FormEventImpl implements FormEvent {
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
 
             } else if (vb.equals(CheckBoxBean.NAME)) {
-                CheckBoxBean bean = (CheckBoxBean)tagBeans.get(beanKey);
+                CheckBoxBean bean = (CheckBoxBean) tagBeans.get(beanKey);
                 if (bean == null) {
                     log.debug("Creating a checkbox bean with id:" + beanId);
                     bean = new CheckBoxBean(req, beanId);
@@ -609,7 +608,7 @@ public class FormEventImpl implements FormEvent {
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
                 tagBeans.put(beanKey, bean);
             } else if (vb.equals(RadioButtonBean.NAME)) {
-                RadioButtonBean bean = (RadioButtonBean)tagBeans.get(beanKey);
+                RadioButtonBean bean = (RadioButtonBean) tagBeans.get(beanKey);
                 if (bean == null) {
                     log.debug("Creating a new radiobutton bean with id:" + beanId);
                     bean = new RadioButtonBean(req, beanId);
@@ -673,31 +672,31 @@ public class FormEventImpl implements FormEvent {
         Map parameters = new Hashtable();
         if (FileUpload.isMultipartContent(req)) {
             //log.debug("Multipart!");
-            DiskFileUpload upload=new DiskFileUpload();
-             // Set upload parameters
+            DiskFileUpload upload = new DiskFileUpload();
+            // Set upload parameters
             upload.setSizeMax(FileInputBean.MAX_UPLOAD_SIZE);
             upload.setRepositoryPath(FileInputBean.TEMP_DIR);
-            List fileItems=null;
+            List fileItems = null;
             try {
-                  fileItems= upload.parseRequest(req);
+                fileItems = upload.parseRequest(req);
 
             } catch (Exception e) {
-             log.error("Error Parsing multi Part form.Error in workaround!!!", e);
+                log.error("Error Parsing multi Part form.Error in workaround!!!", e);
             }
 
-            if (fileItems!=null){
+            if (fileItems != null) {
                 for (int i = 0; i < fileItems.size(); i++) {
                     FileItem item = (FileItem) fileItems.get(i);
-                    String[] tmpstr=new String[1];
-                    if(item.isFormField()) {
-                        tmpstr[0]=item.getString();
-                    }else {
-                        tmpstr[0]="fileinput";
+                    String[] tmpstr = new String[1];
+                    if (item.isFormField()) {
+                        tmpstr[0] = item.getString();
+                    } else {
+                        tmpstr[0] = "fileinput";
                         /** FileInput attribute is a FileItem*/
                         savedFileItem = item;
                     }
-                    log.debug("Name: "+item.getFieldName()+" Value: "+tmpstr[0]);
-                    parameters.put(item.getFieldName(),tmpstr);
+                    log.debug("Name: " + item.getFieldName() + " Value: " + tmpstr[0]);
+                    parameters.put(item.getFieldName(), tmpstr);
                 }
 
             }
@@ -705,6 +704,7 @@ public class FormEventImpl implements FormEvent {
         }
         return parameters;
     }
+
     /**
      * Returns a bean key identifier using the component identifier
      *
@@ -712,17 +712,17 @@ public class FormEventImpl implements FormEvent {
      * @return the bean key identifier
      */
     protected String getBeanKey(String beanId) {
-        String compId = (String)request.getAttribute(SportletProperties.COMPONENT_ID);
+        String compId = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
         return beanId + "_" + compId;
     }
 
-   /**
+    /**
      * Stores any created beans into the request
      */
     public void store() {
         Iterator it = tagBeans.values().iterator();
         while (it.hasNext()) {
-            TagBean tagBean = (TagBean)it.next();
+            TagBean tagBean = (TagBean) it.next();
             //log.debug("storing bean id: " + tagBean.getBeanId());
             tagBean.store();
         }
@@ -737,7 +737,7 @@ public class FormEventImpl implements FormEvent {
         log.debug("in print tag beans:");
         Iterator it = tagBeans.values().iterator();
         while (it.hasNext()) {
-            TagBean tagBean = (TagBean)it.next();
+            TagBean tagBean = (TagBean) it.next();
             log.debug("tag bean id: " + tagBean.getBeanId());
         }
     }
@@ -745,7 +745,7 @@ public class FormEventImpl implements FormEvent {
     public ActionMenuItemBean getActionMenuItemBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (ActionMenuItemBean)tagBeans.get(beanKey);
+            return (ActionMenuItemBean) tagBeans.get(beanKey);
         }
         ActionMenuItemBean ami = new ActionMenuItemBean(request, beanId);
         tagBeans.put(beanKey, ami);
@@ -755,17 +755,27 @@ public class FormEventImpl implements FormEvent {
     public DataGridBean getDataGridBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (DataGridBean)tagBeans.get(beanKey);
+            return (DataGridBean) tagBeans.get(beanKey);
         }
         DataGridBean dgBean = new DataGridBean(request, beanId);
         tagBeans.put(beanKey, dgBean);
         return dgBean;
     }
 
+    public MessageBoxBean getMessageBoxBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (MessageBoxBean) tagBeans.get(beanKey);
+        }
+        MessageBoxBean mbean = new MessageBoxBean(request, beanId);
+        tagBeans.put(beanKey, mbean);
+        return mbean;
+    }
+
     public ActionMenuBean getActionMenuBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
-            return (ActionMenuBean)tagBeans.get(beanKey);
+            return (ActionMenuBean) tagBeans.get(beanKey);
         }
         ActionMenuBean am = new ActionMenuBean(request, beanId);
         tagBeans.put(beanKey, am);
