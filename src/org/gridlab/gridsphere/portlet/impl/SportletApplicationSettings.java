@@ -119,7 +119,7 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
         */
         portletApp = pdd.getConcretePortletApplication(portletApp.getID());
         Enumeration enum = store.elements();
-        Vector list = new Vector();
+        ArrayList list = new ArrayList();
         while (enum.hasMoreElements()) {
             String key = (String)enum.nextElement();
             String value = (String)store.get(key);

@@ -227,7 +227,7 @@ public class SportletSettings implements PortletSettings {
         ConcretePortletApplication concPortletApp = pdd.getConcretePortletApplication(concretePortletID);
         ConcretePortletInfo concPortletInfo = concPortletApp.getConcretePortletInfo();
         Enumeration enum = store.elements();
-        Vector list = new Vector();
+        ArrayList list = new ArrayList();
         while (enum.hasMoreElements()) {
             String key = (String)enum.nextElement();
             String value = (String)store.get(key);
