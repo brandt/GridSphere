@@ -6,6 +6,9 @@
 <% Map groupNames = (Map)request.getAttribute("groupNames"); %>
 
 <portletAPI:init/>
+
+<ui:messagebox beanId="msg"/>
+
 <ui:form>
 
 <h3><ui:text key="LAYOUTMGR_EDIT_BANNER" style="nostyle"/></h3>

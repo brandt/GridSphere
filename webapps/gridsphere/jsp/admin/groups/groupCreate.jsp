@@ -7,6 +7,9 @@
 <% boolean isPublic = ((request.getAttribute("isPrivate") != null) ? false : true); %>
 
 <ui:form>
+
+<ui:messagebox beanId="msg"/>
+
 <ui:hiddenfield beanId="groupId"/>
 
 <h3>Group information</h3>

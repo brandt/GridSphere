@@ -7,6 +7,8 @@
 
 <portletAPI:init/>
 
+<ui:messagebox beanId="msg"/>
+
 <ui:form>
 <h3><ui:text key="LAYOUTMGR_GROUP_EDIT" style="nostyle"/>&nbsp; <%= name %></h3>
 <ui:hiddenfield beanId="layoutHF"/>

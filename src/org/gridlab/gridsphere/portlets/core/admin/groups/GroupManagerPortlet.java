@@ -1,6 +1,6 @@
 /*
- * $Id$
- */
+* $Id$
+*/
 package org.gridlab.gridsphere.portlets.core.admin.groups;
 
 import org.gridlab.gridsphere.portlet.*;
@@ -30,7 +30,7 @@ import java.util.*;
 
 public class GroupManagerPortlet extends ActionPortlet {
 
-      // JSP pages used by this portlet
+    // JSP pages used by this portlet
     public static final String DO_VIEW_GROUP_LIST = "admin/groups/groupList.jsp";
     public static final String DO_VIEW_GROUP_VIEW = "admin/groups/groupView.jsp";
     public static final String DO_VIEW_GROUP_EDIT = "admin/groups/groupEditDefaults.jsp";
@@ -44,6 +44,7 @@ public class GroupManagerPortlet extends ActionPortlet {
 
     // Portlet services
     private UserManagerService userManagerService = null;
+    private AccessControlManagerService aclManagerService = null;
     private LayoutManagerService  layoutMgr = null;
     private PortalConfigService portalConfigService = null;
 
@@ -55,6 +56,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         log.debug("Entering initServices()");
         try {
             this.userManagerService = (UserManagerService)config.getContext().getService(UserManagerService.class);
+            this.aclManagerService = (AccessControlManagerService)this.getConfig().getContext().getService(AccessControlManagerService.class);
             this.layoutMgr = (LayoutManagerService)config.getContext().getService(LayoutManagerService.class);
             this.portalConfigService = (PortalConfigService)getPortletConfig().getContext().getService(PortalConfigService.class);
         } catch (PortletServiceException e) {
@@ -79,20 +81,20 @@ public class GroupManagerPortlet extends ActionPortlet {
         PortletRequest req = evt.getPortletRequest();
         User user = req.getUser();
         List groupList = new ArrayList();
-        List groups = getACLService(user).getGroups();
+        List groups = aclManagerService.getGroups();
         Iterator it = groups.iterator();
         while (it.hasNext()) {
             PortletGroup g = (PortletGroup)it.next();
-            AccessControlManagerService aclService = getACLService(user);
+
             //String desc = g.getDescription();
-            if ((aclService.hasAdminRoleInGroup(user, g)) && (!g.equals(PortletGroupFactory.GRIDSPHERE_GROUP))) {
+            if ((aclManagerService.hasAdminRoleInGroup(user, g)) && (!g.equals(PortletGroupFactory.GRIDSPHERE_GROUP))) {
                 log.info("user " + user.getFullName() + " is admin");
-            //System.err.println("group= " + g.getName() + " ispublic=" + g.isPublic());
+                //System.err.println("group= " + g.getName() + " ispublic=" + g.isPublic());
 
-            //System.err.println("desc=" + desc);
+                //System.err.println("desc=" + desc);
 
-            } else if (aclService.hasSuperRole(user)) {
-            //    groupData.put(g, desc);
+            } else if (aclManagerService.hasSuperRole(user)) {
+                //    groupData.put(g, desc);
             }
             groupList.add(g);
         }
@@ -111,10 +113,11 @@ public class GroupManagerPortlet extends ActionPortlet {
         // see if there is a group already
         PortletGroup group = null;
         Set portletRoleList = null;
-        String groupId = event.getAction().getParameter("groupID");
+        DefaultPortletAction action = event.getAction();
+        if (action != null) {
+        String groupId = action.getParameter("groupID");
         if (groupId != null) {
-            User user = req.getUser();
-            group = getACLService(user).getGroup(groupId);
+            group = aclManagerService.getGroup(groupId);
             TextFieldBean groupNameTF = event.getTextFieldBean("groupNameTF");
             groupNameTF.setValue(group.getName());
             TextFieldBean groupDescTF = event.getTextFieldBean("groupDescTF");
@@ -124,6 +127,7 @@ public class GroupManagerPortlet extends ActionPortlet {
             portletRoleList = group.getPortletRoleList();
             HiddenFieldBean gid = event.getHiddenFieldBean("groupId");
             gid.setValue(groupId);
+        }
         }
 
 
@@ -338,27 +342,39 @@ public class GroupManagerPortlet extends ActionPortlet {
         }
 
         try {
-            if ((!groupTF.getValue().equals("")) && !portletRoles.isEmpty()) {
-
-                newgroup.setName(groupTF.getValue());
-                newgroup.setDescription(groupDescTF.getValue());
-                newgroup.setPortletRoleList(portletRoles);
-                if (groupVisibility.getSelectedValue().equals("PRIVATE")) {
-                    newgroup.setPublic(false);
-                } else {
-                    newgroup.setPublic(true);
-                }
-
-                aclService.createGroup(newgroup);
-
-                // now create new group layout if group does not exist
-
-                if (PortletTabRegistry.getGroupTabs(groupTF.getValue()) == null) {
-                    PortletTabRegistry.newGroupTab(groupTF.getValue(), portletRoles);
-                }
-            } else {
-                log.error("Unable to create new group. Either group name or portlets is empty");
+            if (groupTF.getValue().equals("")) {
+                this.createErrorMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_INVALID_NAME"));
+                setNextState(evt.getPortletRequest(), "doCreateNewGroup");
+                return;
             }
+            if (groupDescTF.getValue().equals("")) {
+                this.createErrorMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_INVALID_DESC"));
+                setNextState(evt.getPortletRequest(), "doCreateNewGroup");
+                return;
+            }
+            if (portletRoles.isEmpty()) {
+                this.createErrorMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_INVALID_PORTLETS"));
+                setNextState(evt.getPortletRequest(), "doCreateNewGroup");
+                return;
+            }
+
+            newgroup.setName(groupTF.getValue());
+            newgroup.setDescription(groupDescTF.getValue());
+            newgroup.setPortletRoleList(portletRoles);
+            if (groupVisibility.getSelectedValue().equals("PRIVATE")) {
+                newgroup.setPublic(false);
+            } else {
+                newgroup.setPublic(true);
+            }
+
+            aclService.createGroup(newgroup);
+
+            // now create new group layout if group does not exist
+
+            if (PortletTabRegistry.getGroupTabs(groupTF.getValue()) == null) {
+                PortletTabRegistry.newGroupTab(groupTF.getValue(), portletRoles);
+            }
+
         } catch (Exception e) {
             log.error("Unable to save new group layout: ", e);
         }
@@ -405,8 +421,8 @@ public class GroupManagerPortlet extends ActionPortlet {
         loadGroup(evt);
 
         HiddenFieldBean groupEntryIDBean = evt.getHiddenFieldBean("groupEntryID");
-        User user = evt.getPortletRequest().getUser();
-        GroupEntry entry = getACLService(user).getGroupEntry(groupEntryIDBean.getValue());
+
+        GroupEntry entry = aclManagerService.getGroupEntry(groupEntryIDBean.getValue());
         evt.getTextBean("userName").setValue(entry.getUser().getUserName());
 
         setRoleListBox(evt, entry.getRole());
@@ -441,9 +457,9 @@ public class GroupManagerPortlet extends ActionPortlet {
         log.debug("Entering doViewAddGroupEntry");
         checkAdminRole(evt);
         PortletRequest req = evt.getPortletRequest();
-        User user = req.getUser();
+
         PortletGroup group = loadGroup(evt);
-        List usersNotInGroupList = getACLService(user).getUsersNotInGroup(group);
+        List usersNotInGroupList = aclManagerService.getUsersNotInGroup(group);
 
         viewUsersNotInGroupList(evt, usersNotInGroupList);
         setNextState(req, DO_VIEW_GROUP_ENTRY_ADD);
@@ -456,18 +472,12 @@ public class GroupManagerPortlet extends ActionPortlet {
         checkAdminRole(evt);
         PortletRequest req = evt.getPortletRequest();
         PortletGroup group = loadGroup(evt);
-        User user = req.getUser();
-        try {
-            addGroupEntries(evt, group);
-            setGroupEntryList(evt, group);
-            setNextTitle(req, "Portlet Group Manager [Added User Role]");
-            setNextState(req, DO_VIEW_GROUP_ENTRY_ADD_CONFIRM);
-        } catch (PortletException e) {
-            List usersNotInGroupList = getACLService(user).getUsersNotInGroup(group);
 
-            viewUsersNotInGroupList(evt, usersNotInGroupList);
-            setNextState(req, DO_VIEW_GROUP_ENTRY_ADD);
-        }
+        addGroupEntries(evt, group);
+        setGroupEntryList(evt, group);
+        setNextTitle(req, "Portlet Group Manager [Added User Role]");
+        setNextState(req, DO_VIEW_GROUP_ENTRY_ADD_CONFIRM);
+
     }
 
     public void doViewConfirmChangeRole(FormEvent evt)
@@ -476,26 +486,23 @@ public class GroupManagerPortlet extends ActionPortlet {
         checkAdminRole(evt);
         PortletRequest req = evt.getPortletRequest();
 
-
-        User root = req.getUser();
-
         HiddenFieldBean groupEntryIDBean = evt.getHiddenFieldBean("groupEntryID");
-        GroupEntry entry = getACLService(root).getGroupEntry(groupEntryIDBean.getValue());
+        GroupEntry entry = aclManagerService.getGroupEntry(groupEntryIDBean.getValue());
 
         ListBoxBean groupEntryRoleListBox = evt.getListBoxBean("groupEntryRoleLB");
         String selectedGroupRole = groupEntryRoleListBox.getSelectedValue();
         PortletRole role = PortletRole.toPortletRole(selectedGroupRole);
 
         // Create add to group request
-        GroupRequest groupRequest = getACLService(root).editGroupEntry(entry);
+        GroupRequest groupRequest = aclManagerService.editGroupEntry(entry);
 
         groupRequest.setRole(role);
 
         // Create access right
-        getACLService(root).saveGroupEntry(groupRequest);
+        aclManagerService.saveGroupEntry(groupRequest);
 
         loadGroup(evt);
-        entry = getACLService(root).getGroupEntry(groupEntryIDBean.getValue());
+        entry = aclManagerService.getGroupEntry(groupEntryIDBean.getValue());
         viewGroupEntry(evt, entry);
 
         setNextTitle(req, "Portlet Group Manager [Modified User's Role]");
@@ -542,9 +549,8 @@ public class GroupManagerPortlet extends ActionPortlet {
 
     public void doEditDefaultGroups(FormEvent evt) {
         PortletRequest req = evt.getPortletRequest();
-        User user = req.getUser();
         Set existingDefaults = portalConfigService.getPortalConfigSettings().getDefaultGroups();
-        List groups = getACLService(user).getGroups();
+        List groups = aclManagerService.getGroups();
         req.setAttribute("groups", groups);
 
 
@@ -610,7 +616,6 @@ public class GroupManagerPortlet extends ActionPortlet {
         System.err.println("in doSaveDefaultGroups");
         CheckBoxBean cb = evt.getCheckBoxBean("groupCB");
         PortletRequest req = evt.getPortletRequest();
-        User user = req.getUser();
 
         List groups = cb.getSelectedValues();
         Set defaultGroups = new HashSet();
@@ -619,7 +624,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         Iterator it = groups.iterator();
         while (it.hasNext()) {
             String name = (String)it.next();
-            PortletGroup g = getACLService(user).getGroupByName(name);
+            PortletGroup g = aclManagerService.getGroupByName(name);
             if (g != null) defaultGroups.add(g);
         }
         configSettings.setDefaultGroups(defaultGroups);
@@ -630,10 +635,9 @@ public class GroupManagerPortlet extends ActionPortlet {
     private PortletGroup loadGroup(FormEvent evt) {
         HiddenFieldBean groupIDBean = evt.getHiddenFieldBean("groupID");
         String groupId = groupIDBean.getValue();
-        User user = evt.getPortletRequest().getUser();
         if (groupId == null) {
             String groupEntryId = evt.getAction().getParameter("groupEntryID");
-            GroupEntry entry = getACLService(user).getGroupEntry(groupEntryId);
+            GroupEntry entry = aclManagerService.getGroupEntry(groupEntryId);
             groupId = entry.getGroup().getID();
         }
         return loadGroup(evt, groupId);
@@ -649,10 +653,10 @@ public class GroupManagerPortlet extends ActionPortlet {
         groupIDBean.setValue(groupID);
 
         String groupDescription = "";
-        User user = evt.getPortletRequest().getUser();
+
         // Load group
         if (!groupID.equals("")) {
-            group = getACLService(user).getGroup(groupID);
+            group = aclManagerService.getGroup(groupID);
             //System.err.println("group= " + group.getName());
             groupDescription = group.getDescription();
             //groupDescription = getACLService(user).getGroupDescription(group);
@@ -676,8 +680,7 @@ public class GroupManagerPortlet extends ActionPortlet {
 
     private void setGroupEntryList(FormEvent evt, PortletGroup group) {
         PortletRequest req = evt.getPortletRequest();
-        User user = req.getUser();
-        List groupEntryList = getACLService(user).getGroupEntries(group);
+        List groupEntryList = aclManagerService.getGroupEntries(group);
         req.setAttribute("groupEntryList", groupEntryList);
     }
 
@@ -699,8 +702,7 @@ public class GroupManagerPortlet extends ActionPortlet {
                 User user = (User)userIterator.next();
                 //String userID = user.getID();
                 String userName = user.getUserName();
-                String fullName = user.getFullName();
-                //String userLabel = userName + " (" + fullName + ")";
+
                 ListBoxItemBean item = new ListBoxItemBean();
                 item.setValue(userName);
                 usersNotInGroupListBox.addBean(item);
@@ -725,9 +727,8 @@ public class GroupManagerPortlet extends ActionPortlet {
 
     private GroupEntry loadGroupEntry(FormEvent evt) {
         log.debug("Entering loadGroupEntry()");
-        User user = evt.getPortletRequest().getUser();
         String groupEntryID = evt.getAction().getParameter("groupEntryID");
-        GroupEntry groupEntry = getACLService(user).getGroupEntry(groupEntryID);
+        GroupEntry groupEntry = aclManagerService.getGroupEntry(groupEntryID);
         return groupEntry;
     }
 
@@ -757,8 +758,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         log.debug("Exiting viewGroupEntry()");
     }
 
-    private void addGroupEntries(FormEvent evt, PortletGroup group)
-            throws PortletException {
+    private void addGroupEntries(FormEvent evt, PortletGroup group) {
         // Group entry role to apply to all users below...
         ListBoxBean groupEntryRoleListBox = evt.getListBoxBean("groupEntryRoleLB");
         String selectedGroupRole = groupEntryRoleListBox.getSelectedValue();
@@ -769,10 +769,10 @@ public class GroupManagerPortlet extends ActionPortlet {
         String groupEntryUserID = userList.getSelectedValue();
 
         User groupEntryUser = this.userManagerService.getUserByUserName(groupEntryUserID);
-        User root = evt.getPortletRequest().getUser();
         if (groupEntryUser != null) {
-            addGroupEntry(root, groupEntryUser, group, groupEntryRole);
-            if (groupEntryUser.getID().equals(root.getID())) {
+            User user = evt.getPortletRequest().getUser();
+            addGroupEntry(groupEntryUser, group, groupEntryRole);
+            if (groupEntryUser.getID().equals(user.getID())) {
                 layoutMgr.addGroupTab(evt.getPortletRequest(), group.getName());
             }
             //layoutMgr.addGroupTab(groupEntryUser, group.getName());
@@ -783,9 +783,9 @@ public class GroupManagerPortlet extends ActionPortlet {
 
     }
 
-    private GroupEntry addGroupEntry(User root, User user, PortletGroup group, PortletRole role) {
+    private GroupEntry addGroupEntry(User user, PortletGroup group, PortletRole role) {
         // Create add to group request
-        GroupRequest groupRequest = getACLService(root).createGroupEntry();
+        GroupRequest groupRequest = aclManagerService.createGroupEntry();
         groupRequest.setUser(user);
         groupRequest.setGroup(group);
         groupRequest.setRole(role);
@@ -794,10 +794,10 @@ public class GroupManagerPortlet extends ActionPortlet {
         //getACLService(root).submitGroupRequest(groupRequest);
         //getACLService(root).approveGroupRequest(groupRequest);
 
-        getACLService(root).saveGroupEntry(groupRequest);
+        aclManagerService.saveGroupEntry(groupRequest);
 
         // Return the new group
-        return getACLService(root).getGroupEntry(user, group);
+        return aclManagerService.getGroupEntry(user, group);
     }
 
     private void removeGroupEntries(FormEvent evt)
@@ -817,9 +817,9 @@ public class GroupManagerPortlet extends ActionPortlet {
         for (int ii = 0; ii < groupEntryIDList.size(); ++ii) {
             // Get entry to remove
             String groupEntryID = (String)groupEntryIDList.get(ii);
-            GroupEntry entry = getACLService(root).getGroupEntry(groupEntryID);
+            GroupEntry entry = aclManagerService.getGroupEntry(groupEntryID);
             // Remove group entry
-            removeGroupEntry(root, entry);
+            removeGroupEntry(entry);
             // remove group layout
 
             if (entry.getUser().getID().equals(root.getID())) {
@@ -829,7 +829,7 @@ public class GroupManagerPortlet extends ActionPortlet {
             PortletRegistry portletRegistry = PortletRegistry.getInstance();
             List portletIds =  portletRegistry.getAllConcretePortletIDs(req.getRole(), entry.getGroup().getName());
             if (entry.getUser().getID().equals(root.getID())) {
-                this.layoutMgr.removePortlets(req, portletIds);
+            this.layoutMgr.removePortlets(req, portletIds);
             }
             this.layoutMgr.removePortlets(req, entry.getUser(), portletIds);
             */
@@ -841,23 +841,19 @@ public class GroupManagerPortlet extends ActionPortlet {
         req.setAttribute("groupEntryList", groupEntryList);
     }
 
-    private void removeGroupEntry(User root, GroupEntry entry) {
+    private void removeGroupEntry(GroupEntry entry) {
         // Create remove from group request
-        GroupRequest groupRequest = getACLService(root).editGroupEntry(entry);
-        getACLService(root).deleteGroupEntry(groupRequest);
+        GroupRequest groupRequest = aclManagerService.editGroupEntry(entry);
+        aclManagerService.deleteGroupEntry(groupRequest);
     }
 
     public void deleteGroup(FormEvent event) throws PortletException {
         checkAdminRole(event);
-        PortletRequest req = event.getPortletRequest();
-
         String groupId = event.getAction().getParameter("groupID");
 
-        User user = req.getUser();
+        PortletGroup group = aclManagerService.getGroup(groupId);
 
-        PortletGroup group = getACLService(user).getGroup(groupId);
-
-        List users = getACLService(user).getUsers(group);
+        List users = aclManagerService.getUsers(group);
         if (users != null) {
             MessageBoxBean msg = event.getMessageBoxBean("msg");
             msg.setMessageType("error");
@@ -865,22 +861,24 @@ public class GroupManagerPortlet extends ActionPortlet {
 
         } else {
 
-        // delete group from acl service
-        getACLService(user).deleteGroup(group);
+            // delete group from acl service
+            aclManagerService.deleteGroup(group);
 
-        // delete group from layout registry
-        PortletTabRegistry.removeGroupTab(group.getName());
+            // delete group from layout registry
+            PortletTabRegistry.removeGroupTab(group.getName());
         }
     }
 
-    public AccessControlManagerService getACLService(User user) {
-        AccessControlManagerService aclManagerService = null;
-        try {
-            aclManagerService = (AccessControlManagerService)this.getConfig().getContext().getService(AccessControlManagerService.class, user);
-        } catch (PortletServiceException e) {
-            log.error("Unable to initialize services!", e);
-        }
-        return aclManagerService;
+    private void createErrorMessage(FormEvent event, String msg) {
+        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
+        msgBox.setMessageType(TextBean.MSG_ERROR);
+        msgBox.setValue(msg);
+    }
+
+    private void createSuccessMessage(FormEvent event, String msg) {
+        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
+        msgBox.setMessageType(TextBean.MSG_SUCCESS);
+        msgBox.setValue(msg);
     }
 
 
