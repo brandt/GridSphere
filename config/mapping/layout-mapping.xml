@@ -12,16 +12,22 @@
 <!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
 <mapping>
 
-    <class name="org.gridlab.gridsphere.layout.PortletContainer">
-        <map-to xml="container-layout"/>
+    <class name="org.gridlab.gridsphere.layout.PortletPage">
+        <map-to xml="page-layout"/>
         <field name="Theme" type="string">
             <bind-xml name="theme" node="attribute"/>
         </field>
-        <field name="PortletComponents" type="org.gridlab.gridsphere.layout.PortletComponent" collection="arraylist">
-            <bind-xml auto-naming="deriveByClass"/>
+        <field name="PortletTabbedPane" type="org.gridlab.gridsphere.layout.PortletTabbedPane">
+            <bind-xml name="portlet-tabbed-pane"/>
         </field>
-        <field name="ContainerName" type="string">
-            <bind-xml name="container-name"/>
+        <field name="PortletHeader" type="org.gridlab.gridsphere.layout.PortletContainer">
+            <bind-xml name="portlet-header"/>
+        </field>
+        <field name="PortletFooter" type="org.gridlab.gridsphere.layout.PortletContainer">
+            <bind-xml name="portlet-footer"/>
+        </field>
+        <field name="Title" type="string">
+            <bind-xml name="title" node="attribute"/>
         </field>
     </class>
 
@@ -50,6 +56,12 @@
         </field>
     </class>
 
+    <class name="org.gridlab.gridsphere.layout.PortletContainer">
+        <field name="PortletComponents" type="org.gridlab.gridsphere.layout.PortletComponent" collection="arraylist">
+            <bind-xml auto-naming="deriveByClass"/>
+        </field>
+    </class>
+
     <class name="org.gridlab.gridsphere.layout.PortletFrameLayout">
         <field name="PortletComponents" type="org.gridlab.gridsphere.layout.PortletComponent" collection="arraylist">
             <bind-xml auto-naming="deriveByClass"/>
@@ -71,6 +83,9 @@
         <field name="PortletClass" type="string">
             <bind-xml name="portlet-class"/>
         </field>
+        <field name="RequiredRole" type="string">
+            <bind-xml name="required-role"/>
+        </field>
         <field name="Transparent" type="boolean">
             <bind-xml name="transparent" node="attribute"/>
         </field>
@@ -82,15 +97,8 @@
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.layout.PortletImage" extends="org.gridlab.gridsphere.layout.BasePortletComponent">
-        <map-to xml="portlet-image"/>
-        <field name="Image" type="string">
-            <bind-xml name="image"/>
-        </field>
-    </class>
-
-    <class name="org.gridlab.gridsphere.layout.PortletText" extends="org.gridlab.gridsphere.layout.BasePortletComponent">
-        <map-to xml="portlet-text"/>
+    <class name="org.gridlab.gridsphere.layout.PortletContent" extends="org.gridlab.gridsphere.layout.BasePortletComponent">
+        <map-to xml="portlet-content"/>
         <field name="Include" type="string">
             <bind-xml name="include" node="attribute"/>
         </field>

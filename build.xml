@@ -72,6 +72,11 @@ Copyright:
     <property name="build.javadoc" value="${build.docs}/javadocs"/>
     <property name="build.tests"   value="${gridsphere.build}/tests"/>
 
+    <patternset id="all.jars" >
+        <include name="lib/*.jar"/>
+        <include name="lib/ext/*.jar"/>
+    </patternset>
+
     <!-- Check for catalina.sh in CATALINA_HOME/bin -->
     <target name="check-catalina">
         <condition property="catalina.exists">
@@ -103,8 +108,7 @@ Copyright:
         </fileset>
 
         <fileset dir="lib">
-            <include name="*.jar"/>
-            <include name="ext/*.jar"/>
+            <patternset refid="all.jars"/>
         </fileset>
         <pathelement path="${java.class.path}"/>
     </path>
@@ -155,24 +159,24 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Print usage information                                             -->
     <!-- =================================================================== -->
-    <target name="help" description="shows help about useful target">
+    <target name="help" description="shows help about useful targets">
         <echo message="target                 description"/>
         <echo message="-----------------------------------------------------------------"/>
-        <echo message="install-fresh          Installs GridSphere from fresh CVS checkout"/>
-        <echo message="clean                  Cleans up the build dir                    "/>
-        <echo message="compile-all            Compiles all the code including tests      "/>
-        <echo message="docs-all               Creates Javadoc API and GridSphere guides  "/>
-        <echo message="run-tests              Builds and runs the unit tests             "/>
+        <echo message="install                Builds and deploys GridSphere and makes documentation"/>
+        <echo message="clean                  Cleans up the build directory              "/>
+        <echo message="compile                Compiles GridSphere source code   "/>
+        <echo message="docs                   Creates Javadoc API and GridSphere guides  "/>
+        <echo message="run-tests              Builds and runs the JUnit tests            "/>
+        <echo message="test-reports           Creates HTML test reports from the JUnit test results"/>
         <echo message="new-project            Creates a new portlet project in projects directory"/>
         <echo message="update-project         Updates a new portlet project in projects directory"/>
         <echo message="deploy                 Deploys GS to tomcat                       "/>
-        <echo message="dist                   Builds a binary GS distribution            "/>
     </target>
 
     <!-- =================================================================== -->
     <!-- Builds and deploys GridSphere                                       -->
     <!-- =================================================================== -->
-    <target name="install-fresh" depends="clean, compile, docs, deploy" description="Build and deploy GridSphere"/>
+    <target name="install" depends="clean, compile, docs, deploy" description="Build and deploy GridSphere"/>
 
     <!-- =================================================================== -->
     <!-- Updates GridSphere source code                                      -->
@@ -201,7 +205,7 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Compiles core framework                                              -->
+    <!-- Compiles core framework                                             -->
     <!-- =================================================================== -->
     <target name="compile" depends="setenv" description="Compile core framework">
         <echo>Compiling core framework</echo>
@@ -514,11 +518,22 @@ Copyright:
 
     <target name="docs" depends="javadocs, docbook" description="Create GridSphere Documentation"/>
 
+    <target name="check-javadocs">
+        <condition property="javadocs.exists">
+                <available file="${build.javadoc}/index.html"/>
+        </condition>
+    </target>
+
+    <target name="check-docbook">
+        <condition property="docbook.exists">
+                <available file="${build.docs}/index.html"/>
+        </condition>
+    </target>
+
     <!-- =================================================================== -->
     <!-- Creates all the API documentation                                   -->
     <!-- =================================================================== -->
-    <target name="javadocs" depends="setenv" description="Create GridSphere Javadocs">
-        <delete quiet="true" dir="${build.javadoc}"/>
+    <target name="javadocs" depends="setenv, check-javadocs" description="Create GridSphere Javadocs" unless="javadocs.exists">
         <mkdir dir="${build.javadoc}"/>
         <javadoc packagenames="org.gridlab.gridsphere.*"
                  sourcepath="src"
@@ -578,7 +593,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Builds the GridSphere docbook documentation                         -->
     <!-- =================================================================== -->
-    <target name="docbook" description="Builds the GridSphere docbook documentation.">
+    <target name="docbook" depends="setenv, check-docbook" description="Builds the GridSphere docbook documentation." unless="docbook.exists">
         <ant dir="${docbook.dir}" target="docbook" inheritAll="false"/>
     </target>
 
@@ -609,14 +624,35 @@ Copyright:
         <ant dir="${thisEnv}" target="deploy"/>
     </target>
 
-    <target name="deploy" depends="gridsphere-jar, jar" description="Deploys GridSphere to a local server">
+    <!-- =================================================================== -->
+    <!-- Deploys GridSphere to Tomcat                                        -->
+    <!-- =================================================================== -->
+    <target name="deploy" depends="gridsphere-jar, jar, docs" description="Deploys GridSphere to a local server">
         <ant target="deploy-install"/>
     </target>
 
+    <!-- =================================================================== -->
+    <!-- Undeploys GridSphere from Tomcat                                    -->
+    <!-- =================================================================== -->
     <target name="undeploy" description="Undeploys GridSphere from a local server">
         <delete quiet="true" dir="${gridsphere.home}"/>
         <delete quiet="true" dir="${gridsphere.dist}"/>
+        <!-- remove GS from Tomcat -->
+        <delete dir="${env.CATALINA_HOME}/webapps/gridsphere"/>
+
+        <!-- remove third-party jars -->
+        <delete>
+            <fileset dir="${env.CATALINA_HOME}/shared/lib">
+                <patternset refid="all.jars"/>
+            </fileset>
+        </delete>
     </target>
+
+    <target name="remove-gridsphere" depends="undeploy" description="Eliminates GridSphere entirely including database">
+        <echo>Removing GridSphere Database</echo>
+        <delete dir="${GRIDSPHERE_HOME}"/>
+    </target>
+
     <!-- =================================================================== -->
     <!-- Deploys GridSphere to Tomcat                                        -->
     <!-- =================================================================== -->
@@ -683,9 +719,6 @@ Copyright:
 
     </target>
 
-
-    <target name="make-test-reports" depends="run-tests" description="Execute Unit Tests"/>
-
 <!-- +++++++++++++++ END TESTS +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
 <!-- ++++++++++++++ START CRUSECONTROL ++++++++++++++++++++ -->
@@ -750,13 +783,11 @@ Copyright:
         </copy>
     </target>
 
-    <!--
-    ========================================================================
-    Run Tomcat 4.0 tests
-    ========================================================================
-        -->
+    <!-- =================================================================== -->
+    <!-- Run Tomcat tests                                                    -->
+    <!-- =================================================================== -->
     <target name="run-tests" depends="deploy-test"
-        if="catalina.exists" description="Run tests on Tomcat">
+        if="catalina.exists" description="Run Junit tests in running Tomcat container">
 
         <!-- Start the servlet engine, wait for it to be started, run the
         unit tests, stop the servlet engine, wait for it to be stopped.
@@ -767,16 +798,12 @@ Copyright:
             startTarget="start-tomcat"
             stopTarget="stop-tomcat"
             testTarget="tests"/>
-
     </target>
 
-    <!--
-       ========================================================================
-         Start Tomcat 4.0
-       ========================================================================
-    -->
+    <!-- ==================================================================== -->
+    <!-- Start Tomcat                                                         -->
+    <!-- ==================================================================== -->
     <target name="start-tomcat">
-
         <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
             <jvmarg value="-Dcatalina.home=${env.CATALINA_HOME}"/>
             <arg value="start"/>
@@ -790,11 +817,9 @@ Copyright:
 
     </target>
 
-    <!--
-    ========================================================================
-    Stop Tomcat
-    ========================================================================
-    -->
+    <!-- =================================================================== -->
+    <!-- Stop Tomcat                                                         -->
+    <!-- =================================================================== -->
     <target name="stop-tomcat">
         <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
             <jvmarg value="-Dcatalina.home=${env.CATALINA_HOME}"/>
@@ -807,11 +832,9 @@ Copyright:
         </java>
     </target>
 
-    <!--
-       ========================================================================
-       Run the client JUnit test cases.
-       ========================================================================
-    -->
+    <!-- =================================================================== -->
+    <!-- Run the client JUnit test cases                                     -->
+    <!-- =================================================================== -->
     <target name="tests">
 
         <mkdir dir="${gridsphere.build}/reports"/>
@@ -829,7 +852,10 @@ Copyright:
 
     </target>
 
-    <target name="test-reports">
+    <!-- =================================================================== -->
+    <!-- Creates HTML reports from the test results                          -->
+    <!-- =================================================================== -->
+    <target name="test-reports" description="Create test reports from Junit results">
         <echo message="Making GridSphere Junit Test Reports"/>
         <mkdir dir="${gridsphere.build}/reports/html"/>
         <junitreport todir="${gridsphere.build}/reports">

@@ -12,29 +12,30 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.PrintWriter;
 
 /**
- * <code>PortletText</code> is used to display the contents of an included
+ * <code>PortletContent</code> is used to display the contents of an included
  * text file located in the ui application.
  */
-public class PortletText extends BasePortletComponent implements Serializable, Cloneable {
+public class PortletContent extends BasePortletComponent implements Serializable, Cloneable {
 
-    private String text;
+    private String textFile = null;
 
     /**
-     *  Constructs an instance of PortletText
+     *  Constructs an instance of PortletContent
      */
-    public PortletText() {
+    public PortletContent() {
     }
 
     /**
      * Sets the text file to be included specified as a path relative to the
      * webapp root directory e.g. /html/newtext.txt
      *
-     * @param textFilePath the relative path to load a text file
+     * @param textFile the relative path to load a text file
      */
-    public void setInclude(String textFilePath) {
-        this.text = textFilePath;
+    public void setInclude(String textFile) {
+        this.textFile = textFile;
     }
 
     /**
@@ -43,7 +44,7 @@ public class PortletText extends BasePortletComponent implements Serializable, C
      * @return the relative path of the text file
      */
     public String getInclude() {
-        return text;
+        return textFile;
     }
 
     /**
@@ -58,16 +59,18 @@ public class PortletText extends BasePortletComponent implements Serializable, C
         PortletContext ctx = event.getPortletContext();
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
-        try {
-            ctx.include(text, req, res);
-        } catch (PortletException e) {
-            throw new PortletLayoutException("Unable to include text: " + text, e);
+        if (textFile != null) {
+            try {
+                ctx.include(textFile, req, res);
+            } catch (PortletException e) {
+                throw new PortletLayoutException("Unable to include text: " + textFile, e);
+            }
         }
     }
 
     public Object clone() throws CloneNotSupportedException {
-        PortletText t = (PortletText)super.clone();
-        t.text = this.text;
+        PortletContent t = (PortletContent)super.clone();
+        t.textFile = this.textFile;
         return t;
     }
 
