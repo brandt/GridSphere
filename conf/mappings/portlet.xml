@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app-def>
+
+<portlet-app uid="org.gridlab.gridsphere.portlets.HelloWorld">
+    <portlet-app-name>Hello World Portlet Application</portlet-app-name>
+    <portlet href="WEB-INF/web.xml#Servlet_1902648613" id="Portlet_1902648613">
+        <portlet-name>Hello World</portlet-name>
+    </portlet>
+</portlet-app>
+
+<portlet-app uid="org.gridlab.gridsphere.portlets.HalloWelt">
+    <portlet-app-name>Hallo Welt Portlet Application</portlet-app-name>
+    <portlet href="WEB-INF/web.xml#Servlet_1902648614" id="Portlet_1902648614">
+        <portlet-name>Hallo Welt</portlet-name>
+    </portlet>
+</portlet-app>
+
+</portlet-app-def>
