@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 /**
  * The <code>GridSphereEventImpl</code> is an implementation of the <code>GridSphereEvent</code> interface.
@@ -50,37 +51,35 @@ public class GridSphereEventImpl implements GridSphereEvent {
         /*
         String[] portletNames = req.getParameterValues("portletName");
         if ( portletNames != null ) {
-            System.err.println("have a TCK POrtlet!!");
-            StringTokenizer tokenizer;
-            if (portletNames.length > 1) System.err.println("Arggh multiple portlets!!");
-            for (int i = 0; i < portletNames.length; i++) {
-                tokenizer =  new StringTokenizer(portletNames[i], "/");
-                String appName = tokenizer.nextToken();
-                portletComponentID = tokenizer.nextToken();
-            }
+        System.err.println("have a TCK POrtlet!!");
+        StringTokenizer tokenizer;
+        if (portletNames.length > 1) System.err.println("Arggh multiple portlets!!");
+        for (int i = 0; i < portletNames.length; i++) {
+        tokenizer =  new StringTokenizer(portletNames[i], "/");
+        String appName = tokenizer.nextToken();
+        portletComponentID = tokenizer.nextToken();
+        }
 
 
         } else {
-         */
+        */
         portletComponentID = req.getParameter(SportletProperties.COMPONENT_ID);
         if (portletComponentID == null) {
             log.debug("Received a null component ID");
             portletComponentID = "";
         }
 
-        try {
-            portletComponentID = decodeUTF8(portletComponentID);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+
+        log.debug("Received cid= " + portletComponentID);
+
 
         //}
         /*
         try {
-           portletComponentID = new Integer(cidStr).intValue();
+        portletComponentID = new Integer(cidStr).intValue();
         } catch (NumberFormatException e) {
-           portletComponentID = -1;
-           log.debug("Received a non-number portlet component ID: " + cidStr);
+        portletComponentID = -1;
+        log.debug("Received a non-number portlet component ID: " + cidStr);
         }
         */
 
@@ -88,9 +87,9 @@ public class GridSphereEventImpl implements GridSphereEvent {
         Enumeration e;
         String name, newname, value;
         String actionStr = portletRequest.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
-        try {
+        //try {
         if (actionStr != null) {
-            actionStr = decodeUTF8(actionStr);
+
             log.debug("Received action=" + actionStr);
 
             action = new DefaultPortletAction(actionStr);
@@ -99,7 +98,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
                 e = portletRequest.getParameterNames();
 
                 while (e.hasMoreElements()) {
-                    name = decodeUTF8((String) e.nextElement());
+                    name = ((String) e.nextElement());
 
                     if (name.startsWith(prefix)) {
                         newname = name.substring(prefix.length() + 1);
@@ -161,9 +160,6 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
             }
         }
-            } catch (UnsupportedEncodingException ex) {
-                ex.printStackTrace();
-            }
 
         /* This is where a DefaultPortletMessage gets put together if one exists */
         String messageStr = portletRequest.getParameter(SportletProperties.DEFAULT_PORTLET_MESSAGE);
@@ -174,9 +170,6 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
     }
 
-    private String decodeUTF8(String string) throws UnsupportedEncodingException {
-        return new String(string.getBytes("iso-8859-1"), "UTF-8");
-    }
     public PortletRequest getPortletRequest() {
         return portletRequest;
     }
