@@ -50,6 +50,9 @@
         <field name="RequiredRoleAsString" type="string">
             <bind-xml name="required-role" node="attribute"/>
         </field>
+        <field name="RequiredGroupAsString" type="string">
+            <bind-xml name="required-group" node="attribute"/>
+        </field>
     </class>
 
     <class name="org.gridlab.gridsphere.layout.PortletContainer">

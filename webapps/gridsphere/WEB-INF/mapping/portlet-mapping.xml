@@ -49,8 +49,8 @@
         <field name="LanguageList" type="org.gridlab.gridsphere.portletcontainer.impl.descriptor.LanguageInfo" collection="arraylist">
             <bind-xml name="language"/>
         </field>
-        <field name="RequiredRole" type="org.gridlab.gridsphere.portletcontainer.impl.descriptor.RequiredRole">
-            <bind-xml name="required-role"/>
+        <field name="AccessRestrictions" type="org.gridlab.gridsphere.portletcontainer.impl.descriptor.AccessRestrictions">
+            <bind-xml name="access-restrictions"/>
         </field>
         <field name="ConfigParamList" type="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam" collection="arraylist">
             <bind-xml name="config-param"/>
@@ -75,7 +75,7 @@
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.portletcontainer.impl.descriptor.RequiredRole">
+    <class name="org.gridlab.gridsphere.portletcontainer.impl.descriptor.AccessRestrictions">
         <field name="Visibility" type="string">
             <bind-xml name="visibility" node="attribute"/>
         </field>
