@@ -25,6 +25,7 @@ public class SportletServiceDefinition {
     protected boolean userRequired = false;
     protected Vector configParamList = new Vector();
     protected Properties configProps = null;
+    protected boolean loadOnStartup = false;
 
     /**
      * Sets the portlet service descriptor
@@ -195,6 +196,24 @@ public class SportletServiceDefinition {
             ConfigParam param = new ConfigParam(key, props.getProperty(key));
             configParamList.add(param);
         }
+    }
+
+    /**
+     * Returns true if this service should be initialized on startup
+     *
+     * @return true if this service should be initialized on startup
+     */
+    public boolean isLoadOnStartup() {
+        return loadOnStartup;
+    }
+
+    /**
+     * Sets whether this service should be initialized on startup
+     *
+     * @param loadOnStartup true if this service should be initialized on startup
+     */
+    public void setLoadOnStartup(boolean loadOnStartup) {
+        this.loadOnStartup = loadOnStartup;
     }
 
     /**

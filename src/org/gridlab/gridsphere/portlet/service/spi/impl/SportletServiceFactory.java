@@ -76,7 +76,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         return instance;
     }
     
-    public static void init() throws PortletServiceException {
+    public void init() throws PortletServiceException {
         // Reads in the service definitions from the xml file and stores them in allServices
         // organized according to service interface keys and service definition values
         String servicesPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/GridSphereServices.xml");
@@ -112,7 +112,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
      * @param servicesPath the path to the portlet services descriptor file
      * @param mappingPath  the path to the portlet services mapping file
      */
-    public static synchronized void addServices(ServletContext ctx, String servicesPath, String mappingPath) throws PortletServiceException {
+    public synchronized void addServices(ServletContext ctx, String servicesPath, String mappingPath) throws PortletServiceException {
         SportletServiceDescriptor descriptor = null;
         try {
             descriptor = new SportletServiceDescriptor(servicesPath, mappingPath);
@@ -129,6 +129,14 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             allServices.put(serviceDef.getServiceInterface(), serviceDef);
             log.debug("adding service: " + serviceDef.getServiceInterface() + " service def: " + serviceDef.toString());
             serviceContexts.put(serviceDef.getServiceInterface(), ctx);
+            if (serviceDef.isLoadOnStartup()) {
+                log.debug("loading service : " + serviceDef.getServiceInterface());
+                try {
+                    createPortletService(Class.forName(serviceDef.getServiceImplementation()), ctx, true);
+                } catch (ClassNotFoundException e) {
+                    log.error("Unable to find class : " + serviceDef.getServiceImplementation());
+                }
+            }
         }
     }
 
@@ -139,7 +147,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
      * @param servicesPath the path to the portlet services descriptor file
      * @param mappingPath  the path to the portlet services mapping file
      */
-    public static synchronized void addServices(String webappName, ServletContext ctx, String servicesPath, String mappingPath, ClassLoader loader) throws PortletServiceException {
+    public synchronized void addServices(String webappName, ServletContext ctx, String servicesPath, String mappingPath, ClassLoader loader) throws PortletServiceException {
         SportletServiceDescriptor descriptor = null;
         try {
             descriptor = new SportletServiceDescriptor(servicesPath, mappingPath);
@@ -155,10 +163,18 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             SportletServiceDefinition serviceDef = (SportletServiceDefinition) it.next();
             serviceDef.setServiceDescriptor(descriptor);
             allServices.put(serviceDef.getServiceInterface(), serviceDef);
-            log.debug("adding service: " + serviceDef.getServiceInterface() + " service def: " + serviceDef.toString());
+            log.debug("adding service: " + serviceDef.getServiceInterface() + " service def: " + serviceDef.toString());            
             serviceContexts.put(serviceDef.getServiceInterface(), ctx);
             classLoaders.put(serviceDef.getServiceInterface(), loader);
             webapplist.add(serviceDef.getServiceInterface());
+            if (serviceDef.isLoadOnStartup()) {
+                log.debug("loading service : " + serviceDef.getServiceInterface());
+                try {
+                    createPortletService(Class.forName(serviceDef.getServiceImplementation(), true, loader), ctx, true);
+                } catch (ClassNotFoundException e) {
+                    log.error("Unable to find class : " + serviceDef.getServiceImplementation());
+                }
+            }
         }
         webappServices.put(webappName, webapplist);
     }

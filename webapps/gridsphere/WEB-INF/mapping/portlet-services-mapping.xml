@@ -36,6 +36,9 @@
         <field name="ConfigParamList" type="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam" collection="vector">
             <bind-xml name="service-config"/>
         </field>
+        <field name="LoadOnStartup" type="boolean">
+            <bind-xml name="load-on-startup"/>
+        </field>
     </class>
 
     <class name="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam">
