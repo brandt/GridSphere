@@ -945,7 +945,16 @@
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
-
+        <attribute>
+            <name>rowspan</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>colspan</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
     </tag>
 
     <tag>

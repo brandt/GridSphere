@@ -17,6 +17,8 @@ public class TableCellBean extends BeanContainer implements TagBean {
     protected String height = null;
     protected String align = null;
     protected String valign = null;
+    protected String colspan = null;
+    protected String rowspan = null;
 
     protected String TABLE_CELL_STYLE = "portlet-section-body";
 
@@ -111,13 +113,49 @@ public class TableCellBean extends BeanContainer implements TagBean {
     }
 
     /**
+     * Returns the table cell row span
+     *
+     * @return the table cell row span
+     */
+    public String getRowspan() {
+        return rowspan;
+    }
+
+    /**
+     * Sets the table cell row span
+     *
+     * @param rowspan the table cell row span
+     */
+    public void setRowspan(String rowspan) {
+        this.rowspan = rowspan;
+    }
+
+    /**
+     * Returns the table cell col span
+     *
+     * @return the table cell col span
+     */
+    public String getColspan() {
+        return colspan;
+    }
+
+    /**
+     * Sets the table cell col span
+     *
+     * @param colspan the table cell col span
+     */
+    public void setColspan(String colspan) {
+        this.colspan = colspan;
+    }
+
+    /**
      * Returns the table cell height
      *
      * @return the table cell height
      */
     public String getHeight() {
         return height;
-    }            
+    }
 
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
@@ -127,6 +165,8 @@ public class TableCellBean extends BeanContainer implements TagBean {
         if (height != null) sb.append(" height=\"" + height + "\"");
         if (align != null) sb.append(" layout=\"" + align + "\"");
         if (valign != null) sb.append(" valign=\"" + valign + "\"");
+        if (rowspan != null) sb.append(" rowspan=\"" + rowspan + "\"");
+        if (colspan != null) sb.append(" colspan=\"" + colspan + "\"");
         sb.append(">");
         Iterator it = container.iterator();
         while (it.hasNext()) {

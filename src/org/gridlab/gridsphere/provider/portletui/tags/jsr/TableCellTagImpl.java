@@ -23,6 +23,8 @@ public class TableCellTagImpl extends BaseComponentTagImpl implements TableCellT
     protected String height = null;
     protected String align = null;
     protected String valign = null;
+    protected String colspan = null;
+    protected String rowspan = null;
 
     /**
      * Sets the table alignment e.g. "left", "center" or "right"
@@ -96,6 +98,42 @@ public class TableCellTagImpl extends BaseComponentTagImpl implements TableCellT
         return height;
     }
 
+     /**
+     * Returns the table cell row span
+     *
+     * @return the table cell row span
+     */
+    public String getRowspan() {
+        return rowspan;
+    }
+
+    /**
+     * Sets the table cell row span
+     *
+     * @param rowspan the table cell row span
+     */
+    public void setRowspan(String rowspan) {
+        this.rowspan = rowspan;
+    }
+
+    /**
+     * Returns the table cell col span
+     *
+     * @return the table cell col span
+     */
+    public String getColspan() {
+        return colspan;
+    }
+
+    /**
+     * Sets the table cell col span
+     *
+     * @param colspan the table cell col span
+     */
+    public void setColspan(String colspan) {
+        this.colspan = colspan;
+    }
+
     /**
      * Sets the table cell bean
      *
@@ -123,6 +161,8 @@ public class TableCellTagImpl extends BaseComponentTagImpl implements TableCellT
             if (width != null) cellBean.setWidth(width);
             if (height != null) cellBean.setHeight(height);
             if (align != null) cellBean.setAlign(align);
+            if (rowspan != null) cellBean.setRowspan(rowspan);
+            if (colspan != null) cellBean.setRowspan(colspan);
             if (valign != null) cellBean.setValign(align);
             if (cssClass != null) cellBean.setCssClass(cssClass);
             if (cssStyle != null) cellBean.setCssStyle(cssStyle);
