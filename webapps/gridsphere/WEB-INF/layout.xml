@@ -11,11 +11,6 @@
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.file.FileManagerPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
-                        <column-layout width="50%">
-                            <portlet-frame required-role="SUPER" label="login">
-                                <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
-                            </portlet-frame>
-                        </column-layout>
                     </row-layout>
                     <row-layout>
                         <column-layout>
