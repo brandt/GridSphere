@@ -26,12 +26,13 @@ public interface AccessControlService extends PortletService {
     public List getSuperUsers() throws PortletServiceException ;
 
     /**
-     * Checks if a user has the super role
+     * Return the list of users associated with a particular group and possessing the specified role
      *
-     * @param user the User to query
-     * @return true if the user has the super role, false otherwise
+     * @param role the PortletRole
+     * @param group the PortletGroup
+     * @return the list of users associated with a particular group and possessing the specified role
      */
-    public boolean isSuperUser(User user);
+    public List getUsersInGroup(PortletRole role, PortletGroup group) throws PortletServiceException ;
 
     /**
      * Checks if a user has a particular role in a group
@@ -51,16 +52,6 @@ public interface AccessControlService extends PortletService {
      * @return true if the user has the specified role in the specified group, false otherwise
      */
     public List getRolesInGroup(User user, PortletGroup group) throws PortletServiceException ;
-
-
-    /**
-     * Return the list of users associated with a particular group and possessing the specified role
-     *
-     * @param role the PortletRole
-     * @param group the PortletGroup
-     * @return the list of users associated with a particular group and possessing the specified role
-     */
-    public List getUsersInGroup(PortletRole role, PortletGroup group) throws PortletServiceException ;
 
     /**
      * Return a list of PortletGroup objects

@@ -132,6 +132,7 @@ public interface UserManagerService extends PortletService {
     public User getUser(User approver, String userName)
             throws PermissionDeniedException;
 
+
     /**
      * Saves a user object with the given username from this service.
      * Requires a user with the "super user" privileges.

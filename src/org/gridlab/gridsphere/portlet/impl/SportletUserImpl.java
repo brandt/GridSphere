@@ -316,7 +316,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
         }
     }
 
-    public Vector getAttributes() {
+    public List getAttributes() {
         return Attributes;
     }
 

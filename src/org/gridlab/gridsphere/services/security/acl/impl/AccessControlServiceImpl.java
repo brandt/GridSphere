@@ -105,11 +105,6 @@ public class AccessControlServiceImpl implements AccessControlService, PortletSe
         return listACL(command);
     }
 
-    //@todo fillin issuperuser , see usermanagerserviceimpl!
-    public boolean isSuperUser(User user) {
-        return true;
-    }
-
     /**
      * Checks if a user has a particular role in a group
      *

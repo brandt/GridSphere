@@ -1,10 +1,10 @@
 <portlet-services>
 
     <service>
-        <name>Portlet Registry Service</name>
-        <description>Provides a Registry for Portlet Web Applications</description>
-        <interface>org.gridlab.gridsphere.services.registry.PortletRegistryService</interface>
-        <implementation>org.gridlab.gridsphere.services.registry.impl.PortletRegistryServiceImpl</implementation>
+        <name>Portlet Manager Service</name>
+        <description>Provides Administration Capabilities for Portlet Web Applications</description>
+        <interface>org.gridlab.gridsphere.services.registry.PortletManagerService</interface>
+        <implementation>org.gridlab.gridsphere.services.registry.impl.PortletManagerServiceImpl</implementation>
         <service-config>
             <param-name>coreContext</param-name>
             <param-value>coreportlets, gsmanager</param-value>
@@ -15,23 +15,23 @@
         <name>Access Control Service</name>
         <description>Provides Access Control for Portlets</description>
         <interface>org.gridlab.gridsphere.services.security.acl.AccessControlService</interface>
-        <secure-wrapper>org.gridlab.gridsphere.services.user.impl.AccessControlServiceProxy</secure-wrapper>
         <implementation>org.gridlab.gridsphere.services.security.acl.impl.AccessControlServiceImpl</implementation>
     </service>
 
     <service>
         <name>Access Control Manager Service</name>
         <description>Provides Authorization Capabilities to Portal Users</description>
+        <user>true</user>
         <interface>org.gridlab.gridsphere.services.security.acl.AccessControlManagerService</interface>
-        <implementation>org.gridlab.gridsphere.services.security.acl.impl.AccessControlManagerServiceImpl</implementation>
+        <implementation>org.gridlab.gridsphere.services.security.acl.impl.SecureAccessControlManagerService</implementation>
     </service>
 
     <service>
         <name>User Manager Service</name>
         <description>Provides User Administration Capabilities</description>
+        <user>true</user>
         <interface>org.gridlab.gridsphere.services.user.UserManagerService</interface>
-        <secure-wrapper>org.gridlab.gridsphere.services.user.impl.UserManagerServiceProxy</secure-wrapper>
-        <implementation>org.gridlab.gridsphere.services.user.impl.UserManagerServiceImpl</implementation>
+        <implementation>org.gridlab.gridsphere.services.user.impl.SecureUserManagerService</implementation>
         <service-config>
             <param-name>userID</param-name>
             <param-value>root</param-value>

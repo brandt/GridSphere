@@ -7,8 +7,8 @@ package org.gridlab.gridsphere.services.user.impl;
 
 import org.gridlab.gridsphere.core.mail.MailMessage;
 import org.gridlab.gridsphere.core.mail.MailUtils;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
@@ -18,30 +18,29 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.services.security.AuthenticationException;
+import org.gridlab.gridsphere.services.security.AuthenticationModule;
 import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 import org.gridlab.gridsphere.services.security.acl.impl.UserACL;
-import org.gridlab.gridsphere.services.security.password.PasswordManagerService;
-import org.gridlab.gridsphere.services.security.password.PasswordBean;
-import org.gridlab.gridsphere.services.security.AuthenticationException;
-import org.gridlab.gridsphere.services.security.AuthenticationModule;
 import org.gridlab.gridsphere.services.security.impl.PasswordAuthenticationModule;
+import org.gridlab.gridsphere.services.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.user.AccountRequest;
 import org.gridlab.gridsphere.services.user.PermissionDeniedException;
 import org.gridlab.gridsphere.services.user.UserManagerService;
 
 import javax.mail.MessagingException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
-import java.util.Iterator;
 
 /**
  * The UserManagerService manages users and account requests. Thru the UserManagerService
  * new portal accounts can be requested and granted or denied. Role objects can be retrieved
  * and removed.
  */
-public class UserManagerServiceImpl implements PortletServiceProvider, UserManagerService {
+class UserManagerServiceImpl implements PortletServiceProvider, UserManagerService {
 
     private static PortletLog log = SportletLog.getInstance(UserManagerServiceImpl.class);
     private static PortletServiceFactory factory = SportletServiceFactory.getInstance();
@@ -64,9 +63,9 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
     // Only single instance allowed of this class
     public static UserManagerServiceImpl getInstance() {
-       numClients++;
-       if (numClients <= MAX_CLIENTS) return instance;
-       return null;
+        numClients++;
+        if (numClients <= MAX_CLIENTS) return instance;
+        return null;
     }
 
     public UserManagerServiceImpl() {
@@ -91,7 +90,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     }
 
     private void initServices(PortletServiceConfig config)
-        throws PortletServiceUnavailableException {
+            throws PortletServiceUnavailableException {
         try {
             aclService = (AccessControlService) factory.createPortletService(AccessControlService.class, config.getServletConfig(), true);
             aclManager = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, config.getServletConfig(), true);
@@ -178,7 +177,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     private void createAccount(AccountRequest request) {
         try {
             submitAccountRequest(request);
-            approveAccountRequest((AccountRequestImpl)request);
+            approveAccountRequest((AccountRequestImpl) request);
         } catch (PortletServiceException e) {
             log.error("Unable to save account", e);
         }
@@ -255,7 +254,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     public List getAccountRequests() {
 
         String command =
-                "select ar from "+jdoARImpl+" ar";
+                "select ar from " + jdoARImpl + " ar";
         List requests = null;
         try {
             requests = pm.restoreList(command);
@@ -282,7 +281,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     private AccountRequestImpl getAccountRequestImpl(String id) {
         AccountRequestImpl requestImpl = null;
         String command =
-                "select ar from "+jdoARImpl+" ar where ar.ObjectID=" + id;
+                "select ar from " + jdoARImpl + " ar where ar.ObjectID=" + id;
         try {
             requestImpl = (AccountRequestImpl) pm.restoreObject(command);
         } catch (PersistenceManagerException e) {
@@ -301,12 +300,12 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public void approveAccountRequest(User approver, AccountRequest request, MailMessage mailMessage)
             throws PermissionDeniedException {
-        if ( ! accountRequestExists(request.getID()) ) {
+        if (!accountRequestExists(request.getID())) {
             throw new PermissionDeniedException("Account request has not been submitted");
         }
         //@todo check if a user with that userid already exists!
         if (isSuperUser(approver)) {
-            approveAccountRequest((AccountRequestImpl)request, mailMessage);
+            approveAccountRequest((AccountRequestImpl) request, mailMessage);
         } else {
             log.info("User '" + approver.getGivenName() + "' tried to approve User '" + request.getGivenName() + "' (denied) ");
             throw new PermissionDeniedException("Permission denied ");
@@ -331,11 +330,11 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     private void approveAccountRequest(AccountRequest request) {
         User user = null;
-        String username= request.getUserID();
+        String username = request.getUserID();
         // now need to check wheter new account or an existing should be modified
         if (userExists(username)) {
             // update user and delete request
-            user = modifyExistingUser((AccountRequestImpl)request, (SportletUser) getUser(username));
+            user = modifyExistingUser((AccountRequestImpl) request, (SportletUser) getUser(username));
             try {
                 pm.update(user);
                 pm.delete(request);
@@ -344,7 +343,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             }
         } else {
             // create user and delete request
-            user = makeNewUser((AccountRequestImpl)request);
+            user = makeNewUser((AccountRequestImpl) request);
             try {
                 pm.create(user);
                 pm.delete(request);
@@ -395,7 +394,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
             String userid = request.getID();
             String command =
-                    "select acl from "+jdoUserACL+" acl where " +
+                    "select acl from " + jdoUserACL + " acl where " +
                     "UserID=\"" + request.getID() + "\"";
 
             try {
@@ -488,16 +487,16 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         if (user instanceof GuestUser) return null;
 
         String command =
-            "select u from "+jdoPDImpl+" u where u.UserID=\""+user.getID()+"\" and u.PortletID=\""+portletID+"\"";
+                "select u from " + jdoPDImpl + " u where u.UserID=\"" + user.getID() + "\" and u.PortletID=\"" + portletID + "\"";
 
         SportletData pd = null;
         try {
-            pd = (SportletData)pm.restoreObject(command);
+            pd = (SportletData) pm.restoreObject(command);
         } catch (PersistenceManagerException e) {
 
         }
 
-        if (pd==null) {
+        if (pd == null) {
             pd = new SportletData();
             pd.setPortletID(portletID);
             pd.setUserID(user.getID());
@@ -519,13 +518,13 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public void setPortletData(User user, String portletID, PortletData data) {
 
-        SportletData sd = (SportletData)data;
+        SportletData sd = (SportletData) data;
         //sd.setPortletID(portletID);
         //sd.setUserID(user.getID());
         try {
             pm.update(sd);
         } catch (PersistenceManagerException e) {
-            log.error("Persistence Exception !"+e);
+            log.error("Persistence Exception !" + e);
         }
     }
 
@@ -544,9 +543,9 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             return getUser(userName);
         } else {
             throw new PermissionDeniedException("User "
-                                               + approver.getGivenName()
-                                               + " wanted to retrieve "
-                                               + userName + " (denied)");
+                    + approver.getGivenName()
+                    + " wanted to retrieve "
+                    + userName + " (denied)");
         }
     }
 
@@ -561,9 +560,9 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             saveUser(user);
         } else {
             throw new PermissionDeniedException("User "
-                                               + approver.getGivenName()
-                                               + " wanted to save "
-                                               + user.getUserID() + " (denied)");
+                    + approver.getGivenName()
+                    + " wanted to save "
+                    + user.getUserID() + " (denied)");
         }
     }
 
@@ -578,9 +577,9 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             removeUser(userName);
         } else {
             throw new PermissionDeniedException("User "
-                                               + approver.getGivenName()
-                                               + " wanted to retrieve "
-                                               + userName + " (denied)");
+                    + approver.getGivenName()
+                    + " wanted to retrieve "
+                    + userName + " (denied)");
         }
     }
 
@@ -590,7 +589,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public List getAllUsers() {
         String command =
-                "select user from "+jdoSUImpl+" user";
+                "select user from " + jdoSUImpl + " user";
         List result = null;
         try {
             result = pm.restoreList(command);
@@ -605,7 +604,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     private User getUser(String name) {
         String command =
-                "select u from "+jdoSUImpl+" u where u.UserID=\"" + name + "\"";
+                "select u from " + jdoSUImpl + " u where u.UserID=\"" + name + "\"";
         return selectUser(command);
 
     }
@@ -617,7 +616,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public User getUserByID(String ID) {
         String command =
-                "select u from "+jdoSUImpl+" u where u.ObjectID=\"" + ID + "\"";
+                "select u from " + jdoSUImpl + " u where u.ObjectID=\"" + ID + "\"";
         return selectUser(command);
     }
 
@@ -666,7 +665,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             try {
                 List groups = aclService.getGroups(user);
                 for (int i = 0; i < groups.size(); i++) {
-                    PortletGroup group = (PortletGroup)groups.get(i);
+                    PortletGroup group = (PortletGroup) groups.get(i);
                     if (group == null) {
                         log.error("Why in the hell is this group object null?!!!!!!");
                     }
@@ -690,7 +689,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public boolean userExists(String userName) {
         String command =
-                "select user from "+jdoSUImpl+" user where UserID=\"" + userName + "\"";
+                "select user from " + jdoSUImpl + " user where UserID=\"" + userName + "\"";
         SportletUser user = null;
         try {
             user = (SportletUser) pm.restoreObject(command);
@@ -708,7 +707,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public boolean existsUserID(String ID) {
         String command =
-                "select user from "+jdoSUImpl+" user where ObjectID=\"" + ID + "\"";
+                "select user from " + jdoSUImpl + " user where ObjectID=\"" + ID + "\"";
         SportletUser user = null;
         try {
             user = (SportletUser) pm.restoreObject(command);
@@ -777,9 +776,9 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         AuthenticationException ex = null;
         Iterator modules = this.authenticationModules.iterator();
         while (modules.hasNext()) {
-            AuthenticationModule module = (AuthenticationModule)modules.next();
+            AuthenticationModule module = (AuthenticationModule) modules.next();
             try {
-               module.authenticate(user, password);
+                module.authenticate(user, password);
             } catch (AuthenticationException e) {
                 if (ex == null) {
                     ex = e;
@@ -798,9 +797,9 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         AuthenticationException ex = null;
         Iterator modules = this.authenticationModules.iterator();
         while (modules.hasNext()) {
-            AuthenticationModule module = (AuthenticationModule)modules.next();
+            AuthenticationModule module = (AuthenticationModule) modules.next();
             try {
-               module.authenticate(user, parameters);
+                module.authenticate(user, parameters);
             } catch (AuthenticationException e) {
                 if (ex == null) {
                     ex = e;
@@ -815,7 +814,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
     private User getAuthUser(Map parameters)
             throws AuthenticationException {
-        String username = (String)parameters.get("username");
+        String username = (String) parameters.get("username");
         return getAuthUser(username);
     }
 
