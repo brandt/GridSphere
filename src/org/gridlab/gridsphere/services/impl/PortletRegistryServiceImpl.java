@@ -5,8 +5,11 @@
 package org.gridlab.gridsphere.services.impl;
 
 import org.gridlab.gridsphere.portlet.service.PortletService;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletResponseImpl;
@@ -14,13 +17,20 @@ import org.gridlab.gridsphere.portlet.impl.SportletRequestImpl;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.AbstractPortlet;
 import org.gridlab.gridsphere.services.ServletParsingService;
 import org.gridlab.gridsphere.services.PortletRegistryService;
 import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
+import org.gridlab.gridsphere.portletcontainer.impl.RegisteredSportletImpl;
+import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
+import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 /**
  * The PortletRegistryService acts as a repository for portlets and makes them available to the portlet
@@ -31,13 +41,57 @@ import java.util.*;
  */
 public class PortletRegistryServiceImpl implements PortletRegistryService, PortletServiceProvider {
 
-    private static PortletLog log = SportletLog.getInstance(PortletRegistryServiceImpl.class);
+    private static PortletServiceFactory factory = SportletServiceFactory.getInstance();
+    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletRegistryServiceImpl.class);
+
     private static Map allPortlets = new Hashtable();
     private static int portletCount = 0;
-    private static RegisteredPortlet reg = null;
 
-    public void init(PortletServiceConfig config) {
+    public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.info("in init()");
+
+        // load in portlet.xml file
+        String appRoot = config.getServletConfig().getServletContext().getRealPath("");
+        String portletConfigFile = config.getInitParameter("portlet.xml");
+        String portletMappingFile = config.getInitParameter("portlet-mapping-file.xml");
+        if (portletConfigFile == null) {
+            portletConfigFile = "/WEB-INF/conf/portlet.xml";
+        }
+        if (portletMappingFile == null) {
+            portletMappingFile = "/WEB-INF/conf/portlet-mapping.xml";
+        }
+        String fullPath = appRoot + portletConfigFile;
+        String mappingPath = appRoot + portletMappingFile;
+        try {
+            FileInputStream fistream = new FileInputStream(fullPath);
+        } catch (FileNotFoundException e) {
+            log.error("Can't find file: " + fullPath);
+            throw new PortletServiceUnavailableException("Unable to create registered portlet");
+        }
+        // Now parse portlet.xml and stick relevant info into portletSettings and portletConfig
+        //portletConfig = new SportletConfig(config);
+
+        // Here is where we need to have a Portal Deployment Descriptor that is marshalled into an object
+        PortletDeploymentDescriptor pdd = null;
+        try {
+            pdd = new PortletDeploymentDescriptor(fullPath, mappingPath);
+        } catch (Exception e) {
+            throw new  PortletServiceUnavailableException("Unable to create PortletDeploymentDescriptor");
+        }
+        //portletSettings = new SportletSettings(pdd);
+
+        //String portletClass = "org.gridlab.gridsphere.portlets.HelloWorld";
+        Iterator portletApps = pdd.getPortletApp().iterator();
+        while (portletApps.hasNext()) {
+            PortletApplication portletApp = (PortletApplication)portletApps.next();
+            try {
+                RegisteredPortlet registeredPortlet = new RegisteredSportletImpl(portletApp);
+                String portletID = getUniqueID(registeredPortlet);
+                allPortlets.put(portletID, registeredPortlet);
+            } catch (Exception e) {
+                throw new PortletServiceUnavailableException("Unable to create registered portlet");
+            }
+        }
     }
 
     public void destroy() {
@@ -77,7 +131,6 @@ public class PortletRegistryServiceImpl implements PortletRegistryService, Portl
      * @param registeredPortlet the registered portlet
      */
     public String registerPortlet(RegisteredPortlet registeredPortlet) {
-        reg = registeredPortlet;
         String portletID = getUniqueID(registeredPortlet);
         allPortlets.put(portletID, registeredPortlet);
         log.info("Registering portlet: " + portletID + " name: " + registeredPortlet.getPortletName());

@@ -11,32 +11,71 @@ import org.gridlab.gridsphere.services.impl.AccountRequest;
 
 import java.util.List;
 
+/**
+ * The UserManagerService manages users and account requests. Thru the UserManagerService
+ * new portal accounts can be requested and granted or denied. User objects can be retrieved
+ * and removed.
+ */
 public interface UserManagerService extends PortletService {
 
     /**
-     * Returns the modifiable SportletUser object for a given user name.
-     * If none exists, an empty SportletUser is returned.
-     *
-     * @param userName the user
-     * @return the modifiable user object
+     * Create a new account request
      */
-    public SportletUser getUser(String userName);
+    public AccountRequest createAccountRequest();
 
     /**
-     *
+     * Submit the account request to the queue for administrative approval
      */
-    public void createAccountRequest(AccountRequest accountRequest);
+    public void submitAccountRequest(AccountRequest request);
 
-    public void loadUser(String userName);
+    /**
+     * Administrators can retrieve all pending account request
+     */
+    public List getAccountRequests();
 
+    /**
+     * Approve a new or modified account request
+     */
+    public void approveAccountRequest(AccountRequest request);
+
+    /**
+     * Deny a new or modified account request
+     */
+    public void denyAccountRequest(AccountRequest request);
+
+    /**
+     * Modify an existing user account. Changes must be approved
+     */
+    public AccountRequest changeAccountRequest(User user);
+
+    /**
+     * Retrieve a user
+     */
+    public User retrieveUser(String userName);
+
+    /**
+     * Save user to DB
+     */
     public void saveUser(String userName);
 
-    public void deleteUser(String userName);
+    /**
+     * Remove a user permanently!
+     */
+    public void removeUser(String userName);
 
+    /**
+     * Checks to see if account exists for a user
+     */
     public boolean existsUser(String userName);
 
+    /**
+     * Return a list of all portal users
+     */
     public List getAllUsers();
 
+    /**
+     * Return a list of users currently logged in
+     */
     public List getActiveUsers();
 
 }
