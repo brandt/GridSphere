@@ -380,9 +380,9 @@ in lighter color
   Normal text in a table cell
 **********************************************/
 .portlet-section-body {
-  background-color: #CCCCFF;
+  background-color: white;
   border: none;
-  color: inherit;
+  color: white;
   font-family: inherit;
   text-align: left;
   padding-top: 1;
