@@ -247,11 +247,11 @@ public class AccountRequestImpl implements AccountRequest {
             PortletGroup group = (PortletGroup)desiredGroups.get(i);
             sb.append(group.getName());
         }
-        sb.append("User DNs: ");
+        sb.append("Role DNs: ");
         for (i = 0; i < userdns.size(); i++) {
             sb.append(userdns.get(i));
         }
-        sb.append("Myproxy User Names: ");
+        sb.append("Myproxy Role Names: ");
         for (i = 0; i < myproxyUserNames.size(); i++) {
             sb.append(myproxyUserNames.get(i));
         }

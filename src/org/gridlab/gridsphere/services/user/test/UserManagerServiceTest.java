@@ -10,10 +10,7 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRole;
-import org.gridlab.gridsphere.portlet.impl.SportletUser;
-import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletGroupImpl;
+import org.gridlab.gridsphere.portlet.impl.*;
 
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
@@ -94,20 +91,20 @@ public class UserManagerServiceTest extends ServiceTest {
         hans.setGivenName(USERS[0]);
         hans.setUserID(USERS[0]);
         aclManagerService.addUserToSuperRole(hans);
-        aclManagerService.addUserToGroup(hans, cactus, PortletRole.getAdminRole());
+        aclManagerService.addUserToGroup(hans, cactus, SportletRole.getAdminRole());
 
         // Lets make user 1 admin of group 1 and 2
         franz = new SportletUserImpl();
         franz.setGivenName(USERS[1]);
         franz.setUserID(USERS[1]);
-        aclManagerService.addUserToGroup(franz, portals, PortletRole.getAdminRole());
-        aclManagerService.addUserToGroup(franz, triana, PortletRole.getAdminRole());
+        aclManagerService.addUserToGroup(franz, portals, SportletRole.getAdminRole());
+        aclManagerService.addUserToGroup(franz, triana, SportletRole.getAdminRole());
 
         // Lets make user 2 admin of group 2
         josef = new SportletUserImpl();
         josef.setGivenName(USERS[2]);
         josef.setUserID(USERS[2]);
-        aclManagerService.addUserToGroup(josef, triana, PortletRole.getAdminRole());
+        aclManagerService.addUserToGroup(josef, triana, SportletRole.getAdminRole());
 
     }
 

@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * The UserManagerService manages users and account requests. Thru the UserManagerService
- * new portal accounts can be requested and granted or denied. User objects can be retrieved
+ * new portal accounts can be requested and granted or denied. Role objects can be retrieved
  * and removed.
  */
 public interface UserManagerService extends PortletService {
@@ -85,7 +85,7 @@ public interface UserManagerService extends PortletService {
      * Modify an existing user account. Changes must be approved
      * (or should only some changes need to be approved??)
      *
-     * @param user the User wishing to modify their account
+     * @param user the Role wishing to modify their account
      * @return a new AccountRequest
      */
     public AccountRequest changeAccountRequest(User user);
@@ -94,7 +94,7 @@ public interface UserManagerService extends PortletService {
      * Login a user
      *
      * @param userName the user to login
-     * @return the retieved User object
+     * @return the retieved Role object
      */
     public User loginUser(String userName);
 
@@ -121,14 +121,14 @@ public interface UserManagerService extends PortletService {
      *
      * @param userID the user login ID
      * @return true if the user exists, false otherwise
-     * @see User.getUserID()
+     * @see Role.getUserID()
      */
     public boolean existsUser(String userID);
 
     /**
      * Return a list of all portal users
      *
-     * @return a list containing all User objects
+     * @return a list containing all Role objects
      */
     public List getAllUsers();
 

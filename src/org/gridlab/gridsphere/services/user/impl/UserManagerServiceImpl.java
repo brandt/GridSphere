@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
+import org.gridlab.gridsphere.portlet.impl.SportletRole;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
@@ -30,7 +31,7 @@ import java.util.*;
 
 /**
  * The UserManagerService manages users and account requests. Thru the UserManagerService
- * new portal accounts can be requested and granted or denied. User objects can be retrieved
+ * new portal accounts can be requested and granted or denied. Role objects can be retrieved
  * and removed.
  */
 public class UserManagerServiceImpl implements PortletServiceProvider, UserManagerService {
@@ -129,7 +130,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         }
 
         // mail the super user
-        String newAcctSubject = "GridSphere: New User Request";
+        String newAcctSubject = "GridSphere: New Role Request";
         String newAcctBody = "New user request from: " + request.toString();
         String portalRoot = "gridsphere-admin@gridlab.org";
 
@@ -155,7 +156,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 for (i = 0; i < groups.size(); i++) {
                     // get admins
                     PortletGroup group = (PortletGroup) groups.get(i);
-                    Iterator adminIt = aclService.getUsersInGroup(PortletRole.getAdminRole(), group).iterator();
+                    Iterator adminIt = aclService.getUsersInGroup(SportletRole.getAdminRole(), group).iterator();
 
                     while (adminIt.hasNext()) {
                         String sender = (String) adminIt.next();
