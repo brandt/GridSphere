@@ -7,8 +7,8 @@ package org.gridlab.gridsphere.portlet.service.spi.impl.descriptor;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 
@@ -38,8 +38,8 @@ public class ServiceDescriptorTest extends TestCase {
         SportletServiceDescriptor descriptor = null;
 
         // load files from JAR
-        String serviceFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_TEST_DIR) + "PortletServices-test.xml";
-        String mappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_SERVICES_MAPPING);
+        String serviceFile = GridSphereConfig.getProperty(GridSphereConfigProperties.TEST_HOME) + "/test/PortletServices-test.xml";
+        String mappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.SERVICES_MAPPING);
         try {
             descriptor = new SportletServiceDescriptor(serviceFile, mappingFile);
         } catch (IOException e) {

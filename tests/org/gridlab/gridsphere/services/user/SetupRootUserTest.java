@@ -7,11 +7,11 @@ package org.gridlab.gridsphere.services.user;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.service.spi.ServiceTest;
+import org.gridlab.gridsphere.portletcontainer.GridSphereServletTest;
 import org.gridlab.gridsphere.services.core.security.AuthenticationException;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 
-public class SetupRootUserTest extends ServiceTest {
+public class SetupRootUserTest extends GridSphereServletTest {
 
     private static LoginService loginService = null;
 
@@ -31,13 +31,12 @@ public class SetupRootUserTest extends ServiceTest {
 
     protected void setUp() {
         super.setUp();
-        super.testCreateServiceFactory();
+        super.testCreateServlet();
         testCreateRootUser();
     }
 
     public void testCreateRootUser() {
         log.info(" =====================================  setup");
-        // Create a services using mock ServletConfig
         try {
             loginService = (LoginService) factory.createPortletService(LoginService.class, null, true);
         } catch (Exception e) {

@@ -7,7 +7,6 @@ package org.gridlab.gridsphere.services.user;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
 import java.util.List;

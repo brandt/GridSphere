@@ -4,21 +4,19 @@
  */
 package org.gridlab.gridsphere;
 
-import java.net.URL;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import org.gridlab.gridsphere.portlet.service.spi.ServiceTest;
+import org.apache.log4j.PropertyConfigurator;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerTest;
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.ServiceDescriptorTest;
+import org.gridlab.gridsphere.portletcontainer.GridSphereServletTest;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDescriptorTest;
-//import org.gridlab.gridsphere.services.security.credential.CredentialManagerServiceTest;
 import org.gridlab.gridsphere.services.user.SetupRootUserTest;
 import org.gridlab.gridsphere.services.user.SetupTestGroupsTest;
 import org.gridlab.gridsphere.services.user.SetupTestUsersTest;
-import org.gridlab.gridsphere.services.user.UserManagerServiceTest;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerTest;
 
-import org.apache.log4j.PropertyConfigurator;
+import java.net.URL;
 
 /**
  * Simple class to build a TestSuite out of the individual test classes.
@@ -38,7 +36,7 @@ public class AllJUnitTests extends TestCase {
         suite.addTest(new TestSuite(ServiceDescriptorTest.class));
 
         suite.addTest(new TestSuite(PersistenceManagerTest.class));
-        suite.addTest(new TestSuite(ServiceTest.class));
+        suite.addTest(new TestSuite(GridSphereServletTest.class));
         suite.addTest(new TestSuite(SetupRootUserTest.class));
 
         suite.addTest(new TestSuite(SetupTestGroupsTest.class));

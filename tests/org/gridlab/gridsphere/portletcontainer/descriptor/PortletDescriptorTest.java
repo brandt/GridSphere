@@ -5,24 +5,26 @@
 package org.gridlab.gridsphere.portletcontainer.descriptor;
 
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.apache.cactus.ServletTestCase;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.portletcontainer.*;
-import org.gridlab.gridsphere.portletcontainer.impl.descriptor.*;
-import org.gridlab.gridsphere.portlet.PortletWindow;
 import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.PortletWindow;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.*;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Hashtable;
+import java.util.List;
 
 /**
  * This is the base fixture for service testing. Provides a service factory and the
  * properties file.
  */
-public class PortletDescriptorTest extends TestCase {
+public class PortletDescriptorTest extends ServletTestCase {
 
 
     public PortletDescriptorTest(String name) {
@@ -41,8 +43,8 @@ public class PortletDescriptorTest extends TestCase {
         PortletDeploymentDescriptor pdd = null;
 
         // load files from JAR
-        String portletFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_TEST_DIR) + "portlet-test.xml";
-        String mappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_PORTLET_MAPPING);
+        String portletFile = GridSphereConfig.getProperty(GridSphereConfigProperties.TEST_HOME) + "/test/portlet-test.xml";
+        String mappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING);
 
         try {
             pdd = new PortletDeploymentDescriptor(portletFile, mappingFile);
@@ -58,6 +60,8 @@ public class PortletDescriptorTest extends TestCase {
         // we have one app descriptions
         assertEquals(1, defs.size());
 
+        String groupOwner = pdd.getGroupOwnerName();
+        assertEquals("The Test Group", groupOwner);
         SportletDefinition def = (SportletDefinition) defs.get(0);
         ApplicationSportletConfig portletApp = def.getApplicationSportletConfig();
         List concreteApps = def.getConcreteSportletList();

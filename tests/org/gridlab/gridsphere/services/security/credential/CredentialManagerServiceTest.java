@@ -14,7 +14,7 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portlet.service.spi.ServiceTest;
+import org.gridlab.gridsphere.portletcontainer.GridSphereServletTest;
 import org.gridlab.gridsphere.services.core.security.AuthenticationException;
 import org.gridlab.gridsphere.services.core.user.AccountRequest;
 import org.gridlab.gridsphere.services.core.user.LoginService;
@@ -24,7 +24,7 @@ import org.gridlab.gridsphere.services.grid.security.credential.*;
 import java.util.List;
 import java.util.Vector;
 
-public class CredentialManagerServiceTest extends ServiceTest {
+public class CredentialManagerServiceTest extends GridSphereServletTest {
 
     // Service variables
     private static PortletLog _log = SportletLog.getInstance(CredentialManagerServiceTest.class);

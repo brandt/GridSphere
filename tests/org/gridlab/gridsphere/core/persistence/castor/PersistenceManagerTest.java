@@ -7,16 +7,10 @@ package org.gridlab.gridsphere.core.persistence.castor;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import org.apache.log4j.PropertyConfigurator;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbmsImpl;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.services.core.user.LoginService;
-
-import java.net.URL;
 
 /**
  * This is the persistence manager test to make sure we can get a PM instance
