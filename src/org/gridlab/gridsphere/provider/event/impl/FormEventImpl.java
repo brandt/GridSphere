@@ -730,6 +730,16 @@ public class FormEventImpl implements FormEvent {
         return ami;
     }
 
+    public DataGridBean getDataGridBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (DataGridBean)tagBeans.get(beanKey);
+        }
+        DataGridBean dgBean = new DataGridBean(request, beanId);
+        tagBeans.put(beanKey, dgBean);
+        return dgBean;
+    }
+
     public ActionMenuBean getActionMenuBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {

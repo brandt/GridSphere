@@ -177,6 +177,8 @@ public interface FormEvent extends ActionEvent {
 
     public ActionMenuItemBean getActionMenuItemBean(String beanId);
 
+    public DataGridBean getDataGridBean(String beanId);
+
     /**
      * Stores any created beans into the request
      */
