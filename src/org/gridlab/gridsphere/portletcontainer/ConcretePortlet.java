@@ -7,8 +7,11 @@ package org.gridlab.gridsphere.portletcontainer;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletSettings;
 import org.gridlab.gridsphere.portletcontainer.descriptor.Owner;
+import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication;
+import org.gridlab.gridsphere.portletcontainer.impl.Cacheable;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * A ConcreteSportlet provides the portlet container with information used to create and manage the
@@ -18,23 +21,49 @@ import java.util.List;
  */
 public interface ConcretePortlet {
 
-    public String getPortletAppID();
-
+    /**
+     * Return the concrete portlet application ID
+     *
+     * @return the concrete portlet application ID
+     */
     public String getConcretePortletAppID();
 
     /**
-     * Returns the portlet config for this portlet
+     * Return the concrete portlet application that defines this concrete portlet in the portlet.xml
+     * descriptor.
      *
-     * @return the portlet config
+     * @return the concrete portlet application
      */
-    public PortletConfig getPortletConfig();
+    public ConcretePortletApplication getConcretePortletApplication();
 
     /**
-     * Returns the portlet settings for this concrete portlet
+     * Returns the map of portlet context parameters that are used in the PortletConfig class
      *
-     * @return the portlet settings
+     * @return the map of portlet context parameters keys are variable name and values are variable values
      */
-    public PortletSettings getPortletSettings(boolean enableConfig);
+    public Map getPortletContext();
+
+
+    /**
+     * Returns the map of portlet configuration parameters that are used in the PortletSettings class
+     *
+     * @return the map of portlet config parameters keys are variable name and values are variable values
+     */
+    public Map getPortletConfig();
+
+    /**
+     * Returns the sportlet settings for this concrete portlet
+     *
+     * @return the sportlet settings
+     */
+    public SportletSettings getSportletSettings();
+
+    /**
+     * Returns the portlet application settings for this concrete portlet
+     *
+     * @return the portlet application settings
+     */
+    //public PortletApplicationSettings getPortletApplicationSettings(boolean enableConfig);
 
     /**
      * Return the name of this portlet
@@ -55,7 +84,7 @@ public interface ConcretePortlet {
      *
      * @return the instantiated abstract portlet instance
      */
-    public AbstractPortlet getActivePortlet();
+    public AbstractPortlet getAbstractPortlet();
 
     /**
      * Return the Owner of the concrete portlet that can reconfigure the settings
@@ -81,18 +110,17 @@ public interface ConcretePortlet {
     public List getSupportedRoles();
 
     /**
-     * Returns the list of supported portlet modes e.g. EDIT, VIEW, HELP, CONFIGURE
+     * gets the default locale of a portlet
      *
-     * @return modes the list of allowed portlet modes
-     * @see <code>Portlet.Mode</code>
+     * @return the default locale of the portlet
      */
-    public List getSupportedPortletModes();
+    public String getDefaultLocale();
 
     /**
-     * Returns the list of allowed portlet window states e.g. MINIMIZED, MAXIMIZED, RESIZING
+     * Returns the language info of a portlet
      *
-     * @return modes the list of allowed portlet window states
-     * @see <code>PortletWindow.State</code>
+     * @return language info of the portlet
      */
-    public List getAllowedPortletWindowStates();
+    public List getLanguageList();
+
 }
