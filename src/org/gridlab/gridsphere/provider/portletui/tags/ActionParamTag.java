@@ -20,16 +20,6 @@ public class ActionParamTag extends TagSupport {
     protected String name = "";
     protected String value = "";
     protected ActionParamBean paramBean = null;
-    protected ImageBean imageBean = null;
-    protected String source = null;
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
 
     /**
      * Sets the action parameter name
