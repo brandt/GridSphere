@@ -1,12 +1,6 @@
 <ui:form>
     <ui:panel>
-        <ui:frame>
-            <ui:tablerow>
-                <ui:tablecell>
-                    <ui:text beanId="errorMsg" error="true"/>
-                </ui:tablecell>
-            </ui:tablerow>
-        </ui:frame>
+        <ui:errorframe beanId="errorFrame"/>
 
         <ui:frame>
             <ui:tablerow>
