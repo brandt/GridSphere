@@ -18,5 +18,7 @@
 
     <gs:dropdownlist bean="ddl"/>
 
+    <gs:listbox bean="lbb"/>
+
 
 </gs:form>
