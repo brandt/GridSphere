@@ -55,9 +55,8 @@ public interface AccessControlManagerService extends PortletService {
      *
      * @param user the Role object
      * @param group the PortletGroup
-     * @param role the PortletRole
      */
-    public void addUserToGroup(User user, PortletGroup group, PortletRole role) throws PortletServiceException ;
+    public void addUserToGroup(User user, PortletGroup group) throws PortletServiceException ;
 
     /**
      * Removes a user from a group
