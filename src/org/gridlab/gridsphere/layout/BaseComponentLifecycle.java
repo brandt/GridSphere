@@ -5,8 +5,9 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import java.io.IOException;
 import java.util.List;
@@ -60,7 +61,7 @@ public abstract class BaseComponentLifecycle implements ComponentLifecycle {
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletRequest req = event.getPortletRequest();
-        req.setAttribute(GridSphereProperties.COMPONENT_ID, componentIDStr);
+        req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
     }
 
     /**

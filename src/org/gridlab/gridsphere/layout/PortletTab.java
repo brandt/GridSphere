@@ -11,8 +11,9 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -83,9 +84,9 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     public String createTabTitleLink(GridSphereEvent event) {
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
-        req.setAttribute(GridSphereProperties.COMPONENT_ID, componentIDStr);
+        req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
         PortletURI portletURI = res.createURI();
-        portletURI.addParameter(GridSphereProperties.COMPONENT_ID, componentIDStr);
+        portletURI.addParameter(SportletProperties.COMPONENT_ID, componentIDStr);
         return portletURI.toString();
     }
 

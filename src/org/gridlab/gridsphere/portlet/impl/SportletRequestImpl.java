@@ -5,7 +5,7 @@
 package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Cookie;
@@ -97,10 +97,10 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the client device
      */
     public Client getClient() {
-        Client client = (Client) req.getSession().getAttribute(GridSphereProperties.CLIENT);
+        Client client = (Client) req.getSession().getAttribute(SportletProperties.CLIENT);
         if (client == null) {
             client = new ClientImpl(req);
-            req.getSession().setAttribute(GridSphereProperties.CLIENT, client);
+            req.getSession().setAttribute(SportletProperties.CLIENT, client);
         }
         return client;
     }
@@ -111,7 +111,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @param client the client device
      */
     public void setClient(Client client) {
-        req.getSession().setAttribute(GridSphereProperties.CLIENT, client);
+        req.getSession().setAttribute(SportletProperties.CLIENT, client);
     }
 
     /**
@@ -187,7 +187,7 @@ public class SportletRequestImpl implements SportletRequest {
         if (getMode() == Portlet.Mode.CONFIGURE) {
             return null;
         }
-        return (PortletData) req.getAttribute(GridSphereProperties.PORTLETDATA);
+        return (PortletData) req.getAttribute(SportletProperties.PORTLET_DATA);
     }
 
     /**
@@ -198,7 +198,7 @@ public class SportletRequestImpl implements SportletRequest {
      */
     public void setData(PortletData data) {
         if (getMode() != Portlet.Mode.EDIT) return;
-        req.setAttribute(GridSphereProperties.PORTLETDATA, data);
+        req.setAttribute(SportletProperties.PORTLET_DATA, data);
     }
 
     /**
@@ -210,10 +210,10 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the User object
      */
     public User getUser() {
-        User user = (User) req.getSession(true).getAttribute(GridSphereProperties.USER);
+        User user = (User) req.getSession(true).getAttribute(SportletProperties.PORTLET_USER);
         if (user == null) {
             user = GuestUser.getInstance();
-            req.getSession().setAttribute(GridSphereProperties.USER, user);
+            req.getSession().setAttribute(SportletProperties.PORTLET_USER, user);
         }
         return user;
     }
@@ -227,8 +227,9 @@ public class SportletRequestImpl implements SportletRequest {
      *
      * @see PortletRole
      */
+    /*
     public PortletRole getRole(PortletGroup group) {
-        Map authMap = (Map) req.getAttribute(GridSphereProperties.GROUPROLES);
+        Map authMap = (Map) req.getAttribute(SportletProperties.GROUPROLES);
         if ((group == null) || (authMap == null)) {
             return PortletRole.GUEST;
         }
@@ -242,11 +243,11 @@ public class SportletRequestImpl implements SportletRequest {
             }
         }
         return (role == null) ? PortletRole.GUEST : role;
-    }
+    }*/
 
 
     public PortletRole getRole() {
-        PortletRole role = (PortletRole)req.getAttribute(GridSphereProperties.PORTLETROLE);
+        PortletRole role = (PortletRole)req.getAttribute(SportletProperties.PORTLET_ROLE);
         if (role == null) {
             return PortletRole.GUEST;
         }
@@ -255,7 +256,7 @@ public class SportletRequestImpl implements SportletRequest {
 
 
     public void setRole(PortletRole role) {
-        req.setAttribute(GridSphereProperties.PORTLETROLE, role);
+        req.setAttribute(SportletProperties.PORTLET_ROLE, role);
     }
 
     /**
@@ -266,18 +267,18 @@ public class SportletRequestImpl implements SportletRequest {
      * @see PortletGroup
      */
     public void setGroup(List groups) {
-        req.setAttribute(GridSphereProperties.PORTLETGROUP, groups);
+        req.setAttribute(SportletProperties.PORTLET_GROUP, groups);
     }
 
     public PortletGroup getGroup() {
-        PortletGroup group = (PortletGroup)req.getAttribute(GridSphereProperties.PORTLETGROUP);
+        PortletGroup group = (PortletGroup)req.getAttribute(SportletProperties.PORTLET_GROUP);
         if (group == null) return PortletGroupFactory.createPortletGroup("unknown group");
         return group;
     }
 
 
     public void setGroup(PortletGroup group) {
-        req.setAttribute(GridSphereProperties.PORTLETGROUP, group);
+        req.setAttribute(SportletProperties.PORTLET_GROUP, group);
     }
 
     /**
@@ -312,7 +313,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the portlet settings
      */
     public PortletSettings getPortletSettings() {
-        return (PortletSettings) req.getAttribute(GridSphereProperties.PORTLETSETTINGS);
+        return (PortletSettings) req.getAttribute(SportletProperties.PORTLET_SETTINGS);
     }
 
     /**
@@ -321,7 +322,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @param settings the portlet settings
      */
     public void setPortletSettings(PortletSettings settings) {
-        req.setAttribute(GridSphereProperties.PORTLETSETTINGS, settings);
+        req.setAttribute(SportletProperties.PORTLET_SETTINGS, settings);
     }
 
 
@@ -331,7 +332,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the previous portlet mode
      */
     public Portlet.Mode getPreviousMode() {
-        Portlet.Mode prev = (Portlet.Mode) req.getAttribute(GridSphereProperties.PREVIOUSMODE);
+        Portlet.Mode prev = (Portlet.Mode) req.getAttribute(SportletProperties.PREVIOUS_MODE);
         if (prev == null) prev = Portlet.Mode.VIEW;
         return prev;
     }
@@ -342,7 +343,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @param previousMode the previous portlet mode
      */
     public void setPreviousMode(Portlet.Mode previousMode) {
-        req.setAttribute(GridSphereProperties.PREVIOUSMODE, previousMode);
+        req.setAttribute(SportletProperties.PREVIOUS_MODE, previousMode);
     }
 
     /**
@@ -351,7 +352,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the portlet window
      */
     public PortletWindow.State getWindowState() {
-        return (PortletWindow.State) req.getAttribute(GridSphereProperties.PORTLETWINDOW);
+        return (PortletWindow.State) req.getAttribute(SportletProperties.PORTLET_WINDOW);
     }
 
     /**
@@ -360,7 +361,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @param state the portlet window state
      */
     public void setWindowState(PortletWindow.State state) {
-        req.setAttribute(GridSphereProperties.PORTLETWINDOW, state);
+        req.setAttribute(SportletProperties.PORTLET_WINDOW, state);
     }
 
     /**
@@ -369,7 +370,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the portlet mode
      */
     public Portlet.Mode getMode() {
-        return (Portlet.Mode) req.getAttribute(GridSphereProperties.PORTLETMODE);
+        return (Portlet.Mode) req.getAttribute(SportletProperties.PORTLET_MODE);
     }
 
     /**
@@ -378,7 +379,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @param mode the portlet mode
      */
     public void setMode(Portlet.Mode mode) {
-        req.setAttribute(GridSphereProperties.PORTLETMODE, mode);
+        req.setAttribute(SportletProperties.PORTLET_MODE, mode);
     }
 
     /**

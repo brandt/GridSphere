@@ -11,8 +11,9 @@ import org.gridlab.gridsphere.layout.event.PortletTitleBarEvent;
 import org.gridlab.gridsphere.layout.event.PortletTitleBarListener;
 import org.gridlab.gridsphere.layout.event.impl.PortletFrameEventImpl;
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.PortletDataManager;
 import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletDataManager;
@@ -223,9 +224,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         PortletResponse res = event.getPortletResponse();
 
-        req.setAttribute(GridSphereProperties.PORTLETID, portletClass);
+        req.setAttribute(SportletProperties.PORTLETID, portletClass);
 
-        String newmode = req.getParameter(GridSphereProperties.PORTLETMODE);
+        String newmode = req.getParameter(SportletProperties.PORTLET_MODE);
         if (newmode != null) {
             req.setMode(Portlet.Mode.toMode(newmode));
         } else {
@@ -243,7 +244,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         if (!(user instanceof GuestUser)) {
             try {
                 data = dataManager.getPortletData(req.getUser(), portletClass);
-                req.setAttribute(GridSphereProperties.PORTLETDATA, data);
+                req.setAttribute(SportletProperties.PORTLET_DATA, data);
             } catch (PersistenceManagerException e) {
                 errorFrame.setError("Unable to retrieve user's portlet data!", e);
             }
@@ -258,7 +259,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 } catch (PortletException e) {
                     errorFrame.setException(e);
                 }
-                String message = (String)req.getAttribute(GridSphereProperties.PORTLETERROR);
+                String message = (String)req.getAttribute(SportletProperties.PORTLETERROR);
                 if (message != null) {
                     errorFrame.setMessage(message);
                 }
@@ -286,7 +287,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
 
-        req.setAttribute(GridSphereProperties.PORTLETID, portletClass);
+        req.setAttribute(SportletProperties.PORTLETID, portletClass);
 
         if (errorFrame.hasError()) {
             errorFrame.doRender(event);
@@ -299,7 +300,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         if (!(user instanceof GuestUser)) {
             try {
                 data = dataManager.getPortletData(req.getUser(), portletClass);
-                req.setAttribute(GridSphereProperties.PORTLETDATA, data);
+                req.setAttribute(SportletProperties.PORTLET_DATA, data);
             } catch (PersistenceManagerException e) {
                 errorFrame.setError("Unable to retrieve user's portlet data", e);
             }

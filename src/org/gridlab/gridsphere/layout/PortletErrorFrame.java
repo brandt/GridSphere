@@ -1,10 +1,11 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import java.io.PrintWriter;
 import java.io.IOException;
@@ -49,7 +50,7 @@ public class PortletErrorFrame extends BasePortletComponent implements Cloneable
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
-        PortletException portletException = (PortletException)req.getAttribute(GridSphereProperties.ERROR);
+        PortletException portletException = (PortletException)req.getAttribute(SportletProperties.ERROR);
         if (portletException == null) {
             if (message != null) {
                 out.println(message);

@@ -7,9 +7,10 @@ package org.gridlab.gridsphere.layout;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import java.io.*;
 import java.util.*;
@@ -62,7 +63,7 @@ public class PortletLayoutEngine {
         PortletRequest req = event.getPortletRequest();
 
         // Check for framework errors
-        Exception portletException = (Exception)req.getAttribute(GridSphereProperties.ERROR);
+        Exception portletException = (Exception)req.getAttribute(SportletProperties.ERROR);
         if (portletException != null) {
             return pageFactory.createErrorPage();
         }
@@ -84,7 +85,7 @@ public class PortletLayoutEngine {
             page = getPortletPage(event);
             int numcomps = page.getComponentIdentifierList().size();
             if (event.getPortletComponentID() < 0 || event.getPortletComponentID() > numcomps) {
-                event.getPortletRequest().setAttribute(GridSphereProperties.COMPONENT_ID, "-1");
+                event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, "-1");
             }
             page.doRender(event);
         } catch (PortletLayoutException e) {
@@ -144,7 +145,7 @@ public class PortletLayoutEngine {
             page = getPortletPage(event);
             int numcomps = page.getComponentIdentifierList().size();
             if (event.getPortletComponentID() < 0 || event.getPortletComponentID() > numcomps) {
-                event.getPortletRequest().setAttribute(GridSphereProperties.COMPONENT_ID, "-1");
+                event.getPortletRequest().setAttribute(SportletProperties.COMPONENT_ID, "-1");
             } else {
                 page.actionPerformed(event);
             }

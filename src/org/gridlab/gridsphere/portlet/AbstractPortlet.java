@@ -8,7 +8,7 @@ import org.gridlab.gridsphere.event.*;
 import org.gridlab.gridsphere.event.impl.ActionEventImpl;
 import org.gridlab.gridsphere.event.impl.MessageEventImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -87,7 +87,7 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
                 }
             } catch (Exception e) {
                 log.error("in PortletAdapter: service()", e);
-                request.setAttribute(GridSphereProperties.PORTLETERROR, "Error performing method:" + method + e.getMessage());
+                request.setAttribute(SportletProperties.PORTLETERROR, "Error performing method:" + method + e.getMessage());
 
                 //doError(request, response, e);
             }

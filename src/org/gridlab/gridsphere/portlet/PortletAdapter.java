@@ -6,7 +6,7 @@ package org.gridlab.gridsphere.portlet;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
 import javax.servlet.UnavailableException;
@@ -122,10 +122,10 @@ public abstract class PortletAdapter extends Portlet {
      */
     public void service(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         // There must be a portlet ID to know which portlet to service
-        String portletID = (String) request.getAttribute(GridSphereProperties.PORTLETID);
+        String portletID = (String) request.getAttribute(SportletProperties.PORTLETID);
         if (portletID == null) {
             // it may be in the request parameter
-            portletID = request.getParameter(GridSphereProperties.PORTLETID);
+            portletID = request.getParameter(SportletProperties.PORTLETID);
             if (portletID == null) {
                 log.error("in AbstractPortlet: No PortletID found in request attribute");
                 return;
@@ -134,15 +134,15 @@ public abstract class PortletAdapter extends Portlet {
 
         portletSettings = (PortletSettings) allPortletSettings.get(portletID);
         if (portletSettings != null) {
-            request.setAttribute(GridSphereProperties.PORTLETSETTINGS, portletSettings);
+            request.setAttribute(SportletProperties.PORTLET_SETTINGS, portletSettings);
         }
 
         String groupName = portletConfig.getGroupName();
         PortletGroup group = PortletGroupFactory.createPortletGroup(groupName);
         PortletRole role = aclService.getRoleInGroup(request.getUser(), group);
         log.debug("Setting Group: " + group.toString() + " Role: " + role.toString());
-        request.setAttribute(GridSphereProperties.PORTLETGROUP, group);
-        request.setAttribute(GridSphereProperties.PORTLETROLE, role);
+        request.setAttribute(SportletProperties.PORTLET_GROUP, group);
+        request.setAttribute(SportletProperties.PORTLET_ROLE, role);
 
         String method = (String) request.getAttribute(SportletProperties.PORTLET_ACTION_METHOD);
         if (method != null) return;
@@ -304,7 +304,7 @@ public abstract class PortletAdapter extends Portlet {
     public void doHelp(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
         PrintWriter out = response.getWriter();
-        //PortletSettings settings = (PortletSettings)request.getAttribute(GridSphereProperties.PORTLETSETTINGS);
+        //PortletSettings settings = (PortletSettings)request.getAttribute(SportletProperties.PORTLETSETTINGS);
         //out.println(settings.getDescription(request.getLocale(), request.getClient()));
 
         doView(request, response);

@@ -8,8 +8,9 @@ import org.gridlab.gridsphere.layout.event.PortletTitleBarEvent;
 import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletWindow;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 
 /**
@@ -32,9 +33,9 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
     public PortletTitleBarEventImpl(GridSphereEvent event, int id) {
         this.req = event.getPortletRequest();
         this.id = id;
-        if (req.getParameter(GridSphereProperties.PORTLETMODE) != null) {
+        if (req.getParameter(SportletProperties.PORTLET_MODE) != null) {
             action = PortletTitleBarEvent.Action.MODE_MODIFY;
-        } else if (req.getParameter(GridSphereProperties.PORTLETWINDOW) != null) {
+        } else if (req.getParameter(SportletProperties.PORTLET_WINDOW) != null) {
             action = PortletTitleBarEvent.Action.WINDOW_MODIFY;
         }
     }
@@ -55,7 +56,7 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
      */
     public Portlet.Mode getMode() {
         Portlet.Mode mode = null;
-        String pMode = req.getParameter(GridSphereProperties.PORTLETMODE);
+        String pMode = req.getParameter(SportletProperties.PORTLET_MODE);
         if (pMode != null) {
             try {
                 mode = Portlet.Mode.toMode(pMode);
@@ -73,7 +74,7 @@ public class PortletTitleBarEventImpl implements PortletTitleBarEvent {
      */
     public PortletWindow.State getState() {
         PortletWindow.State state = null;
-        String s = req.getParameter(GridSphereProperties.PORTLETWINDOW);
+        String s = req.getParameter(SportletProperties.PORTLET_WINDOW);
         if (s != null) {
             try {
                 state = PortletWindow.State.toState(s);

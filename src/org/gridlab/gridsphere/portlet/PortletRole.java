@@ -51,7 +51,7 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
             throws IllegalArgumentException {
         if (portletRole.equalsIgnoreCase("GUEST")) {
             return GUEST;
-        } else if (portletRole.equalsIgnoreCase("USER")) {
+        } else if (portletRole.equalsIgnoreCase("PORTLET_USER")) {
             return USER;
         } else if (portletRole.equalsIgnoreCase("ADMIN")) {
             return ADMIN;
@@ -81,9 +81,9 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
     }
 
     /**
-     * Returns <code>true</code> if this role is <code>USER</code>, <code>false otherwise</code>
+     * Returns <code>true</code> if this role is <code>PORTLET_USER</code>, <code>false otherwise</code>
      *
-     * @return <code>true</code> if this role is <code>USER</code>, <code>false otherwise</code>
+     * @return <code>true</code> if this role is <code>PORTLET_USER</code>, <code>false otherwise</code>
      */
     public boolean isUser() {
         if (role == USER_ROLE) return true;
@@ -115,7 +115,7 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
         if (role == GUEST_ROLE) {
             tagstring = "GUEST";
         } else if (role == USER_ROLE) {
-            tagstring = "USER";
+            tagstring = "PORTLET_USER";
         } else if (role == ADMIN_ROLE) {
             tagstring = "ADMIN";
         } else {

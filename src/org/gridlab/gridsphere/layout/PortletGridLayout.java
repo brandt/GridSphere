@@ -154,8 +154,7 @@ public class PortletGridLayout extends PortletFrameLayout implements Cloneable {
             // now render the portlets in this column
             //out.println("<tr>");
             for (int j = 1; j <= portletsPerColumns; j++) {
-                out.print("<tr");
-                out.println("><td>");
+                out.print("<tr><td>");
                 p = (PortletComponent) components.get(portletCount);
                 if (p.getVisible()) {
                     p.doRender(event);

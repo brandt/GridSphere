@@ -8,7 +8,7 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.PortletWindow;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
@@ -140,11 +140,11 @@ public class SportletResponse implements PortletResponse {
     /**
      * Add any additional parameters to the URI:
      * <ul><li>
-     * GridSphereProperties.COMPONENT_ID
+     * SportletProperties.COMPONENT_ID
      * </li></ul>
      */
     protected void addURIParameters(PortletURI sportletURI) {
-        sportletURI.addParameter(GridSphereProperties.COMPONENT_ID, (String) req.getAttribute(GridSphereProperties.COMPONENT_ID));
+        sportletURI.addParameter(SportletProperties.COMPONENT_ID, (String) req.getAttribute(SportletProperties.COMPONENT_ID));
     }
 
     /**

@@ -8,7 +8,7 @@ import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletAction;
 import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.PortletWindow;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -107,10 +107,10 @@ public class SportletURI implements PortletURI {
         if (action instanceof DefaultPortletAction) {
             DefaultPortletAction dpa = (DefaultPortletAction) action;
             if (!dpa.getName().equals("")) {
-                store.put(GridSphereProperties.ACTION, dpa.getName());
+                store.put(SportletProperties.DEFAULT_PORTLET_ACTION, dpa.getName());
 
                 Map actionParams = dpa.getParameters();
-                if (!actionParams.isEmpty()) store.put(GridSphereProperties.PREFIX, id);
+                if (!actionParams.isEmpty()) store.put(SportletProperties.PREFIX, id);
                 Set set = actionParams.keySet();
                 Iterator it = set.iterator();
                 while (it.hasNext()) {
@@ -129,7 +129,7 @@ public class SportletURI implements PortletURI {
      * @param state the window state that will be invoked by this URI
      */
     public void setWindowState(PortletWindow.State state) {
-        store.put(GridSphereProperties.PORTLETWINDOW, state.toString());
+        store.put(SportletProperties.PORTLET_WINDOW, state.toString());
     }
 
     /**

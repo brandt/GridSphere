@@ -5,10 +5,11 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -155,7 +156,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletRequest req = event.getPortletRequest();
-        req.setAttribute(GridSphereProperties.COMPONENT_ID, componentIDStr);
+        req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
     }
 
     public Object clone() throws CloneNotSupportedException {

@@ -116,6 +116,7 @@ public class SportletContext implements PortletContext {
             throws PortletException, IOException {
         if (path == null) throw new PortletException("The provided resource path is null");
         RequestDispatcher rd = null;
+
         rd = context.getRequestDispatcher(path);
         try {
             if (rd != null) {

@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.layout.event.PortletTitleBarListener;
 import org.gridlab.gridsphere.layout.event.impl.PortletTitleBarEventImpl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.*;
 
 import java.io.IOException;
@@ -439,11 +440,11 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         for (int i = 0; i < windowStates.size(); i++) {
             tmp = (PortletWindow.State)windowStates.get(i);
             portletURI = res.createURI();
-            portletURI.addParameter(GridSphereProperties.COMPONENT_ID, this.componentIDStr);
-            portletURI.addParameter(GridSphereProperties.PORTLETID, portletClass);
+            portletURI.addParameter(SportletProperties.COMPONENT_ID, this.componentIDStr);
+            portletURI.addParameter(SportletProperties.PORTLETID, portletClass);
             try {
                 stateLink = new PortletStateLink(tmp, locale);
-                portletURI.addParameter(GridSphereProperties.PORTLETWINDOW, tmp.toString());
+                portletURI.addParameter(SportletProperties.PORTLET_WINDOW, tmp.toString());
                 stateLink.setHref(portletURI.toString());
                 stateLinks.add(stateLink);
             } catch (IllegalArgumentException e) {
@@ -501,11 +502,11 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             PortletModeLink modeLink;
             mode = (Portlet.Mode)smodes.get(i);
             portletURI = res.createURI();
-            portletURI.addParameter(GridSphereProperties.COMPONENT_ID, this.componentIDStr);
-            portletURI.addParameter(GridSphereProperties.PORTLETID, portletClass);
+            portletURI.addParameter(SportletProperties.COMPONENT_ID, this.componentIDStr);
+            portletURI.addParameter(SportletProperties.PORTLETID, portletClass);
             try {
                 modeLink = new PortletModeLink(mode, locale);
-                portletURI.addParameter(GridSphereProperties.PORTLETMODE, mode.toString());
+                portletURI.addParameter(SportletProperties.PORTLET_MODE, mode.toString());
                 modeLink.setHref(portletURI.toString());
                 portletLinks.add(modeLink);
             } catch (IllegalArgumentException e) {
@@ -551,9 +552,9 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             previousMode = portletMode;
             portletMode = evt.getMode();
             req.setMode(portletMode);
-            req.setAttribute(GridSphereProperties.PREVIOUSMODE, portletMode);
+            req.setAttribute(SportletProperties.PREVIOUS_MODE, portletMode);
         }
-        req.setAttribute(GridSphereProperties.PORTLETWINDOW, windowState);
+        req.setAttribute(SportletProperties.PORTLET_WINDOW, windowState);
         if (evt != null) fireTitleBarEvent(evt);
     }
 
@@ -608,8 +609,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         }
 
         req.setMode(portletMode);
-        req.setAttribute(GridSphereProperties.PREVIOUSMODE, previousMode);
-        req.setAttribute(GridSphereProperties.PORTLETWINDOW, windowState);
+        req.setAttribute(SportletProperties.PREVIOUS_MODE, previousMode);
+        req.setAttribute(SportletProperties.PORTLET_WINDOW, windowState);
         PrintWriter out = res.getWriter();
 
         out.println("<tr><td class=\"window-title\">");
@@ -628,7 +629,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         }
 
         // Invoke doTitle of portlet whose action was perfomed
-        String actionStr = req.getParameter(GridSphereProperties.ACTION);
+        String actionStr = req.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
         out.println("<td class=\"window-title-name\">");
         if (actionStr != null) {
             try {
