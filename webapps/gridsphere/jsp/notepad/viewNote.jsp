@@ -54,10 +54,11 @@
             </ui:tablecell>
         </ui:tablerow>
 
-     <ui:textfield beanId="search"/><ui:actionsubmit action="doSearch" value="Search"/>
      <% if (np_action.equals("view")) { %>
+             <ui:textfield beanId="search"/><ui:actionsubmit action="doSearch" value="Search"/>
             <ui:actionsubmit action="doShowEdit" value="Edit this Note"/>
             <ui:actionsubmit action="doShowNew" value="Create a new Note"/>
+            <ui:actionsubmit action="doDelete" value="Delete this Note"/>
             <%
         }
         %>
@@ -71,7 +72,6 @@
             <%
      }
         %>
-    <ui:actionsubmit action="doDelete" value="Delete this Note"/>
     <ui:actionsubmit action="showList" value="Show all Notes"/>
 
     </ui:frame>
