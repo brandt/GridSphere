@@ -44,52 +44,16 @@ public class FormEventImpl implements FormEvent {
         Enumeration enum = req.getParameterNames();
         while(enum.hasMoreElements()) {
             String name = (String)enum.nextElement();
-            if (name.startsWith("submit:")) {
+            if (name.startsWith("gssubmit:")) {
                 String button = req.getParameter(name);
                 if (button!=null) {
-                    result = name.substring(7);
+                    result = name.substring(9);
                 }
             }
         }
         return result;
     }
 
-    public String getRadioButton() {
-        return null;
-    }
-
-    private String[] getSelectedItem(String groupname) {
-
-        PortletRequest req = event.getPortletRequest();
-        Enumeration enum = req.getParameterNames();
-        while(enum.hasMoreElements()) {
-            String name = (String)enum.nextElement();
-            if (name.equals(groupname)) {
-                return req.getParameterValues(name);
-            }
-        }
-        return null;
-
-    }
-
-    /**
-     * Gets the list of selected values of a listbox , return null if it does not exist
-     * @param listboxname name of the listbox
-     * @return array of stringvalues with the values of the listboxes
-     */
-    public String[] getSelectedListBoxValues (String listboxname) {
-        return getSelectedItem(listboxname);
-    }
-
-    /**
-     * Gets the list of values of selected checkboxes in a group (means with the same name), returns null if does not exist
-     * @param checkboxgroupname name of the checkboxgroup
-     * @return array of stringvalues with the values of the checkboxes
-     */
-    public String[] getSelectedCheckBoxValues (String checkboxgroupname) {
-        PortletRequest req = event.getPortletRequest();
-        return req.getParameterValues(checkboxgroupname);
-    }
 
     private boolean checkParameterName(String name) {
         Enumeration enum = request.getParameterNames();
@@ -101,27 +65,43 @@ public class FormEventImpl implements FormEvent {
         return false;
     }
 
-    public Object getElementBean(String name, PortletRequest request) {
+    private Object getBean(String name, PortletRequest request) {
         HttpSession session = request.getSession();
         NameBean bean = (NameBean)session.getAttribute(name);
-
-        if (checkParameterName("gstag:"+bean.getName())) {
-            String[] values = request.getParameterValues("gstag:"+bean.getName());
-            if (values.length>0) {
-                bean.update(values);
-            }
-        }
         return bean;
     }
 
+    public Object getElementBean(String name, PortletRequest request) {
+        HttpSession session = request.getSession();
+        NameBean bean = (NameBean)getBean(name, request);
+        System.out.println("Getting Bean "+name+" from Session");
+        //if (checkParameterName("gstag:"+bean.getName())) {
+            String[] values = request.getParameterValues("gstag:"+bean.getName());
+            //if (values.length>0) {
+                System.out.println("Updated bean: "+bean.getName());
+                bean.update(values);
+            //}
+        //}
+        return bean;
+    }
+
+    public CheckBoxBean getCheckBox(String name) {
+        CheckBoxBean checkbox = (CheckBoxBean)getBean(name, request);
+        if (checkParameterName("gstag:"+name)) {
+            checkbox.setSelected(true);
+        } else {
+            checkbox.setSelected(false);
+        }
+        return checkbox;
+    }
+
     public Object getElementBean(String name) {
-        printRequestParameter(request);
         PortletRequest request = event.getPortletRequest();
         return getElementBean(name, request);
     }
 
-    private void printRequestParameter(PortletRequest req) {
-        System.out.println("\n\n show request params\n----------------\n");
+    public void printRequestParameter(PortletRequest req) {
+        System.out.println("\n\n show request params\n--------------------\n");
         Enumeration enum = req.getParameterNames();
         while (enum.hasMoreElements()) {
             String name = (String)enum.nextElement();
@@ -141,5 +121,6 @@ public class FormEventImpl implements FormEvent {
 
             }
         }
+        System.out.println("--------------------\n");
     }
 }

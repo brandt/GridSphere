@@ -49,6 +49,12 @@ public abstract class SelectElementBean extends BaseNameValueBean implements Sel
     }
 
     public void update(String[] values) {
-        this.selected = true;
+        try {
+            if (values.equals(null)) {
+                this.selected = true;
+            }
+        } catch (NullPointerException e) {
+            this.selected = false;
+        }
     }
 }

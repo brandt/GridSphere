@@ -25,6 +25,10 @@ public class BaseButtonBean extends BaseNameValueBean implements Button {
         return this.type;
     }
 
+    public String getTagName() {
+        return "gssubmit:";
+    }
+
     public String toString() {
         return "<input type='" + type + "' name='" + getTagName() + name + "' value='" + value + "'/>";
     }

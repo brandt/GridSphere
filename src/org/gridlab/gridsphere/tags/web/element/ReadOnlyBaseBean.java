@@ -42,4 +42,5 @@ public abstract class ReadOnlyBaseBean extends BaseNameValueBean implements Read
         }
     }
 
+
 }

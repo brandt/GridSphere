@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public abstract class BaseNameValueBean extends NameBean implements Valueable, Updateable {
+public abstract class BaseNameValueBean extends NameBean implements Valueable {
 
     protected String value;
     protected boolean disabled;

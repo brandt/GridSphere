@@ -49,7 +49,7 @@ public class TextAreaBean extends ReadOnlyBaseBean implements TextArea {
     }
 
     public String toString() {
-        return "<textarea name='" + name + "' cols='" + cols + "' rows='" + rows + "' " + checkDisabled() + " " + checkReadonly() + ">" +
+        return "<textarea name='" + getTagName()+name + "' cols='" + cols + "' rows='" + rows + "' " + checkDisabled() + " " + checkReadonly() + ">" +
                 value + "</textarea>";
 
     }

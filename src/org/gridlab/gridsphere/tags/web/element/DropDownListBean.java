@@ -51,11 +51,15 @@ public class DropDownListBean extends BaseListBean implements DropDownList {
     }
 
     public void update(String[] values) {
-        if (!multiple) {
-            list.unselectAll();
-        }
-        for (int i=0;i<values.length;i++) {
-            list.setSelected(values[i], true);
+        try {
+            if (!multiple) {
+                list.unselectAll();
+            }
+            for (int i=0;i<values.length;i++) {
+                list.setSelected(values[i], true);
+            }
+        } catch (NullPointerException e) {
+            // ok was empty, nothing selected
         }
     }
 

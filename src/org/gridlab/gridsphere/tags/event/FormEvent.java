@@ -22,29 +22,24 @@ public interface FormEvent {
     */
     public String getPressedSubmitButton();
 
-    public String getRadioButton();
-
     /**
-     * Gets the list of selected values of a listbox
-     * @param listboxname name of the listbox
-     * @return array of stringvalues with the values of the listboxes
-     */
-    public String[] getSelectedListBoxValues (String listboxname);
-
-    /**
-     * Gets the list of values of selected checkboxes in a group (means with the same name), returns null if does not exist
-     * @param checkboxgroupname name of the checkboxgroup
-     * @return array of stringvalues with the values of the checkboxes
-     */
-    public String[] getSelectedCheckBoxValues (String checkboxgroupname);
-
-    /**
-     * Gets back the bean with the modifications from the userinterface.
+     * Gets back the prev. saved bean with the modifications from the userinterface.
      * @param name name of the bean
      * @return updated elementbean
      */
     public Object getElementBean(String name);
 
+    /**
+     * Gets back the prev. saved bean with the modifications from the userinterface.
+     * @param name name of the bean
+     * @param request requestobject where the bean was stored (in the session of the request)
+     * @return updated elementbean
+     */
     public Object getElementBean(String name, PortletRequest request);
+
+    /**
+     * For debugging
+     */
+    public void printRequestParameter(PortletRequest req);
 
 }
