@@ -9,7 +9,7 @@
     $Id$
 -->
 
-<container-layout theme="xp">
+<container-layout theme="gridsphere">
 
 <container-name>GridSphere Portal</container-name>
 
@@ -53,7 +53,7 @@
                     <grid-layout>
                         <portlet-frame inner-padding="20">
                             <name>RSS</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.core.RSSPortlet.1</portlet-class>
+                            <portlet-class>org.gridlab.gridsphere.portlets.groupware.rss.RSSPortlet.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>
