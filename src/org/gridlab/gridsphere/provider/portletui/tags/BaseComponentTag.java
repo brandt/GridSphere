@@ -116,7 +116,7 @@ public abstract class BaseComponentTag extends BaseBeanTag   {
      */
     protected String checkReadonly() {
         if (readonly) {
-            return " disabled='disabled' ";
+            return " readonly='readonly' ";
         } else {
             return "";
         }
