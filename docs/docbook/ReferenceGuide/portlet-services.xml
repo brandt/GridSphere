@@ -1,0 +1,133 @@
+<!--
+
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+    Author:     Jason Novotny
+    Version:    $Id$
+-->
+
+<chapter id="portlet-services">
+    <title>Portlet Service Framework</title>
+
+
+Portlet services allow for the easy separation of a service used to perform
+a set of operations from the portlets and the portlet container that use them.
+
+A portlet service is instantiated by a portlet service factory.
+The factory is responsible for the lifecycle management of
+portlet services. The factory has its own init() and destroy() methods
+that get invoked by the portlet container to startup and shutdown all
+portlet services.
+
+The PortletServiceFactory defines the following method:
+
+public PortletService createPortletService(Class service,
+                                           ServletConfig servletConfig,
+                                           boolean useCachedService)
+            throws PortletServiceUnavailableException, PortletServiceNotFoundException;
+
+The client is expected to provide the following data:
+service          -- the interface defining the service to be instantiated
+servletConfig    -- the ServletConfig object of the portlet conatiner
+useCachedService -- indicates to the factory of a new instance of the service
+                    should be created or reused if one currently exists
+
+The properties file, located in GridSphere under
+webapps/WEB-INF/conf/PortletServices.xml has entries like the following:
+
+<service>
+    <name>User Manager Service</name>
+    <description>Provides User Administration Capabilities</description>
+    <interface>org.gridlab.gridsphere.services.user.UserManagerService</interface>
+    <implementation>org.gridlab.gridsphere.services.user.impl.UserManagerServiceImpl</implementation>
+</service>
+
+This simply maps the interface of the service to its concrete implementation.
+In this way, new implementations for a given interface may be easily swapped
+in or out.
+
+Portlet services may be obtained in two ways:
+
+1) If the client is the portlet container or another portlet service an
+instance of the portlet service factory can be obtained via the implementing
+SportletServiceFactory class as shown:
+
+PortletServiceFactory factory = SportletServiceFactory.getInstance();
+PortletService coolService = factory.createService(CoolService.class,
+                                                   servletConfig,
+                                                   useCached);
+
+2) If the client is another portlet using the service, it can obtain a portlet
+service via the PortletContext as shown:
+
+portletService coolService
+                    = getConfig().getContext().getService(CoolService.class);
+
+In the second case, the portlet context hides the factory from the client and
+uses the default factory settings.
+
+2. A Portlet Service Example
+
+Suppose you want to create the CoolService. Here are the steps to follow:
+
+A) Create a new Service interface that extends PortletService:
+
+ public interface CoolService extends PortletService {
+
+     public void doSomethingCool();
+
+ }
+
+B) Create an implementing class CoolServiceImpl that also implements the
+PortletServiceProvider interface. The PortletServiceProvider defines
+an interface consisting of init() and destroy() methods for handling
+the Portlet Service lifecycle. Upon instantiation by the PortletServiceFactory,
+the init(PortletServiceConfig config) method of the portlet service is
+invoked. The PortletServiceConfig defines methods for retrieving information
+from the PortletServices.properties and the servlet.xml information. These two
+files can be potentially used for portlet service startup values rather than
+hardcoding them directly into the init() method. The example CoolServiceImpl
+is shown below:
+
+
+ public class CoolServiceImpl implements PortletServiceProvider, CoolService {
+
+    public void init(PortletServiceConfig config)
+                    throws PortletServiceUnavailableException {
+        // Place optional startup routines e.g. loading data from database
+    }
+
+    public void destroy() {
+        // Place optional shutdown routines here e.g. saving data to database
+    }
+
+    public void doSomethingCool {
+        System.err.println("I'm doing something cool!");
+    }
+
+ }
+
+C) Add an entry to the PortletServices.properties file:
+
+># Cool Service
+>org.myproject.services.CoolService
+>    = org.myproject.services.impl.CoolServiceImpl
+
+<service>
+    <name>Cool Service</name>
+    <description>Solves the world's problems and puts hair on your head</description>
+    <interface>com.getrich.services.CoolService</interface>
+    <implementation>com.getrich.services.impl.CoolServiceImpl</implementation>
+</service>
+
+D) (Optional) Invoke service from portlet container or portlet as explained in (1)
+
+
+3. Portlet Service Testing
+
+Core services are tested using the JUnit testing framework http://www.junit.org. Check the tests/ directory in
+GridSphere to see how unit tests are created for services. Once a new test is created, it must be added to the
+AllJunitTests.java file.
+
+</chapter>

@@ -3,18 +3,20 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1//EN"
   "http://www.oasis-open.org/docbook/xml/4.1/docbookx.dtd" [
   <!-- Useful snippets -->
-  
+
 <!ENTITY % GridSphereLinks SYSTEM "../common/GridSphereLinks.xml">
-  
+
   %GridSphereLinks;
-  
+
 <!-- Each chapter is in its own file -->
 
 <!ENTITY portlet-intro SYSTEM "portlet-intro.xml">
 <!ENTITY portlet-lifecycle SYSTEM "portlet-lifecycle.xml">
+<!ENTITY portlet-objects SYSTEM "portlet-objects.xml">
 <!ENTITY portlet-descriptor SYSTEM "portlet-descriptor.xml">
-<!ENTITY layout-descriptor SYSTEM "layout-descriptor.xml">
-<!ENTITY services-descriptor SYSTEM "services-descriptor.xml">
+<!ENTITY portlet-layout SYSTEM "portlet-layout.xml">
+<!ENTITY portlet-services SYSTEM "portlet-services.xml">
+<!ENTITY portlet-resources SYSTEM "portlet-resources.xml">
 
 <!-- Application, page, library, component specification entities  -->
 ]>
@@ -40,11 +42,10 @@
   &portlet-intro;
   &portlet-lifecycle;
   &portlet-descriptor;
-<!--
-  &portlet-layout
-  &layout-descriptor;
+  &portlet-objects;
+  &portlet-layout;
   &portlet-services;
   &services-descriptor;
- -->
+  &portlet-resources;
 
 </book>

@@ -22,43 +22,39 @@
     administrators to change persistent settings such as the stock quote service that is contacted.
     </para>
     <para>
-    The architecture of GridSphere and API definitions of key portlet concepts matches the portlet API provided
-    by IBM WebSphere to a large extent. An excellent source of more information on portlets and portlet development
-    is the WebSphere 4.X Portlet Developer's Guide.
+    In the GridSphere framework, portlets inherit from servlets which are defined in Sun's Servlet Specification.
+    Hence, the GridSphere framework is packaged as a web application that provides a portlet container for managing
+    deployed portlets. Portlets are intended to be administered dynamically and portlet administrators can deploy
+    and undeploy portlets to the container.
     </para>
     <para>
-    In following largely the WebSphere specification, GridSphere also supports the notion that portlets inherit from
-    the servlet concept and API defined in Sun's Servlet Specification. Hence, GridSphere runs as a web application
-    that provides a portlet container for managing deployed portlets. Portlets are intended to be administered dynamically
-    and portlet administrators can deploy and undeploy portlets to the container.
+    Because portlets extend from servlets, portlets are packaged as web applications according to the Servlet
+    Specification as Web ARchive (WAR) files just as any other distributable web application. Within a Portlet Web
+    Application, a portlet descriptor file explained in more detail in the next section, is used to describe the
+    portlet's properties and initialization information. A Portlet definition consists of an application portlet and
+    one or more concrete portlets. Application portlets are defined to be the portlets as servlets where a single
+    instance exists for the duration of the portlet container. A concrete portlet instance is an application portlet
+    parameterized with additional data found in the portlets's deployment descriptor (see next section). For
+    instance, it's possible to provide access to multiple stock quote portlets that may have different configuration
+    settings or allow access to a different set of groups, etc.
     </para>
+    <figure>
+        <title>Portlet Web Applications and the Portlet Lifecycle</title>
+        <graphic fileref="lifecycle.png"/>
+    </figure>
     <para>
     The following inheritance hierarchy describes the relationship between servlets and portlets:
+        <para>
+            <itemizedlist>
+            <listitem>&HttpServlet;</listitem>
+            <listitem>&Portlet;</listitem>
+            <listitem>&PortletAdapter;</listitem>
+            <listitem>&AbstractPortlet;</listitem>
+            <listitem><classname>com.mycom.MyPortlet</classname></listitem>
+            </itemizedlist>
+        </para>
+    In general to reap the benefits of the GridSphere portlet model, a developer would create a new portlet
+    which subclasses from the &AbstractPortlet; class and implement the lifecycle methods detailed in teh next section.
     </para>
-    <para>
-        <itemizedlist>
-        <listitem>&HttpServlet;</listitem>
-        <listitem>org.gridlab.gridsphere.portlet.&Portlet;</listitem>
-        <listitem>org.gridlab.gridsphere.portlet.PortletAdaptor</listitem>
-        <listitem>org.gridlab.gridsphere.portlet.AbstractPortlet</listitem>
-        <listitem>com.mycom.MyPortlet</listitem>
 
-        </itemizedlist>
-
-    </para>
-
-
-    <figure><title>The Portlet Lifecycle</title>
-    <graphic fileref="lifecycle.png"/>
-    </figure>
-
-
-
-    <para>
-Application portlets are defined to be the portlets as servlets where a single instance exists for the duration
-of the portlet container. A concrete portlet instance is an application portlet parameterized with additional data
-found in the portlets's deployment descriptor (see next section). For instance, it's possible to provide access to
-multiple stock quote portlets that may have different configuration settings or allow access to a different set of
-groups, etc.
-</para>
 </chapter>

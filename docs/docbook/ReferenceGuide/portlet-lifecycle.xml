@@ -10,51 +10,159 @@
 <chapter id="portlet-lifecycle">
     <title>Portlet Lifecycle</title>
 
+
 <para>
-The following lifecycle methods are implemented or subclassed by the Portlet classes:
+The following lifecycle methods are implemented or subclassed by the Portlet classes. At portal startup and shutdown,
+the <methodname>init</methodname> and <methodname>destroy</methodname> methods are invoked for application and concrete portlets with a portlet web
+application. For every request made by a user, the <methodname>service</methodname> method is invoked which is responsible
+for invoking the appropriate portlet action method if one exists, and then the appropriate portlet render method.
 </para>
+
+<sect1>
+      <title>Portlet Lifecycle Methods</title>
+    These lifecycle methods are invoked by all portlets:
 <itemizedlist>
 <listitem><para>
     Application portlet initialization is the first phase of startup. The portlet is
     instantiated with the &PortletConfig; information (see Basic Portlet Objects section)
     </para><para>
     <programlisting>
-    <prompt>void</prompt> <command>init</command>(PortletConfig <emphasis>config</emphasis>)
+    <prompt>void</prompt> <methodname>init</methodname>(PortletConfig <emphasis>config</emphasis>)
     </programlisting>
 </para></listitem>
 <listitem><para>
     The concrete portlet is placed into service and parametrized with a &PortletSettings; object (see Basic Portlet Objects section)
     </para><para>
     <programlisting>
-    <prompt>void</prompt> <command>initConcrete</command>(PortletSettings <emphasis>settings</emphasis>)
+    <prompt>void</prompt> <methodname>initConcrete</methodname>(PortletSettings <emphasis>settings</emphasis>)
+    </programlisting>
+</para></listitem>
+
+<listitem><para>
+    The <methodname>service</methodname> method is invoked for every client request. Based on the portlet mode or portlet action,
+    it invokes the appropriate actionPerformed, doView, doEdit, etc, method.
+    </para><para>
+    <programlisting>
+    <prompt>void</prompt> <methodname>service</methodname>(PortletRequest <emphasis>req</emphasis>, PortletResponse <emphasis>res</emphasis>)
+    </programlisting>
+</para></listitem>
+
+<listitem><para>
+    The concrete portlet is taken out of service either dynamically when a portlet web application is unloaded or
+    when the portal is shutdown
+    </para><para>
+    <programlisting>
+    <prompt>void</prompt> <methodname>destroyConcrete</methodname>()
     </programlisting>
 </para></listitem>
 <listitem><para>
-    The concrete portlet is taken out of service
+    The application portlet is taken out of service either dynamically when a portlet web application is unloaded or
+    when the portal is shutdown
     </para><para>
     <programlisting>
-    <prompt>void</prompt> <command>destroyConcrete</command>()
+    <prompt>void</prompt> <methodname>destroy</methodname>()
     </programlisting>
 </para></listitem>
 
-void destroy() -- an application portlet is taken out of service
+</itemizedlist>
+</sect1>
 
-void service(PortletRequest req, PortletResponse res) -- service gets invoked for every client request, based on the
-                                                         portlet mode or portlet action, it invokes the appropriate
-                                                         actionPerformed, doView, doEdit, etc, method.
+<sect1><title>Portlet Action Methods</title>
+<itemizedlist>
 
-void actionPerformed(ActionEvent evt) -- this method is invoked when the portlet receives an action and must be
-                                         implemented by the portlet developer. This method is performed before any
-                                         rendering is done via doView, doEdit, etc.
+<listitem><para>
+    The <methodname>actionPerformed</methodname> method is invoked when the portlet receives an action and must be
+    implemented by the portlet developer. This method is performed before any rendering is done via doView,
+    doEdit, etc.
+    </para><para>
+    <programlisting>
+    <prompt>void</prompt> <methodname>actionPerformed</methodname>(ActionEvent <emphasis>event</emphasis>)
+    </programlisting>
+</para></listitem>
 
-void do{View,Config,Edit,Help,Title}(PortletRequest req, PortletResponse res) -- renders the portlet  mode and is
-                                                                                 generally implemented by the portlet
-                                                                                 developer.
+<listitem><para>
+    The <methodname>messageReceived</methodname> method is invoked when the portlet receives a message.
+    </para><para>
+    <programlisting>
+    <prompt>void</prompt> <methodname>messageReceived</methodname>(MessageEvent <emphasis>event</emphasis>)
+    </programlisting>
+</para></listitem>
 
-void window{Maximized,Minimized,Closed,Resizing,...}(WindowEvent event) -- method is invoked when the portlet window
-                                                                           state changes.
+<listitem><para>
+    The <methodname>windowMaximized</methodname> method is invoked for a portlet when the portlet window is maximized.
+    </para><para>
+    <programlisting>
+    <prompt>void</prompt> <methodname>windowMaximized</methodname>(WindowEvent <emphasis>event</emphasis>)
+    </programlisting>
+</para></listitem>
+
+<listitem><para>
+    The <methodname>windowMinimized</methodname> method is invoked for a portlet when the portlet window is minimized.
+    </para><para>
+    <programlisting>
+    <prompt>void</prompt> <methodname>windowMinimized</methodname>(WindowEvent <emphasis>event</emphasis>)
+    </programlisting>
+</para></listitem>
+
+<listitem><para>
+    The <methodname>windowResized</methodname> method is invoked for a portlet when the portlet window is resized.
+    </para><para>
+    <programlisting>
+    <prompt>void</prompt> <methodname>windowResized</methodname>(WindowEvent <emphasis>event</emphasis>)
+    </programlisting>
+</para></listitem>
 
 
 </itemizedlist>
+</sect1>
 
+<sect1>
+    <title>Portlet Render Methods</title>
+<itemizedlist>
+
+<listitem><para>
+    The <methodname>doView</methodname> method is invoked for a portlet when it is in <emphasis>VIEW</emphasis> mode.
+</para><para>
+    <programlisting>
+    <prompt>void</prompt> <methodname>doView</methodname>(PortletRequest <emphasis>req</emphasis>,PortletResponse <emphasis>res</emphasis> )
+    </programlisting>
+</para></listitem>
+
+<listitem><para>
+    The <methodname>doEdit</methodname> method is invoked for a portlet when it is in <emphasis>EDIT</emphasis> mode.
+</para><para>
+    <programlisting>
+    <prompt>void</prompt> <methodname>doEdit</methodname>(PortletRequest <emphasis>req</emphasis>,PortletResponse <emphasis>res</emphasis> )
+    </programlisting>
+</para></listitem>
+
+<listitem><para>
+    The <methodname>doConfigure</methodname> method is invoked for a portlet when it is in <emphasis>CONFIGURE</emphasis> mode.
+    This mode is allowed only for portlet administrators and is intended to provide additional portlet configuration.
+</para><para>
+    <programlisting>
+    <prompt>void</prompt> <methodname>doEdit</methodname>(PortletRequest <emphasis>req</emphasis>,PortletResponse <emphasis>res</emphasis> )
+    </programlisting>
+</para></listitem>
+
+<listitem><para>
+    The <methodname>doHelp</methodname> method is invoked for a portlet when it is in <emphasis>HELP</emphasis> mode.
+</para><para>
+    <programlisting>
+    <prompt>void</prompt> <methodname>doHelp</methodname>(PortletRequest <emphasis>req</emphasis>,PortletResponse <emphasis>res</emphasis> )
+    </programlisting>
+</para></listitem>
+
+<listitem><para>
+    The <methodname>doTitle</methodname> method is invoked for a portlet during its rendering by the layout engine and can be
+    implemented by a portlet developer to provide a customized title.
+</para><para>
+    <programlisting>
+    <prompt>void</prompt> <methodname>doTitle</methodname>(PortletRequest <emphasis>req</emphasis>,PortletResponse <emphasis>res</emphasis> )
+    </programlisting>
+</para></listitem>
+
+</itemizedlist>
+
+</sect1>
 </chapter>

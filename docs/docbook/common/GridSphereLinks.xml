@@ -18,9 +18,9 @@
 <!ENTITY PortletGroup "<classname>PortletRole</classname>">
 <!ENTITY PortletWindow "<classname>PortletWindow</classname>">
 <!ENTITY PortletMode "<classname>Portlet.Mode</classname>">
-<!ENTITY Portlet "<classname>Portlet</classname>">
-<!ENTITY AbstractPortlet "<classname>AbstractPortlet</classname>">
-<!ENTITY PortletAdapter "<classname>PortletAdapter</classname>">
+<!ENTITY Portlet "<classname>org.gridlab.gridsphere.portlet.Portlet</classname>">
+<!ENTITY AbstractPortlet "<classname>org.gridlab.gridsphere.portlet.AbstractPortlet</classname>">
+<!ENTITY PortletAdapter "<classname>org.gridlab.gridsphere.portlet.PortletAdapter</classname>">
 <!ENTITY PortletURI "<classname>PortletURI</classname>">
 <!ENTITY User "<classname>User</classname>">
 

@@ -1,0 +1,19 @@
+<!--
+
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+    Author:     Jason Novotny
+    Version:    $Id$
+-->
+
+<chapter id="portlet-resources">
+    <title>Additional Portlet Resources</title>
+
+<para>
+    The architecture of GridSphere and API definitions of key portlet concepts matches the portlet API provided
+    by IBM WebSphere to a large extent. An excellent source of more information on portlets and portlet development
+    is the WebSphere 4.X Portlet Developer's Guide.
+</para>
+
+</chapter>
