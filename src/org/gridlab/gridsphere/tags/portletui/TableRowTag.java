@@ -29,7 +29,7 @@ public class TableRowTag extends ContainerTag {
     }
 
     public int doStartTag() throws JspException {
-        System.err.println("in TableRowTag:doStartTag");
+        //System.err.println("in TableRowTag:doStartTag");
         list = new Vector();
 
         rowBean = new TableRowBean();

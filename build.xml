@@ -337,6 +337,8 @@ Copyright:
             <!-- don't include portlet widgets tag library -->
             <exclude name="org/gridlab/gridsphere/provider/**"/>
             <exclude name="org/gridlab/gridsphere/tags/**"/>
+            <!-- don't include GridSphere portlets  -->
+            <exclude name="org/gridlab/gridsphere/portlets/**"/>
         </jar>
     </target>
 
@@ -372,9 +374,18 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
+    <!-- Creates the GridSphere portlets JAR                                     -->
+    <!-- =================================================================== -->
+    <target name="coreportlets-jar" depends="compile" description="Create lib/coreportlets.jar">
+        <jar jarfile="lib/coreportlets.jar" basedir="${build.classes}" >
+            <include name="org/gridlab/gridsphere/portlets/**"/>
+        </jar>
+    </target>
+
+    <!-- =================================================================== -->
     <!-- Creates all JAR's                                                   -->
     <!-- =================================================================== -->
-    <target name="jar" depends="portlet-widget-tags-jar, gridsphere-provider-jar, portlet-jar" description="Creates all jars"/>
+    <target name="jar" depends="portlet-widget-tags-jar, gridsphere-provider-jar, portlet-jar, coreportlets-jar" description="Creates all jars"/>
 
     <!-- =================================================================== -->
     <!-- Cleans everything                                                   -->
@@ -420,7 +431,7 @@ Copyright:
             token="@DATABASE_NAME@"
             value="${DATABASE_NAME}"/>
         <replace file="${DATABASE_FILE}"
-            token="@PROJECTS_NAME@"
+            token="@PROJECT_NAME@"
             value="gridsphere"/>
     </target>
 
@@ -684,6 +695,7 @@ Copyright:
             </fileset>
             <fileset dir="lib">
                 <exclude name="portlet-widget-tags.jar"/>
+                <exclude name="coreportlets.jar"/>
                 <exclude name="ext/**"/>
             </fileset>
         </copy>
@@ -695,6 +707,7 @@ Copyright:
         </copy>
 
         <copy overwrite="true" file="lib/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
+        <copy overwrite="true" file="lib/coreportlets.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
 
     </target>
 

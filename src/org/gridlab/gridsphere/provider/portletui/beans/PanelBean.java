@@ -71,14 +71,14 @@ public class PanelBean extends TagBeanContainer implements TagBean {
            // forget it
         }
         int i = 0;
-        System.err.println("in PanelBean: # of tags: " + container.size());
+        //System.err.println("in PanelBean: # of tags: " + container.size());
         while (i < container.size()) {
             sb.append("<tr>");
             int j = 0;
             while ((j < numRows) && (i < container.size())) {
                 //sb.append("<td>");
                 TagBean tagBean = (TagBean)container.get(i);
-                System.err.println("in PanelBean: its " + tagBean.toString());
+                //System.err.println("in PanelBean: its " + tagBean.toString());
                 sb.append(tagBean.toString());
                 //sb.append("</td>");
                 j++; i++;
