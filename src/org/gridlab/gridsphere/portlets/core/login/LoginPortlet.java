@@ -77,7 +77,6 @@ public class LoginPortlet extends ActionPortlet {
         System.err.println("in gs_login! errorkey=" + errorKey);
         if (errorKey != null) {
             FrameBean frame = event.getFrameBean("errorFrame");
-            System.err.println("have errorkey= " + errorKey);
             frame.setKey(LoginPortlet.LOGIN_ERROR_FLAG);
             frame.setStyle("error");
         }
