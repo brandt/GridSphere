@@ -13,7 +13,7 @@
         <name>Example Service</name>
         <description>Provides Capabilities</description>
         <interface>com.mycom.ExampleService</interface>
-        <implementation>com.mycom.impl.LoginServiceImpl</implementation>
+        <implementation>com.mycom.impl.ExampleServiceImpl</implementation>
     </service>
 
     <service>
