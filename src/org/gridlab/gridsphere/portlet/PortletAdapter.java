@@ -122,7 +122,9 @@ public abstract class PortletAdapter extends Portlet {
         }
 
         portletSettings = (PortletSettings) allPortletSettings.get(portletID);
-        request.setAttribute(GridSphereProperties.PORTLETSETTINGS, portletSettings);
+        if (portletSettings != null) {
+            request.setAttribute(GridSphereProperties.PORTLETSETTINGS, portletSettings);
+        }
 
         String method = (String) request.getAttribute(SportletProperties.PORTLET_ACTION_METHOD);
         if (method != null) return;

@@ -337,18 +337,30 @@ public abstract class Portlet extends HttpServlet
 
             if (method.equals(SportletProperties.INIT)) {
                 ApplicationPortletConfig app = (ApplicationPortletConfig) request.getAttribute(SportletProperties.PORTLET_APPLICATION);
+                if (app != null) {
                 this.portletConfig = new SportletConfig(getServletConfig(), app);
                 init(this.portletConfig);
+                } else {
+                    log.error("Unable to perform init(): Received NULL PortletApplication in request");
+                }
             } else if (method.equals(SportletProperties.SERVICE)) {
                 service(portletRequest, portletResponse);
             } else if (method.equals(SportletProperties.DESTROY)) {
                 destroy(this.portletConfig);
             } else if (method.equals(SportletProperties.INIT_CONCRETE)) {
                 PortletSettings settings = (PortletSettings) request.getAttribute(SportletProperties.PORTLET_SETTINGS);
-                initConcrete(settings);
+                if (settings != null) {
+                    initConcrete(settings);
+                } else {
+                    log.error("Unable to perform initConcrete(): Received NULL PortletSettings in request");
+                }
             } else if (method.equals(SportletProperties.DESTROY_CONCRETE)) {
                 PortletSettings settings = (PortletSettings) request.getAttribute(SportletProperties.PORTLET_SETTINGS);
-                destroyConcrete(settings);
+                if (settings != null) {
+                    destroyConcrete(settings);
+                } else {
+                    log.error("Unable to perform destroyConcrete(): Received NULL PortletSettings in request");
+                }
             } else if (method.equals(SportletProperties.LOGIN)) {
                 login(portletRequest);
             } else if (method.equals(SportletProperties.LOGOUT)) {
