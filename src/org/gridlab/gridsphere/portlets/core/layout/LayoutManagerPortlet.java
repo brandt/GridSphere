@@ -20,7 +20,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     // JSP pages used by this portlet
     public static final String VIEW_JSP = "layout/view.jsp";
-    public static final String EDIT_JSP = "layout/edit.jsp";
 
     public static final String CONFIGURE_JSP = "layout/configure.jsp";
 
@@ -322,11 +321,12 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     public void deleteSubTab(FormEvent event) {
         PortletRequest req = event.getPortletRequest();
-        ListBoxBean tabsLB = event.getListBoxBean("subtabsLB");
+        ListBoxBean tabsLB = event.getListBoxBean("delsubtabsLB");
         HiddenFieldBean hf = event.getHiddenFieldBean("tabHF");
         String tabNameHF = hf.getValue();
         String[] tabNames = null;
         String tabnum = "";
+        System.err.println("in delete sub tab");
         if (tabsLB.getSelectedValue() != null) {
             tabnum = tabsLB.getSelectedValue();
             System.err.println("retrieve tab num:" + tabnum);
@@ -334,9 +334,13 @@ public class LayoutManagerPortlet extends ActionPortlet {
             if (tabNames != null) {
                 int tabNum = Integer.parseInt(tabnum);
                 String tabName = tabNames[tabNum];
-                System.err.println("removing tab:" + tabName);
-                layoutMgr.removeTab(req, tabName);
-                layoutMgr.reloadPage(req);
+                System.err.println("removing sub tab:" + tabName);
+
+                // must have at least one sub tab
+                if (tabNames.length > 1) {
+                    layoutMgr.removeTab(req, tabName);
+                    layoutMgr.reloadPage(req);
+                }
             }
         }
     }
@@ -349,6 +353,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         String tabName = event.getTextFieldBean("newTab").getValue();
         String lang = req.getLocale().getLanguage();
         toptab.setTitle(lang, tabName);
+        toptab.setLabel(tabName);
 
         PortletTab tab = new PortletTab();
         String title = this.getLocalizedText(req, "LAYOUT_UNTITLED_TAB");
@@ -384,6 +389,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         String subtabName = event.getTextFieldBean("newSubTab").getValue();
         String lang = req.getLocale().getLanguage();
         tab.setTitle(lang, subtabName);
+        tab.setLabel(subtabName);
 
         PortletTableLayout table = new PortletTableLayout();
         PortletRowLayout row = new PortletRowLayout();
