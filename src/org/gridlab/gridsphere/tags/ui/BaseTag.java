@@ -5,8 +5,6 @@
 package org.gridlab.gridsphere.tags.ui;
 
 import org.gridlab.gridsphere.provider.ui.beans.TagBean;
-import org.gridlab.gridsphere.provider.validator.NoValidation;
-import org.gridlab.gridsphere.provider.validator.Validator;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
@@ -29,7 +27,6 @@ public class BaseTag extends TagSupport {
     protected boolean isChecked = false;
     protected boolean isDisabled = false;
     protected boolean isReadonly = false;
-    protected Validator validator = new NoValidation();
     protected int size = 20;
     protected int maxLength = 20;
     protected TagBean htmlelement = null;
@@ -158,17 +155,6 @@ public class BaseTag extends TagSupport {
 
     public void setCols(int cols) {
         this.cols = cols;
-    }
-
-    public void setValidator(String validatorClass) {
-        try {
-            validator = (Validator) Class.forName(validatorClass).newInstance();
-        } catch (Exception e) {
-        } // so what? use default novalidator currently or should it return false??
-    }
-
-    public Validator getValidator() {
-        return validator;
     }
 
     public int doStartTag() throws JspException {
