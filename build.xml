@@ -494,7 +494,7 @@ Copyright:
     <!-- =================================================================== -->
     <target name="javadocs" depends="setenv, check-javadocs" description="Create GridSphere Javadocs" unless="javadocs.exists">
         <mkdir dir="${build.javadoc}"/>
-        <javadoc packagenames="org.gridlab.gridsphere.*"
+        <javadoc packagenames="org.gridlab.gridsphere.*, javax.*"
             sourcepath="src"
             classpathref="classpath"
             destdir="${build.javadoc}"
@@ -502,10 +502,10 @@ Copyright:
             version="true"
             splitindex="true"
             use="true"
-            maxmemory="180m"
+            maxmemory="256m"
             windowtitle="${gridsphere.name}"
             doctitle="${gridsphere.api}"
-            bottom="Copyright &#169; 2002,2003 GridLab Project. All Rights Reserved.">
+            bottom="Copyright &#169; 2002,2003,2004 GridLab Project. All Rights Reserved.">
 
             <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
 
@@ -522,11 +522,17 @@ Copyright:
                           org.gridlab.gridsphere.portlet.service:org.gridlab.gridsphere.portlet.service.*,
                           org.gridlab.gridsphere.portlet.service.spi:org.gridlab.gridsphere.portlet.service.spi.*"/>
 
+            <group title="JSR 168 Portlet API"
+                packages="javax.portlet:javax.portlet.*"/>
+
             <group title="GridSphere Portlet API Implementation"
                 packages="org.gridlab.gridsphere.event.impl:org.gridlab.gridsphere.event.impl.*,
                           org.gridlab.gridsphere.portlet.impl:org.gridlab.gridsphere.portlet.impl.*,
                           org.gridlab.gridsphere.portlet.service.impl:org.gridlab.gridsphere.portlet.service.impl.*,
                           org.gridlab.gridsphere.portlet.service.spi.impl:org.gridlab.gridsphere.portlet.service.spi.impl.*"/>
+
+            <group title="GridSphere JSR 168 Portlet API Implementation"
+                packages="org.gridlab.gridsphere.portlet.jsrimpl:org.gridlab.gridsphere.portlet.jsrimpl.*"/>
 
             <group title="GridSphere Portal Component Library"
                 packages="org.gridlab.gridsphere.layout:org.gridlab.gridsphere.layout.*"/>
