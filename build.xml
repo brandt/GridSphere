@@ -371,7 +371,20 @@ Copyright:
         <replace file="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/hibernate.properties"
                  token="@GRIDSPHERE_WEBAPP@"
                  value="${env.CATALINA_HOME}/${gswebapp.dir}"/>
+        <replace file="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/hibernate.properties"
+                 token="@GRIDSPHERE_DB@"
+                 value="gridsphere"/>
+    </target>
 
+    <target name="configure-test-database" depends="setenv">
+        <mkdir dir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/"/>
+        <copy overwrite="true" file="webapps/gridsphere/WEB-INF/persistence/hibernate.properties" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/"/>
+        <replace file="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/hibernate.properties"
+                 token="@GRIDSPHERE_WEBAPP@"
+                 value="${env.CATALINA_HOME}/${gswebapp.dir}"/>
+        <replace file="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/hibernate.properties"
+                 token="@GRIDSPHERE_DB@"
+                 value="gridsphere-test"/>
     </target>
 
    <target name="create-database" depends="setenv, configure-database">
@@ -390,6 +403,26 @@ Copyright:
                 <include name="**/*.hbm.xml"/>
             </fileset>
         </schemaexport>
+       <echo message="Successfully created new database"/>
+     </target>
+
+    <target name="create-test-database" depends="setenv, configure-test-database">
+       <taskdef name="schemaexport"
+            classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask"
+            classpathref="classpath"/>
+
+        <schemaexport
+            properties="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/hibernate.properties"
+            quiet="yes"
+            text="no"
+            drop="no"
+            delimiter=";"
+            output="build/schema-export.sql">
+            <fileset dir="webapps/gridsphere/WEB-INF/persistence/">
+                <include name="**/*.hbm.xml"/>
+            </fileset>
+        </schemaexport>
+       <echo message="Successfully created test database"/>
      </target>
 
     <target name="update-database" depends="configure-database">
@@ -489,23 +522,13 @@ Copyright:
     <!-- =================================================================== -->
     <target name="war" depends="jar, gridsphere-jar" description="Create GridSphere WAR">
 
-        <copy todir="${build.webapps}/gridsphere">
-            <fileset dir="${gswebapp.dir}"/>
-        </copy>
-
-        <copy overwrite="true" file="${gswebapp.dir}/WEB-INF/database/database.xml"
-            tofile="${build.webapps}/gridsphere/WEB-INF/database/database.xml"/>
-
-        <copy overwrite="true" file="lib/gridsphere-ui-tags.jar" todir="${build.webapps}/gridsphere/WEB-INF/classes/lib"/>
-        <copy overwrite="true" file="lib/coreportlets.jar" todir="${build.webapps}/gridsphere/WEB-INF/classes/lib"/>
-
-        <antcall target="configure-database"/>
+        <antcall target="deploy"/>
 
         <antcall target="create-database"/>
 
         <war warfile="${build.webapps}/gridsphere.war" update="true"
             webxml="${build.webapps}/gridsphere/WEB-INF/web.xml">
-            <fileset dir="${build.webapps}/gridsphere">
+            <fileset dir="${env.CATALINA_HOME}/webapps/gridsphere">
                 <exclude name="WEB-INF/web.xml"/>
             </fileset>
         </war>
@@ -531,6 +554,8 @@ Copyright:
     <!-- =================================================================== -->
     <target name="deploy" depends="gridsphere-jar, jar" description="Deploys GridSphere to a local server">
         <antcall target="deploy-install"/>
+
+        <antcall target="configure-database"/>
 
         <copy todir="${env.CATALINA_HOME}/webapps/gridsphere">
             <fileset dir="${build.webapps}/gridsphere"/>
