@@ -1,5 +1,5 @@
 /*
-Part of the Gridsphere XP theme
+Part of the Gridsphere default theme
 Author: Oliver Wehrens (wehrens@aei.mpg.de)
 Version: $Id$
 */
@@ -15,18 +15,18 @@ a {
   /*font-weight:bold;  */
 }
 a:link {
-  color: #666600;
+  color: green;
   text-decoration: bold;
 }
 a:visited       {
-  color: #666600;
+  color: green;
   text-decoration: none;
 }
 a:active {
-  color: #666633;
+  color: green;
 }
 a:hover {
-  color: #666633;
+  color: green;
 }
 
 
@@ -61,6 +61,6 @@ input[type=submit] {
 
 input, select, textarea {
   font-size: inherit;
-  font-family: courier, courier new, monospaced;
+  font-family: 'Lucida Grande', Geneva, Verdana, Arial, sans-serif;
 }
 

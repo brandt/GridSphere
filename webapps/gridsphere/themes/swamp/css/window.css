@@ -1,5 +1,5 @@
 /*
-Part of the Gridsphere XP theme
+Part of the Gridsphere default theme
 Author: Oliver Wehrens (oliver.wehrens@aei.mpg.de)
 Version: $Id$
 */
@@ -12,37 +12,35 @@ Version: $Id$
 }
 
 .window-title-inactive {
-  background-color: #33cc33;
+  background-color: #ABBA83;
   color: #000000;
   font-size: 12px;
-  height: 15px;
   width: 100%;
-  border-top: 1px solid #33cc33;
-  border-right: 1px solid #33cc33;
-  border-left: 1px solid #33cc33;
+  border-top: 1px solid #9FB086;
+  border-right: 1px solid #ABBA83;
+  border-left: 1px solid #ABBA83;                                                                                         ¤
 }
 
 .window-title-active {
-  background-color: #33cc33;
+  background-color: #9FB086;
   color: #000000;
   font-size: 12px;
-  height: 15px;
   width: 100%;
-  border-top: 1px solid #33cc33;
-  border-right: 1px solid #33cc33;
-  border-left: 1px solid #33cc33;
+  border-top: 1px solid #9FB086;
+  border-right: 1px solid #9FB086;
+  border-left: 1px solid #9FB086;
 }
 
 .window-title-name {
   color: white;
-  font-family:Franklin Gothic Medium, verdana, arial, sans-serif;
+  font-family: 'Lucida Grande', Geneva, Verdana, Arial, sans-serif;;
   text-align: center;
   font-weight: bold;
 }
 
 .window-icon-right {
    text-align: right;
-   width: 40px;
+   width: 60px;
 }
 
 .window-icon-left {
@@ -55,23 +53,13 @@ Version: $Id$
 }
 
 .window-content {
-  background-color: #cccc99;
+  background-color: #eeeeee;
   padding: 5px;
-  border-right: 1px solid #33cc33;
-  border-left: 1px solid #33cc33;
-  border-bottom: 1px solid #33cc33;
+  border-right: 1px solid #9FB086;
+  border-left: 1px solid #9FB086;
+  border-bottom: 1px solid #9FB086;
   spacing-top: 5px;
   spacing-right: 2px;
   height: 100%;
-}
-
-
-input[type=submit] {
-  margin-top: 2px;
-}
-
-input, select, textarea {
-  font-size: inherit;
-  font-family: courier, courier new, monospaced;
 }
 

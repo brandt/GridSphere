@@ -1,5 +1,5 @@
 /*
-Part of the Gridsphere XP Theme
+Part of the Gridsphere default Theme
 Author: Michael Russell (michael.russell@aei.mpg.de)
 Version: $Id$
 */
@@ -34,7 +34,7 @@ Version: $Id$
 
 .portlet-frame-actions {
   background-color: inherit;
-  border: 1px solid #009900;
+  border: 1px solid #CCCCFF;
   padding: 0;
   spacing: 0;
   color: #000000;
@@ -43,7 +43,7 @@ Version: $Id$
 
 .portlet-frame-info {
   background-color: inherit;
-  border: 1px solid #009900;
+  border: 1px solid #CCCCFF;
   padding: 0;
   spacing: 0;
   color: #000000;
@@ -52,7 +52,7 @@ Version: $Id$
 
 .portlet-frame-alert {
   background-color: inherit;
-  border: 1px solid #009900;
+  border: 1px solid #CCCCFF;
   padding: 0;
   spacing: 0;
   color: darkorange;
@@ -69,53 +69,26 @@ Version: $Id$
 }
 
 .portlet-frame-title {
-  background-color: #009900;
+  background-color: #CCCCFF;
   border: none;
   color: #000000;
   font-family: inherit;
   font-weight: bold;
   text-align: center;
-  padding-top: 1;
-  padding-right: 2;
-  padding-left: 2;
-  padding-bottom: 1;
-}
-
-.portlet-frame-message {
-  background-color: #FFFFFF;
-  border: none;
-  color: #000000;
-  font-family: inherit;
-  padding-top: 4;
-  padding-right: 4;
-  padding-left: 4;
-  padding-bottom: 4;
-}
-
-.portlet-frame-message-alert {
-  background-color: #FFFFFF;
-  border: none;
-  color: darkred;
-  font-family: inherit;
-  padding-top: 4;
-  padding-right: 4;
-  padding-left: 4;
-  padding-bottom: 4;
 }
 
 .portlet-frame-header {
-  background-color: #009900;
-  border-none;
+  background-color: #CCCCFF;
+  border: none;
   color: #000000;
   font-family: inherit;
   font-size: 10px;
   text-align: center;
-  padding: 1;
 }
 
 .portlet-frame-header-checkbox {
-  background-color: #009900;
-  border-none;
+  background-color: #CCCCFF;
+  border: none;
   color: #FFFFFF;
   font-family: inherit;
   font-size: -1;
@@ -125,27 +98,19 @@ Version: $Id$
 }
 
 .portlet-frame-label {
-  background-color: #009900;
+  background-color: #CCCCFF;
   border: none;
   color: #000000;
   font-family: inherit;
   text-align: left;
-  padding-top: 1;
-  padding-right: 2;
-  padding-left: 2;
-  padding-bottom: 1;
 }
 
 .portlet-frame-label-alert {
-  background-color: #009900;
+  background-color: #CCCCFF;
   border: none;
   color: darkred;
   font-family: inherit;
   text-align: left;
-  padding-top: 1;
-  padding-right: 2;
-  padding-left: 2;
-  padding-bottom: 1;
 }
 
 .portlet-frame-text {
@@ -154,10 +119,6 @@ Version: $Id$
   color: #000000;
   font-family: inherit;
   text-align: left;
-  padding-top: 1;
-  padding-right: 2;
-  padding-left: 2;
-  padding-bottom: 1;
 }
 
 .portlet-frame-text-alert {
@@ -166,10 +127,6 @@ Version: $Id$
   color: darkred;
   font-family: inherit;
   text-align: left;
-  padding-top: 1;
-  padding-right: 2;
-  padding-left: 2;
-  padding-bottom: 1;
 }
 
 .portlet-frame-input {
@@ -178,10 +135,6 @@ Version: $Id$
   color: #000000;
   font-family: inherit;
   text-align: left;
-  padding-top: 1;
-  padding-right: 2;
-  padding-left: 2;
-  padding-bottom: 1;
 }
 
 .portlet-frame-input-alert {
@@ -190,10 +143,6 @@ Version: $Id$
   color: darkred;
   font-family: inherit;
   text-align: left;
-  padding-top: 1;
-  padding-right: 2;
-  padding-left: 2;
-  padding-bottom: 1;
 }
 
 .portlet-frame-number {
@@ -202,10 +151,6 @@ Version: $Id$
   color: #000000;
   font-family: inherit;
   text-align: right;
-  padding-top: 1;
-  padding-right: 2;
-  padding-left: 2;
-  padding-bottom: 1;
 }
 
 .portlet-frame-number-alert {
@@ -214,14 +159,10 @@ Version: $Id$
   color: darkred;
   font-family: inherit;
   text-align: right;
-  padding-top: 1;
-  padding-right: 2;
-  padding-left: 2;
-  padding-bottom: 1;
 }
 
 .portlet-frame-entry-checkbox {
-  background-color: #009900;
+  background-color: #CCCCFF;
   border: none;
   color: #000000;
   font-family: inherit;
@@ -238,7 +179,7 @@ used to display non-accentuated information
 **********************************************/
 .portlet-font {
    color:black;
-   background-color:#cccc33;
+   background-color:white;
    font-size:12px;
    font-weight:normal;
    font-style:normal;
@@ -246,10 +187,6 @@ used to display non-accentuated information
    line-height:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
 }
 
 /**********************************************
@@ -258,7 +195,7 @@ in lighter color
 **********************************************/
 .portlet-font-dim {
    color:gray;
-   background-color:#cccc33;
+   background-color:white;
    font-size:12px;
    font-weight:normal;
    font-style:normal;
@@ -266,10 +203,6 @@ in lighter color
    line-height:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
 }
 
 
@@ -290,10 +223,6 @@ in lighter color
    font-weight:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
    border:none;
 }
 
@@ -312,11 +241,6 @@ in lighter color
    font-weight:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
-   border:none;
 }
 
 /**********************************************
@@ -333,10 +257,6 @@ in lighter color
    font-weight:bold;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
    border:none;
 }
 
@@ -351,13 +271,9 @@ in lighter color
    color:darkorange;
    background-color:inherit;
    font-style:italic;
-   /* font-weight:bold; */
+   font-weight:bold;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
    border:none;
 }
 
@@ -377,10 +293,6 @@ in lighter color
    font-weight:bold;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
    border:none;
 }
 
@@ -392,58 +304,41 @@ in lighter color
   Table or section header
 **********************************************/
 .portlet-section-header {
-  background-color: #009900;
+  background-color: #CCCCFF;
   border: none;
   color: #000000;
   font-family: inherit;
   font-size: 10px;
   text-align: center;
-  padding: 1;
 }
 
 /**********************************************
   Normal text in a table cell
 **********************************************/
 .portlet-section-body {
-  background-color: #cccc33;
+  background-color: inherit;
   border: none;
-  color: #cccc33;
+  color: inherit;
   font-family: inherit;
   text-align: left;
-  padding-top: 1;
-  padding-right: 2;
-  padding-left: 2;
-  padding-bottom: 1;
 }
 
 /**********************************************
   Text in every other row in the table
 **********************************************/
-.portlet-section-alternate{
+.portlet-section-alternate {
    color:black;
    background-color:linen;
-   font-size:12px;
-   font-weight:normal;
-   font-style:normal;
-   font-family:verdana, arial, sans-serif;
-   line-height:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
-   border-left: thin  solid black;
-   border-right: thin  solid black;
-   border-bottom: thin  solid black;
 }
 
 /**********************************************
   Text in a selected cell range
 **********************************************/
-.portlet-section-selected{
+.portlet-section-selected {
    color:grey;
-   background-color:#cccc33;
+   background-color:white;
    font-size:12px;
    font-weight:normal;
    font-style:normal;
@@ -451,10 +346,6 @@ in lighter color
    line-height:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
    border-left: thin  solid black;
    border-right: thin  solid black;
    border-bottom: thin  solid black;
@@ -465,7 +356,7 @@ in lighter color
 **********************************************/
 .portlet-section-subheader{
    color:black;
-   background-color:#cccc33;
+   background-color:white;
    font-size:13px;
    font-weight:bold;
    font-style:normal;
@@ -473,10 +364,6 @@ in lighter color
    line-height:normal;
    text-align:center;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
    border-left: thin  solid black;
    border-right: thin  solid black;
    border-bottom: double black;
@@ -487,7 +374,7 @@ in lighter color
 **********************************************/
 .portlet-section-footer{
    color:black;
-   background-color:#cccc33;
+   background-color:white;
    font-size:10px;
    font-weight:normal;
    font-style:italic;
@@ -495,10 +382,6 @@ in lighter color
    line-height:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
    border:none;
 }
 
@@ -510,7 +393,7 @@ in lighter color
 **********************************************/
 .portlet-section-text{
    color:black;
-   background-color:#cccc33;
+   background-color:white;
    font-size:11px;
    font-weight:lighter;
    font-style:italic;
@@ -518,10 +401,6 @@ in lighter color
    line-height:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
    /*border:thin dashed grey;*/
    border:none;
 }
@@ -537,7 +416,7 @@ in lighter color
 **********************************************/
 .portlet-form-label{
    color:black;
-   /* background-color:#cccc33;  */
+   /* background-color:white;  */
    font-size:12px;
    font-weight:bold;
    font-style:normal;
@@ -545,10 +424,6 @@ in lighter color
    line-height:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
 }
 
 /**********************************************
@@ -556,19 +431,15 @@ in lighter color
 **********************************************/
 .portlet-form-input-field{
    color:black;
-   background-color:white;
+   background-color:#f0f0f0;
    font-size:12px;
    font-weight:normal;
    font-style:normal;
-   /* font-family:courier, courier new, monospaced; */
+   font-family:verdana, sans-serif;
    font-family:inherit;
    line-height:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
 }
 
 /**********************************************
@@ -576,19 +447,15 @@ in lighter color
 **********************************************/
 .portlet-form-button{
    color:black;
-   background-color:#999933;
+   background-color:#f0f0f0;
    font-size:12px;
    font-weight:bold;
    font-style:normal;
-   /* font-family:courier, courier new, monospaced; */
+   font-family:verdana, sans-serif;
    font-family:inherit;
    line-height:normal;
    text-align:center;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
 }
 
 /**********************************************
@@ -597,7 +464,7 @@ in lighter color
 **********************************************/
 .portlet-icon-label{
    color:steelblue;
-   background-color:#999933;
+   background-color:white;
    font-size:14px;
    font-weight:normal;
    font-style:normal;
@@ -605,10 +472,6 @@ in lighter color
    line-height:normal;
    text-align:center;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
 }
 
 /**********************************************
@@ -617,7 +480,7 @@ in lighter color
 **********************************************/
 .portlet-dlg-icon-label{
    color:darkblue;
-   background-color:#cccc33;
+   background-color:white;
    font-size:14px;
    font-weight:normal;
    font-style:normal;
@@ -625,10 +488,6 @@ in lighter color
    line-height:normal;
    text-align:center;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
 }
 
 /**********************************************
@@ -637,7 +496,7 @@ in lighter color
 **********************************************/
 .portlet-form-field-label{
    color:black;
-   background-color:#cccc33;
+   background-color:white;
    font-size:11px;
    font-weight:normal;
    font-style:normal;
@@ -645,10 +504,6 @@ in lighter color
    line-height:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
 }
 
 /**********************************************
@@ -657,15 +512,11 @@ in lighter color
 **********************************************/
 .portlet-form-field{
    color:black;
-   background-color:#cccc33;
+   background-color:white;
    font-family: inherit;
    line-height:normal;
    text-align:left;
    text-decoration:none;
-   padding-top:1;
-   padding-bottom:1;
-   padding-left:2;
-   padding-right:2;
 }
 
 /*^^^^^^^^^^^
@@ -677,13 +528,49 @@ in lighter color
   color, margins, etc.
 **********************************************/
 .portlet-menu{
+    color:black;
+    border-right: 1px solid white;
+    border-top: 1px solid #848484;
+    border-left: 1px solid #848484;
+    border-bottom: 1px solid white;
+    padding-bottom: 5px;
+    margin: 2px;
+    text-align:center;
 }
+
+.portlet-menu a{
+    color:black;
+    font:normal 12px verdana, sans-serif;
+    margin:5px 0 5px 0;
+    padding:1px 3px 1px 4px;
+    text-decoration:none;
+    background:#f0f0f0;
+    border-top:1px solid #fafafa;
+    border-right:1px solid #848484;
+    border-bottom:1px solid #848484;
+    border-left:1px solid #fafafa;
+}
+
+
+.portlet-menu a:hover {
+    color:white;
+    background:#526ca4;
+    border-top:1px solid #848484;
+    border-right:1px solid #fafafa;
+    border-bottom:1px solid #fafafa;
+    border-left:1px solid #848484;
+}
+
+
 
 /**********************************************
   Normal, unselected menu item
 **********************************************/
 .portlet-menu-item{
+
 }
+
+
 
 /**********************************************
   Selected menu item
@@ -729,5 +616,12 @@ in lighter color
   Menu caption
 **********************************************/
 .portlet-menu-caption{
+    background-color: #4064ad;
+    color: #FFFFFF;
+    font-weight: bold;
+    text-align:center;
+    font-size: 12px;
+    margin-bottom: 5px;
+
 }
 

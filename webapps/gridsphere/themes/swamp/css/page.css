@@ -1,11 +1,17 @@
+/*
+Part of the Gridsphere default theme
+Author: Oliver Wehrens (wehrens@aei.mpg.de)
+Version: $Id$
+*/
+
 
 #page-logo {
   font-family:Franklin Gothic Medium, verdana, arial, sans-serif;
-  color: #e6e6e6;
-  font-size: 30px;
+  color: #FFFFFF;
+  font-size: 36px;
   font-weight: normal;
-  background:#999933;
-  padding-top: 15px;
+  background:#9DACBD;
+  padding-top: 3px;
   padding-left: 15px;
   padding-right: 15px;
   padding-bottom: 1px;
@@ -15,7 +21,7 @@
   font-family:Franklin Gothic Medium, verdana, arial, sans-serif;
   color:#cbccce;
   font-size:16px;
-  background:#dddd00;
+  background:#9DACBD;
   padding-left: 15px;
   padding-right: 15px;
   padding-top: 1px;
