@@ -18,13 +18,13 @@ import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
 import org.gridlab.gridsphere.services.core.security.acl.GroupAction;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
+import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
 import org.gridlab.gridsphere.services.core.utils.DateUtil;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
 import org.gridlab.gridsphere.services.core.locale.LocaleService;
-import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 import org.gridlab.gridsphere.tmf.config.TmfService;
 import org.gridlab.gridsphere.tmf.config.TmfUser;
 
@@ -37,7 +37,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
     // JSP pages used by this portlet
     public static final String VIEW_USER_JSP = "profile/viewuser.jsp";
-    public static final String EDIT_USER_JSP = "profile/edituser.jsp";
     public static final String CONFIGURE_JSP = "profile/configure.jsp";
     public static final String HELP_JSP = "profile/help.jsp";
 
@@ -68,23 +67,11 @@ public class ProfileManagerPortlet extends ActionPortlet {
     public void initConcrete(PortletSettings settings) throws UnavailableException {
         super.initConcrete(settings);
         DEFAULT_VIEW_PAGE = "doViewUser";
-        DEFAULT_EDIT_PAGE = "doEditUser";
         DEFAULT_HELP_PAGE = HELP_JSP;
         DEFAULT_CONFIGURE_PAGE = "doConfigureSettings";
     }
 
     public void doViewUser(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
-        DefaultTableModel model = setUserTable(event, true);
-        DefaultTableModel messaging = getMessagingFrame(event, true);
-        FrameBean messagingFrame = event.getFrameBean("messagingFrame");
-        FrameBean groupsFrame = event.getFrameBean("groupsFrame");
-        groupsFrame.setTableModel(model);
-        messagingFrame.setTableModel(messaging);
-        setNextState(req, VIEW_USER_JSP);
-    }
-
-    public void doEditUser(FormEvent event) {
         PortletRequest req = event.getPortletRequest();
         DefaultTableModel model = setUserTable(event, false);
         DefaultTableModel messaging = getMessagingFrame(event, false);
@@ -92,7 +79,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         FrameBean groupsFrame = event.getFrameBean("groupsFrame");
         groupsFrame.setTableModel(model);
         messagingFrame.setTableModel(messaging);
-        setNextState(req, EDIT_USER_JSP);
+        setNextState(req, VIEW_USER_JSP);
     }
 
     public void doConfigureSettings(FormEvent event) throws PortletException {
@@ -352,18 +339,47 @@ public class ProfileManagerPortlet extends ActionPortlet {
         return model;
     }
 
-    public void doSaveUser(FormEvent event) {
+    public void doSavePass(FormEvent event) {
 
         PortletRequest req = event.getPortletRequest();
         User user = req.getUser();
 
-        // validate user entries to create an account request
-        SportletUser acctReq = validateUser(event);
-        if (acctReq != null) {
-            log.debug("approve account request for user: " + user.getID());
-            userManagerService.saveUser(acctReq);
+        String origPasswd = event.getPasswordBean("origPassword").getValue();
+        try {
+            passwordManagerService.validateSuppliedPassword(user, origPasswd);
+        } catch (InvalidPasswordException e) {
+            createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_INVALID"));
+            return;
         }
 
+        String passwordValue = event.getPasswordBean("password").getValue();
+        String confirmPasswordValue = event.getPasswordBean("confirmPassword").getValue();
+
+        // Otherwise, password must match confirmation
+        if (!passwordValue.equals(confirmPasswordValue)) {
+            createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_MISMATCH"));
+            // If they do match, then validate password with our service
+        } else if (passwordValue == null) {
+            createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_NOTSET"));
+        } else if (passwordValue.length() == 0) {
+            createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_BLANK"));
+        } else if (passwordValue.length() < 5) {
+            createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_TOOSHORT"));
+        } else {
+            // save password
+            PasswordEditor editPasswd = passwordManagerService.editPassword(user);
+            editPasswd.setValue(passwordValue);
+            editPasswd.setDateLastModified(Calendar.getInstance().getTime());
+            passwordManagerService.savePassword(editPasswd);
+            createSuccessMessage(event, this.getLocalizedText(req, "USER_PASSWORD_SUCCESS"));
+        }
+    }
+
+
+    public void doSaveGroups(FormEvent event) {
+
+        PortletRequest req = event.getPortletRequest();
+        User user = req.getUser();
 
         CheckBoxBean groupsCB = event.getCheckBoxBean("groupCheckBox");
         List selectedGroups = groupsCB.getSelectedValues();
@@ -406,7 +422,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
 
                 log.debug("adding tab " + selectedGroup.getName());
-                // @TODO change to addGroupTab  
+                // @TODO change to addGroupTab
                 this.layoutMgr.addGroupTab(req, selectedGroup.getName());
                 this.layoutMgr.reloadPage(req);
             }
@@ -430,6 +446,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             } catch (InvalidGroupRequestException e) {
                 log.error("in ProfileManagerPortlet invalid group request", e);
             }
+            createSuccessMessage(event, this.getLocalizedText(req, "USER_GROUPS_SUCCESS"));
             this.aclManagerService.approveGroupRequest(groupRequest);
 
             this.layoutMgr.refreshPage(req);
@@ -439,15 +456,35 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
             portletIds = portletRegistry.getAllConcretePortletIDs(req.getRole(), g.getName() + ".1");
             if (portletIds.isEmpty()) {
-                portletIds =  portletRegistry.getAllConcretePortletIDs(req.getRole(), g.getName());
+            portletIds =  portletRegistry.getAllConcretePortletIDs(req.getRole(), g.getName());
             }
             this.layoutMgr.removePortlets(req, portletIds);
             this.layoutMgr.reloadPage(req);
             */
         }
+    }
 
+    public void doSaveUser(FormEvent event) {
+
+        PortletRequest req = event.getPortletRequest();
+        User user = req.getUser();
+
+        // validate user entries to create an account request
+        SportletUser acctReq = validateUser(event);
+        if (acctReq != null) {
+            log.debug("approve account request for user: " + user.getID());
+            userManagerService.saveUser(acctReq);
+            createSuccessMessage(event, this.getLocalizedText(req, "USER_UPDATE_SUCCESS"));
+        }
+
+    }
+
+
+
+    public void doSaveMessaging(FormEvent event) {
         // now do the messaging stuff
-
+        PortletRequest req = event.getPortletRequest();
+        User user = req.getUser();
         TmfUser tmfuser = tms.getUser(req.getUser().getUserID());
         // if the user does not exist yet
         if (tmfuser==null) {
@@ -512,14 +549,10 @@ public class ProfileManagerPortlet extends ActionPortlet {
             isInvalid = true;
         }
 
-        if (!isInvalid) {
-            isInvalid = isInvalidPassword(event, message);
-        }
-
         // Throw exception if error was found
         if (isInvalid) {
-            FrameBean errorFrame = event.getFrameBean("errorFrame");
-            errorFrame.setValue(message.toString());
+            MessageBoxBean msg = event.getMessageBoxBean("msg");
+            msg.setValue(message.toString());
             return null;
         }
 
@@ -545,43 +578,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
         return acctReq;
     }
 
-    private boolean isInvalidPassword(FormEvent event, StringBuffer message) {
-        // Validate password
-        PortletRequest req = event.getPortletRequest();
-        String passwordValue = event.getPasswordBean("password").getValue();
-        String confirmPasswordValue = event.getPasswordBean("confirmPassword").getValue();
-
-        // If user already exists and password unchanged, no problem
-        if (passwordValue.length() == 0 &&
-                   confirmPasswordValue.length() == 0) {
-            return false;
-        }
-        // Otherwise, password must match confirmation
-        if (!passwordValue.equals(confirmPasswordValue)) {
-            message.append(this.getLocalizedText(req, "USER_PASSWORD_MISMATCH") + "<br>");
-            return true;
-            // If they do match, then validate password with our service
-        } else {
-            String msg = null;
-            if (passwordValue == null) {
-                msg = "Password is not set.";
-            }
-            passwordValue = passwordValue.trim();
-            if (passwordValue.length() == 0) {
-                msg = "Password is blank.";
-
-            }
-            if (passwordValue.length() < 5) {
-                msg = "Password must be longer than 5 characters.";
-            }
-            if (msg != null) {
-                message.append(msg);
-                return true;
-            }
-        }
-        return false;
-    }
-
     private ListBoxItemBean makeLocaleBean(String language, String name, Locale locale) {
         ListBoxItemBean bean = new ListBoxItemBean();
         String display = language;
@@ -594,5 +590,18 @@ public class ProfileManagerPortlet extends ActionPortlet {
             bean.setSelected(true);
         }
         return bean;
+    }
+
+
+    private void createErrorMessage(FormEvent event, String msg) {
+        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
+        msgBox.setMessageType(TextBean.MSG_ERROR);
+        msgBox.setValue(msg);
+    }
+
+    private void createSuccessMessage(FormEvent event, String msg) {
+        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
+        msgBox.setMessageType(TextBean.MSG_SUCCESS);
+        msgBox.setValue(msg);
     }
 }

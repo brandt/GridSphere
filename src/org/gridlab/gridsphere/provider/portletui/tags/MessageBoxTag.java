@@ -14,6 +14,24 @@ import javax.servlet.jsp.PageContext;
 public class MessageBoxTag extends BaseComponentTag {
 
     protected MessageBoxBean messageBoxBean = null;
+    protected String key = null;
+
+    /**
+     * Returns the key used to identify localized text
+     *
+     * @return the key used to identify localized text
+     */
+    public String getKey() {
+        return key;
+    }
+
+    /**
+     * Sets the key used to identify localized text
+     * @param key the key used to identify localized text
+     */
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public int doStartTag() throws JspException {
         return EVAL_BODY_INCLUDE;
@@ -27,10 +45,15 @@ public class MessageBoxTag extends BaseComponentTag {
                 this.setBaseComponentBean(messageBoxBean);
             } else {
                 this.updateBaseComponentBean(messageBoxBean);
+                key = messageBoxBean.getKey();
             }
         } else {
             messageBoxBean = new MessageBoxBean();
             this.setBaseComponentBean(messageBoxBean);
+        }
+
+        if (key != null) {
+            messageBoxBean.setValue(getLocalizedText(key));
         }
 
         try {

@@ -22,6 +22,7 @@ import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 
 import java.util.Date;
+import java.util.Calendar;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -224,6 +225,7 @@ public class PasswordManagerServiceImpl
         if (password == null) {
             password = new PasswordImpl();
             password.setUser(user);
+            password.setDateCreated(Calendar.getInstance().getTime());
             this.savePassword(password);
         }
         return password;

@@ -11,6 +11,8 @@ import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.FrameBean;
+import org.gridlab.gridsphere.provider.portletui.beans.MessageBoxBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
@@ -94,9 +96,9 @@ public class LoginPortlet extends ActionPortlet {
         String errorKey = (String)req.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
 
         if (errorKey != null) {
-            FrameBean frame = event.getFrameBean("errorFrame");
+            MessageBoxBean frame = event.getMessageBoxBean("errorFrame");
             frame.setKey(LoginPortlet.LOGIN_ERROR_FLAG);
-            frame.setStyle("error");
+            frame.setMessageType(TextBean.MSG_ERROR);
         }
         setNextState(req, "doViewUser");
     }
@@ -130,9 +132,9 @@ public class LoginPortlet extends ActionPortlet {
             setNextState(req, "doViewUser");
         } catch (PortletException e) {
             //invalid user, an exception was thrown
-            FrameBean err = evt.getFrameBean("errorFrame");
+            MessageBoxBean err = evt.getMessageBoxBean("errorFrame");
             err.setValue(e.getMessage());
-            err.setStyle("error");
+            err.setMessageType(TextBean.MSG_ERROR);
             //back to edit
             setNextState(req, DO_VIEW_USER_EDIT_LOGIN);
         }
