@@ -72,6 +72,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private static PortletRegistry registry = PortletRegistry.getInstance();
     int testpageNo = 1;
 
+    private boolean isTCK = false;
     /**
      * Initializes the GridSphere portlet container
      *
@@ -217,9 +218,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     }
 
     public void setTCKUser(PortletRequest req) {
-        String tck = (String)req.getPortletSession(true).getAttribute("tck");
+        //String tck = (String)req.getPortletSession(true).getAttribute("tck");
         String[] portletNames = req.getParameterValues("portletName");
-        if ((tck != null) || (portletNames != null)) {
+        if ((isTCK) || (portletNames != null)) {
             System.err.println("Setting a TCK user");
             SportletUserImpl u = new SportletUserImpl();
             u.setUserName("tckuser");
@@ -229,7 +230,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             req.setAttribute(SportletProperties.PORTLET_USER, u);
             req.setAttribute(SportletProperties.PORTLETGROUPS, l);
             req.setAttribute(SportletProperties.PORTLET_ROLE, PortletRole.USER);
-            req.getPortletSession(true).setAttribute("tck", "yes");
+            isTCK = true;
         }
     }
 

@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.jsrimpl.PortalContextImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.PortletDispatcher;
@@ -21,11 +22,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.portlet.Portlet;
 import javax.portlet.PortalContext;
-import java.util.Locale;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-import java.util.Iterator;
+import java.util.*;
 import java.net.URLEncoder;
 
 /**
@@ -170,40 +167,60 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
      */
     public PortletDispatcher getPortletDispatcher(org.gridlab.gridsphere.portlet.PortletRequest req, org.gridlab.gridsphere.portlet.PortletResponse res) {
 
+        System.err.println("in getPortletDispatcher: cid=" + req.getAttribute(SportletProperties.COMPONENT_ID));
+        String cid = (String)req.getAttribute(SportletProperties.COMPONENT_ID);
+
         // TODO fix my hack to get any render params and pass them as queryInfo to the portlet
-        Map params = (Map)req.getAttribute("renderParams" + "_" + portletClassName);
+        Map params = (Map)req.getAttribute("renderParams" + "_" + portletClassName + "_" + cid);
         String extraInfo = "";
 
-        if (params != null) {
-            extraInfo = "?";
-            boolean firstParam = true;
-            Iterator it = params.keySet().iterator();
-            while (it.hasNext()) {
-                if (!firstParam) extraInfo += "&";
-                String name = (String)it.next();
-                String encname = URLEncoder.encode(name);
-                String[] vals = (String[])params.get(name);
-                if (vals != null) {
-                    for (int i = 0; i < vals.length; i++) {
-                        if (!firstParam) {
-                            extraInfo += "&";
-                        }
-                        String encvalue = URLEncoder.encode(vals[i]);
-                        extraInfo += encname + "=" + encvalue;
-                        firstParam = false;
-                    }
+        if (params == null) {
+            params = new HashMap();
+
+        }
+
+
+        //params.put(SportletProperties.COMPONENT_ID, cid);
+        boolean firstParam = true;
+
+        Iterator it = params.keySet().iterator();
+        //try {
+        while (it.hasNext()) {
+            if (!firstParam) {
+                extraInfo += "&";
+            } else {
+                extraInfo += "?";
+            }
+            String name = (String)it.next();
+
+            String encname = URLEncoder.encode(name);
+            Object val = params.get(name);
+            if (val instanceof String[]) {
+                String[] vals = (String[])val;
+                for (int j = 0; j < vals.length - 1; j++) {
+                    String encvalue = URLEncoder.encode(vals[j]);
+                    extraInfo += encname + "=" + encvalue + "&";
+                }
+                String encvalue = URLEncoder.encode(vals[vals.length-1]);
+                extraInfo +=  encname + "=" + encvalue;
+            } else if (val instanceof String) {
+                String aval = (String) params.get(name);
+                if ((aval != null) && (aval != "")) {
+                    String encvalue = URLEncoder.encode(aval);
+                    extraInfo += encname + "=" + encvalue;
                 } else {
                     extraInfo += encname;
                 }
-                firstParam = false;
             }
+            firstParam = false;
         }
+
 
         // before it adds ".1" to real webappName
         String realWebAppName = webAppName.substring(0,webAppName.length() - 2);
 
        
-        System.err.println("in getPortletDispatcher of jsr query string " + extraInfo);
+        System.err.println("in getPortletDispatcher of jsr query string " + "/jsr/" + realWebAppName  + extraInfo);
         // TODO change dangerously hardcoded value!!!
         RequestDispatcher rd = context.getRequestDispatcher("/jsr/" + realWebAppName  + extraInfo);
         //RequestDispatcher rd = context.getNamedDispatcher(servletName);

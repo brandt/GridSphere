@@ -45,6 +45,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
         events = new Stack();
 
+        /*
         String[] portletNames = req.getParameterValues("portletName");
         if ( portletNames != null ) {
             System.err.println("have a TCK POrtlet!!");
@@ -58,13 +59,13 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
 
         } else {
-
+         */
         portletComponentID = req.getParameter(SportletProperties.COMPONENT_ID);
         if (portletComponentID == null) {
             log.debug("Received a null component ID");
             portletComponentID = "";
         }
-        }
+        //}
         /*
         try {
            portletComponentID = new Integer(cidStr).intValue();
@@ -190,7 +191,6 @@ public class GridSphereEventImpl implements GridSphereEvent {
     public void addNewRenderEvent(PortletComponentEvent evt) {
         if (evt != null) events.push(evt);
     }
-
 
     public PortletComponentEvent getLastRenderEvent() {
         return (events.isEmpty() ? null : (PortletComponentEvent)events.pop());

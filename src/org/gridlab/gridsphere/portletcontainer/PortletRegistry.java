@@ -65,7 +65,6 @@ public class PortletRegistry {
     public ApplicationPortlet getApplicationPortlet(String applicationPortletID) {
         Collection coll = allApplicationPortlets.values();
         Iterator it = coll.iterator();
-
         while (it.hasNext()) {
             ApplicationPortlet app = (ApplicationPortlet)it.next();
             if (app.getApplicationPortletID().equals(applicationPortletID)) return app;
@@ -74,17 +73,19 @@ public class PortletRegistry {
         return null;
     }
 
-    public String getPortletClassName(String portletName) {
+    public String getPortletClassName(String appName, String portletName) {
         Collection appColl = getAllApplicationPortlets();
         Iterator appIt = appColl.iterator();
         while (appIt.hasNext()) {
             ApplicationPortlet app = (ApplicationPortlet)appIt.next();
+            if (app.getWebApplicationName().startsWith(appName)) {
             List concPortlets = app.getConcretePortlets();
             Iterator cit = concPortlets.iterator();
             while (cit.hasNext()) {
                 ConcretePortlet conc = (ConcretePortlet)cit.next();
                 String name = conc.getPortletName();
                 if (name.equals(portletName)) return conc.getConcretePortletID();
+            }
             }
         }
         return null;

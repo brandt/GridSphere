@@ -55,6 +55,7 @@ public interface GridSphereEvent extends Event {
     public String getPortletComponentID();
 
 
+
     public void addNewRenderEvent(PortletComponentEvent evt);
 
 
