@@ -51,6 +51,8 @@ public class DescriptorTest extends TestCase {
         }
         List defs = pdd.getPortletDef();
 
+        // assertEquals(expected, actual)
+
         // we have one app descriptions
         assertEquals(defs.size(), 1);
 
@@ -62,62 +64,62 @@ public class DescriptorTest extends TestCase {
         assertEquals(concreteApps.size(), 2);
         ConcretePortletApplication concreteOne = (ConcretePortletApplication)concreteApps.get(0);
         ConcretePortletApplication concreteTwo = (ConcretePortletApplication)concreteApps.get(1);
-
-        assertEquals(portletApp.getUID(), "org.gridlab.gridsphere.portlets.core.HelloWorld.666");
-        assertEquals(portletApp.getName(), "Hello World Portlet Application");
+        System.err.println(portletApp.getUID());
+        assertEquals("org.gridlab.gridsphere.portlets.core.HelloWorld.666", portletApp.getUID());
+        assertEquals("Hello World Portlet Application", portletApp.getName());
 
         PortletInfo portletInfo = portletApp.getPortletInfo();
-        assertEquals(portletInfo.getHref(), "WEB-INF/web.xml#Servlet_1902648613");
-        assertEquals(portletInfo.getId(), "Portlet_1");
-        assertEquals(portletInfo.getName(), "Hello World");
+        assertEquals("WEB-INF/web.xml#Servlet_1902648613", portletInfo.getHref());
+        assertEquals("Portlet_1", portletInfo.getId());
+        assertEquals("Hello World", portletInfo.getName());
 
         // Check concrete one portal data
-        assertEquals(concreteOne.getName(), "Concrete Hello World - Portlet Sample #1");
-        assertEquals(concreteOne.getUID(), "org.gridlab.gridsphere.portlets.core.HelloWorld.666.2");
+        assertEquals("Concrete Hello World - Portlet Sample #1", concreteOne.getName());
+        assertEquals("org.gridlab.gridsphere.portlets.core.HelloWorld.666.2", concreteOne.getUID());
 
         List configList = concreteOne.getConfigParamList();
         assertEquals(configList.size(), 2);
         ConfigParam one = (ConfigParam)configList.get(0);
         ConfigParam two = (ConfigParam)configList.get(1);
 
-        assertEquals(one.getParamName(), "Portlet Master");
-        assertEquals(one.getParamValue(), "master@domain.com");
+        assertEquals("Portlet Master", one.getParamName());
+        assertEquals("master@domain.com", one.getParamValue());
 
-        assertEquals(two.getParamName(), "Portlet Mistress");
-        assertEquals(two.getParamValue(), "mistress@domain.com");
+        assertEquals("Portlet Mistress", two.getParamName());
+        assertEquals("mistress@domain.com", two.getParamValue());
 
         ConcretePortletInfo onePI = concreteOne.getConcretePortletInfo();
-        assertEquals(onePI.getHref(), "Portlet_1902648613");
-        assertEquals(onePI.getName(), "Hello World");
-        assertEquals(onePI.getDefaultLocale(), "en");
+        assertEquals("Portlet_1902648613", onePI.getHref());
+        assertEquals("Hello World", onePI.getName());
+        assertEquals("en", onePI.getDefaultLocale());
 
         List langList = onePI.getLanguageList();
         assertEquals(langList.size(), 2);
         LanguageInfo langOne = (LanguageInfo)langList.get(0);
         LanguageInfo langTwo = (LanguageInfo)langList.get(1);
 
-        assertEquals(langOne.getDescription(), "Here is a simple portlet");
-        assertEquals(langOne.getKeywords(), "portlet hello world");
-        assertEquals(langOne.getLocale(), "en_US");
-        assertEquals(langOne.getTitle(), "Hello World - Sample Portlet #1");
-        assertEquals(langOne.getTitleShort(), "Hello World");
+        assertEquals("Here is a simple portlet", langOne.getDescription());
+        assertEquals("portlet hello world", langOne.getKeywords());
+        assertEquals("en_US", langOne.getLocale());
+        assertEquals("Hello World - Sample Portlet #1", langOne.getTitle());
+        assertEquals("Hello World", langOne.getTitleShort());
 
-        assertEquals(langTwo.getDescription(), "Hier ist ein gleicht portlet");
-        assertEquals(langTwo.getKeywords(), "portlet hallo welt");
-        assertEquals(langTwo.getLocale(), "en_DE");
-        assertEquals(langTwo.getTitle(), "Hallo Welt - Sample Portlet #1");
-        assertEquals(langTwo.getTitleShort(), "Hallo Welt");
+        assertEquals("Hier ist ein gleicht portlet", langTwo.getDescription());
+        assertEquals("portlet hallo welt", langTwo.getKeywords());
+        assertEquals("en_DE", langTwo.getLocale());
+        assertEquals("Hallo Welt - Sample Portlet #1", langTwo.getTitle());
+        assertEquals("Hallo Welt", langTwo.getTitleShort());
 
         List groups = onePI.getGroupList();
         assertEquals(groups.size(), 1);
 
         Group g = (Group)groups.get(0);
-        assertEquals(g.getGroupName(), "ANY");
+        assertEquals("ANY", g.getGroupName());
 
         List roles = onePI.getRoleList();
         assertEquals(groups.size(), 1);
         Role r = (Role)roles.get(0);
-        assertEquals(r.getUserRole(), "GUEST");
+        assertEquals("GUEST", r.getRoleName());
 
 
     // Check concrete two portal data
@@ -149,13 +151,13 @@ public class DescriptorTest extends TestCase {
         List groupsList = onePI.getGroupList();
         assertEquals(groups.size(), 1);
 
-        Group gr = (Group)groups.get(0);
-        assertEquals(gr.getGroupName(), "CACTUS");
+        Group gr = (Group)groupsList.get(0);
+        assertEquals("CACTUS", gr.getGroupName());
 
         List rolez = onePI.getRoleList();
         assertEquals(groups.size(), 1);
-        Role rol = (Role)roles.get(0);
-        assertEquals(rol.getUserRole(), "USER");
+        Role rol = (Role)rolez.get(0);
+        assertEquals("USER", rol.getRoleName());
 
     }
 
