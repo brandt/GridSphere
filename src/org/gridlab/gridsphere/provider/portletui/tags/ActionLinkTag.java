@@ -133,6 +133,8 @@ public class ActionLinkTag extends ActionTag {
 
         if (!beanId.equals("")) {
             paramBeans = actionlink.getParamBeanList();
+            label = actionlink.getLabel();
+            action = actionlink.getAction();
         }
         
         actionlink.setPortletURI(createGSActionURI());
