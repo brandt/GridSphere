@@ -29,6 +29,11 @@
             <one-to-many class="org.gridlab.gridsphere.portlet.impl.SportletGroup"/>
         </set>
 
+        <map name="attributes" table="portalconfigattributes">
+            <key column="gsoid"/>
+            <index column="attribute" type="string"/>
+            <element column="value" type="string"/>
+        </map>
     </class>
 
 
