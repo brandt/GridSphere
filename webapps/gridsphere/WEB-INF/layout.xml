@@ -60,7 +60,7 @@
             </portlet-tab>
             <portlet-tab label="utilities">
                 <title lang="en">Utilities</title>
-                <title lang="it">Utilità</title>
+                <title lang="it">Utilit√†</title>
                 <table-layout>
                     <row-layout>
                         <column-layout width="50%">
