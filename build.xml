@@ -329,7 +329,7 @@ Copyright:
   </target>
 
   <!-- =================================================================== -->
-  <!-- Creates the core portlets WAR file                                                -->
+  <!-- Creates the core portlets WAR file                                  -->
   <!-- =================================================================== -->
   <target name="core-war" depends="jar" description="Create GridSphere WAR for deployment">
     <war warfile="${build.dir}/coreportlets.war"
@@ -363,6 +363,7 @@ Copyright:
                 <exclude name="servlet*.jar"/>
             </fileset>
             <fileset dir="${build.lib}">
+                <exclude name="portlet-widget-tags.jar"/>
                 <exclude name="coreportlets.jar"/>
             </fileset>
         </copy>
@@ -388,6 +389,7 @@ Copyright:
         <copy todir="${install.war}/coreportlets">
             <fileset dir="${corewebapp.dir}"/>
         </copy>
+        <copy file="${build.lib}/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/coreportlets/WEB-INF/lib"/>
         <copy file="${build.lib}/coreportlets.jar" todir="${env.CATALINA_HOME}/webapps/coreportlets/WEB-INF/lib"/>
         <copy todir="${env.CATALINA_HOME}/webapps/coreportlets">
             <fileset dir="${install.war}/coreportlets"/>
