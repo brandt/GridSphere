@@ -273,8 +273,9 @@ public class CredentialManagerServiceTest extends ServiceTest {
             _log.error("This is good. At this point, no globus credentials should be permitted.");
         }
         // Testing number of mappings
-        hosts = mapping.getHosts();
-        assertEquals(numMappings, hosts.size());
+        _log.info("Testing get all mappings. Should be 0 entries.");
+        hosts = this.credentialManager.getCredentialMappings();
+        assertEquals(numMappings, mappings.size());
 
         /*** Test create guest mapping with globus permission. ***/
         _log.info("Creating globus permissions.");
