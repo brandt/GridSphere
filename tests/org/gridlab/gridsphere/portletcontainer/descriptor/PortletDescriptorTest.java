@@ -81,7 +81,7 @@ public class PortletDescriptorTest extends TestCase {
 
         assertEquals(true, configHash.containsKey("AppConfigOne"));
         assertEquals(true, configHash.containsKey("AppConfigTwo"));
-
+        assertEquals(false, configHash.containsKey("two"));
         String val = (String)configHash.get("AppConfigOne");
         assertEquals("one", val);
         val = (String)configHash.get("AppConfigTwo");
