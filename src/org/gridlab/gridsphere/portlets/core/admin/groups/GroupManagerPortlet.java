@@ -256,11 +256,8 @@ public class GroupManagerPortlet extends ActionPortlet {
                         tb2.setValue(conc.getDescription(loc));
                         newtc.addBean(tb2);
                         newtr.addBean(newtc);
-                        //model.addTableRowBean(newtr);
 
-
-
-                        //tb2.setValue(conc.getPortletSettings().getDescription(loc, null));
+                        // if there was no existing group than add the list box here
                         if (!found) {
                             ListBoxItemBean item = new ListBoxItemBean();
                             item.setValue(PortletRole.USER.getName());
@@ -335,8 +332,10 @@ public class GroupManagerPortlet extends ActionPortlet {
         try {
             if ((!groupTF.getValue().equals("")) && !portletRoles.isEmpty()) {
                 this.getACLService(user).createGroup(groupTF.getValue(), groupDescTF.getValue(), portletRoles);
-                // now create new group layout
-                PortletTabRegistry.newGroupTab(groupTF.getValue(), portletRoles);
+                // now create new group layout if group does not exist
+                if (PortletTabRegistry.getGroupTabs(groupTF.getValue()) == null) {
+                    PortletTabRegistry.newGroupTab(groupTF.getValue(), portletRoles);
+                }
             } else {
                 log.error("Unable to create new group. Either group name or portlets is empty");
             }

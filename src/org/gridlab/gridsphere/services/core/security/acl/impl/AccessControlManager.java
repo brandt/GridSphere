@@ -501,32 +501,33 @@ public class AccessControlManager implements AccessControlManagerService {
             group.setName(groupName);
             group.setDescription(groupDescription);
             group.setPublic(true);
-            Iterator it = portletRoleList.iterator();
-            while (it.hasNext()) {
-                SportletRoleInfo info = (SportletRoleInfo)it.next();
-                System.err.println("XXX role= " + info.getRole() + " class=" + info.getPortletClass()+" OID "+info.getOid());
-                try {
-                    if (info.getOid() == null) {
-                        pm.create(info);
-                    } else {
-                        pm.update(info);
-                    }
-                } catch (PersistenceManagerException e) {
-                    log.error("Error creating SportletRoleInfo "+info.getRole(), e);
-                }
-            }
-            group.setPortletRoleList(portletRoleList);
+        }
+        Iterator it = portletRoleList.iterator();
+        while (it.hasNext()) {
+            SportletRoleInfo info = (SportletRoleInfo)it.next();
+            System.err.println("XXX role= " + info.getRole() + " class=" + info.getPortletClass()+" OID "+info.getOid());
             try {
-                if (group.getOid()==null) {
-                    pm.create(group);
+                if (info.getOid() == null) {
+                    pm.create(info);
                 } else {
-                    pm.update(group);
+                    pm.update(info);
                 }
             } catch (PersistenceManagerException e) {
-                String msg = "Error creating portlet group " + groupName;
-                log.error(msg, e);
+                log.error("Error creating SportletRoleInfo "+info.getRole(), e);
             }
         }
+        group.setPortletRoleList(portletRoleList);
+        try {
+            if (group.getOid()==null) {
+                pm.create(group);
+            } else {
+                pm.update(group);
+            }
+        } catch (PersistenceManagerException e) {
+            String msg = "Error creating portlet group " + groupName;
+            log.error(msg, e);
+        }
+
         return group;
     }
 
