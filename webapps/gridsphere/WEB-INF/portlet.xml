@@ -207,6 +207,28 @@
         </concrete-portlet-app>
     </portlet-app-def>
 
+    <portlet-app-def>
+            <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager">
+                <portlet-name>Portlet Application Manager</portlet-name>
+                <servlet-name>PortletApplicationManager</servlet-name>
+                <supports>
+                     <view/>
+                     <help/>
+                </supports>
+            </portlet-app>
+
+            <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1">
+                <concrete-portlet>
+                    <portlet-name>Portlet Application Manager</portlet-name>
+                    <access-restrictions role="SUPER"/>
+                    <default-locale>en</default-locale>
+                    <language locale="en">
+                        <title>Portlet Application Manager</title>
+                        <description>Enables portal administrators to administer portlets</description>
+                    </language>
+                </concrete-portlet>
+            </concrete-portlet-app>
+        </portlet-app-def>
 
     <portlet-app-def>
          <portlet-app id="org.gridlab.gridsphere.portlets.core.notepad.NotePadPortlet">

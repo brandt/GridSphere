@@ -64,6 +64,11 @@
     </servlet>
 
     <servlet>
+        <servlet-name>PortletApplicationManager</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>ServletRedirector</servlet-name>
         <servlet-class>org.apache.cactus.server.ServletTestRedirector</servlet-class>
     </servlet>
@@ -126,6 +131,11 @@
     <servlet-mapping>
         <servlet-name>GroupManagerPortlet</servlet-name>
         <url-pattern>/admin/groups</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PortletApplicationManager</servlet-name>
+        <url-pattern>/admin/portlets</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

@@ -91,6 +91,17 @@
                     </row-layout>
                 </table-layout>
             </portlet-tab>
+            <portlet-tab title="Portlets">
+                <table-layout>
+                    <row-layout>
+                        <column-layout width="80%">
+                            <portlet-frame label="portletmanager">
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
         </portlet-tabbed-pane>
     </portlet-tab>
 </portlet-tabbed-pane>

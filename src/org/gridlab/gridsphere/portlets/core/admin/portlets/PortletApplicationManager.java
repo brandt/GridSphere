@@ -29,7 +29,8 @@ import java.util.Map;
  */
 public class PortletApplicationManager extends ActionPortlet {
 
-    //private PortletManagerService portletManager = null;
+    public static final String VIEW_JSP = "admin/portlets/view.jsp";
+
     private TomcatManagerWrapper tomcat = TomcatManagerWrapper.getInstance();
 
     public void init(PortletConfig config) throws UnavailableException {
@@ -66,7 +67,7 @@ public class PortletApplicationManager extends ActionPortlet {
         }
 
         //if (result != null) log.debug("result: " + result.getReturnCode() + " " + result.getDescription());
-        setNextState(event.getPortletRequest(), "portletmanager/list.jsp");
+        setNextState(event.getPortletRequest(), VIEW_JSP);
     }
 
     public void doPortletManager(FormEvent event) throws PortletException {
@@ -159,7 +160,7 @@ public class PortletApplicationManager extends ActionPortlet {
         }
         req.setAttribute("result", result);
         if (result != null) log.debug("result: " + result.getReturnCode() + " " + result.getDescription());
-        setNextState(req, "portletmanager/list.jsp");
+        setNextState(req, VIEW_JSP);
     }
 
     public void uploadFile(FormEvent event) throws PortletException {
@@ -195,7 +196,7 @@ public class PortletApplicationManager extends ActionPortlet {
             errMsg.setStyle("error");
             log.error("Unable to store uploaded file ", e);
         }
-        setNextState(req, "portletmanager/list.jsp");
+        setNextState(req, VIEW_JSP);
     }
 
     public void deployWebapp(FormEvent event) throws PortletException {
@@ -225,6 +226,6 @@ public class PortletApplicationManager extends ActionPortlet {
             errMsg.setStyle("error");
             log.error("Unable to deploy webapp  ", e);
         }
-        setNextState(req, "portletmanager/list.jsp");
+        setNextState(req, VIEW_JSP);
     }
 }
