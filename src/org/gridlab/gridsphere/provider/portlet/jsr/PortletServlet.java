@@ -58,7 +58,6 @@ import javax.servlet.http.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.File;
 import java.io.InputStream;
 import java.util.*;
 
@@ -72,7 +71,7 @@ public class PortletServlet extends HttpServlet
     protected JSRPortletWebApplicationImpl portletWebApp = null;
     protected String webAppName = null;
 
-    PortletManager manager = PortletManager.getInstance();
+    private PortletManager manager = PortletManager.getInstance();
 
     protected PortletContext portletContext = null;
 
@@ -80,9 +79,6 @@ public class PortletServlet extends HttpServlet
     protected Map portletclasses = null;
 
     protected Map portletConfigHash = null;
-
-    /* require an acl service to get role info */
-    //private AccessControlManagerService aclService = null;
 
     private PortletPreferencesManager prefsManager = null;
 
@@ -94,18 +90,12 @@ public class PortletServlet extends HttpServlet
         // load descriptor files
         log.debug("in init of PortletServlet");
 
-        //aclService = AccessControlManagerServiceImpl.getInstance();
-
-        //registry = PortletRegistry.getInstance();
-
         ServletContext ctx = config.getServletContext();
 
         portlets = new Hashtable();
         portletclasses = new Hashtable();
         portletConfigHash = new Hashtable();
-
         portletWebApp = new JSRPortletWebApplicationImpl(ctx, Thread.currentThread().getContextClassLoader());
-        //registry.addApplicationPortlet(appPortlet);
 
         Collection appPortlets = portletWebApp.getAllApplicationPortlets();
         Iterator it = appPortlets.iterator();
@@ -429,36 +419,7 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
             myModes.add(m.toString());
         }
 
-
-        //String modeStr = (String)request.getAttribute(SportletProperties.PORTLET_MODE);
-        //System.err.println("found mode " + mode);
-        //if (modeStr == null) modeStr = "view";
-        /*
-        org.gridlab.gridsphere.portlet.Portlet.Mode mode = org.gridlab.gridsphere.portlet.Portlet.Mode.toMode(modeStr);
-
-
-        if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.VIEW) {
-            m = PortletMode.VIEW;
-        } else if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.EDIT) {
-            m = PortletMode.EDIT;
-        } else if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.HELP) {
-            m = PortletMode.HELP;
-        } else if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.CONFIGURE) {
-            m = new PortletMode("config");
-        } else {
-            m = new PortletMode(mode.toString());
-        }
-        */
         request.setAttribute(SportletProperties.ALLOWED_MODES, myModes);
-        
-        //String jsrmode = SportletProperties.PORTLET_MODE_JSR;
-        //String gsmode = SportletProperties.PORTLET_MODE;
-
-        //request.setAttribute(gsmode, modeStr);
-        //if (request.getAttribute(jsrmode) == null) {
-            //System.err.println("setting jsr mode " + m);
-        //    request.setAttribute(jsrmode, m);
-        //}
 
     }
 
@@ -522,45 +483,6 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
             location = aResponse.getRedirectLocation();
 
             if (location != null) {
-                //if (location == null) {
-
-                //if (location.indexOf("://") < 0 ) {
-                /*
-                       PortletURLImpl redirectUrl = new PortletURLImpl(servletRequest, servletResponse, portalContext, false);
-                       //TODO: don't send changes in case of exception -> PORTLET:SPEC:17
-
-                       // get the changings of this portlet entity that might be set during action handling
-                       // change portlet mode
-                       //redirectUrl.setContextPath(actionRequest.getContextPath());
-                       try {
-                           if (aResponse.getChangedPortletMode() != null) {
-                               redirectUrl.setPortletMode(aResponse.getChangedPortletMode());
-                           } else {
-                               redirectUrl.setPortletMode(actionRequest.getPortletMode());
-                           }
-                       } catch (PortletModeException e) {
-                           e.printStackTrace();
-                       }
-
-                       // change window state
-                       try {
-                           if (aResponse.getChangedWindowState() != null) {
-                               redirectUrl.setWindowState(aResponse.getChangedWindowState());
-                           } else {
-                               redirectUrl.setWindowState(actionRequest.getWindowState());
-                           }
-
-                       } catch (WindowStateException e) {
-                           e.printStackTrace();
-                       }
-                       // get render parameters
-                       Map renderParameter = aResponse.getRenderParameters();
-                       redirectUrl.setComponentID((String) servletRequest.getParameter(SportletProperties.COMPONENT_ID));
-                       redirectUrl.setParameters(renderParameter);
-                       System.err.println("redirecting url " +  redirectUrl.toString());
-                       location = servletResponse.encodeRedirectURL(redirectUrl.toString());
-                  //}
-                   */
                 javax.servlet.http.HttpServletResponse redirectResponse = servletResponse;
                 while (redirectResponse instanceof javax.servlet.http.HttpServletResponseWrapper) {
                     redirectResponse = (javax.servlet.http.HttpServletResponse)
