@@ -528,7 +528,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      * @throws IOException if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
-        System.err.println("PortletTitleBar received an event!!!!");
         super.actionPerformed(event);
 
         PortletComponentEvent lastEvent = event.getLastRenderEvent();

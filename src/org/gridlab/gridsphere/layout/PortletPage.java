@@ -207,7 +207,6 @@ public class PortletPage implements Serializable, Cloneable {
             ComponentIdentifier cid = (ComponentIdentifier)it.next();
             String compLabel = cid.getComponentLabel();
 
-            System.err.println("iteration thru component identifioers cid: " + cid.getComponentID() + " label=" + compLabel);
             if (!compLabel.equals("")) {
                 // create a labels to integer component id mapping
                 labelsHash.put(compLabel, new Integer(cid.getComponentID()));
@@ -280,7 +279,7 @@ public class PortletPage implements Serializable, Cloneable {
      * @throws IOException if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
-        System.err.println("in actionPerformed PortletPage");
+
         // if there is a layout action do it!
         if (!event.getPortletComponentID().equals("")) {
 
@@ -289,22 +288,19 @@ public class PortletPage implements Serializable, Cloneable {
             // first check the hash
             ComponentIdentifier compId = null;
             String cid = event.getPortletComponentID();
-            System.err.println("cid=" + cid);
+
             int compIntId = -1;
             if (labelsHash.containsKey(cid)) {
-                System.err.println("labels hash has cid");
                 Integer cint = (Integer) labelsHash.get(cid);
                 compIntId =  cint.intValue();
                 compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
             } else {
                 // try converting to integer
-                System.err.println("try converting to int");
                 try {
                     compIntId = Integer.parseInt(cid);
                     compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
                 } catch (NumberFormatException e) {
                     compIntId = -1;
-                    System.err.println("go home");
                 }
             }
 

@@ -174,33 +174,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     }
 
     /**
-     * Notifies this listener that a portlet title barw event has occured
-     *
-     * @param event the portolet title bar event
-     * @throws PortletLayoutException if a portlet layout exception occurs during processing
-     */
-    public void handleTitleBarEvent(GridSphereEvent event) throws PortletLayoutException {
-
-        /*
-        if (event.getAction() == PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY) {
-            PortletWindow.State state = event.getState();
-            PortletFrameEvent evt = null;
-            if (state == PortletWindow.State.MINIMIZED) {
-                renderPortlet = false;
-                evt = new PortletFrameEventImpl(PortletFrameEvent.Action.FRAME_MINIMIZED, COMPONENT_ID);
-            } else if (state == PortletWindow.State.RESIZING) {
-                renderPortlet = true;
-                evt = new PortletFrameEventImpl(PortletFrameEvent.Action.FRAME_RESTORED, COMPONENT_ID);
-            } else if (state == PortletWindow.State.MAXIMIZED) {
-                renderPortlet = true;
-                evt = new PortletFrameEventImpl(PortletFrameEvent.Action.FRAME_MAXIMIZED, COMPONENT_ID);
-            }
-           // fireFrameEvent(evt);
-        }
-        */
-    }
-
-    /**
      * Performs an action on this portlet frame component
      *
      * @param event a gridsphere event
