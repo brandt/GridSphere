@@ -72,4 +72,10 @@ public class IncludeBean extends BaseBean implements TagBean {
     public String toEndString() {
         return "";
     }
+    
+    public void store(HttpServletRequest request) {
+        this.request = request;
+        super.store();
+    }
+    
 }
