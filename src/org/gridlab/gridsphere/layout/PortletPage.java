@@ -453,7 +453,7 @@ public class PortletPage implements Serializable, Cloneable {
 
         // set content to UTF-8 for il8n
         //res.setContentType("text/vnd.wap.xhtml");
-        res.setContentType("text/html");
+        res.setContentType("text/wml");
         try {
             out = res.getWriter();
         } catch (IllegalStateException e) {
@@ -531,16 +531,22 @@ public class PortletPage implements Serializable, Cloneable {
         if ((wstate != null) && (wstate.equalsIgnoreCase(PortletWindow.State.FLOATING.toString()))) {
             PortletComponent comp = getActiveComponent(event);
             PortletComponent pc = comp.getParentComponent();
-            if (pc != null) {
+            PortletFrame f = null;
+            if (comp instanceof PortletFrame) {
+                f = (PortletFrame)comp;
+            } else if (pc != null) {
                 if (pc instanceof PortletFrame) {
-                    PortletFrame f = (PortletFrame)pc;
-                    // render portlet frame in pop-up without titlebar
-                    f.setTransparent(true);
-                    f.doRender(event);
-                    f.setTransparent(false);
+                    f = (PortletFrame)pc;
                 }
-
-                writer.println(pc.getBufferedOutput(req));
+            }
+            if (f != null) {
+                // render portlet frame in pop-up without titlebar
+                f.setTransparent(true);
+                req.setAttribute(CacheService.NO_CACHE, CacheService.NO_CACHE);
+                f.getPortletTitleBar().setWindowState(PortletWindow.State.FLOATING);
+                f.doRender(event);
+                f.setTransparent(false);
+                writer.println(f.getBufferedOutput(req));
             }
         } else {
 

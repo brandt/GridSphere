@@ -182,6 +182,8 @@ public class SportletURI implements PortletURI {
             store.put(name, value);
         }
 
+        // if underlying window state is floating then set it in the URI
+        if (req.getAttribute(SportletProperties.PORTLET_WINDOW).equals(PortletWindow.State.FLOATING)) store.put(SportletProperties.PORTLET_WINDOW, PortletWindow.State.FLOATING.toString());
         String url = contextPath;
         String newURL;
         Set set = store.keySet();

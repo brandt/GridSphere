@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.layout.event.PortletTitleBarEvent;
 import org.gridlab.gridsphere.layout.event.impl.PortletFrameEventImpl;
 import org.gridlab.gridsphere.layout.event.impl.PortletTitleBarEventImpl;
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.jsrimpl.RenderResponseImpl;
 import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
@@ -637,6 +638,19 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         req.removeAttribute(SportletProperties.PORTLET_TITLE);
         frame.append(postframe);
         req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, frame);
+
+        // check if expiration was set in render response
+        Map props = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        if (props != null) {
+            String cacheExpiryStr = (String)props.get(RenderResponseImpl.EXPIRATION_CACHE);
+            if (cacheExpiryStr != null) {
+                try {
+                    cacheExpiration = Integer.valueOf(cacheExpiryStr).intValue();
+                } catch (IllegalArgumentException e) {
+                    // do nothing
+                }
+            }
+        }
         if ((cacheExpiration > 0) || (cacheExpiration == -1)) {
             cacheService.cache(this.getComponentID() + portletClass + id, frame, cacheExpiration);
         }

@@ -302,6 +302,10 @@ public class PortletURLImpl implements PortletURL {
         if (mode != null) {
             url += "&" + SportletProperties.PORTLET_MODE + "=" + mode.toString();
         }
+
+        // if underlying window state is floating then set it in the URI
+        if (req.getAttribute(SportletProperties.PORTLET_WINDOW).equals(PortletWindow.State.FLOATING)) state = new WindowState(PortletWindow.State.FLOATING.toString());
+
         if (state != null) {
             url += "&" + SportletProperties.PORTLET_WINDOW + "=" + state.toString();
         }
