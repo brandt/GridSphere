@@ -27,25 +27,15 @@ public class PortletTabbedPane extends BasePortletComponent {
         tabs.add(tab);
     }
 
-    public String getBackgroundAt(int index)  {
-        PortletTab tab = (PortletTab)tabs.get(index);
-        return tab.getBackground();
-    }
-
     public PortletPanel getPortletPanelAt(int index)  {
         PortletTab tab = (PortletTab)tabs.get(index);
         return tab.getPortletPanel();
     }
 
-    public String getForegroundAt(int index) {
-        PortletTab tab = (PortletTab)tabs.get(index);
-        return tab.getForeground();
-    }
-
     public PortletPanel getSelectedPortletPanel() {
         for (int i = 0; i < tabs.size(); i++) {
             PortletTab tab = (PortletTab)tabs.get(i);
-            if (tab.getSelected())
+            if (tab.isSelected())
                 return tab.getPortletPanel();
         }
         return null;
@@ -54,7 +44,7 @@ public class PortletTabbedPane extends BasePortletComponent {
     public int getSelectedIndex() {
         for (int i = 0; i < tabs.size(); i++) {
             PortletTab tab = (PortletTab)tabs.get(i);
-            if (tab.getSelected())
+            if (tab.isSelected())
                 return i;
         }
         return -1;
@@ -63,7 +53,7 @@ public class PortletTabbedPane extends BasePortletComponent {
     public PortletTab getSelectedTab() {
         for (int i = 0; i < tabs.size(); i++) {
             PortletTab tab = (PortletTab)tabs.get(i);
-            if (tab.getSelected())
+            if (tab.isSelected())
                 return tab;
         }
         return null;
@@ -137,19 +127,9 @@ public class PortletTabbedPane extends BasePortletComponent {
         tabs.remove(index);
     }
 
-    public void setBackgroundAt(int index, String background) {
-        PortletTab tab = (PortletTab)tabs.get(index);
-        tab.setBackground(background);
-    }
-
     public void setPortletPanelAt(int index, PortletPanel panel) {
         PortletTab tab = (PortletTab)tabs.get(index);
         tab.setPortletPanel(panel);
-    }
-
-    public void setForegroundAt(int index, String foreground) {
-        PortletTab tab = (PortletTab)tabs.get(index);
-        tab.setForeground(foreground);
     }
 
     public void setSelectedPortletPanel(PortletPanel c) {
@@ -189,7 +169,7 @@ public class PortletTabbedPane extends BasePortletComponent {
     private void unselectLastTab() {
         for (int i = 0; i < tabs.size(); i++) {
             PortletTab tab = (PortletTab)tabs.get(i);
-            if (tab.getSelected())
+            if (tab.isSelected())
                 tab.setSelected(false);
         }
     }
@@ -267,7 +247,25 @@ public class PortletTabbedPane extends BasePortletComponent {
 
 
         // Render tabs titles
-        out.println("<table width=\"100%\">");
+        out.println("<div id=\"tab-pane\">");
+        out.println("<div class=\"tab-menu\">");
+
+        PortletTab tab;
+        for (i = 0; i < tabs.size(); i++) {
+            String title = getTitleAt(i);
+            tab = (PortletTab)tabs.get(i);
+            if (tab.isSelected()) {
+                out.println("<span id=\"tab-active\">" + title + "</span>");
+            } else {
+                out.println("<span id=\"tab-inactive\"><a class=\"tab-menu\" href=\"" + tabLinks[i] + "\" >" +  title + "</a></span>");
+            }
+        }
+
+        out.println("</div></div><div id=\"tab-bar\"></div>");
+
+        ///////////// OLD STUFF
+        //out.println("<table width=\"100%\">");
+        /*
         for (i = 0; i < tabs.size(); i++) {
             String title = getTitleAt(i);
             out.println("<th><b>" + "<a href=\"" + tabLinks[i] + "\" >" +  title + "</a></b></th>");
@@ -276,9 +274,11 @@ public class PortletTabbedPane extends BasePortletComponent {
 
         out.println("<table width=\"100%\">");
         out.println("<tr><td>");
+        */
         LayoutManager layoutManager = selectedPanel.getLayoutManager();
         layoutManager.doRender(event);
-        out.println("</td></tr></table>");
+        //out.println("</td></tr></table>");
+
     }
 
 

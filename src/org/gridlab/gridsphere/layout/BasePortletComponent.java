@@ -16,8 +16,6 @@ public abstract class BasePortletComponent implements PortletComponent {
     protected String width;
     protected String height;
     protected String name;
-    protected String fgColor;
-    protected String bgColor = "#CCCCCC";
     protected PortletBorder border;
     protected PortletInsets insets;
     protected boolean isVisible = true;
@@ -35,14 +33,6 @@ public abstract class BasePortletComponent implements PortletComponent {
 
     public int getComponentID() {
         return COMPONENT_ID;
-    }
-
-    public String getBackground() {
-        return bgColor;
-    }
-
-    public String getForeground() {
-        return fgColor;
     }
 
     public PortletBorder getPortletBorder() {
@@ -63,14 +53,6 @@ public abstract class BasePortletComponent implements PortletComponent {
 
     public String getWidth() {
         return width;
-    }
-
-    public void setBackground(String bgColor) {
-        this.bgColor = bgColor;
-    }
-
-    public void setForeground(String ggColor) {
-        this.fgColor = fgColor;
     }
 
     public void setPortletBorder(PortletBorder border) {
@@ -110,8 +92,6 @@ public abstract class BasePortletComponent implements PortletComponent {
         String sid = new Integer(COMPONENT_ID).toString();
         req.setAttribute(LayoutProperties.ID, sid);
         req.setAttribute(LayoutProperties.NAME, name);
-        req.setAttribute(LayoutProperties.BGCOLOR, bgColor);
-        req.setAttribute(LayoutProperties.FGCOLOR, fgColor);
         req.setAttribute(LayoutProperties.HEIGHT, height);
         req.setAttribute(LayoutProperties.WIDTH, width);
     }

@@ -22,6 +22,7 @@ import org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryMa
 
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -30,10 +31,6 @@ import java.util.Vector;
 public class PortletTitleBar extends BasePortletComponent {
 
     private String title = "";
-    private String titleColor = "#FFFFFF";
-    private String font = "Arial, Helvetica, sans-serif";
-    private String lineColor = "#336699";
-    private String thickness = "1";
     private String portletClass = null;
 
     private PortletWindow.State portletWindowState = PortletWindow.State.NORMAL;
@@ -64,40 +61,8 @@ public class PortletTitleBar extends BasePortletComponent {
         return title;
     }
 
-    public String getTitleColor() {
-        return titleColor;
-    }
-
-    public String getTitleFont() {
-        return font;
-    }
-
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public void setTitleColor(String color) {
-        this.titleColor = titleColor;
-    }
-
-    public void setTitleFont(String font) {
-        this.font = font;
-    }
-
-    public void setLineColor(String color) {
-        this.lineColor = lineColor;
-    }
-
-    public String getLineColor() {
-        return lineColor;
-    }
-
-    public String getThickness() {
-        return thickness;
-    }
-
-    public void setThickness(String thickness) {
-        this.thickness = thickness;
     }
 
     public void setPortletWindowState(PortletWindow portletWindow) {
@@ -145,7 +110,7 @@ public class PortletTitleBar extends BasePortletComponent {
 
     }
 
-    public void makeWindowLinks(GridSphereEvent event) {
+    public List makeWindowLinks(GridSphereEvent event) {
 
         SportletRequest req = event.getSportletRequest();
         SportletResponse res = event.getSportletResponse();
@@ -192,10 +157,10 @@ public class PortletTitleBar extends BasePortletComponent {
                 ErrorMessage += "Unable to create window state link: " + winState + "\n";
             }
         }
-        req.setAttribute(LayoutProperties.WINDOWSTATELINKS, stateLinks);
+        return stateLinks;
     }
 
-    public void makeModeLinks(GridSphereEvent event) {
+    public List makeModeLinks(GridSphereEvent event) {
 
         int i;
 
@@ -253,7 +218,7 @@ public class PortletTitleBar extends BasePortletComponent {
                 ErrorMessage += "Unable to create portlet mode link: " + portletModes[i] + "\n";
             }
         }
-        req.setAttribute(LayoutProperties.PORTLETMODELINKS, portletLinks);
+        return portletLinks;
     }
 
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
@@ -281,53 +246,62 @@ public class PortletTitleBar extends BasePortletComponent {
         Client client = req.getClient();
         title = settings.getTitle(req.getLocale(), client);
 
+        List modeLinks = null, windowLinks = null;
         if (portletClass != null) {
-            makeModeLinks(event);
+            modeLinks = makeModeLinks(event);
+            windowLinks = makeWindowLinks(event);
         }
 
         req.setMode(portletMode);
         req.setPreviousMode(previousMode);
 
-        try {
-            req.setAttribute(LayoutProperties.TITLE, title);
-            req.setAttribute(LayoutProperties.THICKNESS, thickness);
-            req.setAttribute(LayoutProperties.LINECOLOR, lineColor);
-            req.setAttribute(LayoutProperties.FONT, font);
-            req.setAttribute(LayoutProperties.TITLECOLOR, titleColor);
-            ctx.include("/WEB-INF/conf/layout/portlet-border-first.jsp", req, res);
-        } catch (ServletException e) {
-            ErrorMessage += "Unable to include JSP\n";
-        }
+        PrintWriter out = res.getWriter();
 
+        out.println("<div id=\"window-title\">");
+
+        // Output portlet mode icons
+        if (modeLinks != null) {
+            Iterator modesIt = modeLinks.iterator();
+            out.println("<span id=\"window-icon-left\">");
+            PortletModeLink mode;
+            while (modesIt.hasNext()) {
+                mode = (PortletModeLink)modesIt.next();
+                out.println("<a href=\"" +  mode.getModeHref() + "\"><img border=\"0\" src=\"" +  mode.getImageSrc() + "\" alt=\"" + mode.getAltTag() + "\"/></a>");
+            }
+            out.println("</span>");
+        }
 
         // Invoke doTitle of portlet whose action was perfomed
         if ((getComponentID() == event.getPortletComponentID()) && (portletClass != null)) {
             UserPortletManager userManager = event.getUserPortletManager();
             req.setPortletSettings(settings);
             try {
+                out.println("<span id=\"window-title-name\">");
                 userManager.doTitle(portletClass, req, res);
+                out.println("</span>");
                 title = "";
             } catch (PortletException e) {
                 ErrorMessage += "Unable to invoke doTitle on active portlet\n";
                 throw new PortletLayoutException("Unable to invoke doTitle on active portlet " + portletClass + "  " + COMPONENT_ID, e);
             }
+        } else {
+            out.println("<span id=\"window-title-name\">" + title + "</span>");
         }
 
-        if (portletClass != null) {
-            makeWindowLinks(event);
+        // Output window state icons
+        if (windowLinks != null) {
+            Iterator windowsIt = windowLinks.iterator();
+            out.println("<span id=\"window-icon-right\">");
+            PortletStateLink state;
+            while (windowsIt.hasNext()) {
+                state = (PortletStateLink)windowsIt.next();
+                out.println("<a href=\"" +  state.getStateHref() + "\"><img border=\"0\" src=\"" +  state.getImageSrc() + "\" alt=\"" + state.getAltTag() + "\"/></a>");
+            }
+            out.println("</span>");
         }
-
-        try {
-            req.setAttribute(LayoutProperties.TITLE, title);
-            req.setAttribute(LayoutProperties.THICKNESS, thickness);
-            req.setAttribute(LayoutProperties.LINECOLOR, lineColor);
-            req.setAttribute(LayoutProperties.FONT, font);
-            req.setAttribute(LayoutProperties.TITLECOLOR, titleColor);
-            ctx.include("/WEB-INF/conf/layout/portlet-border-last.jsp", req, res);
-        } catch (ServletException e) {
-            ErrorMessage += "Unable to include JSP\n";
-        }
+        out.println("</div>");
     }
+
 
     public boolean hasError() {
         if (ErrorMessage == null) return false;

@@ -32,27 +32,11 @@ public class PortletTab {
         this.title = title;
     }
 
-    public String getBackground() {
-        return background != null? background : parent.getBackground();
-    }
-
-    public void setBackground(String c) {
-        background = c;
-    }
-
-    public String getForeground() {
-        return foreground != null? foreground : parent.getForeground();
-    }
-
-    public void setForeground(String c) {
-        foreground = c;
-    }
-
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
 
-    public boolean getSelected() {
+    public boolean isSelected() {
         return selected;
     }
 

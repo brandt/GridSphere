@@ -177,15 +177,20 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
 
         ///// begin portlet frame
         PrintWriter out = res.getWriter();
-        out.println("<table width=\"" + width + "%\"  border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#FFFFFF\"><tr><td>");
-        out.println("<table width=\"100%\" border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#999999\">");
-        out.println("<tr><td width=\"100%\">");
+
+        out.println("<div id=\"window-main\">");
+
+        //////// OLD STUFF
+        //out.println("<table width=\"" + width + "%\"  border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#FFFFFF\"><tr><td>");
+        //out.println("<table width=\"100%\" border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#999999\">");
+        //out.println("<tr><td width=\"100%\">");
 
         titleBar.doRender(event);
 
-        out.println("</td></tr>");
-        out.println("<tr><td valign=\"top\" align=\"left\"><table width=\"100%\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\" bgcolor=");
-        out.println("\"" + bgColor + "\"<tr><td width=\"25%\" valign=\"center\">");
+        ////// OLD STUFF
+        //out.println("</td></tr>");
+        //out.println("<tr><td valign=\"top\" align=\"left\"><table width=\"100%\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\" bgcolor=");
+        //out.println("\"" + bgColor + "\"<tr><td width=\"25%\" valign=\"center\">");
 
         PortletErrorMessage error = (PortletErrorMessage)req.getAttribute(GridSphereProperties.PORTLETERROR);
         if ((error != null) && (error.getPortletID() == portletClass)) {
@@ -193,15 +198,18 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             out.println(error.getMessage());
         } else {
             if (renderPortlet) {
+                out.println("<div id=\"window-content\">");
                 UserPortletManager userPortletManager = event.getUserPortletManager();
                 try {
                     userPortletManager.service(portletClass, req, res);
                 } catch (PortletException e) {
                     out.println(e.getMessage());
                 }
+                out.println("</div>");
             }
         }
-        out.println("</tr></table></td></tr></table></td></tr></table>");
+        out.println("</div>");
+        //out.println("</tr></table></td></tr></table></td></tr></table>");
 
     }
 

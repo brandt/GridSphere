@@ -10,10 +10,6 @@ public interface PortletComponent extends PortletLifecycle {
 
     public void setVisible(boolean isVisible);
 
-    public String getBackground();
-
-    public String getForeground();
-
     public PortletBorder getPortletBorder();
 
     public PortletInsets getPortletInsets();
@@ -23,10 +19,6 @@ public interface PortletComponent extends PortletLifecycle {
     public String getHeight();
 
     public String getWidth();
-
-    public void setBackground(String bgColor);
-
-    public void setForeground(String ggColor);
 
     public void setPortletBorder(PortletBorder border);
 

@@ -21,7 +21,7 @@ public class PortletContainer implements PortletLifecycle {
     protected List components = new ArrayList();
 
     // The component ID's of each of the layout components
-    protected List portletComponents = new ArrayList();
+    protected List ComponentIdentifiers = new ArrayList();
 
     // The list of portlets a user has-- generally contained within a PortletFrame/PortletTitleBar combo
     protected List portlets = new ArrayList();
@@ -50,14 +50,14 @@ public class PortletContainer implements PortletLifecycle {
             compId.setClassName(cycle.getClass().getName());
             compId.setComponentID(list.size());
             list.add(compId);
-            portletComponents = cycle.init(list);
+            ComponentIdentifiers = cycle.init(list);
         }
-        System.err.println("Made a components list!!!! " + portletComponents.size());
-        for (int i = 0; i < portletComponents.size(); i++) {
-            ComponentIdentifier c = (ComponentIdentifier)portletComponents.get(i);
+        System.err.println("Made a components list!!!! " + ComponentIdentifiers.size());
+        for (int i = 0; i < ComponentIdentifiers.size(); i++) {
+            ComponentIdentifier c = (ComponentIdentifier)ComponentIdentifiers.get(i);
             System.err.println("id: " + c.getComponentID() + " : " + c.getClassName() +  " : " + c.hasPortlet());
         }
-        return portletComponents;
+        return ComponentIdentifiers;
     }
 
     public void login(GridSphereEvent event) {
@@ -92,7 +92,7 @@ public class PortletContainer implements PortletLifecycle {
         if (event.hasAction()) {
             // off by one calculations for array indexing (because all component id's are .size() which is
             // one more than we use to index the components
-            ComponentIdentifier compId = (ComponentIdentifier)portletComponents.get(event.getPortletComponentID() - 1);
+            ComponentIdentifier compId = (ComponentIdentifier)ComponentIdentifiers.get(event.getPortletComponentID() - 1);
             PortletLifecycle l = compId.getPortletLifecycle();
             if (l != null) {
                 l.actionPerformed(event);
@@ -104,17 +104,26 @@ public class PortletContainer implements PortletLifecycle {
         SportletResponse res = event.getSportletResponse();
         PrintWriter out = res.getWriter();
 
-
-
-
-        out.println("<html><head><meta HTTP-EQUIV=\"content-type\" CONTENT=\"text/html; charset=ISO-8859-1\">");
+        out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">");
+        out.println("<head>");
+        out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\"/>");
         out.println("<title>" + name + "</title>");
+        out.println("<link type=\"text/css\" href=\"css/default.css\" rel=\"STYLESHEET\"/>");
+        out.println("</head><body>");
+
+        // for css title
+        out.println("<div id=\"page-logo\">" + name + "</div>");
+        out.println("<div id=\"page-tagline\">Solving the World's Problems!</div>");
+
+        /////////////////////////////////////  OLD STUFF /////
+        //out.println("<html><head><meta HTTP-EQUIV=\"content-type\" CONTENT=\"text/html; charset=ISO-8859-1\">");
+        //out.println("<title>" + name + "</title>");
         Iterator it = components.iterator();
         while (it.hasNext()) {
             PortletRender action = (PortletRender)it.next();
             action.doRender(event);
         }
-        out.println("</html>");
+        out.println("</body></html>");
     }
 
     public void setPortletComponents(ArrayList components) {
@@ -126,7 +135,7 @@ public class PortletContainer implements PortletLifecycle {
     }
 
     public List getComponentIdentifierList() {
-        return portletComponents;
+        return ComponentIdentifiers;
     }
 
     public int getComponentID() {

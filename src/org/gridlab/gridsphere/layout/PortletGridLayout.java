@@ -55,10 +55,10 @@ public class PortletGridLayout extends BaseLayoutManager {
         int max = components.size();
         PortletComponent p = null;
 
-        int gwidth = 100 / cols;
+        //int gwidth = 100 / cols;
 
-        out.println("<table width=\"" + gwidth + "%\"  border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#FFFFFF\">");
-
+        //out.println("<table width=\"" + gwidth + "%\" border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#FFFFFF\">");
+        out.println("<table>");
         while ((i < rows) && (k < max)) {
 
             out.println("<tr>");
