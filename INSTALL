@@ -78,7 +78,7 @@ design document.
 Errors & Troubleshooting
 ------------------------
 
-If you have errors during the docbook transformation, such as "No DTM IDs are available" or other errors, you should check your version of Java (java -version). If you have JDK 1.4.1, it's likely the version of xalan.jar shipped with it is broken. The recommended solution is to get a recent xalan.jar from http://xml.apache.org/xalan-j/index.html to JAVA_HOME/jre/lib/endorsed (If you have an Apple with OS X then copy it to /System/Library/Frameworks/JavaVM.framework/Home/lib/endorsed/).
+If you have errors during the docbook transformation, such as "No DTM IDs are available" or other errors, you should check your version of Java (java -version). If you have JDK 1.4.1, it's likely the version of xalan.jar shipped with it is broken. The recommended solution is to get a recent xalan.jar from http://xml.apache.org/xalan-j/index.html and copy it to JAVA_HOME/jre/lib/endorsed (If you have an Apple with OS X then copy it to /System/Library/Frameworks/JavaVM.framework/Home/lib/endorsed/).
 
 Thanks,
 
