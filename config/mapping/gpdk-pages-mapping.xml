@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<!--
+
+    GPDK pages mapping file controls mappings between portlet actions, GPDK page objects
+    and presentation pages in the MVC model
+
+    $Id$
+
+-->
+<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
+<mapping>
+
+    <class name="org.gridlab.gridsphere.provider.gpdk.core.descriptor.PortletPageCollection">
+        <map-to xml="portlet-pages"/>
+        <field name="PortletPagesList" type="org.gridlab.gridsphere.provider.gpdk.core.descriptor.PortletPagesList" collection="vector">
+            <bind-xml name="portlet-page"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.provider.gpdk.core.descriptor.PortletPagesList">
+        <map-to xml="portlet-page"/>
+        <field name="PortletPages" type="org.gridlab.gridsphere.provider.gpdk.core.descriptor.PortletPageDefinition" collection="vector">
+            <bind-xml name="page"/>
+        </field>
+        <field name="ConcretePortlet" type="string">
+            <bind-xml name="concrete-portlet" node="attribute"/>
+        </field>
+        <field name="BasePageClassDir" type="string">
+            <bind-xml name="base-page-class" node="attribute"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.provider.gpdk.core.descriptor.PortletPageDefinition">
+        <field name="Action" type="string">
+            <bind-xml name="action"/>
+        </field>
+        <field name="Presentation" type="string">
+            <bind-xml name="presentation"/>
+        </field>
+        <field name="PageImplementation" type="string">
+            <bind-xml name="implementation"/>
+        </field>
+    </class>
+
+</mapping>
