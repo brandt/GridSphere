@@ -14,7 +14,7 @@ import java.util.List;
  * <p>
  * The <code>PortletFrameLayout</code> provides an abstract implementation of a generic
  * container
- * The <code>PortletGridLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>
+ * The <code>PortletTableLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>
  * that organizes portlets into a grid with a provided number of rows and columns.
  */
 public interface PortletLayout extends ComponentLifecycle {
