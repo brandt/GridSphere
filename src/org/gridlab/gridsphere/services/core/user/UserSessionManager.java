@@ -28,13 +28,13 @@ public class UserSessionManager implements PortletSessionListener {
     }
 
     public PortletSession getSession(User user) {
-        return (PortletSession)userSessions.get(user.getUserID());
+        return (PortletSession)userSessions.get(user.getID());
 
     }
 
     public void setSession(User user, PortletSession session) {
-        log.error("Setting session for user " + user.getUserID());
-        userSessions.put(user.getUserID(), session);
+        log.error("Setting session for user " + user.getID());
+        userSessions.put(user.getID(), session);
         sessionManager.addSessionListener(session.getId(), this);
     }
 
@@ -91,7 +91,7 @@ public class UserSessionManager implements PortletSessionListener {
     }
 
     public void removeSession(User user) {
-        log.error("Removing session for user " + user.getUserID());
+        log.error("Removing session for user " + user.getID());
         PortletSession s = getSession(user);
         if (s != null) s.invalidate();
         userSessions.remove(user);
