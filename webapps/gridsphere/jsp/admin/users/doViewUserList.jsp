@@ -8,17 +8,6 @@
 
 <ui:form>
 
-<ui:frame>
-        <ui:tablerow>
-            <ui:tablecell>
-                <ui:actionsubmit action="doNewUser" key="USER_NEW_USER"/>
-            </ui:tablecell>
-        </ui:tablerow>
-</ui:frame>
-
-<ui:panel>
-
-
     <ui:table sortable="true" zebra="true" maxrows="20">
                 <ui:tablerow header="true">
                     <ui:tablecell><ui:text key="USERNAME"/></ui:tablecell>
@@ -53,5 +42,12 @@
 %>
     </ui:table>
 
-</ui:panel>
+    <ui:frame>
+            <ui:tablerow>
+                <ui:tablecell>
+                    <ui:actionsubmit action="doNewUser" key="USER_NEW_USER"/>
+                </ui:tablecell>
+            </ui:tablerow>
+    </ui:frame>
+
 </ui:form>

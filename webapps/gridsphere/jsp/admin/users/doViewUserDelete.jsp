@@ -3,7 +3,9 @@
 <portletAPI:init/>
 <ui:form>
 <ui:hiddenfield beanId="userID"/>
-<ui:panel>
+
+<%@ include file="/jsp/admin/users/doViewUser.jsp" %>
+
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
@@ -13,7 +15,4 @@
         </ui:tablerow>
     </ui:frame>
 
-<%@ include file="/jsp/admin/users/doViewUser.jsp" %>
-
-</ui:panel>
 </ui:form>

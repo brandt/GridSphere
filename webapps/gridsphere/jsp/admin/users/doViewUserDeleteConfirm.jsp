@@ -2,9 +2,10 @@
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 <ui:form>
-<ui:panel>
 
-    <ui:frame>
+<%@ include file="/jsp/admin/users/doViewUser.jsp" %>
+
+<ui:frame>
         <ui:tablerow>
             <ui:tablecell>
                 <ui:actionsubmit action="doListUsers" value="List Users"/>
@@ -17,8 +18,5 @@
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
-
-<%@ include file="/jsp/admin/users/doViewUser.jsp" %>
-
-</ui:panel>
+    
 </ui:form>

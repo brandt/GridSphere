@@ -2,20 +2,11 @@
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 
-<ui:frame beanId="errorFrame"/>
+<ui:messagebox beanId="msg"/>
 
 <ui:form>
 <ui:hiddenfield beanId="userID"/>
 <ui:hiddenfield beanId="newuser"/>
-
-    <ui:frame>
-        <ui:tablerow>
-            <ui:tablecell>
-                <ui:actionsubmit action="doConfirmEditUser" key="USER_SAVE"/>
-                <ui:actionsubmit action="doCancelEditUser" key="USER_CANCEL_EDIT"/>
-            </ui:tablecell>
-        </ui:tablerow>
-    </ui:frame>
 
     <ui:frame>
 
@@ -88,7 +79,6 @@
         <ui:tablerow>
             <ui:tablecell width="200">
                 <ui:text key="PASSWORD"/>
-                <ui:text key="PASSWORD_ENTER_MSG"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:password beanId="password"/>
@@ -106,6 +96,15 @@
 
         
     </ui:frame>
-    </ui:form>
 
 
+<ui:frame>
+        <ui:tablerow>
+            <ui:tablecell>
+                <ui:actionsubmit action="doConfirmEditUser" key="USER_SAVE"/>
+                <ui:actionsubmit action="doCancelEditUser" key="USER_CANCEL_EDIT"/>
+            </ui:tablecell>
+        </ui:tablerow>
+    </ui:frame>
+
+</ui:form>
