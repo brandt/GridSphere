@@ -350,23 +350,13 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
                 String path = "themes" + File.separator + theme + File.separator + "images" + File.separator;
                 if (tab.isSelected()) {
-                    /*out.println("<td height=\"24\" width=\"6\" background=\"" + path + "tab-active-left.gif\">");
-                    //out.println("&nbsp;");
-                    out.println("</td>");*/
                     out.println("<td class=\"tabCell\">");
                     out.println( replaceBlanks(title));
-                    //out.println("<td height=\"24\" width=\"6\" background=\"" + path + "tab-active-right.gif\">");
-                    //out.println("&nbsp;");
                     out.println("</td>");
 
                 } else {
-                   // out.println("<td height=\"24\" width=\"6\" background=\"" + path + "tab-inactive-left.gif\">");
-                   // out.println("&nbsp;");
-                  // out.println("</td>");
                     out.println("<td class=\"tabCellDeact\">");
                     out.println("<a href=\"" + links[i] + "\">" + replaceBlanks(title) + "</a>");
-                  //  out.println("<td height=\"24\" width=\"6\" background=\"" + path + "tab-inactive-right.gif\">");
-                  //  out.println("&nbsp;");
                     out.println("</td>");
                 }
 
@@ -383,8 +373,6 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                 }
             }
         }
-
-        //out.println("<td>&nbsp;</td>");
         out.println("</tr></table>");
 
         if (!tabs.isEmpty()) {
@@ -408,17 +396,12 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         PrintWriter out = res.getWriter();
         PortletRole userRole = req.getRole();
 
-        //PortletTab parentTab = (PortletTab)this.getParentComponent();
-        //PortletThemeRegistry themeReg = PortletThemeRegistry.getInstance();
         String path = "themes" + File.separator + theme + File.separator + "images" + File.separator;
 
         // Render tabs titles get always the same componenttheme as the upper menu
         out.println("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\"><tr>");
-        //out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" bgcolor=\"#EEEEEE\"><tr>");
-
 
         PortletTab tab;
-
         List stabs = Collections.synchronizedList(tabs);
         synchronized (stabs) {
             for (int i = 0; i < stabs.size(); i++) {
@@ -429,18 +412,14 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                     String lang = req.getLocale().getLanguage();
                     String title = tab.getTitle(lang);
 
-                    
                     if (tab.isSelected()) {
                     	out.println("<td class=\"tabCellSubm\">");
-                        //out.println("<span class=\"tab-sub-active\">");
                         out.println("<a href=\"" + links[i] + "\">" + replaceBlanks(title) + "</a>");
                         out.println("</td>");
                     } else {
                     	out.println("<td class=\"tabCellDeactSubm\">");
-                        //out.println("<span class=\"tab-sub-inactive\">");
                         out.println("<a href=\"" + links[i] + "\">" + replaceBlanks(title) + "</a>");
                         out.println("</td>");
-                        //out.println("</span>");
                     }
                     out.println("</td>");
 
@@ -457,8 +436,6 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
             }
 
             out.println("</tr></table>");
-            //out.println("<td>"); //width=100
-            //out.println("&nbsp;</td></td></tr></table>");
             PortletTab selectedTab = getSelectedTab();
             if (selectedTab != null)
                 selectedTab.doRender(event);
@@ -479,10 +456,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         //out.println("<img height=\"3\" src=\"themes/" + theme + "/images/spacer.gif\"/>");
         // pane.append("<table><tr><td height=\"600px\">");
         pane.append("<!-- start tabbed pane --><table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
-        //      out.println("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
-
         pane.append("<tr >");
-
 
         PortletTab tab;
         for (int i = 0; i < tabs.size(); i++) {
@@ -496,24 +470,15 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
                 String path = "themes" + File.separator + theme + File.separator + "images" + File.separator;
                 if (tab.isSelected()) {
-                    pane.append("<td height=\"24\" width=\"6\" background=\"" + path + "tab-active-left.gif\">");
-                    pane.append("&nbsp;");
-                    pane.append("</td>");
+                    pane.append("<td height=\"24\" width=\"6\"><img src=\"" + path + "tab-active-left.gif\"></td>");
                     pane.append("<td height=\"24\" nowrap=\"nowrap\" background=\"" + path + "tab-active-middle.gif\">");
                     pane.append("<span class=\"tab-active\">" + replaceBlanks(title) + "</span>");
-                    pane.append("<td height=\"24\" width=\"6\" background=\"" + path + "tab-active-right.gif\">");
-                    pane.append("&nbsp;");
-                    pane.append("</td>");
-
+                    pane.append("<td height=\"24\" width=\"6\"><img src=\"" + path + "tab-active-right.gif\"></td>");
                 } else {
-                    pane.append("<td height=\"24\" width=\"6\" background=\"" + path + "tab-inactive-left.gif\">");
-                    pane.append("&nbsp;");
-                    pane.append("</td>");
+                    pane.append("<td height=\"24\" width=\"6\"><img src=\"" + path + "tab-inactive-left.gif\"></td>");
                     pane.append("<td height=\"24\" nowrap=\"nowrap\" background=\"" + path + "tab-inactive-middle.gif\">");
                     pane.append("<a class=\"tab-menu\" href=\"" + links[i] + "\"" + " onClick=\"this.href='" + links[i] + "&JavaScript=enabled'\">" + replaceBlanks(title) + "</a>");
-                    pane.append("<td height=\"24\" width=\"6\" background=\"" + path + "tab-inactive-right.gif\">");
-                    pane.append("&nbsp;");
-                    pane.append("</td>");
+                    pane.append("<td height=\"24\" width=\"6\"><img src=\"" + path + "tab-inactive-right.gif\"></td>");
                 }
 
                 //out.println("<td class=\"tab-empty\"></td>");
@@ -555,17 +520,13 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
         PortletRole userRole = req.getRole();
 
-        //PortletTab parentTab = (PortletTab)this.getParentComponent();
-        //PortletThemeRegistry themeReg = PortletThemeRegistry.getInstance();
         String path = "themes" + File.separator + theme + File.separator + "images" + File.separator;
         StringBuffer pane = new StringBuffer();
         // Render tabs titles get always the same componenttheme as the upper menu
         pane.append("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"tab-sub-pane" + theme + "\" width=\"100%\"><tr><td>");
         pane.append("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>");
 
-
         PortletTab tab;
-
         List stabs = Collections.synchronizedList(tabs);
         synchronized (stabs) {
             for (int i = 0; i < stabs.size(); i++) {
