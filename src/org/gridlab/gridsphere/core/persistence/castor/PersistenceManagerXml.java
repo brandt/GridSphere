@@ -39,11 +39,22 @@ public class PersistenceManagerXml  {
      */
     private PersistenceManagerXml() {}
 
+    /**
+     * Creates an instance of PersistenceManagerXml from a descriptor and mapping URL
+     * @param descriptorURL the descriptor location
+     * @param mappingURL the mapping location
+     */
     private PersistenceManagerXml(String descriptorURL, String mappingURL) {
         this.mappingURL = mappingURL;
         this.descriptorURL = descriptorURL;
     }
 
+    /**
+     * Returns an instance of a PersistenceManagerXML from a descriptor and mapping URL
+     * @param descriptorURL the descriptor location
+     * @param mappingURL the mapping location
+     * @return an instance of PersistenceManagerXml
+     */
     public static PersistenceManagerXml createPersistenceManager(String descriptorURL, String mappingURL) {
         return new PersistenceManagerXml(descriptorURL, mappingURL);
     }
