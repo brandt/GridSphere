@@ -6,44 +6,38 @@
 package org.gridlab.gridsphere.services.user.impl;
 
 import org.gridlab.gridsphere.core.mail.MailMessage;
-import org.gridlab.gridsphere.core.mail.MailUtils;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.*;
+import org.gridlab.gridsphere.portlet.PortletData;
+import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
-import org.gridlab.gridsphere.services.security.acl.AccessControlService;
-import org.gridlab.gridsphere.services.security.acl.impl.UserACL;
 import org.gridlab.gridsphere.services.user.AccountRequest;
 import org.gridlab.gridsphere.services.user.PermissionDeniedException;
 import org.gridlab.gridsphere.services.user.UserManagerService;
+import org.gridlab.gridsphere.services.security.AuthenticationException;
 
-import javax.mail.MessagingException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The UserManagerService manages users and account requests. Thru the UserManagerService
  * new portal accounts can be requested and granted or denied. Role objects can be retrieved
  * and removed.
  */
-public class UserManagerServiceProxy extends UserManagerServiceImpl {
+public class UserManagerServiceProxy implements PortletServiceProvider, UserManagerService {
 
     private UserManagerServiceImpl serviceImpl;
     private User user;
 
-    private UserManagerServiceProxy() {}
+    private UserManagerServiceProxy() {
+    }
 
     public UserManagerServiceProxy(PortletServiceProvider psp, User user) throws Exception {
         this.user = user;
         if (psp instanceof UserManagerServiceImpl) {
-            serviceImpl = (UserManagerServiceImpl)psp;
+            serviceImpl = (UserManagerServiceImpl) psp;
         } else {
             throw new Exception("Unable to create UserManagerServiceProxy");
         }
@@ -91,6 +85,16 @@ public class UserManagerServiceProxy extends UserManagerServiceImpl {
      */
     public List getAccountRequests() {
         return serviceImpl.getAccountRequests();
+    }
+
+    /**
+     * Returns the account request for the given user id
+     *
+     * @param user id of account request
+     * @return account request for given user id
+     */
+    public AccountRequest getAccountRequest(String userID) {
+        return serviceImpl.getAccountRequest(userID);
     }
 
     /**
@@ -224,19 +228,6 @@ public class UserManagerServiceProxy extends UserManagerServiceImpl {
         return serviceImpl.getAllUsers();
     }
 
-
-
-    /**
-     * Gets a user by his loginname
-     * @param name loginname
-     * @return requested user object
-     */
-    public User getUser(String name) {
-        return serviceImpl.getUser(name);
-
-    }
-
-
     /**
      * Gets a user by the unique ID
      * @param ID unique ID
@@ -260,8 +251,8 @@ public class UserManagerServiceProxy extends UserManagerServiceImpl {
      * @param userName
      * @return true/false if user exists/not exists
      */
-    public boolean existsUser(String userName) {
-        return serviceImpl.existsUser(userName);
+    public boolean userExists(String userName) {
+        return serviceImpl.userExists(userName);
     }
 
     /**
@@ -293,4 +284,32 @@ public class UserManagerServiceProxy extends UserManagerServiceImpl {
     public boolean isAdminUser(User user, PortletGroup group) {
         return serviceImpl.isAdminUser(user, group);
     }
+
+        /**
+     * Login a user with the given login name and password.
+     * Returns the associated user if login succeeds.
+     * Throws an AuthenticationException if login fails.
+     *
+     * @param String The login name or user id.
+     * @param String The login password.
+     * @return User The associated user.
+     * @throws AuthenticationException If login unsuccessful
+     */
+    public User login(String loginName, String loginPassword) throws AuthenticationException {
+        return serviceImpl.login(loginName, loginPassword);
+    }
+
+    /**
+     * Login a user with the given login parameters.
+     * Returns the associated user if login succeeds.
+     * Throws an AuthenticationException if login fails.
+     *
+     * @param Map The login parameters.
+     * @return User The associated user.
+     * @throws AuthenticationException If login unsuccessful
+     */
+    public User login(Map parameters) throws AuthenticationException {
+        return serviceImpl.login(parameters);
+    }
+
 }

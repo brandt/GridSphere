@@ -139,7 +139,7 @@ public class LoginServiceImpl
             ex.putInvalidParameter("username", "No username provided.");
             throw ex;
         }
-        user = this.userManager.getUser(username);
+        //user = this.userManager.getUser(username);
         if (user == null) {
             _log.debug("Unable to retrieve user " + username);
             AuthenticationException ex = new AuthenticationException();

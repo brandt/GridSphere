@@ -10,8 +10,10 @@ import org.gridlab.gridsphere.portlet.PortletData;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.core.mail.MailMessage;
+import org.gridlab.gridsphere.services.security.AuthenticationException;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The UserManagerService manages users and account requests. Thru the UserManagerService
@@ -126,18 +128,6 @@ public interface UserManagerService extends PortletService {
      * @param User The super user requesting the user object
      * @param String The user name or login id of the user in question
      * @throws PermissionDeniedException If approver is not a super user
-     public User createUser(User approver, String userName)
-            throws PermissionDeniedException;
-     */
-
-    /**
-     * Retrieves a user object with the given username from this service.
-     * Requires a user with the "super user" privileges, since this
-     * by-passes the normal login mechanism of retrieving a user object.
-     *
-     * @param User The super user requesting the user object
-     * @param String The user name or login id of the user in question
-     * @throws PermissionDeniedException If approver is not a super user
      */
     public User getUser(User approver, String userName)
             throws PermissionDeniedException;
@@ -165,6 +155,13 @@ public interface UserManagerService extends PortletService {
             throws PermissionDeniedException;
 
     /**
+     * Gets a user by the unique ID
+     * @param ID unique ID
+     * @return requested user
+     */
+    public User getUserByID(String ID);
+
+    /**
      * Return a list of all portal users
      *
      * @return a list containing all Role objects
@@ -172,28 +169,12 @@ public interface UserManagerService extends PortletService {
     public List getAllUsers();
 
     /**
-     * Retrieves a user object with the given username from this service.
-     *
-     * @param String The user name or login id of the user in question
-     * @throws PermissionDeniedException If approver is not a super user
-     */
-    public User getUser(String userName);
-
-    /**
-     * Retrieves a user object with the given username from this service.
-     *
-     * @param String The user name or login id of the user in question
-     * @throws PermissionDeniedException If approver is not a super user
-     */
-    public User getUserByID(String id);
-
-    /**
      * Checks to see if account exists for a user
      *
      * @param userID the user login ID
      * @return true if the user exists, false otherwise
      */
-    public boolean existsUser(String userName);
+    public boolean userExists(String userName);
 
     /**
      * checks if the user is super user
@@ -210,4 +191,30 @@ public interface UserManagerService extends PortletService {
      * @return true/false if he is an admin
      */
     public boolean isAdminUser(User user, PortletGroup group);
+
+    /**
+     * Login a user with the given login name and password.
+     * Returns the associated user if login succeeds.
+     * Throws an AuthenticationException if login fails.
+     *
+     * @param String The login name or user id.
+     * @param String The login password.
+     * @return User The associated user.
+     * @throws AuthenticationException If login unsuccessful
+     */
+    public User login(String loginName, String loginPassword)
+            throws AuthenticationException;
+
+    /**
+     * Login a user with the given login parameters.
+     * Returns the associated user if login succeeds.
+     * Throws an AuthenticationException if login fails.
+     *
+     * @param Map The login parameters.
+     * @return User The associated user.
+     * @throws AuthenticationException If login unsuccessful
+     */
+    public User login(Map parameters)
+            throws AuthenticationException;
+
 }

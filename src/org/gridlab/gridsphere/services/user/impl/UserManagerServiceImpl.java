@@ -23,12 +23,18 @@ import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 import org.gridlab.gridsphere.services.security.acl.impl.UserACL;
 import org.gridlab.gridsphere.services.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.security.password.PasswordBean;
+import org.gridlab.gridsphere.services.security.AuthenticationException;
+import org.gridlab.gridsphere.services.security.AuthenticationModule;
+import org.gridlab.gridsphere.services.security.impl.PasswordAuthenticationModule;
 import org.gridlab.gridsphere.services.user.AccountRequest;
 import org.gridlab.gridsphere.services.user.PermissionDeniedException;
 import org.gridlab.gridsphere.services.user.UserManagerService;
 
 import javax.mail.MessagingException;
 import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+import java.util.Iterator;
 
 /**
  * The UserManagerService manages users and account requests. Thru the UserManagerService
@@ -50,8 +56,20 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
     private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
 
+    private List authenticationModules = new Vector();
+
+    private static final UserManagerServiceImpl instance = new UserManagerServiceImpl();
+    private static int numClients = 0;
+    private static int MAX_CLIENTS = 1;
+
+    // Only single instance allowed of this class
+    public static UserManagerServiceImpl getInstance() {
+       numClients++;
+       if (numClients <= MAX_CLIENTS) return instance;
+       return null;
+    }
+
     public UserManagerServiceImpl() {
-        super();
         jdoSUImpl = SportletUserImpl.class.getName();
         jdoARImpl = AccountRequestImpl.class.getName();
         jdoUserACL = UserACL.class.getName();
@@ -69,6 +87,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         initServices(config);
         initRootUser(config);
+        initAuthenticationModules();
     }
 
     private void initServices(PortletServiceConfig config)
@@ -256,7 +275,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         return getAccountRequestImpl(id);
     }
 
-    public boolean existsAccountRequest(String id) {
+    public boolean accountRequestExists(String id) {
         return (getAccountRequest(id) != null);
     }
 
@@ -282,7 +301,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public void approveAccountRequest(User approver, AccountRequest request, MailMessage mailMessage)
             throws PermissionDeniedException {
-        if ( ! existsAccountRequest(request.getID()) ) {
+        if ( ! accountRequestExists(request.getID()) ) {
             throw new PermissionDeniedException("Account request has not been submitted");
         }
         //@todo check if a user with that userid already exists!
@@ -314,7 +333,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         User user = null;
         String username= request.getUserID();
         // now need to check wheter new account or an existing should be modified
-        if (existsUser(username)) {
+        if (userExists(username)) {
             // update user and delete request
             user = modifyExistingUser((AccountRequestImpl)request, (SportletUser) getUser(username));
             try {
@@ -382,7 +401,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             try {
                 pm.delete(request);
                 // only delete the requested groups when the user did not exist before!
-                if (!existsUser(userid)) {
+                if (!userExists(userid)) {
                     pm.deleteList(command);
                 }
             } catch (PersistenceManagerException e) {
@@ -582,18 +601,9 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     }
 
     /**
-     * Gets a user by his loginname
-     * @param name loginname
-     * @return requested user object
-     */
-    public User getUser(String name) {
-        return getSportletUser(name);
-    }
-
-    /**
      * Used internally by other methods in this class
      */
-    private SportletUserImpl getSportletUser(String name) {
+    private User getUser(String name) {
         String command =
                 "select u from "+jdoSUImpl+" u where u.UserID=\"" + name + "\"";
         return selectUser(command);
@@ -651,7 +661,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @todo check/pass up the exception
      */
     public void removeUser(String userName) {
-        if (existsUser(userName)) {
+        if (userExists(userName)) {
             User user = getUser(userName);
             try {
                 List groups = aclService.getGroups(user);
@@ -678,7 +688,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @param userName
      * @return true/false if user exists/not exists
      */
-    public boolean existsUser(String userName) {
+    public boolean userExists(String userName) {
         String command =
                 "select user from "+jdoSUImpl+" user where UserID=\"" + userName + "\"";
         SportletUser user = null;
@@ -716,7 +726,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public boolean isSuperUser(User user) {
         try {
-            return aclService.hasRoleInGroup(user, PortletGroup.SUPER, PortletRole.SUPER);
+            return aclService.hasRoleInGroup(user, SportletGroup.SUPER, PortletRole.SUPER);
         } catch (PortletServiceException e) {
             log.error("Exception :" + e);
             return false;
@@ -736,5 +746,96 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             log.error("Exception :" + e);
             return false;
         }
+    }
+
+
+    private void initAuthenticationModules() {
+        authenticationModules.add(new PasswordAuthenticationModule());
+    }
+
+    /* Why are these needed? JN
+
+    public List getAuthenticationModules() {
+        return this.authenticationModules;
+    }
+
+    public AuthenticationModule getAuthenticationModule(String name) {
+        Iterator modules = this.authenticationModules.iterator();
+        while (modules.hasNext()) {
+            AuthenticationModule module = (AuthenticationModule)modules.next();
+            if (module.getName().equals(name)) {
+                return module;
+            }
+        }
+        return null;
+    }
+    */
+
+    public User login(String username, String password)
+            throws AuthenticationException {
+        User user = getUser(username);
+        AuthenticationException ex = null;
+        Iterator modules = this.authenticationModules.iterator();
+        while (modules.hasNext()) {
+            AuthenticationModule module = (AuthenticationModule)modules.next();
+            try {
+               module.authenticate(user, password);
+            } catch (AuthenticationException e) {
+                if (ex == null) {
+                    ex = e;
+                }
+            }
+        }
+        if (ex != null) {
+            throw ex;
+        }
+        return user;
+    }
+
+    public User login(Map parameters)
+            throws AuthenticationException {
+        User user = getAuthUser(parameters);
+        AuthenticationException ex = null;
+        Iterator modules = this.authenticationModules.iterator();
+        while (modules.hasNext()) {
+            AuthenticationModule module = (AuthenticationModule)modules.next();
+            try {
+               module.authenticate(user, parameters);
+            } catch (AuthenticationException e) {
+                if (ex == null) {
+                    ex = e;
+                }
+            }
+        }
+        if (ex != null) {
+            throw ex;
+        }
+        return user;
+    }
+
+    private User getAuthUser(Map parameters)
+            throws AuthenticationException {
+        String username = (String)parameters.get("username");
+        return getAuthUser(username);
+    }
+
+    private User getAuthUser(String username)
+            throws AuthenticationException {
+        log.debug("Attempting to retrieve user " + username);
+        User user = null;
+        if (username == null) {
+            AuthenticationException ex = new AuthenticationException();
+            ex.putInvalidParameter("username", "No username provided.");
+            throw ex;
+        }
+        user = getUser(username);
+        if (user == null) {
+            log.debug("Unable to retrieve user " + username);
+            AuthenticationException ex = new AuthenticationException();
+            ex.putInvalidParameter("username", "Invalid username provided.");
+            throw ex;
+        }
+        log.debug("Successfully retrieved user " + username);
+        return user;
     }
 }
