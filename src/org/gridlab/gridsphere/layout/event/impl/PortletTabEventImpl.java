@@ -37,6 +37,15 @@ public class PortletTabEventImpl implements PortletTabEvent {
     }
 
     /**
+     * Returns true if this event actually triggered an action
+     *
+     * @return true if this event actually triggered an action
+     */
+    public boolean hasAction() {
+        return (action == null) ? false : true;
+    }
+
+    /**
      * Returns the portlet tab event action
      *
      * @return the portlet tab event action

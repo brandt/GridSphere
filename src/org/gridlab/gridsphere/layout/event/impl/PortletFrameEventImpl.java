@@ -33,6 +33,10 @@ public class PortletFrameEventImpl implements PortletFrameEvent {
         this.id = id;
     }
 
+    public boolean hasAction() {
+        return (action == null) ? false : true;
+    }
+
     /**
      * Returns the type of PortletFrame action received
      *
