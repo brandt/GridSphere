@@ -5,8 +5,6 @@ Version: $Id$
 */
 
 .tab-pane {
-   padding-top: 5px;
-   padding-left: 10px;
    font-family: verdana, arial, sans-serif;
    font-size:12px;
    font-weight:normal;
@@ -15,7 +13,6 @@ Version: $Id$
 
 .tab-empty {
     width: 5px;
-
     border-bottom: 1px solid black;
 }
 
@@ -32,7 +29,7 @@ Version: $Id$
 }
 
 .tab-active {
-   /*padding: 5px; */
+   padding: 5px;
    padding-bottom: 1px;
    margin-bottom: 0px;
    color:white;
@@ -43,7 +40,6 @@ Version: $Id$
 
 
 .tab-inactive {
-   /*padding: 5px;*/
    margin-bottom: 0px;
    padding-bottom: 0px;
    background-color: #7997de;
@@ -76,7 +72,6 @@ a.tab-menu:active {
 
 
 .tab-sub-active {
-
     border: 1px solid #397df3;
     font-weight: normal;
     color: white;
