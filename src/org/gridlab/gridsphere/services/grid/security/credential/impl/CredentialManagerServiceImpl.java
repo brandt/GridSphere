@@ -32,8 +32,8 @@ public class CredentialManagerServiceImpl
         implements PortletServiceProvider, CredentialManagerService {
 
     private static PortletLog _log = SportletLog.getInstance(CredentialManagerServiceImpl.class);
-    private PortletServiceAuthorizer authorizer = null;
     private GlobusCredentialManager credentialManager = GlobusCredentialManager.getInstance();
+    private PortletServiceAuthorizer authorizer = null;
 
     private CredentialManagerServiceImpl() {
     }

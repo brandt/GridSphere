@@ -36,7 +36,7 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
      * Throws AuthorizationException if supplied user not a super user.
      */
     public void authorizeSuperUser() throws PortletServiceAuthorizationException {
-        if (userManager.hasSuperRole(user)) {
+        if (!userManager.hasSuperRole(user)) {
             throw new PortletServiceAuthorizationException(SUPER_MESSAGE);
         }
     }
@@ -63,8 +63,8 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
      */
     public void authorizeSuperOrAdminUser(PortletGroup group)
             throws AuthorizationException {
-        if (userManager.hasSuperRole(this.user) ||
-            userManager.hasAdminRoleInGroup(this.user, group)) {
+        if (!userManager.hasSuperRole(this.user) &&
+            !userManager.hasAdminRoleInGroup(this.user, group)) {
             throw new PortletServiceAuthorizationException(SUPER_OR_ADMIN_MESSAGE);
         }
     }
@@ -78,8 +78,8 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
      */
     public void authorizeSuperOrSameUser(User user)
             throws AuthorizationException {
-        if (userManager.hasSuperRole(this.user) ||
-            this.user.equals(user)) {
+        if (!userManager.hasSuperRole(this.user) &&
+            !this.user.equals(user)) {
             throw new PortletServiceAuthorizationException(SUPER_OR_SAME_MESSAGE);
         }
     }
@@ -93,9 +93,9 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
      */
     public void authorizeSuperAdminOrSameUser(User user, PortletGroup group)
              throws AuthorizationException {
-        if (userManager.hasSuperRole(this.user) ||
-            userManager.hasAdminRoleInGroup(this.user, group) ||
-            this.user.equals(user)) {
+        if (!userManager.hasSuperRole(this.user) &&
+            !userManager.hasAdminRoleInGroup(this.user, group) &&
+            !this.user.equals(user)) {
             throw new PortletServiceAuthorizationException(SUPER_ADMIN_OR_SAME_MESSAGE);
         }
     }

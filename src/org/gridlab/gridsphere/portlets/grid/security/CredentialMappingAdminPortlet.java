@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class CredentialMappingAdminPortlet extends AbstractPortlet {
+
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         getPortletLog().info("Exiting init()");
