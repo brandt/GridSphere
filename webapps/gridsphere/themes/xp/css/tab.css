@@ -1,0 +1,125 @@
+/*
+Part of the Gridsphere XP theme
+Author: Oliver Wehrens (wehrens@aei.mpg.de)
+Version: $Id$
+*/
+
+.tab-pane {
+   width: 100%;
+   padding-top: 10px;
+   font-family: verdana, arial, sans-serif;
+   font-size:12px;
+   font-weight:normal;
+   background-color:#ffffff;
+}
+
+.tab-empty {
+    width: 10px;
+    padding-left: 5px;
+}
+
+
+.tab-bar {
+   width: 100%;
+   background-color: #397df3;
+   height: 1px;
+   border: none;
+}
+
+.tab-active {
+   padding: 5px;
+   padding-bottom: 1px;
+   margin-bottom: 0px;
+   color:white;
+   background-color: #397df3;
+   font-size:12px;
+   border: 1px solid #397df3;
+}
+
+
+.tab-inactive {
+   padding: 5px;
+   margin-bottom: 0px;
+   padding-bottom: 0px;
+   background-color: #ebebeb;
+   border: 1px solid #397df3;
+   font-size:12px;
+}
+
+a.tab-menu {
+  text-decoration:none;
+}
+
+a.tab-menu:link {
+  color: #000000;
+}
+
+a.tab-menu:visited {
+  color: #000000;
+}
+
+a.tab-menu:hover {
+  color: #000000;
+}
+
+a.tab-menu:active {
+  color: #000000;
+}
+
+/*  subpane */
+
+
+.tab-sub-active {
+    color: #ffffff;
+    border: 1px solid white;
+    padding-right: 2px;
+    padding-bottom: 1px;
+    padding-top: 0px;
+    padding-left: 2px;
+
+}
+
+.tab-sub-inactive {
+    color: #000000;
+    padding-right: 2px;
+    padding-bottom: 1px;
+    padding-top: 0px;
+    padding-left: 2px;
+}
+
+.tab-sub-pane {                                                                                                                                             5
+   width: 100%;
+   background-color: #397df3;
+   padding-left: 2px;
+   font-size:12px;
+   padding-top: 3px;
+   padding-bottom: 3px;
+}
+
+
+a.tab-sub-menu {
+    text-decoration:none;
+}
+
+a.tab-sub-menu:link {
+  color: #ebebeb;
+  font-size:12px;
+}
+
+a.tab-sub-menu:visited {
+  color: #ebebeb;
+  font-size:12px;
+}
+
+a.tab-sub-menu:hover {
+  color: #ebebeb;
+  font-size:12px;
+}
+
+a.tab-sub-menu:active {
+  color: #ebebeb;
+  font-size:12px;
+}
+
+
+

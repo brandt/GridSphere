@@ -1,0 +1,54 @@
+/*
+Part of the Gridsphere XP theme
+Author: Oliver Wehrens (wehrens@aei.mpg.de)
+Version: $Id$
+*/
+
+
+.window-main {
+   width: 100%;
+}
+
+.window-title {
+  background-color: #7997de;
+  color: #000000;
+  font-size: 12px;
+  height: 15px;
+  width: 100%;
+  border-top: 1px solid #7997de;
+  border-right: 1px solid #7997de;
+  border-left: 1px solid #7997de;
+}
+
+
+.window-title-name {
+  color: white;
+  text-align: center;
+  font-weight: bold;
+}
+
+.window-icon-right {
+   text-align: right;
+   width: 40px;
+   float: right;
+}
+
+.window-icon-left {
+    text-align: left;
+    float: left;
+    width: 60px;
+}
+
+.window-content-minimize {
+
+}
+
+.window-content {
+  background-color: #eeeeee;
+  padding: 5px;
+  border-right: 1px solid #7997de;
+  border-left: 1px solid #7997de;
+  border-bottom: 1px solid #7997de;
+}
+
+

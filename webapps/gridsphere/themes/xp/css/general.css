@@ -1,0 +1,66 @@
+/*
+Part of the Gridsphere XP theme
+Author: Oliver Wehrens (wehrens@aei.mpg.de)
+Version: $Id$
+*/
+
+/* ANCHOR tag                                   */
+
+
+a {
+  color: #000000;
+  font-family: verdana, arial, sans-serif;
+  font-size:12px;
+  text-decoration: none;
+  /*font-weight:bold;  */
+}
+a:link {
+  color: #0D70C6;
+  text-decoration: bold;
+}
+a:visited       {
+  color: #0D70C6;
+  text-decoration: none;
+}
+a:active {
+  color: #FFCC66;
+}
+a:hover {
+  color: #FFCC66;
+}
+
+
+/************************************************/
+/* default settings                             */
+
+body {
+  font-family: verdana, arial, sans-serif;
+  font-size:12px;
+  font-weight:normal;
+  margin: 0px;
+  background-color: #FFFFFF;
+  color: #000000;
+}
+
+
+/************************************************/
+/* table tag                                    */
+table {
+    empty-cells: show;
+    font-size: inherit;           /* important belive it or not */
+}
+
+
+
+/************************************************/
+/* input tag                                    */
+
+input[type=submit] {
+  margin-top: 2px;
+}
+
+input, select, textarea {
+  font-size: inherit;
+  font-family: courier, courier new, monospaced;
+}
+
