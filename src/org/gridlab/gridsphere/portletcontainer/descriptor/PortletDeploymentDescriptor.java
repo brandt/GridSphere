@@ -87,7 +87,7 @@ public class PortletDeploymentDescriptor {
      * @throws PortletDeploymentDescriptorException if the PortletDeploymentDescriptor cannot be created
      */
     public void load(String url, String mapping) throws PortletDeploymentDescriptorException  {
-        PersistenceManagerXml pmx = new PersistenceManagerXml();
+        PersistenceManagerXml pmx = PersistenceManagerXml.getInstance();
 
         // where is the portlet.xml ?
         pmx.setConnectionURL(url);

@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.core.persistence.ConfigurationException;
 import org.gridlab.gridsphere.core.persistence.RestoreException;
+import org.gridlab.gridsphere.core.persistence.PersistenceException;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerXml;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletConfig;
@@ -72,7 +73,7 @@ public class PortletLayoutDescriptor {
      * @throws PortletDeploymentDescriptorException if the PortletDeploymentDescriptor cannot be created
      */
     public void load(String url, String mapping) throws PortletLayoutDescriptorException  {
-        PersistenceManagerXml pmx = new PersistenceManagerXml();
+        PersistenceManagerXml pmx = PersistenceManagerXml.getInstance();
 
         // where is the portlet.xml ?
         pmx.setConnectionURL(url);
@@ -93,9 +94,26 @@ public class PortletLayoutDescriptor {
     }
 
     /**
-     * Save the portlet deployment descriptor to portlet.xml
+     * Save the layout deployment descriptor to layout.xml
      * <b>not implemented yet</b>
      */
-    public void save() {}
+    public void save(String url, String mapping) throws PortletLayoutDescriptorException {
+        PersistenceManagerXml pmx = PersistenceManagerXml.getInstance();
+
+        // where is the portlet.xml ?
+        pmx.setConnectionURL(url);
+
+        // set the path to the mapping file
+        pmx.setMappingFile(mapping);
+
+
+        // try to get it
+        try {
+             pmx.update(pc);
+        } catch (PersistenceException e) {
+            log.error("PersistenceException: ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") ", e);
+            throw new PortletLayoutDescriptorException("Unable to save: "+e.getMessage());
+        }
+    }
 
 }
