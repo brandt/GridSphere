@@ -700,6 +700,8 @@ Copyright:
     <target name="start-tomcat">
         <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
             <jvmarg value="-Dcatalina.home=${env.CATALINA_HOME}"/>
+            <jvmarg value="-Xdebug"/>
+            <jvmarg value="-Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n"/>
             <arg value="start"/>
             <classpath>
                 <pathelement path="${java.home}/../lib/tools.jar"/>
@@ -757,7 +759,7 @@ Copyright:
             <fileset dir="${gridsphere.build}/reports">
                 <include name="TEST-*.xml"/>
             </fileset>
-            <report format="noframes" todir="${gridsphere.build}/reports/html"/>
+            <report format="noframes" todir="${gridsphere.build}/reports/html" styledir="${env.ANT_HOME}/etc" />
         </junitreport>
     </target>
 
