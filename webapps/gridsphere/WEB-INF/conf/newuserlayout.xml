@@ -136,18 +136,7 @@
         <title>Examples</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab>
-                <title>Demos</title>
-                <portlet-panel>
-                    <grid-layout>
-                        <portlet-frame>
-                            <name>DemoPortlet</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.examples.DemoPortlet.1</portlet-class>
-                        </portlet-frame>
-                    </grid-layout>
-                </portlet-panel>
-            </portlet-tab>
-            <portlet-tab>
-                <title>Hello</title>
+                <title>Hello World!</title>
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
@@ -165,6 +154,17 @@
                         <portlet-frame>
                             <name>HelloWorld</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.examples.HelloWorld.2</portlet-class>
+                        </portlet-frame>
+                    </grid-layout>
+                </portlet-panel>
+            </portlet-tab>
+            <portlet-tab>
+                <title>Demos</title>
+                <portlet-panel>
+                    <grid-layout>
+                        <portlet-frame>
+                            <name>DemoPortlet</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.examples.DemoPortlet.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>
