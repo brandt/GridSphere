@@ -37,8 +37,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     private List listeners = new ArrayList();
     private PortletErrorFrame errorFrame = new PortletErrorFrame();
     private boolean transparent = false;
-    private String innerPadding = "0";
-    private String outerPadding = "0";
+    private String innerPadding = "";
+    private String outerPadding = "";
     private String roleString = "GUEST";
     private PortletRole requiredRole = PortletRole.GUEST;
 
