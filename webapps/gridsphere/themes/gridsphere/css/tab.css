@@ -45,6 +45,7 @@ Version: $Id$
    color: #ffffff;
    font-size:10px;
    margin-left: 10px;
+   border-top: 1px solid black;
    border-bottom: 1px solid black;
 }
 
