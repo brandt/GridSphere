@@ -11,11 +11,10 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portletcontainer.descriptor.*;
+import org.gridlab.gridsphere.core.persistence.PersistenceException;
+import org.exolab.castor.types.AnyNode;
 
-import java.util.Properties;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-import java.util.List;
+import java.util.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -46,10 +45,12 @@ public class DescriptorTest extends TestCase {
         String mappingFile = System.getProperty("user.dir") + "/webapps/WEB-INF/conf/portlet-mapping.xml";
         try {
             pdd = new PortletDeploymentDescriptor(portletFile, mappingFile);
-        } catch (Exception e) {
+        } catch (IOException e) {
+            fail("IO error unmarshalling " + portletFile + " using " + mappingFile + " : " + e.getMessage());
+        } catch (PortletDeploymentDescriptorException e) {
             fail("Unable to unmarshall " + portletFile + " using " + mappingFile + " : " + e.getMessage());
         }
-        List defs = pdd.getPortletDef();
+        Vector defs = pdd.getPortletDef();
 
         // assertEquals(expected, actual)
 
@@ -57,25 +58,43 @@ public class DescriptorTest extends TestCase {
         assertEquals(defs.size(), 1);
 
         PortletDefinition def = (PortletDefinition)defs.get(0);
-        PortletApplication portletApp = def.getPortletApp();
-        List concreteApps = def.getConcreteApps();
+        PortletApp portletApp = def.getPortletApp();
+        Vector concreteApps = def.getConcreteApps();
 
         // we have two concrete portlet apps
         assertEquals(concreteApps.size(), 2);
         ConcretePortletApplication concreteOne = (ConcretePortletApplication)concreteApps.get(0);
         ConcretePortletApplication concreteTwo = (ConcretePortletApplication)concreteApps.get(1);
-        System.err.println(portletApp.getUID());
-        assertEquals("org.gridlab.gridsphere.portlets.core.HelloWorld.666", portletApp.getUID());
-        assertEquals("Hello World Portlet Application", portletApp.getName());
+        System.err.println(portletApp.getID());
+        assertEquals("org.gridlab.gridsphere.portlets.core.HelloWorld.666", portletApp.getID());
+        assertEquals("Hello World", portletApp.getPortletName());
+        assertEquals("hello", portletApp.getServletName());
+        CacheInfo c = portletApp.getCacheInfo();
+        assertEquals(120, c.getExpires());
+        assertEquals("true", c.getShared());
+        AllowsWindowStates winstatelist = portletApp.getAllowsWindowStates();
+        String[] winstates = winstatelist.getWindowStatesAsStrings();
+        assertEquals(2, winstates.length);
+        assertEquals("maximized", winstates[0]);
+        assertEquals("minimized", winstates[1]);
 
-        PortletInfo portletInfo = portletApp.getPortletInfo();
-        assertEquals("WEB-INF/web.xml#Servlet_1902648613", portletInfo.getHref());
-        assertEquals("Portlet_1", portletInfo.getId());
-        assertEquals("Hello World", portletInfo.getName());
+        SupportsModes smodes = portletApp.getSupportsModes();
+        List mlist = smodes.getMarkupList();
+        assertEquals(2, mlist.size());
+        Markup m = (Markup)mlist.get(0);
+        assertEquals("html", m.getName());
+        List modes = m.getPortletModes();
+        assertEquals(4, modes.size());
+        AnyNode mod = (AnyNode)modes.get(0);
+        assertEquals("view", mod.getLocalName());
+
+        m = (Markup)mlist.get(1);
+        assertEquals("wml", m.getName());
+
 
         // Check concrete one portal data
         assertEquals("Concrete Hello World - Portlet Sample #1", concreteOne.getName());
-        assertEquals("org.gridlab.gridsphere.portlets.core.HelloWorld.666.2", concreteOne.getUID());
+        assertEquals("org.gridlab.gridsphere.portlets.core.HelloWorld.666.2", concreteOne.getID());
 
         List contextList = concreteOne.getContextParamList();
         assertEquals(contextList.size(), 2);
@@ -89,7 +108,6 @@ public class DescriptorTest extends TestCase {
         assertEquals("mistress@domain.com", two.getParamValue());
 
         ConcretePortletInfo onePI = concreteOne.getConcretePortletInfo();
-        assertEquals("Portlet_1902648613", onePI.getHref());
         assertEquals("Hello World", onePI.getName());
         assertEquals("en", onePI.getDefaultLocale());
 
@@ -133,7 +151,7 @@ public class DescriptorTest extends TestCase {
 
         // Check concrete two portal data
         assertEquals(concreteTwo.getName(), "Concrete Hello World - Portlet Sample #2");
-        assertEquals(concreteTwo.getUID(), "org.gridlab.gridsphere.portlets.core.HelloWorld.666.4");
+        assertEquals(concreteTwo.getID(), "org.gridlab.gridsphere.portlets.core.HelloWorld.666.4");
 
         configList = concreteTwo.getContextParamList();
         assertEquals(configList.size(), 1);
@@ -143,7 +161,6 @@ public class DescriptorTest extends TestCase {
         assertEquals(one.getParamValue(), "secondguy@some.com");
 
         onePI = concreteTwo.getConcretePortletInfo();
-        assertEquals(onePI.getHref(), "Portlet_1902648615");
         assertEquals(onePI.getName(), "Hello World");
         assertEquals(onePI.getDefaultLocale(), "en");
 
@@ -177,6 +194,33 @@ public class DescriptorTest extends TestCase {
         one = (ConfigParam)configList.get(0);
         assertEquals("Portlet Master", one.getParamName());
         assertEquals("secondguy@some.com", one.getParamValue());
+
+        /*
+        Hashtable store = new Hashtable();
+        store.put("beezle", "yo");
+        store.put("buzzle", "yea");
+        Enumeration enum = store.keys();
+        Vector list = new Vector();
+        while (enum.hasMoreElements()) {
+            String k = (String)enum.nextElement();
+            System.err.println(k);
+            String value = (String)store.get(k);
+            ConfigParam parms = new ConfigParam(k, value);
+            list.add(parms);
+        }
+
+        concreteOne.setUID("whose your daddy?");
+        concreteOne.setContextParamList(list);
+        portletApp.setName("yo dude");
+        pdd.setPortletApplication(portletApp);
+        pdd.setConcretePortletApplication(concreteOne);
+        try {
+            pdd.save();
+        } catch (Exception e) {
+            System.err.println("Unable to save SportletApplicationSettings: " + e.getMessage());
+        }
+        */
+
     }
 
 
