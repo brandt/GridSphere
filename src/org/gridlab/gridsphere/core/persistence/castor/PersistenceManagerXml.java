@@ -51,7 +51,7 @@ public class PersistenceManagerXml implements PersistenceManagerInterface  {
      *
      * @return filename
      */
-    private String getConnectionURL() {
+    public String getConnectionURL() {
         return URL;
     }
 
