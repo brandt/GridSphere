@@ -3,6 +3,7 @@
 
 <portletAPI:init/>
 
-<gs:actionlink action="logout" label="logout"/>
+<% String logout = (String)request.getAttribute("org.gridlab.gridsphere.portlets.core.LogoutPortlet.title"); %>
+<gs:actionlink action="logout" label="<%= logout %>"/>
 
 

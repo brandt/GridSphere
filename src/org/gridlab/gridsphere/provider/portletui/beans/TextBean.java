@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-public class TextBean extends BaseBeanImpl implements TagBean {
+public class TextBean extends BaseBean implements TagBean {
 
     protected String label = new String();
 

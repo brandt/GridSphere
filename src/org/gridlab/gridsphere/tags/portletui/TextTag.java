@@ -40,22 +40,20 @@ public class TextTag extends BaseBeanTag {
             tb = new TextBean(text);
         }
 
-        store(getBeanKey(), tb);
+        if (!beanId.equals("")) {
+            store(getBeanKey(), tb);
+        }
+        //debug();
 
-        debug();
-
-        TagBeanContainer tc = (TagBeanContainer)pageContext.getAttribute("_container");
-        if (tc != null) {
-            System.err.println("in text tag-- adding myself to container");
-            tc.addTagBean(tb);
-            pageContext.setAttribute("_container", tc);
+        ContainerTag containerTag = (ContainerTag)getParent();
+        if (containerTag != null) {
+            containerTag.addTagBean(tb);
         } else {
-
             try {
                 JspWriter out = pageContext.getOut();
                 out.print(text);
             } catch (Exception e) {
-                throw new JspTagException(e.getMessage());
+                throw new JspException(e.getMessage());
             }
         }
         return EVAL_BODY_INCLUDE;

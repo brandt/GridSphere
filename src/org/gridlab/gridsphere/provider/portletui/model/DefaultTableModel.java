@@ -4,23 +4,48 @@
  */
 package org.gridlab.gridsphere.provider.portletui.model;
 
-import org.gridlab.gridsphere.provider.portletui.beans.TableRowBean;
-import org.gridlab.gridsphere.provider.portletui.beans.BaseBeanImpl;
-import org.gridlab.gridsphere.provider.portletui.beans.TagBean;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.provider.portletui.beans.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Iterator;
+import java.util.*;
 
-public class DefaultTableModel extends BaseBeanImpl implements TagBean {
+public class DefaultTableModel extends BaseBean implements TagBean {
 
-    private List dataList = new ArrayList();
+    protected List dataList = new ArrayList();
 
     public DefaultTableModel() {}
 
     public DefaultTableModel(List dataList) {
         this.dataList = dataList;
+    }
+
+    public DefaultTableModel(Map paramMap) {
+        TableRowBean tableRow = null;
+        TableCellBean cellbean = null;
+        Set set = paramMap.keySet();
+        Iterator it = set.iterator();
+        while (it.hasNext()) {
+            tableRow = new TableRowBean();
+            String key = (String)it.next();
+
+            Object obj = paramMap.get(key);
+            if (obj instanceof List) {
+
+            }
+            if (obj instanceof String) {
+                System.err.println("its an instanceif String!!!");
+                String value = (String)paramMap.get(key);
+                TextBean tb1 = new TextBean(key);
+                cellbean = new TableCellBean();
+                cellbean.addTagBean(tb1);
+                tableRow.addTableCellBean(cellbean);
+                tb1 = new TextBean(" " + value);
+                cellbean = new TableCellBean();
+                cellbean.addTagBean(tb1);
+                tableRow.addTableCellBean(cellbean);
+                dataList.add(tableRow);
+            }
+            store(this);
+        }
     }
 
     public void addTableRowBean(TableRowBean rowBean) {
@@ -33,14 +58,18 @@ public class DefaultTableModel extends BaseBeanImpl implements TagBean {
         store(this);
     }
 
-    public List getDataList() {
+    public void setTableRowBeans(List rowBeans) {
+        dataList = rowBeans;
+        store(this);
+    }
+
+    public List getTableRowBeans() {
         return dataList;
     }
 
     public String toString() {
         StringBuffer sb = new StringBuffer();
         Iterator it = dataList.iterator();
-
         while (it.hasNext()) {
             System.err.println("printing DTM rows");
             TableRowBean trb = (TableRowBean)it.next();

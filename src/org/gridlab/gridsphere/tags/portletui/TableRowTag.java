@@ -5,6 +5,9 @@ import org.gridlab.gridsphere.provider.portletui.beans.TableRowBean;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 
 import javax.servlet.jsp.JspException;
+import javax.swing.table.TableModel;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
@@ -12,25 +15,30 @@ import javax.servlet.jsp.JspException;
  */
 public class TableRowTag extends BaseBeanTag {
 
+    protected TableRowBean trb = null;
+
+    public void setTableRowBean(TableRowBean tableRowBean) {
+        trb = tableRowBean;
+    }
+
+    public TableRowBean getTableRowBean() {
+        return trb;
+    }
+
     public int doStartTag() throws JspException {
+        trb = new TableRowBean();
         System.err.println("in TableRowTag:doStartTag");
-        TableRowBean trb = new TableRowBean();
-        pageContext.setAttribute("_tablerow", trb);
-        return super.doStartTag();
+        return EVAL_BODY_INCLUDE;
     }
 
     public int doEndTag() throws JspException {
         System.err.println("in TableRowTag:doEndTag");
-
-        DefaultTableModel tm = (DefaultTableModel)pageContext.getAttribute("_tablemodel");
-        if (tm != null) {
-            System.err.println("setting tablerow in tablemodel");
-            TableRowBean trb = (TableRowBean)pageContext.getAttribute("_tablerow");
-            if (trb != null) {
-                tm.addTableRowBean(trb);
-                pageContext.setAttribute("_tablemodel", tm);
-            }
+        TableTag tableTag = (TableTag)getParent();
+        if (tableTag != null) {
+            DefaultTableModel tableModel = tableTag.getTableModel();
+            tableModel.addTableRowBean(trb);
         }
-        return super.doEndTag();
+
+        return EVAL_PAGE;
     }
 }

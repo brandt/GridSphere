@@ -9,16 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 
-public class TableCellBean extends BaseBeanImpl {
-
-    public List container = new ArrayList();
+public class TableCellBean extends TagBeanContainer implements TagBean {
 
     public TableCellBean() {
-
-    }
-
-    public void addTagBean(TagBean tagBean) {
-        container.add(tagBean);
+        super();
     }
 
     public String toString() {

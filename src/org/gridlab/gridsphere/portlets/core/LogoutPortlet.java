@@ -14,6 +14,8 @@ import java.io.IOException;
 public class LogoutPortlet extends AbstractPortlet {
 
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
+        String title = getPortletSettings().getTitle(request.getLocale(), null);
+        request.setAttribute("org.gridlab.gridsphere.portlets.core.LogoutPortlet.title", title);
         getPortletConfig().getContext().include("/jsp/logout.jsp", request, response);
     }
 

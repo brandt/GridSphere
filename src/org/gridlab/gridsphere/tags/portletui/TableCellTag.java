@@ -13,34 +13,44 @@ import java.util.Iterator;
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-public class TableCellTag extends BaseBeanTag {
+public class TableCellTag extends ContainerTag {
+
+    protected TableCellBean cellBean = null;
+
+    public void setCellBean(TableCellBean cellBean) {
+        this.cellBean = cellBean;
+    }
+
+    public TableCellBean getCellBean() {
+        return cellBean;
+    }
 
     public int doStartTag() throws JspException {
+        list.clear();
+        cellBean = new TableCellBean();
         System.err.println("in TableCellTag:doStartTag");
-        TagBeanContainer tc = new TagBeanContainer();
-        pageContext.setAttribute("_container", tc);
-        return super.doStartTag();
+        TableRowTag rowTag = (TableRowTag)getParent();
+        if (rowTag == null) return SKIP_BODY;
+        return EVAL_BODY_INCLUDE;
     }
 
     public int doEndTag() throws JspException {
         System.err.println("in TableCellTag:doEndTag");
-        TagBeanContainer tc = (TagBeanContainer)pageContext.getAttribute("_container");
-        TableRowBean trb = (TableRowBean)pageContext.getAttribute("_tablerow");
-        if ((tc != null) && (trb != null)) {
-
+        TableRowTag rowTag = (TableRowTag)getParent();
+        if (rowTag != null) {
+            TableRowBean trb = rowTag.getTableRowBean();
             System.err.println("setting tablecells in tablerow");
-            List tagbeans = tc.getTagBeans();
+            List tagbeans = getTagBeans();
             Iterator it = tagbeans.iterator();
-            TableCellBean cellBean = new TableCellBean();
+
             while (it.hasNext()) {
                 TagBean tagBean = (TagBean)it.next();
                 System.err.println("adding tagbean " + tagBean.toString());
                 cellBean.addTagBean(tagBean);
             }
             trb.addTableCellBean(cellBean);
-            pageContext.setAttribute("_tablerow", trb);
-
+            rowTag.setTableRowBean(trb);
         }
-        return super.doEndTag();
+        return EVAL_BODY_INCLUDE;
     }
 }

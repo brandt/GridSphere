@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.TagSupport;
+import javax.servlet.jsp.tagext.BodyTagSupport;
 import java.util.Enumeration;
 
 public abstract class BaseBeanTag extends TagSupport {
@@ -21,14 +22,6 @@ public abstract class BaseBeanTag extends TagSupport {
 
     public void setBeanId(String beanId) {
         this.beanId = beanId;
-    }
-
-    public int doStartTag() throws JspException {
-        return EVAL_BODY_INCLUDE;
-    }
-
-    public int doEndTag() throws JspException {
-        return EVAL_PAGE;
     }
 
     protected String getBeanKey() {

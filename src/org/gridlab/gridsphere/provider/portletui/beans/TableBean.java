@@ -2,16 +2,13 @@
  * @author <a href="oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
  * @version $Id$
  */
-
 package org.gridlab.gridsphere.provider.portletui.beans;
-
 
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 
+public class TableBean extends BaseBean implements TagBean {
 
-public class TableBean extends BaseBeanImpl implements TagBean {
-
-    private DefaultTableModel defaultModel = null;
+    private DefaultTableModel defaultModel = new DefaultTableModel();
 
     public TableBean() {}
 
@@ -19,11 +16,11 @@ public class TableBean extends BaseBeanImpl implements TagBean {
         this.defaultModel = defaultModel;
     }
 
-    public void setDefaultTableModel(DefaultTableModel defaultModel) {
+    public void setTableModel(DefaultTableModel defaultModel) {
         this.defaultModel = defaultModel;
     }
 
-    public DefaultTableModel getDefaultTableModel() {
+    public DefaultTableModel getTableModel() {
         return defaultModel;
     }
 

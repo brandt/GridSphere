@@ -9,11 +9,12 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class TableRowBean extends BaseBeanImpl {
+public class TableRowBean extends BaseBean {
 
     public List rowList = new ArrayList();
 
     public TableRowBean() {
+        super();
     }
 
     public void addTableCellBean(TableCellBean tableCellBean) {

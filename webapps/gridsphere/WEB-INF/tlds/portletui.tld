@@ -20,7 +20,7 @@
     <attribute>
         <name>name</name>
         <required>true</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
         <name>value</name>
@@ -37,12 +37,36 @@
             Creates a portlet action link
         </description>
         <attribute>
-            <name>label</name>
-            <required>false</required>
+            <name>link</name>
+            <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
             <name>action</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+      </tag>
+
+  <tag>
+        <name>actionsubmit</name>
+        <tag-class>org.gridlab.gridsphere.tags.portletui.ActionSubmitTag</tag-class>
+        <body-content>none</body-content>
+        <description>
+            Creates a submit button
+        </description>
+        <attribute>
+            <name>action</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>name</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>value</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -58,12 +82,12 @@
       <attribute>
         <name>text</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
         <name>beanId</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
@@ -77,25 +101,11 @@
     <attribute>
         <name>beanId</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
   <tag>
-    <name>tablemodel</name>
-    <tag-class>org.gridlab.gridsphere.tags.portletui.TableModelTag</tag-class>
-    <body-content>JSP</body-content>
-    <description>
-        Shows table model
-    </description>
-      <attribute>
-        <name>beanId</name>
-        <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
-    </attribute>
-  </tag>
-
-    <tag>
     <name>tablerow</name>
     <tag-class>org.gridlab.gridsphere.tags.portletui.TableRowTag</tag-class>
     <body-content>JSP</body-content>
@@ -105,7 +115,7 @@
         <attribute>
         <name>beanId</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
@@ -120,7 +130,7 @@
       <attribute>
         <name>beanId</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
@@ -134,17 +144,17 @@
     <attribute>
         <name>method</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
         <name>name</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
         <name>action</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 

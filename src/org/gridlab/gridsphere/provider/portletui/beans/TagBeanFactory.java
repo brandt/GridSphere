@@ -13,16 +13,15 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 public class TagBeanFactory {
 
     private static PortletLog log = SportletLog.getInstance(TagBeanFactory.class);
+    private static TagBeanFactory instance = new TagBeanFactory();
+
     private TagBeanFactory() {}
 
-    /**
-     * Gets back the prev. saved bean with the modifications from the userinterface.  Returns null
-     * if none object was found.
-     * @param id name of the bean
-     * @return updated elementbean
-     */
-    public static TagBean createTagBean(ActionEvent event, String id) {
-        PortletRequest req = event.getPortletRequest();
+    public static TagBeanFactory getInstance() {
+        return instance;
+    }
+
+    public static TagBean getTagBean(PortletRequest req, String id) {
         TagBean bean = (TagBean)req.getSession(true).getAttribute(getBeanKey(req, id));
         if (bean != null) {
             bean.setPortletRequest(req);
@@ -31,8 +30,7 @@ public class TagBeanFactory {
         return bean;
     }
 
-    public static TagBean createNewTagBean(Class tagBean, ActionEvent event, String id) {
-        PortletRequest req = event.getPortletRequest();
+    public static TagBean createTagBean(Class tagBean, PortletRequest req, String id) {
         TagBean bean = null;
         try {
             bean = (TagBean) Class.forName(tagBean.getName()).newInstance();

@@ -18,23 +18,52 @@ import java.util.Iterator;
  */
 public class TableTag extends BaseBeanTag {
 
+    protected TableBean tableBean = null;
+
+    public void setTableModel(DefaultTableModel tableModel) {
+        this.tableBean.setTableModel(tableModel);
+    }
+
+    public DefaultTableModel getTableModel() {
+        return tableBean.getTableModel();
+    }
+
+    public void setTableBean(TableBean tableBean) {
+        this.tableBean = tableBean;
+    }
+
+    public TableBean getTableBean() {
+        return tableBean;
+    }
+
     public int doStartTag() throws JspException {
-        TableBean tb = new TableBean();
-        pageContext.setAttribute("_table", tb);
+        if (!beanId.equals("")) {
+            tableBean = (TableBean)pageContext.getSession().getAttribute(getBeanKey());
+
+            if (tableBean != null) {
+                System.err.println("Found a non-null tablebean");
+                return SKIP_BODY;
+            }
+        }
+        System.err.println("creating new tablebean");
+        tableBean = new TableBean();
         return EVAL_BODY_INCLUDE;
     }
 
     public int doEndTag() throws JspException {
         // do all the rendering for this table
+        System.err.println("in TableTag:doEndTag");
+
+        if (!beanId.equals("")) {
+            System.err.println("setting tablemodel in table");
+            System.err.println("!!!!!!!!!!   setting tablemodel in session ");
+            store(getBeanKey(), tableBean);
+        }
+
         try {
             JspWriter out = pageContext.getOut();
-            TableBean table = (TableBean)pageContext.getAttribute("_table");
-            if (table != null) {
-                System.err.println("printing table " + table.toString());
-                out.print(table.toString());
-            } else {
-                System.err.println("no  table found to print!!!!");
-            }
+            System.err.println("printing table " + tableBean.toString());
+            out.print(tableBean.toString());
         } catch (Exception e) {
             throw new JspTagException(e.getMessage());
         }
