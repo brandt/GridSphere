@@ -19,6 +19,7 @@ import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.util.*;
+import java.net.URLEncoder;
 
 public class UserLayoutPortlet extends ActionPortlet {
 
@@ -123,6 +124,7 @@ public class UserLayoutPortlet extends ActionPortlet {
             PortletTab tab = (PortletTab) it.next();
             if (tab.getLabel().equals(label)) {
                 tab.setTitle(lang, name);
+                tab.setLabel(URLEncoder.encode(name));
             }
         }
         pane.save();
@@ -133,6 +135,7 @@ public class UserLayoutPortlet extends ActionPortlet {
             PortletTab tab = (PortletTab) it.next();
             if (tab.getLabel().equals(label)) {
                 tab.setTitle(lang, name);
+                tab.setLabel(URLEncoder.encode(name));
             }
         }
         layoutMgr.reloadPage(event.getPortletRequest());
