@@ -416,7 +416,12 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 GroupRequest groupRequest = this.aclManagerService.createGroupEntry();
                 groupRequest.setUser(user);
                 groupRequest.setGroup(selectedGroup);
-                groupRequest.setRole(PortletRole.USER);
+
+                if (aclManagerService.hasSuperRole(req.getUser())) {
+                    groupRequest.setRole(PortletRole.ADMIN);
+                } else {
+                    groupRequest.setRole(PortletRole.USER);
+                }
 
                 this.aclManagerService.saveGroupEntry(groupRequest);
 
