@@ -9,6 +9,6 @@ import org.gridlab.gridsphere.portlet.service.PortletService;
 
 public interface LoginUserModule extends PortletService {
 
-    public User getUserByUserName(String loginName);
+    public User getLoggedInUser(String loginName);
 
 }

@@ -158,8 +158,8 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
             throw new AuthorizationException("Username or password is blank");
         }
 
-        User user = activeLoginModule.getUserByUserName(loginName);
-        //User user = userManager.getUserByUserName(loginName);
+        User user = activeLoginModule.getLoggedInUser(loginName);
+
         if (user == null) throw new AuthorizationException("User " + loginName + " does not exist");
 
         Collections.sort(activeAuthModules);

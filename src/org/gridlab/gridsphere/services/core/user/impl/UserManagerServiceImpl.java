@@ -206,6 +206,10 @@ public class UserManagerServiceImpl implements UserManagerService, PortletServic
         return userManager.getUserByUserName(loginName);
     }
 
+    public User getLoggedInUser(String loginName) {
+        return userManager.getLoggedInUser(loginName);
+    }
+
     /**
       * Checks to see if account exists for a user
       *

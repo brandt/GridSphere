@@ -27,10 +27,7 @@ import org.gridlab.gridsphere.services.core.user.AccountRequest;
 import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 public class GridSphereUserManager implements UserManagerService, AccessControlManagerService {
 
@@ -440,6 +437,14 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
 
     public User getUser(String id) {
         return getSportletUserImpl(id);
+    }
+
+    public User getLoggedInUser(String loginName) {
+        SportletUserImpl u = getSportletUserImplByLoginName(loginName);
+        long now = Calendar.getInstance().getTime().getTime();
+        u.setLastLoginTime(now);
+        saveSportletUserImpl(u);
+        return u;
     }
 
     public User getUserByUserName(String loginName) {

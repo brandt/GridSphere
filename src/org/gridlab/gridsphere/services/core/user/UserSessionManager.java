@@ -30,7 +30,7 @@ public class UserSessionManager implements PortletSessionListener {
     }
 
     public void addSession(User user, PortletSession session) {
-        log.error("Setting session for user " + user.getID());
+        log.debug("Setting session for user " + user.getID());
         List sessions = null;
         if (userSessions.containsKey(user.getID())) {
             sessions = (List)userSessions.get(user.getID());
