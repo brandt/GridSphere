@@ -35,6 +35,17 @@ public interface PortletURI {
     public void addParameter(String name, String value);
 
     /**
+     * Adds the given action to this URI. The action is a portlet-defined implementation of the portlet action
+     * interface. It can carry any information. How the information is recovered should the next request be for
+     * this URI is at the discretion of the portlet container.
+     *
+     * Unless the ActionListener interface is implemented at the portlet this action will not be delivered.
+     *
+     * @param action the portlet action
+     */
+    public void addAction(PortletAction action);
+
+    /**
      * Returns the complete URI as a string. The string is ready to be embedded in markup.
      * Once the string has been created, adding more parameters or other listeners will not modify the string.
      * You have to call this method again, to create an updated string.
