@@ -67,6 +67,24 @@ public interface PortletWindow {
             this.state = state;
         }
 
+        public static final PortletWindow.State toPortletWindowState(String windowState) throws Exception {
+            if (windowState.equalsIgnoreCase("NORMAL")) {
+                return PortletWindow.State.NORMAL;
+            } else if (windowState.equalsIgnoreCase("MINIMIZED")) {
+                return PortletWindow.State.MINIMIZED;
+            } else if (windowState.equalsIgnoreCase("MAXIMIZED")) {
+                return PortletWindow.State.MAXIMIZED;
+            } else if (windowState.equalsIgnoreCase("CLOSED")) {
+                return PortletWindow.State.CLOSED;
+            } else if (windowState.equalsIgnoreCase("DETACHED")) {
+                return PortletWindow.State.DETACHED;
+            } else if (windowState.equalsIgnoreCase("RESIZING")) {
+                return PortletWindow.State.RESIZING;
+            } else {
+                throw new Exception("Unable to create PortletWindow corresponding to: " + windowState);
+            }
+        }
+
         public String toString() {
             if (state == NORMAL_STATE) {
                 return "NORMAL";

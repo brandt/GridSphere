@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -123,7 +124,8 @@ public class SportletResponse implements PortletResponse {
      * </li></ul>
      */
     protected void addURIParameters() {
-        sportletURI.addParameter(GridSphereProperties.PORTLETID, (String)req.getAttribute(GridSphereProperties.PORTLETID));
+        //sportletURI.addParameter(GridSphereProperties.PORTLETID, (String)req.getAttribute(GridSphereProperties.PORTLETID));
+        sportletURI.addParameter(GridSphereProperties.COMPONENT_ID, (String)req.getAttribute(GridSphereProperties.COMPONENT_ID));
     }
 
     /**

@@ -6,7 +6,7 @@ package org.gridlab.gridsphere.portlet;
 
 import org.gridlab.gridsphere.portlet.impl.PortletProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletConfig;
-import org.gridlab.gridsphere.portlet.impl.SportletRequest;
+import org.gridlab.gridsphere.portlet.impl.SportletRequestImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletResponse;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApp;
 import org.gridlab.gridsphere.event.ActionEvent;
@@ -92,6 +92,7 @@ public abstract class Portlet extends HttpServlet
         }
 
         public static Portlet.Mode getInstance(String mode) {
+            if (mode == null) return null;
             if (mode.equalsIgnoreCase(EDIT.toString())) {
                 return EDIT;
             } else if (mode.equalsIgnoreCase(VIEW.toString())) {
@@ -339,7 +340,7 @@ public abstract class Portlet extends HttpServlet
         log.info("in Portlet: service(HttpServletRequest, HttpServletResponse)");
 
         // create portlet request and response objects
-        PortletRequest portletRequest = new SportletRequest(request);
+        PortletRequest portletRequest = new SportletRequestImpl(request);
         PortletResponse portletResponse = new SportletResponse(response, request);
 
         String method = (String)request.getAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD);

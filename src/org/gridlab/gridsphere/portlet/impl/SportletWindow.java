@@ -17,7 +17,9 @@ public class SportletWindow implements PortletWindow {
 
     private PortletWindow.State state = null;
 
-    private SportletWindow() {}
+    public SportletWindow(PortletWindow.State state) {
+        this.state = state;
+    }
 
     public SportletWindow(String windowState) throws Exception {
         if (windowState.equalsIgnoreCase(PortletWindow.State.NORMAL.toString())) {
