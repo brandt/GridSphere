@@ -10,6 +10,10 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import javax.servlet.http.HttpSession;
 
+/**
+ * <code>BaseElementBean</code> is an implementation of the TagBean interface.
+ * <code>BaseElementBean</code> provides the basic functionality for all ui beans.
+ */
 public abstract class BaseElementBean implements TagBean {
 
     protected String id = new String();

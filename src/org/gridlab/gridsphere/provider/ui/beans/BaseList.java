@@ -8,7 +8,7 @@ public interface BaseList extends TagBean {
 
     /**
      * Returns the name of the list.
-     * @return the name of the list
+     * @return name of the list
      */
     public String getName();
 

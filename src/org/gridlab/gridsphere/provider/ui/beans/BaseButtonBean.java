@@ -5,6 +5,9 @@
 
 package org.gridlab.gridsphere.provider.ui.beans;
 
+/**
+ * The <code>BaseButtonBean</code> provides basic functionality for ButtonBeans.
+ */
 public class BaseButtonBean extends NameValueDisableBean implements Button {
 
     protected String type = new String();
@@ -34,7 +37,8 @@ public class BaseButtonBean extends NameValueDisableBean implements Button {
     }
 
     /**
-     * Returns the tagname of the button
+     * Returns the tagname of the button.
+     * @return returns the name of the tag
      */
     public String getTagName() {
         return "gssubmit:";

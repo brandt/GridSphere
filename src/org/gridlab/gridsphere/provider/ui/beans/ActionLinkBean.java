@@ -1,8 +1,6 @@
 /**
  * @author <a href="oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
  * @version $Id$
- *
- * The Class provides
  */
 package org.gridlab.gridsphere.provider.ui.beans;
 
@@ -37,10 +35,17 @@ public class ActionLinkBean extends TextBean implements Link {
         this.label = label;
     }
 
+    /**
+     * Sets the action for the link.
+     */
     public void setAction(String action) {
         this.action = action;
     }
 
+    /**
+     * Gets the action for the link.
+     * @return returns the action
+     */
     public String getAction() {
         return action;
     }
@@ -99,7 +104,7 @@ public class ActionLinkBean extends TextBean implements Link {
 
     public String toString() {
         if (link == null) createLink();
-        return "<a href='" + link + "'/>" + label + "</a>";
+        return "<a href=\"" + link + "\"/>" + label + "</a>";
     }
 
 }
