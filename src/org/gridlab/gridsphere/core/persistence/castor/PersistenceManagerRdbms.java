@@ -34,7 +34,6 @@ public class PersistenceManagerRdbms {
     protected transient static PortletLog log = SportletLog.getInstance(PersistenceManagerRdbms.class);
 
     private static PersistenceManagerRdbms instance = new PersistenceManagerRdbms();
-    protected String Query = new String();
     protected boolean databaseCreated = false;
     protected JDO jdo = null;
     protected String Url = null;
@@ -72,34 +71,6 @@ public class PersistenceManagerRdbms {
     }
 
     /**
-     * Sets the connection URL
-     *
-     * @param url
-     *
-     */
-    public void setConnectionURL(String url) {
-        Url = url;
-    }
-
-    /**
-     * gets the query for the database
-     *
-     * @return returns the query string or null if not set
-     */
-    public String getQuery() {
-        return Query;
-    }
-
-    /**
-     * sets the query for the database
-     *
-     * @param query sets the query for the database
-     */
-    public void setQuery(String query) {
-        Query = query;
-    }
-
-    /**
      * Creates an object to the database
      *
      * @param object to be marshalled
@@ -123,9 +94,7 @@ public class PersistenceManagerRdbms {
             log.error("PersistenceException " + e);
             throw new PersistenceManagerException("Persistence Error " + e);
         }
-
     }
-
 
     /**
      * Updates a given object
@@ -149,28 +118,14 @@ public class PersistenceManagerRdbms {
         }
     }
 
-
     /**
      * restores objects from storage
      *
-     * @param query String object containing OQL query
      * @throws ConfigurationException if configurations are not set
      * @throws RestoreException if restore failes for some reason
      * @return list of objects from OQL query
      */
     public List restoreList(String query) throws PersistenceManagerException {
-        setQuery(query);
-        return restoreList();
-    }
-
-    /**
-     * restores objects from storage
-     *
-     * @throws ConfigurationException if configurations are not set
-     * @throws RestoreException if restore failes for some reason
-     * @return list of objects from OQL query
-     */
-    public List restoreList() throws PersistenceManagerException {
         OQLQuery oql = null;
         Database db = null;
         QueryResults results = null;
@@ -179,7 +134,7 @@ public class PersistenceManagerRdbms {
         try {
             db = jdo.getDatabase();
             db.begin();
-            oql = db.getOQLQuery(getQuery());
+            oql = db.getOQLQuery(query);
             results = oql.execute();
             while (results.hasMore()) {
                 list.add(results.next());
@@ -207,21 +162,14 @@ public class PersistenceManagerRdbms {
      * @throws RestoreException if restore failed
      * @return requested object defined by setQuery()
      */
-    public Object restoreObject() throws PersistenceManagerException {
-        List resultList = restoreList();
+    public Object restoreObject(String query) throws PersistenceManagerException {
+        List resultList = restoreList(query);
         if (resultList.size() > 0) {
             return resultList.get(0);
         } else {
             return null;
         }
     }
-
-    public Object restoreObject(String oql) throws PersistenceManagerException {
-        this.setQuery(oql);
-        return restoreObject();
-
-    }
-
 
     /**
      * deletes a the given object from storage
