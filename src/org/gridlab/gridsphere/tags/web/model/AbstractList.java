@@ -1,12 +1,11 @@
-/**
+/*
  * @author <a href="oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
  * @version $Id$
  */
 
 package org.gridlab.gridsphere.tags.web.model;
 
-public interface ComboBoxModel extends ListModel {
+public abstract class AbstractList extends List implements AbstractListModel {
 
-	public Object getSelectedItem();
-    public void setSelectedItem(Object object);
+
 }

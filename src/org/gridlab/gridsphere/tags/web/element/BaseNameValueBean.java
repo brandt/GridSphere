@@ -5,10 +5,9 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public abstract class BaseNameValueBean extends BaseElementBean implements NameValue {
+public abstract class BaseNameValueBean extends NameBean implements Valueable, Updateable {
 
     protected String value;
-    protected String name;
     protected boolean disabled;
 
     public BaseNameValueBean() {
@@ -49,23 +48,6 @@ public abstract class BaseNameValueBean extends BaseElementBean implements NameV
      */
     public String getValue() {
         return value;
-    }
-
-    /**
-     * Sets the name of the bean.
-     * @param name the name of the bean
-     */
-    public void setName(String name) {
-        this.name = name;
-        this.id = name;
-    }
-
-    /**
-     * Gets the name of the bean.
-     * @return the name of the bean
-     */
-    public String getName() {
-        return name;
     }
 
     /**

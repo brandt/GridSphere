@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface NameValue extends Element {
+public interface Valueable extends Nameable {
 
     /**
      * Sets the value of the bean.
@@ -20,18 +20,6 @@ public interface NameValue extends Element {
     public String getValue();
 
     /**
-     * Sets the name of the bean
-     * @param name name of the bean
-     */
-    public void setName(String name);
-
-    /**
-     * Gets the name of the bean.
-     * @return the name of the bean
-     */
-    public String getName();
-
-    /**
      * Return true/false if the bean is disabled.
      * @return true/false if the bean is disabled
      */
@@ -43,10 +31,5 @@ public interface NameValue extends Element {
      */
     public void setDisabled(boolean flag);
 
-    /**
-     * Updates the values of the bean.
-     * @param values array of strings representaing the updates
-     */
-    public void update(String[] values);
 
 }

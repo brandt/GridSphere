@@ -9,7 +9,16 @@ import java.util.ArrayList;
 
 public class List implements ListModel {
 
+    public List() {
+        super();
+    }
+
     ArrayList list = new ArrayList();
+
+    public List(ArrayList list) {
+        super();
+        this.list = list;
+    }
 
     public Object getElementAt(int index) {
         return list.get(index);

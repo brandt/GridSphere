@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.tags.web.element.Element;
 import org.gridlab.gridsphere.tags.web.element.BaseNameValueBean;
 import org.gridlab.gridsphere.tags.web.element.CheckBoxBean;
+import org.gridlab.gridsphere.tags.web.element.NameBean;
 
 
 import javax.servlet.http.HttpSession;
@@ -102,7 +103,7 @@ public class FormEventImpl implements FormEvent {
 
     public Object getElementBean(String name, PortletRequest request) {
         HttpSession session = request.getSession();
-        BaseNameValueBean bean = (BaseNameValueBean)session.getAttribute(name);
+        NameBean bean = (NameBean)session.getAttribute(name);
 
         if (checkParameterName("gstag:"+bean.getName())) {
             String[] values = request.getParameterValues("gstag:"+bean.getName());
