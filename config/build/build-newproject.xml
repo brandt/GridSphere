@@ -32,7 +32,7 @@
     <!-- =================================================================== -->
     <!-- Creates a new portlet project  in projects directory                -->
     <!-- =================================================================== -->
-    <target name="new-project" depends="setenv" description="Creates a new portlet project in projects directory">
+    <target name="new-project" description="Creates a new portlet project in projects directory">
         <echo>Creating a New Portlet Project</echo>
         <mkdir dir="projects"/>
         <input message="Please enter a Project Title e.g. Cool Portlets" addproperty="project.title"/>

@@ -612,6 +612,11 @@ Copyright:
     <target name="deploy" depends="gridsphere-jar, jar" description="Deploys GridSphere to a local server">
         <ant target="deploy-install"/>
     </target>
+
+    <target name="undeploy" description="Undeploys GridSphere from a local server">
+        <delete quiet="true" dir="${gridsphere.home}"/>
+        <delete quiet="true" dir="${gridsphere.dist}"/>
+    </target>
     <!-- =================================================================== -->
     <!-- Deploys GridSphere to Tomcat                                        -->
     <!-- =================================================================== -->
@@ -701,14 +706,14 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates a new portlet project "newproject" in projects directory    -->
     <!-- =================================================================== -->
-    <target name="new-project" description="Creates a new portlet project in projects directory">
+    <target name="new-project" depends="setenv" description="Creates a new portlet project in projects directory">
         <ant antfile="config/build/build-newproject.xml" target="new-project"/>
     </target>
 
     <!-- =================================================================== -->
     <!-- Creates a new portlet project "newproject" in projects directory    -->
     <!-- =================================================================== -->
-    <target name="update-project" description="Updates a portlet project in projects directory">
+    <target name="update-project" depends="setenv" description="Updates a portlet project in projects directory">
         <ant antfile="config/build/build-newproject.xml" target="update-project"/>
     </target>
 
