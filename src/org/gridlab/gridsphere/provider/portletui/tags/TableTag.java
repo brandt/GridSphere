@@ -52,4 +52,8 @@ public interface TableTag extends ComponentTag {
     void incrementRowCount();
 
     int getRowCount();
+
+    void setCurrentPage(int currentPage);
+
+    int getCurrentPage();
 }

@@ -24,6 +24,7 @@ public abstract class BaseComponentTag extends BaseBeanTag implements ComponentT
     protected String cssStyle = null;
     protected String cssClass = null;
     protected boolean supportsJS = false;
+    protected boolean isVisible = true;
 
 
     /**
