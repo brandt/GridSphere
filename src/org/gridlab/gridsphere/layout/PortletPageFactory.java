@@ -22,11 +22,10 @@ import java.util.*;
  */
 public class PortletPageFactory implements PortletSessionListener {
 
-    private String userLayoutDir = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/users");
+    private String userLayoutDir = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/layouts/users");
 
     private static PortletPageFactory instance = null;
     private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
-    private static PortletRegistry registry = PortletRegistry.getInstance();
     protected static PortalConfigService portalConfigService = null;
 
     private static PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
@@ -38,9 +37,9 @@ public class PortletPageFactory implements PortletSessionListener {
     //private PortletPage newuserPage = null;
     private PortletPage errorPage = null;
 
-    private String templateLayoutPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/TemplateLayout.xml");
+    private String templateLayoutPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/layouts/TemplateLayout.xml");
 
-    private String newuserLayoutPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/users/");
+    private String newuserLayoutPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/layouts/users/");
 
     // Store user layouts in a hash
     private static Map userLayouts = new Hashtable();
@@ -55,7 +54,7 @@ public class PortletPageFactory implements PortletSessionListener {
     }
 
     public void init() throws PortletException {
-        String errorLayoutFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/ErrorLayout.xml");
+        String errorLayoutFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/layouts/ErrorLayout.xml");
         try {
             errorPage = PortletLayoutDescriptor.loadPortletPage(errorLayoutFile, layoutMappingFile);
             templatePage = PortletLayoutDescriptor.loadPortletPage(templateLayoutPath, layoutMappingFile);
@@ -119,27 +118,6 @@ public class PortletPageFactory implements PortletSessionListener {
             userLayouts.remove(key);
         }
     }
-
-    /*
-    public void addPortletApplicationTab(PortletRequest req, String webAppName) {
-        PortletPage page = createPortletPage(req);
-        PortletTabbedPane pagePane = page.getPortletTabbedPane();
-        PortletTabbedPane appPane = PortletTabRegistry.getApplicationTabs(webAppName);
-        if (appPane != null) {
-            List tabs = appPane.getPortletTabs();
-            try {
-                for (int j = 0; j < tabs.size(); j++) {
-                    PortletTab tab = (PortletTab) tabs.get(j);
-                    pagePane.addTab((PortletTab) deepCopy(tab));
-                }
-            } catch (Exception e) {
-                log.error("Unable to copy application tabs for webapp: " + webAppName);
-            }
-            page.setPortletTabbedPane(pagePane);
-            page.init(req, new ArrayList());
-        }
-    }
-    */
     
     public void addPortletGroupTab(PortletRequest req, String groupName) {
         PortletPage page = createPortletPage(req);
@@ -187,7 +165,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
         String sessionId = req.getPortletSession(true).getId();
 
-        String userLayout = userLayoutDir + File.separator + user.getID();
+        String userLayout = userLayoutDir + File.separator + user.getUserName();
 
         if (userLayouts.containsKey(sessionId)) {
             PortletPage page = (PortletPage) userLayouts.get(sessionId);
@@ -233,7 +211,9 @@ public class PortletPageFactory implements PortletSessionListener {
             Iterator sit = s.iterator();
             while (sit.hasNext()) {
                 SportletRoleInfo roleInfo = (SportletRoleInfo) sit.next();
-                allowedPortlets.add(roleInfo.getPortletClass());
+
+                    allowedPortlets.add(roleInfo.getPortletClass());
+
             }
         }
 
@@ -352,7 +332,7 @@ public class PortletPageFactory implements PortletSessionListener {
             for (int i = 0; i < list.size(); i++) {
                 ComponentIdentifier c = (ComponentIdentifier) list.get(i);
                 compSB.append("\tid: " + c.getComponentID() + " : " + c.getClassName() + " : " + c.hasPortlet() + "\n");
-                //if (c.hasPortlet()) System.err.println("portlet= " + c.getPortletClass());
+                //if (c.hasPortlet()) System.err.println("portlet= " + c.getPortletID());
             }
             log.debug("Made a components list!!!! " + list.size() + "\n" + compSB.toString());
         } catch (Exception e) {
@@ -382,7 +362,7 @@ public class PortletPageFactory implements PortletSessionListener {
             if (pane == null) {
                 pane = new PortletTabbedPane();
                 User user = req.getUser();
-                String userLayout = userLayoutDir + File.separator + user.getID();
+                String userLayout = userLayoutDir + File.separator + user.getUserName();
                 pane.setLayoutDescriptor(userLayout);
             } else {
                 tabNum = pane.getLastPortletTab().getTabOrder() + 1;
@@ -443,19 +423,21 @@ public class PortletPageFactory implements PortletSessionListener {
             tokenizer = new StringTokenizer(portletNames[i], "/");
             String appName = tokenizer.nextToken();
             String portletName = tokenizer.nextToken();
-            String portletClass = registry.getPortletClassName(appName, portletName);
-            if (portletClass == null) {
-                log.error("Unable to find portlet class for " + portletName);
-            }
+            //String portletClass = registry.getPortletClassName(appName, portletName);
+            //if (portletClass == null) {
+            //    log.error("Unable to find portlet class for " + portletName);
+            //}
             if (pageName == null) {
                 pageName = "TCK_testpage_" + portletName;
             }
             PortletFrame frame = new PortletFrame();
             PortletTitleBar tb = new PortletTitleBar();
-            tb.setPortletClass(portletClass);
+            //tb.setPortletClass(portletClass);
+            tb.setPortletClass(appName + "#" + portletName);
             frame.setPortletTitleBar(tb);
             frame.setLabel(portletName);
-            frame.setPortletClass(portletClass);
+            //frame.setPortletClass(portletClass);
+            frame.setPortletClass(appName + "#" + portletName);
             tableLayout.addPortletComponent(frame);
         }
 

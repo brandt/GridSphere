@@ -22,9 +22,9 @@ public class PortletTabRegistry {
 
     private static String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
 
-    private static String groupLayoutDir = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/groups");
+    private static String groupLayoutDir = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/layouts/groups");
 
-    private static String guestLayoutFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/GuestUserLayout.xml");
+    private static String guestLayoutFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/layouts/GuestUserLayout.xml");
 
 
     private static Map tabDescriptors = new Hashtable();
@@ -132,12 +132,17 @@ public class PortletTabRegistry {
         while (it.hasNext()) {
             SportletRoleInfo info = (SportletRoleInfo) it.next();
             portletClass = info.getPortletClass();
+
+            System.err.println("portletclass = " + portletClass);
             reqRole = info.getRole();
             pTab = new PortletTab();
             PortletRegistry registry = PortletRegistry.getInstance();
+
             String appID = PortletRegistry.getApplicationPortletID(portletClass);
+            System.err.println("appID = " + appID);
             ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
             ConcretePortlet conc = appPortlet.getConcretePortlet(portletClass);
+
             String tabName = conc.getDisplayName(Locale.ENGLISH);
             pTab.setTitle("en", tabName);
             pTab.setRequiredRoleAsString(reqRole);
@@ -146,8 +151,8 @@ public class PortletTabRegistry {
             PortletColumnLayout col = new PortletColumnLayout();
 
             pFrame = new PortletFrame();
-            pFrame.setPortletClass(portletClass);
 
+            pFrame.setPortletClass(conc.getConcretePortletID());
             col.addPortletComponent(pFrame);
             row.addPortletComponent(col);
             table.addPortletComponent(row);
