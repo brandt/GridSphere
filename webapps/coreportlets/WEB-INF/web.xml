@@ -31,11 +31,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>RSSPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.RSSPortlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>UserManagerPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.UserManagerPortlet</servlet-class>
     </servlet>
