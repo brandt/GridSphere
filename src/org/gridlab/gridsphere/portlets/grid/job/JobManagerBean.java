@@ -376,14 +376,20 @@ public class JobManagerBean extends ActionEventHandler {
         this.log.debug("Entering buildApplicationDescription");
         ApplicationDescription applicationDescription = new ApplicationDescription();
         applicationDescription = new ApplicationDescription();
+        // Executable
         String executable = getParameter("executable").trim();
         if (executable.length() == 0) {
             String message = "No Executable specified for application!";
             throw new JobSpecificationException(message);
         }
         applicationDescription.setExecutable(executable);
-        applicationDescription.setStdout(getParameter("stdout").trim());
-        applicationDescription.setStderr(getParameter("stderr").trim());
+        // Stdout
+        String stdout = getParameter("stdout").trim();
+        applicationDescription.setStdout(stdout);
+        // Stderr
+        String stderr = getParameter("stderr").trim();
+        applicationDescription.setStderr(stderr);
+        // Arguments
         Arguments arguments = buildArguments();
         applicationDescription.setArguments(arguments);
         Environment environment = buildEnvironment();

@@ -140,6 +140,10 @@ public class ApplicationDescription {
 
     public void setStdout(String url)
             throws MalformedURLException {
+        System.err.println("ApplicationDescription: Setting stdout to " + url);
+        if (url == null || url.length() == 0) {
+            return;
+        }
         this.stdout = new FileHandle(url);
     }
 
@@ -157,6 +161,10 @@ public class ApplicationDescription {
 
     public void setStderr(String url)
             throws MalformedURLException {
+        System.err.println("ApplicationDescription: Setting stderr to " + url);
+        if (url == null || url.length() == 0) {
+            return;
+        }
         this.stderr = new FileHandle(url);
     }
 

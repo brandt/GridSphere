@@ -521,6 +521,8 @@ public class GrmsJobManager implements JobManagerService {
 
     public static void preProcess(User user, JobSpecification jobSpecification)
             throws JobManagerException {
+        /**** JUST TESTING RIGHT NOW!!!!! ****/
+        if (true) return;
         _logger.info("GrmsJobManager: Preprocessing executable");
         // Setup gass for executable if necessary
         FileHandle executable = jobSpecification.getExecutable();

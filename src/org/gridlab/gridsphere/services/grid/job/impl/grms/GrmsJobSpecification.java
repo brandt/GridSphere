@@ -383,7 +383,7 @@ public class GrmsJobSpecification implements JobSpecification {
         org.gridlab.resmgmt.types.ExecutableTypeType type = buildExecutableType();
         executable.setType(type);
         // Executable count
-        executable.setCount(1);
+        //executable.setCount(1);
         // Executable file
         org.gridlab.resmgmt.ExecutableChoice choice = buildExecutableChoice();
         executable.setExecutableChoice(choice);
@@ -465,8 +465,13 @@ public class GrmsJobSpecification implements JobSpecification {
 ***/
 
     private org.gridlab.resmgmt.Stdout buildStdout() {
+        FileHandle thisStdout = getStdout();
+        // If no stdout, return null
+        if (thisStdout == null) {
+            return null;
+        }
         org.gridlab.resmgmt.Stdout stdout = new org.gridlab.resmgmt.Stdout();
-        String stdoutUrl = getStdout().getFileUrl();
+        String stdoutUrl = thisStdout.getFileUrl();
         portletLog.debug("Stdout url = " + stdoutUrl);
         stdout.setUrl(stdoutUrl);
         // All done
@@ -474,8 +479,13 @@ public class GrmsJobSpecification implements JobSpecification {
     }
 
     private org.gridlab.resmgmt.Stderr buildStderr() {
+        FileHandle thisStderr = getStderr();
+        // If no stderr, return null
+        if (thisStderr == null) {
+            return null;
+        }
         org.gridlab.resmgmt.Stderr stderr = new org.gridlab.resmgmt.Stderr();
-        String stderrUrl = getStderr().getFileUrl();
+        String stderrUrl = thisStderr.getFileUrl();
         portletLog.debug("Stderr url = " + stderrUrl);
         stderr.setUrl(stderrUrl);
         // All done
@@ -483,8 +493,13 @@ public class GrmsJobSpecification implements JobSpecification {
     }
 
     private org.gridlab.resmgmt.Arguments buildArguments() {
+        Arguments thisArguments = getArguments();
+        // If no arguments, return null
+        if (thisArguments.getNumberOfArguments() == 0) {
+            return null;
+        }
         org.gridlab.resmgmt.Arguments arguments = new org.gridlab.resmgmt.Arguments();
-        List argumentList = this.getArguments().getArgumentList();
+        List argumentList = thisArguments.getArgumentList();
         for (int ii = 0; ii < argumentList.size(); ++ii) {
             Argument argument = (Argument)argumentList.get(ii);
             if (argument.getArgumentType() == Argument.FILE) {
@@ -516,12 +531,16 @@ public class GrmsJobSpecification implements JobSpecification {
     }
 
     private org.gridlab.resmgmt.Environment buildEnvironment() {
-        // Environment contains environment variables
+        Environment thisEnvironment = getEnvironment();
+        // If no environment variables, return null
+        if (thisEnvironment.getNumberOfVariables() == 0) {
+            return null;
+        }
         org.gridlab.resmgmt.Environment environment = new org.gridlab.resmgmt.Environment();
-        Iterator environmentVariables = getEnvironment().iterateVariables();
-        while (environmentVariables.hasNext()) {
+        List environmentVariables = thisEnvironment.getVariableList();
+        for (int ii = 0; ii < environmentVariables.size(); ++ii) {
             EnvironmentVariable environmentVariable
-                    = (EnvironmentVariable)environmentVariables.next();
+                    = (EnvironmentVariable)environmentVariables.get(ii);
             org.gridlab.resmgmt.Variable variable = new org.gridlab.resmgmt.Variable();
             variable.setName(environmentVariable.getName());
             variable.setContent(environmentVariable.getValue());
@@ -531,13 +550,51 @@ public class GrmsJobSpecification implements JobSpecification {
     }
 
     private org.gridlab.resmgmt.Resource buildResource() {
+        boolean hasValues = false;
         // Resource contains everything else
         org.gridlab.resmgmt.Resource resource = new org.gridlab.resmgmt.Resource();
-        resource.setHostname(getHost());
-        resource.setLocalrmname(getJobScheduler());
-        resource.setCpucount(String.valueOf(getCpuCount()));
-        resource.setMemory(String.valueOf(getMinimumMemory()));
-        // All done
-        return resource;
+        // Host name
+        String host = getHost();
+        if (host != null) {
+            resource.setHostname(host);
+            hasValues = true;
+        }
+        // Job scheduler
+        String jobScheduler = getJobScheduler();
+        if (jobScheduler != null) {
+            resource.setLocalrmname(jobScheduler);
+            hasValues = true;
+        }
+        // Cpu count=
+        long cpuCount = getCpuCount();
+        if (cpuCount > 0) {
+            resource.setCpucount(String.valueOf(cpuCount));
+            hasValues = true;
+        }
+        // Cpu count=
+        long minimumMemory = getMinimumMemory();
+        if (minimumMemory > 0) {
+            resource.setMemory(String.valueOf(minimumMemory));
+            hasValues = true;
+        }
+        // If values were set return the resource
+        if (hasValues) {
+            return resource;
+        }
+        // Return null otherwise
+        return null;
+    }
+
+    public static void main(String[] argv) {
+        GrmsJobSpecification jobSpec = new GrmsJobSpecification();
+        try {
+            jobSpec.setExecutable("/bin/sleep");
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+        Arguments arguments = new Arguments();
+        arguments.addValueArgument("2000");
+        jobSpec.setArguments(arguments);
+        System.out.println(jobSpec.toString());
     }
 }

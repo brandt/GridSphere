@@ -27,6 +27,9 @@ public class ResourceDescription {
     }
 
     public void setOsType(String value) {
+        if (value == null || value.length() == 0) {
+            return;
+        }
        this.osType = value;
     }
 
@@ -35,6 +38,9 @@ public class ResourceDescription {
     }
 
     public void setOsName(String value) {
+        if (value == null || value.length() == 0) {
+            return;
+        }
         this.osName = value;
     }
 
@@ -43,6 +49,9 @@ public class ResourceDescription {
     }
 
     public void setOsVersion(String value) {
+        if (value == null || value.length() == 0) {
+            return;
+        }
         this.osVersion = value;
     }
 
@@ -52,6 +61,9 @@ public class ResourceDescription {
 
     public void setOsRelease(String value) {
         this.osRelease = value;
+        if (value == null || value.length() == 0) {
+            return;
+        }
     }
 
     public String getHostName() {
@@ -59,6 +71,9 @@ public class ResourceDescription {
     }
 
     public void setHostName(String value) {
+        if (value == null || value.length() == 0) {
+            return;
+        }
         this.hostName = value;
     }
 
@@ -67,6 +82,9 @@ public class ResourceDescription {
     }
 
     public void setJobScheduler(String value) {
+        if (value == null || value.length() == 0) {
+            return;
+        }
         this.jobScheduler = value;
     }
 
@@ -75,6 +93,9 @@ public class ResourceDescription {
     }
 
     public void setMemory(long value) {
+        if (value <= 0) {
+            return;
+        }
         this.memory = value;
     }
 
@@ -83,6 +104,9 @@ public class ResourceDescription {
     }
 
     public void setCpuCount(long value) {
+        if (value <= 0) {
+            return;
+        }
         this.cpuCount = value;
     }
 
@@ -91,6 +115,9 @@ public class ResourceDescription {
     }
 
     public void setCpuSpeed(long value) {
+        if (value <= 0) {
+            return;
+        }
         this.cpuSpeed = value;
     }
 
@@ -99,6 +126,9 @@ public class ResourceDescription {
     }
 
     public void setMaxTime(String value) {
+        if (value == null || value.length() == 0) {
+            return;
+        }
         this.maxTime = value;
     }
 
@@ -107,6 +137,9 @@ public class ResourceDescription {
     }
 
     public void setMaxWallTime(String value) {
+        if (value == null || value.length() == 0) {
+            return;
+        }
         this.maxWallTime = value;
     }
 
@@ -115,6 +148,9 @@ public class ResourceDescription {
     }
 
     public void setMaxCpuTime(String value) {
+        if (value == null || value.length() == 0) {
+            return;
+        }
         this.maxCpuTime = value;
     }
 }
