@@ -56,7 +56,7 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
         String pname = (name == null) ? "" : name;
         String sname = pname;
 
-        sname = action;
+        if (action != null) sname = action;
         if (anchor != null) sname += "#" + anchor;
 
         return "name=\"" + sname + "\" value=\"" + value + "\"/>";

@@ -139,6 +139,7 @@ public class ActionLinkTag extends ActionTag {
         if (key != null) {
             actionlink.setKey(key);
             actionlink.setValue(getLocalizedText(key));
+            value = actionlink.getValue();
         }
 
         return EVAL_BODY_BUFFERED;
@@ -153,7 +154,6 @@ public class ActionLinkTag extends ActionTag {
         }
 
         actionlink.setPortletURI(createActionURI());
-
         if ((bodyContent != null) && (value == null)) {
             actionlink.setValue(bodyContent.getString());
         }

@@ -314,7 +314,7 @@ public abstract class ActionTag extends BaseComponentTag {
 
             if (!paramBeans.isEmpty()) {
                 String id = createUniquePrefix(2);
-
+   
                 portletAction.addParameter(SportletProperties.PREFIX, id);
 
                 while (it.hasNext()) {
@@ -324,6 +324,7 @@ public abstract class ActionTag extends BaseComponentTag {
             }
             actionURI.addAction(portletAction);
         }
+
         return actionURI.toString();
 
     }

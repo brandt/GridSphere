@@ -89,6 +89,9 @@ public class HasRoleTag extends TagSupport {
 
         Map groups = (Map)req.getAttribute(SportletProperties.PORTLETGROUPS);
         if (userRole != null) {
+            if (userRole.isSuper()) {
+                return EVAL_BODY_INCLUDE;    
+            }
             if (group != null) {
                 Iterator it = groups.keySet().iterator();
                 while (it.hasNext()) {

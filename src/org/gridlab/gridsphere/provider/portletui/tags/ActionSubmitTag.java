@@ -83,7 +83,7 @@ public class ActionSubmitTag extends ActionTag {
             this.setBaseComponentBean(actionSubmitBean);
         }
 
-        actionSubmitBean.setAction(action);
+        if (action != null) actionSubmitBean.setAction(action);
         if (cssStyle != null) {
             actionSubmitBean.setCssStyle(cssStyle);
         }
