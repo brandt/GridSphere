@@ -33,6 +33,7 @@ public class AuthorizationUtility {
 
     private static PortletLog _log = SportletLog.getInstance(AuthorizationUtility.class);
     private static UserManagerService _userManager = null;
+    private Class caller = null;
     private User user = null;
 
     static {
@@ -50,7 +51,14 @@ public class AuthorizationUtility {
 
     public AuthorizationUtility(User user) {
         this.user = user;
+        this.caller = caller;
     }
+
+    public AuthorizationUtility(User user, Class caller) {
+        this.user = user;
+        this.caller = caller;
+    }
+
 
     /**
      * Throws AuthorizationException if supplied user not a super user.
@@ -58,10 +66,24 @@ public class AuthorizationUtility {
     public void authorizeSuperUser()
             throws AuthorizationException {
         if (this.user == null) {
-            throw new AuthorizationException(NULL_USER_MESSAGE);
+            throwAuthorizationException(NULL_USER_MESSAGE, null);
         }
         if (_userManager.isSuperUser(this.user)) {
-            throw new AuthorizationException(SUPER_ONLY_MESSAGE);
+            throwAuthorizationException(SUPER_ONLY_MESSAGE, null);
+        }
+    }
+
+    /**
+     * Throws AuthorizationException if supplied user not a super user.
+     * @param String The method being called.
+     */
+    public void authorizeSuperUser(String method)
+            throws AuthorizationException {
+        if (this.user == null) {
+            throwAuthorizationException(NULL_USER_MESSAGE, method);
+        }
+        if (_userManager.isSuperUser(this.user)) {
+            throwAuthorizationException(SUPER_ONLY_MESSAGE, method);
         }
     }
 
@@ -75,10 +97,28 @@ public class AuthorizationUtility {
     public void authorizeSuperOrAdminUser(PortletGroup group)
             throws AuthorizationException {
         if (this.user == null) {
-            throw new AuthorizationException(NULL_USER_MESSAGE);
+            throwAuthorizationException(NULL_USER_MESSAGE, null);
         }
         if (_userManager.isSuperUser(this.user) || _userManager.isAdminUser(this.user, group)) {
-            throw new AuthorizationException(SUPER_OR_ADMIN_MESSAGE);
+            throwAuthorizationException(SUPER_OR_ADMIN_MESSAGE, null);
+        }
+    }
+
+    /**
+     * Throws AuthorizationException if supplied user is not a super user
+     * or an admin user within the specified group.
+     *
+     * @param PortletGroup The portlet group within which the user should
+     *        be an admin if they are not a super user.
+     * @param String The method being called.
+     */
+    public void authorizeSuperOrAdminUser(PortletGroup group, String method)
+            throws AuthorizationException {
+        if (this.user == null) {
+            throwAuthorizationException(NULL_USER_MESSAGE, method);
+        }
+        if (_userManager.isSuperUser(this.user) || _userManager.isAdminUser(this.user, group)) {
+            throwAuthorizationException(SUPER_OR_ADMIN_MESSAGE, method);
         }
     }
 
@@ -92,10 +132,49 @@ public class AuthorizationUtility {
     public void authorizeSuperOrSameUser(User user)
              throws AuthorizationException {
         if (this.user == null || user == null) {
-            throw new AuthorizationException(NULL_USER_MESSAGE);
+            throwAuthorizationException(NULL_USER_MESSAGE, null);
         }
         if (_userManager.isSuperUser(this.user) || this.user.equals(user)) {
-            throw new AuthorizationException(SUPER_OR_SAME_MESSAGE);
+            throwAuthorizationException(SUPER_OR_SAME_MESSAGE, null);
         }
     }
-}
+
+    /**
+     * Throws AuthorizationException if supplied user not a super user
+     * or not the same user as specified in this method.
+     *
+     * @param User The user this supplied user should be equal to if
+     *        if the supplied user is not a super user.
+     * @param String The method being called.
+     */
+    public void authorizeSuperOrSameUser(User user, String method)
+             throws AuthorizationException {
+        if (this.user == null || user == null) {
+            throwAuthorizationException(NULL_USER_MESSAGE, method);
+        }
+        if (_userManager.isSuperUser(this.user) || this.user.equals(user)) {
+            throwAuthorizationException(SUPER_OR_SAME_MESSAGE, method);
+        }
+    }
+
+    /**
+     * Throw authorization exception with appropriate message
+     */
+    private void throwAuthorizationException(String message, String method)
+            throws AuthorizationException {
+        StringBuffer buffer = new StringBuffer();
+        if (this.caller == null) {
+            buffer.append(Object.class.getName());
+        } else {
+            buffer.append(this.caller.getName());
+        }
+        if (method != null && method.length() > 0) {
+            buffer.append(".");
+            buffer.append(method);
+            buffer.append("()");
+        }
+        buffer.append(" => ");
+        buffer.append(message);
+        throw new AuthorizationException(buffer.toString());
+    }
+ }

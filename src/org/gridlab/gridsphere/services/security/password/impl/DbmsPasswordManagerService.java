@@ -90,8 +90,8 @@ public class DbmsPasswordManagerService
 
     public Password createPassword(User user, String value, boolean validatePassword)
             throws PasswordInvalidException {
-         // First validate the value if requested
-         if (validatePassword) {
+        // First validate the value if requested
+        if (validatePassword) {
             validatePassword(value);
         }
         // Then check if user already has password
