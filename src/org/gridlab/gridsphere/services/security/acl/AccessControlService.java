@@ -45,15 +45,6 @@ public interface AccessControlService extends PortletService {
     public List getUsersInGroup(PortletRole role, PortletGroup group) throws PortletServiceException ;
 
     /**
-     * Return a list of PortletRole objects for a user in a group
-     *
-     * @param user the Role object
-     * @param group the PortletGroup
-     * @return a list of PortletRole objects
-     */
-    public List getRolesInGroup(User user, PortletGroup group) throws PortletServiceException ;
-
-    /**
      * Return a list of PortletGroup objects
      *
      * @return a list of PortletGroup objects

@@ -14,10 +14,7 @@ import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletUser;
-import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
-import org.gridlab.gridsphere.portlet.impl.SportletRole;
+import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
@@ -446,14 +443,14 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     }
 
     /**
-     * Checks if a user with a given UserID already exists
+     * Checks if a user with a given unique ID already exists
      *
-     * @param UserID
+     * @param ID the unique ID
      * @return true/false if the user exists
      */
-    public boolean existsUserID(String UserID){
+    public boolean existsUserID(String ID){
         String command =
-                "select user from org.gridlab.gridsphere.portlet.impl.SportletUserImpl user where Oid=\""+UserID+"\"";
+                "select user from org.gridlab.gridsphere.portlet.impl.SportletUserImpl user where Oid=\""+ID+"\"";
         SportletUser user = null;
         try {
             user = (SportletUser)pm.restoreObject(command);
@@ -465,7 +462,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
     /**
      * Return a list of all portal users
-     * @return
+     * @return  list of user objects
      */
     public List getAllUsers() {
 
@@ -513,26 +510,6 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     }
 
     /**
-     * returns true if a oql query is succsessfull
-     * @param command oql query
-     * @return true/false
-     */
-    private boolean queryACL(String command) {
-        UserACL acl = null;
-        try {
-            acl = (UserACL)pm.restoreObject(command);
-        } catch (PersistenceException e) {
-            log.error("PM Exception: "+e);
-        }
-
-        if (acl!=null) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * checks if the user is superuser
      *
      * @param user userobject to be examined
@@ -540,13 +517,12 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public boolean isSuperuser(User user) {
 
-        // GroupID 0 is SuperUser group
-        // @TODO howto get rid of the long select from name, since there is this impl2 thing in there
-
-        String command = "select ua from org.gridlab.gridsphere.services.security.acl.impl2.UserACL ua where "+
-            "UserID=\""+user.getID()+"\" and RoleID="+SportletRole.SUPER+" and Status="+UserACL.STATUS_APPROVED;
-
-        return queryACL(command);
+        try {
+            return aclService.hasRoleInGroup(user, SportletGroup.getSuperGroup(), SportletRole.getSuperRole());
+        } catch (PortletServiceException e) {
+            log.error("Exception :" + e);
+            return false;
+        }
 
     }
 
@@ -557,12 +533,12 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @return true/false if he is an admin
      */
     public boolean isAdminuser(User user, PortletGroup group) {
-
-        String command =
-                " select ua from org.gridlab.gridsphere.services.security.acl.impl2.UserACL ua where "+
-            "UserID=\""+user.getID()+"\" and RoleID="+SportletRole.getAdminRole().getID()+" and GroupID=\""+group.getID()+"\"";
-
-        return queryACL(command);
+        try {
+            return aclService.hasRoleInGroup(user, group, SportletRole.getAdminRole());
+        } catch (PortletServiceException e) {
+            log.error("Exception :" + e);
+            return false;
+        }
     }
 
 }

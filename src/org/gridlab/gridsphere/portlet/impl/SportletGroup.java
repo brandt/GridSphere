@@ -16,11 +16,12 @@ import java.util.Random;
 
 public class SportletGroup extends BaseObject implements PortletGroup {
 
-    public static final String ROOT = "0";
+    public static final String SUPER = "0";
     public static final String BASE = "1";
 
     private String Name = "BASE";
     private static final SportletGroup baseGroup = new SportletGroup(BASE, "BASE");
+    private static final SportletGroup superGroup = new SportletGroup(SUPER, "SUPER");
 
     // @todo why did we need the baseGroup thing??
     // @todo elimnate the sportletgroup(id, name) thing
@@ -42,6 +43,10 @@ public class SportletGroup extends BaseObject implements PortletGroup {
 
     public static PortletGroup getBaseGroup() {
         return baseGroup;
+    }
+
+    public static PortletGroup getSuperGroup() {
+        return superGroup;
     }
 
     public boolean isBaseGroup() {

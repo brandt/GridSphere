@@ -111,10 +111,12 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
      */
     public boolean hasRoleInGroup(User user, PortletGroup group, PortletRole role) throws PortletServiceException{
 
-        String oql = "select r from org.gridlab.gridpshere.services.security.acl.impl2.UserRole r where r.userid="+
-                user.getID()+" and r.groupid="+group.getID()+" and r.roleid="+role.getID();
+        String command =
+            " select ua from org.gridlab.gridsphere.services.security.acl.impl2.UserACL ua where "+
+            "UserID=\""+user.getID()+"\" and RoleID="+role.getID()+" and GroupID=\""+group.getID()+
+            "\" and Status="+UserACL.STATUS_APPROVED;
 
-        return (queryACL(oql));
+        return (queryACL(command));
     }
 
     /**
@@ -130,17 +132,6 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
             "select u from org.gridlab.gridsphere.services.security.acl.impl2.UserACL u where u.RoleID=\""+role.getID()+
             " and u.GroupID="+group.getID()+" and u.Status="+UserACL.STATUS_APPROVED;
         return listACL(command);
-    }
-
-    /**
-     * Return a list of PortletRole objects for a user in a group
-     *
-     * @param user the User object
-     * @param group the PortletGroup
-     * @return a list of PortletRole objects
-     */
-    public List getRolesInGroup(User user, PortletGroup group) throws PortletServiceException {
-        return null;
     }
 
     /**
@@ -220,7 +211,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
 
         String command =
             "select u from org.gridlab.gridsphere.services.security.acl.impl2.UserACL u where u.UserID=\""+user.getID()+
-            "\" and u.GroupID="+group.getID();
+            "\" and u.GroupID="+group.getID()+" and u.Status="+UserACL.STATUS_APPROVED;
 
        return queryACL(command);
 

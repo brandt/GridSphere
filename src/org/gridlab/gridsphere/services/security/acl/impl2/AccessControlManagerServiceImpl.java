@@ -60,7 +60,17 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
      */
     public void addUserToSuperRole(User user) {
 
+        UserACL rootacl = new UserACL();
+        rootacl.setUserID(user.getID());
+        rootacl.setRoleID(SportletRole.SUPER);
+        rootacl.setGroupID(SportletGroup.getSuperGroup().getID());
+        rootacl.setStatus(UserACL.STATUS_APPROVED);
 
+        try {
+            pm.create(rootacl);
+        } catch (PersistenceException e) {
+            log.error("Exception :" + e);
+        }
     }
 
     /**
@@ -104,13 +114,12 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
      * @param group the PortletGroup
      */
     public void removeGroup(PortletGroup group) throws PortletServiceException {
+        String groupid = group.getID();
         String command =
-            "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g where g.Oid="+group.getID();
+            "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g where g.Oid="+groupid;
         delete(command);
 
         // @todo delete all acls here!!!
-
-
     }
 
     /**
@@ -135,7 +144,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
                 log.error("User "+user.getFullName()+" did not requested a role with an accountrequest change");
             } else {
                 // we don't want to approve a superuserrole by an admin!
-                if (notapproved.getRoleID()!=SportletRole.ADMIN) {
+                if (notapproved.getRoleID()!=SportletRole.SUPER) {
                     // delete the status the user has until now
                     UserACL approved = (UserACL)pm.restoreObject(command2);
                     if (approved!=null) {
@@ -144,8 +153,9 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
                     notapproved.setStatus(notapproved.STATUS_APPROVED);
                     pm.update(notapproved);
                     log.info("Approved ACL for user "+user.getGivenName()+" in group "+group.getName());
+                } else {
+                    log.info("User can not approve superuserrole!");
                 }
-                log.info("Can not approve superuserrole!");
             }
 
         } catch (PersistenceException e) {
@@ -153,7 +163,6 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
             throw new PortletServiceException(e.toString());
         }
     }
-
 
     /**
      * Removes a user from a group
@@ -180,6 +189,5 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         delete(command);
 
     }
-
 }
 
