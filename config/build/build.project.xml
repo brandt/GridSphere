@@ -21,6 +21,10 @@ Copyright:
 
 <project name="@PROJECT_TITLE@" default="help" basedir=".">
 
+
+    <property name="project.build" value="build"/>
+    <property name="project.dist" value="dist"/>
+
     <property file="build.properties"/>
 
     <property name="project.name" value="@PROJECT_NAME@"/>
@@ -307,7 +311,7 @@ Copyright:
 
         <mkdir dir="${GRIDSPHERE_HOME}/${project.name}/database"/>
 
-        <copy file="${GRIDSPHERE_PROJECT}/lib/portlet-widget-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
+        <copy file="${GRIDSPHERE_PROJECT}/lib/gridsphere-ui-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
 
         <copy todir="${project.webapp}/WEB-INF/lib">
             <fileset dir="lib">
@@ -321,6 +325,10 @@ Copyright:
             </fileset>
         </copy>
 
+    </target>
+
+    <target name="install" depends="deploy">
+        <antcall target="createdatabase"/>
     </target>
 
 </project>
