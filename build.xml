@@ -839,7 +839,7 @@ Copyright:
         <taskdef name="deploytck"
             classname="org.gridlab.gridsphere.tools.DeployGridSphereTCK"
             classpathref="classpath"/>
-        <deploytck wardir="webapps/tck"/>
+        <deploytck wardir="webapps/tck" server="${env.CATALINA_HOME}"/>
     </target>
 
     <target name="splash" description="Display the logo">
