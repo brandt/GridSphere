@@ -78,18 +78,6 @@ Copyright:
 
         <fail message="Unable to find Tomcat 4.1.+. Make sure you have set $CATALINA_HOME set" unless="catalina.exists"/>
 
-        <available property="cog.present"
-            classname="org.globus.common.Version"
-            classpathref="classpath"/>
-
-        <available property="log4j.present"
-            classname="org.apache.log4j.Logger"
-            classpathref="classpath"/>
-
-        <available property="junit.present"
-            classname="junit.framework.TestCase"
-            classpathref="classpath"/>
-
         <echo message="--- Build environment for ${project} ---" />
         <echo message="--- Flags (Note: If the {property name} is displayed,"/>
         <echo message="           then the component is not present)" />
@@ -98,44 +86,36 @@ Copyright:
         <echo message="ANT_HOME is set to = ${env.ANT_HOME}"/>
         <echo message="JAVA_HOME is set to = ${env.JAVA_HOME}"/>
         <echo message="CATALINA_HOME is set to = ${env.CATALINA_HOME}"/>
-        <echo message="classpath"/>
 
-        <echo message="=== Required Libraries ===" />
-        <echo message="log4j.present=$log4j.present"/>
-
-        <echo message=""/>
-        <echo message="--- Optional Libraries ---" />
-        <echo message="junit.present=$junit.present"/>
         <echo message=""/>
         <echo message="--- Property values ---" />
         <echo message="debug=${debug}" />
         <echo message="deprecation=${deprecation}" />
         <echo message="optimize=${optimize}" />
-
     </target>
 
     <!-- =================================================================== -->
-        <!-- Sets the CLASSPATH                                                  -->
-        <!-- =================================================================== -->
-        <path id="classpath">
-            <pathelement location="${build.lib}"/>
-            <pathelement location="${build.classes}"/>
+    <!-- Sets the CLASSPATH                                                  -->
+    <!-- =================================================================== -->
+    <path id="classpath">
+        <pathelement location="${build.lib}"/>
+        <pathelement location="${build.classes}"/>
 
-            <!-- this is for the servlet JARs in Tomcat 4.1.x -->
-            <fileset dir="${env.CATALINA_HOME}/common/lib">
-                <include name="*.jar"/>
-            </fileset>
+        <!-- this is for the servlet JARs in Tomcat 4.1.x -->
+        <fileset dir="${env.CATALINA_HOME}/common/lib">
+            <include name="*.jar"/>
+        </fileset>
 
-            <!-- this is for the XML JARs in Tomcat 4.1.x -->
-            <fileset dir="${env.CATALINA_HOME}/common/endorsed">
-                <include name="*.jar"/>
-            </fileset>
+        <!-- this is for the XML JARs in Tomcat 4.1.x -->
+        <fileset dir="${env.CATALINA_HOME}/common/endorsed">
+            <include name="*.jar"/>
+        </fileset>
 
-            <fileset dir="lib/ext">
-                <include name="*.jar"/>
-            </fileset>
-            <pathelement path="${java.class.path}"/>
-        </path>
+        <fileset dir="lib/ext">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement path="${java.class.path}"/>
+    </path>
 
     <!-- =================================================================== -->
     <!-- Print usage information                                             -->
