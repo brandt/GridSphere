@@ -286,9 +286,13 @@ public class ActionPortlet extends AbstractPortlet {
      * @param jsp the JSP page to include
      */
     public void doViewJSP(PortletRequest request, PortletResponse response, String jsp)  {
-        log.debug("Forward to JSP page:" + jsp);
+        log.debug("Including JSP page:" + jsp);
         try {
-            getPortletConfig().getContext().include("/jsp/" + jsp, request, response);
+            if (jsp.startsWith("/")) {
+                getPortletConfig().getContext().include(jsp, request, response);
+            } else {
+                getPortletConfig().getContext().include("/jsp/" + jsp, request, response);
+            }
         } catch (Exception e) {
             log.error("Unable to include resource : " + e.getMessage());
         }
