@@ -179,38 +179,43 @@ public class GridSphereParameters {
         // this is a render triggered by a render URL or an action event
 
         if (mycid.equals(targetedCid)) {
-            parseRequestParams();
-            map.putAll(params);
+
             parsePersistParams();
             map.putAll(persistParams);
             //System.err.println("GP: in render, no action this IS the targeted portlet " + pid);
 
-            Iterator it = renderParams.keySet().iterator();
-            // a persist param of the same name should take precedence over a render param
+            parseRequestParams();
+
+            // a param of the same name should take precedence over a render/persist param
             // and new render params of the same name should be added to the array
+            Iterator it = params.keySet().iterator();
             while (it.hasNext()) {
                 String key = (String) it.next();
-                String[] renderVals = (String[]) renderParams.get(key);
-                //if (persistParams.containsKey())
+                String[] paramVals = (String[]) params.get(key);
+
                 if (map.containsKey(key)) {
                     String[] vals = (String[]) map.get(key);
-                    String[] tmp = new String[vals.length + renderVals.length];
-                    System.arraycopy(vals, 0, tmp, 0, vals.length);
-                    System.arraycopy(renderVals, 0, tmp, vals.length, renderVals.length);
+
+                    String[] tmp = new String[vals.length + paramVals.length];
+                    System.arraycopy(paramVals, 0, tmp, 0, paramVals.length);
+                    System.arraycopy(vals, 0, tmp, paramVals.length, vals.length);
                     map.put(key, tmp);
                 } else {
-                    map.put(key, renderVals);
+                    map.put(key, paramVals);
                 }
 
             }
+
         } else {
             //System.err.println("GP: in render, no action this is NOT the targeted portlet" + pid);
             parsePersistParams();
             map.putAll(persistParams);
         }
 
+        //printAllParams();
+
+        //System.err.println("\ngetParamaterMap: returning params for this portlet");
         /*
-        System.err.println("getParamaterMap: returning params for this portlet");
         Iterator it = map.keySet().iterator();
         while (it.hasNext()) {
             String key = (String)it.next();
@@ -225,4 +230,36 @@ public class GridSphereParameters {
     }
 
 
+    private void printAllParams() {
+        System.err.println("normal params");
+        Iterator it = params.keySet().iterator();
+        while (it.hasNext()) {
+            String key = (String)it.next();
+            String[] vals = (String[])params.get(key);
+            System.err.print("name= " + key + " values= ");
+            for (int c = 0; c < vals.length; c++) {
+                System.err.print(vals[c] + " ");
+            }
+        }
+        System.err.println("\nrender params");
+        it = renderParams.keySet().iterator();
+        while (it.hasNext()) {
+            String key = (String)it.next();
+            String[] vals = (String[])renderParams.get(key);
+            System.err.print("name= " + key + " values= ");
+            for (int c = 0; c < vals.length; c++) {
+                System.err.print(vals[c] + " ");
+            }
+        }
+        System.err.println("\npersist params");
+        it = persistParams.keySet().iterator();
+        while (it.hasNext()) {
+            String key = (String)it.next();
+            String[] vals = (String[])persistParams.get(key);
+            System.err.print("name= " + key + " values= ");
+            for (int c = 0; c < vals.length; c++) {
+                System.err.print(vals[c] + " ");
+            }
+        }
+    }
 }

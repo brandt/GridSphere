@@ -66,6 +66,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     private boolean isClosing = false;
 
+    // render params are the persistent per portlet parameters stored as key names and string[] values
     private Map renderParams = new HashMap();
     private boolean onlyRender = true;
 
@@ -439,20 +440,19 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         PortletResponse res = event.getPortletResponse();
 
         // check for render params
-        /*
         if ((onlyRender) && (event.getPortletComponentID().equals(componentIDStr))) {
             Map tmpParams = (Map)req.getParameterMap();
             if (tmpParams != null) {
                 Iterator it = tmpParams.keySet().iterator();
                 while (it.hasNext()) {
                     String key = (String)it.next();
+                    String[] paramValues = req.getParameterValues( key );
                     if (key.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
                         renderParams.put(key, tmpParams.get(key));
                     }
                 }
             }
         }
-        */
 
         User user = req.getUser();
         if (!(user instanceof GuestUser)) {
@@ -601,8 +601,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         if (!transparent) {
             String titleStr = (String) req.getAttribute(SportletProperties.PORTLET_TITLE);
             if (titleStr == null) {
-                titleStr = titleBar.getTitle();                
-            } 
+                titleStr = titleBar.getTitle();
+            }
             frame.append(titleBar.getPreBufferedTitle(req));
             frame.append(titleStr);
             frame.append(titleBar.getPostBufferedTitle(req));
