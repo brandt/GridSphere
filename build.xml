@@ -164,7 +164,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Builds and deploys GridSphere                                       -->
     <!-- =================================================================== -->
-    <target name="install" depends="license, clean, compile, docs, deploy" description="Build and deploy GridSphere">
+    <target name="install" depends="license, splash, clean, compile, docs, deploy" description="Build and deploy GridSphere">
         <antcall target="create-database"/>
     </target>
 
@@ -613,7 +613,7 @@ Copyright:
                 <exclude name="*.LICENSE"/>
             </fileset>
             <fileset dir="${build.lib}">
-                <exclude name="gridsphere-test.jar"/>             
+                <exclude name="gridsphere-test.jar"/>
                 <exclude name="gridsphere-ui-tags.jar"/>
                 <exclude name="gridsphere-provider.jar"/>
                 <exclude name="coreportlets.jar"/>
@@ -835,6 +835,11 @@ Copyright:
             classname="org.gridlab.gridsphere.tools.DeployGridSphereTCK"
             classpathref="classpath"/>
         <deploytck wardir="webapps/tck"/>
+    </target>
+
+    <target name="splash" description="Display the logo">
+        <property name="splash.dir" location="."/>
+        <splash imageurl="file:webapps/gridsphere/images/gridsphere_logo.png" showduration="0"/>
     </target>
 
 </project>
