@@ -801,10 +801,10 @@ Copyright:
     <!-- Mail the HTML reports of  the test results                          -->
     <!-- =================================================================== -->
     <target name="mail">
-        <mail
-            mailhost="mail.nrc.ca"
-            from="jean-claude.cote@nrc-cnrc.gc.ca"
-            tolist="gridsphere-dev@gridlab.org"
+        <mail 
+            mailhost="${mail.junit.mailhost}"
+            from="${mail.junit.from}"
+            tolist="${mail.junit.tolist}"
             subject="GridSphere JUnit Test Results">
             <message mimetype="text/html" src="${gridsphere.build}/reports/html/junit-noframes.html"/>
             <fileset dir="${gridsphere.build}/reports">
