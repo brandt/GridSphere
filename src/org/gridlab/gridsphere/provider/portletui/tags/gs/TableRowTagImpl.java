@@ -7,10 +7,12 @@ package org.gridlab.gridsphere.provider.portletui.tags.gs;
 import org.gridlab.gridsphere.provider.portletui.beans.TableRowBean;
 import org.gridlab.gridsphere.provider.portletui.tags.gs.BaseComponentTagImpl;
 import org.gridlab.gridsphere.provider.portletui.tags.TableRowTag;
+import org.gridlab.gridsphere.provider.portletui.tags.TableTag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.Tag;
 
 /**
  * The <code>TableRowTag</code> represents a table row element that is conatined within a <code>TableTag</code>
@@ -22,6 +24,7 @@ public class TableRowTagImpl extends BaseComponentTagImpl implements TableRowTag
     protected boolean isHeader = false;
     protected String align = null;
     protected String valign = null;
+    protected boolean isZebra = false;
 
     /**
      * Sets the table row bean
@@ -95,7 +98,32 @@ public class TableRowTagImpl extends BaseComponentTagImpl implements TableRowTag
         return valign;
     }
 
+    public void setZebra(boolean isZebra) {
+        this.isZebra = isZebra;
+    }
+
+    public boolean getZebra() {
+        return isZebra;
+    }
+
     public int doStartTag() throws JspException {
+
+        Tag parent = this.getParent();
+        if (parent instanceof TableTag) {
+            TableTag tableTag = (TableTag)parent;
+            int maxrows = tableTag.getMaxrows();
+            if (tableTag.getZebra()) {
+                if ((tableTag.getRowCount() % 2) == 0) isZebra = true;
+            }
+            if (!isHeader) {
+                tableTag.incrementRowCount();
+            }
+            if ((maxrows > 0) && (tableTag.getRowCount() > maxrows)) {
+                return EVAL_PAGE;
+            }
+            System.err.println("\t\trow count " + tableTag.getRowCount());
+        }
+
         if (!beanId.equals("")) {
             rowBean = (TableRowBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (rowBean == null) rowBean = new TableRowBean();
@@ -107,8 +135,7 @@ public class TableRowTagImpl extends BaseComponentTagImpl implements TableRowTag
             rowBean.setCssClass(this.cssClass);
             rowBean.setCssStyle(this.cssStyle);
         }
-
-
+        rowBean.setZebra(isZebra);
 
         try {
             JspWriter out = pageContext.getOut();

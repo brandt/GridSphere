@@ -25,6 +25,9 @@ public class TableTagImpl extends BaseComponentTagImpl implements TableTag {
     protected String width = null;
     protected String align = null;
     protected boolean sortable = false;
+    protected boolean isZebra = false;
+    protected int rowCount = 0;
+    protected int maxRows = -1;
 
     /**
      * Sets the table model associated with this table
@@ -160,6 +163,30 @@ public class TableTagImpl extends BaseComponentTagImpl implements TableTag {
         return sortable;
     }
 
+    public void setZebra(boolean isZebra) {
+        this.isZebra = isZebra;
+    }
+
+    public boolean getZebra() {
+        return isZebra;
+    }
+
+    public void setMaxrows(int maxRows) {
+        this.maxRows = maxRows;
+    }
+
+    public int getMaxrows() {
+        return maxRows;
+    }
+
+    public void incrementRowCount() {
+        this.rowCount++;
+    }
+
+    public int getRowCount() {
+        return rowCount;
+    }
+
     public int doStartTag() throws JspException {
 
         boolean includeBody = true;
@@ -182,6 +209,7 @@ public class TableTagImpl extends BaseComponentTagImpl implements TableTag {
                 tableBean.setSortable(sortable);
                 tableBean.setSortableID("td" + this.getUniqueId("gs_tableNum"));
             }
+            tableBean.setMaxRows(maxRows);
         }
 
         try {
@@ -198,7 +226,7 @@ public class TableTagImpl extends BaseComponentTagImpl implements TableTag {
     }
 
     public int doEndTag() throws JspException {
-
+        tableBean.setRowCount(rowCount);
         try {
             JspWriter out = pageContext.getOut();
             out.print(tableBean.toEndString());

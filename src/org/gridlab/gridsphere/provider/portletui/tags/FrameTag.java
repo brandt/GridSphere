@@ -5,6 +5,7 @@ package org.gridlab.gridsphere.provider.portletui.tags;
  * @version $Id$
  */
 public interface FrameTag extends TableTag {
+    
     void setKey(String key);
 
     String getKey();

@@ -12,8 +12,12 @@ public class TableRowBean extends BeanContainer {
 
     protected boolean isHeader = false;
     public static final String TABLE_HEADER_STYLE = "portlet-section-header";
+    public static final String TABLE_NORMAL_STYLE = "portlet-section-body";
+    public static final String TABLE_ALTERNATE_STYLE = "portlet-section-alternate";
+
     protected String align = null;
     protected String valign = null;
+    protected boolean isZebra = false;
 
     /**
      * Constructs a default table row bean
@@ -96,6 +100,21 @@ public class TableRowBean extends BeanContainer {
         return valign;
     }
 
+    public void setZebra(boolean isZebra) {
+        this.isZebra = isZebra;
+    }
+
+    public boolean getZebra() {
+        return isZebra;
+    }
+
+    private void setBeanStyles(String style) {
+        Iterator it = container.iterator();
+            while (it.hasNext()) {
+                BaseComponentBean tagBean = (BaseComponentBean) it.next();
+                tagBean.setCssClass(style);
+            }
+    }
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         sb.append("<tr");
@@ -103,10 +122,12 @@ public class TableRowBean extends BeanContainer {
         if (valign != null) sb.append(" valign=\"" + valign + "\"");
         sb.append(">");
         if (isHeader) {
-            Iterator it = container.iterator();
-            while (it.hasNext()) {
-                BaseComponentBean tagBean = (BaseComponentBean) it.next();
-                tagBean.setCssClass(TABLE_HEADER_STYLE);
+            setBeanStyles(TABLE_HEADER_STYLE);
+        } else {
+            if (isZebra) {
+                setBeanStyles(TABLE_ALTERNATE_STYLE);
+            } else {
+                setBeanStyles(TABLE_NORMAL_STYLE);
             }
         }
         Iterator it = container.iterator();

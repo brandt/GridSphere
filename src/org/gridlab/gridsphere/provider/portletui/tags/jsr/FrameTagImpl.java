@@ -122,6 +122,7 @@ public class FrameTagImpl extends TableTagImpl implements FrameTag {
                 tableBean.setSortable(sortable);
                 tableBean.setSortableID("td" + this.getUniqueId("gs_tableNum"));
             }
+            tableBean.setMaxRows(maxRows);
             this.setBaseComponentBean(tableBean);
             if (key != null) {
                 tableBean.setKey(key);
@@ -168,7 +169,7 @@ public class FrameTagImpl extends TableTagImpl implements FrameTag {
                 return EVAL_PAGE;
             }
         }
-
+        tableBean.setRowCount(rowCount);
         try {
             JspWriter out = pageContext.getOut();
             out.print(tableBean.toEndString());

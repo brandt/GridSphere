@@ -100,6 +100,7 @@ public class FrameTagImpl extends TableTagImpl implements FrameTag {
             if (tableBean == null) {
                 tableBean = new FrameBean(beanId);
                 this.setBaseComponentBean(tableBean);
+
                 return SKIP_BODY;
             } else {
                 String key = tableBean.getKey();
@@ -121,7 +122,10 @@ public class FrameTagImpl extends TableTagImpl implements FrameTag {
                 tableBean.setSortable(sortable);
                 tableBean.setSortableID("td" + this.getUniqueId("gs_tableNum"));
             }
-
+            if (maxRows > 0) {
+                System.err.println("set max row " + maxRows);
+                tableBean.setMaxRows(maxRows);
+            }
             this.setBaseComponentBean(tableBean);
             if (key != null) {
                 tableBean.setKey(key);
@@ -168,7 +172,8 @@ public class FrameTagImpl extends TableTagImpl implements FrameTag {
                 return EVAL_PAGE;
             }
         }
-
+        System.err.println("row count " + rowCount);
+        tableBean.setRowCount(rowCount);
         try {
             JspWriter out = pageContext.getOut();
             out.print(tableBean.toEndString());

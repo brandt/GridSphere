@@ -93,23 +93,11 @@ public class FrameBean extends TableBean implements TagBean {
     }
 
     public String toStartString() {
-        StringBuffer sb = new StringBuffer();
         if ((key != null) || (value != null)) createMessage();
-        if (isSortable) {
-            sb.append("<table class=\"sortable\" id=\" " + sortableId + "\" ");
-        } else {
-            sb.append("<table " + getFormattedCss() + " ");
-        }
-        if (cellSpacing != null) sb.append(" cellspacing=\"" + cellSpacing + "\" ");
-        if (cellPadding != null) sb.append(" cellpadding=\"" + cellPadding + "\" ");
-        if (border != null) sb.append(" border=\"" + border + "\" ");
-        if (width != null) sb.append(" width=\"" + width + "\" ");
-        sb.append(">");
-        if (defaultModel != null) sb.append(defaultModel.toStartString());
-        return sb.toString();
+        return super.toStartString();
     }
 
     public String toEndString() {
-        return ("</table>");
+        return super.toEndString();
     }
 }

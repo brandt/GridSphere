@@ -21,6 +21,8 @@ public class TableBean extends BaseComponentBean implements TagBean {
     protected String align = null;
     protected boolean isSortable = false;
     protected String sortableId = "t1";
+    private int rowCount = 0;
+    private int maxRows = -1;
 
     /**
      * Constructs a default table bean
@@ -174,25 +176,55 @@ public class TableBean extends BaseComponentBean implements TagBean {
         return sortableId;
     }
 
+    public void setRowCount(int rowCount) {
+        this.rowCount = rowCount;
+    }
+
+    public int getRowCount() {
+        return rowCount;
+    }
+
+    public void setMaxRows(int maxRows) {
+        this.maxRows = maxRows;
+    }
+
+    public int getMaxRows() {
+        return maxRows;
+    }
+
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
-        //if (defaultModel == null) return "";
         if (isSortable) {
-           sb.append("<table class=\"sortable\" id=\" " + sortableId + "\" ");
+            sb.append("<table class=\"sortable\" id=\" " + sortableId + "\" ");
         } else {
             sb.append("<table " + getFormattedCss() + " ");
         }
         if (cellSpacing != null) sb.append(" cellspacing=\"" + cellSpacing + "\" ");
         if (cellPadding != null) sb.append(" cellpadding=\"" + cellPadding + "\" ");
         if (border != null) sb.append(" border=\"" + border + "\" ");
-        if (width != null) sb.append(" width=\"" + width + "\" >");
-        if (defaultModel!=null) sb.append(defaultModel.toStartString());
+        if (width != null) sb.append(" width=\"" + width + "\" ");
+        sb.append(">");
+        if (defaultModel != null) sb.append(defaultModel.toStartString());
         return sb.toString();
     }
 
     public String toEndString() {
         //if (defaultModel==null) return "";
-        return "</table>";
+        StringBuffer sb = new StringBuffer();
+        sb.append("</table>");
+        /*
+        System.err.println("maxrows " + maxRows);
+        if (maxRows > 0) {
+            int numpages = (rowCount + 1) / maxRows;
+            System.err.println("in table bean " + numpages);
+            sb.append("Page " + currentPage + " out of " + numpages);
+            for (int i = 0; i < numpages; i++) {
+
+                sb.append(" | " + i + 1 + " | ");
+            }
+        }
+        */
+        return sb.toString();
     }
 
 }

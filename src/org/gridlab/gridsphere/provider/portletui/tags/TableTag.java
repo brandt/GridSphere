@@ -39,4 +39,17 @@ public interface TableTag extends ComponentTag {
     void setSortable(boolean isSortable);
 
     boolean getSortable();
+
+    void setZebra(boolean isZebra);
+
+    boolean getZebra();
+
+    public void setMaxrows(int maxRows);
+
+    public int getMaxrows();
+
+    // used internally //
+    void incrementRowCount();
+
+    int getRowCount();
 }
