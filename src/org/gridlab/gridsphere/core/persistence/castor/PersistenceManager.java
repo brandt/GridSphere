@@ -38,6 +38,7 @@ public class PersistenceManager implements PersistenceInterface {
         }
 
         cat.info("PM init done");
+        cat.info("config: "+Configfile+" Database "+Databasename);
     }
 
     /**
@@ -91,9 +92,10 @@ public class PersistenceManager implements PersistenceInterface {
     public void close() {
         try {
             db.close();
-            db = null;
+            //db = null;
         } catch (PersistenceException e) {
-            cat.error("Persistence Exception " + e);
+            cat.error("Persistence Exception ");
+            e.printStackTrace();
         }
     }
 
