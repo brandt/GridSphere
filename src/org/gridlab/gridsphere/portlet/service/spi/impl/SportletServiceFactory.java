@@ -137,6 +137,10 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             allServices.put(serviceDef.getServiceInterface(), serviceDef);
             log.debug("adding service: " + serviceDef.getServiceInterface() + " service def: " + serviceDef.toString());
             serviceContexts.put(serviceDef.getServiceInterface(), ctx);
+        }
+        it = services.iterator();
+        while (it.hasNext()) {
+            SportletServiceDefinition serviceDef = (SportletServiceDefinition) it.next();
             if (serviceDef.isLoadOnStartup()) {
                 log.debug("loading service : " + serviceDef.getServiceInterface());
                 try {
@@ -177,6 +181,11 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             serviceContexts.put(serviceDef.getServiceInterface(), ctx);
             classLoaders.put(serviceDef.getServiceInterface(), loader);
             webapplist.add(serviceDef.getServiceInterface());
+        }
+        webappServices.put(webappName, webapplist);
+        it = services.iterator();
+        while (it.hasNext()) {
+            SportletServiceDefinition serviceDef = (SportletServiceDefinition) it.next();
             if (serviceDef.isLoadOnStartup()) {
                 log.debug("loading service : " + serviceDef.getServiceInterface());
                 try {
@@ -186,7 +195,6 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
                 }
             }
         }
-        webappServices.put(webappName, webapplist);
     }
 
     /**
