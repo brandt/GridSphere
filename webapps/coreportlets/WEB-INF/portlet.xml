@@ -309,4 +309,68 @@
 
 -->
 
+<portlet-app-def>
+
+<portlet-app id="org.gridlab.gridsphere.portlets.core.RSSPortlet">
+    <portlet-name>RSS</portlet-name>
+    <servlet-name>RSSPortlet</servlet-name>
+    <portlet-config>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </portlet-config>
+    <cache>
+        <expires>120</expires>
+        <shared>true</shared>
+    </cache>
+    <allows>
+        <maximized/>
+        <minimized/>
+        <resizing/>
+    </allows>
+    <supports>
+        <markup name="html">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+        <markup name="wml">
+            <view/>
+            <edit/>
+            <help/>
+            <configure/>
+        </markup>
+    </supports>
+</portlet-app>
+
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.RSSPortlet.1">
+    <context-param>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </context-param>
+    <concrete-portlet>
+        <portlet-name>RSS</portlet-name>
+        <default-locale>en</default-locale>
+        <language locale="en_US">
+            <title>RSS Portlet</title>
+            <title-short>RSS</title-short>
+            <description>a rss portlet</description>
+            <keywords>rss portlet</keywords>
+        </language>
+        <owner>
+            <group-name>CACTUS</group-name>
+            <role-name>ADMIN</role-name>
+        </owner>
+        <group>
+            <group-name>ANY</group-name>
+        </group>
+        <role>
+            <role-name>GUEST</role-name>
+        </role>
+    </concrete-portlet>
+</concrete-portlet-app>
+
+</portlet-app-def>
+
+
 </portlet-app-collection>

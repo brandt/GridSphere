@@ -29,6 +29,12 @@
         <servlet-class>org.gridlab.gridsphere.portlets.core.SubscriptionPortlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>RSSPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.RSSPortlet</servlet-class>
+    </servlet>
+
+
     <servlet-mapping>
        <servlet-name>HelloWorld</servlet-name>
        <url-pattern>/hello</url-pattern>
@@ -48,6 +54,12 @@
        <servlet-name>SubscriptionPortlet</servlet-name>
        <url-pattern>/subscriptionw</url-pattern>
     </servlet-mapping>
+
+    <servlet-mapping>
+       <servlet-name>RSSPortlet</servlet-name>
+       <url-pattern>/rss</url-pattern>
+    </servlet-mapping>
+
 
     <mime-mapping>
       <extension>wbmp</extension>
