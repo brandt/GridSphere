@@ -35,7 +35,7 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
 
     private static PortletLog log = SportletLog.getInstance(PortletManagerServiceImpl.class);
     private ServletContext context = null;
-
+    private static boolean isInitialized = false;
     private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
     private static PortletRegistry registry = PortletRegistry.getInstance();
 
@@ -55,22 +55,25 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
      */
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.info("in init()");
-        this.context = config.getServletConfig().getServletContext();
-        String webapps = config.getInitParameter(CORE_CONTEXT);
-        if (webapps != null) {
-            String webapp;
-            StringTokenizer st = new StringTokenizer(webapps, ",");
-            if (st.countTokens() == 0) {
-                webapp = webapps.trim();
-                System.err.println("adding webapp:" + webapp);
-                addWebApp(webapp);
-            } else {
-                while (st.hasMoreTokens()) {
-                    webapp = (String) st.nextToken().trim();
+        if (!isInitialized) {
+            this.context = config.getServletConfig().getServletContext();
+            String webapps = config.getInitParameter(CORE_CONTEXT);
+            if (webapps != null) {
+                String webapp;
+                StringTokenizer st = new StringTokenizer(webapps, ",");
+                if (st.countTokens() == 0) {
+                    webapp = webapps.trim();
                     System.err.println("adding webapp:" + webapp);
                     addWebApp(webapp);
+                } else {
+                    while (st.hasMoreTokens()) {
+                        webapp = (String) st.nextToken().trim();
+                        System.err.println("adding webapp:" + webapp);
+                        addWebApp(webapp);
+                    }
                 }
             }
+            isInitialized = true;
         }
     }
 
@@ -120,7 +123,7 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
     }
 
     public void initPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws PortletException {
-        PortletDispatcher.initPortlets(webApplicationName, req, res);
+        PortletDispatcher.initPortletWebApp(webApplicationName, req, res);
     }
 
     public void destroyAllPortletWebApplications(PortletRequest req, PortletResponse res) throws PortletException {
@@ -128,7 +131,7 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
     }
 
     public void destroyPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws PortletException {
-        PortletDispatcher.destroyPortlets(webApplicationName, req, res);
+        PortletDispatcher.destroyPortletWebApp(webApplicationName, req, res);
     }
 
     /**

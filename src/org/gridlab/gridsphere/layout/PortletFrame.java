@@ -149,10 +149,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         DefaultPortletAction action = event.getAction();
         if (action.getName() != "") {
             try {
-                //PortletDispatcher dispatcher = event.getPortletEventDispatcher();
-                PortletDispatcher.portletAction(portletClass, action, req, res);
-                //UserPortletManager userPortletManager = event.getUserPortletManager();
-                //userPortletManager.actionPerformed(portletClass, action, req, res);
+                PortletDispatcher.actionPerformed(portletClass, action, req, res);
             } catch (PortletException e) {
                 error = new PortletErrorMessage(portletClass, e);
             }
@@ -189,9 +186,8 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
                 } else {
                     out.println("<tr><td>");
                 }
-                //PortletDispatcher dispatcher = event.getPortletEventDispatcher();
                 try {
-                    PortletDispatcher.portletService(portletClass, req, res);
+                    PortletDispatcher.service(portletClass, req, res);
                 } catch (PortletException e) {
                     out.println("Portlet Unavailable");
                     out.println(e.toString());

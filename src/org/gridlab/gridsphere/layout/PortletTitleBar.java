@@ -279,7 +279,7 @@ public class PortletTitleBar extends BasePortletComponent {
             }
             if (winEvent != null) {
                 try {
-                    PortletDispatcher.portletWindowEvent(portletClass, winEvent, req, res);
+                    PortletDispatcher.windowEvent(portletClass, winEvent, req, res);
                 } catch (PortletException e) {
                     throw new PortletLayoutException("Failed to invoke window event method of portlet: " + portletClass);
                 }
@@ -348,7 +348,7 @@ public class PortletTitleBar extends BasePortletComponent {
         if (actionStr != null) {
             //PortletDispatcher dispatcher = event.getPortletEventDispatcher();
             try {
-                PortletDispatcher.portletTitle(portletClass, req, res);
+                PortletDispatcher.doTitle(portletClass, req, res);
                 out.println(" (" + portletMode.toString() + ") ");
             } catch (PortletException e) {
                 ErrorMessage += "Unable to invoke doTitle on active portlet\n";

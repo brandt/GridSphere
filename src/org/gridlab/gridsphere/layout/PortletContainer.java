@@ -74,7 +74,7 @@ public class PortletContainer {
             if (cid.getClassName().equals("org.gridlab.gridsphere.layout.PortletFrame")) {
                 f = (PortletFrame) cid.getPortletComponent();
                 portlets.add(f.getPortletClass());
-                PortletDispatcher.portletLogin(f.getPortletClass(), req, res);
+                PortletDispatcher.login(f.getPortletClass(), req, res);
             }
         }
     }
@@ -90,7 +90,7 @@ public class PortletContainer {
             cid = (ComponentIdentifier) it.next();
             if (cid.getPortletClass().equals("org.gridlab.gridsphere.layout.PortletFrame")) {
                 f = (PortletFrame) cid.getPortletComponent();
-                PortletDispatcher.portletLogout(f.getPortletClass(), req, res);
+                PortletDispatcher.logout(f.getPortletClass(), req, res);
             }
         }
     }
