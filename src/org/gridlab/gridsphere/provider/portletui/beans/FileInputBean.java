@@ -23,7 +23,7 @@ public class FileInputBean extends InputBean implements TagBean {
 
     public static String NAME = "fi";
 
-    private FileItem savedFileItem;
+    private FileItem savedFileItem = null;
 
     public FileInputBean() {
         super(NAME);
@@ -71,6 +71,8 @@ public class FileInputBean extends InputBean implements TagBean {
             throw new IOException("Unable to save file: " + e);
         }
 
+        if (savedFileItem == null) throw new IOException("No file has been saved!");
+
         value = savedFileItem.getName();
         savedFileItem.getStoreLocation();
 
@@ -78,15 +80,27 @@ public class FileInputBean extends InputBean implements TagBean {
     }
 
     public File getFile() {
-        return savedFileItem.getStoreLocation();
+        if (savedFileItem != null) {
+            return savedFileItem.getStoreLocation();
+        } else {
+            return null;
+        }
     }
 
     public String getFileName() {
-        return savedFileItem.getName();
+        if (savedFileItem != null) {
+            return savedFileItem.getName();
+        } else {
+            return "";
+        }
     }
 
     public long getFileSize() {
-        return savedFileItem.getSize();
+        if (savedFileItem != null) {
+            return savedFileItem.getSize();
+        } else {
+            return 0;
+        }
     }
 
     public String saveFile(String filePath) throws IOException {

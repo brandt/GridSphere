@@ -47,16 +47,19 @@ public class FileManagerPortlet extends ActionPortlet {
         String[] list = userStorage.getUserFileList(user);
         // set the list box size to number of files plus padding
         if (list == null) {
-            list = new String[] {"empty directory"};
-        }
-
-        lb.setSize(list.length + 3);
-        for (int i = 0; i < list.length; i++) {
             ListBoxItemBean item = new ListBoxItemBean();
-            item.setValue(list[i]);
+            item.setValue("empty directory");
+            item.setDisabled(true);
+            lb.setSize(4);
             lb.addBean(item);
+        } else {
+            lb.setSize(list.length + 3);
+            for (int i = 0; i < list.length; i++) {
+                ListBoxItemBean item = new ListBoxItemBean();
+                item.setValue(list[i]);
+                lb.addBean(item);
+            }
         }
-
         setNextState(request, "filemanager/view.jsp");
     }
 

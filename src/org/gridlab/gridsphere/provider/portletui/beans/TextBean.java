@@ -23,6 +23,12 @@ public class TextBean extends BaseComponentBean implements TagBean {
         this.cssStyle = TEXT_LABEL_STYLE;
     }
 
+    public TextBean(String beanId) {
+        super(NAME);
+        this.beanId = beanId;
+        this.cssStyle = TEXT_LABEL_STYLE;
+    }
+
     public TextBean(PortletRequest req, String beanId) {
         super(NAME);
         this.beanId = beanId;

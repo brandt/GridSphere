@@ -52,16 +52,23 @@ public class TableCellTag extends ContainerTag {
             cellBean = new TableCellBean();
         }
 
-        ContainerTag rowTag = (ContainerTag)getParent();
-        if (rowTag == null) return SKIP_BODY;
-        return EVAL_BODY_INCLUDE;
+        Object tag = getParent();
+        if (tag instanceof ContainerTag) {
+            ContainerTag rowTag = (ContainerTag)tag;
+            if (rowTag == null) return SKIP_BODY;
+            return EVAL_BODY_INCLUDE;
+        } else return SKIP_BODY;
         //return EVAL_BODY_BUFFERED;
     }
 
     public int doEndTag() throws JspException {
         if (cellSpacing != null) cellBean.setCellSpacing(cellSpacing);
         if (width != null) cellBean.setWidth(width);
-        ContainerTag rowTag = (ContainerTag)getParent();
+        Object tag = getParent();
+        if (!(tag instanceof ContainerTag)) {
+            return EVAL_PAGE;
+        }
+        ContainerTag rowTag = (ContainerTag)tag;
         if (rowTag != null) {
             /* if (list.isEmpty()) {
                 None of this works yet--- to include non ui tags within tablecell tags

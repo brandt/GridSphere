@@ -18,7 +18,7 @@ public class TextTag extends BaseComponentTag {
 
     protected TextBean textBean = null;
     protected String key = null;
-    protected String style = "";
+    protected String style = TextBean.TEXT_LABEL_STYLE;
 
     public void setStyle(String style) {
         this.style = style;
@@ -42,7 +42,7 @@ public class TextTag extends BaseComponentTag {
            //System.err.println("in TextTag: gettung text bean from session");
            textBean = (TextBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
            if (textBean == null) {
-               textBean = new TextBean();
+               textBean = new TextBean(beanId);
            } else {
                key = textBean.getKey();
                value = textBean.getValue();

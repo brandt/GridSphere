@@ -16,7 +16,7 @@ public class FrameBean extends TableBean implements TagBean {
     public static final String ERROR_TYPE = "error";
     public static final String MESSAGE_TYPE = "message";
 
-    protected String style = "";
+    protected String style = TextBean.TEXT_LABEL_STYLE;
 
     public FrameBean() {
         super(TABLE_FRAME_STYLE);
@@ -30,22 +30,6 @@ public class FrameBean extends TableBean implements TagBean {
         this.cellSpacing = TABLE_FRAME_SPACING;
         this.beanId = beanId;
         this.request = req;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return value;
     }
 
     public void setStyle(String style) {
@@ -63,15 +47,13 @@ public class FrameBean extends TableBean implements TagBean {
         TextBean text = new TextBean();
         text.setStyle(style);
         if (key != null) {
-            System.err.println("adding key");
             text.setKey(key);
         }
         if (value != null) {
-            System.err.println("adding value");
             text.setValue(value);
         }
         tc.addBean(text);
-        tc.setCssStyle(text.getCssStyle());
+        tc.setCssStyle(style);
         tr.addBean(tc);
         tm.addTableRowBean(tr);
         setTableModel(tm);
