@@ -22,6 +22,7 @@ import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
 import javax.servlet.UnavailableException;
 import java.util.List;
+import java.util.Enumeration;
 
 public class UserManagerPortlet extends ActionPortlet {
 
@@ -58,11 +59,6 @@ public class UserManagerPortlet extends ActionPortlet {
 
     public void doListUsers(FormEvent evt)
             throws PortletException {
-
-        if (this.userManagerService.existsUserName("root")) {
-            System.err.println("\nnnnroot user does not exists!!!!\nnnnn");
-        }
-
         PortletRequest req = evt.getPortletRequest();
         List userList = this.userManagerService.getUsers();
         req.setAttribute("userList", userList);
@@ -224,13 +220,8 @@ public class UserManagerPortlet extends ActionPortlet {
         }
 
         if (newuser) {
-            log.debug("i am a new user checking for " + userName);
-            if (this.userManagerService.getUserByUserName(userName) != null) {
-                message.append("A user already exists with the same user name, please use a different name.\n");
-                isInvalid = true;
-            }
             if (this.userManagerService.existsUserName(userName)) {
-                message.append("A user already exists with the same user name, please use a different name.\n");
+                message.append("A user already exists with the same user name, please use a different name.<br>");
                 isInvalid = true;
             }
         }
