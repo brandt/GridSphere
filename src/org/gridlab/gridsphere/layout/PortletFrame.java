@@ -43,7 +43,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     private PortletRole requiredRole = PortletRole.GUEST;
 
-    private transient PortletDataManager dataManager = SportletDataManager.getInstance();
+    private transient PortletDataManager dataManager = null;
 
     /**
      * Constructs an instance of PortletFrame
@@ -136,6 +136,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      */
     public List init(List list) {
         list = super.init(list);
+        dataManager = SportletDataManager.getInstance();
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
         compId.setPortletClass(portletClass);

@@ -13,7 +13,7 @@ import java.io.IOException;
  */
 public class PortletTabRegistry {
 
-    private static String layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING);
+    private static String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
 
     // Store application tabs in a hash
     private static Map applicationTabs = new Hashtable();

@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class PortletPage implements Serializable, Cloneable {
 
-    private transient PortletLog log = SportletLog.getInstance(PortletPage.class);
+    //private PortletLog log = SportletLog.getInstance(PortletPage.class);
 
     protected int COMPONENT_ID = -1;
 
@@ -44,9 +44,10 @@ public class PortletPage implements Serializable, Cloneable {
     //protected List portlets = new ArrayList();
 
     protected String title = "";
-    protected String theme = GridSphereConfig.getProperty(GridSphereConfigProperties.DEFAULT_THEME);
+    protected String theme = "xp";
 
-    private String layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING);
+    private String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
+
     private String layoutDescriptor = null;
 
     /**
@@ -187,14 +188,16 @@ public class PortletPage implements Serializable, Cloneable {
             tabbedPane.setTheme(theme);
             list = tabbedPane.init(list);
         }
+
         if (footerContainer != null) {
             footerContainer.setTheme(theme);
             list = footerContainer.init(list);
         }
-        log.debug("Made a components list!!!! " + list.size());
+
+        //log.debug("Made a components list!!!! " + list.size());
         for (int i = 0; i < list.size(); i++) {
             ComponentIdentifier c = (ComponentIdentifier) list.get(i);
-            log.debug("id: " + c.getComponentID() + " : " + c.getClassName() + " : " + c.hasPortlet());
+            //log.debug("id: " + c.getComponentID() + " : " + c.getClassName() + " : " + c.hasPortlet());
 
         }
         componentIdentifiers = list;
@@ -264,26 +267,26 @@ public class PortletPage implements Serializable, Cloneable {
      * @throws IOException if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
-        log.debug("Entering actionPerformed()");
+
         // if there is a layout action do it!
         if (event.getPortletComponentID() > -1) {
 
             // the component id determines where in the list the portlet component is
             ComponentIdentifier compId = (ComponentIdentifier) componentIdentifiers.get(event.getPortletComponentID());
             if (compId == null) {
-                log.warn("Event has invalid component id associated with it!");
+                //log.warn("Event has invalid component id associated with it!");
             } else {
                 PortletComponent comp = compId.getPortletComponent();
                 // perform an action if the component is non null
                 if (comp == null) {
-                    log.warn("Event has invalid component id associated with it!");
+                    //log.warn("Event has invalid component id associated with it!");
                 } else {
-                    log.debug("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
+                    //log.debug("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
                     comp.actionPerformed(event);
                 }
             }
         }
-        log.debug("Exiting actionPerformed()");
+
     }
 
     /**

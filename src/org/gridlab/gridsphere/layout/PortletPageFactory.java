@@ -24,14 +24,14 @@ public class PortletPageFactory implements PortletSessionListener {
 
     private static PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
 
-    private String layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING);
+    private String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
 
     private PortletPage templatePage = null;
     private PortletPage guestPage = null;
     private PortletPage newuserPage = null;
     private PortletPage errorPage = null;
 
-    private String templateLayoutPath = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_DIR) + "/TemplateLayout.xml";
+    private String templateLayoutPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/TemplateLayout.xml");
 
     private String newuserLayoutPath = null;
 
@@ -41,10 +41,7 @@ public class PortletPageFactory implements PortletSessionListener {
     private Map guests = new Hashtable();
 
     private PortletPageFactory() throws IOException, PersistenceManagerException {
-        String errorLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_DIR) + "/ErrorLayout.xml";
-
-        newuserLayoutPath = GridSphereConfig.getProperty(GridSphereConfigProperties.NEW_USER_LAYOUT);
-
+        String errorLayoutFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/ErrorLayout.xml");
 
         errorPage = PortletLayoutDescriptor.loadPortletPage(errorLayoutFile, layoutMappingFile);
         errorPage.init(new ArrayList());
@@ -56,7 +53,8 @@ public class PortletPageFactory implements PortletSessionListener {
     }
 
     public void reloadGuestUserLayout() throws IOException, PersistenceManagerException {
-        String guestLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GUEST_USER_LAYOUT);
+        String guestLayoutFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/GuestUserLayout.xml");
+
         guestPage = PortletLayoutDescriptor.loadPortletPage(guestLayoutFile, layoutMappingFile);
         guestPage.setLayoutDescriptor(guestLayoutFile);
     }
@@ -94,7 +92,8 @@ public class PortletPageFactory implements PortletSessionListener {
         PortletTabbedPane pane = null;
         try {
 
-            newPage = (PortletPage)templatePage.clone();
+            //newPage = (PortletPage)templatePage.clone();
+            newPage = (PortletPage)deepCopy(templatePage);
             log.debug("Returning cloned layout from webapps:");
 
             pane = newPage.getPortletTabbedPane();
@@ -110,7 +109,9 @@ public class PortletPageFactory implements PortletSessionListener {
                 List tabs = portletTabs.getPortletTabs();
                 for (int j = 0; j < tabs.size(); j++) {
                     PortletTab tab = (PortletTab)tabs.get(j);
-                    pane.addTab(name, (PortletTab)tab.clone());
+
+                    //pane.addTab(name, (PortletTab)tab.clone());
+                    pane.addTab(name, (PortletTab)deepCopy(tab));
                 }
             }
 
@@ -132,8 +133,8 @@ public class PortletPageFactory implements PortletSessionListener {
         String userLayoutPath = userLayoutDir + user.getID();
         File userLayoutFile = new File(userLayoutPath);
         try {
-            page = (PortletPage)templatePage.clone();
-
+            //page = (PortletPage)templatePage.clone();
+            page = (PortletPage)deepCopy(templatePage);
             if (!userLayoutFile.exists()) {
 
                 userLayoutFile.createNewFile();
@@ -224,7 +225,8 @@ public class PortletPageFactory implements PortletSessionListener {
         } else {
             PortletPage newcontainer = null;
             try {
-                newcontainer = (PortletPage)guestPage.clone();
+                //newcontainer = (PortletPage)guestPage.clone();
+                newcontainer = (PortletPage)deepCopy(guestPage);
                 newcontainer.init(new ArrayList());
                 guests.put(id, newcontainer);
                 sessionManager.addSessionListener(id, this);
@@ -263,4 +265,42 @@ public class PortletPageFactory implements PortletSessionListener {
         fis.close();
     }
 
+    static public Object deepCopy(Object oldObj) throws Exception
+   {
+      ObjectOutputStream oos = null;
+      ObjectInputStream ois = null;
+      try
+      {
+         ByteArrayOutputStream bos =
+               new ByteArrayOutputStream(); // A
+         oos = new ObjectOutputStream(bos); // B
+         // serialize and pass the object
+         oos.writeObject(oldObj);   // C
+         oos.flush();               // D
+         ByteArrayInputStream bin =
+               new ByteArrayInputStream(bos.toByteArray()); // E
+         ois = new ObjectInputStream(bin);                  // F
+         // return the new object
+         Object ro = ois.readObject(); // G
+          String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
+     /*
+         try {
+            PortletLayoutDescriptor.savePortletPage((PortletPage)ro, "/tmp/test.xml", layoutMappingFile);
+        } catch (PersistenceManagerException e) {
+            throw new IOException("Unable to save user's tabbed pane: " + e.getMessage());
+        }
+      */
+          return ro;
+      }
+      catch(Exception e)
+      {
+         System.out.println("Exception in ObjectCloner = " + e);
+         throw(e);
+      }
+      finally
+      {
+         oos.close();
+         ois.close();
+      }
+   }
 }
