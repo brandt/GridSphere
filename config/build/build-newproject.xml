@@ -75,6 +75,7 @@
             <fileset dir="config/template"/>
             <mapper type="glob" from="*.xml.tpl" to="*.xml"/>
         </copy>
+        <copy file="config/template/hibernate.properties" todir="${project.dir}/webapps/WEB-INF/persistence"/>
 
         <replace file="${project.dir}/webapp/WEB-INF/web.xml" token="@PROJECT_TITLE@"
             value="${project.title}"/>
