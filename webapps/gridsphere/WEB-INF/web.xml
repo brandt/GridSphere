@@ -94,11 +94,6 @@
         <servlet-class>org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet</servlet-class>
     </servlet>
 
-    <servlet>
-        <servlet-name>PortalStatsPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.PortalStatsPortlet</servlet-class>
-    </servlet>
-
     <servlet-mapping>
         <servlet-name>gridsphere</servlet-name>
        <url-pattern>/gridsphere</url-pattern>
@@ -142,11 +137,6 @@
     <servlet-mapping>
         <servlet-name>ProfileManagerPortlet</servlet-name>
         <url-pattern>/users/profile</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>PortalStatsPortlet</servlet-name>
-        <url-pattern>/admin/stats</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

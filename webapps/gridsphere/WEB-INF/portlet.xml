@@ -235,28 +235,6 @@
      </portlet-app-def>
 
     <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.portlets.PortalStatsPortlet">
-            <portlet-name>Portal Statistics Portlet</portlet-name>
-            <servlet-name>PortalStatsPortlet</servlet-name>
-            <supports>
-                 <view/>
-                 <help/>
-             </supports>
-        </portlet-app>
-
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.portlets.PortalStatsPortlet.1">
-            <concrete-portlet>
-                <portlet-name>Portal Statistics Portlet</portlet-name>
-                <default-locale>en</default-locale>
-                <language locale="en">
-                    <title>Portal Statistics</title>
-                    <description>Displays portal statistics such as sessions, users and services information</description>
-                </language>
-            </concrete-portlet>
-        </concrete-portlet-app>
-    </portlet-app-def>
-
-    <portlet-app-def>
         <portlet-app id="org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet">
             <portlet-name>Profile Manager Portlet</portlet-name>
             <servlet-name>ProfileManagerPortlet</servlet-name>
