@@ -90,7 +90,7 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
                 }
             } catch (Exception e) {
                 log.error("in AbstractPortlet: service()", e);
-                request.setAttribute(SportletProperties.PORTLETERROR + getPortletSettings().getConcretePortletID(), "Error performing method:" + method + e.getMessage());
+                request.setAttribute(SportletProperties.PORTLETERROR + getPortletSettings().getConcretePortletID(), e.getMessage());
 
                 //doError(request, response, e);
             }

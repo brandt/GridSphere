@@ -334,12 +334,11 @@ public class PortletURLImpl implements PortletURL {
             String encname = null;
 
             // if its a render url, the parameters must be prefixed
-            if (isAction) {
+            //if (isAction) {
                 encname = URLEncoder.encode(name);
-            } else {
-                encname = URLEncoder.encode(SportletProperties.RENDER_PARAM_PREFIX + name);
-;
-            }
+            //} else {
+            //    encname = URLEncoder.encode(SportletProperties.RENDER_PARAM_PREFIX + name);
+            //}
 
             Object val = store.get(name);
             if (val instanceof String[]) {
