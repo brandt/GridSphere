@@ -10,7 +10,6 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-//import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.ServiceTest;
 import org.gridlab.gridsphere.services.security.AuthenticationException;
@@ -162,7 +161,7 @@ public class UserManagerServiceTest extends ServiceTest {
         Vector userdns2 = new Vector();
         userdns2.add("dns1");
         userdns2.add("dns2");
-        req3.setMyproxyUserDN(userdns2);
+        //req3.setMyproxyUserDN(userdns2);
 
         try {
             userManager.submitAccountRequest(req1);
@@ -419,7 +418,7 @@ public class UserManagerServiceTest extends ServiceTest {
         Vector userdns = new Vector();
         userdns.add("dns1");
         userdns.add("dns2");
-        ianRequest.setMyproxyUserDN(userdns);
+        //ianRequest.setMyproxyUserDN(userdns);
         try {
             userManager.submitAccountRequest(ianRequest);
         } catch (PortletServiceException e) {
@@ -480,7 +479,7 @@ public class UserManagerServiceTest extends ServiceTest {
         Vector userdns = new Vector();
         userdns.add("dns1");
         userdns.add("dns2");
-        ianRequest.setMyproxyUserDN(userdns);
+        //ianRequest.setMyproxyUserDN(userdns);
         try {
             userManager.submitAccountRequest(ianRequest);
         } catch (PortletServiceException e) {

@@ -19,7 +19,7 @@ public class SecureAccessControlManagerService implements PortletServiceProvider
     private User user;
     private AccessControlManagerServiceImpl aclManagerService = AccessControlManagerServiceImpl.getInstance();
 
-    public SecureAccessControlManagerService(PortletServiceProvider psp, User user) {
+    public SecureAccessControlManagerService(User user) {
         this.user = user;
     }
 
