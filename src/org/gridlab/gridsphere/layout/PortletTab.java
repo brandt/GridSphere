@@ -33,7 +33,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     private PortletComponent portletComponent = null;
     private int tabOrder = 50;
 
-    protected StringBuffer tab = null;
+    protected StringBuffer tab = new StringBuffer();
     /**
      * Constructs an instance of PortletTab
      */

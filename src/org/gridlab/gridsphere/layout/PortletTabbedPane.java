@@ -34,7 +34,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     private String style = "menu";
     private String layoutDescriptor = null;
 
-    protected StringBuffer pane = null;
+    protected StringBuffer pane = new StringBuffer();
 
     /**
      * Constructs an instance of PortletTabbedPane
@@ -473,8 +473,6 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      */
     protected void doRenderMenuHTML(GridSphereEvent event, String[] links) throws PortletLayoutException, IOException {
         PortletRequest req = event.getPortletRequest();
-        PortletResponse res = event.getPortletResponse();
-        //PrintWriter out = res.getWriter();
 
         PortletRole userRole = req.getRole();
 
@@ -554,8 +552,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      */
     protected void doRenderSubMenuHTML(GridSphereEvent event, String[] links) throws PortletLayoutException, IOException {
         PortletRequest req = event.getPortletRequest();
-        PortletResponse res = event.getPortletResponse();
-        //PrintWriter out = res.getWriter();
+
         PortletRole userRole = req.getRole();
 
         //PortletTab parentTab = (PortletTab)this.getParentComponent();
@@ -603,12 +600,17 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
             }
 
             pane.append("</tr></table>");
-            pane.append("<td background=\"" + path + "subtab-middle.gif\" style=\"width:100%\">");
-            pane.append("&nbsp;</td></tr></table><!-- end tabbed pane -->");
+            pane.append("<td background=\"" + path + "subtab-middle.gif\" style=\"width:100%\">&nbsp;</td>");
+
+            // playing around to get rightmost forward icon
+            //pane.append("<td class=\"window-icon-right\"><a href=\"http://127.0.0.1:8080/gridsphere/gridsphere?gs_state=MINIMIZED&cid=profileTB\"><img border=\"0\" src=\"themes/default/images/window_minimize.gif\" title=\"Minimize\"/></a></td>");
+
+            pane.append("</tr></table><!-- end tabbed pane -->");
             PortletTab selectedTab = getSelectedTab();
-            if (selectedTab != null)
+            if (selectedTab != null) {
                 selectedTab.doRender(event);
                 pane.append(selectedTab.getBufferedOutput());
+            }
         }
     }
 
@@ -667,6 +669,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     public Object clone() throws CloneNotSupportedException {
         PortletTabbedPane t = (PortletTabbedPane) super.clone();
         t.style = this.style;
+        t.pane = this.pane;
         t.startIndex = this.startIndex;
         //t.selectedIndex = this.selectedIndex;
         List stabs = Collections.synchronizedList(tabs);
