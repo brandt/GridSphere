@@ -163,7 +163,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      * @param event a portlet frame event
      */
     public void handleFrameMaximized(PortletFrameEvent event) {
-        System.err.println("in frame layout: frame has been maximized");
+        //System.err.println("in frame layout: frame has been maximized");
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
         Iterator it = scomponents.iterator();
@@ -238,7 +238,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      * @param event a portlet frame event
      */
     public void handleFrameClosed(PortletFrameEvent event) {
-        System.err.println("Portlet FrameLAyout: in frame closed");
+        //System.err.println("Portlet FrameLAyout: in frame closed");
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
         Iterator it = scomponents.iterator();

@@ -21,7 +21,7 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable, S
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
-        System.err.println("\t\tin render RowLayout");
+        //System.err.println("\t\tin render RowLayout");
         PortletComponent p = null;
 
         // starting of the gridtable

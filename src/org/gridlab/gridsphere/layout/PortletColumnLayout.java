@@ -27,7 +27,7 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
      * Renders the component
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
-        System.err.println("\t\tin render ColumnLayout");
+        //System.err.println("\t\tin render ColumnLayout");
         PortletResponse res = event.getPortletResponse();
         PortletRequest req = event.getPortletRequest();
         PrintWriter out = res.getWriter();

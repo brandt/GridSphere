@@ -246,7 +246,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      * @throws IOException            if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
-        System.err.println("in action performed portlet frame: " + portletClass);
+        //System.err.println("in action performed portlet frame: " + portletClass);
 
         super.actionPerformed(event);
 
@@ -512,8 +512,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 PortletResponse wrappedResponse = new StoredPortletResponseImpl(res, writer);
 
                 if (isClosing) {
-
-                    System.err.println("in here!");
 
                     PortletURI portletURI = res.createURI();
                     portletURI.addParameter(SportletProperties.COMPONENT_ID, String.valueOf(titleBar.getComponentID()));
