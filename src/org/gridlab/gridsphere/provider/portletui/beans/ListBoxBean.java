@@ -64,7 +64,6 @@ public class ListBoxBean extends BeanContainer implements TagBean {
         if (!beanId.equals("")) {
             sname = "ui_" + vbName + "_" + beanId + "_" + pname;
         }
-        System.err.println("in ListBoxBean: toString: name= " + sname);
         String result = "<select name='"+sname+"' size='"+size+"'";
         if (isMultiple) {
             result = result + " multiple='multiple'" ;

@@ -15,9 +15,9 @@ public class ListBoxItemBean extends SelectElementBean {
         super(NAME);
     }
 
-    public ListBoxItemBean(String value) {
+    public ListBoxItemBean(String beanId) {
         super(NAME);
-        this.value = value;
+        this.beanId = beanId;
     }
 
     public ListBoxItemBean(PortletRequest req, String beanId) {
