@@ -1,0 +1,28 @@
+
+#page-logo {
+  font-family:Franklin Gothic Medium, verdana, arial, sans-serif;
+  color: #e6e6e6;
+  font-size: 30px;
+  font-weight: normal;
+  background:#e0861e;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 1px;
+}
+
+#page-tagline {
+  font-family:Franklin Gothic Medium, verdana, arial, sans-serif;
+  color:#cbccce;
+  font-size:16px;
+  background:#e0861e;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 1px;
+  padding-bottom: 5px;
+}
+
+#page-wrapper {
+  width: 100%;
+  display: table-row;
+  table-layout: fixed;
+}

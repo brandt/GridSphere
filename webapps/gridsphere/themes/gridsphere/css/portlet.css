@@ -1,0 +1,218 @@
+/*
+Part of the Gridsphere XP Theme
+Author: Michael Russell (michael.russell@aei.mpg.de)
+Version: $Id$
+*/
+
+/***************************************************************************
+ * Portlet Pane and Frame Tags
+ *
+ * Portlet panes contain one or more portlet frames, where portlet frames
+ * contain elements of presentation organized for some particular reason.
+ * Portlet frames are seperated by "borders" where the color and width of
+ * each border is determined by the bgcolor and cellspacing properties of
+ * table respresenting each portlet frame. Note, however, the separation
+ * between portlet frames is determined by the cellspacing and cellpadding
+ * properties of the table representing the portlet pane.
+ ***************************************************************************/
+
+.portlet-pane {
+  background-color: #FFFFFF;
+  border: none;
+  padding: 0;
+}
+
+.portlet-frame {
+  background-color: #397DF3;
+  border: none;
+  padding: 0;
+}
+
+.portlet-frame-title {
+  background-color: #7997DE;
+  border: none;
+  color: #FFFFFF;
+  font-family: inherit;
+  font-weight: bold;
+  text-align: center;
+  padding-top: 1;
+  padding-right: 2;
+  padding-left: 2;
+  padding-bottom: 1;
+}
+
+.portlet-frame-actions {
+  background-color: #CCCCCC;
+  border: none;
+  color: #000000;
+  font-family: inherit;
+  padding-top: 2;
+  padding-right: 2;
+  padding-left: 2;
+  padding-bottom: 2;
+}
+
+.portlet-frame-message {
+  background-color: #FFFFFF;
+  border: none;
+  color: #000000;
+  font-family: inherit;
+  padding-top: 4;
+  padding-right: 4;
+  padding-left: 4;
+  padding-bottom: 4;
+}
+
+.portlet-frame-message-alert {
+  background-color: #FFFFFF;
+  border: none;
+  color: darkred;
+  font-family: inherit;
+  padding-top: 4;
+  padding-right: 4;
+  padding-left: 4;
+  padding-bottom: 4;
+}
+
+.portlet-frame-header {
+  background-color: #7997DE;
+  border-none;
+  color: #FFFFFF;
+  font-family: inherit;
+  text-align: center;
+  padding: 1;
+}
+
+.portlet-frame-header-checkbox {
+  background-color: #7997DE;
+  border-none;
+  color: #FFFFFF;
+  font-family: inherit;
+  font-size: -1;
+  text-align: center;
+  vertical-align: middle;
+  width: 12;
+}
+
+.portlet-frame-label {
+  background-color: #CCCCCC;
+  border: none;
+  color: #000000;
+  font-family: inherit;
+  text-align: left;
+  padding-top: 1;
+  padding-right: 2;
+  padding-left: 2;
+  padding-bottom: 1;
+}
+
+.portlet-frame-label-alert {
+  background-color: #CCCCCC;
+  border: none;
+  color: darkred;
+  font-family: inherit;
+  text-align: left;
+  padding-top: 1;
+  padding-right: 2;
+  padding-left: 2;
+  padding-bottom: 1;
+}
+
+.portlet-frame-text {
+  background-color: #FFFFFF;
+  border: none;
+  color: #000000;
+  font-family: inherit;
+  text-align: left;
+  padding-top: 1;
+  padding-right: 2;
+  padding-left: 2;
+  padding-bottom: 1;
+}
+
+.portlet-frame-text-alert {
+  background-color: #FFFFFF;
+  border: none;
+  color: darkred;
+  font-family: inherit;
+  text-align: left;
+  padding-top: 1;
+  padding-right: 2;
+  padding-left: 2;
+  padding-bottom: 1;
+}
+
+.portlet-frame-input {
+  background-color: #FFFFFF;
+  border: none;
+  color: #000000;
+  font-family: inherit;
+  text-align: left;
+  padding-top: 1;
+  padding-right: 2;
+  padding-left: 2;
+  padding-bottom: 1;
+}
+
+.portlet-frame-input-alert {
+  background-color: #FFFFFF;
+  border: none;
+  color: darkred;
+  font-family: inherit;
+  text-align: left;
+  padding-top: 1;
+  padding-right: 2;
+  padding-left: 2;
+  padding-bottom: 1;
+}
+
+.portlet-frame-number {
+  background-color: #FFFFFF;
+  border: none;
+  color: #000000;
+  font-family: inherit;
+  text-align: right;
+  padding-top: 1;
+  padding-right: 2;
+  padding-left: 2;
+  padding-bottom: 1;
+}
+
+.portlet-frame-number-alert {
+  background-color: #FFFFFF;
+  border: none;
+  color: darkred;
+  font-family: inherit;
+  text-align: right;
+  padding-top: 1;
+  padding-right: 2;
+  padding-left: 2;
+  padding-bottom: 1;
+}
+
+.portlet-frame-entry-checkbox {
+  background-color: #CCCCCC;
+  border: none;
+  color: #000000;
+  font-family: inherit;
+  font-size: -1;
+  text-align: center;
+  vertical-align: middle;
+  width: 12;
+}
+
+/***************************************************************************
+ * Portlet Text Tags
+ ***************************************************************************/
+
+.portlet-text-bold {
+  font-weight: bold;
+}
+
+.portlet-text-italic {
+  font-weight: italic;
+}
+
+.portlet-text-alert {
+  color: darkred;
+}

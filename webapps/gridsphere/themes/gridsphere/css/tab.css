@@ -1,0 +1,147 @@
+/*
+Part of the Gridsphere XP theme
+Author: Oliver Wehrens (wehrens@aei.mpg.de)
+Version: $Id$
+*/
+
+.tab-pane {
+   padding-top: 5px;
+   font-family: verdana, arial, sans-serif;
+   font-size:12px;
+   font-weight:normal;
+   background-color:#ffffff;
+
+}
+
+.tab-empty {
+    width: 1px;
+    border-bottom: 1px solid black;
+}
+
+.tab-fillup {
+    width: 100%;
+    border-bottom: 1px solid black;
+}
+
+.tab-bar {
+   width: 100%;
+   background-color: #cc9900;
+   height: 1px;
+   border: none;
+}
+
+.tab-active {
+   /*padding: 5px; */
+   padding-bottom: 1px;
+   margin-bottom: 0px;
+   color:white;
+   background-color: #f9a61a;
+   font-size:12px;
+   border-top: 1px solid black;
+}
+
+
+.tab-inactive {
+   /*padding: 5px;*/
+   margin-bottom: 0px;
+   padding-bottom: 0px;
+   background-color: #cc6600;
+   color: #ffffff;
+   font-size:12px;
+   margin-left: 10px;
+   border-bottom: 1px solid black;
+   border-top: 1px solid #cc6600;
+}
+
+a.tab-menu {
+  text-decoration:none;
+}
+
+a.tab-menu:link {
+  color: #ffffff;
+}
+
+a.tab-menu:visited {
+  color: #ffffff;
+}
+
+a.tab-menu:hover {
+  color: #ffffff;
+  background-color: #cc6600;
+}
+
+a.tab-menu:active {
+  color: #ffffff;
+}
+
+/*  subpane */
+
+
+.tab-sub-active {
+    border: 1px solid white;
+    color: #ffffff;
+    font-size:10px;
+    font-weight: bold;
+    margin-left: 5px;
+
+}
+
+.tab-sub-inactive {
+    margin-left: 5px;
+    border: 1px solid #f9a61a;
+}
+
+.tab-sub-pane {
+   background-color: #f9a61a;
+   margin: 0px;
+   padding: 0px;
+   height: 10px;
+   border-bottom: 1px solid black;
+   border-right: 1px solid black;
+   border-left: 1px solid black;
+
+}
+
+
+a.tab-sub-menu {
+}
+
+a.tab-sub-menu:link {
+  color: white;
+  font-size:10px;
+  border: 1px solid #f9a61a;
+  font-weight: bold;
+  spacing-left: 2px;
+  spacing-right: 2px;
+
+}
+
+a.tab-sub-menu:visited {
+  color: white;
+  font-size:10px;
+  border: 1px solid #f9a61a;
+  font-weight: bold;
+  spacing-left: 2px;
+  spacing-right: 2px;
+}
+
+a.tab-sub-menu:hover {
+  border: 1px dashed white;
+  background-color: #f9a61a;
+  color: white;
+  font-size:10px;
+  font-weight: bold;
+  spacing-left: 2px;
+  spacing-right: 2px;
+}
+
+a.tab-sub-menu:active {
+  color: white;
+  font-size:10px;
+  font-weight: bold;
+  spacing-left: 2px;
+  spacing-right: 2px;
+}
+
+
+
