@@ -39,8 +39,8 @@ public class PersistenceManagerFactory {
 
     public static synchronized PersistenceManagerRdbms createProjectPersistenceManagerRdbms(String databaseName) {
         if (!databases.containsKey(databaseName)) {
-            String databaseConfigFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_HOME) +
-                    databaseName + "/database/database.xml";
+            String databaseConfigFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_HOME)
+                    + "/" + databaseName + "/database/database.xml";
             PersistenceManagerRdbms pm = new PersistenceManagerRdbmsImpl(databaseName, databaseConfigFile);
             databases.put(databaseName, pm);
         }
