@@ -4,6 +4,8 @@
  */
 package org.gridlab.gridsphere.portlet.service.spi;
 
+import org.gridlab.gridsphere.portlet.PortletConfig;
+
 import javax.servlet.ServletConfig;
 import java.util.Enumeration;
 

@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.portlet.service.spi.impl;
 
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.PortletConfig;
 
 import javax.servlet.ServletConfig;
 import java.util.Enumeration;
