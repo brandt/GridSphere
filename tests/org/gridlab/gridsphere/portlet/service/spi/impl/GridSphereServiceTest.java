@@ -27,7 +27,7 @@ public class GridSphereServiceTest extends GridSphereServletTest {
 
     protected void setUp() {
         super.setUp();
-        super.testCreateServlet();
+        super.testInitGridSphere();
     }
 
     public void testServiceFactoryCreate() {

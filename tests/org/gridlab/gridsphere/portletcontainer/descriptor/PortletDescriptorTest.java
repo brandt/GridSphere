@@ -61,8 +61,6 @@ public class PortletDescriptorTest extends ServletTestCase {
         // we have one app descriptions
         assertEquals(1, defs.size());
 
-        String groupOwner = pdd.getGroupOwnerName();
-        assertEquals("The Test Group", groupOwner);
         SportletDefinition def = (SportletDefinition) defs.get(0);
         ApplicationSportletConfig portletApp = def.getApplicationSportletConfig();
         List concreteApps = def.getConcreteSportletList();

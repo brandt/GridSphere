@@ -36,16 +36,23 @@ public class GridSphereServletTest extends ServletTestCase {
         junit.textui.TestRunner.run(suite());
     }
 
-    public void testCreateServlet() {
+    public void testInitGridSphere() {
         gsServlet = new GridSphereServlet();
         assertNotNull(gsServlet);
         try {
             gsServlet.init(config);
         } catch (Exception e) {
-            fail("Unable to initialize GridSphere Portlet services!");
+            fail("Unable to perform init() of GridSphereServlet!");
         }
         this.context = new SportletContext(config);
         assertNotNull(context);
+        try {
+            gsServlet.initializeServices();
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Unable to initialize GridSphere Portlet services!");
+            log.error("Unable to initialize GridSphere Portlet services!", e);
+        }
     }
 
     public static Test suite() {
