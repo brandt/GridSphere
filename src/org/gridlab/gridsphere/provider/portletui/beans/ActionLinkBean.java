@@ -72,7 +72,7 @@ public class ActionLinkBean extends ActionBean implements TagBean {
             Iterator it = paramBeanList.iterator();
             while (it.hasNext()) {
                 ActionParamBean apBean = (ActionParamBean) it.next();
-                this.portletURI.addActionParameter(apBean.getName(), apBean.getValue());
+                this.portletURI.addParameter(apBean.getName(), apBean.getValue());
             }
         }
 
