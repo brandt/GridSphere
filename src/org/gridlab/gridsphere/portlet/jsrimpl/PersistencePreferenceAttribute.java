@@ -49,8 +49,10 @@ public class PersistencePreferenceAttribute {
 
     public void setAValues(String[] values) {
         this.values = new ArrayList();
-        for (int i = 0; i < values.length; i++) {
-            this.values.add(values[i]);
+        if (values != null) {
+            for (int i = 0; i < values.length; i++) {
+                this.values.add(values[i]);
+            }
         }
     }
 
