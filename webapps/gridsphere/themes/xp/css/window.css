@@ -1,6 +1,6 @@
 /*
 Part of the Gridsphere XP theme
-Author: Oliver Wehrens (wehrens@aei.mpg.de)
+Author: Oliver Wehrens (oliver.wehrens@aei.mpg.de)
 Version: $Id$
 */
 
@@ -8,7 +8,6 @@ Version: $Id$
 .window-main {
    width: 100%;
    cellspacing: 2px;
-
 }
 
 .window-title {
@@ -20,7 +19,6 @@ Version: $Id$
   border-top: 1px solid #0053e2;
   border-right: 1px solid #0053e2;
   border-left: 1px solid #0053e2;
-
 }
 
 
@@ -34,12 +32,10 @@ Version: $Id$
 .window-icon-right {
    text-align: right;
    width: 40px;
-   float: right;
 }
 
 .window-icon-left {
     text-align: left;
-    float: left;
     width: 60px;
 }
 
