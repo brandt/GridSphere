@@ -15,6 +15,15 @@
         <description>Provides Administration Capabilities for Portlet Web Applications</description>
         <interface>org.gridlab.gridsphere.services.core.registry.PortletManagerService</interface>
         <implementation>org.gridlab.gridsphere.services.core.registry.impl.PortletManagerServiceImpl</implementation>
+        <!-- this is the internal name and password used by Tomcat manager webapp -->
+        <service-config>
+            <param-name>username</param-name>
+            <param-value>gridsphere</param-value>
+        </service-config>
+        <service-config>
+            <param-name>password</param-name>
+            <param-value>gridsphere</param-value>
+        </service-config>
     </service>
 
     <service>
