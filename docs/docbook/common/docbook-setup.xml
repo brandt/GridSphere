@@ -91,7 +91,7 @@ http://jakarta.apache.org/proposals/tapestry
 </target>
 
 <property name="html.output.dir" value="html"/>
-<property name="images.src.dir" value="images"/>
+<property name="images.src.dir" value="${docbook.xsl.base}/images"/>
 <property name="images.dest.dir" value="${html.output.dir}/images"/>
 <property name="common-images.dest.dir" value="${html.output.dir}/common-images"/>
 
@@ -120,7 +120,7 @@ http://jakarta.apache.org/proposals/tapestry
       </fileset>
     </copy>
     <copy todir="${common-images.dest.dir}">
-    	<fileset dir="../common/images">
+    	<fileset dir="../common/${docbook.xsl.dir}/images">
     		<include name="*.png"/>
     	</fileset>
     </copy>
@@ -182,7 +182,7 @@ Converting Flow Objects to PDF ...
 				<include name="lib/*.zip"/>
 			</fileset>
 		</classpath>
-		<arg line="-fo ${root.filename}.fop"/>
+		<arg line="-d -fo ${root.filename}.fop"/>
 		<arg line="-pdf ${root.filename}.pdf"/>
 	</java>
 
