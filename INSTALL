@@ -57,7 +57,8 @@ docs -- compiles all GridSphere docbook documentation and
 run-tests -- runs all Junit tests inside the Tomcat container using
 	     the Jakarta Cactus framework  
 
-test-reports -- creates HTML test reports from the Junit tests
+test-reports -- creates HTML test reports from the Junit tests. You first 
+		have to run "run-tests"
 
 To see all the targets invoke "ant --projecthelp".
 
