@@ -1,0 +1,113 @@
+
+<!--
+
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+    Author:     Jason Novotny
+    Version:    $Id$
+-->
+
+<chapter id="intro">
+    <title>Introduction</title>
+    <para>
+    The GridSphere User's Guide describes how to install and configure GridSphere.
+    For more information on developing and packaging portlets, please consult
+    the GridSphere Portlet Developer's Guide. The current implementation is
+    based upon the GridSphere Technical Design Document. The GridSphere portal
+    framework comes in both source and binary forms. Binaries can be created
+    from the source code and in both cases, the build environment is generally
+    the same. The GridSphere source code comes with a README file explaining how
+    to build the binary distribution. Both source and binaries come packaged
+    with all the necessary third party libraries and requires a GridSphere
+    compatible servlet container.
+    </para>
+    <para>
+    Document conventions: 
+    GRIDSPHERE_HOME refers to the GridSphere directory location
+    </para>
+
+  <sect1>
+    <title>Installation</title>
+
+    <sect2>
+        <title>Required Tools and Applications</title>
+        <itemizedlist>
+        <listitem><para>JDK 1.3.1+ <ulink url="http://java.sun.com/j2se">
+        http://java.sun.com/j2se</ulink> or JRE if you don't need to build any
+        source</para></listitem>
+        <listitem><para>Jakarta Ant 1.4.1+
+        <ulink url="http://jakarta.apache.org/ant">
+        http://jakarta.apache.org/ant</ulink>Ant is used to compile and deploy
+        the GridSphere framework</para>
+        </listitem>
+        <listitem><para>Jakarta Tomcat Servlet Container 4.1.18+ is required.
+        (Currently, only Tomcat 4.1.18 supports the Manager web application that
+        allows for dynamic portlet management.)
+        </para></listitem>
+        </itemizedlist>
+    </sect2>
+   
+    <sect2>
+    	<title>Optional Software Packages</title>
+	<para>This product includes Hypersonic SQL, an open-source lightweight Java database engine 
+	and JDBC driver. 
+	(Oliver, please provide info on installing Postgres)
+	</para>
+	
+    </sect2>
+
+    <sect2>
+    	<title>Bundled Software Packages</title>
+	<para>GridSphere uses many quality open source libraries listed below for completeness: It is not recommended to 
+	replace the bundled libaries.
+	</para>
+	<itemizedlist>
+	<listitem><para><ulink url="http://exolab.castor.org">Castor</ulink> is used to provide Java to XML bindings and Java to SQL persistence</para></listitem>
+	<listitem><para><ulink url="http://www.junit.org">Junit</ulink> provides a unit testing framework that is used to test GridSphere portlet services</para></listitem> 
+	<listitem><para><ulink url="http://jakarta.apache.org/log4j">Log 4J</ulink> provides an optimized logging library</para></listitem>
+	</itemizedlist>
+   </sect2>
+    
+    <sect2>
+    	<title>Installing Jakarta Ant</title>
+	<para>In order to build the source distribution or deploy GridSphere to a Tomcat 
+	servlet container, you will need to download Jakarta Ant. Ant is also used to run
+	the unit tests.
+	</para>
+	<orderedlist>
+	<listitem><para>Download Ant 1.5 distribution from <ulink url="http://jakarta.apache.org/ant">http://jakarta.apache.org/ant</ulink></para></listitem>
+	<listitem><para>Unzip ant into your preferred location and set the ANT_HOME environment to point to this location</para></listitem>
+	<listitem><para>Copy junit.jar from your GRIDSPHERE_HOME/lib into ANT_HOME/lib (only necessary if you want to run the tests)</para></listitem>
+	<listitem><para>Add ANT_HOME/bin to your PATH environment</para></listitem>
+	</orderedlist>
+    </sect2>
+    
+    <sect2>
+    	<title>Installing Jakarta Tomcat</title>
+	<para>The Jakarta Tomcat servlet container is required to provide a hosting environment
+	for the GridSphere framework.
+	</para>
+	<orderedlist>
+	<listitem><para>Download Jakarta Tomcat 4.1.18 distribution from <ulink url="http://jakarta.apache.org/tomcat">http://jakarta.apache.org/tomcat</ulink></para></listitem>
+	<listitem><para>Unzip tomcat into your preferred location and set the CATALINA_HOME environment to point to this location</para></listitem>
+	<listitem><para>GridSphere requires access to the ServletContext objects of other portlet web applications. 
+	To allow this, modify $CATALINA_HOME/conf/server.xml and make sure the following line is there:
+	<programlisting><literallayout><![CDATA[ <Context path="/gridsphere" docBase="gridsphere" debug="0" reloadable="false" crossContext="true">
+		<Logger className="org.apache.catalina.logger.FileLogger" prefix="localhost_gridsphere_log." suffix=".txt" timestamp="true"/>
+	</Context>]]></literallayout></programlisting></para></listitem>
+	<listitem><para>The Portlet Manager Portlet requires the Tomcat manager webapp to be configured. Modify $CATALINA_HOME/conf/tomcat-user.xml and make sure the following line is there:
+	<literallayout><programlisting><![CDATA[<user username="tomcat" password="tomcat" roles="tomcat,manager"/>]]></programlisting></literallayout>
+	</para>
+	<para>To ensure that clients can't access the manager webapp directly, modify $CATALINA_HOME/conf.server.xml
+	with the following:
+	<programlisting><literallayout><![CDATA[ <Context path="/gridsphere" docBase="gridsphere" debug="0" reloadable="false" crossContext="true">
+		<Logger className="org.apache.catalina.logger.FileLogger" prefix="localhost_gridsphere_log." suffix=".txt" timestamp="true"/>
+	</Context>]]></literallayout></programlisting></para></listitem>
+	
+	</orderedlist>
+    </sect2>
+    
+  </sect1>
+
+</chapter>
