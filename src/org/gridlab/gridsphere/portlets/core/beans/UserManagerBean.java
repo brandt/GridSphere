@@ -446,7 +446,7 @@ public class UserManagerBean extends PortletBean {
     }
 
     private boolean existsUser(String userName) {
-        return this.userManagerService.existsUser(userName);
+        return this.userManagerService.userExists(userName);
     }
 
     private void loadUserList() {
