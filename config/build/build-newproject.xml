@@ -48,6 +48,10 @@
         <copy file="config/build/build.project.xml" tofile="${project.dir}/build.xml"/>
 
         <copy file="config/build/build.properties" tofile="${project.dir}/build.properties" filtering="true"/>
+        <replace file="${project.dir}/build.properties"
+                 token="@GRIDSPHERE_HOME@"
+                 value="${GRIDSPHERE_HOME}"/>
+
         <replace file="${project.dir}/build.xml"
                  token="@PROJECT_TITLE@"
                  value="${project.title}"/>
