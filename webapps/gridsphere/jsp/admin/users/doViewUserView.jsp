@@ -7,10 +7,9 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:actionsubmit action="doViewListUser" value="List Users"/>
-                <ui:actionsubmit action="doViewNewUser" value="New User"/>
-                <ui:actionsubmit action="doViewEditUser" value="Edit User"/>
-                <ui:actionsubmit action="doViewDeleteUser" value="Delete User"/>
+                <ui:actionsubmit action="doListUsers" value="List Users"/>
+                <ui:actionsubmit action="doEditUser" value="Edit User"/>
+                <ui:actionsubmit action="doDeleteUser" value="Delete User"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>

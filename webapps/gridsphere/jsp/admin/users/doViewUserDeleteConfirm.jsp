@@ -7,8 +7,8 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:actionsubmit action="doViewListUser" value="List Users"/>
-                <ui:actionsubmit action="doViewNewUser" value="New User"/>
+                <ui:actionsubmit action="doListUsers" value="List Users"/>
+                <ui:actionsubmit action="doNewUser" value="New User"/>
             </ui:tablecell>
         </ui:tablerow>
         <ui:tablerow>

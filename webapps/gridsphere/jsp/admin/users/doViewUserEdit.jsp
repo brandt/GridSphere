@@ -3,12 +3,13 @@
 <portletAPI:init/>
 <ui:form>
 <ui:hiddenfield beanId="userID"/>
+<ui:hiddenfield beanId="newuser"/>
 <ui:panel>
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:actionsubmit action="doViewConfirmEditUser" value="Save User"/>
-                <ui:actionsubmit action="doViewCancelEditUser" value="Cancel Edit"/>
+                <ui:actionsubmit action="doConfirmEditUser" value="Save User"/>
+                <ui:actionsubmit action="doCancelEditUser" value="Cancel Edit"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>

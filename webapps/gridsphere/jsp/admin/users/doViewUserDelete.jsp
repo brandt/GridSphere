@@ -7,8 +7,8 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:actionsubmit action="doViewConfirmDeleteUser" value="Confirm Delete"/>
-                <ui:actionsubmit action="doViewCancelDeleteUser" value="Cancel Delete"/>
+                <ui:actionsubmit action="doConfirmDeleteUser" value="Confirm Delete"/>
+                <ui:actionsubmit action="doCancelDeleteUser" value="Cancel Delete"/>
             </ui:tablecell>
         </ui:tablerow>
         <ui:tablerow>
