@@ -6,6 +6,7 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
 import javax.servlet.http.HttpServletRequest;
+import java.awt.*;
 
 /**
  * The <code>TextBean</code> represents text to be displayed
@@ -53,9 +54,8 @@ public class TextBean extends BaseComponentBean implements TagBean {
      * @param beanId the bean identifier
      */
     public TextBean(HttpServletRequest req, String beanId) {
-        super(NAME);
+        super(NAME, req);
         this.beanId = beanId;
-        this.request = req;
         this.cssClass = MessageStyle.MSG_INFO;
     }
 
@@ -116,7 +116,16 @@ public class TextBean extends BaseComponentBean implements TagBean {
         } else if (style.equalsIgnoreCase(MessageStyle.MSG_UNDERLINE)) {
             return "<u>" + value + "</u>";
         }
-        text = "<span " + getFormattedCss();
+        if (locale != null) {
+            ComponentOrientation orientation = ComponentOrientation.getOrientation(locale);
+            if (orientation.isLeftToRight()) {
+                text = "<span " + getFormattedCss();
+            } else {
+                text = "<span dir=\"rtl\"" + getFormattedCss();
+            }
+        } else {
+            text = "<span " + getFormattedCss();
+        }
         text += ">" + value + "</span>";
         return text;
     }

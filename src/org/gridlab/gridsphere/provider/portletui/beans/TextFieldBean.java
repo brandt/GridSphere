@@ -50,9 +50,8 @@ public class TextFieldBean extends InputBean implements TagBean {
      * @param beanId the bean identifier
      */
     public TextFieldBean(HttpServletRequest req, String beanId) {
-        super(NAME);
+        super(NAME, req);
         this.inputtype = "text";
-        this.request = req;
         this.beanId = beanId;
     }
 

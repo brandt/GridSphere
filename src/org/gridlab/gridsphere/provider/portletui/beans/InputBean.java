@@ -8,6 +8,8 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * An abstract <code>InputBean</code> provides a generic input HTML element
  */
@@ -36,6 +38,17 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
      */
     public InputBean(String name) {
         super(name);
+        this.cssClass = INPUT_STYLE;
+    }
+
+    /**
+     * Constructs an input bean with a supplied name
+     *
+     * @param name the bean name
+     * @param req the HttpServletRequest
+     */
+    public InputBean(String name, HttpServletRequest req) {
+        super(name, req);
         this.cssClass = INPUT_STYLE;
     }
 

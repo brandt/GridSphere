@@ -5,6 +5,9 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Locale;
+
 /**
  * The abstract <code>BaseComponentBean</code> defines the visual bean properties of all ui tag beans
  */
@@ -17,7 +20,6 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
     protected String key = null;
     protected boolean visible = true;
     protected boolean supportsJS = false;
-
     protected String cssStyle = null;
     protected String cssClass = null;
 
@@ -35,6 +37,16 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
      */
     public BaseComponentBean(String vbName) {
         super(vbName);
+    }
+
+    /**
+     * Constructs a base component bean using the supplied visual bean type identifier
+     *
+     * @param vbName the supplied visual bean type identifier
+     * @param request the HttpServletRequest
+     */
+    public BaseComponentBean(String vbName, HttpServletRequest request) {
+        super(vbName, request);
     }
 
     /**
@@ -244,6 +256,14 @@ public abstract class BaseComponentBean extends BaseBean implements Comparable {
             result = result + " class=\"" + this.cssClass + "\"";
         }
         return result;
+    }
+
+    public Locale getLocale() {
+        return locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 
     /**

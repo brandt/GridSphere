@@ -14,6 +14,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
+import java.util.Locale;
 
 /**
  * A <code>TextTag</code> represents text to be displayed
@@ -110,7 +111,10 @@ public class TextTag extends BaseComponentTag {
 
     protected void overrideBaseComponentBean(BaseComponentBean componentBean) {
         super.setBaseComponentBean(componentBean);
+        // 1st of property defined in tag put it in bean
         if (style != null) ((TextBean)componentBean).setStyle(style);
+        // 2nd if property exists in bean then use it
+        if (((TextBean)componentBean).getStyle() != null) style = ((TextBean)componentBean).getStyle();
     }
 
     public int doStartTag() throws JspException {
@@ -127,6 +131,7 @@ public class TextTag extends BaseComponentTag {
             } else {
                 //this.updateBaseComponentBean(textBean);
                 this.overrideBaseComponentBean(textBean);
+                textBean.setStyle(style);
                 key = textBean.getValue();
             }
         } else {
@@ -136,6 +141,9 @@ public class TextTag extends BaseComponentTag {
             textBean.setCssClass(this.cssClass);
             textBean.setCssStyle(this.cssStyle);
         }
+
+        Locale locale = getLocale();
+        textBean.setLocale(locale);
 
         if (key != null) {
             textBean.setValue(getLocalizedText(key));

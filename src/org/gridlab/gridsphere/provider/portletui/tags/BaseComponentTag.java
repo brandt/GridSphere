@@ -28,6 +28,7 @@ public abstract class BaseComponentTag extends BaseBeanTag {
     protected String cssClass = null;
     protected boolean supportsJS = false;
     protected boolean isVisible = true;
+    protected Locale locale = null;
 
 
     /**

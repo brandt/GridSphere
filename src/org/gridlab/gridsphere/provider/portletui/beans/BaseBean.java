@@ -23,6 +23,7 @@ public abstract class BaseBean implements TagBean {
     protected String beanId = "";
     protected String vbName = "undefined";
     protected HttpServletRequest request = null;
+    protected Locale locale = null;
 
     /**
      * Constructs default base bean
@@ -38,6 +39,21 @@ public abstract class BaseBean implements TagBean {
      */
     public BaseBean(String vbName) {
         this.vbName = vbName;
+    }
+
+    /**
+     * Constructs a base bean for the supplied visual bean type
+     *
+     * @param vbName a name identifying the type of visual bean
+     * @param req the HttpServletRequest
+     */
+    public BaseBean(String vbName, HttpServletRequest req) {
+        this(vbName);
+        this.request = req;
+        Locale locale = (Locale) request.getSession(true).getAttribute(SportletProperties.LOCALE);
+        if (locale == null)
+            locale = request.getLocale();
+        if (locale == null) locale = Locale.ENGLISH;
     }
 
     /**
@@ -93,7 +109,6 @@ public abstract class BaseBean implements TagBean {
     }
 
     protected String getLocalizedText(String key, String base) {
-        Locale locale = this.request.getLocale();
         ResourceBundle bundle = ResourceBundle.getBundle(base, locale);
         return bundle.getString(key);
     }

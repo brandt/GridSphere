@@ -30,9 +30,8 @@ public class MessageBoxBean extends BaseComponentBean implements TagBean {
     }
 
     public MessageBoxBean(HttpServletRequest req, String beanId) {
-        super(NAME);
+        super(NAME, req);
         this.beanId = beanId;
-        this.request = req;
     }
 
     /**

@@ -42,8 +42,7 @@ public class CheckBoxBean extends SelectElementBean {
      * @param beanId  the bean identifier
      */
     public CheckBoxBean(HttpServletRequest request, String beanId) {
-        super(NAME);
-        this.request = request;
+        super(NAME, request);
         this.beanId = beanId;
         this.cssClass = CHECKBOX_STYLE;
     }

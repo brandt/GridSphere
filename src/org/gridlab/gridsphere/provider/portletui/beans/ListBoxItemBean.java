@@ -38,8 +38,7 @@ public class ListBoxItemBean extends SelectElementBean {
      * @param beanId the bean identifier
      */
     public ListBoxItemBean(HttpServletRequest req, String beanId) {
-        super(NAME);
-        this.request = req;
+        super(NAME, req);
         this.beanId = beanId;
     }
 

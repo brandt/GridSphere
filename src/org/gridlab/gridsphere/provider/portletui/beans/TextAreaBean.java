@@ -46,9 +46,8 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
      * @param beanId the bean identifier
      */
     public TextAreaBean(HttpServletRequest req, String beanId) {
-        super(NAME);
+        super(NAME, req);
         this.cssClass = MessageStyle.MSG_INFO;
-        this.request = req;
         this.beanId = beanId;
     }
 

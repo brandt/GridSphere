@@ -50,7 +50,7 @@ public class ListBoxBean extends BeanContainer implements TagBean {
      * @param beanId  the bean identifier
      */
     public ListBoxBean(HttpServletRequest request, String beanId) {
-        super(NAME);
+        super(NAME, request);
         this.cssClass = LISTBOX_STYLE;
         this.request = request;
         this.beanId = beanId;

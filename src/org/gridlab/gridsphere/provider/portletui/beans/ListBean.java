@@ -41,8 +41,7 @@ public class ListBean extends BaseComponentBean implements TagBean {
      * @param beanId  the bean identifier
      */
     public ListBean(HttpServletRequest request, String beanId) {
-        super(NAME);
-        this.request = request;
+        super(NAME, request);
         this.beanId = beanId;
     }
 

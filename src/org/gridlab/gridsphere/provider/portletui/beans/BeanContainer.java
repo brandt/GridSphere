@@ -5,6 +5,7 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -27,6 +28,16 @@ public abstract class BeanContainer extends BaseComponentBean {
      */
     public BeanContainer(String name) {
         super(name);
+    }
+
+    /**
+     * Constructs a bean container with the supplied name
+     *
+     * @param name the bean container name
+     * @param req the HttpServletRequest
+     */
+    public BeanContainer(String name, HttpServletRequest req) {
+        super(name, req);
     }
 
     /**
