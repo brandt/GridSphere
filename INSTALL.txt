@@ -31,7 +31,7 @@ The Ant build script, build.xml, uses the build.properties file to specify any
 compilation options. Edit build.properties appropriately for your needs.
 
 At this point, simply invoking "ant install" will deploy the GridSphere portlet 
-container to Tomcat. 
+container to Tomcat using the default database. Please see the User Guide for more details on configuring the database.
 
 
 The build.xml supports the following basic tasks:
