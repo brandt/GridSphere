@@ -660,7 +660,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Deploys GridSphere portlets to a local server                       -->
     <!-- =================================================================== -->
-    <target name="deploy-portlets" depends="deploy-manager-portlet, deploy-core-portlets, deploy-grid-portlets" description="Deploys GridSphere portlets to a local server">
+    <target name="deploy-portlets" depends="deploy-manager-portlet, deploy-core-portlets, deploy-grid-portlets, deploy-example-portlets" description="Deploys GridSphere portlets to a local server">
     </target>
 
     <!-- =================================================================== -->
@@ -792,6 +792,7 @@ Copyright:
         <copy todir="${gridsphere.dist}">
             <fileset dir="${gridsphere.build}">
                 <exclude name="classes/**"/>
+                <exclude name="reports/**"/>
             </fileset>
         </copy>
 
