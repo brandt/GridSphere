@@ -82,12 +82,13 @@ a.ui-datagrid-controls-element-active:link {
 /* Sortable tables */
 table.sortable a.sortheader {
     background-color:inherit;
-    color:#666666;
-    font-weight: bold;
+    vertical-align: middle;
+    color:#FFFFFF;
+    font-weight
     text-decoration: none;
     display: block;
 }
 table.sortable span.sortarrow {
-    color: black;
+    color: white;
     text-decoration: none;
 }
