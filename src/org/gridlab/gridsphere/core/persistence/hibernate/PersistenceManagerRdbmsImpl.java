@@ -170,7 +170,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         try {
             doTransaction(object, "", CMD_UPDATE);
         } catch (Exception e) {
-            throw new PersistenceManagerException();
+            throw new PersistenceManagerException(e);
         }
     }
 
@@ -188,7 +188,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         try {
             return (List) doTransaction(null, query, CMD_RESTORE_LIST);
         } catch (Exception e) {
-            throw new PersistenceManagerException();
+            throw new PersistenceManagerException(e);
         }
     }
 
@@ -196,7 +196,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         try {
             doTransaction(object, "", CMD_DELETE);
         } catch (Exception e) {
-            throw new PersistenceManagerException();
+            throw new PersistenceManagerException(e);
         }
     }
 
@@ -204,7 +204,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         try {
             doTransaction(null, query, CMD_DELETE_LIST);
         } catch (Exception e) {
-            throw new PersistenceManagerException();
+            throw new PersistenceManagerException(e);
         }
     }
 
