@@ -129,6 +129,12 @@
                     <description>Anmelden Portlet ermoeglicht das Anmelden</description>
                     <keywords>anmelden logout</keywords>
                 </language>
+		<language locale="fr">
+                    <title>Login</title>
+                    <title-short>Login</title-short>
+                    <description>Ce Portlet permet de faire un login</description>
+                    <keywords>portlet login</keywords>
+                </language>
                 <language locale="hu">
                     <title>Bejelentkezés</title>
                     <title-short>Bejelentkezés</title-short>
@@ -178,6 +184,12 @@
                     <title-short>Abmelden</title-short>
                     <description>Abmelden Portlet ermoeglicht das Ausloggen</description>
                     <keywords>portlet abmelden</keywords>
+                </language>
+		<language locale="fr">
+                    <title>Logout</title>
+                    <title-short>Logout</title-short>
+                    <description>Ce Portlet permet de faire un logout</description>
+                    <keywords>portlet logout</keywords>
                 </language>
                 <language locale="hu">
                     <title>Kijelentkezés</title>
