@@ -1,0 +1,20 @@
+
+These are the GridSphere Portal Framework Libraries:
+
+gridsphere.jar -- The GridSphere portlet container
+
+portlet-api -- The GridSphere Portlet API 
+
+portlet-widget-tags.jar -- The GridSphere Widget UI Tag Library
+
+exampleportlets.jar -- Provides a few example portlets including HelloWorld  
+   
+coreportlets.jar   -- Provides core GridSphere portlets including Login and Administrative portlets
+
+gridportlets.jar -- Provides Grid enabled portlets for credential management, job submission, etc.         
+
+gsmanager-portlet.jar -- Provides the GridSphere manager portlet for dynamic portlet administration
+
+ext/ -- Contains 3rd party libraries used by GridSphere
+
+
