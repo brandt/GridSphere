@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.GuestUser;
 import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
+import org.gridlab.gridsphere.portlet.impl.PortletProperties;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
@@ -41,7 +42,7 @@ public class LoginPortlet extends AbstractPortlet {
 
         if (_action instanceof DefaultPortletAction) {
             DefaultPortletAction action = (DefaultPortletAction) _action;
-            if (action.getName().equals(PortletAction.LOGIN)) {
+            if (action.getName().equals(PortletProperties.LOGIN)) {
                 PortletRequest req = evt.getPortletRequest();
 
                 String username = (String) req.getParameter("username");
@@ -74,7 +75,7 @@ public class LoginPortlet extends AbstractPortlet {
 
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         PortletURI loginURI = response.createURI();
-        DefaultPortletAction loginAction = new DefaultPortletAction(PortletAction.LOGIN);
+        DefaultPortletAction loginAction = new DefaultPortletAction(PortletProperties.LOGIN);
         loginURI.addAction(loginAction);
         request.setAttribute("login", loginURI.toString());
         User user = request.getUser();

@@ -15,7 +15,6 @@ import org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes;
 import org.gridlab.gridsphere.portletcontainer.descriptor.AllowsWindowStates;
 import org.gridlab.gridsphere.portletcontainer.descriptor.Markup;
 import org.gridlab.gridsphere.services.container.registry.UserPortletManager;
-import org.gridlab.gridsphere.services.container.registry.PortletDataManager;
 import org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryManager;
 
 import javax.servlet.ServletContext;
@@ -161,7 +160,7 @@ public class PortletFrame extends BasePortletComponent {
 
         UserPortletManager userPortletManager = UserPortletManager.getInstance();
 
-        PortletDataManager dataManager = PortletDataManager.getInstance();
+        //PortletDataManager dataManager = PortletDataManager.getInstance();
 
         // Set the portlet window
         //PortletWindow window = SportletWindow.getInstance(windowState);

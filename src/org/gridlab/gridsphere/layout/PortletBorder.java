@@ -12,7 +12,6 @@ import org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryMa
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
-import org.gridlab.gridsphere.portletcontainer.GridSphereAction;
 import org.gridlab.gridsphere.portletcontainer.descriptor.Markup;
 import org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes;
 import org.gridlab.gridsphere.portletcontainer.descriptor.AllowsWindowStates;
@@ -238,8 +237,8 @@ public class PortletBorder implements LayoutActionListener {
             try {
             stateLink = new PortletStateLink(winState);
             // Create portlet link Href
-            modeAction = new DefaultPortletAction(GridSphereAction.CHANGESTATE);
-            sportletURI.addAction(modeAction);
+            //modeAction = new DefaultPortletAction(LayoutProperties.CHANGESTATE);
+            //sportletURI.addAction(modeAction);
             sportletURI.addParameter(GridSphereProperties.PORTLETWINDOW, winState);
             stateLink.setStateHref(sportletURI.toString());
             stateLinks.add(stateLink);
@@ -270,7 +269,6 @@ public class PortletBorder implements LayoutActionListener {
             req.setAttribute(LayoutProperties.LINECOLOR, lineColor);
             req.setAttribute(LayoutProperties.FONT, font);
             req.setAttribute(LayoutProperties.TITLECOLOR, titleColor);
-
             req.setAttribute(LayoutProperties.WINDOWSTATES, windowStates);
             RequestDispatcher rd = ctx.getRequestDispatcher("/WEB-INF/conf/layout/portlet-border-first.jsp");
             rd.include(req, res);

@@ -4,7 +4,6 @@
                  org.gridlab.gridsphere.layout.LayoutProperties,
                  org.gridlab.gridsphere.layout.PortletStateLink"%>
 
-  <% String font = (String)request.getAttribute(LayoutProperties.FONT); %>
   <% String title = (String)request.getAttribute(LayoutProperties.TITLE); %>
   <% String titlecolor = (String)request.getAttribute(LayoutProperties.TITLECOLOR); %>
   <% String linecolor = (String)request.getAttribute(LayoutProperties.LINECOLOR); %>
