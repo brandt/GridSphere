@@ -22,9 +22,6 @@ Copyright:
 <project name="@PROJECT_TITLE@" default="help" basedir=".">
 
 
-    <property name="project.build" value="build"/>
-    <property name="project.dist" value="dist"/>
-
     <property file="build.properties"/>
 
     <property name="project.name" value="@PROJECT_NAME@"/>
