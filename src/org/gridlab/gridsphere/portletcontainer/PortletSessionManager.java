@@ -68,7 +68,7 @@ public class PortletSessionManager implements HttpSessionListener {
                         PortletSessionListener sessionListener = (PortletSessionListener)it.next();
                         PortletSession session = new SportletSession(event.getSession());
                         try {
-                            log.debug("logging a session listener out:");
+                            log.debug("logging a session listener out: " + sessionListener.getClass());
                             sessionListener.logout(session);
                         } catch (PortletException e) {
                             log.error("Unable to invoke logout on session listener ", e);
@@ -84,14 +84,23 @@ public class PortletSessionManager implements HttpSessionListener {
     }
 
     public void addSessionListener(String sessionId, PortletSessionListener sessionListener) {
+        log.debug("adding session listener for : " + sessionId + " " + sessionListener.getClass());
+
         List sessionListeners = (List)sessions.get(sessionId);
-        if (sessionListeners != null) {
-            sessionListeners.add(sessionListener);
+
+        if (sessionListeners == null) {
+            log.debug("session listeners null for id " + sessionId);
+            sessionListeners = new ArrayList();
         }
+
+        sessionListeners.add(sessionListener);
+
         sessions.put(sessionId, sessionListeners);
     }
 
     public void removeSessionListener(String sessionId, PortletSessionListener sessionListener) {
+        log.debug("removing session listener for : " + sessionId + " " + sessionListener.getClass());
+
         List sessionListeners = (List)sessions.get(sessionId);
         if (sessionListeners != null) {
             sessionListeners.remove(sessionListener);
@@ -100,12 +109,12 @@ public class PortletSessionManager implements HttpSessionListener {
     }
 
     public void dumpSessions() {
-        log.info("Session information:");
-        log.info("# current sessions: " + sessions.size());
+        log.debug("Session information:");
+        log.debug("# current sessions: " + sessions.size());
         Set keySet = sessions.keySet();
         Iterator it = keySet.iterator();
         while (it.hasNext()) {
-            log.info("current sessions #id: " + (String)it.next());
+            log.debug("current sessions #id: " + (String)it.next());
         }
     }
 }
