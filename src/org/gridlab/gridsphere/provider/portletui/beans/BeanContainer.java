@@ -5,8 +5,7 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * The abstract <code>BeanContainer</code> is a container for other visual beans
@@ -70,6 +69,24 @@ public abstract class BeanContainer extends BaseComponentBean {
      */
     public List getBeans() {
         return container;
+    }
+
+    /**
+     * Sorts the List by the value of the basecomponentbeans.
+     *
+     * @see BaseComponentBean
+     */
+    public void sortByValue() {
+        SortedSet sorted = new TreeSet();
+        for (int i=0;i<container.size();i++) {
+            sorted.add(container.get(i));
+        }
+        Vector result = new Vector();
+        Iterator i = sorted.iterator();
+        while (i.hasNext()) {
+            result.add(i.next());
+        }
+        container = result;
     }
 
 }

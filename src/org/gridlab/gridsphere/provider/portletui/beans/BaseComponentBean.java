@@ -8,7 +8,7 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 /**
  * The abstract <code>BaseComponentBean</code> defines the visual bean properties of all ui tag beans
  */
-public abstract class BaseComponentBean extends BaseBean {
+public abstract class BaseComponentBean extends BaseBean implements Comparable {
 
     protected String name = null;
     protected String value = null;
@@ -203,5 +203,9 @@ public abstract class BaseComponentBean extends BaseBean {
         this.supportsJS = supportsJS;
     }
 
+    public int compareTo(Object o) {
+        BaseComponentBean otherBean = (BaseComponentBean)o;
+        return value.compareToIgnoreCase(otherBean.getValue());
+    }
 }
 
