@@ -6,6 +6,10 @@
 
  saxon layout-mapping.xml layout-mapping.xsl includefiles=/path/file1.xml,/path/file2.xml
 
+ or
+
+ java org.apache.xalan.xslt.Process -IN layout-mapping.xml -XSL layout-mapping.xsl -PARAM includefiles /path/file1.xml,/path/file2.xml
+
  $Id$
 
 -->
