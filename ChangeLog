@@ -23,4 +23,6 @@ Changes since GridSphere 1.0
 + GridSphere libs are placed in build/lib and not lib now
 + Improved image tag/bean and can be nested inside actionlink tag
 + Added LocalePortlet to display available locales at the top of portal
++ layout descriptors support localization of titles used in tabs
++ Added Group Manager portlet to ADMIN layout to allow admins to ad/remove users to/from groups
 

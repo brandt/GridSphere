@@ -49,6 +49,10 @@
             tab. Users may immediately join any groups that are public on the portal. If the group is private, then the
             user has the option to request group submission from the portal administrator by sending an email request.
         </para>
+        <para>
+            A user that is granted the ADMIN role, an administrator,  when logged in will also have access to the "Group Manager" portlet.
+            An administrator has the capability to add and remove users to the group they are administrator of.
+        </para>
     </sect1>
 
     <sect1>
