@@ -64,7 +64,6 @@ public class LoginPortlet extends ActionPortlet {
             requestService = (RequestService) getPortletConfig().getContext().getService(RequestService.class);
             mailService = (MailService) getPortletConfig().getContext().getService(MailService.class);
             portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
-            if (portalConfigService == null) System.err.println("what the hell?");
             canUserCreateAccount = portalConfigService.getPortalConfigSettings().getCanUserCreateAccount();
         } catch (PortletServiceException e) {
             throw new UnavailableException("Unable to initialize services");
