@@ -104,11 +104,17 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
 
     }
 
+    /**
+     * Called from loadGroups to load the layout associated with this group if it exits
+     *
+     * @param ctx the servlet context
+     * @param groupName  the group name
+     * @throws PortletException  if an error occurs
+     */
     protected void loadLayout(ServletContext ctx, String groupName) throws PortletException {
         // load in the portlet.xml file
         String layoutXMLfile = ctx.getRealPath("/WEB-INF/layout.xml");
         File fin = new File(layoutXMLfile);
-
         if (fin.exists()) {
             try {
                 PortletTabRegistry.copyFile(fin, groupName);
@@ -122,7 +128,7 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
     }
 
     /**
-     * Loads in a group descriptor file from the associated servlet context
+     * Loads in a group descriptor file from the associated servlet context and then loads in a layout if one exists
      *
      * @param ctx the <code>ServletContext</code>
      */

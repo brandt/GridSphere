@@ -189,7 +189,12 @@ public class PortletTabRegistry {
         // copy over group tabs if they don't exist
         String tabDesc = groupLayoutDir + File.separator + groupName + ".xml";
         File out = new File(tabDesc);
+
+  
         if (!out.exists()) {
+            copyFile(in, out);
+        } else if (in.lastModified() > out.lastModified()) {
+            // copy over file if it is more recent than existing one
             copyFile(in, out);
         }
         addGroupTab(groupName, tabDesc);
