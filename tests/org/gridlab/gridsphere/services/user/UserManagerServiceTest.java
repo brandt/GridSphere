@@ -151,15 +151,15 @@ public class UserManagerServiceTest extends ServiceTest {
         req1.setFullName("Jason");
         req1.setUserID("jason");
 
-        req1.addToGroup(portals, SportletRole.getUserRole());
-        req1.addToGroup(triana, SportletRole.getUserRole());
-        req1.addToGroup(cactus,SportletRole.getUserRole());
+        req1.addToGroup(portals, PortletRole.USER);
+        req1.addToGroup(triana, PortletRole.USER);
+        req1.addToGroup(cactus, PortletRole.USER);
 
         log.info("Michael");
         req2 = userManager.createAccountRequest();
         req2.setFullName("John D Nobody");
         req2.setUserID("nobody");
-        req2.addToGroup(cactus, SportletRole.getUserRole());
+        req2.addToGroup(cactus, PortletRole.USER);
 
         log.info("Making user done");
 

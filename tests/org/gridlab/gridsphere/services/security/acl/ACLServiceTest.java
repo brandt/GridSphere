@@ -197,7 +197,7 @@ public class ACLServiceTest extends ServiceTest {
         addUsersToGroups();
 
         // test getUsersInGroup
-        List users = aclService.getUsersInGroup(SportletRole.getUserRole(), cactus);
+        List users = aclService.getUsersInGroup(PortletRole.USER, cactus);
         assertEquals(users.size(), 1);
 
         User user = (User)users.get(0);
@@ -224,7 +224,7 @@ public class ACLServiceTest extends ServiceTest {
 
 //        List roles;
 //        aclManagerService.addRoleInGroup(hans, cactus, SportletRole.getAdminRole());
-        assertTrue(aclService.hasRoleInGroup(hans, cactus, SportletRole.getAdminRole()));
+        assertTrue(aclService.hasRoleInGroup(hans, cactus, PortletRole.ADMIN));
 
 //        roles = aclService.getRolesInGroup(hans, cactus);
         // should have user and admin role

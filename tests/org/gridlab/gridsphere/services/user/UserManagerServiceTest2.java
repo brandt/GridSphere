@@ -5,6 +5,7 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletRole;
@@ -379,8 +380,8 @@ public class UserManagerServiceTest2 extends ServiceTest {
 
         UserACL rootacl = new UserACL();
         rootacl.setUserID(root.getOid());
-        rootacl.setRoleID(SportletRole.SUPER);
-        rootacl.setGroupID(SportletGroup.getSuperGroup().getID());
+        rootacl.setRoleID(PortletRole.SUPER.getID());
+        rootacl.setGroupID(PortletGroup.SUPER.getID());
         rootacl.setStatus(UserACL.STATUS_APPROVED);
 
         try {
@@ -403,13 +404,13 @@ public class UserManagerServiceTest2 extends ServiceTest {
 
         AccountRequest req1 = userManager.createAccountRequest();
         req1.setUserID("jason");req1.setGivenName("Jason");
-        req1.addToGroup(portal, SportletRole.getAdminRole());
-        req1.addToGroup(cactus, SportletRole.getUserRole());
+        req1.addToGroup(portal, PortletRole.ADMIN);
+        req1.addToGroup(cactus, PortletRole.USER);
 
         AccountRequest req2 = userManager.createAccountRequest();
         req2.setUserID("michael");req2.setGivenName("Michael");
-        req2.addToGroup(portal, SportletRole.getUserRole());
-        req2.addToGroup(triana, SportletRole.getUserRole());
+        req2.addToGroup(portal, PortletRole.USER);
+        req2.addToGroup(triana, PortletRole.USER);
 
         AccountRequest req3 = userManager.createAccountRequest();
         req3.setUserID("ian");req3.setGivenName("Ian");
