@@ -94,6 +94,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         super.init(config);
 
         GridSphereConfig.setServletConfig(config);
+
         SportletLog.setConfigureURL(GridSphereConfig.getServletContext().getRealPath("/WEB-INF/classes/log4j.properties"));
         this.context = new SportletContext(config);
         factory = SportletServiceFactory.getInstance();
@@ -135,7 +136,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         // If first time being called, instantiate all portlets
         if (firstDoGet.equals(Boolean.TRUE)) {
+
             synchronized (firstDoGet) {
+                GridSphereConfig.setContextPath(req.getContextPath());
                 log.debug("Testing Database");
                 // checking if database setup is correct
                 DBTask dt = new DBTask();

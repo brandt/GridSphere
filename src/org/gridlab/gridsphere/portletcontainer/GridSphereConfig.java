@@ -17,7 +17,9 @@ public class GridSphereConfig implements GridSphereConfigProperties {
     public static final String pathtype = System.getProperty("file.separator");
     protected static ServletConfig config = null;
     protected static ResourceBundle configBundle = null;
+    protected static String contextPath = "";
     public static final String PROJECT_NAME = "gridsphere";
+
 
     public static void setServletConfig(ServletConfig servletConfig) {
         config = servletConfig;
@@ -29,6 +31,14 @@ public class GridSphereConfig implements GridSphereConfigProperties {
 
     public static ServletContext getServletContext() {
         return config.getServletContext();
+    }
+
+    public static String getContextPath() {
+        return contextPath;
+    }
+
+    public static void setContextPath(String contextPath) {
+        GridSphereConfig.contextPath = contextPath;
     }
 
     /**
