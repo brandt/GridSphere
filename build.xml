@@ -346,8 +346,8 @@ Copyright:
         <copy file="conf/log4j.properties" tofile="${env.CATALINA_HOME}/webapps/${Name}/WEB-INF/log4j.properties" />
 
         <!-- Make core gpdk directory if necessary -->
-        <mkdir dir="${gridsphere.dir}"/>
-        <mkdir dir="${gridsphere.dir}/creds"/>
+        <mkdir dir="${env.CATALINA_HOME}/gridsphere"/>
+        <mkdir dir="${env.CATALINA_HOME}/gridsphere/creds"/>
     </target>
 
 
