@@ -11,7 +11,7 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
 import org.gridlab.gridsphere.services.container.registry.PortletUserRegistryService;
-import org.gridlab.gridsphere.services.container.parsing.ServletParsingService;
+import org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryServiceImpl;
 import org.gridlab.gridsphere.event.impl.ActionEventImpl;
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.layout.*;
@@ -34,17 +34,14 @@ public class GridSphere extends HttpServlet {
 
     private static SportletServiceFactory factory = SportletServiceFactory.getInstance();
 
-    //private PortletActionFactory factory = new SportletActionFactory().getInstance();
-
-    private static PortletConfig portletConfig = null;
     private static PortletRegistryService registryService = null;
     private static PortletUserRegistryService userRegistryService = null;
-    private static ServletParsingService parseService = null;
     private static PortletLayoutService layoutService = null;
     private static PortletLayoutEngine layoutEngine = null;
 
-    private static Collection abstractPortlets = new HashSet();
-    private static Collection registeredPortlets = null;
+    private static Collection concretePortlets = new HashSet();
+
+    private static PortletContext portletContext = null;
 
     private static boolean firstDoGet = true;
 
@@ -55,7 +52,7 @@ public class GridSphere extends HttpServlet {
         super.init(config);
         synchronized (this.getClass()) {
             configure(config);
-            registerPortlets();
+            userRegistryService.initializePortlets();
         }
     }
 
@@ -65,15 +62,12 @@ public class GridSphere extends HttpServlet {
 
         // Start services
         try {
-            parseService =
-                    (ServletParsingService) factory.createPortletService(ServletParsingService.class, config, true);
-            registryService =
-                    (PortletRegistryService) factory.createPortletService(PortletRegistryService.class, config, true);
+            portletContext = new SportletContext(config);
+
+            registryService = PortletRegistryServiceImpl.getInstance();
+
             userRegistryService =
                     (PortletUserRegistryService) factory.createPortletService(PortletUserRegistryService.class, config, true);
-
-            // Get a portlet config object
-            portletConfig = new SportletConfig(config);
 
             //layoutEngine = PortletLayoutEngine.getInstance(portletConfig);
 
@@ -86,33 +80,11 @@ public class GridSphere extends HttpServlet {
         }
     }
 
-    public void registerPortlets() {
-
-        Iterator it = registryService.getConcretePortlets().iterator();
-        try {
-        while (it.hasNext()) {
-            ConcretePortlet regPortlet = (ConcretePortlet) it.next();
-            System.err.println("portlet name: " + regPortlet.getPortletName());
-
-            AbstractPortlet abPortlet = regPortlet.getActivePortlet();
-            abstractPortlets.add(abPortlet);
-            //PortletConfig portletConfig = abPortlet.getPortletConfig();
-            PortletSettings portletSettings = regPortlet.getPortletSettings(false);
-            abPortlet.init(portletConfig);
-            abPortlet.initConcrete(portletSettings);
-        }
-        } catch (UnavailableException e) {
-            initFailure = e;
-            log.error("Caught Unavailable exception: ", e);
-        }
-    }
-
-
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 
         // Need to translate servlet objects into portlet counterparts--
         PortletRequest portletRequest = new SportletRequest(req);
-        PortletResponse portletResponse = new SportletResponse(res, portletRequest);
+        PortletResponse portletResponse = new SportletResponse(res, req);
 
         layoutEngine = new PortletLayoutEngine();
         ActionEvent actionEvent = null;
@@ -148,8 +120,12 @@ public class GridSphere extends HttpServlet {
                 actionEvent = new ActionEventImpl(portletAction, portletRequest, portletResponse);
 
                 // do actionPerformed
+                // This should do an action and recycle the cache.
+                // for local portlet actionPerformed and remove cache entry
+                // for remote portlet retrieve URL and put in cache (do action and service)
                 activePortlet.actionPerformed(actionEvent);
-                //portletConfig.getContext().getRequestDispatcher("/hello").include(req, res);
+
+                // or invoke actionPerformed on remote portlet
             }
 
             // Render layout
@@ -165,7 +141,7 @@ public class GridSphere extends HttpServlet {
     public void doRender(PortletRequest req, PortletResponse res) throws IOException, ServletException {
         // Make a layout
         log.info("in doRender()");
-        layoutEngine.doRender(portletConfig.getContext(), req, res);
+        layoutEngine.doRender(portletContext, req, res);
     }
 
     public final void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
@@ -182,22 +158,10 @@ public class GridSphere extends HttpServlet {
     }
 
     public final void destroy() {
-        // Shut down all PortletInfo Services.
-        log.info("Shutting down GridSphere");
+        // Shutdown local portlets
+        userRegistryService.shutdownPortlets();
 
-        // Destroy all portlets
-        Iterator abstractIt = abstractPortlets.iterator();
-        Iterator registeredIt = abstractPortlets.iterator();
-        while (abstractIt.hasNext() && registeredIt.hasNext()) {
-            AbstractPortlet ab = (AbstractPortlet) abstractIt.next();
-            ConcretePortlet reg = (ConcretePortlet) registeredIt.next();
-            ab = reg.getActivePortlet();
-            PortletSettings portletSettings = reg.getPortletSettings(false);
-            PortletConfig portletConfig = reg.getPortletConfig();
-            ab.destroy(portletConfig);
-            ab.destroyConcrete(portletSettings);
-        }
-
+        // Shutdown services
         SportletServiceFactory.getInstance().shutdownServices();
         System.gc();
     }
