@@ -48,7 +48,7 @@ public class UserManager implements UserManagerService {
     protected UserManager() {
     }
 
-    public static UserManager getInstance() {            
+    public static UserManager getInstance() {
         return instance;
     }
 
@@ -90,7 +90,7 @@ public class UserManager implements UserManagerService {
             log.info("Root user full name = " + givenName);
             String organization = config.getInitParameter("organization", "GridSphere").trim();
             log.info("Root user organization = " + organization);
-            String emailAddress = config.getInitParameter("emailAddress", "root@localhost").trim();
+            String emailAddress = config.getInitParameter("emailAddress", "root@localhost.localdomain").trim();
             log.info("Root user email address = " + emailAddress);
             String password = config.getInitParameter("password", "").trim();
             if (password.equals("")) {
