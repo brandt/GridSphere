@@ -28,6 +28,15 @@ public class DataGridTag extends ContainerTag {
     private int startPos = 0;
     private DataGridBean dataGridBean = null;
     private String key = null;
+    private String width = null;
+
+    public String getWidth() {
+        return width;
+    }
+
+    public void setWidth(String width) {
+        this.width = width;
+    }
 
     public String getKey() {
         return key;
@@ -53,11 +62,11 @@ public class DataGridTag extends ContainerTag {
         this.header = header;
     }
 
-    public List getList() {
+    public List getDataList() {
         return objectlist;
     }
 
-    public void setList(List list) {
+    public void setDataList(List list) {
         this.objectlist = list;
     }
 
@@ -85,6 +94,7 @@ public class DataGridTag extends ContainerTag {
                 dataGridBean.setSize(size);
                 this.setBaseComponentBean(dataGridBean);
                 dataGridBean.setList(objectlist);
+                dataGridBean.setWidth(width);
             } else {
                 this.updateBaseComponentBean(dataGridBean);
             }
@@ -113,8 +123,6 @@ public class DataGridTag extends ContainerTag {
             throw new JspException(e.getMessage());
         }
         return EVAL_BODY_INCLUDE;
-
-
     }
 
     public int doEndTag() throws JspException {
@@ -135,5 +143,4 @@ public class DataGridTag extends ContainerTag {
 
         return EVAL_PAGE;
     }
-
 }

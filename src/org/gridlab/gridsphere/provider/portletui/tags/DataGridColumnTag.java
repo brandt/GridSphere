@@ -23,11 +23,11 @@ public class DataGridColumnTag extends ContainerTag {
     private String key = null;
     private DataGridAttributes varattributes = null;
 
-    public DataGridAttributes getVarattributes() {
+    public DataGridAttributes getVarAttributes() {
         return varattributes;
     }
 
-    public void setVarattributes(DataGridAttributes varattributes) {
+    public void setVarAttributes(DataGridAttributes varattributes) {
         this.varattributes = varattributes;
     }
 
@@ -39,19 +39,19 @@ public class DataGridColumnTag extends ContainerTag {
         this.key = key;
     }
 
-    public String getParamvalue() {
+    public String getParamValue() {
         return paramValue;
     }
 
-    public void setParamvalue(String paramValue) {
+    public void setParamValue(String paramValue) {
         this.paramValue = paramValue;
     }
 
-    public String getParamname() {
+    public String getParamName() {
         return paramName;
     }
 
-    public void setParamname(String paramName) {
+    public void setParamName(String paramName) {
         this.paramName = paramName;
     }
 

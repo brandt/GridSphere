@@ -1029,12 +1029,12 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>list</name>
+            <name>dataList</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>startpos</name>
+            <name>startPos</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -1046,6 +1046,15 @@
         <attribute>
             <name>key</name>
             <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>
+                width
+            </name>
+            <required>
+                false
+            </required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
@@ -1078,17 +1087,17 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>paramname</name>
+            <name>paramName</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>paramvalue</name>
+            <name>paramValue</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>varattributes</name>
+            <name>varAttributes</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

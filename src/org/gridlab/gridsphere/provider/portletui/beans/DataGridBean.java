@@ -21,6 +21,7 @@ public class DataGridBean extends BeanContainer implements TagBean {
     private PortletURI uri = null;
     // holds the controlelemenet
     private StringBuffer control = null;
+    private String width = null;
 
     public DataGridBean() {
         super();
@@ -118,6 +119,21 @@ public class DataGridBean extends BeanContainer implements TagBean {
         this.uri = uri;
     }
 
+    /**
+     * Gets the width of the datagrid.
+     * @return width of the datagrid
+     */
+    public String getWidth() {
+        return width;
+    }
+
+    /**
+     * Sets the width of the elemet
+     * @param width width of the element
+     */
+    public void setWidth(String width) {
+        this.width = width;
+    }
 
     private String createLink(PortletURI uri, int pos, String desc, boolean renderlink) {
         StringBuffer result = new StringBuffer();
@@ -138,7 +154,11 @@ public class DataGridBean extends BeanContainer implements TagBean {
 
         // header output
         StringBuffer sb = new StringBuffer();
-        sb.append("<table class=\"ui-datagrid\"><tr><td>");
+        sb.append("<table class=\"ui-datagrid\"");
+        if (width!=null) {
+            sb.append(" width=\""+width+"\"");
+        }
+        sb.append("><tr><td>");
 
         if (key!=null) {
             header = this.getLocalizedText(key, "DataGrid");
