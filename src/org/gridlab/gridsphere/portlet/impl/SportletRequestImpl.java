@@ -5,6 +5,10 @@
 package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.apache.commons.fileupload.DiskFileUpload;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.FileUpload;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletInputStream;
@@ -14,10 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -35,6 +36,7 @@ public class SportletRequestImpl implements SportletRequest {
     private PortletSession portletSession = null;
     private boolean hasSessionBeenCreated = false;
     private static PortletLog log = SportletLog.getInstance(SportletRequest.class);
+    private Map parameters = null;
 
     /**
      * Cannot instantiate uninitialized SportletRequestImpl
@@ -49,6 +51,47 @@ public class SportletRequestImpl implements SportletRequest {
      * @param req the HttpServletRequest
      */
     public SportletRequestImpl(HttpServletRequest req) {
+
+        if (FileUpload.isMultipartContent(req)) {
+            //log.debug("Multipart!");
+            DiskFileUpload fileUpload=new DiskFileUpload();
+            Map map=new Hashtable();
+            List fileItems=null;
+            try {
+                  fileItems= fileUpload.parseRequest(req);
+            } catch (FileUploadException e) {
+                log.debug("Error Parsing multi Part form.Error in workaround!!!");
+            }
+            if (fileItems!=null){
+                for (int i = 0; i < fileItems.size(); i++) {
+                    FileItem item = (FileItem) fileItems.get(i);
+                    String[] tmpstr=new String[1];
+                    if(item.isFormField()) {
+                        tmpstr[0]=item.getString();
+                    }else {
+                        tmpstr[0]="fileinput";
+                        /** FileInput attribute is a FileItem*/
+                        req.setAttribute("SavedFileItem",item);
+                    }
+                    log.debug("Name: "+item.getFieldName()+" Value: "+tmpstr[0]);
+                    map.put(item.getFieldName(),tmpstr);
+                }
+
+                Map map2=req.getParameterMap();
+                //log.debug("Map new"+map.toString());
+                //log.debug("Map old"+map2.toString());
+                Enumeration keys=req.getParameterNames();
+                while (keys.hasMoreElements()) {
+                    String key2 = (String) keys.nextElement();
+                    if (!map.containsKey(key2)){
+                        map.put(key2,map2.get(key2));
+                    }
+                }
+                //log.debug("Map sum"+map.toString());
+                parameters=map;
+            }
+            //log.debug("End of workaround!!!");
+        }
         this.req = req;
         portletSession = new SportletSession(this,req.getSession(true));
     }
@@ -360,7 +403,13 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the parameter value
      */
     public final String getParameter(String name) {
-        return req.getParameter(name);
+        if (parameters==null)
+            return req.getParameter(name);
+        else
+            if (parameters.get(name)!=null)
+                return ((String[])parameters.get(name))[0];
+            else
+                return null;
     }
 
     /**
@@ -369,7 +418,10 @@ public class SportletRequestImpl implements SportletRequest {
      * @return a map of parameters
      */
     public Map getParameterMap() {
-        return req.getParameterMap();
+        if (parameters==null)
+            return req.getParameterMap();
+        else
+            return parameters;
     }
 
     /**
@@ -378,7 +430,12 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the enumeration of parameter names
      */
     public Enumeration getParameterNames() {
-        return req.getParameterNames();
+        if(parameters==null)
+            return req.getParameterNames();
+        else  {
+            Hashtable tmp=new Hashtable(parameters);
+            return  tmp.keys();
+        }
     }
 
     /**
@@ -391,7 +448,11 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the array of parameter values
      */
     public String[] getParameterValues(String name) {
-        return req.getParameterValues(name);
+        if(parameters==null)
+            return req.getParameterValues(name);
+        else{
+            return (String[])parameters.get(name);
+        }
     }
 
     public long getDateHeader(String name) {

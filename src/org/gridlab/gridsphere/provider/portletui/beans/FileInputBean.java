@@ -54,6 +54,17 @@ public class FileInputBean extends InputBean implements TagBean {
         createFileUpload();
     }
 
+    public FileInputBean(PortletRequest request, String beanId, FileItem fileItem) throws IOException {
+        super(NAME);
+        this.cssStyle = SUBMIT_STYLE;
+        this.inputtype = "file";
+        this.request = request;
+        this.beanId = beanId;
+        savedFileItem = fileItem;
+        createFileUpload();
+    }
+
+
     /**
      * Creates a file upload handler
      *
@@ -61,35 +72,36 @@ public class FileInputBean extends InputBean implements TagBean {
      */
     protected void createFileUpload() throws IOException {
 
-        // Create a new file upload handler
-        DiskFileUpload upload = new DiskFileUpload();
+        if (savedFileItem != null) {
+            // Create a new file upload handler
+            DiskFileUpload upload = new DiskFileUpload();
 
-        // Set upload parameters
-        upload.setSizeMax(MAX_UPLOAD_SIZE);
-        upload.setRepositoryPath(TEMP_DIR);
+            // Set upload parameters
+            upload.setSizeMax(MAX_UPLOAD_SIZE);
+            upload.setRepositoryPath(TEMP_DIR);
 
-        // Parse the request
-        List items = null;
-        try {
-            items = upload.parseRequest(request);
-        } catch (FileUploadException e) {
-            name = "<b>Unable to parse uploaded file!</b>";
-        }
-        // Process the uploaded fields
-        Iterator iter = items.iterator();
-
-        try {
-            while (iter.hasNext()) {
-                FileItem item = (FileItem) iter.next();
-                if (!item.isFormField()) {
-                    savedFileItem = item;
-
-                }
+            // Parse the request
+            List items = null;
+            try {
+                items = upload.parseRequest(request);
+            } catch (FileUploadException e) {
+                name = "<b>Unable to parse uploaded file!</b>";
             }
-        } catch (Exception e) {
-            throw new IOException("Unable to save file: " + e);
-        }
+            // Process the uploaded fields
+            Iterator iter = items.iterator();
 
+            try {
+                while (iter.hasNext()) {
+                    FileItem item = (FileItem) iter.next();
+                    if (!item.isFormField()) {
+                        savedFileItem = item;
+
+                    }
+                }
+            } catch (Exception e) {
+                throw new IOException("Unable to save file: " + e);
+            }
+        }
         if (savedFileItem == null) throw new IOException("No file has been saved!");
 
         value = savedFileItem.getName();
@@ -102,7 +114,7 @@ public class FileInputBean extends InputBean implements TagBean {
      * store Uploded file into file
      *
      */
-    public void storeFile(File file) throws Exception{
+    public void storeFile(File file) throws Exception {
         if (savedFileItem != null) {
             savedFileItem.write(file);
         }
@@ -155,12 +167,12 @@ public class FileInputBean extends InputBean implements TagBean {
     }
 
 
-   /**
-    * Returns with a InputStream
-    * @return InputStream
-    * @throws IOException
-    */
-    public  InputStream getInputStream() throws IOException{
+    /**
+     * Returns with the InputStream of savedFileItem
+     * @return InputStream
+     * @throws IOException
+     */
+    public InputStream getInputStream() throws IOException {
         return savedFileItem.getInputStream();
     }
 }

@@ -14,12 +14,10 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
+import org.apache.commons.fileupload.FileItem;
 
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /*
  * The <code>FormEventImpl</code> provides methods for creating/retrieving visual beans
@@ -524,7 +522,13 @@ public class NewFormEventImpl implements FormEvent {
                 this.printRequestAttributes();
                 log.debug("Creating a fileinput bean with id:" + beanId);
                 try {
-                    FileInputBean bean = new FileInputBean(req, beanId);
+                    FileInputBean bean=null;
+                    FileItem savedFileItem=(FileItem)req.getAttribute("SavedFileItem");
+                    if(savedFileItem!=null){
+                        bean = new FileInputBean(req, beanId,savedFileItem);
+                    }else{
+                        bean = new FileInputBean(req, beanId);
+                    }
                     bean.setName(name);
                     tagBeans.put(beanKey, bean);
                 } catch (IOException e) {
