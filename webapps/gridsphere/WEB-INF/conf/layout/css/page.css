@@ -1,0 +1,67 @@
+body {
+  font-family: verdana, arial, sans-serif;
+  color: #666;
+  font-size:11px;
+  font-weight:normal;
+  line-height:16px;
+
+  margin: 0px;
+  background-color: #FFFFFF;
+}
+
+#page-logo {
+  font-family:verdana, arial, sans-serif;
+  color: #FEAC25;
+  font-size: 30px;
+  font-weight: normal;
+  background:#B3E2FD;
+  padding-top: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 10px;
+}
+
+#page-title {
+  font-family:verdana, arial, sans-serif;
+  font-size: 10px;
+}
+
+#page-tagline {
+  font-family:verdana, arial, sans-serif;
+  color:#0066CC;
+  font-size:16px;
+  font-weight:bold;
+  background:#B3e2FD;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 5pxs;
+  padding-bottom: 5px;
+}
+
+
+#page-wrapper {
+  width: 100%;
+  display: table-row;
+  table-layout: fixed;
+}
+
+#page-wrapper-max {
+   width: 90%;
+   margin: 10px;
+   padding: 10px;
+}
+
+#page-row1 {
+  position: relative;
+  display:table-cell;
+  float: left;
+  padding: 10px;
+}
+
+#page-row2 {
+  position:relative; 
+  display:table-cell;
+  float: right;
+  padding: 10px;
+}
+
