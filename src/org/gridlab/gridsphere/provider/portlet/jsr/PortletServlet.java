@@ -23,6 +23,7 @@ import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRApplicationPortletImpl;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRPortletWebApplicationImpl;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 
 import javax.portlet.*;
@@ -206,7 +207,7 @@ public class PortletServlet extends HttpServlet
         JSRApplicationPortletImpl appPortlet =
                 (JSRApplicationPortletImpl) registry.getApplicationPortlet(portletClassName);
 
-        //Supports[] supports = appPortlet.getSupports();
+        Supports[] supports = appPortlet.getSupports();
 
 
         setPortletModes(request, appPortlet);
@@ -264,7 +265,7 @@ public class PortletServlet extends HttpServlet
             if (action != null) {
                 log.debug("in PortletServlet: action is not NULL");
                 if (action.equals(SportletProperties.DO_TITLE)) {
-                    RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext);
+                    RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext, supports);
                     RenderResponse renderResponse = new RenderResponseImpl(request, response, portalContext);
                     renderRequest.setAttribute(SportletProperties.RENDER_REQUEST, renderRequest);
                     renderRequest.setAttribute(SportletProperties.RENDER_RESPONSE, renderResponse);
@@ -281,7 +282,7 @@ public class PortletServlet extends HttpServlet
                 } else if (action.equals(SportletProperties.ACTION_PERFORMED)) {
                     PortletPreferences prefs = prefsManager.getPortletPreferences(appPortlet, user, Thread.currentThread().getContextClassLoader(), false);
                     request.setAttribute(SportletProperties.PORTLET_PREFERENCES, prefs);
-                    ActionRequestImpl actionRequest = new ActionRequestImpl(request, portalContext, portletContext);
+                    ActionRequestImpl actionRequest = new ActionRequestImpl(request, portalContext, portletContext, supports);
                     ActionResponse actionResponse = new ActionResponseImpl(request, response, portalContext);
                     //setGroupAndRole(actionRequest, actionResponse);
                     log.debug("in PortletServlet: action handling portlet " + portletClassName);
@@ -304,7 +305,7 @@ public class PortletServlet extends HttpServlet
                 request.setAttribute(SportletProperties.PORTLET_PREFERENCES, prefs);
 
 
-                RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext);
+                RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext, supports);
                 RenderResponse renderResponse = new RenderResponseImpl(request, response, portalContext);
 
                 renderRequest.setAttribute(SportletProperties.RENDER_REQUEST, renderRequest);

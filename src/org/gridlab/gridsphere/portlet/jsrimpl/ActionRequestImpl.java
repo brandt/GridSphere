@@ -33,8 +33,8 @@ public class ActionRequestImpl extends PortletRequestImpl implements ActionReque
      *
      * @param req the HttpServletRequest
      */
-    public ActionRequestImpl(HttpServletRequest req, PortalContext portalContext, PortletContext portletContext) {
-        super(req, portalContext, portletContext);
+    public ActionRequestImpl(HttpServletRequest req, PortalContext portalContext, PortletContext portletContext, Supports[] supports) {
+        super(req, portalContext, portletContext, supports);
     }
 
     /**

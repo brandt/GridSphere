@@ -49,6 +49,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
 
     // Jakarta Pluto method
     private String stripCharacterEncoding(String type) {
+        System.err.println("in stripchar");
         int xs = type.indexOf(';');
         String strippedType;
         if (xs == -1) {
@@ -169,6 +170,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @see #getContentType
      */
     public void setContentType(String type) {
+        if (type == null) throw new IllegalArgumentException("supplied content type is null!");
         String mimeType = stripCharacterEncoding(type);
         if (!isValidContentType(mimeType)) {
             throw new IllegalArgumentException(mimeType);
