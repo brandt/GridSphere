@@ -21,7 +21,6 @@ import org.gridlab.gridsphere.services.user.LoginService;
 import org.gridlab.gridsphere.services.user.UserManagerService;
 import org.gridlab.gridsphere.services.security.AuthenticationModule;
 import org.gridlab.gridsphere.services.security.AuthenticationException;
-import org.gridlab.gridsphere.services.security.impl.RootAuthenticationModule;
 
 import java.util.Vector;
 import java.util.List;
@@ -42,7 +41,6 @@ public class LoginServiceImpl
     public void init(PortletServiceConfig config) {
         _log.info("Entering init()");
         initServices();
-        rootAuthenticationModule = new RootAuthenticationModule();
         _log.info("Exiting init()");
     }
 

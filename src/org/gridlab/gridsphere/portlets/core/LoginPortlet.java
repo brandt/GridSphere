@@ -28,6 +28,9 @@ public class LoginPortlet extends AbstractPortlet {
     private UserManagerService userService = null;
     private LoginService loginService = null;
 
+    private static final String LOGIN_ERROR_ATTR = "LOGIN_ERROR";
+    private static final Integer LOGIN_ERROR_UNKNOWN = new Integer(-1);
+
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         PortletContext context = config.getContext();
@@ -72,7 +75,6 @@ public class LoginPortlet extends AbstractPortlet {
 
                     System.err.println("Creating new user");
                     session.setAttribute(GridSphereProperties.USER, user);
-                    session.setAttribute(GridSphereProperties.LOGINFLAG, new Boolean(true));
                 } else {
                     try {
                         // Retrieve login parameters from request
@@ -82,7 +84,10 @@ public class LoginPortlet extends AbstractPortlet {
                         // Attach portlet user to portlet session
                         session.setAttribute(GridSphereProperties.USER, user);
                     } catch (AuthenticationException err) {
-                        session.setAttribute(GridSphereProperties.LOGINFLAG, new Boolean(false));
+                        if(log.isDebugEnabled()) {
+                            log.debug(err.getMessage());
+                        }
+                        req.setAttribute(LOGIN_ERROR_ATTR, LOGIN_ERROR_UNKNOWN);
                     }
                 }
             }
