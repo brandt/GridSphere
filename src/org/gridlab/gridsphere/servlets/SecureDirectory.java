@@ -42,15 +42,15 @@ public class SecureDirectory extends HttpServlet {
             if (secureDirPath != null && secureDir.isDirectory()) {
                 inited = true;
 
-               if (DEBUG)
+                if (DEBUG)
                     log("Initialization OK (Strong protection " + (strongProtection ? "enabled" : "DISABLED (better enable it check web.xml) !!!") + "). Setting secureDirPath to " + secureDirPath);
             } else {
                 if (DEBUG)
 
-                   log("Initialization problem, please check if " + getServletContext().getRealPath(SECURE_CONTEXT_PATH) + " exists and if it is directory !!!");
+                    log("Initialization problem, please check if " + getServletContext().getRealPath(SECURE_CONTEXT_PATH) + " exists and if it is directory !!!");
             }
 
-       }
+        }
         dateFormat = DateFormat.getDateInstance();
         dateFormat.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
     }
@@ -67,17 +67,41 @@ public class SecureDirectory extends HttpServlet {
         if (!inited) {
             response.setStatus(503);
         } else {
-            if (userID == null || userID.equals("")) {
+
+            Enumeration params = request.getParameterNames();
+            String saveAs = null;
+            String contentType = null;
+            boolean shared = false;
+            while (params.hasMoreElements()) {
+                String paramName = (String) params.nextElement();
+                if (util.match("/(.+_)?saveAs/", paramName)) {
+                    saveAs = request.getParameter(paramName);
+                    if (contentType != null && shared)
+                        break;
+                } else if (util.match("/(.+_)?contentType/", paramName)) {
+                    contentType = request.getParameter(paramName);
+                    if (saveAs != null && shared)
+                        break;
+                } else if (util.match("/(.+_)?shared/", paramName)) {
+                    String sharedString = request.getParameter(paramName);
+                    if(sharedString.equals("true"))
+                        shared = true;
+                    if (saveAs != null && contentType != null)
+                        break;
+                }
+            }
+
+            if (userID == null || userID.equals("") || shared) {
                 if (DEBUG)
                     log("No userID - request redirected to GUEST. Request: " + request.getRequestURI() + "\nIP: " + request.getRemoteAddr() + "\n");
-                userID=GUEST_SECUREDIR;
+                userID = GUEST_SECUREDIR;
             }
             String userDirPath = secureDirPath + "/" + userID;
             if (!(new File(userDirPath).isDirectory())) {
                 if (DEBUG)
                     log("Request blocked (userDirPath=" + userDirPath + " is not directory) !!! Request: " + request.getRequestURI() + "\nIP: " + request.getRemoteAddr() + "\n");
 
-               response.setStatus(403);
+                response.setStatus(403);
             } else {
                 String resourcePath = util.substitute("s!" + request.getContextPath() + request.getServletPath() + "!!", request.getRequestURI());
                 File resource = new File(userDirPath + resourcePath);
@@ -87,6 +111,7 @@ public class SecureDirectory extends HttpServlet {
 
                     response.setStatus(404);
                 } else {
+/*
                     Enumeration params = request.getParameterNames();
                     String saveAs = null;
                     String contentType = null;
@@ -102,6 +127,7 @@ public class SecureDirectory extends HttpServlet {
                                 break;
                         }
                     }
+*/
 
                     if (contentType == null)
                         contentType = getServletContext().getMimeType(resourcePath);

@@ -49,6 +49,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
         String userID = fileLocationID.getUserID();
         String appName = fileLocationID.getCategory();
         String resource = fileLocationID.getFilePath();
+        boolean shared = fileLocationID.isShared();
         if (userID == null || appName == null || resource == null || !inited)
             return null;
         String userDirectoryPath;
@@ -73,6 +74,11 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
                     queryString += "contentType=" + URLEncoder.encode(contentType, "UTF-8");
                 } catch (Exception e) {
                 }
+            }
+            if(shared){
+                if (!queryString.equals(""))
+                    queryString += "&";
+                queryString += "shared=true";
             }
             resource = util.substitute("s!\\\\!/!g", resource);
             String url = SECURE_SERVLET_MAPPING + "/" + appName + "/" + resource + (queryString != null && !queryString.equals("") ? "?" + queryString : "");
@@ -243,6 +249,10 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
 
     public FileLocationID createFileLocationID(String userID, String category, String fileName) {
         return new FileLocationID(userID, category, fileName);
+    }
+
+    public FileLocationID createFileLocationID(String category, String fileName) {
+        return new FileLocationID("GUEST", category, fileName, true);
     }
 
     private File getFile(FileLocationID fileLocationID, boolean createPath) {

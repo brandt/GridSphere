@@ -27,6 +27,20 @@ public interface SecureDirectoryService extends PortletService {
     /**
      * Creates a file location path to store files using the following strategy:
      * <p/>
+     * location path = "/GUEST/<category>/<fileName>"
+     * <p/>
+     * The fileName
+     *
+     * @param category a category name define root of share virtual filesystem
+     * @param fileName the name of the file, this can be any file path e.g. "context.xml"
+     *                 or "/newdir/files/context.xml"
+     * @return a constructed file location path from the supplied parameters
+     */
+    public FileLocationID createFileLocationID(String category, String fileName);
+
+    /**
+     * Creates a file location path to store files using the following strategy:
+     * <p/>
      * location path = "/<userID>/<category>/<fileName>"
      * <p/>
      * The fileName

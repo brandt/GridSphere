@@ -9,11 +9,19 @@ public class FileLocationID {
     private String userID = null;
     private String category = null;
     private String filePath = null;
+    private boolean shared = false;
 
     public FileLocationID(String userID, String category, String filePath) {
         this.userID = userID;
         this.category = category;
         this.filePath = filePath;
+    }
+
+    public FileLocationID(String userID, String category, String filePath, boolean shared) {
+        this.userID = userID;
+        this.category = category;
+        this.filePath = filePath;
+        this.shared = shared;
     }
 
     public String getFilePath() {
@@ -30,5 +38,13 @@ public class FileLocationID {
 
     public String getCategory() {
         return category;
+    }
+
+    public boolean isShared() {
+        return shared;
+    }
+
+    public void setShared(boolean shared) {
+        this.shared = shared;
     }
 }
