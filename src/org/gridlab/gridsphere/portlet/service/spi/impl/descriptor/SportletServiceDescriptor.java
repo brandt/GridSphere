@@ -4,14 +4,11 @@
  */
 package org.gridlab.gridsphere.portlet.service.spi.impl.descriptor;
 
-import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
 
 import java.io.IOException;
 
 public class SportletServiceDescriptor extends Descriptor {
-
-    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(SportletServiceDescriptor.class);
 
     private SportletServiceCollection services = null;
 

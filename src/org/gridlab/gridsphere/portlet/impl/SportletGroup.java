@@ -67,4 +67,14 @@ public class SportletGroup extends BaseObject implements PortletGroup {
         Name = name;
     }
 
+    public boolean isBaseGroup() {
+        if (Name.equals(BASE_GROUP)) return true;
+        return false;
+    }
+
+    public boolean isSuperGroup() {
+        if (Name.equals(SUPER_GROUP)) return true;
+        return false;
+    }
+
 }

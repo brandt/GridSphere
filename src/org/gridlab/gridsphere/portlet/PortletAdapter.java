@@ -4,11 +4,8 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.PortletProperties;
-import org.gridlab.gridsphere.portlet.impl.SportletSettings;
-import org.gridlab.gridsphere.portlet.impl.SportletSession;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.UnavailableException;
 import javax.servlet.ServletRequest;
@@ -37,8 +34,6 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
 
     protected Hashtable storeVars = new Hashtable();
 
-    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletAdapter.class);
-
     /* keep track of all PortletSettings per concrete portlet (concreteID, PortletSettings) */
     private Map allPortletSettings = new Hashtable();
 
@@ -63,8 +58,8 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      * normal initialization
      */
     public void init(PortletConfig config) throws UnavailableException {
-        log.info("in init(PortletConfig)");
         this.portletConfig = config;
+        log.info("in init(PortletConfig)");
     }
 
     /**
@@ -141,12 +136,12 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
         portletSettings = (PortletSettings)allPortletSettings.get(portletID);
         request.setAttribute(GridSphereProperties.PORTLETSETTINGS, portletSettings);
 
-        String method = (String)request.getAttribute(PortletProperties.PORTLET_ACTION_METHOD);
+        String method = (String)request.getAttribute(SportletProperties.PORTLET_ACTION_METHOD);
         if (method != null) return;
 
         Portlet.Mode mode = request.getMode();
         if (mode == null) mode = Portlet.Mode.VIEW;
-
+        log.info("Displaying mode: " + mode);
         if (mode != null) {
             switch (mode.getMode()) {
                 case Portlet.Mode.VIEW_MODE:

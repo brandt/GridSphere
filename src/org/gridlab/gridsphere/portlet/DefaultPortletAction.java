@@ -4,8 +4,8 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import java.util.Hashtable;
 import java.util.Map;
+import java.util.HashMap;
 
 /**
  * The DefaultPortletAction is a portlet action with default parameters.
@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public final class DefaultPortletAction implements PortletAction {
 
-    private Map store = new Hashtable();
+    private Map store = new HashMap();
     private String name;
 
     /**
@@ -52,4 +52,12 @@ public final class DefaultPortletAction implements PortletAction {
         return store;
     }
 
+    /**
+     * Sets all parameters
+     *
+     * @param store the parameters as a map
+     */
+    public void setParameters(Map store) {
+        this.store = store;
+    }
 }

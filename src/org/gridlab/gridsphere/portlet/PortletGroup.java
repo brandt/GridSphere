@@ -5,13 +5,11 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import org.gridlab.gridsphere.portlet.impl.SportletGroup;
-
-
 public interface PortletGroup {
 
-    public static final PortletGroup BASE = SportletGroup.BASE;
-    public static final PortletGroup SUPER = SportletGroup.SUPER;
+    public boolean isBaseGroup();
+
+    public boolean isSuperGroup();
 
     public String getName();
 

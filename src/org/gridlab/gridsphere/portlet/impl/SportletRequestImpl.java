@@ -41,8 +41,6 @@ public class SportletRequestImpl implements SportletRequest {
      */
     public SportletRequestImpl(HttpServletRequest req) {
         this.req = req;
-        //if (portletSession == null)
-        //    portletSession = new SportletSession(req.getSession(true));
     }
 
     /**

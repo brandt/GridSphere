@@ -4,10 +4,9 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApp;
-import org.gridlab.gridsphere.event.ActionEvent;
-import org.gridlab.gridsphere.event.impl.ActionEventImpl;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.impl.*;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
@@ -298,11 +297,12 @@ public abstract class Portlet extends HttpServlet
      * Initializes the PortletConfig using the web.xml file entry for this portlet
      */
     public final void init(ServletConfig config) throws ServletException {
+        log.info("in Portlet: init(ServletConfig)");
         super.init(config);
-        log.info("in init(ServletConfig)");
     }
 
     public final void init() throws ServletException {
+        log.info("in Portlet: init");
         super.init();
     }
 
@@ -341,66 +341,61 @@ public abstract class Portlet extends HttpServlet
         PortletRequest portletRequest = new SportletRequestImpl(request);
         PortletResponse portletResponse = new SportletResponse(response, portletRequest);
 
-        String method = (String)request.getAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD);
+        String method = (String)request.getAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
         log.info("in Portlet: lifecycle method=" + method);
         try {
-            if (method.equals(PortletProperties.INIT)) {
-                PortletApp app = (PortletApp)request.getAttribute(PortletProperties.PORTLET_APPLICATION);
+            if (method.equals(SportletProperties.INIT)) {
+                PortletApp app = (PortletApp)request.getAttribute(SportletProperties.PORTLET_APPLICATION);
                 this.portletConfig = new SportletConfig(getServletConfig(), app);
                 init(this.portletConfig);
-            } else if (method.equals(PortletProperties.SERVICE)) {
+            } else if (method.equals(SportletProperties.SERVICE)) {
                 service(portletRequest, portletResponse);
-            } else if (method.equals(PortletProperties.DESTROY)) {
+            } else if (method.equals(SportletProperties.DESTROY)) {
                 destroy(this.portletConfig);
-            } else if (method.equals(PortletProperties.INIT_CONCRETE)) {
-                PortletSettings settings = (PortletSettings)request.getAttribute(PortletProperties.PORTLET_SETTINGS);
+            } else if (method.equals(SportletProperties.INIT_CONCRETE)) {
+                PortletSettings settings = (PortletSettings)request.getAttribute(SportletProperties.PORTLET_SETTINGS);
                 initConcrete(settings);
-            } else if (method.equals(PortletProperties.DESTROY_CONCRETE)) {
-                PortletSettings settings = (PortletSettings)request.getAttribute(PortletProperties.PORTLET_SETTINGS);
+            } else if (method.equals(SportletProperties.DESTROY_CONCRETE)) {
+                PortletSettings settings = (PortletSettings)request.getAttribute(SportletProperties.PORTLET_SETTINGS);
                 destroyConcrete(settings);
-            } else if (method.equals(PortletProperties.LOGIN)) {
+            } else if (method.equals(SportletProperties.LOGIN)) {
                 login(portletRequest);
-            } else if (method.equals(PortletProperties.LOGOUT)) {
+            } else if (method.equals(SportletProperties.LOGOUT)) {
                 PortletSession portletSession = (PortletSession)portletRequest.getPortletSession();
                 logout(portletSession);
             } else {
-                log.error("Portlet received unsupported lifecycle method: " + method);
+                if (log != null) log.error("Portlet received unsupported lifecycle method: " + method);
             }
         } catch (PortletException e) {
             PrintWriter out = response.getWriter();
             e.printStackTrace(out);
         }
 
-        request.removeAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD);
+        request.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
     }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-        log.info("in Portlet: doGet");
         super.doGet(req, res);
     }
 
     protected void doPut(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-        log.info("in Portlet: doPost");
         super.doPut(req, res);
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-        log.info("in Portlet: doPost");
         super.doPost(req, res);
     }
 
     protected void doTrace(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-        log.info("in Portlet: doTrace");
         super.doTrace(req, res);
     }
 
     protected void doDelete(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-        log.info("in Portlet: doDelete");
         super.doDelete(req, res);
     }
 

@@ -6,10 +6,9 @@ package org.gridlab.gridsphere.portlet;
 
 import org.gridlab.gridsphere.event.*;
 import org.gridlab.gridsphere.event.impl.ActionEventImpl;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.PortletProperties;
-import org.gridlab.gridsphere.portlet.impl.SportletSession;
+
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.http.HttpSessionEvent;
 import java.io.IOException;
@@ -20,8 +19,6 @@ import java.io.PrintWriter;
  * Additional extensions to a Portlet Adapter to provide action, title, message and window event handling
  */
 public class AbstractPortlet extends PortletAdapter implements ActionListener, MessageListener, WindowListener, PortletTitleListener {
-
-    public static PortletLog log = SportletLog.getInstance(AbstractPortlet.class);
 
     public AbstractPortlet() {
         super();
@@ -54,16 +51,17 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
 
         log.info("in AbstractPortlet: service(PortletRequest, PortletResponse)");
 
-        String method = (String)request.getAttribute(PortletProperties.PORTLET_ACTION_METHOD);
+        String method = (String)request.getAttribute(SportletProperties.PORTLET_ACTION_METHOD);
+        log.info("Received ACTION_METHOD: " + method);
         if (method != null) {
 
             String portletID = request.getParameter(GridSphereProperties.PORTLETID);
             //this.portletSettings = (PortletSettings)allPortletSettings.get(portletID);
 
-            if (method.equals(PortletProperties.DO_TITLE)) {
+            if (method.equals(SportletProperties.DO_TITLE)) {
                 doTitle(request, response);
-            } else if (method.equals(PortletProperties.WINDOW_EVENT)) {
-                WindowEvent winEvent = (WindowEvent)request.getAttribute(PortletProperties.WINDOW_EVENT);
+            } else if (method.equals(SportletProperties.WINDOW_EVENT)) {
+                WindowEvent winEvent = (WindowEvent)request.getAttribute(SportletProperties.WINDOW_EVENT);
                 switch (winEvent.getEventId()) {
                     case WindowEvent.WINDOW_MAXIMIZED:
                         windowMaximized(winEvent);
@@ -79,16 +77,16 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
                         log.error("Received invalid WindowEvent : " + winEvent.getEventId());
                         throw new PortletException("Received invalid WindowEvent");
                 }
-            } else if (method.equals(PortletProperties.ACTION_PERFORMED)) {
+            } else if (method.equals(SportletProperties.ACTION_PERFORMED)) {
                 log.info("in AbstractPortlet: doing actionPerformed()");
 
                 // Set the appropiate portlet action
-                DefaultPortletAction action = (DefaultPortletAction)request.getAttribute(PortletProperties.ACTION_EVENT);
-                ActionEvent evt = new ActionEventImpl(action, request, response);
+                DefaultPortletAction action = (DefaultPortletAction)request.getAttribute(SportletProperties.ACTION_EVENT);
+                ActionEvent evt =  new ActionEventImpl(action, request, response);
                 actionPerformed(evt);
             }
         }
-        request.removeAttribute(PortletProperties.PORTLET_ACTION_METHOD);
+        request.removeAttribute(SportletProperties.PORTLET_ACTION_METHOD);
     }
 
     /**
