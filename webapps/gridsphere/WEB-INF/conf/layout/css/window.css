@@ -41,6 +41,14 @@
    float: right;
 }
 
+#window-icon-left {
+   padding-right: 5px;
+   margin: 0px;
+   position: relative;
+   float: left;
+
+}
+
 a.window-iconmenu {
   text-decoration:none;
 }
