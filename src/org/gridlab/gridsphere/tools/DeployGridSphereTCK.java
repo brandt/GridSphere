@@ -294,10 +294,10 @@ public class DeployGridSphereTCK extends Task {
         String portlet = "";
         while ((line = bis.readLine()) != null) {
             //System.err.println("portlet= " + line);
-            if (line.indexOf("<portlet-class>") > 0) {
-                int d = line.indexOf("<portlet-class>");
-                String p = line.substring(d + "<portlet-class>".length());
-                int e = p.indexOf("</portlet-class>");
+            if (line.indexOf("<portlet-name>") > 0) {
+                int d = line.indexOf("<portlet-name>");
+                String p = line.substring(d + "<portlet-name>".length());
+                int e = p.indexOf("</portlet-name>");
                 portlet = p.substring(0, e);
                 portlets.add(war + "#" + portlet);
             }
