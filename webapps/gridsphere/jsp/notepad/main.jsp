@@ -6,9 +6,9 @@
 <portletAPI:init/>
 
 <jsp:useBean id="notes" class="java.util.List" scope="request"/>
-<jsp:useBean id="message" class="java.lang.String" scope="request"/>
+<jsp:useBean id="search" class="java.lang.String" scope="request"/>
 
-<ui:text value="<%= message %>"/>
+<ui:frame beanId="errorFrame"/>
 
 <ui:form>
     <ui:frame>
@@ -22,8 +22,9 @@
 %>
                     <ui:tablerow>
                         <ui:tablecell>
-                            <ui:actionlink action="viewNote" value="<%= sheet.getName() %>">
+                            <ui:actionlink beanId="link" action="viewNote" value="<%= sheet.getName() %>">
                                 <ui:actionparam name="oid" value="<%= sheet.getOid() %>"/>
+                                <ui:actionparam name="search" value="<%= search %>"/>
                             </ui:actionlink>
                         </ui:tablecell>
                     </ui:tablerow>
@@ -32,7 +33,7 @@
 
 %>
     <ui:textfield beanId="search"/><ui:actionsubmit action="doSearch" value="Search"/>
-    <ui:actionsubmit action="doShowNew" value="New Note"/>
+    <ui:actionsubmit action="doShowNew" value="Create a Note"/>
     <ui:actionsubmit action="showList" value="Show all Notes"/>
     </ui:frame>
 

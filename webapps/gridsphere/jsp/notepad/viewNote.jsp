@@ -13,6 +13,9 @@
 <jsp:useBean id="np_action" class="java.lang.String" scope="request"/>
 
 <ui:form>
+
+    <ui:frame beanId="errorFrame"/>
+
     <ui:frame>
         <ui:hiddenfield beanId="noteoid" value="<%= note.getOid() %>"/>
         <ui:hiddenfield beanId="np_action" value="<%= np_action.toString() %>"/>
@@ -22,7 +25,7 @@
 
             <ui:tablecell>
 <%
-            if (np_action.equals("view")) {
+            if (np_action.equals("view") || np_action.equals("edit")) {
 %>
                 <ui:text value="<%= note.getName() %>"/>
                 <%
@@ -38,13 +41,10 @@
 
             <ui:tablecell>
             <%if (np_action.equals("view")) {
-                System.out.println("getting context");
-/*                RenderContext context = new BaseRenderContext();
-                System.out.println("getting context 2");
+                RenderContext context = new BaseRenderContext();
                 String text = EngineManager.getInstance().render(note.getContent(), context);
-                System.out.println("t:"+text); */
             %>
-                <ui:text value="<%= note.getRadeoxMarkup() %>"/>
+                <ui:text value="<%= text %>"/>
             <%
             } else { %>
                 <ui:textarea rows="20" cols="60" beanId="content"  value="<%= note.getContent() %>"/>
@@ -56,23 +56,23 @@
 
      <ui:textfield beanId="search"/><ui:actionsubmit action="doSearch" value="Search"/>
      <% if (np_action.equals("view")) { %>
-            <ui:actionsubmit action="doShowEdit" value="Edit Note"/>
-            <ui:actionsubmit action="doShowNew" value="New Note"/>
+            <ui:actionsubmit action="doShowEdit" value="Edit this Note"/>
+            <ui:actionsubmit action="doShowNew" value="Create a new Note"/>
             <%
         }
         %>
      <% if (np_action.equals("edit")) { %>
-            <ui:actionsubmit action="doUpdate" value="Update Note"/>
+            <ui:actionsubmit action="doUpdate" value="Update this Note"/>
             <%
      }
         %>
      <% if (np_action.equals("new")) { %>
-            <ui:actionsubmit action="doAdd" value="Add Note"/>
+            <ui:actionsubmit action="doAdd" value="Add this Note"/>
             <%
      }
         %>
-    <ui:actionsubmit action="doDelete" value="Delete Note"/>
-    <ui:actionsubmit action="showList" value="Show List"/>
+    <ui:actionsubmit action="doDelete" value="Delete this Note"/>
+    <ui:actionsubmit action="showList" value="Show all Notes"/>
 
     </ui:frame>
 
