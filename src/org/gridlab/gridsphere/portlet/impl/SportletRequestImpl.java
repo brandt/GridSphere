@@ -7,15 +7,16 @@ package org.gridlab.gridsphere.portlet.impl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletInputStream;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
-import java.io.BufferedReader;
+import javax.servlet.ServletInputStream;
+import javax.servlet.RequestDispatcher;
+import java.util.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.io.BufferedReader;
+
 
 /**
  * A <code>SportletRequestImpl</code> provides an implementation of the
@@ -590,7 +591,7 @@ public class SportletRequestImpl implements SportletRequest {
             attrvalue = (Object) getAttribute(name);
             log.debug("\t\tname=" + name + " object type=" + attrvalue.getClass().getName());
         }
-        log.debug("\trequest parameter names: note if a parameter has multiple values, only the first element is displayed ");
+        log.debug("\trequest parameter names: note if a parameter has multiple values, only the first beans is displayed ");
         enum = getParameterNames();
         while (enum.hasMoreElements()) {
             name = (String) enum.nextElement();
