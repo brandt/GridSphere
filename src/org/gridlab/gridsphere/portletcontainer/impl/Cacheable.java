@@ -17,7 +17,7 @@ public class Cacheable {
         return shared;
     }
 
-    public void setExpiration(long seconds) {
+    public void setExpiration(int seconds) {
         this.seconds = seconds;
     }
 

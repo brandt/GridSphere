@@ -231,5 +231,14 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
     public void setSupportsModes(SupportsModes supportsModes) {
         this.supportsModes = supportsModes;
     }
+
+    /**
+     * returns the amount of time in seconds that a portlet's content should be cached
+     * 
+     * @return the amount of time in seconds that a portlet's content should be cached
+     */
+    public long getCacheExpires() {
+        return cacheInfo.getExpires();
+    }
 }
 
