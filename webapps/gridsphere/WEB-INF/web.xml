@@ -23,6 +23,14 @@
     <servlet>
         <servlet-name>gridsphere</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portletcontainer.GridSphereServlet</servlet-class>
+        <init-param>
+            <param-name>gridsphere_version</param-name>
+            <param-value>1.0</param-value>
+        </init-param>
+        <init-param>
+            <param-name>gridsphere_release</param-name>
+            <param-value>rc_1</param-value>
+        </init-param>
     </servlet>
 
     <servlet>

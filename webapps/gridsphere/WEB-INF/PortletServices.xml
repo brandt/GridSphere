@@ -70,7 +70,7 @@
         <implementation>org.gridlab.gridsphere.services.core.file.impl.FileManagerServiceImpl</implementation>
         <service-config>
             <param-name>tmp_dir</param-name>
-            <param-value>gridsphere/tempdir</param-value>
+            <param-value>tempdir</param-value>
         </service-config>
     </service>
 
