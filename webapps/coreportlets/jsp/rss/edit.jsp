@@ -14,7 +14,10 @@
 
     <gs:textarea bean="tab"/>
 
-    <gs:submit name="show" value="show"/>
+    <gs:submit name="show" value="Show"/>
+
+    <gs:submit name="ok" value="Ok"/>
+
 
     <gs:dropdownlist bean="ddl"/>
 

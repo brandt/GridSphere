@@ -65,8 +65,9 @@ public class RSSPortlet extends AbstractPortlet {
 
         DefaultPortletAction _action = evt.getAction();
         PortletRequest req = evt.getPortletRequest();
-
         FormEvent form = new FormEventImpl(evt);
+
+        form.printRequestParameter(req);
 
         TextFieldBean fieldBean = (TextFieldBean)form.getElementBean("f");
         System.out.println("\n\n\n\nVALUE 1 :"+fieldBean.getValue());
@@ -80,7 +81,21 @@ public class RSSPortlet extends AbstractPortlet {
         }
 
         DropDownListBean ddl = (DropDownListBean)form.getElementBean("ddl");
-        System.out.println("Selected Item (value)"+ddl.getSelectedItem().getValue());
+        System.out.println("Selected Item ddl (value)"+((Selectable)((ddl.getSelectedItems()).get(0))).getValue());
+
+        ListBoxBean lbb = (ListBoxBean)form.getElementBean("lbb");
+        ArrayList result = lbb.getSelectedValues();
+        System.out.println("SELECTE IN MULTIPLE");
+
+        for (int i=0;i<result.size();i++) {
+            System.out.println("RES: "+result.get(i));
+        }
+
+        TextAreaBean tab = (TextAreaBean)form.getElementBean("tab");
+        System.out.println("TextArea value :"+tab.getValue());
+        //System.out.println("Selected Item lbb (value)"+lbb.getSelectedItem().getValue());
+
+
 
         System.out.println("========================================================\n\n\n\n\n");
 
@@ -95,6 +110,8 @@ public class RSSPortlet extends AbstractPortlet {
             System.out.println("\n\n\n\nATTRIBUTE "+data.getAttribute("myattr"));
         */
         String button = form.getPressedSubmitButton();
+
+        System.out.println(">>>>>>>>>>>>> Button "+button);
 
         if (_action.getName().equals("rss_edit")) {
             if (button.equals("show")) {
@@ -126,7 +143,7 @@ public class RSSPortlet extends AbstractPortlet {
 
             }
             if (button.equals("ok")) {
-                String[] result = form.getSelectedListBoxValues("Labeltest");
+               // String[] result = form.getSelectedValues("Labeltest");
                 req.setMode(Portlet.Mode.VIEW);
             }
 
@@ -198,7 +215,6 @@ public class RSSPortlet extends AbstractPortlet {
         tab.store("tab",request);
 
         CheckBoxBean cbb = new CheckBoxBean("test","test",false, false);
-        cbb.setDisabled(true);
         cbb.setSelected(true);
         cbb.store("cbb", request);
 
@@ -207,6 +223,20 @@ public class RSSPortlet extends AbstractPortlet {
         ddl.add("ibook","ib");
         ddl.add("powermac","pm");
         ddl.store("ddl", request);
+
+        ListBoxBean lbb = new ListBoxBean("microsoft");
+        lbb.add("Word 2000","Word");
+        lbb.add("Excel 2000","Excel");
+        lbb.add("Powerpoint 2000","Powerpoint");
+        lbb.add("Access 2000","Access");
+        lbb.add("Word XP","WordX");
+        lbb.add("Excel XP","ExcelX");
+        lbb.add("Powerpoint XP","PowerpointX");
+        lbb.add("Access XP","AccessX");
+        lbb.add("Outlook XP","OutlookX");
+        lbb.setSize(7);
+        lbb.setMultiple(true);
+        lbb.store("lbb",request);
 
         // under the covers, a fieldbean is stored and mapped to f_name
         getPortletConfig().getContext().include("/jsp/rss/edit.jsp", request, response);
