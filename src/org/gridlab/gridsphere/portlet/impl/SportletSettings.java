@@ -33,9 +33,6 @@ public class SportletSettings implements PortletSettings {
     protected SportletApplicationSettings appSettings = null;
     protected Locale locale = null;
 
-    // Initially don't allow this user to modify sportlet settings
-    protected boolean hasConfigurePermission = false;
-
     /**
      * SportletSettings constructor
      * Create a PortletSettings object from a PortletApplication deployment descriptor object
@@ -62,11 +59,6 @@ public class SportletSettings implements PortletSettings {
             ConfigParam configParam = (ConfigParam)configParamsIt.next();
             store.put(configParam.getParamName(), configParam.getParamValue());
         }
-    }
-
-    public void enableConfigurePermission(boolean hasConfigurePermission) {
-        this.hasConfigurePermission = hasConfigurePermission;
-        appSettings.enableConfigurePermission(hasConfigurePermission);
     }
 
     /**
@@ -185,9 +177,6 @@ public class SportletSettings implements PortletSettings {
      * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
     public void removeAttribute(String name) throws AccessDeniedException {
-        if (!hasConfigurePermission) {
-            throw new AccessDeniedException("User is unauthorized to remove portlet settings");
-        }
         store.remove(name);
     }
 
@@ -200,9 +189,6 @@ public class SportletSettings implements PortletSettings {
      * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
     public void setAttribute(String name, String value) throws AccessDeniedException {
-        if (!hasConfigurePermission) {
-            throw new AccessDeniedException("User is unauthorized to set portlet settings");
-        }
         store.put(name, value);
     }
 
@@ -213,9 +199,6 @@ public class SportletSettings implements PortletSettings {
      * @throws IOException if the streaming causes an I/O problem
      */
     public void store() throws AccessDeniedException, IOException {
-        if (!hasConfigurePermission) {
-            throw new AccessDeniedException("User is unauthorized to store portlet settings");
-        }
         /*
         PortletDeploymentDescriptor pdd = null;
         try {

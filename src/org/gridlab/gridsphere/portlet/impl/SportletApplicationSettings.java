@@ -28,7 +28,6 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
     protected PortletDeploymentDescriptor pdd = null;
     protected Hashtable store = new Hashtable();
     protected ConcretePortletApplication portletApp = null;
-    protected boolean hasConfigurePermission = false;
 
     /**
      * SportletApplicationSettings constructor
@@ -44,10 +43,6 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
             ConfigParam configParam = (ConfigParam)contextParamsIt.next();
             store.put(configParam.getParamName(), configParam.getParamValue());
         }
-    }
-
-    public void enableConfigurePermission(boolean hasConfigurePermission) {
-        this.hasConfigurePermission = hasConfigurePermission;
     }
 
     /**
@@ -77,9 +72,6 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
      * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
     public void removeAttribute(String name) throws AccessDeniedException {
-        if (!hasConfigurePermission) {
-            throw new AccessDeniedException("User is unauthorized to remove portlet application settings");
-        }
         store.remove(name);
     }
 
@@ -92,9 +84,6 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
      * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
     public void setAttribute(String name, String value) throws AccessDeniedException {
-        if (!hasConfigurePermission) {
-            throw new AccessDeniedException("User is unauthorized to set portlet application settings");
-        }
         store.put(name, value);
     }
 
@@ -105,17 +94,6 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
      * @throws IOException if the streaming causes an I/O problem
      */
     public void store() throws AccessDeniedException, IOException {
-        if (!hasConfigurePermission) {
-            throw new AccessDeniedException("User is unauthorized to store portlet application settings");
-        }
-        /*
-        PortletDeploymentDescriptor pdd = null;
-        try {
-            pdd = new PortletDeploymentDescriptor();
-        } catch (PortletDeploymentDescriptorException e) {
-            throw new IOException("Unable to load PortletDeploymentDescriptor: " + e.getMessage());
-        }
-        */
         portletApp = pdd.getConcretePortletApplication(portletApp.getID());
         Enumeration enum = store.elements();
         ArrayList list = new ArrayList();

@@ -290,15 +290,5 @@ public interface PortletRequest extends HttpServletRequest {
      */
     public PortletWindow getWindow();
 
-    /**
-     * Defines which portlet mode is shown next. Once the mode is changed it cannot be
-     * changed back to Portlet.ModeModifier.REQUESTED.
-     *
-     * This function may only be used during event processing, in any other case the call has no effect.
-     *
-     * @param modeModifier the portlet mode modifier
-     */
-    public void setModeModifier(Portlet.ModeModifier modeModifier);
-
     public void logRequest();
 }

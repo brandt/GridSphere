@@ -335,30 +335,6 @@ public class SportletRequestImpl implements SportletRequest {
     }
 
     /**
-     * Defines which portlet mode is shown next. Once the mode is changed it cannot be
-     * changed back to PortletInfo.ModeModifier.REQUESTED.
-     *
-     * This function may only be used during event processing, in any other case the call has no effect.
-     *
-     * @param modeModifier the portlet mode modifier
-     */
-    public void setModeModifier(Portlet.ModeModifier modeModifier) {
-        req.setAttribute(GridSphereProperties.MODEMODIFIER, modeModifier);
-    }
-
-    /**
-     * Defines which portlet mode is shown next. Once the mode is changed it cannot be
-     * changed back to PortletInfo.ModeModifier.REQUESTED.
-     *
-     * This function may only be used during event processing, in any other case the call has no effect.
-     *
-     * @return the portlet mode modifier
-     */
-    public Portlet.ModeModifier getModeModifier() {
-        return (Portlet.ModeModifier)req.getAttribute(GridSphereProperties.MODEMODIFIER);
-    }
-
-    /**
      * Returns the mode that the portlet is running in.
      *
      * @return the portlet mode

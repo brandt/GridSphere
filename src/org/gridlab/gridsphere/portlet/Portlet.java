@@ -64,7 +64,7 @@ import java.util.Vector;
  * When the administration is done, the portlet will be newly initialized.
  */
 public abstract class Portlet extends HttpServlet
-        implements Servlet, ServletConfig, java.io.Serializable {
+        implements PortletSessionListener, Servlet, ServletConfig, Serializable {
 
     protected transient static PortletLog log = SportletLog.getInstance(Portlet.class);
 
@@ -122,45 +122,6 @@ public abstract class Portlet extends HttpServlet
                 tagstring = "CONFIGURE";
             } else if (mode == VIEW_MODE) {
                 tagstring = "VIEW";
-            }
-            return tagstring;
-        }
-
-    }
-
-    public static class ModeModifier implements Serializable {
-
-        public static final int CURRENT_MODE = 0;
-        public static final int PREVIOUS_MODE = 1;
-        public static final int REQUESTED_MODE = 2;
-
-        public static final ModeModifier CURRENT = new ModeModifier(CURRENT_MODE);
-        public static final ModeModifier PREVIOUS = new ModeModifier(PREVIOUS_MODE);
-        public static final ModeModifier REQUESTED = new ModeModifier(REQUESTED_MODE);
-
-        private int modifier = CURRENT_MODE;
-
-        private ModeModifier(int modifier) {
-            this.modifier = modifier;
-        }
-
-        public int getId() {
-            return modifier;
-        }
-
-        public Object readResolve() {
-            // XXX: FILL ME IN
-            return null;
-        }
-
-        public String toString() {
-            String tagstring = null;
-            if (modifier == PREVIOUS_MODE) {
-                tagstring = "PREVIOUS";
-            } else if (modifier == REQUESTED_MODE) {
-                tagstring = "REQUESTED";
-            } else if (modifier == CURRENT_MODE) {
-                tagstring = "CURRENT";
             }
             return tagstring;
         }
