@@ -105,9 +105,9 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
     protected void loadPortlets(ServletContext ctx) throws PortletException {
         // load in the portlet.xml file
         String portletXMLfile = ctx.getRealPath("/WEB-INF/portlet.xml");
-        //String portletMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING);
+        String portletMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING);
 
-        String portletMappingFile = GridSphereConfig.getServletContext().getRealPath("") + "/WEB-INF/mapping/portlet-mapping.xml";
+        //String portletMappingFile = GridSphereConfig.getServletContext().getRealPath("") + "/WEB-INF/mapping/portlet-mapping.xml";
         pdd = null;
         try {
             pdd = new PortletDeploymentDescriptor(portletXMLfile, portletMappingFile);
@@ -134,7 +134,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
      */
     protected void loadLayout(ServletContext ctx) throws PortletException {
         // load in the portlet.xml file
-        String layoutXMLfile = ctx.getRealPath("") + "/WEB-INF/layout.xml";
+        String layoutXMLfile = ctx.getRealPath("/WEB-INF/layout.xml");
         File f = new File(layoutXMLfile);
         if (f.exists()) {
             try {
@@ -154,7 +154,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
      */
     protected void loadServices(ServletContext ctx) {
         // load in the portlet.xml file
-        String descriptor = ctx.getRealPath("") + "/WEB-INF/PortletServices.xml";
+        String descriptor = ctx.getRealPath("/WEB-INF/PortletServices.xml");
         File f = new File(descriptor);
         String mapping = GridSphereConfig.getProperty(GridSphereConfigProperties.SERVICES_MAPPING);
         if (f.exists()) {
