@@ -22,7 +22,7 @@ Code
 + Portlet Tag Documentation (Oliver)
 + Get rid of SportletGroup constructors from PortletGroup (Michael?)
 + DB Change Management (Michael)
-+ PortletData verified
++ add ant dist target to build binary
 + Portlet Application Manager (Jason)
 + Portlet subscription/ layout service (Michael, Jason)
 + Account request portlet (Michael)
