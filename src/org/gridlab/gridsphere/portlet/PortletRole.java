@@ -8,7 +8,7 @@ package org.gridlab.gridsphere.portlet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PortletRole  {
+public class PortletRole {
 
     private int role;
 
@@ -83,12 +83,11 @@ public class PortletRole  {
     }
 
     public boolean equals(Object object) {
-        if ((object == null) || (!(object instanceof this.getClass()))) {
-            return false;
+        if (object != null && (object.getClass().equals(this.getClass()))) {
+            PortletRole portletRole = (PortletRole)object;
+            return (role == portletRole.getRole());
         }
-        String thisRole = toString();
-        String thatRole = (String)object;
-        return thisRole.equals(thatRole);
+        return false;
     }
 
     public int hashCode() {

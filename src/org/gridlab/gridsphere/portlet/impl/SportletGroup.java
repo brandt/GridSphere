@@ -68,12 +68,13 @@ public class SportletGroup extends BaseObject implements PortletGroup {
     }
 
     public boolean equals(Object object) {
-        if ((object == null) || (!(object instanceof this.getClass()))) {
-            return false;
+        if (object != null && (object.getClass().equals(this.getClass()))) {
+            PortletGroup portletGroup = (PortletGroup)object;
+            return (Name == portletGroup.getName());
         }
-        String thatGroup = ((PortletGroup)object).toString();
-        return Name.equals(thatGroup);
+        return false;
     }
+
 
     public int hashCode() {
         return Name.hashCode();
