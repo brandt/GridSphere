@@ -138,7 +138,7 @@ public interface SportletProperties {
 
     public static final String COMPONENT_ID = "cid";
 
-    public static final String DEFAULT_PORTLET_ACTION = "action";
+    public static final String DEFAULT_PORTLET_ACTION = "gs_action";
 
     public static final String DEFAULT_PORTLET_MESSAGE = "message";
 

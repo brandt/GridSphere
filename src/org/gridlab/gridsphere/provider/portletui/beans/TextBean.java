@@ -90,32 +90,13 @@ public class TextBean extends BaseComponentBean implements TagBean {
         this.style = style;
     }
 
-    /**
-     * Sets the format of the text
-     *
-     * @param format
-     * @deprecated use setCssStyle
-     */
-    public void setFormat(String format) {
-        this.cssStyle = format;
-    }
-
-    /**
-     * Returns the format of the text
-     *
-     * @return the format of the text
-     * @deprecated use getCssStyle
-     */
-    public String getFormat() {
-        return cssStyle;
-    }
-
     public String toStartString() {
         return "";
     }
 
     public String toEndString() {
-        String text = null;
+        String text = "";
+        if (value == null) return "";
         if (style.equalsIgnoreCase("error") || (style.equalsIgnoreCase("err"))) {
             this.cssClass = MSG_ERROR;
         } else if (style.equalsIgnoreCase("status")) {

@@ -320,7 +320,7 @@ public class PortletURLImpl implements PortletURL {
             url += "&" + SportletProperties.PORTLET_WINDOW + "=" + state.toString();
         }
         if (action != null) {
-            url += "&action=" + action;
+            url += "&" + SportletProperties.DEFAULT_PORTLET_ACTION + "=" + action;
         }
 
         boolean firstParam = true;

@@ -120,11 +120,15 @@ public class TextTagImpl extends BaseComponentTagImpl implements TextTag {
         if (key != null) {
             textBean.setValue(getLocalizedText(key));
         }
-        if (format != null) textBean.setFormat(format);
 
 
+
+        if (this.getBodyContent() != null) {
+            System.err.println("body= " + this.getBodyContent().getString());
+        }
         if ((bodyContent != null) && (value == null)) {
             textBean.setValue(bodyContent.getString());
+            System.err.println("in text tag: body= " + bodyContent.getString());
         }
 
         Tag parent = getParent();

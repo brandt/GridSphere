@@ -4,6 +4,8 @@
  */
 package org.gridlab.gridsphere.portlet;
 
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -84,7 +86,7 @@ public final class DefaultPortletAction implements PortletAction {
 
     public String toString() {
         StringBuffer buffer = new StringBuffer();
-        buffer.append("action=");
+        buffer.append(SportletProperties.DEFAULT_PORTLET_ACTION + "=");
         buffer.append(name);
         Object[] parameterNames = store.keySet().toArray();
         for (int ii = 0; ii < parameterNames.length; ++ii) {
