@@ -7,7 +7,6 @@ package org.gridlab.gridsphere.portlet.jsrimpl;
 import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletWindow;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
 
@@ -45,7 +44,6 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
 
     private PortletSession portletSession = null;
 
-    protected Map props = null;
     protected GridSphereParameters portalParameters = null;
 
     /**
@@ -67,7 +65,24 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         }
         
         this.supports = supports;
-        props = new HashMap();
+        Map map = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        if (map == null) {
+            req.setAttribute(SportletProperties.PORTAL_PROPERTIES, new HashMap());
+        }
+        map = (Map)(Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
+
+        Enumeration e = req.getHeaderNames();
+        while (e.hasMoreElements()) {
+            String name = (String)e.nextElement();
+            Enumeration headersEnum = req.getHeaders(name);
+            List vals = new ArrayList();
+            while (headersEnum.hasMoreElements()) {
+                String val = (String)headersEnum.nextElement();
+                vals.add(val);
+            }
+            map.put(name, vals);
+        }
+        req.setAttribute(SportletProperties.PORTAL_PROPERTIES, map);
 
         portalParameters = new GridSphereParameters(req);
 
@@ -178,10 +193,6 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
             m = new PortletMode(mode.toString());
         }
         return m;
-
-        //String mode = (String)getAttribute(SportletProperties.PORTLET_MODE);
-        //return new PortletMode(mode);
-        //return (PortletMode)getAttribute(SportletProperties.PORTLET_MODE_JSR);
     }
 
     /**
@@ -288,6 +299,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      */
     public String getProperty(String name) {
         if (name == null) throw new IllegalArgumentException("name is NULL");
+        Map props = (Map)getAttribute(SportletProperties.PORTAL_PROPERTIES);
         Object o = props.get(name);
         if (o instanceof String) {
             return (String) o;
@@ -320,6 +332,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      */
     public java.util.Enumeration getProperties(String name) {
         if (name == null) throw new IllegalArgumentException("name is NULL");
+        Map props = (Map)getAttribute(SportletProperties.PORTAL_PROPERTIES);
         Object o = props.get(name);
         if (o instanceof List) {
             List l = (List) o;
@@ -339,6 +352,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * no properties, an empty <code>Enumeration</code>.
      */
     public java.util.Enumeration getPropertyNames() {
+        Map props = (Map)getAttribute(SportletProperties.PORTAL_PROPERTIES);
         return new Enumerator(props.keySet().iterator());
     }
 

@@ -4,6 +4,8 @@
  */
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+
 import javax.portlet.PortalContext;
 import javax.portlet.PortletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +30,6 @@ import java.util.Map;
  */
 public abstract class PortletResponseImpl extends HttpServletResponseWrapper implements PortletResponse {
     protected HttpServletRequest req = null;
-    protected Map properties = null;
 
     protected PortalContext portalContext = null;
 
@@ -41,8 +42,11 @@ public abstract class PortletResponseImpl extends HttpServletResponseWrapper imp
     public PortletResponseImpl(HttpServletRequest req, HttpServletResponse res, PortalContext portalContext) {
         super(res);
         this.req = req;
-        properties = new HashMap();
         this.portalContext = portalContext;
+        Map map = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
+        if (map == null) {
+            req.setAttribute(SportletProperties.PORTAL_PROPERTIES, new HashMap());
+        }
     }
 
     /**
@@ -60,6 +64,7 @@ public abstract class PortletResponseImpl extends HttpServletResponseWrapper imp
      */
     public void addProperty(String key, String value) {
         if (key == null) throw new IllegalArgumentException("key is NULL");
+        Map properties = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
         List vals = (List) properties.get(key);
         if (vals == null) {
             vals = new ArrayList();
@@ -83,6 +88,7 @@ public abstract class PortletResponseImpl extends HttpServletResponseWrapper imp
      */
     public void setProperty(String key, String value) {
         if (key == null) throw new IllegalArgumentException("key is NULL");
+        Map properties = (Map)req.getAttribute(SportletProperties.PORTAL_PROPERTIES);
         List vals = (List) properties.get(key);
         if (vals == null) {
             vals = new ArrayList();

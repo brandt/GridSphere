@@ -210,6 +210,8 @@ public interface SportletProperties {
 
     public static final String FILE_DOWNLOAD_PATH = "org.gridlab.gridsphere.portletcontainer.FILE_DOWNLOAD_PATH";
 
+    public static final String PORTAL_PROPERTIES = "org.gridlab.gridsphere.PORTAL_PROPERTIES";
+
     public static final String ALLOWED_MODES = "org.gridlab.gridsphere.ALLOWED_MODES";
 
     public static final String MIME_TYPES = "org.gridlab.gridsphere.MIME_TYPES";
