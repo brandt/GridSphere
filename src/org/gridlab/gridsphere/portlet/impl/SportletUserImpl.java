@@ -4,6 +4,8 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
+import org.gridlab.gridsphere.core.persistence.BaseObject;
+
 import java.util.Enumeration;
 import java.util.Hashtable;
 
@@ -12,19 +14,19 @@ import java.util.Hashtable;
  * Apart from a set of pre-defined, fixed set of attributes,
  * the interface gives access to user data as well.
  */
-public class SportletUserImpl implements SportletUser {
+public class SportletUserImpl extends BaseObject implements SportletUser  {
 
     // store used to maintain user attributes
     private Hashtable store = new Hashtable();
 
     // Data fields that make up the Role object
-    private String familyName;
-    private String fullName;
-    private String givenName;
-    private String emailAddress;
-    private String id;
-    private String userID;
-    private long lastLoginTime;
+    private String FamilyName;
+    private String FullName;
+    private String GivenName;
+    private String EmailAddress;
+    private String Id;
+    private String UserID;
+    private long LastLoginTime;
 
     /**
      * Returns the value of the attribute with the given name,
@@ -63,7 +65,7 @@ public class SportletUserImpl implements SportletUser {
      * @return the family name
      */
     public String getFamilyName() {
-        return familyName;
+        return FamilyName;
     }
 
     /**
@@ -72,7 +74,7 @@ public class SportletUserImpl implements SportletUser {
      * @param familyName the family name
      */
     public void setFamilyName(String familyName) {
-        this.familyName = familyName;
+        this.FamilyName = familyName;
     }
 
     /**
@@ -83,7 +85,7 @@ public class SportletUserImpl implements SportletUser {
      * @return the full name
      */
     public String getFullName() {
-        return fullName;
+        return FullName;
     }
 
     /**
@@ -94,7 +96,7 @@ public class SportletUserImpl implements SportletUser {
      * @param fullName the full name
      */
     public void setFullName(String fullName) {
-        this.fullName = fullName;
+        this.FullName = fullName;
     }
 
     /**
@@ -103,7 +105,7 @@ public class SportletUserImpl implements SportletUser {
      * @return the given name
      */
     public String getGivenName() {
-        return givenName;
+        return GivenName;
     }
 
     /**
@@ -112,7 +114,7 @@ public class SportletUserImpl implements SportletUser {
      * @param givenName the given name
      */
     public void setGivenName(String givenName) {
-        this.givenName = givenName;
+        this.GivenName = givenName;
     }
 
     /**
@@ -121,7 +123,7 @@ public class SportletUserImpl implements SportletUser {
      * @return the email address
      */
     public String getEmailAddress() {
-        return emailAddress;
+        return EmailAddress;
     }
 
     /**
@@ -130,7 +132,7 @@ public class SportletUserImpl implements SportletUser {
      * @param the email address
      */
     public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+        this.EmailAddress = emailAddress;
     }
 
     /**
@@ -139,7 +141,7 @@ public class SportletUserImpl implements SportletUser {
      * @return the internal unique id
      */
     public String getID() {
-        return id;
+        return Id;
     }
 
     /**
@@ -148,7 +150,7 @@ public class SportletUserImpl implements SportletUser {
      * @param id the internal unique id
      */
     public void setID(String id) {
-        this.id = id;
+        this.Id = id;
     }
 
 
@@ -158,7 +160,7 @@ public class SportletUserImpl implements SportletUser {
      * @return the user id
      */
     public String getUserID() {
-        return userID;
+        return UserID;
     }
 
     /**
@@ -167,7 +169,7 @@ public class SportletUserImpl implements SportletUser {
      * @param userID the user id
      */
     public void setUserID(String userID) {
-        this.userID = userID;
+        this.UserID = userID;
     }
 
     /**
@@ -177,7 +179,7 @@ public class SportletUserImpl implements SportletUser {
      * @return the last login time
      */
     public long getLastLoginTime() {
-        return lastLoginTime;
+        return LastLoginTime;
     }
 
     /**
@@ -187,7 +189,7 @@ public class SportletUserImpl implements SportletUser {
      * @param lastLoginTime the last login time
      */
     public void setLastLoginTime(long lastLoginTime) {
-        this.lastLoginTime = lastLoginTime;
+        this.LastLoginTime = lastLoginTime;
     }
 
 }
