@@ -204,6 +204,9 @@ public abstract class ActionTag extends BaseComponentTag {
         if (label != null) {
             //actionURL = res.createRenderURL();
             res.setProperty("label", label);
+            action = null;
+
+            actionURL.setComponentID(label);
         }
         if (windowState != null) {
             WindowState state = new WindowState(windowState);
@@ -254,6 +257,7 @@ public abstract class ActionTag extends BaseComponentTag {
     public String createActionURI() throws JspException {
         if (isJSR()) {
             RenderResponse res = (RenderResponse) pageContext.getAttribute("renderResponse");
+            if (label != null) return createJSRActionURI(res.createRenderURL());
             return createJSRActionURI(res.createActionURL());
         }
         return createGSActionURI();
