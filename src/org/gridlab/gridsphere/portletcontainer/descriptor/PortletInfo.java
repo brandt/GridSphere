@@ -8,10 +8,8 @@
 package org.gridlab.gridsphere.portletcontainer.descriptor;
 
 import org.gridlab.gridsphere.portletcontainer.GridSphere;
-import org.gridlab.gridsphere.portlet.PortletLog;
 
-public class Portlet {
-    private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(Portlet.class);
+public class PortletInfo {
 
     private String Href = new String();
     private String Id = new String();
@@ -19,7 +17,7 @@ public class Portlet {
     private String Description = new String();
 
     /**
-     * gets the href of a Portlet
+     * gets the href of a PortletInfo
      *
      * @returns href
      */

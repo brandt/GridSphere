@@ -44,15 +44,15 @@ public class PortletDeploymentDescriptor {
      *
      * @return a new PortletApp
      */
-    public PortletApp createPortletApp() {
-        return new PortletApp();
+    public PortletApplication createPortletApp() {
+        return new PortletApplication();
     }
 
     /**
      * Add a new portlet app to the descriptor
      * <b>not implemented yet</b>
      */
-    public void addPortletApp(PortletApp portletApp) {}
+    public void addPortletApp(PortletApplication portletApp) {}
 
     /**
      * Loads the PortletDeploymentDescriptor from the portlet.xml
