@@ -12,6 +12,7 @@ import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.portletcontainer.descriptor.AllowsWindowStates;
 import org.gridlab.gridsphere.portletcontainer.descriptor.Markup;
 import org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes;
+import org.gridlab.gridsphere.portletcontainer.descriptor.ApplicationPortletDescriptor;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -112,7 +113,6 @@ public class PortletTitleBar extends BasePortletComponent {
          * Given a portlet window state, create the necessary URIs to represent the state in a portlet border
          */
         public PortletStateLink(String state) throws Exception {
-
             // Set the image src
             if (state.equalsIgnoreCase(PortletWindow.State.MINIMIZED.toString())) {
                 imageSrc = minimizeImage;
@@ -127,12 +127,9 @@ public class PortletTitleBar extends BasePortletComponent {
                 throw new Exception("No matching PortletWindow.State found for received window mode: " + state);
             }
         }
-
     }
 
-
-    public PortletTitleBar() {
-    }
+    public PortletTitleBar() {}
 
     public void setPortletClass(String portletClass) {
         this.portletClass = portletClass;
@@ -182,21 +179,20 @@ public class PortletTitleBar extends BasePortletComponent {
         PortletRegistry registryManager = PortletRegistry.getInstance();
         String appID = registryManager.getApplicationPortletID(portletClass);
         ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
+        ApplicationPortletDescriptor appDD = appPortlet.getApplicationPortletDescriptor();
         if (appPortlet != null) {
-            SupportsModes supportedModes = appPortlet.getApplicationPortletDescriptor().getSupportsModes();
+            SupportsModes supportedModes = appDD.getSupportsModes();
             modeList = supportedModes.getMarkupList();
             ConcretePortlet concPortlet = appPortlet.getConcretePortlet(portletClass);
             settings = concPortlet.getPortletSettings();
+            // Get window state settings
+            AllowsWindowStates allowedWindowStates = appDD.getAllowsWindowStates();
+            allowsWindowStates = allowedWindowStates.getWindowStatesAsStrings();
         }
-        // Get window state settings
-        AllowsWindowStates allowedWindowStates = appPortlet.getApplicationPortletDescriptor().getAllowsWindowStates();
-        allowsWindowStates = allowedWindowStates.getWindowStatesAsStrings();
         return list;
     }
 
-    public void destroy() {
-
-    }
+    public void destroy() {}
 
     public List makeWindowLinks(GridSphereEvent event) {
 
@@ -260,6 +256,7 @@ public class PortletTitleBar extends BasePortletComponent {
             if (portletModes[i].equalsIgnoreCase(portletMode.toString())) {
                 portletModes[i] = "";
             }
+
         }
 
         // create a URI for each of the portlet modes

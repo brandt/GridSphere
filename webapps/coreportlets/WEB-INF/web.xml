@@ -17,12 +17,12 @@
 
     <servlet>
         <servlet-name>HelloWorld</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld</servlet-class>
+        <servlet-class>org.gridlab.gridsphere.portlets.examples.HelloWorld</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>HalloWelt</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt</servlet-class>
+        <servlet-class>org.gridlab.gridsphere.portlets.examples.HalloWelt</servlet-class>
     </servlet>
 
     <servlet>
@@ -42,7 +42,7 @@
 
     <servlet>
         <servlet-name>DemoPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.DemoPortlet</servlet-class>
+        <servlet-class>org.gridlab.gridsphere.portlets.examples.DemoPortlet</servlet-class>
     </servlet>
 
     <servlet>
