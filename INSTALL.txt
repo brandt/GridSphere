@@ -20,10 +20,6 @@ available at http://jakarta.apache.org/tomcat. In addition to providing
 a hosting environment for GridSphere, Tomcat provides some of the required 
 XML (JAR) libraries that are needed for compilation.
 
-3) (Optional) If you wish to build PDF formats of the documentation download a
-FOP binary from http://xml.apache.org/fop/download.html and unpack it and set
-FOP_HOME environment variable to the top level FOP directory (just like ANT).
-
 Compiling and Deploying
 -----------------------
 
@@ -52,8 +48,7 @@ deploy -- deploys the GridSphere framework and all portlets to a
 create-database - creates a new, fresh database with original
                  GridSphere settings, this wipes out your current database!
 
-docs -- compiles all GridSphere docbook documentation and
-	builds the Javadoc documentation from the source code
+docs -- builds the Javadoc documentation from the source code
 
 run-tests -- runs all Junit tests inside the Tomcat container using
 	     the Jakarta Cactus framework  
@@ -63,7 +58,8 @@ test-reports -- creates HTML test reports from the Junit tests. You first
 
 To see all the targets invoke "ant --projecthelp".
 
-2) Read the compiled documentation found located at build/docs/index.html 
+2) Read the documentation found at  
+http://www.gridsphere.org/gridsphere/gridsphere?cid=docs
 for more information on using and developing portlets with  GridSphere.
 
 3) Startup Tomcat and then go to http://127.0.0.1:8080/gridsphere/gridsphere
@@ -82,9 +78,7 @@ design document.
 Errors & Troubleshooting
 ------------------------
 
-Please look at the online documentation available at http://www.gridsphere.org/gridsphere/gridsphere?cid=docs including the slides and user guides. If you
-experience problems, please subscribe to the mailing lists and consider 
-filing bugs at http://bugs.gridsphere.org
+If you experience problems, please subscribe to the mailing lists and consider filing bugs at http://bugs.gridsphere.org
 
 Thanks,
 
