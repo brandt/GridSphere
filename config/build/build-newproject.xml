@@ -67,12 +67,11 @@
         <mkdir dir="${project.dir}/lib"/>
         <mkdir dir="${project.dir}/lib/ext"/>
         <mkdir dir="${project.dir}/config"/>
-        <mkdir dir="${project.dir}/config/database"/>
         <copy file="config/log4j.properties" tofile="${project.dir}/config/log4j.properties"/>
 
         <mkdir dir="${project.dir}/webapp"/>
         <mkdir dir="${project.dir}/webapp/WEB-INF"/>
-
+        <mkdir dir="${project.dir}/webapp/WEB-INF/persistence"/>
         <copy todir="${project.dir}/webapp/WEB-INF">
             <fileset dir="config/template"/>
             <mapper type="glob" from="*.xml.tpl" to="*.xml"/>
