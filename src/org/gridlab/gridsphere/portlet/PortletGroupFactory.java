@@ -18,6 +18,8 @@ public class PortletGroupFactory {
 
     private PortletGroupFactory() {}
 
+    public static PortletGroup GRIDSPHERE_GROUP = new SportletGroup("gridsphere");
+
     public static PortletGroup createPortletGroup(String groupName) {
         return new SportletGroup(groupName);
     }

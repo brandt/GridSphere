@@ -46,7 +46,7 @@ public class SportletServiceDefinition {
     /**
      * Sets the portlet service description
      *
-     * @param serviceName the portlet service description
+     * @param serviceDescription the portlet service description
      */
     public void setServiceDescription(String serviceDescription) {
         this.serviceDescription = serviceDescription;
@@ -82,7 +82,7 @@ public class SportletServiceDefinition {
     /**
      * Returns the portlet service implementation
      *
-     * @param serviceImplementation the portlet service implementation
+     * @return the portlet service implementation
      */
     public String getServiceImplementation() {
         return this.serviceImplementation;
@@ -160,6 +160,7 @@ public class SportletServiceDefinition {
             createProperties();
         return configProps;
     }
+
 
     /**
      * Returns a <code>String</code> representation if this portlet service

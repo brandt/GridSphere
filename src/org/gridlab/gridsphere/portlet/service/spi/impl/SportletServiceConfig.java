@@ -55,6 +55,16 @@ public class SportletServiceConfig implements PortletServiceConfig {
     }
 
     /**
+     * Returns the init parameter with the given name.
+     *
+     * @param name the name of the requested init parameter.
+     * @param value the value of the init parameter
+     */
+    public void setInitParameter(String name, String value) {
+        configProperties.setProperty(name, value);
+    }
+
+    /**
      * Returns the init parameter with the given name. It returns the given default
      * value if the parameter is not found.
      *

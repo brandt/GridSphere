@@ -30,7 +30,7 @@ public class SportletServiceCollection {
     /**
      * Returns the list of portlet service definitions
      *
-     * @returnsa list containing the portlet service definitions
+     * @return a list containing the portlet service definitions
      *
      * @see SportletServiceDefinition
      */

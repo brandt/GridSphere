@@ -4,9 +4,7 @@
  */
 package org.gridlab.gridsphere.portlet.service.spi.impl;
 
-import org.gridlab.gridsphere.portlet.GuestUser;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
@@ -20,7 +18,9 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServic
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDescriptor;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
+import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.services.core.user.impl.GridSphereUserManager;
+import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
 import javax.servlet.ServletConfig;
@@ -34,11 +34,14 @@ import java.util.*;
  * responsible for portlet service lifecycle management including
  * initialization and shutdown.
  */
-public class SportletServiceFactory implements PortletServiceFactory {
+public class SportletServiceFactory implements PortletServiceFactory, PortletSessionListener {
 
     private static PortletLog log = SportletLog.getInstance(SportletServiceFactory.class);
     private static SportletServiceFactory instance = new SportletServiceFactory();
     private static GridSphereUserManager userManager = GridSphereUserManager.getInstance();
+    private static PortletSessionManager portletSessionManager = PortletSessionManager.getInstance();
+    private static UserSessionManager userSessionManager = UserSessionManager.getInstance();
+
 
     // Maintain a single copy of each service instantiated
     // as a classname and PortletServiceProvider pair
@@ -46,6 +49,12 @@ public class SportletServiceFactory implements PortletServiceFactory {
 
     // Hash of all services key = service interface name, value = SportletServiceDefinition
     private Hashtable allServices = new Hashtable();
+
+    // Hash of all user services
+    private Hashtable userServices = new Hashtable();
+
+    // List of all guest cached guest services
+    private List guestServices = new Vector();
 
     /**
      * Private constructor. Use getDefault() instead.
@@ -56,6 +65,17 @@ public class SportletServiceFactory implements PortletServiceFactory {
         String servicesPath = GridSphereConfig.getProperty(GridSphereConfigProperties.SERVICES_DESCRIPTOR);
         String servicesMappingPath = GridSphereConfig.getProperty(GridSphereConfigProperties.SERVICES_MAPPING);
         addServices(servicesPath, servicesMappingPath);
+    }
+
+    public void login(PortletRequest req) throws PortletException {
+
+    }
+
+    public void logout(PortletSession session) throws PortletException {
+        String userid = userSessionManager.getUserIdFromSession(session);
+        if (userid != null) {
+            userServices.remove(userid);
+        }
     }
 
     /**
@@ -197,6 +217,21 @@ public class SportletServiceFactory implements PortletServiceFactory {
             throw new PortletServiceNotFoundException("Unable to create service: " + serviceName + " user is null");
         }
 
+        if (useCachedService) {
+            List userServiceList = (List)userServices.get(user.getUserID());
+            if (userServiceList != null) {
+                if (userServiceList.contains(serviceName)) {
+                    int idx = userServiceList.indexOf(serviceName);
+                    return (PortletService)userServiceList.get(idx);
+                }
+            }
+        }
+
+        if (guestServices.contains(serviceName)) {
+            int idx = guestServices.indexOf(serviceName);
+            return (PortletService)guestServices.get(idx);
+        }
+
         /* Create the service implementation */
         String serviceImpl = def.getServiceImplementation();
         if (serviceImpl == null) {
@@ -231,6 +266,18 @@ public class SportletServiceFactory implements PortletServiceFactory {
             log.error("Unable to initialize portlet service: " + serviceImpl, e);
             throw new PortletServiceNotFoundException("The SportletServiceFactory was unable to initialize the portlet service: " + serviceImpl, e);
         }
+
+        if (user instanceof GuestUser) {
+            guestServices.add(psp);
+            return psp;
+        }
+
+        List userServiceList = (List)userServices.get(user.getUserID());
+        if (userServiceList == null) userServiceList = new ArrayList();
+
+        userServiceList.add(psp);
+        PortletSession session = userSessionManager.getSession(user);
+        portletSessionManager.addSessionListener(session.getId(), this);
 
         return psp;
     }

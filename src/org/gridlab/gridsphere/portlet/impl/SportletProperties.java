@@ -155,13 +155,13 @@ public interface SportletProperties {
 
     public static final String CLIENT = "org.gridlab.gridsphere.portlet.Client";
 
-    public static final String PORTLET_MODE = "org.gridlab.gridsphere.portlet.PortletMode";
+    public static final String PORTLET_MODE = "gs_mode";
 
     public static final String PREVIOUS_MODE = "org.gridlab.gridsphere.portlet.PreviousMode";
 
     public static final String MODEMODIFIER = "org.gridlab.gridsphere.portlet.ModeModifier";
 
-    public static final String PORTLET_WINDOW = "org.gridlab.gridsphere.portlet.PortletWindow";
+    public static final String PORTLET_WINDOW = "gs_state";
 
     public static final String PORTLET_DATA = "org.gridlab.gridsphere.portlet.PortletData";
 
