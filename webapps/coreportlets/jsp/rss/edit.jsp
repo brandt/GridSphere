@@ -3,8 +3,20 @@
 
 <portletAPI:init/>
 
-This is a inputfield:
-<gs:textfield element="f"/>
+<gs:form action="rss_edit">
 
-TEXTAREA: <gs:textarea name="lala" value="this is f*** text"/>
 
+    <gs:text bean="textid"/>
+
+    <gs:textfield bean="f"/>
+
+    <gs:checkbox bean="cbb"/>
+
+    <gs:textarea bean="tab"/>
+
+    <gs:submit name="show" value="show"/>
+
+    <gs:dropdownlist bean="ddl"/>
+
+
+</gs:form>
