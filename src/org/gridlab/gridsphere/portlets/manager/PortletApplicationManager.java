@@ -43,6 +43,7 @@ public class PortletApplicationManager extends AbstractPortlet {
         DefaultPortletAction action = event.getAction();
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
+        PortletContext ctx = getPortletConfig().getContext();
         User user = event.getPortletRequest().getUser();
 
         try {
@@ -62,20 +63,42 @@ public class PortletApplicationManager extends AbstractPortlet {
         } else if (action.getName().equals("install")) {
             System.err.println("In actionPerformed doing an install");
             FileFormEvent fileformEvent = new FileFormEventImpl(event);
-            File warFile = null;
+            String portletWar = null;
             try {
-                warFile = fileformEvent.saveFile(PortletManagerService.WEB_APPLICATION_PATH);
+                portletWar = fileformEvent.saveFile(PortletManagerService.WEB_APPLICATION_PATH);
             } catch (FileFormException ffe) {
                 log.error("Unable to save file from form: " + ffe.getMessage());
             }
 
-            portletManager.removePortletWebApplication("coreportlets", req, res);
-            result = tomcat.removeWebApp("coreportlets");
 
-            String portletWar = warFile.getAbsolutePath();
-            log.debug("Received WAR File: " + portletWar);
-            result = tomcat.installWebApp(appName, portletWar);
-            portletManager.installPortletWebApplication(appName, req, res);
+
+            /* Remove old portlet web app if it exists */
+            int idx = -1;
+            String webAppContext = null;
+            String webAppName = null;
+            List webappsList = portletManager.getPortletWebApplications();
+            if ((idx = portletWar.lastIndexOf(".")) > 0) {
+                webAppName = portletWar.substring(0, idx);
+                System.err.println(webAppName);
+                if ((idx = webAppName.lastIndexOf("/")) > 0) {
+                    webAppContext = webAppName.substring(idx);
+                    webAppName = webAppContext.substring(1);
+                    System.err.println("webappcontext: " + webAppContext);
+                    System.err.println("webappname: " + webAppName);
+
+                    if (webappsList.contains(webAppName)) {
+                        portletManager.removePortletWebApplication(webAppName, req, res);
+                        result = tomcat.removeWebApp(webAppName);
+                    }
+                }
+            }
+
+            //String portletWar = warFile.getAbsolutePath();
+            if (webAppContext != null) {
+                //result = tomcat.installWebApp(webAppContext, portletWar);
+                //result = tomcat.startWebApp(webAppName);
+                portletManager.installPortletWebApplication(webAppName, req, res);
+            }
         } else if ((operation != null) && (appName!= null)) {
             if (operation.equals("start")) {
                 result = tomcat.startWebApp(appName);
