@@ -43,7 +43,6 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
         while (contextParamsIt.hasNext()) {
             ConfigParam configParam = (ConfigParam)contextParamsIt.next();
             store.put(configParam.getParamName(), configParam.getParamValue());
-            System.err.println("name: " + configParam.getParamName() + " value: " + configParam.getParamValue());
         }
     }
 

@@ -62,7 +62,7 @@ public class SportletConfig implements PortletConfig {
 
         // set allowed states info
         AllowsWindowStates states = portletApp.getAllowsWindowStates();
-        List allowedStates = new Vector();
+        allowedStates = new Vector();
         it = states.getWindowStates().iterator();
         while (it.hasNext()) {
             AnyNode anode = (AnyNode)it.next();

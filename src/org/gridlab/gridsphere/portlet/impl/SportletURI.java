@@ -87,7 +87,7 @@ public class SportletURI implements PortletURI {
     }
 
     public void setWindowState(PortletWindow.State state) {
-        this.state = state;
+        store.put(GridSphereProperties.PORTLETWINDOW, state.toString());
     }
 
     /**
@@ -122,7 +122,6 @@ public class SportletURI implements PortletURI {
         } else {
             newURL = res.encodeURL(url);
         }
-        System.err.println("SportletURI: toString: " + newURL);
         return newURL;
     }
 
