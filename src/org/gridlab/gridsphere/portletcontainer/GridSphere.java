@@ -142,13 +142,6 @@ public class GridSphere extends HttpServlet {
                 //PortletData portletData = userRegistryService.getPortletData(req, portletID);
                 //req.setAttribute(GridSphereProperties.PORTLETDATA, portletData);
 
-
-            }
-
-            // Render layout
-            doRender(portletRequest, portletResponse);
-
-            if (gspAction.hasAction()) {
                 DefaultPortletAction portletAction = gspAction.getPortletAction();
                 actionEvent = new ActionEventImpl(portletAction, portletRequest, portletResponse);
 
@@ -156,6 +149,10 @@ public class GridSphere extends HttpServlet {
                 activePortlet.actionPerformed(actionEvent);
 
             }
+
+            // Render layout
+            doRender(portletRequest, portletResponse);
+
 
         } catch (Exception e) {
             handleException(portletResponse, e);
@@ -168,136 +165,6 @@ public class GridSphere extends HttpServlet {
         // Make a layout
         log.info("in doRender()");
         layoutEngine.doRender(req, res);
-    }
-
-    public void doAction(String action, PortletRequest req, PortletResponse res) throws IOException, ServletException {
-
-        System.err.println("Received ACTION: " + action);
-
-        //setupNewUser(portletRequest, portletResponse);
-
-        String portletID = req.getParameter(GridSphereProperties.PORTLETID);
-        System.err.println("portlet id: " + portletID);
-
-        // Get the active portlet instance
-        AbstractPortlet activePortlet = registryService.getActivePortlet(portletID);
-
-        // Get the user's portlet settings
-        PortletSettings portletSettings = userRegistryService.getPortletSettings(req, portletID);
-
-        // Set the portlet data (when this works)
-
-        //PortletData portletData = userRegistryService.getPortletData(req, portletID);
-        //req.setAttribute(GridSphereProperties.PORTLETDATA, portletData);
-
-        // Check if a secure form submission is required, then pass tokens
-        DefaultPortletAction dpa = new DefaultPortletAction(action);
-       // ActionEvent actionEvent = new ActionEventImpl(dpa, ActionEvent.ACTION_NOTYETPERFORMED, req, res);
-        /*
-        if (dpa.isSensitive()) {
-            activePortlet.actionNotYetPerformed(actionEvent);
-        }
-        */
-        // Render layout
-        doRender(req, res);
-
-        //PortletAction a = actionEvent.getAction();
-        //activePortlet.actionPerformed(actionEvent);
-
-    }
-
-    public void doPortletLifecycle(PortletRequest req, PortletResponse res) throws IOException, ServletException {
-        // Check if user is guest
-        User user = req.getUser();
-
-        // If GuestUser then only display login portlet
-        if (user instanceof GuestUser) {
-
-            // Show LoginPortlet
-
-        }
-
-        // Now we want to display a portlet!
-
-        // These are the following eight calls that get invoked during the portlet lifecycle
-
-        // create a new instance -- maybe instances are maintained by PortletRegistryService
-        // then all instances are retrieved.
-        //PortletAdapter helloPortlet = new HelloWorld();
-
-
-        // Hmmm... need some kind of tags for identifying login and logout actions -- these are special so
-        // portlet.login/logout get called-- also need to keep track of user logged in, so we can invoke
-        // portlet.service method.
-        // Cheap hack is to check some kind of request/session attribute
-        // would rather have some isLoggedIn/Off method...
-        // possibly since we maintain user objects as sportletUserImpls
-
-        // This should be done during first GET after other portlets (servlets) have registered to PortletRegistry service
-        //helloPortlet.init(portletConfig);
-        //helloPortlet.initConcrete(portletSettings);
-
-        // This should be called during a portlet login after the user logs in. (after obtaining a valid user object from
-        // the LoginSportlet
-
-        //helloPortlet.login(portletRequest);
-
-        // For now, use cheesy request parameters.. not sure what else...
-
-
-        // Here is some code for handling actions
-        /*
-        DefaultPortletAction action = (DefaultPortletAction)req.getAttribute(GridSphereProperties.ACTION);
-        ActionEvent actionEvent = new ActionEventImpl(action, ActionEvent.ACTION_NOTYETPERFORMED, req, res);
-        String portletID = action.getPortletID();
-
-        AbstractPortlet coolPortlet = registryService.getActivePortlet(portletID);
-        coolPortlet.actionNotYetPerformed(actionEvent);
-
-        actionEvent.setEventType(ActionEvent.ACTION_PERFORMED);
-        coolPortlet.actionPerformed(actionEvent);
-         */
-        // Check for LOGIN
-        /*
-        String login = (String) req.getAttribute(GridSphereProperties.LOGIN);
-        if (login != null) {
-            doLogin(req, res);
-        }
-        */
-        // Check for LOGOFF
-        /*
-        String logoff = (String) req.getAttribute(GridSphereProperties.LOGOFF);
-        if (logoff != null) {
-            doLogout(req, res);
-        }
-        */
-
-        // This gets called right here in servlets's service method-- just invokes portlet service method of the active portlet
-        // Hmm... may invoke service of all methods if caching etc. is up to each portlet. definitely want to cache!!
-        // Hmm.. what if include is really slow and so even if jsp handles caching it doesn't matter? We'll see...
-        //helloPortlet.service(portletRequest, portletResponse);
-
-        PrintWriter out = res.getWriter();
-        //ServletOutputStream out = portletResponse.getOutputStream();
-        out.println("<html><body>");
-
-        Iterator it = abstractPortlets.iterator();
-        while (it.hasNext()) {
-            AbstractPortlet ab = (AbstractPortlet) it.next();
-
-            // First execute portlet business logic
-            //ab.actionPerformed(actionEvent);
-            out.println("<b>portlet</b>");
-            // Second forward to presentation logic
-            ab.service(req, res);
-        }
-
-        out.println("</body></html>");
-        //helloPortlet.logout(portletRequest.getPortletSession());
-        //helloPortlet.destroyConcrete(portletSettings);
-        //helloPortlet.destroy(portletConfig);
-
-        //portletConfig.getContext().include("/jsp/hello.jsp", portletRequest, portletResponse);
     }
 
     public final void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
