@@ -46,8 +46,9 @@ public class NoteServiceImpl implements NoteService, PortletServiceProvider {
         try {
             result = (Note) pm.restore("from " + Note.class.getName() + " as note where note.oid='" + Oid + "'");
         } catch (PersistenceManagerException e) {
-            e.printStackTrace();
+            log.error("Could not retrieve note by oid "+Oid+" :"+e);
         }
+        System.out.println("\n\n\n\n "+Oid+"\n\n\n");
         return result;
     }
 

@@ -44,6 +44,58 @@ public class Note {
      */
     private Date dateModified = null;
 
+    /**
+     * if it is a to do item
+     */
+    private boolean todo = false;
+
+    /**
+     * priority of the to do item
+     */
+    private int priority = 0;
+
+    /**
+     * date when (if to do item) was closed
+     */
+    private Date dateClosed = null;
+
+    /**
+     * until when this to do item is due
+     */
+    private Date dateDue = null;
+
+    public Date getDateDue() {
+        return dateDue;
+    }
+
+    public void setDateDue(Date dateDue) {
+        this.dateDue = dateDue;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    public Date getDateClosed() {
+        return dateClosed;
+    }
+
+    public void setDateClosed(Date dateClosed) {
+        this.dateClosed = dateClosed;
+    }
+
+    public boolean isTodo() {
+        return todo;
+    }
+
+    public void setTodo(boolean todo) {
+        this.todo = todo;
+    }
+
     public Date getDateCreated() {
         return dateCreated;
     }
@@ -98,6 +150,3 @@ public class Note {
     }
 
 }
- 
-
-

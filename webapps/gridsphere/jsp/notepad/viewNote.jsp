@@ -10,22 +10,22 @@
 <portletAPI:init/>
 
 <jsp:useBean id="note" class="org.gridlab.gridsphere.services.core.note.Note" scope="request"/>
-<jsp:useBean id="np_action" class="java.lang.String" scope="request"/>
+<jsp:useBean id="npaction" class="java.lang.String" scope="request"/>
 
 <ui:form>
 
     <ui:frame beanId="errorFrame"/>
 
     <ui:frame>
+        <ui:hiddenfield beanId="npaction" value="<%= npaction.toString() %>"/>
         <ui:hiddenfield beanId="noteoid" value="<%= note.getOid() %>"/>
-        <ui:hiddenfield beanId="np_action" value="<%= np_action.toString() %>"/>
 
 
         <ui:tablerow>
 
             <ui:tablecell>
 <%
-            if (np_action.equals("view") || np_action.equals("edit")) {
+            if (npaction.equals("view") || npaction.equals("edit")) {
 %>
                 <ui:text value="<%= note.getName() %>"/>
                 <%
@@ -40,7 +40,7 @@
         <ui:tablerow>
 
             <ui:tablecell>
-            <%if (np_action.equals("view")) {
+            <%if (npaction.equals("view")) {
                 RenderContext context = new BaseRenderContext();
                 String text = EngineManager.getInstance().render(note.getContent(), context);
             %>
@@ -54,7 +54,7 @@
             </ui:tablecell>
         </ui:tablerow>
 
-     <% if (np_action.equals("view")) { %>
+     <% if (npaction.equals("view")) { %>
             <ui:textfield beanId="search"/><ui:actionsubmit action="doSearch" key="NOTEPAD_SEARCH"/>
             <ui:actionsubmit action="doShowEdit" key="NOTEPAD_EDIT"/>
             <ui:actionsubmit action="doShowNew" key="NOTEPAD_CREATE"/>
@@ -62,12 +62,12 @@
             <%
         }
         %>
-     <% if (np_action.equals("edit")) { %>
+     <% if (npaction.equals("edit")) { %>
             <ui:actionsubmit action="doUpdate" key="NOTEPAD_UPDATE"/>
             <%
      }
         %>
-     <% if (np_action.equals("new")) { %>
+     <% if (npaction.equals("new")) { %>
             <ui:actionsubmit action="doAdd" key="NOTEPAD_ADD"/>
             <%
      }

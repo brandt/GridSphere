@@ -52,14 +52,14 @@ public class NotePadPortlet extends ActionPortlet {
         PortletRequest request = event.getPortletRequest();
         String oid = event.getAction().getParameter("oid");
         Note Note = noteservice.getNoteByOid(oid);
-        request.setAttribute("np_action", "view");
+        request.setAttribute("npaction", "view");
         request.setAttribute("note", Note);
         setNextState(request, "notepad/viewNote.jsp");
     }
 
     public void doShowNew(FormEvent event) throws PortletException {
         PortletRequest request = event.getPortletRequest();
-        request.setAttribute("np_action", "new");
+        request.setAttribute("npaction", "new");
         request.setAttribute("note", new Note());
         setNextState(request, "notepad/viewNote.jsp");
     }
@@ -68,7 +68,10 @@ public class NotePadPortlet extends ActionPortlet {
         PortletRequest request = event.getPortletRequest();
         HiddenFieldBean oid = event.getHiddenFieldBean("noteoid");
         TextFieldBean search = event.getTextFieldBean("search");
-        request.setAttribute("np_action", "edit");
+        request.setAttribute("npaction", "edit");
+
+        System.out.println("\n\n\n\n NOTEOID "+oid.getValue());
+
         request.setAttribute("note", noteservice.getNoteByOid(oid.getValue()));
         setNextState(request, "notepad/viewNote.jsp");
     }
@@ -87,7 +90,7 @@ public class NotePadPortlet extends ActionPortlet {
             FrameBean frame = event.getFrameBean("errorFrame");
             frame.setKey(message);
             frame.setStyle(FrameBean.ERROR_TYPE);
-            request.setAttribute("np_action", "new");
+            request.setAttribute("npaction", "new");
             Note note = new Note();
             note.setName("");
             note.setContent(content.getValue());
@@ -121,7 +124,7 @@ public class NotePadPortlet extends ActionPortlet {
             frame.setKey(message);
         }
         TextFieldBean search = event.getTextFieldBean("search");
-        request.setAttribute("np_action", "view");
+        request.setAttribute("npaction", "view");
         request.setAttribute("note", Note);
         setNextState(request, "notepad/viewNote.jsp");
     }
