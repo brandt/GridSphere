@@ -6,10 +6,6 @@
         <classname>org.gridlab.gridsphere.tmf.services.AIMService</classname>
     </service>
     <service enabled="false">
-        <config>services/sms.xml</config>
-        <classname>org.gridlab.gridsphere.tmf.services.SmashSMSService</classname>
-    </service>
-    <service>
         <config>services/mail.xml</config>
         <classname>org.gridlab.gridsphere.tmf.services.MailService</classname>
     </service>
