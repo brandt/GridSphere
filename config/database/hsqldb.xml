@@ -7,5 +7,5 @@
     <param name="user" value="sa" />
     <param name="password" value="" />
   </driver>
-  <mapping href="@GRIDSPHERE_HOME@/mapping/@DATABASE_NAME@mapping.xml" />
+  <mapping href="@GRIDSPHERE_HOME@/mapping/@PROJECT_NAME@mapping.xml" />
 </database>

@@ -21,6 +21,9 @@ Copyright:
 
 <project name="GridSphere" default="help" basedir=".">
 
+    <!-- get environment vars -->
+    <property environment="env"/>
+
     <!-- Needed to import ant-contrib tasks -->
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
@@ -44,7 +47,8 @@ Copyright:
     <property name="version"         value="1.0"/>
     <property name="release"         value="ea-dev" />
     <property name="version.release" value="${version} ${release}"/>
-    <property name="gridsphere.name"         value="GridSphere ${version.release}"/>
+    <property name="project.name"    value="gridsphere"/>
+    <property name="gridsphere.name" value="GridSphere ${version.release}"/>
     <property name="gridsphere.api" value="GridSphere Portal Framework API ${version.release}" />
 
     <!-- GridSphere build and dist directories -->
@@ -67,8 +71,6 @@ Copyright:
     <property name="build.docs"    value="${gridsphere.build}/docs"/>
     <property name="build.javadoc" value="${build.docs}/javadocs"/>
     <property name="build.tests"   value="${gridsphere.build}/tests"/>
-
-    <property environment="env"/>
 
     <!-- Check for catalina.sh in CATALINA_HOME/bin -->
     <target name="check-catalina">
@@ -235,9 +237,9 @@ Copyright:
         <echo message="DATABASE_NAME is set to = ${DATABASE_NAME}"/>
         <echo message="DATABASE_CONFIG is set to = ${DATABASE_CONFIG}"/>
         <mkdir dir="${build.classes}/gridsphere"/>
-        <copy file="config/gridsphere.properties"
+        <copy overwrite="true" file="config/gridsphere.properties"
             tofile="${build.classes}/gridsphere/gridsphere.properties"/>
-        <copy file="config/log4j.properties"
+        <copy overwrite="true" file="config/log4j.properties"
             tofile="${build.classes}/gridsphere/log4j.properties"/>
 
         <!-- gridsphere.properties location in build dir -->
@@ -390,6 +392,9 @@ Copyright:
         <replace file="${DATABASE_FILE}"
             token="@DATABASE_NAME@"
             value="${DATABASE_NAME}"/>
+        <replace file="${DATABASE_FILE}"
+            token="@PROJECT_NAME@"
+            value="${project.name}"/>
     </target>
 
     <target name="configure-test-database" depends="doclet-mapping">
@@ -405,13 +410,16 @@ Copyright:
         <replace file="${DATABASE_FILE}"
             token="@DATABASE_NAME@"
             value="${DATABASE_NAME}"/>
+        <replace file="${DATABASE_FILE}"
+            token="@PROJECT_NAME@"
+            value="${project.name}"/>
     </target>
 
     <target name="check-mapping">
         <echo message="force mapping: ${var_force_mapping}"/>
         <condition property="var_force_mapping">
             <not>
-                <available file="${GRIDSPHERE_HOME}/mapping/${DATABASE_NAME}mapping.xml"/>
+                <available file="${GRIDSPHERE_HOME}/mapping/${project.name}mapping.xml"/>
             </not>
         </condition>
     </target>
@@ -432,7 +440,7 @@ Copyright:
             private="true"
             doclet="org.castor.doclet.jdo.JDO"
             docletpath="lib/ext/jdom.jar;lib/ext/castor-doclet.jar"
-            additionalparam="-J-DFILE=${GRIDSPHERE_HOME}/mapping/${DATABASE_NAME}mapping.xml -J-DLOG=1">
+            additionalparam="-J-DFILE=${GRIDSPHERE_HOME}/mapping/${project.name}mapping.xml -J-DLOG=1">
             <classpath refid="classpath"/>
         </javadoc>
     </target>
@@ -594,12 +602,12 @@ Copyright:
         <mkdir dir="${GRIDSPHERE_HOME}/creds"/>
 
         <!-- Copy the gridsphere web app to build directory -->
-        <copy todir="${build.webapps}/gridsphere">
+        <copy overwrite="true" todir="${build.webapps}/gridsphere">
             <fileset dir="${gswebapp.dir}"/>
         </copy>
 
         <!-- Copy over configuration files -->
-        <copy todir="${GRIDSPHERE_HOME}">
+        <copy overwrite="true" todir="${GRIDSPHERE_HOME}">
             <fileset dir="config">
                 <exclude name="*.properties"/>
                 <exclude name="test/**"/>
@@ -608,7 +616,7 @@ Copyright:
             </fileset>
         </copy>
 
-        <copy todir="${env.CATALINA_HOME}/shared/lib">
+        <copy overwrite="true" todir="${env.CATALINA_HOME}/shared/lib">
             <fileset dir="lib/ext"/>
             <fileset dir="lib">
                 <exclude name="portlet-widget-tags.jar"/>
@@ -618,11 +626,11 @@ Copyright:
 
         <antcall target="create-real-database"/>
 
-        <copy todir="${env.CATALINA_HOME}/webapps/gridsphere">
+        <copy overwrite="true" todir="${env.CATALINA_HOME}/webapps/gridsphere">
             <fileset dir="${build.webapps}/gridsphere"/>
         </copy>
 
-        <copy file="lib/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
+        <copy overwrite="true" file="lib/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
 
     </target>
 
@@ -637,11 +645,11 @@ Copyright:
 
         <antcall target="create-test-database"/>
 
-        <copy todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/test">
+        <copy overwrite="true" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/test">
             <fileset dir="config/test"/>
         </copy>
 
-        <copy file="lib/gridsphere-test.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
+        <copy overwrite="true" file="lib/gridsphere-test.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
 
     </target>
 
@@ -732,7 +740,6 @@ Copyright:
 
     </target>
 
-
     <!--
        ========================================================================
          Start Tomcat 4.0
@@ -779,10 +786,7 @@ Copyright:
 
         <mkdir dir="${gridsphere.build}/reports"/>
 
-        <antcall target="create-test-database"/>
-
         <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" fork="yes">
-
             <sysproperty key="cactus.contextURL" value="http://localhost:8080/gridsphere"/>
             <classpath>
                 <path refid="classpath"/>
