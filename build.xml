@@ -150,7 +150,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Builds and deploys GridSphere                                       -->
     <!-- =================================================================== -->
-    <target name="install-fresh" depends="clean,compile-all,docs-all,deploy-tomcat" description="Build and deploy GridSphere"/>
+    <target name="install-fresh" depends="clean,compile-all,docs-all,deploy" description="Build and deploy GridSphere"/>
 
     <!-- =================================================================== -->
     <!-- Updates GridSphere source code                                      -->
