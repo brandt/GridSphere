@@ -5,25 +5,19 @@
  */
 package org.gridlab.gridsphere.services.core.cache.impl;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimerTask;
 
-import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
-import org.gridlab.gridsphere.services.core.timer.TimerService;
 
 /**
- * Simple CacheService implementation based on TimerService
+ * Simple CacheService implementation 
  */
 public class CacheServiceImpl implements PortletServiceProvider, CacheService {
 
@@ -52,7 +46,6 @@ public class CacheServiceImpl implements PortletServiceProvider, CacheService {
     }
 
     public synchronized void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-        PortletServiceFactory factory = SportletServiceFactory.getInstance();
         String isCachingOnStr = config.getInitParameter("isCachingOn");
         if (!isCachingOnStr.equals("true") ||
                 !isCachingOnStr.equals("t") ||
