@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public abstract class BaseNameValue extends BaseElement implements NameValue {
+public abstract class BaseNameValueBean extends BaseElementBean implements NameValueBean {
 
     protected String value;
     protected String name;
@@ -19,11 +19,11 @@ public abstract class BaseNameValue extends BaseElement implements NameValue {
         }
     }
 
-    public BaseNameValue() {
+    public BaseNameValueBean() {
         super();
     }
 
-    public BaseNameValue(String name, String value, boolean disabled) {
+    public BaseNameValueBean(String name, String value, boolean disabled) {
         super();
         this.name = name;
         this.value = value;

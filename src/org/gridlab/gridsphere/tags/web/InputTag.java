@@ -6,8 +6,8 @@ package org.gridlab.gridsphere.tags.web;
 
 import org.gridlab.gridsphere.tags.web.validator.NoValidation;
 import org.gridlab.gridsphere.tags.web.validator.Validator;
-import org.gridlab.gridsphere.tags.web.element.BaseElement;
-import org.gridlab.gridsphere.tags.web.element.Element;
+import org.gridlab.gridsphere.tags.web.element.BaseElementBean;
+import org.gridlab.gridsphere.tags.web.element.ElementBean;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.jsp.JspException;
@@ -26,7 +26,7 @@ public class InputTag extends TagSupport {
     protected Validator validator = new NoValidation();
     protected int size = 20;
     protected int maxLength = 20;
-    protected Element htmlelement;
+    protected ElementBean htmlelement;
     protected String element = new String();
     protected int rows = 10;
     protected int cols = 40;
@@ -165,7 +165,7 @@ public class InputTag extends TagSupport {
 
     public int doStartTag() throws JspException {
         if (!element.equals("")) {
-            this.htmlelement = (Element)pageContext.getRequest().getAttribute(element);
+            this.htmlelement = (ElementBean)pageContext.getRequest().getAttribute(element);
         }
         try {
             JspWriter out = pageContext.getOut();

@@ -5,13 +5,13 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public class PasswordField extends InputField {
+public class PasswordFieldBean extends InputFieldBean {
 
-    public PasswordField() {
+    public PasswordFieldBean() {
         super();
     }
 
-    public PasswordField(String name, String value, boolean disabled, boolean readonly, int size, int maxlength) {
+    public PasswordFieldBean(String name, String value, boolean disabled, boolean readonly, int size, int maxlength) {
         super(name, value, disabled, readonly, size, maxlength);
     }
 

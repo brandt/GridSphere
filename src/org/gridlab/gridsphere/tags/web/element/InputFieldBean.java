@@ -4,17 +4,17 @@
  */
 package org.gridlab.gridsphere.tags.web.element;
 
-public class InputField extends ReadOnlyBase implements Input {
+public class InputFieldBean extends ReadOnlyBaseBean implements InputBean {
 
     protected int size;
     protected String inputtype;
     protected int maxlength;
 
-    public InputField() {
+    public InputFieldBean() {
         super();
     }
 
-    public InputField(String name, String value, boolean disabled, boolean readonly, int size, int maxlength) {
+    public InputFieldBean(String name, String value, boolean disabled, boolean readonly, int size, int maxlength) {
       //  super(name, value, disabled, readonly);
         this.name = name;
         this.value = value;

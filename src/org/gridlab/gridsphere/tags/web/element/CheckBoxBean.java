@@ -5,9 +5,9 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public class CheckBox extends SelectElement {
+public class CheckBoxBean extends SelectElementBean {
 
-    public CheckBox(String name, String value, boolean selected, boolean disabled) {
+    public CheckBoxBean(String name, String value, boolean selected, boolean disabled) {
         super(name, value, selected, disabled);
     }
 

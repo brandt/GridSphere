@@ -7,7 +7,7 @@ package org.gridlab.gridsphere.tags.web;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
-import org.gridlab.gridsphere.tags.web.element.ActionLink;
+import org.gridlab.gridsphere.tags.web.element.ActionLinkBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -19,7 +19,7 @@ public class ActionTag extends TagSupport {
     private String action;
     private String label;
     private PortletURI someURI;
-    private ActionLink actionlink = new ActionLink();
+    private ActionLinkBean actionlink = new ActionLinkBean();
 
     public void setAction(String action) {
         this.action = action;
@@ -37,11 +37,11 @@ public class ActionTag extends TagSupport {
         return label;
     }
 
-    public ActionLink getActionlink() {
+    public ActionLinkBean getActionlink() {
         return actionlink;
     }
 
-    public void setActionlink(ActionLink actionlink) {
+    public void setActionlink(ActionLinkBean actionlink) {
         this.actionlink = actionlink;
     }
 

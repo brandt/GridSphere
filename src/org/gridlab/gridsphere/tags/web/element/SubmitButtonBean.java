@@ -5,9 +5,10 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public class ListBoxItem extends SelectElement {
+public class SubmitButtonBean extends BaseButtonBean {
 
     public String toString() {
-        return "<option value='" + value + " " + checkDisabled() + " " + checkSelected("selected") + "'>" + name + "</option>";
+        this.type = "submit";
+        return super.toString();
     }
 }

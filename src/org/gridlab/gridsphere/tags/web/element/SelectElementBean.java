@@ -5,15 +5,15 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public abstract class SelectElement extends BaseNameValue implements Selectable {
+public abstract class SelectElementBean extends BaseNameValueBean implements SelectableBean {
 
     protected boolean selected = false;
 
-    public SelectElement() {
+    public SelectElementBean() {
         super();
     }
 
-    public SelectElement(String name, String value, boolean selected, boolean disabled) {
+    public SelectElementBean(String name, String value, boolean selected, boolean disabled) {
         this.name = name;
         this.value = value;
         this.selected = selected;

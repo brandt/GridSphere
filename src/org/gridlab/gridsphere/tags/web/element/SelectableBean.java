@@ -5,9 +5,9 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface Button extends NameValue {
+public interface SelectableBean extends NameValueBean {
 
-    public void setType(String type);
+    public void setSelected(boolean flag);
 
-    public String getType();
+    public boolean isSelected();
 }

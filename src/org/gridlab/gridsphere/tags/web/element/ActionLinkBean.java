@@ -4,7 +4,7 @@
  */
 package org.gridlab.gridsphere.tags.web.element;
 
-public class ActionLink extends Text implements Link {
+public class ActionLinkBean extends TextBean implements LinkBean {
 
     protected String link = null;
 

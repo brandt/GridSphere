@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface Element {
+public interface ElementBean {
 
     public String getId();
 

@@ -5,9 +5,9 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public class RadioButton extends SelectElement {
+public class RadioButtonBean extends SelectElementBean {
 
-    public RadioButton(String name, String value, boolean selected, boolean disabled) {
+    public RadioButtonBean(String name, String value, boolean selected, boolean disabled) {
         super(name, value, selected, disabled);
     }
 

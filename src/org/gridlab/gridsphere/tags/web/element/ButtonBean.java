@@ -5,9 +5,9 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface ReadOnly extends NameValue {
+public interface ButtonBean extends NameValueBean {
 
-    public void setReadonly(boolean flag);
+    public void setType(String type);
 
-    public boolean isReadonly();
+    public String getType();
 }

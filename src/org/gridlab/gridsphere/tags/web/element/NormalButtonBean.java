@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public class NormalButton extends BaseButton {
+public class NormalButtonBean extends BaseButtonBean {
 
     public String toString() {
         this.type = "button";

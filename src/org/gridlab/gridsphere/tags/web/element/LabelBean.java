@@ -5,9 +5,11 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface Selectable extends NameValue {
+public interface LabelBean extends ElementBean {
 
-    public void setSelected(boolean flag);
+    public String getLabel();
 
-    public boolean isSelected();
+    public void setLabel(String label);
+
+
 }

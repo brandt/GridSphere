@@ -6,7 +6,7 @@
 package org.gridlab.gridsphere.tags.web;
 
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
-import org.gridlab.gridsphere.tags.web.element.Text;
+import org.gridlab.gridsphere.tags.web.element.TextBean;
 
 import javax.servlet.jsp.tagext.TagSupport;
 import javax.servlet.jsp.JspTagException;
@@ -15,7 +15,7 @@ import javax.servlet.jsp.JspWriter;
 public class TextTag extends TagSupport {
 
     private String text = new String();
-    private Text textelement = new Text();
+    private TextBean textelement = new TextBean();
 
 
     public String getText() {

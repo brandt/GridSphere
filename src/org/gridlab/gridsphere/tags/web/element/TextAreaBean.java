@@ -5,12 +5,12 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public class TextArea extends ReadOnlyBase implements TAElement {
+public class TextAreaBean extends ReadOnlyBaseBean implements TAElementBean {
 
     private int cols;
     private int rows;
 
-    public TextArea(String name, String value, boolean disabled, boolean readonly, int rows, int cols) {
+    public TextAreaBean(String name, String value, boolean disabled, boolean readonly, int rows, int cols) {
         super(name, value, disabled, readonly);
         this.cols = cols;
         this.rows = rows;

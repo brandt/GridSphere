@@ -4,15 +4,15 @@
  */
 package org.gridlab.gridsphere.tags.web.element;
 
-public abstract class ReadOnlyBase extends BaseNameValue implements ReadOnly {
+public abstract class ReadOnlyBaseBean extends BaseNameValueBean implements ReadOnlyBean {
 
     protected boolean readonly;
 
-    public ReadOnlyBase() {
+    public ReadOnlyBaseBean() {
         super();
     }
 
-    public ReadOnlyBase(String name, String value, boolean disabled, boolean readonly) {
+    public ReadOnlyBaseBean(String name, String value, boolean disabled, boolean readonly) {
         super(name, value, disabled);
         this.readonly = readonly;
     }

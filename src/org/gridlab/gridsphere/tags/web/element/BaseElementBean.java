@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public abstract class BaseElement implements Element {
+public abstract class BaseElementBean implements ElementBean {
 
     protected String id;
     protected String color;

@@ -5,7 +5,7 @@
  */
 package org.gridlab.gridsphere.tags.web;
 
-import org.gridlab.gridsphere.tags.web.element.PasswordField;
+import org.gridlab.gridsphere.tags.web.element.PasswordFieldBean;
 
 import javax.servlet.jsp.JspException;
 
@@ -13,7 +13,7 @@ public class PasswordFieldTag extends InputTag {
 
     public int doStartTag() throws JspException {
         if (element.equals("")) {
-            this.htmlelement = new PasswordField(name, value, isDisabled,  isReadonly, size, maxLength);
+            this.htmlelement = new PasswordFieldBean(name, value, isDisabled,  isReadonly, size, maxLength);
         }
         return super.doStartTag();
     }

@@ -5,11 +5,9 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface Label extends Element {
+public interface ReadOnlyBean extends NameValueBean {
 
-    public String getLabel();
+    public void setReadonly(boolean flag);
 
-    public void setLabel(String label);
-
-
+    public boolean isReadonly();
 }

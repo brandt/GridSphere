@@ -4,7 +4,7 @@
  */
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface Input extends ReadOnly {
+public interface InputBean extends ReadOnlyBean {
 
     public void setSize(int size);
 

@@ -5,7 +5,7 @@
  */
 package org.gridlab.gridsphere.tags.web;
 
-import org.gridlab.gridsphere.tags.web.element.RadioButton;
+import org.gridlab.gridsphere.tags.web.element.RadioButtonBean;
 
 import javax.servlet.jsp.JspException;
 
@@ -13,7 +13,7 @@ public class RadioButtonTag extends InputTag {
 
     public int doStartTag() throws JspException {
         if (element.equals("")) {
-            this.htmlelement = new RadioButton(name, value, isChecked, isDisabled);
+            this.htmlelement = new RadioButtonBean(name, value, isChecked, isDisabled);
         }
         return super.doStartTag();
     }
