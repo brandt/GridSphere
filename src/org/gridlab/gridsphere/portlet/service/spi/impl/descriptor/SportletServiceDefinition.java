@@ -20,7 +20,7 @@ public class SportletServiceDefinition {
     protected String Interface = "";
     protected String Implementation = "";
     protected List ConfigParamList = new Vector();
-    protected Properties configProps = new Properties();
+    protected Properties configProps = null;
 
     public void setName(String Name) {
         this.Name = Name;
@@ -63,6 +63,7 @@ public class SportletServiceDefinition {
     }
 
     private void makeProperties() {
+        configProps = new Properties();
         Iterator it = ConfigParamList.iterator();
         ConfigParam param;
         while (it.hasNext()) {
@@ -82,7 +83,14 @@ public class SportletServiceDefinition {
         sb.append("service name: " + Name + "\n");
         sb.append("description: " + Description + "\n");
         sb.append("interface: " + Interface + "\n");
-        sb.append("Implementation: " + Implementation + "\n");
+        sb.append("implementation: " + Implementation + "\n");
+        sb.append("config properties: ");
+        Iterator it = ConfigParamList.iterator();
+        ConfigParam c;
+        while (it.hasNext()) {
+            c = (ConfigParam)it.next();
+            sb.append("\tname: " + c.getParamName() + "\tvalue: " + c.getParamValue());
+        }
         return sb.toString();
     }
 

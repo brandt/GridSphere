@@ -127,6 +127,7 @@ public class SportletServiceFactory implements PortletServiceFactory {
         }
 
         Properties configProperties = def.getConfigProperties();
+        List configList = def.getConfigParamList();
 
         PortletServiceConfig portletServiceConfig =
                 new SportletServiceConfig(service, configProperties, servletConfig);
