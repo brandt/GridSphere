@@ -9,18 +9,17 @@ The GridSphere software was developed under funding from the EU GridLab
 project, supported by the European Commission 5th Framework program,
 (grant IST-2001-32133)
 
-The GridSphere Open License wording is as follows.
-GridSphere Open License (GOL)
-
-Copyright (c) 2003 GridLab Consortium.
-All Rights Reserved.
+The GridSphere Open License wording is as follows. 
+GridSphere Open License (GOL) Copyright © 2003 
+Max-Planck-Gesellschaft/Max-Planck-Institut für Gravitationsphysik. 
+All Rights Reserved. 
 
  1) The "Software", below, refers to the GridSphere Portal (in either
     source-code, or binary form and accompanying documentation) and a
     "work based on the Software" means a work based on either the
     Software, on part of the Software, or on any derivative work of
-    the Software under copyright law: that is, a work containing all
-    or a portion of the Software either verbatim or with
+    the Software under applicable copyright law: that is, a work 
+    containing all or a portion of the Software either verbatim or with
     modifications.  Each licensee is addressed as "you" or "Licensee."
 
  2) A copy or copies of the Software may be given to others, if you
@@ -77,29 +76,47 @@ All Rights Reserved.
        "[Commercial product] was prepared, in part, on the basis of
         work sponsored by the GridSphere Project. The GridSphere project
         does not make any warranty express or implied, or assumes any legal
-        liability or responsibility for the accuracy, completeness, or
-        usefulness of any information, apparatus, product, or process
-        disclosed, or represents that its use would not infringe
-        privately owned rights.
-
-        IN NO EVENT WILL THE GRIDSPHERE PROJECT BE LIABLE FOR ANY
-        DAMAGES, INCLUDING DIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL
-        DAMAGES RESULTING FROM EXERCISE OF THIS LICENSE AGREEMENT OR
-        THE USE OF THE [COMMERCIAL PRODUCT]."
+        liability or responsibility for the usefulness of any information, 
+        apparatus, product, or process disclosed."
 
  7) The Software was prepared, in part, on the basis of work
     sponsored by an agency of the European Union. Neither
     the GridSphere Project, nor any of their employees,
     makes any warranty express or implied, or assumes any legal
-    liability or responsibility for the accuracy, completeness, or
-    usefulness of any information, apparatus, product, or process
-    disclosed, or represents that its use would not infringe privately
-    owned rights.
+    liability or responsibility for the usefulness of any information, 
+    apparatus, product, or process disclosed.
 
- 8) IN NO EVENT WILL THE GRIDSPHERE PROJECT BE LIABLE FOR ANY DAMAGES,
-    INCLUDING DIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES
-    RESULTING FROM EXERCISE OF THIS LICENSE AGREEMENT OR THE USE OF
-    THE SOFTWARE.
+ 8) The GridSphere Project’s liability for any damages sustained by you 
+    or your contract-partners, irrespective of its factual or legal 
+    cause but excluded in case of damages to body or injury, shall be 
+    limited as follows:
+
+    a) Willful Misconduct, Product Liability. The GridSphere Project’s
+       liability for wilful misconduct and claims asserted under the 
+       German Product Liability Act and personal injuries is governed 
+       by the applicable statutory provisions.
+
+    b) Gross Negligence. The GridSphere Project’s liability for gross
+       negligence is limited to reasonably foreseeable damages; this
+       limitation does not apply, if damages are caused by managing 
+       employees of the The GridSphere Project.
+    
+    c) Slight Negligence. The GridSphere Project’s liability for slight
+       negligence is limited to cases of material breach and cases of 
+       default (“Verzug”) or impossi-bility of performance 
+       (“Unmöglichkeit”). In such cases, The GridSphere Project’s 
+       liability is limited to reasonably forseeable damages. 
+    
+    d) Loss of Data. The GridSphere Project is not liable for any loss
+      of data.
+    
+    e) The GridSphere Project is not liable for any consequential damages.
+
+9) This Agreement shall be governed by the laws of the Federal Republic of
+   Germany. The application of the UN Convention on Contracts for the
+   International Sale of Goods is excluded. The exclusive place of
+   jurisdiction for any legal disputes arising from or in connection with 
+   this License Agreement shall be Berlin/Germany.
 
                               END OF LICENSE    
 
