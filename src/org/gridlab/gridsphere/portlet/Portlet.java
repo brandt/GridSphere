@@ -68,10 +68,10 @@ public abstract class Portlet extends HttpServlet
 
     public static class Mode implements Serializable {
 
-        public static final int VIEW_MODE = 0;
-        public static final int EDIT_MODE = 1;
-        public static final int HELP_MODE = 2;
-        public static final int CONFIGURE_MODE = 3;
+        protected static final int VIEW_MODE = 0;
+        protected static final int EDIT_MODE = 1;
+        protected static final int HELP_MODE = 2;
+        protected static final int CONFIGURE_MODE = 3;
 
         public static final Mode EDIT = new Mode(EDIT_MODE);
         public static final Mode VIEW = new Mode(VIEW_MODE);
@@ -82,6 +82,19 @@ public abstract class Portlet extends HttpServlet
 
         private Mode(int mode) {
             this.mode = mode;
+        }
+
+        public static Portlet.Mode getInstance(String mode) {
+            if (mode.equals(EDIT.toString())) {
+                return EDIT;
+            } else if (mode.equals(VIEW.toString())) {
+                return VIEW;
+            } else if (mode.equals(HELP.toString())) {
+                return HELP;
+            } else if (mode.equals(CONFIGURE.toString())) {
+                return CONFIGURE;
+            }
+            return null;
         }
 
         public int getMode() {

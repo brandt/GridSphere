@@ -8,12 +8,17 @@ import org.gridlab.gridsphere.event.WindowListener;
 import org.gridlab.gridsphere.event.ActionListener;
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.event.WindowEvent;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.core.beans.Token;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 
 /**
- *
+ * Additional extensions to a Portlet Adapter to provide action and window event handling
  */
 public abstract class AbstractPortlet extends PortletAdapter implements ActionListener, WindowListener {
+
+    public static PortletLog log = SportletLog.getInstance(AbstractPortlet.class);
 
     public AbstractPortlet() {
         super();
@@ -30,21 +35,13 @@ public abstract class AbstractPortlet extends PortletAdapter implements ActionLi
 
     /**
      * Called by the portlet container to ask this portlet to perform the required operational logic
-     * using the given portlet request. This method is invoked before the service method.
+     * using the given portlet request.
      * Notifies this listener that the action which the listener is watching for has been performed.
      *
      * @param event the action event
      * @throws PortletException if the listener has trouble fulfilling the request
      */
     public abstract void actionPerformed(ActionEvent event) throws PortletException;
-
-    /**
-     * Notifies this listener that the action which the listener is watching for is about to be performed.
-     *
-     * @param event the action event
-     * @throws PortletException if the listener has trouble fulfilling the request
-     */
-    public void actionNotYetPerformed(ActionEvent event) throws PortletException {}
 
     /**
      * Notifies this listener that a portlet window has been detached.

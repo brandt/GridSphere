@@ -17,50 +17,70 @@ public interface PortletWindow {
      * State describes Window state
      */
     public static class State {
-        private int state = NORMAL;
 
-        public State(int state) {
+        /**
+         * The standard "one-of many" window state on a page.
+         */
+        public static final PortletWindow.State NORMAL = new PortletWindow.State(PortletWindow.State.NORMAL_STATE);
+
+        /**
+         * The standard "one-of many" window state on a page.
+         */
+        public static final PortletWindow.State MAXIMIZED = new PortletWindow.State(PortletWindow.State.MAXIMIZED_STATE);
+
+        /**
+         * In this window state the portlet is displayed minimzed which means that only the portlet title is showns
+         */
+        public static final PortletWindow.State MINIMIZED = new PortletWindow.State(PortletWindow.State.MINIMIZED_STATE);
+
+        /**
+         *  The window is or will be closed and thus is not shown on the portal page anymore.
+         */
+        public static final PortletWindow.State CLOSED = new PortletWindow.State(PortletWindow.State.CLOSED_STATE);
+
+        /**
+         * Allows the portlet window to be detached of the normal content view of the portal and thus
+         * be shown in a separate window.
+         */
+        public static final PortletWindow.State DETACHED = new PortletWindow.State(PortletWindow.State.DETACHED_STATE);
+
+        /**
+         * Allows the portlet window to be resized
+         */
+        public static final PortletWindow.State RESIZING = new PortletWindow.State(PortletWindow.State.RESIZING_STATE);
+
+        public static final int NORMAL_STATE = 0;
+        public static final int MAXIMIZED_STATE = 1;
+        public static final int MINIMIZED_STATE = 2;
+        public static final int CLOSED_STATE = 3;
+        public static final int DETACHED_STATE = 4;
+        public static final int RESIZING_STATE = 5;
+
+        private int state = NORMAL_STATE;
+
+        private State() {}
+
+        private State(int state) {
             this.state = state;
         }
 
-        public static final int NORMAL = 0;
-        public static final int MAXIMIZED = 1;
-        public static final int MINIMIZED = 2;
-        public static final int CLOSED = 3;
-        public static final int DETACHED = 4;
-        public static final int RESIZING = 5;
+        public String toString() {
+            if (state == NORMAL_STATE) {
+                return "NORMAL";
+            } else if (state == MAXIMIZED_STATE) {
+                return "MAXIMIZED";
+            } else if (state == MINIMIZED_STATE) {
+                return "MINIMIZED";
+            } else if (state == CLOSED_STATE) {
+                return "CLOSED";
+            } else if (state == DETACHED_STATE) {
+                return "DETACHED";
+            } else if (state == RESIZING_STATE) {
+                return "RESIZING";
+            }
+            return null;
+        }
     }
-
-    /**
-     * The standard "one-of many" window state on a page.
-     */
-    public static final PortletWindow.State NORMAL = new PortletWindow.State(PortletWindow.State.NORMAL);
-
-    /**
-     * The standard "one-of many" window state on a page.
-     */
-    public static final PortletWindow.State MAXIMIZED = new PortletWindow.State(PortletWindow.State.MAXIMIZED);
-
-    /**
-     * In this window state the portlet is displayed minimzed which means that only the portlet title is showns
-     */
-    public static final PortletWindow.State MINIMIZED = new PortletWindow.State(PortletWindow.State.MINIMIZED);
-
-    /**
-     *  The window is or will be closed and thus is not shown on the portal page anymore.
-     */
-    public static final PortletWindow.State CLOSED = new PortletWindow.State(PortletWindow.State.CLOSED);
-
-    /**
-     * Allows the portlet window to be detached of the normal content view of the portal and thus
-     * be shown in a separate window.
-     */
-    public static final PortletWindow.State DETACHED = new PortletWindow.State(PortletWindow.State.DETACHED);
-
-    /**
-     * Allows the portlet window to be resized
-     */
-    public static final PortletWindow.State RESIZING = new PortletWindow.State(PortletWindow.State.RESIZING);
 
     /**
      * Return the portlet window state.
@@ -75,6 +95,5 @@ public interface PortletWindow {
      * @param state the portlet window state
      */
     public void setWindowState(PortletWindow.State state);
-
 
 }
