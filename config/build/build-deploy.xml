@@ -101,7 +101,7 @@ Build include file for the GridSphere Portal source code, see build.xml
     </target>
 
     <!-- deploys jetty to appserver.home -->
-    <target name="install-jetty" description="Deploys jetty to jetty.home">
+    <target name="install-jetty" depends="setenv" description="Deploys jetty to jetty.home">
         <mkdir dir="${appserver.home}"/>
         <mkdir dir="${appserver.home}/webapps"/>
         <mkdir dir="${appserver.home}/logs"/>
