@@ -31,7 +31,7 @@ public class FrameBean extends TableBean implements TagBean {
 
         sb.append("<table class=\"" + TABLE_FRAME_STYLE + "\" ");
         sb.append(" cellspacing=\"" + cellSpacing + "\" ");
-        sb.append(" width=\"" + width + "\" ");
+        sb.append(" width=\"" + width + "\" >");
         sb.append(defaultModel.toString());
         sb.append("</table>");
 
