@@ -53,6 +53,9 @@
 <!ENTITY ActionPage "<classname>ActionPage</classname>">
 <!ENTITY DefaultActionPage "<classname>DefaultActionPage</classname>">
 
+<!ENTITY ActionPortlet "<classname>ActionPortlet</classname>">
+<!ENTITY FormEvent "<classname>FormEvent</classname>">
+
 
 <!-- Common Tapestry classes -->
 
