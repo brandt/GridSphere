@@ -40,16 +40,20 @@ public class PortletRegistry {
      * @param appPortlet an <code>ApplicationPortlet</code>
      */
     public void addApplicationPortlet(ApplicationPortlet appPortlet) {
-        allApplicationPortlets.put(appPortlet.getApplicationPortletID(), appPortlet);
+        String key = appPortlet.getWebApplicationName() + "#" + appPortlet.getApplicationPortletID();
+        if (allApplicationPortlets.get(key) != null) {
+            log.debug("Replacing existing app portlet: " + key);
+        }
+        allApplicationPortlets.put(key, appPortlet);
     }
 
     /**
      * Removes an application portlet from the registry
      *
-     * @param applicationPortletID the application portlet id
+     * @param applicationPortlet the application portlet
      */
-    public void removeApplicationPortlet(String applicationPortletID) {
-        allApplicationPortlets.remove(applicationPortletID);
+    public void removeApplicationPortlet(ApplicationPortlet applicationPortlet) {
+        allApplicationPortlets.remove(applicationPortlet.getWebApplicationName() + "#" + applicationPortlet.getApplicationPortletID());
     }
 
     /**
@@ -59,7 +63,15 @@ public class PortletRegistry {
      * @return an application portlet
      */
     public ApplicationPortlet getApplicationPortlet(String applicationPortletID) {
-        return (ApplicationPortlet) allApplicationPortlets.get(applicationPortletID);
+        Collection coll = allApplicationPortlets.values();
+        Iterator it = coll.iterator();
+
+        while (it.hasNext()) {
+            ApplicationPortlet app = (ApplicationPortlet)it.next();
+            if (app.getApplicationPortletID().equals(applicationPortletID)) return app;
+        }
+        log.debug("Unable to find " + applicationPortletID + " in registry");
+        return null;
     }
 
     /**
@@ -148,7 +160,6 @@ public class PortletRegistry {
         }  catch (NumberFormatException e) {
             appID = concretePortletID;
         }
-        System.err.println("app ID is " + appID);
         return appID;
     }
 

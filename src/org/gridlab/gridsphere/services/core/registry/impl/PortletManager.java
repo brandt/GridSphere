@@ -124,7 +124,7 @@ public class PortletManager implements PortletManagerService {
                 Iterator appsit = appPortlets.iterator();
                 while (appsit.hasNext()) {
                     ApplicationPortlet appPortlet = (ApplicationPortlet) appsit.next();
-                    registry.removeApplicationPortlet(appPortlet.getApplicationPortletID());
+                    registry.removeApplicationPortlet(appPortlet);
                 }
                 log.debug("removing " + webApp.getWebApplicationName());
                 //webapps.remove(webApp);
@@ -157,7 +157,7 @@ public class PortletManager implements PortletManagerService {
                 Iterator appsit = appPortlets.iterator();
                 while (appsit.hasNext()) {
                     ApplicationPortlet appPortlet = (ApplicationPortlet) appsit.next();
-                    registry.removeApplicationPortlet(appPortlet.getApplicationPortletID());
+                    registry.removeApplicationPortlet(appPortlet);
                 }
                 log.debug("removing " + webApp.getWebApplicationName());
                 //webapps.remove(webApp);
