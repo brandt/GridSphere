@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.services.user.UserManagerService;
+import org.gridlab.gridsphere.tags.web.element.InputField;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -20,12 +21,6 @@ import org.jdom.input.SAXBuilder;
 
 import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.InputStream;
@@ -155,7 +150,7 @@ public class RSSPortlet extends AbstractPortlet {
 
         DefaultPortletAction defAction = new DefaultPortletAction("rss_edit");
         returnURI.addAction(defAction);
-        request.setAttribute("rss_url", returnURI.toString());
+        request.setAttribute("f", new InputField("name", "value", false, false, 20, 30));
         getPortletConfig().getContext().include("/jsp/rss/edit.jsp", request, response);
     }
 
