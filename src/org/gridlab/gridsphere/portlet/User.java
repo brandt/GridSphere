@@ -90,7 +90,7 @@ public interface User {
      *
      * @return String the user id
      */
-    public String getLoginName();
+    public String getUserName();
 
     /**
      * Returns the point of time that this user was last logged in, or null if this information is not available.

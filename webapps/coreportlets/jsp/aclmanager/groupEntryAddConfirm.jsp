@@ -23,7 +23,7 @@
         <tr>
           <td bgcolor="#BLACK">
             <font color="WHITE" size="+1">
-              Group Entry
+              Added Group Entries
             </font>
           </td>
         </tr>
@@ -34,7 +34,7 @@
         <tr>
           <td bgcolor="#CCCCCC">
             <input type="button"
-                   name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_EDIT%>"
+                   name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_VIEW%>"
                    value="Edit Entry="
                    onClick="javascript:AccessControllerPortlet_editGroupEntry_onClick()"/>
             &nbsp;&nbsp;<input type="button"
@@ -42,7 +42,7 @@
                    value="Delete Entry"
                    onClick="javascript:AccessControllerPortlet_removeGroupEntry_onClick()"/>
             &nbsp;&nbsp;<input type="button"
-                   name="<%=AccessControllerBean.ACTION_GROUP_VIEW%>"
+                   name="<%=AccessControllerBean.ACTION_GROUP_LIST%>"
                    value="Back To Group"
                    onClick="javascript:AccessControllerPortlet_viewGroup_onClick('<%=aclManagerBean.getGroupID()%>')"/>
           </td>

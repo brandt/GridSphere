@@ -13,7 +13,7 @@
 <jsp:useBean id="aclManagerBean"
              class="org.gridlab.gridsphere.portlets.core.beans.AccessControllerBean"
              scope="request"/>
-<form name="AccessControllerPortlet" method="POST" action="<%=aclManagerBean.getGroupViewURI()%>">
+<form name="AccessControllerPortlet" method="POST" action="">
   <input type="hidden" name="groupID" value="<%=aclManagerBean.getGroupID()%>"/>
   <input type="hidden" name="groupEntryID" value="<%=aclManagerBean.getGroupEntryID()%>"/>
 <table border="0" cellspacing="1" cellpadding="2" width="100%">
@@ -23,7 +23,7 @@
         <tr>
           <td bgcolor="#BLACK">
             <font color="WHITE" size="+1">
-              Group Entry
+              Add Group Entries
             </font>
           </td>
         </tr>
@@ -34,17 +34,24 @@
         <tr>
           <td bgcolor="#CCCCCC">
             <input type="button"
-                   name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_EDIT%>"
-                   value="Edit Entry="
-                   onClick="javascript:AccessControllerPortlet_editGroupEntry_onClick()"/>
+                   name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_VIEW%>"
+                   value="Save"
+                   onClick="javascript:AccessControllerPortlet_confirmAddGroupEntry_onClick()"/>
             &nbsp;&nbsp;<input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_REMOVE%>"
-                   value="Delete Entry"
-                   onClick="javascript:AccessControllerPortlet_removeGroupEntry_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
-                   name="<%=AccessControllerBean.ACTION_GROUP_VIEW%>"
-                   value="Back To Group"
-                   onClick="javascript:AccessControllerPortlet_viewGroup_onClick('<%=aclManagerBean.getGroupID()%>')"/>
+                   value="Delete"
+                   onClick="javascript:AccessControllerPortlet_cancelAddGroupEntry_onClick()"/>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+        <tr>
+          <td bgcolor="WHITE">
+            Select the users you want to add and specify the role they play within this group.
           </td>
         </tr>
       </table>
@@ -55,43 +62,34 @@
       <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
         <tr>
           <td bgcolor="#CCCCCC">
-             Entry:&nbsp;
+             Users not in group:
           </td>
           <td bgcolor="WHITE">
-             <%=aclManagerBean.getGroupEntryID()%>
+            <select size="8" name="groupEntryUserID">
+<% Iterator usersNotInGroup = aclManagerBean.getUsersNotInGroup().iterator();
+   while (usersNotInGroup.hasNext()) {
+        User user = (User)usersNotInGroup.next(); %>
+               <option label="<%=user.getUserName()%>"
+                       value="<%=user.getID()%>"/>
+<% } %>
+            </select>
           </td>
         </tr>
         <tr>
           <td bgcolor="#CCCCCC">
-             Group:&nbsp;
+             Role in group:&nbsp;
           </td>
           <td bgcolor="WHITE">
-             <%=aclManagerBean.getGroupEntry().getGroup().getName()%>
+             <select name="groupEntryRoleName">
+               <option label="USER"
+                       value="user"/>
+               <option label="ADMIN"
+                       value="admin"=/>
+               <option label="GUEST"
+                       value="guest"=/>
+             </select>
           </td>
         </tr>
-        <tr>
-          <td bgcolor="#CCCCCC">
-             User:&nbsp;
-          </td>
-          <td bgcolor="WHITE">
-             <%=aclManagerBean.getGroupEntry().getUser().getUserName()%>
-          </td>
-        </tr>
-        <tr>
-          <td bgcolor="#CCCCCC">
-             Full Name:&nbsp;
-          </td>
-          <td bgcolor="WHITE">
-             <%=aclManagerBean.getGroupEntry().getUser().getFullName()%>
-          </td>
-        </tr>
-        <tr>
-          <td bgcolor="#CCCCCC">
-             Role:&nbsp;
-          </td>
-          <td bgcolor="WHITE">
-             <%=aclManagerBean.getGroupEntry().getRole().toString()%>
-          </td>
         </tr>
       </table>
     </td>

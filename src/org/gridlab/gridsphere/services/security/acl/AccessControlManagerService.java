@@ -20,8 +20,6 @@ public interface AccessControlManagerService extends PortletService {
 
     /*** PORTLET GROUP METHODS ***/
 
-    public List selectGroups(String criteria);
-
     public List getGroups();
 
     public PortletGroup getGroup(String groupId);
@@ -40,7 +38,7 @@ public interface AccessControlManagerService extends PortletService {
 
     public List getGroupRequests(PortletGroup group);
 
-    public List selectGroupRequests(String criteria);
+    public List getGroupRequestsForGroups(List groups);
 
     public GroupRequest getGroupRequest(String id);
 
@@ -71,7 +69,7 @@ public interface AccessControlManagerService extends PortletService {
 
     public List getGroupEntries(PortletGroup group);
 
-    public List selectGroupEntries(String criteria);
+    public List getGroupEntriesForGroups(List groups);
 
     public GroupEntry getGroupEntry(String id);
 

@@ -111,7 +111,7 @@ public class CredentialManagerServiceTest extends ServiceTest {
         try {
             this.userManagerService.submitAccountRequest(req1);
             this.userManagerService.approveAccountRequest(req1);
-            testUser = this.userManagerService.getUserByLoginName("test");
+            testUser = this.userManagerService.getUserByUserName("test");
         } catch (PortletServiceException e) {
             _log.error("Exception " + e);
             fail("failed to generate AccountRequests");

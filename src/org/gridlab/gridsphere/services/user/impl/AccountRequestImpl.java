@@ -142,7 +142,7 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
      *
      * @return String the user id
      */
-    public String getLoginName() {
+    public String getUserName() {
         return this.UserID;
     }
 
@@ -152,7 +152,7 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
      *
      * @param String the user id
      */
-    public void setLoginName(String name) {
+    public void setUserName(String name) {
         this.UserID = name;
     }
 

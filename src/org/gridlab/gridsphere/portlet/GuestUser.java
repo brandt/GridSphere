@@ -136,7 +136,7 @@ public class GuestUser implements User {
      *
      * @return String the user id
      */
-    public String getLoginName() {
+    public String getUserName() {
         return UserID;
     }
 

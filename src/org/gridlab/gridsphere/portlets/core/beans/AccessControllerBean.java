@@ -104,17 +104,14 @@ public class AccessControllerBean extends PortletBean {
     public AccessControllerBean(PortletConfig config, PortletRequest request, PortletResponse response)
             throws PortletException {
         super(config, request, response);
-        init(config);
+        initServices();
     }
 
-    protected void initServices(PortletConfig config)
+    protected void initServices()
             throws PortletException {
         _log.debug("Entering initServices()");
-        PortletContext context = config.getContext();
-        this.userManagerService =
-                (UserManagerService)context.getService(UserManagerService.class);
-        this.aclManagerService =
-                (AccessControlManagerService)context.getService(AccessControlManagerService.class);
+        this.userManagerService = (UserManagerService)getPortletService(UserManagerService.class);
+        this.aclManagerService = (AccessControlManagerService)getPortletService(AccessControlManagerService.class);
         _log.debug("Exiting initServices()");
     }
 
@@ -166,11 +163,6 @@ public class AccessControllerBean extends PortletBean {
         _log.debug("Entering doListGroups");
         // Load group list
         loadGroupList();
-        // Set actions
-        createGroupListURI();
-        createGroupViewURI();
-        createGroupEditURI();
-        createGroupDeleteURI();
         // Set next page attribute
         setNextPage(PAGE_GROUP_LIST);
         _log.debug("Exiting doListGroups");
@@ -181,14 +173,6 @@ public class AccessControllerBean extends PortletBean {
         _log.debug("Entering doViewGroup");
         // Load group so we can edit attributes
         loadGroup();
-        // Set actions
-        createGroupListURI();
-        createGroupViewURI();
-        createGroupEditURI();
-        createGroupDeleteURI();
-        createActionURI(ACTION_GROUP_ENTRY_VIEW);
-        createActionURI(ACTION_GROUP_ENTRY_ADD);
-        createActionURI(ACTION_GROUP_ENTRY_REMOVE);
         // Set next page attribute
         setNextPage(PAGE_GROUP_VIEW);
         _log.debug("Exiting doViewGroup");
@@ -199,9 +183,6 @@ public class AccessControllerBean extends PortletBean {
         _log.debug("Entering doEditGroup");
         // Load group so we can edit attributes
         loadGroup();
-        // Set actions
-        createGroupEditConfirmURI();
-        createGroupEditCancelURI();
         // Set next page attribute
         setNextPage(PAGE_GROUP_EDIT);
         _log.debug("Exiting doEditGroup");
@@ -223,9 +204,6 @@ public class AccessControllerBean extends PortletBean {
             // Set form validation
             setIsFormInvalid(true);
             setFormInvalidMessage(e.getMessage());
-            // Set actions
-            createGroupEditConfirmURI();
-            createGroupEditCancelURI();
             // Set next page attribute
             setNextPage(PAGE_GROUP_EDIT);
         }
@@ -237,9 +215,6 @@ public class AccessControllerBean extends PortletBean {
         _log.debug("Entering doDeleteGroup");
         // Load group so we can have attributes
         loadGroup();
-        // Set actions
-        createGroupDeleteConfirmURI();
-        createGroupDeleteCancelURI();
         // Set next page attribute
         setNextPage(PAGE_GROUP_DELETE);
         _log.debug("Exiting doDeleteGroup");
@@ -252,9 +227,6 @@ public class AccessControllerBean extends PortletBean {
         loadGroup();
         // Delete group
         deleteGroup();
-        // Set actions
-        createGroupListURI();
-        createGroupEditURI();
         // Set next page attribute
         setNextPage(PAGE_GROUP_DELETE_CONFIRM);
         _log.debug("Exiting doConfirmDeleteGroup");
@@ -264,11 +236,6 @@ public class AccessControllerBean extends PortletBean {
             throws PortletException {
         // Load access right
         loadGroupEntry();
-        // Set actions
-        createActionURI(ACTION_GROUP_LIST);
-        createActionURI(ACTION_GROUP_VIEW);
-        createActionURI(ACTION_GROUP_ENTRY_EDIT);
-        createActionURI(ACTION_GROUP_ENTRY_REMOVE);
         // Set next page attribute
         setNextPage(PAGE_GROUP_ENTRY_VIEW);
     }
@@ -277,9 +244,6 @@ public class AccessControllerBean extends PortletBean {
             throws PortletException {
         // Load access right
         loadGroupEntry();
-        // Set actions
-        createActionURI(ACTION_GROUP_ENTRY_EDIT_CONFIRM);
-        createActionURI(ACTION_GROUP_ENTRY_EDIT_CANCEL);
         // Set next page attribute
         setNextPage(PAGE_GROUP_ENTRY_EDIT);
     }
@@ -300,9 +264,6 @@ public class AccessControllerBean extends PortletBean {
             throws PortletException {
         // Load users not in group
         loadUserNotGroupList();
-        // Set actions
-        createActionURI(ACTION_GROUP_ENTRY_ADD_CONFIRM);
-        createActionURI(ACTION_GROUP_ENTRY_ADD_CANCEL);
         // Set next page attribute
         setNextPage(PAGE_GROUP_ENTRY_ADD);
     }
@@ -317,9 +278,6 @@ public class AccessControllerBean extends PortletBean {
             throws PortletException {
         // Load access rights
         loadGroupEntryList();
-        // Set actions
-        createActionURI(ACTION_GROUP_ENTRY_REMOVE_CONFIRM);
-        createActionURI(ACTION_GROUP_ENTRY_REMOVE_CANCEL);
         // Set next page attribute
         setNextPage(PAGE_GROUP_ENTRY_REMOVE);
     }
@@ -330,94 +288,40 @@ public class AccessControllerBean extends PortletBean {
         doViewGroupEntry();
     }
 
-    public String getActionURI(String name) {
-        return (String)request.getAttribute(name);
+    public PortletURI getActionURI(String name) {
+        return getPortletActionURI(name);
     }
 
-    public void createActionURI(String name) {
-        PortletURI listURI = response.createURI();
-        listURI.addAction(new DefaultPortletAction(name));
-        request.setAttribute(name, listURI.toString());
+    public PortletURI getGroupListURI() {
+        return getPortletActionURI(ACTION_GROUP_LIST);
     }
 
-    public String getGroupListURI() {
-        return (String)request.getAttribute(ACTION_GROUP_LIST);
+    public PortletURI getGroupViewURI() {
+        return getPortletActionURI(ACTION_GROUP_VIEW);
     }
 
-    public void createGroupListURI() {
-        PortletURI listURI = response.createURI();
-        listURI.addAction(new DefaultPortletAction(ACTION_GROUP_LIST));
-        request.setAttribute(ACTION_GROUP_LIST, listURI.toString());
+    public PortletURI getGroupEditURI() {
+        return getPortletActionURI(ACTION_GROUP_EDIT);
     }
 
-    public String getGroupViewURI() {
-        return (String)request.getAttribute(ACTION_GROUP_VIEW);
+    public PortletURI getGroupEditConfirmURI() {
+        return getPortletActionURI(ACTION_GROUP_EDIT_CONFIRM);
     }
 
-    public void createGroupViewURI() {
-        PortletURI viewURI = response.createURI();
-        viewURI.addAction(new DefaultPortletAction(ACTION_GROUP_VIEW));
-        request.setAttribute(ACTION_GROUP_VIEW, viewURI.toString());
+    public PortletURI getGroupEditCancelURI() {
+        return getPortletActionURI(ACTION_GROUP_EDIT_CANCEL);
     }
 
-    public String getGroupEditURI() {
-        return (String)request.getAttribute(ACTION_GROUP_EDIT);
+    public PortletURI getGroupDeleteURI() {
+        return getPortletActionURI(ACTION_GROUP_DELETE);
     }
 
-    public void createGroupEditURI() {
-        PortletURI editURI = response.createURI();
-        editURI.addAction(new DefaultPortletAction(ACTION_GROUP_EDIT));
-        request.setAttribute(ACTION_GROUP_EDIT, editURI.toString());
+    public PortletURI getGroupDeleteConfirmURI() {
+        return getPortletActionURI(ACTION_GROUP_DELETE_CONFIRM);
     }
 
-    public String getGroupEditConfirmURI() {
-        return (String)request.getAttribute(ACTION_GROUP_EDIT_CONFIRM);
-    }
-
-    public void createGroupEditConfirmURI() {
-        PortletURI editConfirmURI = response.createURI();
-        editConfirmURI.addAction(new DefaultPortletAction(ACTION_GROUP_EDIT_CONFIRM));
-        request.setAttribute(ACTION_GROUP_EDIT_CONFIRM, editConfirmURI.toString());
-    }
-
-    public String getGroupEditCancelURI() {
-        return (String)request.getAttribute(ACTION_GROUP_EDIT_CANCEL);
-    }
-
-    public void createGroupEditCancelURI() {
-        PortletURI cancelURI = response.createReturnURI();
-        cancelURI.addAction(new DefaultPortletAction(ACTION_GROUP_EDIT_CANCEL));
-        request.setAttribute(ACTION_GROUP_EDIT_CANCEL, cancelURI.toString());
-    }
-
-    public String getGroupDeleteURI() {
-        return (String)request.getAttribute(ACTION_GROUP_DELETE);
-    }
-
-    public void createGroupDeleteURI() {
-        PortletURI deleteURI = response.createURI();
-        deleteURI.addAction(new DefaultPortletAction(ACTION_GROUP_DELETE));
-        request.setAttribute(ACTION_GROUP_DELETE, deleteURI.toString());
-    }
-
-    public String getGroupDeleteConfirmURI() {
-        return (String)request.getAttribute(ACTION_GROUP_DELETE_CONFIRM);
-    }
-
-    public void createGroupDeleteConfirmURI() {
-        PortletURI deleteConfirmURI = response.createURI();
-        deleteConfirmURI.addAction(new DefaultPortletAction(ACTION_GROUP_DELETE_CONFIRM));
-        request.setAttribute(ACTION_GROUP_DELETE_CONFIRM, deleteConfirmURI.toString());
-    }
-
-    public String getGroupDeleteCancelURI() {
-        return (String)request.getAttribute(ACTION_GROUP_DELETE_CANCEL);
-    }
-
-    public void createGroupDeleteCancelURI() {
-        PortletURI cancelURI = response.createReturnURI();
-        cancelURI.addAction(new DefaultPortletAction(ACTION_GROUP_DELETE_CANCEL));
-        request.setAttribute(ACTION_GROUP_DELETE_CANCEL, cancelURI.toString());
+    public PortletURI getGroupDeleteCancelURI() {
+        return getPortletActionURI(ACTION_GROUP_DELETE_CANCEL);
     }
 
     public String getActionPerformed() {

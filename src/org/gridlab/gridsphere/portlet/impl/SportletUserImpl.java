@@ -120,7 +120,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
      *
      * @return String the user id
      */
-    public String getLoginName() {
+    public String getUserName() {
         return this.UserID;
     }
 
@@ -130,7 +130,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
      *
      * @param String the user id
      */
-    public void setLoginName(String name) {
+    public void setUserName(String name) {
         this.UserID = name;
     }
 

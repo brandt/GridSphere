@@ -9,33 +9,36 @@
 package org.gridlab.gridsphere.portlets.core.beans;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.service.PortletService;
 
 public class PortletBean {
 
-    private static PortletLog _log = SportletLog.getInstance(PortletBean.class);
-
     protected PortletConfig config = null;
+    protected PortletContext context = null;
     protected PortletRequest request = null;
     protected PortletResponse response = null;
+    protected User user = null;
+    protected PortletSession session = null;
 
     public PortletBean() {
     }
 
     public PortletBean(PortletConfig config, PortletRequest request, PortletResponse response)
             throws PortletException {
-        this.request = request;
-        this.response = response;
-        init(config);
+        init(config, request, response);
     }
 
-    public void init(PortletConfig config)
+    public void init(PortletConfig config, PortletRequest request, PortletResponse response)
             throws PortletException {
         this.config = config;
-        initServices(config);
+        this.context = config.getContext();
+        this.request = request;
+        this.response = response;
+        this.user = request.getUser();
+        this.session = request.getPortletSession();
     }
 
-    protected void initServices(PortletConfig config)
+    protected void initServices(User user, PortletConfig config)
             throws PortletException {
     }
 
@@ -60,11 +63,39 @@ public class PortletBean {
     }
 
     public PortletSession getPortletSession() {
-        return this.request.getPortletSession();
+        return this.session;
     }
 
     public User getPortletUser() {
-        return this.request.getUser();
+        return this.user;
+    }
+
+    public String getPortletUserID() {
+        return this.user.getID();
+    }
+
+    public String getPortletUserName() {
+        return this.user.getUserName();
+    }
+
+    public PortletService getPortletService(Class serviceClass)
+            throws PortletException {
+        PortletService service = (PortletService)this.session.getAttribute(serviceClass.getName();
+        if (service == null)) {
+            service = this.context.getService(serviceClass, user);
+            this.session.setAttribute(serviceClass.getName(), service);
+        }
+        return service;
+    }
+
+    public PortletURI getPortletActionURI(String action) {
+        PortletURI actionURI = response.createReturnURI();
+        actionURI.addAction(new DefaultPortletAction(action));
+        return actionURI;
+    }
+
+    public PortletURI getPortletActionURI(PortletActionConstant action) {
+        return action.createDefaultPortletActionURI(this.request, this.response);
     }
 
     public String getParameter(String param) {

@@ -15,7 +15,7 @@
       document.AccessControlManagerPortlet.submit();
     }
 
-    function AccessControlManagerPortlet_newGroup_onClick(groupID) {
+    function AccessControlManagerPortlet_newGroup_onClick() {
       document.AccessControlManagerPortlet.groupID.value="";
       document.AccessControlManagerPortlet.action="<%=aclManagerBean.getGroupEditURI()%>";
       document.AccessControlManagerPortlet.submit();

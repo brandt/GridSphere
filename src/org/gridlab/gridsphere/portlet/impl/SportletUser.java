@@ -74,20 +74,12 @@ public interface SportletUser extends User {
     public void setUserID(String userID);
 
     /**
-     * This is an alias for the getUserID method, which for all intensive
-     * purposes represents the name required for this user to login.
-     *
-     * @return String the user id
-     */
-    public String getLoginName();
-
-    /**
      * This is an alias for the setUserID method, which for all intensive
      * purposes represents the name required for this user to login.
      *
      * @param String the user id
      */
-    public void setLoginName(String login);
+    public void setUserName(String login);
 
     /**
      * Sets the point of time that this user was last logged in, or null if this information is not available.

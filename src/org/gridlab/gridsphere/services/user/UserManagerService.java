@@ -22,13 +22,6 @@ public interface UserManagerService extends PortletService {
       *
       * @return a list of pending account requests
       */
-    public List selectAccountRequests(String criteria);
-
-    /**
-      * Administrators can retrieve all pending account request
-      *
-      * @return a list of pending account requests
-      */
     public List getAccountRequests();
 
     /**
@@ -132,13 +125,6 @@ public interface UserManagerService extends PortletService {
     public void deleteAccount(User user, MailMessage mailMessage);
 
     /**
-     * Return a list of all portal users
-     *
-     * @return a list containing all Role objects
-     */
-    public List selectUsers(String criteria);
-
-    /**
       * Administrators can retrieve all pending account request
       *
       * @return a list of pending account requests
@@ -163,7 +149,7 @@ public interface UserManagerService extends PortletService {
       * @param User The super user requesting the user object
       * @param String The user name or login id of the user in question
       */
-    public User getUserByLoginName(String loginName);
+    public User getUserByUserName(String loginName);
 
     /**
       * Checks to see if account exists for a user
@@ -171,5 +157,5 @@ public interface UserManagerService extends PortletService {
       * @param userID the user login ID
       * @return true if the user exists, false otherwise
       */
-    public boolean existsUserWithLoginName(String loginName);
+    public boolean existsUserName(String loginName);
 }

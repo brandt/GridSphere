@@ -89,19 +89,15 @@ public class UserManagerBean extends PortletBean {
     public UserManagerBean(PortletConfig config, PortletRequest request, PortletResponse response)
             throws PortletException {
         super(config, request, response);
-        init(config);
+        initServices();
     }
 
-    protected void initServices(PortletConfig config)
+    protected void initServices()
             throws PortletException {
         _log.debug("Entering initServices()");
-        PortletContext context = config.getContext();
-        this.userManagerService =
-                (UserManagerService)context.getService(UserManagerService.class);
-        this.aclManagerService =
-                (AccessControlManagerService)context.getService(AccessControlManagerService.class);
-        this.passwordManagerService =
-                (PasswordManagerService)context.getService(PasswordManagerService.class);
+        this.userManagerService = (UserManagerService)getPortletService(UserManagerService.class;
+        this.aclManagerService = (AccessControlManagerService)getPortletService(AccessControlManagerService.class);
+        this.passwordManagerService = (PasswordManagerService)getPortletService(PasswordManagerService.class);
         _log.debug("Exiting initServices()");
     }
 
@@ -138,14 +134,6 @@ public class UserManagerBean extends PortletBean {
             throws PortletException {
         // Load user list
         loadUserList();
-        // Add list user action
-        createUserListURI();
-        // Add view user action
-        createUserViewURI();
-        // Add edit user action
-        createUserEditURI();
-        // Add delete user action
-        createUserDeleteURI();
         // Set next page attribute
         setNextPage(PAGE_USER_LIST);
     }
@@ -154,12 +142,6 @@ public class UserManagerBean extends PortletBean {
             throws PortletException {
         // Load user so we can edit attributes
         loadUser();
-        // Add list user action
-        createUserListURI();
-        // Add edit user action
-        createUserEditURI();
-        // Add delete user action
-        createUserDeleteURI();
         // Set next page attribute
         setNextPage(PAGE_USER_VIEW);
     }
@@ -168,11 +150,6 @@ public class UserManagerBean extends PortletBean {
             throws PortletException {
         // Load user so we can edit attributes
         loadUser();
-        // Add confirm action for editing user
-        createUserEditConfirmURI();
-        // Add cancel action for returning to previous page
-        // which should be either user list or view
-        createUserEditCancelURI();
         // Set next page attribute
         setNextPage(PAGE_USER_EDIT);
     }
@@ -186,23 +163,12 @@ public class UserManagerBean extends PortletBean {
             editUser();
             // Save user
             saveUser();
-            // Add list user action
-            createUserListURI();
-            // Add edit user action
-            createUserEditURI();
-            // Add delete user action
-            createUserDeleteURI();
             // Set next page attribute
             setNextPage(PAGE_USER_VIEW);
         } catch (PortletException e) {
             // Set form validation
             setIsFormInvalid(true);
             setFormInvalidMessage(e.getMessage());
-            // Add confirm action for editing user
-            createUserEditConfirmURI();
-            // Add cancel action for returning to previous page
-            // which should be either user list or view
-            createUserEditCancelURI();
             // Set next page attribute
             setNextPage(PAGE_USER_EDIT);
         }
@@ -212,11 +178,6 @@ public class UserManagerBean extends PortletBean {
             throws PortletException {
         // Load user so we can have attributes
         loadUser();
-        // Add confirm action for deleting user
-        createUserDeleteConfirmURI();
-        // Add cancel action for returning to previous page
-        // which should be either user list or view
-        createUserDeleteCancelURI();
         // Set next page attribute
         setNextPage(PAGE_USER_DELETE);
     }
@@ -227,90 +188,39 @@ public class UserManagerBean extends PortletBean {
         loadUser();
         // Delete user
         deleteUser();
-        // Add list user action
-        createUserListURI();
         // Set next page attribute
         setNextPage(PAGE_USER_DELETE_CONFIRM);
     }
 
-    public String getUserListURI() {
-        return (String)request.getAttribute(ACTION_USER_LIST);
+    public PortletURI getUserListURI() {
+        return getPortletActionURI(ACTION_USER_LIST);
     }
 
-    public void createUserListURI() {
-        PortletURI listURI = response.createURI();
-        listURI.addAction(new DefaultPortletAction(ACTION_USER_LIST));
-        request.setAttribute(ACTION_USER_LIST, listURI.toString());
+    public PortletURI getUserViewURI() {
+        return getPortletActionURI(ACTION_USER_VIEW);
     }
 
-    public String getUserViewURI() {
-        return (String)request.getAttribute(ACTION_USER_VIEW);
+    public PortletURI getUserEditURI() {
+        return getPortletActionURI(ACTION_USER_EDIT);
+    }
+    public PortletURI getUserEditConfirmURI() {
+        return getPortletActionURI(ACTION_USER_EDIT_CONFIRM);
     }
 
-    public void createUserViewURI() {
-        PortletURI viewURI = response.createURI();
-        viewURI.addAction(new DefaultPortletAction(ACTION_USER_VIEW));
-        request.setAttribute(ACTION_USER_VIEW, viewURI.toString());
+    public PortletURI getUserEditCancelURI() {
+        return getPortletActionURI(ACTION_USER_EDIT_CANCEL);
     }
 
-    public String getUserEditURI() {
-        return (String)request.getAttribute(ACTION_USER_EDIT);
+    public PortletURI getUserDeleteURI() {
+        return getPortletActionURI(ACTION_USER_DELETE);
     }
 
-    public void createUserEditURI() {
-        PortletURI editURI = response.createURI();
-        editURI.addAction(new DefaultPortletAction(ACTION_USER_EDIT));
-        request.setAttribute(ACTION_USER_EDIT, editURI.toString());
+    public PortletURI getUserDeleteConfirmURI() {
+        return getPortletActionURI(ACTION_USER_DELETE_CONFIRM);
     }
 
-    public String getUserEditConfirmURI() {
-        return (String)request.getAttribute(ACTION_USER_EDIT_CONFIRM);
-    }
-
-    public void createUserEditConfirmURI() {
-        PortletURI editConfirmURI = response.createURI();
-        editConfirmURI.addAction(new DefaultPortletAction(ACTION_USER_EDIT_CONFIRM));
-        request.setAttribute(ACTION_USER_EDIT_CONFIRM, editConfirmURI.toString());
-    }
-
-    public String getUserEditCancelURI() {
-        return (String)request.getAttribute(ACTION_USER_EDIT_CANCEL);
-    }
-
-    public void createUserEditCancelURI() {
-        PortletURI cancelURI = response.createReturnURI();
-        cancelURI.addAction(new DefaultPortletAction(ACTION_USER_EDIT_CANCEL));
-        request.setAttribute(ACTION_USER_EDIT_CANCEL, cancelURI.toString());
-    }
-
-    public String getUserDeleteURI() {
-        return (String)request.getAttribute(ACTION_USER_DELETE);
-    }
-
-    public void createUserDeleteURI() {
-        PortletURI deleteURI = response.createURI();
-        deleteURI.addAction(new DefaultPortletAction(ACTION_USER_DELETE));
-        request.setAttribute(ACTION_USER_DELETE, deleteURI.toString());
-    }
-
-    public String getUserDeleteConfirmURI() {
-        return (String)request.getAttribute(ACTION_USER_DELETE_CONFIRM);
-    }
-
-    public void createUserDeleteConfirmURI() {
-        PortletURI deleteConfirmURI = response.createURI();
-        deleteConfirmURI.addAction(new DefaultPortletAction(ACTION_USER_DELETE_CONFIRM));
-        request.setAttribute(ACTION_USER_DELETE_CONFIRM, deleteConfirmURI.toString());
-    }
-
-    public String getUserDeleteCancelURI() {
-        return (String)request.getAttribute(ACTION_USER_DELETE_CANCEL);
-    }
-
-    public void createUserDeleteCancelURI() {
-        PortletURI cancelURI = response.createReturnURI();
-        cancelURI.addAction(new DefaultPortletAction(ACTION_USER_DELETE_CANCEL));
-        request.setAttribute(ACTION_USER_DELETE_CANCEL, cancelURI.toString());
+    public PortletURI getUserDeleteCancelURI() {
+        return getPortletActionURI(ACTION_USER_DELETE_CANCEL);
     }
 
     public String getActionPerformed() {
@@ -529,7 +439,7 @@ public class UserManagerBean extends PortletBean {
     }
 
     private boolean existsUserWithLoginName(String userName) {
-        return this.userManagerService.existsUserWithLoginName(userName);
+        return this.userManagerService.existsUserName(userName);
     }
 
     private void loadUserList() {
@@ -680,7 +590,7 @@ public class UserManagerBean extends PortletBean {
     }
 
     private void editAccountRequestProfile(AccountRequest accountRequest) {
-        accountRequest.setLoginName(getUserName());
+        accountRequest.setUserName(getUserName());
         accountRequest.setFamilyName(getFamilyName());
         accountRequest.setGivenName(getGivenName());
         accountRequest.setFullName(getFullName());

@@ -102,8 +102,8 @@
             <portlet-tab>
                 <title>Access Control</title>
                 <portlet-panel>
-                    <grid-layout> 
-			<portlet-frame>
+                    <grid-layout>
+                        <portlet-frame>
                             <name>AccessControlManagerPortlet</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.AccessControllerPortlet.1</portlet-class>
                         </portlet-frame>
