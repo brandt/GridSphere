@@ -112,6 +112,7 @@
                 </tbody>
             </tgroup>
         </table>
+        <important>Due to the way that GridSphere encodes beans, you MUST NOT use "_" in the beanID variables!</important>
     </sect1>
 
     <sect1 id="actiontags"><title>Action Tags</title>
