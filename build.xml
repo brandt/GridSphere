@@ -703,6 +703,17 @@ Copyright:
 
 <!-- ++++++++++++++ START CRUSECONTROL ++++++++++++++++++++ -->
 
-    <target name="cruisecontrol" depends="clean, runtests" description="target for cruisecontrol"/>
+    <target name="cruisecontrol" depends="clean, docs-all" description="target for cruisecontrol">
+        <mkdir dir="${build.dir}/reports"/>
+        <junit printsummary="yes" fork="yes" haltonfailure="yes">
+            <classpath>
+                <path refid="classpath"/>
+                <pathelement location="${build.dir}/lib/${Name}.jar"/>
+            </classpath>
+            <test name="org.gridlab.gridsphere.AllJUnitTests" todir="${build.dir}/reports">
+                <formatter type="xml"/>
+            </test>
+        </junit>
+    </target>
 
 </project>
