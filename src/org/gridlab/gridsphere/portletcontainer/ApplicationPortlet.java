@@ -68,11 +68,11 @@ public interface ApplicationPortlet {
     public String getServletName();
 
     /**
-     * Returns a PortletWrapper for this ApplicationPortlet
+     * Returns a PortletDispatcher for this ApplicationPortlet
      *
-     * @return PortletWrapper the proxy portlet for this ApplicationPortlet
+     * @return PortletDispatcher the proxy portlet for this ApplicationPortlet
      */
-    public PortletWrapper getPortletWrapper();
+    public PortletDispatcher getPortletWrapper();
 
     /**
      * Saves the supplied application portlet descriptor to serialize any changes that have been made

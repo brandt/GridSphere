@@ -265,7 +265,7 @@ public class PortletTitleBar extends BasePortletComponent {
         if (evt.getAction() == PortletTitleBarEvent.Action.WINDOW_MODIFY) {
             PortletResponse res = event.getPortletResponse();
 
-            //PortletDispatcher dispatcher = event.getPortletEventDispatcher();
+            //PortletInvoker dispatcher = event.getPortletEventDispatcher();
 
             portletWindowState = evt.getState();
             WindowEvent winEvent = null;
@@ -279,7 +279,7 @@ public class PortletTitleBar extends BasePortletComponent {
             }
             if (winEvent != null) {
                 try {
-                    PortletDispatcher.windowEvent(portletClass, winEvent, req, res);
+                    PortletInvoker.windowEvent(portletClass, winEvent, req, res);
                 } catch (PortletException e) {
                     throw new PortletLayoutException("Failed to invoke window event method of portlet: " + portletClass);
                 }
@@ -346,9 +346,9 @@ public class PortletTitleBar extends BasePortletComponent {
         String actionStr = req.getParameter(GridSphereProperties.ACTION);
         out.println("<td class=\"window-title-name\">");
         if (actionStr != null) {
-            //PortletDispatcher dispatcher = event.getPortletEventDispatcher();
+            //PortletInvoker dispatcher = event.getPortletEventDispatcher();
             try {
-                PortletDispatcher.doTitle(portletClass, req, res);
+                PortletInvoker.doTitle(portletClass, req, res);
                 out.println(" (" + portletMode.toString() + ") ");
             } catch (PortletException e) {
                 ErrorMessage += "Unable to invoke doTitle on active portlet\n";

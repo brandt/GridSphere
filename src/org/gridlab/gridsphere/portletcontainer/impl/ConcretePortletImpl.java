@@ -100,7 +100,7 @@ class ConcretePortletImpl implements ConcretePortlet {
          now we need the web app nad servlet name
          we could return that and set the request dispatcher later
          */
-        //abstractPortlet = new PortletWrapper();
+        //abstractPortlet = new PortletDispatcher();
 
 
         // SINCE ACL SERVICE DOESN"T WORK YET
@@ -259,10 +259,10 @@ class ConcretePortletImpl implements ConcretePortlet {
      *
      * @return the instantiated abstract portlet instance
      */
-    /*
+/*
     public AbstractPortlet getAbstractPortlet(PortletContext ctx, PortletRequest req, PortletResponse res) {
         RequestDispatcher rd = ctx.getNamedDispatcher(servletName);
-        return new PortletWrapper(portletApp, rd, req, res);
+        return new PortletDispatcher(portletApp, rd, req, res);
     }
     */
 

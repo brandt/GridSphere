@@ -12,7 +12,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortletException;
-import org.gridlab.gridsphere.portletcontainer.PortletWrapper;
+import org.gridlab.gridsphere.portletcontainer.PortletDispatcher;
 import org.gridlab.gridsphere.portletcontainer.descriptor.*;
 
 import javax.servlet.RequestDispatcher;
@@ -45,7 +45,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
     private ApplicationPortletDescriptor appDescriptor = null;
     private ServletContext context;
     private String webAppName = null;
-    private PortletWrapper portletWrapper = null;
+    private PortletDispatcher portletWrapper = null;
 
     public ApplicationPortletImpl(PortletDeploymentDescriptor pdd, PortletDefinition portletDef, String webApplication, ServletContext context) {
         this.portletDD = pdd;
@@ -94,7 +94,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
             log.error("Unable to create a dispatcher for portlet: " + portletName);
             log.error("Make sure the servletName: " + servletName + " is the servlet-name defined in web.xml");
         }
-        portletWrapper = new PortletWrapper(rd, appDescriptor);
+        portletWrapper = new PortletDispatcher(rd, appDescriptor);
     }
 
     /**
@@ -116,11 +116,11 @@ class ApplicationPortletImpl implements ApplicationPortlet {
     }
 
     /**
-     * Returns a PortletWrapper for this ApplicationPortlet
+     * Returns a PortletDispatcher for this ApplicationPortlet
      *
-     * @return PortletWrapper the proxy portlet for this ApplicationPortlet
+     * @return PortletDispatcher the proxy portlet for this ApplicationPortlet
      */
-    public PortletWrapper getPortletWrapper() {
+    public PortletDispatcher getPortletWrapper() {
         return portletWrapper;
     }
 

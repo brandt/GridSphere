@@ -200,7 +200,6 @@ public class SportletServiceFactory implements PortletServiceFactory {
                     " . Please check PortletServices.xml file for proper service entry");
             throw new PortletServiceNotFoundException("Unable to find portlet service: " + serviceName);
         }
-
         if (!def.getUserRequired()) {
             return createPortletService(service, servletConfig, useCachedService);
         } else if (user == null) {

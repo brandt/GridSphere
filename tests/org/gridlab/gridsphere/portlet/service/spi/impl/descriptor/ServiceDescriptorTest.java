@@ -48,19 +48,27 @@ public class ServiceDescriptorTest extends TestCase {
         // assertEquals(expected, actual)
 
         List list = services.getPortletServicesList();
-        assertEquals(1, list.size());
+        assertEquals(2, list.size());
 
         SportletServiceDefinition serviceDef = (SportletServiceDefinition) list.get(0);
         assertEquals("Test Portlet Service", serviceDef.getName());
         assertEquals("This is a Test Portlet Service", serviceDef.getDescription());
         assertEquals("org.gridlab.gridsphere.services.test.PortletTestService", serviceDef.getInterface());
         assertEquals("org.gridlab.gridsphere.services.test.PortletTestServiceImpl", serviceDef.getImplementation());
+        assertEquals(false, serviceDef.getUserRequired());
         List configList = serviceDef.getConfigParamList();
 
         assertEquals(1, configList.size());
         ConfigParam configParam = (ConfigParam) configList.get(0);
         assertEquals("some parameter", configParam.getParamName());
         assertEquals("some value", configParam.getParamValue());
+
+        serviceDef = (SportletServiceDefinition) list.get(1);
+        assertEquals("User Test Portlet Service", serviceDef.getName());
+        assertEquals("This is a User Test Portlet Service", serviceDef.getDescription());
+        assertEquals("org.gridlab.gridsphere.services.test.PortletTestService", serviceDef.getInterface());
+        assertEquals("org.gridlab.gridsphere.services.test.PortletTestServiceImpl", serviceDef.getImplementation());
+        assertEquals(true, serviceDef.getUserRequired());
     }
 
 

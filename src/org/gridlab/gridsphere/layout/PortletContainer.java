@@ -8,7 +8,7 @@ import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.portletcontainer.PortletDispatcher;
+import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -62,7 +62,7 @@ public class PortletContainer {
     }
 
     public void loginPortlets(GridSphereEvent event) throws PortletException {
-        //PortletDispatcher dispatcher = event.getPortletEventDispatcher();
+        //PortletInvoker dispatcher = event.getPortletEventDispatcher();
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
         Iterator it = componentIdentifiers.iterator();
@@ -74,7 +74,7 @@ public class PortletContainer {
             if (cid.getClassName().equals("org.gridlab.gridsphere.layout.PortletFrame")) {
                 f = (PortletFrame) cid.getPortletComponent();
                 portlets.add(f.getPortletClass());
-                PortletDispatcher.login(f.getPortletClass(), req, res);
+                PortletInvoker.login(f.getPortletClass(), req, res);
             }
         }
     }
@@ -82,7 +82,7 @@ public class PortletContainer {
     public void logoutPortlets(GridSphereEvent event) throws PortletException {
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
-        //PortletDispatcher dispatcher = event.getPortletEventDispatcher();
+        //PortletInvoker dispatcher = event.getPortletEventDispatcher();
         Iterator it = componentIdentifiers.iterator();
         ComponentIdentifier cid = null;
         PortletFrame f = null;
@@ -90,7 +90,7 @@ public class PortletContainer {
             cid = (ComponentIdentifier) it.next();
             if (cid.getPortletClass().equals("org.gridlab.gridsphere.layout.PortletFrame")) {
                 f = (PortletFrame) cid.getPortletComponent();
-                PortletDispatcher.logout(f.getPortletClass(), req, res);
+                PortletInvoker.logout(f.getPortletClass(), req, res);
             }
         }
     }

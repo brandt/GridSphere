@@ -12,7 +12,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletRequestImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletResponse;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-import org.gridlab.gridsphere.portletcontainer.PortletDispatcher;
+import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

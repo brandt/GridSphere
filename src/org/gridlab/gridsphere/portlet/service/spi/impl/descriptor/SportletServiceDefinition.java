@@ -101,6 +101,7 @@ public class SportletServiceDefinition {
         sb.append("service name: " + Name + "\n");
         sb.append("description: " + Description + "\n");
         sb.append("interface: " + Interface + "\n");
+        sb.append("user required: " + UserRequired + "\n");
         sb.append("implementation: " + Implementation + "\n");
         sb.append("config properties: ");
         Iterator it = ConfigParamList.iterator();

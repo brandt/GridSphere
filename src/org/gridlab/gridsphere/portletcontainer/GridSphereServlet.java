@@ -116,8 +116,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         // If first time being called, instantiate all portlets
         if (firstDoGet) {
-            //PortletDispatcher dispatcher = event.getPortletEventDispatcher();
-            PortletDispatcher.initAllPortlets(portletReq, portletRes);
+            //PortletInvoker dispatcher = event.getPortletEventDispatcher();
+            PortletInvoker.initAllPortlets(portletReq, portletRes);
             firstDoGet = false;
         }
 

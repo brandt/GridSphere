@@ -119,19 +119,19 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
     }
 
     public void initAllPortletWebApplications(PortletRequest req, PortletResponse res) throws PortletException {
-        PortletDispatcher.initAllPortlets(req, res);
+        PortletInvoker.initAllPortlets(req, res);
     }
 
     public void initPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws PortletException {
-        PortletDispatcher.initPortletWebApp(webApplicationName, req, res);
+        PortletInvoker.initPortletWebApp(webApplicationName, req, res);
     }
 
     public void destroyAllPortletWebApplications(PortletRequest req, PortletResponse res) throws PortletException {
-        PortletDispatcher.destroyAllPortlets(req, res);
+        PortletInvoker.destroyAllPortlets(req, res);
     }
 
     public void destroyPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws PortletException {
-        PortletDispatcher.destroyPortletWebApp(webApplicationName, req, res);
+        PortletInvoker.destroyPortletWebApp(webApplicationName, req, res);
     }
 
     /**
