@@ -594,7 +594,7 @@ Copyright:
         <antcall target="configure-database"/>
 
         <!-- always overwrite persistence directory -->
-        <delete dir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence"/>
+        <!-- <delete dir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence"/> -->
 
         <copy todir="${env.CATALINA_HOME}/webapps">
             <fileset dir="${build.webapps}"/>
