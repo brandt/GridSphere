@@ -144,7 +144,7 @@ Build include file for the GridSphere Portal source code, see build.xml
     <!-- =================================================================== -->
     <!-- Creates all JAR's                                                   -->
     <!-- =================================================================== -->
-    <target name="jar" depends="gridsphere-ui-tags-jar, gridsphere-provider-jar, portlet-api-jar, portlet-jar, coreportlets-jar, gridsphere-jsp-jar" description="Creates all jars"/>
+    <target name="jar" depends="gridsphere-ui-tags-jar, gridsphere-provider-jar, portlet-api-jar, portlet-jar, coreportlets-jar, make-gridsphere-jar, gridsphere-jsp-jar" description="Creates all jars"/>
 
 
     <!-- =================================================================== -->
@@ -162,10 +162,6 @@ Build include file for the GridSphere Portal source code, see build.xml
 
     <target name="jsp-precompile" depends="gridsphere-ui-tags-jar">
 
-        <!--  from the web:
-             The Ant JSPC task doesn't work with Tomcat 5.0
-             so in the meantime we need to define our own task.
-          -->
         <taskdef name="jspc50" classname="org.apache.jasper.JspC" classpathref="classpath">
         </taskdef>
 
@@ -180,8 +176,6 @@ Build include file for the GridSphere Portal source code, see build.xml
                     uriroot="webapps/gridsphere/"
                     webXmlFragment="${gridsphere.build}/jsp/web.inc"
                     validateXml="false">
-                    <!--                  <include name="**/*.jsp" />
-                                <exclude name="**/include/**/*.jsp" />-->
                 </jspc50>
             </then>
         </if>
@@ -200,6 +194,33 @@ Build include file for the GridSphere Portal source code, see build.xml
         </javac>
 
     </target>
+
+ <!--   <target name="jsp-compile" depends="gridsphere-ui-tags-jar">
+            <mkdir dir="${gridsphere.build}/jsp/classes"/>
+            <mkdir dir="${gridsphere.build}/jsp/source/jsp"/>
+
+            <jspc destdir="${gridsphere.build}/jsp/source/jsp"
+                srcdir="webapps/gridsphere/jsp"
+                webinc="${gridsphere.build}/jsp/web.inc"
+                classpathref="classpath">
+                <include name="**/*.jsp"/>
+                <exclude name="**/include/**.jsp"/>
+                <webapp basedir="webapps/gridsphere"/>
+            </jspc>
+            <depend
+                srcdir="${gridsphere.build}/jsp/source/jsp"
+                destdir="${gridsphere.build}/jsp/classes"
+                cache="${gridsphere.build}/jsp/dependencies"
+                classpath="lib/gridsphere-ui-tags.jar"/>
+            <javac
+                srcdir="${gridsphere.build}/jsp/source"
+                destdir="${gridsphere.build}/jsp/classes"
+                classpath="${build.lib}/gridsphere-ui-tags.jar"
+                classpathref="classpath"
+                debug="on">
+            </javac>
+
+        </target>  -->
 
     <!-- =================================================================== -->
     <!-- Put JSP pages in a jar                                              -->

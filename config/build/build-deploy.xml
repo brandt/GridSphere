@@ -8,7 +8,7 @@ Build include file for the GridSphere Portal source code, see build.xml
 
 <project name="GridSphere Deploy">
 
-    <target name="deploy" depends="gridsphere-jar, jar">
+    <target name="deploy" depends="jar">
 
         <echo message="GridSphere AppServer: ${gridsphere.appserver}"/>
         <if>
@@ -31,6 +31,7 @@ Build include file for the GridSphere Portal source code, see build.xml
 
     <target name="deploy-common">
 
+
         <!-- Copy the gridsphere web app to build directory -->
         <copy todir="${build.webapps}/gridsphere">
             <fileset dir="${gswebapp.dir}"/>
@@ -38,7 +39,7 @@ Build include file for the GridSphere Portal source code, see build.xml
 
         <!-- change web.xml if precompiled jsps are available -->
 
-        <if>        <!-- to avoid errormsg when not found -->
+        <if>        <!-- to avoid errormsg if not found -->
             <available file="${gridsphere.build}/jsp/web.inc"/>
             <then>
                 <loadfile property="web.inc" srcfile="${gridsphere.build}/jsp/web.inc" failonerror="false"/>
@@ -66,6 +67,7 @@ Build include file for the GridSphere Portal source code, see build.xml
             <fileset dir="docs/docbook/EclipseGuide"/>
         </copy>
 
+        <!-- copy webappsdir to deployed location -->
         <copy todir="${appserver.home}/webapps">
             <fileset dir="${build.webapps}"/>
         </copy>
@@ -94,10 +96,6 @@ Build include file for the GridSphere Portal source code, see build.xml
     <!-- deploys gridsphere to jetty -->
     <target name="deploy-jetty" depends="deploy-common">
 
-        <copy todir="${build.webapps}/gridsphere">
-            <fileset dir="${gswebapp.dir}"/>
-        </copy>
-
         <copy overwrite="true" todir="${appserver.home}/ext">
             <fileset dir="lib">
                 <exclude name="*.LICENSE"/>
@@ -107,7 +105,7 @@ Build include file for the GridSphere Portal source code, see build.xml
                 <exclude name="gridsphere-ui-tags.jar"/>
                 <exclude name="gridsphere-provider.jar"/>
                 <exclude name="coreportlets.jar"/>
-
+                <exclude name="gridsphere-jsp.jar"/>
             </fileset>
         </copy>
 
@@ -143,6 +141,7 @@ Build include file for the GridSphere Portal source code, see build.xml
                 <exclude name="gridsphere-ui-tags.jar"/>
                 <exclude name="gridsphere-provider.jar"/>
                 <exclude name="coreportlets.jar"/>
+                <exclude name="gridsphere-jsp.jar"/>
             </fileset>
         </copy>
 
