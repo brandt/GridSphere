@@ -12,7 +12,7 @@ import javax.servlet.jsp.JspException;
 public class SubmitButtonTag extends BaseTag {
 
     public int doStartTag() throws JspException {
-        if (tagBean.equals("")) {
+        if (bean.equals("")) {
             this.htmlelement = new SubmitButtonBean(name, value);
         }
         return super.doStartTag();

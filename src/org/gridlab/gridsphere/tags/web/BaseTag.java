@@ -25,7 +25,7 @@ public class BaseTag extends TagSupport {
     protected int size = 20;
     protected int maxLength = 20;
     protected TagBean htmlelement = null;
-    protected String tagBean = new String();
+    protected String bean = new String();
     protected int rows = 10;
     protected int cols = 40;
 
@@ -37,6 +37,8 @@ public class BaseTag extends TagSupport {
     public static final String RESET = "reset";
     public static final String FILE = "file";
     public static final String BUTTON = "button";
+
+
 
     /**
      * Possible attributes of HTML 4.0 <input> tag
@@ -62,12 +64,12 @@ public class BaseTag extends TagSupport {
      * ONCHANGE=Script (element value changed)
      */
 
-    public String getTagBean() {
-        return tagBean;
+    public String getBean() {
+        return bean;
     }
 
-    public void setTagBean(String tagBean) {
-        this.tagBean = tagBean;
+    public void setBean(String bean) {
+        this.bean = bean;
     }
 
     public void setType(String type) {
@@ -162,8 +164,8 @@ public class BaseTag extends TagSupport {
     }
 
     public int doStartTag() throws JspException {
-        if (!tagBean.equals("")) {
-            this.htmlelement = (TagBean) pageContext.getRequest().getAttribute(tagBean);
+        if (!bean.equals("")) {
+            this.htmlelement = (TagBean) pageContext.getRequest().getAttribute(bean);
         }
         try {
             JspWriter out = pageContext.getOut();

@@ -12,7 +12,7 @@ import javax.servlet.jsp.JspException;
 public class FileInputTag extends BaseTag {
 
     public int doStartTag() throws JspException {
-        if (tagBean.equals("")) {
+        if (bean.equals("")) {
             this.htmlelement = new FileInputBean(name, value, isDisabled, isReadonly, size, maxLength);
 
         }

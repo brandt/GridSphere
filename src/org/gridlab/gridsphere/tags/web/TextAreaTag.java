@@ -12,7 +12,7 @@ import javax.servlet.jsp.JspException;
 public class TextAreaTag extends BaseTag {
 
     public int doStartTag() throws JspException {
-        if (tagBean.equals("")) {
+        if (bean.equals("")) {
             this.htmlelement = new TextAreaBean(name, value, isDisabled, isReadonly, rows, cols);
         }
         return super.doStartTag();
