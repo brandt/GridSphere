@@ -71,7 +71,7 @@ public class AccountRequestSportlet extends AbstractPortlet {
         }
         PortletURI portletURI = response.createURI();
 
-        action = new DefaultPortletAction(this, "create");
+        action = new DefaultPortletAction("create");
         portletURI.addAction(action);
     }
 

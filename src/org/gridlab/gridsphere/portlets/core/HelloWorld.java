@@ -18,10 +18,6 @@ public class HelloWorld extends AbstractPortlet {
         super.init(config);
     }
 
-    public void execute(PortletRequest request) throws PortletException {
-        // do nothing
-    }
-
     public void actionPerformed(ActionEvent evt) { }
 
     public void service(PortletRequest request, PortletResponse response)
