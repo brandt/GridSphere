@@ -7,7 +7,7 @@
 package org.gridlab.gridsphere.services.core.security.acl.impl;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbmsImpl;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
@@ -28,12 +28,12 @@ public class ACLManager {
 
     protected transient static PortletLog log = SportletLog.getInstance(ACLManager.class);
 
-    private PersistenceManagerRdbms pm = null;
+    private PersistenceManagerRdbmsImpl pm = null;
 
 
     public ACLManager() {
         super();
-        pm = PersistenceManagerRdbms.getInstance();
+        pm = PersistenceManagerFactory.createGridSphereRdbms();
     }
 
     private void delete(String command) throws PortletServiceException {
@@ -92,7 +92,7 @@ public class ACLManager {
         String command =
                 "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g where g.ObjectID=" + group.getID();
         try {
-            SportletGroup pg = (SportletGroup) pm.restoreObject(command);
+            SportletGroup pg = (SportletGroup) pm.restore(command);
             pg.setName(newGroupName);
             pm.update(pg);
         } catch (PersistenceManagerException e) {
@@ -133,14 +133,14 @@ public class ACLManager {
 
         UserACL notapproved = null;
         try {
-            notapproved = (UserACL) pm.restoreObject(command);
+            notapproved = (UserACL) pm.restore(command);
             if (notapproved == null) {
                 log.error("User " + user.getFullName() + " did not requested a role with an accountrequest change");
             } else {
                 // we don't want to approve a superuserrole by an admin!
                 if (notapproved.getRoleID() != PortletRole.SUPER.getID()) {
                     // delete the status the user has until now
-                    UserACL approved = (UserACL) pm.restoreObject(command2);
+                    UserACL approved = (UserACL) pm.restore(command2);
                     if (approved != null) {
                         pm.delete(approved);
                     }
@@ -193,7 +193,7 @@ public class ACLManager {
     private boolean queryACL(String command) {
         UserACL acl = null;
         try {
-            acl = (UserACL)pm.restoreObject(command);
+            acl = (UserACL)pm.restore(command);
         } catch (PersistenceManagerException e) {
             log.error("PM Exception: "+e);
         }
@@ -301,7 +301,7 @@ public class ACLManager {
             "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g where g.ObjectID=\""+id+"\"";
         PortletGroup g = null;
         try {
-            g = (PortletGroup)pm.restoreObject(command);
+            g = (PortletGroup)pm.restore(command);
         } catch (PersistenceManagerException e) {
             log.error("Exception " + e);
             throw new PortletServiceException("Could ot get group "+id);
