@@ -22,7 +22,7 @@
 
 <ui:actionsubmit action="saveDefaultTheme" key="SAVE"/>
 
-<h3><ui:text key="LAYOUTMGR_GUEST" style="nostyle"</h3>
+<h3><ui:text key="LAYOUTMGR_GUEST" style="nostyle"/></h3>
 
 <b><ui:actionlink action="editGuestLayout" key="LAYOUTMGR_EDIT_GUEST"/></b>
 
