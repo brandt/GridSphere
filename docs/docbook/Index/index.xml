@@ -29,6 +29,10 @@
         <listitem><para>GridSphere Portlet Reference Guide <ulink url="ReferenceGuide/ReferenceGuide.html">(HTML)</ulink>
             <ulink url="ReferenceGuide/ReferenceGuide.pdf">(PDF)</ulink></para></listitem>
 
+	<listitem><para>GridSphere Portlet Tutorial Guide <ulink url="Tutorials/Tutorials.html">(HTML)</ulink>
+            <ulink url="Tutorials/Tutorials.pdf">(PDF)</ulink></para>
+	</listitem>
+
         <listitem><para>GridSphere Tag Library User's Guide <ulink url="TagGuide/TagGuide.html">(HTML)</ulink>
             <ulink url="TagGuide/TagGuide.pdf">(PDF)</ulink></para></listitem>
 
