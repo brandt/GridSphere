@@ -20,7 +20,4 @@ public interface GroupRequest extends GroupEntry {
 
     public void setRole(PortletRole role);
 
-    public GroupAction getGroupAction();
-
-    public void setGroupAction(GroupAction action);
 }

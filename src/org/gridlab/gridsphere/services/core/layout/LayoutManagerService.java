@@ -22,6 +22,8 @@ public interface LayoutManagerService extends PortletService {
 
     public void addGroupTab(PortletRequest req, String groupName);
 
+    public void removeGroupTab(PortletRequest req, String groupName);
+
     public PortletTabbedPane getUserTabbedPane(PortletRequest req);
 
     public PortletTabbedPane createUserTabbedPane(PortletRequest req, int cols, String label);

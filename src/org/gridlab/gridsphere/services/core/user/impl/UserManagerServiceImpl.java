@@ -22,7 +22,7 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManager;
+import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
@@ -34,7 +34,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
     private PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
     private PasswordManagerService passwordManagerService = null;
-    private AccessControlManager aclManager = null;
+    private AccessControlManagerService aclManager = null;
 
     private static boolean isInitialized = false;
 
@@ -50,10 +50,11 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.info("Entering init()");
         if (!isInitialized) {
-            aclManager = AccessControlManager.getInstance();
+
             PortletServiceFactory factory = SportletServiceFactory.getInstance();
             try {
                 passwordManagerService = (PasswordManagerService) factory.createPortletService(PasswordManagerService.class, config.getServletContext(), true);
+                aclManager = (AccessControlManagerService)factory.createPortletService(AccessControlManagerService.class, config.getServletContext(), true);
             } catch (PortletServiceUnavailableException e) {
                 throw new PortletServiceUnavailableException("Cannot initialize usermanager service", e);
             } catch (PortletServiceNotFoundException e) {
@@ -65,8 +66,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         }
     }
 
-    private void initRootUser(PortletServiceConfig config)
-            throws PortletServiceUnavailableException {
+    private void initRootUser(PortletServiceConfig config) {
         log.info("Entering initRootUser()");
         /** 1. Retrieve root user properties **/
         // Login name

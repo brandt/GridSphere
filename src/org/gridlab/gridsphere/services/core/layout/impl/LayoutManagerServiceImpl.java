@@ -52,6 +52,10 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         pageFactory.addPortletGroupTab(req, groupName);
     }
 
+    public void removeGroupTab(PortletRequest req, String groupName) {
+        pageFactory.removePortletGroupTab(req, groupName);
+    }
+
     public PortletTabbedPane getUserTabbedPane(PortletRequest req) {
         return pageFactory.getUserTabbedPane(req);
     }

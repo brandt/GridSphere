@@ -10,7 +10,6 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceAuthorizer;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
@@ -28,26 +27,15 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
     private static PortletLog log = SportletLog.getInstance(PortletManagerServiceImpl.class);
     private static boolean isManagerInited = false;
     private PortletManager portletManager = PortletManager.getInstance();
-    private PortletServiceAuthorizer authorizer = null;
-
-    /**
-     * Default instantiation disallowed
-     */
-    private PortletManagerServiceImpl() {}
 
     /**
      * Constructs an instance of PortletManagerServiceImpl
-     *
-     * @param authorizer a <code>PortletServiceAuthorizer</code>
      */
-    public PortletManagerServiceImpl(PortletServiceAuthorizer authorizer) {
-        this.authorizer = authorizer;
-    }
+    public PortletManagerServiceImpl() {}
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.debug("in init()");
         if (!isManagerInited) {
-
             portletManager.init(config);
             isManagerInited = true;
         }

@@ -29,7 +29,7 @@ public interface AccessControlManagerService extends PortletService {
     public PortletGroup getGroupByName(String groupName);
 
     /*** GROUP REQUEST METHODS ***/
-
+    /*
     public List getGroupRequests();
 
     public List getGroupRequests(User user);
@@ -40,9 +40,7 @@ public interface AccessControlManagerService extends PortletService {
 
     public GroupRequest getGroupRequest(String id);
 
-    public GroupRequest createGroupRequest();
 
-    public GroupRequest createGroupRequest(GroupEntry entry);
 
     public void validateGroupRequest(GroupRequest request)
             throws InvalidGroupRequestException;
@@ -54,8 +52,13 @@ public interface AccessControlManagerService extends PortletService {
     public void approveGroupRequest(GroupRequest request);
 
     public void denyGroupRequest(GroupRequest request);
+    */
 
     /*** GROUP ENTRY METHODS ***/
+
+    public GroupRequest createGroupEntry();
+
+    public GroupRequest editGroupEntry(GroupEntry entry);
 
     public List getGroupEntries();
 
@@ -72,6 +75,9 @@ public interface AccessControlManagerService extends PortletService {
     public void deleteGroupEntry(GroupEntry entry);
 
     public void deleteGroupEntries(User user);
+
+    public void saveGroupEntry(GroupEntry groupEntry);
+
 
     /*** ACCESS CONTROL LOGIC METHODS ***/
 

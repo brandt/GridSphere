@@ -26,7 +26,6 @@ import java.util.*;
  */
 public class PortletManager implements PortletManagerService {
 
-    private final static String CORE_CONTEXT = "startup-portlet-webapps";
     private static PortletLog log = SportletLog.getInstance(PortletManager.class);
     private static PortletManager instance = new PortletManager();
     private ServletContext context = null;
@@ -132,6 +131,7 @@ public class PortletManager implements PortletManagerService {
                             addWebApp(portletWebApp);
                         } catch (PortletException e) {
                             log.error("Unable to create portlet web application: " + webapp);
+                            e.printStackTrace();
                         }
                     }          
                 }

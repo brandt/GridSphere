@@ -45,17 +45,14 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     private static Map authModules = new HashMap();
     private static List activeAuthModules = new ArrayList();
     private static LoginUserModule activeLoginModule = null;
-    private PortletServiceAuthorizer authorizer = null;
     private PasswordAuthModule passwdModule = null;
 
     private PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
 
-    public LoginServiceImpl(PortletServiceAuthorizer authorizer) {
-        this.authorizer = authorizer;
+    public LoginServiceImpl() {
     }
 
     public List getActiveAuthModules() {
-        authorizer.authorizeSuperUser();
         return activeAuthModules;
     }
 
@@ -127,12 +124,10 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     }
 
     public void setActiveAuthModules(List activeModules, User user) {
-        authorizer.authorizeSuperUser();
-        this.activeAuthModules = activeModules;
+        activeAuthModules = activeModules;
     }
 
     public List getSupportedAuthModules() {
-        authorizer.authorizeSuperUser();
         List mods = new ArrayList(authModules.size());
         Iterator it = authModules.values().iterator();
         while (it.hasNext()) {
@@ -142,17 +137,14 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     }
 
     public LoginUserModule getActiveLoginModule() {
-        authorizer.authorizeSuperUser();
         return activeLoginModule;
     }
 
     public void setActiveLoginModule(LoginUserModule loginModule) {
-        authorizer.authorizeSuperUser();
-        this.activeLoginModule = loginModule;
+        activeLoginModule = loginModule;
     }
 
     public List getActiveUserIds() {
-        authorizer.authorizeAdminUser(PortletGroupFactory.GRIDSPHERE_GROUP);
         return userSessionManager.getUserIds();
     }
 
@@ -178,7 +170,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
                     try {
                         PortletServiceFactory factory = SportletServiceFactory.getInstance();
                         Class loginModClass = Class.forName(loginClassName);
-                        activeLoginModule = (LoginUserModule)factory.createUserPortletService(loginModClass, GuestUser.getInstance(), config.getServletContext(), true);
+                        activeLoginModule = (LoginUserModule)factory.createPortletService(loginModClass, config.getServletContext(), true);
                     } catch (ClassNotFoundException e) {
                         log.error("Unable to create class from class name: " + loginClassName, e);
                     } catch (PortletServiceNotFoundException e) {

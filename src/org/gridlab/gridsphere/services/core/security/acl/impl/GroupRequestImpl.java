@@ -10,33 +10,25 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
-import org.gridlab.gridsphere.services.core.security.acl.GroupAction;
 import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
-import org.gridlab.gridsphere.services.core.security.acl.impl.GroupEntryImpl;
 
 public class GroupRequestImpl implements GroupRequest {
 
     protected transient static PortletLog log = SportletLog.getInstance(GroupRequestImpl.class);
 
     private String oid = null;
-    private GroupEntryImpl entry = null;
     private SportletUserImpl user = null;
     private SportletGroup sgroup = null;
     private String role = "";
-    private String action = GroupAction.ADD.toString();
 
     public GroupRequestImpl() {
     }
 
     public GroupRequestImpl(GroupEntry groupEntry) {
-        if (groupEntry instanceof GroupEntryImpl) {
-            this.entry = (GroupEntryImpl)groupEntry;
-            this.user = entry.getSportletUser();
-            this.sgroup = entry.getSportletGroup();
-            this.role = entry.getRole().toString();
-            this.action = GroupAction.EDIT.toString();
-        }
+        this.user = (SportletUserImpl)groupEntry.getUser();
+        this.sgroup = (SportletGroup)groupEntry.getGroup();
+        this.role = groupEntry.getRole().toString();
     }
 
     public String getOid() {
@@ -49,10 +41,6 @@ public class GroupRequestImpl implements GroupRequest {
 
     public String getID() {
         return getOid();
-    }
-
-    public String getEntryID() {
-        return this.entry.getOid();
     }
 
     public PortletGroup getGroup() {
@@ -92,22 +80,6 @@ public class GroupRequestImpl implements GroupRequest {
         this.user = (SportletUserImpl)user;
     }
 
-    public GroupAction getGroupAction() {
-        return GroupAction.toGroupAction(this.action);
-    }
-
-    public void setGroupAction(GroupAction groupAction) {
-        this.action = groupAction.toString();
-    }
-
-    public String getAction() {
-        return this.action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
-    }
-
     /**
      * Castor method for getting user object.
      */
@@ -136,17 +108,4 @@ public class GroupRequestImpl implements GroupRequest {
         this.sgroup = group;
     }
 
-    /**
-     * Castor method for getting entry object.
-     */
-    public GroupEntryImpl getGroupEntry() {
-        return this.entry;
-    }
-
-    /**
-     * Castor method for setting entry object.
-     */
-    public void setGroupEntry(GroupEntryImpl entry) {
-        this.entry = entry;
-    }
 }
