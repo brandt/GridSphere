@@ -136,11 +136,6 @@ Invoke "ant help"
                 <exclude name="*.LICENSE"/>
                 <include name="*.jar"/>
             </fileset>
-            <fileset dir="lib/ext">
-                <exclude name="*.LICENSE"/>
-                <include name="*.jar"/>
-            </fileset>
-<!--            <pathelement location="${servlet-api.file}"/>-->
             <path refid="servletpath"/>
         </path>
 
