@@ -5,10 +5,15 @@
 
 package org.gridlab.gridsphere.portletcontainer.descriptor;
 
+import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portlet.PortletRole;
+
 public class Owner {
 
-    private String GroupName = "";
+    private String groupName = "";
     private String roleName = "";
+    private PortletGroup group = null;
+    private PortletRole role = null;
 
     public Owner() {}
 
@@ -18,7 +23,25 @@ public class Owner {
      * @returns GroupName
      */
     public String getGroupName() {
-        return GroupName;
+        return groupName;
+    }
+
+    /**
+     * gets the portlet group
+     *
+     * @returns Group
+     */
+    public PortletGroup getGroup() {
+        return group;
+    }
+
+    /**
+     * Sets the portlet group
+     *
+     * @param group the PortletGroup Group
+     */
+    public void setGroup(PortletGroup group) {
+        this.group = group;
     }
 
     /**
@@ -26,8 +49,8 @@ public class Owner {
      *
      * @param GroupName the group name
      */
-    public void setGroupName(String GroupName) {
-        this.GroupName = GroupName;
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
     /**
@@ -37,6 +60,24 @@ public class Owner {
      */
     public String getRoleName() {
         return roleName;
+    }
+
+    /**
+     * gets the portlet group
+     *
+     * @returns Group
+     */
+    public PortletRole getRole() {
+        return role;
+    }
+
+    /**
+     * gets the portlet group
+     *
+     * @returns Group
+     */
+    public void setRole(PortletRole role) {
+        this.role = role;
     }
 
     /**
