@@ -560,7 +560,7 @@ public class GroupManagerPortlet extends ActionPortlet {
 
     public void doSaveDefaultGroups(FormEvent evt) throws PortletException {
 
-        System.err.println("in doSaveDefaultGroups");
+        //System.err.println("in doSaveDefaultGroups");
         CheckBoxBean cb = evt.getCheckBoxBean("groupCB");
         PortletRequest req = evt.getPortletRequest();
 
@@ -723,7 +723,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         if (!l.isEmpty()) {
             while (it.hasNext()) {
                 String geid = (String)it.next();
-                System.err.println("geid= " + geid);
+                //System.err.println("geid= " + geid);
                 GroupEntry entry = aclManagerService.getGroupEntry(geid);
                 if (entry != null) {
                     GroupRequest groupRequest = aclManagerService.editGroupEntry(entry);

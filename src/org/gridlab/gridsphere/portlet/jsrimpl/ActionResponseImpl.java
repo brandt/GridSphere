@@ -185,8 +185,6 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
                 redirected = true;
                 req.setAttribute(SportletProperties.RESPONSE_COMMITTED, "true");
                 //res.sendRedirect(location);
-            } else {
-
             }
         } else {
             throw new IllegalStateException("Can't invoke sendRedirect() after certain methods have been called");
@@ -229,7 +227,6 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
         Map params = new HashMap();
         Iterator iter = parameters.keySet().iterator();
         while (iter.hasNext()) {
-
             Object obj = iter.next();
             if (!(obj instanceof String)) throw new IllegalArgumentException("Key must not be null and of type java.lang.String.");
             String key = (String) obj;
@@ -239,7 +236,6 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
             if (!(vals instanceof String[])) throw new IllegalArgumentException("Value must not be null and of type java.lang.String[].");
             String newkey = SportletProperties.RENDER_PARAM_PREFIX + key;
             params.put(newkey, vals);
-
         }
 
         renderParams.putAll(params);

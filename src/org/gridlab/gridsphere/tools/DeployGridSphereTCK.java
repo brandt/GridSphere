@@ -15,6 +15,7 @@ import java.util.jar.JarOutputStream;
 public class DeployGridSphereTCK extends Task {
 
     private String warPath = null;
+    private String catalina = null;
     private List portlets = new Vector();
     private List portletapps = new Vector();
 
@@ -31,6 +32,10 @@ public class DeployGridSphereTCK extends Task {
         //System.out.println("Setting configdir to: "+this.configDir);
     }
 
+    public void setServer(String serverDir) {
+        this.catalina = serverDir;
+    }
+
     /**
      * Tool to transform Sun TCK portlet WAR's to GridSphere JSR model
      */
@@ -42,38 +47,20 @@ public class DeployGridSphereTCK extends Task {
         try {
             loadWars(warPath);
             createLayout();
-            createPortletMaster();
+            deployPortlets();
         } catch (IOException e) {
             System.err.println("Error converting WARS:");
             e.printStackTrace();
         }
     }
 
-    private void createPortletMaster() throws IOException {
-
-        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("PortletMaster-tck.xml")));
-        out.println("<portlet-services>\n" +
-                "\n" +
-                "    <service>\n" +
-                "        <name>Portlet Manager Service</name>\n" +
-                "        <user-required>true</user-required>\n" +
-                "        <description>Provides Administration Capabilities for Portlet Web Applications</description>\n" +
-                "        <interface>org.gridlab.gridsphere.services.core.registry.PortletManagerService</interface>\n" +
-                "        <implementation>org.gridlab.gridsphere.services.core.registry.impl.PortletManagerServiceImpl</implementation>\n" +
-                "        <service-config>\n" +
-                "            <param-name>startup-portlet-webapps</param-name>\n");
-        out.print("<param-value>gridsphere");
+    private void deployPortlets() throws IOException {
+        String portletsDir = catalina + "/webapps/gridsphere/WEB-INF/Portlets/";
+        File tmp = null;
         for (int i = 0; i < portletapps.size(); i++) {
-            out.print(", " + portletapps.get(i));
+            tmp = new File(portletsDir + portletapps.get(i));
+            tmp.createNewFile();
         }
-
-
-        out.print("</param-value>\n" +
-                "        </service-config>\n" +
-                "    </service>\n" +
-                "\n" +
-                "</portlet-services>");
-        out.close();
     }
 
 
@@ -300,7 +287,7 @@ public class DeployGridSphereTCK extends Task {
         String line = null;
         boolean done = false;
         String portlet = "";
-        while (((line = bis.readLine()) != null) && (!done)) {
+        while ((line = bis.readLine()) != null) {
             //System.err.println("portlet= " + line);
             if (line.indexOf("<portlet-class>") > 0) {
                 int d = line.indexOf("<portlet-class>");
@@ -308,7 +295,7 @@ public class DeployGridSphereTCK extends Task {
                 int e = p.indexOf("</portlet-class>");
                 portlet = p.substring(0, e);
                 portlets.add(portlet);
-                done = true;
+                //done = true;
             }
         }
         bis.close();

@@ -22,7 +22,6 @@ public class GridSphereParameters {
     private HttpServletRequest req = null;
     private Map renderParams = null;
     private Map params = null;
-    private String mycid = null;
     private String targetedCid = null;
     private List reservedParams = null;
 
@@ -45,7 +44,7 @@ public class GridSphereParameters {
         parseQueryString(queryString);
 
         this.targetedCid = request.getParameter(SportletProperties.COMPONENT_ID);
-        this.mycid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
+
     }
 
     public void parseQueryString(String queryString) {
@@ -115,7 +114,7 @@ public class GridSphereParameters {
     }
 
     public Map getParameterMap() {
-
+        String mycid = (String) req.getAttribute(SportletProperties.COMPONENT_ID);
         Map map = new HashMap();
         // we need to distinguish between a render invocation abnd a render that follows an action
         // In the first case, all params are returned. In the second case, params in action method
@@ -128,6 +127,18 @@ public class GridSphereParameters {
             if (req.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION) != null) {
                 overlayRequestParams();
                 if (mycid.equals(targetedCid)) map.putAll(renderParams);
+                /*
+                System.err.println("getParamaterMap: returning all params");
+                Iterator it = map.keySet().iterator();
+                while (it.hasNext()) {
+                    String key = (String)it.next();
+                    String[] vals = (String[])map.get(key);
+                    System.err.print("name= " + key + " values= ");
+                    for (int c = 0; c < vals.length; c++) {
+                        System.err.print(vals[c] + " ");
+                    }
+                }
+                */
                 return Collections.unmodifiableMap(map);
             }
         }
@@ -152,7 +163,20 @@ public class GridSphereParameters {
 
             }
         }
+        /*
+        System.err.println("getParamaterMap: returning params for this portlet");
+        Iterator it = map.keySet().iterator();
+        while (it.hasNext()) {
+            String key = (String)it.next();
+            String[] vals = (String[])map.get(key);
+            System.err.print("name= " + key + " values= ");
+            for (int c = 0; c < vals.length; c++) {
+                System.err.print(vals[c] + " ");
+            }
+        }
+        */
         return Collections.unmodifiableMap(map);
     }
+
 
 }

@@ -319,6 +319,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         } else {
 
+            // now perform actionPerformed on Portlet if it has an action
             if (titleBar != null) titleBar.actionPerformed(event);
 
             // process events
@@ -340,14 +341,12 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             } else {
                 if (titleBar != null) {
                     Portlet.Mode mode = titleBar.getPortletMode();
+                    //System.err.println("mode = " + mode);
                     req.setMode(mode);
                 } else {
                     req.setMode(Portlet.Mode.VIEW);
                 }
             }
-
-            // now perform actionPerformed on Portlet if it has an action
-
 
             if (titleBar != null) titleBar.setPortletMode(req.getMode());
 
@@ -400,6 +399,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletRequest req = event.getPortletRequest();
+
+        // now perform actionPerformed on Portlet if it has an action
+        //if (titleBar != null) titleBar.actionPerformed(event);
 
         /*
         PortletRole userRole = req.getRole();
@@ -572,22 +574,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             postframe.append("<p><b>An error occured!</b><p>");
             StringWriter sw = new StringWriter();
             PrintWriter w = new PrintWriter(sw);
-            //StackTraceElement[] elem = ex.getStackTrace();
-            //ex.printStackTrace(w);
-           /*
-            Throwable t = null;
-            while ((t = ex.getCause()) != null) {
-                ex = ex.getCause();
-
-            }
-            */
             ex.printStackTrace(w);
-            /*
-            for (int i = 0; i < elem.length; i++) {
-                System.err.println("stack # " + elem[i]);
-            }
-            postframe.append(elem[0].toString());
-            */
             w.close();
             postframe.append(sw.toString());
         }

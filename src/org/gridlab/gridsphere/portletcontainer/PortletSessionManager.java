@@ -40,7 +40,7 @@ public class PortletSessionManager implements HttpSessionListener {
         synchronized (sessions) {
             sessions.put(event.getSession().getId(), new ArrayList());
         }
-        dumpSessions();
+        //dumpSessions();
     }
 
 
@@ -82,8 +82,8 @@ public class PortletSessionManager implements HttpSessionListener {
         } else {
             log.info("Not sure why sessionDestroyed listener provides null session id!");
         }
-        //}
-        dumpSessions();
+
+        //dumpSessions();
     }
 
     public void addSessionListener(String sessionId, PortletSessionListener sessionListener) {
@@ -99,7 +99,7 @@ public class PortletSessionManager implements HttpSessionListener {
         sessionListeners.add(sessionListener);
 
         sessions.put(sessionId, sessionListeners);
-        dumpSessions();
+        //dumpSessions();
     }
 
     /*

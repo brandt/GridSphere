@@ -191,9 +191,9 @@ public abstract class ActionTag extends BaseComponentTag {
 
     protected String createJSRActionURI(PortletURL url) throws JspException {
         // Builds a URI containing the actin and associated params
-        RenderResponse res = (RenderResponse) pageContext.getAttribute("renderResponse", PageContext.PAGE_SCOPE);
+        RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
         this.actionURL = (PortletURLImpl) url;
-        RenderRequest req = (RenderRequest) pageContext.getAttribute("renderRequest", PageContext.PAGE_SCOPE);
+        RenderRequest req = (RenderRequest) pageContext.getAttribute(SportletProperties.RENDER_REQUEST, PageContext.REQUEST_SCOPE);
         // action is a required attribute except for FormTag
         if (windowState == null) {
             windowState = req.getWindowState().toString();
@@ -250,25 +250,28 @@ public abstract class ActionTag extends BaseComponentTag {
         }
 
         if (!paramBeans.isEmpty()) {
-            String id = createUniquePrefix(2);
+            //String id = createUniquePrefix(2);
             Iterator it = paramBeans.iterator();
-            actionURL.setParameter(SportletProperties.PREFIX, id);
-            portletAction.addParameter(SportletProperties.PREFIX, id);
+            //actionURL.setParameter(SportletProperties.PREFIX, id);
+            //portletAction.addParameter(SportletProperties.PREFIX, id);
             while (it.hasNext()) {
                 ActionParamBean pbean = (ActionParamBean) it.next();
-                actionURL.setParameter(id + "_" + pbean.getName(), pbean.getValue());
-                portletAction.addParameter(id + "_" + pbean.getName(), pbean.getValue());
+                //System.err.println("have param bean name= " + pbean.getName() + " value= " + pbean.getValue());
+                actionURL.setParameter(pbean.getName(), pbean.getValue());
+                portletAction.addParameter(pbean.getName(), pbean.getValue());
+                //actionURL.setParameter(id + "_" + pbean.getName(), pbean.getValue());
+                //portletAction.addParameter(id + "_" + pbean.getName(), pbean.getValue());
                 //actionURL.setParameter(pbean.getName(), pbean.getValue());
             }
         }
 
-        //System.err.println("printing URL = " + actionURL.toString());
+        //System.err.println("printing action  URL = " + actionURL.toString());
         return actionURL.toString();
     }
 
     public String createActionURI() throws JspException {
         if (isJSR()) {
-            RenderResponse res = (RenderResponse) pageContext.getAttribute("renderResponse");
+            RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
             if (label != null) return createJSRActionURI(res.createRenderURL());
             return createJSRActionURI(res.createActionURL());
         }

@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.servlets;
 
 import org.apache.oro.text.perl.Perl5Util;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -19,18 +20,22 @@ import java.util.Enumeration;
 
 public class SecureDirectory extends HttpServlet {
 
+    public static final String SECURE_CONTEXT = "secure";
+    public static final String SECURE_CONTEXT_PATH = "/WEB-INF/" + SECURE_CONTEXT;
+
     private Perl5Util util = new Perl5Util();
     private final static int BUFFER_SIZE = 8 * 1024; //8 kB
     private final static boolean DEBUG = true; //leaving DEBUG=true helps to trace if somebody tries to break into ;-)
     private final static int EXPIRES = 15; //15 seconds, works only if strong protection is disabled
     private static String secureDirPath;
+
     private static boolean strongProtection = true;
     private static boolean inited = false;
     private DateFormat dateFormat = null;
 
     public void init() throws ServletException {
         if (!inited) {
-            secureDirPath = getServletContext().getRealPath("/WEB-INF/secure");
+            secureDirPath = getServletContext().getRealPath(SECURE_CONTEXT_PATH);
             strongProtection = Boolean.valueOf(getInitParameter("strongProtection")).booleanValue();
             File secureDir = new File(secureDirPath);
             if (secureDirPath != null && secureDir.isDirectory()) {
@@ -39,7 +44,7 @@ public class SecureDirectory extends HttpServlet {
                     log("Initialization OK (Strong protection " + (strongProtection ? "enabled" : "DISABLED (better enable it check web.xml) !!!") + "). Setting secureDirPath to " + secureDirPath);
             } else {
                 if (DEBUG)
-                    log("Initialization problem, please check if " + getServletContext().getRealPath("/WEB-INF/secure") + " exists and if it is directory !!!");
+                    log("Initialization problem, please check if " + getServletContext().getRealPath(SECURE_CONTEXT_PATH) + " exists and if it is directory !!!");
             }
         }
         dateFormat = DateFormat.getDateInstance();
@@ -47,7 +52,7 @@ public class SecureDirectory extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String userID = (String) request.getSession().getAttribute("org.gridlab.gridsphere.portlet.User");
+        String userID = (String) request.getSession().getAttribute(SportletProperties.PORTLET_USER);
         if (userID == null || userID.equals("")) {
             if (DEBUG)
                 log("Request blocked (userID=" + userID + ") !!! Request: " + request.getRequestURI() + "\nIP: " + request.getRemoteAddr() + "\n");
@@ -124,7 +129,7 @@ public class SecureDirectory extends HttpServlet {
 
     public long getLastModified(HttpServletRequest request) {
         if (Calendar.getInstance().getTimeInMillis() > 0) return Calendar.getInstance().getTimeInMillis(); //comment this line if you want allow browser to check when resource was last modified
-        String userID = (String) request.getSession().getAttribute("org.gridlab.gridsphere.portlet.User");
+        String userID = (String) request.getSession().getAttribute(SportletProperties.PORTLET_USER);
         if (userID == null || userID.equals("")) {
             if (DEBUG)
                 log("LastModifiedRequest blocked (userID=" + userID + ") !!! Request: " + request.getRequestURI() + "\nIP: " + request.getRemoteAddr() + "\n");

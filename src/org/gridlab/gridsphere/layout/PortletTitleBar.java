@@ -380,9 +380,11 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         compId.setClassName(this.getClass().getName());
         list.add(compId);
         doConfig();
+        /*
         windowState = PortletWindow.State.NORMAL;
         portletMode = Portlet.Mode.VIEW;
         previousMode = Portlet.Mode.VIEW;
+        */
         return list;
     }
 
@@ -621,7 +623,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                         }
                     }
                 } else if (titleBarEvent.getAction().getID() == PortletTitleBarEvent.TitleBarAction.MODE_MODIFY.getID()) {
-                    if (titleBarEvent.getMode().equals(Portlet.Mode.CONFIGURE)) {                        
+
+                    if (titleBarEvent.getMode().equals(Portlet.Mode.CONFIGURE)) {
                         boolean hasrole = aclService.hasRequiredRole(user, portletClass, true);
                         if (!hasrole) return;
                     }
@@ -789,14 +792,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         PortletResponse res = event.getPortletResponse();
 
         // get the appropriate title for this client
-        Client client = req.getClient();
-        Locale locale = req.getLocale();
 
-        /*
-        if (settings != null) {
-            title = settings.getTitle(locale, client);
-        }
-        */
+        Locale locale = req.getLocale();
 
         List modeLinks = null, windowLinks = null;
         User user = req.getUser();

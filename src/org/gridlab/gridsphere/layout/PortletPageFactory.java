@@ -471,6 +471,7 @@ public class PortletPageFactory implements PortletSessionListener {
         if (portletNames != null) {
             log.info("Creating TCK LAYOUT!");
             tckLayout = createTCKPage(req, portletNames);
+
         }
 
         if (tckLayout != null) {

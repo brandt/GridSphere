@@ -72,7 +72,6 @@ public class PortletPreferencesImpl implements PortletPreferences {
         Map prefsMap = new HashMap();
         if (portletPrefs != null) {
             Preference[] prefs = portletPrefs.getPreference();
-            System.err.println("cycling thru prefs:");
             for (int i = 0; i < prefs.length; i++) {
                 String name = prefs[i].getName().getContent();
                 defaultPrefsMap.put(name, prefs[i]);

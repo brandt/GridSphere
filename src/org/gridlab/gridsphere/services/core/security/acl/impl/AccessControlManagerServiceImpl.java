@@ -264,7 +264,6 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
             String msg = "Error deleting portlet group";
             log.error(msg, e);
         }
-        System.err.println("deleted " + group);
     }
 
     public List getUsers(PortletGroup group) {
@@ -288,9 +287,9 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         List l = new Vector();
         while (it.hasNext()) {
             User u = (User) it.next();
-            System.err.println("Checking if " + u.getFullName() + " has " + role);
+            //System.err.println("Checking if " + u.getFullName() + " has " + role);
             if (this.hasRoleInGroup(u, group, role)) {
-                System.err.println("user has role in group" + u.getFullName() + " " + u.getEmailAddress());
+                //System.err.println("user has role in group" + u.getFullName() + " " + u.getEmailAddress());
                 l.add(u);
             }
         }

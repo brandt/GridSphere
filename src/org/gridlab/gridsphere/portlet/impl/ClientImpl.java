@@ -48,26 +48,26 @@ public class ClientImpl implements Client {
 
         String browserInfo = "Unknown browser";
         //WAP 2.0 identifification begins here:
-        for (int identString=0;identString<15;identString++)
-        {
-        	if (userAgent.indexOf(WAP_IDENTIFIER[identString])!=-1) {
-        		browserInfo=MANUFACTURER_NAMES[identString+4];
-        		manufacturer=MANUFACTURER_NAMES[identString+4];
-        		mimeType=MIME_TYPES[0];
-        		markupName=MARKUP_TYPES[1];
-        	}
+        for (int identString=0;identString<15;identString++) {
+            if (userAgent.indexOf(WAP_IDENTIFIER[identString])!=-1) {
+                browserInfo=MANUFACTURER_NAMES[identString+4];
+                manufacturer=MANUFACTURER_NAMES[identString+4];
+                mimeType=MIME_TYPES[0];
+                markupName=MARKUP_TYPES[1];
+            }
         }
         //WAP 2.0 identification ends here
-        
-        if (browserInfo.equals("Unknown browser")) //WAP 2.0
-        if (userAgent != null) {
-            int i = userAgent.indexOf(" ");
 
-            //System.err.println("mozilla version: " + mozillaVersion);
-            int j = userAgent.lastIndexOf(")");
+        if (browserInfo.equals("Unknown browser")) {//WAP 2.0
+            if (userAgent != null) {
+                int i = userAgent.indexOf(" ");
 
-            if (j >= 0) {
-                browserInfo = userAgent.substring(j + 1).trim();
+                //System.err.println("mozilla version: " + mozillaVersion);
+                int j = userAgent.lastIndexOf(")");
+
+                if (j >= 0) {
+                    browserInfo = userAgent.substring(j + 1).trim();
+                }
             }
         }
         //System.err.println("browser info: " + browserInfo);
@@ -96,19 +96,20 @@ public class ClientImpl implements Client {
         } else {
             manufacturer = MANUFACTURER_NAMES[3];
         }
-        
-        if (markupName==null)//WAP 2.0
-        if (mimeType != null) {
-            int i = mimeType.indexOf("html");
-            if (i < 0) {
-                // IE 5.2 on  Mac OS X
-                if (mimeType.indexOf("*/*") >= 0) {
+
+        if (markupName==null) {//WAP 2.0
+            if (mimeType != null) {
+                int i = mimeType.indexOf("html");
+                if (i < 0) {
+                    // IE 5.2 on  Mac OS X
+                    if (mimeType.indexOf("*/*") >= 0) {
+                        mimeType = MIME_TYPES[0];
+                        markupName = MARKUP_TYPES[0];
+                    }
+                } else {
                     mimeType = MIME_TYPES[0];
                     markupName = MARKUP_TYPES[0];
                 }
-            } else {
-                mimeType = MIME_TYPES[0];
-                markupName = MARKUP_TYPES[0];
             }
         }
         // make up version for now
@@ -116,6 +117,10 @@ public class ClientImpl implements Client {
         // make up model for now
         model = "gridsphere model";
 
+        // if all else fails, it is html
+        if (markupName == null) markupName = MARKUP_TYPES[0];
+        if (mimeType == null) mimeType = MIME_TYPES[0];
+        
         //logRequest(req);
     }
 

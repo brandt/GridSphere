@@ -99,9 +99,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     }
 
     public synchronized void initializeServices() throws PortletServiceException {
-        // discover portlets
-        // create groups from portlet web apps
-
         requestService = (RequestService) factory.createPortletService(RequestService.class, getServletConfig().getServletContext(), true);
         log.debug("Creating access control manager service");
         aclService = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, getServletConfig().getServletContext(), true);
@@ -230,12 +227,13 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         layoutEngine.service(event);
 
-        log.debug("Session stats");
-        userSessionManager.dumpSessions();
+        //log.debug("Session stats");
+        //userSessionManager.dumpSessions();
 
-        log.debug("Portlet service factory stats");
-        factory.logStatistics();
+        //log.debug("Portlet service factory stats");
+        //factory.logStatistics();
 
+        /*
         log.debug("Portlet page factory stats");
         try {
             PortletPageFactory pageFactory = PortletPageFactory.getInstance();
@@ -243,7 +241,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         } catch (Exception e) {
             log.error("Unable to get page factory", e);
         }
-
+        */
 
     }
 

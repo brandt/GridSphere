@@ -114,7 +114,7 @@ public class UserSessionManager implements PortletSessionListener {
                 }
             }
         }
-        dumpSessions();
+        //dumpSessions();
     }
 
     public void removeSessions(User user) {
@@ -157,7 +157,7 @@ public class UserSessionManager implements PortletSessionListener {
         }
     }
 
-    public void dumpSessions() {
+    public synchronized void dumpSessions() {
         log.info("User Session Manager information:");
         log.info("# current sessions: " + userSessions.size());
         Set keySet = userSessions.keySet();
@@ -172,7 +172,6 @@ public class UserSessionManager implements PortletSessionListener {
             }
 
         }
-
         sessionManager.dumpSessions();
     }
 }

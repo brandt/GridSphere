@@ -49,7 +49,6 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
 
     // Jakarta Pluto method
     private String stripCharacterEncoding(String type) {
-        System.err.println("in stripchar");
         int xs = type.indexOf(';');
         String strippedType;
         if (xs == -1) {
@@ -105,7 +104,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @return a portlet render URL
      */
     public PortletURL createRenderURL() {
-        PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse) super.getResponse(), portalContext);
+        PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse) super.getResponse(), portalContext, true);
         portletURL.setComponentID((String) req.getAttribute(SportletProperties.COMPONENT_ID));
         return portletURL;
     }
@@ -125,7 +124,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @return a portlet action URL
      */
     public PortletURL createActionURL() {
-        PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse) super.getResponse(), portalContext);
+        PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse) super.getResponse(), portalContext, false);
         portletURL.setAction("");
         portletURL.setComponentID((String) req.getAttribute(SportletProperties.COMPONENT_ID));
         return portletURL;

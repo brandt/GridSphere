@@ -70,28 +70,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         }
         
         this.supports = supports;
-        if (supports == null) System.err.println("WHAT THE FUCK??????");
         props = new HashMap();
-        /*
-        modesAllowed = new ArrayList();
-        for (int i = 0; i < supports.length; i++) {
-            Supports s = (Supports) supports[i];
-            org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode[] modes = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode[]) s.getPortletMode();
-            for (int j = 0; j < modes.length; j++) {
-                org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode m = modes[j];
-                modesAllowed.add(m.getContent());
-            }
-        }
-        /*
-        Enumeration modesEnum = portalContext.getSupportedPortletModes();
-        while (modesEnum.hasMoreElements()) {
-            PortletMode m = (PortletMode)modesEnum.nextElement();
-            modesAllowed.add(m.toString());
-        }
-        */
-        //if (!modesAllowed.contains(PortletMode.VIEW.toString())) modesAllowed.add(PortletMode.VIEW.toString());
-
-
 
         portalParameters = new GridSphereParameters(req);
 
@@ -292,7 +271,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         if (create && portletSession == null) {
             httpSession = this.getHttpServletRequest().getSession(create);
             if (httpSession != null) {
-                portletSession = new PortletSessionImpl(this.getHttpServletRequest(), this.getHttpServletRequest().getSession(true), portletContext);
+                portletSession = new PortletSessionImpl(this.getHttpServletRequest(), httpSession, portletContext);
             }
         }
 
@@ -750,20 +729,17 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     public String getResponseContentType() {
         Portlet.Mode mode = (Portlet.Mode) getAttribute(SportletProperties.PORTLET_MODE);
         if (supports != null) {
-            System.err.println("suppoorts is not null!!!!");
             Supports s = supports[0];
             org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode[] modes = s.getPortletMode();
             for (int j = 0; j < modes.length; j++) {
                 org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode m = modes[j];
-                System.err.println("mode content= " + m.getContent());
+                //System.err.println("mode content= " + m.getContent());
                 if (m.getContent().equalsIgnoreCase(mode.toString())) {
                     return s.getMimeType().getContent();
                 }
             }
-            System.err.println("handing back = " + s.getMimeType().getContent());
+            //System.err.println("handing back = " + s.getMimeType().getContent());
             return s.getMimeType().getContent();
-        }  else {
-            System.err.println("in getResponseType: supports is NULL");
         }
         return "";
     }

@@ -24,6 +24,7 @@ import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRApplicationPortletImpl
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRPortletWebApplicationImpl;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.UserAttribute;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 
 import javax.portlet.*;
@@ -82,13 +83,13 @@ public class PortletServlet extends HttpServlet
 
     private PortletPreferencesManager prefsManager = null;
 
+    private Map userKeys = new HashMap();
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         String propsFile = config.getServletContext().getRealPath("/WEB-INF/classes/log4j.properties");
         File f = new File(propsFile);
         if (f.exists()) {
-            System.err.println("configuring to use " + propsFile);
             SportletLog.setConfigureURL(propsFile);
         }
         // load descriptor files
@@ -124,6 +125,16 @@ public class PortletServlet extends HttpServlet
                 throw new ServletException("Unable to create jsr portlet instance: " + portletClass, e);
             }
         }
+
+        UserAttribute[] userAttrs = portletWebApp.getUserAttributes();
+        if (userAttrs != null) {
+            String key = null;
+            for (int i = 0; i < userAttrs.length; i++) {
+                key = userAttrs[i].getName().getContent();
+                userKeys.put(key, "");
+            }
+        }
+
 
         /*
         PortletManager manager = PortletManager.getInstance();
@@ -221,16 +232,16 @@ public class PortletServlet extends HttpServlet
             userInfo = null;
         } else {
             userInfo = new HashMap();
-            userInfo.put("user.name", user.getUserName());
-            //userInfo.put("user.name.nickName", user.getUserName());
-            userInfo.put("user.id", user.getID());
-            userInfo.put("user.email", user.getEmailAddress());
-            userInfo.put("user.organization", user.getOrganization());
-            userInfo.put("user.lastlogintime", new Long(user.getLastLoginTime()).toString());
-            userInfo.put("user.name.full", user.getFullName());
-            userInfo.put("user.timezone", user.getAttribute(User.TIMEZONE));
-            userInfo.put("user.locale", user.getAttribute(User.LOCALE));
-            userInfo.put("user.theme", user.getAttribute(User.THEME));
+            userInfo.putAll(userKeys);
+            if (userInfo.containsKey("user.name")) userInfo.put("user.name", user.getUserName());
+            if (userInfo.containsKey("user.id")) userInfo.put("user.id", user.getID());
+            if (userInfo.containsKey("user.email")) userInfo.put("user.email", user.getEmailAddress());
+            if (userInfo.containsKey("user.organization")) userInfo.put("user.organization", user.getOrganization());
+            if (userInfo.containsKey("user.lastlogintime")) userInfo.put("user.lastlogintime", new Long(user.getLastLoginTime()).toString());
+            if (userInfo.containsKey("user.name.full")) userInfo.put("user.name.full", user.getFullName());
+            if (userInfo.containsKey("user.timezone")) userInfo.put("user.timezone", user.getAttribute(User.TIMEZONE));
+            if (userInfo.containsKey("user.locale")) userInfo.put("user.locale", user.getAttribute(User.LOCALE));
+            if (userInfo.containsKey("user.theme")) userInfo.put("user.theme", user.getAttribute(User.THEME));
 
             //userInfo.put("user.name.given", user.getGivenName());
             //userInfo.put("user.name.family", user.getFamilyName());
@@ -246,7 +257,6 @@ public class PortletServlet extends HttpServlet
         }
         request.setAttribute(PortletRequest.USER_INFO, userInfo);
         */
-
 
         // portlet preferences
 
@@ -288,17 +298,18 @@ public class PortletServlet extends HttpServlet
                     log.debug("in PortletServlet: action handling portlet " + portletClassName);
                     try {
                         portlet.processAction(actionRequest, actionResponse);
+                        Map params = ((ActionResponseImpl) actionResponse).getRenderParameters();
+                        String cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
+                        actionRequest.setAttribute("renderParams" + "_" + portletClassName + "_" + cid, params);
+                        log.debug("placing render params in attribute: " + "renderParams" + "_" + portletClassName + "_" + cid);
+                        redirect(request, response, actionRequest, actionResponse, portalContext);
                     } catch (Exception e) {
                         log.error("Error during processAction:", e);
                         request.setAttribute(SportletProperties.PORTLETERROR + portletClassName, new org.gridlab.gridsphere.portlet.PortletException(e));
                     }
-                    Map params = ((ActionResponseImpl) actionResponse).getRenderParameters();
-                    String cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
-                    actionRequest.setAttribute("renderParams" + "_" + portletClassName + "_" + cid, params);
-                    log.debug("placing render params in attribute: " + "renderParams" + "_" + portletClassName + "_" + cid);
 
                     //actionRequest.clearParameters();
-                    redirect(request, response, actionRequest, actionResponse, portalContext);
+
                 }
             } else {
                 PortletPreferences prefs = prefsManager.getPortletPreferences(appPortlet, user, Thread.currentThread().getContextClassLoader(), true);
@@ -314,6 +325,7 @@ public class PortletServlet extends HttpServlet
                 log.debug("in PortletServlet: rendering  portlet " + portletClassName);
                 if (renderRequest.getAttribute(SportletProperties.RESPONSE_COMMITTED) == null) {
                     try {
+
                         portlet.render(renderRequest, renderResponse);
                     } catch (UnavailableException e) {
                         log.error("in PortletServlet(): doRender() caught unavailable exception: ");
@@ -328,8 +340,9 @@ public class PortletServlet extends HttpServlet
                         }
                         log.error("in PortletServlet(): doRender() caught exception", e);
                         throw new ServletException(e);
-                    }
-                    request.removeAttribute(SportletProperties.PORTLET_MODE_JSR);
+                    } finally {
+                        request.removeAttribute(SportletProperties.PORTLET_MODE_JSR);
+                    }                   
                 }
             }
             request.removeAttribute(SportletProperties.PORTLET_ACTION_METHOD);
@@ -388,6 +401,7 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
         }
 
         org.gridlab.gridsphere.portlet.Portlet.Mode mode = (org.gridlab.gridsphere.portlet.Portlet.Mode) request.getAttribute(SportletProperties.PORTLET_MODE);
+        //System.err.println("found mode " + mode);
         if (mode == null) mode = org.gridlab.gridsphere.portlet.Portlet.Mode.VIEW;
         if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.VIEW) {
             m = PortletMode.VIEW;
@@ -407,6 +421,7 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
 
         request.setAttribute(gsmode, mode);
         if (request.getAttribute(jsrmode) == null) {
+            //System.err.println("setting jsr mode " + m);
             request.setAttribute(jsrmode, m);
         }
 

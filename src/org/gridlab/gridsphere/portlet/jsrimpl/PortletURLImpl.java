@@ -51,19 +51,22 @@ public class PortletURLImpl implements PortletURL {
     private PortletMode mode = null;
     private WindowState state = null;
 
+    private boolean isRender = false;
+
     /**
      * Constructs a PortletURL from a servlet request and response
      *
      * @param req the servlet request
      * @param res the servlet response
      */
-    public PortletURLImpl(HttpServletRequest req, HttpServletResponse res, PortalContext context) {
+    public PortletURLImpl(HttpServletRequest req, HttpServletResponse res, PortalContext context, boolean isRender) {
         this.store = new HashMap();
         this.res = res;
         this.req = req;
         this.context = context;
         this.contextPath = "/gridsphere"; //req.getContextPath();
         this.isSecure = req.isSecure();
+        this.isRender = isRender;
     }
 
     public void setContextPath(String contextPath) {
@@ -163,7 +166,11 @@ public class PortletURLImpl implements PortletURL {
     public void setParameter(String name, String value) {
         if ((name == null) || !(name instanceof String)) throw new IllegalArgumentException("name must be a non-null string");
         if (value == null) throw new IllegalArgumentException("value is NULL");
-        store.put(name, value);
+        if (isRender) {
+            store.put(SportletProperties.RENDER_PARAM_PREFIX + name, value);
+        } else {
+            store.put(name, value);
+        }
     }
 
     /**
@@ -185,7 +192,12 @@ public class PortletURLImpl implements PortletURL {
         if ((name == null) || !(name instanceof String)) throw new IllegalArgumentException("name must be a non-null string");
         if (values == null) throw new IllegalArgumentException("values is NULL");
         if (values.length == 0) throw new IllegalArgumentException("values is NULL");
-        store.put(name, values);
+
+        if (isRender) {
+            store.put(SportletProperties.RENDER_PARAM_PREFIX + name, values);
+        } else {
+            store.put(name, values);
+        }
     }
 
     /**
