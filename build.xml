@@ -109,7 +109,6 @@ Copyright:
         <pathelement path="${java.class.path}"/>
     </path>
 
-
     <!-- =================================================================== -->
     <!-- Functions                                                           -->
     <!-- =================================================================== -->
@@ -263,8 +262,8 @@ Copyright:
 
         <mkdir dir="${build.classes}/gridsphere"/>
 
-        <copy file="${gswebapp.dir}/WEB-INF/classes/log4j.properties"
-            tofile="${build.classes}/gridsphere/log4j.properties"/>
+      <!--  <copy file="${gswebapp.dir}/WEB-INF/classes/log4j.properties"
+            tofile="${build.classes}/gridsphere/log4j.properties"/>   -->
 
         <echo message="Configuring GridSphere jar settings:"/>
         <echo message="GridSphere Release  ${version.release}"/>
@@ -273,15 +272,19 @@ Copyright:
         <echo message="Replaced GRIDSPHERE_RELEASE with : ${release}"/>
 
         <jar jarfile="${build.lib}/gridsphere.jar" basedir="${build.classes}" defaultexcludes="yes">
+
             <include name="org/**"/>
-            <include name="gridsphere/log4j.properties"/>
+           <!-- <include name="gridsphere/log4j.properties"/>  -->
             <!-- don't include portlet API -->
             <exclude name="org/gridlab/gridsphere/portlet/**"/>
+            <!-- don't include gs servlet -->
+            <exclude name="org/gridlab/gridsphere/servlets/**"/>
             <exclude name="org/gridlab/gridsphere/event/**"/>
             <!-- don't include portlet widgets tag library -->
             <exclude name="org/gridlab/gridsphere/provider/**"/>
             <!-- don't include GridSphere portlets  -->
             <exclude name="org/gridlab/gridsphere/portlets/**"/>
+
         </jar>
     </target>
 
@@ -294,7 +297,7 @@ Copyright:
             <exclude name="**/jsrimpl/**"/>
             <include name="org/gridlab/gridsphere/event/**"/>
             <exclude name="**/*Test.class"/>
-            <include name="gridsphere/log4j.properties"/>
+          <!--  <include name="gridsphere/log4j.properties"/>  -->
         </jar>
     </target>
 
@@ -306,7 +309,6 @@ Copyright:
         <jar jarfile="${build.lib}/portlet-jsr-api.jar" basedir="${build.classes}">
             <include name="javax/**"/>
             <include name="**/portlet/jsrimpl/**"/>
-            <include name="gridsphere/log4j.properties"/>
         </jar>
     </target>
 
@@ -343,6 +345,7 @@ Copyright:
     <target name="coreportlets-jar" depends="compile" description="Create lib/coreportlets.jar">
         <jar jarfile="${build.lib}/coreportlets.jar" basedir="${build.classes}">
             <include name="org/gridlab/gridsphere/portlets/**"/>
+            <include name="org/gridlab/gridsphere/servlets/**"/>
         </jar>
     </target>
 
@@ -390,7 +393,7 @@ Copyright:
             classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
             classpathref="classpath"/>
         <dbtask
-            configdir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence"
+            configdir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF"
             action="CREATE"/>
     </target>
 
@@ -417,12 +420,12 @@ Copyright:
             value="${cathome}/${gswebapp.dir}"/>
     </target>
 
-    <target name="create-test-database" depends="setenv, configure-test-database, compile">
+    <target name="create-test-database" depends="configure-test-database, compile">
         <taskdef name="dbtask"
             classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
             classpathref="classpath"/>
         <dbtask
-            configdir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence"
+            configdir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF"
             action="CREATE"/>
         <echo message="Successfully created test database"/>
     </target>
@@ -432,7 +435,7 @@ Copyright:
             classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
             classpathref="classpath"/>
         <dbtask
-            configdir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence"
+            configdir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF"
             action="UPDATE"/>
     </target>
 
@@ -617,6 +620,7 @@ Copyright:
                 <exclude name="gridsphere-ui-tags.jar"/>
                 <exclude name="gridsphere-provider.jar"/>
                 <exclude name="coreportlets.jar"/>
+
             </fileset>
         </copy>
 
@@ -648,7 +652,7 @@ Copyright:
         </copy>
 
         <!-- <copy overwrite="true" file="lib/gridsphere-test.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/> -->
-        <copy overwrite="true" file="${build.lib}/gridsphere-test.jar" todir="${env.CATALINA_HOME}/shared/lib"/>
+        <copy overwrite="true" file="${build.lib}/gridsphere-test.jar" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/lib"/>
 
     </target>
 
@@ -721,60 +725,61 @@ Copyright:
     </target>
 
     <!-- ==================================================================== -->
-    <!-- Start Tomcat                                                         -->
-    <!-- ==================================================================== -->
-    <target name="start-tomcat">
-        <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
-            <jvmarg value="-Dcatalina.home=${env.CATALINA_HOME}"/>
-            <jvmarg value="-Xdebug"/>
-            <jvmarg value="-Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n"/>
-            <arg value="start"/>
-            <classpath>
-                <pathelement path="${java.home}/../lib/tools.jar"/>
-                <fileset dir="${env.CATALINA_HOME}">
-                    <include name="bin/bootstrap.jar"/>
-                </fileset>
-            </classpath>
-        </java>
+        <!-- Start Tomcat                                                         -->
+        <!-- ==================================================================== -->
+        <target name="start-tomcat">
+            <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
+                <jvmarg value="-Dcatalina.home=${env.CATALINA_HOME}"/>
+                <jvmarg value="-Xdebug"/>
+                <jvmarg value="-Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n"/>
+                <arg value="start"/>
+                <classpath>
+                    <pathelement path="${java.home}/../lib/tools.jar"/>
+                    <fileset dir="${env.CATALINA_HOME}">
+                        <include name="bin/bootstrap.jar"/>
+                    </fileset>
+                </classpath>
+            </java>
 
-    </target>
+        </target>
 
-    <!-- =================================================================== -->
-    <!-- Stop Tomcat                                                         -->
-    <!-- =================================================================== -->
-    <target name="stop-tomcat">
-        <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
-            <jvmarg value="-Dcatalina.home=${env.CATALINA_HOME}"/>
-            <arg value="stop"/>
-            <classpath>
-                <fileset dir="${env.CATALINA_HOME}">
-                    <include name="bin/bootstrap.jar"/>
-                </fileset>
-            </classpath>
-        </java>
-    </target>
+        <!-- =================================================================== -->
+        <!-- Stop Tomcat                                                         -->
+        <!-- =================================================================== -->
+        <target name="stop-tomcat">
+            <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
+                <jvmarg value="-Dcatalina.home=${env.CATALINA_HOME}"/>
+                <arg value="stop"/>
+                <classpath>
+                    <fileset dir="${env.CATALINA_HOME}">
+                        <include name="bin/bootstrap.jar"/>
+                    </fileset>
+                </classpath>
+            </java>
+        </target>
 
-    <!-- =================================================================== -->
-    <!-- Run the client JUnit test cases                                     -->
-    <!-- =================================================================== -->
-    <target name="tests">
+        <!-- =================================================================== -->
+        <!-- Run the client JUnit test cases                                     -->
+        <!-- =================================================================== -->
+        <target name="tests">
 
-        <delete dir="${gridsphere.build}/reports"/>
-        <mkdir dir="${gridsphere.build}/reports"/>
+            <delete dir="${gridsphere.build}/reports"/>
+            <mkdir dir="${gridsphere.build}/reports"/>
 
-        <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" fork="yes">
-            <sysproperty key="cactus.contextURL" value="http://localhost:8080/gridsphere"/>
-            <classpath>
-                <path refid="classpath"/>
-                <pathelement location="${env.CATALINA_HOME}/webapps/gridsphere"/>
-            </classpath>
-            <test name="org.gridlab.gridsphere.GridSphereTest" todir="${gridsphere.build}/reports">
-                <formatter type="xml"/>
-            </test>
-        </junit>
+            <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" fork="yes">
+                <sysproperty key="cactus.contextURL" value="http://localhost:8080/gridsphere"/>
+                <classpath>
+                    <path refid="classpath"/>
+                    <pathelement location="${env.CATALINA_HOME}/webapps/gridsphere"/>
+                </classpath>
+                <test name="org.gridlab.gridsphere.GridSphereTest" todir="${gridsphere.build}/reports">
+                    <formatter type="xml"/>
+                </test>
+            </junit>
 
-    </target>
+        </target>
 
+    
     <!-- =================================================================== -->
     <!-- Creates HTML reports from the test results                          -->
     <!-- =================================================================== -->
