@@ -115,7 +115,11 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletRequest portletReq = event.getPortletRequest();
         PortletResponse portletRes = event.getPortletResponse();
 
-
+        String locale = (String)portletReq.getPortletSession(true).getAttribute(User.LOCALE);
+        if (locale == null) {
+            locale = Locale.ENGLISH.getLanguage();
+            portletReq.getPortletSession(true).setAttribute(User.LOCALE, locale);
+        }
 
         // If first time being called, instantiate all portlets
         if (firstDoGet.equals(Boolean.TRUE)) {
@@ -191,7 +195,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         } catch (Exception e) {
             log.error("Unable to get page factory", e);
         }
-
     }
 
     public void setUserAndGroups(PortletRequest req) {
