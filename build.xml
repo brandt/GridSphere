@@ -174,39 +174,33 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Compiles all portlets                                               -->
     <!-- =================================================================== -->
-    <target name="compile-portlets" depends="compile-core-portlets, compile-grid-portlets, compile-example-portlets" description="Compile GridSphere source code">
+    <target name="compile-portlets" depends="compile-core-portlets, compile-grid-portlets" description="Compile GridSphere source code">
         <echo>Compiling GridSphere</echo>
-        <javac  srcdir="src"
-            destdir="${build.classes}"
-            excludes="org/gridlab/gridsphere/portlets/**, org/gridlab/gridsphere/services/grid/**"
-            classpathref="classpath"
-            debug="${debug}"
-            optimize="${optimize}"
-            deprecation="false"/>
     </target>
 
     <!-- =================================================================== -->
     <!-- Compiles core portlets                                              -->
     <!-- =================================================================== -->
     <target name="compile-core-portlets" depends="compile-core" description="Compile core portlets">
-        <echo>Compiling Core Portlets</echo>
-        <javac srcdir="src/org/gridlab/gridsphere/portlets/core"
+        <echo>Compiling core portlets</echo>
+        <javac srcdir="src/org/gridlab/gridsphere/portlets"
             destdir="${build.classes}"
+            excludes="grid/**"
             classpathref="classpath"
             debug="${debug}"
             optimize="${optimize}"
-            deprecation="${deprecation}">
-        </javac>
+            deprecation="${deprecation}"/>
     </target>
 
     <!-- =================================================================== -->
-    <!-- Compiles core framework source code                                 -->
+    <!-- Compiles core framework                                              -->
     <!-- =================================================================== -->
     <target name="compile-core" depends="setenv" description="Compile core frameowrk">
-        <echo>Compiling Core Framework</echo>
-        <javac  srcdir="src"
+        <echo>Compiling core framework</echo>
+        <javac srcdir="src"
             destdir="${build.classes}"
-            excludes="org/gridlab/gridsphere/portlets/**, org/gridlab/gridsphere/services/grid/**"
+            excludes="org/gridlab/gridsphere/portlets/**,
+                      org/gridlab/gridsphere/services/grid/**"
             classpathref="classpath"
             debug="${debug}"
             optimize="${optimize}"
@@ -217,7 +211,7 @@ Copyright:
     <!-- Compiles grid portlets                                              -->
     <!-- =================================================================== -->
     <target name="compile-grid-portlets" depends="compile-grid" if="grid.exists" description="Compile grid portlets">
-        <echo>Compiling Grid Portlets</echo>
+        <echo>Compiling grid portlets</echo>
         <javac srcdir="src/org/gridlab/gridsphere/portlets/grid"
             destdir="${build.classes}"
             classpathref="classpath"
@@ -231,28 +225,14 @@ Copyright:
     <!-- Compiles grid services if OGSA/CoG is present                       -->
     <!-- =================================================================== -->
     <target name="compile-grid" depends="setenv" if="grid.exists" description="Compile grid services">
-        <echo>Compiling Grid Services</echo>
+        <echo>Compiling grid services</echo>
         <javac srcdir="src/org/gridlab/gridsphere/services/grid"
             destdir="${build.classes}"
             classpathref="classpath"
             debug="${debug}"
             optimize="${optimize}"
-            deprecation="false"/>
+            deprecation="${deprecation}"/>
     </target>
-
-    <!-- =================================================================== -->
-    <!-- Compiles example portlets                                               -->
-    <!-- =================================================================== -->
-    <target name="compile-example-portlets" depends="compile-core" description="Compile examples source code">
-        <echo>Compiling GridSphere</echo>
-        <javac  srcdir="src/org/gridlab/gridsphere/portlets/examples"
-            destdir="${build.classes}"
-            classpathref="classpath"
-            debug="${debug}"
-            optimize="${optimize}"
-            deprecation="false"/>
-    </target>
-
 
     <!-- =================================================================== -->
     <!-- Compiles JUnit tests                                                -->
@@ -414,7 +394,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates example portlets required by GridSphere                        -->
     <!-- =================================================================== -->
-    <target name="example-portlets-jar" depends="compile-example-portlets" description="Create lib/exampleportlets.jar">
+    <target name="example-portlets-jar" depends="compile-core-portlets" description="Create lib/exampleportlets.jar">
         <jar jarfile="lib/exampleportlets.jar" basedir="${build.classes}" >
             <include name="org/gridlab/gridsphere/portlets/*" />
             <include name="org/gridlab/gridsphere/portlets/examples/**" />
