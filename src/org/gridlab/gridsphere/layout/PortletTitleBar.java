@@ -27,7 +27,7 @@ import java.util.*;
  */
 public class PortletTitleBar extends BasePortletComponent implements Serializable, Cloneable {
 
-    private String title = null;
+    private String title = "unknown title";
     private String portletClass = null;
     private transient PortletWindow.State windowState = PortletWindow.State.NORMAL;
     private List supportedModes = new Vector();
@@ -632,15 +632,13 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         // get the appropriate title for this client
         Client client = req.getClient();
-        Locale locale = Locale.getDefault();
+        Locale locale = null;
+        String locStr = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
+        if (locStr != null) {
+            locale = new Locale(locStr, "", "");
+        }
         if (settings != null) {
-            String locStr = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
-            if (locStr != null) {
-                locale = new Locale(locStr, "", "");
-            } else {
-                locale = settings.getDefaultLocale();
-            }
-            title =  settings.getTitle(locale, client);
+            title = settings.getTitle(locale, client);
         }
 
         List modeLinks = null, windowLinks = null;

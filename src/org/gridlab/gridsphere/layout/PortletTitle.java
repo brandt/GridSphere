@@ -12,7 +12,7 @@ import java.util.Locale;
  */
 public class PortletTitle implements Serializable, Cloneable {
 
-    private String lang = Locale.getDefault().getLanguage();
+    private String lang = Locale.ENGLISH.getLanguage();
     private String text = "";
 
     /**

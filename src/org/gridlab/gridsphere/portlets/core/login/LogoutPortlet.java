@@ -15,7 +15,7 @@ public class LogoutPortlet extends AbstractPortlet {
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         Client client = request.getClient();
 
-        Locale locale = Locale.getDefault();
+        Locale locale = null;
         String title = "";
         String userlocale = (String)request.getSession(true).getAttribute(User.LOCALE);
         if (userlocale != null) {
