@@ -126,7 +126,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
             pdd = new PortletDeploymentDescriptor(gsportletXMLfile, portletMappingFile);
         } catch (Exception e) {
             log.error("Mapping Error! " + webApplicationName, e);
-            throw new PortletException("Unable to load portlets from: " + webApplicationName + " + due to mapping error", e);
+            throw new PortletException("Unable to load portlets from: " + webApplicationName + " + due to mapping error");
         }
         // Every SportletDefinition has a PortletApplication and possibly multiple ConcretePortletConfig's
         Iterator portletDefs = pdd.getPortletDefinitionList().iterator();

@@ -115,7 +115,7 @@ public class PortletManager implements PortletManagerService {
                 Arrays.sort(webappFiles, new WebappComparator());
 
                 // get rid of any priority numbers
-                String webapp;
+                String webapp = "";
                 int idx = 0;
                 for (int i = 0; i < webappFiles.length; i++) {
                     webapp = webappFiles[i];
@@ -125,16 +125,15 @@ public class PortletManager implements PortletManagerService {
                 }
 
                 if (webappFiles != null) {
-                    try {
-                        for (int i = 0; i < webappFiles.length; i++) {
+                    for (int i = 0; i < webappFiles.length; i++) {
+                        try {
                             webapp = webappFiles[i];
                             PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
                             addWebApp(portletWebApp);
+                        } catch (PortletException e) {
+                            log.error("Unable to create portlet web application: " + webapp);
                         }
-                    } catch (PortletException e) {
-                        log.error("Unable to create portlet web application ", e);
-                    }
-
+                    }          
                 }
             } else {
                 log.error(portletsPath + " does not exist!");
