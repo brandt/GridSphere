@@ -35,11 +35,13 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     private final static int CMD_UPDATE = 5;
     private final static int CMD_CREATE = 6;
 
+/*
 
     private String getPropertiesFile() {
         ServletContext ctx = GridSphereConfig.getServletContext();
         return ctx.getRealPath("/WEB-INF/persistence/hibernate.properties");
     }
+*/
 
     public PersistenceManagerRdbmsImpl() {
         ServletContext ctx = GridSphereConfig.getServletContext();
@@ -54,7 +56,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     }
 
     private SessionFactory getFactory(String persistenceConfigDir) {
-        Properties hibernateProperties = loadProperties(getPropertiesFile());
+        Properties hibernateProperties = loadProperties(persistenceConfigDir+"/hibernate.properties");
         Configuration cfg = loadConfiguration(persistenceConfigDir, hibernateProperties);
         SessionFactory factory = null;
 
@@ -116,11 +118,13 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     /*
      * for now we just need to load the config from the basedir of gridsphere/WEB-INF/persistence
      */
+/*
     private Properties loadProperties() {
         ServletContext ctx = GridSphereConfig.getServletContext();
         String persistenceConfigDir = ctx.getRealPath("/WEB-INF/persistence/");
         return loadProperties(persistenceConfigDir + "/hibernate.properties");
     }
+*/
 
 
     public PersistenceSession getPersistenceSession() throws PersistenceManagerException {
