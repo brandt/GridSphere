@@ -38,7 +38,7 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
     }
 
     public String toStartString() {
-        return "<input type=\"submit\" ";
+        return "<input class=\"" + cssStyle + "\" type=\"submit\" ";
     }
 
     public String toEndString() {
