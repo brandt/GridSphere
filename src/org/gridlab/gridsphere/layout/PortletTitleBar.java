@@ -179,8 +179,8 @@ public class PortletTitleBar extends BasePortletComponent {
         PortletRegistry registryManager = PortletRegistry.getInstance();
         String appID = registryManager.getApplicationPortletID(portletClass);
         ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
-        ApplicationPortletDescriptor appDD = appPortlet.getApplicationPortletDescriptor();
         if (appPortlet != null) {
+            ApplicationPortletDescriptor appDD = appPortlet.getApplicationPortletDescriptor();
             SupportsModes supportedModes = appDD.getSupportsModes();
             modeList = supportedModes.getMarkupList();
             ConcretePortlet concPortlet = appPortlet.getConcretePortlet(portletClass);

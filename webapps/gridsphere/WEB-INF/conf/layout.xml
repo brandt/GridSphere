@@ -30,7 +30,7 @@
                         </portlet-frame>
                         <portlet-frame>
                             <name>DemoPortlet</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.examples.DemoPortlet.2</portlet-class>
+                            <portlet-class>org.gridlab.gridsphere.portlets.examples.DemoPortlet.1</portlet-class>
                         </portlet-frame>
                         <portlet-frame>
                             <name>HelloWorld</name>
