@@ -39,7 +39,11 @@
 <ui:frame beanId="groupsFrame"/>
 
 <ui:frame>
+<ui:tablerow>
+<ui:tablecell>
 <ui:actionsubmit action="doSaveUser" key="PROFILE_SAVE"/>
+</ui:tablecell>
+</ui:tablerow>
 </ui:frame>
 </ui:panel>
 
