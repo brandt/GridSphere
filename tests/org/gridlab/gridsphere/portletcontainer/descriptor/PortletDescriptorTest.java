@@ -61,13 +61,13 @@ public class PortletDescriptorTest extends TestCase {
         assertEquals(1, defs.size());
 
         PortletDefinition def = (PortletDefinition)defs.get(0);
-        PortletApp portletApp = def.getPortletApp();
+        ApplicationPortletDescriptor portletApp = def.getApplicationPortletDescriptor();
         List concreteApps = def.getConcreteApps();
 
         // we have two concrete portlet apps
         assertEquals(concreteApps.size(), 2);
-        ConcretePortletApplication concreteOne = (ConcretePortletApplication)concreteApps.get(0);
-        ConcretePortletApplication concreteTwo = (ConcretePortletApplication)concreteApps.get(1);
+        ConcretePortletDescriptor concreteOne = (ConcretePortletDescriptor)concreteApps.get(0);
+        ConcretePortletDescriptor concreteTwo = (ConcretePortletDescriptor)concreteApps.get(1);
         assertEquals("org.gridlab.gridsphere.portlets.core.HelloWorld.666", portletApp.getID());
         assertEquals("Hello World", portletApp.getPortletName());
         assertEquals("hello", portletApp.getServletName());
