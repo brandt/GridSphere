@@ -193,4 +193,20 @@ public class SportletUserImpl extends BaseObject implements SportletUser  {
         this.LastLoginTime = lastLoginTime;
     }
 
+    /**
+     * Returns a string representaation of the User
+     *
+     * @return User information represented as a String
+     */
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("FamilyName: " + FamilyName);
+        sb.append("FullName: " + FullName);
+        sb.append("GivenName: " + GivenName);
+        sb.append("EmailAddress: " + EmailAddress);
+        sb.append("Id: " + Id);
+        sb.append("UserID: " + UserID);
+        sb.append("LastLoginTime: " + LastLoginTime);
+        return sb.toString();
+    }
 }

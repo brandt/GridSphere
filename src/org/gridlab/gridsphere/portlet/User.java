@@ -83,4 +83,11 @@ public interface User {
      */
     public long getLastLoginTime();
 
+    /**
+     * Returns a string representaation of the User
+     *
+     * @return User information represented as a String
+     */
+    public String toString();
+
 }
