@@ -94,9 +94,10 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
                 }
                 throw new PortletException(e);
                 //doError(request, response, e);
+            } finally {
+                request.removeAttribute(SportletProperties.PORTLET_ACTION_METHOD);
             }
         }
-        request.removeAttribute(SportletProperties.PORTLET_ACTION_METHOD);
     }
 
     /**
