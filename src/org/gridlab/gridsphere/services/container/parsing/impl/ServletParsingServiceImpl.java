@@ -9,9 +9,12 @@ import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.container.parsing.ServletParsingService;
+import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDefinition;
 import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication;
+import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,23 +36,31 @@ public class ServletParsingServiceImpl implements PortletServiceProvider, Servle
         log.info("in destroy()");
     }
 
-    public PortletRequest getPortletRequest(HttpServletRequest request) {
-        SportletRequestImpl req = new SportletRequestImpl(request);
-        return (PortletRequest) req;
+    public PortletRequest getPortletRequest(RegisteredPortlet regPortlet, HttpServletRequest request) {
+
+      /*
+        request.setAttribute(GridSphereProperties.PORTLETSETTINGS, portletSettings);
+        request.setAttribute(GridSphereProperties.PORTLETWINDOW, portletWindow);
+        request.setAttribute(GridSphereProperties.MODEMODIFIER, modeModifier);
+        request.setAttribute(GridSphereProperties.PORTLETMODE, mode);
+        request.setAttribute(GridSphereProperties.PREVIOUSMODE, previousMode);
+        request.setAttribute(GridSphereProperties.CLIENT, client);
+        PortletRequest req = new SportletRequest(request);
+        return req;
+        */
+        return null;
     }
 
     public PortletResponse getPortletResponse(HttpServletResponse res) {
-        SportletResponse sportletResponse = new SportletResponse(res, config.getServletConfig().getServletName());
+        /*
+        SportletResponse sportletResponse = new SportletResponse(res);
         return (PortletResponse) sportletResponse;
+        */
+        return null;
     }
 
     public void putPortletRequest(PortletRequest req) {
 
-    }
-
-    public PortletSettings getPortletSettings(ConcretePortletApplication portletApp, List knownGroups, List knownRoles) {
-        SportletSettings settings = new SportletSettings(portletApp, knownGroups, knownRoles);
-        return settings;
     }
 
     public PortletConfig getPortletConfig(ServletConfig config) {
