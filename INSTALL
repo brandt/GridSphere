@@ -30,14 +30,14 @@ compile-all -- compiles all the GridSphere source code including
 dist -- creates a GridSphere distribution in the dist directory 
 	defined in build.properties
 
-deploy -- deploys the GridSphere framwork and all portlets to a 
+deploy -- deploys the GridSphere framework and all portlets to a 
 	  Tomcat servlet container located at $CATALINA_HOME
 
 docs-all -- compiles all GridSphere docbook documentation and 
-	    builds the Javadoc documenattion from the source code
+	    builds the Javadoc documentation from the source code
 
 make-test-reports -- runs all Junit tests and creates HTML
-		     status reports in the build/reports directory. 
+		     status reports in the build/reports directory 
 
 To see all the targets invoke "ant --projecthelp".
 
