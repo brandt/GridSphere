@@ -130,6 +130,13 @@ public interface UserManagerService extends PortletService {
      */
     public void saveUser(String userName);
 
+
+    /**
+     * Save a user to DB
+     */
+    public void saveUser(User user);
+
+
     /**
      * Remove a user permanently! Requires super user
      */

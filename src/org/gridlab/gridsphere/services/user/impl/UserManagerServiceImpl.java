@@ -20,6 +20,7 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
+import org.gridlab.gridsphere.services.security.acl.impl.UserACL;
 import org.gridlab.gridsphere.services.user.AccountRequest;
 import org.gridlab.gridsphere.services.user.PermissionDeniedException;
 import org.gridlab.gridsphere.services.user.UserManagerService;
@@ -39,10 +40,17 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     private static AccessControlService aclService = null;
     private static AccessControlManagerService aclManagerService = null;
 
+    private String jdoUserACL = new String();
+    private String jdoARImpl = new String();
+    private String jdoSUImpl = new String();
+
     private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
 
     public UserManagerServiceImpl() {
         super();
+        jdoSUImpl = SportletUserImpl.class.getName();
+        jdoARImpl = AccountRequestImpl.class.getName();
+        jdoUserACL = UserACL.class.getName();
     }
 
     /**
@@ -136,8 +144,9 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * Administrators can retrieve all pending account request
      */
     public List getAccountRequests() {
+
         String command =
-                "select ar from org.gridlab.gridsphere.services.user.impl.AccountRequestImpl ar";
+                "select ar from "+jdoARImpl+" ar";
         List requests = null;
         try {
             requests = pm.restoreList(command);
@@ -163,7 +172,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             String userid = request.getID();
             AccountRequestImpl requestImpl = null;
             String command =
-                    "select ar from org.gridlab.gridsphere.services.user.impl.AccountRequestImpl ar where ar.ObjectID=" + userid;
+                    "select ar from "+jdoARImpl+" ar where ar.ObjectID=" + userid;
             try {
                 requestImpl = (AccountRequestImpl) pm.restoreObject(command);
             } catch (PersistenceManagerException e) {
@@ -219,9 +228,9 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             String userid = request.getID();
             AccountRequestImpl requestImpl = null;
             String command =
-                    "select ar from org.gridlab.gridsphere.services.user.impl.AccountRequestImpl ar where ar.ObjectID=" + userid;
+                    "select ar from "+jdoARImpl+" ar where ar.ObjectID=" + userid;
             String command2 =
-                    "select acl from org.gridlab.gridsphere.services.security.acl.impl.UserACL acl where " +
+                    "select acl from "+jdoUserACL+" acl where " +
                     "UserID=\"" + request.getID() + "\"";
 
             try {
@@ -242,7 +251,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 log.error("Unable to send mail: ", e);
             }
         } else {
-            throw new PermissionDeniedException("Permission denied to deny Accounrequest for user " + request.getGivenName());
+            throw new PermissionDeniedException("Permission denied to deny Accountrequest for user " + request.getGivenName());
         }
     }
 
@@ -364,7 +373,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     private User getUserByID(String ID) {
         String command =
-                "select u from org.gridlab.gridsphere.portlet.impl.SportletUserImpl u where ObjectID=\"" + ID + "\"";
+                "select u from "+jdoSUImpl+" u where ObjectID=\"" + ID + "\"";
         return getUser(command);
     }
 
@@ -375,7 +384,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     private User getUserByName(String name) {
         String command =
-                "select u from org.gridlab.gridsphere.portlet.impl.SportletUserImpl u where UserID=\"" + name + "\"";
+                "select u from "+jdoSUImpl+" u where UserID=\"" + name + "\"";
         return getUser(command);
 
     }
@@ -390,7 +399,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     public User loginUser(String userName) {
         // same as getUser, we do add the user somewhere to the active users
         String command =
-                "select u from org.gridlab.gridsphere.portlet.impl.SportletUserImpl u where UserID=\"" + userName + "\"";
+                "select u from "+jdoSUImpl+" u where UserID=\"" + userName + "\"";
         return getUser(command);
     }
 
@@ -408,6 +417,19 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public void saveUser(String userName) {
 
+    }
+
+    /**
+     * save the userobjects to the database
+     * @param user the userobject
+     * @todo check/pass up the exception
+     */
+    public void saveUser(User user) {
+        try {
+            pm.update(user);
+        } catch (PersistenceManagerException e) {
+            log.error("Persistence Exception !"+e);
+        }
     }
 
     /**
@@ -447,7 +469,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public boolean existsUser(String userName) {
         String command =
-                "select user from org.gridlab.gridsphere.portlet.impl.SportletUserImpl user where UserID=\"" + userName + "\"";
+                "select user from "+jdoSUImpl+" user where UserID=\"" + userName + "\"";
         SportletUser user = null;
         try {
             user = (SportletUser) pm.restoreObject(command);
@@ -465,7 +487,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public boolean existsUserID(String ID) {
         String command =
-                "select user from org.gridlab.gridsphere.portlet.impl.SportletUserImpl user where ObjectID=\"" + ID + "\"";
+                "select user from "+jdoSUImpl+" user where ObjectID=\"" + ID + "\"";
         SportletUser user = null;
         try {
             user = (SportletUser) pm.restoreObject(command);
@@ -482,7 +504,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     public List getAllUsers() {
 
         String command =
-                "select user from org.gridlab.gridsphere.portlet.impl.SportletUserImpl user";
+                "select user from "+jdoSUImpl+" user";
         List result = null;
         try {
             result = pm.restoreList(command);
