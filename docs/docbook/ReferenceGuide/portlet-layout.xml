@@ -92,11 +92,9 @@ double-tabbed pane. An example illustration is shown:
 </para>
 <informalexample id="layout.def"><programlisting>
 &lt;portlet-tabbed-pane&gt; <co id="tab.pane"/>
-    &lt;portlet-tab&gt;
-        &lt;title&gt;Examples&lt;/title&gt; <co id="tab.title"/>
+    &ltportlet-tab title="Examples"&gt;<co id="tab.title"/>
         &lt;portlet-tabbed-pane style="sub-menu"&gt;  <co id="tab.pane2"/>
-            &lt;portlet-tab&gt;
-                &lt;title&gt;Simple Examples&lt;/title&gt;
+            &ltportlet-tab title="Simple Examples"&gt;
                 &lt;table-layout&gt;    <co id="table.layout"/>
                     &lt;row-layout&gt;  <co id="row.layout"/>
                         &lt;column-layout width="50%&gt; <co id="column.layout"/>
@@ -112,8 +110,7 @@ double-tabbed pane. An example illustration is shown:
                     &lt;/row-layout&gt;
                 &lt;/table-layout&gt;
             &lt;/portlet-tab&gt;
-            &lt;portlet-tab&gt;
-                &lt;title&gt;Demos&lt;/title&gt;
+            &lt;portlet-tab title="Demos"&gt;
                 &lt;table-layout&gt;
                     &lt;row-layout&gt;
                         &lt;column-layout&gt;
