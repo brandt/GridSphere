@@ -47,6 +47,7 @@ public class SubscriptionPortlet extends ActionPortlet {
         portletMgr = PortletManager.getInstance();
 
         DEFAULT_VIEW_PAGE = "doViewSubscription";
+        DEFAULT_HELP_PAGE = "subscription/help.jsp";
     }
 
     public void initConcrete(PortletSettings settings) throws UnavailableException {

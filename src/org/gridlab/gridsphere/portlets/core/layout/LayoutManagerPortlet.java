@@ -39,6 +39,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         //portletMgr = PortletManager.getInstance();
 
         DEFAULT_VIEW_PAGE = "doShowLayout";
+        DEFAULT_HELP_PAGE = "layout/help.jsp";
 
     }
 
