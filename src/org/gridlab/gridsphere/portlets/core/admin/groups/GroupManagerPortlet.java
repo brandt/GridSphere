@@ -127,7 +127,14 @@ public class GroupManagerPortlet extends ActionPortlet {
         this.log.debug("Entering doViewEditGroupEntry");
         PortletRequest req = evt.getPortletRequest();
         loadGroup(evt);
-        loadGroupEntry(evt);
+
+        HiddenFieldBean groupEntryIDBean = evt.getHiddenFieldBean("groupEntryID");
+        User user = evt.getPortletRequest().getUser();
+        GroupEntry entry = getACLService(user).getGroupEntry(groupEntryIDBean.getValue());
+        evt.getTextBean("userName").setValue(entry.getUser().getUserName());
+
+        setRoleListBox(evt, entry.getRole());
+
         setNextState(req, DO_VIEW_GROUP_ENTRY_EDIT);
         this.log.debug("Exiting doViewEditGroupEntry");
     }
@@ -173,7 +180,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         try {
             addGroupEntries(evt, group);
             setGroupEntryList(evt, group);
-            setNextTitle(req, "Portlet Group Manager [Added Users]");
+            setNextTitle(req, "Portlet Group Manager [Added User Role]");
             setNextState(req, DO_VIEW_GROUP_ENTRY_ADD_CONFIRM);
         } catch (PortletException e) {
             List usersNotInGroupList = getACLService(user).getUsersNotInGroup(group);
@@ -181,6 +188,39 @@ public class GroupManagerPortlet extends ActionPortlet {
             viewUsersNotInGroupList(evt, usersNotInGroupList);
             setNextState(req, DO_VIEW_GROUP_ENTRY_ADD);
         }
+    }
+
+    public void doViewConfirmChangeRole(FormEvent evt)
+            throws PortletException {
+        this.log.debug("Entering doViewConfirmChangeRole");
+        PortletRequest req = evt.getPortletRequest();
+
+
+        User root = req.getUser();
+
+        HiddenFieldBean groupEntryIDBean = evt.getHiddenFieldBean("groupEntryID");
+        GroupEntry entry = getACLService(root).getGroupEntry(groupEntryIDBean.getValue());
+
+        ListBoxBean groupEntryRoleListBox = evt.getListBoxBean("groupEntryRoleLB");
+        String selectedGroupRole = groupEntryRoleListBox.getSelectedValue();
+        PortletRole role = PortletRole.toPortletRole(selectedGroupRole);
+
+        // Create add to group request
+        GroupRequest groupRequest = getACLService(root).createGroupRequest(entry);
+
+        groupRequest.setRole(role);
+        groupRequest.setGroupAction(GroupAction.EDIT);
+
+        // Create access right
+        getACLService(root).submitGroupRequest(groupRequest);
+        getACLService(root).approveGroupRequest(groupRequest);
+
+        loadGroup(evt);
+        entry = getACLService(root).getGroupEntry(groupEntryIDBean.getValue());
+        viewGroupEntry(evt, entry);
+
+        setNextTitle(req, "Portlet Group Manager [Modified User's Role]");
+        setNextState(req, DO_VIEW_GROUP_ENTRY_VIEW);
     }
 
     public void doViewCancelAddGroupEntry(FormEvent evt)
@@ -296,16 +336,19 @@ public class GroupManagerPortlet extends ActionPortlet {
                 usersNotInGroupListBox.addBean(item);
             }
         }
+        setRoleListBox(evt, PortletRole.USER);
+    }
 
-        ListBoxBean userRoles = evt.getListBoxBean("groupEntryRole");
+    private void setRoleListBox(FormEvent evt, PortletRole role) {
+        ListBoxBean userRoles = evt.getListBoxBean("groupEntryRoleLB");
         userRoles.setMultipleSelection(false);
         userRoles.setSize(1);
         ListBoxItemBean adminItem = new ListBoxItemBean();
         adminItem.setValue("ADMIN");
-        adminItem.setSelected(false);
+        if (role.equals(PortletRole.ADMIN)) adminItem.setSelected(true);
         ListBoxItemBean userItem = new ListBoxItemBean();
         userItem.setValue("USER");
-        userItem.setSelected(true);
+        if (role.equals(PortletRole.USER)) userItem.setSelected(true);
         userRoles.addBean(userItem);
         userRoles.addBean(adminItem);
     }
@@ -347,10 +390,10 @@ public class GroupManagerPortlet extends ActionPortlet {
     private void addGroupEntries(FormEvent evt, PortletGroup group)
             throws PortletException {
         // Group entry role to apply to all users below...
-        ListBoxBean groupEntryRoleListBox = evt.getListBoxBean("groupEntryRole");
+        ListBoxBean groupEntryRoleListBox = evt.getListBoxBean("groupEntryRoleLB");
         String selectedGroupRole = groupEntryRoleListBox.getSelectedValue();
-
         PortletRole groupEntryRole = PortletRole.toPortletRole(selectedGroupRole);
+
         // Users to add...
         ListBoxBean userList = evt.getListBoxBean("usersNotInGroupList");
         String groupEntryUserID = userList.getSelectedValue();
@@ -391,7 +434,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         List groupEntryList = new ArrayList();
         PortletRequest req = evt.getPortletRequest();
         User root = req.getUser();
-        CheckBoxBean groupEntryIDCheckBox = evt.getCheckBoxBean("groupEntryID");
+        CheckBoxBean groupEntryIDCheckBox = evt.getCheckBoxBean("groupEntryIDCB");
 
         List groupEntryIDList = groupEntryIDCheckBox.getSelectedValues();
 
