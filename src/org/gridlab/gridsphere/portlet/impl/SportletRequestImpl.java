@@ -49,17 +49,6 @@ public class SportletRequestImpl implements SportletRequest {
         this.req = req;
         if (portletSession == null)
             portletSession = new SportletSession(req.getSession(true));
-
-        User user = (User)req.getSession().getAttribute(GridSphereProperties.USER);
-        if (user == null) {
-            user = GuestUser.getInstance();
-            req.getSession().setAttribute(GridSphereProperties.USER, user);
-        }
-        Client client = (Client)req.getSession().getAttribute(GridSphereProperties.CLIENT);
-        if (client == null) {
-            client = new ClientImpl(req);
-            req.getSession().setAttribute(GridSphereProperties.CLIENT, client);
-        }
     }
 
     /**
@@ -108,7 +97,12 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the client device
      */
     public Client getClient() {
-        return (Client)req.getSession().getAttribute(GridSphereProperties.CLIENT);
+        Client client = (Client)req.getSession().getAttribute(GridSphereProperties.CLIENT);
+        if (client == null) {
+            client = new ClientImpl(req);
+            req.getSession().setAttribute(GridSphereProperties.CLIENT, client);
+        }
+        return client;
     }
 
     /**
@@ -199,7 +193,12 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the User object
      */
     public User getUser() {
-        return (User)portletSession.getAttribute(GridSphereProperties.USER);
+        User user = (User)req.getSession(true).getAttribute(GridSphereProperties.USER);
+        if (user == null) {
+            user = GuestUser.getInstance();
+            req.getSession().setAttribute(GridSphereProperties.USER, user);
+        }
+        return user;
     }
 
     /**
