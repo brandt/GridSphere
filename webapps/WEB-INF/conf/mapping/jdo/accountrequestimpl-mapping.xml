@@ -24,25 +24,55 @@
       <field name="Organization" type="java.lang.String">
          <sql type="char" name="Organization" />
       </field>
-<!--      <field name="DesiredGroups" type="java.util.List">
-         <sql name="ListOid" />
-      </field>
-      <field name="MyproxyUserNames" type="java.util.List">
-         <sql name="ListOid" />
-      </field>-->
+
       <field name="Oid" type="java.lang.String">
          <sql type="char" name="Oid" />
       </field>
 
-      <field name="DesiredGroups" type="org.gridlab.gridsphere.core.persistence.castor.StringVector" collection="vector">
+      <field name="DesiredGroupsSV" type="org.gridlab.gridsphere.services.user.impl.AccountRequestImplDesiredGroups" collection="vector">
+         <sql many-key="Reference"/>
+      </field>
+
+      <field name="MyproxyUserNamesSV" type="org.gridlab.gridsphere.services.user.impl.AccountRequestImplMyproxyUserNames" collection="vector">
+         <sql many-key="Reference"/>
+      </field>
+
+      <field name="UserdnsSV" type="org.gridlab.gridsphere.services.user.impl.AccountRequestImplUserdns" collection="vector">
          <sql many-key="Reference"/>
       </field>
 
    </class>
 
+   <!-- should use inheritence here in castor ! -->
 
-   <class name="org.gridlab.gridsphere.core.persistence.castor.StringVector" identity="Oid" key-generator="UUID" depends="org.gridlab.gridsphere.services.user.impl.AccountRequestImpl">
-        <map-to table="SportletUserImplDesiredGroups" />
+   <class name="org.gridlab.gridsphere.services.user.impl.AccountRequestImplDesiredGroups" identity="Oid" key-generator="UUID" depends="org.gridlab.gridsphere.services.user.impl.AccountRequestImpl">
+        <map-to table="AccountRequestImplDesiredGroups" />
+        <field name="Value" type="java.lang.String">
+            <sql type="char" name="Value" />
+        </field>
+        <field name="Reference" type="org.gridlab.gridsphere.services.user.impl.AccountRequestImpl">
+            <sql name="Reference" />
+        </field>
+        <field name="Oid" type="java.lang.String">
+            <sql type="char" name="Oid" />
+        </field>
+    </class>
+
+   <class name="org.gridlab.gridsphere.services.user.impl.AccountRequestImplMyproxyUserNames" identity="Oid" key-generator="UUID" depends="org.gridlab.gridsphere.services.user.impl.AccountRequestImpl">
+        <map-to table="AccountRequestImplMyProxyUserNames" />
+        <field name="Value" type="java.lang.String">
+            <sql type="char" name="Value" />
+        </field>
+        <field name="Reference" type="org.gridlab.gridsphere.services.user.impl.AccountRequestImpl">
+            <sql name="Reference" />
+        </field>
+        <field name="Oid" type="java.lang.String">
+            <sql type="char" name="Oid" />
+        </field>
+    </class>
+
+   <class name="org.gridlab.gridsphere.services.user.impl.AccountRequestImplUserdns" identity="Oid" key-generator="UUID" depends="org.gridlab.gridsphere.services.user.impl.AccountRequestImpl">
+        <map-to table="AccountRequestImplUserdns" />
         <field name="Value" type="java.lang.String">
             <sql type="char" name="Value" />
         </field>
