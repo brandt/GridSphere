@@ -6,10 +6,10 @@
          <param name="password" value="" />
     </driver>
 
-    <mapping href="webapps/WEB-INF/conf/acl-mapping.xml" />
-    <mapping href="webapps/WEB-INF/conf/useracl-mapping.xml"/>
-    <mapping href="webapps/WEB-INF/conf/sportletuserimpl-mapping.xml"/>
-    <mapping href="webapps/WEB-INF/conf/accountrequestimpl-mapping.xml"/>
+    <mapping href="webapps/WEB-INF/conf/mapping/jdo/acl-mapping.xml" />
+    <mapping href="webapps/WEB-INF/conf/mapping/jdo/useracl-mapping.xml"/>
+    <mapping href="webapps/WEB-INF/conf/mapping/jdo/sportletuserimpl-mapping.xml"/>
+    <mapping href="webapps/WEB-INF/conf/mapping/jdo/accountrequestimpl-mapping.xml"/>
 
 
 </database>
