@@ -771,7 +771,7 @@ Copyright:
     <target name="sourcetarball" depends="clean">
         <tstamp/>
 
-        <tar destfile="../${gridsphere.project}-${version}-${DSTAMP}-src.tgz" compression="gzip">
+        <tar destfile="${gridsphere.project}-${version}-${DSTAMP}-src.tgz" compression="gzip">
 
             <tarfileset dir="." prefix="${gridsphere.project}-${version}">
                 <exclude name="**/CVS"/>
