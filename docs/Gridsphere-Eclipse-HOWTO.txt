@@ -23,6 +23,7 @@ Questions, Comments, Enhancements Welcome :-)
 - In the project's settings
 	Can update server.xml
 	Don't be a reloadable context (It messes up anyway)
+	Redirect context logger to Eclipse
 
 - Check out Gridsphere (module gridsphere in CVS) _into_ the project
 	-Setup Java Build Configuration
@@ -39,7 +40,7 @@ Questions, Comments, Enhancements Welcome :-)
 	Working directory: gridsphere
 	Parameters: -Dcatalina.home=/path/to/tomcat/installation -Dcatalina.base=${project_loc:/GSProject}
 			-Declipse.build=${workspace_loc:/GSProject/path/to/build/directory}
-	Targets: eclipse-deploy eclipse-create-database
+	Targets (in this order): eclipse-deploy eclipse-create-database eclipse-resources
 	Refresh project
 
 - Optionally setup the Ant launch configuration to deploy local gridsphere configuration
@@ -49,6 +50,8 @@ Questions, Comments, Enhancements Welcome :-)
 - Launch the configuration -> Should deploy Gridsphere to the project
 
 - From the project context menu -> Tomcat -> update server.xml
+Go to server.xml, and adjust the generated Context so that it includes the crossContext="true" 
+attribute. 
 
 - In Window -> Preferences -> Tomcat add the project (here GSProject) to the Tomcat Classpath
 
