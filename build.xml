@@ -67,14 +67,48 @@ Copyright:
         <fail message="Unable to find Tomcat 4.1.+. Make sure you have set $CATALINA_HOME set" unless="catalina.exists"/>
     </target>
 
+    <!-- =================================================================== -->
+    <!-- Sets the CLASSPATH                                                  -->
+    <!-- =================================================================== -->
+    <path id="classpath">
+
+        <pathelement location="${build.classes}"/>
+
+        <!-- this is for the servlet JARs in Tomcat 4.1.x -->
+        <fileset dir="${env.CATALINA_HOME}/common/lib">
+            <include name="*.jar"/>
+        </fileset>
+
+        <!-- this is for the OGSA JARs in Tomcat 4.1.x -->
+        <fileset dir="${env.OGSA_HOME}/lib">
+            <include name="*.jar"/>
+        </fileset>
+
+        <!-- this is for the servlet JARs in Tomcat 4.1.x -->
+        <fileset dir="${env.CATALINA_HOME}/shared/lib">
+            <include name="*.jar"/>
+        </fileset>
+
+        <!-- this is for the XML JARs in Tomcat 4.1.x -->
+        <fileset dir="${env.CATALINA_HOME}/common/endorsed">
+            <include name="*.jar"/>
+        </fileset>
+
+        <fileset dir="lib">
+            <include name="*.jar"/>
+            <include name="ext/*.jar"/>
+        </fileset>
+        <pathelement path="${java.class.path}"/>
+    </path>
+
     <target name="check-grid">
         <!-- Check for known OGSA libraries -->
         <condition property="grid.exists">
             <and>
-                <available file="${env.CATALINA_HOME}/shared/lib/cog-jglobus.jar"/>
-                <available file="${env.CATALINA_HOME}/server/lib/cog-tomcat.jar"/>
+                <available file="${env.OGSA_HOME}/impl/java/lib/ogsa.jar"/>
             </and>
         </condition>
+        <fail message="Unable to find OGSA GT-3 alpha 3. Make sure you have set $OGSA_HOME set" unless="grid.exists"/>
     </target>
 
     <!-- =================================================================== -->
@@ -102,35 +136,6 @@ Copyright:
         <echo message="deprecation=${deprecation}" />
         <echo message="optimize=${optimize}" />
     </target>
-
-    <!-- =================================================================== -->
-    <!-- Sets the CLASSPATH                                                  -->
-    <!-- =================================================================== -->
-    <path id="classpath">
-
-        <pathelement location="${build.classes}"/>
-
-        <!-- this is for the servlet JARs in Tomcat 4.1.x -->
-        <fileset dir="${env.CATALINA_HOME}/common/lib">
-            <include name="*.jar"/>
-        </fileset>
-
-        <!-- this is for the servlet JARs in Tomcat 4.1.x -->
-        <fileset dir="${env.CATALINA_HOME}/shared/lib">
-            <include name="*.jar"/>
-        </fileset>
-
-        <!-- this is for the XML JARs in Tomcat 4.1.x -->
-        <fileset dir="${env.CATALINA_HOME}/common/endorsed">
-            <include name="*.jar"/>
-        </fileset>
-
-        <fileset dir="lib">
-            <include name="*.jar"/>
-            <include name="ext/*.jar"/>
-        </fileset>
-        <pathelement path="${java.class.path}"/>
-    </path>
 
     <!-- =================================================================== -->
     <!-- Print usage information                                             -->
