@@ -211,8 +211,6 @@ Copyright:
         <echo>Compiling core framework</echo>
         <javac srcdir="src"
             destdir="${build.classes}"
-            excludes="org/gridlab/gridsphere/portlets/grid/**,
-                      org/gridlab/gridsphere/services/grid/**"
             classpathref="classpath"
             debug="${debug}"
             optimize="${optimize}"
@@ -323,9 +321,6 @@ Copyright:
             <!-- don't include portlet API -->
             <exclude name="org/gridlab/gridsphere/portlet/**"/>
             <exclude name="org/gridlab/gridsphere/event/**"/>
-            <!-- don't include grid portlets or services -->
-            <exclude name="org/gridlab/gridsphere/portlets/grid/**"/>
-            <exclude name="org/gridlab/gridsphere/services/grid/**"/>
             <!-- don't include portlet widgets tag library -->
             <exclude name="org/gridlab/gridsphere/provider/**"/>
             <exclude name="org/gridlab/gridsphere/tags/**"/>
@@ -451,7 +446,6 @@ Copyright:
     <target name="doclet-mapping" depends="check-mapping" if="var_force_mapping">
         <mkdir dir="${gridsphere.core}/database"/>
         <javadoc packagenames="org.gridlab.gridsphere.*"
-            excludepackagenames="org.gridlab.gridsphere.services.grid.*, org.gridlab.gridsphere.portlets.grid.*"
             sourcepath="src"
             private="true"
             doclet="org.castor.doclet.ddl.DDL"
@@ -460,7 +454,6 @@ Copyright:
             <classpath refid="classpath"/>
         </javadoc>
         <javadoc packagenames="org.gridlab.gridsphere.*"
-            excludepackagenames="org.gridlab.gridsphere.services.grid.*, org.gridlab.gridsphere.portlets.grid.*"
             sourcepath="src"
             private="true"
             doclet="org.castor.doclet.jdo.JDO"
