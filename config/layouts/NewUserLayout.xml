@@ -26,10 +26,10 @@
 <!-- Tabbed Panes -->
 <portlet-tabbed-pane selected="0" style="menu">
     <portlet-tab>
-        <title>Home</title>
+        <title>GridSphere</title>
         <portlet-tabbed-pane selected="0" style="sub-menu">
             <portlet-tab>
-                <title>Welcome</title>
+                <title>Home</title>
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
@@ -39,17 +39,11 @@
                     </grid-layout>
                 </portlet-panel>
             </portlet-tab>
-        </portlet-tabbed-pane>
-   </portlet-tab>
-   <portlet-tab>
-        <title>Administration</title>
-        <portlet-tabbed-pane style="sub-menu">
             <portlet-tab>
                 <title>Portlets</title>
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
-                            <required-role>SUPER</required-role>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.PortletApplicationManager.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
@@ -60,7 +54,6 @@
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
-                            <required-role>SUPER</required-role>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.user.UserManagerPortlet.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
@@ -76,96 +69,8 @@
                     </grid-layout>
                 </portlet-panel>
             </portlet-tab>
-            <portlet-tab>
-                <title>Credentials</title>
-                <portlet-panel>
-                    <grid-layout>
-                        <portlet-frame>
-                            <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialPermissionAdminPortlet.1</portlet-class>
-                        </portlet-frame>
-                        <portlet-frame>
-                            <name>CredentialMappingAdminPortlet</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialMappingAdminPortlet.1</portlet-class>
-                        </portlet-frame>
-                        <portlet-frame>
-                            <name>CredentialManagerAdminPortlet</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialManagerAdminPortlet.1</portlet-class>
-                        </portlet-frame>
-                    </grid-layout>
-                </portlet-panel>
-            </portlet-tab>
         </portlet-tabbed-pane>
    </portlet-tab>
-   <portlet-tab>
-        <title>Grid</title>
-        <portlet-tabbed-pane style="sub-menu">
-            <portlet-tab>
-                <title>Welcome</title>
-                <portlet-panel>
-                    <grid-layout>
-                        <portlet-frame>
-                            <name>CredentialRetrievalUserPortlet</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialRetrievalUserPortlet.1</portlet-class>
-                        </portlet-frame>
-                        <portlet-frame>
-                            <name>CredentialMappingUserPortlet</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialMappingUserPortlet.1</portlet-class>
-                        </portlet-frame>
-                    </grid-layout>
-                </portlet-panel>
-            </portlet-tab>
-            <portlet-tab>
-                <title>Jobs</title>
-                <portlet-panel>
-                    <grid-layout>
-                        <portlet-frame>
-                            <name>JobManagerPortlet</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.grid.job.JobManagerPortlet.1</portlet-class>
-                        </portlet-frame>
-                    </grid-layout>
-                </portlet-panel>
-            </portlet-tab>
-        </portlet-tabbed-pane>
-   </portlet-tab>
-   <portlet-tab>
-        <title>Examples</title>
-        <portlet-tabbed-pane style="sub-menu">
-            <portlet-tab>
-                <title>Hello World!</title>
-                <portlet-panel>
-                    <grid-layout>
-                        <portlet-frame>
-                            <name>HalloWelt</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.examples.HalloWelt.1</portlet-class>
-                        </portlet-frame>
-                        <portlet-frame>
-                            <name>HalloWelt</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.examples.HalloWelt.1</portlet-class>
-                        </portlet-frame>
-                        <portlet-frame>
-                            <name>HelloWorld</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.examples.HelloWorld.1</portlet-class>
-                        </portlet-frame>
-                        <portlet-frame>
-                            <name>HelloWorld</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.examples.HelloWorld.2</portlet-class>
-                        </portlet-frame>
-                    </grid-layout>
-                </portlet-panel>
-            </portlet-tab>
-            <portlet-tab>
-                <title>Demos</title>
-                <portlet-panel>
-                    <grid-layout>
-                        <portlet-frame>
-                            <name>DemoPortlet</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.examples.DemoPortlet.1</portlet-class>
-                        </portlet-frame>
-                    </grid-layout>
-                </portlet-panel>
-            </portlet-tab>
-        </portlet-tabbed-pane>
-    </portlet-tab>
 </portlet-tabbed-pane>
 
 <!-- Footer components (if any) -->
