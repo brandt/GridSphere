@@ -47,7 +47,7 @@ Copyright:
     <property name="version"         value="1.0"/>
     <property name="release"         value="ea-dev" />
     <property name="version.release" value="${version} ${release}"/>
-    <property name="project.name"    value="gridsphere"/>
+    <property name="gridsphere.project"    value="gridsphere"/>
     <property name="gridsphere.name" value="GridSphere ${version.release}"/>
     <property name="gridsphere.api" value="GridSphere Portal Framework API ${version.release}" />
 
@@ -130,7 +130,6 @@ Copyright:
            <property name="GRIDSPHERE_HOME" value="${gridsphere.home}/gridsphere"/>
          </else>
         </if>
-
 
         <property name="TEST_HOME" value="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/test"/>
 
@@ -408,7 +407,7 @@ Copyright:
             value="${DATABASE_NAME}"/>
         <replace file="${DATABASE_FILE}"
             token="@PROJECT_NAME@"
-            value="${project.name}"/>
+            value="${gridsphere.project}"/>
     </target>
 
     <target name="configure-test-database" depends="doclet-mapping">
@@ -426,14 +425,14 @@ Copyright:
             value="${DATABASE_NAME}"/>
         <replace file="${DATABASE_FILE}"
             token="@PROJECT_NAME@"
-            value="${project.name}"/>
+            value="${gridsphere.project}"/>
     </target>
 
     <target name="check-mapping">
         <echo message="force mapping: ${var_force_mapping}"/>
         <condition property="var_force_mapping">
             <not>
-                <available file="${GRIDSPHERE_HOME}/mapping/${project.name}mapping.xml"/>
+                <available file="${GRIDSPHERE_HOME}/mapping/${gridsphere.project}mapping.xml"/>
             </not>
         </condition>
     </target>
@@ -459,7 +458,7 @@ Copyright:
             private="true"
             doclet="org.castor.doclet.jdo.JDO"
             docletpath="lib/ext/jdom.jar;lib/ext/castor-doclet.jar"
-            additionalparam="-J-DFILE=${GRIDSPHERE_HOME}/mapping/${project.name}mapping.xml -J-DLOG=1">
+            additionalparam="-J-DFILE=${GRIDSPHERE_HOME}/mapping/${gridsphere.project}mapping.xml -J-DLOG=1">
             <classpath refid="classpath"/>
         </javadoc>
     </target>

@@ -208,7 +208,7 @@ Copyright:
     </target>
 
     <target name="doclet-mapping" depends="check-mapping" if="var_force_mapping">
-        <javadoc
+        <javadoc packagenames="*"
             sourcepath="src"
             private="true"
             doclet="org.castor.doclet.ddl.DDL"
