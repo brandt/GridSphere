@@ -6,9 +6,14 @@
  * To change template for new class use 
  * Code Style | Class Templates options (Tools | IDE Options).
  */
-package org.gridlab.gridsphere.services.core.security;
+package org.gridlab.gridsphere.services.core.security.auth;
+
+import java.util.Map;
+import java.util.TreeMap;
 
 public class AuthorizationException extends RuntimeException {
+
+    public Map invalidParameters = new TreeMap();
 
     public AuthorizationException() {
         super();
@@ -16,5 +21,13 @@ public class AuthorizationException extends RuntimeException {
 
     public AuthorizationException(String msg) {
         super(msg);
+    }
+
+    public Map getInvalidParameters() {
+        return this.invalidParameters;
+    }
+
+    public void putInvalidParameter(String name, String explanation) {
+        this.invalidParameters.put(name, explanation);
     }
 }

@@ -17,17 +17,14 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
-import org.gridlab.gridsphere.services.core.security.AuthenticationException;
-import org.gridlab.gridsphere.services.core.security.AuthenticationModule;
+import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.acl.*;
-import org.gridlab.gridsphere.services.core.security.impl.PasswordAuthenticationModule;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.security.password.impl.DbmsPasswordManagerService;
 import org.gridlab.gridsphere.services.core.user.AccountRequest;
 import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
-import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
 import java.util.Iterator;
@@ -35,14 +32,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-public class GridSphereUserManager implements LoginService, UserManagerService, AccessControlManagerService {
+public class GridSphereUserManager implements UserManagerService, AccessControlManagerService {
 
     private static PortletLog log = SportletLog.getInstance(GridSphereUserManager.class);
     private static GridSphereUserManager instance = new GridSphereUserManager();
     private PortletManagerService pms = null;
     private PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
     private PasswordManagerService passwordManagerService = DbmsPasswordManagerService.getInstance();
-    private List authenticationModules = new Vector();
 
     private static boolean isInitialized = false;
 
@@ -69,14 +65,10 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
             }
             initAccessControl(config);
             initRootUser(config);
-            initAuthenticationModules();
+
             log.info("Entering init()");
             isInitialized = true;
         }
-    }
-
-    private void initAuthenticationModules() {
-        authenticationModules.add(new PasswordAuthenticationModule());
     }
 
     private void initAccessControl(PortletServiceConfig config)
@@ -184,45 +176,18 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         log.info("Calling destroy()");
     }
 
-    public User login(String username, String password)
-            throws AuthenticationException {
-        User user = getAuthUser(username);
-        AuthenticationException ex = null;
-        Iterator modules = this.authenticationModules.iterator();
-        while (modules.hasNext()) {
-            AuthenticationModule module = (AuthenticationModule) modules.next();
-            try {
-                module.authenticate(user, password);
-            } catch (AuthenticationException e) {
-                if (ex == null) {
-                    ex = e;
-                }
-            }
-        }
-        if (ex != null) {
-            throw ex;
-        }
-        return user;
-    }
-
-    private User getAuthUser(Map parameters)
-            throws AuthenticationException {
-        String username = (String) parameters.get("username");
-        return getAuthUser(username);
-    }
-
     private User getAuthUser(String loginName)
-            throws AuthenticationException {
+            throws AuthorizationException {
         log.debug("Attempting to retrieve user " + loginName);
         if (loginName == null) {
-            AuthenticationException ex = new AuthenticationException();
+            AuthorizationException ex = new AuthorizationException();
             ex.putInvalidParameter("username", "No username provided.");
             throw ex;
         }
         User user = getUserByUserName(loginName);
         if (user == null) {
             log.debug("Unable to retrieve user " + loginName);
-            AuthenticationException ex = new AuthenticationException();
+            AuthorizationException ex = new AuthorizationException();
             ex.putInvalidParameter("username", "Invalid username provided.");
             throw ex;
         }

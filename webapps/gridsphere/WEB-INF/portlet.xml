@@ -26,6 +26,10 @@
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.LoginPortlet.1">
+            <context-param>
+                <param-name>login_module</param-name>
+                <param-value>PASSWORD_AUTH_MODULE</param-value>
+            </context-param>
             <concrete-portlet>
                 <portlet-name>Login</portlet-name>
                 <default-locale>en</default-locale>

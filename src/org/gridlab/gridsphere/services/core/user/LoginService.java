@@ -6,12 +6,17 @@ package org.gridlab.gridsphere.services.core.user;
 
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletService;
-import org.gridlab.gridsphere.services.core.security.AuthenticationException;
+import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
+import org.gridlab.gridsphere.services.core.security.auth.LoginAuthModule;
 
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionListener;
+import java.util.List;
+import java.util.Map;
 
 public interface LoginService extends PortletService {
+
+    public Map getSupportedAuthModules();
+
+    public void setActiveAuthModule(LoginAuthModule loginModule);
 
     /**
      * Login a user with the given login name and password.
@@ -21,17 +26,10 @@ public interface LoginService extends PortletService {
      * @param loginName the login name
      * @param loginPassword the login password.
      * @return User The associated user.
-     * @throws AuthenticationException If login unsuccessful
+     * @throws org.gridlab.gridsphere.services.core.security.auth.AuthorizationException If login unsuccessful
      */
     public User login(String loginName, String loginPassword)
-            throws AuthenticationException;
+            throws AuthorizationException;
 
-    /*
-    public void sessionCreated(HttpSession session);
-
-    public void sessionDestoyed(HttpSession session);
-
-    public void addSessionListener(HttpSessionListener sessionListener);
-    */
 
 }
