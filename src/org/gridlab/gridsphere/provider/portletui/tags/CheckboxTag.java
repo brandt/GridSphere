@@ -46,7 +46,7 @@ public class CheckboxTag extends BaseComponentTag {
                 checkbox.setSelected(selected);
                 this.setBaseComponentBean(checkbox);
             } else {
-                this.updateBaseComponentBean(checkbox);
+                this.overrideBaseComponentBean(checkbox);
             }
         } else {
             checkbox = new CheckBoxBean();

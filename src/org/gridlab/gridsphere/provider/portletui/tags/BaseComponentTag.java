@@ -207,6 +207,23 @@ public abstract class BaseComponentTag extends BaseBeanTag {
         }
     }
 
+    protected void overrideBaseComponentBean(BaseComponentBean componentBean) {
+        if (cssStyle != null) {
+            componentBean.setCssClass(cssStyle);
+        }
+        if (name != null) {
+            componentBean.setName(name);
+        }
+        if (value != null) {
+            componentBean.setValue(value);
+        }
+        if (supportsJavaScript()) {
+            supportsJS = true;
+        } else {
+            supportsJS = false;
+        }
+    }
+
     protected String getLocalizedText(String key) {
         return getLocalizedText(key, "Portlet");
     }
