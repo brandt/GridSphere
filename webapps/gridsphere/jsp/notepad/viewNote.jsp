@@ -47,7 +47,7 @@
                 <ui:text value="<%= text %>"/>
             <%
             } else { %>
-                <ui:textarea beanId="content"  value="<%= note.getContent() %>"/>
+                <ui:textarea beanId="content"  rows="20" cols="60" value="<%= note.getContent() %>"/>
             <%
             }
             %>
