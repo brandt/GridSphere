@@ -57,6 +57,7 @@ Copyright:
     <property name="build.javadoc" value="${build.docs}/javadocs"/>
     <property name="build.tests"   value="${gridsphere.build}/tests"/>
 
+
     <property environment="env"/>
 
     <!-- =================================================================== -->
@@ -419,7 +420,7 @@ Copyright:
             sourcepath="src"
             private="true"
             doclet="org.castor.doclet.ddl.DDL"
-            docletpath="lib/jdom.jar;lib/castor-doclet.jar"
+            docletpath="lib/ext/jdom.jar;lib/ext/castor-doclet.jar"
             additionalparam=" -J-DFILE=${GRIDSPHERE_HOME}/database/dbcreate.sql -J-DDB_TYPE=db2 -J-DLOG=1">
             <classpath refid="classpath"/>
         </javadoc>
@@ -427,7 +428,7 @@ Copyright:
             sourcepath="src"
             private="true"
             doclet="org.castor.doclet.jdo.JDO"
-            docletpath="lib/jdom.jar;lib/castor-doclet.jar"
+            docletpath="lib/ext/jdom.jar;lib/ext/castor-doclet.jar"
             additionalparam="-J-DFILE=${GRIDSPHERE_HOME}/mapping/docletmapping.xml -J-DLOG=1">
             <classpath refid="classpath"/>
         </javadoc>
