@@ -450,7 +450,7 @@ Copyright:
 
 <!-- +++++++++++++++ START DOCUMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
-    <target name="docs-all" depends="javadocs" description="Create GridSphere Documentation"/>
+    <target name="docs-all" depends="javadocs, docbook" description="Create GridSphere Documentation"/>
 
     <!-- =================================================================== -->
     <!-- Creates all the API documentation                                   -->
@@ -517,11 +517,7 @@ Copyright:
     <!-- Builds the GridSphere docbook documentation                         -->
     <!-- =================================================================== -->
     <target name="docbook" description="Builds the GridSphere docbook documentation.">
-        <mkdir dir="build/${docbook.dir}"/>
-        <copy todir="build/${docbook.dir}">
-            <fileset dir="${docbook.dir}"/>
-        </copy>
-        <ant dir="build/${docbook.dir}" target="docbook" inheritAll="false"/>
+        <ant dir="${docbook.dir}" target="docbook" inheritAll="false"/>
     </target>
 
 <!-- +++++++++++++++ END DOCUMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
@@ -760,7 +756,7 @@ Copyright:
             <fileset dir="${gridsphere.build}/reports">
                 <include name="TEST-*.xml"/>
             </fileset>
-            <report format="frames" todir="${gridsphere.build}/reports/html"/>
+            <report format="noframes" todir="${gridsphere.build}/reports/html"/>
         </junitreport>
     </target>
 
