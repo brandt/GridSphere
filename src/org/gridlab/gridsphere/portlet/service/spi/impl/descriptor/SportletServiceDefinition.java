@@ -5,11 +5,14 @@
 package org.gridlab.gridsphere.portlet.service.spi.impl.descriptor;
 
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
+import java.util.Enumeration;
+import java.io.IOException;
 
 /**
  * The <code>SportletServiceDefinition</code> defines a portlet service
@@ -17,13 +20,32 @@ import java.util.Vector;
  */
 public class SportletServiceDefinition {
 
+    protected SportletServiceDescriptor serviceDescriptor = null;
     protected String serviceName = "";
     protected String serviceDescription = "";
     protected String serviceInterface = "";
     protected String serviceImplementation = "";
     protected boolean userRequired = false;
-    protected List configParamList = new Vector();
+    protected Vector configParamList = new Vector();
     protected Properties configProps = null;
+
+    /**
+     * Sets the portlet service descriptor
+     *
+     * @param descriptor the portlet service descriptor
+     */
+    public void setServiceDescriptor(SportletServiceDescriptor descriptor) {
+        this.serviceDescriptor = descriptor;
+    }
+
+    /**
+     * Returns the portlet service descriptor
+     *
+     * @return  descriptor the portlet service descriptor
+     */
+    public SportletServiceDescriptor getServiceDescriptor() {
+        return serviceDescriptor;
+    }
 
     /**
      * Sets the portlet service name
@@ -131,7 +153,7 @@ public class SportletServiceDefinition {
      *
      * @return the configuration parameter list
      */
-    public List getConfigParamList() {
+    public Vector getConfigParamList() {
         return this.configParamList;
     }
 
@@ -161,6 +183,22 @@ public class SportletServiceDefinition {
         return configProps;
     }
 
+    /**
+     * Sets the configuration properties
+     *
+     * @param props the configuration properties
+     */
+    public void setConfigProperties(Properties props) {
+        Enumeration enum = props.keys();
+        if (!props.isEmpty()) {
+            configParamList = new Vector();
+        }
+        while (enum.hasMoreElements()) {
+            String key = (String)enum.nextElement();
+            ConfigParam param = new ConfigParam(key, props.getProperty(key));
+            configParamList.add(param);
+        }
+    }
 
     /**
      * Returns a <code>String</code> representation if this portlet service

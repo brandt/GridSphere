@@ -4,9 +4,9 @@
  */
 package org.gridlab.gridsphere.portlet.service.spi;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import java.util.Enumeration;
+import java.io.IOException;
 
 /**
  * The <code>PortletServiceConfig</code> is the interface through which
@@ -22,6 +22,14 @@ public interface PortletServiceConfig {
      * @return the init parameter
      */
     public String getInitParameter(String name);
+
+    /**
+     * Returns the init parameter with the given name.
+     *
+     * @param name the name of the init parameter.
+     * @param value the value of the init parameter
+     */
+    public void setInitParameter(String name, String value);
 
     /**
      * Returns the init parameter with the given name. It returns the given default
@@ -46,5 +54,12 @@ public interface PortletServiceConfig {
      * @return the servlet configuration
      */
     public ServletContext getServletContext();
+
+    /**
+     * Stores the service config settings
+     *
+     * @throws java.io.IOException if the store failed
+     */
+    public void store() throws IOException;
 
 }

@@ -22,7 +22,6 @@ import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManager;
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -117,6 +116,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         Iterator it = services.iterator();
         while (it.hasNext()) {
             SportletServiceDefinition serviceDef = (SportletServiceDefinition) it.next();
+            serviceDef.setServiceDescriptor(descriptor);
             allServices.put(serviceDef.getServiceInterface(), serviceDef);
             log.debug("adding service: " + serviceDef.getServiceInterface() + " service def: " + serviceDef.toString());
             serviceContexts.put(serviceDef.getServiceInterface(), ctx);
@@ -147,6 +147,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         Iterator it = services.iterator();
         while (it.hasNext()) {
             SportletServiceDefinition serviceDef = (SportletServiceDefinition) it.next();
+            serviceDef.setServiceDescriptor(descriptor);
             allServices.put(serviceDef.getServiceInterface(), serviceDef);
             log.debug("adding service: " + serviceDef.getServiceInterface() + " service def: " + serviceDef.toString());
             serviceContexts.put(serviceDef.getServiceInterface(), ctx);
@@ -213,10 +214,8 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             throw new PortletServiceNotFoundException("Unable to find implementing portlet service for interface: " + serviceName);
         }
 
-        Properties configProperties = def.getConfigProperties();
-
         ServletContext ctx = (ServletContext)serviceContexts.get(serviceName);
-        PortletServiceConfig portletServiceConfig = new SportletServiceConfig(service, configProperties, ctx);
+        PortletServiceConfig portletServiceConfig = new SportletServiceConfig(def, ctx);
 
         try {
             ClassLoader loader = (ClassLoader)classLoaders.get(serviceName);
@@ -316,10 +315,9 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             throw new PortletServiceNotFoundException("Unable to find implementing portlet service for interface: " + serviceName);
         }
 
-        Properties configProperties = def.getConfigProperties();
         ServletContext ctx = (ServletContext)serviceContexts.get(serviceName);
         PortletServiceConfig portletServiceConfig =
-                new SportletServiceConfig(service, configProperties, ctx);
+                new SportletServiceConfig(def, ctx);
 
         // Create an authroizer for the secure service
         PortletServiceAuthorizer auth = new SportletServiceAuthorizer(user, aclManager);
