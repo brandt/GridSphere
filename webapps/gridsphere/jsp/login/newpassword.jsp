@@ -7,7 +7,6 @@
 
 <ui:form>
 
-
 <h3><ui:text value="Update password" style="nostyle"/></h3>
 <ui:hiddenfield beanId="reqid"/>
 <ui:group>

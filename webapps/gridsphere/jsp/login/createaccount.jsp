@@ -2,9 +2,8 @@
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 <ui:form>
-<ui:panel>
 
-    <ui:frame beanId="errorFrame"/>
+    <ui:messagebox beanId="msg"/>
 
     <ui:frame>
 
@@ -17,6 +16,7 @@
             </ui:tablecell>
         </ui:tablerow>
 
+        <%--
         <ui:tablerow>
             <ui:tablecell width="200">
                 <ui:text key="FAMILYNAME"/>
@@ -34,6 +34,7 @@
                 <ui:textfield beanId="givenName"/>
             </ui:tablecell>
         </ui:tablerow>
+        --%>
 
         <ui:tablerow>
             <ui:tablecell width="200">
@@ -91,6 +92,5 @@
         </ui:tablerow>
     </ui:frame>
 
-</ui:panel>
 </ui:form>
 

@@ -4,7 +4,7 @@
 <portletAPI:init/>
 
 <ui:form>
-    <ui:messagebox beanId="errorFrame"/>
+    <ui:messagebox beanId="msg"/>
 
     <ui:table>
             <ui:tablerow>

@@ -14,7 +14,7 @@
                     <ui:text key="LOGIN_REQUEST_EMAIL"/>
                 </ui:tablecell>
                 <ui:tablecell width="60">
-                    <ui:textfield beanId="emailTF" size="20" maxlength="20"/>
+                    <ui:textfield beanId="emailTF" size="25" maxlength="40"/>
                 </ui:tablecell>
                 <ui:tablecell/>
             </ui:tablerow>
