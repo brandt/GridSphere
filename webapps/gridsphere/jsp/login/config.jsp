@@ -1,9 +1,12 @@
 <%@ page import="java.util.List,
                  java.util.Iterator,
-                 org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule"%>
+                 org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule,
+                 org.gridlab.gridsphere.portlet.PortletRequest"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
+<portletAPI:init/>
 
+<% PortletRequest pReq = (PortletRequest)pageContext.getAttribute("portletRequest"); %>
 <% List authModules = (List)request.getAttribute("authModules"); %>
 
 <portletAPI:init/>
@@ -105,7 +108,7 @@
             <ui:textfield name="<%= authModule.getModuleName() %>" value="<%= String.valueOf(authModule.getModulePriority()) %>" size="3"/>
         </ui:tablecell>
          <ui:tablecell>
-            <ui:text value="<%= authModule.getModuleDescription() %>"/>
+            <ui:text value="<%= authModule.getModuleDescription(pReq.getLocale()) %>"/>
         </ui:tablecell>
     </ui:tablerow>
 

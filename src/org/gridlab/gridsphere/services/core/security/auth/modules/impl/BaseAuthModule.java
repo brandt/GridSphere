@@ -5,11 +5,9 @@ import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
+import org.gridlab.gridsphere.core.persistence.castor.descriptor.Description;
 
-import java.util.Map;
-import java.util.List;
-import java.util.Iterator;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
@@ -46,8 +44,19 @@ public abstract class BaseAuthModule implements Comparable {
         return moduleDef.getModuleName();
     }
 
-    public String getModuleDescription() {
-        return moduleDef.getModuleDescription();
+    public String getModuleDescription(Locale locale) {
+        System.err.println("hello");
+        List modDescs = moduleDef.getModuleDescriptions();
+        if (locale == null) throw new IllegalArgumentException("locale is NULL");
+        Iterator it = modDescs.iterator();
+        String defTitle = "";
+        while (it.hasNext()) {
+            Description t = (Description) it.next();
+            if (t.getLang() == null) t.setLang(Locale.ENGLISH.getLanguage());
+            if (locale.getLanguage().equals(new Locale(t.getLang(), "", "").getLanguage())) return t.getText();
+            if (t.getLang().equals(Locale.ENGLISH.getLanguage())) defTitle = t.getText();
+        }
+        return defTitle;
     }
 
     public int getModulePriority() {

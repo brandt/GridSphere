@@ -4,6 +4,7 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
 
 import java.util.Map;
+import java.util.Locale;
 
 /**
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
@@ -19,7 +20,7 @@ public interface LoginAuthModule extends Comparable {
 
     public String getModuleName();
 
-    public String getModuleDescription();
+    public String getModuleDescription(Locale locale);
 
     public int getModulePriority();
 

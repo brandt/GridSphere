@@ -77,11 +77,13 @@ public class RequestServiceImpl implements RequestService, PortletServiceProvide
         Iterator it = reqs.iterator();
         while (it.hasNext()) {
             GenericRequest req = (GenericRequest)it.next();
-            if (date.compareTo(req.getLifetime()) >= 0) {
+            if (req.getLifetime() == null) {
+                log.debug("deleting request with no lifetime specified " + req.getOid());
+                deleteRequest(req);
+            } else if (date.compareTo(req.getLifetime()) >= 0) {
                 System.err.println("my date=" +  date);
                 System.err.println("req lifetime=" +  req.getLifetime());
                 log.debug("deleting request " + req.getOid());
-
                 deleteRequest(req);
             }
         }

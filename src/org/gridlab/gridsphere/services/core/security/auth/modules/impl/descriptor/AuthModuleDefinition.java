@@ -19,7 +19,8 @@ public class AuthModuleDefinition {
     protected AuthModulesDescriptor authDescriptor = null;
     private String oid = null;
     protected String moduleName = "";
-    protected String moduleDescription = "";
+    private List moduleDescriptions = new Vector();
+
     protected int priority = 100;
     protected String moduleImplementation = "";
     protected boolean moduleActive = false;
@@ -35,7 +36,6 @@ public class AuthModuleDefinition {
     public void setOid(String oid) {
         this.oid = oid;
     }
-
 
     /**
      * Sets the auth module descriptor
@@ -78,17 +78,17 @@ public class AuthModuleDefinition {
      *
      * @param moduleDescription the portlet service description
      */
-    public void setModuleDescription(String moduleDescription) {
-        this.moduleDescription = moduleDescription;
+    public void setModuleDescriptions(List moduleDescriptions) {
+        this.moduleDescriptions = moduleDescriptions;
     }
 
     /**
-     * Returns the portlet service name
+     * Returns the module descriptions
      *
-     * @return the portlet service name
+     * @return the module descriptions
      */
-    public String getModuleDescription() {
-        return this.moduleDescription;
+    public List getModuleDescriptions() {
+        return this.moduleDescriptions;
     }
 
     /**
@@ -227,7 +227,7 @@ public class AuthModuleDefinition {
     public String toString() {
         StringBuffer sb = new StringBuffer("\n");
         sb.append("auth module name: " + this.moduleName + "\n");
-        sb.append("auth module description: " + this.moduleDescription + "\n");
+        //sb.append("auth module description: " + this.moduleDescription + "\n");
         sb.append("auth module implementation: " + this.moduleImplementation + "\n");
         sb.append("auth module priority: " + this.priority + "\n");
         sb.append("config properties: ");

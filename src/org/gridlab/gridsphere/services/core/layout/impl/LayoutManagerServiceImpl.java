@@ -16,6 +16,7 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 
 import java.util.Vector;
+import java.util.ArrayList;
 
 /**
  * The <code>LayoutManagerService</code> manages users layouts
@@ -40,7 +41,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
     public void reloadPage(PortletRequest req) {
         PortletPage page = pageFactory.createPortletPage(req);
 
-        page.init(req, new Vector());
+        page.init(req, new ArrayList());
     }
 
     public void refreshPage(PortletRequest req) {
