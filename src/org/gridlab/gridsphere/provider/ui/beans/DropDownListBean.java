@@ -81,6 +81,7 @@ public class DropDownListBean extends BaseListBean implements DropDownList {
         Iterator it = list.iterator();
         while (it.hasNext()) {
             Selectable item = (Selectable)it.next();
+            item.setCID(this.cid);
             result = result + item.toString();
         }
         result = result +"</select>";

@@ -43,6 +43,7 @@ public class CheckBoxListBean extends DropDownListBean {
         Iterator it = list.iterator();
         while (it.hasNext()) {
             SelectElementBean seb =  ((SelectElementBean)it.next());
+            seb.setCID(this.cid);
             result = result + seb.toString();
             if (seb.getLabel()!=null) {
                 result = result + seb.getLabel().getValue();

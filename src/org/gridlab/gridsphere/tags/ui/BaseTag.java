@@ -194,6 +194,8 @@ public class BaseTag extends TagSupport {
         } else {
             try {
                 JspWriter out = pageContext.getOut();
+                // print out the beantag
+                htmlelement.setCID(pageContext.getRequest().getAttribute(GridSphereProperties.COMPONENT_ID).toString());
                 out.print(htmlelement.toString());
                 log.debug("Jup we got content :"+htmlelement.toString()+" for "+GridSphereProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID)+":"+bean);
             } catch (Exception e) {

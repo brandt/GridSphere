@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import javax.servlet.http.HttpSession;
+import javax.servlet.ServletRequest;
 
 /**
  * <code>BaseElementBean</code> is an implementation of the TagBean interface.
@@ -25,7 +26,12 @@ public abstract class BaseElementBean implements TagBean {
     protected String backgroundcolor = new String();
     protected String cssStyle = new String();
     protected String font = new String();
+    protected String cid = new String();    // cid of the portlet the bean belongs to
 
+    public void setCID(String id) {
+        this.cid = id;
+        log.debug("settig cid to :"+this.cid +"("+id+")");
+    }
 
     public BaseElementBean() {
         super();
@@ -139,7 +145,7 @@ public abstract class BaseElementBean implements TagBean {
      * @return tagidentifier
      */
     protected String getTagName() {
-        return "gstag:";
+        return "gstag:cid:"+this.cid+":";
     }
 
     protected String getCSS(String text) {

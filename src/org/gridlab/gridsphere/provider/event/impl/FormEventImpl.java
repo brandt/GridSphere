@@ -144,8 +144,9 @@ public class FormEventImpl implements FormEvent {
                 return tbean;
             } else {
                // session.setAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name, bean);
-                String[] values = request.getParameterValues("gstag:" + bean.getName());
-                log.debug("Updating bean: " + " name req: "+name+" bean name: "+bean.getName());
+                String paramval = "gstag:"+GridSphereProperties.COMPONENT_ID+":"+request.getAttribute(GridSphereProperties.COMPONENT_ID).toString()+":"+ bean.getName();
+                String[] values = request.getParameterValues(paramval);
+                log.debug("Updating bean: " + " name req: "+name+" bean name: "+bean.getName()+"("+paramval+")");
                 bean.update(values);
                 session.setAttribute(beanKey, bean);
                 return bean;
