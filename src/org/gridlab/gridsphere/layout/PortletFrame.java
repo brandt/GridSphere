@@ -13,8 +13,8 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
 import org.gridlab.gridsphere.services.container.registry.PortletRegistryServiceException;
 import org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryServiceImpl;
-import org.gridlab.gridsphere.services.container.caching.CachingService;
-import org.gridlab.gridsphere.services.container.caching.impl.PortletCachingServiceImpl;
+//import org.gridlab.gridsphere.services.container.caching.CachingService;
+//import org.gridlab.gridsphere.services.container.caching.impl.PortletCachingServiceImpl;
 import org.gridlab.gridsphere.event.ActionEvent;
 
 import java.io.IOException;
