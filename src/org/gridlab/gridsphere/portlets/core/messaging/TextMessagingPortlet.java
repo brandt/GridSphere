@@ -8,13 +8,12 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.services.core.messaging.TextMessagingService;
-import org.gridlab.gridsphere.tmf.Message;
-import org.gridlab.gridsphere.tmf.config.User;
+import org.gridlab.gridsphere.tmf.TmfMessage;
 import org.gridlab.gridsphere.tmf.config.Messagetype;
 import org.gridlab.gridsphere.tmf.config.TmfService;
+import org.gridlab.gridsphere.tmf.config.TmfUser;
 
 import javax.servlet.UnavailableException;
-import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -51,7 +50,7 @@ public class TextMessagingPortlet extends ActionPortlet {
 
         for (int i=0;i<users.size();i++)  {
             ListBoxItemBean u = new ListBoxItemBean();
-            User user = (User)users.get(i);
+            TmfUser user = (TmfUser)users.get(i);
             List services = user.getMessagetype();
             String types = new String();
             for (int j=0;j<services.size();j++) {
@@ -83,11 +82,24 @@ public class TextMessagingPortlet extends ActionPortlet {
         ListBoxBean users = event.getListBoxBean("userlist");
         ListBoxBean services = event.getListBoxBean("services");
 
-        Message m = tms.createNewMessage();
-        m.setMessageType(services.getSelectedValue());
-        m.setRecipient(users.getSelectedValue());
-        m.setBody(message.getValue());
-        tms.send(m);
+        FrameBean frame = event.getFrameBean("errorFrame");
+        frame.setStyle(FrameBean.ERROR_TYPE);
+
+        if (users.getSelectedValue()==null) {
+            frame.setKey("MESSAGING_NOUSERSELECTED");
+        } else {
+
+            if (tms.isUserOnService(users.getSelectedValue(), services.getSelectedValue())) {
+                TmfMessage m = tms.createNewMessage();
+                m.setMessageType(services.getSelectedValue());
+                m.setRecipient(users.getSelectedValue());
+                m.setBody(message.getValue());
+                tms.send(m);
+            } else {
+                frame.setKey("MESSAGING_USERNOTONSERVICE");
+            }
+        }
+
         setNextState(event.getPortletRequest(), "doStart");
 
     }
@@ -123,7 +135,7 @@ public class TextMessagingPortlet extends ActionPortlet {
         List users = tms.getUsers();
 
         for (int i=0; i<users.size();i++) {
-            User u = (User)users.get(i);
+            TmfUser u = (TmfUser)users.get(i);
             if (u.getUserid().equals(request.getUser().getUserID())) {
                 TextFieldBean username = event.getTextFieldBean("username");
                 username.setValue(u.getUserNameForMessagetype(service));
@@ -145,10 +157,10 @@ public class TextMessagingPortlet extends ActionPortlet {
         HiddenFieldBean h_userid = event.getHiddenFieldBean("Huserid");
         TextFieldBean username = event.getTextFieldBean("username");
 
-        User user = tms.getUser(h_userid.getValue());
+        TmfUser user = tms.getUser(h_userid.getValue());
         // if the user does not exist yet
         if (user==null) {
-            user = new User();
+            user = new TmfUser();
             user.setName(event.getPortletRequest().getUser().getFullName());
             user.setUserid(h_userid.getValue());
             user.setPreferred(h_service.getValue());
@@ -158,7 +170,7 @@ public class TextMessagingPortlet extends ActionPortlet {
         if (!delete) {
             user.setMessageType(h_service.getValue(), username.getValue());
         }
-        tms.setUser(user);
+        tms.saveUser(user);
         request.setMode(Portlet.Mode.VIEW);
         setNextState(request, "doStart");
 

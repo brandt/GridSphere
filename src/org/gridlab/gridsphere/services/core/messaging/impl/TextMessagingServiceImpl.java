@@ -6,9 +6,10 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.tmf.Message;
 import org.gridlab.gridsphere.tmf.TmfCore;
-import org.gridlab.gridsphere.tmf.config.User;
+import org.gridlab.gridsphere.tmf.TmfMessage;
+import org.gridlab.gridsphere.tmf.TmfConfig;
+import org.gridlab.gridsphere.tmf.config.TmfUser;
 
 import java.util.List;
 
@@ -23,11 +24,11 @@ public class TextMessagingServiceImpl  implements TextMessagingService, PortletS
 
     private TmfCore core = null;
 
-    public Message createNewMessage() {
+    public TmfMessage createNewMessage() {
         return core.getNewMessage();
     }
 
-    public void send(Message message) {
+    public void send(TmfMessage message) {
         core.send(message);
     }
 
@@ -49,19 +50,34 @@ public class TextMessagingServiceImpl  implements TextMessagingService, PortletS
      * @return
      */
     public List getUsers() {
-        return core.getUsers();
+        TmfConfig config = core.getTmfConfig();
+        return config.getUserlist().getUserlist();
     }
 
     public List getServices() {
-        return core.getServiceConfig();
+        TmfConfig config = core.getTmfConfig();
+        return config.getActiveservices();
     }
 
-    public void setUser(User user) {
-        core.setUser(user);
+    public void saveUser(TmfUser user) {
+        TmfConfig config = core.getTmfConfig();
+        config.setUser(user);
     }
 
-    public User getUser(String userid) {
-        return core.getUser(userid);
+    public TmfUser getUser(String userid) {
+        TmfConfig config = core.getTmfConfig();
+        return config.getUser(userid);
+    }
+
+    public boolean isUserOnService(String userid, String messagetype) {
+        TmfConfig config = core.getTmfConfig();
+        TmfUser u = config.getUser(userid);
+        boolean result = (u.getUserNameForMessagetype(messagetype)!=null);
+        return result;
+    }
+
+    public boolean isUserOnline(String userid, String messagetype) {
+        return false;
     }
 
 }
