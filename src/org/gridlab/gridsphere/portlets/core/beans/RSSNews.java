@@ -20,7 +20,7 @@ import java.net.URL;
 public class RSSNews {
 
     private static RSSNews instance = new RSSNews();
-    private int fetchinterval = 60;         // in seconds
+    private int fetchinterval = 300;         // in seconds
 
     Vector feeds = new Vector();
 
@@ -82,6 +82,10 @@ public class RSSNews {
 
         version = root.getAttributeValue("version");
         result = result + ("RSS feed from URL: "+feed.getUrl());
+        result = result + "<br/>Next refresh in ";
+        long next = ((feed.getLastfetched()+1000*getFetchinterval())-System.currentTimeMillis())/1000;
+
+        result = result + next + " seconds.<p/> ";
 
         try {
             if (version.equals("2.0") || version.equals("3.14159265359")) {
