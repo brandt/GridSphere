@@ -109,12 +109,9 @@
                    for (int ii = 0; ii < allRoles.size(); ++ii) {
                        PortletRole thatRole = (PortletRole)allRoles.get(ii);
                        if (thisRole.equals(thatRole)) { %>
-               <option label="<%=thatRole.toString()%>"
-                       value="<%=thatRole.toString()%>"
-                       selected="true"/>
+               <option label="<%=thatRole.toString()%>" selected="true"><%=thatRole.toString()%></option>
                <%     } else { %>
-               <option label="<%=thatRole.toString()%>"
-                       value="<%=thatRole.toString()%>"/>
+               <option label="<%=thatRole.toString()%>"><%=thatRole.toString()%></option>
                <%     }
 
                     } %>

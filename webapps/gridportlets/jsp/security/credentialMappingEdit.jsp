@@ -78,7 +78,7 @@
        Iterator userIterator = userList.iterator();
        while (userIterator.hasNext()) {
            User user = (User)userIterator.next(); %>
-            <option value="<%=user.getID()%>" label="<%=user.getUserName()%>&nbsp;[<%=user.getFullName()%>]"/>
+            <option value="<%=user.getID()%>"><%=user.getUserName()%>&nbsp;[<%=user.getFullName()%></option>
 <%     } %>
            </select>
          </td>
