@@ -2,13 +2,13 @@
 <!--
 
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
-  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
-    Author:     Jason Novotny
-    Version:    $Id$
+Author:     Jason Novotny
+Version:    $Id$
 -->
 
-<chapter id="intro">
+<sect1>
     <title>Introduction</title>
     <para>
     The GridSphere User's Guide describes how to install and configure GridSphere.
@@ -23,10 +23,11 @@
     compatible servlet container, currently Tomcat 4.1+ and Tomcat 5 are supported
 
     </para>
+</sect1>
 
-    <sect1>
-        <title>Required Tools and Applications</title>
-        <itemizedlist>
+<sect1>
+    <title>Required Tools and Applications</title>
+    <itemizedlist>
         <listitem><para>JDK 1.4.2 or JDK 1.3.1 &JDK; or JRE if you don't need to build any
         source. DO NOT USE JDK 1.4.1 since it contains a broken Xalan library.</para></listitem>
         <listitem><para>Jakarta Ant 1.5.3-1+ &Ant; is used to compile and deploy
@@ -37,72 +38,72 @@
             application that allows for dynamic portlet management.)
             (Make sure you get the full Tomcat version and not the Light Edition (LE))
         </para></listitem>
-        </itemizedlist>
-    </sect1>
-
-    <sect1>
-    	<title>Bundled Software Packages</title>
-	<para>GridSphere uses many quality open source libraries listed below for completeness: It is not recommended to 
-	replace the bundled libaries.
-	</para>
-	<itemizedlist>
-	<listitem><para>&Castor; is used to provide Java to XML bindings</para></listitem>
-    <listitem><para>&Hibernate; is used to provide SQL based database support</para></listitem>
-    <listitem><para>&JUnit; provides a unit testing framework</para></listitem>
-    <listitem><para>&Cactus; provides a unit testing framework for testing GridSphere in a servlet container</para></listitem>
-    <listitem><para>&Log4J; provides an optimized logging library</para></listitem>
-    <listitem><para>&HSQL; database provides a pure Java SQL database</para></listitem>
-    <listitem><para>&Commons; utility classes for performing file uploads, etc.</para></listitem>
-    <listitem><para>&Xalan; is used for XSLT processing</para></listitem>
     </itemizedlist>
-   </sect1>
-    
-    <sect1>
-    	<title>Installing Jakarta Ant</title>
-	<para>In order to build the source distribution or deploy GridSphere to a Tomcat 
+</sect1>
+
+<sect1>
+    <title>Bundled Software Packages</title>
+    <para>GridSphere uses many quality open source libraries listed below for completeness: It is not recommended to
+	replace the bundled libaries.
+    </para>
+    <itemizedlist>
+        <listitem><para>&Castor; is used to provide Java to XML bindings</para></listitem>
+        <listitem><para>&Hibernate; is used to provide SQL based database support</para></listitem>
+        <listitem><para>&JUnit; provides a unit testing framework</para></listitem>
+        <listitem><para>&Cactus; provides a unit testing framework for testing GridSphere in a servlet container</para></listitem>
+        <listitem><para>&Log4J; provides an optimized logging library</para></listitem>
+        <listitem><para>&HSQL; database provides a pure Java SQL database</para></listitem>
+        <listitem><para>&Commons; utility classes for performing file uploads, etc.</para></listitem>
+        <listitem><para>&Xalan; is used for XSLT processing</para></listitem>
+    </itemizedlist>
+</sect1>
+
+<sect1>
+    <title>Installing Jakarta Ant</title>
+    <para>In order to build the source distribution or deploy GridSphere to a Tomcat
 	servlet container, you will need to download Jakarta Ant. Ant is also used to run
 	the unit tests.
-	</para>
-	<orderedlist>
-	<listitem><para>Download &Ant; 1.5+ distribution</para></listitem>
-	<listitem><para>Unzip ant into your preferred location and set the ANT_HOME environment to point to this location</para></listitem>
-	<listitem><para>Copy junit.jar from your GRIDSPHERE_HOME/lib into ANT_HOME/lib (only necessary if you want to run the tests)</para></listitem>
-	<listitem><para>Add ANT_HOME/bin to your PATH environment</para></listitem>
-	</orderedlist>
-    </sect1>
-    
-    <sect1>
-    	<title>Installing Jakarta Tomcat</title>
-	<para>The Jakarta Tomcat servlet container is required to provide a hosting environment
+    </para>
+    <orderedlist>
+        <listitem><para>Download &Ant; 1.5+ distribution</para></listitem>
+        <listitem><para>Unzip ant into your preferred location and set the ANT_HOME environment to point to this location</para></listitem>
+        <listitem><para>Copy junit.jar from your GRIDSPHERE_HOME/lib into ANT_HOME/lib (only necessary if you want to run the tests)</para></listitem>
+        <listitem><para>Add ANT_HOME/bin to your PATH environment</para></listitem>
+    </orderedlist>
+</sect1>
+
+<sect1>
+    <title>Installing Jakarta Tomcat</title>
+    <para>The Jakarta Tomcat servlet container is required to provide a hosting environment
 	for the GridSphere framework.
-	</para>
-	<orderedlist>
-	<listitem><para>Download Jakarta &Tomcat; distribution</para></listitem>
-	<listitem><para>Unzip tomcat into your preferred location and set the CATALINA_HOME environment to point to this location <important>If using Windows, set the path with forward slashes e.g C:/MyApps/MyTomcat-4.29!</important></para></listitem>
+    </para>
+    <orderedlist>
+        <listitem><para>Download Jakarta &Tomcat; distribution</para></listitem>
+        <listitem><para>Unzip tomcat into your preferred location and set the CATALINA_HOME environment to point to this location <important>If using Windows, set the path with forward slashes e.g C:/MyApps/MyTomcat-4.29!</important></para></listitem>
 
-    <listitem><para>The Portlet Manager Portlet requires the Tomcat manager webapp to be configured to
+        <listitem><para>The Portlet Manager Portlet requires the Tomcat manager webapp to be configured to
     allow the gridsphere user to manage web applications. You must modify
-        <filename>$CATALINA_HOME/conf/tomcat-users.xml</filename> and make sure the following line is there:
-	<programlisting><literallayout>
-
-        <![CDATA[<user username="gridsphere" password="gridsphere" roles="manager"/>]]>
-
-    </literallayout></programlisting>
-	</para>
-	<para>To ensure that clients can't access the manager webapp directly, modify
-        <filename>$CATALINA_HOME/conf/server.xml</filename>
+            <filename>$CATALINA_HOME/conf/tomcat-users.xml</filename> and make sure the following line is there:
+            <programlisting><literallayout>
+<![CDATA[
+<user username="gridsphere" password="gridsphere" roles="manager"/>
+ ]]>
+            </literallayout></programlisting>
+        </para>
+            <para>To ensure that clients can't access the manager webapp directly, modify
+                <filename>$CATALINA_HOME/conf/server.xml</filename>
 	with the following where $CATALINA_HOME is replaced with the actual path to Tomcat e.g. "/usr/local/tomcat":
-	<programlisting><literallayout>
+                <programlisting><literallayout>
+<![CDATA[
+<Context path="/manager" debug="0" privileged="true"
+    docBase="$CATALINA_HOME/server/webapps/manager">
+    <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+        allow="127.0.0.1"/>
+</Context>
+ ]]>
+                </literallayout></programlisting>
+<important>Make sure there are no line-breaks between beginning and closing tags!</important>
+                </para></listitem>
 
-        <![CDATA[<Context path="/manager" debug="0" privileged="true"
-                 docBase="$CATALINA_HOME/server/webapps/manager">
-                 <Valve className="org.apache.catalina.valves.RemoteAddrValve"
-                 allow="127.0.0.1"/>
-        </Context>]]>
-    <important>Make sure there are no line-breaks between beginning and closing tags!</important>
-    </literallayout></programlisting></para></listitem>
-
-	</orderedlist>
-    </sect1>
-
-</chapter>
+    </orderedlist>
+</sect1>

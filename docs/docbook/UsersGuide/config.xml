@@ -2,13 +2,13 @@
 <!--
 
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
-  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
-    Author:     Jason Novotny
-    Version:    $Id$
+Author:     Jason Novotny
+Version:    $Id$
 -->
 
-<chapter id="config">
+<sect1>
     <title>Configuration</title>
     <para>
         Before deploying GridSphere to a servlet container, various configuration settings can
@@ -16,9 +16,10 @@
         web applications that are started at run time. Below is a description of the various configuration files
         and how they are used.
     </para>
+</sect1>
 
-    <sect1>
-        <title>Initialized Portlet Web Applications</title>
+<sect1>
+    <title>Initialized Portlet Web Applications</title>
         When deployed, GridSphere requires access to deployed portlet web applications. Since portlets are packaged according
         to the web application repository (WAR) format defined in the Java 2.3 Servlet Specification, the names of the
         WAR files or web applications needs to be added as an empty file whose filename is defined by the name of portlet web application
@@ -27,85 +28,50 @@
         you will see <filename>$CATALINA_HOME/webapps/gridsphere/WEB-INF/Portlets/gridsphere.1</filename> which instructs
         the container to load the set of core gridsphere portlets first. Below is a sample directory listing showing
         a deployed GridSphere and a couple additional portlet applications:
-        <example>
-            <programlisting>
-                <literallayout>
-                 %> ls $CATALINA_HOME/webapps/gridsphere/WEB-INF/Portlets/
-grid            gridsphere.1    jsrtutorial  examplets  mysamples.2
-                </literallayout>
-            </programlisting>
-        </example>
-    </sect1>
+    <example>
+        <programlisting>
+            <literallayout>
+%>ls $CATALINA_HOME/webapps/gridsphere/WEB-INF/Portlets/
 
-    <sect1>
-        <title>Portal Layout Configuration</title>
+grid   gridsphere.1    jsrtutorial  examplets  mysamples.2
+            </literallayout>
+        </programlisting>
+    </example>
+</sect1>
+
+<sect1>
+    <title>Portal Layout Configuration</title>
         The defined layouts used in GridSphere are found in <filename>webapps/gridpshere/WEB-INF/layouts</filename> of your GridSphere
         distribution and contain the <filename>GuestUserLayout.xml</filename>
         which defines the guest layout. Initially before a user has logged in, they will see
         the layout as presented in <filename>GuestUserLayout.xml</filename>. The guest layout contains the Login portlet
         to allow people to login and little else. This file may be edited to provide additional portlets to guest portal
-        users.
+        users. Group layouts specify the layout for a particular group and are stored in
+    <filename>$CATALINA_HOME/webapps/gridsphere/WEB-INF/layouts/groups</filename>. Please see the GridSphere Administartor's Guide for
+    more information on customizing group layouts.
         Users' layouts are persisted and stored in <filename>$CATALINA_HOME/webapps/gridsphere/WEB-INF/layouts/users</filename>.
         Simply removing any of these layout files will force a new one to be created when a user logs in.
-    </sect1>
+</sect1>
 
-    <sect1>
-    	<title>Core GridSphere Portlets Configuration</title>
-        As described in greater detail in the Portlet Developers Guide, the portlet service descriptor file in
-        <filename>PortletServices.xml</filename> defines the portlet services that are used by a portlet web
-        application. The core portlets provided by GridSphere are defined in <filename>webapps/gridsphere/WEB-INF</filename>
-        directory as <filename>portlet.xml</filename>. The core services are defined in
-        <filename>PortletServices.xml</filename>. The User Account Manager Service defines the service used to manage
-        portal users and is configured in the following service definition of <filename>PortletServices.xml</filename>
-        <example><title>The User Account Manager Service Definition</title>
-        <programlisting><literallayout>
-            <![CDATA[
-<service>
-    <name>User Account Manager Service</name>
-    <user-required>true</user-required>
-    <description>Provides User Administration Capabilities</description>
-    <interface>org.gridlab.gridsphere.services.core.user.UserManagerService</interface>
-    <implementation>
-        org.gridlab.gridsphere.services.core.user.impl.UserManagerServiceImpl
-    </implementation>
-    <service-config>
-        <param-name>userID</param-name>
-        <param-value>root</param-value>
-    </service-config>
-    <service-config>
-        <param-name>password</param-name>
-        <param-value></param-value>
-    </service-config>
-</service>]]>
-    </literallayout></programlisting>
-    The initial <emphasis>root</emphasis> password is initially blank meaning that when the
-    portal first starts up, you can login as <emphasis>root</emphasis> with no password and then
-    change the password using the portal. In general, there should be no reason to edit the
-    <filename>PortletServices.xml</filename> services description of the core portlets.
-    </example>
-    </sect1>
-
-    <sect1>
-        <title>Database Configuration</title>
+<sect1>
+    <title>Database Configuration</title>
             By default, GridSphere is configured (using Hibernate) to use HSQL pure Java database. To configure
             GridSphere to use some other database, please edit the
-            <filename>gridsphere/webapps/gridsphere/WEB-INF/persistence/hibernate.properties</filename> before deploying.
+    <filename>gridsphere/webapps/gridsphere/WEB-INF/persistence/hibernate.properties</filename> before deploying.
             file and comment out the HSQL lines and uncomment the lines for the database you wish to use.
             The connection url setting should point to the physical location of your database.
             The same applies if you want to deploy any 3rd party webapp which uses persistence.
             The configuration file is
             located in  <filename>webapp/WEB-INF/persistence/hibernate.properties</filename>.
             The default is as well to use the internal HSQL database with no modification needed.
-    </sect1>
+</sect1>
 
-    <sect1>
-        <title>Messaging Configuration</title>
+<sect1>
+    <title>Messaging Configuration</title>
         To take advantage of GridSphere's messaging system you need to edit  <filename>gridsphere/webapps/WEB-INF/tmfconfig/tmf.xml</filename>.
         Please enable the services and the configuration files for the services you want to use. Currently mail and
         AOL Aim service are supported. For AIM you need to edit <filename>gridsphere/webapps/WEB-INF/tmfconfig/services/aim.xml</filename>  and
         fill in the approriate values for the username/password for the aimbot you wish to use.
         For Mail modification of <filename>gridsphere/webapps/WEB-INF/tmfconfig/services/mail.xml</filename> with the values of
         MailServer, Port and Sender is needed. Redeploy gridsphere after making any changes.
-    </sect1>
-
-</chapter>
+</sect1>

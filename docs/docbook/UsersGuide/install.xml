@@ -2,145 +2,136 @@
 <!--
 
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
-  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
-    Author:     Jason Novotny
-    Version:    $Id$
+Author:     Jason Novotny
+Version:    $Id$
 -->
 
-<chapter id="install">
+<sect1>
     <title>Deployment and Testing</title>
     <para>
-        As explained in the INSTALL file, GridSphere relies on &Ant; for its compilation
-        and deployment. The build script,
+As explained in the INSTALL file, GridSphere relies on &Ant; for its compilation
+and deployment. The build script,
         <filename>build.xml</filename> provides various
-        targets for compiling, deploying, building documentation, creating new portlet projects,
-        running unit tests and making test reports.
+targets for compiling, deploying, building documentation, creating new portlet projects,
+running unit tests and making test reports.
     </para>
+</sect1>
 
-    <sect1>
-        <title>Deploying GridSphere</title>
-        <para>
-          From inside the GridSphere source directory, you should be able to issue:
-            <programlisting>ant install</programlisting> which will
-        compile the framework code, create documentation if necessary and deploy GridSphere
-        to a Tomcat container. You may notice lots of verbose logging during the document creation
-          phase and the database creation. You can safely ignore all [schemaexport] statements that
-          say
-            <programlisting>"[schemaexport] Unsuccessful: Table not found:"</programlisting>
-          At the end of installing you should see
-            <programlisting>BUILD SUCCESSFUL</programlisting>.
-          Once this has completed succesfully, you should be able to start
-        up Tomcat by issuing the following:
-            <programlisting>
-              cd $CATALINA_HOME
-              ./startup.sh (or startup.bat on Windows)
-            </programlisting>
-          and then go to
-            <ulink url="http://127.0.0.1:8080/gridsphere/gridsphere">http://127.0.0.1:8080/gridsphere/gridsphere</ulink>
-            you should see the running GridSphere portal. If an error occurs, please consult the
-          FAQ.
-        </para>
-        <para>
-          If you are installing GridSphere on Windows please make sure that your
-          %TOMCAT_HOME% and %CATALINA_HOME% environment variables do not contain any DOS style slashes
-          "\" since this will make the install fail. Please use Unix style slashes "/".
-        </para>
-        <para>
-          Gridsphere comes with default the HSQL database. If you whish to use another hibernate supported database (like
-          mysql, postgresql) you will need to download the requiered JDBC drivers from the database vendor and put them
-          in the lib/ dir of gridsphere source before deploying. You are also requiered to make changes to the
-            <filename>webapps/gridsphere/WEB-INF/persistence/hibernate.properties</filename>.
-        </para>
-    </sect1>
+<sect1>
+    <title>Deploying GridSphere</title>
+    <para>
+From inside the GridSphere source directory, you should be able to issue:
+        <programlisting>ant install</programlisting> which will
+compile the framework code, create documentation if necessary and deploy GridSphere
+to a Tomcat container. After the installation completes and you see "BUILD SUCCESFUL", go to
+        <ulink url="http://127.0.0.1:8080/gridsphere/gridsphere">http://127.0.0.1:8080/gridsphere/gridsphere</ulink>
+You should now see the running GridSphere portal. If an error occurs, please consult the
+FAQ and possibly mail the mailing lists if you encounter problems.
+    </para>
+    <para>
+If you are installing GridSphere on Windows please make sure that your
+%TOMCAT_HOME% and %CATALINA_HOME% environment variables do not contain any DOS style slashes
+"\" since this will make the install fail. Please use Unix style slashes "/".
+    </para>
+    <para>
+Gridsphere comes with default the HSQL database. If you whish to use another hibernate supported database (like
+mysql, postgresql) you will need to download the requiered JDBC drivers from the database vendor and put them
+in the lib/ dir of gridsphere source before deploying. You are also requiered to make changes to the
+        <filename>webapps/gridsphere/WEB-INF/persistence/hibernate.properties</filename>.
+    </para>
+</sect1>
 
-    <sect1>
-        <title>GridSphere Web Application</title>
-      GridSphere exists like any other web application and is packaged according to the Java Servlet specification.
-      The directory structure is as follows:
-        <para>
-            <simplelist>
-                <member>
-                    <filename>jsp/</filename> - contains JSP web pages for the GridSphere core portlets
-                </member>
-                <member>
-                    <filename>html/</filename> - contains HTML web pages for the GridSphere core portlets
-                </member>
-                <member>
-                    <filename>javscript/</filename> - contains JavaScript used by the portal
-                </member>
-                <member>
-                    <filename>themes/</filename> - contains CSS stylesheets used to create common look and feel
-                </member>
-                <member>
-                    <filename>WEB-INF/</filename> - contains GridSphere configuration files, layouts, and database
-                </member>
-                <member>
-                    <filename>WEB-INF/Portlets/</filename> - contains empty files whoise filenames identify external portlet applications to load
-                </member>
-                <member>
-                    <filename>WEB-INF/portlet.xml</filename> - contains the portlet descriptor for core portlets
-                </member>
-                <member>
-                    <filename>WEB-INF/layout.xml</filename> - contains a default layout for the core portlets
-                </member>
-                <member>
-                    <filename>WEB-INF/web.xml</filename> - contains servlet mappings necessary for the servlet container
-                </member>
+<sect1>
+    <title>GridSphere Web Application</title>
+GridSphere exists like any other web application and is packaged according to the Java Servlet specification.
+The directory structure is as follows:
+    <para>
+        <simplelist>
+            <member>
+                <filename>jsp/</filename> - contains JSP web pages for the GridSphere core portlets
+            </member>
+            <member>
+                <filename>html/</filename> - contains HTML web pages for the GridSphere core portlets
+            </member>
+            <member>
+                <filename>javscript/</filename> - contains JavaScript used by the portal
+            </member>
+            <member>
+                <filename>themes/</filename> - contains CSS stylesheets used to create common look and feel
+            </member>
+            <member>
+                <filename>WEB-INF/</filename> - contains GridSphere configuration files, layouts, and database
+            </member>
+            <member>
+                <filename>WEB-INF/Portlets/</filename> - contains empty files whoise filenames identify external portlet applications to load
+            </member>
+            <member>
+                <filename>WEB-INF/group.xml</filename> - contains a group descriptor for the core portlets
+            </member>
+            <member>
+                <filename>WEB-INF/portlet.xml</filename> - contains the portlet descriptor for core portlets
+            </member>
+            <member>
+                <filename>WEB-INF/layout.xml</filename> - contains a default layout for the core portlets
+            </member>
+            <member>
+                <filename>WEB-INF/web.xml</filename> - contains servlet mappings necessary for the servlet container
+            </member>
 
-                <member>
-                    <filename>WEB-INF/tlds</filename> - contains Tag Library Descriptors used by GridSphere tag libraries
-                </member>
-                <member>
-                    <filename>WEB-INF/lib</filename> - contains external libraries used by the core portlets and JSPs
-                </member>
-                <member>
-                    <filename>WEB-INF/classes</filename> - contains localization properties file used by the core portlets
-                </member>
-                <member>
-                    <filename>WEB-INF/database</filename> - contains the GridSphere database and configuration files
-                </member>
-                <member>
-                    <filename>WEB-INF/layout</filename> - contains user's specific layouts including the GuestUserLayout.xml and NewUserLayout.xml
-                </member>
-                <member>
-                    <filename>WEB-INF/mapping</filename> - contains all the mapping files used to convert XML descriptors into Java
-                </member>
-            </simplelist>
-        </para>
-    </sect1>
+            <member>
+                <filename>WEB-INF/tlds</filename> - contains Tag Library Descriptors used by GridSphere tag libraries
+            </member>
+            <member>
+                <filename>WEB-INF/lib</filename> - contains external libraries used by the core portlets and JSPs
+            </member>
+            <member>
+                <filename>WEB-INF/classes</filename> - contains localization properties file used by the core portlets
+            </member>
+            <member>
+                <filename>WEB-INF/database</filename> - contains the GridSphere database and configuration files
+            </member>
+            <member>
+                <filename>WEB-INF/layout</filename> - contains user's specific layouts including the GuestUserLayout.xml and NewUserLayout.xml
+            </member>
+            <member>
+                <filename>WEB-INF/mapping</filename> - contains all the mapping files used to convert XML descriptors into Java
+            </member>
+        </simplelist>
+    </para>
+</sect1>
 
-    <sect1>
-        <title>Testing the GridSphere Framework</title>
-        <para>
-            In order to ensure higher code quality, unit tests of core framework functionality and
-            core services has been developed using the &JUnit; testing framework. Because proper
-            testing requires the framework to be running inside a servlet container, we have integrated
-            GridSphere and &Cactus; to perform server-side unit testing inside the Tomcat container.
-            To run the unit tests, issue the following:
-            <programlisting>ant run-tests</programlisting>
-            Once the tests have finished, you can invoke
-            <programlisting>ant test-reports</programlisting>
-            to create a nice HTML output of all the JUnit test results.
-        </para>
-        <para>
-           GridSphere has passed the JSR 168 portlet technology kit (TCK) distributed by Sun and is 100% JSR 168 compliant.
-        </para>
-    </sect1>
+<sect1>
+    <title>Testing the GridSphere Framework</title>
+    <para>
+In order to ensure higher code quality, unit tests of core framework functionality and
+core services has been developed using the &JUnit; testing framework. Because proper
+testing requires the framework to be running inside a servlet container, we have integrated
+GridSphere and &Cactus; to perform server-side unit testing inside the Tomcat container.
+To run the unit tests, issue the following:
+        <programlisting>ant run-tests</programlisting>
+Once the tests have finished, you can invoke
+        <programlisting>ant test-reports</programlisting>
+to create a nice HTML output of all the JUnit test results.
+    </para>
+    <para>
+GridSphere has passed the JSR 168 portlet technology kit (TCK) distributed by Sun and is 100% JSR 168 compliant.
+    </para>
+</sect1>
 
-    <sect1>
-        <title>Logging and Debugging</title>
-        <para>
-          GridSphere uses the &Log4J; logging framework and logs all messages to
-            <filename>$CATALINA_HOME/logs/catalina.out</filename>
-          and to
-            <filename>$CATALINA_HOME/logs/localhost_gridsphere_log.{yyyy-mm-dd}.txt</filename>
-          If you encounter any errors, please look at the log files for more information.
-          In addition, the logging level can be selectively controlled by configuring the
-            <filename>log4j.properties</filename> located in the
-            <filename>config</filename> directory of
-          the GridSphere source directory and then re-deploying.
-        </para>
-    </sect1>
+<sect1>
+    <title>Logging and Debugging</title>
+    <para>
+GridSphere uses the &Log4J; logging framework and logs all messages to
+        <filename>$CATALINA_HOME/logs/catalina.out</filename>
+and to
+        <filename>$CATALINA_HOME/logs/localhost_gridsphere_log.{yyyy-mm-dd}.txt</filename>
+If you encounter any errors, please look at the log files for more information.
+In addition, the logging level can be selectively controlled by configuring the
+        <filename>log4j.properties</filename> located in the
+        <filename>config</filename> directory of
+the GridSphere source directory and then re-deploying.
+    </para>
+</sect1>
 
-</chapter>
