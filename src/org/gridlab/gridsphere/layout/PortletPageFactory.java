@@ -154,8 +154,7 @@ public class PortletPageFactory {
 
                 synchronized (new Integer(counter)) {
                     counter = (counter >= MAX_GUEST_CONTAINERS) ? 0 : counter++;
-                    //newcontainer = (PortletPage)guestContainer.clone();
-                    newcontainer = guestPage;
+                    newcontainer = (PortletPage)guestPage.clone();
                 }
                 newcontainer.init(new ArrayList());
                 guests.put(id, newcontainer);
