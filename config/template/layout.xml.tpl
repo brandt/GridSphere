@@ -1,6 +1,6 @@
 <portlet-tabbed-pane>
     <portlet-tab>
-        <title>Examples</title>
+        <title>@PROJECT_TITLE@</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab>
                 <title>Hello World!</title>

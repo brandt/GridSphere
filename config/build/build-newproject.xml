@@ -79,6 +79,9 @@
 
         <replace file="${project.dir}/webapp/WEB-INF/web.xml" token="@PROJECT_TITLE@"
             value="${project.title}"/>
+        <replace file="${project.dir}/webapp/WEB-INF/layout.xml" token="@PROJECT_TITLE@"
+            value="${project.title}"/>
+
 
         <mkdir dir="${project.dir}/webapp/html"/>
         <mkdir dir="${project.dir}/webapp/jsp"/>
