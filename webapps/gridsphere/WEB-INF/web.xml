@@ -106,6 +106,15 @@
         <servlet-class>org.apache.cactus.server.runner.ServletTestRunner</servlet-class>
     </servlet>
 
+    <servlet>
+	<servlet-name>SecureDirectory</servlet-name>
+	<servlet-class>org.gridlab.gridsphere.servlets.SecureDirectory</servlet-class>
+	<init-param>
+	    <param-name>strongProtection</param-name>
+	    <param-value>true</param-value>
+	</init-param>
+    </servlet>
+								
     <servlet-mapping>
         <servlet-name>gridsphere</servlet-name>
        <url-pattern>/gridsphere</url-pattern>
@@ -184,6 +193,11 @@
     <servlet-mapping>
         <servlet-name>LocalePortlet</servlet-name>
         <url-pattern>/locale</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+	<servlet-name>SecureDirectory</servlet-name>
+	<url-pattern>/secure/*</url-pattern>
     </servlet-mapping>
 
     <mime-mapping>
