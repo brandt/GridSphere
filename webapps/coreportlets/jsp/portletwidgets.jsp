@@ -1,5 +1,8 @@
 
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
+<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
+
+<portletAPI:init/>
 
 <html bgcolor="white">
 
@@ -15,26 +18,17 @@
     <tr>
     <td align="right">Username: </td>
     <td align="left">
-        <input type="text"
-            name="username"
-            size="8"
-            maxlength="20"
-            value="">
-        </input>
+        <gs:textfield name="username" size="8" maxlength="20"></gs:textfield>
     </td>
     </tr>
     <tr>
     <td align="right">Password: </td>
     <td align="left">
-        <input type="password"
-            name="password"
-            size="8"
-            maxlength="20">
-        </input>
+        <gs:password name="password" size="8" maxlength="20"></gs:password>
     </td>
     </tr>
     <tr>
-    <td colspan=5 align="center"><input type="submit" name="option" value="Login" ></input></td>
+    <td colspan=5 align="center"><gs:input type="submit" name="option" value="Login"></gs:input></td>
     </tr>
     </table>
 

@@ -13,10 +13,24 @@
   <tag>
     <name>init</name>
     <tag-class>org.gridlab.gridsphere.tags.portlet.InitTag</tag-class>
-    <body-content>JSP</body-content>
+    <body-content>empty</body-content>
     <description>
-        Wrapper around HTML form tag
+        Initializes Core Portlet Objects: PortletRequest, PortletResponse, PortletConfig
     </description>
+    <variable>
+        <name-given>portletRequest</name-given>
+        <variable-class>org.gridlab.gridsphere.portlet.PortletRequest</variable-class>
+        <declare>true</declare>
+        <scope>AT_BEGIN</scope>
+        <description>The PortletRequest Object</description>
+    </variable>
+    <variable>
+        <name-given>portletResponse</name-given>
+        <variable-class>org.gridlab.gridsphere.portlet.PortletResponse</variable-class>
+        <declare>true</declare>
+        <scope>AT_BEGIN</scope>
+        <description>The PortletResponse Object</description>
+    </variable>
   </tag>
 
 </taglib>
