@@ -30,27 +30,55 @@ to a Tomcat container. After the installation completes and you see "BUILD SUCCE
 You should now see the running GridSphere portal. If an error occurs, please consult the
 FAQ and possibly mail the mailing lists if you encounter problems.
     </para>
-    <para>
-If you are installing GridSphere on Windows please make sure that your
-%TOMCAT_HOME% and %CATALINA_HOME% environment variables do not contain any DOS style slashes
-"\" since this will make the install fail. Please use Unix style slashes "/".
-    </para>
+    <sect2>
+        <title>Installation on Microsoft Windows</title>
+        <para>
+    If you are installing GridSphere on Windows please make sure that your
+    %TOMCAT_HOME% and %CATALINA_HOME% environment variables do not contain any DOS style slashes
+    "\" since this will make the install fail. Please use Unix style slashes "/".
+        </para>
+    </sect2>
+    <sect2>
+    <title>Database configuration</title>
     <para>
 Gridsphere comes with default the HSQL database. If you whish to use another hibernate supported database (like
 mysql, postgresql) you will need to download the required JDBC drivers from the database vendor and put them
-in the <filename>$CATALINA_HOME/shared/lib</filename> directory. You are also required to make changes to the
+in the
+        <filename>$CATALINA_HOME/shared/lib</filename> directory. You are also required to make changes to the
         <filename>$CATALINA_HOME/webapps/gridsphere/CustomPortal/database/hibernate.properties</filename> hibernate
         properties file. Next, issue "ant create-database" to create the database using the updated configuration.
         Finally restart the application server.
     </para>
+    </sect2>
+    <sect2>
+        <title>Support for the Jetty servlet container</title>
+        <para>
+            GridSphere's default installation supports Jakarta's Tomcat servlet container. If you want to use
+            Jetty as webserver for the portal you need to change the build.properties file located in the root
+            of the source directory of GridSphere. Change
+            <programlisting>
+gridsphere.appserver=tomcat
+            </programlisting>
+            to
+            <programlisting>
+gridsphere.appserver=jetty
+            </programlisting>
+            Furthermore the environment variable CATALINA_HOME is not used anymore. Instead you need to define APPSERVER_HOME
+            to point to the installationdirectory of the webserver. In future versions support for other servlet containers
+            might be added. Please substitute all CATALINA_HOME variables used in this guide with APPSERVER_HOME if you
+            are using the Jetty servlet container.
+
+
+        </para>
+ </sect2>
 </sect1>
 
 <sect1>
     <title>Updating from earlier GridSphere</title>
     <para>
        To update to a recent version of GridSphere, you should issue the following two commands (make sure Tomcat is shutdown):
-          <programlisting>ant deploy</programlisting> which will deploy GS to the Tomcat container followed by:
-             <programlisting>ant update-database</programlisting> which will update the GridSphere database if any new data fields
+        <programlisting>ant deploy</programlisting> which will deploy GS to the Tomcat container followed by:
+        <programlisting>ant update-database</programlisting> which will update the GridSphere database if any new data fields
         were added.
     </para>
 </sect1>
@@ -148,72 +176,85 @@ the GridSphere source directory and then re-deploying.
 </sect1>
 
 <sect1>
-        <title>Configuring the Portal URL</title>
-        <para>
+    <title>Configuring the Portal URL</title>
+    <para>
             By default, the portal is configured as http://localhost:8080/gridsphere/gridsphere.
             It is possible to change the context by editing the deployed context.
-            Under Tomcat 4, the context file is located in <filename>$CATALINA_HOME/webapps/gridsphere-context.xml</filename>.
-            Under Tomcat 5, the context file is located in <filename>$CATALINA_HOME/conf/Catalina/localhost/gridsphere.xml</filename>
+            Under Tomcat 4, the context file is located in
+        <filename>$CATALINA_HOME/webapps/gridsphere-context.xml</filename>.
+            Under Tomcat 5, the context file is located in
+        <filename>$CATALINA_HOME/conf/Catalina/localhost/gridsphere.xml</filename>
             Change the following:
-            </para>
-           <informalexample><programlisting>
-&lt;Context path="/gridsphere" docBase="gridsphere" debug="0" reloadable="false" crossContext="true"&gt;
-       &lt;Logger className="org.apache.catalina.logger.FileLogger"
+    </para>
+    <informalexample>
+        <programlisting>
+            &lt;Context path="/gridsphere" docBase="gridsphere" debug="0" reloadable="false" crossContext="true"&gt;
+            &lt;Logger className="org.apache.catalina.logger.FileLogger"
            prefix="localhost_gridsphere_log." suffix=".txt" timestamp="true"/&gt;
-&lt;/Context&gt;
-  </programlisting></informalexample>
-   <para>to</para>
-
-
-            <informalexample><programlisting>
-&lt;Context path="/myorg" docBase="gridsphere" debug="0" reloadable="false" crossContext="true"&gt;
-       &lt;Logger className="org.apache.catalina.logger.FileLogger"
-           prefix="localhost_gridsphere_log." suffix=".txt" timestamp="true"/&gt;
-&lt;/Context&gt;
-  </programlisting></informalexample>
-         <para>
-          Where the context <emphasis>path</emphasis> element corresponds to your desired context.
-
-          In addition, you can edit the servlet mapping by editing <filename>$CATALINA_HOME/webapps/gridsphere/WEB-INF/web.xml</filename>
-
-        </para>
-
-  <informalexample><programlisting>
-&lt;servlet-mapping&gt;
-       &lt;servlet-name&gt;gridsphere&lt;/servlet-name&gt;
-       &lt;url-pattern&gt;/gridsphere/*&lt;/url-pattern&gt;
-&lt;/servlet-mapping&gt;
-     </programlisting></informalexample>
+            &lt;/Context&gt;
+        </programlisting>
+    </informalexample>
     <para>to</para>
 
-    <informalexample><programlisting>
-&lt;servlet-mapping&gt;
-       &lt;servlet-name&gt;gridsphere&lt;/servlet-name&gt;
-       &lt;url-pattern&gt;/start/*&lt;/url-pattern&gt;
-&lt;/servlet-mapping&gt;
-    </programlisting></informalexample>
+
+    <informalexample>
+        <programlisting>
+            &lt;Context path="/myorg" docBase="gridsphere" debug="0" reloadable="false" crossContext="true"&gt;
+            &lt;Logger className="org.apache.catalina.logger.FileLogger"
+           prefix="localhost_gridsphere_log." suffix=".txt" timestamp="true"/&gt;
+            &lt;/Context&gt;
+        </programlisting>
+    </informalexample>
+    <para>
+          Where the context
+        <emphasis>path</emphasis> element corresponds to your desired context.
+
+          In addition, you can edit the servlet mapping by editing
+        <filename>$CATALINA_HOME/webapps/gridsphere/WEB-INF/web.xml</filename>
+
+    </para>
+
+    <informalexample>
+        <programlisting>
+            &lt;servlet-mapping&gt;
+            &lt;servlet-name&gt;gridsphere&lt;/servlet-name&gt;
+            &lt;url-pattern&gt;/gridsphere/*&lt;/url-pattern&gt;
+            &lt;/servlet-mapping&gt;
+        </programlisting>
+    </informalexample>
+    <para>to</para>
+
+    <informalexample>
+        <programlisting>
+            &lt;servlet-mapping&gt;
+            &lt;servlet-name&gt;gridsphere&lt;/servlet-name&gt;
+            &lt;url-pattern&gt;/start/*&lt;/url-pattern&gt;
+            &lt;/servlet-mapping&gt;
+        </programlisting>
+    </informalexample>
 
 and then you can navigate to http://servername/myorg/start/
 
-    </sect1>
+</sect1>
 
 <sect1>
     <title>Redeploying a customized portal</title>
-        <para>
+    <para>
            All custom settings including the default database are contained in
-            <filename>$CATALINA_HOME/webapps/gridsphere/WEB-INF/CustomPortal</filename>. To deploy a new portal configured
+        <filename>$CATALINA_HOME/webapps/gridsphere/WEB-INF/CustomPortal</filename>. To deploy a new portal configured
             with the earlier customizations, simply manually copy over this directory to the new portal
             directory. In order for the database to work, you will have to hand edit the
-            <filename>$CATALINA_HOME/webapps/gridsphere/WEB-INF/CustomPortal/database/hibernate.properties</filename>
-            <emphasis>hibernate.connection.url</emphasis> entry to match the new Tomcat location.
-        </para>
-    </sect1>
+        <filename>$CATALINA_HOME/webapps/gridsphere/WEB-INF/CustomPortal/database/hibernate.properties</filename>
+        <emphasis>hibernate.connection.url</emphasis> entry to match the new Tomcat location.
+    </para>
+</sect1>
 
 <sect1>
     <title>Running GridSphere with Apache httpd2 and mod_jk</title>
     <para>
         If you want to install GridSphere behind Apache httpd2 please read the following section.
-        Download httpd2 from <ulink url="http://httpd.apache.org/download.cgi">http://httpd.apache.org/download.cgi</ulink>.
+        Download httpd2 from
+        <ulink url="http://httpd.apache.org/download.cgi">http://httpd.apache.org/download.cgi</ulink>.
         <example>
             <title>configure apache httpd2</title>
             <programlisting>
@@ -224,10 +265,11 @@ make
 make install
             </programlisting>
         </example>
-<important>Make sure you have at least openssl 0.9.6e installed it is needed by httpd2.</important>
+        <important>Make sure you have at least openssl 0.9.6e installed it is needed by httpd2.</important>
     </para>
     Next step is to compile the tomcat connectors for httpd2.
-    Download these from <ulink url="http://archive.apache.org/dist/jakarta/tomcat-connectors/jk/source/">http://archive.apache.org/dist/jakarta/tomcat-connectors/jk/source/</ulink>.
+    Download these from
+    <ulink url="http://archive.apache.org/dist/jakarta/tomcat-connectors/jk/source/">http://archive.apache.org/dist/jakarta/tomcat-connectors/jk/source/</ulink>.
     <example>
         <title>configuring apache/tomcat connectors</title>
         <programlisting>
@@ -256,7 +298,7 @@ It might be a good idea to run apache httpd with virtual hosts. The configuratio
     <example>
         <title>httpd.conf</title>
         <programlisting>
-<![CDATA[
+            <![CDATA[
 
 LoadModule jk_module modules/mod_jk.so
 <IfModule mod_jk.c>
@@ -286,15 +328,15 @@ NameVirtualHost YOURIP:80
    CustomLog /logs/access_ssl_log common
 </VirtualHost>
 
-]]>
+            ]]>
         </programlisting>
-     </example>
+    </example>
 
     This redirects all incoming requests on port 80 to the running tomcat on port 8080.  The second virtual hosts directive
     will it make possible to access GridSphere over a secure https connection. You need to have valid ssl certificates for that
     in the specified locations.
 
- <important>These are just sample configurations. Please change them to reflect your local installation.</important>
+    <important>These are just sample configurations. Please change them to reflect your local installation.</important>
 </sect1>
 
 <sect1>
