@@ -411,7 +411,8 @@ public abstract class BaseFormEventImpl {
      * Prints the request parameters to stdout. Generally used for debugging
      */
     public void logRequestParameters() {
-        log.debug("\n\n show request params\n--------------------\n");
+        StringBuffer sb = new StringBuffer();
+        sb.append("\n\n show request params\n--------------------\n");
         Enumeration enum = request.getParameterNames();
         while (enum.hasMoreElements()) {
             String name = (String) enum.nextElement();
@@ -422,28 +423,31 @@ public abstract class BaseFormEventImpl {
                 if (pval.length() == 0) {
                     pval = "no value";
                 }
-                if (!name.startsWith("ui_pb")) log.debug("\t\t value : " + pval);
+                if (!name.startsWith("ui_pb")) sb.append("\t\t value : " + pval);
             } else {
-                log.debug("\t\t value :");
+                sb.append("\t\t value :");
                 for (int i = 0; i < values.length; i++) {
-                    log.debug("\t\t  - " + values[i]);
+                    sb.append("\t\t  - " + values[i]);
                 }
             }
         }
-        log.debug("--------------------\n");
+        sb.append("--------------------\n");
+        log.debug(sb.toString());
     }
 
     /**
      * Prints the request attributes to stdout. Generally used for debugging
      */
     public void logRequestAttributes() {
-        log.debug("\n\n show request attributes\n--------------------\n");
+        StringBuffer sb = new StringBuffer();
+        sb.append("\n\n show request attributes\n--------------------\n");
         Enumeration enum = request.getAttributeNames();
         while (enum.hasMoreElements()) {
             String name = (String) enum.nextElement();
-            log.debug("name :" + name);
+            sb.append("name :" + name);
         }
-        log.debug("--------------------\n");
+        sb.append("--------------------\n");
+        log.debug(sb.toString());
     }
 
     /**

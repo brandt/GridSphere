@@ -296,14 +296,13 @@ public class PortletPageFactory implements PortletSessionListener {
             newPage.init(req, new ArrayList());
 
             List list = newPage.getComponentIdentifierList();
-            log.debug("Made a components list!!!! " + list.size());
-
+            StringBuffer compSB = new StringBuffer();
             for (int i = 0; i < list.size(); i++) {
                 ComponentIdentifier c = (ComponentIdentifier) list.get(i);
-                log.debug("\tid: " + c.getComponentID() + " : " + c.getClassName() + " : " + c.hasPortlet());
+                compSB.append("\tid: " + c.getComponentID() + " : " + c.getClassName() + " : " + c.hasPortlet() + "\n");
                 //if (c.hasPortlet()) System.err.println("portlet= " + c.getPortletClass());
             }
-
+            log.debug("Made a components list!!!! " + list.size() + "\n" + compSB.toString());
         } catch (Exception e) {
             log.error("Unable to make a clone of the templatePage", e);
 
