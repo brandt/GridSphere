@@ -4,22 +4,22 @@
  */
 package org.gridlab.gridsphere.tags.web.model;
 
-import org.gridlab.gridsphere.tags.web.element.Element;
+import org.gridlab.gridsphere.tags.web.element.Bean;
 
 import java.util.Enumeration;
 import java.util.Iterator;
 
 public interface DefaultListModel extends AbstractListModel {
 
-    public void add(int index, Element bean);
+    public void add(int index, Bean bean);
 
-    public void addElement(Element bean);
+    public void addBean(Bean bean);
 
     public boolean isEmpty();
 
     public void remove(int index);
 
-    public void set(int index, Element bean);
+    public void set(int index, Bean bean);
 
     public Iterator iterator();
 

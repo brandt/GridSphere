@@ -4,7 +4,7 @@
  */
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface BaseList extends Element {
+public interface BaseList extends Bean {
 
     /**
      * Returns the name of the list.

@@ -4,7 +4,7 @@
  */
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface Disableable extends Element {
+public interface Disableable extends Bean {
 
     /**
      * Return true/false if the bean is disabled.

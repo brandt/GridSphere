@@ -4,7 +4,7 @@
  */
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface Nameable extends Element {
+public interface Nameable extends Bean {
 
     /**
      * Sets the name of the bean

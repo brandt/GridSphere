@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface Link extends Element {
+public interface Link extends Bean {
 
 
     /**

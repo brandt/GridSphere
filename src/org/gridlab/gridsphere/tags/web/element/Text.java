@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public interface Text extends Element {
+public interface Text extends Bean {
 
     /**
      * Gets the text of the bean.
