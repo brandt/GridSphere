@@ -57,6 +57,13 @@ public interface ApplicationPortlet {
     public String getApplicationPortletName();
 
     /**
+     * Returns the portlet application class
+     *
+     * @return classname of the portlet
+     */
+    public String getApplicationPortletClassName();
+
+    /**
      * Returns the name of a servlet associated with this portlet defined in ui.xml as <servlet-name>
      *
      * @return the servlet name

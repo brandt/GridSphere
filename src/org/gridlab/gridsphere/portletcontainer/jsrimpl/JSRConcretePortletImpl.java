@@ -28,9 +28,6 @@ public class JSRConcretePortletImpl implements ConcretePortlet {
     private JSRConcretePortletConfigImpl concConfig = null;
     private String concreteID = null;
     private String portletName = null;
-    //private String concreteID = null;
-    //private List languageList = null;
-    //private String defaultLocale = "en";
 
     /**
      * Constructs an instance of ConcreteSportlet
@@ -38,11 +35,11 @@ public class JSRConcretePortletImpl implements ConcretePortlet {
      * @param pdd        a <code>PortletDeploymentDescriptor2</code>
      * @param portletDef a concrete portlet descriptor
      */
-    public JSRConcretePortletImpl(PortletDeploymentDescriptor2 pdd, PortletDefinition portletDef, JSRConcretePortletConfigImpl concConfig) {
+    public JSRConcretePortletImpl(PortletDeploymentDescriptor2 pdd, PortletDefinition portletDef, JSRConcretePortletConfigImpl concConfig, String webappName) {
         this.portletDD = pdd;
         this.concConfig = concConfig;
-        concreteID = portletDef.getPortletClass().getContent();
         portletName = portletDef.getPortletName().getContent();
+        concreteID = webappName + "#" + portletName;
     }
 
     /**

@@ -11,12 +11,14 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.*;
-import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl;
 import org.gridlab.gridsphere.services.core.security.acl.impl.descriptor.PortletGroupDescriptor;
+import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 
 import javax.servlet.RequestDispatcher;
@@ -41,6 +43,7 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
     protected RequestDispatcher rd = null;
     protected String webApplicationName = "Unknown portlet web application";
     protected String webAppDescription = "Unknown portlet web application description";
+    protected AccessControlManagerService aclManager = null;
 
     // PortletLayout engine handles layout.xml
     //private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
@@ -51,10 +54,18 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
         String appName = realPath.substring(l + 1);
 
         // Make all jsr portlets have only one concrete instance
-        webApplicationName = appName + ".1";
+        webApplicationName = appName;
+        //webApplicationName = appName + ".1";
+
         this.webAppDescription = context.getServletContextName();
         this.servletName = servletName;
 
+        PortletServiceFactory factory = SportletServiceFactory.getInstance();
+        try {
+            aclManager = (AccessControlManagerService)factory.createPortletService(AccessControlManagerService.class, context, true);
+        } catch (PortletServiceException e) {
+            throw new PortletException("Unable to get instance of AccessControlManagerService!", e);
+        }
         //rd = context.getNamedDispatcher(webApplicationName);
 
         // load services xml
@@ -97,10 +108,17 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
         // Iterate thru portlet definitions for portlet applications
         for (int i = 0; i < portletDefs.length; i++) {
             ApplicationPortlet portletApp = new JSRApplicationPortletImpl(pdd, portletDefs[i], servletName, webApplicationName, ctx);
+
             String portletClass = portletApp.getApplicationPortletID();
+            /*
             portletDefinitions.put(portletClass, portletDefs[i]);
             appPortlets.put(portletClass, portletApp);
-            log.debug("sticking " + portletClass + " in hash");
+            */
+            String portletName = portletApp.getApplicationPortletName();
+            portletDefinitions.put(portletName, portletDefs[i]);
+            appPortlets.put(portletName, portletApp);
+
+            log.debug("sticking " + portletName + " class: " + portletClass + " in hash");
         }
 
     }
@@ -141,7 +159,6 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
             try {
                 PortletGroupDescriptor groupDescriptor = new PortletGroupDescriptor(groupXMLfile);
                 SportletGroup group = groupDescriptor.getPortletGroup();
-                AccessControlManagerServiceImpl aclManager = AccessControlManagerServiceImpl.getInstance();
                 PortletGroup g = aclManager.getGroupByName(group.getName());
                 if (g == null) {
                     aclManager.createGroup(group);
@@ -172,8 +189,8 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
         }
     }
 
-    public PortletDefinition getPortletDefinition(String portletClassName) {
-        return (PortletDefinition) portletDefinitions.get(portletClassName);
+    public PortletDefinition getPortletDefinition(String portletName) {
+        return (PortletDefinition) portletDefinitions.get(portletName);
     }
 
     public void destroy() {
@@ -196,10 +213,6 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
 
     public Collection getAllApplicationPortlets() {
         return appPortlets.values();
-    }
-
-    public ApplicationPortlet getApplicationPortlet(String applicationPortletID) {
-        return (ApplicationPortlet) appPortlets.get(applicationPortletID);
     }
 
     public String getWebApplicationDescription() {

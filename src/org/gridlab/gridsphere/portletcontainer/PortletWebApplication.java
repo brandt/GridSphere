@@ -32,14 +32,6 @@ public interface PortletWebApplication {
     public String getWebApplicationDescription();
 
     /**
-     * Returns an application portlet contained by the portlet web application with the supplied id
-     *
-     * @param applicationPortletID an application portlet id
-     * @return an application portlet
-     */
-    public ApplicationPortlet getApplicationPortlet(String applicationPortletID);
-
-    /**
      * Returns the collection of application portlets contained by this portlet web application
      *
      * @return the collection of application portlets

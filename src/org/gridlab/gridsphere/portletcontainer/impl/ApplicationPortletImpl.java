@@ -37,6 +37,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
 
     private String applicationPortletID = "";
     private String portletName = "";
+    private String portletClass = "";
     private String servletName = "";
     private List concretePortlets = new ArrayList();
     private ApplicationSportletConfig appPortletConfig = null;
@@ -89,7 +90,9 @@ class ApplicationPortletImpl implements ApplicationPortlet {
             ConcretePortlet concretePortlet = new ConcreteSportlet(pdd, appPortletConfig, concSportlet);
             concretePortlets.add(concretePortlet);
         }
-        applicationPortletID = appPortletConfig.getApplicationPortletID();
+        portletClass = appPortletConfig.getApplicationPortletID();
+        //applicationPortletID = webAppName + "#" + portletClass;
+        applicationPortletID = portletClass;
         portletName = appPortletConfig.getPortletName();
         servletName = appPortletConfig.getServletName();
 
@@ -160,7 +163,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
         Iterator it = concretePortlets.iterator();
         while (it.hasNext()) {
             ConcretePortlet c = (ConcretePortlet) it.next();
-            if (c.getConcretePortletID().equals(concretePortletID)) {
+            if ((c.getConcretePortletID().equals(concretePortletID)) || (c.getPortletName().equals(concretePortletID))) {
                 return c;
             }
         }
@@ -183,6 +186,15 @@ class ApplicationPortletImpl implements ApplicationPortlet {
      */
     public String getApplicationPortletName() {
         return portletName;
+    }
+
+    /**
+     * Returns the portlet class
+     *
+     * @return the portlet class
+     */
+    public String getApplicationPortletClassName() {
+        return portletClass;
     }
 
     /**

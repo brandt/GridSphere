@@ -40,7 +40,10 @@ public class PortletRegistry {
      * @param appPortlet an <code>ApplicationPortlet</code>
      */
     public void addApplicationPortlet(ApplicationPortlet appPortlet) {
-        String key = appPortlet.getWebApplicationName() + "#" + appPortlet.getApplicationPortletID();
+        String key = appPortlet.getApplicationPortletID();
+        if (key.indexOf("#") < 0) {
+            key = appPortlet.getWebApplicationName() + "#" + appPortlet.getApplicationPortletID();
+        }
         if (allApplicationPortlets.get(key) != null) {
             log.debug("Replacing existing app portlet: " + key);
         }
@@ -53,7 +56,7 @@ public class PortletRegistry {
      * @param applicationPortlet the application portlet
      */
     public void removeApplicationPortlet(ApplicationPortlet applicationPortlet) {
-        allApplicationPortlets.remove(applicationPortlet.getWebApplicationName() + "#" + applicationPortlet.getApplicationPortletID());
+        allApplicationPortlets.remove(applicationPortlet.getApplicationPortletID());
     }
 
     /**
@@ -63,16 +66,27 @@ public class PortletRegistry {
      * @return an application portlet
      */
     public ApplicationPortlet getApplicationPortlet(String applicationPortletID) {
+        int idx = applicationPortletID.indexOf("#");
+        String portletName = "";
+        String webapp = "";
+        if (idx > 0) {
+            webapp = applicationPortletID.substring(0, idx);
+            portletName = applicationPortletID.substring(idx+1);
+            System.err.println("webapp= " + webapp + " pname= " + portletName);
+            return (ApplicationPortlet)allApplicationPortlets.get(applicationPortletID);
+        }
         Collection coll = allApplicationPortlets.values();
         Iterator it = coll.iterator();
         while (it.hasNext()) {
             ApplicationPortlet app = (ApplicationPortlet) it.next();
             if (app.getApplicationPortletID().equals(applicationPortletID)) return app;
+            if (app.getApplicationPortletClassName().equals(applicationPortletID)) return app;
         }
         log.debug("Unable to find " + applicationPortletID + " in registry");
         return null;
     }
 
+    /*
     public String getPortletClassName(String appName, String portletName) {
         Collection appColl = getAllApplicationPortlets();
         Iterator appIt = appColl.iterator();
@@ -90,6 +104,7 @@ public class PortletRegistry {
         }
         return null;
     }
+    */
 
     /**
      * Returns all application portlets from the registry
@@ -122,43 +137,6 @@ public class PortletRegistry {
         return webappPortlets;
     }
 
-    public List getAllConcretePortletIDs(PortletRole role, String webApplicationName) {
-        List newlist = new Vector();
-        List appColl = getApplicationPortlets(webApplicationName);
-        Iterator appIt = appColl.iterator();
-        while (appIt.hasNext()) {
-            ApplicationPortlet app = (ApplicationPortlet) appIt.next();
-            List concPortlets = app.getConcretePortlets();
-            Iterator cit = concPortlets.iterator();
-            while (cit.hasNext()) {
-                ConcretePortlet conc = (ConcretePortlet) cit.next();
-                String concID = conc.getConcretePortletID();
-                PortletRole reqrole = conc.getConcretePortletConfig().getRequiredRole();
-                if (role.compare(role, reqrole) >= 0) {
-                    newlist.add(concID);
-                }
-            }
-        }
-        return newlist;
-    }
-
-    public List getAllConcretePortletIDs() {
-        List newlist = new Vector();
-        Collection appColl = getAllApplicationPortlets();
-        Iterator appIt = appColl.iterator();
-        while (appIt.hasNext()) {
-            ApplicationPortlet app = (ApplicationPortlet) appIt.next();
-            List concPortlets = app.getConcretePortlets();
-            Iterator cit = concPortlets.iterator();
-            while (cit.hasNext()) {
-                ConcretePortlet conc = (ConcretePortlet) cit.next();
-                String concID = conc.getConcretePortletID();
-                newlist.add(concID);
-            }
-        }
-        return newlist;
-    }
-
     /**
      * Returns the application portlet id given a concrete portlet id
      *
@@ -167,7 +145,9 @@ public class PortletRegistry {
      */
     public static final String getApplicationPortletID(String concretePortletID) {
         int i = concretePortletID.lastIndexOf(".");
-        if (i < 0) return "";
+        // do nothing if id is on form <web app name>#<portlet name>
+        if (concretePortletID.indexOf("#") > 0) return concretePortletID;
+        if (i < 0) return concretePortletID;
         // check to see if it has number at the end
         String numStr = concretePortletID.substring(i + 1);
         String appID = "";

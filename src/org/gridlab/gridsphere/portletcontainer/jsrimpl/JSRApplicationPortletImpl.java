@@ -22,6 +22,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import java.net.URLEncoder;
 import java.util.*;
+import java.io.UnsupportedEncodingException;
 
 /**
  * The <code>ApplicationPortletImpl</code> is an implementation of the <code>ApplicationPortlet</code> interface
@@ -60,7 +61,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
      * @param webApplication the ui application name for this application portlet
      * @param context        the <code>ServletContext</code> containing this application portlet
      */
-    public JSRApplicationPortletImpl(PortletDeploymentDescriptor2 pdd, PortletDefinition portletDef, String servletName, String webApplication, ServletContext context) throws PortletException {
+    public JSRApplicationPortletImpl(PortletDeploymentDescriptor2 pdd, PortletDefinition portletDef, String servletName, String webApplication, ServletContext context)  {
         this.portletDef = portletDef;
         this.webAppName = webApplication;
         this.servletName = servletName;
@@ -100,7 +101,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
         JSRConcretePortletConfigImpl concConfig = new JSRConcretePortletConfigImpl(portletDef);
 
         log.debug("creating JSRConcretePortletImpl");
-        JSRConcretePortletImpl concPortlet = new JSRConcretePortletImpl(pdd, portletDef, concConfig);
+        JSRConcretePortletImpl concPortlet = new JSRConcretePortletImpl(pdd, portletDef, concConfig, webAppName);
         concPortlets.add(concPortlet);
     }
 
@@ -124,12 +125,16 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
      *         application portlet
      */
     public ConcretePortlet getConcretePortlet(String concretePortletID) {
+        return (ConcretePortlet)concPortlets.get(0);
+        /*
         Iterator it = concPortlets.iterator();
         while (it.hasNext()) {
             ConcretePortlet conc = (ConcretePortlet) it.next();
             if (conc.getConcretePortletID().equals(concretePortletID)) return conc;
+            if (conc.getPortletName().equals(concretePortletID)) return conc;
         }
         return null;
+        */
     }
 
 
@@ -158,7 +163,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
      * @return the id of the PortletApplication
      */
     public String getApplicationPortletID() {
-        return portletClassName;
+        return webAppName + "#" + portletName;
     }
 
     /**
@@ -185,7 +190,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
         boolean firstParam = true;
 
         Iterator it = params.keySet().iterator();
-        //try {
+        try {
         while (it.hasNext()) {
             if (!firstParam) {
                 extraInfo += "&";
@@ -194,7 +199,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
             }
             String name = (String) it.next();
 
-            String encname = URLEncoder.encode(name);
+            String encname = URLEncoder.encode(name, "UTF-8");
             Object val = params.get(name);
             if (val instanceof String[]) {
                 String[] vals = (String[]) val;
@@ -202,12 +207,12 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
                     String encvalue = URLEncoder.encode(vals[j]);
                     extraInfo += encname + "=" + encvalue + "&";
                 }
-                String encvalue = URLEncoder.encode(vals[vals.length - 1]);
+                String encvalue = URLEncoder.encode(vals[vals.length - 1], "UTF-8");
                 extraInfo += encname + "=" + encvalue;
             } else if (val instanceof String) {
                 String aval = (String) params.get(name);
                 if ((aval != null) && (!aval.equals(""))) {
-                    String encvalue = URLEncoder.encode(aval);
+                    String encvalue = URLEncoder.encode(aval, "UTF-8");
                     extraInfo += encname + "=" + encvalue;
                 } else {
                     extraInfo += encname;
@@ -215,15 +220,17 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
             }
             firstParam = false;
         }
-
+        } catch (UnsupportedEncodingException e) {
+            log.error("Unsupported encoding!", e);
+        }
 
         // before it adds ".1" to real webappName
-        String realWebAppName = webAppName.substring(0, webAppName.length() - 2);
+        //String realWebAppName = webAppName.substring(0, webAppName.length() - 2);
 
        
         //System.err.println("in getPortletDispatcher of jsr query string " + "/jsr/" + realWebAppName  + extraInfo);
         // TODO change dangerously hardcoded value!!!
-        RequestDispatcher rd = context.getRequestDispatcher("/jsr/" + realWebAppName + extraInfo);
+        RequestDispatcher rd = context.getRequestDispatcher("/jsr/" + webAppName + extraInfo);
         //RequestDispatcher rd = context.getNamedDispatcher(servletName);
 
         if (rd == null) {
@@ -263,12 +270,8 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
         return servletName;
     }
 
-    public String getPortletClassName() {
+    public String getApplicationPortletClassName() {
         return portletClassName;
-    }
-
-    public String getPortletName() {
-        return portletDef.getPortletName().getContent();
     }
 
     public PortalContext getPortalContext() {

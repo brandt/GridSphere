@@ -15,6 +15,7 @@ import java.util.jar.JarOutputStream;
 public class DeployGridSphereTCK extends Task {
 
     private String warPath = null;
+    private String buildDir = null;
     private String catalina = null;
     private List portlets = new Vector();
     private List portletapps = new Vector();
@@ -30,6 +31,10 @@ public class DeployGridSphereTCK extends Task {
     public void setWarDir(String warDir) {
         this.warPath = warDir;
         //System.out.println("Setting configdir to: "+this.configDir);
+    }
+
+    public void setBuildDir(String buildDir) {
+        this.buildDir = buildDir;
     }
 
     public void setServer(String serverDir) {
@@ -80,6 +85,7 @@ public class DeployGridSphereTCK extends Task {
             System.err.println((String) portlets.get(i));
             out.println("<portlet-frame>");
             out.println("<portlet-class>" + (String) portlets.get(i) + "</portlet-class>");
+            //out.println("<portlet-name>" + (String) portlets.get(i) + "</portlet-name>");
             out.println("</portlet-frame>");
         }
         out.println("</portlet-tab></portlet-tabbed-pane></page-layout");
@@ -126,7 +132,7 @@ public class DeployGridSphereTCK extends Task {
                 }
                 if (entry.getName().equals("WEB-INF/portlet.xml")) {
                     InputStream entryStream = jarFile.getInputStream(entry);
-                    collectPortletNames(entryStream);
+                    collectPortletNames(war, entryStream);
                 }
 
                 tempJar.putNextEntry(entry);
@@ -254,7 +260,7 @@ public class DeployGridSphereTCK extends Task {
 
     public void addGridSphereTagLibs(JarOutputStream tempJar) throws IOException {
 
-        String fileName = "build/lib/gridsphere-ui-tags.jar";
+        String fileName = buildDir + File.separator + "lib" + File.separator + "gridsphere-ui-tags.jar";
         byte[] buffer = new byte[1024];
         int bytesRead;
 
@@ -282,10 +288,9 @@ public class DeployGridSphereTCK extends Task {
         }
     }
 
-    public void collectPortletNames(InputStream portletxmlStream) throws IOException {
+    public void collectPortletNames(String war, InputStream portletxmlStream) throws IOException {
         BufferedReader bis = new BufferedReader(new InputStreamReader(portletxmlStream));
         String line = null;
-        boolean done = false;
         String portlet = "";
         while ((line = bis.readLine()) != null) {
             //System.err.println("portlet= " + line);
@@ -294,8 +299,7 @@ public class DeployGridSphereTCK extends Task {
                 String p = line.substring(d + "<portlet-class>".length());
                 int e = p.indexOf("</portlet-class>");
                 portlet = p.substring(0, e);
-                portlets.add(portlet);
-                //done = true;
+                portlets.add(war + "#" + portlet);
             }
         }
         bis.close();

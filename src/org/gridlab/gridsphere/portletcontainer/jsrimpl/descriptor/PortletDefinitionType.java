@@ -450,7 +450,7 @@ public class PortletDefinitionType implements java.io.Serializable {
      */
     public org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletClass getPortletClass() {
         return this._portletClass;
-    } //-- java.lang.String getPortletClass()
+    } //-- java.lang.String getPortletID()
 
     /**
      * Returns the value of field 'portletName'.
@@ -793,7 +793,7 @@ public class PortletDefinitionType implements java.io.Serializable {
      */
     public void setPortletClass(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletClass portletClass) {
         this._portletClass = portletClass;
-    } //-- void setPortletClass(java.lang.String)
+    } //-- void setPortletID(java.lang.String)
 
     /**
      * Sets the value of field 'portletName'.

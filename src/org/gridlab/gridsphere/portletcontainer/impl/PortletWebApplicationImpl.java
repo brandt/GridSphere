@@ -11,13 +11,15 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.PortletDeploymentDescriptor;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.SportletDefinition;
-import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl;
 import org.gridlab.gridsphere.services.core.security.acl.impl.descriptor.PortletGroupDescriptor;
+import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 
 import javax.servlet.ServletContext;
@@ -40,6 +42,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
     protected Map appPortlets = new Hashtable();
     protected String webAppDescription;
     private boolean isJSR = false;
+    protected AccessControlManagerService aclManager = null;
 
     /**
      * Default instantiation is disallowed
@@ -60,9 +63,16 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         String contextURIPath = null;
         if (webApplicationName.startsWith("/")) {
             contextURIPath = webApplicationName;
-            webApplicationName = webApplicationName.substring(1);
+            this.webApplicationName = webApplicationName.substring(1);
         } else {
             contextURIPath = "/" + webApplicationName;
+        }
+
+        PortletServiceFactory factory = SportletServiceFactory.getInstance();
+        try {
+            aclManager = (AccessControlManagerService)factory.createPortletService(AccessControlManagerService.class, context, true);
+        } catch (PortletServiceException e) {
+            throw new PortletException("Unable to get instance of AccessControlManagerService!", e);
         }
 
         // Get the cross context servlet context
@@ -178,7 +188,6 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
             try {
                 PortletGroupDescriptor groupDescriptor = new PortletGroupDescriptor(groupXMLfile);
                 SportletGroup group = groupDescriptor.getPortletGroup();
-                AccessControlManagerServiceImpl aclManager = AccessControlManagerServiceImpl.getInstance();
                 PortletGroup g = aclManager.getGroupByName(group.getName());
                 if (g == null) {
                     aclManager.createGroup(group);
@@ -242,16 +251,6 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
      */
     public String getWebApplicationDescription() {
         return webAppDescription;
-    }
-
-    /**
-     * Returns an application portlet contained by the portlet web application with the supplied id
-     *
-     * @param applicationPortletID an application portlet id
-     * @return an application portlet
-     */
-    public ApplicationPortlet getApplicationPortlet(String applicationPortletID) {
-        return (ApplicationPortlet) appPortlets.get(applicationPortletID);
     }
 
     /**
