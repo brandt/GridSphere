@@ -17,11 +17,13 @@ public class PortletTabRegistry {
 
     // Store application tabs in a hash
     private static Map applicationTabs = new Hashtable();
+    private static Map tabDescriptors = new Hashtable();
 
     private PortletTabRegistry() {}
 
     public synchronized static void addApplicationTab(String webAppName, String tabXMLfile) throws IOException, PersistenceManagerException {
         PortletTabbedPane webAppTabs = PortletLayoutDescriptor.loadPortletTabs(tabXMLfile, layoutMappingFile);
+        tabDescriptors.put(webAppName, tabXMLfile);
         applicationTabs.put(webAppName, webAppTabs);
     }
 
@@ -33,4 +35,7 @@ public class PortletTabRegistry {
         return (PortletTabbedPane)applicationTabs.get(webAppName);
     }
 
+    public static String getTabDescriptorPath(String webAppName) {
+        return (String)tabDescriptors.get(webAppName);
+    }
 }

@@ -86,7 +86,6 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         req.setAttribute(GridSphereProperties.COMPONENT_ID, componentIDStr);
         PortletURI portletURI = res.createURI();
         portletURI.addParameter(GridSphereProperties.COMPONENT_ID, componentIDStr);
-        //portletURI.addParameter(GridSphereProperties.PORTLETTAB, title);
         return portletURI.toString();
     }
 
@@ -171,7 +170,6 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.actionPerformed(event);
         PortletTabListener tabListener;
-        System.err.println("Creating a tab event with id: " + COMPONENT_ID);
         PortletTabEvent tabEvent = new PortletTabEventImpl(this, PortletTabEvent.Action.TAB_SELECTED, COMPONENT_ID);
         for (int i = 0; i < listeners.size(); i++) {
             tabListener = (PortletTabListener) listeners.get(i);
@@ -192,6 +190,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
 
     public Object clone() throws CloneNotSupportedException {
         PortletTab t = (PortletTab)super.clone();
+        t.requiredRole = (PortletRole)this.requiredRole.clone();
         t.portletComponent = (this.portletComponent == null) ? null : (PortletComponent)this.portletComponent.clone();
         t.title = this.title;
         t.selected = this.selected;

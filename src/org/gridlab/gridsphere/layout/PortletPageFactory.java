@@ -5,6 +5,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
+import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 
 import java.io.*;
@@ -14,39 +15,44 @@ import java.util.*;
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-public class PortletPageFactory {
+public class PortletPageFactory implements PortletSessionListener {
 
     private String userLayoutDir = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_DIR);
 
     private static PortletPageFactory instance = null;
+    private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
+
     private static PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
 
-    private static int MAX_GUEST_CONTAINERS = 50;
     private String layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING);
 
+    private PortletPage templatePage = null;
     private PortletPage guestPage = null;
     private PortletPage errorPage = null;
-    private PortletPage templatePage = null;
-    private static int counter = 0;
+
+    private String templateLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_DIR) + "/TemplateLayout.xml";
+
     private String newuserLayoutPath;
 
     // Store user layouts in a hash
-    private Map userLayouts = new HashMap();
+    private Map userLayouts = new Hashtable();
 
-    private Map guests = new HashMap();
+    private Map guests = new Hashtable();
 
     private PortletPageFactory() throws IOException, PersistenceManagerException {
         String errorLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_DIR) + "/ErrorLayout.xml";
-        String templateLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_DIR) + "/TemplateLayout.xml";
 
         newuserLayoutPath = GridSphereConfig.getProperty(GridSphereConfigProperties.NEW_USER_LAYOUT);
         String guestLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GUEST_USER_LAYOUT);
 
         errorPage = PortletLayoutDescriptor.loadPortletPage(errorLayoutFile, layoutMappingFile);
         guestPage = PortletLayoutDescriptor.loadPortletPage(guestLayoutFile, layoutMappingFile);
-        templatePage = PortletLayoutDescriptor.loadPortletPage(templateLayoutFile, layoutMappingFile);
         errorPage.init(new ArrayList());
-
+        try {
+            templatePage = PortletLayoutDescriptor.loadPortletPage(templateLayoutFile, layoutMappingFile);
+        }  catch (Exception e) {
+            log.error("Unable to create clone of user page", e);
+        }
     }
 
     public static PortletPageFactory getInstance() throws IOException, PersistenceManagerException {
@@ -60,36 +66,63 @@ public class PortletPageFactory {
         return errorPage;
     }
 
-    public PortletPage createFromAllWebApps(PortletRequest req) {
+    public void login(PortletRequest request) {
+
+    }
+
+    public void logout(PortletSession session) {
+        String sessionId = session.getId();
+        if (guests.containsKey(sessionId)) {
+            log.debug("Removing guest container for:" + sessionId);
+            guests.remove(sessionId);
+        }
+        if (userLayouts.containsKey(sessionId)) {
+            log.debug("Removing user  container for:" + sessionId);
+            userLayouts.remove(sessionId);
+        }
+    }
+
+    public PortletPage createFromAllWebApps() throws CloneNotSupportedException {
 
         PortletPage newPage = null;
-        PortletTab newTab = null;
+        //PortletTab newTab = null;
         PortletTabbedPane pane = null;
-
         try {
+            //newPage = PortletLayoutDescriptor.loadPortletPage(templateLayoutFile, layoutMappingFile);
             newPage = (PortletPage)templatePage.clone();
-            pane = templatePage.getPortletTabbedPane();
+            log.debug("Returning cloned layout from webapps:");
+            //newPage = (PortletPage)templatePage.clone();
+            //newPage.init(new ArrayList());
+            pane = newPage.getPortletTabbedPane();
+
             PortletManager manager = PortletManager.getInstance();
             List webappNames = manager.getPortletWebApplicationNames();
+
             for (int i = 0; i < webappNames.size(); i++) {
                 String name = (String)webappNames.get(i);
+
                 PortletTabbedPane portletTabs = PortletTabRegistry.getApplicationTabs(name);
+
                 List tabs = portletTabs.getPortletTabs();
                 for (int j = 0; j < tabs.size(); j++) {
                     PortletTab tab = (PortletTab)tabs.get(j);
-                    newTab = (PortletTab)tab.clone();
-                    pane.addTab(name, newTab);
+                    pane.addTab(name, (PortletTab)tab.clone());
                 }
             }
+
             newPage.setPortletTabbedPane(pane);
-        } catch (CloneNotSupportedException e) {
-            log.error("Unable to make a clone of the templatePage", e);
+            //newPage = (PortletPage)templatePage;
+        } catch (Exception e) {
+          log.error("Unable to make a clone of the templatePage", e);
 
         }
+        newPage.init(new ArrayList());
+
         return newPage;
     }
 
     public PortletPage createFromNewUserLayoutXML(PortletRequest req) throws PersistenceManagerException, IOException {
+        String sessionId = req.getSession().getId();
         User user = req.getUser();
         String layoutPath = userLayoutDir + user.getID();
         File f = new File(layoutPath);
@@ -98,18 +131,18 @@ public class PortletPageFactory {
             copyFile(new File(newuserLayoutPath), f);
         }
         PortletPage page = PortletLayoutDescriptor.loadPortletPage(layoutPath, layoutMappingFile);
-        userLayouts.put(user, page);
+        sessionManager.addSessionListener(sessionId, this);
+        userLayouts.put(sessionId, page);
         return page;
 
     }
 
-    public void removeUser(User user) {
-        if (userLayouts.containsKey(user)) {
-            userLayouts.remove(user);
-        }
-    }
-
     public PortletPage createPortletPage(PortletRequest req) {
+
+        log.info("number of guest layouts: " + guests.size());
+        log.info("number of user layouts: " + userLayouts.size());
+
+        String sessionId = req.getSession().getId();
         User user = req.getUser();
 
         if (user instanceof GuestUser) {
@@ -117,30 +150,43 @@ public class PortletPageFactory {
         }
 
         // Need to provide one guest container per users session
-        if (userLayouts.containsKey(user)) {
-            return (PortletPage) userLayouts.get(user);
+        if (userLayouts.containsKey(sessionId)) {
+            log.debug("Returning existing layout for:" + sessionId);
+            return (PortletPage) userLayouts.get(sessionId);
         } else {
 
+            // No wthe user is user so remove guest layout
+            if (guests.containsKey(sessionId)) {
+                log.debug("Removing guest container for:" + sessionId);
+                guests.remove(sessionId);
+            }
+
+            PortletPage page = null;
             // is user a SUPER?
             PortletRole role = req.getRole();
             if (role.equals(PortletRole.SUPER)) {
 
-                PortletPage page = createFromAllWebApps(req);
-                userLayouts.put(user, page);
-                return page;
-            }
+                try {
+                    page = createFromAllWebApps();
+                } catch (Exception e) {
+                    log.error("Unable to clone layout: ", e);
+                }
+            }  else {
 
-            try {
-                // For now users also get ALL web app layouts
-                PortletPage page = createFromAllWebApps(req);
-                userLayouts.put(user, page);
-                return page;
-                //return createFromNewUserLayoutXML(req);
-            } catch (Exception e) {
-                log.info("Using Guest Layout for " + req.getUser().getUserName());
+                try {
+
+                    // For now users also get ALL web app layouts
+                    page = createFromAllWebApps();
+
+                    //return createFromNewUserLayoutXML(req);
+                } catch (Exception e) {
+                    log.error("Unable to clone layout: ", e);
+                }
             }
+            userLayouts.put(sessionId, page);
+            sessionManager.addSessionListener(sessionId, this);
+            return page;
         }
-        return createFromGuestLayoutXML(req);
     }
 
     public PortletPage createFromGuestLayoutXML(PortletRequest req) {
@@ -151,13 +197,10 @@ public class PortletPageFactory {
         } else {
             PortletPage newcontainer = null;
             try {
-
-                //synchronized (new Integer(counter)) {
-                    //counter = (counter >= MAX_GUEST_CONTAINERS) ? 0 : counter++;
-                    newcontainer = (PortletPage)guestPage.clone();
-                //}
+                newcontainer = (PortletPage)guestPage.clone();
                 newcontainer.init(new ArrayList());
                 guests.put(id, newcontainer);
+                sessionManager.addSessionListener(id, this);
             } catch (Exception e) {
                 e.printStackTrace();
             }

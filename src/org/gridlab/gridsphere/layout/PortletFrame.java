@@ -366,7 +366,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         f.innerPadding = this.innerPadding;
         f.portletClass = this.portletClass;
         f.roleString = this.roleString;
-        f.requiredRole = this.requiredRole;
+        f.requiredRole = (PortletRole)this.requiredRole.clone();
         f.renderPortlet = this.renderPortlet;
         return f;
     }

@@ -248,10 +248,11 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         }
         out.println("<td class=\"tab-fillup\">&nbsp</td></tr></table>");
 
-        PortletTab selectedTab = (PortletTab) tabs.get(selectedIndex);
-        if (selectedTab != null) {
-            System.err.println("rendering tab: " + selectedIndex);
-            selectedTab.doRender(event);
+        if (!tabs.isEmpty()) {
+            PortletTab selectedTab = (PortletTab) tabs.get(selectedIndex);
+            if (selectedTab != null) {
+                selectedTab.doRender(event);
+            }
         }
     }
 
@@ -309,7 +310,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         // This insures that if no portlet component id (cid)
         // is set, then the selected tab index is the startIndex = 0
         if (event.getPortletComponentID() < 0) {
-            selectedIndex = startIndex;
+            this.setSelectedPortletTab((PortletTab)tabs.get(selectedIndex));
         }
 
         super.doRender(event);
@@ -326,6 +327,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     public Object clone() throws CloneNotSupportedException {
         PortletTabbedPane t = (PortletTabbedPane)super.clone();
         t.style = this.style;
+        t.startIndex = this.startIndex;
         t.selectedIndex = this.selectedIndex;
         t.tabs = new ArrayList(this.tabs.size());
         for (int i = 0; i < this.tabs.size(); i++) {

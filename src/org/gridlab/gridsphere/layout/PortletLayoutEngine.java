@@ -7,11 +7,9 @@ package org.gridlab.gridsphere.layout;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
+
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
 import java.io.*;
 import java.util.*;
@@ -107,7 +105,6 @@ public class PortletLayoutEngine {
         PortletPage page = null;
         try {
             page = getPortletPage(event);
-            page.init(new ArrayList());
             page.loginPortlets(event);
         } catch (Exception e) {
             log.error("Unable to loadUserLayout for user: " + req.getUser().getUserName(), e);

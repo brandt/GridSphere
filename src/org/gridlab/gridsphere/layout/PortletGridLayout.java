@@ -20,10 +20,10 @@ import java.util.ArrayList;
  */
 public class PortletGridLayout extends PortletFrameLayout implements Cloneable {
 
-    private int numColumns = 1;
-    private List colSizes = new ArrayList();
-    private String columnString = null;
-    private String style = "";
+    protected int numColumns = 1;
+    protected List colSizes = new ArrayList();
+    protected String columnString = "100";
+    protected String style = "";
 
     /**
      * Constructs an instance of PortletGridLayout
@@ -114,6 +114,9 @@ public class PortletGridLayout extends PortletFrameLayout implements Cloneable {
         //int j = 0, k = 0;
 
         //out.println("row: "+rows+" columns "+cols);
+        if (colSizes.size() == 0) {
+            colSizes.add("100");
+        }
 
         int numComponents = components.size();
         PortletComponent p = null;
@@ -177,8 +180,9 @@ public class PortletGridLayout extends PortletFrameLayout implements Cloneable {
     public Object clone() throws CloneNotSupportedException {
         PortletGridLayout g = (PortletGridLayout)super.clone();
         g.numColumns = this.numColumns;
+        g.columnString = this.columnString;
         g.style = this.style;
-        g.colSizes = new ArrayList(this.colSizes.size());
+        g.colSizes = new ArrayList(this.numColumns);
         for (int i = 0; i < this.colSizes.size(); i++) {
             String size = (String)this.colSizes.get(i);
             g.colSizes.add(size);
