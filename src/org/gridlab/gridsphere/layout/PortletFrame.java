@@ -66,12 +66,17 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
 
     public List init(List list) {
         list = super.init(list);
-        componentIDStr = String.valueOf(COMPONENT_ID);
-        list.add((PortletComponent)titleBar);
-        if (portletClass != null) {
-            titleBar.setPortletClass(portletClass);
+        if (titleBar != null) {
+            ComponentIdentifier compId = new ComponentIdentifier();
+            compId.setPortletLifecycle(titleBar);
+            compId.setComponentID(COMPONENT_ID);
+            compId.setClassName(titleBar.getClass().getName());
+            if (portletClass != null) {
+                titleBar.setPortletClass(portletClass);
+                titleBar.addTitleBarListener(this);
+            }
+            list.add(compId);
             list = titleBar.init(list);
-            titleBar.addTitleBarListener(this);
         }
         return list;
     }

@@ -120,15 +120,6 @@ public class PortletTitleBar extends BasePortletComponent {
         return PortletTitleBar.class.getName();
     }
 
-    /*
-    public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        log.debug("in doRenderFirst()");
-        PrintWriter out = res.getWriter();
-        out.println("<table width=\"100%\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\" bgcolor=\"" +  lineColor + "\"");
-        out.println("<tr><td><img src=\"images/help.gif\" align=left></td><td height=\"20\" align=left valign=middle>");
-    }
-    */
-
     public void addTitleBarListener(PortletTitleBarListener listener) {
         listeners.add(listener);
     }

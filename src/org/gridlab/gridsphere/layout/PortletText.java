@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletResponse;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
+import java.util.List;
 
 public class PortletText extends BasePortletComponent {
 
@@ -20,6 +21,11 @@ public class PortletText extends BasePortletComponent {
 
     public PortletText(String text) {
         setText(text);
+    }
+
+    public List init(List list) {
+        COMPONENT_ID = list.size();
+        return list;
     }
 
     public void setText(String text) {

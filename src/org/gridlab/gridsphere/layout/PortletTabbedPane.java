@@ -17,8 +17,6 @@ import java.util.List;
 
 public class PortletTabbedPane extends BasePortletComponent {
 
-    protected String name = PortletTabbedPane.class.getName();
-
     private PortletPanel selectedPanel = null;
     private List tabs = new ArrayList();
 
@@ -210,17 +208,25 @@ public class PortletTabbedPane extends BasePortletComponent {
 
     public List init(List list) {
         list = super.init(list);
+        System.err.println("COMP ID for tabbed pane: " + COMPONENT_ID);
         selectedPanel = getSelectedPortletPanel();
         PortletPanel panel = null;
+        ComponentIdentifier compId;
         for (int i = 0; i < getTabCount(); i++) {
+            compId = new ComponentIdentifier();
             panel = getPortletPanelAt(i);
-            list.add((PortletComponent)panel);
-            list = panel.init(list);
+            LayoutManager manager = panel.getLayoutManager();
+            compId.setPortletLifecycle(manager);
+            compId.setComponentID(list.size());
+            compId.setClassName(manager.getClass().getName());
+            list.add(compId);
+            list = manager.init(list);
         }
         return list;
     }
 
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
+        System.err.println("Doing an action in tabbed pane!!!!!!!!!!!!!!!!");
         SportletRequest req = event.getSportletRequest();
         String tabchange = req.getParameter(GridSphereProperties.PORTLETTAB);
         if (tabchange != null) {
@@ -228,7 +234,8 @@ public class PortletTabbedPane extends BasePortletComponent {
             setSelectedIndex(idx);
         }
         selectedPanel = getSelectedPortletPanel();
-        selectedPanel.actionPerformed(event);
+        LayoutManager layoutManager = selectedPanel.getLayoutManager();
+        layoutManager.actionPerformed(event);
     }
 
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
@@ -269,7 +276,8 @@ public class PortletTabbedPane extends BasePortletComponent {
 
         out.println("<table width=\"100%\">");
         out.println("<tr><td>");
-        selectedPanel.doRender(event);
+        LayoutManager layoutManager = selectedPanel.getLayoutManager();
+        layoutManager.doRender(event);
         out.println("</td></tr></table>");
     }
 

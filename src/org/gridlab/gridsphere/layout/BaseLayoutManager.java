@@ -16,18 +16,24 @@ import java.util.List;
  * The LayoutManager is responsible for constructing a layout appropriate
  * to the user's layout preferences.
  */
-public abstract class BaseLayoutManager implements LayoutManager, PortletFrameListener {
+public abstract class BaseLayoutManager extends BasePortletComponent implements LayoutManager, PortletFrameListener {
 
     protected List components = new ArrayList();
     protected PortletInsets insets;
 
     public List init(List list) {
+        list = super.init(list);
         Iterator it = components.iterator();
-        PortletComponent p = null;
+        PortletLifecycle p = null;
+        ComponentIdentifier compId;
         while (it.hasNext()) {
-            p = (PortletComponent)it.next();
+            compId = new ComponentIdentifier();
+            p = (PortletLifecycle)it.next();
+            compId.setPortletLifecycle(p);
+            compId.setClassName(p.getClass().getName());
+            compId.setComponentID(list.size());
             //PortletRender a = (PortletRender)p;
-            list.add(p);
+            list.add(compId);
             // invoke init on each component
             list = p.init(list);
             // If the component is a frame we want to be notified

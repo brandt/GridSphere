@@ -21,4 +21,6 @@ public interface PortletLifecycle extends PortletRender {
 
     public void destroy();
 
+    public int getComponentID();
+
 }

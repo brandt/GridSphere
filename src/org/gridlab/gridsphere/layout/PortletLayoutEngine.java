@@ -56,6 +56,11 @@ public class PortletLayoutEngine {
         guestContainer.init(new ArrayList());
     }
 
+    public PortletContainer getPortletContainer(User user) {
+        if (!userLayouts.containsKey(user)) return null;
+        PortletLayoutDescriptor pld = (PortletLayoutDescriptor)userLayouts.get(user);
+        return pld.getPortletContainer();
+    }
 
     public PortletContainer getPortletContainer(GridSphereEvent event) throws PortletLayoutException {
         // if user is guest then use guest template

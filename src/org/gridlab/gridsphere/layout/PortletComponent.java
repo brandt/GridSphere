@@ -4,16 +4,11 @@
  */
 package org.gridlab.gridsphere.layout;
 
-
-
-
 public interface PortletComponent extends PortletLifecycle {
 
     public boolean isVisible();
 
     public void setVisible(boolean isVisible);
-
-    public int getComponentID();
 
     public String getBackground();
 

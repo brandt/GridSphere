@@ -14,6 +14,7 @@ public class PortletTab {
     private PortletPanel panel;
     private boolean selected = false;
     private PortletTabbedPane parent;
+    private LayoutManager layoutManager;
 
     public PortletTab() {}
 
@@ -61,6 +62,14 @@ public class PortletTab {
 
     public void setPortletPanel(PortletPanel panel) {
         this.panel = panel;
+    }
+
+    public void setLayoutManager(LayoutManager layoutManager) {
+        this.layoutManager = layoutManager;
+    }
+
+    public LayoutManager getLayoutManager() {
+        return layoutManager;
     }
 
 }

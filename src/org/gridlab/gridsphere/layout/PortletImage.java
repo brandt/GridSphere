@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 public class PortletImage extends BasePortletComponent {
 

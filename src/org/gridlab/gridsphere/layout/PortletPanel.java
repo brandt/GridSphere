@@ -8,28 +8,13 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.ArrayList;
 
-public class PortletPanel extends BasePortletComponent {
+public class PortletPanel {
 
     private LayoutManager layoutManager;
 
     public PortletPanel() {}
-
-    public String getClassName() {
-        return PortletPanel.class.getName();
-    }
-
-    public List init(List list) {
-        list = super.init(list);
-        PortletLifecycle cycle = (PortletLifecycle)layoutManager;
-        list.add(cycle);
-        list = cycle.init(list);
-        return list;
-    }
-
-    public void destroy() {
-        layoutManager.destroy();
-    }
 
     public PortletPanel(LayoutManager layoutManager) {
         this.layoutManager = layoutManager;
@@ -41,14 +26,6 @@ public class PortletPanel extends BasePortletComponent {
 
     public LayoutManager getLayoutManager() {
         return layoutManager;
-    }
-
-    public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
-        layoutManager.actionPerformed(event);
-    }
-
-    public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
-        layoutManager.doRender(event);
     }
 
 }

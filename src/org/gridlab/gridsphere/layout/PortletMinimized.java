@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 public class PortletMinimized extends BasePortletComponent {
 
@@ -20,6 +21,11 @@ public class PortletMinimized extends BasePortletComponent {
 
     public PortletMinimized(String title) {
         this.title = title;
+    }
+
+    public List init(List list) {
+        COMPONENT_ID = list.size();
+        return list;
     }
 
     public void setTitle(String title) {

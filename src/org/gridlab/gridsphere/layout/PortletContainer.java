@@ -15,8 +15,17 @@ import java.util.List;
 
 public class PortletContainer implements PortletLifecycle {
 
+    protected int COMPONENT_ID = 0;
+
+    // The actual portlet layout components
     protected List components = new ArrayList();
+
+    // The component ID's of each of the layout components
     protected List portletComponents = new ArrayList();
+
+    // The list of portlets a user has-- generally contained within a PortletFrame/PortletTitleBar combo
+    protected List portlets = new ArrayList();
+
     protected LayoutManager layoutManager;
     protected String name = "";
 
@@ -41,16 +50,21 @@ public class PortletContainer implements PortletLifecycle {
     public List init(List list) {
         Iterator it = components.iterator();
         PortletLifecycle cycle;
+        ComponentIdentifier compId;
         while (it.hasNext()) {
+            compId = new ComponentIdentifier();
             cycle = (PortletLifecycle)it.next();
-            list.add(cycle);
+            compId.setPortletLifecycle(cycle);
+            compId.setClassName(cycle.getClass().getName());
+            compId.setComponentID(list.size());
+            list.add(compId);
             portletComponents = cycle.init(list);
         }
 
         System.err.println("Made a components list!!!! " + portletComponents.size());
         for (int i = 0; i < portletComponents.size(); i++) {
-            PortletLifecycle c = (PortletLifecycle)portletComponents.get(i);
-            System.err.println(c.getClass().getName());
+            ComponentIdentifier c = (ComponentIdentifier)portletComponents.get(i);
+            System.err.println(c.getComponentID() + " : " + c.getClassName());
         }
         return portletComponents;
     }
@@ -85,9 +99,10 @@ public class PortletContainer implements PortletLifecycle {
 
         // if there is a layout action do it!
         if (event.hasAction()) {
-            System.err.println("In PORTLET CONTAINER: ACTION = " + event.getAction().toString());
-            System.err.println("In PORTLET CONTAINER: ID = " + event.getPortletComponentID());
-            PortletLifecycle l = (PortletLifecycle)portletComponents.get(event.getPortletComponentID() - 1);
+            // off by one calculations for array indexing (because all component id's are .size() which is
+            // one more than we use to index the components
+            ComponentIdentifier compId = (ComponentIdentifier)portletComponents.get(event.getPortletComponentID() - 1);
+            PortletLifecycle l = compId.getPortletLifecycle();
             if (l != null) {
                 l.actionPerformed(event);
             }
@@ -145,4 +160,7 @@ public class PortletContainer implements PortletLifecycle {
         layoutManager = mgr;
     }
 
+    public int getComponentID() {
+        return COMPONENT_ID;
+    }
 }

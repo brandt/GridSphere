@@ -22,7 +22,7 @@ public abstract class BasePortletComponent implements PortletComponent {
     protected PortletInsets insets;
     protected boolean isVisible = true;
 
-    public List init(List list) {
+    public  List init(List list) {
         COMPONENT_ID = list.size();
         return list;
     }

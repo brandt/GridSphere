@@ -57,17 +57,6 @@ public class PortletFlowLayout extends BaseLayoutManager {
         return vgap;
     }
 
-/*
-    public void doLayoutAction(GridSphereEvent event) throws PortletLayoutException, IOException {
-        Iterator it = components.iterator();
-        PortletRender p = null;
-        while (it.hasNext()) {
-            p = (PortletRender)it.next();
-            p.doLayoutAction(ctx, req, res);
-        }
-    }
-    */
-
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         SportletRequest req = event.getSportletRequest();
         SportletResponse res = event.getSportletResponse();
