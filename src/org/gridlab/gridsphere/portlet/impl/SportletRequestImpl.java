@@ -288,7 +288,8 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
      * @return the portlet mode
      */
     public Portlet.Mode getMode() {
-        return (Portlet.Mode) this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_MODE);
+        String mode = (String) this.getHttpServletRequest().getAttribute(SportletProperties.PORTLET_MODE);
+        return Portlet.Mode.toMode(mode);
     }
 
     /**
@@ -297,7 +298,7 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
      * @param mode the portlet mode
      */
     public void setMode(Portlet.Mode mode) {
-        this.getHttpServletRequest().setAttribute(SportletProperties.PORTLET_MODE, mode);
+        this.getHttpServletRequest().setAttribute(SportletProperties.PORTLET_MODE, mode.toString());
     }
 
     public void invalidateCache() {

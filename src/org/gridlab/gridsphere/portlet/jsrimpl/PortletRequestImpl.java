@@ -44,12 +44,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     private PortletSession portletSession = null;
 
     protected Map props = null;
-
-    //protected List modesAllowed = null;
-
     protected GridSphereParameters portalParameters = null;
-
-    //protected boolean included = true;
 
     /**
      * Constructor creates a proxy for a HttpServletRequest
@@ -156,17 +151,6 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     public boolean isPortletModeAllowed(PortletMode mode) {
         List modesAllowed = (List)this.getHttpServletRequest().getAttribute(SportletProperties.ALLOWED_MODES);
         if (modesAllowed.contains(mode.toString())) return true;
-        /*
-        Enumeration modesEnum = portalContext.getSupportedPortletModes();
-        while (modesEnum.hasMoreElements()) {
-            PortletMode m = (PortletMode)modesEnum.nextElement();
-            if (m.equals(mode)) {
-                System.err.println("mode " + mode.toString() + " IS allowed");
-                return true;
-            }
-        }
-        System.err.println("mode " + mode.toString() + " not allowed");
-        */
         return false;
     }
 
@@ -176,8 +160,9 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @return the portlet mode
      */
     public PortletMode getPortletMode() {
-        /*
-        Portlet.Mode mode = (Portlet.Mode) getAttribute(SportletProperties.PORTLET_MODE);
+
+        String modeStr = (String) getAttribute(SportletProperties.PORTLET_MODE);
+        Portlet.Mode mode = Portlet.Mode.toMode(modeStr);
         PortletMode m = PortletMode.VIEW;
         if (mode == Portlet.Mode.VIEW) {
             m = PortletMode.VIEW;
@@ -191,8 +176,10 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
             m = new PortletMode(mode.toString());
         }
         return m;
-        */
-        return (PortletMode)getAttribute(SportletProperties.PORTLET_MODE_JSR);
+
+        //String mode = (String)getAttribute(SportletProperties.PORTLET_MODE);
+        //return new PortletMode(mode);
+        //return (PortletMode)getAttribute(SportletProperties.PORTLET_MODE_JSR);
     }
 
     /**
@@ -560,46 +547,6 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         return (String[]) this.getParameterMap().get(name);
     }
 
-    public Map getParameterMap2() {
-        //get control params
-        Map portletParameters = new HashMap();
-
-        /*
-        Iterator iterator = portalParameters.getRenderParamNames();
-
-        while (iterator.hasNext())
-        {
-            String name = (String)iterator.next();
-
-            String[] values = portalParameters.getRenderParamValues(name);
-
-            portletParameters.put(name, values );
-
-        }
-
-        //get request params
-        String myid = portalParameters.getMyId();
-        String cid = portalParameters.getTargetedID();
-
-        if (myid.equals(cid)) {
-            for (Enumeration parameters = super.getParameterNames(); parameters.hasMoreElements();) {
-                String   paramName   = (String)parameters.nextElement();
-                String[] paramValues = (String[])super.getParameterValues(paramName);
-                String[] values      = (String[])portletParameters.get(paramName);
-
-                if (values != null) {
-                    String[] temp = new String[paramValues.length + values.length];
-                    System.arraycopy(paramValues, 0, temp, 0, paramValues.length);
-                    System.arraycopy(values, 0, temp, paramValues.length, values.length);
-                    paramValues = temp;
-                }
-                portletParameters.put(paramName, paramValues);
-            }
-        }
-        */
-        return Collections.unmodifiableMap(portletParameters);
-    }
-
     /**
      * Returns a <code>Map</code> of the parameters of this request.
      * Request parameters are extra information sent with the request.
@@ -720,7 +667,8 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @return preferred MIME type of the response
      */
     public String getResponseContentType() {
-        Portlet.Mode mode = (Portlet.Mode) getAttribute(SportletProperties.PORTLET_MODE);
+        String modeStr = (String) getAttribute(SportletProperties.PORTLET_MODE);
+        Portlet.Mode mode = Portlet.Mode.toMode(modeStr);
         if (supports != null) {
             Supports s = supports[0];
             org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode[] modes = s.getPortletMode();
@@ -754,7 +702,8 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      */
     public java.util.Enumeration getResponseContentTypes() {
         List types = new ArrayList();
-        Portlet.Mode mode = (Portlet.Mode) getAttribute(SportletProperties.PORTLET_MODE);
+        String modeStr = (String) getAttribute(SportletProperties.PORTLET_MODE);
+        Portlet.Mode mode = Portlet.Mode.toMode(modeStr);
         if (supports != null) {
             for (int i = 0; i < supports.length; i++) {
                 Supports s = supports[i];

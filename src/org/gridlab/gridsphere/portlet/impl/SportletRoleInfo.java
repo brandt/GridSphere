@@ -3,7 +3,7 @@ package org.gridlab.gridsphere.portlet.impl;
 import org.gridlab.gridsphere.portlet.PortletRole;
 
 /*
- * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  * The <code>PortletRoleInfo</code> saves the role associated to a concrete portlet.
  */

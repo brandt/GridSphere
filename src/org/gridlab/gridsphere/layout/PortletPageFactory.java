@@ -44,7 +44,7 @@ public class PortletPageFactory implements PortletSessionListener {
     // Store user layouts in a hash
     private static Map userLayouts = new Hashtable();
 
-    private PortletPage tckLayout = null;
+    private Map tckLayouts = new Hashtable();
 
     private static Map guests = new Hashtable();
 
@@ -434,7 +434,6 @@ public class PortletPageFactory implements PortletSessionListener {
             //tb.setPortletClass(portletClass);
             tb.setPortletClass(appName + "#" + portletName);
             frame.setPortletTitleBar(tb);
-            frame.setLabel(portletName);
             //frame.setPortletClass(portletClass);
             frame.setPortletClass(appName + "#" + portletName);
             tableLayout.addPortletComponent(frame);
@@ -467,14 +466,20 @@ public class PortletPageFactory implements PortletSessionListener {
         log.debug("User requesting layout: " + user.getUserName());
 
         String[] portletNames = req.getParameterValues("portletName");
-        if (portletNames != null) {
-            log.info("Creating TCK LAYOUT!");
-            tckLayout = createTCKPage(req, portletNames);
-            tckLayout.init(req, new ArrayList());
-        }
 
-        if (tckLayout != null) {
-            return tckLayout;
+        // Sun TCK test uses Jakarta Commons-HttpClient/2.0beta1
+        if (req.getClient().getUserAgent().indexOf("HttpClient") > 0) {
+            if (portletNames != null) {
+                log.info("Creating TCK LAYOUT!");
+                PortletPage tckLayout = createTCKPage(req, portletNames);
+                tckLayout.init(req, new ArrayList());
+                tckLayouts.put(sessionId, tckLayout);
+                sessionManager.addSessionListener(sessionId, this);
+            }
+
+            if (tckLayouts.containsKey(sessionId)) {
+                return (PortletPage)tckLayouts.get(sessionId);
+            }
         }
 
         if (user instanceof GuestUser) {

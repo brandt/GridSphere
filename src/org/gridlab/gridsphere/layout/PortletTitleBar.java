@@ -665,8 +665,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             event.addNewRenderEvent(titleBarEvent);
             comp.actionPerformed(event);
         }
-
-        //if (evt != null) fireTitleBarEvent(evt);
     }
 
     /**
@@ -683,6 +681,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             l.handleTitleBarEvent(event);
         }
     }
+
     /**
      * Renders the portlet title bar component
      *
@@ -698,6 +697,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     		doRenderWML(event);
     	}
     }
+
     public void doRenderWML(GridSphereEvent event) throws PortletLayoutException, IOException {
 
         hasError = false;
@@ -709,12 +709,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         // get the appropriate title for this client
         Client client = req.getClient();
         Locale locale = req.getLocale();
-
-        /*
-        if (settings != null) {
-            title = settings.getTitle(locale, client);
-        }
-        */
 
         List modeLinks = null, windowLinks = null;
         User user = req.getUser();

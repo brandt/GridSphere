@@ -227,7 +227,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
 
         super.actionPerformed(event);
-
+        tab = null;
         PortletComponentEvent compEvt = event.getLastRenderEvent();
         PortletTabEvent tabEvent = new PortletTabEventImpl(this, event.getPortletRequest(), PortletTabEvent.TabAction.TAB_SELECTED, COMPONENT_ID);
         List l = Collections.synchronizedList(listeners);

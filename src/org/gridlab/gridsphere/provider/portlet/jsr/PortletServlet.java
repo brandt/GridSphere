@@ -309,10 +309,12 @@ public class PortletServlet extends HttpServlet
                     log.debug("in PortletServlet: action handling portlet " + pid);
                     try {
                         portlet.processAction(actionRequest, actionResponse);
+
                         Map params = ((ActionResponseImpl) actionResponse).getRenderParameters();
+
                         String cid = (String) request.getAttribute(SportletProperties.COMPONENT_ID);
                         actionRequest.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid, params);
-                        log.debug("placing render params in attribute: " + SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid);
+                        log.debug("placing render params in attribute: key= " + SportletProperties.RENDER_PARAM_PREFIX + pid + "_" + cid);
                         redirect(request, response, actionRequest, actionResponse, portalContext);
                     } catch (Exception e) {
                         log.error("Error during processAction:", e);
@@ -353,7 +355,7 @@ public class PortletServlet extends HttpServlet
                         log.error("in PortletServlet(): doRender() caught exception", e);
                         throw new ServletException(e);
                     } finally {
-                        request.removeAttribute(SportletProperties.PORTLET_MODE_JSR);
+                        //request.removeAttribute(SportletProperties.PORTLET_MODE_JSR);
                     }                   
                 }
             }
@@ -412,9 +414,14 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
             myModes.add(m.toString());
         }
 
-        org.gridlab.gridsphere.portlet.Portlet.Mode mode = (org.gridlab.gridsphere.portlet.Portlet.Mode) request.getAttribute(SportletProperties.PORTLET_MODE);
+
+        //String modeStr = (String)request.getAttribute(SportletProperties.PORTLET_MODE);
         //System.err.println("found mode " + mode);
-        if (mode == null) mode = org.gridlab.gridsphere.portlet.Portlet.Mode.VIEW;
+        //if (modeStr == null) modeStr = "view";
+        /*
+        org.gridlab.gridsphere.portlet.Portlet.Mode mode = org.gridlab.gridsphere.portlet.Portlet.Mode.toMode(modeStr);
+
+
         if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.VIEW) {
             m = PortletMode.VIEW;
         } else if (mode == org.gridlab.gridsphere.portlet.Portlet.Mode.EDIT) {
@@ -426,16 +433,17 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
         } else {
             m = new PortletMode(mode.toString());
         }
-
+        */
         request.setAttribute(SportletProperties.ALLOWED_MODES, myModes);
-        String jsrmode = SportletProperties.PORTLET_MODE_JSR;
-        String gsmode = SportletProperties.PORTLET_MODE;
+        
+        //String jsrmode = SportletProperties.PORTLET_MODE_JSR;
+        //String gsmode = SportletProperties.PORTLET_MODE;
 
-        request.setAttribute(gsmode, mode);
-        if (request.getAttribute(jsrmode) == null) {
+        //request.setAttribute(gsmode, modeStr);
+        //if (request.getAttribute(jsrmode) == null) {
             //System.err.println("setting jsr mode " + m);
-            request.setAttribute(jsrmode, m);
-        }
+        //    request.setAttribute(jsrmode, m);
+        //}
 
     }
 

@@ -35,8 +35,6 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
     private boolean redirected = false;
     private String redirectLocation;
     protected Map renderParams = null;
-    protected PortletMode portletMode;
-    protected WindowState windowState;
 
     /**
      * Constructs an instance of SportletResponse using an
@@ -93,7 +91,7 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
             if (!found) throw new WindowStateException("Unsupported window state!", windowState);
         }
         isRedirectAllowed = false;
-        this.windowState = windowState;
+
         req.setAttribute(SportletProperties.PORTLET_WINDOW, ws);
     }
 
@@ -128,17 +126,12 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
         if (redirected) {
             throw new IllegalStateException("it is not allowed to invoke setPortletMode after sendRedirect has been called");
         }
-
-        //Portlet.Mode mode = Portlet.Mode.VIEW;
-
         List allowedModes = (List) req.getAttribute(SportletProperties.ALLOWED_MODES);
-
 
         if (!allowedModes.contains(portletMode.toString())) throw new PortletModeException("Unsupported portlet mode!", portletMode);
 
-        this.portletMode = portletMode;
-        String thismode = SportletProperties.PORTLET_MODE_JSR;
-        req.setAttribute(thismode, portletMode);
+        req.setAttribute(SportletProperties.PORTLET_MODE, portletMode.toString());
+
         isRedirectAllowed = false;
     }
 
@@ -317,13 +310,6 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
         return redirectLocation;
     }
 
-    public PortletMode getChangedPortletMode() {
-        return this.portletMode;
-    }
-
-    public WindowState getChangedWindowState() {
-        return this.windowState;
-    }
 }
 
 

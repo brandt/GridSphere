@@ -260,6 +260,8 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
         super.actionPerformed(event);
 
+        pane = null;
+
         PortletComponentEvent compEvt = event.getLastRenderEvent();
         if ((compEvt != null) && (compEvt instanceof PortletTabEvent)) {
             PortletTabEvent tabEvent = (PortletTabEvent) compEvt;
@@ -620,9 +622,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     	String markupName=event.getPortletRequest().getClient().getMarkupName();
     	if (markupName.equals("html")){
     		doRenderHTML(event);
-    	}
-    	else
-    	{
+    	} else {
     		doRenderWML(event);
     	}
     }

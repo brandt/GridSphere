@@ -416,11 +416,9 @@ public class PortletPage implements Serializable, Cloneable {
 
         // handle any client logic to determin which markup to display
     	String markupName=event.getPortletRequest().getClient().getMarkupName();
-    	if (markupName.equals("html")){
+    	if (markupName.equals("html")) {
     		doRenderHTML(event);
-    	}
-    	else
-    	{
+    	} else {
     		doRenderWML(event);
     	}
     }
@@ -444,8 +442,7 @@ public class PortletPage implements Serializable, Cloneable {
         out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         out.println("<!DOCTYPE html PUBLIC \"-//WAPFORUM//DTD XHTML Mobile 1.0//EN\" \"http://www.wapforum.org/DTD/xhtml-mobile10.dtd\">");
         out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
-        out.println("  <link type=\"text/css\" href=\"themes/" + theme + "/css" +
-        "/defaultwap.css\" rel=\"stylesheet\"/>");
+        out.println("  <link type=\"text/css\" href=\"themes/" + theme + "/css/defaultwap.css\" rel=\"stylesheet\"/>");
         //out.println("\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");        
 		
         //out.println("<wml>");

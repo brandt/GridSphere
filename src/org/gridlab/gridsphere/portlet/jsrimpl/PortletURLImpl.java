@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
 import java.util.*;
+import java.io.UnsupportedEncodingException;
 
 
 /**
@@ -141,7 +142,7 @@ public class PortletURLImpl implements PortletURL {
         List allowedModes = (List) req.getAttribute(SportletProperties.ALLOWED_MODES);
         if (allowedModes.contains(portletMode.toString())) {
             mode = portletMode;
-            req.setAttribute(SportletProperties.PORTLET_MODE_JSR, mode);
+            req.setAttribute(SportletProperties.PORTLET_MODE, mode.toString());
         } else {
             throw new PortletModeException("Illegal portlet mode", portletMode);
         }
@@ -308,45 +309,45 @@ public class PortletURLImpl implements PortletURL {
 
         //boolean firstParam = true;
         Iterator it = set.iterator();
-        //try {
-        while (it.hasNext()) {
-            //if (!firstParam)
-            url += "&";
-            String name = (String) it.next();
+        try {
+            while (it.hasNext()) {
+                //if (!firstParam)
+                url += "&";
+                String name = (String) it.next();
 
-            String encname = null;
+                String encname = null;
 
-            // if its a render url, the parameters must be prefixed
-            //if (isAction) {
-            encname = URLEncoder.encode(name);
-            //} else {
-            //    encname = URLEncoder.encode(SportletProperties.RENDER_PARAM_PREFIX + name);
-            //}
+                // if its a render url, the parameters must be prefixed
+                //if (isAction) {
+                encname = URLEncoder.encode(name, "UTF-8");
+                //} else {
+                //    encname = URLEncoder.encode(SportletProperties.RENDER_PARAM_PREFIX + name);
+                //}
 
-            Object val = store.get(name);
-            if (val instanceof String[]) {
-                String[] vals = (String[]) val;
-                for (int j = 0; j < vals.length - 1; j++) {
-                    String encvalue = URLEncoder.encode(vals[j]);
-                    url += encname + "=" + encvalue + "&";
-                }
-                String encvalue = URLEncoder.encode(vals[vals.length - 1]);
-                url += encname + "=" + encvalue;
-            } else if (val instanceof String) {
-                String aval = (String) store.get(name);
-                if ((aval != null) && (!aval.equals(""))) {
-                    String encvalue = URLEncoder.encode(aval);
+                Object val = store.get(name);
+                if (val instanceof String[]) {
+                    String[] vals = (String[]) val;
+                    for (int j = 0; j < vals.length - 1; j++) {
+                        String encvalue = URLEncoder.encode(vals[j], "UTF-8");
+                        url += encname + "=" + encvalue + "&";
+                    }
+                    String encvalue = URLEncoder.encode(vals[vals.length - 1], "UTF-8");
                     url += encname + "=" + encvalue;
-                } else {
-                    url += encname;
+                } else if (val instanceof String) {
+                    String aval = (String) store.get(name);
+                    if ((aval != null) && (!aval.equals(""))) {
+                        String encvalue = URLEncoder.encode(aval, "UTF-8");
+                        url += encname + "=" + encvalue;
+                    } else {
+                        url += encname;
+                    }
                 }
+                //firstParam = false;
             }
-            //firstParam = false;
-        }
-        /*
+
         } catch (UnsupportedEncodingException e) {
-        System.err.println("Unable to support UTF-8 encoding!");
-        }*/
+            System.err.println("Unable to support UTF-8 encoding!");
+        }
         if (redirect) {
             newURL = res.encodeRedirectURL(url);
         } else {

@@ -165,7 +165,7 @@ public interface SportletProperties {
 
     public static final String PORTLET_MODE = "gs_mode";
 
-    public static final String PORTLET_MODE_JSR = "jsr_mode";
+    //public static final String PORTLET_MODE_JSR = "jsr_mode";
 
     public static final String PORTLET_TITLE = "title";
 

@@ -66,6 +66,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     private boolean isClosing = false;
 
+    private Map renderParams = null;
+
     private StringBuffer frame = new StringBuffer();
 
     /**
@@ -272,6 +274,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         // remove cached output
         cacheService.removeCached(portletClass + id);
+        frame = null;
+
         hasTitleBarEvent = false;
 
         PortletComponentEvent titleBarEvent = event.getLastRenderEvent();
@@ -279,8 +283,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         if ((titleBarEvent != null) && (titleBarEvent instanceof PortletTitleBarEvent)) {
             PortletTitleBarEvent tbEvt = (PortletTitleBarEvent) titleBarEvent;
             if (titleBarEvent.getAction() == PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY) {
-                // remove cached output for any window action
-                cacheService.removeCached(portletClass + id);
 
                 PortletWindow.State state = tbEvt.getState();
                 PortletFrameEventImpl frameEvent = null;
@@ -329,28 +331,41 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             // now perform actionPerformed on Portlet if it has an action
             titleBar.actionPerformed(event);
 
-            // process events
-            PortletRequest req = event.getPortletRequest();
-
-            req.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
+            request.setAttribute(SportletProperties.COMPONENT_ID, componentIDStr);
 
             //PortletRole role = req.getRole();
             //if (role.compare(role, requiredRole) < 0) return;
 
             PortletResponse res = event.getPortletResponse();
 
-            req.setAttribute(SportletProperties.PORTLETID, portletClass);
+            request.setAttribute(SportletProperties.PORTLETID, portletClass);
 
             // Override if user is a guest
             //Uuser = req.getUser();
             if (user instanceof GuestUser) {
-                req.setMode(Portlet.Mode.VIEW);
+                request.setMode(Portlet.Mode.VIEW);
             } else {
                 Portlet.Mode mode = titleBar.getPortletMode();
-                req.setMode(mode);
+                request.setMode(mode);
             }
 
-            titleBar.setPortletMode(req.getMode());
+            titleBar.setPortletMode(request.getMode());
+
+
+            // If render parameters have been set, then use them in the triggered portlet
+            /*
+            renderParams = new HashMap();
+            for (Enumeration parameters = request.getParameterNames(); parameters.hasMoreElements();) {
+                String paramName = (String) parameters.nextElement();
+                String[] paramValues = (String[]) request.getParameterValues(paramName);
+                if (paramName.startsWith(SportletProperties.RENDER_PARAM_PREFIX)) {
+                    if (!renderParams.containsKey(paramName)) {
+                        renderParams.put(paramName, paramValues);
+                    }
+                }
+            }
+            if (!renderParams.isEmpty()) request.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr, renderParams);
+            */
 
             //System.err.println("in PortletFrame action invoked for " + portletClass);
             if (event.hasAction()
@@ -358,18 +373,28 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     && (!event.getAction().getName().equals(FRAME_CLOSE_CANCEL_ACTION))) {
                 DefaultPortletAction action = event.getAction();
 
+                renderParams = null;
+
                 try {
-                    PortletInvoker.actionPerformed((String)req.getAttribute(SportletProperties.PORTLETID), action, req, res);
+                    PortletInvoker.actionPerformed((String)request.getAttribute(SportletProperties.PORTLETID), action, request, res);
                 } catch (PortletException e) {
                     // catch it and keep processing
                 }
 
                 // see if mode has been set
-                Portlet.Mode mymode = (Portlet.Mode)req.getAttribute(SportletProperties.PORTLET_MODE);
+                String mymodeStr = (String)request.getAttribute(SportletProperties.PORTLET_MODE);
+                Portlet.Mode mymode = Portlet.Mode.toMode(mymodeStr);
                 if (mymode != null) {
+                    System.err.println("setting title mode to " + mymode);
                     titleBar.setPortletMode(mymode);
                 }
+
             }
+
+            // see if render params are set
+            renderParams = (Map)request.getAttribute(SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
+
+            if (renderParams != null) System.err.println("in action " + portletClass + " there are render params! key= " + SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
 
             List slisteners = Collections.synchronizedList(listeners);
             synchronized (slisteners) {
@@ -518,6 +543,12 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     postframe.append(storedWriter.toString());
                 } else {
                     try {
+                       /*
+                        if ((renderParams != null) && (!renderParams.isEmpty())) {
+                            System.err.println("in render " + portletClass + " there are render params in the frame setting in request! key= " + SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr);
+                            req.setAttribute(SportletProperties.RENDER_PARAM_PREFIX + portletClass + "_" + componentIDStr, renderParams);
+                        }
+                         */
                         PortletInvoker.service((String)req.getAttribute(SportletProperties.PORTLETID), req, wrappedResponse);
                         postframe.append(storedWriter.toString());
                     } catch (PortletException e) {
