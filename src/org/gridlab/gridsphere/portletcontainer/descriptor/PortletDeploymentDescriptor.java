@@ -13,13 +13,13 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.Descriptor;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class PortletDeploymentDescriptor extends Descriptor {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletDeploymentDescriptor.class);
     private PersistenceManagerXml pmx = PersistenceManagerXml.getInstance();
-    private Vector PortletDef = new Vector();
+    private List PortletDef = new ArrayList();
     private PortletCollection pc = null;
     private String mappingFilePath = null;
     private String portletFilePath = null;
@@ -41,7 +41,7 @@ public class PortletDeploymentDescriptor extends Descriptor {
      *
      * @return a list of PortletApps
      */
-    public Vector getPortletDef() {
+    public List getPortletDef() {
         return pc.getPortletDefList();
     }
 
@@ -50,7 +50,7 @@ public class PortletDeploymentDescriptor extends Descriptor {
      *
      * @return a list of PortletApps
      */
-    public void setPortletDef(Vector defs) {
+    public void setPortletDef(ArrayList defs) {
         pc.setPortletDefList(defs);
     }
 
@@ -80,18 +80,18 @@ public class PortletDeploymentDescriptor extends Descriptor {
     public void setConcretePortletApplication(ConcretePortletApplication concApp) {
         if (getConcretePortletApplication(concApp.getID()) == null) {
             // see if an application portlet exists
-            Vector defList = pc.getPortletDefList();
+            List defList = pc.getPortletDefList();
             Iterator it = defList.iterator();
             while (it.hasNext()) {
                 PortletDefinition pd = (PortletDefinition)it.next();
-                Vector apps = pd.getConcreteApps();
+                List apps = pd.getConcreteApps();
                 PortletApp pApp = pd.getPortletApp();
                 if (concApp.getID().startsWith(pApp.getID())) {
                     apps.add(concApp);
                     defList.remove(pd);
-                    pd.setConcreteApps(apps);
+                    pd.setConcreteApps((ArrayList)apps);
                     defList.add(pd);
-                    pc.setPortletDefList(defList);
+                    pc.setPortletDefList((ArrayList)defList);
                 }
             }
         }
@@ -125,9 +125,9 @@ public class PortletDeploymentDescriptor extends Descriptor {
     public void setPortletAppDescriptor(PortletApp portletApp) {
         if (getPortletAppDescriptor(portletApp.getID()) == null) {
             PortletDefinition pd = new PortletDefinition();
-            Vector defList = pc.getPortletDefList();
+            List defList = pc.getPortletDefList();
             defList.add(pd);
-            pc.setPortletDefList(defList);
+            pc.setPortletDefList((ArrayList)defList);
         }
     }
 

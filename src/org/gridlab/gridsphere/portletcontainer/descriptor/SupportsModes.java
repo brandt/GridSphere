@@ -4,14 +4,14 @@
  */
 package org.gridlab.gridsphere.portletcontainer.descriptor;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SupportsModes {
 
-    private List markupList = new Vector();
+    private List markupList = new ArrayList();
 
-    public void setMarkupList(Vector markupList) {
+    public void setMarkupList(ArrayList markupList) {
         this.markupList = markupList;
     }
 

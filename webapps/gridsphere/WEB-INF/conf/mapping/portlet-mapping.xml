@@ -4,7 +4,7 @@
 
     <class name="org.gridlab.gridsphere.portletcontainer.descriptor.PortletCollection">
         <map-to xml="portlet-app-collection"/>
-        <field name="PortletDefList" type="org.gridlab.gridsphere.portletcontainer.descriptor.PortletDefinition" collection="vector">
+        <field name="PortletDefList" type="org.gridlab.gridsphere.portletcontainer.descriptor.PortletDefinition" collection="arraylist">
             <bind-xml name="portlet-app-def"/>
         </field>
     </class>
@@ -13,7 +13,7 @@
         <field name="PortletApp" type="org.gridlab.gridsphere.portletcontainer.descriptor.PortletApp">
             <bind-xml name="portlet-app"/>
         </field>
-        <field name="ConcreteApps" type="org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication" collection="vector">
+        <field name="ConcreteApps" type="org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication" collection="arraylist">
             <bind-xml name="concrete-portlet-app"/>
         </field>
     </class>
@@ -22,7 +22,7 @@
         <field name="ID" type="string">
             <bind-xml name="id" node="attribute"/>
         </field>
-        <field name="ContextParamList" type="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam" collection="vector">
+        <field name="ContextParamList" type="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam" collection="arraylist">
             <bind-xml name="context-param"/>
         </field>
         <field name="ConcretePortletInfo" type="org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletInfo">
@@ -37,19 +37,19 @@
         <field name="DefaultLocale" type="string">
             <bind-xml name="default-locale" attribute="element"/>
         </field>
-        <field name="LanguageList" type="org.gridlab.gridsphere.portletcontainer.descriptor.LanguageInfo" collection="vector">
+        <field name="LanguageList" type="org.gridlab.gridsphere.portletcontainer.descriptor.LanguageInfo" collection="arraylist">
             <bind-xml name="language"/>
         </field>
         <field name="Owner" type="org.gridlab.gridsphere.portletcontainer.descriptor.Owner">
             <bind-xml name="owner"/>
         </field>
-        <field name="GroupList" type="org.gridlab.gridsphere.portletcontainer.descriptor.Group" collection="vector">
+        <field name="GroupList" type="org.gridlab.gridsphere.portletcontainer.descriptor.Group" collection="arraylist">
             <bind-xml name="group"/>
         </field>
-        <field name="RoleList" type="org.gridlab.gridsphere.portletcontainer.descriptor.Role" collection="vector">
+        <field name="RoleList" type="org.gridlab.gridsphere.portletcontainer.descriptor.Role" collection="arraylist">
             <bind-xml name="role"/>
         </field>
-        <field name="ConfigParamList" type="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam" collection="vector">
+        <field name="ConfigParamList" type="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam" collection="arraylist">
             <bind-xml name="config-param"/>
         </field>
     </class>
@@ -83,7 +83,7 @@
         <field name="ServletName" type="string">
             <bind-xml name="servlet-name"/>
         </field>
-        <field name="ConfigParamList" type="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam" collection="vector">
+        <field name="ConfigParamList" type="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam" collection="arraylist">
             <bind-xml name="portlet-config"/>
         </field>
         <field name="CacheInfo" type="org.gridlab.gridsphere.portletcontainer.descriptor.CacheInfo">
@@ -107,13 +107,13 @@
     </class>
 
     <class name="org.gridlab.gridsphere.portletcontainer.descriptor.AllowsWindowStates">
-        <field name="WindowStates" type="org.exolab.castor.types.AnyNode" collection="vector">
+        <field name="WindowStates" type="org.exolab.castor.types.AnyNode" collection="arraylist">
             <bind-xml matches="*"/>
         </field>
     </class>
 
     <class name="org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes">
-        <field name="MarkupList" type="org.gridlab.gridsphere.portletcontainer.descriptor.Markup" collection="vector">
+        <field name="MarkupList" type="org.gridlab.gridsphere.portletcontainer.descriptor.Markup" collection="arraylist">
             <bind-xml name="markup"/>
         </field>
     </class>
@@ -122,7 +122,7 @@
         <field name="Name" type="string">
             <bind-xml name="name" node="attribute"/>
         </field>
-        <field name="PortletModes" type="org.exolab.castor.types.AnyNode" collection="vector">
+        <field name="PortletModes" type="org.exolab.castor.types.AnyNode" collection="arraylist">
             <bind-xml matches="*"/>
         </field>
     </class>

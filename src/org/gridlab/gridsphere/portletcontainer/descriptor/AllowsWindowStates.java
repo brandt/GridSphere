@@ -10,16 +10,15 @@ import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.impl.SportletWindow;
 
 import java.util.List;
-import java.util.Vector;
 import java.util.ArrayList;
 
 public class AllowsWindowStates {
 
-    private List windowStates = new Vector();
+    private List windowStates = new ArrayList();
     private List statesAsStrings = null;
     private List statesAsStates = null;
 
-    public void setWindowStates(Vector windowStates) {
+    public void setWindowStates(ArrayList windowStates) {
         this.windowStates = windowStates;
     }
 
@@ -29,7 +28,7 @@ public class AllowsWindowStates {
 
     protected void convertStates() {
         AnyNode a = null;
-        statesAsStrings = new Vector();
+        statesAsStrings = new ArrayList();
         for (int i = 0; i < windowStates.size(); i++) {
             a = (AnyNode)windowStates.get(i);
             statesAsStrings.add(a.getLocalName());

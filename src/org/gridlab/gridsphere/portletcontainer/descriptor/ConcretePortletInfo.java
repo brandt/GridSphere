@@ -7,19 +7,19 @@
 
 package org.gridlab.gridsphere.portletcontainer.descriptor;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ConcretePortletInfo {
 
     private String defaultLocale = new String();
-    private List languageList = new Vector();
+    private List languageList = new ArrayList();
     private String name = new String();
     private String Description = new String();
     private Owner owner = new Owner();
-    private List groupList = new Vector();
-    private List roleList = new Vector();
-    private Vector configParamList = new Vector();
+    private List groupList = new ArrayList();
+    private List roleList = new ArrayList();
+    private List configParamList = new ArrayList();
 
     /**
      * gets the default locale of a portlet
@@ -53,7 +53,7 @@ public class ConcretePortletInfo {
      *
      * @param languageInfo the language info of the portlet
      */
-    public void setLanguageList(Vector languageList) {
+    public void setLanguageList(ArrayList languageList) {
         this.languageList = languageList;
     }
 
@@ -96,36 +96,36 @@ public class ConcretePortletInfo {
     /**
      * Returns the List of groups allowed access to this portlet
      *
-     * @return vector of groups allowed access to this portlet
+     * @return ArrayList of groups allowed access to this portlet
      */
     public List getGroupList() {
         return groupList;
     }
 
     /**
-     * Sets the Vector of groups allowed access to this portlet
+     * Sets the ArrayList of groups allowed access to this portlet
      *
-     * @param groupList the Vector of groups allowed access to this portlet
+     * @param groupList the ArrayList of groups allowed access to this portlet
      */
-    public void setGroupList(Vector groupList) {
+    public void setGroupList(ArrayList groupList) {
         this.groupList = groupList;
     }
 
     /**
      * Returns the List of roles allowed access to this portlet
      *
-     * @return vector of roles allowed access to this portlet
+     * @return ArrayList of roles allowed access to this portlet
      */
     public List getRoleList() {
         return roleList;
     }
 
     /**
-     * Sets the Vector of roles allowed access to this portlet
+     * Sets the ArrayList of roles allowed access to this portlet
      *
-     * @param groupList the Vector of roles allowed access to this portlet
+     * @param groupList the ArrayList of roles allowed access to this portlet
      */
-    public void setRoleList(Vector roleList) {
+    public void setRoleList(ArrayList roleList) {
         this.roleList = roleList;
     }
 
@@ -143,7 +143,7 @@ public class ConcretePortletInfo {
      *
      * @param the configuration parameters of the portlet
      */
-    public void setConfigParamList(Vector configParamList) {
+    public void setConfigParamList(ArrayList configParamList) {
         this.configParamList = configParamList;
     }
 

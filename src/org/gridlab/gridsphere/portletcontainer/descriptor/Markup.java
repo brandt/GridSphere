@@ -6,14 +6,14 @@ package org.gridlab.gridsphere.portletcontainer.descriptor;
 
 import org.exolab.castor.types.AnyNode;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 
 public class Markup {
 
     private String name;
-    private List portletModes = new Vector();
+    private List portletModes = new ArrayList();
 
     public void setName(String name) {
         this.name = name;
@@ -27,7 +27,7 @@ public class Markup {
         return portletModes;
     }
 
-    public void setPortletModes(Vector portletModes) {
+    public void setPortletModes(ArrayList portletModes) {
         this.portletModes = portletModes;
     }
 

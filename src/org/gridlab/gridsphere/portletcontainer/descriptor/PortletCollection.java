@@ -4,30 +4,30 @@
  */
 package org.gridlab.gridsphere.portletcontainer.descriptor;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PortletCollection {
 
     public PortletCollection() {}
 
-    private Vector PortletDefList = new Vector();
+    private List PortletDefList = new ArrayList();
 
     /**
      * gets the List of PortletApps
      *
-     * @return vector of portletapps
+     * @return ArrayList of portletapps
      */
-    public Vector getPortletDefList() {
+    public List getPortletDefList() {
         return PortletDefList;
     }
 
     /**
-     * set the Vector of portletapps
+     * set the ArrayList of portletapps
      * (never used, only testing)
      *
      */
-    public void setPortletDefList(Vector portletDefList) {
+    public void setPortletDefList(ArrayList portletDefList) {
         this.PortletDefList = portletDefList;
     }
 

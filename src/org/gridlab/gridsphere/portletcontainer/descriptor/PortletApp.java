@@ -6,7 +6,7 @@
 
 package org.gridlab.gridsphere.portletcontainer.descriptor;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PortletApp {
@@ -14,7 +14,7 @@ public class PortletApp {
     private String id = new String();
     private String portletName = new String();
     private String servletName = new String();
-    private List portletConfig = new Vector();
+    private List portletConfig = new ArrayList();
     private CacheInfo cacheInfo = new CacheInfo();
     private AllowsWindowStates allowsWindowStates = new AllowsWindowStates();
     private SupportsModes supportsModes = new SupportsModes();
@@ -80,7 +80,7 @@ public class PortletApp {
         return portletConfig;
     }
 
-    public void setConfigParamList(Vector portletConfig) {
+    public void setConfigParamList(ArrayList portletConfig) {
         this.portletConfig = portletConfig;
     }
 

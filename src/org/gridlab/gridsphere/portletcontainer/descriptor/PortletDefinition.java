@@ -6,19 +6,19 @@
 
 package org.gridlab.gridsphere.portletcontainer.descriptor;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PortletDefinition {
 
     private PortletApp portletApp = new PortletApp();
-    private Vector concreteApps = new Vector();
+    private List concreteApps = new ArrayList();
 
-    public Vector getConcreteApps() {
+    public List getConcreteApps() {
         return concreteApps;
     }
 
-    public void setConcreteApps(Vector concreteApps) {
+    public void setConcreteApps(ArrayList concreteApps) {
         this.concreteApps = concreteApps;
     }
 

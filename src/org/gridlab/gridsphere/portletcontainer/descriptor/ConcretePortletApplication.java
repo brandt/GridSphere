@@ -6,14 +6,14 @@
 
 package org.gridlab.gridsphere.portletcontainer.descriptor;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ConcretePortletApplication {
 
     private String id = new String();
     //private String name = new String();
-    private Vector contextParamList = new Vector();
+    private List contextParamList = new ArrayList();
     private ConcretePortletInfo portletInfo = new ConcretePortletInfo();
 
     public ConcretePortletApplication() {}
@@ -41,7 +41,7 @@ public class ConcretePortletApplication {
      *
      * @returns description of the portlet
      */
-    public Vector getContextParamList() {
+    public List getContextParamList() {
         return contextParamList;
     }
 
@@ -50,7 +50,7 @@ public class ConcretePortletApplication {
      *
      * @param description the description of the portlet
      */
-    public void setContextParamList(Vector contextParamList) {
+    public void setContextParamList(ArrayList contextParamList) {
         this.contextParamList = contextParamList;
     }
 
