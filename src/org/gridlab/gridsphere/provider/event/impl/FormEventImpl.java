@@ -108,6 +108,9 @@ public class FormEventImpl implements FormEvent {
      * @return the portlet action
      */
     public  DefaultPortletAction getAction() {
+        if (event == null) {
+            return null;
+        }
         return event.getAction();
     }
 
@@ -117,6 +120,9 @@ public class FormEventImpl implements FormEvent {
      * @return the portlet action as a String
      */
     public String getActionString() {
+        if (event == null) {
+            return null;
+        }
         return event.getActionString();
     }
 
