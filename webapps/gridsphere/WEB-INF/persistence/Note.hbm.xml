@@ -22,7 +22,7 @@
 
         <property name="Userid" type="string" column="userid"/>
         <property name="name" type="string" column="name"/>
-        <property name="content" type="string" column="content"/>
+        <property name="content" type="java.lang.String" length="65000" column="content"/>
     </class>
 
 
