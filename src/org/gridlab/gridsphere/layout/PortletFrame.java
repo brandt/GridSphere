@@ -54,7 +54,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     // keep track of the original width
     private String originalWidth = "";
 
-    private transient PortletDataManager dataManager = null;
+    //private transient PortletDataManager dataManager = null;
 
     private boolean hasTitleBarEvent = false;
     /**
@@ -172,7 +172,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             System.err.println("Unable to init Cache service! " + e.getMessage());
         }
         list = super.init(req, list);
-        dataManager = SportletDataManager.getInstance();
+        //dataManager = SportletDataManager.getInstance();
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
         compId.setPortletClass(portletClass);
@@ -301,6 +301,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
 
             // Set the portlet data
+            /*
             PortletData data = null;
             if (!(user instanceof GuestUser)) {
                 try {
@@ -310,6 +311,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     errorFrame.setError("Unable to retrieve user's portlet data!", e);
                 }
             }
+            */
 
             // now perform actionPerformed on Portlet if it has an action
 
@@ -387,6 +389,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         }
 
         // Set the portlet data
+        /*
         User user = req.getUser();
         PortletData data = null;
         if (!(user instanceof GuestUser)) {
@@ -397,6 +400,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 errorFrame.setError("Unable to retrieve user's portlet data", e);
             }
         }
+        */
 
         // TODO try to cache portlet's rendering---
         StringWriter storedWriter = new StringWriter();
@@ -538,6 +542,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
 
             // Set the portlet data
+            /*
             PortletData data = null;
             if (!(user instanceof GuestUser)) {
                 try {
@@ -547,6 +552,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     errorFrame.setError("Unable to retrieve user's portlet data!", e);
                 }
             }
+            */
 
             try {
                 PortletInvoker.messageEvent(portletClass, msg, req, res);

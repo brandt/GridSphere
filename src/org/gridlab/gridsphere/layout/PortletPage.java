@@ -9,10 +9,14 @@ import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletMessage;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
 import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
+import org.gridlab.gridsphere.services.core.cache.CacheService;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -30,8 +34,7 @@ public class PortletPage implements Serializable, Cloneable {
 
     protected int COMPONENT_ID = -1;
 
-    // The actual portlet layout components
-    //protected List components = new ArrayList();
+    protected CacheService cacheService = null;
 
     protected PortletContainer footerContainer = null;
     protected PortletContainer headerContainer = null;
@@ -146,7 +149,7 @@ public class PortletPage implements Serializable, Cloneable {
     public void setPortletBody(PortletContainer bodyContainer) {
         this.bodyContainer = bodyContainer;
     }
-    
+
     /**
      * Returns the page body
      *
@@ -155,7 +158,7 @@ public class PortletPage implements Serializable, Cloneable {
     public PortletContainer getPortletBody() {
         return bodyContainer;
     }
-    
+
     public void setPortletTabbedPane(PortletTabbedPane tabbedPane) {
         this.tabbedPane = tabbedPane;
     }
@@ -205,6 +208,13 @@ public class PortletPage implements Serializable, Cloneable {
      */
     public List init(PortletRequest req, List list) {
 
+        PortletServiceFactory factory = SportletServiceFactory.getInstance();
+        try {
+            cacheService = (CacheService)factory.createPortletService(CacheService.class, null, true);
+        } catch (PortletServiceException e) {
+            System.err.println("Unable to init Cache service! " + e.getMessage());
+        }
+
         componentIdentifiers = new Vector();
 
         if (headerContainer != null) {
@@ -241,7 +251,7 @@ public class PortletPage implements Serializable, Cloneable {
         while (it.hasNext()) {
             ComponentIdentifier cid = (ComponentIdentifier)it.next();
             String compLabel = cid.getComponentLabel();
-            if (cid.hasPortlet()) {                    
+            if (cid.hasPortlet()) {
                 String portletClass = cid.getPortletClass();
                 portletHash.put(portletClass, new Integer(cid.getComponentID()));
             }
@@ -268,11 +278,14 @@ public class PortletPage implements Serializable, Cloneable {
         Iterator it = componentIdentifiers.iterator();
         ComponentIdentifier cid = null;
         PortletFrame f = null;
+        String id = event.getPortletRequest().getPortletSession(true).getId();
         while (it.hasNext()) {
             cid = (ComponentIdentifier) it.next();
             PortletComponent pc = cid.getPortletComponent();
             if (pc instanceof PortletFrame) {
                 f = (PortletFrame) pc;
+                // remove any cached portlet
+                cacheService.removeCached(f.getPortletClass() + id);
                 //portlets.add(f.getPortletClass());
                 PortletInvoker.login(f.getPortletClass(), event.getPortletRequest(), event.getPortletResponse());
             }
@@ -293,10 +306,13 @@ public class PortletPage implements Serializable, Cloneable {
         PortletFrame f = null;
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
+        String id = req.getPortletSession(true).getId();
         while (it.hasNext()) {
             cid = (ComponentIdentifier) it.next();
             if (cid.getPortletComponent() instanceof PortletFrame) {
                 f = (PortletFrame) cid.getPortletComponent();
+                // remove any cached portlet
+                cacheService.removeCached(f.getPortletClass() + id);
                 PortletInvoker.logout(f.getPortletClass(), req, res);
             }
         }
@@ -402,7 +418,7 @@ public class PortletPage implements Serializable, Cloneable {
         if (headerContainer != null) headerContainer.doRender(event);
         // ..| tabs | here |....
         if (tabbedPane != null) tabbedPane.doRender(event);
-        // The body 
+        // The body
         if (bodyContainer != null) bodyContainer.doRender(event);
         //.... the footer ..........
         if (footerContainer != null) footerContainer.doRender(event);
