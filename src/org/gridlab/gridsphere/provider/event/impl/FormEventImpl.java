@@ -19,6 +19,11 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.ui.beans.*;
+import org.gridlab.gridsphere.provider.ui.beans.TableBean;
+import org.gridlab.gridsphere.provider.ui.beans.TableCellBean;
+import org.gridlab.gridsphere.provider.ui.beans.TableRowBean;
+import org.gridlab.gridsphere.provider.ui.beans.TagBean;
+import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
 import org.gridlab.gridsphere.provider.portletui.beans.PasswordBean;
@@ -223,6 +228,14 @@ public class FormEventImpl implements FormEvent {
     }
 
     public TextBean getTextBean(String name) {
+        return null;
+    }
+
+    public FrameBean getFrameBean(String beanID) {
+        return null;
+    }
+
+    public ErrorFrameBean getErrorFrameBean(String beanID) {
         return null;
     }
 

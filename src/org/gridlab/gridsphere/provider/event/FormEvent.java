@@ -7,16 +7,17 @@ package org.gridlab.gridsphere.provider.event;
 
 
 import org.gridlab.gridsphere.event.ActionEvent;
-import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
-import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
-import org.gridlab.gridsphere.provider.portletui.beans.PasswordBean;
-import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
+import org.gridlab.gridsphere.provider.portletui.beans.*;
 
 import java.util.Map;
 
 public interface FormEvent extends ActionEvent {
 
     public Map getTagBeans();
+
+    public FrameBean getFrameBean(String beanID);
+
+    public ErrorFrameBean getErrorFrameBean(String beanID);
 
     public CheckBoxBean getCheckBoxBean(String beanId);
 

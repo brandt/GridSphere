@@ -98,12 +98,30 @@ public class NewFormEventImpl implements FormEvent {
         return pb;
     }
 
-    public TextBean getTextBean(String name) {
-        if (tagBeans.containsKey(name)) {
-            return (TextBean)tagBeans.get(name);
+    public FrameBean getFrameBean(String beanId) {
+        if (tagBeans.containsKey(beanId)) {
+            return (FrameBean)tagBeans.get(beanId);
         }
-        TextBean tb = new TextBean(request, name);
-        tagBeans.put(name, tb);
+        FrameBean fb = new FrameBean(request, beanId);
+        tagBeans.put(beanId, fb);
+        return fb;
+    }
+
+    public ErrorFrameBean getErrorFrameBean(String beanId) {
+        if (tagBeans.containsKey(beanId)) {
+            return (ErrorFrameBean)tagBeans.get(beanId);
+        }
+        ErrorFrameBean fb = new ErrorFrameBean(request, beanId);
+        tagBeans.put(beanId, fb);
+        return fb;
+    }
+
+    public TextBean getTextBean(String beanId) {
+        if (tagBeans.containsKey(beanId)) {
+            return (TextBean)tagBeans.get(beanId);
+        }
+        TextBean tb = new TextBean(request, beanId);
+        tagBeans.put(beanId, tb);
         return tb;
     }
 
