@@ -13,7 +13,7 @@ import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.AccountRequest;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
+
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
@@ -80,6 +80,7 @@ public class AccessControllerBean extends PortletBean {
     private User groupEntryUser = null;
     private PortletGroup groupEntryGroup = null;
     private PortletRole groupEntryRole = null;
+    private PortletGroup BASE_GROUP = null;
 
     public AccessControllerBean() {
         super();
@@ -99,6 +100,7 @@ public class AccessControllerBean extends PortletBean {
         this.userManagerService = (UserManagerService)getPortletService(UserManagerService.class);
         this.aclManagerService = (AccessControlManagerService)getPortletService(AccessControlManagerService.class);
         this.log.debug("Exiting initServices()");
+        this.BASE_GROUP = aclManagerService.getBaseGroup();
     }
 
     private void initView() {
@@ -275,18 +277,18 @@ public class AccessControllerBean extends PortletBean {
     }
 
     public List getAllRolesInBaseGroup() {
-        return getAllRolesInGroup(PortletGroup.BASE);
+        return getAllRolesInGroup(BASE_GROUP);
     }
 
     public List getAllRolesInGroup(PortletGroup group) {
         List allRoles = new Vector();
-        if (group.equals(PortletGroup.SUPER)) {
+        if (group.isSuperGroup()) {
             allRoles.add(PortletRole.SUPER);
         } else {
             allRoles.add(PortletRole.GUEST);
             allRoles.add(PortletRole.USER);
             allRoles.add(PortletRole.ADMIN);
-            if (group.equals(PortletGroup.BASE)) {
+            if (group.isBaseGroup()) {
                 allRoles.add(PortletRole.SUPER);
             }
         }

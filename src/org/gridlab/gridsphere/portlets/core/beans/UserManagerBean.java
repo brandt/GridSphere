@@ -14,6 +14,7 @@ import org.gridlab.gridsphere.services.core.user.AccountRequest;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
@@ -303,18 +304,18 @@ public class UserManagerBean extends PortletBean {
     }
 
     public List getAllRolesInBaseGroup() {
-        return getAllRolesInGroup(PortletGroup.BASE);
+        return getAllRolesInGroup(SportletGroup.BASE);
     }
 
     public List getAllRolesInGroup(PortletGroup group) {
         List allRoles = new Vector();
-        if (group.equals(PortletGroup.SUPER)) {
+        if (group.equals(SportletGroup.SUPER)) {
             allRoles.add(PortletRole.SUPER);
         } else {
             allRoles.add(PortletRole.GUEST);
             allRoles.add(PortletRole.USER);
             allRoles.add(PortletRole.ADMIN);
-            if (group.equals(PortletGroup.BASE)) {
+            if (group.equals(SportletGroup.BASE)) {
                 allRoles.add(PortletRole.SUPER);
             }
         }
@@ -360,7 +361,7 @@ public class UserManagerBean extends PortletBean {
             this.baseGroupRole = PortletRole.SUPER;
         } else {
             this.baseGroupRole =
-                    this.aclManagerService.getRoleInGroup(this.user, PortletGroup.BASE);
+                    this.aclManagerService.getRoleInGroup(this.user, SportletGroup.BASE);
             if (this.baseGroupRole == null) {
                 this.baseGroupRole = PortletRole.USER;
             }
@@ -499,7 +500,7 @@ public class UserManagerBean extends PortletBean {
         // Create appropriate access request
         GroupRequest accessRequest = this.aclManagerService.createGroupRequest();
         accessRequest.setUser(user);
-        accessRequest.setGroup(PortletGroup.BASE);
+        accessRequest.setGroup(SportletGroup.BASE);
         // If super role was chosen
         if (role.equals(PortletRole.SUPER)) {
             this.log.debug("Granting super role");

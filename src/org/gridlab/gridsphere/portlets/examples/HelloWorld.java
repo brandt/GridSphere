@@ -19,11 +19,7 @@ public class HelloWorld extends AbstractPortlet {
 
     public void actionPerformed(ActionEvent evt) {
         PortletMessage msg = new DefaultPortletMessage("yo dude");
-        try {
-            getPortletConfig().getContext().send("org.gridlab.gridsphere.portlets.examples.HalloWelt.1", msg);
-        } catch (AccessDeniedException e) {
-            getPortletLog().info("Access denied to send a message: " + e.getMessage());
-        }
+        getPortletConfig().getContext().send("org.gridlab.gridsphere.portlets.examples.HalloWelt.1", msg);
     }
 
     public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {

@@ -26,6 +26,7 @@ public class TomcatManagerWrapper {
     }
 
     public TomcatWebAppResult doCommand(String command) {
+        System.err.println(command);
         String show = "";
         TomcatWebAppResult result = null;
         try {

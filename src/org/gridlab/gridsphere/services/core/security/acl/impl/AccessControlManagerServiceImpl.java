@@ -62,6 +62,14 @@ public class AccessControlManagerServiceImpl implements AccessControlManagerServ
         return aclManager.getGroup(groupId);
     }
 
+    public PortletGroup getBaseGroup() {
+        return aclManager.getBaseGroup();
+    }
+
+    public PortletGroup getSuperGroup() {
+        return aclManager.getSuperGroup();
+    }
+
     public PortletGroup getGroupByName(String groupName) {
         return aclManager.getGroupByName(groupName);
     }
