@@ -9,7 +9,7 @@
     $Id$
 -->
 
-<container-layout theme="gridsphere">
+<container-layout>
 
 <container-name>GridSphere Portal</container-name>
 
