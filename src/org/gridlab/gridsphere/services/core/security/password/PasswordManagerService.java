@@ -10,11 +10,15 @@ public interface PasswordManagerService extends PortletService {
 
     public Password getPassword(User user);
 
+    public String getHashedPassword(String pass);
+
     public void validateSuppliedPassword(User user, String suppliedPassword)
             throws InvalidPasswordException;
 
     public void savePassword(Password passwordBean);
 
+    public void saveHashedPassword(Password editor);
+    
     public void deletePassword(User user);
 
     public PasswordEditor editPassword(User user);

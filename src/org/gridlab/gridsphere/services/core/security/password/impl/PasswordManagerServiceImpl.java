@@ -111,6 +111,32 @@ public class PasswordManagerServiceImpl
         }
     }
 
+    public String getHashedPassword(String pass) {
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            md5.update(pass.getBytes());
+            return toHex(md5.digest());
+        } catch (NoSuchAlgorithmException e) {
+            _log.error("NoSuchAlgorithm MD5!", e);    
+        }
+        return null;
+    }
+
+    public void saveHashedPassword(Password editor) {
+        try {
+            if (editor instanceof PasswordImpl) {
+                PasswordImpl pass = (PasswordImpl) editor;
+                if (pass.getOid() != null) {
+                    pm.update(pass);
+                } else {
+                    pm.create(pass);
+                }
+            }
+        } catch (PersistenceManagerException e) {
+            _log.error("Unable to create or update password for user", e);
+        }
+    }
+
     public void deletePassword(User user) {
         Password password = getPassword(user);
         if (password != null) {
