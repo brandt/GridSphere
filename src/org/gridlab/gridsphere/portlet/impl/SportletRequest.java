@@ -29,13 +29,6 @@ public interface SportletRequest extends PortletRequest {
     public void setPreviousMode(Portlet.Mode mode);
 
     /**
-     * Sets the PortletSettings object of the concrete portlet.
-     *
-     * @param portletSettings the portlet settings
-     */
-    public void setPortletSettings(PortletSettings portletSettings);
-
-    /**
      * Sets the window that the portlet is running in.
      *
      * @param portletWindow the portlet window

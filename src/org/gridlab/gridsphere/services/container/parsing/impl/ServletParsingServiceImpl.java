@@ -34,7 +34,7 @@ public class ServletParsingServiceImpl implements PortletServiceProvider, Servle
         SportletRequestImpl req = new SportletRequestImpl(request);
 
         // XXX: FIX THIS -- NEED TO PASS ON PORTLETSETTINGS FROM REGISTRY
-        req.setPortletSettings(null);
+        //req.setPortletSettings(null);
 
 
 

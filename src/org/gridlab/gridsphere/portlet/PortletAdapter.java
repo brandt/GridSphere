@@ -116,7 +116,7 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
             throws PortletException, IOException {
 
         // Forward to appropriate do... method
-        Portlet.Mode mode = (Portlet.Mode) request.getAttribute(GridSphereProperties.PortletMode);
+        Portlet.Mode mode = (Portlet.Mode) request.getAttribute(GridSphereProperties.PORTLETMODE);
         if (mode != null) {
             switch (mode.getMode()) {
                 case Portlet.Mode.VIEW:

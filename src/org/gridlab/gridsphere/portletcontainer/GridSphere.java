@@ -87,7 +87,19 @@ public class GridSphere extends HttpServlet {
         registryService =
                 (PortletRegistryService) factory.createPortletService(PortletRegistryService.class, props, config, true);
 
+        Iterator it = registryService.getRegisteredPortlets().iterator();
+        while (it.hasNext()) {
+            RegisteredPortlet regPortlet = (RegisteredPortlet) it.next();
+            System.err.println("portlet name: " + regPortlet.getPortletName());
 
+            AbstractPortlet abPortlet = regPortlet.getActivePortlet();
+            abstractPortlets.add(abPortlet);
+            // PortletConfig portletConfig = regPortlet.getPortletConfig();
+            PortletSettings portletSettings = regPortlet.getPortletSettings();
+
+            abPortlet.init(portletConfig);
+            abPortlet.initConcrete(portletSettings);
+        }
         // read portlet.xml and retrieve portlet info
         log.info("configure() in GridSphere");
 
@@ -122,28 +134,6 @@ public class GridSphere extends HttpServlet {
 
     public final void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 
-        // Get available portlets from PortletRegistry the first time the portal is accessed
-        if (firstDoGet) {
-            Iterator it = registryService.getRegisteredPortlets().iterator();
-            while (it.hasNext()) {
-                RegisteredPortlet regPortlet = (RegisteredPortlet) it.next();
-                System.err.println("portlet name: " + regPortlet.getPortletName());
-
-                AbstractPortlet abPortlet = regPortlet.getActivePortlet();
-                abstractPortlets.add(abPortlet);
-                // PortletConfig portletConfig = regPortlet.getPortletConfig();
-                PortletSettings portletSettings = regPortlet.getPortletSettings();
-
-                abPortlet.init(portletConfig);
-                abPortlet.initConcrete(portletSettings);
-            }
-
-            firstDoGet = false;
-        }
-
-
-        // Some prototyping here to perform tasks of portlet container
-
         // Need to translate servlet objects into portlet counterparts--
         PortletRequest portletRequest;
         PortletResponse portletResponse;
@@ -158,8 +148,6 @@ public class GridSphere extends HttpServlet {
         // create a new instance -- maybe instances are maintained by PortletRegistryService
         // then all instances are retrieved.
         //PortletAdapter helloPortlet = new HelloWorld();
-
-
 
 
         // Hmmm... need some kind of tags for identifying login and logout actions -- these are special so
@@ -179,8 +167,8 @@ public class GridSphere extends HttpServlet {
         //helloPortlet.login(portletRequest);
 
         // For now, use cheesy request parameters.. not sure what else...
-        String login = (String) portletRequest.getAttribute(GridSphereProperties.Login);
-        String logoff = (String) portletRequest.getAttribute(GridSphereProperties.Logoff);
+        String login = (String) portletRequest.getAttribute(GridSphereProperties.LOGIN);
+        String logoff = (String) portletRequest.getAttribute(GridSphereProperties.LOGOFF);
         if (login != null) {
             doLogin(portletRequest, portletResponse);
         }
