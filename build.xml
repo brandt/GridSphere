@@ -430,7 +430,7 @@ Copyright:
             private="true"
             doclet="org.castor.doclet.jdo.JDO"
             docletpath="lib/jdom.jar;lib/castor-doclet.jar"
-            additionalparam="-J-DFILE=${build.db}/docletmapping.xml -J-DLOG=1">
+            additionalparam="-J-DFILE=${gridsphere.build}/${gswebapp.dir}/WEB-INF/conf/mapping/docletmapping.xml -J-DLOG=1">
             <classpath refid="classpath"/>
         </javadoc>
     </target>
