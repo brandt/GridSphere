@@ -3,92 +3,77 @@
     Version:    $Id$
 -->
 
-<chapter id="formtags">
+<chapter id="uitags">
+    <title>GridSphere UI Tag Library</title>
 
     <para>
-
-        These tags can be used in a jsp file to display....??!??
-
+        GridSphere UI tags are JSP tags that can be used in a JSP page to create user interfaces. The UI tag library
+        descriptor which defines tag parameters and definitions can be found in webapps/gridsphere/WEB-INF/tlds/portletui.tld
+        of the source directory. All tags may contain a beanId attribute. The valueof beanId is
+        a String that identifies the tag so it mey be retrieved as a bean in the portlet. See the Tutorial
+        for an example.
     </para>
 
+    <sect1 id="usage"><title>Usage on GridSphere UI Tags</title>
     <example>
-        <title>Usage on GS Tags</title>
+        <para>
+            Every JSP that wishes to use the tag library must include the following code snippet
+            show below:
+        </para>
         <screen>
-<![CDATA[<%@ taglib uri="/portletWidgets" prefix="gs" %>
+<![CDATA[
+<%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
-<portletAPI:init/>]]>
+<portletAPI:init/>
+]]>
         </screen>
+        <para>
+            Now the tags can be used within a JSP by using the "ui" reference specified in the taglib
+            directive. The portletAPI directive and tag initialization make the portlet objects available to the
+            tags.
+        </para>
     </example>
+    </sect1>
 
 
+    <sect1 id="actiontags"><title>Action Tags</title>
+        <para>
+            As discussed in the Tutorial, action tags are used to send actions back to portlets
+            to trigger a particular sequence of logic operations. An action can come in 2 flavors,
+            an actionlink or an actionsubmit. Action tags are required to supply an action attribute
+            value that provides an action name that is made available to the Portlet via the
+            &ActionEvent; object. Both action tags may also contain one or more actionparam tags to
+            define action parameters.
+        </para>
 
-    <title>Formtags</title>
-    <para>
-
-    </para>
-
-    <sect1 id="parameters">
-        <title>Parameters</title>
-
-            <title>Tagattributes</title>
-
+        <sect2 id="actionlinktag">
+            <title>ActionLink</title>
+            <para>
+                This tag creates an actionlink which is a hyperlink containing an action name and possibly action parameters.            </para>
             <table>
-                <title>attributes of tags</title>
-                <tgroup cols="2">
+                <title>Attributes to actionlink</title>
+                <tgroup cols="3">
                     <thead>
                         <row>
-                            <entry>attributename</entry><entry>description</entry>
+                            <entry>attribute name</entry><entry>required?</entry><entry>description</entry>
                         </row>
                     </thead>
                     <tbody>
                         <row>
-                            <entry>name</entry><entry>string: name of the tag</entry>
-                        </row>
-                        <row>
-                            <entry>value</entry><entry>string: value of the tag</entry>
-                        </row>
-                        <row>
-                            <entry>size</entry><entry>integer: size of the field</entry>
-                        </row>
-                        <row>
-                            <entry>maxlength</entry><entry>integer: maximal length of the field</entry>
-                        </row>
-                        <row>
-                            <entry>disabled</entry><entry>boolean: if the element is disabled</entry>
-                        </row>
-                        <row>
-                            <entry>readonly</entry><entry>boolean: if the element is readonly</entry>
-                        </row>
-                        <row>
-                            <entry>checked</entry><entry>boolean: if the element is selected</entry>
-                        </row>
-                        <row>
-                            <entry>bean</entry><entry>string: name of the corresponding bean</entry>
+                            <entry>action</entry><entry>yes</entry><entry>string: name of the action</entry>
                         </row>
                     </tbody>
-                </tgroup>
-            </table>
-
-            To most of the tags you can pass in a name of the bean you saved from your java file (see down for
-            an example).
-    </sect1>
-
-    <!-- ================================================================ -->
-
-    <sect1 id="tags">
-        <title>Tags</title>
-
-        <sect2 id="actiontag">
-            <title>ActionLink</title>
-            <para>
-                This tag creates an actionlink pointing to the same portlet with additional parameters.
-            </para>
-            <table>
-                <title>Attributes to actionlink</title>
-                <tgroup cols="3">
                     <tbody>
                         <row>
-                            <entry>label</entry><entry>action</entry> <entry>bean (ActionLinkBean)</entry>
+                            <entry>key</entry><entry>no</entry><entry>string: the key used to identify a value from the
+                            localized properties file located in <filename>WEB-INF/classes/Portlet_XX.properties</filename>
+                            of the portlet web application.</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>value</entry><entry>no</entry><entry>string: the value that is displayed in the
+                            hyperlink. The key attribute should be used wherever possible to provide localized string values.</entry>
                         </row>
                     </tbody>
                 </tgroup>
@@ -97,29 +82,287 @@
             <example>
                 <title>Usage of actionlink</title>
                 <screen>
-<![CDATA[<gs:actionlink label="mylabel" action="name=hallo"/>]]>
+                    <![CDATA[<ui:actionlink action="doActionLink" key="DOIT"/>]]>
                 </screen>
-                This example would create an html href pointing to the current portlet with a clickable
-                text mylabel and a paramter/value pair name/hallo. Alternativly you could use an
-                actionlinkbean (see actionlinkbean) to pass into this tag.
+                This example would create an html hyperlink pointing to the current portlet with a clickable
+                a localized text value DOIT that will trigger the doActionLink method to be performed in the
+                portlet.
+                <screen>
+                    <![CDATA[<ui:actionlink beanId="myAction" action="doActionLink" key="DOIT"/>]]>
+                </screen>
+                By providing a beanId, the tag will first check for the existence of a myAction ActionLinkBean
+                that would have been created by the portlet and uses that first. Otherwise one is created using the
+                specified default values.
             </example>
         </sect2>
 
+       <sect2 id="actionsubmittag">
+            <title>ActionSubmit</title>
+            <para>
+                This tag creates a button that triggers an action event</para>
+            <table>
+                <title>Attributes to actionsubmit</title>
+                <tgroup cols="3">
+                    <thead>
+                        <row>
+                            <entry>attribute name</entry><entry>required?</entry><entry>description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>action</entry><entry>yes</entry><entry>string: name of the action</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>key</entry><entry>no</entry><entry>string: the key used to identify a value from the
+                            localized properties file located in <filename>WEB-INF/classes/Portlet_XX.properties</filename>
+                            of the portlet web application.</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>value</entry><entry>no</entry><entry>string: the value that is displayed in the
+                            hyperlink. The key attribute should be used wherever possible to provide localized string values.</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>name</entry><entry>no</entry><entry>string: the name of the actionsubmit element.</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+
+            <example>
+                <title>Usage of actionsubmit</title>
+                <screen>
+                    <![CDATA[<ui:actionsubmit action="doActionLink" key="DOIT"/>]]>
+                </screen>
+                This example would create a button displayed with the localized text from the key DOIT
+                that will trigger the doActionLink method to be performed in the portlet.
+            </example>
+        </sect2>
+
+       <sect2 id="actionparamstag">
+            <title>ActionParam</title>
+            <para>
+                This tag creates a an action parameter that may be nested inside an actionlink,
+ an actionsubmit, or a form tag. An action parameter is simply a string name-value pair.</para>
+            <table>
+                <title>Attributes to actionparam</title>
+                <tgroup cols="3">
+                    <thead>
+                        <row>
+                            <entry>attribute name</entry><entry>required?</entry><entry>description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>name</entry><entry>yes</entry><entry>string: the action parameter name</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>value</entry><entry>yes</entry><entry>string: the action parameter value</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+
+            <example>
+                <title>Usage of actionparam</title>
+                <screen>
+<![CDATA[
+         <ui:actionsubmit action="doActionLink" key="DOIT">
+            <ui:actionparam name="somename" value="avalue"/>
+            <ui:actionparam name="anothername" value="anewvalue"/>
+         </ui:actionsubmit>
+ ]]>
+                </screen>
+                This example would create a button that when triggered will invoke the doActionLink method
+                of the portlet and also contains additional action parameters.
+            </example>
+        </sect2>
+
+    </sect1>
+
+
+    <sect1 id="uitags"><title>UI Tags</title>
+     <para>
+         The rest of the UI tags generally wrap existing HTML elements, such as the checkbox, radiobutton,
+         textfield tags. The panel and frame tags are container tags for other tag elements. A reasonably nice
+         interface can be constructed by placing elements within forms within frames within panes as shown in the
+         following code:
+         <screen>
+<![CDATA[
+        <ui:form>
+            <ui:panel>
+                <ui:frame>
+                   <ui:tablerow>
+                      <ui:tablecell width="5%">
+                          <ui:checkbox beanId="myCheckbox" value="somevalue" selected="true"/>
+                      </ui:tablecell>
+                   </ui:tablerow>
+                </ui:frame>
+                <ui:frame>
+                   <ui:tablerow>
+                       <ui:tablecell width="5%">
+                           <ui:radiobutton beanId="myRadio" value="whatever"/>
+                       </ui:tablecell>
+                   </ui:tablerow>
+                </ui:frame>
+                <ui:frame>
+                    <ui:tablerow>
+                        <ui:tablecell width="100">
+                            <ui:actionsubmit action="submit" key="SUBMIT_ACTION"/>
+                        </ui:tablecell>
+                    </ui:tablerow>
+                </ui:frame>
+            </ui:panel>
+        </ui:form>
+ ]]>
+         </screen>
+     </para>
+
+        <sect2 id="paneltag">
+            <title>Panel</title>
+            <para>
+                A panel is a stylized table that contains frame tags. A panel acts as a base
+                container element like that used in any graphic toolkit.
+            </para>
+            <table>
+                <title>Attributes to panel</title>
+                <tgroup cols="3">
+                    <thead>
+                        <row>
+                            <entry>attribute name</entry><entry>required?</entry><entry>description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>rows</entry><entry>no</entry><entry>integer: the number of rows</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>cols</entry><entry>no</entry><entry>integer: the number of columns</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>width</entry><entry>no</entry><entry>integer: the width of the panel</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>cellspacing</entry><entry>no</entry><entry>integer: the cellspacing table width</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of panel</title>
+                <screen>
+<![CDATA[
+<ui:panel rows="2" cols="1">
+    <ui:frame>
+        ...
+    </ui:frame>
+    <ui:frame>
+        ...
+    </ui:frame>
+</ui:panel>
+ ]]>
+                </screen>
+                This creates a panel with two frames one on top of the other.
+            </example>
+        </sect2>
+
+                <sect2 id="tabletag">
+            <title>Table</title>
+            <para>
+                A table is a
+            </para>
+            <table>
+                <title>Attributes to panel</title>
+                <tgroup cols="3">
+                    <thead>
+                        <row>
+                            <entry>attribute name</entry><entry>required?</entry><entry>description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>rows</entry><entry>no</entry><entry>integer: the number of rows</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>cols</entry><entry>no</entry><entry>integer: the number of columns</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>width</entry><entry>no</entry><entry>integer: the width of the panel</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>cellspacing</entry><entry>no</entry><entry>integer: the cellspacing table width</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of panel</title>
+                <screen>
+<![CDATA[
+<ui:panel rows="2" cols="1">
+    <ui:frame>
+        ...
+    </ui:frame>
+    <ui:frame>
+        ...
+    </ui:frame>
+</ui:panel>
+ ]]>
+                </screen>
+                This creates a panel with two frames one on top of the other.
+            </example>
+        </sect2>
 
         <sect2 id="checkboxtag">
             <title>CheckBox</title>
             <para>
-                This tag shows a checkbox.
+                This tag displays a checkbox.
             </para>
             <table>
                 <title>Attributes to checkbox</title>
-                <tgroup cols="4">
+                <tgroup cols="3">
+                    <thead>
+                        <row>
+                            <entry>attribute name</entry><entry>required?</entry><entry>description</entry>
+                        </row>
+                    </thead>
                     <tbody>
                         <row>
-                            <entry>name</entry><entry>value</entry><entry>checked</entry><entry>disabled</entry>
+                            <entry>name</entry><entry>no</entry><entry>string: the checkbox name</entry>
                         </row>
+                    </tbody>
+                    <tbody>
                         <row>
-                            <entry>bean (CheckBoxBean)</entry>
+                            <entry>value</entry><entry>yes</entry><entry>string: the checkbox value</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>selected</entry><entry>no</entry><entry>boolean: true if selected, default is false</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>disabled</entry><entry>no</entry><entry>boolean: true if disabled, default is false</entry>
                         </row>
                     </tbody>
                 </tgroup>
@@ -127,7 +370,9 @@
             <example>
                 <title>Usage of checkbox</title>
                 <screen>
-<![CDATA[<gs:checkbox name="name" value="value" checked="true" disabled="false"/>]]>
+<![CDATA[
+<ui:checkbox name="name" value="value" checked="true" disabled="false"/>
+ ]]>
                 </screen>
                 This creates a selected checkbox with the name 'name' and the value 'value'.
             </example>
@@ -136,12 +381,15 @@
         <sect2 id="formtag">
             <title>Form</title>
             <para>
-                This tag is used to surround a form.
+                This tag is used to create a form and can contain other UI tags as well as actionparam tags
+                specifying action parameters. If a form tag contains a actionsubmit tag, then the action specified
+                in the actionsubmit will override any action specified in the form tag.
             </para>
             <example>
                 <title>Usage of form</title>
                 <screen>
-<![CDATA[<gs:form action="identifier">
+<![CDATA[
+<ui:form action="doSomeAction">
 ...
 </gs:form>]]>
                 </screen>
@@ -150,31 +398,162 @@
 
         <sect2 id="fileinputtag">
             <title>FileInput</title>
-        </sect2>
-
-
-        <sect2 id="passwordfieldtag">
-            <title>PasswordField</title>
             <para>
-                This tag renders a passwordfield.
+                This tag renders a file-input field that can be used to handle file uploads.
             </para>
             <table>
-                <title>Attributes to passwordfield</title>
-                <tgroup cols="4">
+                <title>Attributes to fileinput</title>
+                <tgroup cols="3">
+                    <thead>
+                        <row>
+                            <entry>attribute name</entry><entry>required?</entry><entry>description</entry>
+                        </row>
+                    </thead>
+
                     <tbody>
                         <row>
-                            <entry>name</entry><entry>value</entry><entry>size</entry><entry>disabled</entry>
+                            <entry>size</entry><entry>no</entry><entry>integer: the displayed size in number of characters of the input field</entry>
                         </row>
+                    </tbody>
+                    <tbody>
                         <row>
-                            <entry>maxlength</entry><entry>bean (PasswordBean)</entry>
+                            <entry>name</entry><entry>no</entry><entry>string: name of the textfield</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>maxlength</entry><entry>no</entry><entry>integer: maximum length of the textfield</entry>
+                        </row>
+                    </tbody>
+
+                    <tbody>
+                        <row>
+                            <entry>readonly</entry><entry>no</entry><entry>boolean: true if read-only, default is false</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>disabled</entry><entry>no</entry><entry>boolean: true if disabled, default is false</entry>
                         </row>
                     </tbody>
                 </tgroup>
             </table>
             <example>
-                <title>Usage of passwordfield</title>
+                <title>Usage of textfield</title>
                 <screen>
-<![CDATA[<gs:password name="password" value="" size="15"/>]]>
+                    <![CDATA[<ui:textfield beanId="myTextField" value="Initial value" size="15"/>]]>
+                </screen>
+                This example creates a textfield with the beanId myTextField such that it can be retrieved in the portlet
+                action method.
+            </example>
+        </sect2>
+
+        <sect2 id="textfieldtag">
+            <title>TextField</title>
+            <para>
+                This tag renders a textfield.
+            </para>
+            <table>
+                <title>Attributes to textfield</title>
+                <tgroup cols="3">
+                    <thead>
+                        <row>
+                            <entry>attribute name</entry><entry>required?</entry><entry>description</entry>
+                        </row>
+                    </thead>
+
+                    <tbody>
+                        <row>
+                            <entry>size</entry><entry>no</entry><entry>integer: the displayed size in number of characters of the input field</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>name</entry><entry>no</entry><entry>string: name of the textfield</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>maxlength</entry><entry>no</entry><entry>integer: maximum length of the textfield</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>value</entry><entry>no</entry><entry>string: initial textfield value</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>readonly</entry><entry>no</entry><entry>boolean: true if read-only, default is false</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>disabled</entry><entry>no</entry><entry>boolean: true if disabled, default is false</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of textfield</title>
+                <screen>
+                    <![CDATA[<ui:textfield beanId="myTextField" value="Initial value" size="15"/>]]>
+                </screen>
+                This example creates a textfield with the beanId myTextField such that it can be retrieved in the portlet
+                action method.
+            </example>
+        </sect2>
+
+        <sect2 id="passwordtag">
+            <title>Password</title>
+            <para>
+                This tag renders a password field.
+            </para>
+            <table>
+                <title>Attributes to password field</title>
+                <tgroup cols="3">
+                    <thead>
+                        <row>
+                            <entry>attribute name</entry><entry>required?</entry><entry>description</entry>
+                        </row>
+                    </thead>
+
+                    <tbody>
+                        <row>
+                            <entry>size</entry><entry>no</entry><entry>integer: the displayed size in number of characters of the input field</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>name</entry><entry>no</entry><entry>string: name of the password field</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>maxlength</entry><entry>no</entry><entry>integer: maximum length of the password field</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>value</entry><entry>no</entry><entry>string: initial password value</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>readonly</entry><entry>no</entry><entry>boolean: true if read-only, default is false</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>disabled</entry><entry>no</entry><entry>boolean: true if disabled, default is false</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example>
+                <title>Usage of password field</title>
+                <screen>
+                    <![CDATA[<ui:password name="password" value="" size="15"/>]]>
                 </screen>
                 This example creates a password field with the name password, no default value and a size of 15 characters.
             </example>
@@ -189,13 +568,30 @@
             </para>
             <table>
                 <title>Attributes to radiobutton</title>
-                <tgroup cols="4">
+                <tgroup cols="3">
+                    <thead>
+                        <row>
+                            <entry>attribute name</entry><entry>required?</entry><entry>description</entry>
+                        </row>
+                    </thead>
                     <tbody>
                         <row>
-                            <entry>name</entry><entry>value</entry><entry>checked</entry><entry>disabled</entry>
+                            <entry>name</entry><entry>no</entry><entry>string: the checkbox name</entry>
                         </row>
+                    </tbody>
+                    <tbody>
                         <row>
-                           <entry>bean (RadioButtonBean)</entry>
+                            <entry>value</entry><entry>yes</entry><entry>string: the checkbox value</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>selected</entry><entry>no</entry><entry>boolean: true if selected, default is false</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>disabled</entry><entry>no</entry><entry>boolean: true if disabled, default is false</entry>
                         </row>
                     </tbody>
                 </tgroup>
@@ -203,16 +599,11 @@
             <example>
                 <title>Usage of radiobutton</title>
                 <screen>
-<![CDATA[<gs:radiobutton name="name" value="value" checked="true" disabled="false"/>]]>
+<![CDATA[<ui:radiobutton name="name" value="value" checked="true" disabled="false"/>]]>
                 </screen>
-                This creates a selected radiobutton woth the name 'name' and the value 'value'.
+                This creates a selected radiobutton with the name 'name' and the value 'value'.
             </example>
         </sect2>
-
-        <sect2 id="submitbuttontag">
-            <title>SubmitButton</title>
-        </sect2>
-
 
         <sect2 id="textareatag">
             <title>TextArea</title>
@@ -221,13 +612,35 @@
             </para>
             <table>
                 <title>Attributes to textarea</title>
-                <tgroup cols="4">
+                <tgroup cols="3">
                     <tbody>
                         <row>
-                            <entry>name</entry><entry>value</entry><entry>readonly</entry><entry>disabled</entry>
+                            <entry>rows</entry><entry>no</entry><entry>integer: the maximum number of rows to display</entry>
                         </row>
+                    </tbody>
+                    <tbody>
                         <row>
-                           <entry>bean (TextAreaBean)</entry><entry>cols</entry><entry>rows</entry>
+                            <entry>cols</entry><entry>no</entry><entry>integer: the maximum number of columns to display</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>name</entry><entry>no</entry><entry>string: name of the text area</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>value</entry><entry>no</entry><entry>string: initial text area text to display</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>readonly</entry><entry>no</entry><entry>boolean: true if read-only, default is false</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>disabled</entry><entry>no</entry><entry>boolean: true if disabled, default is false</entry>
                         </row>
                     </tbody>
                 </tgroup>
@@ -235,51 +648,29 @@
             <example>
                 <title>Usage of textarea</title>
                 <screen>
-<![CDATA[<gs:textarea name="inputfield" value="This is text" rows="120" cols="30"  disabled="false" />]]>
+<![CDATA[<ui:textarea name="myTextArea" value="This is text" rows="120" cols="30"  disabled="false" />]]>
                 </screen>
                 This creates a 120x30 textinputfield with the name 'inputfield' and the text 'This is text'.
             </example>
         </sect2>
 
-        <sect2 id="textfieldtag">
-            <title>TextField</title>
-            <para>
-                This tag shows a textinputfield.
-            </para>
-            <table>
-                <title>Attributes to textfield</title>
-                <tgroup cols="4">
-                    <tbody>
-                        <row>
-                            <entry>name</entry><entry>value</entry><entry>size</entry><entry>disabled</entry>
-                        </row>
-                        <row>
-                            <entry>maxlength</entry><entry>bean (TextFieldBean)</entry>
-                        </row>
-                    </tbody>
-                </tgroup>
-            </table>
-            <example>
-                <title>Usage of textfield</title>
-                <screen>
-<![CDATA[<gs:textfield name="textfield" value="" size="15"/>]]>
-                </screen>
-                This example creates a input field with the name textfield, no default value and a size of 15 characters.
-            </example>
-        </sect2>
-
-
         <sect2 id="texttag">
             <title>Text</title>
             <para>
-                This tag shows text.
+                The text tag is used to display (localized) text
             </para>
             <table>
                 <title>Attributes to text</title>
-                <tgroup cols="1">
+                <tgroup cols="3">
                     <tbody>
                         <row>
-                            <entry>text</entry>
+                            <entry>key</entry><entry>no</entry><entry>string: name of the key to lookup localized text from
+                            the <filename>WEB-INF/classes/Portlet_XX.properties</filename> localized properties file</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>value</entry><entry>no</entry><entry>string: actual text to display</entry>
                         </row>
                     </tbody>
                 </tgroup>
@@ -287,36 +678,11 @@
             <example>
                 <title>Usage of text</title>
                 <screen>
-<![CDATA[<gs:text text="text"/>]]>
+<![CDATA[<ui:text value="text"/>]]>
                 </screen>
+                Just prints out "text"
             </example>
         </sect2>
-
-
-        <sect2 id="labeltag">
-            <title>Label</title>
-            <para>
-                This tag shows a label.
-            </para>
-            <table>
-                <title>Attributes to label</title>
-                <tgroup cols="2">
-                    <tbody>
-                        <row>
-                            <entry>text</entry><entry>bean (LabelBean)</entry>
-                        </row>
-                    </tbody>
-                </tgroup>
-            </table>
-            <example>
-                <title>Usage of label</title>
-                <screen>
-<![CDATA[<gs:text text="label"/>]]>
-                </screen>
-            </example>
-            This example creates a label with the text 'label'.
-        </sect2>
-
 
         <sect2 id="dropdownlist">
             <title>DropDownList</title>
@@ -492,13 +858,6 @@
                 </tgroup>
             </table>
         </sect2>
-    </sect1>
-
-    <!-- ================================================================ -->
-
-    <sect1 id="forms">
-        <title>Formhandling</title>
-
     </sect1>
 
 </chapter>

@@ -21,7 +21,7 @@
         portlet lifecycle, the doView is invoked initially (when there is no inital action) which can
         produce output by using the &PortletResponse; to write directly to the output stream or by
         using the &PortletContext; to include a Java Server Page (JSP) used for presentation. In the
-        typically the presentation of a portlet will consist of standard HTMl elements including forms,
+        typically the presentation of a portlet will consist of standard HTML elements including forms,
         checkboxes, input fields, submit buttons and other elements. Certain elements including
         hyperlinks, forms and submit buttons will generate actions that are trapped and used in the
         actionPerformed method of a portlet. The &ActionEvent; object available in the actionPerformed
@@ -47,7 +47,7 @@
         In the GridSphere Action Provider model, the &ActionPortlet; acts as an intelligent dispatcher
         that hides the above branching logic from a portlet developer by following a simple convention:
         The action method invoked is defined by the action name of the HTML action element. So in the
-        case of a form or submit button, the name attribute in the HTML is used to define a method name
+        case of a form or submit button, a method name is defined
         that will be invoked by the portlet that subclasses from &ActionPortlet;. Hence, if an action
         such as <methodname>getStockQuotes</methodname>() is defined in the  name of the submit button
         in the presentation, this will trigger the <methodname>getStockQuotes</methodname>() method to be
@@ -102,6 +102,7 @@
     into a reusable Java Tag library, known as the Portlet User Interface (UI) tag library. The UI tags seek to provide
     more feature rich visual components that are configured with a default look and feel using CSS internally, so that
         portlet developers need not invest a lot of time in CSS development for decent looking web interfaces.
+        See the Portlet UI Tag Reference Guide for more information on tag usage.
         The following example illustrates how the Portlet UI tag library would be used in a presentation JSP to
         construct a form:
         <programlisting>
@@ -111,10 +112,10 @@
         <ui:frame>
             <ui:tablerow>
                 <ui:tablecell width="100">
-                    <ui:text key="PRICE"/>
+                    <ui:text key="COMPANY"/>
                 </ui:tablecell>
                 <ui:tablecell width="60">
-                    <ui:textfield name="password" size="20" maxlength="20"/>
+                    <ui:textfield beanId="company" size="20" maxlength="20"/>
                 </ui:tablecell>
                 <ui:tablecell/>
             </ui:tablerow>
@@ -123,7 +124,7 @@
         <ui:frame>
             <ui:tablerow>
                 <ui:tablecell width="100">
-                    <ui:actionsubmit action="getQuotes" name="login" key="QUOTE_ACTION"/>
+                    <ui:actionsubmit action="getQuote" name="login" key="QUOTE_ACTION"/>
                 </ui:tablecell>
                 <ui:tablecell/>
             </ui:tablerow>
@@ -133,7 +134,131 @@
         </programlisting>
 
     </para>
-    </sect1>
+        <para>
+    In this example, a form is created to construct a stock quote query based upon a user's
+    specified company. The user interface composed of panels that act as
+    containers for frames. The underlying HTML uses tables and CSS. A frame contains one
+    or more nested tablerow tags which in turn contain tablecell tags. A text tag is used to
+    display localized text that is specified in a properties file.
+    </para>
+    <para>
+        Portlet actions can be created by using <emphasis>ActionLink</emphasis> or
+        <emphasis>ActionSubmit</emphasis> as shown in the following code snippet:
+        <programlisting>
+        &lt;ui:actionlink action="doActionLink" key="ACTION"/&gt;
 
+        &lt;ui:actionsubmit action="doActionSubmit key="SUBMIT/&gt;
+        </programlisting>
+        An actionsubmit tag can be nested inside a form tag as well. In addition one or more
+        actionparam tags can be nested inside an actionlink, actionsubmit or actionform tag to create
+        action parameters that can be made availalble to the appropriate action method of the portlet as
+        shown:
+            <programlisting>
+            <![CDATA[
+            <ui:actionlink action="doActionLink" key="ACTION">
+                <ui:actionparam name="aname" value="avalue"/>
+            </ui:actionlink>]]>
+            </programlisting>
+        In this example, the portlet, call it SimplePortlet,  will have the following methods as shown:
 
+        <programlisting>
+           public class SimplePortlet extends ActionPortlet {
+
+               public void doActionLink(FormEvent event) {
+                    log.debug("in doActionLink");
+               }
+
+               public void doActionSubmit(FormEvent event) {
+                    log.debug("in doActionSubmit");
+               }
+
+           }
+        </programlisting>
+        Now when an action is triggered from the user interface, the corresponding
+        method is called in the portlet and can perform the required business logic before
+        rendering the presentation. At the end of an action method, a portlet developer
+        calls the <methodname>setNextPresentation</methodname> method to set the presentation method
+        or a JSP to be included. The following shows how the actionlink can be used to display a
+        new view consisting of some text:
+             <programlisting>
+           public class SimplePortlet extends ActionPortlet {
+
+               // action methods
+               public void doActionLink(FormEvent event) {
+                    log.debug("in doActionLink");
+                    setNextPresentation(event.getPortletRequest(), "displayMessage");
+               }
+
+               public void doActionSubmit(FormEvent event) {
+                    log.debug("in doActionSubmit");
+               }
+
+               // presentation methods
+               public void displayMessage(FormEvent event) {
+                  PrintWriter out = event.getPortletResponse().getWriter();
+                  out.println("you just hit an actionlink");
+               }
+
+           }
+        </programlisting>
+        In this example, a JSP could have been specified instead of a method. Generally, the
+        presentation methods are used for performing any additional logic before the portlet is
+        rendered, such as placing variables in the request or session, or usage of the portlet UI
+        tag beans.
+        </para>
+        <para>
+         The Portlet UI tag beans complement the UI tag library by providing a portlet developer
+         with a visual bean library for creating dynamic user interfaces and obtaining information
+         useful for performing business logic. The stock quote example earlier could be much more
+         sophisticated using radiobuttons, checkboxes, and other HTML input elements that have been
+         wrapped by the ui tag library. The following example, view.jsp, shows how a form is constructed to
+         take user input and display the results.
+         <programlisting>
+             &lt;ui:form&gt;
+             &lt;ui:textfield beanid="mybean" value="Empty right now"/&gt;
+             &lt;ui:text beanId="msg" value="Nothing entered yet"/&gt;
+             &lt;ui:actionsubmit action="doActionSubmit" value="Display"/&gt;
+             &lt;/ui:form&gt;
+         </programlisting>
+         Now the <methodname>doActionForm</methodname> method can retrieve the textfield bean by doing the following:
+                <programlisting>
+
+               public void doActionForm(FormEvent event) {
+                    // get text field input
+                    TextFieldBean mybean = event.getTextFieldBean("mybean");
+                    String value = mybean.getValue();
+
+                    // set textbean message to entered text
+                    TextBean tb = event.getTextBean("msg");
+                    tb.setValue(value);
+
+                    setNextPresentation(event.getPortletRequest(), "simple.jsp");
+               }
+
+        </programlisting>
+        Now when the JSP is displayed again, the text bean will contain the new value. The &FormEvent;
+        provides various helper methods for retrieving beans from the corresponding tags and makes the
+        construction and manipulation of web interfaces more consistent than using HTML/JSP alone. Please refer to the
+        Portlet UI Tag Library Reference for more details on tag and bean usage.
+    </para>
+    <para>
+    Finally, putting the simple portlet together requires that default views are set. The ActionPortlet
+    defines the following variables to define the default presentation methods or JSPs:
+    <emphasis>DEFAULT_VIEW</emphasis>, <emphasis>DEFAULT_EDIT</emphasis>,
+    <emphasis>DEFAULT_CONFIGURE</emphasis> and <emphasis>DEFAULT_HELP</emphasis>. All necessary default presentation
+    should be configured in the init method of the portlet as shown:
+        <programlisting>
+            public void init(PortletConfig config) throws UnavailableException {
+                super.init(config);
+                DEFAULT_VIEW = "simple/view.jsp";
+                DEFAULT_CONFIGURE = "simple/config.jsp";
+            }
+        </programlisting>
+    </para>
+    <para>
+     The GridSphere action model provides portlet developers with a higher level approach to
+     complex portlet development and offers a sophisticated ui tag and visual bean library as well
+     as built-in dispatching support for the execution of action methods and managing presentation.
+    </para>
+   </sect1>
 </chapter>
