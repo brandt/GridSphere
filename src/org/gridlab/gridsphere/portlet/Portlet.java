@@ -338,7 +338,7 @@ public abstract class Portlet extends HttpServlet
 
         // create portlet request and response objects
         PortletRequest portletRequest = new SportletRequestImpl(request);
-        PortletResponse portletResponse = new SportletResponse(response, request);
+        PortletResponse portletResponse = new SportletResponse(response, portletRequest);
 
         String method = (String)request.getAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD);
         log.info("in Portlet: lifecycle method=" + method);

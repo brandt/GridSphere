@@ -11,6 +11,8 @@ import javax.servlet.ServletException;
  */
 public class PortletException extends ServletException {
 
+    private String text;
+
     /**
      * Constructs a new portlet exception.
      */
@@ -26,6 +28,7 @@ public class PortletException extends ServletException {
      */
     public PortletException(String text) {
         super(text);
+        this.text = text;
     }
 
     /**
@@ -47,6 +50,10 @@ public class PortletException extends ServletException {
      */
     public PortletException(Throwable cause) {
         super(cause);
+    }
+
+    public String getMessage() {
+        return text;
     }
 
 }

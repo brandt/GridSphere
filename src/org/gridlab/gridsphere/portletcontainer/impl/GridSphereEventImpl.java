@@ -25,18 +25,18 @@ import javax.servlet.ServletConfig;
 
 public class GridSphereEventImpl implements GridSphereEvent {
 
-    protected SportletRequest req;
-    protected SportletResponse res;
-    protected PortletContext ctx;
+    protected SportletRequest portletRequest;
+    protected SportletResponse portletResponse;
+    protected PortletContext portletContext;
 
     protected int PortletComponentID = -1;
     protected String ActivePortletID = null;
     protected UserPortletManager userPortletManager = UserPortletManager.getInstance();
 
     public GridSphereEventImpl(ServletConfig config, HttpServletRequest req, HttpServletResponse res) {
-        this.req = new SportletRequestImpl(req);
-        this.res = new SportletResponse(res, req);
-        this.ctx = new SportletContext(config);
+        portletRequest = new SportletRequestImpl(req);
+        portletResponse = new SportletResponse(res, portletRequest);
+        portletContext = new SportletContext(config);
 
         String cidStr = req.getParameter(GridSphereProperties.COMPONENT_ID);
         try {
@@ -53,19 +53,19 @@ public class GridSphereEventImpl implements GridSphereEvent {
     }
 
     public SportletRequest getSportletRequest() {
-        return req;
+        return portletRequest;
     }
 
     public SportletResponse getSportletResponse() {
-        return res;
+        return portletResponse;
     }
 
     public PortletContext getPortletContext() {
-        return ctx;
+        return portletContext;
     }
 
     public GridSphereEvent.Action getAction() {
-        String action = req.getParameter(GridSphereProperties.ACTION);
+        String action = portletRequest.getParameter(GridSphereProperties.ACTION);
         return GridSphereEvent.Action.toAction(action);
     }
 
@@ -79,7 +79,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
     }
 
     public SportletURI createNewAction(GridSphereEvent.Action action, int PortletComponentID, String ActivePortletID) {
-        SportletURI sportletURI = new SportletURI(res);
+        SportletURI sportletURI = new SportletURI(portletResponse);
         sportletURI.addParameter(GridSphereProperties.ACTION, action.toString());
         String sid = new Integer(PortletComponentID).toString();
         sportletURI.addParameter(GridSphereProperties.COMPONENT_ID, sid);
