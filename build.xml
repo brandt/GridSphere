@@ -27,13 +27,13 @@ Copyright:
     <!-- Needed to import ant-contrib tasks -->
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
-            <pathelement location="lib/ext/ant-contrib-0.3.jar"/>
+            <pathelement location="lib/ant-contrib-0.3.jar"/>
         </classpath>
     </taskdef>
 
     <taskdef resource="cactus.tasks">
         <classpath>
-            <pathelement location="lib/ext/cactus-integration-ant-20030401.jar"/>
+            <pathelement location="lib/cactus-integration-ant-20030401.jar"/>
         </classpath>
     </taskdef>
 
@@ -98,7 +98,7 @@ Copyright:
             <include name="*.jar"/>
         </fileset>
 
-        <fileset dir="lib/ext">
+        <fileset dir="lib">
             <exclude name="*.LICENSE"/>
             <include name="*.jar"/>
         </fileset>
@@ -575,7 +575,7 @@ Copyright:
         </copy>
 
         <copy overwrite="true" todir="${env.CATALINA_HOME}/shared/lib">
-            <fileset dir="lib/ext">
+            <fileset dir="lib">
                 <exclude name="*.LICENSE"/>
             </fileset>
             <fileset dir="${build.lib}">

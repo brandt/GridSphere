@@ -47,7 +47,6 @@ Copyright:
 
     <!-- GridSphere build targets -->
     <property name="build.lib"    value="${project.build}/lib"/>
-    <property name="build.home"    value="${project.build}/home"/>
     <property name="build.classes" value="${project.build}/classes"/>
     <property name="build.webapp" value="${project.build}/webapp"/>
     <property name="build.docs"    value="${project.build}/docs"/>
@@ -105,7 +104,6 @@ Copyright:
         <mkdir dir="src"/>
         <mkdir dir="lib"/>
         <mkdir dir="${project.build}"/>
-        <mkdir dir="${build.home}"/>
         <mkdir dir="${build.lib}"/>
         <mkdir dir="${build.classes}"/>
         <mkdir dir="${build.webapp}"/>

@@ -30,7 +30,7 @@ Copyright:
     </patternset>
 
     <patternset id="extra.jars" >
-      <include name="lib/ext/*.jar"/>
+      <include name="lib/*.jar"/>
     </patternset>
 
     <property name="newproject" value="projects/newproject"/>
@@ -59,7 +59,7 @@ Copyright:
             <include name="*.jar"/>
         </fileset>
 
-        <fileset dir="lib/ext">
+        <fileset dir="lib">
             <include name="*.jar"/>
         </fileset>
         <pathelement path="${java.class.path}"/>
@@ -175,7 +175,7 @@ Copyright:
         </copy>
 
         <copy todir="${env.CATALINA_HOME}/shared/lib">
-            <fileset dir="lib/ext">
+            <fileset dir="lib">
                 <include name="*.jar"/>
             </fileset>
         </copy>
