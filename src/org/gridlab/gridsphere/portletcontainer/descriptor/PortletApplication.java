@@ -63,9 +63,9 @@ public class PortletApplication {
      * sets the portlet of a PortletApplication
      *
      * @see portlet
-     * @param portlet portlet of a PortletApplication
+     * @param portletInfo the portlet of a PortletApplication
      */
-    public void setPortlet(PortletInfo portletInfo) {
+    public void setPortletInfo(PortletInfo portletInfo) {
         this.portletInfo = portletInfo;
     }
 }

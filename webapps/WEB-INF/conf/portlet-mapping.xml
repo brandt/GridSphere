@@ -19,7 +19,7 @@
             <bind-xml name="portlet-app-name" attribute="element"/>
         </field>
 
-        <field name="Portlet" type="org.gridlab.gridsphere.portletcontainer.descriptor.PortletInfo">
+        <field name="PortletInfo" type="org.gridlab.gridsphere.portletcontainer.descriptor.PortletInfo">
             <bind-xml name="portlet"/>
         </field>
     </class>
