@@ -8,48 +8,8 @@
 <jsp:useBean id="credentialRetrievalUserBean"
              class="org.gridlab.gridsphere.portlets.grid.security.CredentialRetrievalUserBean"
              scope="request"/>
-<form name="CredentialRetrievalUserPortlet" method="POST"
-      action="<%=credentialRetrievalUserBean.getPortletActionURI("doListUserActiveCredential")%>">
+<gs:form action="doListUserActiveCredential">
   <input type="hidden" name="credentialMappingID" value=""/>
-  <script type="text/javascript">
-    function CredentialRetrievalUserPortlet_listUserActiveCredential_onClick() {
-      document.CredentialRetrievalUserPortlet.action="<%=credentialRetrievalUserBean.getPortletActionURI("doListUserActiveCredential")%>";
-      document.CredentialRetrievalUserPortlet.submit();
-    }
-
-    function CredentialRetrievalUserPortlet_viewUserActiveCredential_onClick(credentialMappingID) {
-      document.CredentialRetrievalUserPortlet.credentialMappingID.value=credentialMappingID;
-      document.CredentialRetrievalUserPortlet.action="<%=credentialRetrievalUserBean.getPortletActionURI("doViewUserActiveCredential")%>";
-      document.CredentialRetrievalUserPortlet.submit();
-    }
-
-    function CredentialRetrievalUserPortlet_retrieveUserCredential_onClick() {
-      document.CredentialRetrievalUserPortlet.action="<%=credentialRetrievalUserBean.getPortletActionURI("doRetrieveUserCredential")%>";
-      document.CredentialRetrievalUserPortlet.submit();
-    }
-
-    function CredentialRetrievalUserPortlet_refreshUserCredential_onClick() {
-      var validate = GridSphere_CheckBoxList_validateCheckOneOrMore(document.CredentialRetrievalUserPortlet.credentialMappingID);
-      // Validate remove action
-      if (validate == false) {
-        alert("Please select the credentials you would like to refresh.");
-      } else {
-        document.CredentialRetrievalUserPortlet.action="<%=credentialRetrievalUserBean.getPortletActionURI("doRefreshUserCredential")%>";
-        document.CredentialRetrievalUserPortlet.submit();
-      }
-    }
-
-    function CredentialRetrievalUserPortlet_destroyUserCredential_onClick() {
-      var validate = GridSphere_CheckBoxList_validateCheckOneOrMore(document.CredentialRetrievalUserPortlet.credentialMappingID);
-      // Validate remove action
-      if (validate == false) {
-        alert("Please select the credentials you would like to destroy.");
-      } else {
-        document.CredentialRetrievalUserPortlet.action="<%=credentialRetrievalUserBean.getPortletActionURI("doDestroyUserCredential")%>";
-        document.CredentialRetrievalUserPortlet.submit();
-      }
-    }
-  </script>
 <table class="portlet-pane" cellspacing="1">
 <% if (credentialRetrievalUserBean.isFormInvalid()) { %>
   <tr>
@@ -78,10 +38,7 @@
             &nbsp;&nbsp;<input type="password"
                    name="password"
                    value=""/>
-            &nbsp;&nbsp;<input type="button"
-                   name="doRetrieveUserCredential"
-                   value="Submit"
-                   onClick="javascript:CredentialRetrievalUserPortlet_retrieveUserCredential_onClick()"/>
+            &nbsp;&nbsp;<gs:submit name="doRetrieveUserCredential" value="Submit"/>
           </td>
         </tr>
       </table>
@@ -112,39 +69,12 @@
               Your Active Credentials
           </td>
         </tr>
-<%-- TEMPORARILY COMMENTED OUT (MPR 25/02/03)
-        <tr>
-          <td class="portlet-frame-actions">
-            <input type="button"
-                   name="doListUserActiveCredential"
-                   value="List Credentials"
-                   onClick="javascript:CredentialRetrievalUserPortlet_listUserActiveCredential_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
-                   name="doRefreshUserCredential"
-                   value="Refresh Credentials"
-                   onClick="javascript:CredentialRetrievalUserPortlet_refreshUserCredential_onClick()"/>
-            &nbsp;&nbsp;<input type="button"
-                   name="doDestroyUserCredential"
-                   value="Destroy Credentials"
-                   onClick="javascript:CredentialRetrievalUserPortlet_destroyUserCredential_onClick()"/>
-          </td>
-        </tr>
---%>
       </table>
     </td>
   </tr>
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="500">
-<%-- TEMPORARILY COMMENTED OUT (MPR 25/02/03)
-        <tr>
-          <td class="portlet-frame-header-checkbox">
-              <input type="checkbox"
-               name="credentialMappingID"
-               value=""
-               onClick="javascript:GridSphere_CheckBoxList_checkAll(document.AccessControllerPortlet.groupEntryUserID)"/>
-          </td>
---%>
          <td class="portlet-frame-header" width="150">
            Label
          </td>
@@ -159,14 +89,6 @@
        CredentialMapping credentialMapping = (CredentialMapping)credentialMappingList.get(ii);
        Credential credential = credentialMapping.getCredential(); %>
         <tr>
-<%-- TEMPORARILY COMMENTED OUT (MPR 25/02/03)
-          <td class="portlet-frame-entry-checkbox">
-              <input type="checkbox"
-               name="credentialMappingID"
-               value="<%=credentialMapping.getID()%>"
-               onClick="javascript:GridSphere_CheckBoxList_onClick(document.CredentialRetrievalUserPortlet.credentialMappingID,
-                                                                   this)"/>
---%>
           <td class="portlet-frame-text">
             <a href="javascript:CredentialRetrievalUserPortlet_viewUserActiveCredential_onClick('<%=credentialMapping.getID()%>')">
               <%=credentialMapping.getLabel()%>
@@ -185,4 +107,4 @@
     </td>
   </tr>
 </table>
-</form>
+</gs:form>

@@ -1,5 +1,4 @@
 <%@ page import="org.gridlab.gridsphere.portlet.User,
-                 org.gridlab.gridsphere.portlets.core.beans.UserManagerBean,
                  java.util.List,
                  org.gridlab.gridsphere.portlet.PortletURI,
                  org.gridlab.gridsphere.services.grid.job.Job,
@@ -32,8 +31,10 @@
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
-<% List userJobList = jobManagerBean.getUserJobList();
+<% System.out.println("Getting jobs for user!!!!!!!!!!!");
+   List userJobList = jobManagerBean.getUserJobList();
    int numUsers = userJobList.size();
+   System.out.println("no jobs for user");
    if (numUsers == 0) { %>
         <tr>
           <td class="portlet-frame-text">
@@ -59,8 +60,9 @@
          </td>
        </tr>
 <%   for (int ii = 0; ii < numUsers; ++ii) {
+      System.out.println("job " + ii + " for user");
        Job job = (Job)userJobList.get(ii);
-       JobSpecification jobSpecification = (JobSpecification)job.getJobSpecification()%>
+       JobSpecification jobSpecification = (JobSpecification)job.getJobSpecification();%>
         <tr>
           <td class="portlet-frame-text">
             <% PortletURI actionURI = jobManagerBean.getPortletActionURI("doViewUserJob");
