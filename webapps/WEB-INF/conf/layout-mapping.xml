@@ -43,7 +43,7 @@
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.layout.PortletGridLayout">
+    <class name="org.gridlab.gridsphere.layout.PortletGridLayout" extends="org.gridlab.gridsphere.layout.BasePortletComponent">
         <map-to xml="grid-layout"/>
         <field name="Rows" type="integer">
             <bind-xml name="rows"/>
@@ -56,7 +56,7 @@
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.layout.PortletFlowLayout">
+    <class name="org.gridlab.gridsphere.layout.PortletFlowLayout" extends="org.gridlab.gridsphere.layout.BasePortletComponent">
         <map-to xml="flow-layout"/>
         <field name="Alignment" type="integer">
             <bind-xml name="align"/>

@@ -75,10 +75,10 @@
                     <hgap>1</hgap>
                     <vgap>1</vgap>
                     <portlet-frame>
-                        <line-border>
+                        <portlet-border>
                             <color>blue</color>
-                            <thickness>"2"</thickness>
-                        </line-border>
+                            <thickness>2</thickness>
+                        </portlet-border>
                         <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.624.2</portlet-class>
                     </portlet-frame>
                 </flow-layout>
