@@ -6,7 +6,6 @@
 
 <jsp:useBean id="locale" class="java.util.Locale" scope="request"/>
 
-<br><br>
 <ui:form name="localeform" action="selectLang">
     <% String flag = "/gridsphere/html/flags/"+locale.getLanguage() +".gif"; %>
     <table>
