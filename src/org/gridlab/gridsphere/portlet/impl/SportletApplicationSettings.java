@@ -21,27 +21,29 @@ import java.io.IOException;
  * dynamic configuration. Only when the portlet is in CONFIGURE mode, it has write access to the dynamic
  * configuration data
  */
-public abstract class SportletApplicationSettings implements PortletApplicationSettings {
+public class SportletApplicationSettings implements PortletApplicationSettings {
 
     protected Hashtable store = new Hashtable();
-    protected PortletDeploymentDescriptor pdd = null;
     protected ConcretePortletApplication portletApp = null;
     protected boolean hasConfigurePermission = false;
 
     /**
      * SportletApplicationSettings constructor
      */
-    public SportletApplicationSettings(PortletDeploymentDescriptor pdd, ConcretePortletApplication portletApp,
-                                       boolean hasConfigurePermission) {
+    public SportletApplicationSettings(ConcretePortletApplication portletApp) {
+
         this.portletApp = portletApp;
-        this.hasConfigurePermission = hasConfigurePermission;
 
         // Stick <context-param> in store
-  /*      Iterator contextParamsIt = portletApp.getContextParamList().iterator();
+        Iterator contextParamsIt = portletApp.getContextParamList().iterator();
         while (contextParamsIt.hasNext()) {
             ConfigParam configParam = (ConfigParam)contextParamsIt.next();
             store.put(configParam.getParamName(), configParam.getParamValue());
-        }*/
+        }
+    }
+
+    public void enableConfigurePermission(boolean hasConfigurePermission) {
+        this.hasConfigurePermission = hasConfigurePermission;
     }
 
     /**
@@ -102,6 +104,13 @@ public abstract class SportletApplicationSettings implements PortletApplicationS
         if (!hasConfigurePermission) {
             throw new AccessDeniedException("User is unauthorized to store portlet application settings");
         }
+        PortletDeploymentDescriptor pdd = null;
+        try {
+            pdd = new PortletDeploymentDescriptor();
+        } catch (PortletDeploymentDescriptorException e) {
+            throw new IOException("Unable to load PortletDeploymentDescriptor: " + e.getMessage());
+        }
+        portletApp = pdd.getConcretePortletApplication(portletApp.getUID());
         Enumeration enum = store.elements();
         Vector list = new Vector();
         while (enum.hasMoreElements()) {
@@ -111,10 +120,11 @@ public abstract class SportletApplicationSettings implements PortletApplicationS
             list.add(parms);
         }
         portletApp.setContextParamList(list);
+        pdd.setConcretePortletApplication(portletApp);
         try {
             pdd.save();
         } catch (PersistenceException e) {
-            throw new IOException("Unable to save SportletApplicationSettings: " + e.getMessage());
+            throw new IOException("Unable to save PortletApplicationSettings: " + e.getMessage());
         }
     }
 

@@ -24,8 +24,6 @@ public class SportletSettings implements PortletSettings {
 
     protected Hashtable store = new Hashtable();
     protected List langList = new Vector();
-    protected PortletDeploymentDescriptor pdd = null;
-    protected PortletApplicationSettings applicationSettings = null;
     protected ConcretePortletInfo concretePortletInfo = null;
     protected String concretePortletID = null;
     protected SportletApplicationSettings appSettings = null;
@@ -33,7 +31,6 @@ public class SportletSettings implements PortletSettings {
 
     // Initially don't allow this user to modify sportlet settings
     protected boolean hasConfigurePermission = false;
-
 
     /**
      * SportletSettings constructor
@@ -44,17 +41,16 @@ public class SportletSettings implements PortletSettings {
      * @param knownGroups a list of known groups obtained from the AccessControlService
      * @param knownRoles a list of known roles obtained from the AccessControlService
      */
-    public SportletSettings(PortletDeploymentDescriptor pdd,
-                            ConcretePortletApplication portletApp,
-                            List knownGroups, List knownRoles) {
+    public SportletSettings(ConcretePortletApplication portletApp) {
 
-        this.pdd = pdd;
         this.concretePortletInfo = portletApp.getConcretePortletInfo();
         this.concretePortletID = portletApp.getUID();
 
         String localeStr = concretePortletInfo.getDefaultLocale();
         locale = new Locale(localeStr, "");
         langList = concretePortletInfo.getLanguageList();
+
+        appSettings = new SportletApplicationSettings(portletApp);
 
         // Stick <config-param> in store
         Iterator configParamsIt = concretePortletInfo.getConfigParamList().iterator();
@@ -66,6 +62,7 @@ public class SportletSettings implements PortletSettings {
 
     public void enableConfigurePermission(boolean hasConfigurePermission) {
         this.hasConfigurePermission = hasConfigurePermission;
+        appSettings.enableConfigurePermission(hasConfigurePermission);
     }
 
     /**
@@ -215,6 +212,14 @@ public class SportletSettings implements PortletSettings {
         if (!hasConfigurePermission) {
             throw new AccessDeniedException("User is unauthorized to store portlet settings");
         }
+        PortletDeploymentDescriptor pdd = null;
+        try {
+            pdd = new PortletDeploymentDescriptor();
+        } catch (PortletDeploymentDescriptorException e) {
+            throw new IOException("Unable to load PortletDeploymentDescriptor: " + e.getMessage());
+        }
+        ConcretePortletApplication concPortletApp = pdd.getConcretePortletApplication(concretePortletID);
+        ConcretePortletInfo concPortletInfo = concPortletApp.getConcretePortletInfo();
         Enumeration enum = store.elements();
         Vector list = new Vector();
         while (enum.hasMoreElements()) {
@@ -223,11 +228,13 @@ public class SportletSettings implements PortletSettings {
             ConfigParam parms = new ConfigParam(key, value);
             list.add(parms);
         }
-        concretePortletInfo.setConfigParamList(list);
+        concPortletInfo.setConfigParamList(list);
+        concPortletApp.setConcretePortletInfo(concPortletInfo);
+        pdd.setConcretePortletApplication(concPortletApp);
         try {
             pdd.save();
         } catch (PersistenceException e) {
-            throw new IOException("Unable to save SportletSettings: " + e.getMessage());
+            throw new IOException("Unable to save PortletSettings: " + e.getMessage());
         }
     }
 
@@ -237,7 +244,7 @@ public class SportletSettings implements PortletSettings {
      * @return the portlet application settings
      */
     public PortletApplicationSettings getApplicationSettings() {
-        return applicationSettings;
+        return appSettings;
     }
 
 }

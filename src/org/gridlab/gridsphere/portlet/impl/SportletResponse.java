@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.ServletOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,7 +18,7 @@ import java.util.Locale;
 public class SportletResponse implements PortletResponse {
 
     private HttpServletResponse res = null;
-    private PortletRequest req = null;
+    private HttpServletRequest req = null;
     private SportletURI sportletURI = null;
 
     // HARDCODED FOR SportletURI -- needs to have the servlet name
@@ -27,7 +28,7 @@ public class SportletResponse implements PortletResponse {
     // if user goes to /GridSphere, the actual servlet name then
     // getServletName returns some crazy "org.apache.catalina.INVOKER.GridSphere"
 
-    public SportletResponse(HttpServletResponse res, PortletRequest req) {
+    public SportletResponse(HttpServletResponse res, HttpServletRequest req) {
         this.res = res;
         this.req = req;
         sportletURI = new SportletURI(res);

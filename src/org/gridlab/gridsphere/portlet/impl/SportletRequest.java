@@ -6,8 +6,6 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletInputStream;
