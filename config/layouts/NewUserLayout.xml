@@ -21,7 +21,7 @@
 -->
 
 <portlet-panel>
-    <grid-layout columns="80,20">
+    <grid-layout columns="80,20" cssstyle="layout-header">
         <portlet-text include="/html/pagehead.html"/>
         <portlet-frame transparent="true" outer-padding="0">
             <portlet-class>org.gridlab.gridsphere.portlets.core.LogoutPortlet.1</portlet-class>

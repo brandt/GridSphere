@@ -22,6 +22,7 @@ public class PortletGridLayout extends PortletFrameLayout {
     private int numColumns;
     private int[] colSizes;
     private String columnString;
+    private String cssStyle = "";
 
     /**
      * Constructs an instance of PortletGridLayout
@@ -34,6 +35,27 @@ public class PortletGridLayout extends PortletFrameLayout {
         return PortletGridLayout.class.getName();
     }
      */
+
+    /**
+     * Returns the CSS style name for the grid-layout.
+     *
+     * @return css style name
+     */
+    public String getCssStyle() {
+        return cssStyle;
+    }
+
+    /**
+     * Sets the CSS style name for the grid-layout.
+     * This needs to be set if you want to have transparent portlets, if there is
+     * no background there can't be a real transparent portlet.
+     * Most likely one sets just the background in that one.
+     *
+     * @param cssStyle  css style of the that layout
+     */
+    public void setCssStyle(String cssStyle) {
+        this.cssStyle = cssStyle;
+    }
 
     /**
      * Sets the columns definition string. Normally specified in the layout.xml
@@ -120,18 +142,24 @@ public class PortletGridLayout extends PortletFrameLayout {
         }
 
         //out.println("<table width=\"" + gwidth + "%\" border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#FFFFFF\">");
-        out.println("<table border=\"0\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"> <!-- overall gridlayout table -->");
+        out.print("<table ");
+        if (!getCssStyle().equals("")) {
+            out.print(" class='"+getCssStyle()+"' ");
+        }
+        out.println("border=\"0\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"> <!-- overall gridlayout table -->");
 
         out.println("<tr> <!-- overall one row -->");
         for (int i = 0; i < numColumns; i++) {
             // new column
             out.println("<td width=\"" + colSizes[i] + "%\" valign=\"top\"> <!-- this is a row -->");
             // construct a table inside this column
-            out.println("<table border=\"0\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"> <!-- this is table inside row (" + i + ")-->");
+            out.print("<table ");
+            out.println("border=\"0\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"> <!-- this is table inside row (" + i + ")-->");
             // now render the portlets in this column
             //out.println("<tr>");
             for (int j = 1; j <= portletsPerColumns; j++) {
-                out.println("<tr><td>");
+                out.print("<tr");
+                out.println("><td>");
                 p = (PortletComponent) components.get(portletCount);
                 if (p.getVisible()) {
                     p.doRender(event);

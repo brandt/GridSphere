@@ -61,6 +61,9 @@
         <field name="Columns" type="string">
             <bind-xml name="columns" node="attribute"/>
         </field>
+        <field name="CssStyle" type="string">
+            <bind-xml name="cssstyle" node="attribute"/>
+        </field>
     </class>
 
     <class name="org.gridlab.gridsphere.layout.PortletFrame" extends="org.gridlab.gridsphere.layout.BasePortletComponent">
