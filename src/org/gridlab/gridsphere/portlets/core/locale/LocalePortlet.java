@@ -12,10 +12,12 @@ import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
 
 import javax.servlet.UnavailableException;
 import java.util.Locale;
+import java.util.StringTokenizer;
 
 public class LocalePortlet extends ActionPortlet {
 
     public static final String VIEW_JSP = "/jsp/locale/view.jsp";
+    public static final String DEFAULT_DISPLAY_LOCALES="en,cs,de,fr,hu,pl,it";
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
@@ -55,23 +57,16 @@ public class LocalePortlet extends ActionPortlet {
         localeSelector.setOnChange("GridSphere_SelectSubmit( this.form )");
         localeSelector.setSize(1);
 
-
-        ListBoxItemBean bean_en = makeLocaleBean(Locale.US.getDisplayLanguage(new Locale("en","","")), "en", locale);
-        ListBoxItemBean bean_cz = makeLocaleBean(new Locale("cs","","").getDisplayLanguage(new Locale("cs","","")), "cs", locale);
-        ListBoxItemBean bean_ge = makeLocaleBean(Locale.GERMAN.getDisplayLanguage(new Locale("de","","")), "de", locale);
-        ListBoxItemBean bean_fr = makeLocaleBean(Locale.FRENCH.getDisplayLanguage(new Locale("fr","","")), "fr", locale);
-        ListBoxItemBean bean_hu = makeLocaleBean(new Locale("hu","","").getDisplayLanguage(new Locale("hu","","")), "hu", locale);
-        ListBoxItemBean bean_pl = makeLocaleBean(new Locale("pl","","").getDisplayLanguage(new Locale("pl","","")), "pl", locale);
-        ListBoxItemBean bean_it = makeLocaleBean(Locale.ITALIAN.getDisplayLanguage(new Locale("it","","")), "it", locale);
-
-        localeSelector.addBean(bean_en);
-        localeSelector.addBean(bean_cz);
-        localeSelector.addBean(bean_ge);
-        localeSelector.addBean(bean_fr);
-        localeSelector.addBean(bean_hu);
-        localeSelector.addBean(bean_pl);
-        localeSelector.addBean(bean_it);
-
+        String displayLocales = getPortletSettings().getAttribute("display-locale");
+        if (displayLocales == null) displayLocales = DEFAULT_DISPLAY_LOCALES;
+        StringTokenizer localeTokenizer = new StringTokenizer(displayLocales,",");
+        while (localeTokenizer.hasMoreTokens()) {
+                String displayLocaleStr = localeTokenizer.nextToken();
+                Locale displayLocale = new Locale(displayLocaleStr,"","");
+                ListBoxItemBean localeBean = makeLocaleBean(displayLocale.getDisplayLanguage(displayLocale), displayLocaleStr, locale);
+                localeSelector.addBean(localeBean);
+        }
+        
         setNextState(request, "locale/viewlocale.jsp");
     }
 

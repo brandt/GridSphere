@@ -554,6 +554,11 @@
                     <title>Lokalizacja</title>
                     <description>Wybór lokalizacji</description>
                </language>
+<!--  Configure the displayed locale options
+                <config-param>
+                    <param-name>display-locale</param-name>
+                    <param-value>en,hu</param-value>
+                </config-param>  -->             
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
