@@ -28,7 +28,7 @@
                     </row-layout>
                 </table-layout>
             </portlet-tab>
-            <portlet-tab lable="utilities">
+            <portlet-tab label="utilities">
                 <title>Utilities</title>
                 <table-layout>
                     <row-layout>
