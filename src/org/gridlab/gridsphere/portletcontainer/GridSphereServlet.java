@@ -13,9 +13,8 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
-import org.gridlab.gridsphere.services.container.registry.UserPortletManager;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
+import org.gridlab.gridsphere.services.registry.PortletRegistryService;
 
 import javax.servlet.*;
 import javax.servlet.http.*;

@@ -15,7 +15,6 @@ import org.gridlab.gridsphere.portlet.AbstractPortlet;
 import org.gridlab.gridsphere.portlet.impl.SportletResponse;
 import org.gridlab.gridsphere.portlet.impl.SportletURI;
 import org.gridlab.gridsphere.portlet.impl.SportletRequest;
-import org.gridlab.gridsphere.services.container.registry.UserPortletManager;
 
 public interface GridSphereEvent {
 
