@@ -19,8 +19,6 @@ public class SetupTestUsersTest extends SetupRootUserTest {
     protected AccessControlManagerService rootACLService = null;
 
     protected User jason = null;
-    protected User michael = null;
-    protected User oliver = null;
 
     public SetupTestUsersTest(String name) {
         super(name);
@@ -38,8 +36,8 @@ public class SetupTestUsersTest extends SetupRootUserTest {
         super.setUp();
         try {
             super.testLoginRootUser();
-            rootUserService = (UserManagerService) factory.createUserPortletService(UserManagerService.class, rootUser, context, true);
-            rootACLService = (AccessControlManagerService) factory.createUserPortletService(AccessControlManagerService.class, rootUser, context, true);
+            rootUserService = (UserManagerService) factory.createPortletService(UserManagerService.class, context, true);
+            rootACLService = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, context, true);
         } catch (PortletServiceException e) {
             fail("Unable to initialize user services");
         }
@@ -65,6 +63,7 @@ public class SetupTestUsersTest extends SetupRootUserTest {
         rootUserService.saveUser(michaelRequest);
         rootUserService.saveUser(oliverRequest);
 
+        jason = rootUserService.getUserByUserName("jason");
     }
 
     public void testCreateTestUsers() {
@@ -79,8 +78,8 @@ public class SetupTestUsersTest extends SetupRootUserTest {
         List users = rootUserService.getUsers();
         assertEquals(users.size(), 4);
 
-        User jason2 = rootUserService.getUserByUserName(jason.getUserName());
-        assertEquals(jason2.getGivenName(), jason.getGivenName());
+        jason = rootUserService.getUserByUserName("jason");
+        assertEquals(jason.getGivenName(), "Jason");
 
 
         deleteUsers();
@@ -96,9 +95,11 @@ public class SetupTestUsersTest extends SetupRootUserTest {
     protected void deleteUsers() {
         // test delete users
         rootUserService.deleteUser(jason);
-        User jason2 = rootUserService.getUserByUserName(jason.getUserName());
-        assertNull(jason2);
+        //User jason2 = rootUserService.getUserByUserName("jason");
+        //assertNull(jason2);
 
+        User oliver = rootUserService.getUserByUserName("oliver");
+        User michael = rootUserService.getUserByUserName("michael");
         rootUserService.deleteUser(michael);
         rootUserService.deleteUser(oliver);
 

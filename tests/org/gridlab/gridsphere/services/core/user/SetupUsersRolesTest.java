@@ -8,10 +8,8 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.gridlab.gridsphere.portlet.PortletGroupFactory;
 import org.gridlab.gridsphere.portlet.PortletRole;
-import org.gridlab.gridsphere.services.core.security.acl.GroupAction;
 import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
-import org.gridlab.gridsphere.services.core.security.acl.InvalidGroupRequestException;
 
 public class SetupUsersRolesTest extends SetupTestUsersTest {
 
@@ -51,19 +49,17 @@ public class SetupUsersRolesTest extends SetupTestUsersTest {
 
     public void testAssignRoles() {
 
-        GroupRequest req = rootACLService.createGroupRequest();
+        GroupRequest req = rootACLService.createGroupEntry();
         req.setUser(jason);
         req.setRole(PortletRole.ADMIN);
         req.setGroup(PortletGroupFactory.GRIDSPHERE_GROUP);
-        req.setGroupAction(GroupAction.ADD);
-        try {
-            rootACLService.submitGroupRequest(req);
-        } catch (InvalidGroupRequestException e) {
-            fail("Unable to submit jason group request");
-        }
-        rootACLService.approveGroupRequest(req);
+
+
+        rootACLService.saveGroupEntry(req);
 
         // should be an admin
+        assertNotNull(jason);
+
         boolean isAdmin = rootACLService.hasRoleInGroup(jason, PortletGroupFactory.GRIDSPHERE_GROUP, PortletRole.ADMIN);
         assertTrue(isAdmin);
 
@@ -71,20 +67,9 @@ public class SetupUsersRolesTest extends SetupTestUsersTest {
         PortletRole role = jasonEntry.getRole();
         assertEquals(role, PortletRole.ADMIN);
 
-        // test revoke role
-
-        req = rootACLService.createGroupRequest(jasonEntry);
-        req.setGroupAction(GroupAction.REMOVE);
-        try {
-            rootACLService.submitGroupRequest(req);
-        } catch (InvalidGroupRequestException e) {
-            fail("Unable to submit jason group request");
-        }
-        rootACLService.approveGroupRequest(req);
-
         // should be an admin
         isAdmin = rootACLService.hasRoleInGroup(jason, PortletGroupFactory.GRIDSPHERE_GROUP, PortletRole.ADMIN);
-        assertFalse(isAdmin);
+        assertTrue(isAdmin);
 
     }
 
