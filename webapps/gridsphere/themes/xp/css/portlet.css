@@ -29,10 +29,9 @@ Version: $Id$
 }
 
 .portlet-frame-title {
-  background-color: #6666FF;
+  background-color: #6699CC;
   border: none;
   color: #ffffff;
-  font-family: inherit;
   font-weight: bold;
   text-align: center;
   padding-top: 1;
@@ -45,7 +44,6 @@ Version: $Id$
   background-color: #CCCCCC;
   border: none;
   color: #000000;
-  font-family: inherit;
   padding-top: 2;
   padding-right: 2;
   padding-left: 2;
@@ -56,7 +54,6 @@ Version: $Id$
   background-color: #ffffff;
   border: none;
   color: #000000;
-  font-family: inherit;
   padding-top: 4;
   padding-right: 4;
   padding-left: 4;
@@ -67,7 +64,6 @@ Version: $Id$
   background-color: #ffffff;
   border: none;
   color: darkred;
-  font-family: inherit;
   padding-top: 4;
   padding-right: 4;
   padding-left: 4;
@@ -78,7 +74,6 @@ Version: $Id$
   background-color: #6699CC;
   border-none;
   color: #ffffff;
-  font-family: inherit;
   font-weight: bold;
   text-align: center;
   padding: 1;
@@ -88,7 +83,6 @@ Version: $Id$
   background-color: #CCCCCC;
   border: none;
   color: #000000;
-  font-family: inherit;
   text-align: left;
   padding-top: 1;
   padding-right: 2;
@@ -99,8 +93,7 @@ Version: $Id$
 .portlet-frame-label-alert {
   background-color: #CCCCCC;
   border: none;
-  color: DARKRED;
-  font-family: inherit;
+  color: darkred;
   text-align: left;
   padding-top: 1;
   padding-right: 2;
@@ -112,7 +105,6 @@ Version: $Id$
   background-color: #ffffff;
   border: none;
   color: #000000;
-  font-family: inherit;
   text-align: left;
   padding-top: 1;
   padding-right: 2;
@@ -123,8 +115,7 @@ Version: $Id$
 .portlet-frame-text-alert {
   background-color: #ffffff;
   border: none;
-  color: DARKRED;
-  font-family: inherit;
+  color: darkred;
   text-align: left;
   padding-top: 1;
   padding-right: 2;
@@ -146,7 +137,7 @@ Version: $Id$
 .portlet-frame-input-alert {
   background-color: #ffffff;
   border: none;
-  color: DARKRED;
+  color: darkred;
   font-family: inherit;
   text-align: left;
   padding-top: 1;
@@ -170,7 +161,7 @@ Version: $Id$
 .portlet-frame-number-alert {
   background-color: #ffffff;
   border: none;
-  color: DARKRED;
+  color: darkred;
   font-family: inherit;
   text-align: right;
   padding-top: 1;
