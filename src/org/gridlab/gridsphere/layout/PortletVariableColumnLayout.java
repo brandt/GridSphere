@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
@@ -53,9 +54,10 @@ public class PortletVariableColumnLayout extends PortletFrameLayout implements C
         // starting of the gridtable
 
         if (!components.isEmpty()) {
-            out.println("<table width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"> <!-- START COLUMN -->");
+            StringBuffer sb = new StringBuffer();
+            sb.append("<table width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"> <!-- START COLUMN -->");
 
-            out.println("<tbody>");
+            sb.append("<tbody>");
 
             //find which variant to display
             String thisLabel = this.getLabel();
@@ -71,20 +73,21 @@ public class PortletVariableColumnLayout extends PortletFrameLayout implements C
             List scomponents = Collections.synchronizedList(components);
             synchronized (scomponents) {
                 for (int i = 0; i < scomponents.size(); i++) {
-                    out.print("<tr><td valign=\"top\">");
+                    sb.append("<tr><td valign=\"top\">");
 
                     p = (PortletComponent) scomponents.get(i);
                     String plabel = p.getLabel();
 
                     if (p.getVisible() && sesvariant.equals(plabel)) {
                         p.doRender(event);
+                        sb.append(p.getBufferedOutput(req));
                     }
 
-                    out.println("</td></tr>");
+                    sb.append("</td></tr>");
                 }
             }
-            out.println("</tbody>");
-            out.println("</table> <!-- END COLUMN -->");
+            sb.append("</tbody></table> <!-- END COLUMN -->");
+            req.setAttribute(SportletProperties.RENDER_OUTPUT + componentIDStr, sb);
         }
     }
 
