@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,11 +39,10 @@ public class SportletURI implements PortletURI {
      * context path obtained from a <code>HttpServletRequest</code>
      *
      * @param res         a <code>HttpServletResponse</code>
-     * @param contextPath the request context path
      */
-    public SportletURI(HttpServletRequest req, HttpServletResponse res, String contextPath) {
+    public SportletURI(HttpServletRequest req, HttpServletResponse res) {
         this.store = new HashMap();
-        this.contextPath = "/gridsphere"; // contextPath;
+        this.contextPath = GridSphereConfig.getContextPath();
         this.res = res;
         this.req = req;
 
@@ -58,12 +58,11 @@ public class SportletURI implements PortletURI {
      * context path obtained from a <code>HttpServletRequest</code>
      *
      * @param res         a <code>HttpServletResponse</code>
-     * @param contextPath the request context path
      */
-    public SportletURI(HttpServletRequest req, HttpServletResponse res, String contextPath, boolean isSecure) {
+    public SportletURI(HttpServletRequest req, HttpServletResponse res, boolean isSecure) {
         this.store = new HashMap();
         this.isSecure = isSecure;
-        this.contextPath = "/gridsphere"; // contextPath;
+        this.contextPath = GridSphereConfig.getContextPath(); // contextPath;
         this.req = req;
         this.res = res;
         //this.id = createUniquePrefix(2);

@@ -45,7 +45,7 @@ public class SportletResponse extends HttpServletResponseWrapper implements Port
      * @return the portletURI
      */
     public PortletURI createReturnURI() {
-        SportletURI sportletURI = new SportletURI(req, this.getHttpServletResponse(), req.getContextPath());
+        SportletURI sportletURI = new SportletURI(req, this.getHttpServletResponse());
         addURIParameters(sportletURI);
         sportletURI.setReturn(true);
         return sportletURI;
@@ -58,7 +58,7 @@ public class SportletResponse extends HttpServletResponseWrapper implements Port
      * @return the portlet URI
      */
     public PortletURI createURI() {
-        SportletURI sportletURI = new SportletURI(req, this.getHttpServletResponse(), req.getContextPath());
+        SportletURI sportletURI = new SportletURI(req, this.getHttpServletResponse());
         addURIParameters(sportletURI);
         sportletURI.setReturn(false);
         return sportletURI;
@@ -70,7 +70,7 @@ public class SportletResponse extends HttpServletResponseWrapper implements Port
      * @return the portlet URI
      */
     public PortletURI createURI(boolean isSecure) {
-        SportletURI sportletURI = new SportletURI(req, this.getHttpServletResponse(), req.getContextPath(), isSecure);
+        SportletURI sportletURI = new SportletURI(req, this.getHttpServletResponse(), isSecure);
         addURIParameters(sportletURI);
         sportletURI.setReturn(false);
         return sportletURI;
@@ -82,7 +82,7 @@ public class SportletResponse extends HttpServletResponseWrapper implements Port
      * @return the portlet component label
      */
     public PortletURI createURI(String componentLabel, boolean isSecure) {
-        SportletURI sportletURI = new SportletURI(req, this.getHttpServletResponse(), req.getContextPath(), isSecure);
+        SportletURI sportletURI = new SportletURI(req, this.getHttpServletResponse(), isSecure);
         sportletURI.addParameter(SportletProperties.COMPONENT_ID, componentLabel);
         sportletURI.setReturn(false);
         return sportletURI;
@@ -95,7 +95,7 @@ public class SportletResponse extends HttpServletResponseWrapper implements Port
      * @param mode the portlet mode
      */
     public PortletURI createURI(Portlet.Mode mode) {
-        SportletURI sportletURI = new SportletURI(req, this.getHttpServletResponse(), req.getContextPath());
+        SportletURI sportletURI = new SportletURI(req, this.getHttpServletResponse());
         addURIParameters(sportletURI);
         sportletURI.setPortletMode(mode);
         return sportletURI;
@@ -108,7 +108,7 @@ public class SportletResponse extends HttpServletResponseWrapper implements Port
      * @see #addURIParameters
      */
     public PortletURI createURI(PortletWindow.State state) {
-        SportletURI sportletURI = new SportletURI(req, this.getHttpServletResponse(), req.getContextPath());
+        SportletURI sportletURI = new SportletURI(req, this.getHttpServletResponse());
         addURIParameters(sportletURI);
         sportletURI.setWindowState(state);
         return sportletURI;

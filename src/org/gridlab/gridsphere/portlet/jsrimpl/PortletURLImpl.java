@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import javax.portlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -64,13 +65,9 @@ public class PortletURLImpl implements PortletURL {
         this.res = res;
         this.req = req;
         this.context = context;
-        this.contextPath = "/gridsphere"; //req.getContextPath();
+        this.contextPath = GridSphereConfig.getContextPath();
         this.isSecure = req.isSecure();
         this.isRender = isRender;
-    }
-
-    public void setContextPath(String contextPath) {
-        this.contextPath = contextPath;
     }
 
     public void setAction(String action) {
