@@ -37,6 +37,7 @@ public class FileManagerPortlet extends ActionPortlet {
 
     public void doViewUserFiles(FormEvent event) throws PortletException {
         log.debug("in FileManagerPortlet: doViewUser");
+        checkUserRole(event);
         PortletRequest request = event.getPortletRequest();
         User user = request.getUser();
 
