@@ -439,6 +439,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         PortletResponse res = event.getPortletResponse();
 
         // check for render params
+        /*
         if ((onlyRender) && (event.getPortletComponentID().equals(componentIDStr))) {
             Map tmpParams = (Map)req.getParameterMap();
             if (tmpParams != null) {
@@ -451,7 +452,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 }
             }
         }
-
+        */
 
         User user = req.getUser();
         if (!(user instanceof GuestUser)) {
