@@ -18,15 +18,13 @@
 
 <!-- Tabbed Panes -->
 <portlet-tabbed-pane selected="0" style="menu">
-    <portlet-tab>
-        <title>GridSphere</title>
+    <portlet-tab title="GridSphere">
         <portlet-tabbed-pane selected="0" style="sub-menu">
-            <portlet-tab label="home">
-                <title>Home</title>
+            <portlet-tab label="home" title="Home">
                 <table-layout>
                     <row-layout>
                         <column-layout width="70%">
-                            <portlet-frame>
+                            <portlet-frame label="banner">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.file.BannerPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
