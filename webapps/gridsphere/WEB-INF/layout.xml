@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <portlet-tabbed-pane>
     <portlet-tab label="welcome">
+        <title lang="zh">欢迎</title>
         <title lang="en">Welcome</title>
         <title lang="de">Willkommen</title>
         <title lang="it">Benvenuto</title>
@@ -11,6 +12,7 @@
         <title lang="cs">Vítejte</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab label="settings">
+            	<title lang="zh">配置</title>
                 <title lang="en">Settings</title>
                 <title lang="it">Preferenze</title>
                 <title lang="pl">Ustawienia</title>
@@ -29,7 +31,8 @@
                 </table-layout>
             </portlet-tab>
             <portlet-tab label="layouttab">
-                <title lang="en">Layout</title>
+                <title lang="zh">版面</title>
+            	<title lang="en">Layout</title>
                 <title lang="it">Layout</title>
                 <title lang="pl">Układ graficzny</title>
                 <title lang="hu">Kinézet</title>
@@ -50,6 +53,7 @@
         </portlet-tabbed-pane>
     </portlet-tab>
     <portlet-tab label="admin" required-role="ADMIN">
+        <title lang="zh">管理者</title>
         <title lang="en">Administration</title>
         <title lang="it">Amministrazione</title>
         <title lang="pl">Administracja</title>
@@ -59,6 +63,7 @@
         <title lang="cs">Administrace</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab label="portlets" required-role="SUPER">
+                <title lang="zh">门件</title>
                 <title lang="en">Portlets</title>
                 <title lang="pl">Portlety</title>
                 <title lang="hu">Portletek</title>
@@ -82,6 +87,7 @@
                 </table-layout>
             </portlet-tab>
             <portlet-tab label="users" required-role="SUPER">
+                <title lang="zh">用户</title>
                 <title lang="en">Users</title>
                 <title lang="it">Utenti</title>
                 <title lang="pl">Użytkownicy</title>
@@ -101,6 +107,7 @@
                 </table-layout>
             </portlet-tab>
             <portlet-tab label="groups" required-role="ADMIN">
+                <title lang="zh">用户组</title>
                 <title lang="en">Groups</title>
                 <title lang="it">Gruppi</title>
                 <title lang="pl">Grupy</title>
@@ -120,6 +127,7 @@
                 </table-layout>
             </portlet-tab>
             <portlet-tab label="adminlayouttab" required-role="ADMIN">
+                <title lang="zh">版面组</title>
                 <title lang="en">Layouts</title>
                 <title lang="it">Layouts</title>
                 <title lang="pl">Graficzny</title>
@@ -138,6 +146,7 @@
                 </table-layout>
             </portlet-tab>
             <portlet-tab label="messagingservicestab" required-role="ADMIN">
+                <title lang="zh">信息</title>
                 <title lang="en">Messaging</title>
                 <title lang="de">Textnachrichtendienste</title>
                 <table-layout>

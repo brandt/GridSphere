@@ -30,9 +30,11 @@
 <!-- Tabbed Panes -->
 <portlet-tabbed-pane selected="0" style="menu">
     <portlet-tab label="gridsphere">
-        <title lang="en">GridSphere</title>
+        <title lang="zh">GridSphere网络门户框架</title>
+        <title lang="en">GridSphere Portal Framework</title>
         <portlet-tabbed-pane selected="0" style="sub-menu">
             <portlet-tab label="home">
+               	<title lang="zh">首页</title>
                	<title lang="en">Home</title>
                 <title lang="it">Inizio</title>
 		        <title lang="pl">Start</title>
@@ -41,13 +43,34 @@
 		        <title lang="cs">Výchozí</title>
                 <table-layout>
                     <row-layout>
-                        <column-layout width="70%">
-                            <portlet-content include="/html/main.html"/>
+                        <column-layout width="35%">
+                            <portlet-content include="/html/default.html"/>
                         </column-layout>
                         <column-layout width="30%">
                             <portlet-frame label="login">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
                             </portlet-frame>
+                        </column-layout>
+                        <column-layout width="35%">
+                            <portlet-content include="/html/default.html"/>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
+            <portlet-tab label="about">
+               	<title lang="zh">关于</title>
+               	<title lang="en">About</title>
+               	<title lang="de">Über</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout width="35%">
+                            <portlet-content include="/html/default.html"/>
+                        </column-layout>
+                        <column-layout width="30%">
+                            <portlet-content include="/jsp/about/about.jsp"/>
+                        </column-layout>
+                        <column-layout width="35%">
+                            <portlet-content include="/html/default.html"/>
                         </column-layout>
                     </row-layout>
                 </table-layout>

@@ -32,7 +32,13 @@
             </context-param>
             <concrete-portlet>
                 <portlet-name>Login</portlet-name>
-                <default-locale>en</default-locale>
+                <default-locale>zh</default-locale>
+                <language locale="zh">
+                    <title>【登录 Login】</title>
+                    <title-short>登录</title-short>
+                    <description>门件提供了登录功能</description>
+                    <keywords>门件 登录</keywords>
+                </language>
                 <language locale="en">
                     <title>Login</title>
                     <title-short>Login</title-short>
@@ -100,7 +106,13 @@
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.login.LogoutPortlet.1">
             <concrete-portlet>
                 <portlet-name>Logout</portlet-name>
-                <default-locale>en</default-locale>
+                <default-locale>zh</default-locale>
+                <language locale="zh">
+                    <title>【退出登录 Logout】</title>
+                    <title-short>退出登录</title-short>
+                    <description>门件提供了退出登录功能</description>
+                    <keywords>门件 退出登录</keywords>
+                </language>
                 <language locale="en">
                     <title>Logout</title>
                     <title-short>Logout</title-short>
@@ -174,7 +186,13 @@
             <concrete-portlet>
                 <portlet-name>User Account Manager</portlet-name>
                 <access-restrictions role="SUPER"/>
-                <default-locale>en</default-locale>
+                <default-locale>zh</default-locale>
+                <language locale="zh">
+                    <title>【用户帐号管理者 User Account Manager】</title>
+                    <title-short>用户帐号管理者</title-short>
+                    <description>使门户网站管理者能够管理用户帐号</description>
+                    <keywords>用户 帐号 管理者</keywords>
+                </language>
                 <language locale="en">
                     <title>User Account Manager</title>
                     <title-short>User Account Manager</title-short>
@@ -240,7 +258,11 @@
             <concrete-portlet>
                 <portlet-name>Portlet Group Manager</portlet-name>
                 <access-restrictions role="SUPER"/>
-                <default-locale>en</default-locale>
+                <default-locale>zh</default-locale>
+                <language locale="zh">
+                    <title>【门件用户组管理者 Portlet Group Manager】</title>
+                    <description>使门户网站管理者能够管理门件用户组</description>
+                </language>
                 <language locale="en">
                     <title>Portlet Group Manager</title>
                     <description>Enables portal administrators to administer portlet groups</description>
@@ -298,7 +320,11 @@
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet.1">
             <concrete-portlet>
                 <portlet-name>Layout Manager Portlet</portlet-name>
-                <default-locale>en</default-locale>
+                <default-locale>zh</default-locale>
+                <language locale="zh">
+                    <title>【版面管理者门件 Layout Manager Portlet】</title>
+                    <description>提供了用户版面定制化功能</description>
+                </language>
                 <language locale="en">
                     <title>Layout Manager</title>
                     <description>Provides user layout customization</description>
@@ -360,7 +386,11 @@
             <concrete-portlet>
                 <portlet-name>Portlet Application Manager</portlet-name>
                 <access-restrictions role="SUPER"/>
-                <default-locale>en</default-locale>
+                <default-locale>zh</default-locale>
+                <language locale="zh">
+                    <title>【门件应用软件管理者 Portlet Application Manager】</title>
+                    <description>使门户网站管理者管理门件</description>
+                </language>
                 <language locale="en">
                     <title>Portlet Application Manager</title>
                     <description>Enables portal administrators to administer portlets</description>
@@ -418,7 +448,11 @@
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.layout.UserLayoutPortlet.1">
             <concrete-portlet>
                 <portlet-name>Layout Manager Portlet</portlet-name>
-                <default-locale>en</default-locale>
+                <default-locale>zh</default-locale>
+                <language locale="zh">
+                    <title>【用户版面管理者 User Layout Manager】</title>
+                    <description>提供了用户版面定制化功能</description>
+                </language>
                 <language locale="en">
                     <title>Layout Manager</title>
                     <description>Provides user layout customization</description>
@@ -479,7 +513,11 @@
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet.1">
             <concrete-portlet>
                 <portlet-name>Profile Manager Portlet</portlet-name>
-                <default-locale>en</default-locale>
+                <default-locale>zh</default-locale>
+                <language locale="zh">
+                    <title>【成形管理者 Profile Manager】</title>
+                    <description>定制用户成形</description>
+                </language>
                 <language locale="en">
                     <title>Profile Manager</title>
                     <description>Customizes users profile</description>
@@ -530,7 +568,11 @@
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.locale.LocalePortlet.1">
             <concrete-portlet>
                 <portlet-name>Locale Portlet</portlet-name>
-                <default-locale>en</default-locale>
+                <default-locale>zh</default-locale>
+                <language locale="zh">
+                    <title>语言</title>
+                    <description>选择一门语言</description>
+                </language>
                 <language locale="en">
                     <title>Locale</title>
                     <description>Selects a locale</description>
@@ -587,7 +629,13 @@
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.messaging.MessagingServicesPortlet.1">
             <concrete-portlet>
                 <portlet-name>MessagingServicesPortlet</portlet-name>
-                <default-locale>en</default-locale>
+                <default-locale>zh</default-locale>
+                <language locale="zh">
+                    <title>【配置信息服务 Configure Messaging Services】</title>
+                    <title-short>配置信息服务</title-short>
+                    <description>门件提供了信息服务配置功能</description>
+                    <keywords>门件 信息 服务</keywords>
+                </language>
                 <language locale="en">
                     <title>Configure Messaging Services</title>
                     <title-short>Messaging Services</title-short>
@@ -656,7 +704,13 @@
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.portlets.SessionManagerPortlet.1">
             <concrete-portlet>
                 <portlet-name>SessionManagerPortlet</portlet-name>
-                <default-locale>en</default-locale>
+                <default-locale>zh</default-locale>
+                <language locale="zh">
+                    <title>【会话管理员 Session Manager】</title>
+                    <title-short>会话管理员</title-short>
+                    <description>显示门户网站会话</description>
+                    <keywords>门户网站 会话</keywords>
+                </language>
                 <language locale="en">
                     <title>Session Manager</title>
                     <title-short>Session Manager</title-short>
