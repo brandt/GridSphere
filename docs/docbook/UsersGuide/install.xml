@@ -152,8 +152,8 @@ the GridSphere source directory and then re-deploying.
         <para>
             By default, the portal is configured as http://localhost:8080/gridsphere/gridsphere.
             It is possible to change the context by editing the deployed context.
-            Under Tomcat 4, the context file is located in <filename></filename>.
-            Under Tomcat 5, the context file is located in <filename></filename>
+            Under Tomcat 4, the context file is located in <filename>$CATALINA_HOME/webapps/gridsphere-context.xml</filename>.
+            Under Tomcat 5, the context file is located in <filename>$CATALINA_HOME/conf/Catalina/localhost/gridsphere.xml</filename>
             Change the following:
             </para>
            <informalexample><programlisting>
