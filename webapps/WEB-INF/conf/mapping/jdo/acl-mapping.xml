@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
+<mapping>
+   <class name="org.gridlab.gridsphere.services.security.acl.impl2.Groups" identity="Oid" key-generator="UUID">
+      <map-to table="Groups" />
+      <field name="Name" type="java.lang.String">
+         <sql type="char" name="Name" />
+      </field>
+      <field name="ID" type="integer">
+         <sql type="integer" name="ID" />
+      </field>
+      <field name="Oid" type="java.lang.String">
+         <sql type="char" name="Oid" />
+      </field>
+   </class>
+</mapping>
+
