@@ -13,10 +13,11 @@ public class TableCellBean extends BeanContainer implements TagBean {
 
     protected String cellSpacing = "";
     protected String width = "";
-    protected String TABLE_CELL_STYLE = "";
+    protected String TABLE_CELL_STYLE = "portlet-frame-text";
 
     public TableCellBean() {
         super();
+        this.cssStyle = TABLE_CELL_STYLE;
     }
 
     public void setWidth(String width) {

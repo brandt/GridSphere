@@ -7,7 +7,7 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 import java.util.Iterator;
 
-public class CheckBoxListBean extends DropDownListBean {
+public class CheckBoxListBean extends ListBoxBean {
 
     public CheckBoxListBean(String name) {
         super(name);

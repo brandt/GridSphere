@@ -16,6 +16,7 @@ public abstract class BaseComponentBean extends BaseBean {
     protected String cssStyle = "";
     protected String font = "";
     protected String key = null;
+    protected boolean visible = true;
 
     public BaseComponentBean() {
         super();
@@ -178,4 +179,11 @@ public abstract class BaseComponentBean extends BaseBean {
         this.cssStyle = style;
     }
 
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    public boolean getVisible() {
+        return visible;
+    }
 }

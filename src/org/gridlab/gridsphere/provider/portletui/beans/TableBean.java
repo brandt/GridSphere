@@ -50,14 +50,16 @@ public class TableBean extends BaseComponentBean implements TagBean {
 
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("<table ");
-        sb.append("cellspacing=\"" + cellSpacing + "\" ");
-        if (width != null) {
-        sb.append("width=\"" + width + "\" ");
-        }
-        sb.append(">");
-        sb.append(defaultModel.toString());
-        sb.append("</table>");
+
+            sb.append("<table ");
+            sb.append("cellspacing=\"" + cellSpacing + "\" ");
+            if (width != null) {
+                sb.append("width=\"" + width + "\" ");
+            }
+            sb.append(">");
+            sb.append(defaultModel.toString());
+            sb.append("</table>");
+
         return sb.toString();
     }
 }

@@ -5,44 +5,150 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-public class ListBoxBean extends DropDownListBean {
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 
-    public ListBoxBean(String name) {
-        super(name);
-        this.name = name;
-        this.size = 10;
+import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class ListBoxBean extends BaseComponentBean implements TagBean {
+
+    protected List list = new ArrayList();
+
+    protected transient static PortletLog log = SportletLog.getInstance(ListBoxBean.class);
+
+    protected int size = 1;
+    protected boolean isMultiple = false;
+
+    public ListBoxBean() {
+
     }
 
-    /**
-     * Sets the size of the listbox.
-     * @param size the size of the listbox
-     */
-    public void setSize(int size) {
-        this.size = size;
+    public ListBoxBean(String beanId) {
+        this.beanId = beanId;
     }
 
-    /**
-     * Returns the size of the listbox.
-     * @return size of the listbox
-     */
+    public ListBoxBean(PortletRequest request, String beanId) {
+        this.request = request;
+        this.beanId = beanId;
+    }
+
     public int getSize() {
         return size;
     }
 
-    /**
-     * Sets multiple choice on/off in the listbox.
-     * @param isMultiple determines wether multiple items may be selected
-     */
-    public void setMultiple(boolean isMultiple) {
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public void setMultipleSelection(boolean isMultiple) {
         this.isMultiple = isMultiple;
     }
 
-    /**
-     * Returns true/false if multiple choice is on/off
-     * @return true/false
-     */
-    public boolean isMultiple() {
+    public boolean getMultipleSelection() {
         return isMultiple;
+    }
+
+    /**
+     * Adds an entry to the dropdownlist.
+     * @param label label of the entry
+     * @param value value of the entry
+     */
+    public void add(String label, String value) {
+        ListBoxItemBean item = new ListBoxItemBean();
+        item.setName(label);
+        item.setValue(value);
+        list.add(item);
+    }
+
+    /**
+     * Adds an entry to the dropdownlist.
+     * @param label label of the entry
+     * @param value value of the entry
+     * @param selected marks if the element should be selected or not
+     */
+    public void add(String label, String value, boolean selected) {
+        ListBoxItemBean item = new ListBoxItemBean();
+        item.setName(label);
+        item.setValue(value);
+        item.setSelected(selected);
+        list.add(item);
+    }
+
+
+    /**
+     * Sets the selected flag on an entry.
+     * @param index index of the element
+     * @param selected true/false representing the selected status
+     */
+    public void setSelected(int index, boolean selected) {
+        ListBoxItemBean item = (ListBoxItemBean)list.get(index);
+        item.setSelected(selected);
+    }
+
+    /**
+     * Adds a selectable item to the list
+     * @param item selectable item to be added
+     */
+    public void add(ListBoxItemBean item) {
+        list.add(item);
+    }
+
+    /**
+     * Clears items in list
+     */
+    public void clear() {
+        list.clear();
+    }
+
+    public String toString() {
+        String result = "<select name='"+name+"' size='"+size+"'";
+        if (isMultiple) {
+            result = result + " multiple='multiple'" ;
+        }
+        result = result +">";
+        Iterator it = list.iterator();
+        while (it.hasNext()) {
+            ListBoxItemBean item = (ListBoxItemBean)it.next();
+            result = result + item.toString();
+        }
+        result = result +"</select>";
+        return result;
+    }
+
+    /**
+     * Returns the selected values of the list.
+     * @return selected values of the list
+     */
+    public ArrayList getSelectedValues() {
+        ArrayList result = new ArrayList();
+        Iterator it = list.iterator();
+        while (it.hasNext()) {
+            ListBoxItemBean item = (ListBoxItemBean)it.next();
+            if (item.isSelected()) {
+                result.add(item.getValue());
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Returns the selected items of the list
+     * @return  the selected item of the list
+     */
+    public ArrayList getSelectedItems() {
+        ArrayList result = new ArrayList();
+        Iterator it = list.iterator();
+        while (it.hasNext()) {
+            ListBoxItemBean item = (ListBoxItemBean)it.next();
+            if (item.isSelected()) {
+                result.add(item);
+            }
+        }
+        return result;
     }
 
 }
