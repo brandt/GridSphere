@@ -24,8 +24,8 @@ public class PasswordBean extends TextFieldBean {
         super(NAME, beanId);
     }
 
-    public String toString() {
+    public String toStartString() {
         this.inputtype = "password";
-        return super.toString();
+        return super.toStartString();
     }
 }

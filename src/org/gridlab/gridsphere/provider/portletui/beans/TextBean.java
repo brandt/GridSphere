@@ -44,7 +44,7 @@ public class TextBean extends BaseComponentBean implements TagBean {
         this.style = style;
     }
 
-    public String toString() {
+    public String toStartString() {
         if (style.equalsIgnoreCase("error")) {
             this.cssStyle = TEXT_ERROR_STYLE;
         } else if (style.equalsIgnoreCase("message")) {
@@ -54,6 +54,10 @@ public class TextBean extends BaseComponentBean implements TagBean {
         } else if (style.equalsIgnoreCase("plain")) {
             this.cssStyle = TEXT_PLAIN_STYLE;
         }
+        return "";
+    }
+
+    public String toEndString() {
         return value;
     }
 }

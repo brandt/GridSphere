@@ -12,7 +12,7 @@ import java.util.Iterator;
 public class TableRowBean extends BeanContainer {
 
     protected boolean isHeader = false;
-    protected String TABLE_HEADER_STYLE = "portlet-frame-header";
+    public static final  String TABLE_HEADER_STYLE = "portlet-frame-header";
 
     public TableRowBean() {
         super();
@@ -24,6 +24,29 @@ public class TableRowBean extends BeanContainer {
 
     public boolean getHeader() {
         return isHeader;
+    }
+
+    public String toStartString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("<tr>");
+        if (isHeader) {
+            Iterator it = container.iterator();
+            while (it.hasNext()) {
+                BaseComponentBean tagBean = (BaseComponentBean)it.next();
+                tagBean.setCssStyle(TABLE_HEADER_STYLE);
+            }
+        }
+        Iterator it = container.iterator();
+        while (it.hasNext()) {
+            TableCellBean cellBean = (TableCellBean)it.next();
+            sb.append(cellBean.toStartString());
+            sb.append(cellBean.toEndString());
+        }
+        return sb.toString();
+    }
+
+    public String toEndString() {
+        return "</tr>";
     }
 
     public String toString() {

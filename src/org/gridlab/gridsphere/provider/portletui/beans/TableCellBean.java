@@ -36,16 +36,24 @@ public class TableCellBean extends BeanContainer implements TagBean {
         return cellSpacing;
     }
 
-    public String toString() {
+    public String toStartString() {
         StringBuffer sb = new StringBuffer();
         sb.append("<td ");
         if (!cssStyle.equals("")) sb.append("class=\"" + cssStyle + "\"");
         if (!cellSpacing.equals("")) sb.append(" cellspacing=\"" + cellSpacing + "\"");
         if (!width.equals("")) sb.append(" width=\"" + width + "\"");
         sb.append(">");
-        sb.append(super.toString());
-        sb.append("</td>");
+        Iterator it = container.iterator();
+        while (it.hasNext()) {
+            BaseComponentBean bean = (BaseComponentBean)it.next();
+            sb.append(bean.toStartString());
+            sb.append(bean.toEndString());
+        }
         return sb.toString();
+    }
+
+    public String toEndString() {
+        return "</td>";
     }
 
 }

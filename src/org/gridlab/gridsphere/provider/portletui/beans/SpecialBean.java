@@ -35,7 +35,7 @@ public class SpecialBean extends BaseComponentBean implements TagBean  {
         this.beanId = id;
     }
 
-    public String toString() {
+    public String toStartString() {
         if (supportsJS) {
             return "<b>a javascript interface</b>";
         } else {

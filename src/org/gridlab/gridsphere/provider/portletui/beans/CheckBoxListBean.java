@@ -42,7 +42,7 @@ public class CheckBoxListBean extends ListBoxBean {
         //list.add(cbb);
     }
 
-    public String toString() {
+    public String toStartString() {
         String result = new String();
         /*
         if (this.label!=null) {

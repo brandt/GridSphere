@@ -44,13 +44,15 @@ public abstract class BaseBean implements TagBean {
         this.beanId = beanId;
     }
 
-
-
     public void setPortletRequest(PortletRequest request)  {
         this.request = request;
     }
 
-    public String toString() {
+    public String toStartString() {
+        return "";
+    }
+
+    public String toEndString() {
         return "";
     }
 

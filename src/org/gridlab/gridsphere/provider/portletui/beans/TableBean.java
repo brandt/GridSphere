@@ -9,7 +9,7 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 
 public class TableBean extends BaseComponentBean implements TagBean {
 
-    protected DefaultTableModel defaultModel = new DefaultTableModel();
+    protected DefaultTableModel defaultModel = null;
     protected String cellSpacing = "1";
     protected String width = null;
 
@@ -53,6 +53,19 @@ public class TableBean extends BaseComponentBean implements TagBean {
 
     public String getWidth() {
         return width;
+    }
+
+    public String toStartString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("<table");
+        sb.append(" cellspacing=\"" + cellSpacing + "\" ");
+        sb.append(" width=\"" + width + "\" >");
+        if (defaultModel != null) sb.append(defaultModel.toStartString());
+        return sb.toString();
+    }
+
+    public String toEndString() {
+        return "</table>";
     }
 
     public String toString() {

@@ -12,7 +12,7 @@ public class ActionLinkBean extends ActionBean implements TagBean {
         this.cssStyle = ACTION_STYLE;
     }
 
-    public String toString() {
+    public String toStartString() {
         //if (value == null) createLink();
         //return "<a href=\"" + action + "\"/>" + value + "</a>";
         return "<a href=\"" + action + "\"" + " onClick=\"this.href='" + action + "&JavaScript=enabled'\"/>" + value + "</a>";

@@ -58,20 +58,31 @@ public class ListBoxBean extends BeanContainer implements TagBean {
         return isMultiple;
     }
 
-    public String toString() {
+    public String toStartString() {
+        StringBuffer sb = new StringBuffer();
         String pname = (name == null) ? "" : name;
         String sname = pname;
         if (!beanId.equals("")) {
             sname = "ui_" + vbName + "_" + beanId + "_" + pname;
         }
-        String result = "<select name='"+sname+"' size='"+size+"'";
+        sb.append("<select name='"+sname+"' size='"+size+"'");
         if (isMultiple) {
-            result = result + " multiple='multiple'" ;
+            sb.append(" multiple='multiple'");
         }
-        result = result +">";
-        result += super.toString();
-        result = result +"</select>";
-        return result;
+        sb.append(">");
+
+        Iterator it = container.iterator();
+        while (it.hasNext()) {
+            ListBoxItemBean itemBean = (ListBoxItemBean)it.next();
+            sb.append(itemBean.toStartString());
+            sb.append(itemBean.toEndString());
+        }
+
+        return sb.toString();
+    }
+
+    public String toEndString() {
+        return "</select>";
     }
 
     /**

@@ -32,8 +32,8 @@ public class CheckBoxBean extends SelectElementBean {
         this.cssStyle = CHECKBOX_STYLE;
     }
 
-    public String toString() {
-        return super.toString("checkbox");
+    public String toStartString() {
+        return super.toStartString("checkbox");
     }
 
 }

@@ -25,7 +25,7 @@ public class RadioButtonBean extends SelectElementBean {
         this.beanId = id;
     }
 
-    public String toString() {
-        return super.toString("radio");
+    public String toStartString() {
+        return super.toStartString("radio");
     }
 }

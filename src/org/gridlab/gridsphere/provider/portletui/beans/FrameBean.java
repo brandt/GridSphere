@@ -24,6 +24,13 @@ public class FrameBean extends TableBean implements TagBean {
         this.cellSpacing = TABLE_FRAME_SPACING;
     }
 
+    public FrameBean(String beanId) {
+        super(TABLE_FRAME_STYLE);
+        this.beanId = beanId;
+        this.width = TABLE_FRAME_WIDTH;
+        this.cellSpacing = TABLE_FRAME_SPACING;
+    }
+
     public FrameBean(PortletRequest req, String beanId) {
         super(TABLE_FRAME_STYLE);
         this.width = TABLE_FRAME_WIDTH;
@@ -41,7 +48,7 @@ public class FrameBean extends TableBean implements TagBean {
     }
 
     protected void makeMessage() {
-        DefaultTableModel tm = new DefaultTableModel();
+        defaultModel = new DefaultTableModel();
         TableRowBean tr = new TableRowBean();
         TableCellBean tc = new TableCellBean();
         TextBean text = new TextBean();
@@ -55,20 +62,21 @@ public class FrameBean extends TableBean implements TagBean {
         tc.addBean(text);
         tc.setCssStyle(style);
         tr.addBean(tc);
-        tm.addTableRowBean(tr);
-        setTableModel(tm);
+        defaultModel.addTableRowBean(tr);
     }
 
-
-    public String toString() {
+    public String toStartString() {
         StringBuffer sb = new StringBuffer();
+
         if ((key != null) || (value != null)) makeMessage();
         sb.append("<table class=\"" + TABLE_FRAME_STYLE + "\" ");
         sb.append(" cellspacing=\"" + cellSpacing + "\" ");
         sb.append(" width=\"" + width + "\" >");
-        sb.append(defaultModel.toString());
-        sb.append("</table>");
-
+        if (defaultModel != null) sb.append(defaultModel.toStartString());
         return sb.toString();
+    }
+
+    public String toEndString() {
+        return ("</table>");
     }
 }

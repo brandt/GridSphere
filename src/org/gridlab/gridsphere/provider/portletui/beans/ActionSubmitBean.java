@@ -29,7 +29,7 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
         this.beanId = beanId;
     }
 
-    public String toString() {
+    public String toStartString() {
 
         String pname = (name == null) ? "" : name;
         String sname = pname;

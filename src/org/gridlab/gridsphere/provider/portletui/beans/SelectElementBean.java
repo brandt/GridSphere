@@ -5,9 +5,14 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Iterator;
+
 public abstract class SelectElementBean extends BaseComponentBean implements TagBean {
 
     protected boolean selected = false;
+    protected List results = new ArrayList();
 
     public SelectElementBean() {
         super();
@@ -41,7 +46,19 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
         return selected;
     }
 
-    public String toString(String type) {
+    /**
+     * Returns the selected values of the list.
+     * @return selected values of the list
+     */
+    public List getSelectedValues() {
+        return results;
+    }
+
+    public void addSelectedValue(String value) {
+        results.add(value);
+    }
+
+    public String toStartString(String type) {
 
 
         String pname = (name == null) ? "" : name;
@@ -49,8 +66,16 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
         if (!beanId.equals("")) {
             sname = "ui_" + vbName + "_" + beanId + "_" + pname;
         }
-        return "<input type='" + type + "' name='" + sname + "' value='" + value + "' " + checkDisabled() + " " + checkSelected("checked") +
-                "/>";
+        return "<input type='"
+                + type
+                + "' name='"
+                + sname
+                + "' value='"
+                + value + "' "
+                + checkDisabled()
+                + " "
+                + checkSelected("checked")
+                + "/>";
     }
 
 }

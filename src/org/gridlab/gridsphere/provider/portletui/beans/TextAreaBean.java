@@ -60,7 +60,7 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
         this.rows = rows;
     }
 
-    public String toString() {
+    public String toStartString() {
         StringBuffer sb = new StringBuffer();
         sb.append("<textarea ");
 
@@ -76,9 +76,12 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
         sb.append(" " + checkDisabled());
         sb.append(" " + checkReadonly());
         sb.append(">");
-        if (value != null) sb.append(value);
-        sb.append("</textarea>");
         return sb.toString();
+    }
+
+    public String toEndString() {
+        String result = (value != null) ? value : "";
+        return result + " </textarea>";
     }
 
 }

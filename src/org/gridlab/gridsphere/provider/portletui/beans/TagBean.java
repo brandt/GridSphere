@@ -27,7 +27,13 @@ public interface TagBean {
      * Returns the HTML reprensetation of the beans
      * @return html string presenting the object
      */
-    public String toString();
+    public String toStartString();
+
+    /**
+     * Returns the HTML reprensetation of the beans
+     * @return html string presenting the object
+     */
+    public String toEndString();
 
     public void store();
 

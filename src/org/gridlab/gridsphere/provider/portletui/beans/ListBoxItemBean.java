@@ -26,7 +26,7 @@ public class ListBoxItemBean extends SelectElementBean {
         this.beanId = beanId;
     }
 
-    public String toString() {
+    public String toStartString() {
         String pval = (value == null) ? "" : value;
         String sname = (name == null) ? "" : name;
         if (!beanId.equals("")) {
