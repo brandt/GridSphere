@@ -12,6 +12,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.services.core.security.acl.GroupAction;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
+import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
 
 public class GroupRequestImpl implements GroupRequest {
 
@@ -27,12 +28,14 @@ public class GroupRequestImpl implements GroupRequest {
     public GroupRequestImpl() {
     }
 
-    public GroupRequestImpl(GroupEntryImpl entry) {
-        this.entry = entry;
-        this.user = entry.getSportletUser();
-        this.sgroup = entry.getSportletGroup();
-        this.role = entry.getRole().toString();
-        this.action = GroupAction.EDIT.toString();
+    public GroupRequestImpl(GroupEntry groupEntry) {
+        if (groupEntry instanceof GroupEntryImpl) {
+            this.entry = (GroupEntryImpl)groupEntry;
+            this.user = entry.getSportletUser();
+            this.sgroup = entry.getSportletGroup();
+            this.role = entry.getRole().toString();
+            this.action = GroupAction.EDIT.toString();
+        }
     }
 
     public String getOid() {

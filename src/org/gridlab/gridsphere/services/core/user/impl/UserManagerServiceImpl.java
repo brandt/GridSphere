@@ -102,7 +102,6 @@ public class UserManagerServiceImpl implements UserManagerService, PortletServic
 
     /**
       * Approve a new or modified account request.
-      * If mailMessage is non-null, a mail message will be sent out to the account requestor
       *
       * @param request the <code>AccountRequest</code> to approve
       */
@@ -112,7 +111,6 @@ public class UserManagerServiceImpl implements UserManagerService, PortletServic
 
     /**
       * Approve a new or modified account request.
-      * If mailMessage is non-null, a mail message will be sent out to the account requestor
       *
       * @param request the <code>AccountRequest</code> to approve
       */
@@ -121,8 +119,7 @@ public class UserManagerServiceImpl implements UserManagerService, PortletServic
     }
 
     /**
-      * Approve a new or modified account request.
-      * If mailMessage is non-null, a mail message will be sent out to the account requestor
+      * Deletes a users account
       *
       * @param user the <code>Account</code> to approve
       */

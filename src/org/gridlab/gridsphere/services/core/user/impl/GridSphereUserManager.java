@@ -33,9 +33,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     private static GridSphereUserManager instance = new GridSphereUserManager();
     private PortletManagerService pms = null;
     private PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
-    //private PersistenceManagerRdbms pm = null;
     private PasswordManagerService passwordManagerService = DbmsPasswordManagerService.getInstance();
-    //private PasswordManagerService passwordManagerService = null;
 
     private static boolean isInitialized = false;
 
@@ -122,7 +120,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
         log.info("Entering initRootUser()");
         /** 1. Retrieve root user properties **/
         // Login name
-        String loginName = config.getInitParameter("loginName", "root").trim();
+        String loginName = config.getInitParameter("gridsphere.user.userid", "root").trim();
         log.info("Root user login name = " + loginName);
         /** 2. Create root user account if doesn't exist **/
         User rootUser = getUserByUserName(loginName);
@@ -216,18 +214,23 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     }
 
     public AccountRequest createAccountRequest() {
-        return new AccountRequestImpl();
+        AccountRequest request = new AccountRequestImpl();
+        return createNewAccountRequest(request);
     }
 
     public AccountRequest createAccountRequest(User user) {
-        AccountRequestImpl request = new AccountRequestImpl();
-        request.setID(user.getID());
-        request.setUserName(user.getUserName());
-        request.setFamilyName(user.getFamilyName());
-        request.setGivenName(user.getGivenName());
-        request.setFullName(user.getFullName());
-        request.setOrganization(user.getOrganization());
-        request.setEmailAddress(user.getEmailAddress());
+        AccountRequestImpl request = new AccountRequestImpl(user);
+        return createNewAccountRequest(request);
+    }
+
+    private AccountRequest createNewAccountRequest(AccountRequest request) {
+        try {
+            pm.create(request);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error saving account request";
+            log.error(msg, e);
+        }
+        log.debug("Creating account request record: " + request.getID());
         return request;
     }
 
@@ -235,13 +238,13 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
             throws InvalidAccountRequestException {
          if (request instanceof AccountRequestImpl) {
              // Save account request if not already saved
-             if (!existsAccountRequest(request)) {
+             if (existsAccountRequest(request)) {
                  // First validate account request
                  validateAccountRequest(request);
-                 /* Store account request */
+                 /* Update account request */
                  try {
-                     log.debug("Creating account request record for " + request.getUserName());
-                     pm.create(request);
+                     log.debug("Updating account request record: " + request.getID());
+                     pm.update(request);
                  } catch (PersistenceManagerException e) {
                      String msg = "Error saving account request";
                      log.error(msg, e);
@@ -249,7 +252,6 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
                  /* Store passsword for requested account */
                  saveAccountRequestPassword(request);
              }
-             // Send message if not null
          }
     }
 
@@ -303,11 +305,13 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
         }
         log.debug("Saving password record for account request " + request.getUserName());
         // Otherwise attempt to save password edits
+        System.err.println("before save passwd request id: " + request.getID());
         try {
             this.passwordManagerService.savePassword(passwordBean);
         } catch (InvalidPasswordException e) {
             throw new InvalidAccountRequestException("Unable to validate password: " + e.getExplanation());
         }
+
     }
 
     private boolean existsAccountRequest(AccountRequest request) {
@@ -345,6 +349,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
 
     private void activateAccountRequestPassword(AccountRequest request, User user) {
         // If a new password was submitted with account request
+        //if (request.getPasswordValidation()) {
         if (this.passwordManagerService.hasPassword(request)) {
             log.info("Activating password for " + user.getUserName());
             // Activate user password
@@ -354,6 +359,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
                 log.error("Invalid password during account request approval!!!", e);
             }
         }
+        //}
     }
 
     private void activateAccountRequestGroupEntries(AccountRequest request, User user) {
@@ -464,8 +470,11 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     private SportletUserImpl editSportletUserImpl(AccountRequest request) {
         /* TODO: Account request id should not be same as user id */
         String userID = request.getID();
-        SportletUserImpl user = getSportletUserImpl(userID);
+        System.err.println("in  editSportletUser userID: " + userID);
+        String userName = request.getUserName();
+        SportletUserImpl user = getSportletUserImplByLoginName(userName);
         if (user == null) {
+            System.err.println("user is null!!");
             user = new SportletUserImpl();
             user.setID(userID);
         }
@@ -554,7 +563,7 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
         try {
             SportletUserImpl sui = (SportletUserImpl) pm.restore(oql);
             if (sui==null) {
-                log.debug("User does not exsit!");
+                log.debug("User does not exist!");
             }
             return (sui != null);
         } catch (PersistenceManagerException e) {
@@ -651,17 +660,23 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
     }
 
     public GroupRequest createGroupRequest() {
-        GroupRequestImpl request = new GroupRequestImpl();
-        return request;
+        GroupRequest request = new GroupRequestImpl();
+        return createNewGroupRequest(request);
     }
 
-    public GroupRequest createGroupRequest(GroupEntry entry) {
-        if (entry instanceof GroupEntryImpl) {
-            GroupEntryImpl entryImpl = (GroupEntryImpl)entry;
-            GroupRequestImpl request = new GroupRequestImpl(entryImpl);
-            return request;
+    public GroupRequest createGroupRequest(GroupEntry groupEntry) {
+        GroupRequest request = new GroupRequestImpl(groupEntry);
+        return createNewGroupRequest(request);
+    }
+
+    private GroupRequest createNewGroupRequest(GroupRequest request) {
+        try {
+            pm.create(request);
+        } catch (PersistenceManagerException e) {
+            String msg = "Error saving group request";
+            log.error(msg, e);
         }
-        return null;
+        return request;
     }
 
     public void submitGroupRequest(GroupRequest request)
@@ -670,9 +685,9 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
             // First validate accesss request
             validateGroupRequest(request);
             // Then save account request if not already saved
-            if (!existsGroupRequest(request)) {
+            if (existsGroupRequest(request)) {
                 try {
-                    pm.create(request);
+                    pm.update(request);
                 } catch (PersistenceManagerException e) {
                     String msg = "Error saving group request";
                     log.error(msg, e);

@@ -44,16 +44,8 @@ public class AccountRequestImpl implements AccountRequest {
         this.passwordBean = new PasswordEditor(this);
     }
 
-    public String getOid() {
-        return oid;
-    }
-
-    public void setOid(String oid) {
-        this.oid = oid;
-    }
-
     public AccountRequestImpl(User user) {
-        setOid(user.getID());
+        //setOid(user.getID());
         setEmailAddress(user.getEmailAddress());
         setFamilyName(user.getFamilyName());
         setFullName(user.getFullName());
@@ -61,6 +53,14 @@ public class AccountRequestImpl implements AccountRequest {
         setOrganization(user.getOrganization());
         setUserID(user.getUserID());
         this.passwordBean = new PasswordEditor(this);
+    }
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
     }
 
     /**
