@@ -114,7 +114,7 @@ public class TableRowTagImpl extends BaseComponentTagImpl implements TableRowTag
             if (tableTag.getZebra()) {
                 int numrows = tableTag.getRowCount();
                 if ((numrows % 2) == 0) isZebra = true;
-                tableTag.setRowCount(numrows++);
+                tableTag.incrementRowCount();
             }
         }
         if (!beanId.equals("")) {
