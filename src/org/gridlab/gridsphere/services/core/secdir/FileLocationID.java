@@ -20,6 +20,10 @@ public class FileLocationID {
         return filePath;
     }
 
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
     public String getUserID() {
         return userID;
     }

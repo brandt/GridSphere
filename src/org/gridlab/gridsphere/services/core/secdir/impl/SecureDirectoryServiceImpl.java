@@ -1,6 +1,6 @@
 /**
  * @author <a href="mailto:tkucz@icis.pcz.pl">Tomasz Kuczynski</a>
- * @version 0.6 2004/05/17
+ * @version 0.7 2004/10/06
  */
 package org.gridlab.gridsphere.services.core.secdir.impl;
 
@@ -18,7 +18,6 @@ import java.net.URLEncoder;
 import java.util.StringTokenizer;
 
 public class SecureDirectoryServiceImpl implements SecureDirectoryService, PortletServiceProvider {
-
     private Perl5Util util = new Perl5Util();
     private static boolean inited = false;
     private final static int BUFFER_SIZE = 8 * 1024; //8 kB
@@ -40,7 +39,6 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
     }
 
     public void destroy() {
-
     }
 
     public String getFileUrl(FileLocationID fileLocationID) {
@@ -91,9 +89,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
         if (userID == null || appName == null || path == null || !inited)
             return null;
         String userDirectoryPath;
-
         //FOR SECURITY REASONS DO NOT CHANGE THE FOLLOWING REGEXPS (UNLESS YOU KNOW WHAT YOU ARE DOING)
-
         path = util.substitute("s!\\\\!/!g", path);
         do {
             path = util.substitute("s!^/!!", path);
@@ -123,50 +119,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
     }
 
     public File getFile(FileLocationID fileLocationID) {
-        String userID = fileLocationID.getUserID();
-        String appName = fileLocationID.getCategory();
-        String resource = fileLocationID.getFilePath();
-        if (userID == null || appName == null || resource == null || !inited)
-            return null;
-
-        //FOR SECURITY REASONS DO NOT CHANGE THE FOLLOWING REGEXPS (UNLESS YOU KNOW WHAT YOU ARE DOING)
-
-        resource = util.substitute("s!\\\\!/!g", resource);
-        do {
-            resource = util.substitute("s!^/!!", resource);
-            resource = util.substitute("s!\\.\\.!.!g", resource);
-            resource = util.substitute("s!^\\.[\\/]!!", resource);
-        } while (util.match("m!^/|\\.\\.|^\\.[\\/]!", resource));
-        String userDirectoryPath;
-        if ((userDirectoryPath = getUserDirectoryPath(userID)) != null) {
-            String filePath = userDirectoryPath + File.separator + appName;
-            File file = new File(filePath);
-            if (!file.exists()) {
-                if (!file.mkdir()) {
-                    log.error("Unable to create directory for application " + filePath);
-                    return null;
-                }
-            } else if (!file.isDirectory()) {
-                return null;
-            }
-            boolean canCreate = true;
-            if (util.match("m!/!", resource)) {
-                String tmpPath = util.substitute("s!/[^/]*$!!", resource);
-                File dirTree = new File(filePath + File.separator + tmpPath);
-                if (!dirTree.exists()) {
-                    canCreate = dirTree.mkdirs();
-                } else if (!dirTree.isDirectory())
-                    canCreate = false;
-            }
-            if (canCreate) {
-                filePath += File.separator + resource;
-                file = new File(filePath);
-                return file;
-            } else {
-                return null;
-            }
-        } else
-            return null;
+        return getFile(fileLocationID, true);
     }
 
     public boolean deleteFile(FileLocationID fileLocationID) {
@@ -181,9 +134,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
         String userID = fileLocationID.getUserID();
         String appName = fileLocationID.getCategory();
         String resource = fileLocationID.getFilePath();
-
         //FOR SECURITY REASONS DO NOT CHANGE THE FOLLOWING REGEXPS (UNLESS YOU KNOW WHAT YOU ARE DOING)
-
         do {
             resource = util.substitute("s!\\.\\.!.!g", resource);
         } while (util.match("m!\\.\\.!", resource));
@@ -225,6 +176,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
                 throw new IOException("Unable to add file for (USERID=" + userID + ",CATEGORY=" + appName + ",FILENAME=" + resource + ") ! Can't create file.");
             FileOutputStream output = new FileOutputStream(file);
             rewrite(inputStream, output);
+            output.flush();
             output.close();
         } catch (Exception e) {
             throw new IOException("Unable to add file for (USERID=" + userID + ",CATEGORY=" + appName + ",FILENAME=" + resource + ") !" + e.getMessage());
@@ -234,14 +186,13 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
     public void addFile(FileLocationID fileLocationID, File inputFile) throws IOException {
         FileInputStream input = new FileInputStream(inputFile);
         addFile(fileLocationID, input);
+        input.close();
     }
 
     public boolean categoryExistsForUser(String userID, String category) {
         if (userID == null || category == null || !inited)
             return false;
-
         //FOR SECURITY REASONS DO NOT CHANGE THE FOLLOWING REGEXP (UNLESS YOU KNOW WHAT YOU ARE DOING)
-
         category = util.substitute("s![\\/.]!!g", category);
         String userDirectoryPath;
         if ((userDirectoryPath = getUserDirectoryPath(userID)) != null) {
@@ -264,9 +215,7 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
                 throw new IOException("Unable to create category for user ! SecureDirectory service is not initialized.");
             throw new IOException("Unable to create category for user (USERID=" + userID + ",CATEGORY=" + category + ")");
         }
-
         //FOR SECURITY REASONS DO NOT CHANGE THE FOLLOWING REGEXP (UNLESS YOU KNOW WHAT YOU ARE DOING)
-
         category = util.substitute("s![\\/.]!!g", category);
         String userDirectoryPath;
         if ((userDirectoryPath = getUserDirectoryPath(userID)) != null) {
@@ -286,14 +235,62 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
     }
 
     public boolean fileExists(FileLocationID fileLocationID) {
-        File file = getFile(fileLocationID);
-        if (file == null)
+        File file = getFile(fileLocationID, false);
+        if (file == null || !file.exists())
             return false;
         return true;
     }
 
     public FileLocationID createFileLocationID(String userID, String category, String fileName) {
         return new FileLocationID(userID, category, fileName);
+    }
+
+    private File getFile(FileLocationID fileLocationID, boolean createPath) {
+        String userID = fileLocationID.getUserID();
+        String appName = fileLocationID.getCategory();
+        String resource = fileLocationID.getFilePath();
+        if (userID == null || appName == null || resource == null || !inited)
+            return null;
+        //FOR SECURITY REASONS DO NOT CHANGE THE FOLLOWING REGEXPS (UNLESS YOU KNOW WHAT YOU ARE DOING)
+        resource = util.substitute("s!\\\\!/!g", resource);
+        do {
+            resource = util.substitute("s!^/!!", resource);
+            resource = util.substitute("s!\\.\\.!.!g", resource);
+            resource = util.substitute("s!^\\.[\\/]!!", resource);
+        } while (util.match("m!^/|\\.\\.|^\\.[\\/]!", resource));
+        String userDirectoryPath;
+        if ((userDirectoryPath = getUserDirectoryPath(userID)) != null) {
+            String filePath = userDirectoryPath + File.separator + appName;
+            File file = new File(filePath);
+            if (!file.exists()) {
+                if (!file.mkdir()) {
+                    log.error("Unable to create directory for application " + filePath);
+                    return null;
+                }
+            } else if (!file.isDirectory()) {
+                return null;
+            }
+            boolean canCreate = true;
+            if (util.match("m!/!", resource)) {
+                String tmpPath = util.substitute("s!/[^/]*$!!", resource);
+                File dirTree = new File(filePath + File.separator + tmpPath);
+                if (!dirTree.exists()) {
+                    if (createPath)
+                        canCreate = dirTree.mkdirs();
+                    else
+                        return null;
+                } else if (!dirTree.isDirectory())
+                    canCreate = false;
+            }
+            if (canCreate) {
+                filePath += File.separator + resource;
+                file = new File(filePath);
+                return file;
+            } else {
+                return null;
+            }
+        } else
+            return null;
     }
 
     private boolean isInPath(String examineIsPath, String examineInPath) {
@@ -360,7 +357,6 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
             if (!delTree)
                 return deleteDirectory(file);
             boolean toRet = deleteDirectory(file);
-
             File secureDir = new File(secureDirPath);
             String parent = file.getParent();
             while (parent != null) {
@@ -374,7 +370,6 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
                     break;
                 parent = dir.getParent();
             }
-
             return toRet;
         } else
             return false;
@@ -398,7 +393,6 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
             return false;
         if (!file.delete())
             return false;
-
         if (delTree) {
             File secureDir = new File(secureDirPath);
             String parent = file.getParent();
@@ -459,7 +453,6 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
         if (!dirTree.exists())
             if (!dirTree.mkdirs())
                 return false;
-
         for (int i = 0; i < files.length; ++i) {
             if (files[i].isDirectory()) {
                 if (!copyDirectory(userID, appName, files[i], destination + files[i].getName() + File.separator))

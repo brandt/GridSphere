@@ -26,16 +26,15 @@ public interface SecureDirectoryService extends PortletService {
 
     /**
      * Creates a file location path to store files using the following strategy:
-     *
+     * <p/>
      * location path = "/<userID>/<category>/<fileName>"
-     *
+     * <p/>
      * The fileName
      *
-     * @param userID the user id
+     * @param userID   the user id
      * @param category a category name define root of user's virtual filesystem
      * @param fileName the name of the file, this can be any file path e.g. "context.xml"
-     * or "/newdir/files/context.xml"
-     *
+     *                 or "/newdir/files/context.xml"
      * @return a constructed file location path from the supplied parameters
      */
     public FileLocationID createFileLocationID(String userID, String category, String fileName);
@@ -44,7 +43,6 @@ public interface SecureDirectoryService extends PortletService {
      * Returns URL that points at resource in SecureDirectory
      *
      * @param fileLocationID the file location id
-     *
      * @return URL that represents the location of the file to be used in a hyperlink, etc.
      */
     public String getFileUrl(FileLocationID fileLocationID);
@@ -53,8 +51,8 @@ public interface SecureDirectoryService extends PortletService {
      * Returns URL that allows to download resource from SecureDirectory
      *
      * @param fileLocationID the file location id
-     * @param saveAs   filename for resource which will be sent to the browser
-     * @param contentType if non-null forces the content type that should be set by HTTP server
+     * @param saveAs         filename for resource which will be sent to the browser
+     * @param contentType    if non-null forces the content type that should be set by HTTP server
      * @return URL that allows to download resource using Web Browser (forces on browser save as dialog box)
      */
     public String getDownloadFileUrl(FileLocationID fileLocationID, String saveAs, String contentType);
@@ -63,7 +61,6 @@ public interface SecureDirectoryService extends PortletService {
      * Returns array of descriptors of resources in some path in SecureDirectory (something like ls/dir command for SecureDirectoryService)
      *
      * @param fileLocationID a file location id that includes a path
-     *
      * @return array of file information
      */
     public FileInfo[] getFileList(FileLocationID fileLocationID);
@@ -72,7 +69,6 @@ public interface SecureDirectoryService extends PortletService {
      * Returns file object for the resource in SecureDirectory
      *
      * @param fileLocationID the file location id
-     *
      * @return file object for the resource in SecureDirectory or null if resource doesn't exist
      */
     public File getFile(FileLocationID fileLocationID);
@@ -81,9 +77,7 @@ public interface SecureDirectoryService extends PortletService {
      * Adds resource to SecureDirectory
      *
      * @param fileLocationID the file location id
-     *
-     * @param inputFile java.io.File object to add
-     *
+     * @param inputFile      java.io.File object to add
      * @throws java.io.IOException if fails to add resource
      */
     public void addFile(FileLocationID fileLocationID, File inputFile) throws IOException;
@@ -92,9 +86,7 @@ public interface SecureDirectoryService extends PortletService {
      * Adds resource to SecureDirectory
      *
      * @param fileLocationID the file location id
-     *
-     * @param inputStream java.io.InputStream object to add
-     *
+     * @param inputStream    java.io.InputStream object to add
      * @throws java.io.IOException if fails to add resource
      */
     public void addFile(FileLocationID fileLocationID, InputStream inputStream) throws IOException;
@@ -103,7 +95,6 @@ public interface SecureDirectoryService extends PortletService {
      * Removes resource in SecureDirectory
      *
      * @param fileLocationID the handle to the file to be deleted
-     *
      * @return success = true / fail = false
      */
     public boolean deleteFile(FileLocationID fileLocationID);
@@ -112,8 +103,7 @@ public interface SecureDirectoryService extends PortletService {
      * Removes resource in SecureDirectory (allows to remove subdirectories recursively)
      *
      * @param fileLocationID the handle to the file to be deleted
-     * @param recursive set to true to delete directory and its subdirectories
-     *
+     * @param recursive      set to true to delete directory and its subdirectories
      * @return success = true / fail = false
      */
     public boolean deleteFile(FileLocationID fileLocationID, boolean recursive);
@@ -122,9 +112,8 @@ public interface SecureDirectoryService extends PortletService {
      * Removes resource in SecureDirectory (allows to remove subdirectories recursively/allows to remove parentdirectories recursively)
      *
      * @param fileLocationID the handle to the file to be deleted
-     * @param recursive set to true to delete directory and its subdirectories
-     * @param delTree   set to true to delete tree of all empty parentdirectores
-     *
+     * @param recursive      set to true to delete directory and its subdirectories
+     * @param delTree        set to true to delete tree of all empty parentdirectores
      * @return success = true / fail = false
      */
     public boolean deleteFile(FileLocationID fileLocationID, boolean recursive, boolean delTree);
@@ -133,9 +122,8 @@ public interface SecureDirectoryService extends PortletService {
      * Copies one resource to another one in SecureDirectory (checks if copying is save - if it is not copying directory to its subdirectory)
      *
      * @param srcFileLocationID source file location id
-     * @param fileDest the name of the destination file, this can be any file path e.g. "context.xml"
-     * or "/newdir/files/context.xml"
-     *
+     * @param fileDest          the name of the destination file, this can be any file path e.g. "context.xml"
+     *                          or "/newdir/files/context.xml"
      * @return success = true / fail = false
      */
     public boolean copyFile(FileLocationID srcFileLocationID, String fileDest);
@@ -144,9 +132,8 @@ public interface SecureDirectoryService extends PortletService {
      * Moves one resource to another one in SecureDirectory (checks if moving is save - if it is not moving directory to its subdirectory)
      *
      * @param srcFileLocationID source file location id
-     * @param fileDest the name of the destination file, this can be any file path e.g. "context.xml"
-     * or "/newdir/files/context.xml"
-     *
+     * @param fileDest          the name of the destination file, this can be any file path e.g. "context.xml"
+     *                          or "/newdir/files/context.xml"
      * @return success = true / fail = false
      */
     public boolean moveFile(FileLocationID srcFileLocationID, String fileDest);
@@ -155,7 +142,6 @@ public interface SecureDirectoryService extends PortletService {
      * Checks if resource exists in SecureDirectory
      *
      * @param fileLocationID source file location id
-     *
      * @return exists = true / doesn't exist = false
      */
     public boolean fileExists(FileLocationID fileLocationID);
@@ -163,9 +149,8 @@ public interface SecureDirectoryService extends PortletService {
     /**
      * Checks if category exists for user
      *
-     * @param userID the user id
+     * @param userID   the user id
      * @param category a category name define root of user's virtual filesystem
-     *
      * @return true - category exists/false - category doesn't exist
      */
     public boolean categoryExistsForUser(String userID, String category);
@@ -173,9 +158,8 @@ public interface SecureDirectoryService extends PortletService {
     /**
      * Creates category for user
      *
-     * @param userID the user id
+     * @param userID   the user id
      * @param category a category name define root of user's virtual filesystem
-     *
      * @throws java.io.IOException - if method fails
      */
     public void createCategoryForUser(String userID, String category) throws IOException;
