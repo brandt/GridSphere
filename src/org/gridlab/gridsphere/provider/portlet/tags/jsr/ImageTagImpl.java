@@ -3,11 +3,12 @@
  * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
  * @version $Id$
  */
-package org.gridlab.gridsphere.provider.portlet.tags.jsrimpl;
+package org.gridlab.gridsphere.provider.portlet.tags.jsr;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
+import org.gridlab.gridsphere.provider.portletui.tags.ImageTag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -17,8 +18,8 @@ import javax.servlet.jsp.tagext.Tag;
 /**
  * The <code>ImageTag</code> represents an href img element
  */
-public class ImageTag extends BaseComponentTag {
-    private static PortletLog log = SportletLog.getInstance(ImageTag.class);
+public class ImageTagImpl extends BaseComponentTagImpl implements ImageTag {
+    private static PortletLog log = SportletLog.getInstance(ImageTagImpl.class);
 
     protected ImageBean urlImageBean = null;
     protected String src = new String();
@@ -178,8 +179,8 @@ public class ImageTag extends BaseComponentTag {
         }
 
         Tag parent = getParent();
-        if (parent instanceof ActionTag) {
-            ActionTag actionTag = (ActionTag)parent;
+        if (parent instanceof ActionTagImpl) {
+            ActionTagImpl actionTag = (ActionTagImpl)parent;
             actionTag.setImageBean(urlImageBean);
         } else {
             try {

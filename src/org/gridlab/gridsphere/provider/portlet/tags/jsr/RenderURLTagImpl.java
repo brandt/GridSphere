@@ -2,11 +2,13 @@
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-package org.gridlab.gridsphere.provider.portlet.tags.jsrimpl;
+package org.gridlab.gridsphere.provider.portlet.tags.jsr;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ActionLinkBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
+import org.gridlab.gridsphere.provider.portlet.tags.jsr.ActionTagImpl;
+
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
@@ -19,7 +21,7 @@ import java.util.ArrayList;
  * The <code>ActionLinkTag</code> provides a hyperlink element that includes a <code>DefaultPortletAction</code>
  * and can contain nested <code>ActionParamTag</code>s
  */
-public class ActionURLTag extends ActionTag {
+public class RenderURLTagImpl extends ActionTagImpl {
 
     protected ActionLinkBean actionlink = null;
     protected String style = TextBean.MSG_INFO;
@@ -69,7 +71,6 @@ public class ActionURLTag extends ActionTag {
             this.setBaseComponentBean(actionlink);
             actionlink.setStyle(style);
         }
-
         if (name != null) actionlink.setName(name);
         if (anchor != null) actionlink.setAnchor(anchor);
 
@@ -84,9 +85,9 @@ public class ActionURLTag extends ActionTag {
     }
 
     public int doEndTag() throws JspException {
-        // set action to non-null
-        action = "";
+
         actionlink.setAction(createActionURI());
+
         if ((bodyContent != null) && (value == null)) {
             actionlink.setValue(bodyContent.getString());
         }

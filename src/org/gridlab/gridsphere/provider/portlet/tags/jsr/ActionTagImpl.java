@@ -2,12 +2,13 @@
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-package org.gridlab.gridsphere.provider.portlet.tags.jsrimpl;
+package org.gridlab.gridsphere.provider.portlet.tags.jsr;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.provider.portletui.beans.ActionParamBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
+import org.gridlab.gridsphere.provider.portletui.tags.ActionTag;
 
 import javax.portlet.RenderResponse;
 import javax.portlet.PortletURL;
@@ -26,7 +27,7 @@ import java.util.List;
  * The abstract <code>ActionTag</code> is used by other Action tags to contain <code>DefaultPortletAction</code>s
  * and possibly <code>ActionParamTag</code>s
  */
-public abstract class ActionTag extends BaseComponentTag {
+public abstract class ActionTagImpl extends BaseComponentTagImpl implements ActionTag {
 
     protected String action = null;
     protected PortletURL actionURL = null;
@@ -156,7 +157,7 @@ public abstract class ActionTag extends BaseComponentTag {
         this.windowState = windowState;
     }
 
-    public boolean getSecure(boolean isSecure) {
+    public boolean getSecure() {
         return isSecure;
     }
 
@@ -224,17 +225,21 @@ public abstract class ActionTag extends BaseComponentTag {
             actionURL = res.createRenderURL();
         }
 
-        if (!paramBeans.isEmpty()) {
-            String id = createUniquePrefix(2);
-            portletAction.addParameter(SportletProperties.PREFIX, id);
+        if (action != null) {
+            portletAction = new DefaultPortletAction(action);
+            if (!paramBeans.isEmpty()) {
+                String id = createUniquePrefix(2);
+                portletAction.addParameter(SportletProperties.PREFIX, id);
 
-            if (action != null) actionURL.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, action);
-            Iterator it = paramBeans.iterator();
-            while (it.hasNext()) {
-                ActionParamBean pbean = (ActionParamBean)it.next();
-                actionURL.setParameter(pbean.getName(), pbean.getValue());
+                Iterator it = paramBeans.iterator();
+                while (it.hasNext()) {
+                    ActionParamBean pbean = (ActionParamBean)it.next();
+                    actionURL.setParameter(pbean.getName(), pbean.getValue());
+                }
             }
+            actionURL.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, action);
         }
+
         return actionURL.toString();
     }
 
