@@ -1,16 +1,7 @@
-<%@ page import="org.gridlab.gridsphere.portlet.*"%>
+<%@ page import="org.gridlab.gridsphere.portlet.*,
+                 org.gridlab.gridsphere.portletcontainer.GridSphereProperties"%>
 
-<!-- <jsp:useBean id="login" class="org.gridlab.gridsphere.portlets.core.beans.LoginBean" scope="request"/>  -->
-
-<% PortletRequest portletRequest = (PortletRequest)request.getAttribute("portletRequest"); %>
-<% PortletResponse portletResponse = (PortletResponse)request.getAttribute("portletResponse"); %>
-<% PortletSettings portletSettings = (PortletSettings)request.getAttribute("portletSettings"); %>
-<% PortletURI loginURI = portletResponse.createURI(); %>
-<% DefaultPortletAction loginAction = new DefaultPortletAction(PortletAction.LOGIN); %>
-<% loginAction.addParameter("portletid", portletSettings.getConcretePortletID()); %>
-<% loginURI.addAction(loginAction); %>
-
-
+<jsp:useBean id="login" class="java.lang.String" scope="request"/>
 
 <table border=0 cellpadding=1 cellspacing=0 width="181" bgcolor=6699CC><tr><td><font color=FFFFFF><b>&nbsp;Get Proxy from Server</b></font></td></tr>
 </table>
@@ -21,9 +12,7 @@
 <spacer type=block width=1></td>
 <td width=1000>
     <table border=0 cellpadding=3 cellspacing=0 width="178"><tr><td valign=top>
-    <form method="POST" action="<%= loginURI.toString() %>">
-    <input type="hidden" name="action" value="login">
-    <input type="hidden" name="pageaction" value="get">
+    <form method="POST" action="<%= login %>">
     <table cellspacing=2 cellpadding=2 border=0>
     <tr>
     <td align="right">Username: </td>
