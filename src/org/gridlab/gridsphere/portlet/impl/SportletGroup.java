@@ -57,6 +57,7 @@ public class SportletGroup extends BaseObject implements PortletGroup {
         super();
         if (groupName == null) Name = "Unknown Group";
         this.Name = groupName;
+        log.debug("GROUP WITH ID "+getOid()+" NAME "+Name+" created.");
     }
 
     /**

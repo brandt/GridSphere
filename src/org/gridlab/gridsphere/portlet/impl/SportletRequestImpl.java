@@ -79,6 +79,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @param value the attribute value
      */
     public void setAttribute(String name, Object value) {
+        log.debug("Storing bean in request");
         req.setAttribute(name, value);
     }
 

@@ -27,7 +27,9 @@ public class SportletDataAttribute extends Attribute {
     public SportletDataAttribute(String k, String v) {
         this.setKey(k);
         this.setValue(v);
-        this.setOid(UniqueID.get());
+        UniqueID uid = UniqueID.getInstance();
+
+        this.setOid(uid.get());
     }
 
     public SportletData getSportletData() {

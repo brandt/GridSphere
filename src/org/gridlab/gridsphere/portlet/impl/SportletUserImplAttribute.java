@@ -27,7 +27,9 @@ public class SportletUserImplAttribute extends Attribute {
     public SportletUserImplAttribute(String k, String v) {
         this.setKey(k);
         this.setValue(v);
-        this.setOid(UniqueID.get());
+        UniqueID uid = UniqueID.getInstance();
+
+        this.setOid(uid.get());
     }
 
     public SportletUserImpl getUser() {
