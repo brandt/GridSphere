@@ -8,7 +8,7 @@ Requirements
 ------------
 
 1) Building the GridSphere distribution requires JDK 1.3.1 or JDK 1.4.2 
-(JDK 1.4.1 ships with a broken xalan.jar). You will also need Ant 1.5.3-1+ 
+(JDK 1.4.1 ships with a broken xalan.jar). You will also need Ant 1.6+ 
 available at http://jakarta.apache.org/ant. In addition, make sure
 the $ANT_HOME/lib directory contains junit.jar used for testing and
 xalan.jar used to construct the documentation from the XSL style sheets.
@@ -17,11 +17,10 @@ If you are using JDK 1.3.1 you will need to download Xalan from
 You can optionally copy junit.jar from gridsphere/lib/ext into $ANT_HOME/lib
 to run the unit tests.
 
-2) You will also need a Tomcat 4.1+ servlet container available at
-http://jakarta.apache.org/tomcat. In addition to providing a hosting
-environment for GridSphere, Tomcat provides some of the required XML (JAR)
-libraries that are needed for compilation. (Make sure you get the full 
-Tomcat version and not the Light Edition (LE))
+2) You will also need a Tomcat 4.1+ or Tomcat 5.0.25+ servlet container 
+available at http://jakarta.apache.org/tomcat. In addition to providing
+a hosting environment for GridSphere, Tomcat provides some of the required 
+XML (JAR) libraries that are needed for compilation.
 
 3) (Optional) If you wish to build PDF formats of the documentation download a
 FOP binary from http://xml.apache.org/fop/download.html and unpack it and set
@@ -82,7 +81,9 @@ design document.
 Errors & Troubleshooting
 ------------------------
 
-If you have errors during the docbook transformation, such as "No DTM IDs are available" or other errors, you should check your version of Java (java -version). If you have JDK 1.4.1, it's likely the version of xalan.jar shipped with it is broken. The recommended solution is to get a recent xalan.jar from http://xml.apache.org/xalan-j/index.html and copy it to JAVA_HOME/jre/lib/endorsed (If you have an Apple with OS X then copy it to /System/Library/Frameworks/JavaVM.framework/Home/lib/endorsed/).
+Please look at the online documentation available at http://www.gridsphere.org/gridsphere/gridsphere?cid=docs including the slides and user guides. If you
+experience problems, please subscribe to the mailing lists and consider 
+filing bugs at http://bugs.gridsphere.org
 
 Thanks,
 
