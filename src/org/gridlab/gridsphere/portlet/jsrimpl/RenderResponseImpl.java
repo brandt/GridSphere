@@ -2,6 +2,7 @@ package org.gridlab.gridsphere.portlet.jsrimpl;
 
 import org.gridlab.gridsphere.portlet.jsrimpl.PortletResponseImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState;
 
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
 import java.io.IOException;
+import java.util.Locale;
 
 
 /**
@@ -26,6 +28,8 @@ import java.io.IOException;
 public class RenderResponseImpl extends PortletResponseImpl implements RenderResponse {
 
     protected String contentType = null;  // needed as servlet 2.3 does not have a response.getContentType
+    protected boolean hasWriter = false;
+    protected boolean hasOutputStream = false;
 
     /**
      * Constructs an instance of SportletResponse using an
@@ -36,6 +40,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
     public RenderResponseImpl(HttpServletRequest req, HttpServletResponse res, PortalContext portalContext) {
         super(req, res, portalContext);
         contentType = req.getContentType();
+
     }
 
     private boolean isValidContentType(String type) {
@@ -100,7 +105,9 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @return a portlet render URL
      */
     public PortletURL createRenderURL() {
-        PortletURL portletURL = new PortletURLImpl(req, (HttpServletResponse)super.getResponse());
+        System.err.println("created a render url: ");
+        PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse)super.getResponse(), portalContext, false);
+        portletURL.setComponentID((String) req.getAttribute(SportletProperties.COMPONENT_ID));
         return portletURL;
     }
 
@@ -119,8 +126,10 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @return a portlet action URL
      */
     public PortletURL createActionURL() {
-        PortletURL portletURL = new PortletURLImpl(req, (HttpServletResponse)super.getResponse());
-        portletURL.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, "");
+        System.err.println("created an action url: ");
+        PortletURLImpl portletURL = new PortletURLImpl(req, (HttpServletResponse)super.getResponse(), portalContext, true);
+        portletURL.setAction("");
+        portletURL.setComponentID((String)req.getAttribute(SportletProperties.COMPONENT_ID));
         return portletURL;
     }
 
@@ -132,8 +141,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @return   the namespace
      */
     public String getNamespace() {
-        // TODO
-        return "";
+        return "gridsphere_";
     }
 
     /**
@@ -166,12 +174,14 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @see  #getContentType
      */
     public void setContentType(String type) {
+        System.err.println("\n\n\nCset to PE= " + type);
         String mimeType = stripCharacterEncoding(type);
         if (!isValidContentType(mimeType)) {
             throw new IllegalArgumentException(mimeType);
         }
         this.getHttpServletResponse().setContentType(mimeType);
         this.contentType = mimeType;
+        System.err.println("\n\n\nSET CTYPE= " + contentType);
     }
 
 
@@ -218,6 +228,9 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @see #getPortletOutputStream
      */
     public java.io.PrintWriter getWriter() throws java.io.IOException {
+        if ((contentType == null) || (hasOutputStream)) throw new IllegalStateException("A writer has already been obtained");
+        hasWriter = true;
+        System.err.println("\n\n\nin getWriter CONTENT TYPE= " + contentType);
         return this.getHttpServletResponse().getWriter();
     }
 
@@ -228,7 +241,11 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @return  Locale of this response
      */
     public java.util.Locale getLocale() {
-        return this.getHttpServletResponse().getLocale();
+        Locale locale = (Locale)this.req.getSession(true).getAttribute(User.LOCALE);
+        if (locale != null) return locale;
+        locale = this.req.getLocale();
+        if (locale != null) return locale;
+        return Locale.ENGLISH;
     }
 
 
@@ -255,7 +272,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @see 		#reset
      */
     public void setBufferSize(int size) {
-        this.getHttpServletResponse().setBufferSize(size);
+        throw new IllegalStateException("portlet container does not support buffering");
     }
 
 
@@ -272,7 +289,7 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @see 		#reset
      */
     public int getBufferSize() {
-        return this.getHttpServletResponse().getBufferSize();
+        return 0;
     }
 
 
@@ -371,7 +388,10 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
      * @see #getWriter
      */
     public java.io.OutputStream getPortletOutputStream() throws java.io.IOException {
-        return getOutputStream();
+        if ((contentType == null) || (hasWriter)) throw new IllegalStateException("A writer has already been obtained");
+        hasOutputStream = true;
+        System.err.println("\n\n\nin getPortletOutputStream CONTENT TYPE= " + contentType);
+        return this.getHttpServletResponse().getOutputStream();
     }
 
 }

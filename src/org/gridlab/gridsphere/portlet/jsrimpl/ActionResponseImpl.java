@@ -10,10 +10,7 @@ import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowSt
 import javax.portlet.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
-import java.util.Iterator;
-import java.util.HashMap;
-import java.util.Enumeration;
+import java.util.*;
 
 
 /**
@@ -142,23 +139,12 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
         }
 
         Portlet.Mode mode = Portlet.Mode.VIEW;
-        if (portletMode == PortletMode.EDIT) {
-            mode = Portlet.Mode.EDIT;
-        } else if (portletMode == PortletMode.HELP) {
-            mode = Portlet.Mode.HELP;
-        } else {
-            Enumeration enum = portalContext.getSupportedPortletModes();
-            boolean found = false;
-            while (enum.hasMoreElements() & (!found)) {
-                PortletMode m = (PortletMode)enum.nextElement();
-                if (m.toString().equalsIgnoreCase(portletMode.toString())) {
-                    mode = Portlet.Mode.toMode(portletMode.toString());
-                    portletMode = m;
-                    found = true;
-                }
-            }
-            if (!found) throw new PortletModeException("Unsupported portlet mode!", portletMode);
-        }
+
+        List allowedModes = (List)req.getAttribute(SportletProperties.ALLOWED_MODES);
+
+
+        if (!allowedModes.contains(portletMode.toString())) throw new PortletModeException("Unsupported portlet mode!", portletMode);
+        //}
         this.portletMode = portletMode;
         req.setAttribute(SportletProperties.PORTLET_MODE, mode);
         isRedirectAllowed = false;
@@ -200,6 +186,7 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
         if (isRedirectAllowed) {
             if (location != null) {
                 HttpServletResponse res = (HttpServletResponse)super.getResponse();
+                if (location.indexOf("/") == -1) throw new IllegalArgumentException("Must be an absolute URL or full path URI");
                 if (location.indexOf("://") != -1) {
                     //   provider.setAbsoluteURL(location);
                 } else {
@@ -210,6 +197,8 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
                 redirected = true;
                 req.setAttribute(SportletProperties.RESPONSE_COMMITTED, "true");
                 //res.sendRedirect(location);
+            } else {
+
             }
         } else {
             throw new IllegalStateException("Can't invoke sendRedirect() after certain methods have been called");
@@ -252,21 +241,26 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
         if (parameters == null) {
             throw new IllegalArgumentException("Render parameters must not be null.");
         }
-        for (Iterator iter = parameters.entrySet().iterator(); iter.hasNext();) {
-            Map.Entry entry = (Map.Entry)iter.next();
-            if (!(entry.getKey() instanceof String)) {
-                throw new IllegalArgumentException("Key must not be null and of type java.lang.String.");
-            }
-            if (!(entry.getValue() instanceof String[])) {
-                throw new IllegalArgumentException("Value must not be null and of type java.lang.String[].");
-            }
+        Map params = new HashMap();
+        Iterator iter = parameters.keySet().iterator();
+        while (iter.hasNext()) {
+
+            Object obj = iter.next();
+            if (!(obj instanceof String)) throw new IllegalArgumentException("Key must not be null and of type java.lang.String.");
+            String key = (String)obj;
+
+            Object vals = parameters.get(key);
+
+            if (!(vals instanceof String[])) throw new IllegalArgumentException("Value must not be null and of type java.lang.String[].");
+            String newkey = SportletProperties.RENDER_PARAM_PREFIX + key;
+            params.put(newkey, vals);
+
         }
 
-        renderParams.putAll(parameters);
+        renderParams.putAll(params);
 
         isRedirectAllowed = false;
 
-        this.renderParams = parameters;
     }
 
 
@@ -300,8 +294,8 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
             throw new IllegalArgumentException("Render parameter key or value  must not be null.");
         }
 
-        System.err.println("placing render poaram " + key + " " + value);
-        renderParams.put(key, new String[] {value});
+        System.err.println("placing render param " + key + " " + value);
+        renderParams.put(SportletProperties.RENDER_PARAM_PREFIX + key, new String[] {value});
 
         isRedirectAllowed = false;
     }
@@ -336,7 +330,7 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
             throw new IllegalArgumentException("Render parameter key or value  must not be null or values be an empty array.");
         }
 
-        renderParams.put(key, values);
+        renderParams.put(SportletProperties.RENDER_PARAM_PREFIX + key, values);
 
         isRedirectAllowed = false;
     }

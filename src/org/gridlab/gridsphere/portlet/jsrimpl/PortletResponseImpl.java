@@ -121,6 +121,9 @@ public abstract class PortletResponseImpl extends HttpServletResponseWrapper imp
      * @return   the encoded resource URL as string
      */
     public String encodeURL(String path) {
+        if (path.indexOf("://") == -1 && !path.startsWith("/")) {
+            throw new IllegalArgumentException("only absolute URLs or full path URIs are allowed");
+        }
         return this.getHttpServletResponse().encodeURL(path);
     }
 

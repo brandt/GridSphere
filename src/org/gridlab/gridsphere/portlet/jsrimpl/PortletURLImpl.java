@@ -3,19 +3,10 @@ package org.gridlab.gridsphere.portlet.jsrimpl;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
-import javax.portlet.WindowStateException;
-import javax.portlet.PortletRequest;
-import javax.portlet.WindowState;
-import javax.portlet.PortletModeException;
-import javax.portlet.PortletMode;
-import javax.portlet.PortletSecurityException;
-import javax.portlet.PortletURL;
+import javax.portlet.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.Iterator;
+import java.util.*;
 import java.net.URLEncoder;
 
 
@@ -50,6 +41,14 @@ public class PortletURLImpl implements PortletURL {
     private Map store = new HashMap();
     private boolean redirect = true;
     private String contextPath = null;
+    private PortalContext context = null;
+    private List allowedModes = null;
+
+    private boolean isAction = false;
+    private String action = null;
+    private String cid = null;
+    private PortletMode mode = null;
+    private WindowState state = null;
 
     /**
      * Constructs a PortletURL from a servlet request and response
@@ -57,13 +56,27 @@ public class PortletURLImpl implements PortletURL {
      * @param req the servlet request
      * @param res the servlet response
      */
-    public PortletURLImpl(HttpServletRequest req, HttpServletResponse res) {
+    public PortletURLImpl(HttpServletRequest req, HttpServletResponse res, PortalContext context, boolean isAction) {
         this.store = new HashMap();
         this.res = res;
         this.req = req;
-        this.contextPath = req.getContextPath();
+        this.context = context;
+        this.contextPath = "/gridsphere"; //req.getContextPath();
         this.isSecure = req.isSecure();
-        store.put(SportletProperties.COMPONENT_ID, (String) req.getAttribute(SportletProperties.COMPONENT_ID));
+        allowedModes = (List)req.getAttribute(SportletProperties.ALLOWED_MODES);
+        this.isAction = isAction;
+    }
+
+    public void setContextPath(String contextPath) {
+        this.contextPath = contextPath;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public void setComponentID(String cid) {
+        this.cid = cid;
     }
 
     /**
@@ -88,7 +101,23 @@ public class PortletURLImpl implements PortletURL {
      */
     public void setWindowState(WindowState windowState)
             throws WindowStateException {
-        store.put(SportletProperties.PORTLET_WINDOW, windowState.toString());
+        if (windowState == null) throw new IllegalArgumentException("Window state cannot be null");
+        boolean isSupported = false;
+        Enumeration enum = context.getSupportedWindowStates();
+        while (enum.hasMoreElements()) {
+            WindowState supported = (WindowState)enum.nextElement();
+            if (supported.equals(windowState)) {
+                isSupported = true;
+                break;
+            }
+        }
+
+        if (isSupported) {
+            state = windowState;
+        } else {
+            throw new WindowStateException("Illegal window state", windowState);
+        }
+
     }
 
     /**
@@ -113,7 +142,24 @@ public class PortletURLImpl implements PortletURL {
      */
     public void setPortletMode(PortletMode portletMode)
             throws PortletModeException {
-        store.put(SportletProperties.PORTLET_MODE, portletMode.toString());
+        if (portletMode == null) throw new IllegalArgumentException("Portlet mode cannot be null");
+
+        /*
+        boolean isSupported = false;
+        Enumeration enum = context.getSupportedPortletModes();
+        while (enum.hasMoreElements()) {
+            PortletMode supported = (PortletMode)enum.nextElement();
+            if (supported.equals(portletMode)) {
+                isSupported = true;
+                break;
+            }
+        }
+        */
+        if (allowedModes.contains(portletMode.toString())) {
+            mode = portletMode;
+        } else {
+            throw new PortletModeException("Illegal portlet mode", portletMode);
+        }
     }
 
     /**
@@ -136,7 +182,7 @@ public class PortletURLImpl implements PortletURL {
      *                            if name or value are <code>null</code>.
      */
     public void setParameter(String name, String value) {
-        if (name == null) throw new IllegalArgumentException("name is NULL");
+        if ((name == null) || !(name instanceof String)) throw new IllegalArgumentException("name must be a non-null string");
         if (value == null) throw new IllegalArgumentException("value is NULL");
         store.put(name, value);
     }
@@ -161,7 +207,7 @@ public class PortletURLImpl implements PortletURL {
      *                            if name or values are <code>null</code>.
      */
     public void setParameter(String name, String[] values) {
-        if (name == null) throw new IllegalArgumentException("name is NULL");
+        if ((name == null) || !(name instanceof String)) throw new IllegalArgumentException("name must be a non-null string");
         if (values == null) throw new IllegalArgumentException("values is NULL");
         if (values.length == 0) throw new IllegalArgumentException("values is NULL");
         store.put(name, values);
@@ -203,10 +249,12 @@ public class PortletURLImpl implements PortletURL {
             if (key instanceof String) {
                 Object values = parameters.get(key);
                 if (values == null) throw new IllegalArgumentException("a parameters value is NULL");
-                if (!(values instanceof String[]) && (!(values instanceof String))) {
-                    throw new IllegalArgumentException("a parameters value element must be a string or string array");
+                if (!(values instanceof String[])) {
+                    throw new IllegalArgumentException("a parameters value element must be a string array");
                 }
                 this.setParameter((String)key, (String[])values);
+            } else {
+                throw new IllegalArgumentException("parameter key must be a string");
             }
 
         }
@@ -233,7 +281,6 @@ public class PortletURLImpl implements PortletURL {
         this.isSecure = secure;
     }
 
-
     /**
      * Returns the portlet URL string representation to be embedded in the
      * markup.<br>
@@ -253,23 +300,47 @@ public class PortletURLImpl implements PortletURL {
         s.append(req.getServerName() + ":" + req.getServerPort());
 
         String url = contextPath;
+
+        //System.err.println("\n\n\nContext path=" + contextPath);
         String newURL;
+
         Set set = store.keySet();
-        if (!set.isEmpty()) {
-            // add question mark
-            url = contextPath + contextPath + "?";
-        } else {
-            return contextPath + url;
+
+
+        url = contextPath + contextPath + "?";
+
+        if (cid != null) {
+            url += "cid=" + cid;
         }
+
+        if (mode != null) {
+            url += "&" + SportletProperties.PORTLET_MODE + "=" + mode.toString();
+        }
+        if (state != null) {
+            url += "&" + SportletProperties.PORTLET_WINDOW + "=" + mode.toString();
+        }
+        if (action != null) {
+            url += "&action=" + action;
+        }
+
         boolean firstParam = true;
         Iterator it = set.iterator();
         //try {
         while (it.hasNext()) {
-            if (!firstParam)
+            //if (!firstParam)
                 url += "&";
             String name = (String)it.next();
 
-            String encname = URLEncoder.encode(name);
+            String encname = null;
+
+            // if its a render url, the parameters must be prefixed
+            if (isAction) {
+                encname = URLEncoder.encode(name);
+            } else {
+                encname = URLEncoder.encode(SportletProperties.RENDER_PARAM_PREFIX + name);
+;
+            }
+
             Object val = store.get(name);
             if (val instanceof String[]) {
                 String[] vals = (String[])val;
@@ -300,6 +371,7 @@ public class PortletURLImpl implements PortletURL {
             newURL = res.encodeURL(url);
         }
         s.append(newURL);
+        System.err.println("created URL= " + s.toString());
         return s.toString();
     }
 

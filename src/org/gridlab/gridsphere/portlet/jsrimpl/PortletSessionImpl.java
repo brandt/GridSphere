@@ -78,8 +78,7 @@ public class PortletSessionImpl implements PortletSession, HttpSession
      */
 
     public Object getAttribute(String name) throws IllegalStateException, IllegalArgumentException {
-        if (name == null) throw new IllegalArgumentException("name is NULL");
-        return session.getAttribute(name);
+        return getAttribute(name, PortletSession.PORTLET_SCOPE);
     }
 
     /**
@@ -98,7 +97,7 @@ public class PortletSessionImpl implements PortletSession, HttpSession
      */
 
     public java.util.Enumeration getAttributeNames() throws IllegalStateException {
-        return session.getAttributeNames();
+        return getAttributeNames(PortletSession.PORTLET_SCOPE);
     }
 
     /**
@@ -222,8 +221,7 @@ public class PortletSessionImpl implements PortletSession, HttpSession
      */
 
     public void removeAttribute(String name) throws IllegalStateException, IllegalArgumentException {
-        if (name == null) throw new IllegalArgumentException("name is NULL");
-        session.removeAttribute(name);
+        removeAttribute(name, PortletSession.PORTLET_SCOPE);
     }
 
     /**
@@ -257,8 +255,7 @@ public class PortletSessionImpl implements PortletSession, HttpSession
      */
 
     public void setAttribute(String name, Object value) throws IllegalStateException, IllegalArgumentException {
-        if (name == null) throw new IllegalArgumentException("name is NULL");
-        session.setAttribute(name, value);
+        setAttribute(name, value, PortletSession.PORTLET_SCOPE);
     }
 
 

@@ -5,7 +5,6 @@ import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletWindow;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
-
 import javax.portlet.ActionRequest;
 import javax.portlet.RenderRequest;
 import javax.portlet.WindowState;
@@ -47,9 +46,14 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     protected boolean hasReader = false;
     protected boolean included = false;
 
-    private PortletSession portletSession;
+    private PortletSession portletSession = null;
 
     protected Map props = null;
+
+    protected List modesAllowed = null;
+
+    protected GridSphereParameters portalParameters = null;
+
     //protected boolean included = true;
 
     /**
@@ -67,6 +71,58 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
         contextPath = contextPath.substring(l);
         this.supports = supports;
         props = new HashMap();
+        modesAllowed = new ArrayList();
+        for (int i = 0; i < supports.length; i++) {
+            Supports s = (Supports)supports[i];
+            org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode[] modes = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode[])s.getPortletMode();
+            for (int j = 0; j < modes.length; j++) {
+                org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode m = modes[j];
+                modesAllowed.add(m.getContent());
+            }
+        }
+        /*
+        Enumeration modesEnum = portalContext.getSupportedPortletModes();
+        while (modesEnum.hasMoreElements()) {
+            PortletMode m = (PortletMode)modesEnum.nextElement();
+            modesAllowed.add(m.toString());
+        }
+        */
+        if (!modesAllowed.contains(PortletMode.VIEW.toString())) modesAllowed.add(PortletMode.VIEW.toString());
+        req.setAttribute(SportletProperties.ALLOWED_MODES, modesAllowed);
+
+        portalParameters = new GridSphereParameters(req);
+
+        /*
+        System.err.println("============================= PortletRequestImpl =====================================");
+        if (getAttribute(SportletProperties.PORTLET_ACTION_METHOD) != null) {
+            System.err.println("in action");
+        } else {
+            System.err.println("in render");
+        }
+        System.err.println("query string=" + super.getQueryString());
+
+        System.err.println("Actual HTTP parameters");
+        for (Enumeration parameters = super.getParameterNames(); parameters.hasMoreElements();) {
+            String   paramName   = (String)parameters.nextElement();
+            String[] paramValues = (String[])super.getParameterValues(paramName);
+            System.err.println("\nname=" + paramName + "\nvalues=");
+            for (int i = 0; i < paramValues.length; i++) {
+                System.err.print("  " + paramValues[i]);
+            }
+        }
+
+        System.err.println("\n\nPortlet parameters for portlet " );
+        for (Enumeration parameters = getParameterNames(); parameters.hasMoreElements();) {
+            String   paramName   = (String)parameters.nextElement();
+            String[] paramValues = (String[])getParameterValues(paramName);
+            System.err.println("\nname=" + paramName + "\nvalues=");
+            for (int i = 0; i < paramValues.length; i++) {
+                System.err.print("  " + paramValues[i]);
+            }
+        }
+
+        System.err.println("\n===================================================================");
+        */
     }
 
 
@@ -120,6 +176,9 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      *
      */
     public boolean isPortletModeAllowed(PortletMode mode) {
+
+        if (modesAllowed.contains(mode.toString())) return true;
+        /*
         Enumeration modesEnum = portalContext.getSupportedPortletModes();
         while (modesEnum.hasMoreElements()) {
             PortletMode m = (PortletMode)modesEnum.nextElement();
@@ -129,6 +188,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
             }
         }
         System.err.println("mode " + mode.toString() + " not allowed");
+        */
         return false;
     }
 
@@ -138,9 +198,11 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @return   the portlet mode
      */
     public PortletMode getPortletMode() {
-       Portlet.Mode mode = (Portlet.Mode)getAttribute(SportletProperties.PORTLET_MODE);
-       PortletMode m = PortletMode.VIEW;
-        if (mode == Portlet.Mode.EDIT) {
+        Portlet.Mode mode = (Portlet.Mode)getAttribute(SportletProperties.PORTLET_MODE);
+        PortletMode m = PortletMode.VIEW;
+        if (mode == Portlet.Mode.VIEW) {
+            m = PortletMode.VIEW;
+        } else if (mode == Portlet.Mode.EDIT) {
             m = PortletMode.EDIT;
         } else if (mode == Portlet.Mode.HELP) {
             m = PortletMode.HELP;
@@ -492,9 +554,19 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      *
      */
     public String getParameter(String name) {
-        hasReader = true;
+        System.err.println("getting param name=" + name);
         if (name == null) throw new IllegalArgumentException("name is NULL");
-        return this.getHttpServletRequest().getParameter(name);
+        hasReader = true;
+        Object val = this.getParameterMap().get(name);
+        if (val != null) {
+            if (val instanceof String) return (String)val;
+        if (val instanceof String[]) {
+            String[] s = (String[])val;
+            return s[0];
+        }
+            return (String)val;
+        }
+        return null;
     }
 
     /**
@@ -516,7 +588,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      */
     public java.util.Enumeration getParameterNames() {
         hasReader = true;
-        return this.getHttpServletRequest().getParameterNames();
+        return Collections.enumeration(this.getParameterMap().keySet());
     }
 
     /**
@@ -544,9 +616,48 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
     public String[] getParameterValues(String name) {
         if (name == null) throw new IllegalArgumentException("name is NULL");
         hasReader = true;
-        return this.getHttpServletRequest().getParameterValues(name);
+        return (String[]) this.getParameterMap().get(name);
     }
 
+    public Map getParameterMap2() {
+        //get control params
+        Map portletParameters = new HashMap();
+
+        /*
+        Iterator iterator = portalParameters.getRenderParamNames();
+
+        while (iterator.hasNext())
+        {
+            String name = (String)iterator.next();
+
+            String[] values = portalParameters.getRenderParamValues(name);
+
+            portletParameters.put(name, values );
+
+        }
+
+        //get request params
+        String myid = portalParameters.getMyId();
+        String cid = portalParameters.getTargetedID();
+
+        if (myid.equals(cid)) {
+            for (Enumeration parameters = super.getParameterNames(); parameters.hasMoreElements();) {
+                String   paramName   = (String)parameters.nextElement();
+                String[] paramValues = (String[])super.getParameterValues(paramName);
+                String[] values      = (String[])portletParameters.get(paramName);
+
+                if (values != null) {
+                    String[] temp = new String[paramValues.length + values.length];
+                    System.arraycopy(paramValues, 0, temp, 0, paramValues.length);
+                    System.arraycopy(values, 0, temp, paramValues.length, values.length);
+                    paramValues = temp;
+                }
+                portletParameters.put(paramName, paramValues);
+            }
+        }
+        */
+        return Collections.unmodifiableMap(portletParameters);
+    }
     /**
      * Returns a <code>Map</code> of the parameters of this request.
      * Request parameters are extra information sent with the request.
@@ -565,7 +676,7 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      */
     public java.util.Map getParameterMap() {
         hasReader = true;
-        return Collections.unmodifiableMap(this.getHttpServletRequest().getParameterMap());
+        return portalParameters.getParameterMap();
     }
 
     /**
