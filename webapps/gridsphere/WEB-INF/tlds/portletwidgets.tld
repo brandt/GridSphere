@@ -495,5 +495,18 @@
     </attribute>
   </tag>
 
+   <tag>
+    <name>table</name>
+    <tag-class>org.gridlab.gridsphere.tags.web.BaseTag</tag-class>
+    <body-content>empty</body-content>
+    <description>
+        displays a table
+    </description>
+    <attribute>
+        <name>bean</name>
+        <required>true</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+  </tag>
 
 </taglib>

@@ -39,14 +39,10 @@
             <portlet-tab>
                 <title>Welcome</title>
                 <portlet-panel>
-                    <grid-layout columns="40,60">
+                    <grid-layout>
                         <portlet-frame>
                             <name>Login</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.LoginPortlet.1</portlet-class>
-                        </portlet-frame>
-                        <portlet-frame inner-padding="0">
-                            <name>RSS</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.core.RSSPortlet.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>
@@ -81,10 +77,10 @@
             <portlet-tab>
                 <title>Accounts</title>
                 <portlet-panel>
-                    <grid-layout columns="50">
+                    <grid-layout>
                         <portlet-frame inner-padding="0">
                             <name>UserManagerPortlet</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.core.UserManagerPortlet.1</portlet-class>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.user.UserManagerPortlet.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>

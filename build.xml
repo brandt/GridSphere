@@ -542,6 +542,7 @@ Copyright:
         <copy todir="${env.CATALINA_HOME}/shared/lib">
             <fileset dir="lib/ext"/>
             <fileset dir="lib">
+                <exclude name="portlet-widgets.jar"/>
                 <exclude name="ext/**"/>
             </fileset>
         </copy>
