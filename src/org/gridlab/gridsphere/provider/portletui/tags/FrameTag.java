@@ -6,6 +6,8 @@ package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.FrameBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.User;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -91,10 +93,7 @@ public class FrameTag extends TableTag {
             } else {
                 String key = tableBean.getKey();
                 if (key != null) {
-
-                    Locale locale = pageContext.getRequest().getLocale();
-                    ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
-                    tableBean.setValue(bundle.getString(tableBean.getKey()));
+                    tableBean.setValue(getLocalizedText(key));
                     tableBean.setCssStyle(cssStyle);
                 }
 
@@ -112,12 +111,31 @@ public class FrameTag extends TableTag {
             }
         }
 
+        PanelTag panelTag = (PanelTag)findAncestorWithClass(this, PanelTag.class);
+        if (panelTag != null) {
+
+            int numCols = panelTag.getNumCols();
+
+            int thiscol = panelTag.getColumnCounter();
+            try {
+                JspWriter out = pageContext.getOut();
+                if ((thiscol % numCols) == 0) {
+                    out.println("<tr>");
+                }
+                out.println("<td width=\"" + "50%" + "\">");
+            } catch (Exception e) {
+                throw new JspException(e.getMessage());
+            }
+        }
+
         try {
             JspWriter out = pageContext.getOut();
             out.print(tableBean.toStartString());
         } catch (Exception e) {
             throw new JspException(e.getMessage());
         }
+
+
         return EVAL_BODY_INCLUDE;
     }
 
@@ -136,6 +154,24 @@ public class FrameTag extends TableTag {
         } catch (Exception e) {
             throw new JspException(e.getMessage());
         }
+
+        PanelTag panelTag = (PanelTag)findAncestorWithClass(this, PanelTag.class);
+        if (panelTag != null) {
+            int numCols = panelTag.getNumCols();
+            int thiscol = panelTag.getColumnCounter();
+            thiscol++;
+            panelTag.setColumnCounter(thiscol);
+            try {
+                JspWriter out = pageContext.getOut();
+                out.println("</td>");
+                if ((thiscol % numCols) == 0) {
+                    out.println("</tr>");
+                }
+            } catch (Exception e) {
+                throw new JspException(e.getMessage());
+            }
+        }
+
         return EVAL_PAGE;
     }
 }

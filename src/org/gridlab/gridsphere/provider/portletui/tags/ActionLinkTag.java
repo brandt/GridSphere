@@ -5,6 +5,8 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ActionLinkBean;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.User;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -56,9 +58,7 @@ public class ActionLinkTag extends ActionTag {
 
         if (key != null) {
             actionlink.setKey(key);
-            Locale locale = pageContext.getRequest().getLocale();
-            ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
-            actionlink.setValue(bundle.getString(actionlink.getKey()));
+            actionlink.setValue(getLocalizedText(key));
         }
 
         return EVAL_BODY_INCLUDE;

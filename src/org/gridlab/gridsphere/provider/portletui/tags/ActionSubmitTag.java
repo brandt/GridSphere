@@ -54,12 +54,7 @@ public class ActionSubmitTag extends ActionTag {
 
         if (!key.equals("")) {
             actionSubmitBean.setKey(key);
-            Locale locale = pageContext.getRequest().getLocale();
-            ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
-            String localizedText = bundle.getString(actionSubmitBean.getKey());
-            if (localizedText != null) {
-                value = localizedText;
-            }
+            value = getLocalizedText(key);
         }
 
         if (!beanId.equals("")) {

@@ -5,6 +5,11 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.User;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * The abstract <code>BaseComponentTag</code> is used by all UI tags to provide CSS support and general
@@ -175,6 +180,20 @@ public abstract class BaseComponentTag extends BaseBeanTag   {
         } else {
             supportsJS = false;
         }
+    }
+
+    protected String getLocalizedText(String key) {
+        PortletRequest req = (PortletRequest)pageContext.getAttribute("portletRequest");
+        User user = req.getUser();
+        String loc = (String)user.getAttribute(User.LOCALE);
+        Locale locale = null;
+        if (loc != null) {
+            locale = new Locale(loc, "", "");
+        } else {
+            locale = pageContext.getRequest().getLocale();
+        }
+        ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
+        return bundle.getString(key);
     }
 
 }

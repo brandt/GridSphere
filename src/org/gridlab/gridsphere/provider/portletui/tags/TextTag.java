@@ -7,6 +7,8 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.User;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -89,9 +91,7 @@ public class TextTag extends BaseComponentTag {
         this.setBaseComponentBean(textBean);
 
         if (key != null) {
-            Locale locale = pageContext.getRequest().getLocale();
-            ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
-            textBean.setValue(bundle.getString(key));
+            textBean.setValue(getLocalizedText(key));
         }
 
         if ((bodyContent != null) && (value == null)) {
