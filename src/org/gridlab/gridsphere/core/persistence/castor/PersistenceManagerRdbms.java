@@ -103,7 +103,13 @@ public class PersistenceManagerRdbms {
             log.error("PersistenceException " + e);
             throw new PersistenceManagerException("Persistence Error " + e);
         }  finally {
-            if (db != null) db.close();
+            if (db != null) {
+                try {
+                    db.close();
+                } catch (PersistenceException e) {
+                    db = null;
+                }
+            }
         }
 
     }
@@ -123,11 +129,19 @@ public class PersistenceManagerRdbms {
             db.begin();
             db.update(object);
             db.commit();
-            db.close();
         } catch (PersistenceException e) {
             log.error("PersistenceException " + e);
             throw new PersistenceManagerException("Persistence Error: " + e);
+        }   finally {
+            if (db != null) {
+                try {
+                    db.close();
+                } catch (PersistenceException e) {
+                    db = null;
+                }
+            }
         }
+
     }
 
     /**
@@ -152,7 +166,6 @@ public class PersistenceManagerRdbms {
                 list.add(results.next());
             }
             db.commit();
-            db.close();
         } catch (DatabaseNotFoundException e) {
             log.error("Exception! " + e);
             throw new PersistenceManagerException("Database not found: " + e);
@@ -162,6 +175,14 @@ public class PersistenceManagerRdbms {
         } catch (NoSuchElementException e) {
             log.error("NoSuchElementException!" + e);
             throw new PersistenceManagerException("No such element error: " + e);
+        } finally {
+            if (db != null) {
+                try {
+                    db.close();
+                } catch (PersistenceException e) {
+                    db = null;
+                }
+            }
         }
 
         return list;
@@ -209,7 +230,6 @@ public class PersistenceManagerRdbms {
 
             db.remove(deleteObject);
             db.commit();
-            db.close();
 
         } catch (NoSuchMethodException e) {
             log.info("Exception " + e);
@@ -229,6 +249,14 @@ public class PersistenceManagerRdbms {
         } catch (PersistenceException e) {
             log.info("Exception " + e);
             throw new PersistenceManagerException("Mapping Error :" + e);
+        }   finally {
+            if (db != null) {
+                try {
+                    db.close();
+                } catch (PersistenceException e) {
+                    db = null;
+                }
+            }
         }
     }
 
@@ -254,6 +282,14 @@ public class PersistenceManagerRdbms {
         } catch (PersistenceException e) {
             log.error("Exception! " + e);
             throw new PersistenceManagerException("Persisetnce Exception: " + e);
+        } finally {
+            if (db != null) {
+                try {
+                    db.close();
+                } catch (PersistenceException e) {
+                    db = null;
+                }
+            }
         }
 
         return object;
@@ -283,7 +319,6 @@ public class PersistenceManagerRdbms {
                 db.remove(results.next());
             }
             db.commit();
-            db.close();
         } catch (DatabaseNotFoundException e) {
             log.error("Exception! " + e);
             throw new PersistenceManagerException("Database not found: " + e);
@@ -293,6 +328,14 @@ public class PersistenceManagerRdbms {
         } catch (NoSuchElementException e) {
             log.error("NoSuchElementException!" + e);
             throw new PersistenceManagerException("No such element error: " + e);
+        }    finally {
+            if (db != null) {
+                try {
+                    db.close();
+                } catch (PersistenceException e) {
+                    db = null;
+                }
+            }
         }
     }
 
@@ -301,11 +344,9 @@ public class PersistenceManagerRdbms {
         Database db = null;
         OQLQuery oql = null;
         QueryResults results = null;
-
         try {
             db = jdo.getDatabase();
             db.begin();
-
             while (list.hasMore()) {
                 Parameter p = list.getNextParameter();
                 String query = "select " + p.getTable() + " from " + p.getTable() + " where " + p.getCondition();
@@ -316,9 +357,7 @@ public class PersistenceManagerRdbms {
                     db.remove(results.next());
                 }
             }
-
             db.commit();
-            db.close();
         } catch (PersistenceException e) {
             //db.rollback();
             log.error("PersistenceException!" + e);
@@ -327,6 +366,14 @@ public class PersistenceManagerRdbms {
             //db.rollback();
             log.error("NoSuchElementException!" + e);
             throw new PersistenceManagerException("NoSuchElement Error: " + e);
+        } finally {
+            if (db != null) {
+                try {
+                    db.close();
+                } catch (PersistenceException e) {
+                    db = null;
+                }
+            }
         }
     }
 
