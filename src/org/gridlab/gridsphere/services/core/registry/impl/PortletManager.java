@@ -59,11 +59,11 @@ public class PortletManager implements PortletManagerService {
 
             // check if a has a priority and b does not
             if ((a > 0) && (b < 0)) {
-                return 1;
+                return -1;
             }
             // check if b has a priority and a does not
             if ((a < 0) && (b > 0)) {
-                return -1;
+                return 1;
             }
             // check if a and b do not have a priority then use alphabetical
             if ((a > 0) && (b > 0)) {
@@ -71,8 +71,8 @@ public class PortletManager implements PortletManagerService {
                 try {
                     int a1 = Integer.valueOf(_webapp1.substring(a + 1)).intValue();
                     int a2 = Integer.valueOf(_webapp2.substring(b + 1)).intValue();
-                    if (a1 > a2) return 1;
-                    if (a1 < a2) return -1;
+                    if (a1 > a2) return -1;
+                    if (a1 < a2) return 1;
                     if (a1 == a2) return 0;
                 } catch (NumberFormatException e) {
                     // oh well
@@ -263,7 +263,7 @@ public class PortletManager implements PortletManagerService {
      * @throws PortletException if a portlet exception occurs
      */
     public synchronized void initPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
-        log.debug("adding web app" + webApplicationName);
+        log.debug("initing web app" + webApplicationName);
         PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webApplicationName, context);
         addWebApp(portletWebApp);
         log.debug("initing web app " + webApplicationName);
@@ -281,7 +281,7 @@ public class PortletManager implements PortletManagerService {
      */
     public synchronized void initPortletWebApplication(PortletWebApplication portletWebApplication, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         String webapp = portletWebApplication.getWebApplicationName();
-        log.debug("adding web app" + webapp);
+        log.debug("initing web app" + webapp);
         PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webapp, context);
         addWebApp(portletWebApp);
         log.debug("initing web app " + webapp);

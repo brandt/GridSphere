@@ -226,6 +226,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         PersistenceManagerFactory.destroyPersistenceManagerRdbms(webApplicationName);
     }
 
+
     /**
      * Returns the portlet web application name
      *

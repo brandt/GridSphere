@@ -42,6 +42,7 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
      * @return the String used in the final markup indicating if this bean is selected or not
      */
     protected String checkSelected(String select) {
+        /*  @TODO@ MPR ADDED HERE
         if (!beanId.equals("") && value != null) {
             for (int ii = 0; ii < results.size(); ++ii) {
                 String selectedValue = (String)results.get(ii);
@@ -51,6 +52,7 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
             }
             return "";
         }
+        */
         if (selected) {
             return " " + select + "='" + select + "' ";
         } else {

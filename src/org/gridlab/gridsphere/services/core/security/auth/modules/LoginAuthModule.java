@@ -1,7 +1,6 @@
 package org.gridlab.gridsphere.services.core.security.auth.modules;
 
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.auth.AuthenticationException;
 
 import java.util.Map;

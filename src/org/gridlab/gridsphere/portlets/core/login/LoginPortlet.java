@@ -20,17 +20,16 @@ import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerSer
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
+import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
+import org.gridlab.gridsphere.services.core.user.LoginService;
 
 import javax.mail.MessagingException;
 import javax.servlet.UnavailableException;
 import javax.servlet.http.Cookie;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Calendar;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Date;
+import java.util.*;
 
 public class LoginPortlet extends ActionPortlet {
 
@@ -54,6 +53,7 @@ public class LoginPortlet extends ActionPortlet {
     private PortalConfigService portalConfigService = null;
     private RequestService requestService = null;
     private MailService mailService = null;
+    private LoginService loginService = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
@@ -65,6 +65,7 @@ public class LoginPortlet extends ActionPortlet {
             mailService = (MailService) getPortletConfig().getContext().getService(MailService.class);
             portalConfigService = (PortalConfigService) getPortletConfig().getContext().getService(PortalConfigService.class);
             canUserCreateAccount = portalConfigService.getPortalConfigSettings().getCanUserCreateAccount();
+            loginService = (LoginService)getPortletConfig().getContext().getService(LoginService.class);
         } catch (PortletServiceException e) {
             throw new UnavailableException("Unable to initialize services");
         }
@@ -91,7 +92,6 @@ public class LoginPortlet extends ActionPortlet {
         request.setAttribute("user", user);
 
         //CheckBoxBean cb = event.getCheckBoxBean("remloginCB");
-
 
         if (user instanceof GuestUser) {
             if (canUserCreateAccount) request.setAttribute("canUserCreateAcct", "true");
@@ -319,6 +319,8 @@ public class LoginPortlet extends ActionPortlet {
         TextFieldBean mailSenderTF = event.getTextFieldBean("mailFromTF");
         mailSenderTF.setValue(settings.getAttribute(MailService.MAIL_SENDER));
 
+        List authModules = loginService.getAuthModules();
+        req.setAttribute("authModules", authModules);
         setNextState(req, DO_CONFIGURE);
     }
 
@@ -450,6 +452,27 @@ public class LoginPortlet extends ActionPortlet {
 
     }
 
+    public void doSaveAuthModules(FormEvent event) {
+
+        PortletRequest req = event.getPortletRequest();
+        CheckBoxBean cb = event.getCheckBoxBean("authModCB");
+
+        List values = cb.getSelectedValues();
+
+        Iterator it = values.iterator();
+        while (it.hasNext()) {
+            String val = (String)it.next();
+
+            LoginAuthModule authMod = loginService.getAuthModule(val);
+            if (authMod != null) {            
+            if (req.getParameter(val) != null) {
+
+            }
+            }
+
+        }
+
+    }
 
     public void doSavePass(FormEvent event) {
 

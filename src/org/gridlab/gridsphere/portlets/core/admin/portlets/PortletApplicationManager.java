@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
+import org.gridlab.gridsphere.layout.PortletTabRegistry;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
@@ -102,6 +103,8 @@ public class PortletApplicationManager extends ActionPortlet {
                 } else if (operation.equals("remove")) {
                     portletManager.destroyPortletWebApplication(appName, req, res);
                     result = tomcat.removeWebApp(req, appName);
+                    log.debug("removing application tab :" + appName);
+                    PortletTabRegistry.removeGroupTab(appName);                   
                     this.createSuccessMessage(event, this.getLocalizedText(req, "PORTLET_SUC_TOMCAT"));
                 } else if (operation.equals("deploy")) {
                     result = tomcat.deployWebApp(req, appName);

@@ -73,6 +73,14 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         return (LoginAuthModule)authModules.get(moduleClassName);
     }
 
+    public List getAuthModules() {
+        List vals = new ArrayList();
+        Iterator it = authModules.values().iterator();
+        while (it.hasNext()) {
+            vals.add(it.next());
+        }
+        return vals;
+    }
     public boolean hasActiveAuthModule(User user, String moduleClassName) {
         AuthModuleEntry authMod = null;
         try {

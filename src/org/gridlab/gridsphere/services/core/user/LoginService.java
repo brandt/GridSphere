@@ -35,6 +35,8 @@ public interface LoginService extends PortletService {
 
     public boolean hasActiveAuthModule(User user, String moduleClassName);
 
+    public List getAuthModules();
+
     public LoginAuthModule getAuthModule(String moduleClassName);
     
     public LoginUserModule getActiveLoginModule();

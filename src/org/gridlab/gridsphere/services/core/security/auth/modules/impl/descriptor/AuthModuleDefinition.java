@@ -17,6 +17,7 @@ import java.util.*;
 public class AuthModuleDefinition {
 
     protected AuthModulesDescriptor authDescriptor = null;
+    private String oid = null;
     protected String moduleName = "";
     protected String moduleDescription = "";
     protected int priority = 100;
@@ -26,6 +27,14 @@ public class AuthModuleDefinition {
     protected List configParamList = new Vector();
     protected Map attributes = new HashMap();
     protected Properties configProps = null;
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
 
 
     /**
