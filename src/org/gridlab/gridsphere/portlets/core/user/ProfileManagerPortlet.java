@@ -535,15 +535,6 @@ public class ProfileManagerPortlet extends ActionPortlet {
         if (timeZone!=null) acctReq.setAttribute(User.TIMEZONE, timeZone);
         if (organization != null) acctReq.setOrganization(organization);
 
-
-        // Save password parameters if password was altered
-        /*
-        String passwordValue = event.getPasswordBean("password").getValue();
-        if (passwordValue.length() > 0) {
-            acctReq.setPasswordValue(passwordValue);
-        }
-        */
-
         log.debug("Exiting validateUser()");
         return acctReq;
     }
