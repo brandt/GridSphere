@@ -3,13 +3,27 @@ $Id$
 	Building the GridSphere Distribution
 =======================================================
 
+
+Requirements
+------------
 0)    Building the GridSphere distribution requires Ant available at 
-http://jakarta.apache.org/ant. In addition, make sure the $ANT_HOME/lib directory contains junit.jar used for testing and xalan.jar used to construct the documentation from the XSL style sheets. Both junit.jar and xalan.jar are found in the lib directory. 
+http://jakarta.apache.org/ant. In addition, make sure the $ANT_HOME/lib directory contains junit.jar used for testing
+and xalan.jar used to construct the documentation from the XSL style sheets. Both junit.jar and xalan.jar are found in
+the lib directory.
 
-0) (Optional) If you wish to build PDF formats of the documentation
-download a FOP binary from http://xml.apache.org/fop/download.html and unpack it and set FOP_HOME to the top level FOP directory (just like ANT).
+1) You will also need a Tomcat 4.1+ servlet container available at http://jakarta.apache.org/tomcat. In addition to
+providing a hosting environment for GridSphere, Tomcat provides some of the required XML Jars that are needed for
+compilation.
 
-1)    The Ant build script, build.xml, uses the build.properties file to specify any compilation options. Edit build.properties appropriately for your needs.
+2) (Optional) If you wish to build PDF formats of the documentation download a FOP binary from
+http://xml.apache.org/fop/download.html and unpack it and set FOP_HOME to the top level FOP
+directory (just like ANT).
+
+Compiling and Deploying
+-----------------------
+
+    The Ant build script, build.xml, uses the build.properties file to specify any compilation options. Edit
+    build.properties appropriately for your needs.
 
 At this point, simply invoking "ant dist" will create the GridSphere distribution.  
 
