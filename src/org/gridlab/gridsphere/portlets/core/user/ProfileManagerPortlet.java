@@ -128,7 +128,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
         //String logintime = DateFormat.getDateTimeInstance().format(new Date(user.getLastLoginTime()));
         req.setAttribute("logintime", DateUtil.getLocalizedDate(user,
-                (Locale)session.getAttribute(User.LOCALE),
+                req.getLocale(),
                 user.getLastLoginTime(), DateFormat.FULL, DateFormat.FULL));
         req.setAttribute("username", user.getUserName());
 
