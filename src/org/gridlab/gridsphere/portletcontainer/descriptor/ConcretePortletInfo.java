@@ -19,8 +19,10 @@ public class ConcretePortletInfo {
     private List languageList = new Vector();
     private String name = new String();
     private String Description = new String();
+    private Owner owner = new Owner();
     private List groupList = new Vector();
     private List roleList = new Vector();
+    private Vector configParamList = new Vector();
 
     /**
      * gets the href of a PortletInfo
@@ -95,6 +97,24 @@ public class ConcretePortletInfo {
     }
 
     /**
+     * Returns the Owner defining who has authorization to configure this portlet
+     *
+     * @return owner the Owner defining who has authorization to configure this portlet
+     */
+    public Owner getOwner() {
+        return owner;
+    }
+
+    /**
+     * Sets the Owner defining who has authorization to configure this portlet
+     *
+     * @param owner the Owner defining who has authorization to configure this portlet
+     */
+    public void setOwner(Owner owner) {
+        this.owner = owner;
+    }
+
+    /**
      * Returns the List of groups allowed access to this portlet
      *
      * @return vector of groups allowed access to this portlet
@@ -128,6 +148,24 @@ public class ConcretePortletInfo {
      */
     public void setRoleList(Vector roleList) {
         this.roleList = roleList;
+    }
+
+    /**
+     * Returns the configuration parameters of the portlet
+     *
+     * @returns the configuration parameters of the portlet
+     */
+    public List getConfigParamList() {
+        return configParamList;
+    }
+
+    /**
+     * Sets the configuration parameters of the portlet
+     *
+     * @param the configuration parameters of the portlet
+     */
+    public void setConfigParamList(Vector configParamList) {
+        this.configParamList = configParamList;
     }
 
 }

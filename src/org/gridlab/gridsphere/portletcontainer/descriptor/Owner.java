@@ -5,11 +5,12 @@
 
 package org.gridlab.gridsphere.portletcontainer.descriptor;
 
-public class Group {
+public class Owner {
 
     private String GroupName = "";
+    private String roleName = "";
 
-    public Group() {}
+    public Owner() {}
 
     /**
      * gets the group name
@@ -27,6 +28,24 @@ public class Group {
      */
     public void setGroupName(String GroupName) {
         this.GroupName = GroupName;
+    }
+
+    /**
+     * Returns the role name
+     *
+     * @returns the role name
+     */
+    public String getRoleName() {
+        return roleName;
+    }
+
+    /**
+     * Sets the role name
+     *
+     * @param roleName the role name
+     */
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
 }

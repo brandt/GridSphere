@@ -10,6 +10,13 @@ public class ConfigParam {
     private String ParamName = "";
     private String ParamValue = "";
 
+    public ConfigParam() {}
+
+    public ConfigParam(String ParamName, String ParamValue) {
+        ParamName = this.ParamName;
+        ParamValue = this.ParamValue;
+    }
+
     /**
      * Returns the parameter name
      *

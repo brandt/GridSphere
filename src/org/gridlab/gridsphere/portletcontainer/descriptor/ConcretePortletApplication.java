@@ -13,7 +13,7 @@ public class ConcretePortletApplication {
 
     private String uid = new String();
     private String name = new String();
-    private List configParamList = new Vector();
+    private List contextParamList = new Vector();
     private ConcretePortletInfo portletInfo = new ConcretePortletInfo();
 
     public ConcretePortletApplication() {}
@@ -59,8 +59,8 @@ public class ConcretePortletApplication {
      *
      * @returns description of the portlet
      */
-    public List getConfigParamList() {
-        return configParamList;
+    public List getContextParamList() {
+        return contextParamList;
     }
 
     /**
@@ -68,8 +68,8 @@ public class ConcretePortletApplication {
      *
      * @param description the description of the portlet
      */
-    public void setConfigParamList(Vector configParamList) {
-        this.configParamList = configParamList;
+    public void setContextParamList(Vector contextParamList) {
+        this.contextParamList = contextParamList;
     }
 
     /**
