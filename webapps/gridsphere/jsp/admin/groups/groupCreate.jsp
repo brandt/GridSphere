@@ -7,6 +7,7 @@
 <% boolean isPublic = ((request.getAttribute("isPrivate") != null) ? false : true); %>
 
 <ui:form>
+<ui:hiddenfield beanId="groupId"/>
 
 <h3>Group information</h3>
 <ui:text value="Enter group name:"/>&nbsp;&nbsp;<ui:textfield beanId="groupNameTF"/>
@@ -19,14 +20,14 @@
 <ui:text value="Select if group should be public or private. Anyone can add themselves to a public group, while private groups require authorization"/>
 <p>
 <% if (isPublic) { %>
-    <ui:radiobutton name="groupVisibility" value="PUBLIC" selected="true"/>
+    <ui:radiobutton beanId="groupVisibility" value="PUBLIC" selected="true"/>
     <ui:text value="PUBLIC"/>
-    <ui:radiobutton name="groupVisibility" value="PRIVATE"/>
+    <ui:radiobutton beanId="groupVisibility" value="PRIVATE"/>
     <ui:text value="PRIVATE"/>
 <% } else { %>
-    <ui:radiobutton name="groupVisibility" value="PUBLIC"/>
+    <ui:radiobutton beanId="groupVisibility" value="PUBLIC"/>
     <ui:text value="PUBLIC"/>
-    <ui:radiobutton name="groupVisibility" value="PRIVATE" selected="true"/>
+    <ui:radiobutton beanId="groupVisibility" value="PRIVATE" selected="true"/>
     <ui:text value="PRIVATE"/>
 <% } %>
 
