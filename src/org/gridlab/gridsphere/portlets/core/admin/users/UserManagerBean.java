@@ -343,12 +343,14 @@ public class UserManagerBean extends ActionEventHandler {
             userRoles.add("User Role", "USER", false);
         }
         // Guest role
+        /*
         if (selectedRole.isGuest()) {
             this.log.debug("Setting guest role");
             userRoles.add("Guest Role", "GUEST", true);
         } else {
             userRoles.add("Guest Role", "GUEST", false);
         }
+        */
         return userRoles;
     }
 
