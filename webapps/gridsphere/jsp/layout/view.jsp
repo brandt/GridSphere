@@ -10,15 +10,18 @@
 
 <ui:messagebox beanId="msg"/>
 
-<ui:form>
+
 
 <h3><ui:text key="LAYOUT_THEME" style="nostyle"/></h3>
 <ui:group>
+<ui:form>
 <ui:text key="LAYOUT_SELECT_THEME"/>&nbsp;<ui:listbox beanId="themeLB"/> <ui:actionsubmit action="saveTheme" key="SAVE"/>
+</ui:form>
 </ui:group>
 
 <h3><ui:text key="LAYOUT_NEW_TAB" style="nostyle"/></h3>
 <ui:group>
+<ui:form>
 <ui:text key="LAYOUT_TAB_NAME"/>&nbsp;&nbsp;<ui:textfield beanId="userTabTF"/>
 <p>
 
@@ -27,7 +30,9 @@
 <ui:radiobutton beanId="colsRB" value="3"/><ui:text key="LAYOUT_THREE_COL"/>
 
 <p>
+
 <ui:actionsubmit action="createNewTab" key="CREATE"/>
+</ui:form>
 </ui:group>
 
 <% if (tabs.size() > 0) { %>
@@ -50,6 +55,7 @@
         PortletTab tab = (PortletTab)tabs.get(i);
         String title = tab.getTitle(lang);
     %>
+    <ui:form>
     <ui:tablerow>
     <ui:tablecell>        
         <ui:text value="<%= title %>"/>
@@ -66,9 +72,10 @@
         </ui:actionsubmit>
     </ui:tablecell>
     </ui:tablerow>
+    </ui:form>
     <% } %>
 
 </ui:table>
 <% } %>
 
-</ui:form>
+
