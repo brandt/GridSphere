@@ -25,6 +25,7 @@ import java.util.*;
 public class PortletMessageServiceImpl implements PortletMessageService, PortletServiceProvider {
 
     private static PortletLog log = SportletLog.getInstance(PortletMessageServiceImpl.class);
+    private Map messages = new Hashtable();
 
     /**
      * The init method is responsible for parsing portlet.xml and creating ConcretePortlet objects based on the
@@ -56,7 +57,13 @@ public class PortletMessageServiceImpl implements PortletMessageService, Portlet
      * @throws AccessDeniedException if the portlet tries to access this function outside of the event processing
      */
     public void send(String portletName, PortletMessage message) throws AccessDeniedException {
-
+        List l = (List)messages.get(portletName);
+        if (l == null) l = new ArrayList();
+        l.add(message);
+        messages.put(portletName, l);
     }
 
+    public List retrieveMessages(String portletName) throws AccessDeniedException {
+        return (List)messages.get(portletName);
+    }
 }
