@@ -6,12 +6,14 @@
 package org.gridlab.gridsphere.tags.portletui;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ActionSubmitBean;
+import org.gridlab.gridsphere.provider.portletui.beans.ActionParamBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class ActionSubmitTag extends ActionTag {
 
@@ -36,6 +38,7 @@ public class ActionSubmitTag extends ActionTag {
         paramBeans = new ArrayList();
 
         actionSubmitBean.setName(createActionURI());
+
         if (!key.equals("")) {
             actionSubmitBean.setKey(key);
             Locale locale = pageContext.getRequest().getLocale();
@@ -66,6 +69,36 @@ public class ActionSubmitTag extends ActionTag {
                 throw new JspException(e.getMessage());
             }
         }
-        return SKIP_BODY;
+
+        return EVAL_BODY_INCLUDE;
     }
+
+    public int doEndTag() throws JspException {
+
+        Iterator it = paramBeans.iterator();
+        while (it.hasNext()) {
+            ActionParamBean pbean = (ActionParamBean)it.next();
+            portletAction.addParameter(pbean.getName(), pbean.getValue());
+        }
+
+        String actionURI = createActionURI();
+
+        actionSubmitBean.setName(actionURI);
+
+        actionSubmitBean.setAction(portletAction.toString());
+
+        if ((bodyContent != null) && (value == null)) {
+            actionSubmitBean.setValue(bodyContent.getString());
+        }
+
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(actionSubmitBean.toEndString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
+        }
+
+        return EVAL_PAGE;
+    }
+
 }
