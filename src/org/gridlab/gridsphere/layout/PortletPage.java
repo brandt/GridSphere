@@ -370,13 +370,14 @@ public class PortletPage implements Serializable, Cloneable {
                             if (!(user instanceof GuestUser)) {
                                 String portletClass = ((PortletTitleBar)comp).getPortletClass();
                                 boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
+                                System.err.println("hasRole = " + hasrole);
                                 if (!hasrole) {
                                     System.err.println("User " + user + " does not have required role!");
                                     return;
                                 }
                             }
                         }
-                        //System.err.println("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
+                        System.err.println("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
                         comp.actionPerformed(event);
                     }
                 }
@@ -398,10 +399,63 @@ public class PortletPage implements Serializable, Cloneable {
         Client client = req.getClient();
 
         // handle any client logic to determin which markup to display
-
-        doRenderHTML(event);
+    	String markupName=event.getPortletRequest().getClient().getMarkupName();
+    	if (markupName.equals("html")){
+    		doRenderHTML(event);
+    	}
+    	else
+    	{
+    		doRenderWML(event);
+    	}
     }
+    public void doRenderWML(GridSphereEvent event) throws PortletLayoutException, IOException {
 
+        PortletResponse res = event.getPortletResponse();
+       
+        PrintWriter out = null;
+
+        // set content to UTF-8 for il8n
+        //res.setContentType("text/vnd.wap.xhtml");
+        res.setContentType("text/html");
+        try {
+            out = res.getWriter();
+        } catch (IllegalStateException e) {
+            // means the writer has already been obtained
+            return;
+        }
+
+        // page header
+        out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        out.println("<!DOCTYPE html PUBLIC \"-//WAPFORUM//DTD XHTML Mobile 1.0//EN\" \"http://www.wapforum.org/DTD/xhtml-mobile10.dtd\">");
+        out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
+        out.println("  <link type=\"text/css\" href=\"themes/" + theme + "/css" +
+        "/defaultwap.css\" rel=\"stylesheet\"/>");
+        //out.println("\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");        
+		
+        //out.println("<wml>");
+        out.println("<head>");
+
+        out.println("<title>" + title + "</title>");
+        //out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>");
+        //out.println("<meta name=\"keywords\" content=\"" + keywords + "\"/>");
+        //out.println("<meta http-equiv=\"Pragma content=\"no-cache\"/>");
+        //out.println("  <link type=\"text/css\" href=\"themes/" + theme + "/css" +
+        //        "/default.css\" rel=\"stylesheet\"/>");
+        //out.println("<link rel=\"icon\" href=\"images/favicon.ico\" type=\"imge/x-icon\">");
+        //out.println("<link rel=\"shortcut icon\" href=\"images/favicon.ico\" type=\"image/x-icon\">");       
+        out.println("</head><body>");
+
+        // A Portal page in 3 lines -- voila!
+        //  -------- header ---------
+        //if (headerContainer != null) headerContainer.doRender(event);
+        // ..| tabs | here |....
+        if (tabbedPane != null) tabbedPane.doRender(event);
+        //.... the footer ..........
+        if (footerContainer != null) footerContainer.doRender(event);
+
+        out.println("</body></html>");
+      
+    }
     public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
 
         PortletResponse res = event.getPortletResponse();
