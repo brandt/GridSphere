@@ -4,14 +4,11 @@
         <portlet-tab>
             <title>ASC</title>
             <portlet-panel>
-                <flow-layout>
-                <align>1</align>
-                    <hgap>1</hgap>
-                    <vgap>1</vgap>
+                <grid-layout>
                     <portlet-frame>
                         <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.624.2</portlet-class>
                     </portlet-frame>
-                </flow-layout>
+                </grid-layout>
             </portlet-panel>
         </portlet-tab>
     </portlet-tabbed-pane>
