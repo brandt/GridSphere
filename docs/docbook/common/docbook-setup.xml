@@ -10,7 +10,7 @@ This script was initially provided by the Tapestry project
 http://jakarta.apache.org/proposals/tapestry
 -->
 
-<property file="../../../config/build.properties"/>
+<property file="../../../build.properties"/>
 
 
 <property name="docs.dir" value="../../../build/docs"/>
