@@ -2,11 +2,11 @@
 
 <!--
 
-    Template Layout Descriptor
+Template Layout Descriptor
 
-    This descriptor defines the template user's portal layout configuration
+This descriptor defines the template user's portal layout configuration
 
-    $Id$
+$Id$
 -->
 
 <page-layout theme="default" title="GridSphere Portal" keywords="gridsphere">
@@ -26,8 +26,19 @@
         </table-layout>
     </portlet-header>
 
-<portlet-tabbed-pane selected="0" style="menu">
+    <portlet-tabbed-pane selected="0" style="menu">
 
-</portlet-tabbed-pane>
+    </portlet-tabbed-pane>
+
+    <!-- Footer components (if any) -->
+    <portlet-footer>
+        <table-layout style="footer">
+            <row-layout>
+                <column-layout>
+                    <portlet-content include="/html/pagefooter.html"/>
+                </column-layout>
+            </row-layout>
+        </table-layout>
+    </portlet-footer>
 
 </page-layout>
