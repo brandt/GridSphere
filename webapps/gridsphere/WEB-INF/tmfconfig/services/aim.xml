@@ -19,4 +19,9 @@
         <key>Password</key>
         <value></value>
     </param>
+    <param>
+        <key>NeedRestart</key>
+        <value>true</value>
+    </param>
+
 </tfmservice>

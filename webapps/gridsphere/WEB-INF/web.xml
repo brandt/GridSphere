@@ -98,8 +98,8 @@
     </servlet>
 
     <servlet>
-        <servlet-name>SubscriptionPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.subscription.SubscriptionPortlet</servlet-class>
+        <servlet-name>MessagingServicesPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.messaging.MessagingServicesPortlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -182,13 +182,13 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>SubscriptionPortlet</servlet-name>
-        <url-pattern>/subscription</url-pattern>
+        <servlet-name>LocalePortlet</servlet-name>
+        <url-pattern>/locale</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>LocalePortlet</servlet-name>
-        <url-pattern>/locale</url-pattern>
+        <servlet-name>MessagingServicesPortlet</servlet-name>
+        <url-pattern>/admin/messagingservice</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

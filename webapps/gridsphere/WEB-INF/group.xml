@@ -43,4 +43,8 @@
         <portlet-class>org.gridlab.gridsphere.portlets.core.locale.LocalePortlet.1</portlet-class>
         <required-role>GUEST</required-role>
     </portlet-role-info>
+    <portlet-role-info>
+        <portlet-class>org.gridlab.gridsphere.portlets.core.messaging.MessagingServicesPortlet.1</portlet-class>
+        <required-role>SUPER</required-role>
+    </portlet-role-info>
 </portlet-group>

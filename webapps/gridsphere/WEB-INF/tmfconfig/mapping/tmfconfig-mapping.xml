@@ -29,7 +29,7 @@
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.tmf.config.ServiceConfig">
+    <class name="org.gridlab.gridsphere.tmf.config.TmfServiceConfig">
         <map-to xml="tfmservice"/>
         <field name="Name" type="string">
             <bind-xml name="name"/>
@@ -42,6 +42,9 @@
         </field>
         <field name="Description" type="string">
             <bind-xml name="description"/>
+        </field>
+        <field name="NeedRestart" type="boolean">
+            <bind-xml name="needrestart"/>
         </field>
         <field name="Params" collection="arraylist" type="org.gridlab.gridsphere.tmf.config.ConfigParameter">
             <bind-xml name="params"/>

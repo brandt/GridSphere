@@ -134,6 +134,19 @@
                     </row-layout>
                 </table-layout>
             </portlet-tab>
+            <portlet-tab label="messagingservicestab" required-role="ADMIN">
+                <title lang="en">Messagingservices</title>
+                <title lang="de">Textnachrichtendienste</title>
+                <table-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="messagingservice">
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.messaging.MessagingServicesPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
+                </table-layout>
+            </portlet-tab>
         </portlet-tabbed-pane>
     </portlet-tab>
 </portlet-tabbed-pane>

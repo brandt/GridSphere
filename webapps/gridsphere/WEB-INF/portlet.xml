@@ -525,5 +525,47 @@
         </concrete-portlet-app>
     </portlet-app-def>
 
+    <portlet-app-def>
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.messaging.MessagingServicesPortlet">
+            <portlet-name>MessagingServicesPortlet</portlet-name>
+            <servlet-name>MessagingServicesPortlet</servlet-name>
+            <allows>
+                <minimized/>
+                <maximized/>
+                <resizing/>
+            </allows>
+            <supports>
+                <markup name="html">
+                    <view/>
+                    <help/>
+                </markup>
+            </supports>
+        </portlet-app>
+
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.messaging.MessagingServicesPortlet.1">
+            <concrete-portlet>
+                <portlet-name>MessagingServicesPortlet</portlet-name>
+                <default-locale>en</default-locale>
+                <language locale="en">
+                    <title>Configure MessagingServices</title>
+                    <title-short>Messaging Services</title-short>
+                    <description>Portlet provides configuration of messaging services capabilities</description>
+                    <keywords>portlet messaging services</keywords>
+                </language>
+                <language locale="de">
+                    <title>Textnachrichtendienste konfigurieren</title>
+                    <title-short>Textnachrichtendienste</title-short>
+                    <description>Ermöglicht das Konfigurieren der Textnachrichtendienste</description>
+                    <keywords>textnachrichtendienst </keywords>
+                </language>
+            </concrete-portlet>
+        </concrete-portlet-app>
+    </portlet-app-def>
+
+
+
+
+
+
 </portlet-app-collection>
 
