@@ -176,5 +176,9 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
         }
 
     }
+
+    public List getAllRoles() {
+        return null;
+    }
 }
 
