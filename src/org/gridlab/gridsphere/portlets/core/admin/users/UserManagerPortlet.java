@@ -49,14 +49,14 @@ public class UserManagerPortlet extends ActionPortlet {
         }
         this.log.debug("Exiting initServices()");
 
-        DEFAULT_VIEW_PAGE = "doViewListUser";
+        DEFAULT_VIEW_PAGE = "doListUsers";
     }
 
     public void initConcrete(PortletSettings settings) throws UnavailableException {
         super.initConcrete(settings);
     }
 
-    public void doViewListUser(FormEvent evt)
+    public void doListUsers(FormEvent evt)
             throws PortletException {
         PortletRequest req = evt.getPortletRequest();
         List userList = this.userManagerService.getUsers();
@@ -65,10 +65,18 @@ public class UserManagerPortlet extends ActionPortlet {
         setNextState(req, DO_VIEW_USER_LIST);
     }
 
-    public void doViewViewUser(FormEvent evt)
+    public void doViewUser(FormEvent evt)
             throws PortletException {
         PortletRequest req = evt.getPortletRequest();
-        User user = loadUser(evt);
+
+
+        String userID = evt.getAction().getParameter("userID");
+        if (userID == null) {
+
+        }
+        User user = this.userManagerService.getUser(userID);
+
+
         req.setAttribute("user", user);
         HiddenFieldBean hf = evt.getHiddenFieldBean("userID");
         hf.setValue(user.getID());
@@ -78,28 +86,60 @@ public class UserManagerPortlet extends ActionPortlet {
         setNextState(req, DO_VIEW_USER_VIEW);
     }
 
-    public void doViewNewUser(FormEvent evt)
+    public void doNewUser(FormEvent evt)
             throws PortletException {
         PortletRequest req = evt.getPortletRequest();
+
+        // indicate to edit JSP this is a new user
+        HiddenFieldBean hf = evt.getHiddenFieldBean("newuser");
+        hf.setValue("true");
+
         setNextTitle(req, "User Account Manager [New User]");
         setNextState(req, DO_VIEW_USER_EDIT);
         log.debug("in doViewNewUser");
     }
 
-    public void doViewEditUser(FormEvent evt)
+    public void doEditUser(FormEvent evt)
             throws PortletException {
         PortletRequest req = evt.getPortletRequest();
+
+        // indicate to edit JSP this is an existing user
+        HiddenFieldBean newuserHF = evt.getHiddenFieldBean("newuser");
+        newuserHF.setValue("false");
+
+        // load in User values
+        HiddenFieldBean userHF = evt.getHiddenFieldBean("userID");
+        String userID = userHF.getValue();
+
+        // get user
+        User user = this.userManagerService.getUser(userID);
+        if (user == null) doNewUser(evt);
+
+        setUserValues(evt, user);
+
         setNextTitle(req, "User Account Manager [Edit User]");
         setNextState(req, DO_VIEW_USER_EDIT);
     }
 
-    public void doViewConfirmEditUser(FormEvent evt)
+    public void doConfirmEditUser(FormEvent evt)
             throws PortletException {
         PortletRequest req = evt.getPortletRequest();
         //User user = loadUser(evt);
         try {
             validateUser(evt);
-            User user = saveUser(evt);
+            User user = null;
+            HiddenFieldBean hf = evt.getHiddenFieldBean("newuser");
+            String newuser = hf.getValue();
+
+            if (newuser.equals("true")) {
+                user = saveUser(evt, null);
+            } else {
+                // load in User values
+                HiddenFieldBean userHF = evt.getHiddenFieldBean("userID");
+                String userID = userHF.getValue();
+                User thisuser = this.userManagerService.getUser(userID);
+                user = saveUser(evt, thisuser);
+            }
             req.setAttribute("user", user);
             PortletRole role = aclManagerService.getRoleInGroup(user, PortletGroupFactory.GRIDSPHERE_GROUP);
             req.setAttribute("role", role.toString());
@@ -113,12 +153,12 @@ public class UserManagerPortlet extends ActionPortlet {
         }
     }
 
-    public void doViewCancelEditUser(FormEvent evt)
+    public void doCancelEditUser(FormEvent evt)
             throws PortletException {
-        doViewListUser(evt);
+        doListUsers(evt);
     }
 
-    public void doViewDeleteUser(FormEvent evt)
+    public void doDeleteUser(FormEvent evt)
             throws PortletException {
         PortletRequest req = evt.getPortletRequest();
         HiddenFieldBean hf = evt.getHiddenFieldBean("userID");
@@ -131,7 +171,7 @@ public class UserManagerPortlet extends ActionPortlet {
         setNextState(req, DO_VIEW_USER_DELETE);
     }
 
-    public void doViewConfirmDeleteUser(FormEvent evt)
+    public void doConfirmDeleteUser(FormEvent evt)
             throws PortletException {
         PortletRequest req = evt.getPortletRequest();
         HiddenFieldBean hf = evt.getHiddenFieldBean("userID");
@@ -145,25 +185,21 @@ public class UserManagerPortlet extends ActionPortlet {
         setNextState(req, DO_VIEW_USER_DELETE_CONFIRM);
     }
 
-    public void doViewCancelDeleteUser(FormEvent evt)
+    public void doCancelDeleteUser(FormEvent evt)
             throws PortletException {
-        doViewListUser(evt);
+        doListUsers(evt);
     }
 
-    private User loadUser(FormEvent event) {
-        log.debug("Entering loadUser()");
-        String userID = event.getAction().getParameter("userID");
-        User user = this.userManagerService.getUser(userID);
+    private void setUserValues(FormEvent event, User user) {
+        event.getTextFieldBean("userName").setValue(user.getUserName());
         event.getTextFieldBean("familyName").setValue(user.getFamilyName());
         event.getTextFieldBean("givenName").setValue(user.getGivenName());
-        event.getTextFieldBean("familyName").setValue(user.getFamilyName());
+        event.getTextFieldBean("fullName").setValue(user.getFullName());
         event.getTextFieldBean("emailAddress").setValue(user.getEmailAddress());
         event.getTextFieldBean("organization").setValue(user.getOrganization());
         Password pwd = this.passwordManagerService.getPassword(user);
         event.getPasswordBean("password").setValue(pwd.getValue());
-        log.debug("Loading user with id " + userID);
-        log.debug("Exiting loadUser()");
-        return user;
+        event.getPasswordBean("confirmPassword").setValue(pwd.getValue());
     }
 
     private void validateUser(FormEvent event)
@@ -228,14 +264,19 @@ public class UserManagerPortlet extends ActionPortlet {
         return false;
     }
 
-    private User saveUser(FormEvent event)
+    private User saveUser(FormEvent event, User user)
             throws PortletException {
         log.debug("Entering saveUser()");
         // Account request
         AccountRequest accountRequest = null;
 
         // Create edit account request
-        accountRequest = this.userManagerService.createAccountRequest();
+        if (user == null) {
+            accountRequest = this.userManagerService.createAccountRequest();
+        } else {
+            System.err.println("Creating account request for existing user");
+            accountRequest = this.userManagerService.createAccountRequest(user);
+        }
 
         // Edit account attributes
         editAccountRequest(event, accountRequest);
