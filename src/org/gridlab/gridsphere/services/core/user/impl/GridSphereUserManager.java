@@ -27,10 +27,7 @@ import org.gridlab.gridsphere.services.core.user.AccountRequest;
 import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
-import java.util.Calendar;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 public class GridSphereUserManager implements UserManagerService, AccessControlManagerService {
 
@@ -440,7 +437,6 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
                    + " user "
                    + criteria;
         try {
-            System.out.println("\n\n\n\n GET USERS with "+oql+"\n\n\n\n");
             return pm.restoreList(oql);
         } catch (PersistenceManagerException e) {
             String msg = "Error retrieving users with criteria " + criteria;
@@ -459,9 +455,16 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
 
     public User getLoggedInUser(String loginName) {
         SportletUserImpl user = getSportletUserImplByLoginName(loginName);
-        if (user!=null) {
+        if (user != null) {
             long now = Calendar.getInstance().getTime().getTime();
-            user.setLastLoginTime(now);
+            String lastlogin = (String)user.getAttribute("lastlogin");
+            if (lastlogin != null) {
+                long lastl = Long.parseLong(lastlogin);
+                user.setLastLoginTime(lastl);
+            }  else {
+                user.setLastLoginTime(now);
+            }
+            user.setAttribute("lastlogin", new Long(now).toString());
             saveSportletUserImpl(user);
         }
         return user;
@@ -510,6 +513,12 @@ public class GridSphereUserManager implements UserManagerService, AccessControlM
         user.setFullName(request.getFullName());
         user.setOrganization(request.getOrganization());
         user.setEmailAddress(request.getEmailAddress());
+        Enumeration enum = request.getAttributeNames();
+        while (enum.hasMoreElements()) {
+            String attrName = (String)enum.nextElement();
+            String attrVal = (String)request.getAttribute(attrName);
+            user.setAttribute(attrName, attrVal);
+        }
         return user;
     }
 

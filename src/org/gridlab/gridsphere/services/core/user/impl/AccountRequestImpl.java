@@ -17,8 +17,7 @@ import org.gridlab.gridsphere.services.core.security.acl.impl.UserACL;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.user.AccountRequest;
 
-import java.util.Date;
-import java.util.Enumeration;
+import java.util.*;
 
 public class AccountRequestImpl implements AccountRequest {
 
@@ -31,6 +30,7 @@ public class AccountRequestImpl implements AccountRequest {
     private String FullName = "";
     private String EmailAddress = "";
     private String Organization = "";
+    private Map attributes = new HashMap();
 
     // Password bean
     private transient PasswordEditor passwordBean = null;
@@ -213,6 +213,25 @@ public class AccountRequestImpl implements AccountRequest {
         return Organization;
     }
 
+    public Map getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map attributes) {
+        this.attributes = attributes;
+    }
+
+    /**
+     * Returns the value of the attribute with the given name,s
+     * or null if no attribute with the given name exists.
+     *
+     * @param name the attribute name
+     * @return the attribute value
+     */
+    public Object getAttribute(String name) {
+        return attributes.get(name);
+    }
+
     /**
      * Sets the value of the attribute with the given name,
      *
@@ -220,18 +239,7 @@ public class AccountRequestImpl implements AccountRequest {
      * @param value the attribute value
      */
     public void setAttribute(String name, String value) {
-
-    }
-
-    /**
-     * Returns the value of the attribute with the given name,
-     * or null if no attribute with the given name exists.
-     *
-     * @param name the attribute name
-     * @return the attribute value
-     */
-    public Object getAttribute(String name) {
-        return null;
+        attributes.put(name, value);
     }
 
     /**
@@ -241,7 +249,17 @@ public class AccountRequestImpl implements AccountRequest {
      * @return an enumeration of attribute names
      */
     public Enumeration getAttributeNames() {
-        return null;
+        return new Hashtable(attributes).keys();
+    }
+
+    /**
+     * Returns an enumeration of names of all attributes available to this request.
+     * This method returns an empty enumeration if the request has no attributes available to it.
+     *
+     * @return an enumeration of attribute names
+     */
+    public Enumeration getAttributeValues() {
+        return new Hashtable(attributes).elements();
     }
 
     /**

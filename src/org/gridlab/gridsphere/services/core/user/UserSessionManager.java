@@ -15,7 +15,6 @@ public class UserSessionManager implements PortletSessionListener {
     private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
     private static UserSessionManager instance  = new UserSessionManager();
     private PortletLog log = SportletLog.getInstance(UserSessionManager.class);
-
     private Map userSessions = new Hashtable();
 
     private UserSessionManager() {
@@ -93,6 +92,7 @@ public class UserSessionManager implements PortletSessionListener {
             if (sessions.contains(session)) {
                 log.debug("Logging out user: " +  uid + " session: " + session.getId());
                 sessions.remove(session);
+                //userManagerService.logoffUser(uid);
             }
         }
         dumpSessions();
