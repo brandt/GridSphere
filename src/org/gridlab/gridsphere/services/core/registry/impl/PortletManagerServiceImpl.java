@@ -26,6 +26,7 @@ import java.util.List;
 public class PortletManagerServiceImpl implements PortletManagerService, PortletServiceProvider {
 
     private static PortletLog log = SportletLog.getInstance(PortletManagerServiceImpl.class);
+    private static boolean isManagerInited = false;
     private PortletManager portletManager = PortletManager.getInstance();
     private PortletServiceAuthorizer authorizer = null;
 
@@ -45,7 +46,10 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.debug("in init()");
-        portletManager.init(config);
+        if (!isManagerInited) {
+            portletManager.init(config);
+            isManagerInited = true;
+        }
     }
 
     public void destroy() {

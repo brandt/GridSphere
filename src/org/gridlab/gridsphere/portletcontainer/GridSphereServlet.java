@@ -180,6 +180,11 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             try {
                 User user = loginService.login(username, password);
                 session.setAttribute(GridSphereProperties.USER, user);
+                if (aclService.hasSuperRole(user)) {
+                    log.debug("User: " + user.getUserName() + " logged in as SUPER");
+                    req.setAttribute(GridSphereProperties.PORTLETROLE, PortletRole.SUPER);
+                }
+
             } catch (AuthenticationException err) {
                 if(log.isDebugEnabled()) log.debug(err.getMessage());
                 req.setAttribute(LOGIN_ERROR_FLAG, LOGIN_ERROR_UNKNOWN);

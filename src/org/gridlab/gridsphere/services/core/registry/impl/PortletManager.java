@@ -34,11 +34,10 @@ public class PortletManager implements PortletManagerService {
     private static PortletManager instance = new PortletManager();
     private ServletContext context = null;
     private boolean isInitialized = false;
-    private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
     private PortletRegistry registry = PortletRegistry.getInstance();
 
     // A multi-valued hashtable with a webapp key and a List value containing portletAppID's
-    private Map webapps = new Hashtable();
+    private List webapps = new Vector();
     //private UserPortletManager userPortletManager = UserPortletManager.getDefault();
 
     /**
@@ -61,7 +60,7 @@ public class PortletManager implements PortletManagerService {
      * @param config the <code>PortletServiceConfig</code>
      * @throws PortletServiceUnavailableException if initialization fails
      */
-    public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
+    public synchronized void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.debug("in init()");
         if (!isInitialized) {
             context = config.getServletConfig().getServletContext();
@@ -104,51 +103,53 @@ public class PortletManager implements PortletManagerService {
             log.debug("Adding application portlet: " + appPortlet.getApplicationPortletID());
             registry.addApplicationPortlet(appPortlet);
         }
-        webapps.put(webApplicationName, portletWebApp);
+        webapps.add(portletWebApp);
     }
 
-    public void removePortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) {
-        List webappsList = (List) webapps.get(webApplicationName);
-        if (webappsList != null) {
-            Iterator it = webappsList.iterator();
-            while (it.hasNext()) {
-                ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
-                registry.removeApplicationPortlet((String) appPortlet.getApplicationPortletID());
-            }
-            webapps.remove(webApplicationName);
+    public synchronized void removePortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) {
+        Iterator it = webapps.iterator();
+        while (it.hasNext()) {
+            PortletWebApplication webApp = (PortletWebApplication)it.next();
 
-            // Remove default tab from layout engine
-            layoutEngine.removeApplicationTab(webApplicationName);
+            if (webApp.getWebApplicationName().equalsIgnoreCase(webApplicationName)) {
+                webApp.destroy();
+                Collection appPortlets = webApp.getAllApplicationPortlets();
+                Iterator appsit = appPortlets.iterator();
+                while (appsit.hasNext()) {
+                    ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
+                    registry.removeApplicationPortlet(appPortlet.getApplicationPortletID());
+                }
+                webapps.remove(webApplicationName);
+            }
         }
     }
 
-    public void installPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public synchronized void installPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         addWebApp(webApplicationName);
         initPortletWebApplication(webApplicationName, req, res);
     }
 
-    public void initAllPortletWebApplications(PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public synchronized void initAllPortletWebApplications(PortletRequest req, PortletResponse res) throws IOException, PortletException {
         PortletInvoker.initAllPortlets(req, res);
     }
 
-    public void initPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public synchronized void initPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         PortletInvoker.initPortletWebApp(webApplicationName, req, res);
     }
 
-    public void destroyAllPortletWebApplications(PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public synchronized void destroyAllPortletWebApplications(PortletRequest req, PortletResponse res) throws IOException, PortletException {
         PortletInvoker.destroyAllPortlets(req, res);
     }
 
-    public void destroyPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public synchronized void destroyPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         PortletInvoker.destroyPortletWebApp(webApplicationName, req, res);
     }
 
     public List getPortletWebApplicationNames() {
         List l = new ArrayList();
-        Set set = webapps.keySet();
-        Iterator it = set.iterator();
-        while (it.hasNext()) {
-            l.add((String) it.next());
+        for (int i = 0; i < webapps.size(); i++) {
+            PortletWebApplication webapp = (PortletWebApplication)webapps.get(i);
+            l.add(webapp.getWebApplicationName());
         }
         return l;
     }
