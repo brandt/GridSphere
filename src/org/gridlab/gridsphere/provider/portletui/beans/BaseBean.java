@@ -66,7 +66,7 @@ public abstract class BaseBean implements TagBean {
     }
 
     public void store() {
-        System.err.println("storing bean " + getBeanKey());
+        //System.err.println("storing bean " + getBeanKey());
         if (request != null) request.setAttribute(getBeanKey(), this);
     }
 

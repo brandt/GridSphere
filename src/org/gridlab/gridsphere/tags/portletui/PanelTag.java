@@ -66,32 +66,20 @@ public class PanelTag extends ContainerTag {
         }
         panelBean.setWidth(width);
         panelBean.setCellSpacing(cellSpacing);
-        //if (panelBean == null)
-        //System.err.println("creating new tablebean");
+
         return EVAL_BODY_INCLUDE;
     }
 
     public int doEndTag() throws JspException {
-        // do all the rendering for this table
-        //System.err.println("in PanelTag:doEndTag");
-        //System.err.println("in PanelTag: # of tags: " + list.size());
         // add all components to pane
         Iterator it = list.iterator();
         while (it.hasNext()) {
             BaseComponentBean bc = (BaseComponentBean)it.next();
-            //System.err.println("adding " + t.toString() + " to panel");
             panelBean.addBean(bc);
         }
 
-        /*
-        if (!beanId.equals("")) {
-            //System.err.println("setting tablemodel in table");
-            store(getBeanKey(), panelBean);
-        }*/
-
         try {
             JspWriter out = pageContext.getOut();
-            //System.err.println("printing table pane " + panelBean.toString());
             out.print(panelBean.toString());
         } catch (Exception e) {
             throw new JspException(e);

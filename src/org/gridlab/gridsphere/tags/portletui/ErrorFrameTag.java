@@ -25,13 +25,9 @@ public class ErrorFrameTag extends TableTag {
     public int doEndTag() throws JspException {
 
         if (!beanId.equals("")) {
-
             tableBean = (ErrorFrameBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (tableBean == null) {
-                System.err.println("1. creating a useless error bean in frame");
                 tableBean = new ErrorFrameBean();
-            } else {
-                System.err.println("2. indeed i have an error bean");
             }
         } else {
             tableBean = new ErrorFrameBean();

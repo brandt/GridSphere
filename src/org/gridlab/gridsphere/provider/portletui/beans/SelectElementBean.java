@@ -43,12 +43,13 @@ public abstract class SelectElementBean extends BaseComponentBean implements Tag
 
     public String toString(String type) {
 
-        String pname = name;
-        if (!beanId.equals("")) {
-            pname = "ui_" + vbName + "_" + beanId + "_" + name;
-        }
 
-        return "<input type='" + type + "' name='" + pname + "' value='" + value + "' " + checkDisabled() + " " + checkSelected("checked") +
+        String pname = (name == null) ? "" : name;
+        String sname = pname;
+        if (!beanId.equals("")) {
+            sname = "ui_" + vbName + "_" + beanId + "_" + pname;
+        }
+        return "<input type='" + type + "' name='" + sname + "' value='" + value + "' " + checkDisabled() + " " + checkSelected("checked") +
                 "/>";
     }
 

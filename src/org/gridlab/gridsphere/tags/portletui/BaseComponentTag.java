@@ -162,16 +162,6 @@ public abstract class BaseComponentTag extends BaseBeanTag   {
         this.cssStyle = style;
     }
 
-    protected void update(BaseComponentBean baseBean) {
-        String name = baseBean.getName();
-        if (!name.equals("")) {
-            String value = pageContext.getRequest().getParameter(name);
-            if (value != null) {
-                baseBean.setValue(value);
-            }
-        }
-    }
-
     protected void setBaseComponentBean(BaseComponentBean componentBean) {
         if (backgroundcolor != null) componentBean.setBackgroundColor(backgroundcolor);
         if (color != null) componentBean.setColor(color);

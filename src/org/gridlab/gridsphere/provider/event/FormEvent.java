@@ -25,6 +25,8 @@ public interface FormEvent extends ActionEvent {
 
     public PasswordBean getPasswordBean(String beanId);
 
+    public TextAreaBean getTextAreaBean(String beanId);
+
     public TextBean getTextBean(String beanId);
 
 

@@ -16,6 +16,7 @@ import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 
@@ -42,6 +43,7 @@ public class NewFormEventImpl implements FormEvent {
             tagBeans = new HashMap();
             createTagBeans(request);
         }
+        printTagBeans();
     }
 
     public NewFormEventImpl(ActionEvent evt) {
@@ -69,64 +71,78 @@ public class NewFormEventImpl implements FormEvent {
     }
 
     public CheckBoxBean getCheckBoxBean(String beanId) {
-        System.err.println("retrieving a bean from tagBeans with name: " + beanId);
-        if (tagBeans.containsKey(beanId)) {
-            System.err.println("found it");
-            return (CheckBoxBean)tagBeans.get(beanId);
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (CheckBoxBean)tagBeans.get(beanKey);
         }
-        System.err.println("did not find it-- creating a new one--");
         CheckBoxBean cb = new CheckBoxBean(request, beanId);
-        tagBeans.put(beanId, cb);
+        tagBeans.put(beanKey, cb);
         return cb;
     }
 
-    public TextFieldBean getTextFieldBean(String name) {
-        if (tagBeans.containsKey(name)) {
-            return (TextFieldBean)tagBeans.get(name);
+    public TextFieldBean getTextFieldBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (TextFieldBean)tagBeans.get(beanKey);
         }
-        TextFieldBean tf = new TextFieldBean(request, name);
-        tagBeans.put(name, tf);
+        TextFieldBean tf = new TextFieldBean(request, beanId);
+        tagBeans.put(beanKey, tf);
         return tf;
     }
 
-    public PasswordBean getPasswordBean(String name) {
-        if (tagBeans.containsKey(name)) {
-            return (PasswordBean)tagBeans.get(name);
+    public PasswordBean getPasswordBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (PasswordBean)tagBeans.get(beanKey);
         }
-        PasswordBean pb = new PasswordBean(request, name);
-        tagBeans.put(name, pb);
+        PasswordBean pb = new PasswordBean(request, beanId);
+        tagBeans.put(beanKey, pb);
         return pb;
     }
 
+    public TextAreaBean getTextAreaBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (TextAreaBean)tagBeans.get(beanKey);
+        }
+        TextAreaBean ta = new TextAreaBean(request, beanId);
+        tagBeans.put(beanKey, ta);
+        return ta;
+    }
+
     public FrameBean getFrameBean(String beanId) {
-        if (tagBeans.containsKey(beanId)) {
-            return (FrameBean)tagBeans.get(beanId);
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (FrameBean)tagBeans.get(beanKey);
         }
         FrameBean fb = new FrameBean(request, beanId);
-        tagBeans.put(beanId, fb);
+        tagBeans.put(beanKey, fb);
         return fb;
     }
 
     public ErrorFrameBean getErrorFrameBean(String beanId) {
-        if (tagBeans.containsKey(beanId)) {
-            return (ErrorFrameBean)tagBeans.get(beanId);
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (ErrorFrameBean)tagBeans.get(beanKey);
         }
         ErrorFrameBean fb = new ErrorFrameBean(request, beanId);
-        tagBeans.put(beanId, fb);
+        tagBeans.put(beanKey, fb);
         return fb;
     }
 
     public TextBean getTextBean(String beanId) {
-        if (tagBeans.containsKey(beanId)) {
-            return (TextBean)tagBeans.get(beanId);
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (TextBean)tagBeans.get(beanKey);
         }
         TextBean tb = new TextBean(request, beanId);
-        tagBeans.put(beanId, tb);
+        tagBeans.put(beanKey, tb);
         return tb;
     }
 
     public TagBean getNewTagBean(String beanId) {
-        return (TagBean)tagBeans.get(beanId);
+        String beanKey = getBeanKey(beanId);
+        return (TagBean)tagBeans.get(beanKey);
     }
 
     /**
@@ -135,20 +151,7 @@ public class NewFormEventImpl implements FormEvent {
      * @return name of the button which was pressed
      */
     public String getSubmitButtonName() {
-        String result = null;
-
-        PortletRequest req = event.getPortletRequest();
-        Enumeration enum = req.getParameterNames();
-        while (enum.hasMoreElements()) {
-            String name = (String) enum.nextElement();
-            if (name.startsWith("gssubmit:")) {
-                String button = req.getParameter(name);
-                if (button != null) {
-                    result = name.substring(9);
-                }
-            }
-        }
-        return result;
+        return null;
     }
 
 
@@ -189,23 +192,32 @@ public class NewFormEventImpl implements FormEvent {
         System.out.println("--------------------\n");
     }
 
+    public void printRequestAttributes() {
+        System.out.println("\n\n show request attributes\n--------------------\n");
+        Enumeration enum = request.getAttributeNames();
+        while (enum.hasMoreElements()) {
+            String name = (String) enum.nextElement();
+            System.out.println("name :" + name);
+        }
+        System.out.println("--------------------\n");
+    }
+
     /**
      * Parses all request parameters for visual beans.
      * A visual bean parameter has the following encoding:
-     * ui_<visual bean element>_name
+     * ui_<visual bean element>_<bean Id>_name
      * where <visual bean element> can be one of the following:
      *
      * tf - TextFieldBean
      * rb - RadioButtonBean
      * cb - CheckBoxBean
      * tb - TextBean
+     * ta - TextAreaBean
      *
      * @param req
      */
     protected void createTagBeans(PortletRequest req) {
         log.debug("in createTagBeans");
-
-
         if (tagBeans == null) tagBeans = new HashMap();
         printRequestParameter();
 
@@ -226,7 +238,7 @@ public class NewFormEventImpl implements FormEvent {
 
             if (idx > 0) {
                 vb = vbname.substring(0, idx);
-                System.out.println("vb type :" + vb);
+                //System.out.println("vb type :" + vb);
             }
 
             vbname = vbname.substring(idx+1);
@@ -234,52 +246,56 @@ public class NewFormEventImpl implements FormEvent {
 
             if (idx > 0) {
                 beanId = vbname.substring(0, idx);
-                System.out.println("beanId :" + beanId);
+                //System.out.println("beanId :" + beanId);
             }
 
             name = vbname.substring(idx+1);
             System.out.println("name :" + name);
 
             String[] vals = request.getParameterValues(uiname);
-            for (int i = 0; i < vals.length; i++) {
+            /*for (int i = 0; i < vals.length; i++) {
                 System.err.println("vals[" + i +"] = " + vals[i]);
-            }
+            }*/
 
+            String beanKey = getBeanKey(beanId);
             if (vb.equals(TextFieldBean.NAME)) {
-                TextFieldBean bean = new TextFieldBean(req, name);
+                log.debug("Creating a textfieldbean bean with id:" + beanId);
+                TextFieldBean bean = new TextFieldBean(req, beanId);
                 bean.setValue(vals[0]);
+                log.debug("setting new value" + vals[0]);
                 bean.setName(name);
-                System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
-                tagBeans.put(beanId, bean);
+                //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
+                tagBeans.put(beanKey, bean);
             } else if (vb.equals(CheckBoxBean.NAME)) {
                 log.debug("Creating a checkbox bean with id:" + beanId);
                 CheckBoxBean bean = new CheckBoxBean(req, beanId);
                 bean.setSelected(true);
                 bean.setValue(vals[0]);
                 bean.setName(name);
-                System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
-                tagBeans.put(beanId, bean);
+                //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
+                tagBeans.put(beanKey, bean);
             } else if (vb.equals(RadioButtonBean.NAME)) {
                 log.debug("Creating a radiobutton bean with id:" + beanId);
                 RadioButtonBean bean = new RadioButtonBean(req, beanId);
                 bean.setSelected(true);
                 bean.setValue(vals[0]);
                 bean.setName(name);
-                System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
-                tagBeans.put(beanId, bean);
+                //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
+                tagBeans.put(beanKey, bean);
             } else if (vb.equals(PasswordBean.NAME)) {
                 log.debug("Creating a passwordbean bean with id:" + beanId);
                 PasswordBean bean = new PasswordBean(req, beanId);
                 bean.setValue(vals[0]);
                 bean.setName(name);
-                System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
-                tagBeans.put(beanId, bean);
+                //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
+                tagBeans.put(beanKey, bean);
             } else if (vb.equals(TextAreaBean.NAME)) {
-                TextAreaBean bean = new TextAreaBean(req, name);
+                log.debug("Creating a textareabean bean with id:" + beanId);
+                TextAreaBean bean = new TextAreaBean(req, beanId);
                 bean.setValue(vals[0]);
                 bean.setName(name);
-                System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
-                tagBeans.put(beanId, bean);
+                //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
+                tagBeans.put(beanKey, bean);
             } else {
                 log.error("unable to find suitable bean type for : " + uiname);
             }
@@ -301,16 +317,33 @@ public class NewFormEventImpl implements FormEvent {
             */
 
         }
+
+        printTagBeans();
+    }
+
+    protected String getBeanKey(String beanId) {
+        String compId = (String)request.getAttribute(SportletProperties.COMPONENT_ID);
+        return beanId + "_" + compId;
     }
 
     public void store() {
         Iterator it = tagBeans.values().iterator();
         while (it.hasNext()) {
             TagBean tagBean = (TagBean)it.next();
-            log.debug("storing bean id: " + tagBean.getBeanId());
+            //log.debug("storing bean id: " + tagBean.getBeanId());
             tagBean.store();
         }
+        //printRequestAttributes();
+
     }
 
+    public void printTagBeans() {
+        log.debug("in print tag beans:");
+        Iterator it = tagBeans.values().iterator();
+        while (it.hasNext()) {
+            TagBean tagBean = (TagBean)it.next();
+            log.debug("tag bean id: " + tagBean.getBeanId());
+        }
+    }
 
 }

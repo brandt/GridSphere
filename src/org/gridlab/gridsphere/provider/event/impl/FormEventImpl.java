@@ -28,6 +28,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
 import org.gridlab.gridsphere.provider.portletui.beans.PasswordBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TextAreaBean;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
@@ -236,6 +237,10 @@ public class FormEventImpl implements FormEvent {
     }
 
     public ErrorFrameBean getErrorFrameBean(String beanID) {
+        return null;
+    }
+
+    public TextAreaBean getTextAreaBean(String beanId) {
         return null;
     }
 

@@ -9,12 +9,11 @@ import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
 
 public class TextFieldTag extends BaseComponentTag {
 
     protected TextFieldBean textFieldBean = null;
-    public static final String TEXTFIELD_STYLE = "portlet-frame-text";
-
     protected int size = 0;
     protected int maxlength = 0;
 
@@ -51,13 +50,14 @@ public class TextFieldTag extends BaseComponentTag {
     }
 
     public int doEndTag() throws JspException {
-        if (cssStyle == null) cssStyle = TEXTFIELD_STYLE;
         if (!beanId.equals("")) {
-            textFieldBean = (TextFieldBean)pageContext.getAttribute(getBeanKey());
+            textFieldBean = (TextFieldBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (textFieldBean == null) {
-                //update(textFieldBean);
                 textFieldBean = new TextFieldBean();
                 textFieldBean.setBeanId(beanId);
+                this.setBaseComponentBean(textFieldBean);
+            } else {
+                this.updateBaseComponentBean(textFieldBean);
             }
         } else {
             textFieldBean = new TextFieldBean();
@@ -65,12 +65,7 @@ public class TextFieldTag extends BaseComponentTag {
             if (size != 0) textFieldBean.setSize(size);
             this.setBaseComponentBean(textFieldBean);
         }
-       /*
-        if (!beanId.equals("")) {
-            //System.err.println("storing bean in the session");
-            store(getBeanKey(), textFieldBean);
-        }
-        */
+
         //debug();
 
         Object parentTag = getParent();

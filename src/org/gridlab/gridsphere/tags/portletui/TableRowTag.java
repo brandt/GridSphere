@@ -31,7 +31,6 @@ public class TableRowTag extends ContainerTag {
     }
 
     public int doStartTag() throws JspException {
-        //System.err.println("in TableRowTag:doStartTag");
         list = new Vector();
 
 
@@ -46,7 +45,6 @@ public class TableRowTag extends ContainerTag {
     }
 
     public int doEndTag() throws JspException {
-        //System.err.println("in TableRowTag:doEndTag");
         TableTag tableTag = (TableTag)getParent();
         if (tableTag != null) {
 
@@ -59,7 +57,6 @@ public class TableRowTag extends ContainerTag {
             DefaultTableModel tableModel = tableTag.getTableModel();
             tableModel.addTableRowBean(rowBean);
             tableTag.setTableModel(tableModel);
-
         }
 
         return EVAL_PAGE;

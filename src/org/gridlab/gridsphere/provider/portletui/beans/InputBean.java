@@ -36,10 +36,16 @@ public abstract class InputBean extends BaseComponentBean implements TagBean {
         StringBuffer sb = new StringBuffer();
         sb.append("<input ");
         sb.append("type=\"" + inputtype + "\" ");
+
+
+        String pname = (name == null) ? "" : name;
+        String sname = pname;
         if (!beanId.equals("")) {
-            name = "ui_" + vbName + "_" + name;
+            sname = "ui_" + vbName + "_" + beanId + "_" + pname;
         }
-        if (name != null) sb.append("name=\"" + name + "\" ");
+
+
+        sb.append("name=\"" + sname + "\" ");
         if (value != null) sb.append("value=\"" + value + "\" ");
         if (size != 0) sb.append("size=\"" + size + "\" ");
         if (maxlength != 0) sb.append("maxlength=\"" + maxlength + "\" ");

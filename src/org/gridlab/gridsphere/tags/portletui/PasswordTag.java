@@ -12,6 +12,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.PasswordBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -58,7 +59,7 @@ public class PasswordTag extends BaseComponentTag {
     public int doEndTag() throws JspException {
 
         if (!beanId.equals("")) {
-            passwordBean = (PasswordBean)pageContext.getAttribute(getBeanKey());
+            passwordBean = (PasswordBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (passwordBean == null) {
                 passwordBean = new PasswordBean(beanId);
             }

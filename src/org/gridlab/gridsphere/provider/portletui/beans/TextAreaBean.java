@@ -14,7 +14,7 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
     public static final String TEXTAREA_STYLE = "portlet-frame-textarea";
 
     private int cols = 0;
-    private int rows = 0;;
+    private int rows = 0;
 
     public TextAreaBean() {
         super(NAME);
@@ -63,7 +63,14 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("<textarea ");
-        sb.append("name=\"" + name + "\" ");
+
+        String pname = (name == null) ? "" : name;
+        String sname = pname;
+        if (!beanId.equals("")) {
+            sname = "ui_" + vbName + "_" + beanId + "_" + pname;
+        }
+
+        sb.append("name=\"" + sname + "\" ");
         if (cols != 0) sb.append(" cols=\"" + cols + "\" ");
         if (rows != 0) sb.append(" rows=\"" + rows + "\" ");
         sb.append(" " + checkDisabled());

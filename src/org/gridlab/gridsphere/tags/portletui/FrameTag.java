@@ -25,14 +25,11 @@ public class FrameTag extends TableTag {
         if (!beanId.equals("")) {
             tableBean = (FrameBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (tableBean != null) {
-                //System.err.println("Found a non-null tableframebean");
                 return SKIP_BODY;
             } else {
-                System.err.println("creating new tableframebean");
                 tableBean = new FrameBean();
             }
         } else {
-            System.err.println("creating new tableframebean");
             tableBean = new FrameBean();
         }
         return EVAL_BODY_INCLUDE;
