@@ -389,7 +389,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates castor definitions                                          -->
     <!-- =================================================================== -->
-    <target name="configure-database" depends="doclet-mapping">
+    <target name="configure-database" depends="doclet-mapping, grid-mapping">
 
         <property name="DATABASE_FILE"
                   value="${GRIDSPHERE_HOME}/database/${DATABASE_TYPE}db.xml"/>
@@ -413,6 +413,7 @@ Copyright:
 
     <target name="doclet-mapping" depends="check-mapping" if="var_force_mapping">
         <javadoc packagenames="org.gridlab.gridsphere.*"
+            excludepackagenames="org.gridlab.gridsphere.services.grid.*"
             sourcepath="src"
             private="true"
             doclet="org.castor.doclet.ddl.DDL"
@@ -421,6 +422,26 @@ Copyright:
             <classpath refid="classpath"/>
         </javadoc>
         <javadoc packagenames="org.gridlab.gridsphere.*"
+            excludepackagenames="org.gridlab.gridsphere.services.grid.*"
+            sourcepath="src"
+            private="true"
+            doclet="org.castor.doclet.jdo.JDO"
+            docletpath="lib/ext/jdom.jar;lib/ext/castor-doclet.jar"
+            additionalparam="-J-DFILE=${GRIDSPHERE_HOME}/mapping/docletmapping.xml -J-DLOG=1">
+            <classpath refid="classpath"/>
+        </javadoc>
+    </target>
+
+    <target name="grid-mapping" depends="check-mapping" if="var_force_mapping, ${grid.exists}">
+        <javadoc packagenames="org.gridlab.gridsphere.services.grid.*"
+            sourcepath="src"
+            private="true"
+            doclet="org.castor.doclet.ddl.DDL"
+            docletpath="lib/ext/jdom.jar;lib/ext/castor-doclet.jar"
+            additionalparam=" -J-DFILE=${GRIDSPHERE_HOME}/database/dbcreate.sql -J-DDB_TYPE=db2 -J-DLOG=1">
+            <classpath refid="classpath"/>
+        </javadoc>
+        <javadoc packagenames="org.gridlab.gridsphere.services.grid.*"
             sourcepath="src"
             private="true"
             doclet="org.castor.doclet.jdo.JDO"
