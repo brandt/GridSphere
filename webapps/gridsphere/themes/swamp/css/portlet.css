@@ -1,0 +1,708 @@
+/*
+Part of the Gridsphere XP Theme
+Author: Michael Russell (michael.russell@aei.mpg.de)
+Version: $Id$
+*/
+
+/***************************************************************************
+ * Portlet Pane and Frame Tags
+ *
+ * Portlet panes contain one or more portlet frames, where portlet frames
+ * contain elements of presentation organized for some particular reason.
+ * Portlet frames are seperated by "borders" where the color and width of
+ * each border is determined by the bgcolor and cellspacing properties of
+ * table respresenting each portlet frame. Note, however, the separation
+ * between portlet frames is determined by the cellspacing and cellpadding
+ * properties of the table representing the portlet pane.
+ ***************************************************************************/
+
+.portlet-pane {
+  background-color: #FFFFFF;
+  border: 0;
+  padding: 0;
+  spacing: 0;
+  width: 100%;
+}
+
+.portlet-frame {
+  background-color: black;
+  border: 0;
+  padding: 0;
+  spacing: 0;
+  width: 100%;
+}
+
+.portlet-frame-title {
+  background-color: #009900;
+  border: none;
+  color: #000000;
+  font-family: inherit;
+  font-weight: bold;
+  text-align: center;
+  padding-top: 1;
+  padding-right: 2;
+  padding-left: 2;
+  padding-bottom: 1;
+}
+
+.portlet-frame-actions {
+  background-color: #FFFFFF;
+  border: none;
+  color: #000000;
+  font-family: inherit;
+  padding-top: 2;
+  padding-right: 2;
+  padding-left: 2;
+  padding-bottom: 2;
+}
+
+.portlet-frame-message {
+  background-color: #FFFFFF;
+  border: none;
+  color: #000000;
+  font-family: inherit;
+  padding-top: 4;
+  padding-right: 4;
+  padding-left: 4;
+  padding-bottom: 4;
+}
+
+.portlet-frame-message-alert {
+  background-color: #FFFFFF;
+  border: none;
+  color: darkred;
+  font-family: inherit;
+  padding-top: 4;
+  padding-right: 4;
+  padding-left: 4;
+  padding-bottom: 4;
+}
+
+.portlet-frame-header {
+  background-color: #009900;
+  border-none;
+  color: #000000;
+  font-family: inherit;
+  font-size: 10px;
+  text-align: center;
+  padding: 1;
+}
+
+.portlet-frame-header-checkbox {
+  background-color: #009900;
+  border-none;
+  color: #FFFFFF;
+  font-family: inherit;
+  font-size: -1;
+  text-align: center;
+  vertical-align: middle;
+  width: 12;
+}
+
+.portlet-frame-label {
+  background-color: #009900;
+  border: none;
+  color: #000000;
+  font-family: inherit;
+  text-align: left;
+  padding-top: 1;
+  padding-right: 2;
+  padding-left: 2;
+  padding-bottom: 1;
+}
+
+.portlet-frame-label-alert {
+  background-color: #009900;
+  border: none;
+  color: darkred;
+  font-family: inherit;
+  text-align: left;
+  padding-top: 1;
+  padding-right: 2;
+  padding-left: 2;
+  padding-bottom: 1;
+}
+
+.portlet-frame-text {
+  background-color: #FFFFFF;
+  border: none;
+  color: #000000;
+  font-family: inherit;
+  text-align: left;
+  padding-top: 1;
+  padding-right: 2;
+  padding-left: 2;
+  padding-bottom: 1;
+}
+
+.portlet-frame-text-alert {
+  background-color: #FFFFFF;
+  border: none;
+  color: darkred;
+  font-family: inherit;
+  text-align: left;
+  padding-top: 1;
+  padding-right: 2;
+  padding-left: 2;
+  padding-bottom: 1;
+}
+
+.portlet-frame-input {
+  background-color: #FFFFFF;
+  border: none;
+  color: #000000;
+  font-family: inherit;
+  text-align: left;
+  padding-top: 1;
+  padding-right: 2;
+  padding-left: 2;
+  padding-bottom: 1;
+}
+
+.portlet-frame-input-alert {
+  background-color: #FFFFFF;
+  border: none;
+  color: darkred;
+  font-family: inherit;
+  text-align: left;
+  padding-top: 1;
+  padding-right: 2;
+  padding-left: 2;
+  padding-bottom: 1;
+}
+
+.portlet-frame-number {
+  background-color: #FFFFFF;
+  border: none;
+  color: #000000;
+  font-family: inherit;
+  text-align: right;
+  padding-top: 1;
+  padding-right: 2;
+  padding-left: 2;
+  padding-bottom: 1;
+}
+
+.portlet-frame-number-alert {
+  background-color: #FFFFFF;
+  border: none;
+  color: darkred;
+  font-family: inherit;
+  text-align: right;
+  padding-top: 1;
+  padding-right: 2;
+  padding-left: 2;
+  padding-bottom: 1;
+}
+
+.portlet-frame-entry-checkbox {
+  background-color: #009900;
+  border: none;
+  color: #000000;
+  font-family: inherit;
+  font-size: -1;
+  text-align: center;
+  vertical-align: middle;
+  width: 12;
+}
+
+
+/**********************************************
+Font attributes for the "normal" fragment font;
+used to display non-accentuated information
+**********************************************/
+.portlet-font {
+   color:black;
+   background-color:#cccc33;
+   font-size:12px;
+   font-weight:normal;
+   font-style:normal;
+   font-family:verdana, arial, sans-serif;
+   line-height:normal;
+   text-align:left;
+   text-decoration:none;
+   padding-top:1;
+   padding-bottom:1;
+   padding-left:2;
+   padding-right:2;
+}
+
+/**********************************************
+Font attributes for the "normal" fragment font
+in lighter color
+**********************************************/
+.portlet-font-dim {
+   color:gray;
+   background-color:#cccc33;
+   font-size:12px;
+   font-weight:normal;
+   font-style:normal;
+   font-family:verdana, arial, sans-serif;
+   line-height:normal;
+   text-align:left;
+   text-decoration:none;
+   padding-top:1;
+   padding-bottom:1;
+   padding-left:2;
+   padding-right:2;
+}
+
+
+/*^^^^^^^^^^
+   MESSAGES
+  ^^^^^^^^^^*/
+
+/**********************************************
+  Status of the current operation
+**********************************************/
+.portlet-msg-status {
+   font-size:13px;
+   /* font-family:verdana, arial,sans-serif; */
+   font-family:inherit;
+   color:darkblue;
+   font-style:italic;
+   background-color: inherit;
+   font-weight:normal;
+   text-align:left;
+   text-decoration:none;
+   padding-top:1;
+   padding-bottom:1;
+   padding-left:2;
+   padding-right:2;
+   border:none;
+}
+
+
+/**********************************************
+  Help messages, general additional
+  information, etc.
+**********************************************/
+.portlet-msg-info {
+   font-size:11px;
+   /* font-family:courier, courier new, monospaced; */
+   font-family:inherit;
+   color:black;
+   background-color:inherit;
+   font-style:normal;
+   font-weight:normal;
+   text-align:left;
+   text-decoration:none;
+   padding-top:1;
+   padding-bottom:1;
+   padding-left:2;
+   padding-right:2;
+   border:none;
+}
+
+/**********************************************
+  Error messages
+**********************************************/
+.portlet-msg-error {
+   font-size:14px;
+   /* font-family:verdana, arial, sans-serif; */
+   font-family:inherit;
+   font-variant:small-caps;
+   color:darkred;
+   background-color:inherit;
+   font-style:normal;
+   font-weight:bold;
+   text-align:left;
+   text-decoration:none;
+   padding-top:1;
+   padding-bottom:1;
+   padding-left:2;
+   padding-right:2;
+   border:none;
+}
+
+/**********************************************
+  Warning messages
+**********************************************/
+.portlet-msg-alert {
+   font-size:14px;
+   /* font-family:verdana, arial, sans-serif; */
+   font-family:inherit;
+   font-variant:small-caps;
+   color:darkorange;
+   background-color:inherit;
+   font-style:italic;
+   /* font-weight:bold; */
+   text-align:left;
+   text-decoration:none;
+   padding-top:1;
+   padding-bottom:1;
+   padding-left:2;
+   padding-right:2;
+   border:none;
+}
+
+/**********************************************
+  Verification of the successful completion
+  of a task
+**********************************************/
+.portlet-msg-success {
+   font-size:14px;
+   /* font-family:courier, courier new, monospaced; */
+   font-family:inherit;
+   font-variant:small-caps;
+   letter-spacing:2px;
+   color:black;
+   background-color:inherit;
+   font-style:normal;
+   font-weight:bold;
+   text-align:left;
+   text-decoration:none;
+   padding-top:1;
+   padding-bottom:1;
+   padding-left:2;
+   padding-right:2;
+   border:none;
+}
+
+/*^^^^^^^^^^^^
+  SECTIONS
+  ^^^^^^^^^^*/
+
+/**********************************************
+  Table or section header
+**********************************************/
+.portlet-section-header {
+  background-color: #009900;
+  border: none;
+  color: #000000;
+  font-family: inherit;
+  font-size: 10px;
+  text-align: center;
+  padding: 1;
+}
+
+/**********************************************
+  Normal text in a table cell
+**********************************************/
+.portlet-section-body {
+  background-color: #cccc33;
+  border: none;
+  color: #cccc33;
+  font-family: inherit;
+  text-align: left;
+  padding-top: 1;
+  padding-right: 2;
+  padding-left: 2;
+  padding-bottom: 1;
+}
+
+/**********************************************
+  Text in every other row in the table
+**********************************************/
+.portlet-section-alternate{
+   color:black;
+   background-color:linen;
+   font-size:12px;
+   font-weight:normal;
+   font-style:normal;
+   font-family:verdana, arial, sans-serif;
+   line-height:normal;
+   text-align:left;
+   text-decoration:none;
+   padding-top:1;
+   padding-bottom:1;
+   padding-left:2;
+   padding-right:2;
+   border-left: thin  solid black;
+   border-right: thin  solid black;
+   border-bottom: thin  solid black;
+}
+
+/**********************************************
+  Text in a selected cell range
+**********************************************/
+.portlet-section-selected{
+   color:grey;
+   background-color:#cccc33;
+   font-size:12px;
+   font-weight:normal;
+   font-style:normal;
+   font-family:verdana, arial, sans-serif;
+   line-height:normal;
+   text-align:left;
+   text-decoration:none;
+   padding-top:1;
+   padding-bottom:1;
+   padding-left:2;
+   padding-right:2;
+   border-left: thin  solid black;
+   border-right: thin  solid black;
+   border-bottom: thin  solid black;
+}
+
+/**********************************************
+  Text of a subheading
+**********************************************/
+.portlet-section-subheader{
+   color:black;
+   background-color:#cccc33;
+   font-size:13px;
+   font-weight:bold;
+   font-style:normal;
+   font-family:verdana, arial, sans-serif;
+   line-height:normal;
+   text-align:center;
+   text-decoration:none;
+   padding-top:1;
+   padding-bottom:1;
+   padding-left:2;
+   padding-right:2;
+   border-left: thin  solid black;
+   border-right: thin  solid black;
+   border-bottom: double black;
+}
+
+/**********************************************
+  Table or section footnote
+**********************************************/
+.portlet-section-footer{
+   color:black;
+   background-color:#cccc33;
+   font-size:10px;
+   font-weight:normal;
+   font-style:italic;
+   font-family:verdana, arial, sans-serif;
+   line-height:normal;
+   text-align:left;
+   text-decoration:none;
+   padding-top:1;
+   padding-bottom:1;
+   padding-left:2;
+   padding-right:2;
+   border:none;
+}
+
+/**********************************************
+  Text that belongs to the table but does not
+  fall in any of the previous categories
+  e.g. explanatory or help text that is
+       associated with the section
+**********************************************/
+.portlet-section-text{
+   color:black;
+   background-color:#cccc33;
+   font-size:11px;
+   font-weight:lighter;
+   font-style:italic;
+   font-family:verdana, arial, sans-serif;
+   line-height:normal;
+   text-align:left;
+   text-decoration:none;
+   padding-top:1;
+   padding-bottom:1;
+   padding-left:2;
+   padding-right:2;
+   /*border:thin dashed grey;*/
+   border:none;
+}
+
+
+/*^^^^^^^^^^
+  FORMS
+  ^^^^^^^^*/
+
+/**********************************************
+  Text used for the descriptive label of the
+  whole form (not the labels for fields)
+**********************************************/
+.portlet-form-label{
+   color:black;
+   /* background-color:#cccc33;  */
+   font-size:12px;
+   font-weight:bold;
+   font-style:normal;
+   font-family:verdana, arial, sans-serif;
+   line-height:normal;
+   text-align:left;
+   text-decoration:none;
+   padding-top:1;
+   padding-bottom:1;
+   padding-left:2;
+   padding-right:2;
+}
+
+/**********************************************
+  Text of the user-input in an input field
+**********************************************/
+.portlet-form-input-field{
+   color:black;
+   background-color:white;
+   font-size:12px;
+   font-weight:normal;
+   font-style:normal;
+   /* font-family:courier, courier new, monospaced; */
+   font-family:inherit;
+   line-height:normal;
+   text-align:left;
+   text-decoration:none;
+   padding-top:1;
+   padding-bottom:1;
+   padding-left:2;
+   padding-right:2;
+}
+
+/**********************************************
+  Text on a button
+**********************************************/
+.portlet-form-button{
+   color:black;
+   background-color:#999933;
+   font-size:12px;
+   font-weight:bold;
+   font-style:normal;
+   /* font-family:courier, courier new, monospaced; */
+   font-family:inherit;
+   line-height:normal;
+   text-align:center;
+   text-decoration:none;
+   padding-top:1;
+   padding-bottom:1;
+   padding-left:2;
+   padding-right:2;
+}
+
+/**********************************************
+  Text that appears beside a context dependent
+  action icon
+**********************************************/
+.portlet-icon-label{
+   color:steelblue;
+   background-color:#999933;
+   font-size:14px;
+   font-weight:normal;
+   font-style:normal;
+   font-family:verdana, arial, sans-serif;
+   line-height:normal;
+   text-align:center;
+   text-decoration:none;
+   padding-top:1;
+   padding-bottom:1;
+   padding-left:2;
+   padding-right:2;
+}
+
+/**********************************************
+  Text that appears beside a "standard" icon
+  e.g. Ok, Cancel
+**********************************************/
+.portlet-dlg-icon-label{
+   color:darkblue;
+   background-color:#cccc33;
+   font-size:14px;
+   font-weight:normal;
+   font-style:normal;
+   font-family:verdana, arial, sans-serif;
+   line-height:normal;
+   text-align:center;
+   text-decoration:none;
+   padding-top:1;
+   padding-bottom:1;
+   padding-left:2;
+   padding-right:2;
+}
+
+/**********************************************
+  Text for a separator of fields
+  e.g. checkboxes
+**********************************************/
+.portlet-form-field-label{
+   color:black;
+   background-color:#cccc33;
+   font-size:11px;
+   font-weight:normal;
+   font-style:normal;
+   font-family:courier, courier new, monospaced;
+   line-height:normal;
+   text-align:left;
+   text-decoration:none;
+   padding-top:1;
+   padding-bottom:1;
+   padding-left:2;
+   padding-right:2;
+}
+
+/**********************************************
+  Text for a field
+  (not input field, checkboxes)
+**********************************************/
+.portlet-form-field{
+   color:black;
+   background-color:#cccc33;
+   font-family: inherit;
+   line-height:normal;
+   text-align:left;
+   text-decoration:none;
+   padding-top:1;
+   padding-bottom:1;
+   padding-left:2;
+   padding-right:2;
+}
+
+/*^^^^^^^^^^^
+   MENUS
+   ^^^^^^^^*/
+
+/**********************************************
+  General menu settings such as background
+  color, margins, etc.
+**********************************************/
+.portlet-menu{
+}
+
+/**********************************************
+  Normal, unselected menu item
+**********************************************/
+.portlet-menu-item{
+}
+
+/**********************************************
+  Selected menu item
+**********************************************/
+.portlet-menu-item-selected{
+}
+
+/**********************************************
+  Normal, unselected menu item when the
+  mouse hovers over it
+**********************************************/
+.portlet-menu-item-hover{
+}
+
+/**********************************************
+  Selected menu item when the mouse hovers
+  over it
+**********************************************/
+.portlet-menu-item-hover-selected{
+}
+
+/**********************************************
+  Normal, unselected menu item that has
+  submenus
+**********************************************/
+.portlet-menu-cascade-item{
+}
+
+/**********************************************
+  Selected submenu item that has submenus
+**********************************************/
+.porlet-menu-cascade-item-selected{
+}
+
+/**********************************************
+  Descriptive text for the menu
+  e.g. in a help context below the menu
+**********************************************/
+.portlet-menu-description{
+}
+
+/**********************************************
+  Menu caption
+**********************************************/
+.portlet-menu-caption{
+}
+

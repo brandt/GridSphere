@@ -1,0 +1,77 @@
+/*
+Part of the Gridsphere XP theme
+Author: Oliver Wehrens (oliver.wehrens@aei.mpg.de)
+Version: $Id$
+*/
+
+
+.window-main {
+   width: 100%;
+   spacing: 2px;
+   padding: 2px;
+}
+
+.window-title-inactive {
+  background-color: #33cc33;
+  color: #000000;
+  font-size: 12px;
+  height: 15px;
+  width: 100%;
+  border-top: 1px solid #33cc33;
+  border-right: 1px solid #33cc33;
+  border-left: 1px solid #33cc33;
+}
+
+.window-title-active {
+  background-color: #33cc33;
+  color: #000000;
+  font-size: 12px;
+  height: 15px;
+  width: 100%;
+  border-top: 1px solid #33cc33;
+  border-right: 1px solid #33cc33;
+  border-left: 1px solid #33cc33;
+}
+
+.window-title-name {
+  color: white;
+  font-family:Franklin Gothic Medium, verdana, arial, sans-serif;
+  text-align: center;
+  font-weight: bold;
+}
+
+.window-icon-right {
+   text-align: right;
+   width: 40px;
+}
+
+.window-icon-left {
+    text-align: left;
+    width: 60px;
+}
+
+.window-content-minimize {
+
+}
+
+.window-content {
+  background-color: #cccc99;
+  padding: 5px;
+  border-right: 1px solid #33cc33;
+  border-left: 1px solid #33cc33;
+  border-bottom: 1px solid #33cc33;
+  spacing-top: 5px;
+  spacing-right: 2px;
+  height: 100%;
+}
+
+
+input[type=submit] {
+  margin-top: 2px;
+}
+
+input, select, textarea {
+  font-size: inherit;
+  font-family: courier, courier new, monospaced;
+}
+

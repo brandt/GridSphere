@@ -1,0 +1,13 @@
+/* Stylesheet */
+/*
+Part of the Gridsphere XP theme
+Author: Oliver Wehrens (wehrens@aei.mpg.de)
+Version: $Id$
+*/
+
+@import url(general.css);
+@import url(page.css);
+@import url(tab.css);
+@import url(window.css);
+@import url(portlet.css);
+@import url(layout.css);
