@@ -393,7 +393,7 @@ Copyright:
 
     <target name="doclet-mapping" depends="check-mapping" if="var_force_mapping">
         <javadoc packagenames="*"
-            sourcepath="src:projects/gridlab/src"
+            sourcepath="src"
             private="true"
             doclet="org.castor.doclet.ddl.DDL"
             docletpath="lib/ext/jdom.jar;lib/ext/castor-doclet.jar"
@@ -401,7 +401,7 @@ Copyright:
             <classpath refid="classpath"/>
         </javadoc>
         <javadoc packagenames="*"
-            sourcepath="src:projects/gridlab/src"
+            sourcepath="src"
             private="true"
             doclet="org.castor.doclet.jdo.JDO"
             docletpath="lib/ext/jdom.jar;lib/ext/castor-doclet.jar"
