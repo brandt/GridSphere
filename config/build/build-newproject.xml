@@ -65,6 +65,7 @@
 
         <mkdir dir="${project.dir}/src"/>
         <mkdir dir="${project.dir}/lib"/>
+        <mkdir dir="${project.dir}/lib/ext"/>
         <mkdir dir="${project.dir}/config"/>
         <copy file="config/log4j.properties" tofile="${project.dir}/config/log4j.properties"/>
         <copy todir="${project.dir}/config/database">
