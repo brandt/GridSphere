@@ -22,10 +22,6 @@
 
         <property name="userId" type="string" column="userid"/>
         <property name="portletId" type="string" column="portletid"/>
-        <many-to-one
-            name="attributes"
-            class="org.gridlab.gridsphere.portlet.jsrimpl.PersistencePreferenceAttribute">
-        </many-to-one>
 
     </class>
 
