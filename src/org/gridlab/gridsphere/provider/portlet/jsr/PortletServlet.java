@@ -123,11 +123,8 @@ public class PortletServlet  extends HttpServlet
         String method = (String) request.getAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
 
         if (method.equals(SportletProperties.INIT)) {
-
-
-                Set set = portlets.keySet();
-            synchronized(set) {
-                Iterator it = set.iterator();
+            Set set = portlets.keySet();
+            Iterator it = set.iterator();
             while (it.hasNext()) {
                 String portletClass = (String)it.next();
                 Portlet portlet = (Portlet)portlets.get(portletClass);
@@ -138,27 +135,30 @@ public class PortletServlet  extends HttpServlet
                 try {
                     portlet.init(portletConfig);
                     portletConfigHash.put(portletClass, portletConfig);
-                } catch (PortletException e) {
+                } catch (Exception e) {
                     log.error("in PortletServlet: service(): Unable to INIT portlet " + portletClass, e);
                     // PLT.5.5.2.1 Portlet that fails to initialize must not be placed in active service
-                    portlets.remove(portletClass);
+                    it.remove();
+                    //throw new ServletException(e);
                 }
             }
-            }
+
             manager.addWebApp(portletWebApp);
             return;
         } else if (method.equals(SportletProperties.INIT_CONCRETE)) {
             // do nothing for concrete portlets
             return;
         } else if (method.equals(SportletProperties.DESTROY)) {
-            synchronized(portlets) {
             Iterator it = portlets.keySet().iterator();
             while (it.hasNext()) {
                 String portletClass = (String)it.next();
                 Portlet portlet = (Portlet)portlets.get(portletClass);
                 log.debug("in PortletServlet: service(): Destroying portlet " + portletClass);
-                portlet.destroy();
-            }
+                try {
+                    portlet.destroy();
+                } catch (RuntimeException e) {
+                    log.error("Caught exception during portlet destroy", e);
+                }
             }
             manager.removePortletWebApplication(portletWebApp);
             return;
@@ -210,9 +210,6 @@ public class PortletServlet  extends HttpServlet
         request.setAttribute(PortletRequest.USER_INFO, userInfo);
 
         // portlet preferences
-        PortletPreferences prefs = prefsManager.getPortletPreferences(appPortlet, user, Thread.currentThread().getContextClassLoader());
-
-        request.setAttribute(SportletProperties.PORTLET_PREFERENCES, prefs);
 
         PortalContext portalContext = appPortlet.getPortalContext();
         request.setAttribute(SportletProperties.PORTAL_CONTEXT, portalContext);
@@ -236,12 +233,17 @@ public class PortletServlet  extends HttpServlet
                     log.debug("in PortletServlet: do title " + portletClassName);
                     doTitle(portlet, renderRequest, renderResponse);
                 } else {
+                    PortletPreferences prefs = prefsManager.getPortletPreferences(appPortlet, user, Thread.currentThread().getContextClassLoader(), false);
+                    request.setAttribute(SportletProperties.PORTLET_PREFERENCES, prefs);
                     ActionRequest actionRequest = new ActionRequestImpl(request, portalContext, portletContext, supports);
                     ActionResponse actionResponse = new ActionResponseImpl(request, response, portalContext);
                     //setGroupAndRole(actionRequest, actionResponse);
                     log.debug("in PortletServlet: action handling portlet " + portletClassName);
-                    doAction(portlet, actionRequest, actionResponse);
-
+                    try {
+                        portlet.processAction(actionRequest, actionResponse);
+                    } catch (Exception e) {
+                        throw new ServletException(e);
+                    }
                     System.err.println("placing render params in attribute: " + "renderParams" + "_" + portletClassName);
                     Map params = ((ActionResponseImpl)actionResponse).getRenderParameters();
                     actionRequest.setAttribute("renderParams" + "_" + portletClassName, params);
@@ -251,6 +253,9 @@ public class PortletServlet  extends HttpServlet
                     redirect(request, response, actionResponse);
                 }
             } else {
+                PortletPreferences prefs = prefsManager.getPortletPreferences(appPortlet, user, Thread.currentThread().getContextClassLoader(), true);
+                request.setAttribute(SportletProperties.PORTLET_PREFERENCES, prefs);
+
                 RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext, supports);
                 RenderResponse renderResponse = new RenderResponseImpl(request, response, portalContext);
                 renderRequest.setAttribute(SportletProperties.RENDER_REQUEST, renderRequest);
@@ -258,7 +263,18 @@ public class PortletServlet  extends HttpServlet
                 //setGroupAndRole(renderRequest, renderResponse);
                 log.debug("in PortletServlet: rendering  portlet " + portletClassName);
                 if (renderRequest.getAttribute(SportletProperties.RESPONSE_COMMITTED) == null) {
-                    doRender(portlet, renderRequest, renderResponse);
+                    try {
+                        portlet.render(renderRequest, renderResponse);
+                    } catch (UnavailableException e) {
+                        log.error("in PortletServlet(): doRender() caught unavailable exception: ");
+                        try {
+                            portlet.destroy();
+                        } catch (Exception d) {
+                            log.error("in PortletServlet(): destroy caught unavailable exception: ", d);
+                        }
+                    } catch (Exception e) {
+                        log.error("in PortletServlet(): doRender() caught exception: ", e);
+                    }
                 }
             }
             request.removeAttribute(SportletProperties.PORTLET_ACTION_METHOD);
@@ -298,13 +314,7 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
         }
     }
 
-    protected void doAction(Portlet portlet, ActionRequest request, ActionResponse response) {
-        try {
-            portlet.processAction(request, response);
-        } catch (Exception e) {
-            log.error("in PortletServlet(): doAction() caught exception: ", e);
-        }
-    }
+
 
     protected void doRender(Portlet portlet, RenderRequest request, RenderResponse response) {
         PortletMode mode = request.getPortletMode();
