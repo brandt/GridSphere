@@ -101,7 +101,7 @@ public class LoginPortlet extends ActionPortlet {
         String errorKey = (String)req.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
 
         if (errorKey != null) {
-            MessageBoxBean frame = event.getMessageBoxBean("errorFrame");
+            MessageBoxBean frame = event.getMessageBoxBean("msg");
             frame.setKey(LoginPortlet.LOGIN_ERROR_FLAG);
             frame.setMessageType(TextBean.MSG_ERROR);
         }
@@ -129,7 +129,7 @@ public class LoginPortlet extends ActionPortlet {
             //new and valid user and will save it
             User user = saveUser(evt);
             //show the data of this user
-            MessageBoxBean frame = evt.getMessageBoxBean("errorFrame");
+            MessageBoxBean frame = evt.getMessageBoxBean("msg");
             frame.setValue(this.getLocalizedText(req, "USER_NEW_ACCOUNT") +
                     "<br>" + this.getLocalizedText(req, "USER_PLEASE_LOGIN") +
                     " " + user.getUserName());
@@ -137,7 +137,7 @@ public class LoginPortlet extends ActionPortlet {
             setNextState(req, "doViewUser");
         } catch (PortletException e) {
             //invalid user, an exception was thrown
-            MessageBoxBean err = evt.getMessageBoxBean("errorFrame");
+            MessageBoxBean err = evt.getMessageBoxBean("msg");
             err.setValue(e.getMessage());
             err.setMessageType(TextBean.MSG_ERROR);
             //back to edit
@@ -171,6 +171,7 @@ public class LoginPortlet extends ActionPortlet {
 
 
         // Validate family name
+        /*
         String familyName = event.getTextFieldBean("familyName").getValue();
         if (familyName.equals("")) {
             message.append(this.getLocalizedText(req, "USER_FAMILYNAME_BLANK") + "<br>");
@@ -182,6 +183,7 @@ public class LoginPortlet extends ActionPortlet {
             message.append(this.getLocalizedText(req, "USER_GIVENNAME_BLANK") + "<br>");
             isInvalid = true;
         }
+        */
 
         // Validate e-mail
         String eMail = event.getTextFieldBean("emailAddress").getValue();
@@ -271,8 +273,8 @@ public class LoginPortlet extends ActionPortlet {
     private void editSportletUser(FormEvent event, SportletUser SportletUser) {
         log.debug("Entering editSportletUser()");
         SportletUser.setUserName(event.getTextFieldBean("userName").getValue());
-        SportletUser.setFamilyName(event.getTextFieldBean("familyName").getValue());
-        SportletUser.setGivenName(event.getTextFieldBean("givenName").getValue());
+        //SportletUser.setFamilyName(event.getTextFieldBean("familyName").getValue());
+        //SportletUser.setGivenName(event.getTextFieldBean("givenName").getValue());
         SportletUser.setFullName(event.getTextFieldBean("fullName").getValue());
         SportletUser.setEmailAddress(event.getTextFieldBean("emailAddress").getValue());
         SportletUser.setOrganization(event.getTextFieldBean("organization").getValue());
@@ -306,6 +308,13 @@ public class LoginPortlet extends ActionPortlet {
         PortletRequest req = event.getPortletRequest();
         CheckBoxBean acctCB = event.getCheckBoxBean("acctCB");
         acctCB.setSelected(canUserCreateAccount);
+        PortalConfigSettings settings = portalConfigService.getPortalConfigSettings();
+
+        TextFieldBean mailServerTF = event.getTextFieldBean("mailHostTF");
+        mailServerTF.setValue(settings.getAttribute(MailService.MAIL_SERVER_HOST));
+        TextFieldBean mailSenderTF = event.getTextFieldBean("mailFromTF");
+        mailSenderTF.setValue(settings.getAttribute(MailService.MAIL_SENDER));
+
         setNextState(req, DO_CONFIGURE);
     }
 
@@ -381,10 +390,9 @@ public class LoginPortlet extends ActionPortlet {
             message.setSender(settings.getAttribute(MailService.MAIL_SENDER));
         }
 
-
         StringBuffer body = new StringBuffer();
 
-        body.append(getLocalizedText(req, "LOGIN_FORGOTMAIL") + "\n\n");
+        body.append(getLocalizedText(req, "LOGIN_FORGOT_MAIL") + "\n\n");
 
         PortletURI uri = res.createURI();
         uri.addAction("newpassword");
@@ -397,7 +405,11 @@ public class LoginPortlet extends ActionPortlet {
             mailService.sendMail(message);
         } catch (MessagingException e) {
             log.error("Unable to send mail message!", e);
+            createErrorMessage(evt, this.getLocalizedText(req, "LOGIN_FAILURE_MAIL"));
+            return;
         }
+        createSuccessMessage(evt, this.getLocalizedText(req, "LOGIN_SUCCESS_MAIL"));
+
     }
 
     private void createErrorMessage(FormEvent evt, String text) {
