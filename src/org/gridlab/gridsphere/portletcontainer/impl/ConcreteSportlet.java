@@ -55,7 +55,10 @@ public class ConcreteSportlet implements ConcretePortlet {
         // Get PortletApplication UID  e.g. classname.number
         appID = appPortletConfig.getApplicationPortletID();
 
-        portletName = appPortletConfig.getPortletName();
+        //portletName = appPortletConfig.getPortletName();
+
+        portletName = concSportletDef.getConcreteSportletConfig().getName();
+        
         concreteID = concSportletDef.getConcretePortletID();
         index = concreteID.lastIndexOf(".");
         cappID = concreteID.substring(0, index);
