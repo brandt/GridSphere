@@ -49,9 +49,10 @@ public class PortletDescriptorTest extends GridSphereServletTest {
 
         // load files from JAR
         String portletFile = config.getServletContext().getRealPath("/WEB-INF/test/portlet-test.xml");
+        String portletMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-mapping.xml");
 
         try {
-            pdd = new PortletDeploymentDescriptor(portletFile);
+            pdd = new PortletDeploymentDescriptor(portletFile, portletMappingFile);
         } catch (Exception e) {
             fail("Error unmarshalling " + portletFile);
         }

@@ -45,11 +45,17 @@ public class GridSphereServletTest extends ServletTestCase {
                 fail("Unable to perform init() of GridSphereServlet!");
             }
             try {
+                factory = SportletServiceFactory.getInstance();
+                factory.init();
+            } catch (Exception e) {
+                fail("Unable to init the SportletServicefactory");
+            }
+            try {
                 gsServlet.initializeServices();
             } catch (Exception e) {
                 fail("Unable to initialize GridSphere Portlet services!");
             }
-            factory = SportletServiceFactory.getInstance();
+
             bInited = true;
         }
     }
