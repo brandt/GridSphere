@@ -268,8 +268,8 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             req.setMode(Portlet.Mode.toMode(newmode));
         } else {
             if (titleBar != null) {
-                String mode = titleBar.getPortletMode();
-                req.setMode(Portlet.Mode.toMode(mode));
+                Portlet.Mode mode = titleBar.getPortletMode();
+                req.setMode(mode);
             } else {
                 req.setMode(Portlet.Mode.VIEW);
             }
@@ -304,7 +304,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             }
             // in case portlet mode got reset
         }
-        if (titleBar != null) titleBar.setPortletMode(req.getMode().toString());
+        if (titleBar != null) titleBar.setPortletMode(req.getMode());
     }
 
     /**
