@@ -28,7 +28,7 @@ Compiling and Deploying
 The Ant build script, build.xml, uses the build.properties file to specify any
 compilation options. Edit build.properties appropriately for your needs.
 
-At this point, simply invoking "ant deploy" will deploy the GridSphere portlet 
+At this point, simply invoking "ant install" will deploy the GridSphere portlet 
 container to Tomcat. 
 
 
