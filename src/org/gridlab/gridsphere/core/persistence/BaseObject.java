@@ -28,6 +28,11 @@ public class BaseObject implements org.exolab.castor.jdo.TimeStampable, org.exol
     // timestamp
     private long timestamp;
 
+    public BaseObject() {
+        super();
+        this.Oid = UniqueID.get();
+    }
+
     /**
      * init the object
      */
@@ -141,7 +146,7 @@ public class BaseObject implements org.exolab.castor.jdo.TimeStampable, org.exol
     /**
      * converts a vector of stringvectors to a normal vector of strings
      *
-     * @param a vector of stringvector objects
+     * @param vector vector of stringvector objects
      * @return a vector of strings
      */
     public Vector convertToVector(List vector) {
