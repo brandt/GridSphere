@@ -68,11 +68,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>BannerPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.file.BannerPortlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>UserManagerPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet</servlet-class>
     </servlet>
@@ -86,7 +81,6 @@
         <servlet-name>LayoutManagerPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet</servlet-class>
     </servlet>
-
 
     <servlet>
         <servlet-name>PortletApplicationManager</servlet-name>
@@ -135,11 +129,6 @@
             <param-name>strongProtection</param-name>
             <param-value>true</param-value>
         </init-param>
-    </servlet>
-
-    <servlet>
-        <servlet-name>CommanderPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.file.CommanderPortlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -225,11 +214,6 @@
     <servlet-mapping>
         <servlet-name>SecureDirectory</servlet-name>
         <url-pattern>/secure/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>CommanderPortlet</servlet-name>
-        <url-pattern>/file/commander</url-pattern>
     </servlet-mapping>
 
     <mime-mapping>
