@@ -1,4 +1,4 @@
-<%@ page import="java.util.Locale"%>
+<%@ page import="java.util.Locale" pageEncoding="UTF-8" %>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
