@@ -38,13 +38,14 @@ public interface PortletConfig extends ServletConfig {
     public String getGroupName();
 
     /**
-     * Returns whether the portlet supports the given mode
+     * Returns whether the portlet supports the given mode for the supplied client
      *
      * @param mode the portlet mode
+     * @param client the Client 
      * @return <code>true</code> if the window supports the given state,
      * <code>false</code> otherwise
      */
-    public boolean supports(Portlet.Mode mode);
+    public boolean supports(Portlet.Mode mode, Client client);
 
 
     /**

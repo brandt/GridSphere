@@ -11,9 +11,11 @@ import org.gridlab.gridsphere.portlet.PortletWindow;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletApp;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.portlet.PortletMode;
+import java.util.*;
 
 /**
  * The <code>ApplicationSportletConfig</code> is the implementation of
@@ -26,6 +28,9 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
     private String portletName = "";
     private int expiration = 0;
 
+    private Map markupModes = new HashMap();
+    private List states = new ArrayList();
+
     /**
      *  Constructs an instance of ApplicationSportletConfig
      */
@@ -36,6 +41,62 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
             expiration = portletDef.getExpirationCache().getContent();
         }
 
+        Supports[] supports = portletDef.getSupports();
+        CustomPortletMode[] customModes = app.getCustomPortletMode();
+
+        Map tmpMarkups = new HashMap();
+        // toss all known modes into list
+
+        // custom modes
+        List cModes = new ArrayList();
+        if (customModes != null) {
+            for (int i = 0; i < customModes.length; i++) {
+                String newmode = customModes[i].getPortletMode().getContent();
+                cModes.add(newmode);
+            }
+        }
+
+        // defined portlet modes
+        for (int i = 0; i < supports.length; i++) {
+            List modesAllowed = new ArrayList();
+            Supports s = (Supports)supports[i];
+            org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode[] modes = (org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode[])s.getPortletMode();
+            for (int j = 0; j < modes.length; j++) {
+                org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletMode m = modes[j];
+                modesAllowed.add(m.getContent());
+            }
+            String mimeType = (String)s.getMimeType().getContent();
+            modesAllowed.addAll(cModes);
+            tmpMarkups.put(mimeType, modesAllowed);
+        }
+
+        // replace javax.portlet.PortletMode with GS modes
+
+        Iterator it = tmpMarkups.keySet().iterator();
+        while (it.hasNext()) {
+            String mtype = (String)it.next();
+            List tmpModes = (List)tmpMarkups.get(mtype);
+            List modes = new ArrayList();
+            for (int i = 0; i < tmpModes.size(); i++) {
+                String m = (String)tmpModes.get(i);
+                if (m.equalsIgnoreCase("CONFIG")) {
+                    if (!modes.contains(Portlet.Mode.CONFIGURE)) modes.add(Portlet.Mode.CONFIGURE);
+                } else {
+                    try {
+                        modes.add(Portlet.Mode.toMode(m.toString()));
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Unknown mode defined in portlet.xml: " + m.toString());
+                    }
+                }
+            }
+            if (!modes.contains(Portlet.Mode.VIEW)) modes.add(Portlet.Mode.VIEW);
+            markupModes.put(mtype, modes);
+        }
+        tmpMarkups = null;
+
+        states.add(PortletWindow.State.MAXIMIZED);
+        states.add(PortletWindow.State.MINIMIZED);
+        states.add(PortletWindow.State.RESIZING);
     }
 
     /**
@@ -72,10 +133,6 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
      * <code>PortletWindow.State</code> elements allowed for this portlet
      */
     public List getAllowedWindowStates() {
-        List states = new ArrayList();
-        states.add(PortletWindow.State.MAXIMIZED);
-        states.add(PortletWindow.State.MINIMIZED);
-        states.add(PortletWindow.State.RESIZING);
 
         // TODO support custom states
         /*
@@ -96,25 +153,17 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
      *
      * @return the supported modes for this portlet
      */
-    public List getSupportedModes() {
-        List modes = new ArrayList();
-        modes.add(Portlet.Mode.HELP);
-        modes.add(Portlet.Mode.EDIT);
-        modes.add(Portlet.Mode.CONFIGURE);
-        modes.add(Portlet.Mode.VIEW);
-
-        // TODO support custom modes
-        /*
-        CustomPortletMode[] customModes = portletApp.getCustomPortletMode();
-        if (customModes != null) {
-            for (int i = 0; i < customModes.length; i++) {
-                String newmode = customModes[i].getPortletMode().getContent();
-                Portlet.Mode m = Portlet.Mode.toMode(newmode);
-                modes.add(m);
+    public List getSupportedModes(String markup) {
+        Iterator it = markupModes.keySet().iterator();
+        while (it.hasNext()) {
+            String mimeType = (String)it.next();
+            int idx1 = mimeType.indexOf(markup);
+            int idx2 = markup.indexOf(mimeType);
+            if ((idx1 > 0) || (idx2 > 0) || (mimeType.equalsIgnoreCase(markup))) {
+                return (List)markupModes.get(mimeType);
             }
         }
-        */
-        return modes;
+        return new ArrayList();
     }
 
     /**

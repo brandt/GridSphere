@@ -28,11 +28,11 @@ public class SportletConfig implements PortletConfig {
 
     private static PortletLog log = SportletLog.getInstance(SportletConfig.class);
 
+    private ApplicationSportletConfig appConfig = null;
     private ServletConfig servletConfig = null;
     private PortletContext context = null;
     private String portletName = null;
     private String groupName = null;
-    private List supportedModes = new ArrayList();
     private List allowedStates = new ArrayList();
     private Hashtable configs = new Hashtable();
 
@@ -52,8 +52,7 @@ public class SportletConfig implements PortletConfig {
         this.servletConfig = servletConfig;
         this.context = new SportletContext(servletConfig);
 
-        // set portlet modes
-        supportedModes = appConfig.getSupportedModes();
+        this.appConfig = appConfig;
 
         // set allowed states info
         allowedStates = appConfig.getAllowedWindowStates();
@@ -103,11 +102,14 @@ public class SportletConfig implements PortletConfig {
      * Returns whether the portlet supports the given mode for the given client.
      *
      * @param mode the portlet mode
+     * @param client the client object
      *
      * @return <code>true</code> if the window supports the given state,
      * <code>false</code> otherwise
      */
-    public boolean supports(Portlet.Mode mode) {
+    public boolean supports(Portlet.Mode mode, Client client) {
+         // set portlet modes
+        List supportedModes = appConfig.getSupportedModes(client.getMimeType());        
         return (supportedModes.contains(mode) ? true : false);
     }
 

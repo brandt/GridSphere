@@ -35,7 +35,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     private String title = "unknown title";
     private String portletClass = null;
     private transient PortletWindow.State windowState = PortletWindow.State.NORMAL;
-    private List supportedModes = new Vector();
+    //private List supportedModes = new Vector();
     private transient Portlet.Mode portletMode = Portlet.Mode.VIEW;
     private transient Portlet.Mode previousMode = null;
     private List allowedWindowStates = new Vector();
@@ -381,7 +381,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             ApplicationPortletConfig appConfig = appPortlet.getApplicationPortletConfig();
             if (appConfig != null) {
                 // get supported modes from application portlet config
-                supportedModes = sort(appConfig.getSupportedModes());
+                //supportedModes = sort(appConfig.getSupportedModes());
 
                 // get window states from application portlet config
 
@@ -484,8 +484,21 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         PortletResponse res = event.getPortletResponse();
         PortletRequest req = event.getPortletRequest();
         // make modes from supported modes
-        if (supportedModes.isEmpty()) return null;
-
+        Client client = req.getClient();
+        List supportedModes = new ArrayList();
+        // set portlet modes
+        PortletRegistry registryManager = PortletRegistry.getInstance();
+        String appID = registryManager.getApplicationPortletID(portletClass);
+        ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
+        if (appPortlet != null) {
+            ApplicationPortletConfig appConfig = appPortlet.getApplicationPortletConfig();
+            if (appConfig != null) {
+                // get supported modes from application portlet config
+                //supportedModes = sort(appConfig.getSupportedModes());
+                supportedModes = appConfig.getSupportedModes(client.getMimeType());
+                if (supportedModes.isEmpty()) return null;
+            }
+        }
 
         // Unless user is a super they should not see configure mode
         boolean hasConfigurePermission = false;
@@ -509,7 +522,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             smodes.remove(portletMode);
         }
 
-         // Localize the portlet mode names
+        // Localize the portlet mode names
         Locale locale = req.getLocale();
 
         List portletLinks = new ArrayList();
@@ -748,11 +761,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         t.hasError = this.hasError;
         // don't clone settings for now
         //t.settings = this.settings;
-        t.supportedModes = new ArrayList(this.supportedModes.size());
-        for (int i = 0; i < this.supportedModes.size(); i++) {
-            Portlet.Mode mode = (Portlet.Mode)supportedModes.get(i);
-            t.supportedModes.add(mode.clone());
-        }
+
         t.allowedWindowStates = new ArrayList(this.allowedWindowStates.size());
         for (int i = 0; i < this.allowedWindowStates.size(); i++) {
             PortletWindow.State state = (PortletWindow.State)allowedWindowStates.get(i);

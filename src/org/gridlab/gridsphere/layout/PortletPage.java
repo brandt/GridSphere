@@ -44,6 +44,7 @@ public class PortletPage implements Serializable, Cloneable {
     // The list of portlets a user has-- generally contained within a PortletFrame/PortletTitleBar combo
     //protected List portlets = new ArrayList();
 
+    protected String keywords = "";
     protected String title = "";
     protected String theme = "";
 
@@ -100,6 +101,24 @@ public class PortletPage implements Serializable, Cloneable {
      */
     public String getTheme() {
         return theme;
+    }
+
+    /**
+     * Returns the keywords used in rendering output
+     *
+     * @return keywords
+     */
+    public String getKeywords() {
+        return keywords;
+    }
+
+    /**
+     * Sets the keywords used in rendering output
+     *
+     * @param keywords  used in rendering output
+     */
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
     }
 
     /**
@@ -406,6 +425,7 @@ public class PortletPage implements Serializable, Cloneable {
             // means the writer has already been obtained
             return;
         }
+        
         res.setContentType("text/html; charset=utf-8");
 
         // page header
@@ -414,9 +434,12 @@ public class PortletPage implements Serializable, Cloneable {
         //out.println("\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
         out.println("<html>");
         out.println("<head>");
+
         out.println("  <title>" + title + "</title>");
+        out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>");
+        out.println("<meta name=\"keywords\" content=\"" + keywords + "\"/>");
         out.println("  <link type=\"text/css\" href=\"themes/" + theme + "/css" +
-                "/default.css\" rel=\"STYLESHEET\"/>");
+                "/default.css\" rel=\"stylesheet\"/>");
         out.println("<script language=\"JavaScript\" src=\"javascript/gridsphere.js\"></script>");
         out.println("</head><body>");
 

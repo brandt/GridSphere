@@ -95,6 +95,8 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
         log.debug("creating JSRApplicationPortletConfigImpl");
         appConfig = new JSRApplicationPortletConfigImpl(pdd.getPortletWebApplication(), portletDef);
 
+        //portletDef.getSupports();
+
         log.debug("creating JSRConcretePortletConfigImpl");
         JSRConcretePortletConfigImpl concConfig = new JSRConcretePortletConfigImpl(portletDef);
 

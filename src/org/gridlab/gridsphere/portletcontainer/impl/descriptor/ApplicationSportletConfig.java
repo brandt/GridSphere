@@ -11,9 +11,7 @@ import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletWindow;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
+import java.util.*;
 
 /**
  * The <code>ApplicationSportletConfig</code> is the implementation of
@@ -36,7 +34,9 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
     private AllowsWindowStates allowsWindowStates = new AllowsWindowStates();
 
     // portlet mode list used by Castor
-    private SupportsModes supportsModes = new SupportsModes();
+    private Supports supports = new Supports();
+
+    private Map markupModes = new HashMap();
 
     /**
      *  Constructs an instance of ApplicationSportletConfig
@@ -202,13 +202,19 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
      *
      * @return the supported modes for this portlet
      */
-    public List getSupportedModes() {
-        List modes = supportsModes.getPortletModes();
-        if (modes.isEmpty()) {
-            modes.add(Portlet.Mode.HELP);
-            modes.add(Portlet.Mode.EDIT);
-            modes.add(Portlet.Mode.CONFIGURE);
-            modes.add(Portlet.Mode.VIEW);
+    public List getSupportedModes(String markup) {
+        List markups = supports.getMarkups();
+        List modes = new ArrayList();
+        Iterator it = markups.iterator();
+        while (it.hasNext()) {
+            Markup m = (Markup)it.next();
+            int idx1 = m.getName().indexOf(markup);
+            int idx2 = markup.indexOf(m.getName());
+            if ((idx1 > 0) || (idx2 > 0) || (markup.equalsIgnoreCase(m.getName()))) {
+                modes = m.getPortletModes();
+                if (!modes.contains(Portlet.Mode.VIEW)) modes.add(Portlet.Mode.VIEW);
+                return modes;
+            }
         }
         return modes;
     }
@@ -219,18 +225,18 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
      *
      * @return the supported modes for this portlet
      */
-    public SupportsModes getSupportsModes() {
-        return this.supportsModes;
+    public Supports getSupports() {
+        return this.supports;
     }
 
     /**
      * Used internally by Castor. Clients should use #getSupportedModes
      * instead.
      *
-     * @param supportsModes the supported modes for this portlet
+     * @param supports the supported modes for this portlet
      */
-    public void setSupportsModes(SupportsModes supportsModes) {
-        this.supportsModes = supportsModes;
+    public void setSupports(Supports supports) {
+        this.supports = supports;
     }
 
     /**

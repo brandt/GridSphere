@@ -43,11 +43,11 @@ public interface ApplicationPortletConfig {
     public List getAllowedWindowStates();
 
     /**
-     * Returns the supported modes for this portlet
+     * Returns the supported modes for this portlet using the supplied markup
      *
      * @return the supported modes for this portlet
      */
-    public List getSupportedModes();
+    public List getSupportedModes(String markup);
 
     /**
      * returns the amount of time in seconds that a portlet's content should be cached
