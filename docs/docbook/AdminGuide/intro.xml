@@ -57,10 +57,12 @@
             The Administration=>Groups tab shows the "Group Manager" portlet that displays all the known portlet groups.
             Portlet groups can be dynamically created and are associated with a collection of portlets. In addition a group defines
             access rights for the portlets, and a flag to indicate
-            which groups are public and private. Normally a new user has access only to the
+            which groups are public, private and hidden. Normally a new user has access only to the
             GridSphere group but may join additional groups via the "Profile Manager" portlet in the Welcome=>Settings
             tab. Users may immediately join any groups that are public on the portal. If the group is private, then the
-            user has the option to request group submission from the portal administrator by sending an email request.
+            user has the option to request group submission from the portal administrator by sending an email request. If the group
+            is hidden, then the group is not displayed to the user for approval and will require explicit addition by a portal
+            administrator.
         </para>
         <para>
             A user that is granted the ADMIN role, an administrator,  when logged in will also have access to the "Group Manager" portlet.
