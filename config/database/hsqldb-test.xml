@@ -1,7 +1,7 @@
 <!DOCTYPE databases PUBLIC
 	"-//EXOLAB/Castor JDO Configuration DTD Version 1.0//EN"
 	"http://castor.exolab.org/jdo-conf.dtd">
-<database name="gridsphere-test" engine="hsql">
+<database name="@DATABASE_NAME@" engine="hsql">
  <driver class-name="org.hsqldb.jdbcDriver"
           url="jdbc:hsqldb:@TEST_HOME@/database/@DATABASE_NAME@">
     <param name="user" value="sa" />
