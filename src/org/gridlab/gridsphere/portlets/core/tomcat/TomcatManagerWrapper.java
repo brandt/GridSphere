@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.portlets.core.tomcat;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -28,7 +29,7 @@ public class TomcatManagerWrapper {
         return instance;
     }
 
-    public TomcatWebAppResult doCommand(String command) {
+    public TomcatWebAppResult doCommand(String command) throws TomcatManagerException {
         System.err.println(command);
         String show = "";
         TomcatWebAppResult result = null;
@@ -62,7 +63,7 @@ public class TomcatManagerWrapper {
                     System.err.println("HTTP Authorization failure");
 
                 } else {
-                    //throw new Exception(message);
+                    throw new TomcatManagerException("What the?");
                 }
             }
 
@@ -90,8 +91,8 @@ public class TomcatManagerWrapper {
                 }
             }
 
-        } catch (Exception e) {
-
+        } catch (IOException e) {
+            throw new TomcatManagerException("Unable to perform command: ", e);
         }
         return result;
     }
@@ -99,13 +100,18 @@ public class TomcatManagerWrapper {
     /**
      * Return the list of ui applications.
      */
-    public TomcatWebAppResult getWebAppList() {
+    public TomcatWebAppResult getWebAppList() throws TomcatManagerException {
         return doCommand("/list");
     }
 
-    public List getPortletAppList(List webapps) {
+    public List getPortletAppList(List webapps) throws TomcatManagerException {
         List l = new ArrayList();
         TomcatWebAppResult result = doCommand("/list");
+        if (result != null) {
+            System.err.println("result: " + result.getReturnCode() + " " + result.getDescription());
+        }  else {
+            System.err.println("in getPortletAppList: nothing came back!");
+        }
         Iterator it = result.getWebAppDescriptions().iterator();
         while (it.hasNext()) {
             TomcatWebAppDescription desc = (TomcatWebAppDescription)it.next();
@@ -114,37 +120,37 @@ public class TomcatManagerWrapper {
         return l;
     }
 
-    public TomcatWebAppResult reloadWebApp(String context) {
+    public TomcatWebAppResult reloadWebApp(String context) throws TomcatManagerException {
         if (!context.startsWith("/")) context = "/" + context;
         return doCommand("/reload?path=" + context);
     }
 
-    public TomcatWebAppResult removeWebApp(String context) {
+    public TomcatWebAppResult removeWebApp(String context) throws TomcatManagerException {
         if (!context.startsWith("/")) context = "/" + context;
         return doCommand("/remove?path=" + context);
     }
 
-    public TomcatWebAppResult startWebApp(String context) {
+    public TomcatWebAppResult startWebApp(String context) throws TomcatManagerException {
         if (!context.startsWith("/")) context = "/" + context;
         return doCommand("/start?path=" + context);
     }
 
-    public TomcatWebAppResult stopWebApp(String context) {
+    public TomcatWebAppResult stopWebApp(String context) throws TomcatManagerException {
         if (!context.startsWith("/")) context = "/" + context;
         return doCommand("/stop?path=" + context);
     }
 
-    public TomcatWebAppResult deployWebApp(String context) {
+    public TomcatWebAppResult deployWebApp(String context) throws TomcatManagerException {
         if (!context.startsWith("/")) context = "/" + context;
         return doCommand("/deploy?path=" + context);
     }
 
-    public TomcatWebAppResult undeployWebApp(String context) {
+    public TomcatWebAppResult undeployWebApp(String context) throws TomcatManagerException {
         if (!context.startsWith("/")) context = "/" + context;
         return doCommand("/undeploy?path=" + context);
     }
 
-    public TomcatWebAppResult installWebApp(String context, String warFile) {
+    public TomcatWebAppResult installWebApp(String context, String warFile) throws TomcatManagerException {
         //install?path=/foo&war=file:/path/to/foo
         if (!context.startsWith("/")) context = "/" + context;
         return doCommand("/install?path=" + context + "&war=" + warFile);
