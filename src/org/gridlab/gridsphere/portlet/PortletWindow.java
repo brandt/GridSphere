@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.portlet;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 /**
  * The <code>PortletWindow</code> represents the window that encloses a portlet.
@@ -19,7 +20,7 @@ public interface PortletWindow {
     /**
      * The <code>State</code> describes the <code>PortletWindow</code> state
      */
-    public static class State implements Serializable {
+    public static class State implements Serializable, Comparator {
 
         /**
          * The standard "one-of many" window state on a page.
@@ -52,12 +53,16 @@ public interface PortletWindow {
          */
         public static final PortletWindow.State RESIZING = new PortletWindow.State(PortletWindow.State.RESIZING_STATE);
 
+        /**
+         * The ordering here is also used in the layout of icons
+         */
         private static final int NORMAL_STATE = 0;
-        private static final int MAXIMIZED_STATE = 1;
-        private static final int MINIMIZED_STATE = 2;
-        private static final int CLOSED_STATE = 3;
-        private static final int DETACHED_STATE = 4;
-        private static final int RESIZING_STATE = 5;
+        private static final int MINIMIZED_STATE = 1;
+        private static final int MAXIMIZED_STATE = 2;
+        private static final int RESIZING_STATE = 3;
+        private static final int CLOSED_STATE = 4;
+        private static final int DETACHED_STATE = 5;
+
 
         private int state = NORMAL_STATE;
 
@@ -74,6 +79,14 @@ public interface PortletWindow {
          */
         private State(int state) {
             this.state = state;
+        }
+
+        /**
+         * Returns the portlet window state
+         * @return the portlet window state
+         */
+        public int getState() {
+            return state;
         }
 
         /**
@@ -124,6 +137,27 @@ public interface PortletWindow {
                 return "RESIZING";
             }
             return "Unknown State!";
+        }
+
+        public int compare(Object left, Object right) {
+            int leftID  =  ((PortletWindow.State)left).getState();
+            int rightID  = ((PortletWindow.State)right).getState();
+            int result;
+            if ( leftID < rightID ) { result = -1; }
+            else if ( leftID > rightID ) { result = 1; }
+            else { result = 0; }
+            return result;
+        }
+
+        public boolean equals(Object o) {
+            if ((o != null)  && (o instanceof PortletWindow.State)) {
+                return (this.state == ((PortletWindow.State)o).getState() ? true : false);
+            }
+            return false;
+        }
+
+        public int hashCode() {
+            return state;
         }
     }
 

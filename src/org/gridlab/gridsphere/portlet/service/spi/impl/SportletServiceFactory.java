@@ -24,9 +24,11 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.gridlab.gridsphere.services.core.user.impl.GridSphereUserManager;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.*;
+import java.net.URL;
 
 /**
  * The <code>SportletServiceFactory</code> provides a factory for the creation
@@ -55,37 +57,10 @@ public class SportletServiceFactory implements PortletServiceFactory {
     private SportletServiceFactory() {
         // Reads in the service definitions from the xml file and stores them in allServices
         // organized according to service interface keys and service definition values
-        Class clazz =  this.getClass();
         String servicesPath = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_SERVICES);
-
-
         String servicesMappingPath = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_SERVICES_MAPPING);
-
         addServices(servicesPath, servicesMappingPath);
     }
-
-    /**
-     * Constructor creates an instance of SportletServiceFactory from a servlet
-     * context
-     *
-     * <b>not fully implemented yet</b>
-     *
-     * @param context a <code>ServletContext</code>
-     */
-    /*
-    private SportletServiceFactory(ServletContext context) {
-        String webApplicationName = context.getServletContextName();
-        // get the servlet context for the coreportlets webapp
-        String contextURIPath = "/" + webApplicationName;
-        ServletContext ctx = context.getContext(contextURIPath);
-        if (ctx == null) System.err.println("Unable to get ServletContext for: " + contextURIPath);
-        // load in the PortletServices.xml file
-        Class clazz =  this.getClass();
-        String servicesPath = clazz.getResource("/gridsphere/config/PortletServices.xml").getFile();
-        String servicesMappingPath = clazz.getResource("/gridsphere/config/mapping/portlet-services-mapping.xml").getFile();
-        addServices(servicesPath, servicesMappingPath);
-    }
-    */
 
     /**
      * Umarshalls services from the descriptor file found in servicesPath
@@ -94,7 +69,7 @@ public class SportletServiceFactory implements PortletServiceFactory {
      * @param servicesPath the path to the portlet services descriptor file
      * @param mappingPath the path to the portlet services mapping file
      */
-    protected void addServices(String servicesPath, String mappingPath) {
+    public synchronized void addServices(String servicesPath, String mappingPath) {
         SportletServiceDescriptor descriptor = null;
         try {
             descriptor = new SportletServiceDescriptor(servicesPath, mappingPath);
@@ -124,7 +99,6 @@ public class SportletServiceFactory implements PortletServiceFactory {
      *
      * @param service the class of the service
      * @param servletConfig the servlet configuration
-     * @param boolean reuse a previous initialized service if true, otherwise create a new service instance if false
      * @return the instantiated portlet service
      * @throws PortletServiceUnavailableException if the portlet service is unavailable
      * @throws PortletServiceNotFoundException if the PortletService is not found
@@ -169,7 +143,6 @@ public class SportletServiceFactory implements PortletServiceFactory {
         }
 
         Properties configProperties = def.getConfigProperties();
-        List configList = def.getConfigParamList();
 
         PortletServiceConfig portletServiceConfig =
                 new SportletServiceConfig(service, configProperties, servletConfig);
@@ -193,11 +166,14 @@ public class SportletServiceFactory implements PortletServiceFactory {
     }
 
     /**
-     * createPortletServiceFactory instantiates the given class and initializes it
+     * Creates a user specific portlet service. If no instance exists, the service
+     * will be initialized before it is returned to the client.
      *
      * @param service the class of the service
+     * @param user the User
      * @param servletConfig the servlet configuration
-     * @param boolean reuse a previous initialized service if true, otherwise create a new service instance if false
+     * @param useCachedService reuse a previous initialized service if <code>true</code>,
+     * otherwise create a new service instance if <code>false</code>
      * @return the instantiated portlet service
      * @throws PortletServiceUnavailableException if the portlet service is unavailable
      * @throws PortletServiceNotFoundException if the PortletService is not found
@@ -232,7 +208,6 @@ public class SportletServiceFactory implements PortletServiceFactory {
         }
 
         Properties configProperties = def.getConfigProperties();
-        List configList = def.getConfigParamList();
 
         PortletServiceConfig portletServiceConfig =
                 new SportletServiceConfig(service, configProperties, servletConfig);

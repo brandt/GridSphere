@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.Enumeration;
+import java.util.Comparator;
 
 /**
  * A portlet is a small Java program that runs within a portlet container.
@@ -70,12 +71,12 @@ public abstract class Portlet extends HttpServlet
      * Possible mode values are <code>View</code>, <code>EDIT</code>,
      * <code>HELP</code> and <code>CONFIGURE</code>
      */
-    public static class Mode implements Serializable {
+    public static class Mode implements Comparator, Serializable {
 
         protected static final int VIEW_MODE = 1;
-        protected static final int EDIT_MODE = 2;
-        protected static final int HELP_MODE = 3;
-        protected static final int CONFIGURE_MODE = 4;
+        protected static final int CONFIGURE_MODE = 2;
+        protected static final int EDIT_MODE = 3;
+        protected static final int HELP_MODE = 4;
 
         public static final Mode EDIT = new Mode(EDIT_MODE);
         public static final Mode VIEW = new Mode(VIEW_MODE);
@@ -142,6 +143,26 @@ public abstract class Portlet extends HttpServlet
             return tagstring;
         }
 
+        public int compare(Object left, Object right) {
+            int leftID  =  ((Portlet.Mode)left).getMode();
+            int rightID  = ((Portlet.Mode)right).getMode();
+            int result;
+            if ( leftID < rightID ) { result = -1; }
+            else if ( leftID > rightID ) { result = 1; }
+            else { result = 0; }
+            return result;
+        }
+
+        public boolean equals(Object o) {
+            if ((o != null)  && (o instanceof Portlet.Mode)) {
+                return (this.mode == ((Portlet.Mode)o).getMode() ? true : false);
+            }
+            return false;
+        }
+
+        public int hashCode() {
+            return mode;
+        }
     }
 
     /**
