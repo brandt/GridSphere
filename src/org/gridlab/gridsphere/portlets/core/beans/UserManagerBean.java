@@ -26,6 +26,8 @@ import java.util.Vector;
 import java.util.Iterator;
 import java.security.acl.Group;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.ParseException;
 
 public class UserManagerBean extends PortletBean {
 
@@ -269,8 +271,12 @@ public class UserManagerBean extends PortletBean {
         return this.datePasswordExpires;
     }
 
-    public void setDatePasswordExpires(String expires) {
-        Date dateExpires = new Date(expires);
+    /**
+     *
+     * @param expires the DateFormat date/time representation obtained from DateFormat.getDateTimeInstance()
+     */
+    public void setDatePasswordExpires(String expires) throws ParseException {
+        Date dateExpires = DateFormat.getDateTimeInstance().parse(expires);
         this.datePasswordExpires = dateExpires;
     }
 
