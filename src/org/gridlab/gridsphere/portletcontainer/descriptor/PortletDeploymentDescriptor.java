@@ -35,13 +35,6 @@ public class PortletDeploymentDescriptor {
      */
     public List getPortletApp() {
         return PortletApp;
-    };
-
-    /**
-     * sets the PortletApp Vector
-     */
-    private void setPortletApp(Vector v) {
-        this.PortletApp = v;
     }
 
     /**
@@ -79,12 +72,12 @@ public class PortletDeploymentDescriptor {
             throw new PortletDeploymentDescriptorException("Configuration error: "+e.getMessage());
         }
 
-        this.setPortletApp((Vector)pd.getPortletAppList());
+        this.PortletApp = (Vector)pd.getPortletAppList());
     }
 
     /**
      * <b>not implemented yet</b>
      */
-    public void save() {};
+    public void save() {}
 
 }
