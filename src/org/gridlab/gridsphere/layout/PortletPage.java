@@ -401,8 +401,8 @@ public class PortletPage implements Serializable, Cloneable {
         out.println("<meta name=\"keywords\" content=\"" + keywords + "\"/>");
         out.println("  <link type=\"text/css\" href=\"themes/" + theme + "/css" +
                 "/default.css\" rel=\"stylesheet\"/>");
-        out.println("<link rel=\"icon\" href=\"favicon.ico\" type=\"imge/x-icon\">");
-        out.println("<link rel=\"shortcut icon\" href=\"favicon.ico\" type=\"image/x-icon\">");
+        out.println("<link rel=\"icon\" href=\"images/favicon.ico\" type=\"imge/x-icon\">");
+        out.println("<link rel=\"shortcut icon\" href=\"images/favicon.ico\" type=\"image/x-icon\">");
         out.println("<script language=\"JavaScript\" src=\"javascript/gridsphere.js\"></script>");
         out.println("</head><body>");
 
