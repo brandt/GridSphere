@@ -41,9 +41,6 @@
             <description>Hello World - Sample Portlet #1</description>
             <keywords>portlet hello world</keywords>
         </language>
-        <allowed-access visibility="public">
-            <role>ANY</role>
-        </allowed-access>
         <config-param>
             <param-name>Portlet Master</param-name>
             <param-value>yourid@yourdomain.com</param-value>
