@@ -489,7 +489,6 @@ Copyright:
             version="true"
             splitindex="true"
             use="true"
-            breakiterator="true"
             maxmemory="180m"
             windowtitle="${gridsphere.name}"
             doctitle="${gridsphere.api}"
@@ -819,7 +818,7 @@ Copyright:
     <!-- Mail the HTML reports of  the test results                          -->
     <!-- =================================================================== -->
     <target name="mail">
-        <mail 
+        <mail
             mailhost="${mail.junit.mailhost}"
             from="${mail.junit.from}"
             tolist="${mail.junit.tolist}"
