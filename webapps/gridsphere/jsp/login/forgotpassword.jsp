@@ -9,15 +9,16 @@
     <ui:messagebox key="LOGIN_FORGOT_TEXT"/>
 
     <ui:table>
-            <ui:tablerow>
-                <ui:tablecell width="100">
-                    <ui:text key="LOGIN_REQUEST_EMAIL"/>
-                </ui:tablecell>
-                <ui:tablecell width="60">
-                    <ui:textfield beanId="emailTF" size="25" maxlength="40"/>
-                </ui:tablecell>
-                <ui:tablecell/>
-            </ui:tablerow>
+        <ui:tablerow>
+            <ui:tablecell>
+                <ui:text key="LOGIN_REQUEST_EMAIL"/>
+            </ui:tablecell>
+        </ui:tablerow>
+        <ui:tablerow>
+            <ui:tablecell>
+                <ui:textfield beanId="emailTF" size="25" maxlength="40"/>
+            </ui:tablecell>
+        </ui:tablerow>
     </ui:table>
 
     <ui:table>
