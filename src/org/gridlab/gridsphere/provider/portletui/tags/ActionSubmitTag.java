@@ -23,6 +23,8 @@ public class ActionSubmitTag extends ActionTag {
 
     protected ActionSubmitBean actionSubmitBean = null;
 
+    protected String onClick = null;
+
     /**
      * Returns the action link key used to locate localized text
      *
@@ -39,6 +41,24 @@ public class ActionSubmitTag extends ActionTag {
      */
     public void setKey(String key) {
         this.key = key;
+    }
+
+    /**
+     * Returns the onClick JavaScript function
+     *
+     * @return onClick JavaScript function
+     */
+    public String getOnClick() {
+        return onClick;
+    }
+
+    /**
+     * Sets the onClick JavaScript function
+     *
+     * @param onClick the onClick JavaScript function
+     */
+    public void setOnClick(String onClick) {
+        this.onClick = onClick;
     }
 
     public int doStartTag() throws JspException {
@@ -77,6 +97,10 @@ public class ActionSubmitTag extends ActionTag {
             value = getLocalizedText(key);
         }
 
+        if (onClick != null) {
+            actionSubmitBean.setOnClick(onClick);
+        }
+        
         if (!beanId.equals("")) {
             this.updateBaseComponentBean(actionSubmitBean);
         } else {

@@ -16,6 +16,8 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
     public static final String SUBMIT_STYLE = "portlet-form-button";
     public static final String NAME = "as";
 
+    protected String onClick = null;
+
     /**
      * Constructs a default action submit bean
      */
@@ -48,6 +50,24 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
         this.beanId = beanId;
     }
 
+    /**
+     * Returns the onClick JavaScript function
+     *
+     * @return onClick JavaScript function
+     */
+    public String getOnClick() {
+        return onClick;
+    }
+
+    /**
+     * Sets the onClick JavaScript function
+     *
+     * @param onClick the onClick JavaScript function
+     */
+    public void setOnClick(String onClick) {
+        this.onClick = onClick;
+    }
+
     public String toStartString() {
         return "<input " + getFormattedCss() + " type=\"submit\" " + checkDisabled();
     }
@@ -55,11 +75,14 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
     public String toEndString() {
         String pname = (name == null) ? "" : name;
         String sname = pname;
-
+        StringBuffer sb = new StringBuffer();
         if (action != null) sname = action;
         if (anchor != null) sname += "#" + anchor;
-
-        return "name=\"" + sname + "\" value=\"" + value + "\"/>";
+        if (onClick != null) {
+            sb.append(" onChange='" + onClick + "' ");
+        }
+        sb.append("name=\"" + sname + "\" value=\"" + value + "\"/>");
+        return sb.toString();
     }
 
 }
