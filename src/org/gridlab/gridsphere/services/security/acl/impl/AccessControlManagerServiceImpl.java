@@ -37,7 +37,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     /**
      * Promotes a user to the role of super
      *
-     * @param user the User object
+     * @param user the Role object
      */
     public void addUserToSuperRole(User user) {
 
@@ -74,7 +74,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     /**
      * Add a role to a user in a group
      *
-     * @param user the User object
+     * @param user the Role object
      * @param group the PortletGroup
      * @param role the PortletRole
      */
@@ -85,7 +85,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     /**
      * Add a user to a group with a specified role
      *
-     * @param user the User object
+     * @param user the Role object
      * @param group the PortletGroup
      * @param role the PortletRole
      */
@@ -96,7 +96,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     /**
      * Removes a user from a group
      *
-     * @param user the User object
+     * @param user the Role object
      * @param group the PortletGroup
      */
     public void removeUserFromGroup(User user, PortletGroup group) {
@@ -106,7 +106,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     /**
      * Remove a specified user role from a group
      *
-     * @param user the User object
+     * @param user the Role object
      * @param group the PortletGroup
      * @param role the PortletRole
      */

@@ -52,7 +52,7 @@ public class AccessControlServiceImpl implements PortletServiceProvider, AccessC
     /**
      * Checks if a user has a particular role in a group
      *
-     * @param user the User object
+     * @param user the Role object
      * @param group the PortletGroup
      * @param role the PortletRole
      * @return true if the user has the specified role in the specified group, false otherwise
@@ -75,7 +75,7 @@ public class AccessControlServiceImpl implements PortletServiceProvider, AccessC
     /**
      * Return a list of PortletRole objects for a user in a group
      *
-     * @param user the User object
+     * @param user the Role object
      * @param group the PortletGroup
      * @return a list of PortletRole objects
      */
@@ -104,7 +104,7 @@ public class AccessControlServiceImpl implements PortletServiceProvider, AccessC
     /**
      * Returns a list of PortletGroup objects associated with a user
      *
-     * @param user the User object
+     * @param user the Role object
      * @return the list of PortletGroup objects
      */
     public List getGroups(User user) {
@@ -114,7 +114,7 @@ public class AccessControlServiceImpl implements PortletServiceProvider, AccessC
     /**
      * Check to see if a user is in a group
      *
-     * @param user the User object
+     * @param user the Role object
      * @param group the PortletGroup
      * @return true if the user in the PortletGroup, false otherwise
      */

@@ -10,10 +10,7 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRole;
-import org.gridlab.gridsphere.portlet.impl.SportletUser;
-import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletGroupImpl;
+import org.gridlab.gridsphere.portlet.impl.*;
 
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
@@ -139,7 +136,7 @@ public class ACLServiceTest extends ServiceTest {
         addUsersToGroups();
 
         // test getUsersInGroup
-        List users = aclService.getUsersInGroup(PortletRole.getUserRole(), cactus);
+        List users = aclService.getUsersInGroup(SportletRole.getUserRole(), cactus);
         assertEquals(users.size(), 1);
 
         User user = (User)users.get(0);
@@ -165,28 +162,28 @@ public class ACLServiceTest extends ServiceTest {
         addUsersToGroups();
 
         List roles;
-        aclManagerService.addRoleInGroup(hans, cactus, PortletRole.getAdminRole());
-        assertTrue(aclService.hasRoleInGroup(hans, cactus, PortletRole.getAdminRole()));
+        aclManagerService.addRoleInGroup(hans, cactus, SportletRole.getAdminRole());
+        assertTrue(aclService.hasRoleInGroup(hans, cactus, SportletRole.getAdminRole()));
 
         roles = aclService.getRolesInGroup(hans, cactus);
         // should have user and admin role
         assertEquals(roles.size(), 2);
 
-        aclManagerService.removeUserRoleFromGroup(hans, cactus, PortletRole.getUserRole());
+        aclManagerService.removeUserRoleFromGroup(hans, cactus, SportletRole.getUserRole());
         roles = aclService.getRolesInGroup(hans, cactus);
         // should have user role
         assertEquals(roles.size(), 1);
         PortletRole role = (PortletRole)roles.get(0);
-        assertEquals(role.getRole(), PortletRole.USER);
+        assertEquals(role.getRole(), SportletRole.USER);
 
         // remove josef from user role hence he has no roles
-        aclManagerService.removeUserRoleFromGroup(josef, portals, PortletRole.getUserRole());
+        aclManagerService.removeUserRoleFromGroup(josef, portals, SportletRole.getUserRole());
         List group = aclService.getGroups(josef);
         assertTrue(!aclService.isUserInGroup(josef, portals));
         assertTrue(!group.contains(portals));
 
         // should do nothing
-        aclManagerService.removeUserRoleFromGroup(josef, portals, PortletRole.getAdminRole());
+        aclManagerService.removeUserRoleFromGroup(josef, portals, SportletRole.getAdminRole());
 
     }
 
@@ -234,9 +231,9 @@ public class ACLServiceTest extends ServiceTest {
      */
     protected void addUsersToGroups() {
 
-        aclManagerService.addUserToGroup(hans, cactus, PortletRole.getUserRole());
-        aclManagerService.addUserToGroup(franz, triana, PortletRole.getUserRole());
-        aclManagerService.addUserToGroup(josef, portals, PortletRole.getUserRole());
+        aclManagerService.addUserToGroup(hans, cactus, SportletRole.getUserRole());
+        aclManagerService.addUserToGroup(franz, triana, SportletRole.getUserRole());
+        aclManagerService.addUserToGroup(josef, portals, SportletRole.getUserRole());
 
         assertTrue(aclService.isUserInGroup(hans, cactus));
         assertTrue(aclService.isUserInGroup(franz, triana));
