@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.event.impl.FormEventImpl;
 import org.gridlab.gridsphere.provider.ui.beans.*;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import java.util.*;
 import java.lang.reflect.Method;
@@ -102,6 +103,10 @@ public class ActionEventHandler {
         return this.log;
     }
 
+    public PortletURI createPortletURI() {
+        return this.response.createReturnURI();
+    }
+
     public PortletURI createPortletActionURI(String action) {
         PortletURI actionURI = this.response.createReturnURI();
         actionURI.addAction(new DefaultPortletAction(action));
@@ -146,16 +151,36 @@ public class ActionEventHandler {
     }
 
     public String getActionPerformedParameter(String paramName) {
-        String actionParameter = null;
+        this.log.debug("Parameter name = " + paramName);
+        String actionPerformedParameter = null;
         if (this.actionEvent == null) {
-            actionParameter = "";
+            this.log.debug("No action event");
+            // If no action event, then return blank
+            actionPerformedParameter = "";
         } else {
-            actionParameter = (String)this.actionEvent.getAction().getParameters().get(paramName);
-            if (actionParameter == null) {
-                actionParameter = "";
+            // Else see if action parameter exists
+            this.log.debug("Action performed = " + this.actionEvent.getAction().toString());
+            Map actionParameters = this.actionEvent.getAction().getParameters();
+            actionPerformedParameter = (String)actionParameters.get(paramName);
+            this.log.debug("Parameter value = " + actionPerformedParameter);
+            if (actionPerformedParameter == null) {
+                // Else we see if it exists as a tag element
+                StringBuffer newParamName = new StringBuffer("gstag:cid:");
+                newParamName.append(this.request.getParameter(GridSphereProperties.COMPONENT_ID));
+                newParamName.append(":");
+                newParamName.append(paramName);
+                paramName = newParamName.toString();
+                this.log.debug("Parameter name = " + paramName);
+                actionPerformedParameter = this.request.getParameter(paramName);
+                this.log.debug("Parameter value = " + actionPerformedParameter);
+                if (actionPerformedParameter == null) {
+                    this.log.debug("Parameter value is blank");
+                    // Otherwise return blank
+                    actionPerformedParameter = "";
+                }
             }
         }
-        return actionParameter;
+        return actionPerformedParameter;
     }
 
     public TagBean getTagBean(String beanName) {

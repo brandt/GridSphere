@@ -186,6 +186,7 @@ public class UserManagerBean extends ActionEventHandler {
     }
 
     private User listUser() {
+        log.debug("Entering listUser()");
         this.userList = this.userManagerService.getUsers();
         TableBean tableBean = null;
         if (this.userList.size() == 0) {
@@ -193,18 +194,17 @@ public class UserManagerBean extends ActionEventHandler {
             tableBean = createTableBeanWithMessage(message);
         } else {
             // View action depends on which mode we're in...
-            String viewAction = null;
+            String viewActionName = null;
             if (getPortletMode().equals(Portlet.Mode.CONFIGURE)) {
                 // If in config mode, then want config mode view user
-                viewAction = "doConfigureViewUser";
+                viewActionName = "doConfigureViewUser";
             } else {
                 // Otherwise want view mode view user
-                viewAction = "doViewViewUser";
+                viewActionName = "doViewViewUser";
             }
 
             // Create headers
             List headers = new Vector();
-            headers.add("User ID");
             headers.add("User Name");
             headers.add("Full Name");
             headers.add("Email Address");
@@ -218,16 +218,11 @@ public class UserManagerBean extends ActionEventHandler {
                 User user = (User)userIterator.next();
                 // Create new table row
                 TableRowBean rowBean = new TableRowBean();
-                // User id
-                PortletURI userIDLink = createPortletActionURI(viewAction);
-                userIDLink.addParameter("userID", user.getID());
-                ActionLinkBean userIDLinkBean =
-                        new ActionLinkBean(userIDLink, viewAction, user.getID());
+                // User name with user id action link
+                ActionLinkBean userIDLinkBean
+                        = new ActionLinkBean(createPortletURI(), viewActionName, user.getID());
+                userIDLinkBean.addParamBean("userID", user.getUserName());
                 TableCellBean cellBean = createTableCellBean(userIDLinkBean);
-                rowBean.add(cellBean);
-                // User name
-                TextBean userNameBean = new TextBean(user.getUserName());
-                cellBean = createTableCellBean(userNameBean);
                 rowBean.add(cellBean);
                 // Full name
                 TextBean fullNameBean = new TextBean(user.getFullName());
@@ -247,6 +242,7 @@ public class UserManagerBean extends ActionEventHandler {
         }
         // All done
         tableBean.store("userList", request);
+        log.debug("Exiting listUser()");
         return user;
     }
 

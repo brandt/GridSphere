@@ -36,6 +36,21 @@ public class ActionLinkBean extends TextBean implements Link {
     }
 
     /**
+     * Sets the uri for the link.
+     */
+    public void setPortletURI(PortletURI portletURI) {
+        this.portletURI = portletURI;
+    }
+
+    /**
+     * Gets the uri for the link.
+     * @return returns the action
+     */
+    public PortletURI getPortletURI() {
+        return portletURI;
+    }
+
+    /**
      * Sets the action for the link.
      */
     public void setAction(String action) {
@@ -70,6 +85,11 @@ public class ActionLinkBean extends TextBean implements Link {
         paramBeanList.add(paramBean);
     }
 
+    public void addParamBean(String paramName, String paramValue) {
+        ParamBean paramBean = new ParamBean(paramName, paramValue);
+        paramBeanList.add(paramBean);
+    }
+
     public void removeParamBean(ParamBean paramBean) {
         paramBeanList.remove(paramBean);
     }
@@ -91,14 +111,16 @@ public class ActionLinkBean extends TextBean implements Link {
 
     private void createLink() {
         DefaultPortletAction portletAction = new DefaultPortletAction(action);
-        portletURI.addAction(portletAction);
         Iterator it = paramBeanList.iterator();
         ParamBean paramBean = null;
         while (it.hasNext()) {
             paramBean = (ParamBean)it.next();
             portletAction.addParameter(paramBean.getName(), paramBean.getValue());
         }
+        log.debug("Portlet action = " + portletAction.toString());
+        portletURI.addAction(portletAction);
         link = portletURI.toString();
+        log.debug("Portlet action uri = " + link);
         this.setText(label);
     }
 
