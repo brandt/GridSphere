@@ -22,9 +22,9 @@
 <ui:text key="LAYOUT_TAB_NAME"/>&nbsp;&nbsp;<ui:textfield beanId="userTabTF"/>
 <p>
 
-<ui:radiobutton beanId="colsRB" selected="true" value="1"/><ui:text key="LAYOUT_ONE_COL"/>
-<ui:radiobutton beanId="colsRB" value="2"/><ui:text key="LAYOUT_TWO_COL"/>
-<ui:radiobutton beanId="colsRB" value="3"/><ui:text key="LAYOUT_THREE_COL"/>
+<ui:radiobutton name="colsRB" value="1"/><ui:text key="LAYOUT_ONE_COL"/>
+<ui:radiobutton name="colsRB" value="2" selected="true"/><ui:text key="LAYOUT_TWO_COL"/>
+<ui:radiobutton name="colsRB" value="3"/><ui:text key="LAYOUT_THREE_COL"/>
 
 <p>
 <ui:actionsubmit action="createNewTab" key="CREATE"/>
