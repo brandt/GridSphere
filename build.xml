@@ -171,6 +171,8 @@ Copyright:
         <exclude name="org/gridlab/gridsphere/event/**"/>
         <!-- don't include core portlets -->
         <exclude name="org/gridlab/gridsphere/portlets/**"/>
+        <!-- don't include portlet widgets tag library -->
+        <exclude name="org/gridlab/gridsphere/tags/**"/>
     </jar>
   </target>
 
@@ -187,6 +189,16 @@ Copyright:
   </target>
 
   <!-- =================================================================== -->
+  <!-- Creates the Portlet Widgets Tag Library                             -->
+  <!-- =================================================================== -->
+  <target name="portlet-widgets-jar" depends="compile" description="Create ${build.lib}/portlet-widget-tags.jar">
+    <jar jarfile="${build.lib}/portlet-widget-tags.jar" basedir="${classes.dir}" >
+        <include name="org/gridlab/gridsphere/tags/**" />
+        <metainf dir="${gswebapp.dir}/WEB-INF/tlds"/>
+    </jar>
+  </target>
+
+  <!-- =================================================================== -->
   <!-- Creates core portlets required by GridSphere                        -->
   <!-- =================================================================== -->
   <target name="core-portlets-jar" depends="compile" description="Create ${build.lib}/coreportlets.jar">
@@ -199,7 +211,7 @@ Copyright:
   <!-- =================================================================== -->
   <!-- Creates all JAR's                                                   -->
   <!-- =================================================================== -->
-  <target name="jar" depends="gridsphere-jar, portlet-api-jar" description="Creates all jars"/>
+  <target name="jar" depends="gridsphere-jar, portlet-api-jar, portlet-widgets-jar" description="Creates all jars"/>
 
   <!-- =================================================================== -->
   <!-- Cleans everything                                                   -->
@@ -354,6 +366,9 @@ Copyright:
                 <exclude name="coreportlets.jar"/>
             </fileset>
         </copy>
+
+        <replace file="${install.war}/${Name}/WEB-INF/conf/hsqldb.xml" token="@CATALINA_HOME@" value="${env.CATALINA_HOME}"/>
+        <replace file="${install.war}/${Name}/WEB-INF/conf/hsqldb-junit.xml" token="@CATALINA_HOME@" value="${env.CATALINA_HOME}"/>
         <copy todir="${env.CATALINA_HOME}/webapps/${Name}">
             <fileset dir="${install.war}/${Name}"/>
         </copy>
