@@ -292,6 +292,7 @@ public class PortletTitleBar extends BasePortletComponent {
             try {
                 out.println("<span class=\"window-title-name\">");
                 userManager.doTitle(portletClass, req, res);
+                out.println(" ("+portletMode.toString()+") ");
                 out.println("</span>");
                 title = "";
             } catch (PortletException e) {
