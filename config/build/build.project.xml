@@ -330,6 +330,8 @@ Copyright:
 
         <antcall target="copygs"/>
         <antcall target="copyjsr"/>
+
+        <antcall target="configure-database"/>
     </target>
 
     <target name="copyjsr" if="use.jsr">
