@@ -197,7 +197,7 @@
                 portlet.
                 <screen>
 <![CDATA[
-<ui:actionlink action="doActionLink">Click Me</>]]>
+<ui:actionlink action="doActionLink">Click Me</ui:actionlink>]]>
                 </screen>
                 This example would create an html hyperlink pointing to the current portlet with a clickable
                 text value of "Click Me" as specified in the body of the tag.
@@ -210,14 +210,14 @@
                 specified default values.
                 <screen>
 <![CDATA[
-<ui:actionlink secure="true" label="login">Click to login</>]]>
+<ui:actionlink secure="true" label="login">Click to login</ui:actionlink>]]>
                 </screen>
                 This example would create a secure "https" html hyperlink pointing to the Login portlet (as defined by
                 label="login" in the layout descriptor file) with a clickable
                 text value of "Click to login" as specified in the body of the tag.
                 <screen>
 <![CDATA[
-<ui:actionlink label="login" action="doSomething">Click to login and doSomething</>]]>
+<ui:actionlink label="login" action="doSomething">Click to login and doSomething</ui:actionlink>]]>
                 </screen>
                 This example would create an html hyperlink pointing to the Login portlet (as defined by
                 label="login" in the layout descriptor file) that would also invoke the doSomething method
