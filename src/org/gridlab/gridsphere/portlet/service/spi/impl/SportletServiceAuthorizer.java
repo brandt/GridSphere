@@ -9,7 +9,7 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletServiceAuthorizationException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceAuthorizer;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
-import org.gridlab.gridsphere.services.core.user.impl.GridSphereUserManager;
+import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManager;
 
 /**
  * The <code>SportletServiceAuthorizer</code> provides an implementation of
@@ -30,7 +30,7 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
             "The user calling this method must have super privileges, admin privileges within this group, or be the same user given to this method";
 
     private User user = null;
-    private GridSphereUserManager userManager = null;
+    private AccessControlManager aclManager = null;
 
     /**
      * Constructor disallows non-argument instantiation
@@ -45,9 +45,9 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
      * @param user the supplied <code>User</code>
      * @param userManager an instance of <code>GridSphereUserManager</code>
      */
-    public SportletServiceAuthorizer(User user, GridSphereUserManager userManager) {
+    public SportletServiceAuthorizer(User user, AccessControlManager userManager) {
         this.user = user;
-        this.userManager = userManager;
+        this.aclManager = userManager;
     }
 
     /**
@@ -56,7 +56,7 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
      * @throws PortletServiceAuthorizationException if supplied user is not a super user
      */
     public void authorizeSuperUser() throws PortletServiceAuthorizationException {
-        if (!userManager.hasSuperRole(user)) {
+        if (!aclManager.hasSuperRole(user)) {
             throw new PortletServiceAuthorizationException(SUPER_MESSAGE);
         }
     }
@@ -69,7 +69,7 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
      * @throws PortletServiceAuthorizationException if supplied user is not an admin user
      */
     public void authorizeAdminUser(PortletGroup group) throws PortletServiceAuthorizationException {
-        if (!userManager.hasAdminRoleInGroup(user, group)) {
+        if (!aclManager.hasAdminRoleInGroup(user, group)) {
             throw new PortletServiceAuthorizationException(ADMIN_MESSAGE);
         }
     }
@@ -83,8 +83,8 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
      */
     public void authorizeSuperOrAdminUser(PortletGroup group)
             throws AuthorizationException {
-        if (!userManager.hasSuperRole(this.user) &&
-                !userManager.hasAdminRoleInGroup(this.user, group)) {
+        if (!aclManager.hasSuperRole(this.user) &&
+                !aclManager.hasAdminRoleInGroup(this.user, group)) {
             throw new PortletServiceAuthorizationException(SUPER_OR_ADMIN_MESSAGE);
         }
     }
@@ -99,7 +99,7 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
      */
     public void authorizeSuperOrSameUser(User user)
             throws AuthorizationException {
-        if (!userManager.hasSuperRole(this.user) &&
+        if (!aclManager.hasSuperRole(this.user) &&
                 !this.user.equals(user)) {
             throw new PortletServiceAuthorizationException(SUPER_OR_SAME_MESSAGE);
         }
@@ -117,8 +117,8 @@ public class SportletServiceAuthorizer implements PortletServiceAuthorizer {
      */
     public void authorizeSuperAdminOrSameUser(User user, PortletGroup group)
             throws AuthorizationException {
-        if (!userManager.hasSuperRole(this.user) &&
-                !userManager.hasAdminRoleInGroup(this.user, group) &&
+        if (!aclManager.hasSuperRole(this.user) &&
+                !aclManager.hasAdminRoleInGroup(this.user, group) &&
                 !this.user.equals(user)) {
             throw new PortletServiceAuthorizationException(SUPER_ADMIN_OR_SAME_MESSAGE);
         }

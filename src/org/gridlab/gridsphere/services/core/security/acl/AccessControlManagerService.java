@@ -69,6 +69,12 @@ public interface AccessControlManagerService extends PortletService {
 
     public GroupEntry getGroupEntry(User user, PortletGroup group);
 
+    public void addGroupEntry(User user, PortletGroup group, PortletRole role);
+
+    public void deleteGroupEntry(GroupEntry entry);
+
+    public void deleteGroupEntries(User user);
+
     /*** ACCESS CONTROL LOGIC METHODS ***/
 
     public List getGroups(User user);

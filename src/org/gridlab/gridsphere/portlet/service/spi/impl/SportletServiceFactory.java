@@ -20,7 +20,7 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServic
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
-import org.gridlab.gridsphere.services.core.user.impl.GridSphereUserManager;
+import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManager;
 
 import javax.servlet.ServletConfig;
 import java.io.IOException;
@@ -37,7 +37,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
 
     private static PortletLog log = SportletLog.getInstance(SportletServiceFactory.class);
     private static SportletServiceFactory instance = null;
-    private static GridSphereUserManager userManager = GridSphereUserManager.getInstance();
+    private static AccessControlManager aclManager = AccessControlManager.getInstance();
     private static PortletSessionManager portletSessionManager = PortletSessionManager.getInstance();
     private static UserSessionManager userSessionManager = UserSessionManager.getInstance();
 
@@ -254,7 +254,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
                 new SportletServiceConfig(service, configProperties, servletConfig);
 
         // Create an authroizer for the secure service
-        PortletServiceAuthorizer auth = new SportletServiceAuthorizer(user, userManager);
+        PortletServiceAuthorizer auth = new SportletServiceAuthorizer(user, aclManager);
 
         // instantiate wrapper with user and impl
         PortletServiceProvider psp = null;
@@ -330,8 +330,8 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
      */
     public void shutdownServices() {
         // Calls destroy() on all services we know about
+        log.info("Shutting down all portlet services:");
         Enumeration keys = initServices.keys();
-        log.info("Shutting down all services:");
         while (keys.hasMoreElements()) {
             String serviceName = (String) keys.nextElement();
             PortletServiceProvider psp = (PortletServiceProvider) initServices.get(serviceName);

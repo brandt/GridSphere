@@ -17,7 +17,7 @@ import java.util.List;
 
 public class UserManagerServiceImpl implements UserManagerService, PortletServiceProvider {
 
-    private GridSphereUserManager userManager = GridSphereUserManager.getInstance();
+    private UserManager userManager = UserManager.getInstance();
     private PortletServiceAuthorizer authorizer = null;
 
     public UserManagerServiceImpl(PortletServiceAuthorizer authorizer) {

@@ -19,13 +19,12 @@ import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerSer
 import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.security.acl.InvalidGroupRequestException;
-import org.gridlab.gridsphere.services.core.user.impl.GridSphereUserManager;
 
 import java.util.List;
 
 public class AccessControlManagerServiceImpl implements AccessControlManagerService, PortletServiceProvider {
 
-    private GridSphereUserManager aclManager = GridSphereUserManager.getInstance();
+    private AccessControlManager aclManager = AccessControlManager.getInstance();
     private PortletServiceAuthorizer authorizer = null;
 
     public AccessControlManagerServiceImpl(PortletServiceAuthorizer authorizer) {
@@ -140,6 +139,18 @@ public class AccessControlManagerServiceImpl implements AccessControlManagerServ
 
     public GroupEntry getGroupEntry(User user, PortletGroup group) {
         return aclManager.getGroupEntry(user, group);
+    }
+
+    public void deleteGroupEntry(GroupEntry entry) {
+        aclManager.deleteGroupEntry(entry);
+    }
+
+    public void deleteGroupEntries(User user) {
+        aclManager.deleteGroupEntries(user);
+    }
+
+    public void addGroupEntry(User user, PortletGroup group, PortletRole role) {
+        aclManager.addGroupEntry(user, group, role);
     }
 
     /*** ACCESS CONTROL LOGIC METHODS ***/
