@@ -47,9 +47,17 @@ public interface SportletUser extends User {
     /**
      * Sets the given e-mail of the user.
      *
-     * @param the email address
+     * @param emailAddress the email address
      */
     public void setEmailAddress(String emailAddress);
+
+    /**
+     * Sets the organization the user belongs to
+     *
+     * @param organization the organization name
+     *
+     */
+    public void setOrganization(String organization);
 
     /**
      * Sets the internal unique user id.
