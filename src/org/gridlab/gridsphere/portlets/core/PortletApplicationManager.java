@@ -67,20 +67,17 @@ public class PortletApplicationManager extends AbstractPortlet {
                     log.error("Unable to save file from form: " + ffe.getMessage());
                 }
 
-                /* Remove old portlet ui app if it exists */
+                /* Remove old portlet web app if it exists */
                 int idx = -1;
                 String webAppContext = null;
                 String webAppName = null;
-                List webappsList = portletManager.getPortletWebApplications();
+                List webappsList = portletManager.getPortletWebApplicationNames();
                 if ((idx = portletWar.lastIndexOf(".")) > 0) {
                     webAppName = portletWar.substring(0, idx);
                     System.err.println(webAppName);
                     if ((idx = webAppName.lastIndexOf("/")) > 0) {
                         webAppContext = webAppName.substring(idx);
                         webAppName = webAppContext.substring(1);
-                        System.err.println("webappcontext: " + webAppContext);
-                        System.err.println("webappname: " + webAppName);
-
                         if (webappsList.contains(webAppName)) {
                             portletManager.removePortletWebApplication(webAppName, req, res);
                             result = tomcat.removeWebApp(webAppName);

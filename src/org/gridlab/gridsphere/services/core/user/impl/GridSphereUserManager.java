@@ -17,30 +17,31 @@ import org.gridlab.gridsphere.services.core.security.password.PasswordManagerSer
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.impl.DbmsPasswordManagerService;
-import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.portlet.PortletRole;
-import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.core.mail.MailMessage;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
+import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
+import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
 
-import java.util.Map;
-import java.util.List;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.*;
 
 public class GridSphereUserManager implements LoginService, UserManagerService, AccessControlManagerService {
 
     private static PortletLog log = SportletLog.getInstance(GridSphereUserManager.class);
     private static GridSphereUserManager instance = new GridSphereUserManager();
+    private PortletManagerService pms = null;
     private PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
     private PasswordManagerService passwordManagerService = DbmsPasswordManagerService.getInstance();
     private List authenticationModules = new Vector();
@@ -62,6 +63,12 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.info("Entering init()");
         if (!isInitialized) {
+            PortletServiceFactory factory = SportletServiceFactory.getInstance();
+            try {
+                pms = (PortletManagerService)factory.createUserPortletService(PortletManagerService.class, GuestUser.getInstance(), config.getServletConfig(), true);
+            } catch (Exception e) {
+                throw new PortletServiceUnavailableException("Unable to get instance of PMS!");
+            }
             initAccessControl(config);
             initRootUser(config);
             initAuthenticationModules();
@@ -89,20 +96,24 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     }
 
     private void initSportletGroup(SportletGroup group) {
-        String groupName = group.getName();
-        SportletGroup testGroup = getSportletGroupByName(groupName);
-        if (testGroup == null) {
-            log.info("Creating group " + groupName);
-            try {
-                pm.create(group);
-            } catch (PersistenceManagerException e) {
-                String msg = "Error creating portlet group " + groupName;
-                log.error(msg, e);
+        List webappNames = pms.getPortletWebApplicationNames();
+        Iterator it = webappNames.iterator();
+        while (it.hasNext()) {
+            String groupName = (String)it.next();
+            SportletGroup testGroup = getSportletGroupByName(groupName);
+            if (testGroup == null) {
+                log.info("Creating group " + groupName);
+                try {
+                    pm.create(group);
+                } catch (PersistenceManagerException e) {
+                    String msg = "Error creating portlet group " + groupName;
+                    log.error(msg, e);
+                }
+            } else {
+                String groupId = testGroup.getID();
+                log.info("Setting group " + groupName + " id to " + groupId);
+                group.setID(groupId);
             }
-        } else {
-            String groupId = testGroup.getID();
-            log.info("Setting group " + groupName + " id to " + groupId);
-            group.setID(groupId);
         }
     }
 
@@ -949,10 +960,6 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         return selectSportletGroup("where portletGroup.ObjectID=\"" + id + "\"");
     }
 
-    private PortletGroup getCoreGroup() {
-        return SportletGroup.CORE;
-    }
-
     private PortletGroup getSuperGroup() {
         return SportletGroup.SUPER;
     }
@@ -1080,6 +1087,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     }
 
     public PortletRole getRoleInGroup(User user, PortletGroup group) {
+        System.err.println("I am being called with : " + user.getUserName() + group.toString());
         if (hasSuperRole(user)) {
             return PortletRole.SUPER;
         } else {

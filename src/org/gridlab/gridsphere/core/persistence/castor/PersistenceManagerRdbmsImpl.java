@@ -35,8 +35,8 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     private PersistenceManagerRdbmsImpl() {}
 
     public PersistenceManagerRdbmsImpl(String databaseName, String databaseConfigFile) {
-        log.info("Creating PersistenceManagerRdbmsImpl");
-        log.info("Using '" + databaseName + "' as Databasename with the configfile '" + databaseConfigFile + "'");
+        log.debug("Creating PersistenceManagerRdbmsImpl");
+        log.debug("Using '" + databaseName + "' as Databasename with the configfile '" + databaseConfigFile + "'");
 
         try {
             JDO.loadConfiguration(databaseConfigFile);
@@ -142,7 +142,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             throw new PersistenceManagerException("Persistence Error: " + e);
         } catch (NoSuchElementException e) {
             log.error("NoSuchElementException!" + e);
-            throw new PersistenceManagerException("No such element error: " + e);
+            throw new PersistenceManagerException("No such beans error: " + e);
         } finally {
             if (db != null) {
                 try {
@@ -195,22 +195,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             db.commit();
             db.close();
             db = null;
-        } catch (NoSuchMethodException e) {
-            log.info("Exception " + e);
-            throw new PersistenceManagerException("Mapping Error :" + e);
-        } catch (SecurityException e) {
-            log.info("Exception " + e);
-            throw new PersistenceManagerException("Mapping Error :" + e);
-        } catch (IllegalAccessException e) {
-            log.info("Exception " + e);
-            throw new PersistenceManagerException("Mapping Error :" + e);
-        } catch (IllegalArgumentException e) {
-            log.info("Exception " + e);
-            throw new PersistenceManagerException("Mapping Error :" + e);
-        } catch (InvocationTargetException e) {
-            log.info("Exception " + e);
-            throw new PersistenceManagerException("Mapping Error :" + e);
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             log.info("Exception " + e);
             throw new PersistenceManagerException("Mapping Error :" + e);
         }   finally {
@@ -289,7 +274,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             throw new PersistenceManagerException("Persistence Error: " + e);
         } catch (NoSuchElementException e) {
             log.error("NoSuchElementException!" + e);
-            throw new PersistenceManagerException("No such element error: " + e);
+            throw new PersistenceManagerException("No such beans error: " + e);
         } finally {
             if (db != null) {
                 try {
