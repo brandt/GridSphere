@@ -490,8 +490,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         }
         frame.append(postframe);
         out = res.getWriter();
-        out.println(frame.toString());
-
+        if (errorFrame.hasError()) {
+            errorFrame.doRender(event);
+        } else {
+            out.println(frame.toString());
+        }
         cacheService.cache(portletClass + id, frame, 0, false);
     }
 
