@@ -1194,8 +1194,14 @@
                         <row>
                             <entry>style</entry><entry>no</entry><entry>string: the style to display text in.
                                 Possible values include <constant>error</constant>, <constant>info</constant>
-                            <constant>alert</constant>, <constant>status</constant> and <constant>success</constant>.
+                            <constant>alert</constant>, <constant>status</constant>, <constant>success</constant>.
                             The default style used is <constant>info</constant></entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>format</entry><entry>no</entry><entry>string: additional style values. This attribute
+                            allows you to override or add to the style being used.</entry>
                         </row>
                     </tbody>
                 </tgroup>
@@ -1205,11 +1211,14 @@
                 <screen>
 <![CDATA[<ui:text key="GREETING_MSG"/>
 <ui:text value="something bad happened" style="error"/>
-<ui:text style="error">something bad happened</>]]>
+<ui:text style="error">something bad happened</>
+<ui:text style="error" format="font-style:italic;color:red">something bad happened</>]]>
                 </screen>
                 The first example prints a localized message using the GREETING_MSG as a key. The
                 second example displays a message using the error look and feel and the third example is the
-                same as the second, but uses the tag body to specify the display message.
+                same as the second, but uses the tag body to specify the display message. The fourthe example
+                shows ow you can override the default look and feel to make the text italic and red by overriding
+                the underlying CSS.
             </example>
         </sect2>
 
