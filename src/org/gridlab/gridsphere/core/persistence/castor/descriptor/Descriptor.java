@@ -17,8 +17,6 @@ public abstract class Descriptor {
 
     private static PortletLog log = SportletLog.getInstance(Descriptor.class);
 
-    private String layoutPath, layoutMappingPath;
-
     public Descriptor() {}
 
     /**
@@ -40,7 +38,7 @@ public abstract class Descriptor {
         // the mapping xml file
         pmx.setMappingFile(mappingPath);
 
-
+        log.info("Using " + descriptorPath + " " +  mappingPath);
         // try to get it
         try {
              object = pmx.restoreObject();

@@ -14,12 +14,15 @@ import org.exolab.castor.xml.ValidationException;
 import org.gridlab.gridsphere.core.persistence.*;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.xml.sax.InputSource;
 
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.net.URL;
 
 /**
  * The Class provides easy access to marshal/unmarshal objects to XML files
@@ -148,18 +151,26 @@ public class PersistenceManagerXml  {
      * @throws ConfigurationException if there was a configurationerror
      * @return object which was unmarshalled
      */
-    public Object restoreObject() throws IOException, PersistenceManagerException {
+    public Object restoreObject() throws  IOException, PersistenceManagerException {
 
         checkSetting();
 
         Object object = null;
 
         try {
-            FileReader filereader = new FileReader(getConnectionURL());
+            log.info("Using getConnectionURL() " + getConnectionURL());
+            FileReader filereader = null;
+
+            filereader = new FileReader(getConnectionURL());
+
             Mapping mapping = new Mapping();
+
             mapping.loadMapping(getMappingFile());
+            log.info("Using  getMappingFile()" + getMappingFile());
+
             Unmarshaller unmarshal = new Unmarshaller(mapping);
             object = unmarshal.unmarshal(filereader);
+
         } catch (MappingException e) {
             log.error("MappingException: " + e.getException().toString());
             throw new PersistenceManagerException("Mapping Error" + e.getException().toString());
@@ -173,19 +184,6 @@ public class PersistenceManagerXml  {
         return object;
     }
 
-    /**
-     * Restore objects from xml file, just here to justify interface could be empty
-     * since it makes no sense in xml files
-     *
-     * @returns list of objects (here just with one object)
-     * @throws IOException if an I/O error occured
-     * @throws PersistenceException if config was wrong
-     */
-    public List restoreList() throws IOException, PersistenceManagerException {
-        List list = new ArrayList();
-        list.add(restoreObject());
-        return list;
-    }
 
 }
 

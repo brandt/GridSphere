@@ -5,7 +5,8 @@
 package org.gridlab.gridsphere.portlet;
 
 import org.gridlab.gridsphere.portlet.impl.*;
-import org.gridlab.gridsphere.portletcontainer.descriptor.ApplicationPortletDescriptor;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig;
+import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
@@ -82,7 +83,7 @@ public abstract class Portlet extends HttpServlet
         public static final Mode HELP = new Mode(HELP_MODE);
         public static final Mode CONFIGURE = new Mode(CONFIGURE_MODE);
 
-        private int mode = 0;
+        private int mode = VIEW_MODE;
 
         /**
          * Private constructor creates pre-defined Mode objects
@@ -315,7 +316,7 @@ public abstract class Portlet extends HttpServlet
         if (method != null) {
             try {
                 if (method.equals(SportletProperties.INIT)) {
-                    ApplicationPortletDescriptor app = (ApplicationPortletDescriptor) request.getAttribute(SportletProperties.PORTLET_APPLICATION);
+                    ApplicationPortletConfig app = (ApplicationPortletConfig) request.getAttribute(SportletProperties.PORTLET_APPLICATION);
                     this.portletConfig = new SportletConfig(getServletConfig(), app);
                     init(this.portletConfig);
                 } else if (method.equals(SportletProperties.SERVICE)) {

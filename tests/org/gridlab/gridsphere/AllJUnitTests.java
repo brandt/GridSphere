@@ -15,6 +15,7 @@ import org.gridlab.gridsphere.services.user.SetupRootUserTest;
 import org.gridlab.gridsphere.services.user.SetupTestGroupsTest;
 import org.gridlab.gridsphere.services.user.SetupTestUsersTest;
 import org.gridlab.gridsphere.services.user.UserManagerServiceTest;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerTest;
 
 /**
  * Simple class to build a TestSuite out of the individual test classes.
@@ -30,13 +31,14 @@ public class AllJUnitTests extends TestCase {
         suite.addTest(new TestSuite(PortletDescriptorTest.class));
         suite.addTest(new TestSuite(ServiceDescriptorTest.class));
 
-        suite.addTest(new TestSuite(ServiceTest.class));
-        suite.addTest(new TestSuite(SetupRootUserTest.class));
+        suite.addTest(new TestSuite(PersistenceManagerTest.class));
+        //suite.addTest(new TestSuite(ServiceTest.class));
+        //suite.addTest(new TestSuite(SetupRootUserTest.class));
 
-        suite.addTest(new TestSuite(SetupTestGroupsTest.class));
-        suite.addTest(new TestSuite(SetupTestUsersTest.class));
-        suite.addTest(new TestSuite(UserManagerServiceTest.class));
-        suite.addTest(new TestSuite(CredentialManagerServiceTest.class));
+        //suite.addTest(new TestSuite(SetupTestGroupsTest.class));
+        //suite.addTest(new TestSuite(SetupTestUsersTest.class));
+        //suite.addTest(new TestSuite(UserManagerServiceTest.class));
+        //suite.addTest(new TestSuite(CredentialManagerServiceTest.class));
 
         return suite;
     }

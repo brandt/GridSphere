@@ -1,59 +1,68 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
- * @version $Id$
- */
+* @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+* @version $Id$
+*/
 package org.gridlab.gridsphere.portletcontainer;
 
 import org.gridlab.gridsphere.portlet.PortletSettings;
-import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletDescriptor;
-import org.gridlab.gridsphere.portletcontainer.descriptor.AllowedAccess;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.AccessRestrictions;
 
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
- * A ConcreteSportlet provides the portlet container with information used to create and manage the
- * portlet's lifecycle. A ConcretePortlet is responsible for parsing the portlet.xml file for
- * portlet settings and portlet configuration information. The ConcretePortlet also maintains an instantiated
- * portlet that is managed by the portlet container.
+ * A <code>ConcretePortlet</code> provides the portlet container with
+ * information used to create and manage the portlet's lifecycle. A
+ * <code>ConcretePortlet</code> is responsible for parsing the portlet.xml
+ * file for portlet settings and portlet configuration information.
+ * The <code>ConcretePortlet</code> also maintains an instantiated portlet
+ * that is managed by the portlet container.
+ *
+ * @see org.gridlab.gridsphere.portlet.PortletSettings
  */
 public interface ConcretePortlet {
 
     /**
-     * Return the concrete portlet application ID
+     * Returns the portlet context attributes
+     *
+     * @returns the portlet context attributes
+     */
+    public Hashtable getContextAttributes();
+
+    /**
+     * Sets the portlet context attributes
+     *
+     * @param contextHash the portlet context attributes
+     */
+    public void setContextAttributes(Hashtable contextHash);
+
+    /**
+     * Returns the concrete portlet application ID
      *
      * @return the concrete portlet application ID
      */
-    public String getConcretePortletAppID();
+    public String getConcretePortletID();
 
     /**
-     * Return the concrete portlet application that defines this concrete portlet in the portlet.xml
-     * descriptor.
+     * Returns the concrete portlet configuration
      *
-     * @return the concrete portlet application
+     * @return the concrete portlet configuration
      */
-    public ConcretePortletDescriptor getConcretePortletDescriptor();
+    public ConcretePortletConfig getConcretePortletConfig();
 
     /**
-     * Returns the map of portlet context parameters that are used in the PortletConfig class
+     * Sets the concrete portlet configuration
      *
-     * @return the map of portlet context parameters keys are variable name and values are variable values
+     * @param concPortletConfig the concrete portlet configuration
      */
-    public Hashtable getPortletContextHash();
-
-
-    /**
-     * Returns the map of portlet configuration parameters that are used in the PortletSettings class
-     *
-     * @return the map of portlet config parameters keys are variable name and values are variable values
-     */
-    public Hashtable getPortletConfigHash();
+    public void setConcretePortletConfig(ConcretePortletConfig concPortletConfig);
 
     /**
-     * Returns the sportlet settings for this concrete portlet
+     * Returns the portlet settings for this concrete portlet
      *
-     * @return the sportlet settings
+     * @return the portlet settings
      */
     public PortletSettings getPortletSettings();
 
@@ -65,34 +74,10 @@ public interface ConcretePortlet {
     public String getPortletName();
 
     /**
-     * Return the classname of this portlet
+     * Saves any concrete portlet changes to the descriptor
      *
-     * @return the portlet classname
+     * @throws IOException if an I/O error occurs
      */
-    public String getPortletClass();
+    public void save() throws IOException;
 
-
-    public AllowedAccess getAllowedAccess();
-
-    /**
-     * gets the default locale of a portlet
-     *
-     * @return the default locale of the portlet
-     */
-    public String getDefaultLocale();
-
-    /**
-     * Returns the language info of a portlet
-     *
-     * @return language info of the portlet
-     */
-    public List getLanguageList();
-
-    /**
-     * Saves the supplied concrete portlet descriptor to serialize any changes that have been made
-     *
-     * @param concreterDescriptor the concrete portlet descriptor
-     * @throws IOException if an I/O error ooccurs
-     */
-    public void saveDescriptor(ConcretePortletDescriptor concreteDescriptor) throws IOException;
 }

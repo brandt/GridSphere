@@ -19,10 +19,10 @@ public class PortletRole {
 
     private int role;
 
-    public static final int GUEST_ROLE = 1;
-    public static final int USER_ROLE = 2;
-    public static final int ADMIN_ROLE = 3;
-    public static final int SUPER_ROLE = 4;
+    private static final int GUEST_ROLE = 1;
+    private static final int USER_ROLE = 2;
+    private static final int ADMIN_ROLE = 3;
+    private static final int SUPER_ROLE = 4;
 
     public static final PortletRole GUEST = new PortletRole(GUEST_ROLE);
     public static final PortletRole USER = new PortletRole(USER_ROLE);

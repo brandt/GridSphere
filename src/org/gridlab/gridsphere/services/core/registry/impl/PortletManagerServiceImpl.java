@@ -17,35 +17,33 @@ import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 
 import javax.servlet.ServletContext;
 import java.util.*;
+import java.io.IOException;
 
 /**
- * The PortletRegistryService acts as a repository for portlets and makes them available to the portlet
- * container, layout manager and any other services that require an active portlet.
- * The PortletInfo base class is responsible for reading in the associated portlet.xml file and
- * creating a ConcretePortlet object which represents the portlet. The PortletRegistryService maintains
- * a Set of RegisteredPortlets and provides operations for the registration, unregistration and querying
- * of ConcretePortlet objects.
+ * The <code>PortletManagerServiceImpl</code> is an implementation of the <code>PortletManagerService</code>
+ * that is responsible for the initialization, installation, removal and overall
+ * management of portlet web applications.
  */
 public class PortletManagerServiceImpl implements PortletManagerService, PortletServiceProvider {
 
-
     private static PortletLog log = SportletLog.getInstance(PortletManagerServiceImpl.class);
     private PortletManager portletManager = PortletManager.getInstance();
-
-    // A multi-valued hashtable with a webapp key and a List value containing portletAppID's
-    //private Map webapps = new Hashtable();
-    //private UserPortletManager userPortletManager = UserPortletManager.getInstance();
-
     private PortletServiceAuthorizer authorizer = null;
 
+    /**
+     * Default instantiation disallowed
+     */
+    private PortletManagerServiceImpl() {}
+
+    /**
+     * Constructs an instance of PortletManagerServiceImpl
+     *
+     * @param authorizer a <code>PortletServiceAuthorizer</code>
+     */
     public PortletManagerServiceImpl(PortletServiceAuthorizer authorizer) {
         this.authorizer = authorizer;
     }
 
-    /**
-     * The init method is responsible for parsing portlet.xml and creating ConcretePortlet objects based on the
-     * entries. The RegisteredPortlets are managed by the PortletRegistryService.
-     */
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.info("in init()");
         portletManager.init(config);
@@ -56,38 +54,87 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
     }
 
     /**
-     * Removes a portlet web application from the registry
+     * Removes a portlet web application from the portlet container. If the web application is active, then the portlets
+     * are shutdown
      *
-     * @param the web application name
+     * @param webApplicationName the name of the portlet web application
+     * @param req the <code>PortletRequest</code>
+     * @param res the <code>Portletresponse</code>
+     * @throws IOException if an I/O error occurs
+     * @throws PortletException if a portlet/servlet error occurs
      */
-    public void removePortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) {
+    public void removePortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         portletManager.removePortletWebApplication(webApplicationName, req, res);
     }
 
-    public void installPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws PortletException {
+    /**
+     * Installs and initializes a portlet web application to the portlet container
+     *
+     * @param webApplicationName the name of the portlet web application
+     * @param req the <code>PortletRequest</code>
+     * @param res the <code>Portletresponse</code>
+     * @throws IOException if an I/O error occurs
+     * @throws PortletException if a portlet/servlet error occurs
+     */
+    public void installPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         portletManager.installPortletWebApplication(webApplicationName, req, res);
     }
 
-    public void initAllPortletWebApplications(PortletRequest req, PortletResponse res) throws PortletException {
+    /**
+     * Initializes all the portlet web applications
+     *
+     * @param req the <code>PortletRequest</code>
+     * @param res the <code>Portletresponse</code>
+     * @throws IOException if an I/O error occurs
+     * @throws PortletException if a portlet/servlet error occurs
+     */
+    public void initAllPortletWebApplications(PortletRequest req, PortletResponse res) throws IOException, PortletException {
         portletManager.initAllPortletWebApplications(req, res);
     }
 
-    public void initPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws PortletException {
+    /**
+     * Initializes a portlet web application
+     *
+     * @param webApplicationName the name of the portlet web application
+     * @param req the <code>PortletRequest</code>
+     * @param res the <code>Portletresponse</code>
+     * @throws IOException if an I/O error occurs
+     * @throws PortletException if a portlet/servlet error occurs
+     */
+    public void initPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         portletManager.initPortletWebApplication(webApplicationName, req, res);
     }
 
-    public void destroyAllPortletWebApplications(PortletRequest req, PortletResponse res) throws PortletException {
+    /**
+     * Shuts down all currently active portlet web applications from the portlet container
+     *
+     * @param webApplicationName the name of the portlet web application
+     * @param req the <code>PortletRequest</code>
+     * @param res the <code>Portletresponse</code>
+     * @throws IOException if an I/O error occurs
+     * @throws PortletException if a portlet/servlet error occurs
+     */
+    public void destroyAllPortletWebApplications(PortletRequest req, PortletResponse res) throws IOException, PortletException {
         portletManager.destroyAllPortletWebApplications(req, res);
     }
 
-    public void destroyPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws PortletException {
+    /**
+     * Shuts down a currently active portlet web application from the portlet container
+     *
+     * @param webApplicationName the name of the portlet web application
+     * @param req the <code>PortletRequest</code>
+     * @param res the <code>Portletresponse</code>
+     * @throws IOException if an I/O error occurs
+     * @throws PortletException if a portlet/servlet error occurs
+     */
+    public void destroyPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         portletManager.destroyPortletWebApplication(webApplicationName, req, res);
     }
 
     /**
-     * Lists all the portlet web applications in the registry
+     * Lists all the portlet web applications known to the portlet container
      *
-     * @return the list of web application names
+     * @return the list of web application names as <code>String</code> elements
      */
     public List getPortletWebApplications() {
         return portletManager.getPortletWebApplications();

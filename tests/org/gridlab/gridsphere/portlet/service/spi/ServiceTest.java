@@ -12,6 +12,9 @@ import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.services.core.user.LoginService;
+
+import java.net.URL;
 
 /**
  * This is the base fixture for service testing. Provides a service factory and the
@@ -27,7 +30,11 @@ public class ServiceTest extends TestCase {
     }
 
     protected void setUp() {
-        PropertyConfigurator.configure("conf/log4j.properties");
+        /*
+        URL url = this.getClass().getResource("/gridsphere/log4j.properties");
+        if (url == null) fail ("Unable to find log4j.properties in JAR");
+        PropertyConfigurator.configure(url);
+        */
     }
 
     public void testCreateServiceFactory() {
@@ -45,6 +52,7 @@ public class ServiceTest extends TestCase {
     }
 
     protected void tearDown() {
-        SportletServiceFactory.getInstance().shutdownServices();
+        SportletServiceFactory factory = SportletServiceFactory.getInstance();
+        factory.shutdownServices();
     }
 }

@@ -34,6 +34,7 @@ import java.util.Vector;
 public class DbmsPasswordManagerService
     implements PortletServiceProvider, PasswordManagerService {
 
+    private static PasswordManagerService instance = new DbmsPasswordManagerService();
     private static PortletLog _log = SportletLog.getInstance(DbmsPasswordManagerService.class);
     private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
     private String userPasswordImpl = DbmsUserPassword.class.getName();
@@ -42,16 +43,13 @@ public class DbmsPasswordManagerService
 
     /****** PORTLET SERVICE METHODS *******/
 
-    public void init(PortletServiceConfig config) {
-        _log.info("Entering init()");
-        initServices();
-        _log.info("Exiting init()");
+
+    public static PasswordManagerService getInstance() {
+        return instance;
     }
 
-    private void initServices() {
-        // Get instance of service factory
-        PortletServiceFactory factory = SportletServiceFactory.getInstance();
-        // Instantiate helper services
+    public void init(PortletServiceConfig config) {
+
     }
 
     public void destroy() {

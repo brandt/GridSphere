@@ -9,22 +9,41 @@ import org.gridlab.gridsphere.event.WindowEvent;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.portletcontainer.descriptor.ApplicationPortletDescriptor;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
+/**
+ * The <code>PortletDispatcher</code> provides a mechanism for invoking portlet lifecycle methods by using a
+ * <code>RequestDispatcher</code> from the Servlet API to forward requests to other portlets (servlets).
+ *
+ * @see <code>PortletInvoker</code>
+ */
 public class PortletDispatcher {
 
     public static PortletLog log = SportletLog.getInstance(PortletDispatcher.class);
 
     private RequestDispatcher rd;
-    private ApplicationPortletDescriptor portletApp = null;
+    private ApplicationPortletConfig appPortletConfig = null;
 
-    public PortletDispatcher(RequestDispatcher rd, ApplicationPortletDescriptor portletApp) {
+    /**
+     * Default constructor is kept private
+     */
+    private PortletDispatcher() {}
+
+    /**
+     * Constructs a PortletDispatcher from a <code>RequestDispatcher</code> and an <code>ApplicationPortletConfig</code>
+     *
+     * @param rd the <code>RequestDispatcher</code>
+     * @param appPortletConfig the <code>ApplicationPortletConfig</code>
+     */
+    public PortletDispatcher(RequestDispatcher rd, ApplicationPortletConfig appPortletConfig) {
         this.rd = rd;
-        this.portletApp = portletApp;
+        this.appPortletConfig = appPortletConfig;
     }
 
     /**
@@ -43,12 +62,12 @@ public class PortletDispatcher {
      * @throws UnavailableException if an exception has occurrred that interferes with the portlet's
      * normal initialization
      */
-    public void init(HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        req.setAttribute(SportletProperties.PORTLET_APPLICATION, portletApp);
+    public void init(HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
+        req.setAttribute(SportletProperties.PORTLET_APPLICATION, appPortletConfig);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.INIT);
         try {
             include(req, res);
-        } catch (Exception e) {
+        } catch (ServletException e) {
             log.error("Unable to perform init");
             throw new PortletException("Unable to perform init", e);
         }
@@ -65,11 +84,11 @@ public class PortletDispatcher {
      *
      * @param config the portlet configuration
      */
-    public void destroy(HttpServletRequest req, HttpServletResponse res) throws PortletException {
+    public void destroy(HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.DESTROY);
         try {
             include(req, res);
-        } catch (Exception e) {
+        } catch (ServletException e) {
             log.error("Unable to perform destroy");
             throw new PortletException("Unable to perform destroy", e);
         }
@@ -88,12 +107,12 @@ public class PortletDispatcher {
      *
      * @param settings the portlet settings
      */
-    public void initConcrete(PortletSettings settings, HttpServletRequest req, HttpServletResponse res) throws PortletException {
+    public void initConcrete(PortletSettings settings, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
         req.setAttribute(SportletProperties.PORTLET_SETTINGS, settings);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.INIT_CONCRETE);
         try {
             include(req, res);
-        } catch (Exception e) {
+        } catch (ServletException e) {
             log.error("Unable to perform initConcrete");
             throw new PortletException("Unable to perform initConcrete", e);
         }
@@ -110,13 +129,13 @@ public class PortletDispatcher {
      *
      * @param settings the portlet settings
      */
-    public void destroyConcrete(PortletSettings settings, HttpServletRequest req, HttpServletResponse res) throws PortletException {
+    public void destroyConcrete(PortletSettings settings, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
         log.info("in destroyConcrete");
         req.setAttribute(SportletProperties.PORTLET_SETTINGS, settings);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.DESTROY_CONCRETE);
         try {
             include(req, res);
-        } catch (Exception e) {
+        } catch (ServletException e) {
             log.error("Unable to perform destroyConcrete");
             throw new PortletException("Unable to perform destroyConcrete", e);
         }
@@ -134,11 +153,11 @@ public class PortletDispatcher {
      * @throws PortletException if the portlet has trouble fulfilling the rendering request
      * @throws IOException if the streaming causes an I/O problem
      */
-    public void service(HttpServletRequest req, HttpServletResponse res) throws PortletException {
+    public void service(HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         try {
             include(req, res);
-        } catch (Exception e) {
+        } catch (ServletException e) {
             log.error("Unable to perform service");
             throw new PortletException("Unable to perform service", e);
         }
@@ -152,11 +171,11 @@ public class PortletDispatcher {
      *
      * @param request the portlet request
      */
-    public void login(HttpServletRequest req, HttpServletResponse res) throws PortletException {
+    public void login(HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.LOGIN);
         try {
             include(req, res);
-        } catch (Exception e) {
+        } catch (ServletException e) {
             log.error("Unable to perform login");
             throw new PortletException("Unable to perform login", e);
         }
@@ -171,11 +190,11 @@ public class PortletDispatcher {
      *
      * @param session the portlet session
      */
-    public void logout(HttpServletRequest req, HttpServletResponse res) throws PortletException {
+    public void logout(HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.LOGOUT);
         try {
             include(req, res);
-        } catch (Exception e) {
+        } catch (ServletException e) {
             log.error("Unable to perform logout");
             throw new PortletException("Unable to perform logout", e);
         }
@@ -189,7 +208,7 @@ public class PortletDispatcher {
      * @param event the action event
      * @throws PortletException if the listener has trouble fulfilling the request
      */
-    public void actionPerformed(DefaultPortletAction action, HttpServletRequest req, HttpServletResponse res) throws PortletException {
+    public void actionPerformed(DefaultPortletAction action, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
         req.setAttribute(SportletProperties.ACTION_EVENT, action);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.ACTION_PERFORMED);
@@ -197,7 +216,7 @@ public class PortletDispatcher {
         PortletData data = (PortletData)req.getAttribute(GridSphereProperties.PORTLETDATA);
         try {
             include(req, res);
-        } catch (Exception e) {
+        } catch (ServletException e) {
             log.error("Unable to perform actionPerformed");
             throw new PortletException("Unable to perform actionPerformed", e);
         }
@@ -210,13 +229,13 @@ public class PortletDispatcher {
      *
      * @throws PortletException if the listener has trouble fulfilling the request
      */
-    public void messageEvent(DefaultPortletMessage message, HttpServletRequest req, HttpServletResponse res) throws PortletException {
+    public void messageEvent(DefaultPortletMessage message, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
         req.setAttribute(SportletProperties.MESSAGE_EVENT, message);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.MESSAGE_RECEIVED);
         try {
             include(req, res);
-        } catch (Exception e) {
+        } catch (ServletException e) {
             log.error("Unable to perform messageEvent");
             throw new PortletException("Unable to perform messageEvent", e);
         }
@@ -237,12 +256,12 @@ public class PortletDispatcher {
      *
      * @throws <code>PortletException</code>if the portlet title has trouble fulfilling the rendering request
      */
-    public void doTitle(HttpServletRequest req, HttpServletResponse res) throws PortletException {
+    public void doTitle(HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.DO_TITLE);
         try {
             include(req, res);
-        } catch (Exception e) {
+        } catch (ServletException e) {
             log.error("Unable to perform doTitle");
             throw new PortletException("Unable to perform doTitle", e);
         }
@@ -253,24 +272,26 @@ public class PortletDispatcher {
      *
      * @param event the window event
      */
-    public void windowEvent(WindowEvent event, HttpServletRequest req, HttpServletResponse res) throws PortletException {
+    public void windowEvent(WindowEvent event, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
         req.setAttribute(SportletProperties.WINDOW_EVENT, event);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.WINDOW_EVENT);
         try {
             include(req, res);
-        } catch (Exception e) {
+        } catch (ServletException e) {
             log.error("Unable to perform windowEvent");
             throw new PortletException("Unable to perform windowEvent", e);
         }
     }
 
-    protected void include(HttpServletRequest req, HttpServletResponse res) {
-        try {
-            rd.include(req, res);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    /**
+     * Underlying method used by all other dispatcher methods to invoke the appropriate portlet lifecycle method
+     *
+     * @param req a <code>HttpServletRequest</code>
+     * @param res a <code>HttpServletResponse</code>
+     */
+    protected void include(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+        rd.include(req, res);
     }
 
 }

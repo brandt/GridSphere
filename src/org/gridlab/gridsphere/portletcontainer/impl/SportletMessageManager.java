@@ -19,7 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The PortletMessageService provides customization support for user layouts
+ * The <code>SportletMessageManager</code> provides a singleton implementation of <code>PortletMessageManager</code> and
+ * is responsible for maintaining <code>PortletMessage</code>s.
  */
 public class SportletMessageManager implements PortletMessageManager {
 
@@ -27,24 +28,28 @@ public class SportletMessageManager implements PortletMessageManager {
     private static PortletMessageManager instance = new SportletMessageManager();
     private Map messages = new Hashtable();
 
+    /**
+     * Returns a PortletMessageManager instance
+     *
+     * @return an instance of PortletMessageManager
+     */
     public static PortletMessageManager getInstance() {
         return instance;
     }
 
+    /**
+     * Default constructor instantiation disallowed
+     */
     private SportletMessageManager() {}
 
     /**
-     * Sends the given message to all portlets on the same page that have the given name regardless of the portlet application.
-     * If the portlet name is null the message is broadcast to all portlets in the same portlet application.
-     * If more than one instance of the portlet with the given name exists on the current page, the message is sent
-     * to every single instance of that portlet. If the source portlet has the same name as the target portlet(s),
-     * the message will not be sent to avoid possible cyclic calls.
+     * Sends the supplied message to the portlet specified by the concrete portlet id
      * <p>
      * The portlet(s) with the given name will only receive the message event if it has/they have implemented
      * the appropriate listener.
      *
-     * @param portletName the name of the portlet(s) to send the message to
-     * @param message the message to be sent
+     * @param concretePortletID the concrete portlet id
+     * @param message the portlet message to be sent
      */
     public void send(String concretePortletID, PortletMessage message) {
         List l = (List) messages.get(concretePortletID);
@@ -57,7 +62,7 @@ public class SportletMessageManager implements PortletMessageManager {
      * Retrieves the messages for the given portlet name and removes them from the queue
      *
      * @para portletName the name of the portlet(s) to send the message to
-     * @return a list of PortletMessage objects
+     * @return a list of <code>PortletMessage</code> objects
      */
     public List retrieveMessages(String concretePortletID) {
         List messageList = new ArrayList();
@@ -72,7 +77,7 @@ public class SportletMessageManager implements PortletMessageManager {
     /**
      * Retrieves all the messages  removes them from the queue
      *
-     * @return a list of PortletMessage objects
+     * @return a map of PortletMessage objects
      */
     public Map retrieveAllMessages() {
         return messages;

@@ -131,7 +131,6 @@ public class SportletGroup extends BaseObject implements PortletGroup {
         return false;
     }
 
-
     /**
      * Returns a unique hashcode
      *

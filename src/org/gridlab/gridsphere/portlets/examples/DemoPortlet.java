@@ -94,7 +94,7 @@ public class DemoPortlet extends AbstractPortlet {
 
 
         boolean supports = portletConfig.supports(PortletWindow.State.MINIMIZED);
-        boolean s = portletConfig.supports(Portlet.Mode.EDIT, client);
+        boolean s = portletConfig.supports(Portlet.Mode.EDIT);
 
         String value = portletSettings.getApplicationSettings().getAttribute("foobar");
         out.println(value);

@@ -5,7 +5,7 @@
  * @version $Id$
  */
 
-package org.gridlab.gridsphere.portletcontainer.descriptor;
+package org.gridlab.gridsphere.portletcontainer.impl.descriptor;
 
 
 public class LanguageInfo {

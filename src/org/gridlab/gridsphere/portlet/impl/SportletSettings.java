@@ -4,14 +4,13 @@
  */
 package org.gridlab.gridsphere.portlet.impl;
 
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
 import org.gridlab.gridsphere.portlet.Client;
 import org.gridlab.gridsphere.portlet.PortletApplicationSettings;
 import org.gridlab.gridsphere.portlet.PortletSettings;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletDescriptor;
-import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletInfo;
-import org.gridlab.gridsphere.portletcontainer.descriptor.LanguageInfo;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletConfig;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.LanguageInfo;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
 
 import java.io.IOException;
 import java.util.*;
@@ -40,22 +39,18 @@ public class SportletSettings implements PortletSettings {
     public SportletSettings(ConcretePortlet concPortlet) {
 
         this.concPortlet = concPortlet;
-        this.concretePortletID = concPortlet.getConcretePortletAppID();
+        this.concretePortletID = concPortlet.getConcretePortletID();
         this.appSettings = new SportletApplicationSettings(concPortlet);
 
-        ConcretePortletInfo concretePortletInfo =
-                concPortlet.getConcretePortletDescriptor().getConcretePortletInfo();
-        String localeStr = concretePortletInfo.getDefaultLocale();
+        ConcretePortletConfig concPortletConf =
+                concPortlet.getConcretePortletConfig();
+        String localeStr = concPortletConf.getDefaultLocale();
         locale = new Locale(localeStr, "");
-        langList = concretePortletInfo.getLanguageList();
+        langList = concPortletConf.getLanguageList();
 
         // Stick <config-param> in store
-        store = concPortlet.getPortletContextHash();
-        Iterator configParamsIt = concretePortletInfo.getConfigParamList().iterator();
-        while (configParamsIt.hasNext()) {
-            ConfigParam configParam = (ConfigParam) configParamsIt.next();
-            store.put(configParam.getParamName(), configParam.getParamValue());
-        }
+        store = concPortlet.getContextAttributes();
+
     }
 
     /**
@@ -191,19 +186,10 @@ public class SportletSettings implements PortletSettings {
      * @throws IOException if the streaming causes an I/O problem
      */
     public void store() throws IOException {
-        ConcretePortletDescriptor concDescriptor = concPortlet.getConcretePortletDescriptor();
-        ConcretePortletInfo concPortletInfo = concDescriptor.getConcretePortletInfo();
-        Enumeration enum = store.elements();
-        ArrayList list = new ArrayList();
-        while (enum.hasMoreElements()) {
-            String key = (String) enum.nextElement();
-            String value = (String) store.get(key);
-            ConfigParam parms = new ConfigParam(key, value);
-            list.add(parms);
-        }
-        concPortletInfo.setConfigParamList(list);
-        concDescriptor.setConcretePortletInfo(concPortletInfo);
-        concPortlet.saveDescriptor(concDescriptor);
+        ConcretePortletConfig concPortletConfig = concPortlet.getConcretePortletConfig();
+        concPortletConfig.setConfigAttributes(store);
+        concPortlet.setConcretePortletConfig(concPortletConfig);
+        concPortlet.save();
     }
 
     /**

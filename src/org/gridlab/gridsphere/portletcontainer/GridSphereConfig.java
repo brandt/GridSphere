@@ -6,9 +6,13 @@ package org.gridlab.gridsphere.portletcontainer;
 
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.io.FileNotFoundException;
+import java.io.File;
+import java.net.URL;
 
 /**
- * GridSphere properties file
+ * <code>GridSphereConfig</code> represents the <code>gridsphere.properties</code> properties file
+ * used for maintaing properties about the GridSphere portlet conatiner.
  */
 public class GridSphereConfig implements GridSphereConfigProperties {
 
@@ -17,6 +21,7 @@ public class GridSphereConfig implements GridSphereConfigProperties {
     private static GridSphereConfig instance;
     protected static ResourceBundle configBundle = null;
     protected static final String projectname = "gridsphere";
+    private Class clazz = this.getClass();
 
     static {
         try {
@@ -34,7 +39,11 @@ public class GridSphereConfig implements GridSphereConfigProperties {
         }
     }
 
+    /**
+     * Default constructor disallows instantiation
+     */
     private GridSphereConfig() {
+        Class clazz = this.getClass();
     }
 
     /**
@@ -43,7 +52,11 @@ public class GridSphereConfig implements GridSphereConfigProperties {
      * @return <code>String</code> the value for the given property key
      */
     public static final String getProperty(String type) {
-        return configBundle.getString(type);
+        String configString = configBundle.getString(type);
+        if ((configString != null) && (type.endsWith("DIR"))) {
+            if (!configString.endsWith(pathtype)) configString += pathtype;
+        }
+        return configString;
     }
 
 }

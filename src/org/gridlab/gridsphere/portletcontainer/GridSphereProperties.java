@@ -4,6 +4,10 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
+/**
+ * The <code>GridSphereProperties</code> maintains all the hidden variable names that are passed in the
+ * <code>PortletRequest</code> to set the mode, window state, component id and portlet objects.
+ */
 public class GridSphereProperties {
 
     public static final String COMPONENT_ID = "cid";

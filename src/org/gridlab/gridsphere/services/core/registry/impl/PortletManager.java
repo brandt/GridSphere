@@ -18,14 +18,11 @@ import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletConfig;
 import java.util.*;
+import java.io.IOException;
 
 /**
- * The PortletRegistryService acts as a repository for portlets and makes them available to the portlet
- * container, layout manager and any other services that require an active portlet.
- * The PortletInfo base class is responsible for reading in the associated portlet.xml file and
- * creating a ConcretePortlet object which represents the portlet. The PortletRegistryService maintains
- * a Set of RegisteredPortlets and provides operations for the registration, unregistration and querying
- * of ConcretePortlet objects.
+ * The <code>PortletManager</code> is a singleton responsible for maintaining the registry of portlet
+ * web applications known to the portlet container.
  */
 public class PortletManager implements PortletManagerService {
 
@@ -41,15 +38,25 @@ public class PortletManager implements PortletManagerService {
     private Map webapps = new Hashtable();
     //private UserPortletManager userPortletManager = UserPortletManager.getInstance();
 
+    /**
+     * Default instantiation disallowed
+     */
     private PortletManager() {}
 
+    /**
+     * Return an instance of PortletManager
+     *
+     * @return the PortletManager instance
+     */
     public static PortletManager getInstance() {
         return instance;
     }
 
     /**
-     * The init method is responsible for parsing portlet.xml and creating ConcretePortlet objects based on the
-     * entries. The RegisteredPortlets are managed by the PortletRegistryService.
+     * Initializes portlet web applications that are defined by the <code>PortletManagerService</code>
+     *
+     * @param config the <code>PortletServiceConfig</code>
+     * @throws PortletServiceUnavailableException if initialization fails
      */
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.info("in init()");
@@ -75,8 +82,12 @@ public class PortletManager implements PortletManagerService {
         }
     }
 
+    /**
+     * Adds a portlet web application to the registry
+     *
+     * @param webApplicationName the portlet web application name
+     */
     protected void addWebApp(String webApplicationName) {
-        if (context == null) System.err.println("WHY THE FUCK?");
         PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webApplicationName, context);
         Collection appPortlets = portletWebApp.getAllApplicationPortlets();
         Iterator it = appPortlets.iterator();
@@ -89,19 +100,13 @@ public class PortletManager implements PortletManagerService {
         webapps.put(webApplicationName, appPortletList);
     }
 
-
-    /**
-     * Removes a portlet web application from the registry
-     *
-     * @param the web application name
-     */
     public void removePortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) {
         List webappsList = (List) webapps.get(webApplicationName);
         if (webappsList != null) {
             Iterator it = webappsList.iterator();
             while (it.hasNext()) {
                 ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
-                registry.removeApplicationPortlet((String) appPortlet.getPortletAppID());
+                registry.removeApplicationPortlet((String) appPortlet.getApplicationPortletID());
             }
             webapps.remove(webApplicationName);
 
@@ -110,32 +115,27 @@ public class PortletManager implements PortletManagerService {
         }
     }
 
-    public void installPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws PortletException {
+    public void installPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         addWebApp(webApplicationName);
         initPortletWebApplication(webApplicationName, req, res);
     }
 
-    public void initAllPortletWebApplications(PortletRequest req, PortletResponse res) throws PortletException {
+    public void initAllPortletWebApplications(PortletRequest req, PortletResponse res) throws IOException, PortletException {
         PortletInvoker.initAllPortlets(req, res);
     }
 
-    public void initPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws PortletException {
+    public void initPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         PortletInvoker.initPortletWebApp(webApplicationName, req, res);
     }
 
-    public void destroyAllPortletWebApplications(PortletRequest req, PortletResponse res) throws PortletException {
+    public void destroyAllPortletWebApplications(PortletRequest req, PortletResponse res) throws IOException, PortletException {
         PortletInvoker.destroyAllPortlets(req, res);
     }
 
-    public void destroyPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws PortletException {
+    public void destroyPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         PortletInvoker.destroyPortletWebApp(webApplicationName, req, res);
     }
 
-    /**
-     * Lists all the portlet web applications in the registry
-     *
-     * @return the list of web application names
-     */
     public List getPortletWebApplications() {
         List l = new ArrayList();
         Set set = webapps.keySet();
@@ -145,7 +145,5 @@ public class PortletManager implements PortletManagerService {
         }
         return l;
     }
-
-
 
 }

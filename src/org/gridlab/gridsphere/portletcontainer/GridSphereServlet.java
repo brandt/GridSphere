@@ -30,6 +30,11 @@ import java.io.IOException;
 import java.util.*;
 
 
+/**
+ * The <code>GridSphereServlet</code> is the GridSphere portlet container.
+ * All portlet requests get proccessed by the GridSphereServlet before they
+ * are rendered.
+ */
 public class GridSphereServlet extends HttpServlet implements ServletContextListener,
         HttpSessionAttributeListener, HttpSessionListener {
 
@@ -60,6 +65,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private PortletContext context = null;
     private static boolean firstDoGet = true;
 
+    /**
+     * Initializes the GridSphere portlet container
+     *
+     * @param config the <code>ServletConfig</code>
+     * @throws ServletException if an error occurs during initialization
+     */
     public final void init(ServletConfig config) throws ServletException {
         super.init(config);
         this.context = new SportletContext(config);
@@ -111,6 +122,14 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         }
     }
 
+    /**
+     * Processes GridSphere portal framework requests
+     *
+     * @param req the <code>HttpServletRequest</code>
+     * @param res the <code>HttpServletResponse</code>
+     * @throws IOException if an I/O error occurs
+     * @throws ServletException if a servlet error occurs
+     */
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 
         GridSphereEvent event = new GridSphereEventImpl(context, req, res);
@@ -135,13 +154,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
         }
         // All these are we application names
+
         System.err.println(context.getServletContextName()); // -- Description
-
         System.err.println(req.getServletPath());
-
         System.err.println(req.getContextPath());
-
-
 
         /* This is where we get ACL info and update sportlet request */
         User user = portletReq.getUser();
@@ -188,7 +204,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         layoutEngine.service(event);
     }
 
-    public void login(GridSphereEvent event) {
+    /**
+     * Handles login requests
+     *
+     * @event a <code>GridSphereEvent</code>
+     */
+    protected void login(GridSphereEvent event) {
         log.debug("in login of GridSphere Servlet");
         String LOGIN_ERROR_FLAG = "LOGIN_ERROR";
         Integer LOGIN_ERROR_UNKNOWN = new Integer(-1);
@@ -223,7 +244,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         layoutEngine.loginPortlets(event);
     }
 
-    public void logout(GridSphereEvent event) {
+    /**
+     * Handles logout requests
+     *
+     * @event a <code>GridSphereEvent</code>
+     */
+    protected void logout(GridSphereEvent event) {
         PortletRequest req = event.getPortletRequest();
         PortletSession session = req.getPortletSession();
         session.invalidate();
@@ -231,6 +257,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         //layoutEngine.logoutPortlets(event);
     }
 
+    /**
+     * @see #doGet
+     */
     public final void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         doGet(req, res);
     }
@@ -244,6 +273,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         return "GridSphere Servlet 0.9";
     }
 
+    /**
+     * Shuts down the GridSphere portlet container
+     */
     public final void destroy() {
         // Shutdown services
         SportletServiceFactory.getInstance().shutdownServices();

@@ -5,52 +5,69 @@
 
 package org.gridlab.gridsphere.core.persistence.castor.descriptor;
 
+import java.util.List;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
+/**
+ * A <code>ConfigParam</code> is an attribute representation used
+ * to define attribute names and values in a descriptor by Castor.
+ */
 public class ConfigParam {
 
-    private String ParamName = "";
-    private String ParamValue = "";
+    private String paramName = "";
+    private String paramValue = "";
 
+    /**
+     * Constructs an instance of ConfigParam
+     */
     public ConfigParam() {}
 
-    public ConfigParam(String ParamName, String ParamValue) {
-        this.ParamName = ParamName;
-        this.ParamValue = ParamValue;
+    /**
+     * Constructs an instance of ConfigParam with a parameter name and value
+     *
+     * @param paramName the parameter name
+     * @param paramValue the parameter value
+     */
+    public ConfigParam(String paramName, String paramValue) {
+        this.paramName = paramName;
+        this.paramValue = paramValue;
     }
 
     /**
      * Returns the parameter name
      *
-     * @returns ParamName
+     * @returns the parameter name
      */
     public String getParamName() {
-        return ParamName;
+        return paramName;
     }
 
     /**
      * Sets the parameter name
      *
-     * @param ParamName the parameter name
+     * @param paramName the parameter name
      */
-    public void setParamName(String ParamName) {
-        this.ParamName = ParamName;
+    public void setParamName(String paramName) {
+        this.paramName = paramName;
     }
 
     /**
      * Returns the parameter value
      *
-     * @returns ParamValue
+     * @returns the parameter value
      */
     public String getParamValue() {
-        return ParamValue;
+        return paramValue;
     }
 
     /**
      * Sets the parameter value
      *
-     * @param ParamValue the parameter value
+     * @param paramValue the parameter value
      */
-    public void setParamValue(String ParamValue) {
-        this.ParamValue = ParamValue;
+    public void setParamValue(String paramValue) {
+        this.paramValue = paramValue;
     }
 
 }

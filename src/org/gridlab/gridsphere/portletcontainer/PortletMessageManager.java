@@ -15,24 +15,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The PortletMessageManager
+ * The <code>PortletMessageManager</code> is responsible for maintaining <code>PortletMessage</code>s.
  */
 public interface PortletMessageManager {
 
     /**
-     * Sends the given message to all portlets on the same page that have the given name regardless of the portlet application.
-     * If the portlet name is null the message is broadcast to all portlets in the same portlet application.
-     * If more than one instance of the portlet with the given name exists on the current page, the message is sent
-     * to every single instance of that portlet. If the source portlet has the same name as the target portlet(s),
-     * the message will not be sent to avoid possible cyclic calls.
-     *
+     * Sends the supplied message to the portlet specified by the concrete portlet id
+     * <p>
      * The portlet(s) with the given name will only receive the message event if it has/they have implemented
      * the appropriate listener.
      *
-     * This function may only be used during event processing, in any other case the method throws an AccessDeniedException.
-     *
-     * @param portletName the name of the portlet(s) to send the message to
-     * @param message the message to be sent
+     * @param concretePortletID the concrete portlet id
+     * @param message the portlet message to be sent
      */
     public void send(String portletName, PortletMessage message);
 
@@ -47,7 +41,7 @@ public interface PortletMessageManager {
     /**
      * Retrieves all the messages  removes them from the queue
      *
-     * @return a list of PortletMessage objects
+     * @return a map of PortletMessage objects
      */
     public Map retrieveAllMessages();
 

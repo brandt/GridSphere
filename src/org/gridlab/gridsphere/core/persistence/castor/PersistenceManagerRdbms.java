@@ -12,6 +12,7 @@ package org.gridlab.gridsphere.core.persistence.castor;
 import org.exolab.castor.jdo.*;
 import org.exolab.castor.jdo.PersistenceException;
 import org.exolab.castor.mapping.MappingException;
+import org.exolab.castor.util.Logger;
 import org.gridlab.gridsphere.core.persistence.*;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
@@ -27,6 +28,8 @@ import java.util.Properties;
 import java.io.FileReader;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.net.URL;
 
 
 public class PersistenceManagerRdbms {
@@ -36,24 +39,32 @@ public class PersistenceManagerRdbms {
     private static PersistenceManagerRdbms instance = new PersistenceManagerRdbms();
     protected boolean databaseCreated = false;
     protected JDO jdo = null;
-    protected String Url = null;
-    //protected PersistencePropertiesRdbms props = new PersistencePropertiesRdbms();
+    protected String url = null;
 
     // @todo need to check settings for rollback !!
 
     private PersistenceManagerRdbms() {
         log.info("Entering PM");
-        String DatabaseName = GridSphereConfig.getProperty(GridSphereConfigProperties.PERSISTENCE_DBNAME);
-        String ConnectionURL = GridSphereConfig.getProperty(GridSphereConfigProperties.PERSISTENCE_CONFIGFILE);
-        log.info("Using '" + DatabaseName + "' as Databasename with the configfile '" + ConnectionURL + "'");
-        this.Url = ConnectionURL;
+
+        String databaseDir = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_DATABASE_DIR);
+        String databaseConfigFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_DATABASE_CONFIG);
+        String databaseName = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_DATABASE_NAME);
+
+        url = databaseConfigFile;
+        log.info("Using '" + databaseName + "' as Databasename with the configfile '" + url + "'");
+
         try {
-            JDO.loadConfiguration(Url);
-            jdo = new JDO(DatabaseName);
-            jdo.setTransactionManager(null);
+            JDO.loadConfiguration(url);
         } catch (MappingException e) {
-            log.error("Unable to get JDO: ",e);
+            log.error("Unable to get JDO configuration: " + url, e);
         }
+
+        jdo = new JDO();
+        //PrintWriter writer = new Logger(System.out).setPrefix("test");
+        //jdo.setLogWriter(writer);
+
+        jdo.setDatabaseName(databaseName);
+        jdo.setTransactionManager(null);
     }
 
     public static PersistenceManagerRdbms getInstance() {
@@ -66,7 +77,7 @@ public class PersistenceManagerRdbms {
      * @return filename
      */
     public String getConnectionURL() {
-        return Url;
+        return url;
     }
 
     /**

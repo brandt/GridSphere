@@ -9,12 +9,8 @@ import org.gridlab.gridsphere.portlet.PortletConfig;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.AbstractPortlet;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
-import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridlab.gridsphere.portletcontainer.ConcretePortletException;
-import org.gridlab.gridsphere.portletcontainer.PortletDispatcher;
-import org.gridlab.gridsphere.portletcontainer.descriptor.*;
-
+import org.gridlab.gridsphere.portletcontainer.*;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.*;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
@@ -25,10 +21,11 @@ import java.util.List;
 import java.util.Vector;
 
 /**
- * An application portlet represents the portlet application defined in the portlet.xml
- * ApplicationPortlet is mostly a proxy for the PortletApplication class used by Castor
- *
- * @see <code>org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication</code>
+ * The <code>ApplicationPortletImpl</code> is an implementation of the <code>ApplicationPortlet</code> interface
+ * that uses Castor for XML to Java data bindings.
+ * <p>
+ * The <code>ApplicationPortlet</code> represents the portlet application instance
+ * defined in the portlet descriptor file.
  */
 class ApplicationPortletImpl implements ApplicationPortlet {
 
@@ -42,23 +39,37 @@ class ApplicationPortletImpl implements ApplicationPortlet {
     private SupportsModes supportedModes = null;
     private List allowedStates = null;
     private List concretePortlets = null;
-    private ApplicationPortletDescriptor appDescriptor = null;
+    private ApplicationPortletConfig appPortletConfig = null;
     private ServletContext context;
     private String webAppName = null;
     private PortletDispatcher portletWrapper = null;
 
-    public ApplicationPortletImpl(PortletDeploymentDescriptor pdd, PortletDefinition portletDef, String webApplication, ServletContext context) {
+    /**
+     * Default constructor is private
+     */
+    private ApplicationPortletImpl() {}
+
+    /**
+     * Constructs an ApplicationPortletImpl
+     *
+     * @param pdd a <code>PortletDeploymentDescriptor</code>
+     * @param portletDef a <code>SportletDefinition</code>
+     * @param webApplication the web application name for this application portlet
+     * @param context the <code>ServletContext</code> containing this application portlet
+     */
+    public ApplicationPortletImpl(PortletDeploymentDescriptor pdd, SportletDefinition portletDef,
+                                  String webApplication, ServletContext context) {
         this.portletDD = pdd;
         this.context = context;
         this.webAppName = webApplication;
-        this.appDescriptor = portletDef.getApplicationPortletDescriptor();
+        this.appPortletConfig = portletDef.getApplicationSportletConfig();
 
         // Set cache information
-        CacheInfo cacheInfo = appDescriptor.getCacheInfo();
         /*
+        CacheInfo cacheInfo = appDescriptor.getCacheInfo();
         if (cacheInfo == null) {
             cacheInfo = new CacheInfo("true", -1);
-        }*/
+        }
         cacheable = new Cacheable();
         cacheable.setExpiration(cacheInfo.getExpires());
         String shared = cacheInfo.getShared();
@@ -69,24 +80,20 @@ class ApplicationPortletImpl implements ApplicationPortlet {
             cacheable.setShared(true);
         } else {
             cacheable.setShared(false);
-        }
+        }*/
 
         // Set concrete portlet information
-        List concreteApps = portletDef.getConcreteApps();
-        Iterator it = concreteApps.iterator();
+        List concPortletDefs = portletDef.getConcreteSportletList();
+        Iterator it = concPortletDefs.iterator();
         concretePortlets = new Vector();
         while (it.hasNext()) {
-            ConcretePortletDescriptor concApp = (ConcretePortletDescriptor) it.next();
-            try {
-                ConcretePortlet concretePortlet = new ConcretePortletImpl(pdd, appDescriptor, concApp);
-                concretePortlets.add(concretePortlet);
-            } catch (ConcretePortletException e) {
-                log.error("Unable to create concrete portlet: " + concApp.getConcretePortletInfo().getName(), e);
-            }
+            ConcreteSportletDefinition concSportlet = (ConcreteSportletDefinition) it.next();
+            ConcretePortlet concretePortlet = new ConcreteSportlet(pdd, appPortletConfig, concSportlet);
+            concretePortlets.add(concretePortlet);
         }
-        applicationPortletID = appDescriptor.getID();
-        portletName = appDescriptor.getPortletName();
-        servletName = appDescriptor.getServletName();
+        applicationPortletID = appPortletConfig.getApplicationPortletID();
+        portletName = appPortletConfig.getPortletName();
+        servletName = appPortletConfig.getServletName();
 
         log.info("Creating request dispatcher for " + servletName);
         RequestDispatcher rd = context.getNamedDispatcher(servletName);
@@ -94,7 +101,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
             log.error("Unable to create a dispatcher for portlet: " + portletName);
             log.error("Make sure the servletName: " + servletName + " is the servlet-name defined in web.xml");
         }
-        portletWrapper = new PortletDispatcher(rd, appDescriptor);
+        portletWrapper = new PortletDispatcher(rd, appPortletConfig);
     }
 
     /**
@@ -111,8 +118,17 @@ class ApplicationPortletImpl implements ApplicationPortlet {
      *
      * @return the PortletApplication
      */
-    public ApplicationPortletDescriptor getApplicationPortletDescriptor() {
-        return appDescriptor;
+    public ApplicationPortletConfig getApplicationPortletConfig() {
+        return appPortletConfig;
+    }
+
+    /**
+     * Return the PortletApplication, the portlet descriptor class that defines the portlet application
+     *
+     * @return the PortletApplication
+     */
+    public void setApplicationPortletConfig(ApplicationPortletConfig appPortletConfig) {
+        this.appPortletConfig = appPortletConfig;
     }
 
     /**
@@ -120,7 +136,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
      *
      * @return PortletDispatcher the proxy portlet for this ApplicationPortlet
      */
-    public PortletDispatcher getPortletWrapper() {
+    public PortletDispatcher getPortletDispatcher() {
         return portletWrapper;
     }
 
@@ -144,7 +160,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
         Iterator it = concretePortlets.iterator();
         while (it.hasNext()) {
             ConcretePortlet c = (ConcretePortlet) it.next();
-            if (c.getConcretePortletAppID().equals(concretePortletID)) {
+            if (c.getConcretePortletID().equals(concretePortletID)) {
                 return c;
             }
         }
@@ -156,7 +172,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
      *
      * @returns the id of the PortletApplication
      */
-    public String getPortletAppID() {
+    public String getApplicationPortletID() {
         return applicationPortletID;
     }
 
@@ -165,7 +181,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
      *
      * @returns name of the PortletApplication
      */
-    public String getPortletName() {
+    public String getApplicationPortletName() {
         return portletName;
     }
 
@@ -176,22 +192,6 @@ class ApplicationPortletImpl implements ApplicationPortlet {
      */
     public String getServletName() {
         return servletName;
-    }
-
-    /**
-     * Saves the supplied application portlet descriptor to serialize any changes that have been made
-     *
-     * @param appDescriptor the application portlet descriptor
-     * @throws IOException if an I/O error ooccurs
-     */
-    public void saveDescriptor(ApplicationPortletDescriptor appDescriptor) throws IOException {
-        this.appDescriptor = appDescriptor;
-        portletDD.setApplicationPortletDescriptor(appDescriptor);
-        try {
-            portletDD.save();
-        } catch (DescriptorException e) {
-            log.error("Unable to save application portlet descriptor! " + applicationPortletID, e);
-        }
     }
 
 }

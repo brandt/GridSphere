@@ -2,12 +2,12 @@
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-package org.gridlab.gridsphere.portletcontainer.descriptor;
+package org.gridlab.gridsphere.portletcontainer.impl.descriptor;
 
 public class CacheInfo {
 
     private long expires = -1;
-    private String shared = "false";
+    private boolean shared = false;
 
     public long getExpires() {
         return expires;
@@ -17,12 +17,11 @@ public class CacheInfo {
         this.expires = expires;
     }
 
-    public void setShared(String shared) {
+    public void setShared(boolean shared) {
         this.shared = shared;
     }
 
-    public String getShared() {
+    public boolean getShared() {
         return shared;
     }
-
 }

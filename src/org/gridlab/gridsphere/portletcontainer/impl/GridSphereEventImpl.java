@@ -15,6 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Enumeration;
 
+/**
+ * The <code>GridSphereEventImpl</code> is an implementation of the <code>GridSphereEvent</code> interface.
+ * <p>
+ * A <code>GridSphereEvent</code> represents a general portlet container
+ * event. The <code>GridSphereEvent</code> is passed into components that
+ * need to access the <code>PortletRequest</code>
+ * <code>PortletResponse</code> objects, such as the layout components.
+ */
 public class GridSphereEventImpl implements GridSphereEvent {
 
     protected PortletRequest portletRequest;

@@ -52,12 +52,12 @@ public interface PortletWindow {
          */
         public static final PortletWindow.State RESIZING = new PortletWindow.State(PortletWindow.State.RESIZING_STATE);
 
-        public static final int NORMAL_STATE = 0;
-        public static final int MAXIMIZED_STATE = 1;
-        public static final int MINIMIZED_STATE = 2;
-        public static final int CLOSED_STATE = 3;
-        public static final int DETACHED_STATE = 4;
-        public static final int RESIZING_STATE = 5;
+        private static final int NORMAL_STATE = 0;
+        private static final int MAXIMIZED_STATE = 1;
+        private static final int MINIMIZED_STATE = 2;
+        private static final int CLOSED_STATE = 3;
+        private static final int DETACHED_STATE = 4;
+        private static final int RESIZING_STATE = 5;
 
         private int state = NORMAL_STATE;
 

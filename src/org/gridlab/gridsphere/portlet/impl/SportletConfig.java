@@ -5,12 +5,10 @@
 package org.gridlab.gridsphere.portlet.impl;
 
 import org.exolab.castor.types.AnyNode;
-import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
+//import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portletcontainer.descriptor.AllowsWindowStates;
-import org.gridlab.gridsphere.portletcontainer.descriptor.ApplicationPortletDescriptor;
-import org.gridlab.gridsphere.portletcontainer.descriptor.Markup;
-import org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes;
+import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
+import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -31,64 +29,37 @@ public class SportletConfig implements PortletConfig {
     private ServletConfig servletConfig = null;
     private PortletContext context = null;
     private String portletName = null;
-    private Map supportedModes = null;
-    private List allowedStates = null;
+    private List supportedModes = new ArrayList();
+    private List allowedStates = new ArrayList();
     private Hashtable configs = new Hashtable();
 
     /**
      * Cannot instantiate uninitialized SportletConfig
      */
-    private SportletConfig() {
-    }
+    private SportletConfig() {}
 
     /**
      * Constructs an instance of PortletConfig from a servlet configuration
      * object and an application portlet descriptor
      *
      * @param servletConfig a <code>ServletConfig</code>
-     * @param appDescriptor a <code>ApplicationPortletDescriptor</code>
+     * @param appDescriptor a <code>ApplicationSportletConfig</code>
      */
-    public SportletConfig(ServletConfig servletConfig, ApplicationPortletDescriptor appDescriptor) {
+    public SportletConfig(ServletConfig servletConfig, ApplicationPortletConfig appConfig) {
         this.servletConfig = servletConfig;
         this.context = new SportletContext(servletConfig);
         Iterator it;
 
-        // set supported modes info
-        supportedModes = new Hashtable();
-        SupportsModes smodes = appDescriptor.getSupportsModes();
-        List modesList = smodes.getMarkupList();
-        it = modesList.iterator();
-        while (it.hasNext()) {
-            Markup markup = (Markup) it.next();
-            String name = markup.getName();
-            Iterator modesIt = markup.getPortletModes().iterator();
-            List modes = new Vector();
-            while (modesIt.hasNext()) {
-                AnyNode anode = (AnyNode) modesIt.next();
-                modes.add(anode.getLocalName().toUpperCase());
-            }
-            supportedModes.put(name, modes);
-        }
+        // set portlet modes
+        supportedModes = appConfig.getSupportedModes();
 
         // set allowed states info
-        AllowsWindowStates states = appDescriptor.getAllowsWindowStates();
-        allowedStates = new Vector();
-        it = states.getWindowStates().iterator();
-        while (it.hasNext()) {
-            AnyNode anode = (AnyNode) it.next();
-            String state = anode.getLocalName().toUpperCase();
-            allowedStates.add(state);
-        }
+        allowedStates = appConfig.getAllowedWindowStates();
 
         // set portlet config information
-        List configList = appDescriptor.getConfigParamList();
-        it = configList.iterator();
-        while (it.hasNext()) {
-            ConfigParam configParam = (ConfigParam) it.next();
-            configs.put(configParam.getParamName(), configParam.getParamValue());
-        }
+        configs = appConfig.getConfigParams();
 
-        portletName = appDescriptor.getPortletName();
+        portletName = appConfig.getPortletName();
         //this.logConfig();
     }
 
@@ -119,13 +90,8 @@ public class SportletConfig implements PortletConfig {
      * @return <code>true</code> if the window supports the given state,
      * <code>false</code> otherwise
      */
-    public boolean supports(Portlet.Mode mode, Client client) {
-        String clientMarkup = client.getMarkupName();
-        if (supportedModes.containsKey(clientMarkup)) {
-            List modes = (List) supportedModes.get(clientMarkup);
-            if (modes.contains(mode.toString().toUpperCase())) return true;
-        }
-        return false;
+    public boolean supports(Portlet.Mode mode) {
+        return (supportedModes.contains(mode) ? true : false);
     }
 
     /**
@@ -136,8 +102,7 @@ public class SportletConfig implements PortletConfig {
      * <code>false</code> otherwise
      */
     public boolean supports(PortletWindow.State state) {
-        if (allowedStates.contains(state.toString().toUpperCase())) return true;
-        return false;
+        return (allowedStates.contains(state) ? true : false);
     }
 
     public final String getInitParameter(String name) {

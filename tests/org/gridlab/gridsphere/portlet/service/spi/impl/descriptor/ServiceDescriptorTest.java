@@ -9,6 +9,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,10 +34,14 @@ public class ServiceDescriptorTest extends TestCase {
         return new TestSuite(ServiceDescriptorTest.class);
     }
 
-    public void testDescriptor() {
+    public void testServiceDescriptor() {
         SportletServiceDescriptor descriptor = null;
-        String serviceFile = "webapps/gridsphere/WEB-INF/conf/test/PortletServices-test.xml";
-        String mappingFile = "webapps/gridsphere/WEB-INF/conf/mapping/PortletServices-mapping.xml";
+        Class clazz =  this.getClass();
+
+        // load files from JAR
+        String serviceFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_TEST_DIR) + "PortletServices-test.xml";
+        String mappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_SERVICES_MAPPING);
+
         try {
             descriptor = new SportletServiceDescriptor(serviceFile, mappingFile);
         } catch (IOException e) {

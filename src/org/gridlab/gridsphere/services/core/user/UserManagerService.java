@@ -133,7 +133,7 @@ public interface UserManagerService extends PortletService {
 
     /**
       * Retrieves a user object with the given username from this service.
-      * Requires a user with the "super user" AccessRights, since this
+      * Requires a user with the "super user" AccessRestrictions, since this
       * by-passes the normal login mechanism of retrieving a user object.
       *
       * @param User The super user requesting the user object
@@ -143,7 +143,7 @@ public interface UserManagerService extends PortletService {
 
     /**
       * Retrieves a user object with the given username from this service.
-      * Requires a user with the "super user" AccessRights, since this
+      * Requires a user with the "super user" AccessRestrictions, since this
       * by-passes the normal login mechanism of retrieving a user object.
       *
       * @param User The super user requesting the user object

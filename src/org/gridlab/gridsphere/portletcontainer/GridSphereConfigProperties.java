@@ -4,6 +4,10 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
+/**
+ * The <code>GridSphereConfigProperties</code> provides GridSphere portlet container properties from the
+ * <code>gridsphere.properties</code> properties file.
+ */
 public interface GridSphereConfigProperties {
 
     /**
@@ -15,11 +19,6 @@ public interface GridSphereConfigProperties {
      *  Location of Catalina
      */
     public static final String CATALINA_HOME = "CATALINA_HOME";
-
-    /**
-     * Location of GridSphere web application
-     */
-    public static final String GRIDSPHERE_WEBAPP = "GRIDSPHERE_WEBAPP";
 
     /**
      * Location of GridSphere directory used to store persistent data
@@ -37,41 +36,72 @@ public interface GridSphereConfigProperties {
     public static final String GRIDSPHERE_RELEASE = "GRIDSPHERE_RELEASE";
 
     /**
-     * Portlet deployment descriptor mapping file
+     * Directory containing GridSphere configuration files
      */
-    public static final String PORTLET_MAPPING_XML = "PORTLET_MAPPING_XML";
+    public static final String GRIDSPHERE_CONFIG_DIR = "GRIDSPHERE_CONFIG_DIR";
 
     /**
-     * Portlet services description file
+     * Directory containing GridSphere test files
      */
-    public static final String PORTLET_SERVICES = "PORTLET_SERVICES";
+    public static final String GRIDSPHERE_TEST_DIR = "GRIDSPHERE_TEST_DIR";
 
     /**
-     * Portlet services description file
+     * Directory containing GridSphere Castor mapping files
      */
-    public static final String PORTLET_SERVICES_XML = "PORTLET_SERVICES_XML";
+    public static final String GRIDSPHERE_MAPPING_DIR = "GRIDSPHERE_MAPPING_DIR";
 
     /**
-     * Portlet services mapping file
+     * Directory containing GridSphere Castor mapping files
      */
-    public static final String PORTLET_SERVICES_MAPPING_XML = "PORTLET_SERVICES_MAPPING_XML";
+    public static final String GRIDSPHERE_PORTLET_MAPPING = "GRIDSPHERE_PORTLET_MAPPING";
 
     /**
-     * LayoutEngine properties
+     * Directory containing GridSphere Castor mapping files
      */
-    public static final String GUEST_USER_LAYOUT_XML = "GUEST_USER_LAYOUT_XML";
-    public static final String NEW_USER_LAYOUT_XML = "NEW_USER_LAYOUT_XML";
-    public static final String LAYOUT_MAPPING_XML = "LAYOUT_MAPPING_XML";
-    public static final String USER_LAYOUT_DIR = "USER_LAYOUT_DIR";
+    public static final String GRIDSPHERE_SERVICES_MAPPING = "GRIDSPHERE_SERVICES_MAPPING";
+
 
     /**
-     * Configuration ofor the used persistence database
+     * Directory containing GridSphere Castor mapping files
      */
-    public static final String PERSISTENCE_CONFIGFILE = "PERSISTENCE_CONFIGFILE";
-    public static final String PERSISTENCE_DBNAME = "PERSISTENCE_DBNAME";
+    public static final String GRIDSPHERE_SERVICES = "GRIDSPHERE_SERVICES";
+
 
     /**
-     *  Configuration for the standard UI Theme
+     * Directory containing GridSphere database configuration files
      */
-    public static final String UI_THEME = "UI_THEME";
+    public static final String GRIDSPHERE_DATABASE_DIR = "GRIDSPHERE_DATABASE_DIR";
+
+    /**
+     * Configured SQL based databse to use
+     */
+    public static final String GRIDSPHERE_DATABASE_CONFIG = "GRIDSPHERE_DATABASE_CONFIG";
+
+    /**
+     * Name of databse
+     */
+    public static final String GRIDSPHERE_DATABASE_NAME = "GRIDSPHERE_DATABASE_NAME";
+
+
+    /**
+     * Directory containing user layouts
+     */
+    public static final String GRIDSPHERE_LAYOUT_DIR = "GRIDSPHERE_LAYOUT_DIR";
+
+    /**
+     * Directory containing user layouts
+     */
+    public static final String GRIDSPHERE_LAYOUT_MAPPING = "GRIDSPHERE_LAYOUT_MAPPING";
+
+
+    /**
+     * Directory containing user layouts
+     */
+    public static final String GRIDSPHERE_NEW_USER_LAYOUT = "GRIDSPHERE_NEW_USER_LAYOUT";
+
+    /**
+     * Directory containing user layouts
+     */
+    public static final String GRIDSPHERE_GUEST_USER_LAYOUT = "GRIDSPHERE_GUEST_USER_LAYOUT";
+
 }

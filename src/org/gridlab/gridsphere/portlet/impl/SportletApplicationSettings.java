@@ -7,7 +7,7 @@ package org.gridlab.gridsphere.portlet.impl;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
 import org.gridlab.gridsphere.portlet.PortletApplicationSettings;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletDescriptor;
+import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
      */
     public SportletApplicationSettings(ConcretePortlet concPortlet) {
         this.concPortlet = concPortlet;
-        store = concPortlet.getPortletContextHash();
+        store = concPortlet.getContextAttributes();
     }
 
     /**
@@ -79,22 +79,13 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
     }
 
     /**
-     * Stores all attributes.
+     * Stores all attributes
      *
      * @throws IOException if an I/O error occurs saving the data
      */
     public void store() throws IOException {
-        ConcretePortletDescriptor concDescriptor = concPortlet.getConcretePortletDescriptor();
-        Enumeration enum = store.elements();
-        ArrayList list = new ArrayList();
-        while (enum.hasMoreElements()) {
-            String key = (String) enum.nextElement();
-            String value = (String) store.get(key);
-            ConfigParam parms = new ConfigParam(key, value);
-            list.add(parms);
-        }
-        concDescriptor.setContextParamList(list);
-        concPortlet.saveDescriptor(concDescriptor);
+        concPortlet.setContextAttributes(store);
+        concPortlet.save();
     }
 
 }

@@ -4,66 +4,62 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
-import org.gridlab.gridsphere.portletcontainer.descriptor.ApplicationPortletDescriptor;
+import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig;
 
 import java.io.IOException;
 import java.util.List;
 
 /**
- * An application portlet represents the portlet application defined in the portlet.xml
- * ApplicationPortlet is mostly a proxy for the ApplicationPortletDescriptor class used by Castor
- *
- * @see <code>org.gridlab.gridsphere.portletcontainer.descriptor.ApplicationPortletDescriptor</code>
+ * An <code>ApplicationPortlet</code> represents the portlet application instance
+ * defined in the portlet descriptor file.
+
+ * @see <code>org.gridlab.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig</code>
  */
 public interface ApplicationPortlet {
 
     /**
-     * Return the ConcretePortlets associated with this ApplicationPortlet
+     * Returns the concrete portlets associated with this application portlet
      *
-     * @return the ConcretePortlets associated with this ApplicationPortlet
+     * @return the <code>ConcretePortlet</code>s
      */
     public List getConcretePortlets();
 
     /**
-     * Return the ConcretePortlet associated with this ApplicationPortlet
+     * Returns the <code>ConcretePortlet</code> associated with this application
+     * portlet
      *
-     * @param concretePortletID the concrete portlet ID associated with this ApplicationPortlet
-     * @return the ConcretePortlet associated with this ApplicationPortlet with the provided concretePortletID
+     * @param concretePortletID the concrete portlet ID associated with this
+     * <code>ApplicationPortlet</code>
+     * @return the <code>ConcretePortlet</code> associated with this
+     * application portlet
      */
     public ConcretePortlet getConcretePortlet(String concretePortletID);
 
     /**
-     * Return the web application name associated with this application portlet
+     * Returns the web application name associated with this application portlet
      *
      * @return the web application name
      */
     public String getWebApplicationName();
 
     /**
-     * Return the PortletApplication, the portlet descriptor class that defines the portlet application
-     *
-     * @return the PortletApplication
-     */
-    public ApplicationPortletDescriptor getApplicationPortletDescriptor();
-
-    /**
      * Returns the id of a PortletApplication
      *
-     * @returns the id of the PortletApplication
+     * @return the id of the PortletApplication
      */
-    public String getPortletAppID();
+    public String getApplicationPortletID();
 
     /**
      * Returns the name of a PortletApplication
      *
-     * @returns name of the PortletApplication
+     * @return name of the PortletApplication
      */
-    public String getPortletName();
+    public String getApplicationPortletName();
 
     /**
      * Returns the name of a servlet associated with this portlet defined in web.xml as <servlet-name>
      *
-     * @returns the servlet name
+     * @return the servlet name
      */
     public String getServletName();
 
@@ -72,14 +68,13 @@ public interface ApplicationPortlet {
      *
      * @return PortletDispatcher the proxy portlet for this ApplicationPortlet
      */
-    public PortletDispatcher getPortletWrapper();
+    public PortletDispatcher getPortletDispatcher();
 
     /**
-     * Saves the supplied application portlet descriptor to serialize any changes that have been made
+     * Return the PortletApplication, the portlet descriptor class that defines the portlet application
      *
-     * @param appDescriptor the application portlet descriptor
-     * @throws IOException if an I/O error ooccurs
+     * @return the PortletApplication
      */
-    public void saveDescriptor(ApplicationPortletDescriptor applicationDescriptor) throws IOException;
+    public ApplicationPortletConfig getApplicationPortletConfig();
 
 }

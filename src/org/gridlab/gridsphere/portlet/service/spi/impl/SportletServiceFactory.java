@@ -21,6 +21,7 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServic
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.SportletServiceDescriptor;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.services.core.user.impl.GridSphereUserManager;
 
 import javax.servlet.ServletConfig;
@@ -28,6 +29,7 @@ import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.*;
+import java.net.URL;
 
 /**
  * The <code>SportletServiceFactory</code> provides a factory for the creation
@@ -48,9 +50,7 @@ public class SportletServiceFactory implements PortletServiceFactory {
     // Hash of all services key = service interface name, value = SportletServiceDefinition
     private Hashtable allServices = new Hashtable();
 
-    private static Hashtable serviceFactories = new Hashtable();
-
-    private String serviceMappingPath;
+    private Hashtable serviceFactories = new Hashtable();
 
     /**
      * Private constructor. Use getInstance() instead.
@@ -58,9 +58,13 @@ public class SportletServiceFactory implements PortletServiceFactory {
     private SportletServiceFactory() {
         // Reads in the service definitions from the xml file and stores them in allServices
         // organized according to service interface keys and service definition values
-        String servicesPath = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_SERVICES_XML);
-        serviceMappingPath = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_SERVICES_MAPPING_XML);
-        addServices(servicesPath, serviceMappingPath);
+        Class clazz =  this.getClass();
+        String servicesPath = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_SERVICES);
+
+
+        String servicesMappingPath = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_SERVICES_MAPPING);
+
+        addServices(servicesPath, servicesMappingPath);
     }
 
     /**
@@ -71,6 +75,7 @@ public class SportletServiceFactory implements PortletServiceFactory {
      *
      * @param context a <code>ServletContext</code>
      */
+    /*
     private SportletServiceFactory(ServletContext context) {
         String webApplicationName = context.getServletContextName();
         // get the servlet context for the coreportlets webapp
@@ -78,9 +83,12 @@ public class SportletServiceFactory implements PortletServiceFactory {
         ServletContext ctx = context.getContext(contextURIPath);
         if (ctx == null) System.err.println("Unable to get ServletContext for: " + contextURIPath);
         // load in the PortletServices.xml file
-        String servicesPath = ctx.getRealPath("") + "/WEB-INF/PortletServices.xml";
-        addServices(servicesPath, serviceMappingPath);
+        Class clazz =  this.getClass();
+        String servicesPath = clazz.getResource("/gridsphere/config/PortletServices.xml").getFile();
+        String servicesMappingPath = clazz.getResource("/gridsphere/config/mapping/portlet-services-mapping.xml").getFile();
+        addServices(servicesPath, servicesMappingPath);
     }
+    */
 
     /**
      * Umarshalls services from the descriptor file found in servicesPath

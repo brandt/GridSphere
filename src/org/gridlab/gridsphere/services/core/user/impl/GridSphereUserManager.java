@@ -20,6 +20,7 @@ import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.security.password.PasswordBean;
+import org.gridlab.gridsphere.services.core.security.password.impl.DbmsPasswordManagerService;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRole;
@@ -47,14 +48,11 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
 
     private static PortletLog log = SportletLog.getInstance(GridSphereUserManager.class);
     private static GridSphereUserManager instance = new GridSphereUserManager();
-
-    private static PortletServiceFactory factory = SportletServiceFactory.getInstance();
-
     private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
-    private PasswordManagerService passwordManagerService = null;
+    private PasswordManagerService passwordManagerService = DbmsPasswordManagerService.getInstance();
     private List authenticationModules = new Vector();
 
-    private boolean isInitialized = false;
+    private static boolean isInitialized = false;
 
     private String jdoUser = SportletUserImpl.class.getName();
     private String jdoAccountRequest = AccountRequestImpl.class.getName();
@@ -71,30 +69,11 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.info("Entering init()");
         if (!isInitialized) {
-            initServices(config);
             initAccessControl(config);
             initRootUser(config);
             initAuthenticationModules();
             log.info("Entering init()");
         }
-    }
-
-    private void initServices(PortletServiceConfig config)
-            throws PortletServiceUnavailableException {
-        log.info("Entering initServices()");
-        try {
-            passwordManagerService =
-                (PasswordManagerService)
-                    this.factory.createPortletService(PasswordManagerService.class,
-                                                      config.getServletConfig(),
-                                                      true);
-            log.info("in init()");
-        } catch (PortletServiceNotFoundException e) {
-            String msg = "Unable to create portlet service instances";
-            log.error(msg, e);
-            throw new PortletServiceUnavailableException(msg);
-        }
-        log.info("Entering initServices()");
     }
 
     private void initAuthenticationModules() {

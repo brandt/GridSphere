@@ -41,7 +41,7 @@ public class SetupRootUserTest extends ServiceTest {
         try {
             loginService = (LoginService) factory.createPortletService(LoginService.class, null, true);
         } catch (Exception e) {
-            log.error("Unable to initialize services: ", e);
+            fail("Unable to initialize services: " + e.getMessage());
         }
         loginRoot();
     }
