@@ -1,5 +1,5 @@
 /*
- * @author <a href="oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
+ * @author <a href="novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
 
@@ -13,10 +13,12 @@ import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * A <code>ListBoxBean</code> represents a visual list box element
+ */
 public class ListBoxBean extends BeanContainer implements TagBean {
 
-    protected String LISTBOX_STYLE = "portlet-frame-input";
+    protected String LISTBOX_STYLE = "portlet-form-field";
     public static final String NAME = "lb";
 
     protected transient static PortletLog log = SportletLog.getInstance(ListBoxBean.class);
@@ -24,17 +26,31 @@ public class ListBoxBean extends BeanContainer implements TagBean {
     protected int size = 0;
     protected boolean isMultiple = false;
 
+    /**
+     * Constructs a default list box bean
+     */
     public ListBoxBean() {
         super(NAME);
         this.cssStyle = LISTBOX_STYLE;
     }
 
+    /**
+     * Constructs a list box bean with the supplied bean identifier
+     *
+     * @param beanId the bean identifier
+     */
     public ListBoxBean(String beanId) {
         super(NAME);
         this.beanId = beanId;
         this.cssStyle = LISTBOX_STYLE;
     }
 
+    /**
+     * Constructs a list box bean with a supplied portlet request and bean identifier
+     *
+     * @param request the portlet request
+     * @param beanId the bean identifier
+     */
     public ListBoxBean(PortletRequest request, String beanId) {
         super(NAME);
         this.cssStyle = LISTBOX_STYLE;
@@ -42,18 +58,38 @@ public class ListBoxBean extends BeanContainer implements TagBean {
         this.beanId = beanId;
     }
 
+    /**
+     * Returns the size of the list box
+     *
+     * @return the size of the list box
+     */
     public int getSize() {
         return size;
     }
 
+    /**
+     * Sets the size of the list box
+     *
+     * @param size the size of the list box
+     */
     public void setSize(int size) {
         this.size = size;
     }
 
+    /**
+     * Sets multiple selection
+     *
+     * @param isMultiple is true if listbox provides multiple selections, false otherwise
+     */
     public void setMultipleSelection(boolean isMultiple) {
         this.isMultiple = isMultiple;
     }
 
+    /**
+     * Indicates if multiple selection is provided
+     *
+     * @return true if this listbox supports multiple selection, false otherwise
+     */
     public boolean getMultipleSelection() {
         return isMultiple;
     }

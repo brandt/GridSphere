@@ -1,11 +1,15 @@
 /**
- * @author <a href="oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
+ * @author <a href="novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
 
+/**
+ *  A <code>SpecialBean</code> is just a demonstration of how to create a tag/bean pair
+ * that can dynamically choose to use JavaScript or not based on browser detection
+ */
 public class SpecialBean extends BaseComponentBean implements TagBean  {
 
     public static final String NAME = "sp";
@@ -41,6 +45,10 @@ public class SpecialBean extends BaseComponentBean implements TagBean  {
         } else {
             return "<b>a non-javascript interface</b>";
         }
+    }
+
+    public String toEndString() {
+        return "";
     }
 
 }

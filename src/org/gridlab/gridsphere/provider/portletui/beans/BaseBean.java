@@ -1,8 +1,7 @@
 /**
- * @author <a href="oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
+ * @author <a href="novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-
 package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.gridlab.gridsphere.provider.portletui.beans.TagBean;
@@ -11,8 +10,8 @@ import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 
 /**
- * <code>BaseElementBean</code> is an implementation of the TagBean interface.
- * <code>BaseElementBean</code> provides the basic functionality for all ui beans.
+ * The abstract <code>BaseBean</code> is an implementation of the <code>TagBean</code> interface.
+ * <code>BaseBean</code> provides the basic functionality for all visual beans.
  */
 public abstract class BaseBean implements TagBean {
 
@@ -20,25 +19,35 @@ public abstract class BaseBean implements TagBean {
     protected String vbName = "undefined";
     protected PortletRequest request = null;
 
+    /**
+     * Constructs default base bean
+     */
     public BaseBean() {
         super();
     }
 
+    /**
+     * Constructs a base bean for the supplied visual bean type
+     *
+     * @param vbName a name identifying the type of visual bean
+     */
     public BaseBean(String vbName) {
         this.vbName = vbName;
     }
 
     /**
-     * Gets the ID.
-     * @return id of the bean
+     * Returns the bean identifier
+     *
+     * @return the bean identifier
      */
     public String getBeanId() {
         return this.beanId;
     }
 
     /**
-     * Sets the ID od the bean.
-     * @param beanId the id of the bean
+     * Sets the bean identifier
+     *
+     * @param beanId the bean identifier
      */
     public void setBeanId(String beanId) {
         this.beanId = beanId;
@@ -48,24 +57,9 @@ public abstract class BaseBean implements TagBean {
         this.request = request;
     }
 
-    public String toStartString() {
-        return "";
-    }
+    public abstract String toStartString();
 
-    public String toEndString() {
-        return "";
-    }
-
-    protected void store(Object object) {
-        /*
-        if (!beanId.equals("")) {
-            //System.err.println("saving " + beanId + " into session");
-            if (request != null) {
-                request.getSession().setAttribute(getBeanKey(), object);
-            }
-        }
-        */
-    }
+    public abstract String toEndString();
 
     public void store() {
         //System.err.println("storing bean " + getBeanKey());

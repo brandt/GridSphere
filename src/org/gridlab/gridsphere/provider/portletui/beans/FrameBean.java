@@ -1,5 +1,5 @@
 /*
- * @author <a href="oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
+ * @author <a href="novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
@@ -7,6 +7,10 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 
+/**
+ *  The <code>FrameBean</code> extends <code>TableBean</code> to provide a stylized table that can also
+ * be used to render text messages.
+ */
 public class FrameBean extends TableBean implements TagBean {
 
     public static final String TABLE_FRAME_STYLE = "portlet-frame";
@@ -16,14 +20,22 @@ public class FrameBean extends TableBean implements TagBean {
     public static final String ERROR_TYPE = "error";
     public static final String MESSAGE_TYPE = "message";
 
-    protected String style = TextBean.TEXT_LABEL_STYLE;
+    protected String style = TextBean.MSG_INFO;
 
+    /**
+     * Constructs a default frame bean
+     */
     public FrameBean() {
         super(TABLE_FRAME_STYLE);
         this.width = TABLE_FRAME_WIDTH;
         this.cellSpacing = TABLE_FRAME_SPACING;
     }
 
+    /**
+     * Constructs a frame bean from a bean identifier
+     *
+     * @param beanId the frame bean identifier
+     */
     public FrameBean(String beanId) {
         super(TABLE_FRAME_STYLE);
         this.beanId = beanId;
@@ -31,6 +43,12 @@ public class FrameBean extends TableBean implements TagBean {
         this.cellSpacing = TABLE_FRAME_SPACING;
     }
 
+    /**
+     * Constructs a frame bean from a portlet request and bena identifier
+     *
+     * @param req the portlet request
+     * @param beanId the bean identifier
+     */
     public FrameBean(PortletRequest req, String beanId) {
         super(TABLE_FRAME_STYLE);
         this.width = TABLE_FRAME_WIDTH;
@@ -39,15 +57,28 @@ public class FrameBean extends TableBean implements TagBean {
         this.request = req;
     }
 
+    /**
+     * Sets the text style
+     *
+     * @param style the text style
+     */
     public void setStyle(String style) {
         this.style = style;
     }
 
+    /**
+     * Returns the text style
+     *
+     * @return the text style
+     */
     public String getStyle() {
         return style;
     }
 
-    protected void makeMessage() {
+    /**
+     * Creates a frame to display a text message
+     */
+    protected void createMessage() {
         defaultModel = new DefaultTableModel();
         TableRowBean tr = new TableRowBean();
         TableCellBean tc = new TableCellBean();
@@ -67,11 +98,10 @@ public class FrameBean extends TableBean implements TagBean {
 
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
-
-        if ((key != null) || (value != null)) makeMessage();
+        if ((key != null) || (value != null)) createMessage();
         sb.append("<table class=\"" + TABLE_FRAME_STYLE + "\" ");
-        sb.append(" cellspacing=\"" + cellSpacing + "\" ");
-        sb.append(" width=\"" + width + "\" >");
+        if (cellSpacing != null) sb.append(" cellspacing=\"" + cellSpacing + "\" ");
+        if (width != null) sb.append(" width=\"" + width + "\" >");
         if (defaultModel != null) sb.append(defaultModel.toStartString());
         return sb.toString();
     }

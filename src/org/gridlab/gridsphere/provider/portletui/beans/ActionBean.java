@@ -1,5 +1,5 @@
 /**
- * @author <a href="oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
+ * @author <a href="novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
@@ -7,41 +7,60 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 import org.gridlab.gridsphere.portlet.PortletURI;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.provider.ui.beans.TextBean;
-import org.gridlab.gridsphere.provider.ui.beans.Link;
-import org.gridlab.gridsphere.provider.ui.beans.ParamBean;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class ActionBean extends BaseComponentBean implements TagBean {
+/**
+ * An <code>ActionBean</code> is an abstract visual bean that is responsible for creating
+ * <code>DefaultPortletAction</code> using a supplied <code>PortletURI</code> and is used by
+ * the <code>ActionLinkBean</code> and <code>ActionSubmitBean</code>
+ */
+public abstract class ActionBean extends BaseComponentBean implements TagBean {
 
     protected String action = "no action specified";
     protected PortletURI portletURI = null;
     protected List paramBeanList = new ArrayList();
 
+    /**
+     * Constructs default action bean
+     */
     public ActionBean() {
     }
 
+    /**
+     * Constructs action bean with the supplied name
+     *
+     * @param name an identifying name
+     */
     public ActionBean(String name) {
         super(name);
     }
 
+    /**
+     * Constructs action bean with the supplied portlet request and bean identifier
+     *
+     * @param req the portlet request
+     * @param beanId the bean identifier
+     */
     public ActionBean(PortletRequest req, String beanId) {
         this.request = req;
         this.beanId = beanId;
     }
 
     /**
-     * Sets the uri for the link.
+     * Sets the uri for the link
+     *
+     * @param portletURI the portlet uri
      */
     public void setPortletURI(PortletURI portletURI) {
         this.portletURI = portletURI;
     }
 
     /**
-     * Gets the uri for the link.
+     * Returns the uri for the link
+     *
      * @return returns the action
      */
     public PortletURI getPortletURI() {
@@ -49,62 +68,83 @@ public class ActionBean extends BaseComponentBean implements TagBean {
     }
 
     /**
-     * Sets the action for the link.
+     * Sets the action for the link
+     *
+     * @param action the action name
      */
     public void setAction(String action) {
         this.action = action;
     }
 
     /**
-     * Gets the action for the link.
-     * @return returns the action
+     * Returns the action name
+     *
+     * @return returns the action name
      */
     public String getAction() {
         return action;
     }
 
+    /**
+     * Sets the list of name value parameter beans
+     *
+     * @param paramBeanList a list containing <code>ActionParamBean</code>s
+     */
     public void setParamBeanList(List paramBeanList) {
         this.paramBeanList = paramBeanList;
     }
 
+    /**
+     * Returns the list of name value parameter beans
+     *
+     * @return the list containing <code>ActionParamBean</code>s
+     */
     public List getParamBeanList() {
         return paramBeanList;
     }
 
-    public void addParamBean(ParamBean paramBean) {
+    /**
+     * Adds an action parameter bean
+     *
+     * @param paramBean an action parameter bean
+     */
+    public void addParamBean(ActionParamBean paramBean) {
         paramBeanList.add(paramBean);
     }
 
+    /**
+     * Creates and adds an action parameter bean
+     *
+     * @param paramName the parameter name
+     * @param paramValue the parameter value
+     */
     public void addParamBean(String paramName, String paramValue) {
-        ParamBean paramBean = new ParamBean(paramName, paramValue);
+        ActionParamBean paramBean = new ActionParamBean(paramName, paramValue);
         paramBeanList.add(paramBean);
     }
 
-    public void removeParamBean(ParamBean paramBean) {
+    /**
+     * Removes an action parameter bean
+     *
+     * @param paramBean the action parameter bean
+     */
+    public void removeParamBean(ActionParamBean paramBean) {
         paramBeanList.remove(paramBean);
     }
 
+    /**
+     * Creates a <code>PortletURI</code> containing the associated action link
+     */
     protected void createLink() {
         DefaultPortletAction portletAction = new DefaultPortletAction(action);
         Iterator it = paramBeanList.iterator();
-        ParamBean paramBean = null;
+        ActionParamBean paramBean = null;
         while (it.hasNext()) {
-            paramBean = (ParamBean)it.next();
+            paramBean = (ActionParamBean)it.next();
             portletAction.addParameter(paramBean.getName(), paramBean.getValue());
         }
         portletURI.addAction(portletAction);
         action = portletURI.toString();
-    }
-
-    protected String createSubmitName() {
-        Iterator it = paramBeanList.iterator();
-        ParamBean paramBean = null;
-        StringBuffer sb = new StringBuffer();
-        while (it.hasNext()) {
-            paramBean = (ParamBean)it.next();
-            sb.append("pname="+paramBean.getName()+"pvalue="+paramBean.getValue());
-        }
-        return sb.toString();
     }
 
 }

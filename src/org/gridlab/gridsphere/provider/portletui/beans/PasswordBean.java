@@ -1,5 +1,5 @@
 /**
- * @author <a href="oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
+ * @author <a href="novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
 
@@ -7,21 +7,38 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
 
+/**
+ * A <code>PasswordBean</code> represents a password input element
+ */
 public class PasswordBean extends TextFieldBean {
 
     public static final String NAME = "pb";
 
+    /**
+     * Constructs a default password bean
+     */
     public PasswordBean() {
         super(NAME);
     }
 
+    /**
+     * Constructs a password bean using a supplied bean identifier
+     *
+     * @param beanId the bean identifier
+     */
+    public PasswordBean(String beanId) {
+        super(NAME, beanId);
+    }
+
+    /**
+     * Constructs a password bean using a supplied portlet request and bean identifier
+     *
+     * @param req the portlet request
+     * @param beanId the bean identifier
+     */
     public PasswordBean(PortletRequest req, String beanId) {
         super(NAME, beanId);
         this.request = req;
-    }
-
-    public PasswordBean(String beanId) {
-        super(NAME, beanId);
     }
 
     public String toStartString() {

@@ -1,50 +1,66 @@
 /*
- * @author <a href="oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
+ * @author <a href="novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Vector;
 
-public class BeanContainer extends BaseComponentBean {
+/**
+ * The abstract <code>BeanContainer</code> is a container for other visual beans
+ */
+public abstract class BeanContainer extends BaseComponentBean {
 
     public List container  = new Vector();
 
+    /**
+     * Constructs a default bean container
+     */
     public BeanContainer() {}
 
+    /**
+     * Constructs a bean container with the supplied name
+     *
+     * @param name the bean container name
+     */
     public BeanContainer(String name) {
         super(name);
     }
 
+    /**
+     * Adds a visual bean to the bean container
+     *
+     * @param bean a base component bean
+     */
     public void addBean(BaseComponentBean bean) {
         container.add(bean);
     }
 
+    /**
+     * Removes a visual bean from the bean container
+     *
+     * @param bean the visual bean to remove
+     */
     public void removeBean(BaseComponentBean bean) {
         container.remove(bean);
     }
 
+    /**
+     * Clears the list of visual beans in this container
+     */
     public void clear() {
         container.clear();
     }
 
+    /**
+     * Returns the visual beans as a list of <code>BaseComponentBean</code>s
+     *
+     * @return the list of visual beans
+     */
     public List getBeans() {
         return container;
-    }
-
-    public String toString() {
-        Iterator it = container.iterator();
-        StringBuffer sb = new StringBuffer();
-        while (it.hasNext()) {
-            BaseComponentBean tagBean = (BaseComponentBean)it.next();
-            if (tagBean.toString() != null) sb.append(tagBean.toString());
-            //System.err.println("its the tagbean out: " + tagBean.toString());
-        }
-        return sb.toString();
     }
 
 }

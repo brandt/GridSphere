@@ -1,5 +1,5 @@
 /*
- * @author <a href="wehrens@aei.mpg.de">Oliver Wehrens</a>
+ * @author <a href="novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
 
@@ -7,66 +7,108 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
 
+/**
+ * The <code>TextBean</code> represents text to be displayed
+ */
 public class TextBean extends BaseComponentBean implements TagBean {
 
     public static final String NAME = "tb";
 
-    public static final String TEXT_LABEL_STYLE = "portlet-frame-label";
-    public static final String TEXT_PLAIN_STYLE = "portlet-frame-text";
-    public static final String TEXT_MESSAGE_STYLE = "portlet-frame-message";
-    public static final String TEXT_ERROR_STYLE = "portlet-frame-message-alert";
+    // CSS definitions according to Portlet API spec. PLT.C
+    public static final String MSG_STATUS = "portlet-msg-status";
+    public static final String MSG_INFO = "portlet-msg-info";
+    public static final String MSG_ERROR = "portlet-msg-error";
+    public static final String MSG_ALERT = "portlet-msg-alert";
+    public static final String MSG_SUCCESS = "portlet-msg-success";
 
-    public static final String BOLD = "bold";
-    public static final String ITALIC = "italic";
+    protected String style = "info";
 
-    protected String style = "";
-
+    /**
+     * Constructs a default text bean
+     */
     public TextBean() {
         super(NAME);
-        this.cssStyle = TEXT_LABEL_STYLE;
+        this.cssStyle = MSG_INFO;
     }
 
+    /**
+     * Constructs a text bean using a supplied bean identifier
+     *
+     * @param beanId the bean identifier
+     */
     public TextBean(String beanId) {
         super(NAME);
         this.beanId = beanId;
-        this.cssStyle = TEXT_LABEL_STYLE;
+        this.cssStyle = MSG_INFO;
     }
 
+    /**
+     * Constructs a text bean from a supplied portlet request and bean identifier
+     *
+     * @param req the portlet request
+     * @param beanId the bean identifier
+     */
     public TextBean(PortletRequest req, String beanId) {
         super(NAME);
         this.beanId = beanId;
         this.request = req;
-        this.cssStyle = TEXT_LABEL_STYLE;
+        this.cssStyle = MSG_INFO;
     }
 
+    /**
+     * Returns the style of the text: Available styles are
+     * <ul>
+     * <li>error</li>
+     * <li>info</li>
+     * <li>status</li>
+     * <li>alert</li>
+     * <li>success</li>
+     *
+     * @return the text style
+     */
     public String getStyle() {
         return style;
     }
 
+    /**
+     * Sets the style of the text: Available styles are
+     * <ul>
+     * <li>error</li>
+     * <li>info</li>
+     * <li>status</li>
+     * <li>alert</li>
+     * <li>success</li>
+     *
+     * @param style the text style
+     */
     public void setStyle(String style) {
         this.style = style;
     }
 
     public String toStartString() {
-
-        if (style.equalsIgnoreCase("error")) {
-            this.cssStyle = TEXT_ERROR_STYLE;
-        } else if (style.equalsIgnoreCase("message")) {
-            this.cssStyle = TEXT_MESSAGE_STYLE;
-        } else if (style.equalsIgnoreCase("label")) {
-            this.cssStyle = TEXT_LABEL_STYLE;
-        } else if (style.equalsIgnoreCase("plain")) {
-            this.cssStyle = TEXT_PLAIN_STYLE;
-        }
         return "";
     }
 
     public String toEndString() {
-        if (style.equalsIgnoreCase(BOLD)) {
+        /*
+        if (cssStyle.equalsIgnoreCase(MSG_SUCCESS)) {
             value = "<b>" + value + "</b>";
         } else if (style.equalsIgnoreCase(ITALIC)) {
             value = "<i>" + value + "</i>";
         }
-        return value;
+        */
+        System.err.println("in TextBean: doEndString");
+        if (style.equalsIgnoreCase("error") || (style.equalsIgnoreCase("err"))) {
+            this.cssStyle = MSG_ERROR;
+        } else if (style.equalsIgnoreCase("status")) {
+            this.cssStyle = MSG_STATUS;
+        } else if (style.equalsIgnoreCase("info")) {
+            this.cssStyle = MSG_INFO;
+        } else if (style.equalsIgnoreCase("alert")) {
+            this.cssStyle = MSG_ALERT;
+        } else if (style.equalsIgnoreCase("success")) {
+            this.cssStyle = MSG_SUCCESS;
+        }
+        return "<div class=\"" + cssStyle + "\">" + value + "</div>";
     }
 }

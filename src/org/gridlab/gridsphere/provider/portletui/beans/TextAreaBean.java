@@ -1,5 +1,5 @@
 /**
- * @author <a href="oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
+ * @author <a href="novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
 
@@ -7,23 +7,33 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
 
+/**
+ * The <code>TextAreaBean</code> represents a text area element
+ */
 public class TextAreaBean extends BaseComponentBean implements TagBean {
 
     public static final String NAME = "ta";
 
-    public static final String TEXTAREA_STYLE = "portlet-frame-textarea";
-
     private int cols = 0;
     private int rows = 0;
 
+    /**
+     * Constructs a default text area bean
+     */
     public TextAreaBean() {
         super(NAME);
-        this.cssStyle = TEXTAREA_STYLE;
+        this.cssStyle = TextBean.MSG_INFO;
     }
 
+    /**
+     * Constructs a text area bean from a supplied portlet request and bean identifier
+     *
+     * @param req the portlet request
+     * @param beanId the bean identifier
+     */
     public TextAreaBean(PortletRequest req, String beanId) {
         super(NAME);
-        this.cssStyle = TEXTAREA_STYLE;
+        this.cssStyle = TextBean.MSG_INFO;
         this.request = req;
         this.beanId = beanId;
     }
@@ -74,7 +84,7 @@ public class TextAreaBean extends BaseComponentBean implements TagBean {
         if (cols != 0) sb.append(" cols=\"" + cols + "\" ");
         if (rows != 0) sb.append(" rows=\"" + rows + "\" ");
         sb.append(" " + checkDisabled());
-        sb.append(" " + checkReadonly());
+        sb.append(" " + checkReadOnly());
         sb.append(">");
         return sb.toString();
     }

@@ -1,59 +1,82 @@
 /*
- * @author <a href="oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
+ * @author <a href="novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
+import org.gridlab.gridsphere.portlet.PortletRequest;
+
+/**
+ * A <code>PanelBean</code> provides a stylized table that is generally used as a container for
+ * <code>FrameBean</code>s
+ */
 public class PanelBean extends BeanContainer implements TagBean {
 
-    public static final String TABLE_PANE_STYLE = "portlet-pane";
-    public static final String TABLE_PANE_WIDTH = "200";
-    public static final String TABLE_PANE_SPACING = "1";
+    public static final String PANEL_STYLE = "portlet-pane";
+    public static final String PANEL_WIDTH = "200";
+    public static final String PANEL_SPACING = "1";
 
-    protected String cellSpacing = TABLE_PANE_SPACING;
-    protected String rows = "";
-    protected String cols = "";
-    protected String width = TABLE_PANE_WIDTH;
+    protected String cellSpacing = PANEL_SPACING;
+    protected String width = PANEL_WIDTH;
 
+    /**
+     * Constructs a default panel bean
+     */
     public PanelBean() {
-        this.cssStyle = TABLE_PANE_STYLE;
+        this.cssStyle = PANEL_STYLE;
     }
 
-    public void setRows(String rows) {
-        this.rows = rows;
+    /**
+     * Constructs a panel bean from a supplied portlet request and bean identifier
+     *
+     * @param req the portlet request
+     * @param beanId the bean identifier
+     */
+    public PanelBean(PortletRequest req, String beanId) {
+        this.cssStyle = PANEL_STYLE;
+        this.beanId = beanId;
+        this.request = req;
     }
 
-    public String getRows() {
-        return rows;
-    }
-
-    public void setCols(String cols) {
-        this.cols = cols;
-    }
-
-    public String getCols() {
-        return cols;
-    }
-
+    /**
+     * Sets the panel (table) width
+     *
+     * @param width the panel width
+     */
     public void setWidth(String width) {
         this.width = width;
     }
 
+    /**
+     * Returns the panel (table) width
+     *
+     * @return the panel width
+     */
     public String getWidth() {
         return width;
     }
 
+    /**
+     * Sets the panel (table) cell spacing
+     *
+     * @param cellSpacing the panel cell spacing
+     */
     public void setCellSpacing(String cellSpacing) {
         this.cellSpacing = cellSpacing;
     }
 
+    /**
+     * Returns the panel (table) cell spacing
+     *
+     * @return  the panel cell spacing
+     */
     public String getCellSpacing() {
         return cellSpacing;
     }
 
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("<table class=\"" + TABLE_PANE_STYLE + "\" ");
+        sb.append("<table class=\"" + cssStyle + "\" ");
         sb.append(" cellspacing=\"" + cellSpacing + "\" ");
         sb.append(" width=\"" + width + "\" ");
         sb.append(">");
@@ -62,17 +85,8 @@ public class PanelBean extends BeanContainer implements TagBean {
 
     public String toEndString() {
         StringBuffer sb = new StringBuffer();
-        if (rows.equals("")) {
-            rows = new Integer(container.size()).toString();
-        }
-        int numRows = 0;
-        int numCols = 0;
-        try {
-            numRows = new Integer(rows).intValue();
-            numCols = new Integer(cols).intValue();
-        } catch (Exception e) {
-            // forget it
-        }
+
+        int numRows = container.size();
         int i = 0;
         //System.err.println("in PanelBean: # of tags: " + container.size());
         while (i < container.size()) {
@@ -89,50 +103,8 @@ public class PanelBean extends BeanContainer implements TagBean {
             }
             sb.append("</tr>");
         }
-
         sb.append("</table>");
         return sb.toString();
     }
 
-    public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("<table class=\"" + TABLE_PANE_STYLE + "\" ");
-        sb.append(" cellspacing=\"" + cellSpacing + "\" ");
-        sb.append(" width=\"" + width + "\" ");
-        sb.append(">");
-        //sb.append("<tr><td>");
-
-
-        if (rows.equals("")) {
-            rows = new Integer(container.size()).toString();
-        }
-        int numRows = 0;
-        int numCols = 0;
-        try {
-            numRows = new Integer(rows).intValue();
-            numCols = new Integer(cols).intValue();
-        } catch (Exception e) {
-           // forget it
-        }
-        int i = 0;
-        //System.err.println("in PanelBean: # of tags: " + container.size());
-        while (i < container.size()) {
-            sb.append("<tr>");
-            int j = 0;
-            while ((j < numRows) && (i < container.size())) {
-                //sb.append("<td>");
-                TagBean tagBean = (TagBean)container.get(i);
-                //System.err.println("in PanelBean: its " + tagBean.toString());
-                sb.append(tagBean.toString());
-                //sb.append("</td>");
-                j++; i++;
-            }
-            sb.append("</tr>");
-        }
-
-        //sb.append(super.toString());
-        //sb.append("</td></tr>");
-        sb.append("</table>");
-        return sb.toString();
-    }
 }
