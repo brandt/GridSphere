@@ -66,7 +66,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         try {
             String query = "select cp from "
                          + this.credentialPermissionImpl
-                         + " cp where cp.pattern=" + pattern;
+                         + " cp where cp.permittedsubjects=" + pattern;
             _log.debug(query);
             return (CredentialPermission)this.pm.restoreObject(query);
         } catch (PersistenceManagerException e) {
@@ -76,24 +76,26 @@ public abstract class AbstractCredentialManager implements CredentialManager {
     }
 
     public void createCredentialPermission(String pattern) {
-        CredentialPermission permission = getCredentialPermission(pattern);
-        if (permission == null) {
-            // Create new permission of proper type
-            try {
-                permission = (CredentialPermission)Class.forName(this.credentialPermissionImpl).newInstance();
-            } catch (Exception e) {
-                _log.error("Error creating instance of credential permission", e);
-            }
-            permission.setPermittedSubjects(pattern);
-            createCredentialPermission(permission);
+        CredentialPermission permission = null;
+        // Create new permission of proper type
+        try {
+            permission = (CredentialPermission)Class.forName(this.credentialPermissionImpl).newInstance();
+        } catch (Exception e) {
+            _log.error("Error creating instance of credential permission", e);
         }
+        permission.setPermittedSubjects(pattern);
+        createCredentialPermission(permission);
     }
 
     public void createCredentialPermission(CredentialPermission permission) {
-        try {
-            this.pm.create(permission);
-        } catch (PersistenceManagerException e) {
-            _log.error("Error saving credential permission", e);
+        String pattern = permission.getPermittedSubjects();
+        // Check that no permission (already) exists with given pattern
+        if (!existsCredentialPermission(pattern)) {
+            try {
+                this.pm.create(permission);
+            } catch (PersistenceManagerException e) {
+                _log.error("Error saving credential permission", e);
+            }
         }
     }
 
@@ -114,13 +116,29 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         }
     }
 
+    public boolean existsCredentialPermission(String pattern) {
+        try {
+            String query = "select cp.permittedsubjects from "
+                         + this.credentialPermissionImpl
+                         + " cp";
+            _log.debug(query);
+            this.pm.restoreObject(query);
+            // return true if we succeed
+            return true;
+        } catch (PersistenceManagerException e) {
+            // return false if we fail
+            return false;
+        }
+    }
+
     /****** CREDENTIAL PERMISSION CONVENIENCE METHODS *******/
 
     public List getPermittedCredentialSubjects() {
         List permittedSubjects = null;
         try {
-            String query = "select cp.pattern from "
-                         + this.credentialPermissionImpl;
+            String query = "select cp.permittedsubjects from "
+                         + this.credentialPermissionImpl
+                         + " cp";
             _log.debug(query);
             permittedSubjects = this.pm.restoreList(query);
         } catch (PersistenceManagerException e) {
@@ -173,28 +191,30 @@ public abstract class AbstractCredentialManager implements CredentialManager {
 
     public void createCredentialMapping(String subject, User user)
             throws CredentialNotPermittedException {
-        CredentialMapping mapping = getCredentialMapping(subject);
-        if (mapping == null) {
-            // Create new mapping of proper type
-            try {
-                mapping = (CredentialMapping)Class.forName(this.credentialMappingImpl).newInstance();
-            } catch (Exception e) {
-                _log.error("Error creating instance of credential mapping", e);
-            }
-            mapping.setSubject(subject);
-            mapping.setUser(user.getID());
-            createCredentialMapping(mapping);
+        CredentialMapping mapping = null;
+        // Create new mapping of proper type
+        try {
+            mapping = (CredentialMapping)Class.forName(this.credentialMappingImpl).newInstance();
+        } catch (Exception e) {
+            _log.error("Error creating instance of credential mapping", e);
         }
+        mapping.setSubject(subject);
+        mapping.setUser(user.getID());
+        createCredentialMapping(mapping);
     }
 
     public void createCredentialMapping(CredentialMapping mapping)
             throws CredentialNotPermittedException {
         String subject = mapping.getSubject();
+        // Make sure the mapping subject is permitted
         if (isCredentialPermitted(subject)) {
-            try {
-                this.pm.create(mapping);
-            } catch (PersistenceManagerException e) {
-                _log.error("Error saving credential mapping " + e);
+            // Check that no mapping (already) exists with given subject
+            if (!existsCredentialMapping(subject)) {
+                try {
+                    this.pm.create(mapping);
+                } catch (PersistenceManagerException e) {
+                    _log.error("Error saving credential mapping " + e);
+                }
             }
         } else {
             throw new CredentialNotPermittedException("Credential subject not permitted");
@@ -255,7 +275,23 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         }
     }
 
+    public boolean existsCredentialMapping(String subject) {
+        try {
+            String query = "select cm.subject from "
+                         + this.credentialMappingImpl
+                         + " cm";
+            _log.debug(query);
+            this.pm.restoreObject(query);
+            // return true if we succeed
+            return true;
+        } catch (PersistenceManagerException e) {
+            // return false if we fail
+            return false;
+        }
+    }
+
     /****** CREDENTIAL MAPPING CONVENIENCE METHODS *******/
+
 
     public User getCredentialUser(String subject) {
         User user = null;
