@@ -11,11 +11,12 @@ public class SportletGroup implements PortletGroup {
 
     public static final int BASE = 0;
 
-    private int group = BASE;
+    private int ID = BASE;
     private String groupName = "BASE";
+    private static final SportletGroup baseGroup = new SportletGroup(BASE, "BASE");
 
-    public SportletGroup(int group, String groupName) {
-        this.group = group;
+    public SportletGroup(int id, String groupName) {
+        this.ID = id;
         this.groupName = groupName;
     }
 
@@ -24,11 +25,11 @@ public class SportletGroup implements PortletGroup {
     }
 
     public static PortletGroup getBaseGroup() {
-        return new SportletGroup(BASE, "BASE");
+        return baseGroup;
     }
 
     public boolean isBaseGroup() {
-        if (group == BASE) {
+        if (ID == BASE) {
             return true;
         } else {
             return false;
@@ -39,12 +40,8 @@ public class SportletGroup implements PortletGroup {
         return groupName;
     }
 
-    public int getGroup() {
-        return group;
-    }
-
     public int getID() {
-        return group;
+        return ID;
     }
 
 }
