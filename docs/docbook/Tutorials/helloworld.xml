@@ -1,0 +1,396 @@
+<chapter id="thirdparty">
+    <title>ThirdParty Portlets</title>
+    <para>
+        Gridsphere provides the possibility to easily develop and deploy thirdparty
+        portlets. This chapter will describe how to do so.
+    </para>
+
+    <sect1 id="newproject">
+        <title>Creating a new project</title>
+        <para>
+            If you want to develop new portlets for gridsphere you need to issue the command
+            <screen>
+<prompt>bash$</prompt> <command>ant <replaceable>new-project</replaceable>
+            </command>
+...
+new-project:
+     [echo] Creating a New Portlet Project
+    [input] Please enter a Project Title e.g. Cool Portlets
+    <prompt>This is the Hello World Portlet</prompt>
+    [input] Please enter a Project Name this will be used for your portlet web application and should be lowercase e.g. coolportlets
+    <prompt>hello</prompt>
+...
+            </screen>
+            At the first prompt enter a description of your portlet package (or one portlet) you want to develop.
+            After that you are asked to type in  a name for your portletpackage under which it will be deployed in the servlet container.
+            In the above example a package called 'hello' will be created in the projects directory of gridsphere.
+            All needed template files and the directoy structure is automatically created.
+            At the moment it is requiered that all portlet projects are in the projects dir in the gridsphere home directory.
+        </para>
+    </sect1>
+
+    <sect1 id="HelloWorldPortlet">
+        <title>Hello World</title>
+
+            <sect2 id="helloworldsrc">
+            <title>First Portlet</title>
+                After creating the new project you are ready to write your first portlet. The very basic portlet looks like:
+                <example>
+                    <title>HelloWorld.java</title>
+                    <programlisting linenumbering='numbered'>
+package package org.gridlab.gridsphere.portlets.tutorial;
+
+public class HelloWorld  extends AbstractPortlet {
+
+    public void doView(PortletRequest request, PortletResponse response)
+         throws PortletException, IOException {
+        PrintWriter out = response.getWriter();
+        out.println("<h1>Hello World</h1>");
+    }
+}
+                    </programlisting>
+                </example>
+                All portlets need to extend AbstractPortlet (line 3). In this example we just implement
+                the view mode of the portlet. This outputs just a simple html string to the page.
+            </sect2>
+            <sect2 id="portletdescriptor">
+                <title>PortletDescriptor</title>
+                <para>
+                    The next step in order to deploy the portlet is to write the portletdescriptor. During the init process
+                    (ant new-project) all needed template files were copied to the proper locations.
+                    The descriptor file is <filename>webapp/WEB-INF/portlet.xml</filename> and it should look like the
+                    following example. Please make sure the portlet-app-id matches the portletclass name and the
+                    concrete-portlet-app-id matches it as well plus a numeric identifier.  Furthermore check if the
+                    servlet-name matches the servlet-name defined in web.xml. See down for more information on this.
+
+                    <example>                        <title>HelloWorld.java - portlet.xml</title>
+                    <programlisting>
+                    <![CDATA[
+
+<portlet-app-collection>
+
+<portlet-app-def>
+
+<portlet-app id="org.gridlab.gridsphere.portlets.tutorial.HelloWorld">
+    <portlet-name>Hello World Portlet Application</portlet-name>
+    <servlet-name>HelloWorld</servlet-name>
+    <portlet-config>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </portlet-config>
+    <cache>
+        <expires>120</expires>
+        <shared>true</shared>
+    </cache>
+    <allows>
+        <maximized/>
+        <minimized/>
+        <resizing/>
+    </allows>
+    <supports>
+        <view/>
+        <edit/>
+        <help/>
+        <configure/>
+    </supports>
+</portlet-app>
+
+<concrete-portlet-app id="org.gridlab.gridsphere.portlets.tutorial.HelloWorld.1">
+    <context-param>
+        <param-name>foobar</param-name>
+        <param-value>a value</param-value>
+    </context-param>
+    <concrete-portlet>
+        <portlet-name>Hello World</portlet-name>
+        <default-locale>en</default-locale>
+        <language locale="en_US">
+            <title>Hello World</title>
+            <title-short>Hello World</title-short>
+            <description>Hello World - Sample Portlet #1</description>
+            <keywords>portlet hello world</keywords>
+        </language>
+        <config-param>
+            <param-name>Portlet Master</param-name>
+            <param-value>yourid@yourdomain.com</param-value>
+        </config-param>
+    </concrete-portlet>
+</concrete-portlet-app>
+
+</portlet-app-def>
+
+</portlet-app-collection>
+            ]]>
+                    </programlisting>
+                    </example>
+            </para>
+
+        </sect2>
+        <sect2 id="web.xml">
+
+                <title>web.xml</title>
+
+            The other file which needs to be modified is <filename>webapp/WEB-INF/web.xml</filename>. Here you
+            need to modify the servlet tag. Make sure you match the servlet-name  you defined above in
+            <filename>webapp/WEB-INF/portlet.xml</filename>.
+            The same applies to servlet-class. It must be the same as defined in <filename>webapp/WEB-INF/portlet.xml</filename>
+            <example><title>HelloWorld.java - web.xml</title>
+            <programlisting>
+ <![CDATA[
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/j2ee/dtds/web-app_2.3.dtd">
+
+<web-app>
+    <display-name></display-name>
+
+    <description>
+        Provides
+    </description>
+
+    <servlet>
+        <servlet-name>HelloWorld</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.tutorial.HelloWorld</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+       <servlet-name>HelloWorld</servlet-name>
+       <url-pattern>/hello</url-pattern>
+    </servlet-mapping>
+
+    <mime-mapping>
+      <extension>wbmp</extension>
+      <mime-type>image/vnd.wap.wbmp</mime-type>
+    </mime-mapping>
+
+    <mime-mapping>
+      <extension>wml</extension>
+      <mime-type>text/vnd.wap.wml</mime-type>
+    </mime-mapping>
+
+    <mime-mapping>
+      <extension>wmls</extension>
+      <mime-type>text/vnd.wap.wmlscript</mime-type>
+    </mime-mapping>
+
+</web-app>
+]]>
+            </programlisting>
+            </example>
+        </sect2>
+        <sect2 id="hello world deploy">
+            <title>Deploy the portlet</title>
+            To deploy the <filename>HelloWorld</filename> Portlet simply issue:
+            <screen>
+<prompt>bash$</prompt> <command>ant <replaceable>deploy</replaceable></command>
+            </screen>
+            in the homedirectory of the your project. Your portlet is now deployed to
+            gridsphere.
+        </sect2>
+
+        <sect2 id="modify gridsphere">
+            <title>Register with gridsphere</title>
+            The final step is to register the portlet with gridsphere. First you have to
+            edit the <filename>PortletMaster.xml</filename> to register your project
+            with gridsphere. Either you use the deployed file in <filename>$CATALINA_HOME/gridsphere/PortletMaster.xml</filename>
+            or you use the one in your gridsphere sourcedir. There it is located in <filename>config/PortletMaster.xml</filename>.
+            If you use the one in the gridsphere sourcedir you need to redeploy gridsphere.
+            <example>
+                <title>HelloWorld.java - config/PortletMaster.xml</title>
+
+            <programlisting>
+<![CDATA[
+<portlet-services>
+    <service>
+        <name>Portlet Manager Service</name>
+        <user-required>true</user-required>
+        <description>Provides Administration Capabilities for Portlet Web Applications</description>
+        <interface>org.gridlab.gridsphere.services.core.registry.PortletManagerService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.registry.impl.PortletManagerServiceImpl</implementation>
+        <service-config>
+            <param-name>startup-portlet-webapps</param-name>
+            <param-value>gridsphere, helloworld</param-value>
+        </service-config>
+    </service>
+</portlet-services>
+]]>
+            </programlisting>
+            </example>
+            The last part is to edit the <filename>$CATALINA_HOME/gridsphere/GuestUserLayout.xml</filename> or
+            the <filename>config/layouts/GuestUserLayout.xml</filename> in the sourcedirectory of gridsphere. If you
+            choose the second way you have to redeploy gridsphere.
+            The <filename>GuestUserLayout.xml</filename> should have a section inside some grid-layout tag which
+            looks like this:
+            <example>
+                <title>HelloWorld.java - GuestUserLayout.xml</title>
+                <programlisting>
+            <![CDATA[
+<portlet-frame inner-padding="20">
+    <name>RSS</name>
+    <portlet-class>org.gridlab.gridsphere.portlets.tutorial.HelloWorld.1</portlet-class>
+</portlet-frame>
+]]>
+            </programlisting>
+            </example>
+        </sect2>
+    </sect1>
+
+    <sect1 id="persistence">
+        <title>Using persistence in a portlet</title>
+        This Tutorial will show how you can make objects persistent to a database. Since Gridsphere comes
+        with hsqldb preinstalled it will use this for the examples. Furthermore Gridsphere uses
+        castor to store/retrieve objects from the database.
+
+        <sect2 id="castorpersistence">
+            <title>Making your own objects peristent</title>
+            The recommended way of makeing your own objects easily persistent is to create a PortletService
+            which takes care of this operation. The reason for that is that this operation is potentially
+            useful to other portlets as well. Furthermore this is needed due to classloading issues.
+            After creating a new project we first create the service. The PortletService has to
+            be in a package called <filename>services</filename> (e.g. <filename>org.gridlab.gridsphere.portlets.tutorial.pmdemo.services</filename>).
+            All object which need to make persistent have to be in the same package as well.
+            In our case we want to create a very simple 'NameService' which will store 'Name' objects and returns
+            a list of all the objects when requested.
+            <example>
+                <title>Name.java - Persistence </title>
+                <programlisting>
+<![CDATA[
+package org.gridlab.gridsphere.portlets.tutorial.pmdemo.services;
+
+import org.gridlab.gridsphere.core.persistence.BaseObject;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+
+/**
+ * @table pmdemo
+ */
+public class Name extends BaseObject {
+    private static PortletLog log = SportletLog.getInstance(Name.class);
+
+    /**
+     * @sql-size 50
+     * @sql-name fname
+     */
+    String firstname = new String();
+
+    /**
+     * @sql-size 50
+     * @sql-name lname
+     */
+    String lastname = new String();
+
+    public String getFirstname() {
+        return firstname;
+    }
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+    public String getLastname() {
+        return lastname;
+    }
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+}
+]]>
+
+                </programlisting>
+            </example>
+            <para>
+                To generate mapping files for castor we use castordoclet. This packages creates the corresponding
+                mapping and database files from the sourcecode. However it is possible to create this mappings
+                by hand but it is not recommended to do so. For further information on the syntax off the
+                castordocletsmapping refer to the homepage of the project.
+            </para>
+            <para>
+                Now we need to create the actual service which will take care of the creation/update/deletion
+                of the object. We need to define an interface and an implementation for that.
+                <example>
+                    <title>NameService.java - Persistence</title>
+                    <screen>
+<![CDATA[
+package org.gridlab.gridsphere.portlets.tutorial.pmdemo.services;
+
+import org.gridlab.gridsphere.portlet.service.PortletService;
+
+import java.util.List;
+
+public interface NameService extends PortletService {
+    public void storeName(Name name);
+    public List getNames();
+}
+]]>
+                    </screen>
+                </example>
+                <para>
+                    This defines two methods of which one stores a nameobject the other returns a list of these
+                    objects.
+                </para>
+                <example>
+                    <title>NameServiceImpl.java - Persistence</title>
+                    <screen>
+<![CDATA[
+package org.gridlab.gridsphere.portlets.tutorial.pmdemo.services;
+
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+
+import java.util.List;
+public class NameServiceImpl implements NameService, PortletServiceProvider {
+    private PersistenceManagerRdbms pm = PersistenceManagerFactory.createProjectPersistenceManagerRdbms("pmdemo");
+    public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
+    }
+
+    public void destroy() {
+    }
+
+    public void storeName(Name name) {
+        try {
+            pm.create(name);
+        } catch (PersistenceManagerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List getNames() {
+        try {
+            List result = pm.restoreList("select n from org.gridlab.gridsphere.portlets.tutorial.pmdemo.services.Name n");
+            return result;
+        } catch (PersistenceManagerException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+}
+]]>
+
+                    </screen>
+                </example>
+                <para>
+                    The class needs to implement the NameService interface as well as the PortletServiceProviderinterface.
+                    Serveral steps are needed to make the service work.
+                    <para>
+                        We need to get an instance of the PersistenceManager which will take care
+                        of the database handling. The argument you pass into the <classname>PersistenceManagerFactory</classname>
+                        is the name of the project you were building.
+                    </para>
+                    <para>
+                        In the storeName() method all we need to save an object to the database is to call
+                        the create() method of the persistencemanager.
+                    </para>
+                    <para>
+                        To retrieve the list of objects we need some knowledge of OQL. Please refer to the castordocumentaion
+                        on howto use that.
+                        The method restoreList() will return a list with results according to the query.
+                    </para>
+                </para>
+            </para>
+
+
+        </sect2>
+    </sect1>
+
+</chapter>
