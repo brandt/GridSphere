@@ -19,20 +19,22 @@ import org.gridlab.gridsphere.core.persistence.BaseObject;
 public class GroupRequestBean
         implements GroupRequest {
 
+    private GroupEntry entry = null;
     private String id = new String();
     private User user = null;
     private PortletGroup group = null;
     private String role = null;
-    private String action = GroupRequest.ACTION_ADD;
+    private GroupAction action = GroupAction.ADD;
 
     public GroupRequestBean() {
     }
 
-    public GroupRequestBean(GroupEntry accessRight) {
-        this.id = accessRight.getID();
-        this.user = accessRight.getUser();
-        this.group = accessRight.getGroup();
-        this.role = accessRight.getRole().toString();
+    public GroupRequestBean(GroupEntry entry) {
+        this.entry = entry;
+        this.id = entry.getID();
+        this.user = entry.getUser();
+        this.group = entry.getGroup();
+        this.role = entry.getRole().toString();
     }
 
     public String getID() {
@@ -75,14 +77,15 @@ public class GroupRequestBean
         this.role = roleName;
     }
 
-    public String getAction() {
+    public GroupAction getGroupAction() {
         return this.action;
     }
 
-    public void setAction(String action) {
-        if (action.equals(GroupRequest.ACTION_ADD) ||
-            action.equals(GroupRequest.ACTION_REMOVE)) {
-            this.action = action;
-        }
+    public void setGroupAction(GroupAction action) {
+        this.action = action;
+    }
+
+    public void setGroupAction(String action) {
+        this.action = GroupAction.toGroupAction(action);
     }
 }

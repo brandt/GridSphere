@@ -34,13 +34,13 @@
         <tr>
           <td align="center" bgcolor="#6666FF">
             <font color="WHITE"><strong>
-             Users Added To Group [<%=aclManagerBean.getGroupName()%>]
+             Entries Removed From Group [<%=aclManagerBean.getGroupName()%>]
             </strong></font>
           </td>
         </tr>
         <tr>
           <td bgcolor="WHITE">
-            The following entries were <strong>added</strong> to this group.
+            The following entries were <strong>removed</strong> from this group.
           </td>
         </tr>
       </table>
@@ -56,8 +56,8 @@
                    value="Back To Group"
                    onClick="javascript:AccessControllerPortlet_viewGroup_onClick()"/>
             &nbsp;&nbsp;<input type="button"
-                   name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_ADD%>"
-                   value="List Groups"
+                   name="<%=AccessControllerBean.ACTION_GROUP_LIST%>"
+                   value="Add Users"
                    onClick="javascript:AccessControllerPortlet_listGroup_onClick()"/>
           </td>
         </tr>

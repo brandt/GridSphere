@@ -42,7 +42,9 @@ public interface AccessControlManagerService extends PortletService {
 
     public GroupRequest getGroupRequest(String id);
 
-    public GroupRequest createGroupRequest(User user);
+    public GroupRequest createGroupRequest();
+
+    public GroupRequest createGroupRequest(GroupEntry entry);
 
     public void validateGroupRequest(GroupRequest request)
             throws InvalidGroupRequestException;

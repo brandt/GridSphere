@@ -32,7 +32,8 @@
           </td>
         <tr>
           <td bgcolor="WHITE">
-            Click "<font color="DARKRED">Confirm Delete</font>" to delete this user, "Cancel Delete" otherwise.
+            Click "<font color="DARKRED">Confirm Delete</font>" to delete this user,
+            "<font color="DARKRED">Cancel Delete</font>" otherwise.
           </td>
         </tr>
       </table>

@@ -52,7 +52,11 @@
         <tr>
           <td align="center" bgcolor="#6666FF">
             <font color="WHITE"><strong>
+<% if (aclManagerBean.getGroupID().equals("")) { %>
+              New Group
+<% } else { %>
               Edit Group [<%=aclManagerBean.getGroupName()%>]
+<% } %>
             </strong></font>
           </td>
         </tr>

@@ -96,8 +96,12 @@ public class AccessControlManagerServiceImpl implements AccessControlManagerServ
         return aclManager.getGroupRequest(id);
     }
 
-    public GroupRequest createGroupRequest(User user) {
-        return aclManager.createGroupRequest(user);
+    public GroupRequest createGroupRequest() {
+        return aclManager.createGroupRequest();
+    }
+
+    public GroupRequest createGroupRequest(GroupEntry entry) {
+        return aclManager.createGroupRequest(entry);
     }
 
     public void validateGroupRequest(GroupRequest request)

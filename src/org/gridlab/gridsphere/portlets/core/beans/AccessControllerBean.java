@@ -283,8 +283,8 @@ public class AccessControllerBean extends PortletBean {
         loadGroup();
         // Add group entries
         addGroupEntries();
-        // View group
-        doViewGroup();
+        // Set next page attribute
+        setNextPage(PAGE_GROUP_ENTRY_ADD_CONFIRM);
     }
 
     public void doRemoveGroupEntry()
@@ -292,7 +292,7 @@ public class AccessControllerBean extends PortletBean {
         // Load group
         loadGroup();
         // Load access rights
-        loadGroupEntryList();
+        readGroupEntryList();
         // Set next page attribute
         setNextPage(PAGE_GROUP_ENTRY_REMOVE);
     }
@@ -303,8 +303,8 @@ public class AccessControllerBean extends PortletBean {
         loadGroup();
         // Add group entries
         removeGroupEntries();
-        // View group
-        doViewGroupEntry();
+        // Set next page attribute
+        setNextPage(PAGE_GROUP_ENTRY_REMOVE_CONFIRM);
     }
 
     public PortletURI getActionURI(String name) {
@@ -503,6 +503,23 @@ public class AccessControllerBean extends PortletBean {
         }
     }
 
+    private void readGroupEntryList() {
+        // Create group entry list
+        List entryList = new Vector();
+        // Get ids of entries to remove
+        List groupEntryIDList = getParameterCheckBoxList("groupEntryID");
+        for (int ii = 0; ii < groupEntryIDList.size(); ++ii) {
+            String groupEntryID = (String)groupEntryIDList.get(ii);
+            // Get entry to remove
+            GroupEntry entry = this.aclManagerService.getGroupEntry(groupEntryID);
+            // Put entry in list
+            entryList.add(entry);
+        }
+        // Set group entry list
+        setGroupEntryList(entryList);
+    }
+
+
     private void loadGroupEntryList() {
         this.groupEntryList = this.aclManagerService.getGroupEntries(this.group);
     }
@@ -630,87 +647,67 @@ public class AccessControllerBean extends PortletBean {
         setGroupEntry(groupEntry);
     }
 
-    private void addGroupEntry(User user, PortletGroup group, PortletRole role)
+    private void addGroupEntries()
             throws PortletException {
-        // Create add access request
-        GroupRequest groupRequest = this.aclManagerService.createGroupRequest(user);
-        groupRequest.setAction(GroupRequest.ACTION_ADD);
-        // Edit access request
+        // Create group entry list
+        List entryList = new Vector();
+        // Get portlet group
+        PortletGroup group = getGroup();
+        // Get ids of users to add
+        List groupEntryUserIDList = getParameterCheckBoxList("groupEntryUserID");
+        for (int ii = 0; ii < groupEntryUserIDList.size(); ++ii) {
+            String groupEntryUserID = (String)groupEntryUserIDList.get(ii);
+            // Get user to add
+            User user = this.userManagerService.getUser(groupEntryUserID);
+            // Get role for user ...
+            PortletRole role = PortletRole.USER;
+            // Add group entry
+            GroupEntry entry = addGroupEntry(user, group, role);
+            // Put entry in list
+            entryList.add(entry);
+        }
+        // Set group entry list
+        setGroupEntryList(entryList);
+    }
+
+    private GroupEntry addGroupEntry(User user, PortletGroup group, PortletRole role)
+            throws PortletException {
+        // Create add to group request
+        GroupRequest groupRequest = this.aclManagerService.createGroupRequest();
+        groupRequest.setUser(user);
         groupRequest.setGroup(group);
         groupRequest.setRole(role);
         // Create access right
         this.aclManagerService.submitGroupRequest(groupRequest);
         this.aclManagerService.approveGroupRequest(groupRequest);
-    }
-
-    private void addGroupEntries()
-            throws PortletException {
-        // Get ids of users to add
-        String groupEntryUserIDs[] = getParameterValues("groupEntryUserID");
-        // Get portlet group
-        PortletGroup group = getGroup();
-        // Add first user in list
-        User user = this.userManagerService.getUser(groupEntryUserIDs[0]);
-        System.err.println("Adding user " + groupEntryUserIDs[0]);
-        addGroupEntry(user, group, PortletRole.USER);
-        // If list greater than 1 then iterate through list
-        if (groupEntryUserIDs.length > 1) {
-            // But user could have selected add all option
-            // So we have to be careful to not try to add
-            // the user with the same id as in add all value
-            String firstGroupEntryUserID = groupEntryUserIDs[0];
-            for (int ii = 1; ii < groupEntryUserIDs.length; ++ii) {
-                // Skip if we already added this user
-                if (groupEntryUserIDs[ii].equals(firstGroupEntryUserID)) {
-                    continue;
-                }
-                // Add this user to the group
-                user = this.userManagerService.getUser(groupEntryUserIDs[ii]);
-                System.err.println("Adding user " + groupEntryUserIDs[ii]);
-                addGroupEntry(user, group, PortletRole.USER);
-            }
-        }
+        // Return the new group
+        return this.aclManagerService.getGroupEntry(user, group);
     }
 
     private void removeGroupEntries()
             throws PortletException {
+        // Create group entry list
+        List entryList = new Vector();
         // Get ids of entries to remove
-        String groupEntryIDs[] = getParameterValues("groupEntryID");
-        // Add first entry in list
-        GroupEntry entry = this.aclManagerService.getGroupEntry(groupEntryIDs[0]);
-        _log.debug("Removing entry " + groupEntryIDs[0]);
-        removeGroupEntry(entry);
-        // If list greater than 1 then iterate through list
-        if (groupEntryIDs.length > 1) {
-            // But user could have selected remove all option
-            // So we have to be careful to not try to add
-            // the user with the same id as in remove all value
-            String firstGroupEntryID = groupEntryIDs[0];
-            for (int ii = 1; ii < groupEntryIDs.length; ++ii) {
-                // Skip if we already added this user
-                if (groupEntryIDs[ii].equals(firstGroupEntryID)) {
-                    continue;
-                }
-                // Remove this entry from the group
-                entry = this.aclManagerService.getGroupEntry(groupEntryIDs[0]);
-                _log.debug("Removing entry " + groupEntryIDs[ii]);
-                removeGroupEntry(entry);
-            }
+        List groupEntryIDList = getParameterCheckBoxList("groupEntryID");
+        for (int ii = 0; ii < groupEntryIDList.size(); ++ii) {
+            String groupEntryID = (String)groupEntryIDList.get(ii);
+            // Get entry to remove
+            GroupEntry entry = this.aclManagerService.getGroupEntry(groupEntryID);
+            // Remove group entry
+            removeGroupEntry(entry);
+            // Put entry in list
+            entryList.add(entry);
         }
+        // Set group entry list
+        setGroupEntryList(entryList);
     }
 
-    private void removeGroupEntry(GroupEntry right)
+    private void removeGroupEntry(GroupEntry entry)
             throws PortletException {
-        // Get edited parameters
-        User user = right.getUser();
-        PortletGroup group = right.getGroup();
-        PortletRole role = right.getRole();
-        // Create add access request
-        GroupRequest groupRequest = this.aclManagerService.createGroupRequest(user);
-        groupRequest.setAction(GroupRequest.ACTION_ADD);
-        // Edit access request
-        groupRequest.setGroup(group);
-        groupRequest.setRole(role);
+        // Create remove from group request
+        GroupRequest groupRequest = this.aclManagerService.createGroupRequest(entry);
+        groupRequest.setGroupAction(GroupAction.REMOVE);
         // Create access right
         this.aclManagerService.submitGroupRequest(groupRequest);
         this.aclManagerService.approveGroupRequest(groupRequest);

@@ -700,10 +700,18 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         }
     }
 
-    public GroupRequest createGroupRequest(User user) {
-        GroupRequest request = new GroupRequestImpl();
-        request.setUser(user);
+    public GroupRequest createGroupRequest() {
+        GroupRequestImpl request = new GroupRequestImpl();
         return request;
+    }
+
+    public GroupRequest createGroupRequest(GroupEntry entry) {
+        if (entry instanceof GroupEntryImpl) {
+            GroupEntryImpl entryImpl = (GroupEntryImpl)entry;
+            GroupRequestImpl request = new GroupRequestImpl(entryImpl);
+            return request;
+        }
+        return null;
     }
 
     public void submitGroupRequest(GroupRequest request)
@@ -713,7 +721,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
 
     public void submitGroupRequest(GroupRequest request, MailMessage mailMessage)
             throws InvalidGroupRequestException {
-        if (request instanceof AccountRequestImpl) {
+        if (request instanceof GroupRequestImpl) {
             // First validate accesss request
             validateGroupRequest(request);
             // Then save account request if not already saved
@@ -721,7 +729,7 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
                 try {
                     pm.create(request);
                 } catch (PersistenceManagerException e) {
-                    String msg = "Error saving account request";
+                    String msg = "Error saving group request";
                     log.error(msg, e);
                 }
             }
@@ -758,19 +766,31 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
 
     public void approveGroupRequest(GroupRequest request, MailMessage mailMessage) {
         if (request instanceof GroupRequestImpl) {
+            GroupRequestImpl requestImpl = (GroupRequestImpl)request;
             // Get request attributes
-            User user = request.getUser();
-            PortletGroup group = request.getGroup();
-            String action = request.getAction();
-            // Perform requested action
-            if (action.equals(GroupRequest.ACTION_ADD)) {
-                PortletRole role = request.getRole();
-                addUserToGroup(user, group, role);
-            } else {
-                removeUserFromGroup(user, group);
-            }
-            // Delete account request
+            User user = requestImpl.getUser();
+            PortletGroup group = requestImpl.getGroup();
+            GroupAction action = requestImpl.getGroupAction();
+            PortletRole role = request.getRole();
+            // Delete group request
             deleteGroupRequest(request);
+            // Perform requested action
+            if (action.equals(GroupAction.ADD)) {
+                // Add user to group
+                addUserToGroup(user, group, role);
+           } else if (action.equals(GroupAction.EDIT)) {
+                // Get associated entry
+                GroupEntryImpl entryImpl = requestImpl.getGroupEntry();
+                // Edit user role in group
+                entryImpl.setRole(role);
+                // Update associated entry
+                saveGroupEntry(entryImpl);
+            } else {
+               // Get associated entry
+                GroupEntryImpl entryImpl = requestImpl.getGroupEntry();
+                // Delete associated entry
+                deleteGroupEntry(entryImpl);
+            }
             // Send message if not null
         }
     }
@@ -855,8 +875,8 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         }
     }
 
-   private boolean existsGroupEntry(GroupEntry right) {
-       GroupEntryImpl rightImpl = (GroupEntryImpl)right;
+   private boolean existsGroupEntry(GroupEntry entry) {
+       GroupEntryImpl rightImpl = (GroupEntryImpl)entry;
        String oql = "select groupEntry.ObjectID from "
                   + jdoGroupEntry
                   + " groupEntry where groupEntry.ObjectID="
@@ -870,11 +890,18 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
        return false;
     }
 
-    private void saveGroupEntry(GroupEntry right) {
+    private void saveGroupEntry(GroupEntry entry) {
         // Create or update access right
-        if (!existsGroupEntry(right)) {
+        if (existsGroupEntry(entry)) {
             try {
-                pm.create(right);
+                pm.update(entry);
+            } catch (PersistenceManagerException e) {
+                String msg = "Error creating access right";
+                log.error(msg, e);
+            }
+        } else {
+            try {
+                pm.create(entry);
             } catch (PersistenceManagerException e) {
                 String msg = "Error creating access right";
                 log.error(msg, e);
@@ -882,9 +909,9 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         }
     }
 
-    private void deleteGroupEntry(GroupEntry right) {
+    private void deleteGroupEntry(GroupEntry entry) {
         try {
-            pm.delete(right);
+            pm.delete(entry);
         } catch (PersistenceManagerException e) {
             String msg = "Error deleting access right";
             log.error(msg, e);
@@ -1030,11 +1057,11 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     }
 
     public PortletRole getRoleInGroup(User user, PortletGroup group) {
-        GroupEntry right = getGroupEntry(user, group);
-        if (right == null) {
+        GroupEntry entry = getGroupEntry(user, group);
+        if (entry == null) {
             return null;
         }
-        return right.getRole();
+        return entry.getRole();
     }
 
     private void addUserToGroup(User user, PortletGroup group, PortletRole role) {
@@ -1050,9 +1077,10 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     }
 
     private void removeUserFromGroup(User user, PortletGroup group) {
-        GroupEntry right = getGroupEntry(user, group);
-        if (right != null) {
-            deleteGroupEntry(right);
+        GroupEntry entry = getGroupEntry(user, group);
+        if (entry != null) {
+            log.debug("Deleting group entry " + entry.getID());
+            deleteGroupEntry(entry);
         }
     }
 

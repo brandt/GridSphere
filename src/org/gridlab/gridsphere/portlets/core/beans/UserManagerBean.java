@@ -617,8 +617,8 @@ public class UserManagerBean extends PortletBean {
         // Chosen role in base group
         PortletRole role = getRoleInBaseGroup();
         // Create appropriate access request
-        GroupRequest accessRequest = this.aclManagerService.createGroupRequest(user);
-        accessRequest.setAction(GroupRequest.ACTION_ADD);
+        GroupRequest accessRequest = this.aclManagerService.createGroupRequest();
+        accessRequest.setUser(user);
         accessRequest.setGroup(PortletGroup.BASE);
         // If super role was chosen
         if (role.equals(PortletRole.SUPER)) {

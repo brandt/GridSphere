@@ -63,16 +63,29 @@
     }
 
     function AccessControllerPortlet_addGroupEntry_onClick() {
+      // If displaying group entry list
+      if (document.AccessControllerPortlet.groupEntryID) {
+        // Clear all selections
+        GridSphere_CheckBoxList_clear(document.AccessControllerPortlet.groupEntryID);
+      }
+      // Then submit action
       var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_ADD)%>";
       document.AccessControllerPortlet.action=action;
       document.AccessControllerPortlet.submit();
     }
 
-    function AccessControllerPortlet_removeGroupEntry_onClick(groupID) {
-      var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_REMOVE)%>";
-      document.AccessControllerPortlet.action=action;
-      document.AccessControllerPortlet.submit();
+    function AccessControllerPortlet_removeGroupEntry_onClick() {
+      var isValid = GridSphere_CheckBoxList_validateCheckOneOrMore(document.AccessControllerPortlet.groupEntryID);
+      // Validate remove action
+      if (isValid == false) {
+        alert("Please select the users you would like to remove from this group.");
+      } else {
+        var action = "<%=aclManagerBean.getPortletActionURI(AccessControllerBean.ACTION_GROUP_ENTRY_REMOVE)%>";
+        document.AccessControllerPortlet.action=action;
+        document.AccessControllerPortlet.submit();
+      }
     }
+
   </script>
 <table border="0" cellspacing="1" cellpadding="2" width="100%">
   <tr>
@@ -149,6 +162,8 @@
   <tr>
     <td>
       <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+<% Iterator groupEntries = aclManagerBean.getGroupEntryList().iterator();
+   if (groupEntries.hasNext()) { %>
         <tr>
           <td bgcolor="#6666FF" align="center" valign="middle" width="12">
             <font size="-1">
@@ -174,9 +189,7 @@
             </font>
           </td>
         </tr>
-<% Iterator groupEntries = aclManagerBean.getGroupEntryList().iterator();
-   if (groupEntries.hasNext()) {
-       while (groupEntries.hasNext()) {
+<%     while (groupEntries.hasNext()) {
            GroupEntry groupEntry = (GroupEntry)groupEntries.next();
            User groupEntryUser = groupEntry.getUser();
            PortletRole groupEntryRole = groupEntry.getRole(); %>
@@ -207,10 +220,11 @@
         <tr>
           <td bgcolor="WHITE" colspan="4">
             <font color="DARKRED">
-              No users in portlet group.
+              No users in this group.
             </font>
           </td>
         </tr>
+  </tr>
 <%  } %>
       </table>
     </td>

@@ -42,7 +42,8 @@
         </tr>
         <tr>
           <td bgcolor="WHITE">
-            Click "<font color="DARKRED">Confirm Delete</font>" to delete this group, "Cancel Delete" otherwise.
+            Click "<font color="DARKRED">Confirm Delete</font>" to delete this group,
+            "<font color="DARKRED">Cancel Delete</font>" otherwise.
           </td>
         </tr>
       </table>

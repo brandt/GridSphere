@@ -11,6 +11,9 @@ package org.gridlab.gridsphere.portlets.core.beans;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 
+import java.util.List;
+import java.util.Vector;
+
 public class PortletBean {
 
     protected PortletConfig config = null;
@@ -397,5 +400,35 @@ public class PortletBean {
             }
             return objs;
         }
+    }
+
+    public List getParameterCheckBoxList(String param) {
+        // Create list for values
+        List listValues = new Vector();
+        // Get parameter values
+        String paramValues[] = getParameterValues(param);
+        // If none, then return empty list
+        if (paramValues.length == 0) {
+            return listValues;
+        }
+        // Add first entry (See why below)
+        listValues.add(paramValues[0]);
+        // Return list if list has only one entry
+        if (paramValues.length == 1) {
+            return listValues;
+        }
+        // If list greater than 1 then iterate through list
+        String firstParamValue = paramValues[0];
+        for (int ii = 1; ii < paramValues.length; ++ii) {
+            // But user could have selected add all check box
+            // So we have to be careful to not try to add
+            // the selection with the same value as would
+            // be stored in the add all check box
+            if (paramValues[ii].equals(firstParamValue)) {
+                continue;
+            }
+            listValues.add(paramValues[ii]);
+        }
+        return listValues;
     }
 }
