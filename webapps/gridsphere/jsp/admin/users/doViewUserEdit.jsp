@@ -77,11 +77,7 @@
                 <ui:text value="Role In GridSphere:"/>
             </ui:tablecell>
             <ui:tablecell>
-                <ui:listbox beanId="userRole">
-                    <ui:listboxitem value="USER" selected="true"/>
-                    <ui:listboxitem value="ADMIN"/>
-                    <ui:listboxitem value="SUPER"/>
-                </ui:listbox>
+                <ui:listbox beanId="userRole"/>
             </ui:tablecell>
         </ui:tablerow>
 

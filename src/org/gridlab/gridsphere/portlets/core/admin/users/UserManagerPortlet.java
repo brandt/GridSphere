@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.provider.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.HiddenFieldBean;
 import org.gridlab.gridsphere.provider.portletui.beans.FrameBean;
+import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.AccountRequest;
@@ -94,6 +95,7 @@ public class UserManagerPortlet extends ActionPortlet {
         HiddenFieldBean hf = evt.getHiddenFieldBean("newuser");
         hf.setValue("true");
 
+        setSelectedUserRole(evt, PortletRole.USER);
         setNextTitle(req, "User Account Manager [New User]");
         setNextState(req, DO_VIEW_USER_EDIT);
         log.debug("in doViewNewUser");
@@ -114,6 +116,9 @@ public class UserManagerPortlet extends ActionPortlet {
         // get user
         User user = this.userManagerService.getUser(userID);
         if (user == null) doNewUser(evt);
+
+        PortletRole role = aclManagerService.getRoleInGroup(user, PortletGroupFactory.GRIDSPHERE_GROUP);
+        setSelectedUserRole(evt, role);
 
         setUserValues(evt, user);
 
@@ -331,6 +336,27 @@ public class UserManagerPortlet extends ActionPortlet {
             this.aclManagerService.approveGroupRequest(groupRequest);
         }
         log.debug("Exiting saveUserRole()");
+    }
+
+    private void setSelectedUserRole(FormEvent event, PortletRole role) {
+        ListBoxBean roleListBean = event.getListBoxBean("userRole");
+        roleListBean.clear();
+        ListBoxItemBean userRole = new ListBoxItemBean();
+        ListBoxItemBean adminRole = new ListBoxItemBean();
+        ListBoxItemBean superRole = new ListBoxItemBean();
+        userRole.setValue(PortletRole.USER.toString());
+        adminRole.setValue(PortletRole.ADMIN.toString());
+        superRole.setValue(PortletRole.SUPER.toString());
+        if (role.equals(PortletRole.USER)) {
+            userRole.setSelected(true);
+        } else if (role.equals(PortletRole.ADMIN)) {
+            adminRole.setSelected(true);
+        } else if (role.equals(PortletRole.SUPER)) {
+            superRole.setSelected(true);
+        }
+        roleListBean.addBean(userRole);
+        roleListBean.addBean(adminRole);
+        roleListBean.addBean(superRole);
     }
 
     private PortletRole getSelectedUserRole(FormEvent event) {
