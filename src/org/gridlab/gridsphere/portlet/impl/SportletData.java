@@ -35,7 +35,7 @@ import java.io.IOException;
 public class SportletData extends BaseObject implements PortletData  {
 
     protected transient Hashtable store = new Hashtable();
-    private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
+    private transient PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
 
 
     /**
@@ -61,8 +61,6 @@ public class SportletData extends BaseObject implements PortletData  {
      * @sql-name portletid
      */
     private String PortletID = new String();
-
-    public SportletData(boolean hasConfigurePermission) {}
 
     public SportletData() {};
 
