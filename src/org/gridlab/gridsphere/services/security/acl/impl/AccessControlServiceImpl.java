@@ -130,6 +130,17 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
     }
 
     /**
+     * Returns a list of PortletRole objects associated with the provided user and group
+     *
+     * @param user the User object
+     * @param group the PortletGroup
+     * @return true if the user has the specified role in the specified group, false otherwise
+     */
+    public List getRolesInGroup(User user, PortletGroup group) throws PortletServiceException {
+        return null;
+    }
+
+    /**
      * Return the list of users associated with a particular group and possessing the specified role
      *
      * @param role the PortletRole

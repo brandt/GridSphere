@@ -44,6 +44,16 @@ public interface AccessControlService extends PortletService {
     public boolean hasRoleInGroup(User user, PortletGroup group, PortletRole role) throws PortletServiceException ;
 
     /**
+     * Returns a list of PortletRole objects associated with the provided user and group
+     *
+     * @param user the User object
+     * @param group the PortletGroup
+     * @return true if the user has the specified role in the specified group, false otherwise
+     */
+    public List getRolesInGroup(User user, PortletGroup group) throws PortletServiceException ;
+
+
+    /**
      * Return the list of users associated with a particular group and possessing the specified role
      *
      * @param role the PortletRole
