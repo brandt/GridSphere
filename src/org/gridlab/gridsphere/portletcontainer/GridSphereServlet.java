@@ -187,9 +187,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 while (newit.hasNext()) {
                     PortletMessage msg = (PortletMessage) newit.next();
                     layoutEngine.messageEvent(concPortletID, msg, event);
-                    newit.remove();
                 }
+
             }
+            messageManager.removeAllMessages();
         }
 
         setUserAndGroups(portletReq);
@@ -252,8 +253,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletRequest req = event.getPortletRequest();
         PortletSession session = req.getPortletSession(true);
 
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
+        String username = req.getParameter("ui_tf_username_");
+        String password = req.getParameter("ui_pb_password_");
 
         try {
 

@@ -9,10 +9,7 @@ import org.gridlab.gridsphere.portlet.PortletMessage;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.PortletMessageManager;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The <code>SportletMessageManager</code> provides a singleton implementation of <code>PortletMessageManager</code> and
@@ -47,7 +44,7 @@ public class SportletMessageManager implements PortletMessageManager {
      * @param concretePortletID the concrete portlet id
      * @param message the portlet message to be sent
      */
-    public void send(String concretePortletID, PortletMessage message) {
+    public synchronized void send(String concretePortletID, PortletMessage message) {
         if (concretePortletID == null) {
                 concretePortletID = "*"; 
         }
@@ -64,22 +61,33 @@ public class SportletMessageManager implements PortletMessageManager {
      * @return a list of <code>PortletMessage</code> objects
      */
     public List retrieveMessages(String concretePortletID) {
-        List messageList = new ArrayList();
+        if (!messages.containsKey(concretePortletID)) return null;
         List l = (List) messages.get(concretePortletID);
-        if (l != null) {
-            messageList.addAll(l);
-            messages.remove(l);
-        }
-        return messageList;
+        return Collections.unmodifiableList(l);
     }
 
+    public void removeMessages(String concretePortletID) {
+        messages.remove(concretePortletID);
+    }
+
+    public synchronized void removeMessage(String concretePortletID, PortletMessage message) {
+        if (messages.containsKey(concretePortletID)) {
+            List l = (List)messages.get(concretePortletID);
+            l.remove(message);
+        }
+    }
+
+    public void removeAllMessages() {
+        messages.clear();
+    }
+    
     /**
      * Retrieves all the messages  removes them from the queue
      *
      * @return a map of PortletMessage objects
      */
     public Map retrieveAllMessages() {
-        return messages;
+        return Collections.unmodifiableMap(messages);
     }
 
     /**
