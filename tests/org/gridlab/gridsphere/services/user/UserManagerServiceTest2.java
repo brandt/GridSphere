@@ -12,6 +12,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.security.acl.impl2.UserACL;
+import org.gridlab.gridsphere.services.user.impl.AccountRequestImpl;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.ConfigurationException;
 import org.gridlab.gridsphere.core.persistence.CreateException;
@@ -22,6 +23,7 @@ import junit.framework.TestSuite;
 import junit.framework.TestResult;
 
 import java.util.List;
+import java.util.Vector;
 
 /*
  * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
@@ -102,6 +104,19 @@ public class UserManagerServiceTest2 extends ServiceTest {
 
 
     // === tests
+
+    public void testSportletUserAttributes() {
+        log.info("+ testSportletuserAttributes");
+        User jason = userManager.loginUser("jason");
+    }
+
+    public void testUserDns() {
+        log.info("+ testuserDns");
+        List result = userManager.getAccountRequests();
+        AccountRequest ari = (AccountRequest)result.get(0);
+        assertEquals(2,ari.getMyProxyUserDN().size());
+
+    }
 
     public void testremoveUser() {
         log.info("+ testremoveUser");
@@ -398,9 +413,13 @@ public class UserManagerServiceTest2 extends ServiceTest {
 
         AccountRequest req3 = userManager.createAccountRequest();
         req3.setUserID("ian");req3.setGivenName("Ian");
+        Vector userdns = new Vector(); userdns.add("dns1");userdns.add("dns2");
+        req3.setMyproxyUserDN(userdns);
 
         AccountRequest req4 = userManager.createAccountRequest();
         req4.setUserID("oliver");req4.setGivenName("Oliver");
+        Vector userdns2 = new Vector(); userdns2.add("dns1");userdns2.add("dns2");
+        req4.setMyproxyUserDN(userdns2);
 
         User root = getSuperUser();
         try {

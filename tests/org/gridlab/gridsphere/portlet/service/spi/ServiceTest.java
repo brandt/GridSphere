@@ -44,7 +44,9 @@ public class ServiceTest extends TestCase {
         // create properties
         props = new Properties();
         FileInputStream fistream = null;
-        String fullPath = System.getProperty("user.dir") + "/webapps/WEB-INF/conf/PortletServices.properties";
+        //String fullPath = System.getProperty("user.dir") + "/webapps/WEB-INF/conf/PortletServices.properties";
+        String fullPath = "/Users/wehrens/Applications/tomcat-4.1/webapps/gridsphere/WEB-INF/conf/PortletServices.properties";
+
         log.info("loading properties file: " + fullPath);
         try {
             fistream = new FileInputStream(fullPath);
