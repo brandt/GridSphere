@@ -6,12 +6,9 @@ package org.gridlab.gridsphere.services.core.user;
 
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRole;
-import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletUser;
-import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 
-import java.util.List;
 import java.util.Date;
 
 public interface AccountRequest extends SportletUser {

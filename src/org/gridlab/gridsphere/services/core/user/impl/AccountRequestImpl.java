@@ -7,9 +7,8 @@ package org.gridlab.gridsphere.services.core.user.impl;
 
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbmsImpl;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRole;
@@ -19,10 +18,8 @@ import org.gridlab.gridsphere.services.core.security.acl.impl.UserACL;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.user.AccountRequest;
 
-import java.util.List;
-import java.util.Vector;
-import java.util.Enumeration;
 import java.util.Date;
+import java.util.Enumeration;
 
 /**
  * @table accountrequest
@@ -63,23 +60,9 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
      */
     private String Organization = "";
 
-    private transient List Userdns = new Vector();
-    private transient List MyproxyUserNames = new Vector();
-
-    /**
-     * @field-type AccountRequestImplUserdns
-     * @many-key reference
-     */
-    private Vector UserdnsSV = new Vector();
-
-    /**
-     * @field-type AccountRequestImplMyproxyUserNames
-     * @many-key reference
-     */
-    private  Vector MyproxyUserNamesSV = new Vector();
-
     // Password bean
     private transient PasswordEditor passwordBean = null;
+
     // New user flag
     private transient boolean isNewUser = false;
 
@@ -301,64 +284,6 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
 
     }
 
-    // -----
-
-    /**
-     * Sets the list of myproxy user names that can be used for this user
-     *
-     * @param myproxyUserNames userdns the array of strings containing user DN information
-     */
-    public void setMyproxyUserNames(List myproxyUserNames) {
-        MyproxyUserNames = myproxyUserNames;
-        MyproxyUserNamesSV = this.convertToStringVector(this, MyproxyUserNames, AccountRequestImplMyproxyUserNames.class);
-
-    }
-
-    /**
-     * Returns the list of myproxy user names that can be used for this user
-     *
-     * @return userdns the array of strings containing user DN information
-     */
-    public List getMyproxyUserNames() {
-        return MyproxyUserNames;
-    }
-
-    public List getMyproxyUserNamesSV() {
-        return MyproxyUserNamesSV;
-    }
-
-    public void setMyproxyUserNamesSV(Vector myproxyUserNamesSV) {
-        MyproxyUserNamesSV = myproxyUserNamesSV;
-        MyproxyUserNames = this.convertToVector(MyproxyUserNamesSV);
-    }
-
-
-    /**
-     * Sets the list of myproxy user names that can be used for this user
-     *
-     * @param userdns the array of strings containing user DN information
-     */
-    public void setMyproxyUserDN(List userdns) {
-        Userdns = userdns;
-        UserdnsSV = this.convertToStringVector(this, Userdns, AccountRequestImplUserdns.class);
-    }
-
-    /**
-     * Returns the list of myproxy user names that can be used for this user
-     */
-    public List getMyProxyUserDN() {
-        return Userdns;
-    }
-
-    public List getUserdnsSV() {
-        return UserdnsSV;
-    }
-
-    public void setUserdnsSV(Vector userdnsSV) {
-        UserdnsSV = userdnsSV;
-        Userdns = this.convertToVector(UserdnsSV);
-    }
-
     //@todo should be done using the aclmanager service!
     /**
      * Adds a user with status 'candidate' to a group
@@ -367,7 +292,7 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
      */
     public void addToGroup(PortletGroup group, PortletRole role) {
         UserACL acl;
-        acl = new UserACL(this.getID(), role.getRole(), group.getID());
+        acl = new UserACL(this.getID(), role.getID(), group.getID());
         PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
         try {
             pm.create(acl);
@@ -389,7 +314,7 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
     }
 
     public void setPasswordValue(String value) {
-        this.passwordBean.setValue(value);
+        this.passwordBean.setPassword(value);
     }
 
     public String getPasswordHint() {
@@ -446,14 +371,7 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
         sb.append("Email Address: " + EmailAddress);
         sb.append("Organization: " + Organization);
         sb.append("Requested Groups: ");
-        sb.append("Role DNs: ");
-        for (i = 0; i < Userdns.size(); i++) {
-            sb.append(Userdns.get(i));
-        }
-        sb.append("Myproxy Role Names: ");
-        for (i = 0; i < MyproxyUserNames.size(); i++) {
-            sb.append(MyproxyUserNames.get(i));
-        }
+
         return sb.toString();
     }
 }

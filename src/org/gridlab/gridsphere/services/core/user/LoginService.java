@@ -1,20 +1,15 @@
 /*
- * Created by IntelliJ IDEA.
- * User: russell
- * Date: Dec 18, 2002
- * Time: 2:04:14 PM
- * To change template for new interface use 
- * Code Style | Class Templates options (Tools | IDE Options).
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @version $Id$
  */
 package org.gridlab.gridsphere.services.core.user;
 
-import java.util.List;
-import java.util.Map;
-
-import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.services.core.security.AuthenticationException;
-import org.gridlab.gridsphere.services.core.security.AuthenticationModule;
+
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionListener;
 
 public interface LoginService extends PortletService {
 
@@ -23,23 +18,20 @@ public interface LoginService extends PortletService {
      * Returns the associated user if login succeeds.
      * Throws an AuthenticationException if login fails.
      *
-     * @param String The login name or user id.
-     * @param String The login password.
+     * @param loginName the login name
+     * @param loginPassword the login password.
      * @return User The associated user.
      * @throws AuthenticationException If login unsuccessful
      */
     public User login(String loginName, String loginPassword)
             throws AuthenticationException;
 
-    /**
-     * Login a user with the given login parameters.
-     * Returns the associated user if login succeeds.
-     * Throws an AuthenticationException if login fails.
-     *
-     * @param Map The login parameters.
-     * @return User The associated user.
-     * @throws AuthenticationException If login unsuccessful
-     */
-    public User login(Map parameters)
-            throws AuthenticationException;
+    /*
+    public void sessionCreated(HttpSession session);
+
+    public void sessionDestoyed(HttpSession session);
+
+    public void addSessionListener(HttpSessionListener sessionListener);
+    */
+
 }

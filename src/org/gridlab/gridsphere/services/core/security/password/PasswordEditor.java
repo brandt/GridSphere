@@ -89,7 +89,7 @@ public class PasswordEditor implements Password {
         return this.value;
     }
 
-    public void setValue(String value) {
+    public void setPassword(String value) {
         this.value = value;
         this.isDirty = true;
     }

@@ -18,6 +18,8 @@ public interface Password {
 
     public String getHint();
 
+    public String getValue();
+
     public long getLifetime();
 
     public Date getDateExpires();
@@ -25,6 +27,10 @@ public interface Password {
     public Date getDateCreated();
 
     public Date getDateLastModified();
+
+    public boolean getValidation();
+
+    public void setValidation(boolean flag);
 
     public boolean equals(String password);
 }

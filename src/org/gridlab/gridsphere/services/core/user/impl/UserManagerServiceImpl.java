@@ -3,18 +3,15 @@
  */
 package org.gridlab.gridsphere.services.core.user.impl;
 
-import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
-import org.gridlab.gridsphere.services.core.user.impl.GridSphereUserManager;
-import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.services.core.user.AccountRequest;
-import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
 import org.gridlab.gridsphere.core.mail.MailMessage;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceAuthorizer;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridlab.gridsphere.services.core.user.AccountRequest;
+import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
+import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
 import java.util.List;
 
@@ -117,7 +114,6 @@ public class UserManagerServiceImpl implements UserManagerService, PortletServic
       * If mailMessage is non-null, a mail message will be sent out to the account requestor
       *
       * @param request the <code>AccountRequest</code> to approve
-      * @param mailMessage the <code>MailMessage</code> to use for notification
       */
     public User approveAccountRequest(AccountRequest request) {
         return userManager.approveAccountRequest(request);
@@ -139,7 +135,6 @@ public class UserManagerServiceImpl implements UserManagerService, PortletServic
       * If mailMessage is non-null, a mail message will be sent out to the account requestor
       *
       * @param request the <code>AccountRequest</code> to approve
-      * @param mailMessage the <code>MailMessage</code> to use for notification
       */
     public void denyAccountRequest(AccountRequest request) {
         userManager.denyAccountRequest(request);
@@ -160,8 +155,7 @@ public class UserManagerServiceImpl implements UserManagerService, PortletServic
       * Approve a new or modified account request.
       * If mailMessage is non-null, a mail message will be sent out to the account requestor
       *
-      * @param request the <code>AccountRequest</code> to approve
-      * @param mailMessage the <code>MailMessage</code> to use for notification
+      * @param user the <code>Account</code> to approve
       */
     public void deleteAccount(User user) {
         userManager.deleteAccount(user);

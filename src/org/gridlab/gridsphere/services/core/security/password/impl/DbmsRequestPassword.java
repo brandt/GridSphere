@@ -8,10 +8,9 @@
  */
 package org.gridlab.gridsphere.services.core.security.password.impl;
 
-import org.gridlab.gridsphere.services.core.user.impl.AccountRequestImpl;
-import org.gridlab.gridsphere.services.core.security.password.Password;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.services.core.user.impl.AccountRequestImpl;
 
 import java.util.Date;
 
@@ -57,6 +56,16 @@ public class DbmsRequestPassword extends BaseObject implements DbmsPassword {
      * @required
      */
     private Date dateLastModified = null;
+
+    private transient boolean validation = false;
+
+    public boolean  getValidation() {
+        return validation;
+    }
+
+    public void setValidation(boolean validation) {
+        this.validation = validation;
+    }
 
     public String getHint() {
         return this.hint;

@@ -4,38 +4,36 @@
  */
 package org.gridlab.gridsphere.services.core.user.impl;
 
-import org.gridlab.gridsphere.services.core.user.*;
-import org.gridlab.gridsphere.services.core.security.acl.*;
-import org.gridlab.gridsphere.services.core.security.AuthenticationException;
-import org.gridlab.gridsphere.services.core.security.AuthenticationModule;
-import org.gridlab.gridsphere.services.core.security.impl.PasswordAuthenticationModule;
-import org.gridlab.gridsphere.services.core.user.AccountRequest;
-import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
-import org.gridlab.gridsphere.services.core.user.LoginService;
-import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
-import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
-import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
-import org.gridlab.gridsphere.services.core.security.password.impl.DbmsPasswordManagerService;
-import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
-import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletGroup;
-
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.core.mail.MailMessage;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
-import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
-import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
+import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletGroup;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
+import org.gridlab.gridsphere.services.core.security.AuthenticationException;
+import org.gridlab.gridsphere.services.core.security.AuthenticationModule;
+import org.gridlab.gridsphere.services.core.security.acl.*;
+import org.gridlab.gridsphere.services.core.security.impl.PasswordAuthenticationModule;
+import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
+import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
+import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
+import org.gridlab.gridsphere.services.core.security.password.impl.DbmsPasswordManagerService;
+import org.gridlab.gridsphere.services.core.user.AccountRequest;
+import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
+import org.gridlab.gridsphere.services.core.user.LoginService;
+import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
 public class GridSphereUserManager implements LoginService, UserManagerService, AccessControlManagerService {
 
@@ -205,27 +203,6 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
             throw ex;
         }
         return user;
-    }
-
-    public User login(Map parameters)
-             throws AuthenticationException {
-         User user = getAuthUser(parameters);
-         AuthenticationException ex = null;
-         Iterator modules = this.authenticationModules.iterator();
-         while (modules.hasNext()) {
-             AuthenticationModule module = (AuthenticationModule) modules.next();
-             try {
-                 module.authenticate(user, parameters);
-             } catch (AuthenticationException e) {
-                 if (ex == null) {
-                     ex = e;
-                 }
-             }
-         }
-         if (ex != null) {
-             throw ex;
-         }
-         return user;
     }
 
     private User getAuthUser(Map parameters)
@@ -690,18 +667,6 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
            log.error(msg, e);
        }
        return false;
-    }
-
-    private void saveGroupRequest(GroupRequest request) {
-        // Create or update access request
-        if (!existsGroupRequest(request)) {
-            try {
-                pm.create(request);
-            } catch (PersistenceManagerException e) {
-                String msg = "Error creating access request";
-                log.error(msg, e);
-            }
-        }
     }
 
     private void deleteGroupRequest(GroupRequest request) {

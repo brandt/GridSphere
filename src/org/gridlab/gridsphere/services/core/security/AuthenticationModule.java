@@ -19,6 +19,4 @@ public interface AuthenticationModule {
     public void authenticate(User user, String password)
             throws AuthenticationException;
 
-    public void authenticate(User user, Map parameters)
-            throws AuthenticationException;
 }

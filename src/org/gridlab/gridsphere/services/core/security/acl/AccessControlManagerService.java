@@ -8,11 +8,11 @@
  */
 package org.gridlab.gridsphere.services.core.security.acl;
 
-import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.PortletRole;
-import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.core.mail.MailMessage;
+import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.service.PortletService;
 
 import java.util.List;
 

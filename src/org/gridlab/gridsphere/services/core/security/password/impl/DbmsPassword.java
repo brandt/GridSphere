@@ -8,10 +8,8 @@
  */
 package org.gridlab.gridsphere.services.core.security.password.impl;
 
-import org.gridlab.gridsphere.services.core.security.password.Password;
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
-import org.gridlab.gridsphere.core.persistence.BaseObject;
+import org.gridlab.gridsphere.services.core.security.password.Password;
 
 import java.util.Date;
 
@@ -20,8 +18,6 @@ public interface DbmsPassword extends Password  {
     public void setUser(User user);
 
     public void setHint(String hint);
-
-    public String getValue();
 
     public void setValue(String value);
 

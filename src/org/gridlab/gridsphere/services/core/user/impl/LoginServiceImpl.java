@@ -1,20 +1,18 @@
 /*
- * @version: $Id$
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @version $Id$
  */
 package org.gridlab.gridsphere.services.core.user.impl;
 
-import java.util.List;
-import java.util.Map;
-
-import org.gridlab.gridsphere.portlet.service.PortletService;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.core.security.AuthenticationException;
-import org.gridlab.gridsphere.services.core.security.AuthenticationModule;
-import org.gridlab.gridsphere.services.core.user.impl.GridSphereUserManager;
 import org.gridlab.gridsphere.services.core.user.LoginService;
+
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionListener;
 
 public class LoginServiceImpl implements LoginService, PortletServiceProvider {
 
@@ -45,8 +43,8 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
      * Returns the associated user if login succeeds.
      * Throws an AuthenticationException if login fails.
      *
-     * @param String The login name or user id.
-     * @param String The login password.
+     * @param loginName the login name
+     * @param loginPassword The login password.
      * @return User The associated user.
      * @throws AuthenticationException If login unsuccessful
      */
@@ -55,18 +53,17 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         return loginManager.login(loginName, loginPassword);
     }
 
-    /**
-     * Login a user with the given login parameters.
-     * Returns the associated user if login succeeds.
-     * Throws an AuthenticationException if login fails.
-     *
-     * @param Map The login parameters.
-     * @return User The associated user.
-     * @throws AuthenticationException If login unsuccessful
-     */
-    public User login(Map parameters)
-            throws AuthenticationException {
-        return loginManager.login(parameters);
+    /*
+    public void sessionCreated(HttpSession session) {
+
     }
 
+    public void sessionDestoyed(HttpSession session) {
+
+    }
+
+    public void addSessionListener(String sessionID, HttpSessionListener sessionListener) {
+
+    }
+    */
 }

@@ -12,19 +12,12 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.services.core.user.AccountRequest;
 
 import java.util.List;
-import java.util.Date;
 
 public interface PasswordManagerService {
 
     public List getPasswords();
 
-    public List getAccountRequestPasswords();
-
-    public List getUserPasswords();
-
     public Password getPassword(User user);
-
-    public PasswordEditor editPassword(User user);
 
     public void validatePassword(String password)
           throws InvalidPasswordException;
@@ -32,7 +25,7 @@ public interface PasswordManagerService {
     public void validatePassword(User user, String password)
           throws InvalidPasswordException;
 
-    public void savePassword(PasswordEditor passwordBean)
+    public void savePassword(Password passwordBean)
             throws InvalidPasswordException;
 
     public void deletePassword(User user);

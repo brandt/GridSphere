@@ -8,7 +8,6 @@
  */
 package org.gridlab.gridsphere.services.core.security.password.impl;
 
-import org.gridlab.gridsphere.services.core.security.password.Password;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
@@ -58,6 +57,8 @@ public class DbmsUserPassword extends BaseObject implements DbmsPassword {
      */
     private Date dateLastModified = null;
 
+    private transient boolean validation = false;
+
     public String getHint() {
         return this.hint;
     }
@@ -72,6 +73,14 @@ public class DbmsUserPassword extends BaseObject implements DbmsPassword {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public boolean  getValidation() {
+        return validation;
+    }
+
+    public void setValidation(boolean validation) {
+        this.validation = validation;
     }
 
     public long getLifetime() {

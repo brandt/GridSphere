@@ -8,9 +8,9 @@
  */
 package org.gridlab.gridsphere.services.core.security.acl;
 
-import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.User;
 
 public interface GroupEntry {
 

@@ -8,24 +8,23 @@
  */
 package org.gridlab.gridsphere.services.core.security.password.impl;
 
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.services.core.security.password.*;
-import org.gridlab.gridsphere.services.core.user.AccountRequest;
-import org.gridlab.gridsphere.services.core.user.impl.AccountRequestImpl;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.security.password.Password;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.services.core.user.AccountRequest;
+import org.gridlab.gridsphere.services.core.user.impl.AccountRequestImpl;
 
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 
 public class DbmsPasswordManagerService
@@ -63,7 +62,7 @@ public class DbmsPasswordManagerService
         return allPasswords;
     }
 
-    public List getAccountRequestPasswords() {
+    protected List getAccountRequestPasswords() {
         List passwords = null;
         String query = "select pw from "
                      + this.requestPasswordImpl
@@ -77,7 +76,7 @@ public class DbmsPasswordManagerService
         return passwords;
     }
 
-    public List getUserPasswords() {
+    protected List getUserPasswords() {
         List passwords = null;
         String query = "select pw from "
                      + this.userPasswordImpl
@@ -141,20 +140,7 @@ public class DbmsPasswordManagerService
         return password;
     }
 
-    public PasswordEditor editPassword(User user) {
-        PasswordEditor editor = null;
-        Password password = getDbmsUserPassword(user);
-        if (password == null) {
-            long lifetime = getDefaultPasswordLifetime();
-            editor = new PasswordEditor(user);
-            editor.setLifetime(lifetime);
-        } else {
-            editor = new PasswordEditor(password);
-        }
-        return editor;
-    }
-
-    public void savePassword(PasswordEditor editor)
+    public void savePassword(Password editor)
             throws InvalidPasswordException {
         // Get password attributes
         User user = editor.getUser();
@@ -243,7 +229,7 @@ public class DbmsPasswordManagerService
         PasswordEditor passwordBean = new PasswordEditor();
         passwordBean.setUser(user);
         passwordBean.setHint(passwordBean.getHint());
-        passwordBean.setValue(requestPassword.getValue());
+        passwordBean.setPassword(requestPassword.getValue());
         passwordBean.setDateExpires(requestPassword.getDateExpires());
         passwordBean.setValidation(false);
         savePassword(passwordBean);
