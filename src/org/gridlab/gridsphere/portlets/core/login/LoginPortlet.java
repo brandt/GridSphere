@@ -142,26 +142,15 @@ public class LoginPortlet extends ActionPortlet {
             //new and valid user and will save it
             User user = saveUser(evt);
             //show the data of this user
-            MessageBoxBean frame = evt.getMessageBoxBean("msg");
-            frame.setValue(this.getLocalizedText(req, "USER_NEW_ACCOUNT") +
+            createSuccessMessage(evt, this.getLocalizedText(req, "USER_NEW_ACCOUNT") +
                     "<br>" + this.getLocalizedText(req, "USER_PLEASE_LOGIN") +
                     " " + user.getUserName());
-            frame.setMessageType(TextBean.MSG_ERROR);
             setNextState(req, "doViewUser");
         } catch (PortletException e) {
             //invalid user, an exception was thrown
-            MessageBoxBean err = evt.getMessageBoxBean("msg");
-            err.setValue(e.getMessage());
-            err.setMessageType(TextBean.MSG_ERROR);
             //back to edit
             setNextState(req, DO_VIEW_USER_EDIT_LOGIN);
         }
-    }
-
-    public void doCancelEditUser(FormEvent evt)
-            throws PortletException {
-        PortletRequest req = evt.getPortletRequest();
-        setNextState(req, "doViewUser");
     }
 
     private void validateUser(FormEvent event)
@@ -173,23 +162,24 @@ public class LoginPortlet extends ActionPortlet {
         // Validate user name
         String userName = event.getTextFieldBean("userName").getValue();
         if (userName.equals("")) {
-            message.append(this.getLocalizedText(req, "USER_NAME_BLANK") + "<br>");
+            createErrorMessage(event, this.getLocalizedText(req, "USER_NAME_BLANK") + "<br>");
             isInvalid = true;
         }
 
         if (this.userManagerService.existsUserName(userName)) {
-            message.append(this.getLocalizedText(req, "USER_EXISTS") + "<br>");
+            createErrorMessage(event, this.getLocalizedText(req, "USER_EXISTS") + "<br>");
             isInvalid = true;
         }
 
 
-        // Validate family name
-        /*
-        String familyName = event.getTextFieldBean("familyName").getValue();
+        // Validate full name
+
+        String familyName = event.getTextFieldBean("fullName").getValue();
         if (familyName.equals("")) {
-            message.append(this.getLocalizedText(req, "USER_FAMILYNAME_BLANK") + "<br>");
+            createErrorMessage(event, this.getLocalizedText(req, "USER_FULLNAME_BLANK") + "<br>");
             isInvalid = true;
         }
+        /*
         // Validate given name
         String givenName = event.getTextFieldBean("givenName").getValue();
         if (givenName.equals("")) {
@@ -201,19 +191,19 @@ public class LoginPortlet extends ActionPortlet {
         // Validate e-mail
         String eMail = event.getTextFieldBean("emailAddress").getValue();
         if (eMail.equals("")) {
-            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
+            createErrorMessage(event, this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
             isInvalid = true;
         } else if ((eMail.indexOf("@") < 0)) {
-            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
+            createErrorMessage(event, this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
             isInvalid = true;
         } else if ((eMail.indexOf(".") < 0)) {
-            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
+            createErrorMessage(event, this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
             isInvalid = true;
         }
 
         //Validate password
         if (!isInvalid) {
-            isInvalid = isInvalidPassword(event, message);
+            isInvalid = isInvalidPassword(event);
         }
         // Throw exception if error was found
         if (isInvalid) {
@@ -222,7 +212,7 @@ public class LoginPortlet extends ActionPortlet {
         log.debug("Exiting validateUser()");
     }
 
-    private boolean isInvalidPassword(FormEvent event, StringBuffer message) {
+    private boolean isInvalidPassword(FormEvent event) {
         PortletRequest req = event.getPortletRequest();
         // Validate password
         String passwordValue = event.getPasswordBean("password").getValue();
@@ -231,33 +221,28 @@ public class LoginPortlet extends ActionPortlet {
 
         // Otherwise, password must match confirmation
         if (!passwordValue.equals(confirmPasswordValue)) {
-            message.append(this.getLocalizedText(req, "USER_PASSWORD_MISMATCH") + "<br>");
+            createErrorMessage(event, (this.getLocalizedText(req, "USER_PASSWORD_MISMATCH")) + "<br>");
             return true;
             // If they do match, then validate password with our service
         } else {
-            String msg = null;
             if (passwordValue == null) {
-                msg = this.getLocalizedText(req, "USER_PASSWORD_NOTSET");
-
+                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_NOTSET"));
+                return true;
             }
             passwordValue = passwordValue.trim();
             if (passwordValue.length() == 0) {
-                msg = this.getLocalizedText(req, "USER_PASSWORD_BLANK");
+                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_BLANK"));
+                return true;
             }
             if (passwordValue.length() < 5) {
-                msg = this.getLocalizedText(req, "USER_PASSWORD_TOOSHORT");
-
-            }
-            if (msg != null) {
-                message.append(msg);
+                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_TOOSHORT"));
                 return true;
             }
         }
         return false;
     }
 
-    private User saveUser(FormEvent event)
-            throws PortletException {
+    private User saveUser(FormEvent event) {
         log.debug("Entering saveUser()");
         // Account request
 
@@ -294,8 +279,7 @@ public class LoginPortlet extends ActionPortlet {
         log.debug("Exiting editSportletUser()");
     }
 
-    private void saveUserRole(User user)
-            throws PortletException {
+    private void saveUserRole(User user) {
         log.debug("Entering saveUserRole()");
 
         // Revoke super role (in case they had it)

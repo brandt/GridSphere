@@ -21,6 +21,7 @@
 <h3><ui:text key="GROUP_VISIBILITY_MSG" style="nostyle"/></h3>
 
 <ui:text key="GROUP_VISIBILITY_DESC"/>
+<ui:text key="GROUP_VISIBILITY_MOREDESC"/>
 <p>
 <% if (isPublic) { %>
     <ui:radiobutton beanId="groupVisibility" value="PUBLIC" selected="true"/>

@@ -4,6 +4,8 @@
 <ui:form>
 <ui:hiddenfield beanId="userID"/>
 
+<h3><ui:text key="USER_VIEW_USER" style="nostyle"/></h3>
+
 <%@ include file="/jsp/admin/users/doViewUser.jsp" %>
 
 <ui:frame>

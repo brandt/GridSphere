@@ -4,6 +4,10 @@
 
 <ui:messagebox beanId="msg"/>
 
+<h3><ui:text key="USER_EDIT_USER_MSG" style="nostyle"/></h3>
+
+<ui:text style="alert" key="USER_PASS_BLANK_MSG"/>
+
 <ui:form>
 <ui:hiddenfield beanId="userID"/>
 <ui:hiddenfield beanId="newuser"/>
@@ -102,7 +106,7 @@
         <ui:tablerow>
             <ui:tablecell>
                 <ui:actionsubmit action="doConfirmEditUser" key="USER_SAVE"/>
-                <ui:actionsubmit action="doCancelEditUser" key="USER_CANCEL_EDIT"/>
+                <ui:actionsubmit action="doListUsers" key="CANCEL"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>

@@ -9,10 +9,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
-import org.gridlab.gridsphere.provider.portletui.beans.FrameBean;
-import org.gridlab.gridsphere.provider.portletui.beans.HiddenFieldBean;
-import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
-import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
+import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
@@ -31,8 +28,6 @@ public class UserManagerPortlet extends ActionPortlet {
     public static final String DO_VIEW_USER_LIST = "admin/users/doViewUserList.jsp";
     public static final String DO_VIEW_USER_VIEW = "admin/users/doViewUserView.jsp";
     public static final String DO_VIEW_USER_EDIT = "admin/users/doViewUserEdit.jsp";
-    public static final String DO_VIEW_USER_DELETE = "admin/users/doViewUserDelete.jsp";
-    public static final String DO_VIEW_USER_DELETE_CONFIRM = "admin/users/doViewUserDeleteConfirm.jsp";
 
     // Portlet services
     private UserManagerService userManagerService = null;
@@ -72,7 +67,7 @@ public class UserManagerPortlet extends ActionPortlet {
     public void doViewUser(FormEvent evt)
             throws PortletException {
         PortletRequest req = evt.getPortletRequest();
-
+        checkAdminRole(evt);
         String userID = evt.getAction().getParameter("userID");
         User user = this.userManagerService.getUser(userID);
 
@@ -138,7 +133,7 @@ public class UserManagerPortlet extends ActionPortlet {
                 user = saveUser(evt, null);
                 HiddenFieldBean userHF = evt.getHiddenFieldBean("userID");
                 userHF.setValue(user.getID());
-
+                createSuccessMessage(evt, this.getLocalizedText(req, "USER_NEW_SUCCESS"));
             } else {
                 validateUser(evt, false);
                 // load in User values
@@ -146,23 +141,20 @@ public class UserManagerPortlet extends ActionPortlet {
                 String userID = userHF.getValue();
                 User thisuser = this.userManagerService.getUser(userID);
                 user = saveUser(evt, thisuser);
+                createSuccessMessage(evt, this.getLocalizedText(req, "USER_EDIT_SUCCESS"));
             }
             req.setAttribute("user", user);
 
             PortletRole role = aclManagerService.getRoleInGroup(user, PortletGroupFactory.GRIDSPHERE_GROUP);
             req.setAttribute("role", role.toString());
-            setNextState(req, DO_VIEW_USER_VIEW);
+
+            setNextState(req, "doListUsers");
         } catch (PortletException e) {
             FrameBean err = evt.getFrameBean("errorFrame");
             err.setValue(e.getMessage());
             err.setStyle("alert");
             setNextState(req, DO_VIEW_USER_EDIT);
         }
-    }
-
-    public void doCancelEditUser(FormEvent evt)
-            throws PortletException {
-        doListUsers(evt);
     }
 
     public void doDeleteUser(FormEvent evt)
@@ -172,30 +164,16 @@ public class UserManagerPortlet extends ActionPortlet {
         HiddenFieldBean hf = evt.getHiddenFieldBean("userID");
         String userId = hf.getValue();
         User user = this.userManagerService.getUser(userId);
-        req.setAttribute("user", user);
-        PortletRole role = aclManagerService.getRoleInGroup(user, PortletGroupFactory.GRIDSPHERE_GROUP);
-        req.setAttribute("role", role.toString());
-        setNextState(req, DO_VIEW_USER_DELETE);
+        if (user != null) {
+            req.setAttribute("user", user);
+            PortletRole role = aclManagerService.getRoleInGroup(user, PortletGroupFactory.GRIDSPHERE_GROUP);
+            req.setAttribute("role", role.toString());
+            this.userManagerService.deleteUser(user);
+            createSuccessMessage(evt, this.getLocalizedText(req, "USER_DELETE_SUCCESS"));
+        }
+        setNextState(req, "doListUsers");
     }
 
-    public void doConfirmDeleteUser(FormEvent evt)
-            throws PortletException {
-        checkSuperRole(evt);
-        PortletRequest req = evt.getPortletRequest();
-        HiddenFieldBean hf = evt.getHiddenFieldBean("userID");
-        String userId = hf.getValue();
-        User user = this.userManagerService.getUser(userId);
-        req.setAttribute("user", user);
-        PortletRole role = aclManagerService.getRoleInGroup(user, PortletGroupFactory.GRIDSPHERE_GROUP);
-        req.setAttribute("role", role.toString());
-        this.userManagerService.deleteUser(user);
-        setNextState(req, DO_VIEW_USER_DELETE_CONFIRM);
-    }
-
-    public void doCancelDeleteUser(FormEvent evt)
-            throws PortletException {
-        doListUsers(evt);
-    }
 
     private void setUserValues(FormEvent event, User user) {
         event.getTextFieldBean("userName").setValue(user.getUserName());
@@ -214,20 +192,18 @@ public class UserManagerPortlet extends ActionPortlet {
         StringBuffer message = new StringBuffer();
         boolean isInvalid = false;
         // Validate user name
-        /*
+
         String userName = event.getTextFieldBean("userName").getValue();
         if (userName.equals("")) {
-            message.append(this.getLocalizedText(req, "USER_NAME_BLANK") + "<br>");
+            createErrorMessage(event, this.getLocalizedText(req, "USER_NAME_BLANK") + "<br>");
             isInvalid = true;
-        }
-
-        if (newuser) {
+        } else if (newuser) {
             if (this.userManagerService.existsUserName(userName)) {
-                message.append(this.getLocalizedText(req, "USER_EXISTS") + "<br>");
+                createErrorMessage(event, this.getLocalizedText(req, "USER_EXISTS") + "<br>");
                 isInvalid = true;
             }
         }
-        */
+
         // Validate family name
         /*
         String familyName = event.getTextFieldBean("familyName").getValue();
@@ -239,26 +215,26 @@ public class UserManagerPortlet extends ActionPortlet {
         // Validate given name
         String givenName = event.getTextFieldBean("fullName").getValue();
         if (givenName.equals("")) {
-            message.append(this.getLocalizedText(req, "USER_FULLNAME_BLANK") + "<br>");
+            createErrorMessage(event, this.getLocalizedText(req, "USER_FULLNAME_BLANK") + "<br>");
             isInvalid = true;
         }
 
         // Validate e-mail
         String eMail = event.getTextFieldBean("emailAddress").getValue();
         if (eMail.equals("")) {
-            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
+            createErrorMessage(event, this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
             isInvalid = true;
         } else if ((eMail.indexOf("@") < 0)) {
-            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
+            createErrorMessage(event, this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
             isInvalid = true;
         } else if ((eMail.indexOf(".") < 0)) {
-            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
+            createErrorMessage(event, this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
             isInvalid = true;
         }
 
 
         if (!isInvalid) {
-            isInvalid = isInvalidPassword(event, newuser, message);
+            isInvalid = isInvalidPassword(event, newuser);
         }
 
         // Throw exception if error was found
@@ -268,7 +244,7 @@ public class UserManagerPortlet extends ActionPortlet {
         log.debug("Exiting validateUser()");
     }
 
-    private boolean isInvalidPassword(FormEvent event, boolean newuser, StringBuffer message) {
+    private boolean isInvalidPassword(FormEvent event, boolean newuser) {
         // Validate password
         PortletRequest req = event.getPortletRequest();
         String passwordValue = event.getPasswordBean("password").getValue();
@@ -278,29 +254,25 @@ public class UserManagerPortlet extends ActionPortlet {
         if (passwordValue.length() == 0 &&
                 confirmPasswordValue.length() == 0) {
             if (newuser) {
-                message.append(this.getLocalizedText(req, "USER_PASSWORD_BLANK") + "<br>");
+                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_BLANK") + "<br>");
                 return true;
             }
             return false;
         }
         // Otherwise, password must match confirmation
         if (!passwordValue.equals(confirmPasswordValue)) {
-            message.append(this.getLocalizedText(req, "USER_PASSWORD_MISMATCH") + "<br>");
+            createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_MISMATCH") + "<br>");
             return true;
             // If they do match, then validate password with our service
         } else {
-            if (passwordValue == null) {
-                message.append("Password is not set.");
-
-            }
-
-            if (passwordValue.length() == 0) {
-                message.append(this.getLocalizedText(req, "USER_PASSWORD_BLANK"));
+            if ((passwordValue == null) || (passwordValue.length() == 0)) {
+                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_BLANK"));
+                return true;
             }
             if (passwordValue.length() < 5) {
-                message.append(this.getLocalizedText(req, "USER_PASSWORD_TOOSHORT"));
+                createErrorMessage(event, this.getLocalizedText(req, "USER_PASSWORD_TOOSHORT"));
+                return true;
             }
-
         }
         return false;
     }
@@ -322,12 +294,8 @@ public class UserManagerPortlet extends ActionPortlet {
 
         PasswordEditor editor = passwordManagerService.editPassword(newuser);
         String password = event.getPasswordBean("password").getValue();
-        StringBuffer message = new StringBuffer();
-        boolean isgood = this.isInvalidPassword(event, newuserflag, message);
+        boolean isgood = this.isInvalidPassword(event, newuserflag);
         if (isgood) {
-            FrameBean err = event.getFrameBean("errorFrame");
-            err.setValue(message.toString());
-            err.setStyle("alert");
             setNextState(event.getPortletRequest(), DO_VIEW_USER_EDIT);
             return newuser;
         } else {
@@ -429,5 +397,18 @@ public class UserManagerPortlet extends ActionPortlet {
             return PortletRole.toPortletRole(userRoleItem);
         }
     }
+
+    private void createErrorMessage(FormEvent event, String msg) {
+        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
+        msgBox.setMessageType(TextBean.MSG_ERROR);
+        msgBox.setValue(msg);
+    }
+
+    private void createSuccessMessage(FormEvent event, String msg) {
+        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
+        msgBox.setMessageType(TextBean.MSG_SUCCESS);
+        msgBox.appendText(msg);
+    }
+
 
 }

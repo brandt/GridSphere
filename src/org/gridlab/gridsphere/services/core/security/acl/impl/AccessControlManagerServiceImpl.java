@@ -313,12 +313,13 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
             String msg = "Error deleting portlet group";
             log.error(msg, e);
         }
+        System.err.println("deleted " + group);
     }
 
     public List getUsers(PortletGroup group) {
-        String oql = "select groupEntry.sportletUser from "
+        String oql = "select groupRequest.sportletUser from "
                 + jdoGroupRequest
-                + " groupEntry where groupRequest.sportletGroup.oid='"
+                + " groupRequest where groupRequest.sportletGroup.oid='"
                 + group.getID()
                 + "'";
         try {

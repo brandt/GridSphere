@@ -31,8 +31,6 @@ import java.util.*;
 public class ActionPortlet extends GenericPortlet {
 
     public static PortletLog log = SportletLog.getInstance(ActionPortlet.class);
-    public static String ACTION_PORTLET_ERROR = "org.gridlab.gridsphere.provider.ACTION_PORTLET_ERROR";
-    public static String ACTION_PORTLET_PAGE = "org.gridlab.gridsphere.provider.ACTION_PORTLET_PAGE";
 
     // Default error page
     protected String ERROR_PAGE = "doError";

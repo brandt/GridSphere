@@ -3,12 +3,15 @@
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
+<p>
+
 
 <% List userList = (List)request.getAttribute("userList"); %>
+<h3><ui:text key="USER_SHOW_USERS" style="nostyle"/></h3>
 
 <ui:form>
 
-    <ui:table sortable="true" zebra="true" maxrows="20">
+    <ui:table sortable="true" zebra="true" maxrows="25">
                 <ui:tablerow header="true">
                     <ui:tablecell><ui:text key="USERNAME"/></ui:tablecell>
                     <ui:tablecell><ui:text key="FULLNAME"/></ui:tablecell>
@@ -42,12 +45,8 @@
 %>
     </ui:table>
 
-    <ui:frame>
-            <ui:tablerow>
-                <ui:tablecell>
-                    <ui:actionsubmit action="doNewUser" key="USER_NEW_USER"/>
-                </ui:tablecell>
-            </ui:tablerow>
-    </ui:frame>
+<h3><ui:actionlink action="doNewUser" key="USER_CREATE_USER"/></h3>
+
+
 
 </ui:form>

@@ -575,8 +575,6 @@ public abstract class BaseFormEventImpl {
                     }
                     bean.setName(name);
                 } else {
-                    /*is this called anytime ? */
-                    //log.debug("Using existing checkbox bean with id:" + beanId);
                     bean.addSelectedValue(vals[0]);
                 }
                 bean.setSelected(true);

@@ -343,7 +343,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
             FileDataSource fds = new FileDataSource(f);
             res.setContentType(fds.getContentType());
-
             res.setHeader("Content-Disposition", "attachment; filename=" + fileName);
             res.setHeader("Content-Length", String.valueOf(f.length()));
             DataHandler handler = new DataHandler(fds);

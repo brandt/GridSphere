@@ -29,7 +29,7 @@ import java.util.*;
 public class PortletTabbedPane extends BasePortletComponent implements Serializable, PortletTabListener, Cloneable {
 
 
-    private List tabs = new ArrayList();
+    private List tabs = new Vector();
     private int startIndex = 0;
     private String style = "menu";
     private String layoutDescriptor = null;
@@ -183,7 +183,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      *
      * @param tabs an ArrayList containing the portlet tabs to add
      */
-    public void setPortletTabs(ArrayList tabs) {
+    public void setPortletTabs(Vector tabs) {
         this.tabs = tabs;
 
     }
@@ -338,12 +338,13 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         out.println("<tr >");
         // if (!themeReg.isGfxTheme(theme)) out.println("<td class=\"tab-empty\">&nbsp;</td>");
 
+        boolean badrole = false;
         PortletTab tab;
-        List stabs = Collections.synchronizedList(tabs);
-        synchronized (stabs) {
-            for (int i = 0; i < stabs.size(); i++) {
+        //List stabs = Collections.synchronizedList(tabs);
+        //synchronized (stabs) {
+            for (int i = 0; i < tabs.size(); i++) {
 
-                tab = (PortletTab) stabs.get(i);
+                tab = (PortletTab) tabs.get(i);
                 PortletRole tabRole = tab.getRequiredRole();
                 if (userRole.compare(userRole, tabRole) >= 0) {
 
@@ -379,28 +380,34 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                 } else {
                     // if role is < required role we try selecting the next possible tab
                     //System.err.println("in PortletTabbedPane menu: role is < required role we try selecting the next possible tab");
-                    if (tab.isSelected()) {
-                        int index = (i + 1);
-                        PortletTab newtab = (PortletTab) stabs.get(index);
-                        if (index < tabs.size()) {
-                            this.setSelectedPortletTab(newtab);
-                        }
-                    }
+
+                    badrole = true;
+
                 }
             }
+
+            if (badrole) {
+                // try to use first tab with ok role
+                tab = (PortletTab)tabs.get(0);
+                PortletRole tabRole = tab.getRequiredRole();
+                if (tabRole.compare(userRole, tabRole) >= 0) {
+                    this.setSelectedPortletTab(tab);
+                }
+            }
+
 //            if (themeReg.isGfxTheme(theme)) {
             //               out.println("<td witdh=\"100%\" >&nbsp;</td>");
             //          }
             out.println("<td class=\"tab-fillup\">&nbsp;</td>");
             out.println("</tr></table>");
 
-            if (!stabs.isEmpty()) {
+            if (!tabs.isEmpty()) {
                 PortletTab selectedTab = getSelectedTab();
                 if (selectedTab != null) {
                     selectedTab.doRender(event);
                 }
             }
-        }
+        //}
     }
 
     /**

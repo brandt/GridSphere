@@ -351,7 +351,7 @@ public class PortletPage implements Serializable, Cloneable {
                 PortletRole userRole = event.getPortletRequest().getRole();
                 if (userRole.compare(userRole, comp.getRequiredRole()) >= 0) {
                     if (comp != null) {
-                        //System.err.println("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
+                        System.err.println("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
                         comp.actionPerformed(event);
                     }
                 }

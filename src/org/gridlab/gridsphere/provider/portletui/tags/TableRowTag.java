@@ -122,6 +122,7 @@ public class TableRowTag extends BaseComponentTag {
             // logic to determine if alternate (darkened row) should be set
             if (tableTag.getZebra()) {
                 if ((tableTag.getRowCount() % 2) == 0) {
+
                     isZebra = true;
                 } else {
                     isZebra = false;

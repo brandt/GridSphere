@@ -87,7 +87,7 @@
         <ui:tablerow>
             <ui:tablecell>
                 <ui:actionsubmit action="doConfirmEditUser" key="SAVE"/>
-                <ui:actionsubmit action="doCancelEditUser" key="CANCEL"/>
+                <ui:actionsubmit action="doViewUser" key="CANCEL"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>

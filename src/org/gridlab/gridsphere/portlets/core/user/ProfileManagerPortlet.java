@@ -222,7 +222,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             groupsDescTC.addBean(groupDescTB);
             if (!g.isPublic()) {
                 TextBean priv = event.getTextBean("privateTB");
-                priv.setValue("&nbsp;&nbsp;" + this.getLocalizedText(req, "GROUP_NOTIFY"));
+                priv.setValue("<br>" + this.getLocalizedText(req, "GROUP_NOTIFY"));
                 List admins = aclManagerService.getUsers(g, PortletRole.ADMIN);
                 String emailAddress = "";
                 if (admins.isEmpty()) {
@@ -238,17 +238,20 @@ public class ProfileManagerPortlet extends ActionPortlet {
                 mailTB.setValue(mailhref);
                 groupsDescTC.addBean(priv);
                 groupsDescTC.addBean(mailTB);
+                groupsTR.addBean(groupsTC);
+                groupsTR.addBean(groupsDescTC);
+            }  else {               
+                PortletRole r = aclManagerService.getRoleInGroup(user, g);
+                TextBean roletext = new TextBean();
+                if (r.equals(PortletRole.GUEST)) r = PortletRole.USER;
+                roletext.setValue(r.getName());
+                roleTC.addBean(roletext);
+
+                groupsTR.addBean(groupsTC);
+                groupsTR.addBean(groupsDescTC);
+
+                groupsTR.addBean(roleTC);
             }
-
-            PortletRole r = aclManagerService.getRoleInGroup(user, g);
-            TextBean roletext = new TextBean();
-            if (r.equals(PortletRole.GUEST)) r = PortletRole.USER;
-            roletext.setValue(r.getName());
-            roleTC.addBean(roletext);
-
-            groupsTR.addBean(groupsTC);
-            groupsTR.addBean(groupsDescTC);
-            groupsTR.addBean(roleTC);
             model.addTableRowBean(groupsTR);
         }
 

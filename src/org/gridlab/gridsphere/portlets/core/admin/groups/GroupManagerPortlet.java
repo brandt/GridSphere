@@ -35,10 +35,6 @@ public class GroupManagerPortlet extends ActionPortlet {
     public static final String DO_VIEW_GROUP_VIEW = "admin/groups/groupView.jsp";
     public static final String DO_VIEW_GROUP_EDIT = "admin/groups/groupEditDefaults.jsp";
     public static final String DO_VIEW_GROUP_ENTRY_EDIT = "admin/groups/groupEntryEdit.jsp";
-    //public static final String DO_VIEW_GROUP_ENTRY_ADD = "admin/groups/groupEntryAdd.jsp";
-    //public static final String DO_VIEW_GROUP_ENTRY_ADD_CONFIRM = "admin/groups/groupEntryAddConfirm.jsp";
-    //public static final String DO_VIEW_GROUP_ENTRY_REMOVE = "admin/groups/groupEntryRemove.jsp";
-    //public static final String DO_VIEW_GROUP_ENTRY_REMOVE_CONFIRM = "admin/groups/groupEntryRemoveConfirm.jsp";
     public static final String DO_VIEW_GROUP_CREATE = "admin/groups/groupCreate.jsp";
 
     // Portlet services
@@ -373,7 +369,10 @@ public class GroupManagerPortlet extends ActionPortlet {
             if (PortletTabRegistry.getGroupTabs(groupTF.getValue()) == null) {
                 PortletTabRegistry.newGroupTab(groupTF.getValue(), portletRoles);
             }
-
+            createSuccessMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_NEWGROUP_SUCCESS"));
+            if (!newgroup.getPublic()) {
+                createSuccessMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_VISIBILITY_MOREDESC") + " " + newgroup.getName());
+            }
         } catch (Exception e) {
             log.error("Unable to save new group layout: ", e);
         }
@@ -667,39 +666,6 @@ public class GroupManagerPortlet extends ActionPortlet {
         userRoles.addBean(adminItem);
     }
 
-    private GroupEntry loadGroupEntry(FormEvent evt) {
-        log.debug("Entering loadGroupEntry()");
-        String groupEntryID = evt.getAction().getParameter("groupEntryID");
-        GroupEntry groupEntry = aclManagerService.getGroupEntry(groupEntryID);
-        return groupEntry;
-    }
-
-    private void viewGroupEntry(FormEvent evt, GroupEntry groupEntry) {
-        log.debug("Entering viewGroupEntry()");
-
-        HiddenFieldBean groupEntryIDBean = evt.getHiddenFieldBean("groupEntryID");
-        TextBean groupEntryUserNameBean = evt.getTextBean("groupEntryUserName");
-        TextBean groupEntryUserFullNameBean = evt.getTextBean("groupEntryUserFullName");
-        TextBean groupEntryRoleBean = evt.getTextBean("groupEntryRole");
-        if (groupEntry == null) {
-            // Clear group entry attributes
-
-            groupEntryIDBean.setValue("");
-            groupEntryUserNameBean.setValue("");
-            groupEntryUserFullNameBean.setValue("");
-            groupEntryRoleBean = new TextBean("");
-        } else {
-            User groupEntryUser = groupEntry.getUser();
-            // Set group entry attributes
-            groupEntryIDBean.setValue(groupEntry.getID());
-            groupEntryUserNameBean.setValue(groupEntryUser.getUserName());
-            groupEntryUserFullNameBean.setValue(groupEntryUser.getFullName());
-            groupEntryRoleBean.setValue(groupEntry.getRole().toString());
-        }
-
-        log.debug("Exiting viewGroupEntry()");
-    }
-
     private void addGroupEntries(FormEvent evt, PortletGroup group) {
         // Group entry role to apply to all users below...
         ListBoxBean groupEntryRoleListBox = evt.getListBoxBean("groupEntryRoleLB");
@@ -806,7 +772,7 @@ public class GroupManagerPortlet extends ActionPortlet {
     private void createSuccessMessage(FormEvent event, String msg) {
         MessageBoxBean msgBox = event.getMessageBoxBean("msg");
         msgBox.setMessageType(TextBean.MSG_SUCCESS);
-        msgBox.setValue(msg);
+        msgBox.appendText(msg);
     }
 
 
