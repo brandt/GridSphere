@@ -26,9 +26,6 @@ public class BannerPortlet extends ActionPortlet {
 
     private FileManagerService userStorage = null;
 
-    private String defaultTitle = "";
-    private String defaultFileURL = "";
-
     private static final String CONFIGURE_JSP = "banner/configure.jsp";
     private static final String HELP_JSP = "banner/help.jsp";
     private static final String EDIT_JSP = "banner/edit.jsp";
@@ -50,12 +47,16 @@ public class BannerPortlet extends ActionPortlet {
         DEFAULT_HELP_PAGE = HELP_JSP;
     }
 
-    public void initConcrete(PortletSettings settings) throws UnavailableException {
-        super.initConcrete(settings);
-        defaultTitle = settings.getAttribute(TITLE);
+    public String getTitle() {
+        String defaultTitle = this.getPortletSettings().getAttribute(TITLE);
         if (defaultTitle == null)  defaultTitle = "";
-        defaultFileURL = settings.getAttribute(FILE);
+        return defaultTitle;
+    }
+
+    public String getFileURL() {
+        String defaultFileURL = this.getPortletSettings().getAttribute(FILE);
         if (defaultFileURL == null)  defaultFileURL = "";
+        return defaultFileURL;
     }
 
      /**
@@ -68,10 +69,10 @@ public class BannerPortlet extends ActionPortlet {
          PortletRequest req = event.getPortletRequest();
 
          TextFieldBean displayTitle = event.getTextFieldBean("displayTitle");
-         displayTitle.setValue(defaultTitle);
+         displayTitle.setValue(getTitle());
 
          TextFieldBean displayFile = event.getTextFieldBean("displayFile");
-         displayFile.setValue(defaultFileURL);
+         displayFile.setValue(getFileURL());
          setNextState(req, CONFIGURE_JSP);
      }
 
@@ -79,11 +80,11 @@ public class BannerPortlet extends ActionPortlet {
         log.debug("in BannerPortlet: setConfigureDisplayFile");
         PortletRequest req = event.getPortletRequest();
         TextFieldBean displayFile = event.getTextFieldBean("displayFile");
-        defaultFileURL = displayFile.getValue();
+        String defaultFileURL = displayFile.getValue();
         getPortletSettings().setAttribute(FILE, defaultFileURL);
 
         TextFieldBean displayTitle = event.getTextFieldBean("displayTitle");
-        defaultTitle = displayTitle.getValue();
+        String defaultTitle = displayTitle.getValue();
 
         getPortletSettings().setAttribute(TITLE, defaultTitle);
         FrameBean alert = event.getFrameBean("alert");
@@ -180,8 +181,8 @@ public class BannerPortlet extends ActionPortlet {
         PortletRequest request = event.getPortletRequest();
         PortletResponse response = event.getPortletResponse();
         User user = request.getUser();
-        String title = defaultTitle;
-        String fileURL = defaultFileURL;
+        String title = getTitle();
+        String fileURL = getFileURL();
         if (!(user instanceof GuestUser)) {
             PortletData data = request.getData();
             fileURL = data.getAttribute(FILE);
@@ -225,7 +226,7 @@ public class BannerPortlet extends ActionPortlet {
                 title = data.getAttribute(TITLE);
                 if (title == null) title = this.getLocalizedText(request, "BANNER_HELP");
             } else {
-                title = defaultTitle;
+                title = getTitle();
             }
             out.println(title);
         } else if (request.getMode() == Portlet.Mode.HELP) {
