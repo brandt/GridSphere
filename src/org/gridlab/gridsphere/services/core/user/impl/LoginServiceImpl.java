@@ -283,7 +283,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
 
 
         Collections.sort(modules);
-        AuthorizationException authEx = null;
+        AuthenticationException authEx = null;
 
         Iterator it = modules.iterator();
         log.debug("in login: Active modules are: ");
@@ -295,7 +295,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
             try {
                 mod.checkAuthentication(user, loginPassword);
                 success = true;
-            } catch (AuthorizationException e) {
+            } catch (AuthenticationException e) {
                 authEx = e;
             }
             if (success) break;
