@@ -44,8 +44,8 @@ Copyright:
     <property name="deprecation" value="true"/>
 
     <!-- Version properties -->
-    <property name="version" value="1.1.0"/>
-    <property name="release" value="rc1"/>
+    <property name="version" value="1.1.1"/>
+    <property name="release" value=""/>
     <property name="version.release" value="${version} ${release}"/>
     <property name="gridsphere.project" value="gridsphere"/>
     <property name="gridsphere.name" value="GridSphere ${version.release}"/>
