@@ -55,10 +55,10 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     /**
      * Rename an existing group
      *
-     * @param oldGroupName the name of the old group
+     * @param group the existing PortletGroup
      * @param newGroupName the name of the new group
      */
-    public void renameGroup(String oldGroupName, String newGroupName) {
+    public void renameGroup(PortletGroup group, String newGroupName) {
 
     }
 
