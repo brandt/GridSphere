@@ -10,19 +10,22 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule;
 import org.gridlab.gridsphere.services.core.security.auth.modules.impl.AuthModuleEntry;
-import org.gridlab.gridsphere.services.core.security.auth.modules.impl.PasswordAuthModule;
+import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModulesDescriptor;
+import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleCollection;
+import org.gridlab.gridsphere.services.core.security.auth.modules.impl.descriptor.AuthModuleDefinition;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.user.LoginUserModule;
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -40,17 +43,15 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     private PortletLog log = SportletLog.getInstance(LoginServiceImpl.class);
     private static boolean inited = false;
     private static Map authModules = new HashMap();
-    private static List activeAuthModules = new ArrayList();
+    private static Map activeAuthModules = new HashMap();
     private static LoginUserModule activeLoginModule = null;
-    private PasswordAuthModule passwdModule = null;
 
     private PersistenceManagerRdbms pm = null;
 
-    public LoginServiceImpl() {
-    }
+    private String authMappingPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/auth-modules-mapping.xml");
+    private String authModulesPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/authmodules.xml");
 
-    public List getActiveAuthModules() {
-        return activeAuthModules;
+    public LoginServiceImpl() {
     }
 
     public void addActiveAuthModule(User user, LoginAuthModule authModule) {
@@ -104,24 +105,25 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         }
         // now convert AuthModuleEntry into the LoginAuthModule concrete class
         List mods = new Vector();
-        Iterator it = result.iterator();
-        while (it.hasNext()) {
-            AuthModuleEntry entry = (AuthModuleEntry) it.next();
-            String className = entry.getModuleClassName();
-            System.err.println("trying to create a new login auth module:" + className);
-            try {
-                LoginAuthModule authModule = (LoginAuthModule) Class.forName(className).newInstance();
-                authModule.setAttributes(entry.getAttributes());
-                mods.add(authModule);
-            } catch (Exception e) {
-                log.error("Unable to create auth module: " + className, e);
+        if (result != null) {
+            Iterator it = result.iterator();
+            while (it.hasNext()) {
+                AuthModuleEntry entry = (AuthModuleEntry) it.next();
+                String className = entry.getModuleClassName();
+                System.err.println("found a class=" + className);
+                if (activeAuthModules.containsKey(className)) mods.add(activeAuthModules.get(className));
+            }
+        }
+        if (mods.isEmpty()) {
+            Iterator it = activeAuthModules.values().iterator();
+            while (it.hasNext()) {
+                LoginAuthModule module = (LoginAuthModule)it.next();                
+                System.err.println("found nothing-- adding " + module.getModuleName());
+                this.addActiveAuthModule(user, module);
+                mods.add(module);
             }
         }
         return mods;
-    }
-
-    public void setActiveAuthModules(List activeModules, User user) {
-        activeAuthModules = activeModules;
     }
 
     public List getSupportedAuthModules() {
@@ -158,6 +160,22 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         log.debug("in login service init");
         if (!inited) {
             pm = PersistenceManagerFactory.createGridSphereRdbms();
+
+            String loginClassName = config.getInitParameter("LOGIN_MODULE");
+            try {
+                PortletServiceFactory factory = SportletServiceFactory.getInstance();
+                Class loginModClass = Class.forName(loginClassName);
+                activeLoginModule = (LoginUserModule) factory.createPortletService(loginModClass, config.getServletContext(), true);
+            } catch (ClassNotFoundException e) {
+                log.error("Unable to create class from class name: " + loginClassName, e);
+            } catch (PortletServiceNotFoundException e) {
+                log.error("Unable to get service from portlet service factory: " + loginClassName, e);
+            }
+            log.debug("Created a login module service: " + loginClassName);
+
+            loadAuthModules();
+
+            /*
             passwdModule = new PasswordAuthModule("PASSWORD_AUTH_MODULE");
             authModules.put("PASSWORD_AUTH_MODULE", passwdModule);
 
@@ -176,34 +194,44 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
                         log.error("Unable to get service from portlet service factory: " + loginClassName, e);
                     }
                     log.debug("Created a login module service: " + loginClassName);
-                } /*else {
+                } else {
                     String authClassName = config.getInitParameter(moduleName);
                     LoginAuthModule authModule = createNewAuthModule(moduleName, authClassName);
                     if (authModule != null) authModules.put(moduleName, authModule);
-                }*/
+                }
             }
             LoginAuthModule activeModule = (LoginAuthModule) authModules.get("PASSWORD_AUTH_MODULE");
             activeAuthModules.add(activeModule);
-
+            */
             inited = true;
         }
     }
 
-    private LoginAuthModule createNewAuthModule(String authModuleName, String authClassName) {
-        LoginAuthModule authModule = null;
+    private void loadAuthModules() {
+
+        AuthModulesDescriptor desc = null;
         try {
-            Class c = Class.forName(authClassName);
-            Class[] parameterTypes = new Class[]{String.class};
-            Object[] obj = new Object[]{authModuleName};
-            Constructor con = c.getConstructor(parameterTypes);
-            authModule = (LoginAuthModule) con.newInstance(obj);
-        } catch (ClassNotFoundException cne) {
-            log.error("LoginServiceImpl: Unable to locate class: " + authClassName);
+            desc = new AuthModulesDescriptor(authModulesPath, authMappingPath);
+
+            AuthModuleCollection coll = desc.getCollection();
+            List modList = coll.getAuthModulesList();
+            Iterator it = modList.iterator();
+            log.info("loading auth modules:");
+            while (it.hasNext()) {
+                AuthModuleDefinition def = (AuthModuleDefinition)it.next();
+                log.info(def.toString());
+                String modClassName = def.getModuleImplementation();
+                Class c = Class.forName(modClassName);
+                Class[] parameterTypes = new Class[]{AuthModuleDefinition.class};
+                Object[] obj = new Object[]{def};
+                Constructor con = c.getConstructor(parameterTypes);
+                LoginAuthModule authModule = (LoginAuthModule) con.newInstance(obj);
+                authModules.put(def.getModuleName(), authModule);
+                if (authModule.isModuleActive()) activeAuthModules.put(modClassName, authModule);
+            }
         } catch (Exception e) {
-            log.error("LoginServiceImpl: Unable to create new LoginAuthModule " + authClassName + "(" + authModuleName + ")");
+            log.error("Error loading auth module!", e);
         }
-        log.debug("LoginServiceImpl: created module: " + authModuleName);
-        return authModule;
     }
 
     /**
@@ -237,13 +265,13 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
         // second invoke the appropriate auth module
 
         List modules = this.getActiveAuthModules(user);
-        if (modules.isEmpty()) modules.add(passwdModule);
+
 
         Collections.sort(modules);
         AuthorizationException authEx = null;
 
         Iterator it = modules.iterator();
-        log.debug("Active modules are: ");
+        log.debug("in login: Active modules are: ");
         boolean success = false;
         while (it.hasNext()) {
             success = false;
