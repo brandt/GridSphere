@@ -20,20 +20,50 @@ import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import java.util.List;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
+/**
+ * The PortletRegistryService acts as a repository for portlets and makes them available to the portlet
+ * container. The Portlet base class is responsible for reading in the associated portlet.xml file and
+ * creating a RegisteredPortlet object which represents the portlet. The PortletRegistryService maintains
+ * a Set of RegisteredPortlets and provides operations for the registration, unregistration and querying
+ * of RegisteredPortlet objects.
+ */
 public interface PortletRegistryService extends PortletService {
 
-    public Set getRegisteredPortlets();
+    /**
+     * Returns the collection of registered portlets
+     *
+     * @return the registered portlets
+     */
+    public Collection getRegisteredPortlets();
 
+    /**
+     * Return the registered portlet IDs
+     *
+     * @return the registered portlet IDs
+     */
     public Set getRegisteredPortletIDs();
 
+    /**
+     * Return a registered portlet given its identifier
+     *
+     * @return the portletID
+     */
     public RegisteredPortlet getRegisteredPortlet(String portletID);
 
+    /**
+     * Registers a portlet with the PortletRegistryService
+     *
+     * @param registeredPortlet the registered portlet
+     */
     public String registerPortlet(RegisteredPortlet registeredPortlet);
 
+    /**
+     * Unregisters a portlet with the PortletRegistryService
+     *
+     * @param portletID the portlet ID
+     */
     public void unregisterPortlet(String portletID);
 
 }
