@@ -47,7 +47,8 @@ public class RadioButtonTag extends BaseComponentTag {
                 radiobutton.setSelected(selected);
                 this.setBaseComponentBean(radiobutton);
             } else {
-                this.updateBaseComponentBean(radiobutton);
+                //this.updateBaseComponentBean(radiobutton);
+                this.overrideBaseComponentBean(radiobutton);
             }
         } else {
             radiobutton = new RadioButtonBean();
