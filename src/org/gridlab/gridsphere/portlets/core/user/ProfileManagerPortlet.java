@@ -127,9 +127,9 @@ public class ProfileManagerPortlet extends ActionPortlet {
         PortletSession session = event.getPortletRequest().getPortletSession(true);
 
         //String logintime = DateFormat.getDateTimeInstance().format(new Date(user.getLastLoginTime()));
-        req.setAttribute("logintime", DateUtil.getLocalizedLongDate(user,
+        req.setAttribute("logintime", DateUtil.getLocalizedDate(user,
                 (Locale)session.getAttribute(User.LOCALE),
-                user.getLastLoginTime()));
+                user.getLastLoginTime(), DateFormat.FULL, DateFormat.FULL));
         req.setAttribute("username", user.getUserName());
 
         TextFieldBean userName =  event.getTextFieldBean("userName");
