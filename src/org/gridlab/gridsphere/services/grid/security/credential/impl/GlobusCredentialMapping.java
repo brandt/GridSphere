@@ -216,13 +216,19 @@ public class GlobusCredentialMapping extends BaseObject implements CredentialMap
      */
     public Credential getCredential() {
         if (this.credential == null) {
-            if (_credentialManager.isActiveCredential(subject)) {
-                this.credential = (GlobusCredential)_credentialManager.getActiveCredential(subject);
+            this.credential = (GlobusCredential)_credentialManager.getActiveCredential(this);
+        } else {
+            _log.debug("Time left on credential is " + credential.getTimeLeft());
+            if (this.credential.isExpired()) {
+                _log.debug("Credential is expired...");
+                return null;
             }
-        } else if (this.credential.isExpired()) {
-            this.credential = null;
         }
         return this.credential;
+    }
+
+    void setCredential(GlobusCredential credential) {
+        this.credential = credential;
     }
 
     /**

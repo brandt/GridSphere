@@ -112,13 +112,13 @@
               Your Active Credentials
           </td>
         </tr>
+<%-- TEMPORARILY COMMENTED OUT (MPR 25/02/03)
         <tr>
           <td class="portlet-frame-actions">
             <input type="button"
                    name="doListUserActiveCredential"
                    value="List Credentials"
                    onClick="javascript:CredentialRetrievalUserPortlet_listUserActiveCredential_onClick()"/>
-<%-- TEMPORARILY COMMENTED OUT (MPR 25/02/03)
             &nbsp;&nbsp;<input type="button"
                    name="doRefreshUserCredential"
                    value="Refresh Credentials"
@@ -127,17 +127,17 @@
                    name="doDestroyUserCredential"
                    value="Destroy Credentials"
                    onClick="javascript:CredentialRetrievalUserPortlet_destroyUserCredential_onClick()"/>
---%>
           </td>
         </tr>
+--%>
       </table>
     </td>
   </tr>
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="500">
-        <tr>
 <%-- TEMPORARILY COMMENTED OUT (MPR 25/02/03)
+        <tr>
           <td class="portlet-frame-header-checkbox">
               <input type="checkbox"
                name="credentialMappingID"

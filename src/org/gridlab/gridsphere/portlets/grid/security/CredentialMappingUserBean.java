@@ -60,7 +60,7 @@ public class CredentialMappingUserBean extends PortletBean {
     }
 
     protected void initView() {
-        setTitle("Credential Mapping Manager");
+        setTitle("Credential Mapping");
     }
 
     public void doDefaultViewAction()

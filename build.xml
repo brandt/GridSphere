@@ -240,11 +240,34 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
+    <!-- Creates GridSphere manager portlet                                  -->
+    <!-- =================================================================== -->
+    <target name="manager-portlet-jar" depends="compile" description="Create ${build.lib}/gsmanager-portlet.jar">
+        <jar jarfile="${build.lib}/gsmanager-portlet.jar" basedir="${classes.dir}" >
+            <include name="org/gridlab/gridsphere/portlets/manager/**" />
+            <include name="${conf.dir}/log4j.properties"/>
+        </jar>
+    </target>
+
+
+    <!-- =================================================================== -->
     <!-- Creates core portlets required by GridSphere                        -->
     <!-- =================================================================== -->
     <target name="core-portlets-jar" depends="compile" description="Create ${build.lib}/coreportlets.jar">
         <jar jarfile="${build.lib}/coreportlets.jar" basedir="${classes.dir}" >
+            <include name="org/gridlab/gridsphere/portlets/*" />
             <include name="org/gridlab/gridsphere/portlets/core/**" />
+            <include name="${conf.dir}/log4j.properties"/>
+        </jar>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Creates grid portlets required by GridSphere                        -->
+    <!-- =================================================================== -->
+    <target name="grid-portlets-jar" depends="compile" description="Create ${build.lib}/gridportlets.jar">
+        <jar jarfile="${build.lib}/gridportlets.jar" basedir="${classes.dir}" >
+            <include name="org/gridlab/gridsphere/portlets/*" />
+            <include name="org/gridlab/gridsphere/portlets/grid/**" />
             <include name="${conf.dir}/log4j.properties"/>
         </jar>
     </target>
@@ -259,27 +282,6 @@ Copyright:
             <include name="${conf.dir}/log4j.properties"/>
         </jar>
     </target>
-
-    <!-- =================================================================== -->
-    <!-- Creates grid portlets required by GridSphere                        -->
-    <!-- =================================================================== -->
-    <target name="grid-portlets-jar" depends="compile" description="Create ${build.lib}/gridportlets.jar">
-        <jar jarfile="${build.lib}/gridportlets.jar" basedir="${classes.dir}" >
-            <include name="org/gridlab/gridsphere/portlets/grid/**" />
-            <include name="${conf.dir}/log4j.properties"/>
-        </jar>
-    </target>
-
-    <!-- =================================================================== -->
-    <!-- Creates GridSphere manager portlet                                  -->
-    <!-- =================================================================== -->
-    <target name="manager-portlet-jar" depends="compile" description="Create ${build.lib}/gsmanager-portlet.jar">
-        <jar jarfile="${build.lib}/gsmanager-portlet.jar" basedir="${classes.dir}" >
-            <include name="org/gridlab/gridsphere/portlets/manager/**" />
-            <include name="${conf.dir}/log4j.properties"/>
-        </jar>
-    </target>
-
 
     <!-- =================================================================== -->
     <!-- Creates all JAR's                                                   -->
@@ -597,6 +599,7 @@ Copyright:
                 <exclude name="gsmanager-portlet.jar"/>
                 <exclude name="coreportlets.jar"/>
                 <exclude name="gridportlets.jar"/>
+                <exclude name="exampleportlets.jar"/>
             </fileset>
         </copy>
 

@@ -83,7 +83,7 @@ public class CredentialManagerServiceImpl
      */
     public CredentialPermission createCredentialPermission(String permission, String description) {
         this.authorizer.authorizeSuperUser();
-        return this.credentialManager.createCredentialPermission(permission);
+        return this.credentialManager.createCredentialPermission(permission, description);
     }
 
     /*

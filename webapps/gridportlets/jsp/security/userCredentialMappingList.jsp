@@ -17,7 +17,7 @@
       document.CredentialMappingPortlet.submit();
     }
 
-    function CredentialMappingPortlet_newCredentialMapping_onClick(credentialMappingID) {
+    function CredentialMappingPortlet_newCredentialMapping_onClick() {
       document.CredentialMappingPortlet.credentialMappingID.value="";
       document.CredentialMappingPortlet.action="<%=credentialMappingUserBean.getPortletActionURI("doEditUserCredentialMapping")%>";
       document.CredentialMappingPortlet.submit();

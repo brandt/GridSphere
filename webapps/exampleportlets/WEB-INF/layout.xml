@@ -2,7 +2,7 @@
     <title>Examples</title>
     <portlet-tabbed-pane style="sub-menu">
         <portlet-tab>
-            <title>Hello World</title>
+            <title>Hello World!</title>
             <portlet-panel>
                 <grid-layout>
                     <portlet-frame>

@@ -4,17 +4,18 @@
  */
 package org.gridlab.gridsphere.portlets;
 
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletService;
-import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.event.ActionEvent;
+import org.gridlab.gridsphere.tags.event.FormEvent;
+import org.gridlab.gridsphere.tags.event.impl.FormEventImpl;
 
 import java.util.*;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
 public class PortletBean {
-
-    public static final String PAGE_ERROR_UNDEFINED_ACTION = "/gridsphere/jsp/error/portletActionUndefined.jsp";
 
     protected PortletConfig config = null;
     protected PortletContext context = null;
@@ -23,6 +24,7 @@ public class PortletBean {
     protected PortletLog log = null;
     protected User user = null;
     protected PortletSession session = null;
+    protected ActionEvent actionEvent = null;
     protected PortletAction actionPerformed = null;
     protected String page = null;
     protected String title = null;
@@ -104,15 +106,36 @@ public class PortletBean {
         return this.log;
     }
 
-    public PortletAction getActionPerformed() {
-        return this.actionPerformed;
+    public ActionEvent getActionEvent() {
+        return this.actionEvent;
     }
 
-    public String getActionPerformedName() {
-        if (this.actionPerformed != null && this.actionPerformed instanceof DefaultPortletAction) {
-            return ((DefaultPortletAction)this.actionPerformed).getName();
+    public void setActionEvent(ActionEvent actionEvent) {
+        this.actionEvent = actionEvent;
+        PortletAction action = actionEvent.getAction();
+    }
+
+    public String getActionMethodName() {
+        String actionMethodName = null;
+        // If action event not set, return null
+        if (this.actionEvent == null) {
+            return null;
         }
-        return "";
+        // If a submit button was presssed, the action method
+        // we call is the the name of the pressed button
+        FormEvent form = new FormEventImpl(this.actionEvent);
+        actionMethodName = form.getPressedSubmitButton();
+        // If no submit button was pressed, then the action
+        // method we call is the name of the portlet action
+        if (actionMethodName == null) {
+            DefaultPortletAction action = (DefaultPortletAction)actionEvent.getAction();
+            actionMethodName = action.getName();
+        }
+        return actionMethodName;
+    }
+
+    public PortletAction getActionPerformed() {
+        return this.actionPerformed;
     }
 
     public void setActionPerformed(PortletAction action) {
@@ -122,6 +145,13 @@ public class PortletBean {
             }
         }
         this.actionPerformed = action;
+    }
+
+    public String getActionPerformedName() {
+        if (this.actionPerformed != null && this.actionPerformed instanceof DefaultPortletAction) {
+            return ((DefaultPortletAction)this.actionPerformed).getName();
+        }
+        return "";
     }
 
     public String getTitle() {
@@ -142,43 +172,67 @@ public class PortletBean {
         this.page = page;
     }
 
+    public void doViewAction(ActionEvent actionEvent)
+            throws PortletException {
+        this.log.debug("Entering doAction(ActionEvent)");
+        if (actionEvent == null) {
+            this.log.debug("No action provided!");
+            doErrorUndefinedAction();
+        } else {
+            // Save action event
+            setActionEvent(actionEvent);
+            // Get action method to perform
+            String methodName = getActionMethodName();
+            // Invoke action method
+            invokeActionMethod(methodName);
+        }
+        this.log.debug("Exiting doAction(ActionEvent)");
+    }
+
     public void doViewAction(PortletAction action)
             throws PortletException {
         this.log.debug("Entering doAction(PortletAction)");
         // If action is not specified do error undefined action
         if (action == null) {
+            this.log.debug("No action provided!");
             doErrorUndefinedAction();
         } else {
-            // Get object and class references
-            Object thisObject = (Object)this;
-            Class thisClass = this.getClass();
             // Set action performed (even if it fails below)
             setActionPerformed(action);
             // Get name of action peformed
             String actionName = getActionPerformedName();
-            // Call method specified by action name
-            try {
-                if (this.log.isDebugEnabled()) {
-                    this.log.debug("Getting action method " + thisClass.getName() + "." + action + "()");
-                }
-                Method actionMethod = thisClass.getMethod(actionName, null);
-                this.log.debug("Invoking action method");
-                actionMethod.invoke(thisObject, null);
-            } catch (NoSuchMethodException e) {
-                this.log.error("Error invoking action method", e);
-                // If action is not illegal do error undefined action
-                doErrorUndefinedAction();
-            } catch (IllegalAccessException e) {
-                this.log.error("Error invoking action method", e);
-                // If action is not illegal do error undefined action
-                doErrorUndefinedAction();
-            } catch (InvocationTargetException e) {
-                this.log.error("Error invoking action method", e);
-                // If action is not illegal do error undefined action
-                doErrorUndefinedAction();
-            }
+            // Invoke action
+            invokeActionMethod(actionName);
         }
         this.log.debug("Exiting doAction(PortletAction)");
+    }
+
+    private void invokeActionMethod(String methodName)
+            throws PortletException {
+        // Get object and class references
+        Object thisObject = (Object)this;
+        Class thisClass = this.getClass();
+        // Call method specified by action name
+        try {
+            if (this.log.isDebugEnabled()) {
+                this.log.debug("Getting action method " + thisClass.getName() + "." + methodName + "()");
+            }
+            Method method = thisClass.getMethod(methodName, null);
+            this.log.debug("Invoking action method");
+            method.invoke(thisObject, null);
+        } catch (NoSuchMethodException e) {
+            this.log.error("Error invoking action method", e);
+            // If action is not illegal do error undefined action
+            doErrorUndefinedAction();
+        } catch (IllegalAccessException e) {
+            this.log.error("Error invoking action method", e);
+            // If action is not illegal do error undefined action
+            doErrorUndefinedAction();
+        } catch (InvocationTargetException e) {
+            this.log.error("Error invoking action method", e);
+            // If action is not illegal do error undefined action
+            doErrorUndefinedAction();
+        }
     }
 
     public void doDefaultViewAction()
@@ -188,7 +242,6 @@ public class PortletBean {
     public void doErrorUndefinedAction()
             throws PortletException {
         setTitle("Error: Undefined Action");
-        setPage(PAGE_ERROR_UNDEFINED_ACTION);
         String errorMessage = "Attempt to access undefined portlet action "
                             + this.getClass().getName()
                             + "."

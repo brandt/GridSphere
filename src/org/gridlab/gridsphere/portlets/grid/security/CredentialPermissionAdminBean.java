@@ -212,13 +212,15 @@ public class CredentialPermissionAdminBean extends PortletBean {
             throw new PortletException("Permitted subjects cannot be blank.");
         }
         this.description = getParameter("description");
-        if (this.permittedSubjects.equals("")) {
+        this.log.debug("Description = " + this.description);
+        if (this.description.equals("")) {
             throw new PortletException("Description cannot be blank.");
         }
     }
 
     public void saveCredentialPermission()
             throws PortletException {
+        this.log.debug("Description = " + this.description);
         this.credentialManagerService.createCredentialPermission(this.permittedSubjects, this.description);
         this.credentialPermissionID = this.permittedSubjects;
     }

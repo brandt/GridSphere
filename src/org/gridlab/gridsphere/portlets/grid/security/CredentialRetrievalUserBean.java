@@ -58,7 +58,7 @@ public class CredentialRetrievalUserBean extends PortletBean {
     }
 
     private void initView() {
-        setTitle("Credential Mapping Manager");
+        setTitle("Credential Retrieval");
     }
 
     public void doDefaultViewAction()
@@ -228,9 +228,8 @@ public class CredentialRetrievalUserBean extends PortletBean {
             this.credentialManagerService.retrieveCredentials(this.user, password);
         } else {
             String message = "There are no credentials mapped to your account. "
-                           + "If you wish to use Grid credentials, "
-                           + "please see the <a href=\"/grid/credential/user\">"
-                           + "credential mapping portlet</a> for more details.";
+                           + "If you wish to use Grid credentials, please see "
+                           + "the credential mapping portlet for more details.";
             throw new PortletException(message);
         }
     }

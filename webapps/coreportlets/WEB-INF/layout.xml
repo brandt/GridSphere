@@ -1,8 +1,8 @@
 <portlet-tab>
-    <title>ASC</title>
+    <title>Configuration</title>
     <portlet-tabbed-pane style="sub-menu">
         <portlet-tab>
-            <title>ASC</title>
+            <title>Account</title>
             <portlet-panel>
                 <grid-layout>
                     <portlet-frame>

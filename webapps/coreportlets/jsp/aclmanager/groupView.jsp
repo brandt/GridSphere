@@ -168,7 +168,6 @@
           <td class="portlet-frame-header-checkbox">
               <input type="checkbox"
                name="groupEntryID"
-               value=""
                onClick="javascript:GridSphere_CheckBoxList_checkAll(document.AccessControllerPortlet.groupEntryID)"/>
           </td>
           <td class="portlet-frame-header" width="100">

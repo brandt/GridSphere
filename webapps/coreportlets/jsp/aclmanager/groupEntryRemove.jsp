@@ -77,6 +77,8 @@
       </table>
     </td>
   </tr>
+<% List groupEntryList = aclManagerBean.getGroupEntryList();
+   GroupEntry groupEntry = (GroupEntry)groupEntryList.get(0); %>
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
@@ -84,8 +86,8 @@
           <td class="portlet-frame-header-checkbox">
               <input type="checkbox"
                name="groupEntryID"
-               checked="false"
-               value=""
+               value="<%=groupEntry.getID()%>"
+               checked="on"
                onClick="javascript:GridSphere_CheckBoxList_checkAll(document.AccessControllerPortlet.groupEntryID)"/>
           </td>
           <td class="portlet-frame-header" width="100">
@@ -98,16 +100,15 @@
               Role
           </td>
         </tr>
-<% Iterator groupEntries = aclManagerBean.getGroupEntryList().iterator();
-   while (groupEntries.hasNext()) {
-        GroupEntry groupEntry = (GroupEntry)groupEntries.next();
-        User groupEntryUser = groupEntry.getUser();
-        PortletRole groupEntryRole = groupEntry.getRole(); %>
+<% for (int ii = 0; ii < groupEntryList.size(); ++ii) {
+      groupEntry = (GroupEntry)groupEntryList.get(ii);
+      User groupEntryUser = groupEntry.getUser();
+      PortletRole groupEntryRole = groupEntry.getRole(); %>
         <tr>
           <td class="portlet-frame-entry-checkbox">
               <input type="checkbox"
                name="groupEntryID"
-               checked="false"
+               checked="on"
                value="<%=groupEntry.getID()%>"
                onClick="javascript:GridSphere_CheckBoxList_onClick(document.AccessControllerPortlet.groupEntryID,
                                                                    this)"/>
