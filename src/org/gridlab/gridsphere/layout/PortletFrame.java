@@ -198,7 +198,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
 
         out.println("<!-- PORTLET STARTS HERE -->");
         //out.println("<div class=\"window-main\">");
-        out.println("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">");        // this is the main table around one portlet
+        out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">");        // this is the main table around one portlet
         req.setMode(Portlet.Mode.VIEW);
         req.setPreviousMode(Portlet.Mode.VIEW);
         if (titleBar != null) titleBar.doRender(event);
@@ -210,8 +210,11 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         } else {
 
             if (renderPortlet) {
-                out.println("<tr><td class=\"window-content\">");      // now the portlet content begins
-                //out.println("<div class=\"window-content\">");
+                if (!transparent) {
+                    out.println("<tr><td class=\"window-content\">");      // now the portlet content begins
+                } else {
+                    out.println("<tr><td>");
+                }
                 UserPortletManager userPortletManager = event.getUserPortletManager();
                 try {
                     userPortletManager.service(portletClass, req, res);
@@ -219,12 +222,10 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
                     out.println("Portlet Unavailable");
                     out.println(e.toString());
                 }
-                //out.println("</div>");
                 out.println("</td></tr>");
             } else {
                 out.println("<tr><td class=\"window-content-minimize\">");      // now the portlet content begins
                 out.println("</td></tr>");
-
             }
         }
         //out.println("</div>");
