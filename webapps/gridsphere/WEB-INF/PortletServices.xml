@@ -47,7 +47,7 @@
         <interface>org.gridlab.gridsphere.services.core.user.UserManagerService</interface>
         <implementation>org.gridlab.gridsphere.services.core.user.impl.UserManagerServiceImpl</implementation>
         <service-config>
-            <param-name>userID</param-name>
+            <param-name>gridsphere.user.userid</param-name>
             <param-value>root</param-value>
         </service-config>
         <service-config>
@@ -61,6 +61,10 @@
         <description>Provides Password Management Capabilities</description>
         <interface>org.gridlab.gridsphere.services.core.security.password.PasswordManagerService</interface>
         <implementation>org.gridlab.gridsphere.services.core.security.password.impl.DbmsPasswordManagerService</implementation>
+        <service-config>
+            <param-name>gridsphere.user.password</param-name>
+            <param-value></param-value>
+        </service-config>
     </service>
 
     <service>

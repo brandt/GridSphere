@@ -64,7 +64,6 @@ public class RequiredRoleTag extends TagSupport {
         PortletRole userRole = req.getRole();
 
         if (userRole != null) {
-            System.err.println(userRole);
             if (exclusive) {
                 if ((userRole.getID()) == role.getID()) {
                     return EVAL_BODY_INCLUDE;
