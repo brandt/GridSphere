@@ -642,11 +642,11 @@ Copyright:
         <antcall target="configure-database"/>
 
         <sql driver="org.hsqldb.jdbcDriver"
-           url="jdbc:hsqldb:${build.db}/gridsphere-db"
+           url="jdbc:hsqldb:${GRIDSPHERE_HOME}/db/gridsphere-db"
            userid="sa"
            password=""
            onerror="continue"
-           src="${build.db}/dbcreate.sql">
+           src="${GRIDSPHERE_HOME}/db/dbcreate.sql">
            <classpath refid="classpath"/>
         </sql>
 
