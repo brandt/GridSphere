@@ -13,8 +13,8 @@ http://jakarta.apache.org/proposals/tapestry
 <property file="../../../build.properties"/>
 
 
-<property name="docs.dir" value="../../../build/docs"/>
-<property name="html.install.dir" value="../../../build/docs/${root.filename}"/>
+<property name="docs.dir" value="${gridsphere.build}/docs"/>
+<property name="html.install.dir" value="${docs.dir}/${root.filename}"/>
 
 <!-- The base name for the DTD distribution (the directory and tar file
      will match). -->
