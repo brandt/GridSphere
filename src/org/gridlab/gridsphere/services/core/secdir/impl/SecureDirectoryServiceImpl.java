@@ -1,6 +1,6 @@
 /**
  * @author <a href="mailto:tkucz@icis.pcz.pl">Tomasz Kuczynski</a>
- * @version 0.3 2004/03/30
+ * @version 0.5 2004/04/01
  */
 package org.gridlab.gridsphere.services.core.secdir.impl;
 
@@ -19,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 import org.apache.oro.text.perl.Perl5Util;
 
@@ -190,36 +191,15 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
     }
 
     public boolean saveResourceCopy(User user, String appName, String resourceSource, String resourceDestination) {
-        if (!copyResource(user, appName, resourceSource, "/lost_and_found")) {
-            deleteResource(user, appName, "/lost_and_found", true);
-            return false;
-        }
-        if (copyResource(user, appName, "/lost_and_found", resourceDestination)) {
-            deleteResource(user, appName, "/lost_and_found", true);
-            return true;
-        }
-        deleteResource(user, appName, resourceDestination, true);
-        deleteResource(user, appName, "/lost_and_found", true);
+        if (!isInPath(resourceSource, resourceDestination))
+            return copyResource(user, appName, resourceSource, resourceDestination);
         return false;
     }
 
     public boolean saveResourceMove(User user, String appName, String resourceSource, String resourceDestination) {
-        if (!copyResource(user, appName, resourceSource, "/lost_and_found")) {
-            deleteResource(user, appName, "/lost_and_found", true);
-            return false;
-        }
-        if (!deleteResource(user, appName, resourceSource, true)) {
-            if (copyResource(user, appName, "/lost_and_found", resourceSource))
-                deleteResource(user, appName, "/lost_and_found", true);
-            return false;
-        }
-        if (copyResource(user, appName, "/lost_and_found", resourceDestination)) {
-            deleteResource(user, appName, "/lost_and_found", true);
-            return true;
-        }
-        deleteResource(user, appName, resourceDestination, true);
-        if (copyResource(user, appName, "/lost_and_found", resourceSource))
-            deleteResource(user, appName, "/lost_and_found", true);
+        if (!isInPath(resourceSource, resourceDestination))
+            if (copyResource(user, appName, resourceSource, resourceDestination))
+                return deleteResource(user, appName, resourceSource, true);
         return false;
     }
 
@@ -284,6 +264,24 @@ public class SecureDirectoryServiceImpl implements SecureDirectoryService, Portl
             }
         }
         return false;
+    }
+
+    private boolean isInPath(String examineIsPath, String examineInPath) {
+        examineIsPath = util.substitute("s! !!g", examineIsPath);
+        examineInPath = util.substitute("s! !!g", examineInPath);
+        examineIsPath = util.substitute("s!\\\\|/! !g", examineIsPath);
+        examineInPath = util.substitute("s!\\\\|/! !g", examineInPath);
+        StringTokenizer stringTokenizerIs = new StringTokenizer(examineIsPath);
+        StringTokenizer stringTokenizerIn = new StringTokenizer(examineInPath);
+        while (stringTokenizerIs.hasMoreTokens()) {
+            String isToken = stringTokenizerIs.nextToken();
+            if (stringTokenizerIn.hasMoreTokens()) {
+                String inToken = stringTokenizerIn.nextToken();
+                if (!isToken.equals(inToken))
+                    return false;
+            }
+        }
+        return true;
     }
 
     private void rewrite(InputStream input, OutputStream output) throws IOException {

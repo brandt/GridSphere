@@ -1,6 +1,6 @@
 /**
  * @author <a href="mailto:tkucz@icis.pcz.pl">Tomasz Kuczynski</a>
- * @version 0.95 2004/03/30
+ * @version 0.96 2004/04/01
  */
 package org.gridlab.gridsphere.portlets.core.file;
 
@@ -90,6 +90,7 @@ public class CommanderPortlet extends ActionPortlet {
 
             if (fi.getSize() < FileInputBean.MAX_UPLOAD_SIZE) {
                 SecureDirectoryService secureDirectoryService = (SecureDirectoryService) getPortletConfig().getContext().getService(SecureDirectoryService.class);
+                filename = util.substitute("s!\\\\!/!g", filename);
                 if (util.match("m!/([^/]+)$!", filename)) {
                     filename = util.group(1);
                 }
@@ -122,6 +123,7 @@ public class CommanderPortlet extends ActionPortlet {
 
             if (fi.getSize() < FileInputBean.MAX_UPLOAD_SIZE) {
                 SecureDirectoryService secureDirectoryService = (SecureDirectoryService) getPortletConfig().getContext().getService(SecureDirectoryService.class);
+                filename = util.substitute("s!\\\\!/!g", filename);
                 if (util.match("m!/([^/]+)$!", filename)) {
                     filename = util.group(1);
                 }
