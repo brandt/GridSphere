@@ -27,7 +27,7 @@ public class PortletPage implements Serializable, Cloneable {
 
     private transient PortletLog log = SportletLog.getInstance(PortletPage.class);
 
-    protected int COMPONENT_ID = 0;
+    protected int COMPONENT_ID = -1;
 
     // The actual portlet layout components
     //protected List components = new ArrayList();
@@ -254,7 +254,7 @@ public class PortletPage implements Serializable, Cloneable {
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
         log.debug("Entering actionPerformed()");
         // if there is a layout action do it!
-        if (event.getPortletComponentID() > 0) {
+        if (event.getPortletComponentID() > -1) {
 
             // the component id determines where in the list the portlet component is
             ComponentIdentifier compId = (ComponentIdentifier) componentIdentifiers.get(event.getPortletComponentID());
