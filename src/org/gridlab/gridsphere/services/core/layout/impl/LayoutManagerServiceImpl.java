@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 import org.gridlab.gridsphere.layout.*;
+import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 
 import java.util.*;
 
@@ -25,6 +26,8 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
     private PortletLog log = SportletLog.getInstance(LayoutManagerServiceImpl.class);
 
     private PortletPageFactory pageFactory = null;
+
+    private PortletRegistry portletRegistry = null;
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         try {
@@ -44,7 +47,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
 
     public void reloadPage(PortletRequest req) {
         PortletPage page = pageFactory.createPortletPage(req);
-        page.init(new Vector());
+        page.init(req, new Vector());
     }
 
     public String getTheme(PortletRequest req) {
@@ -57,6 +60,12 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         PortletTabbedPane pane = page.getPortletTabbedPane();
         pane.addTab(tab);
     }
+
+    /*
+    public List getAvailableConcretePortletIDs(PortletRequest req) {
+        return portletRegistry.getAllConcretePortletIDs(req.getRole());
+
+    }*/
 
     public void removePortlets(PortletRequest req, List portletClassNames) {
 
@@ -106,6 +115,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
             ComponentIdentifier cid = (ComponentIdentifier) it.next();
             PortletComponent pc = cid.getPortletComponent();
             if (pc instanceof PortletFrame) {
+
                 portlets.add(cid.getPortletClass());
 
             }

@@ -64,7 +64,7 @@ public class SubscriptionPortlet extends ActionPortlet {
         Iterator it = groups.iterator();
 
         PanelBean panel = event.getPanelBean("panel");
-
+        PortletRole role = req.getRole();
         while (it.hasNext()) {
             FrameBean frame = new FrameBean();
             DefaultTableModel model = new DefaultTableModel();
@@ -97,6 +97,9 @@ public class SubscriptionPortlet extends ActionPortlet {
                     ConcretePortlet conc = (ConcretePortlet)cit.next();
                     String concID = conc.getConcretePortletID();
 
+                    PortletRole reqrole = conc.getConcretePortletConfig().getRequiredRole();
+                    System.err.println(concID + " " + reqrole);
+                    if (role.compare(role, reqrole) >= 0) {
                     // build an interface
                     CheckBoxBean cb = new CheckBoxBean(req, "portletsCB");
                     cb.setValue(concID);
@@ -113,6 +116,7 @@ public class SubscriptionPortlet extends ActionPortlet {
                     TableCellBean newtc = new TableCellBean();
                     newtc.addBean(cb);
                     newtr.addBean(newtc);
+
                     TableCellBean newtc2 = new TableCellBean();
                     TextBean tb = new TextBean();
                     int li = concID.lastIndexOf(".");
@@ -129,6 +133,7 @@ public class SubscriptionPortlet extends ActionPortlet {
                     newtc.addBean(tb2);
                     newtr.addBean(newtc);
                     model.addTableRowBean(newtr);
+                    }
                 }
             }
             frame.setTableModel(model);
