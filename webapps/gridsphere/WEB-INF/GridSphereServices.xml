@@ -127,7 +127,7 @@
         <implementation>org.gridlab.gridsphere.services.core.locale.impl.LocaleServiceImpl</implementation>
         <service-config>
             <param-name>display-locale</param-name>
-            <param-value>en,cs,de,fr,hu,pl,it</param-value>
+            <param-value>en,cs,de,fr,hu,pl,it,ar</param-value>
         </service-config>
     </service>
 
