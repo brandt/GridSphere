@@ -17,7 +17,7 @@ import javax.servlet.jsp.tagext.Tag;
 public class ActionMenuTag extends ContainerTag {
 
     protected ActionMenuBean actionMenuBean = null;
-    protected String align = null;
+    protected String layout = null;
     protected String title = null;
     protected String menuType = null;
     protected boolean collapsible = false;
@@ -57,12 +57,12 @@ public class ActionMenuTag extends ContainerTag {
         this.title = title;
     }
 
-    public String getAlign() {
-        return align;
+    public String getLayout() {
+        return layout;
     }
 
-    public void setAlign(String align) {
-        this.align = align;
+    public void setLayout(String layout) {
+        this.layout = layout;
     }
 
     /**
@@ -90,7 +90,7 @@ public class ActionMenuTag extends ContainerTag {
         }
         if (actionMenuBean == null) {
             actionMenuBean = new ActionMenuBean();
-            if (this.align != null) actionMenuBean.setAlign(align);
+            if (this.layout != null) actionMenuBean.setAlign(layout);
             if (this.title != null) actionMenuBean.setTitle(title);
             if (this.menuType != null) actionMenuBean.setMenuType(this.menuType);
         }

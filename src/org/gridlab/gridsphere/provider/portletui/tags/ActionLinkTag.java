@@ -111,7 +111,7 @@ public class ActionLinkTag extends ActionTag {
         Tag parent = getParent();
         if (parent instanceof ActionMenuTag) {
             ActionMenuTag actionMenuTag = (ActionMenuTag) parent;
-            if (!actionMenuTag.getAlign().equals("horizontal")) {
+            if (!actionMenuTag.getLayout().equals("horizontal")) {
                 actionlink.setCssStyle("display: block");
             }
         }

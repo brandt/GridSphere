@@ -100,7 +100,7 @@ public class TableRowBean extends BeanContainer {
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
         sb.append("<tr");
-        if (align != null) sb.append(" align=\"" + align + "\"");
+        if (align != null) sb.append(" layout=\"" + align + "\"");
         if (valign != null) sb.append(" valign=\"" + valign + "\"");
         sb.append(">");
         if (isHeader) {

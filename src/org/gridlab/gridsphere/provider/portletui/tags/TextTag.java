@@ -107,12 +107,15 @@ public class TextTag extends BaseComponentTag {
             textBean = new TextBean();
             this.setBaseComponentBean(textBean);
             textBean.setStyle(style);
+            textBean.setCssClass(this.cssClass);
+            textBean.setCssStyle(this.cssStyle);
         }
 
         if (key != null) {
             textBean.setValue(getLocalizedText(key));
         }
         if (format != null) textBean.setFormat(format);
+
 
         if ((bodyContent != null) && (value == null)) {
             textBean.setValue(bodyContent.getString());

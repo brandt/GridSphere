@@ -100,17 +100,17 @@ public class FrameTag extends TableTag {
         } else {
             tableBean = new FrameBean();
             tableBean.setWidth(width);
-            if (cellSpacing == null) tableBean.setCellSpacing(FrameBean.TABLE_FRAME_SPACING);
-            if (cellPadding == null) tableBean.setCellPadding(FrameBean.TABLE_FRAME_PADDING);
-            if (border == null) tableBean.setBorder(FrameBean.TABLE_FRAME_BORDER);
+            if (cellSpacing == null) tableBean.setCellSpacing(cellSpacing);
+            if (cellPadding == null) tableBean.setCellPadding(cellPadding);
+            if (border == null) tableBean.setBorder(border);
+            tableBean.setCssClass(cssClass);
+            tableBean.setCssStyle(cssStyle);
             this.setBaseComponentBean(tableBean);
             if (key != null) {
                 tableBean.setKey(key);
                 Locale locale = pageContext.getRequest().getLocale();
                 ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
                 tableBean.setValue(bundle.getString(tableBean.getKey()));
-                tableBean.setCssClass(cssClass);
-                tableBean.setCssStyle(cssStyle);
             }
         }
 

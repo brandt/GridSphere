@@ -102,7 +102,11 @@ public class TableRowTag extends BaseComponentTag {
             rowBean.setHeader(isHeader);
             if (align != null) rowBean.setAlign(align);
             if (valign != null) rowBean.setValign(valign);
+            rowBean.setCssClass(this.cssClass);
+            rowBean.setCssStyle(this.cssStyle);
         }
+
+
 
         try {
             JspWriter out = pageContext.getOut();

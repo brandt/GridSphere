@@ -42,7 +42,7 @@ public class ActionMenuItemTag extends ContainerTag {
         Tag parent = getParent();
         if (parent instanceof ActionMenuTag) {
             ActionMenuTag actionMenuTag = (ActionMenuTag) parent;
-            if (actionMenuTag.getAlign() != null) actionMenuItemBean.setAlign(actionMenuTag.getAlign());
+            if (actionMenuTag.getLayout() != null) actionMenuItemBean.setAlign(actionMenuTag.getLayout());
             if (actionMenuTag.getMenuType() != null) actionMenuItemBean.setMenuType(actionMenuTag.getMenuType());
         }
 

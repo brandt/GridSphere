@@ -198,7 +198,7 @@ public class PanelBean extends BeanContainer implements TagBean {
         sb.append(" cellpadding=\"" + cellPadding + "\" ");
         sb.append(" border=\"" + border + "\" ");
         sb.append(" width=\"" + width + "\" ");
-        if (align != null) sb.append(" align=\"" + align + "\" ");
+        if (align != null) sb.append(" layout=\"" + align + "\" ");
         sb.append(">");
         return sb.toString();
     }

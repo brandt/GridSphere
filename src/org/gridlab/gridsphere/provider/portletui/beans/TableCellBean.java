@@ -117,7 +117,7 @@ public class TableCellBean extends BeanContainer implements TagBean {
      */
     public String getHeight() {
         return height;
-    }
+    }            
 
     public String toStartString() {
         StringBuffer sb = new StringBuffer();
@@ -125,7 +125,7 @@ public class TableCellBean extends BeanContainer implements TagBean {
         sb.append(getFormattedCss());
         if (width != null) sb.append(" width=\"" + width + "\"");
         if (height != null) sb.append(" height=\"" + height + "\"");
-        if (align != null) sb.append(" align=\"" + align + "\"");
+        if (align != null) sb.append(" layout=\"" + align + "\"");
         if (valign != null) sb.append(" valign=\"" + valign + "\"");
         sb.append(">");
         Iterator it = container.iterator();
