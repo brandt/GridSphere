@@ -183,12 +183,12 @@
                         <literallayout>
                                      <![CDATA[
     <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.provider.gpdk.GPDKPortlet">
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.GPDKPortlet">
             <portlet-name>Login</portlet-name>
             <servlet-name>LoginPortlet</servlet-name>
         </portlet-app>
 
-        <concrete-portlet-app id="org.gridlab.gridsphere.provider.gpdk.GPDKPortlet.1">
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.GPDKPortlet.1">
             <concrete-portlet>
                 <portlet-name>A GPDK model portlet</portlet-name>
                      ...
@@ -204,7 +204,7 @@
 
 
 &lt;portlet-pages&gt;
-    &lt;portlet-page concrete-portlet="org.gridlab.gridsphere.provider.gpdk.GPDKPortlet.1" <co id="gpdk.conc.def"/>
+    &lt;portlet-page concrete-portlet="org.gridlab.gridsphere.portlets.core.GPDKPortlet.1" <co id="gpdk.conc.def"/>
                   base-page-class="org.myorg.portlets.pages"&gt; <co id="gpdk.basepg.def"/>
         &lt;page&gt;
             &lt;action&gt;VIEW&lt;/action&gt; <co id="gpdk.action.def"/>

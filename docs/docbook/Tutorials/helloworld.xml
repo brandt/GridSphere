@@ -1,5 +1,5 @@
 <chapter id="thirdparty">
-    <title>ThirdParty Portlets</title>
+    <title>Third-Party Portlets</title>
     <para>
         Gridsphere provides capabilities for easily developing and deploying third-party
         portlets. This chapter will describe how to do so.
@@ -8,7 +8,7 @@
     <sect1 id="newproject">
         <title>Creating a new project</title>
         <para>
-            First, issue the following GridSPhere build script command to create a new template project.
+            First, issue the following GridSphere build script command to create a new template project.
             <screen>
 <prompt>bash$</prompt> <command>ant <replaceable>new-project</replaceable>
             </command>

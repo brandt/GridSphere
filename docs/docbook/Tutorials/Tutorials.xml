@@ -12,6 +12,7 @@
 
 <!ENTITY chap-intro SYSTEM "intro.xml">
 <!ENTITY chap-hello SYSTEM "helloworld.xml">
+<!ENTITY chap-action SYSTEM "actionmodel.xml">
 <!ENTITY chap-gpdk SYSTEM "gpdk.xml">
 
 <!-- Application, page, library, component specification entities  -->
@@ -37,6 +38,7 @@
 
   &chap-intro;
   &chap-hello;
+  &chap-action;
   &chap-gpdk;
 
 </book>
