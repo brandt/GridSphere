@@ -32,45 +32,18 @@ public interface SportletRequest extends PortletRequest {
     public void setData(PortletData data);
 
     /**
-     * Sets the roles this user has in the supplied <code>PortletGroup</code>.
-     * If no group is specified, the roles the user has in the <code>BASE</code>
-     * group are returned.
+     * Sets the roles this user has in the associated portlet
      *
-     * @param group the user's <code>PortletGroup</code>
      * @param role the user's <code>PortletRole</code>
      */
-    public void setRole(PortletGroup group, PortletRole role);
+    public void setRole(PortletRole role);
 
     /**
-     * Returns the roles this user has in the supplied <code>PortletGroup</code>.
-     * If no group is specified, the roles the user has in the <code>BASE</code>
-     * group are returned.
+     * Sets the group associated with this portlet request
      *
-     * @param group the <code>PortletGroup</code> to query the user's roles or null if
-     * <code>BASE</code> group
-     * @return the user's <code>PortletRole</code>
+     * @param group the user's <code>PortletGroup</code>
      */
-    public PortletRole getRole(PortletGroup group);
-
-    /**
-     * Returns the <code>PortletGroup</code> objects representing the users
-     * group membership
-     *
-     * @return an array of <code>PortletGroup</code> objects.
-     * This method is guaranteed to at least return the <code>BASE</code> group.
-     *
-     * @see PortletGroup
-     */
-    public List getGroups();
-
-    /**
-     * Returns the <code>PortletGroup</code> objects representing the users group membership
-     *
-     * @param groups a list of <code>PortletGroup</code> objects.
-     *
-     * @see PortletGroup
-     */
-    public void setGroups(List groups);
+    public void setGroup(PortletGroup group);
 
     /**
      * Sets the PortletSettings object of the concrete portlet.

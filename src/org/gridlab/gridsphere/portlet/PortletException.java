@@ -1,10 +1,14 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
- * @version $Id$
- */
+* @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+* @version $Id$
+*/
 package org.gridlab.gridsphere.portlet;
 
 import javax.servlet.ServletException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * The <code>PortletException</code> class defines a general exception that a
@@ -12,7 +16,9 @@ import javax.servlet.ServletException;
  */
 public class PortletException extends ServletException {
 
-    private String text;
+    private Throwable cause = null;
+    private String text = "";
+    private List messages = new ArrayList();
 
     /**
      * Constructs an instance of PortletException
@@ -29,7 +35,7 @@ public class PortletException extends ServletException {
      */
     public PortletException(String text) {
         super(text);
-        this.text = text;
+        this.text += "\n" + text;
     }
 
     /**
@@ -40,7 +46,9 @@ public class PortletException extends ServletException {
      * @param cause the root cause
      */
     public PortletException(String text, Throwable cause) {
-        super(text, cause);
+        super(text);
+        this.text = text;
+        this.cause = cause;
     }
 
     /**
@@ -51,6 +59,7 @@ public class PortletException extends ServletException {
      */
     public PortletException(Throwable cause) {
         super(cause);
+        this.cause = cause;
     }
 
     /**
@@ -62,4 +71,41 @@ public class PortletException extends ServletException {
         return text;
     }
 
+    /**
+     * Return the exception message
+     *
+     * @return the exception message
+     */
+    public List getMessages() {
+        return messages;
+    }
+
+    public void printStackTrace() {
+        super.printStackTrace();
+        if (cause != null) {
+            cause.printStackTrace();
+        }
+    }
+
+    public void printStackTrace(PrintStream ps) {
+        super.printStackTrace(ps);
+        if (cause != null) {
+            ps.println();
+            ps.println();
+            ps.println("Caused by:");
+            cause.printStackTrace(ps);
+        }
+    }
+
+    public void printStackTrace(PrintWriter pw) {
+        super.printStackTrace(pw);
+        pw.println(text);
+        if (cause != null) {
+            pw.println();
+            pw.println();
+            pw.println("Caused by:");
+            pw.println(cause.getMessage());
+            cause.printStackTrace(pw);
+        }
+    }
 }

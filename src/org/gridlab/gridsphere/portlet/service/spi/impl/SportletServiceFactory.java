@@ -149,14 +149,14 @@ public class SportletServiceFactory implements PortletServiceFactory {
             psp = (PortletServiceProvider) Class.forName(serviceImpl).newInstance();
         } catch (Exception e) {
             log.error("Unable to create portlet service: " + serviceImpl, e);
-            throw new PortletServiceNotFoundException("Unable to create portlet service: " + serviceImpl);
+            throw new PortletServiceNotFoundException("Unable to create portlet service: " + serviceImpl, e);
         }
 
         try {
             psp.init(portletServiceConfig);
         } catch (PortletServiceUnavailableException e) {
             log.error("Unable to initialize portlet service: " + serviceImpl, e);
-            throw new PortletServiceNotFoundException("Unable to initialize portlet service: " + serviceImpl);
+            throw new PortletServiceNotFoundException("Unable to initialize portlet service: " + serviceImpl, e);
         }
 
         initServices.put(service, psp);
@@ -222,14 +222,14 @@ public class SportletServiceFactory implements PortletServiceFactory {
             psp = (PortletServiceProvider) con.newInstance(obj);
         } catch (Exception e) {
             log.error("Unable to create portlet service wrapper: " + serviceImpl, e);
-            throw new PortletServiceNotFoundException("Unable to create portlet service: " + serviceName);
+            throw new PortletServiceNotFoundException("Unable to create portlet service: " + serviceName, e);
         }
 
         try {
             psp.init(portletServiceConfig);
         } catch (PortletServiceUnavailableException e) {
             log.error("Unable to initialize portlet service: " + serviceImpl, e);
-            throw new PortletServiceNotFoundException("Unable to initialize portlet service: " + serviceImpl);
+            throw new PortletServiceNotFoundException("The SportletServiceFactory was unable to initialize the portlet service: " + serviceImpl, e);
         }
 
         return psp;

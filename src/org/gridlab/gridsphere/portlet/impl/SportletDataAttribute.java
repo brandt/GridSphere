@@ -8,7 +8,6 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.core.persistence.UniqueID;
 import org.gridlab.gridsphere.core.persistence.castor.Attribute;
-import org.gridlab.gridsphere.portlet.PortletData;
 
 /**
  * @table sdattribute

@@ -158,6 +158,26 @@ public class SportletRequestImpl implements SportletRequest {
     }
 
     /**
+     * Clears all of the request parameters associated with this request
+     */
+    public void invalidate() {
+        // clear request attributes
+        Enumeration attrnames = req.getAttributeNames();
+        while (attrnames.hasMoreElements()) {
+            String name = (String)attrnames.nextElement();
+            req.getAttribute(name);
+            req.setAttribute(name, null);
+        }
+        // clear request parameters
+        Enumeration paramnames = req.getParameterNames();
+        while (paramnames.hasMoreElements()) {
+            String name = (String)paramnames.nextElement();
+            req.getParameter(name);
+            // how do i clear a request parameter ???
+        }
+    }
+
+    /**
      * Returns the data of the concrete portlet instance
      * If the portlet is run in CONFIGURE mode, the portlet data is not accessible and this method will return null.
      *
@@ -224,35 +244,19 @@ public class SportletRequestImpl implements SportletRequest {
         return (role == null) ? PortletRole.GUEST : role;
     }
 
-    /**
-     * Sets the roles this user has in the supplied PortletGroup. If no group
-     * is specified, the roles the user has in the BASE group are returned.
-     *
-     * @param group the PortletGroup
-     * @param role a PortletRole objects
-     */
-    public void setRole(PortletGroup group, PortletRole role) {
-        Map authMap = (Hashtable)req.getAttribute(GridSphereProperties.GROUPROLES);
-        if (authMap == null) authMap = new Hashtable();
-        authMap.put(group, role);
-        req.setAttribute(GridSphereProperties.GROUPROLES, authMap);
+
+    public PortletRole getRole() {
+        PortletRole role = (PortletRole)req.getAttribute(GridSphereProperties.PORTLETROLE);
+        if (role == null) {
+            System.err.println("FARGH!!!!");
+            return PortletRole.GUEST;
+        }
+        return role;
     }
 
 
-    /**
-     * Returns the PortletGroup objects representing the users group membership
-     *
-     * @return an array of PortletGroup objects. This method is guaranteed to at least
-     * return the SportletGroup.BASEGroup
-     *
-     * @see PortletGroup
-     */
-    public List getGroups() {
-        List groups = (Vector) req.getAttribute(GridSphereProperties.PORTLETGROUPS);
-        if (groups == null) {
-            groups = new Vector();
-        }
-        return groups;
+    public void setRole(PortletRole role) {
+        req.setAttribute(GridSphereProperties.PORTLETROLE, role);
     }
 
     /**
@@ -262,10 +266,20 @@ public class SportletRequestImpl implements SportletRequest {
      *
      * @see PortletGroup
      */
-    public void setGroups(List groups) {
-        req.setAttribute(GridSphereProperties.PORTLETGROUPS, groups);
+    public void setGroup(List groups) {
+        req.setAttribute(GridSphereProperties.PORTLETGROUP, groups);
     }
 
+    public PortletGroup getGroup() {
+        PortletGroup group = (PortletGroup)req.getAttribute(GridSphereProperties.PORTLETGROUP);
+        if (group == null) return PortletGroupFactory.createPortletGroup("unknown group");
+        return group;
+    }
+
+
+    public void setGroup(PortletGroup group) {
+        req.setAttribute(GridSphereProperties.PORTLETGROUP, group);
+    }
 
     /**
      * Returns the locale of the preferred language. The preference is based on the user's
@@ -313,12 +327,14 @@ public class SportletRequestImpl implements SportletRequest {
 
 
     /**
-     * Returns the mode that the portlet was running at last, or null if no previous mode exists.
+     * Returns the mode that the portlet was running at last, or Portlet.Mode.VIEW if no previous mode exists.
      *
      * @return the previous portlet mode
      */
     public Portlet.Mode getPreviousMode() {
-        return (Portlet.Mode) req.getAttribute(GridSphereProperties.PREVIOUSMODE);
+        Portlet.Mode prev = (Portlet.Mode) req.getAttribute(GridSphereProperties.PREVIOUSMODE);
+        if (prev == null) prev = Portlet.Mode.VIEW;
+        return prev;
     }
 
     /**

@@ -31,6 +31,13 @@ public interface PortletConfig extends ServletConfig {
     public String getName();
 
     /**
+     * Returns the group name associated with the portlet
+     *
+     * @return the group name associated with the portlet
+     */
+    public String getGroupName();
+
+    /**
      * Returns whether the portlet supports the given mode
      *
      * @param mode the portlet mode

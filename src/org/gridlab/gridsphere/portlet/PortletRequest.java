@@ -14,8 +14,10 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * The <code>PortletRequest</code> encapsulates the request sent by the client
- * to the portlet.
+ * The <code>PortletRequest</code> encapsulates the portlet request sent by the client
+ * to the portlet. The <code>PortletRequest</code> provides various portlet information
+ * including current mode and window state as well as providing access to the
+ * {@link PortletSettings} and {@link PortletData} objects.
  */
 public interface PortletRequest extends HttpServletRequest {
 
@@ -117,21 +119,18 @@ public interface PortletRequest extends HttpServletRequest {
     public User getUser();
 
     /**
-     * Returns the roles this user has in the supplied <code>PortletGroup</code>.
-     * If no group is specified, the roles the user has in the
-     * <code>BASE</code> group are returned.
+     * Returns the PortletGroup of this this portlet
      *
-     * @param group the <code>PortletGroup </code>to query the user's roles
-     * @return the user's <code>PortletRole</code>
+     * @return the portlet group associated with this portlet
      */
-    public PortletRole getRole(PortletGroup group);
+    public PortletGroup getGroup();
 
     /**
-     * Returns the PortletGroup objects representing the users group membership
+     * Returns the portlet role associated with this portlet
      *
-     * @return an array of <code>PortletGroup</code> objects
+     * @return the portlet role associated with this portlet
      */
-    public List getGroups();
+    public PortletRole getRole();
 
     /**
      * Returns the PortletSettings object of the concrete portlet.
@@ -294,7 +293,7 @@ public interface PortletRequest extends HttpServletRequest {
 
     /**
      * Returns the mode that the portlet was running at last, or
-     * <code>null</code> if no previous mode exists.
+     * <code>Portlet.Mode.VIEW</code> if no previous mode exists.
      *
      * @return the previous portlet mode
      */

@@ -365,7 +365,7 @@ public abstract class Portlet extends HttpServlet
                 ApplicationPortletConfig app = (ApplicationPortletConfig) request.getAttribute(SportletProperties.PORTLET_APPLICATION);
                 if (app != null) {
                 this.portletConfig = new SportletConfig(getServletConfig(), app);
-                init(this.portletConfig);
+                    init(this.portletConfig);
                 } else {
                     log.error("Unable to perform init(): Received NULL PortletApplication in request");
                 }

@@ -26,6 +26,7 @@ public class SportletConfig implements PortletConfig {
     private ServletConfig servletConfig = null;
     private PortletContext context = null;
     private String portletName = null;
+    private String groupName = null;
     private List supportedModes = new ArrayList();
     private List allowedStates = new ArrayList();
     private Hashtable configs = new Hashtable();
@@ -56,6 +57,13 @@ public class SportletConfig implements PortletConfig {
         configs = appConfig.getConfigParams();
 
         portletName = appConfig.getPortletName();
+
+        // the group name is the web application name which can be found from
+        // the context path
+        String ctxPath = context.getRealPath("");
+        int i = ctxPath.lastIndexOf("/");
+        groupName = ctxPath.substring(i+1);
+
         //this.logConfig();
     }
 
@@ -75,6 +83,15 @@ public class SportletConfig implements PortletConfig {
      */
     public String getName() {
         return portletName;
+    }
+
+    /**
+     * Returns the group name associated with the portlet
+     *
+     * @return the group name associated with the portlet
+     */
+    public String getGroupName() {
+        return groupName;
     }
 
     /**
@@ -123,6 +140,7 @@ public class SportletConfig implements PortletConfig {
 
         log.debug("PortletConfig Information");
         log.debug("portlet name: " + this.getName());
+        log.debug("portlet group name: " + this.getGroupName());
         log.debug("servlet name: " + this.getServletName());
         log.debug("config init parameters: ");
         enum = this.getInitParameterNames();

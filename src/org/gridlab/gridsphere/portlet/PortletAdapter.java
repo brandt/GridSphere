@@ -5,7 +5,9 @@
 package org.gridlab.gridsphere.portlet;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
@@ -26,6 +28,9 @@ public abstract class PortletAdapter extends Portlet {
 
     /* keep track of all PortletSettings per concrete portlet (concreteID, PortletSettings) */
     private Map allPortletSettings = new Hashtable();
+
+    /* require an acl service to get role info */
+    private AccessControlManagerService aclService = null;
 
     public PortletAdapter() {
     }
@@ -48,6 +53,13 @@ public abstract class PortletAdapter extends Portlet {
      */
     public void init(PortletConfig config) throws UnavailableException {
         this.portletConfig = config;
+        PortletContext ctx = portletConfig.getContext();
+        try {
+            aclService = (AccessControlManagerService)ctx.getService(AccessControlManagerService.class, GuestUser.getInstance());
+        } catch (PortletServiceException e) {
+            log.error("Unable to get an instance of AccessControlManagerService");
+            throw new UnavailableException("Unable to get an instance of AccessControlManagerService");
+        }
     }
 
     /**
@@ -125,6 +137,13 @@ public abstract class PortletAdapter extends Portlet {
         if (portletSettings != null) {
             request.setAttribute(GridSphereProperties.PORTLETSETTINGS, portletSettings);
         }
+
+        String groupName = portletConfig.getGroupName();
+        PortletGroup group = PortletGroupFactory.createPortletGroup(groupName);
+        PortletRole role = aclService.getRoleInGroup(request.getUser(), group);
+        log.debug("Setting Group: " + group.toString() + " Role: " + role.toString());
+        request.setAttribute(GridSphereProperties.PORTLETGROUP, group);
+        request.setAttribute(GridSphereProperties.PORTLETROLE, role);
 
         String method = (String) request.getAttribute(SportletProperties.PORTLET_ACTION_METHOD);
         if (method != null) return;
