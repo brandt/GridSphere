@@ -5,12 +5,10 @@ Version: $Id$
 */
 
 .tab-pane {
-   padding-top: 5px;
    font-family: verdana, arial, sans-serif;
    font-size:12px;
    font-weight:normal;
    background-color:#ffffff;
-
 }
 
 .tab-empty {
@@ -26,12 +24,11 @@ Version: $Id$
 .tab-bar {
    width: 100%;
    background-color: #cc9900;
-   height: 1px;
    border: none;
 }
 
 .tab-active {
-   /*padding: 5px; */
+
    padding-bottom: 1px;
    margin-bottom: 0px;
    color:white;
@@ -42,7 +39,6 @@ Version: $Id$
 
 
 .tab-inactive {
-   /*padding: 5px;*/
    margin-bottom: 0px;
    padding-bottom: 0px;
    background-color: #cc6600;

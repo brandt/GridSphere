@@ -7,6 +7,8 @@ Version: $Id$
 
 .window-main {
    width: 100%;
+
+   spacing-top: 5px;
    spacing: 2px;
    padding: 2px;
 }
@@ -25,7 +27,7 @@ Version: $Id$
 
 .window-title-name {
   color: white;
-  font-family:Franklin Gothic Medium, verdana, arial, sans-serif;
+  font-family: verdana, arial, sans-serif;
   text-align: center;
   font-weight: bold;
 }
