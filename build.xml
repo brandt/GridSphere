@@ -158,7 +158,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Builds and deploys GridSphere                                       -->
     <!-- =================================================================== -->
-    <target name="install-fresh" depends="clean,compile,docs,force-mapping,jar,deploy" description="Build and deploy GridSphere"/>
+    <target name="install-fresh" depends="clean,compile,docs-all,force-mapping,jar,deploy" description="Build and deploy GridSphere"/>
 
     <!-- =================================================================== -->
     <!-- Updates GridSphere source code                                      -->
@@ -405,10 +405,12 @@ Copyright:
         </sql>
     </target>
 
+    <target name="docs-all" depends="docs-gs, docs-portlet-api" description="Create GridSphere Javadocs"/>
+
     <!-- =================================================================== -->
-    <!-- Creates the API documentation                                       -->
+    <!-- Creates all the API documentation                                   -->
     <!-- =================================================================== -->
-    <target name="docs-all" depends="setenv" description="Create GridSphere Javadocs">
+    <target name="docs-gs" depends="setenv" description="Create GridSphere Javadocs">
         <delete quiet="true" dir="${javadoc.dir}/portletapi"/>
         <mkdir dir="${javadoc.dir}/gridsphere"/>
         <javadoc packagenames="org.*"
@@ -424,13 +426,15 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Creates the Portlet API documentation                                       -->
+    <!-- Creates the Portlet API and Services documentation                               -->
     <!-- =================================================================== -->
     <target name="docs-portlet-api" depends="setenv" description="Create GridSphere Javadocs">
     <delete quiet="true" dir="${javadoc.dir}/portletapi"/>
     <mkdir dir="${javadoc.dir}/portletapi"/>
         <javadoc
-           packagenames="org.gridlab.gridsphere.portlet.*, org.gridlab.gridsphere.event.*"
+           packagenames="org.gridlab.gridsphere.portlet.*,
+                         org.gridlab.gridsphere.event.*,
+                         org.gridlab.gridsphere.services.*"
            sourcepath="${src.dir}"
            classpathref="classpath"
            destdir="${javadoc.dir}/portletapi"
@@ -440,7 +444,8 @@ Copyright:
            windowtitle="${project} Portlet API"
            excludepackagenames="org.gridlab.gridsphere.portlet.impl.*,
                                 org.gridlab.gridsphere.portlet.service.spi.impl.*,
-                                org.gridlab.gridsphere.event.impl.*"
+                                org.gridlab.gridsphere.event.impl.*,
+                                org.gridlab.gridsphere.services.*.impl.*"
 
            defaultexcludes="yes"
            doctitle="${project} Portlet API"
