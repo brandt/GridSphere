@@ -462,7 +462,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         TmfUser tmfuser = tms.getUser(req.getUser().getUserID());
         // if the user does not exist yet
         if (tmfuser==null) {
-            tmfuser = new TmfUser();
+            tmfuser = new TmfUser(); 
             tmfuser.setName(event.getPortletRequest().getUser().getFullName());
             tmfuser.setUserid(req.getUser().getUserID());
             //tmfuser.setPreferred(h_service.getValue());
@@ -475,6 +475,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             TextFieldBean tfb = event.getTextFieldBean("TFSERVICENAME"+tmfservice.getMessageType());
             tmfuser.setMessageType(tmfservice.getMessageType(), tfb.getValue());
         }
+
 
         tms.saveUser(tmfuser);
 
