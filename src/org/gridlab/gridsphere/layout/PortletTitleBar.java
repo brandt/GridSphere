@@ -571,7 +571,7 @@ public class PortletTitleBar extends BasePortletComponent {
         if (actionStr != null) {
             try {
                 PortletInvoker.doTitle(portletClass, req, res);
-                out.println(" (" + portletMode.toString() + ") ");
+                //out.println(" (" + portletMode.toString() + ") ");
             } catch (PortletException e) {
                 errorMessage += "Unable to invoke doTitle on active portlet\n";
                 hasError = true;
