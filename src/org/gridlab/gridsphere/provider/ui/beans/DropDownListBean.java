@@ -6,6 +6,8 @@
 package org.gridlab.gridsphere.provider.ui.beans;
 
 import org.gridlab.gridsphere.provider.ui.model.SelectList;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.PortletLog;
 
 import java.util.Iterator;
 import java.util.Vector;
@@ -15,6 +17,8 @@ import java.util.ArrayList;
 public class DropDownListBean extends BaseListBean implements DropDownList {
 
     SelectList list = new SelectList();
+
+    protected transient static PortletLog log = SportletLog.getInstance(DropDownListBean.class);
 
     protected int size = 1;
     protected boolean multiple = false;
@@ -31,7 +35,7 @@ public class DropDownListBean extends BaseListBean implements DropDownList {
      */
     public void add(String label, String value) {
         ListBoxItemBean item = new ListBoxItemBean();
-        item.setName(name);
+        item.setName(label);
         item.setValue(value);
         list.addElement(item);
     }
@@ -61,14 +65,16 @@ public class DropDownListBean extends BaseListBean implements DropDownList {
 
     public void update(String[] values) {
         //@todo FIXME NPE
-        try {
+        if (values==null)  {
+            // nothing
+        } else {
             //if (!multiple) {
                 list.unselectAll();
             //}
             for (int i=0;i<values.length;i++) {
                 list.setSelected(values[i], true);
             }
-        } catch (NullPointerException e) {
+       // } catch (NullPointerException e) {
             // ok was empty, nothing selected
         }
     }
@@ -104,5 +110,4 @@ public class DropDownListBean extends BaseListBean implements DropDownList {
         }
         return result;
     }
-
 }
