@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.PanelBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
 
 /**
  * A <code>PanelTag</code> represents a stylized table that generally conatins other <code>TableTag</code> or
@@ -59,7 +60,7 @@ public class PanelTag extends BaseComponentTag {
     public int doStartTag() throws JspException {
 
         if (!beanId.equals("")) {
-            panelBean = (PanelBean)pageContext.getSession().getAttribute(getBeanKey());
+            panelBean = (PanelBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (panelBean == null) {
                 return SKIP_BODY;
             }

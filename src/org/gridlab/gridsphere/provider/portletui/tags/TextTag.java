@@ -26,6 +26,7 @@ public class TextTag extends BaseComponentTag {
     /**
      * Sets the style of the text: Available styles are
      * <ul>
+     * <li>nostyle</li>
      * <li>error</li>
      * <li>info</li>
      * <li>status</li>
@@ -41,6 +42,7 @@ public class TextTag extends BaseComponentTag {
     /**
      * Returns the style of the text: Available styles are
      * <ul>
+     * <li>nostyle</li>
      * <li>error</li>
      * <li>info</li>
      * <li>status</li>
@@ -76,13 +78,15 @@ public class TextTag extends BaseComponentTag {
         if (!beanId.equals("")) {
             textBean = (TextBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (textBean == null) {
-                return EVAL_PAGE;
+                textBean = new TextBean();
             }
         } else {
             textBean = new TextBean();
             this.setBaseComponentBean(textBean);
             textBean.setStyle(style);
         }
+
+        this.setBaseComponentBean(textBean);
 
         if (key != null) {
             Locale locale = pageContext.getRequest().getLocale();

@@ -13,7 +13,7 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 public class PanelBean extends BeanContainer implements TagBean {
 
     public static final String PANEL_STYLE = "portlet-pane";
-    public static final String PANEL_WIDTH = "200";
+    public static final String PANEL_WIDTH = "100%";
     public static final String PANEL_SPACING = "1";
 
     protected String cellSpacing = PANEL_SPACING;

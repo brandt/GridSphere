@@ -58,11 +58,12 @@ public class TextBean extends BaseComponentBean implements TagBean {
     /**
      * Returns the style of the text: Available styles are
      * <ul>
-     * <li>error</li>
-     * <li>info</li>
-     * <li>status</li>
-     * <li>alert</li>
-     * <li>success</li>
+     * <li>nostyle - plain text</li>
+     * <li>error - error text</li>
+     * <li>info - default info text</li>
+     * <li>status - status text</li>
+     * <li>alert - alert text</li>
+     * <li>success - success text</li>
      *
      * @return the text style
      */
@@ -100,7 +101,9 @@ public class TextBean extends BaseComponentBean implements TagBean {
             this.cssStyle = MSG_ALERT;
         } else if (style.equalsIgnoreCase("success")) {
             this.cssStyle = MSG_SUCCESS;
+        } else if (style.equalsIgnoreCase("nostyle")) {
+            return value;
         }
-        return "<div class=\"" + cssStyle + "\">" + value + "</div>";
+        return "<span class=\"" + cssStyle + "\">" + value + "</span>";
     }
 }
