@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.net.URLEncoder;
+import java.io.UnsupportedEncodingException;
 
 
 /**
@@ -162,14 +164,20 @@ public class SportletURI implements PortletURI {
         }
         boolean firstParam = true;
         Iterator it = set.iterator();
+        //try {
         while (it.hasNext()) {
             if (!firstParam)
                 url += "&";
-            String name = (String) it.next();
-            String value = (String) store.get(name);
-            url += name + "=" + value;
+            String name = (String)it.next();
+            String encname = URLEncoder.encode(name);
+            String encvalue = URLEncoder.encode((String) store.get(name));
+            url += encname + "=" + encvalue;
             firstParam = false;
         }
+        /*
+        } catch (UnsupportedEncodingException e) {
+            System.err.println("Unable to support UTF-8 encoding!");
+        }*/
         if (redirect) {
             newURL = res.encodeRedirectURL(url);
         } else {
