@@ -6,15 +6,12 @@ package org.gridlab.gridsphere.provider.portlet.tags.jsr;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ActionLinkBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
-import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
+import org.gridlab.gridsphere.provider.portletui.tags.gs.ActionTagImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.VariableInfo;
-import javax.servlet.jsp.tagext.TagData;
-import javax.servlet.jsp.tagext.TagExtraInfo;
 import javax.portlet.RenderResponse;
 import java.util.ArrayList;
 
@@ -88,10 +85,11 @@ public class ActionURLTagImpl extends ActionTagImpl {
 
     public int doEndTag() throws JspException {
         // set action to non-null
-        action = "";
+        if (action == null) action = "";
         RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
-
-        actionlink.setAction(createActionURI(res.createActionURL()));
+        String actionString = createJSRActionURI(res.createActionURL());
+        actionlink.setAction(actionString);
+        
         if ((bodyContent != null) && (value == null)) {
             actionlink.setValue(bodyContent.getString());
         }

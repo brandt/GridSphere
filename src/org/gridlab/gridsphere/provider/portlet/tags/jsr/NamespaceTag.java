@@ -19,21 +19,17 @@ import javax.servlet.jsp.tagext.TagSupport;
  * writes a unique value for the current portlet
  * <BR>This tag has no attributes
  */
-public class NamespaceTag extends TagSupport
-{
+public class NamespaceTag extends TagSupport {
 
     public int doStartTag() throws JspException {
         RenderResponse renderResponse = (RenderResponse)pageContext.getAttribute("renderResponse", PageContext.PAGE_SCOPE);
         String namespace = renderResponse.getNamespace();
         JspWriter writer = pageContext.getOut();
-        try
-        {
+        try {
             writer.print(namespace);
             writer.flush();
-        }
-        catch (IOException ioe)
-        {
-            throw new JspException("namespace Tag Exception: cannot write to the output writer.");
+        } catch (IOException e) {
+            throw new JspException("namespace Tag Exception: cannot write to the output writer.", e);
         }
         return SKIP_BODY;
     }
