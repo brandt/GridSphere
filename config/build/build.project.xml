@@ -209,9 +209,8 @@ Copyright:
     </target>
 
     <target name="doclet-mapping" depends="check-mapping" if="var_force_mapping">
-        <mkdir dir="${GRIDSPHERE_HOME}/${project.name}/database/castor"/>
         <javadoc packagenames="*"
-            sourcepath="src:config/database/castor"
+            sourcepath="src"
             private="true"
             doclet="org.castor.doclet.ddl.DDL"
             docletpath="${gridsphere.base}/lib/ext/jdom.jar;${gridsphere.base}/lib/ext/castor-doclet.jar"
@@ -219,7 +218,7 @@ Copyright:
             <classpath refid="classpath"/>
         </javadoc>
         <javadoc packagenames="*"
-            sourcepath="src:config/database/castor"
+            sourcepath="src"
             private="true"
             doclet="org.castor.doclet.jdo.JDO"
             docletpath="${gridsphere.base}/lib/ext/jdom.jar;${gridsphere.base}/lib/ext/castor-doclet.jar"
