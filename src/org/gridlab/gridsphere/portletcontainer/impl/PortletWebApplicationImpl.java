@@ -36,6 +36,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
     protected String webApplicationName = null;
     protected Map appPortlets = new Hashtable();
     protected String webAppDescription;
+    private boolean isJSR = false;
 
     // PortletLayout engine handles layout.xml
     private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
@@ -108,6 +109,8 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
             // trying
             log.info("Instead loading portlet.xml as a gridsphere portlet descriptor...");
             portletXMLfile = ctx.getRealPath("/WEB-INF/portlet.xml");
+        } else {
+            isJSR = true;
         }
         //String portletMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING);
 
@@ -158,6 +161,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
      */
     protected void loadServices(ServletContext ctx) {
         // load in the portlet.xml file
+        if (isJSR) return;
         String descriptor = ctx.getRealPath("/WEB-INF/PortletServices.xml");
         File f = new File(descriptor);
         String mapping = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-services-mapping.xml");
