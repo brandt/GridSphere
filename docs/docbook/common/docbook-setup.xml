@@ -130,7 +130,7 @@ http://jakarta.apache.org/proposals/tapestry
 <!-- Only attempt to generate PDF if the developer has set fop.dir
      in their build.properties. -->
 
-<target name="pdf" depends="docbook-setup,copy-images" if="fop.dir">
+<target name="pdf" depends="docbook-setup,copy-images" if="fop.exists">
 
    <uptodate property="uptodate.fop"
      targetfile="${html.output.dir}/${root.filename}.fop">
