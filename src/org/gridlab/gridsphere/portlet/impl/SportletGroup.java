@@ -19,17 +19,17 @@ import java.util.Random;
  */
 public class SportletGroup extends BaseObject implements PortletGroup {
 
-    public static final String SUPER = "0";
-    public static final String BASE = "1";
+    public static final String SUPER_GROUP = "0";
+    public static final String BASE_GROUP = "1";
+
+    public static final PortletGroup BASE = new SportletGroup(BASE_GROUP);
+    public static final PortletGroup SUPER = new SportletGroup(SUPER_GROUP);
 
     /**
      * @sql-size 128
      * @sql-name base
      */
     private String Name = new String();
-
-    private static final SportletGroup baseGroup = new SportletGroup(BASE, "BASE");
-    private static final SportletGroup superGroup = new SportletGroup(SUPER, "SUPER");
 
     // @todo why did we need the baseGroup thing??
     // @todo elimnate the sportletgroup(id, name) thing
@@ -47,22 +47,6 @@ public class SportletGroup extends BaseObject implements PortletGroup {
 
     public SportletGroup() {
         super();
-    }
-
-    public static PortletGroup getBaseGroup() {
-        return baseGroup;
-    }
-
-    public static PortletGroup getSuperGroup() {
-        return superGroup;
-    }
-
-    public boolean isBaseGroup() {
-        if (getOid() == BASE) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public String getName() {

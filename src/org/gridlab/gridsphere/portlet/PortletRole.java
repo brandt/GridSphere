@@ -5,18 +5,19 @@
  */
 package org.gridlab.gridsphere.portlet;
 
+import org.gridlab.gridsphere.portlet.impl.SportletRole;
+
 public interface PortletRole {
 
-    public boolean isUserRole();
-
-    public boolean isAdminRole();
-
-    public boolean isSuperRole();
+    public static final PortletRole GUEST = SportletRole.GUEST;
+    public static final PortletRole USER = SportletRole.USER;
+    public static final PortletRole ADMIN = SportletRole.ADMIN;
+    public static final PortletRole SUPER = SportletRole.SUPER;
 
     public int getRole();
 
     public int getID();
 
-    public String getRoleName();
+    public String toString();
 
 }
