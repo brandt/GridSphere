@@ -23,7 +23,7 @@
     <tag>
         <name>renderURL</name>
         <tag-class>org.gridlab.gridsphere.provider.portlet.tags.jsr.RenderURLTagImpl</tag-class>
-        <tei-class>org.gridlab.gridsphere.provider.portletui.tags.gs.ActionTagImpl$TEI</tei-class>
+        <tei-class>org.gridlab.gridsphere.provider.portletui.tags.ActionTag$TEI</tei-class>
         <body-content>JSP</body-content>
         <description>
             provides a render hyperlink that can contain additional nested param tags
@@ -52,7 +52,7 @@
     <tag>
         <name>actionURL</name>
         <tag-class>org.gridlab.gridsphere.provider.portlet.tags.jsr.ActionURLTagImpl</tag-class>
-        <tei-class>org.gridlab.gridsphere.provider.portletui.tags.gs.ActionTagImpl$TEI</tei-class>
+        <tei-class>org.gridlab.gridsphere.provider.portletui.tags.ActionTag$TEI</tei-class>
         <body-content>JSP</body-content>
         <description>
             provides action hyperlink that can contain additional nested param tags
@@ -90,7 +90,7 @@
     </tag>
     <tag>
         <name>param</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.ActionParamTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ActionParamTag</tag-class>
         <body-content>empty</body-content>
         <description>
             Creates a portlet action parameter

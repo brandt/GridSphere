@@ -6,7 +6,7 @@ package org.gridlab.gridsphere.provider.portlet.tags.jsr;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ActionLinkBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
-import org.gridlab.gridsphere.provider.portletui.tags.gs.ActionTagImpl;
+import org.gridlab.gridsphere.provider.portletui.tags.ActionTag;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.jsp.JspException;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * The <code>ActionLinkTag</code> provides a hyperlink element that includes a <code>DefaultPortletAction</code>
  * and can contain nested <code>ActionParamTag</code>s
  */
-public class RenderURLTagImpl extends ActionTagImpl {
+public class RenderURLTagImpl extends ActionTag {
 
     protected ActionLinkBean actionlink = null;
     protected String style = TextBean.MSG_INFO;

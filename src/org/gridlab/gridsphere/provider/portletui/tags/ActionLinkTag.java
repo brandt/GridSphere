@@ -2,28 +2,28 @@
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-package org.gridlab.gridsphere.provider.portlet.tags.jsr;
+package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ActionLinkBean;
+import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
-import org.gridlab.gridsphere.provider.portletui.tags.ActionTag;
-import org.gridlab.gridsphere.provider.portletui.tags.ActionTag;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
-import javax.portlet.RenderResponse;
+import javax.servlet.jsp.tagext.Tag;
 import java.util.ArrayList;
 
 /**
  * The <code>ActionLinkTag</code> provides a hyperlink element that includes a <code>DefaultPortletAction</code>
  * and can contain nested <code>ActionParamTag</code>s
  */
-public class ActionURLTagImpl extends ActionTag {
+public class ActionLinkTag extends ActionTag {
 
     protected ActionLinkBean actionlink = null;
+
     protected String style = TextBean.MSG_INFO;
+    protected ImageBean imageBean = null;
 
     /**
      * Sets the style of the text: Available styles are
@@ -57,14 +57,51 @@ public class ActionURLTagImpl extends ActionTag {
         return style;
     }
 
+    /**
+     * Sets the action link key used to locate localized text
+     *
+     * @param key the action link key
+     */
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    /**
+     * Returns the action link key used to locate localized text
+     *
+     * @return the action link key
+     */
+    public String getKey() {
+        return key;
+    }
+
+    /**
+     * Sets the image bean
+     *
+     * @param imageBean the image bean
+     */
+    public void setImageBean(ImageBean imageBean) {
+        this.imageBean = imageBean;
+    }
+
+    /**
+     * Returns the image bean
+     *
+     * @return the image bean
+     */
+    public ImageBean getImageBean() {
+        return imageBean;
+    }
+
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
-            actionlink = (ActionLinkBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            actionlink = (ActionLinkBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (actionlink == null) {
                 actionlink = new ActionLinkBean();
                 actionlink.setStyle(style);
                 this.setBaseComponentBean(actionlink);
             }
+
         } else {
             actionlink = new ActionLinkBean();
             this.setBaseComponentBean(actionlink);
@@ -73,6 +110,14 @@ public class ActionURLTagImpl extends ActionTag {
 
         if (name != null) actionlink.setName(name);
         if (anchor != null) actionlink.setAnchor(anchor);
+
+        Tag parent = getParent();
+        if (parent instanceof ActionMenuTag) {
+            ActionMenuTag actionMenuTag = (ActionMenuTag) parent;
+            if (!actionMenuTag.getLayout().equals("horizontal")) {
+                actionlink.setCssStyle("display: block");
+            }
+        }
 
         paramBeans = new ArrayList();
 
@@ -85,12 +130,13 @@ public class ActionURLTagImpl extends ActionTag {
     }
 
     public int doEndTag() throws JspException {
-        // set action to non-null
-        if (action == null) action = "";
-        RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
-        String actionString = createJSRActionURI(res.createActionURL());
-        actionlink.setAction(actionString);
+
+        if (!beanId.equals("")) {
+            paramBeans = actionlink.getParamBeanList();
+        }
         
+        actionlink.setPortletURI(createGSActionURI());
+
         if ((bodyContent != null) && (value == null)) {
             actionlink.setValue(bodyContent.getString());
         }
@@ -100,17 +146,21 @@ public class ActionURLTagImpl extends ActionTag {
             if (val == null) val = "";
             actionlink.setValue(imageBean.toStartString() + val);
         }
-        if (var == null) {
+
+
+        Tag parent = getParent();
+        if (parent instanceof DataGridColumnTag) {
+            DataGridColumnTag dataGridColumnTag = (DataGridColumnTag) parent;
+            dataGridColumnTag.addTagBean(this.actionlink);
+        } else {
+
             try {
                 JspWriter out = pageContext.getOut();
-                out.print(actionURL.toString());
+                out.print(actionlink.toEndString());
             } catch (Exception e) {
                 throw new JspException(e.getMessage());
             }
-        } else {
-            pageContext.setAttribute(var, actionURL.toString(), PageContext.PAGE_SCOPE);
         }
         return EVAL_PAGE;
     }
-
 }
