@@ -132,18 +132,22 @@ public class PortletPageFactory implements PortletSessionListener {
                     PortletTab tab = (PortletTab)tabs.get(j);
 
                     //pane.addTab(name, (PortletTab)tab.clone());
-                    pane.addTab(name, (PortletTab)deepCopy(tab));
+                    pane.addTab((PortletTab)deepCopy(tab));
                 }
                 }
             }
 
-            newPage.setPortletTabbedPane(pane);
+            //newPage.setPortletTabbedPane(pane);
+            newPage.init(new ArrayList());
+
+            newPage.setLayoutDescriptor("/tmp/bob");
+            newPage.save();
             //newPage = (PortletPage)templatePage;
         } catch (Exception e) {
           log.error("Unable to make a clone of the templatePage", e);
 
         }
-        newPage.init(new ArrayList());
+
 
         return newPage;
     }
@@ -177,7 +181,7 @@ public class PortletPageFactory implements PortletSessionListener {
                             PortletTab tab = (PortletTab)tabs.get(j);
 
                             //pane.addTab(g.getName(), (PortletTab)tab.clone());
-                            pane.addTab(g.getName(), (PortletTab)deepCopy(tab));
+                            pane.addTab((PortletTab)deepCopy(tab));
                         }
                     }
                 }

@@ -198,8 +198,8 @@ public class PortletPage implements Serializable, Cloneable {
         //log.debug("Made a components list!!!! " + list.size());
         for (int i = 0; i < list.size(); i++) {
             ComponentIdentifier c = (ComponentIdentifier) list.get(i);
-            //log.debug("id: " + c.getComponentID() + " : " + c.getClassName() + " : " + c.hasPortlet());
-
+            System.err.println("id: " + c.getComponentID() + " : " + c.getClassName() + " : " + c.hasPortlet());
+            if (c.hasPortlet()) System.err.println("portlet= " + c.getPortletClass());
         }
         componentIdentifiers = list;
 
@@ -235,8 +235,9 @@ public class PortletPage implements Serializable, Cloneable {
         PortletFrame f = null;
         while (it.hasNext()) {
             cid = (ComponentIdentifier) it.next();
-            if (cid.getClassName().equals("org.gridlab.gridsphere.layout.PortletFrame")) {
-                f = (PortletFrame) cid.getPortletComponent();
+            PortletComponent pc = cid.getPortletComponent();
+            if (pc instanceof PortletFrame) {
+                f = (PortletFrame) pc;
                 //portlets.add(f.getPortletClass());
                 PortletInvoker.login(f.getPortletClass(), event.getPortletRequest(), event.getPortletResponse());
             }

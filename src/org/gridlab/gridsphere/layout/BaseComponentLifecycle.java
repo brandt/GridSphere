@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * The <code>BaseComponentLifecycle</code> provides an abstract implemetation of the
- * <code>ComponentLifecycle</code> lifecyle methods and is subclasses by the
+ * <code>ComponentLifecycle</code> lifecyle methods and is subclassed by the
  * {@link BasePortletComponent}.
  */
 public abstract class BaseComponentLifecycle implements ComponentLifecycle {

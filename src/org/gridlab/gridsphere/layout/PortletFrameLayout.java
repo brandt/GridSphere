@@ -64,6 +64,7 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
                 f.addFrameListener(this);
             }
             */
+            p.setParentComponent(this);
         }
         }
         return list;

@@ -122,15 +122,6 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     }
 
     /**
-     * Adds a portlet tab listener used to receive notification when a tab event occurs
-     *
-     * @param listener a portlet tab listener
-     */
-    public void addPortletTabListener(PortletTabListener listener) {
-        listeners.add(listener);
-    }
-
-    /**
      * Initializes the portlet tab. Since the components are isolated
      * after Castor unmarshalls from XML, the ordering is determined by a
      * passed in List containing the previous portlet components in the tree.

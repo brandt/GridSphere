@@ -91,8 +91,7 @@ public class ComponentIdentifier implements Serializable, Cloneable {
      * <code>false</code> otherwise
      */
     public boolean hasPortlet() {
-        if (portletClass != null) return true;
-        return false;
+        return (portletClass != null);
     }
 
     /**

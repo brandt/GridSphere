@@ -52,6 +52,7 @@ public class PortletContainer extends BasePortletComponent implements
             p.setTheme(theme);
             // invoke init on each component
             list = p.init(list);
+            p.setParentComponent(this);
         }
         }
         return list;

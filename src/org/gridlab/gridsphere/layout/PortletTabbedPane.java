@@ -68,7 +68,29 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         return (PortletTab) tabs.get(selectedIndex);
     }
 
+    /**
+     * Returns the tab with the supplied title
+     *
+     * @param title the tab title
+     * @return the tab associated with this title
+     */
+    public PortletTab getPortletTab(String title) {
+        Iterator it = tabs.iterator();
+        while (it.hasNext()) {
+            PortletTab tab = (PortletTab)it.next();
+            if (tab.getTitle().equals(title)) return tab;
+        }
+        return null;
+    }
+
+    /**
+     * Return the tab contained by this tabbed pane by index
+     *
+     * @param index the tab index
+     * @return the portlet tab
+     */
     public PortletTab getPortletTabAt(int index) {
+        if (index > tabs.size()) return null;
         return (PortletTab) tabs.get(index);
     }
 
@@ -83,10 +105,9 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
     /**
      * Adds a new portlet tab to the tabbed pane
      *
-     * @param title a tab title
      * @param tab a portlet tab to add
      */
-    public void addTab(String title, PortletTab tab) {
+    public void addTab(PortletTab tab) {
         tabs.add(tab);
     }
 
@@ -200,7 +221,8 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                 tab.setTheme(theme);
                 if (selectedIndex == i) tab.setSelected(true);
                 list = tab.init(list);
-                tab.addPortletTabListener(this);
+                tab.addComponentListener(this);
+                tab.setParentComponent(this);
             }
         }
         return list;

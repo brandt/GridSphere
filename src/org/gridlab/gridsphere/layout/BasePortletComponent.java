@@ -20,6 +20,7 @@ import java.util.Vector;
  */
 public abstract class BasePortletComponent extends BaseComponentLifecycle implements PortletComponent, Serializable {
 
+    protected PortletComponent parent;
     protected String defaultWidth = new String();
     protected String width = new String();
     protected String label = new String();
@@ -193,6 +194,14 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      */
     public String getTheme() {
         return theme;
+    }
+
+    public PortletComponent getParentComponent() {
+        return parent;
+    }
+
+    public void setParentComponent(PortletComponent parent) {
+        this.parent = parent;
     }
 
     /**

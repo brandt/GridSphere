@@ -105,4 +105,8 @@ public interface PortletComponent extends ComponentLifecycle {
     public PortletRole getRequiredRole();
 
     public void addComponentListener(PortletComponent component);
+
+    public PortletComponent getParentComponent();
+
+    public void setParentComponent(PortletComponent parent);
 }
