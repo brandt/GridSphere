@@ -17,6 +17,7 @@
     <allows>
         <maximized/>
         <minimized/>
+        <resizing/>
     </allows>
     <supports>
         <markup name="html">
@@ -106,6 +107,7 @@
     <allows>
         <maximized/>
         <minimized/>
+        <resizing/>
     </allows>
     <supports>
         <markup name="html">
@@ -162,6 +164,7 @@
     <allows>
         <maximized/>
         <minimized/>
+        <resizing/>
     </allows>
     <supports>
         <markup name="html">
