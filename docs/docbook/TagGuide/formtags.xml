@@ -592,55 +592,6 @@
             </example>
         </sect2>
 
-        <sect2 id="errframetag">
-            <title>Error Frame</title>
-            <para>
-                The Error Frame tag is used to provide a frame used for displaying errors. In general,
-                this tag may be nested inside a panel tag.
-            </para>
-            <table>
-                <title>Attributes to error frame</title>
-                <tgroup cols="3">
-                    <thead>
-                        <row>
-                            <entry>Attribute name</entry><entry>Required?</entry><entry>Description</entry>
-                        </row>
-                    </thead>
-                    <tbody>
-                        <row>
-                            <entry>width</entry><entry>no</entry><entry>integer: the width of the panel</entry>
-                        </row>
-                    </tbody>
-                    <tbody>
-                        <row>
-                            <entry>cellspacing</entry><entry>no</entry><entry>integer: the cellspacing table width</entry>
-                        </row>
-                    </tbody>
-                    <tbody>
-                        <row>
-                            <entry>key</entry><entry>no</entry><entry>string: name of the key to lookup localized text from
-                            the <filename>WEB-INF/classes/Portlet_XX.properties</filename> localized properties file</entry>
-                        </row>
-                    </tbody>
-                    <tbody>
-                        <row>
-                            <entry>value</entry><entry>no</entry><entry>string: actual text to display</entry>
-                        </row>
-                    </tbody>
-                </tgroup>
-            </table>
-            <example>
-                <title>Usage of frame</title>
-                <screen>
-<![CDATA[<ui:panel>
-    <ui:errorframe beanID="errmsg"/>
-</ui:panel>]]>
-                </screen>
-                This creates a panel with an error frame that displays a message
-                using the errmsg error frame bean.
-            </example>
-        </sect2>
-
         <sect2 id="checkboxtag">
             <title>CheckBox</title>
             <para>
@@ -684,6 +635,14 @@
  ]]>
                 </screen>
                 This creates a selected checkbox with the name 'name' and the value 'value'.
+                <screen>
+<![CDATA[<ui:checkbox beanId="myCheckBox" value="value #1" checked="true"/>
+ <ui:checkbox beanId="myCheckBox" value="value #2"/>
+ <ui:checkbox beanId="myCheckBox" value="value #3"/>]]>
+                </screen>
+                This creates multiple check boxes identified by the same beanId with different display values
+                such that the bean can be retrieved in the portlet and will contain the selected check boxes
+                in the group.
             </example>
         </sect2>
 
@@ -929,6 +888,14 @@
 <![CDATA[<ui:radiobutton name="name" value="value" checked="true" disabled="false"/>]]>
                 </screen>
                 This creates a selected radiobutton with the name 'name' and the value 'value'.
+                <screen>
+<![CDATA[<ui:radiobutton beanId="myButton" value="value #1" checked="true"/>
+ <ui:radiobutton beanId="myButton" value="value #2"/>
+ <ui:radiobutton beanId="myButton" value="value #3"/>]]>
+                </screen>
+                This creates multiple radio buttons identified by the same beanId with different display values
+                such that the bean can be retrieved in the portlet and will contain the selected radio button
+                in the group.
             </example>
         </sect2>
 
@@ -980,9 +947,11 @@
             <example>
                 <title>Usage of textarea</title>
                 <screen>
-<![CDATA[<ui:textarea name="myTextArea" value="This is text" rows="120" cols="30"  disabled="false" />]]>
+<![CDATA[<ui:textarea name="myTextArea" value="This is text" rows="120" cols="30"  disabled="false" />
+ <ui:textarea name="myTextArea"rows="120" cols="30"  disabled="false">this is text</>]]>
                 </screen>
                 This creates a 120x30 textinputfield with the name 'inputfield' and the text 'This is text'.
+                The second example uses the tag body to specify the displayed text.
             </example>
         </sect2>
 
@@ -1022,10 +991,12 @@
                 <title>Usage of text</title>
                 <screen>
 <![CDATA[<ui:text key="GREETING_MSG"/>
-<ui:text value="something bad happened" error="true"/>]]>
+<ui:text value="something bad happened" error="true"/>
+<ui:text error="true">something bad happened</>]>
                 </screen>
                 The first example prints a localized message using the GREETING_MSG as a key. The
-                second example displays a message using the error look and feel.
+                second example displays a message using the error look and feel and the third example is the
+                same as the second, but uses the tag body to specify the display message.
             </example>
         </sect2>
 
