@@ -434,7 +434,7 @@ Copyright:
     </target>
 
 
-    <target name="force-real-database" depends="setenv, doclet-mapping">
+    <target name="force-real-database" depends="setenv, force-mapping">
         <echo message="Creating Database at: ${build.webapps}/gridsphere/WEB-INF/database/gridsphere"/>
         <echo message="Using script: ${build.webapps}/gridsphere/WEB-INF/database/dbcreate.sql"/>
         <sql driver="org.hsqldb.jdbcDriver"
@@ -542,9 +542,24 @@ Copyright:
     <!-- Creates the GridSphere WAR file                                  -->
     <!-- =================================================================== -->
     <target name="war" depends="jar, gridsphere-jar" description="Create GridSphere WAR">
+
+        <copy todir="${build.webapps}/gridsphere">
+            <fileset dir="${gswebapp.dir}"/>
+        </copy>
+
+        <copy overwrite="true" file="${gswebapp.dir}/WEB-INF/database/database.xml"
+            tofile="${build.webapps}/gridsphere/WEB-INF/database/database.xml"/>
+
+        <copy overwrite="true" file="lib/portlet-widget-tags.jar" todir="${build.webapps}/gridsphere/WEB-INF/classes/lib"/>
+        <copy overwrite="true" file="lib/coreportlets.jar" todir="${build.webapps}/gridsphere/WEB-INF/classes/lib"/>
+
+        <antcall target="configure-database"/>
+
+        <antcall target="force-real-database"/>
+
         <war warfile="${build.webapps}/gridsphere.war" update="true"
-            webxml="${gswebapp.dir}/WEB-INF/web.xml">
-            <fileset dir="${gswebapp.dir}">
+            webxml="${build.webapps}/gridsphere/WEB-INF/web.xml">
+            <fileset dir="${build.webapps}/gridsphere">
                 <exclude name="WEB-INF/web.xml"/>
             </fileset>
         </war>
