@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <portlet-tabbed-pane>
     <portlet-tab label="welcome">
         <title lang="en">Welcome</title>
@@ -9,7 +8,7 @@
         <title lang="hu">Üdvözöllek</title>
         <title lang="fr">Bienvenue</title>
         <title lang="de">Willkommen</title>
-        <title lang="cs">Vítejte</title>      
+        <title lang="cs">Vítejte</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab label="settings">
                 <title lang="en">Settings</title>

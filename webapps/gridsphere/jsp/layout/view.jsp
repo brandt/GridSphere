@@ -8,6 +8,8 @@
 <% String lang = (String)request.getAttribute("lang"); %>
 <% List tabs = (List)request.getAttribute("tabs"); %>
 
+<ui:messagebox beanId="msg"/>
+
 <ui:form>
 
 <h3><ui:text key="LAYOUT_THEME" style="nostyle"/></h3>
@@ -20,7 +22,7 @@
 <ui:text key="LAYOUT_TAB_NAME"/>&nbsp;&nbsp;<ui:textfield beanId="userTabTF"/>
 <p>
 
-<ui:radiobutton beanId="colsRB" value="1"/><ui:text key="LAYOUT_ONE_COL"/>
+<ui:radiobutton beanId="colsRB" selected="true" value="1"/><ui:text key="LAYOUT_ONE_COL"/>
 <ui:radiobutton beanId="colsRB" value="2"/><ui:text key="LAYOUT_TWO_COL"/>
 <ui:radiobutton beanId="colsRB" value="3"/><ui:text key="LAYOUT_THREE_COL"/>
 

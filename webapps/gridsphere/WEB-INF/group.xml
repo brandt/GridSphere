@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <portlet-group core="true">
     <group-name>gridsphere</group-name>
     <group-description>Core GridSphere Group</group-description>
@@ -31,5 +30,17 @@
     <portlet-role-info>
         <portlet-class>org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet.1</portlet-class>
         <required-role>ADMIN</required-role>
+    </portlet-role-info>
+    <portlet-role-info>
+        <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
+        <required-role>GUEST</required-role>
+    </portlet-role-info>
+    <portlet-role-info>
+        <portlet-class>org.gridlab.gridsphere.portlets.core.login.LogoutPortlet.1</portlet-class>
+        <required-role>USER</required-role>
+    </portlet-role-info>
+    <portlet-role-info>
+        <portlet-class>org.gridlab.gridsphere.portlets.core.locale.LocalePortlet.1</portlet-class>
+        <required-role>GUEST</required-role>
     </portlet-role-info>
 </portlet-group>
