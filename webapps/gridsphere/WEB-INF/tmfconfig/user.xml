@@ -16,14 +16,13 @@
             <messagetype>aim</messagetype>
             <username>gridportal</username>
         </service>
-    </user>
-    <user>
-        <name>Jason Novotny</name>
-        <userid>novotny</userid>
-        <preferred>aim</preferred>
         <service>
-            <messagetype>aim</messagetype>
-            <username>gridnomad</username>
+            <messagetype>sms</messagetype>
+            <username>+491744840547</username>
+        </service>
+        <service>
+            <messagetype>mail</messagetype>
+            <username>oliver@wehrens.de</username>
         </service>
     </user>
 </list>
