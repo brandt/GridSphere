@@ -183,6 +183,17 @@ public class NewFormEventImpl implements FormEvent {
         return tb;
     }
 
+    public URLImageBean getURLImageBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (URLImageBean)tagBeans.get(beanKey);
+        }
+        URLImageBean tb = new URLImageBean(request, beanId);
+        tagBeans.put(beanKey, tb);
+        return tb;
+
+    }
+
     public TableBean getTableBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
