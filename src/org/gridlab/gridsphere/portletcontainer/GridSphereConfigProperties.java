@@ -97,4 +97,5 @@ public interface GridSphereConfigProperties {
      */
     public static final String GUEST_USER_LAYOUT = "GUEST_USER_LAYOUT";
 
+    public static final String GPDK_MAPPING = "GPDK_MAPPING";
 }

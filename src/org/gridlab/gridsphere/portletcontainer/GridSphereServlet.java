@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerSer
 import org.gridlab.gridsphere.services.core.security.auth.AuthorizationException;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 import org.gridlab.gridsphere.services.core.user.LoginService;
+import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.impl.*;
@@ -53,6 +54,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     /* GridSphere Portlet layout Engine handles rendering */
     private static PortletLayoutEngine layoutEngine = null;
+
+    /* Session manager maps users to sessions */
+    private UserSessionManager userSessionManager = UserSessionManager.getInstance();
 
     private PortletErrorFrame errorMsg = new PortletErrorFrame();
 
@@ -187,7 +191,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                     log.debug("User: " + user.getUserName() + " logged in as SUPER");
                     req.setAttribute(SportletProperties.PORTLET_ROLE, PortletRole.SUPER);
                 }
-
+                userSessionManager.setSession(user, session);
             } catch (AuthorizationException err) {
                 if(log.isDebugEnabled()) log.debug(err.getMessage());
                 req.setAttribute(LOGIN_ERROR_FLAG, LOGIN_ERROR_FLAG);
@@ -206,7 +210,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     protected void logout(GridSphereEvent event) {
         PortletRequest req = event.getPortletRequest();
         PortletSession session = req.getPortletSession();
-        session.invalidate();
+        userSessionManager.removeSession(req.getUser());
         log.debug("in logout of GridSphere Servlet");
     }
 
