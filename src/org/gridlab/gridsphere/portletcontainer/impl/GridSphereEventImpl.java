@@ -24,6 +24,7 @@ import java.util.*;
  */
 public class GridSphereEventImpl implements GridSphereEvent {
 
+    protected transient PortletLog log = SportletLog.getInstance(GridSphereEventImpl.class);
     protected SportletRequest portletRequest;
     protected SportletResponse portletResponse;
     protected PortletContext portletContext;
@@ -42,13 +43,13 @@ public class GridSphereEventImpl implements GridSphereEvent {
         try {
             portletComponentID = new Integer(cidStr).intValue();
         } catch (NumberFormatException e) {
-           // portletComponentID = 0;
+           log.debug("Received a non-number portlet component ID: " + cidStr);
         }
 
         /* This is where a DefaultPortletAction gets put together if one exists */
         String actionStr = portletRequest.getParameter(GridSphereProperties.ACTION);
         if (actionStr != null) {
-            System.err.println("Received action: " + actionStr);
+            log.info("Received action: " + actionStr);
             action = new DefaultPortletAction(actionStr);
             String prefix = portletRequest.getParameter(GridSphereProperties.PREFIX);
             if (prefix != null) {
@@ -68,13 +69,14 @@ public class GridSphereEventImpl implements GridSphereEvent {
         /* This is where a DefaultPortletMessage gets put together if one exists */
         String messageStr = portletRequest.getParameter(GridSphereProperties.MESSAGE);
         if (messageStr != null) {
-            System.err.println("Received message: " + messageStr);
+            log.debug("Received message: " + messageStr);
             message = new DefaultPortletMessage(messageStr);
         }
 
         /* This is where we get ACL info and update sportlet request */
         User user = portletRequest.getUser();
         if (! (user instanceof GuestUser) ) {
+            log.debug("Role information for user: " + user.getUserID());
             List groups = aclService.getGroups(user);
             Iterator git = groups.iterator();
             PortletGroup group = null;
@@ -82,6 +84,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
                 group = (PortletGroup)git.next();
                 PortletRole role = aclService.getRoleInGroup(portletRequest.getUser(), group);
                 portletRequest.setRole(group, role);
+                log.debug("Group: " + group.toString() + " Role: " + role.toString());
             }
         }
 

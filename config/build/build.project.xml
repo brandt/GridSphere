@@ -209,17 +209,17 @@ Copyright:
     </target>
 
     <target name="doclet-mapping" depends="check-mapping" if="var_force_mapping">
-        <mkdir dir="${GRIDSPHERE_HOME}/${project.name}/database"/>
+        <mkdir dir="${GRIDSPHERE_HOME}/${project.name}/database/castor"/>
         <javadoc packagenames="*"
-            sourcepath="src"
+            sourcepath="src:config/database/castor"
             private="true"
             doclet="org.castor.doclet.ddl.DDL"
             docletpath="${gridsphere.base}/lib/ext/jdom.jar;${gridsphere.base}/lib/ext/castor-doclet.jar"
             additionalparam=" -J-DFILE=${GRIDSPHERE_HOME}/${project.name}/database/create.sql -J-DDB_TYPE=db2 -J-DLOG=1">
             <classpath refid="classpath"/>
         </javadoc>
-        <javadoc
-            sourcepath="src"
+        <javadoc packagenames="*"
+            sourcepath="src:config/database/castor"
             private="true"
             doclet="org.castor.doclet.jdo.JDO"
             docletpath="${gridsphere.base}/lib/ext/jdom.jar;${gridsphere.base}/lib/ext/castor-doclet.jar"
@@ -246,7 +246,7 @@ Copyright:
         </condition>
     </target>
 
-    <target name="create-real-database" depends="setenv, configure-database, check-real-database-exists" if="use.persistence, var_force_database">
+    <target name="create-real-database" depends="setenv, configure-database, check-real-database-exists" if="var_force_database">
         <echo message="Creating Database at: ${GRIDSPHERE_HOME}/${project.name}/database/${project.name}"/>
         <echo message="Using script: ${GRIDSPHERE_HOME}/${project.name}/database/create.sql"/>
         <sql driver="org.hsqldb.jdbcDriver"
@@ -259,7 +259,7 @@ Copyright:
         </sql>
     </target>
 
-    <target name="create-test-database" depends="configure-test-database, check-test-database-exists" if="use.persistence, var_force_database">
+    <target name="create-test-database" depends="configure-test-database, check-test-database-exists" if="var_force_database">
         <echo message="Creating Database at: ${TEST_HOME}/database/${project.name}-test"/>
         <echo message="Using script: ${GRIDSPHERE_HOME}/${project.name}/database/create.sql"/>
         <sql driver="org.hsqldb.jdbcDriver"
@@ -374,6 +374,7 @@ Copyright:
 
         <copy file="${gridsphere.base}/lib/portlet-widget-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
         <copy file="lib/${project.name}.jar" todir="${project.webapp}/WEB-INF/lib"/>
+        <copy file="lib/${project.name}-services.jar" todir="${env.CATALINA_HOME}/shared/lib"/>
 
     </target>
 

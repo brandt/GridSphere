@@ -79,7 +79,6 @@ public class SportletRequestImpl implements SportletRequest {
      * @param value the attribute value
      */
     public void setAttribute(String name, Object value) {
-        log.debug("Storing bean in request");
         req.setAttribute(name, value);
     }
 
@@ -233,8 +232,8 @@ public class SportletRequestImpl implements SportletRequest {
      * @param role a PortletRole objects
      */
     public void setRole(PortletGroup group, PortletRole role) {
-        Map authMap = (Map)req.getAttribute(GridSphereProperties.GROUPROLES);
-        if (authMap == null) authMap = new HashMap();
+        Map authMap = (Hashtable)req.getAttribute(GridSphereProperties.GROUPROLES);
+        if (authMap == null) authMap = new Hashtable();
         authMap.put(group, role);
         req.setAttribute(GridSphereProperties.GROUPROLES, authMap);
     }
@@ -249,9 +248,9 @@ public class SportletRequestImpl implements SportletRequest {
      * @see PortletGroup
      */
     public List getGroups() {
-        List groups = (List) req.getAttribute(GridSphereProperties.PORTLETGROUPS);
+        List groups = (Vector) req.getAttribute(GridSphereProperties.PORTLETGROUPS);
         if (groups == null) {
-            groups = new ArrayList();
+            groups = new Vector();
         }
         return groups;
     }
@@ -511,7 +510,6 @@ public class SportletRequestImpl implements SportletRequest {
         return req.getSession(create);
     }
 
-
     // The ServletRequest methods
     public final ServletInputStream getInputStream() throws IOException {
         return req.getInputStream();
@@ -522,6 +520,7 @@ public class SportletRequestImpl implements SportletRequest {
     }
 
     public final void setCharacterEncoding(String enc) throws UnsupportedEncodingException {
+        req.setCharacterEncoding(enc);
     }
 
     public final int getContentLength() {

@@ -14,7 +14,7 @@ public class PortletRegistry {
 
     private static PortletRegistry instance = new PortletRegistry();
 
-    private Map allApplicationPortlets = new Hashtable();
+    private static Map allApplicationPortlets = new Hashtable();
 
     /**
      * Default instantiation disallowed

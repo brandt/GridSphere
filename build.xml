@@ -132,7 +132,7 @@ Copyright:
         </if>
 
         <property name="TEST_HOME" value="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/test"/>
-        <property name="gridsphere.core" value="${GRIDSPHERE_HOME}/core"/>
+        <property name="gridsphere.core" value="${GRIDSPHERE_HOME}/gridsphere"/>
 
         <echo message="--- Build environment for ${gridsphere.name} ---" />
         <echo message="--- Flags (Note: If the {property name} is displayed,"/>
@@ -409,7 +409,7 @@ Copyright:
             value="${DATABASE_NAME}"/>
         <replace file="${DATABASE_FILE}"
             token="@PROJECT_NAME@"
-            value="core"/>
+            value="gridsphere"/>
     </target>
 
     <target name="configure-test-database" depends="doclet-mapping">
@@ -427,7 +427,7 @@ Copyright:
             value="${DATABASE_NAME}"/>
         <replace file="${DATABASE_FILE}"
             token="@PROJECT_NAME@"
-            value="core"/>
+            value="gridsphere"/>
     </target>
 
     <target name="check-mapping">
@@ -452,7 +452,7 @@ Copyright:
             private="true"
             doclet="org.castor.doclet.ddl.DDL"
             docletpath="lib/ext/jdom.jar;lib/ext/castor-doclet.jar"
-            additionalparam=" -J-DFILE=${gridsphere.core}/database/dbcreate.sql -J-DDB_TYPE=db2 -J-DLOG=1">
+            additionalparam="-J-DFILE=${gridsphere.core}/database/dbcreate.sql -J-DDB_TYPE=db2 -J-DLOG=1">
             <classpath refid="classpath"/>
         </javadoc>
         <javadoc packagenames="org.gridlab.gridsphere.*"

@@ -17,8 +17,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class ClientImpl implements Client {
 
-    private PortletLog log = SportletLog.getInstance(ClientImpl.class);
-
     public static final String[] MIME_TYPES = {"text/html", "text/vnd.wap.wml"};
     public static final String[] MARKUP_TYPES = {"html", "wml", "chtml"};
     public static final String[] MANUFACTURER_NAMES = {"opera", "netscape", "mozilla", "IE"};

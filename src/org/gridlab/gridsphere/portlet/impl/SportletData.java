@@ -33,6 +33,7 @@ public class SportletData extends BaseObject implements PortletData {
 
     protected transient Hashtable store = new Hashtable();
     private transient PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
+
     /**
      * Saves the hashtable (for castor)
      *
@@ -58,10 +59,18 @@ public class SportletData extends BaseObject implements PortletData {
     private String PortletID = new String();
 
     /**
-     * Constructs an instance of SportletData
+     * Constructs an instance of SportletData that uses the GridSphere database
      */
     public SportletData() {
         super();
+    }
+
+    /**
+     * Constructs an instance of SportletData that uses the GridSphere database
+     */
+    public SportletData(PersistenceManagerRdbms pm) {
+        super();
+        this.pm = pm;
     }
 
     /**
@@ -125,7 +134,7 @@ public class SportletData extends BaseObject implements PortletData {
         while (allkeys.hasMoreElements()) {
             String key = (String) allkeys.nextElement();
             ha = new SportletDataAttribute(key, (String) store.get(key));
-            ha.setSportletData(this);
+            ha.setPortletData(this);
             Attributes.add(ha);
         }
     }
@@ -170,7 +179,7 @@ public class SportletData extends BaseObject implements PortletData {
     /**
      * Returns the user id of this portlet data
      *
-     * @preturn the user id
+     * @return the user id
      */
     public String getUserID() {
         return UserID;
@@ -188,7 +197,7 @@ public class SportletData extends BaseObject implements PortletData {
     /**
      * Returns the concrete portlet id of this portlet data
      *
-     * @preturn the concrete portlet id
+     * @return the concrete portlet id
      */
     public String getPortletID() {
         return PortletID;

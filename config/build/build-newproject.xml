@@ -71,6 +71,9 @@
             <fileset dir="config/database"/>
         </copy>
 
+        <!-- must copy the BaseObject.java source file for castordoclet to work -->
+        <copy file="src/org/gridlab/gridsphere/core/persistence/BaseObject.java" tofile="${project.dir}/config/database/castor/BaseObject.java"/>
+
         <property name="DATABASE_NAME"
                   value="${project.name}"/>
         <property name="DATABASE_FILE"

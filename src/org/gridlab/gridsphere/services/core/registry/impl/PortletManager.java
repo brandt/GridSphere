@@ -90,6 +90,7 @@ public class PortletManager implements PortletManagerService {
         Iterator it = appPortlets.iterator();
         while (it.hasNext()) {
             ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
+            log.debug("Adding application portlet: " + appPortlet.getApplicationPortletID());
             registry.addApplicationPortlet(appPortlet);
         }
         webapps.put(webApplicationName, portletWebApp);
