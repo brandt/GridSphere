@@ -40,9 +40,10 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     private static AccessControlService aclService = null;
     private static AccessControlManagerService aclManagerService = null;
 
-    private String jdoUserACL = new String();
-    private String jdoARImpl = new String();
-    private String jdoSUImpl = new String();
+    private String jdoUserACL = new String();   // object name for UserACL
+    private String jdoARImpl = new String();    // ... for AccountRequest
+    private String jdoSUImpl = new String();    // ... for SportletUserImpl
+    private String jdoPDImpl = new String();    // ... for SportletData
 
     private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
 
@@ -51,6 +52,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         jdoSUImpl = SportletUserImpl.class.getName();
         jdoARImpl = AccountRequestImpl.class.getName();
         jdoUserACL = UserACL.class.getName();
+        jdoPDImpl = SportletData.class.getName();
     }
 
     /**
@@ -335,8 +337,29 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @return the PortletData for this portlet or null if none exists.
      */
     public PortletData getPortletData(User user, String portletID) {
-        // XXX: FIX ME
-        return null;
+
+        String command =
+            "select u from "+jdoPDImpl+" u where u.UserID=\""+user.getID()+"\" and u.PortletID=\""+portletID+"\"";
+
+        SportletData pd = null;
+        try {
+            pd = (SportletData)pm.restoreObject(command);
+        } catch (PersistenceManagerException e) {
+
+        }
+
+        if (pd==null) {
+            pd = new SportletData();
+            pd.setPortletID(portletID);
+            pd.setUserID(user.getID());
+            try {
+                pm.create(pd);
+                System.out.println("create new one");
+            } catch (PersistenceManagerException e) {
+
+            }
+        }
+        return pd;
     }
 
     /**
@@ -347,7 +370,14 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @param data the PortletData
      */
     public void setPortletData(User user, String portletID, PortletData data) {
-        // XXX: FIX ME
+
+        try {
+
+            pm.update(data);
+            System.out.println("update!");
+        } catch (PersistenceManagerException e) {
+            log.error("Persistence Exception !"+e);
+        }
     }
 
     /**

@@ -293,8 +293,6 @@ public class SportletUserImpl extends BaseObject implements SportletUser {
         convert2vector();
     }
 
-
-
     public Class jdoLoad(short i) throws Exception {
         convert2hash();
         return super.jdoLoad(i);
