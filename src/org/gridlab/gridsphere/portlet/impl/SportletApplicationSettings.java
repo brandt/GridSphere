@@ -27,6 +27,11 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
     protected Hashtable store = new Hashtable();
 
     /**
+     * Disallow default instantiation
+     */
+    private SportletApplicationSettings() {}
+
+    /**
      * Constructs an instance of SportletApplicationSettings from a concrete portlet
      *
      * @param concPortlet the concrete portlet

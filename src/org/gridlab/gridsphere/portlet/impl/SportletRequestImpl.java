@@ -30,7 +30,7 @@ public class SportletRequestImpl implements SportletRequest {
 
     // Another proxy class
     private PortletSession portletSession = null;
-
+    private boolean hasSessionBeenCreated = false;
     private static PortletLog log = SportletLog.getInstance(SportletRequest.class);
 
     /**
@@ -47,6 +47,7 @@ public class SportletRequestImpl implements SportletRequest {
      */
     public SportletRequestImpl(HttpServletRequest req) {
         this.req = req;
+        portletSession = new SportletSession(req.getSession(true));
     }
 
     /**
@@ -127,8 +128,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the portlet session
      */
     public PortletSession getPortletSession() {
-        if (portletSession == null)
-            portletSession = new SportletSession(req.getSession(true));
+        hasSessionBeenCreated = true;
         return portletSession;
     }
 
@@ -142,9 +142,8 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the portlet session
      */
     public PortletSession getPortletSession(boolean create) {
-        if ((portletSession == null) && (create == false))
+        if ((hasSessionBeenCreated == false) && (create == false))
             return null;
-        if (portletSession == null) portletSession = new SportletSession(req.getSession(create));
         return portletSession;
     }
 
@@ -177,7 +176,7 @@ public class SportletRequestImpl implements SportletRequest {
      * @param data the portlet data
      */
     public void setData(PortletData data) {
-        if ((portletSession == null) || (getMode() != Portlet.Mode.EDIT)) return;
+        if (getMode() != Portlet.Mode.EDIT) return;
         req.setAttribute(GridSphereProperties.PORTLETDATA, data);
     }
 

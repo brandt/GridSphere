@@ -30,6 +30,12 @@ public class SportletSettings implements PortletSettings {
     protected Locale locale = null;
 
     /**
+     * Disallow default instantiation
+     */
+    private SportletSettings() {
+    }
+
+    /**
      * SportletSettings constructor
      * Create a PortletSettings object from a concrete portlet
      *
@@ -48,8 +54,7 @@ public class SportletSettings implements PortletSettings {
         langList = concPortletConf.getLanguageList();
 
         // Stick <config-param> in store
-        store = concPortlet.getContextAttributes();
-
+        store = concPortletConf.getConfigAttributes();
     }
 
     /**
@@ -185,9 +190,9 @@ public class SportletSettings implements PortletSettings {
      * @throws IOException if the streaming causes an I/O problem
      */
     public void store() throws IOException {
-        ConcretePortletConfig concPortletConfig = concPortlet.getConcretePortletConfig();
-        concPortletConfig.setConfigAttributes(store);
-        concPortlet.setConcretePortletConfig(concPortletConfig);
+        ConcretePortletConfig concPortletConf = concPortlet.getConcretePortletConfig();
+        concPortletConf.setConfigAttributes(store);
+        concPortlet.setConcretePortletConfig(concPortletConf);
         concPortlet.save();
     }
 
