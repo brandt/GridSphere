@@ -427,6 +427,11 @@ Copyright:
         </condition>
     </target>
 
+    <target name="force-mapping">
+        <property name="var_force_mapping" value="true"/>
+        <antcall target="doclet-mapping"/>
+    </target>
+
     <target name="doclet-mapping" depends="check-mapping" if="var_force_mapping">
         <javadoc packagenames="org.gridlab.gridsphere.*"
             excludepackagenames="org.gridlab.gridsphere.services.grid.*"
