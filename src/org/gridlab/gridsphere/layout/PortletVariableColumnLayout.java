@@ -25,7 +25,7 @@ public class PortletVariableColumnLayout extends PortletFrameLayout implements C
     /**
      * Prefix to be prepended to component label when searching session for variant.
      */
-    public static final String LABEL_PREFIX = "variant.layout";
+    public static final String LABEL_PREFIX = "variant.layout.";
 
     protected String variant = "";
 
