@@ -21,7 +21,7 @@
                 </language>
 		        <language locale="de">
                     <title>Datei Manager</title>
-                    <description>Provides users with a virtual filesystem</description>
+                    <description>Bietet dem Benutzer ein virtuelles Dateisystem</description>
                 </language>
                 <language locale="it">
                     <title>Gestione File</title>
@@ -44,6 +44,10 @@
                 <language locale="en">
                     <title>Banner</title>
                     <description>Displays a banner in a portlet</description>
+                </language>
+		<language locale="de">
+                    <title>Banner</title>
+                    <description>Zeigt ein Banner im Portlet an</description>
                 </language>
                 <language locale="it">
                     <title>Titolo</title>
@@ -233,6 +237,10 @@
                     <title>Portlet Group Manager</title>
                     <description>Enables portal administrators to administer portlet groups</description>
                 </language>
+		<language locale="de">
+                    <title>Portlet Gruppen Verwaltung</title>
+                    <description>Ermöglicht Portal-Administratoren Portlet Gruppen zu verwalten</description>
+                </language>
                 <language locale="it">
                     <title>Gestione Gruppo Portlet</title>
                     <description>Consente agli amministratori del portale di gestire i gruppi di portlet</description>
@@ -259,6 +267,10 @@
                 <language locale="en">
                     <title>Portlet Application Manager</title>
                     <description>Enables portal administrators to administer portlets</description>
+                </language>
+		<language locale="de">
+                    <title>Portlet Anwendungsverwaltung</title>
+                    <description>Ermöglicht Portal-Administratoren Portlets zu verwalten</description>
                 </language>
                 <language locale="it">
                     <title>Gestione Applicazione Portlet</title>
@@ -318,8 +330,8 @@
                      <description>Provides user layout customization</description>
                  </language>
 		 <language locale="de">
-                     <title>Layout Manager</title>
-                     <description>Provides user layout customization</description>
+                     <title>Layout Managieren</title>
+                     <description>Ermöglicht die benutzerspezifische Anpassung der Darstellung</description>
                  </language>
                  <language locale="it">
                      <title>Gestione Layout</title>
@@ -352,6 +364,10 @@
                     <title>Profile Manager</title>
                     <description>Customizes users profile</description>
                 </language>
+		<language locale="de">
+                    <title>Benutzerprofil Verwaltung</title>
+                    <description>Zur Anpassung der Benutzerprofile</description>
+                </language>
                 <language locale="it">
                     <title>Gestione Profilo</title>
                     <description>Personalizza il profilo utente</description>
@@ -377,6 +393,10 @@
                     <title>Locale</title>
                     <description>Selects a locale</description>
                 </language>
+		<language locale="de">
+                    <title>Spracheinstellungen</title>
+                    <description>Wählt eine Spracheinstellungen</description>
+                </language>
                 <language locale="it">
                     <title>Localizzazione</title>
                     <description>Seleziona una localizzazione</description>
@@ -398,6 +418,10 @@
                 <language locale="en">
                     <title>Portlet Subscription</title>
                     <description>Customizes users portlets</description>
+                </language>
+		<language locale="de">
+                    <title>Portlet Abonnementverwaltung</title>
+                    <description>Passt die Portlets des Benutzers an</description>
                 </language>
                 <language locale="it">
                     <title>Sottoscrizione alla portlet</title>
@@ -429,7 +453,7 @@
                  </language>
                  <language locale="de">
                      <title>Text Nachrichten</title>
-                     <description>Provides users ability to send messages</description>
+                     <description>Bietet Benutzern die Möglichkeit Nachrichten zu verschicken</description>
                  </language>
                  <language locale="it">
                      <title>Messaggi di testo</title>
