@@ -26,30 +26,32 @@ public abstract class BasePortletLayout extends BasePortletComponent implements 
         Iterator it = components.iterator();
         PortletComponent p = null;
         while (it.hasNext()) {
-            p = (PortletComponent)it.next();
+            p = (PortletComponent) it.next();
             // all the components have the same theme
             p.setTheme(theme);
             // invoke init on each component
             list = p.init(list);
             // If the component is a frame we want to be notified
             if (p instanceof PortletFrame) {
-                PortletFrame f = (PortletFrame)p;
+                PortletFrame f = (PortletFrame) p;
                 f.addFrameListener(this);
             }
         }
         return list;
     }
 
-    public void destroy() {}
+    public void destroy() {
+    }
 
-    public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {}
+    public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
+    }
 
     public void handleFrameMaximized(PortletFrameEvent event) {
         Iterator it = components.iterator();
         PortletComponent p = null;
         int id = event.getID();
         while (it.hasNext()) {
-            p = (PortletComponent)it.next();
+            p = (PortletComponent) it.next();
             // check for the frame that has been maximized
             if (p.getComponentID() == id) {
                 p.setWidth("100%");
@@ -66,7 +68,7 @@ public abstract class BasePortletLayout extends BasePortletComponent implements 
         int id = event.getID();
 
         while (it.hasNext()) {
-            p = (PortletComponent)it.next();
+            p = (PortletComponent) it.next();
             if (p.getComponentID() == id) {
                 p.setWidth("");
             }
@@ -80,7 +82,7 @@ public abstract class BasePortletLayout extends BasePortletComponent implements 
         int id = event.getID();
 
         while (it.hasNext()) {
-            p = (PortletComponent)it.next();
+            p = (PortletComponent) it.next();
             if (p.getComponentID() == id) {
                 p.setWidth("");
             } else {

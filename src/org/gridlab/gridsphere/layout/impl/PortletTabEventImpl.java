@@ -3,13 +3,13 @@
  * User: novotny
  * Date: Dec 10, 2002
  * Time: 2:17:14 AM
- * To change template for new interface use 
+ * To change template for new interface use
  * Code Style | Class Templates options (Tools | IDE Options).
  */
 package org.gridlab.gridsphere.layout.impl;
 
-import org.gridlab.gridsphere.layout.PortletTabEvent;
 import org.gridlab.gridsphere.layout.PortletTab;
+import org.gridlab.gridsphere.layout.PortletTabEvent;
 
 public class PortletTabEventImpl implements PortletTabEvent {
 

@@ -6,13 +6,9 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.Descriptor;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PortletLayoutDescriptor extends Descriptor {
 
@@ -25,7 +21,8 @@ public class PortletLayoutDescriptor extends Descriptor {
      * @param layoutMappingPath location of the mapping file
      * @throws DescriptorException if the PortletLayoutDescriptor cannot be created
      */
-    private PortletLayoutDescriptor() {}
+    private PortletLayoutDescriptor() {
+    }
 
     /**
      * Loads the portlet container associated with this descriptor
@@ -36,24 +33,24 @@ public class PortletLayoutDescriptor extends Descriptor {
      * @return the portlet container
      */
     public static PortletContainer loadPortletContainer(String layoutDescriptorPath, String layoutMappingPath) throws IOException, DescriptorException {
-        return (PortletContainer)load(layoutDescriptorPath, layoutMappingPath);
+        return (PortletContainer) load(layoutDescriptorPath, layoutMappingPath);
     }
 
     public static PortletTab loadPortletTab(String layoutDescriptorPath, String layoutMappingPath) throws IOException, DescriptorException {
-        return (PortletTab)load(layoutDescriptorPath, layoutMappingPath);
+        return (PortletTab) load(layoutDescriptorPath, layoutMappingPath);
     }
 
     /**
      *
      */
     public static void savePortletContainer(PortletContainer pc, String descriptorPath, String mappingPath) throws IOException, DescriptorException {
-       save(descriptorPath, mappingPath, pc);
+        save(descriptorPath, mappingPath, pc);
     }
 
     /**
      *
      */
     public static void savePortletContainer(PortletTab tab, String descriptorPath, String mappingPath) throws IOException, DescriptorException {
-       save(descriptorPath, mappingPath, tab);
+        save(descriptorPath, mappingPath, tab);
     }
 }

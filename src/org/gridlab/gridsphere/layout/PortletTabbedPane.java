@@ -6,19 +6,14 @@
 
 package org.gridlab.gridsphere.layout;
 
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-import org.gridlab.gridsphere.portlet.PortletURI;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletRequest;
-import org.gridlab.gridsphere.portlet.impl.SportletResponse;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PortletTabbedPane extends BasePortletComponent implements PortletTabListener {
 
@@ -26,7 +21,8 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
     private int selectedIndex = 0;
     private String style = "menu";
 
-    public PortletTabbedPane() {}
+    public PortletTabbedPane() {
+    }
 
     public void setStyle(String style) {
         this.style = style;
@@ -50,11 +46,11 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
     }
 
     public PortletTab getSelectedTab() {
-        return (PortletTab)tabs.get(selectedIndex);
+        return (PortletTab) tabs.get(selectedIndex);
     }
 
     public PortletTab getPortletTabAt(int index) {
-        return (PortletTab)tabs.get(index);
+        return (PortletTab) tabs.get(index);
     }
 
     public int getTabCount() {
@@ -62,7 +58,7 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
     }
 
     public String getTitleAt(int index) {
-        PortletTab tab = (PortletTab)tabs.get(index);
+        PortletTab tab = (PortletTab) tabs.get(index);
         return tab.getTitle();
     }
 
@@ -70,7 +66,7 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
         boolean found = false;
         int i;
         for (i = 0; i < tabs.size(); i++) {
-            PortletTab tab = (PortletTab)tabs.get(i);
+            PortletTab tab = (PortletTab) tabs.get(i);
             if (tab.getTitle().equals(title)) {
                 found = true;
                 break;
@@ -100,7 +96,7 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
     }
 
     public void setTitleAt(int index, String title) {
-        PortletTab tab = (PortletTab)tabs.get(index);
+        PortletTab tab = (PortletTab) tabs.get(index);
         tab.setTitle(title);
     }
 
@@ -113,7 +109,7 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
         PortletTab portletTab;
 
         for (int i = 0; i < tabs.size(); i++) {
-            portletTab = (PortletTab)tabs.get(i);
+            portletTab = (PortletTab) tabs.get(i);
             if (portletTab.getComponentID() == tab.getComponentID()) {
                 selectedIndex = i;
                 portletTab.setSelected(true);
@@ -132,7 +128,7 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
         PortletTab tab = null;
         for (int i = 0; i < getTabCount(); i++) {
             tab = getPortletTabAt(i);
-            if (selectedIndex==i) tab.setSelected(true);
+            if (selectedIndex == i) tab.setSelected(true);
             tab.addPortletTabListener(this);
             list = tab.init(list);
         }
@@ -147,25 +143,20 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
     }
 
     public String[] makeTabLinks(GridSphereEvent event) throws IOException {
-        SportletRequest req = event.getSportletRequest();
+        PortletRequest req = event.getPortletRequest();
 
         // Make tab links
         String[] tabLinks = new String[tabs.size()];
-
-        PortletURI sportletURI;
         for (int i = 0; i < tabs.size(); i++) {
-            PortletTab tab = (PortletTab)tabs.get(i);
-            sportletURI = event.createNewAction(tab.getComponentID(), null);
-
-            sportletURI.addParameter(GridSphereProperties.PORTLETTAB, tab.getTitle());
-            tabLinks[i] = sportletURI.toString();
+            PortletTab tab = (PortletTab) tabs.get(i);
+            tabLinks[i] = tab.makeTitleLink(event);
         }
         req.setAttribute(LayoutProperties.TABLINKS, tabLinks);
         return tabLinks;
     }
 
     public void doRenderMenu(GridSphereEvent event, String[] links) throws PortletLayoutException, IOException {
-        SportletResponse res = event.getSportletResponse();
+        PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
 
         // Render tabs titles
@@ -175,28 +166,28 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
         PortletTab tab;
         for (int i = 0; i < tabs.size(); i++) {
             String title = getTitleAt(i);
-            tab = (PortletTab)tabs.get(i);
+            tab = (PortletTab) tabs.get(i);
             if (tab.isSelected()) {
-                out.println("<td><img src=\"themes/"+theme+"/images/tab-active-left.gif\"/></td>");
+                out.println("<td><img src=\"themes/" + theme + "/images/tab-active-left.gif\"/></td>");
                 out.println("<td class=\"tab-active\">" + title + "</td>");
-                out.println("<td><img src=\"themes/"+theme+"/images/tab-active-right.gif\"/></td>");
+                out.println("<td><img src=\"themes/" + theme + "/images/tab-active-right.gif\"/></td>");
             } else {
-                out.println("<td><img src=\"themes/"+theme+"/images/tab-inactive-left.gif\"/></td>");
-                out.println("<td class=\"tab-inactive\"><a class=\"tab-menu\" href=\"" + links[i] + "\" >" +  title + "</a>");
-                out.println("<td><img src=\"themes/"+theme+"/images/tab-inactive-right.gif\"/></td>");
+                out.println("<td><img src=\"themes/" + theme + "/images/tab-inactive-left.gif\"/></td>");
+                out.println("<td class=\"tab-inactive\"><a class=\"tab-menu\" href=\"" + links[i] + "\" >" + title + "</a>");
+                out.println("<td><img src=\"themes/" + theme + "/images/tab-inactive-right.gif\"/></td>");
             }
             out.println("<td class=\"tab-empty\">&nbsp;</td>");
         }
         out.println("</tr></table>");
 
-        PortletTab selectedTab = (PortletTab)tabs.get(selectedIndex);
+        PortletTab selectedTab = (PortletTab) tabs.get(selectedIndex);
         if (selectedTab != null)
             selectedTab.doRender(event);
 
     }
 
     public void doRenderSubMenu(GridSphereEvent event, String[] links) throws PortletLayoutException, IOException {
-        SportletResponse res = event.getSportletResponse();
+        PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
 
         // Render tabs titles
@@ -207,12 +198,12 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
         PortletTab tab;
         for (int i = 0; i < tabs.size(); i++) {
             String title = getTitleAt(i);
-            tab = (PortletTab)tabs.get(i);
+            tab = (PortletTab) tabs.get(i);
             if (tab.isSelected()) {
-                out.println("<td> <span class=\"tab-sub-active\">"+title+"</span></td>");
+                out.println("<td> <span class=\"tab-sub-active\">" + title + "</span></td>");
             } else {
                 out.println("<td> <span class=\"tab-sub-inactive\">");
-                out.println("<a class=\"tab-sub-menu\" href=\"" + links[i] + "\" >" +  title + "</a>");
+                out.println("<a class=\"tab-sub-menu\" href=\"" + links[i] + "\" >" + title + "</a>");
                 out.println("</span></td>");
             }
         }
@@ -220,7 +211,7 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
         out.println("</tr></table>");
         out.println("</td></tr></table>");
 
-        PortletTab selectedTab = (PortletTab)tabs.get(selectedIndex);
+        PortletTab selectedTab = (PortletTab) tabs.get(selectedIndex);
         if (selectedTab != null)
             selectedTab.doRender(event);
     }

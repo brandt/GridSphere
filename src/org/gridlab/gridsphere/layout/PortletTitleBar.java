@@ -8,9 +8,6 @@ import org.gridlab.gridsphere.event.WindowEvent;
 import org.gridlab.gridsphere.event.impl.WindowEventImpl;
 import org.gridlab.gridsphere.layout.impl.PortletTitleBarEventImpl;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletRequest;
-import org.gridlab.gridsphere.portlet.impl.SportletResponse;
-import org.gridlab.gridsphere.portlet.impl.SportletURI;
 import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.portletcontainer.descriptor.AllowsWindowStates;
 import org.gridlab.gridsphere.portletcontainer.descriptor.Markup;
@@ -141,7 +138,8 @@ public class PortletTitleBar extends BasePortletComponent {
     }
 
     public List init(List list) {
-        COMPONENT_ID = list.size();
+        list = super.init(list);
+        //COMPONENT_ID = list.size();
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
         compId.setPortletClass(portletClass);
@@ -153,13 +151,13 @@ public class PortletTitleBar extends BasePortletComponent {
         String appID = registryManager.getApplicationPortletID(portletClass);
         ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
         if (appPortlet != null) {
-            SupportsModes supportedModes = appPortlet.getPortletApplicationDescriptor().getSupportsModes();
+            SupportsModes supportedModes = appPortlet.getApplicationPortletDescriptor().getSupportsModes();
             modeList = supportedModes.getMarkupList();
             ConcretePortlet concPortlet = appPortlet.getConcretePortlet(portletClass);
-            settings = concPortlet.getSportletSettings();
+            settings = concPortlet.getPortletSettings();
         }
         // Get window state settings
-        AllowsWindowStates allowedWindowStates = appPortlet.getPortletApplicationDescriptor().getAllowsWindowStates();
+        AllowsWindowStates allowedWindowStates = appPortlet.getApplicationPortletDescriptor().getAllowsWindowStates();
         allowsWindowStates = allowedWindowStates.getWindowStatesAsStrings();
         return list;
     }
@@ -170,7 +168,8 @@ public class PortletTitleBar extends BasePortletComponent {
 
     public List makeWindowLinks(GridSphereEvent event) {
 
-        SportletURI sportletURI;
+        PortletURI portletURI;
+        PortletResponse res = event.getPortletResponse();
 
         // subtract current window state
         List windowStates = new ArrayList(allowsWindowStates);
@@ -187,14 +186,17 @@ public class PortletTitleBar extends BasePortletComponent {
         Iterator it = windowStates.iterator();
         while (it.hasNext()) {
             String winState = (String) it.next();
-            sportletURI = event.createNewAction(COMPONENT_ID, portletClass);
+
+            portletURI = res.createURI();
+            portletURI.addParameter(GridSphereProperties.COMPONENT_ID, this.componentIDStr);
+            portletURI.addParameter(GridSphereProperties.PORTLETID, portletClass);
             try {
                 stateLink = new PortletStateLink(winState);
                 // Create portlet link Href
                 //modeAction = new DefaultPortletAction(LayoutProperties.CHANGESTATE);
                 //sportletURI.addAction(modeAction);
-                sportletURI.addParameter(GridSphereProperties.PORTLETWINDOW, winState);
-                stateLink.setStateHref(sportletURI.toString());
+                portletURI.addParameter(GridSphereProperties.PORTLETWINDOW, winState);
+                stateLink.setStateHref(portletURI.toString());
                 stateLinks.add(stateLink);
             } catch (Exception e) {
                 ErrorMessage += "Unable to create window state link: " + winState + "\n";
@@ -207,7 +209,8 @@ public class PortletTitleBar extends BasePortletComponent {
 
         int i;
 
-        SportletRequest req = event.getSportletRequest();
+        PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
 
         // get client preferred markup
         Client client = req.getClient();
@@ -230,20 +233,24 @@ public class PortletTitleBar extends BasePortletComponent {
         }
 
         // create a URI for each of the portlet modes
-        PortletURI sportletURI;
+        PortletURI portletURI;
         PortletModeLink modeLink;
         List portletLinks = new Vector();
         for (i = 0; i < portletModes.length; i++) {
-            sportletURI = event.createNewAction(COMPONENT_ID, portletClass);
-            //sportletURI.addParameter(GridSphereProperties.PORTLETID, (String)req.getAttribute(GridSphereProperties.PORTLETID));
+
+            portletURI = res.createURI();
+
+            portletURI.addParameter(GridSphereProperties.COMPONENT_ID, this.componentIDStr);
+
+            portletURI.addParameter(GridSphereProperties.PORTLETID, portletClass);
             try {
                 modeLink = new PortletModeLink(portletModes[i]);
                 // Create portlet link Href
 
                 //modeAction = new DefaultPortletAction(PortletAction.CHANGEMODE);
                 //sportletURI.addAction(modeAction);
-                sportletURI.addParameter(GridSphereProperties.PORTLETMODE, portletModes[i]);
-                modeLink.setModeHref(sportletURI.toString());
+                portletURI.addParameter(GridSphereProperties.PORTLETMODE, portletModes[i]);
+                modeLink.setModeHref(portletURI.toString());
                 portletLinks.add(modeLink);
             } catch (Exception e) {
                 ErrorMessage += "Unable to create portlet mode link: " + portletModes[i] + "\n";
@@ -254,10 +261,10 @@ public class PortletTitleBar extends BasePortletComponent {
 
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletTitleBarEvent evt = new PortletTitleBarEventImpl(event, COMPONENT_ID);
-        SportletRequest req = event.getSportletRequest();
+        PortletRequest req = event.getPortletRequest();
         if (evt.getAction() == PortletTitleBarEvent.Action.WINDOW_MODIFY) {
-            PortletResponse res = event.getSportletResponse();
-            //UserPortletManager userManager = event.getUserPortletManager();
+            PortletResponse res = event.getPortletResponse();
+
             PortletEventDispatcher dispatcher = event.getPortletEventDispatcher();
 
             portletWindowState = evt.getState();
@@ -282,7 +289,7 @@ public class PortletTitleBar extends BasePortletComponent {
             previousMode = portletMode;
             portletMode = evt.getMode();
             req.setMode(portletMode);
-            req.setPreviousMode(portletMode);
+            req.setAttribute(GridSphereProperties.PREVIOUSMODE, portletMode);
         }
         if (evt != null) fireTitleBarAction(evt);
     }
@@ -299,8 +306,8 @@ public class PortletTitleBar extends BasePortletComponent {
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
 
         // title bar: configure, edit, help, title, min, max
-        SportletRequest req = event.getSportletRequest();
-        SportletResponse res = event.getSportletResponse();
+        PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
 
         // get the appropriate title for this client
         Client client = req.getClient();
@@ -317,7 +324,7 @@ public class PortletTitleBar extends BasePortletComponent {
         }
 
         req.setMode(portletMode);
-        req.setPreviousMode(previousMode);
+        req.setAttribute(GridSphereProperties.PREVIOUSMODE, previousMode);
 
         PrintWriter out = res.getWriter();
 

@@ -4,14 +4,13 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portlet.impl.SportletResponse;
+import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.StringTokenizer;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class PortletGridLayout extends BasePortletLayout {
 
@@ -19,7 +18,8 @@ public class PortletGridLayout extends BasePortletLayout {
     private int[] colSizes;
     private String columnString;
 
-    public PortletGridLayout() {}
+    public PortletGridLayout() {
+    }
 
     public String getClassName() {
         return PortletGridLayout.class.getName();
@@ -54,7 +54,7 @@ public class PortletGridLayout extends BasePortletLayout {
     }
 
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
-        SportletResponse res = event.getSportletResponse();
+        PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
 
         //int j = 0, k = 0;
@@ -64,12 +64,12 @@ public class PortletGridLayout extends BasePortletLayout {
         int numComponents = components.size();
         PortletComponent p = null;
 
-        int portletsPerColumns = numComponents/numColumns;
+        int portletsPerColumns = numComponents / numColumns;
         int portletCount = 0;
 
         // ok this one is maximized show only this window
-        for (int i=0;i<numComponents;i++) {
-            p = (PortletComponent)components.get(i);
+        for (int i = 0; i < numComponents; i++) {
+            p = (PortletComponent) components.get(i);
             if (p.getWidth().equals("100%")) {
                 // make another table around this, just for the padding
                 out.println("<table border=\"0\" width=\"100%\" cellpadding=\"2\" cellspacing=\"0\"> ");
@@ -84,16 +84,16 @@ public class PortletGridLayout extends BasePortletLayout {
         out.println("<table border=\"0\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"> <!-- overall gridlayout table -->");
 
         out.println("<tr> <!-- overall one row -->");
-        for (int i=0;i<numColumns;i++) {
+        for (int i = 0; i < numColumns; i++) {
             // new column
-            out.println("<td width=\""+colSizes[i]+"%\" valign=\"top\"> <!-- this is a row -->");
+            out.println("<td width=\"" + colSizes[i] + "%\" valign=\"top\"> <!-- this is a row -->");
             // construct a table inside this column
-            out.println("<table border=\"0\" width=\"100%\" cellpadding=\"2\" cellspacing=\"0\"> <!-- this is table inside row ("+i+")-->");
+            out.println("<table border=\"0\" width=\"100%\" cellpadding=\"2\" cellspacing=\"0\"> <!-- this is table inside row (" + i + ")-->");
             // now render the portlets in this column
             //out.println("<tr>");
-            for (int j=1;j<=portletsPerColumns;j++) {
+            for (int j = 1; j <= portletsPerColumns; j++) {
                 out.println("<tr><td>");
-                p = (PortletComponent)components.get(portletCount);
+                p = (PortletComponent) components.get(portletCount);
                 if (p.isVisible()) {
                     p.doRender(event);
                 }
@@ -102,7 +102,7 @@ public class PortletGridLayout extends BasePortletLayout {
 
                 // if we have some (1) portlet left because of odd number of
                 // portlets to display just render the last ones in that column here
-                if ((portletCount<numComponents) && (i==numColumns-1) && (j==portletsPerColumns)) {
+                if ((portletCount < numComponents) && (i == numColumns - 1) && (j == portletsPerColumns)) {
                     j--;
                 }
             }

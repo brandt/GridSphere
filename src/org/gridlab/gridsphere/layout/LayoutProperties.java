@@ -36,7 +36,4 @@ public class LayoutProperties {
     public static final String RESIZEURI = "resizeuri";
 
 
-
-
-
 }

@@ -6,18 +6,18 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletContext;
 import org.gridlab.gridsphere.portlet.PortletException;
-import org.gridlab.gridsphere.portlet.impl.SportletRequest;
-import org.gridlab.gridsphere.portlet.impl.SportletResponse;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
-import java.util.List;
 
 public class PortletText extends BasePortletComponent {
 
     private String text;
 
-    public PortletText() {}
+    public PortletText() {
+    }
 
     public void setInclude(String text) {
         this.text = text;
@@ -30,8 +30,8 @@ public class PortletText extends BasePortletComponent {
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.doRender(event);
         PortletContext ctx = event.getPortletContext();
-        SportletRequest req = event.getSportletRequest();
-        SportletResponse res = event.getSportletResponse();
+        PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
         try {
             ctx.include(text, req, res);
         } catch (PortletException e) {

@@ -3,7 +3,7 @@
  * User: novotny
  * Date: Nov 29, 2002
  * Time: 3:52:37 PM
- * To change template for new class use 
+ * To change template for new class use
  * Code Style | Class Templates options (Tools | IDE Options).
  */
 package org.gridlab.gridsphere.layout;

@@ -8,20 +8,21 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.ArrayList;
 
 public class PortletPanel extends BasePortletComponent {
 
     private PortletLayout layout;
 
-    public PortletPanel() {}
+    public PortletPanel() {
+    }
 
     public List init(List list) {
         super.init(list);
         return layout.init(list);
     }
 
-    public void destroy() {}
+    public void destroy() {
+    }
 
     public PortletPanel(PortletLayout layout) {
         this.layout = layout;

@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.layout;
 
 
-
 /**
  * The WindowListener interface is an addition to the Portlet interface. If an object wishes to receive
  * events from a portlet window, this interface has to be implemented additionally to the Portlet interface.

@@ -1,10 +1,6 @@
 /*
- * Created by IntelliJ IDEA.
- * User: novotny
- * Date: Dec 16, 2002
- * Time: 11:30:30 AM
- * To change template for new class use 
- * Code Style | Class Templates options (Tools | IDE Options).
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @version $Id$
  */
 package org.gridlab.gridsphere.layout;
 

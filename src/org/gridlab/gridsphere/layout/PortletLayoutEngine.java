@@ -5,22 +5,16 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletResponse;
-import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.portlet.GuestUser;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletRequest;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The portlet layout engine is responsible for managing user's layouts. It also manages
@@ -50,7 +44,8 @@ public class PortletLayoutEngine {
     // Store application tabs in a hash
     private Map applicationTabs = new HashMap();
 
-    private PortletLayoutEngine() {}
+    private PortletLayoutEngine() {
+    }
 
     /**
      *
@@ -64,7 +59,7 @@ public class PortletLayoutEngine {
             PortletTab webAppTab = PortletLayoutDescriptor.loadPortletTab(tabXMLfile, layoutMappingPath);
             applicationTabs.put(webAppName, webAppTab);
         } catch (Exception e) {
-           // Don't worry- already logged
+            // Don't worry- already logged
         }
     }
 
@@ -81,11 +76,11 @@ public class PortletLayoutEngine {
         if (!layDir.exists()) {
             layDir.mkdir();
         }
-        String guestLayoutPath =  GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_XML);
+        String guestLayoutPath = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_XML);
         guestContainer = PortletLayoutDescriptor.loadPortletContainer(guestLayoutPath, layoutMappingPath);
         guestContainer.init(new ArrayList());
 
-        newuserLayoutPath =  GridSphereConfig.getProperty(GridSphereConfigProperties.NEW_USER_LAYOUT_XML);
+        newuserLayoutPath = GridSphereConfig.getProperty(GridSphereConfigProperties.NEW_USER_LAYOUT_XML);
         newuserContainer = PortletLayoutDescriptor.loadPortletContainer(newuserLayoutPath, layoutMappingPath);
         newuserContainer.init(new ArrayList());
     }
@@ -101,15 +96,15 @@ public class PortletLayoutEngine {
         // if user is guest then use guest template
         PortletContainer pc = null;
 
-        User user = event.getSportletRequest().getUser();
-        System.err.println(user.getFamilyName());
+        User user = event.getPortletRequest().getUser();
+
         if (user instanceof GuestUser) {
             return guestContainer;
 
             // Check if we have user's layout already
         } else if (userLayouts.containsKey(user)) {
 
-            pc = (PortletContainer)userLayouts.get(user);
+            pc = (PortletContainer) userLayouts.get(user);
             // If not we try to load it in (creating new one if necessary)
         } else {
             try {
@@ -127,7 +122,7 @@ public class PortletLayoutEngine {
 
     public PortletContainer getPortletContainer(User user) {
         if (user instanceof GuestUser) return guestContainer;
-        return (PortletContainer)userLayouts.get(user);
+        return (PortletContainer) userLayouts.get(user);
     }
 
     public void service(GridSphereEvent event) throws IOException {
@@ -143,7 +138,7 @@ public class PortletLayoutEngine {
             pc.doRender(event);
         } catch (PortletLayoutException e) {
             error = e.getMessage();
-            SportletRequest req = event.getSportletRequest();
+            PortletRequest req = event.getPortletRequest();
             req.logRequest();
             log.error("Caught LayoutException: ", e);
         }
@@ -166,7 +161,7 @@ public class PortletLayoutEngine {
     }
 
     public PortletContainer getUserLayout(User user) {
-        return (PortletContainer)userLayouts.get(user);
+        return (PortletContainer) userLayouts.get(user);
     }
 
     public void actionPerformed(GridSphereEvent event) throws IOException {
@@ -179,7 +174,7 @@ public class PortletLayoutEngine {
             pc.actionPerformed(event);
         } catch (PortletLayoutException e) {
             error = e.getMessage();
-            SportletRequest req = event.getSportletRequest();
+            PortletRequest req = event.getPortletRequest();
             req.logRequest();
             log.error("Caught LayoutException: ", e);
         }
@@ -212,7 +207,7 @@ public class PortletLayoutEngine {
 
     public void saveUserLayout(User user) throws DescriptorException, IOException {
 
-        PortletContainer pc = (PortletContainer)userLayouts.get(user);
+        PortletContainer pc = (PortletContainer) userLayouts.get(user);
         if (pc == null) {
             throw new DescriptorException("PortletLayout does not exist for user: " + user.getID());
         }

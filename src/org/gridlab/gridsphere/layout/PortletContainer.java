@@ -4,12 +4,10 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portlet.impl.SportletResponse;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletException;
-import org.gridlab.gridsphere.portletcontainer.*;
-import org.gridlab.gridsphere.services.registry.PortletManagerService;
+import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
+import org.gridlab.gridsphere.portletcontainer.PortletEventDispatcher;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -33,7 +31,8 @@ public class PortletContainer {
     protected String name = "";
     protected String uiTheme = "xp";
 
-    public PortletContainer() {}
+    public PortletContainer() {
+    }
 
     public void setContainerName(String name) {
         this.name = name;
@@ -47,14 +46,14 @@ public class PortletContainer {
         Iterator it = components.iterator();
         PortletComponent comp;
         while (it.hasNext()) {
-            comp = (PortletComponent)it.next();
+            comp = (PortletComponent) it.next();
             comp.setTheme(uiTheme);
             list = comp.init(list);
         }
         System.err.println("Made a components list!!!! " + list.size());
         for (int i = 0; i < list.size(); i++) {
-            ComponentIdentifier c = (ComponentIdentifier)list.get(i);
-            System.err.println("id: " + c.getComponentID() + " : " + c.getClassName() +  " : " + c.hasPortlet());
+            ComponentIdentifier c = (ComponentIdentifier) list.get(i);
+            System.err.println("id: " + c.getComponentID() + " : " + c.getClassName() + " : " + c.hasPortlet());
 
         }
         componentIdentifiers = list;
@@ -67,10 +66,10 @@ public class PortletContainer {
         ComponentIdentifier cid = null;
         PortletFrame f = null;
         while (it.hasNext()) {
-            cid = (ComponentIdentifier)it.next();
+            cid = (ComponentIdentifier) it.next();
             System.err.println(cid.getClassName());
             if (cid.getClassName().equals("org.gridlab.gridsphere.layout.PortletFrame")) {
-                f = (PortletFrame)cid.getPortletComponent();
+                f = (PortletFrame) cid.getPortletComponent();
                 portlets.add(f.getPortletClass());
                 dispatcher.portletLogin(f.getPortletClass());
             }
@@ -83,9 +82,9 @@ public class PortletContainer {
         ComponentIdentifier cid = null;
         PortletFrame f = null;
         while (it.hasNext()) {
-            cid = (ComponentIdentifier)it.next();
+            cid = (ComponentIdentifier) it.next();
             if (cid.getPortletClass().equals("org.gridlab.gridsphere.layout.PortletFrame")) {
-                f = (PortletFrame)cid.getPortletComponent();
+                f = (PortletFrame) cid.getPortletComponent();
                 dispatcher.portletLogout(f.getPortletClass());
             }
         }
@@ -94,7 +93,7 @@ public class PortletContainer {
     public void destroy() {
         Iterator it = components.iterator();
         while (it.hasNext()) {
-            PortletComponent comp = (PortletComponent)it.next();
+            PortletComponent comp = (PortletComponent) it.next();
             comp.destroy();
         }
     }
@@ -104,7 +103,7 @@ public class PortletContainer {
         if (event.getPortletComponentID() != -1) {
             // off by one calculations for array indexing (because all component id's are .size() which is
             // one more than we use to index the components
-            ComponentIdentifier compId = (ComponentIdentifier)componentIdentifiers.get(event.getPortletComponentID());
+            ComponentIdentifier compId = (ComponentIdentifier) componentIdentifiers.get(event.getPortletComponentID());
             PortletComponent comp = compId.getPortletComponent();
             if (comp != null) {
                 comp.actionPerformed(event);
@@ -113,20 +112,20 @@ public class PortletContainer {
     }
 
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
-        SportletResponse res = event.getSportletResponse();
+        PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
 
         out.println("<html>");
         out.println("<head>");
         out.println("  <title>" + name + "</title>");
-        out.println("  <link type=\"text/css\" href=\"themes/"+uiTheme+"/css"+
-         "/default.css\" rel=\"STYLESHEET\"/>");
+        out.println("  <link type=\"text/css\" href=\"themes/" + uiTheme + "/css" +
+                "/default.css\" rel=\"STYLESHEET\"/>");
         out.println("<script language=\"JavaScript\" src=\"javascript/gridsphere.js\"></script>");
         out.println("</head>\n<body>");
 
         Iterator it = components.iterator();
         while (it.hasNext()) {
-            PortletComponent comp = (PortletComponent)it.next();
+            PortletComponent comp = (PortletComponent) it.next();
             comp.doRender(event);
         }
         out.println("</body></html>");

@@ -4,18 +4,18 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portlet.impl.SportletResponse;
+import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 public class PortletImage extends BasePortletComponent {
 
     private String image;
 
-    public PortletImage() {}
+    public PortletImage() {
+    }
 
     public PortletImage(String image) {
         this.image = image;
@@ -31,7 +31,7 @@ public class PortletImage extends BasePortletComponent {
 
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.doRender(event);
-        SportletResponse res = event.getSportletResponse();
+        PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
         out.println("<table width=\"100%\"><td width=\"1\">");
         out.println("<spacer type=block width=\"100\"></td><td>");

@@ -6,17 +6,9 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.layout.impl.PortletFrameEventImpl;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portlet.impl.SportletRequest;
-import org.gridlab.gridsphere.portlet.impl.SportletResponse;
 import org.gridlab.gridsphere.portlet.impl.SportletWindow;
-import org.gridlab.gridsphere.portlet.GuestUser;
 import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletDataManager;
-//import org.gridlab.gridsphere.portletcontainer.UserPortletManager;
-import org.gridlab.gridsphere.services.user.UserManagerService;
-import org.gridlab.gridsphere.services.registry.PortletManagerService;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -38,7 +30,8 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
     private PortletErrorMessage error = null;
     private boolean transparent = false;
 
-    public PortletFrame() {}
+    public PortletFrame() {
+    }
 
     public void setPortletClass(String portletClass) {
         this.portletClass = portletClass;
@@ -68,8 +61,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
     }
 
     public List init(List list) {
-        COMPONENT_ID = list.size();
-        componentIDStr = String.valueOf(COMPONENT_ID);
+        list = super.init(list);
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
         compId.setPortletClass(portletClass);
@@ -93,7 +85,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         Iterator it = listeners.iterator();
         PortletFrameListener l;
         while (it.hasNext()) {
-            l = (PortletFrameListener)it.next();
+            l = (PortletFrameListener) it.next();
             l.handleFrameEvent(event);
         }
     }
@@ -124,14 +116,13 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
     }
 
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
-
+        super.actionPerformed(event);
         // process events
-        SportletRequest req = event.getSportletRequest();
-        SportletResponse res = event.getSportletResponse();
+        PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
         PortletContext ctx = event.getPortletContext();
 
         req.setAttribute(GridSphereProperties.PORTLETID, portletClass);
-        req.setAttribute(GridSphereProperties.COMPONENT_ID, componentIDStr);
 
         String newmode = req.getParameter(GridSphereProperties.PORTLETMODE);
         if (newmode != null) {
@@ -150,7 +141,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         if (!(user instanceof GuestUser)) {
             PortletDataManager dataManager = SportletDataManager.getInstance();
             data = dataManager.getPortletData(req.getUser(), portletClass);
-            req.setData(data);
+            req.setAttribute(GridSphereProperties.PORTLETDATA, data);
         }
 
 
@@ -172,11 +163,10 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
 
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.doRender(event);
-        SportletRequest req = event.getSportletRequest();
-        SportletResponse res = event.getSportletResponse();
+        PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
 
         req.setAttribute(GridSphereProperties.PORTLETID, portletClass);
-        req.setAttribute(GridSphereProperties.COMPONENT_ID, componentIDStr);
 
         ///// begin portlet frame
         PrintWriter out = res.getWriter();
