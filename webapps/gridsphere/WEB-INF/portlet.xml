@@ -20,12 +20,12 @@
     </portlet-app-def>
 
     <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.LoginPortlet">
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.login.LoginPortlet">
             <portlet-name>Login</portlet-name>
             <servlet-name>LoginPortlet</servlet-name>
         </portlet-app>
 
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.LoginPortlet.1">
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1">
             <context-param>
                 <param-name>login_module</param-name>
                 <param-value>PASSWORD_AUTH_MODULE</param-value>
@@ -52,10 +52,10 @@
                     <keywords>anmelden logout</keywords>
                 </language>
                 <language locale="hu">
-                    <title>Bejelentkezs</title>
-                    <title-short>Bejelentkezs</title-short>
-                    <description>A portlet a portlba val bejelentkezsre szolgl</description>
-                    <keywords>bejelentkezs portlet</keywords>
+                    <title>Bejelentkezés</title>
+                    <title-short>Bejelentkezés</title-short>
+                    <description>A portlet a portálba való bejelentkezésre szolgál</description>
+                    <keywords>bejelentkezés portlet</keywords>
                 </language>
                 <language locale="pl">
                   <title>Logowanie</title>
@@ -74,12 +74,12 @@
     </portlet-app-def>
 
     <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.LogoutPortlet">
+        <portlet-app id="org.gridlab.gridsphere.portlets.core.login.LogoutPortlet">
             <portlet-name>Logout</portlet-name>
             <servlet-name>LogoutPortlet</servlet-name>
         </portlet-app>
 
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.LogoutPortlet.1">
+        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.login.LogoutPortlet.1">
             <concrete-portlet>
                 <portlet-name>Logout</portlet-name>
                 <default-locale>en</default-locale>
@@ -102,10 +102,10 @@
                     <keywords>portlet abmelden</keywords>
                 </language>
                 <language locale="hu">
-                    <title>Kijelentkez�s</title>
-                    <title-short>Kijelentkez�s</title-short>
-                    <description>A portlet a port�lb�l val� kijelentkez�sre szolg�l</description>
-                    <keywords>kijelentkez�s portlet</keywords>
+                    <title>Kijelentkezés</title>
+                    <title-short>Kijelentkezés</title-short>
+                    <description>A portlet a portálból való kijelentkezésre szolgál</description>
+                    <keywords>kijelentkezés portlet</keywords>
                 </language>
                 <language locale="pl">
                     <title>Wylogowanie</title>
