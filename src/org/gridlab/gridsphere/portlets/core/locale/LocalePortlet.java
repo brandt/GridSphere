@@ -52,7 +52,7 @@ public class LocalePortlet extends ActionPortlet {
 
         ListBoxBean localeSelector = event.getListBoxBean("localeLB");
         localeSelector.clear();
-        localeSelector.setOnChange("GridSphere_SelectLocale(this)");
+        localeSelector.setOnChange("GridSphere_SelectSubmit( this.form )");
         localeSelector.setSize(1);
 
 
