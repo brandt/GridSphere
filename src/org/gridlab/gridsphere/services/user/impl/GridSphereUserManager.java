@@ -176,9 +176,6 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
             } catch (InvalidAccountRequestException e) {
                 log.error("Unable to create account for root user", e);
                 throw new PortletServiceUnavailableException(e.getMessage());
-            } catch (InvalidPasswordException e) {
-                log.error("Unable to create account for root user", e);
-                throw new PortletServiceUnavailableException(e.getMessage());
             }
             /* Retrieve root user object */
             rootUser = getUserByUserName(loginName);
@@ -315,12 +312,12 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     }
 
     public void submitAccountRequest(AccountRequest request)
-            throws InvalidAccountRequestException, InvalidPasswordException {
+            throws InvalidAccountRequestException {
         submitAccountRequest(request, null);
     }
 
     public void submitAccountRequest(AccountRequest request, MailMessage mailMessage)
-            throws InvalidAccountRequestException, InvalidPasswordException {
+            throws InvalidAccountRequestException {
          if (request instanceof AccountRequestImpl) {
              // Save account request if not already saved
              if (!existsAccountRequest(request)) {
@@ -341,34 +338,40 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
     }
 
     public void validateAccountRequest(AccountRequest request)
-            throws InvalidAccountRequestException, InvalidPasswordException {
+            throws InvalidAccountRequestException {
         // Then validate password
         validatePassword(request);
     }
 
-    private void validatePassword(AccountRequest request)
-            throws InvalidPasswordException {
+    private void validatePassword(AccountRequest request) throws InvalidAccountRequestException {
         // Then validate password if requested
         User user = getUser(request.getID());
         if (user == null) {
             if (request.getPasswordValidation()) {
                 log.info("Validating password for account request");
-                this.passwordManagerService.validatePassword(request.getPasswordValue());
+                try {
+                    this.passwordManagerService.validatePassword(request.getPasswordValue());
+                } catch (InvalidPasswordException e) {
+                    throw new InvalidAccountRequestException("Unable to validate password: " + e.getExplanation());
+                }
             } else {
                 log.info("Not validating password for account request");
             }
         } else {
             if (request.getPasswordValidation() && request.getPasswordHasChanged()) {
                 log.info("Validating password for account request");
-                this.passwordManagerService.validatePassword(user, request.getPasswordValue());
+                try {
+                    this.passwordManagerService.validatePassword(user, request.getPasswordValue());
+                } catch (InvalidPasswordException e) {
+                    throw new InvalidAccountRequestException("Unable to validate password: " + e.getExplanation());
+                }
             } else {
                 log.info("Not validating password for account request");
             }
         }
     }
 
-    private void saveAccountRequestPassword(AccountRequest request)
-            throws InvalidPasswordException {
+    private void saveAccountRequestPassword(AccountRequest request) throws InvalidAccountRequestException {
         // Get password editor from account request
         PasswordBean passwordBean = request.getPassword();
         // Check if password wasn't edited
@@ -383,7 +386,11 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
             }
         }
         // Otherwise attempt to save password edits
-        this.passwordManagerService.savePassword(passwordBean);
+        try {
+            this.passwordManagerService.savePassword(passwordBean);
+        } catch (InvalidPasswordException e) {
+            throw new InvalidAccountRequestException("Unable to validate password: " + e.getExplanation());
+        }
     }
 
     private boolean existsAccountRequest(AccountRequest request) {

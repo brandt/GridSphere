@@ -93,7 +93,7 @@ public class UserManagerServiceImpl implements UserManagerService, PortletServic
      * @param request the <code>AccountRequest</code> to submit
      */
     public void validateAccountRequest(AccountRequest request)
-            throws InvalidAccountRequestException, InvalidPasswordException {
+            throws InvalidAccountRequestException {
         userManager.validateAccountRequest(request);
     }
 
@@ -103,7 +103,7 @@ public class UserManagerServiceImpl implements UserManagerService, PortletServic
      * @param request the <code>AccountRequest</code> to submit
      */
     public void submitAccountRequest(AccountRequest request)
-            throws InvalidAccountRequestException, InvalidPasswordException {
+            throws InvalidAccountRequestException {
         userManager.submitAccountRequest(request);
     }
 
@@ -113,7 +113,7 @@ public class UserManagerServiceImpl implements UserManagerService, PortletServic
       * @param request the <code>AccountRequest</code> to submit
       */
     public void submitAccountRequest(AccountRequest request, MailMessage mailMessage)
-            throws InvalidAccountRequestException, InvalidPasswordException {
+            throws InvalidAccountRequestException {
          userManager.submitAccountRequest(request, mailMessage);
      }
 

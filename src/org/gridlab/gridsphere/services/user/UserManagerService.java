@@ -3,7 +3,7 @@
  * User: russell
  * Date: Jan 31, 2003
  * Time: 3:58:16 AM
- * To change template for new interface use 
+ * To change template for new interface use
  * Code Style | Class Templates options (Tools | IDE Options).
  */
 package org.gridlab.gridsphere.services.user;
@@ -52,7 +52,7 @@ public interface UserManagerService extends PortletService {
      * @param request the <code>AccountRequest</code> to submit
      */
     public void validateAccountRequest(AccountRequest request)
-            throws InvalidAccountRequestException, InvalidPasswordException;
+            throws InvalidAccountRequestException;
 
     /**
      * Submit the account request to the queue for administrative approval
@@ -60,7 +60,7 @@ public interface UserManagerService extends PortletService {
      * @param request the <code>AccountRequest</code> to submit
      */
     public void submitAccountRequest(AccountRequest request)
-            throws InvalidAccountRequestException, InvalidPasswordException;
+            throws InvalidAccountRequestException;
 
      /**
       * Submit the account request to the queue for administrative approval
@@ -68,7 +68,7 @@ public interface UserManagerService extends PortletService {
       * @param request the <code>AccountRequest</code> to submit
       */
     public void submitAccountRequest(AccountRequest request, MailMessage mailMessage)
-            throws InvalidAccountRequestException, InvalidPasswordException;
+            throws InvalidAccountRequestException;
 
     /**
       * Approve a new or modified account request.
@@ -158,4 +158,5 @@ public interface UserManagerService extends PortletService {
       * @return true if the user exists, false otherwise
       */
     public boolean existsUserName(String loginName);
+
 }
