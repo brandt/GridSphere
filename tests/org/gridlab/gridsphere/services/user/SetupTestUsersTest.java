@@ -97,7 +97,7 @@ public class SetupTestUsersTest extends SetupTestGroupsTest {
 
     public void testAddRemoveUsers() {
         AccountRequest franzReq = rootUserService.createAccountRequest();
-        franzReq.setLoginName("franz");
+        franzReq.setUserName("franz");
         try {
             rootUserService.submitAccountRequest(franzReq);
         } catch (InvalidAccountRequestException e) {
@@ -107,10 +107,10 @@ public class SetupTestUsersTest extends SetupTestGroupsTest {
         boolean isthere = reqs.contains(franzReq);
         assertEquals(true, isthere);
         User franz = rootUserService.approveAccountRequest(franzReq);
-        User newfranz = rootUserService.getUserByLoginName("franz");
+        User newfranz = rootUserService.getUserByUserName("franz");
         assertEquals(franz, newfranz);
         rootUserService.deleteAccount(franz);
-        newfranz = rootUserService.getUserByLoginName("franz");
+        newfranz = rootUserService.getUserByUserName("franz");
         assertEquals(null, newfranz);
     }
 
