@@ -143,7 +143,7 @@ public abstract class BaseComponentBean extends BaseBean {
      */
     protected String checkReadOnly() {
         if (readonly) {
-            return " disabled='disabled' ";
+            return " readonly='readonly' ";
         } else {
             return "";
         }
