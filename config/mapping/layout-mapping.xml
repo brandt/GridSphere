@@ -71,6 +71,13 @@
         </field>
     </class>
 
+    <class name="org.gridlab.gridsphere.layout.PortletTableLayout" extends="org.gridlab.gridsphere.layout.PortletFrameLayout">
+        <map-to xml="table-layout"/>
+        <field name="Style" type="string">
+            <bind-xml name="style" node="attribute"/>
+        </field>
+    </class>
+
     <class name="org.gridlab.gridsphere.layout.PortletGridLayout" extends="org.gridlab.gridsphere.layout.PortletFrameLayout">
         <map-to xml="grid-layout"/>
         <field name="Columns" type="string">
@@ -78,6 +85,13 @@
         </field>
         <field name="Style" type="string">
             <bind-xml name="style" node="attribute"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.layout.PortletColumnLayout" extends="org.gridlab.gridsphere.layout.PortletFrameLayout">
+        <map-to xml="column-layout"/>
+        <field name="width" type="string">
+            <bind-xml name="width" node="attribute"/>
         </field>
     </class>
 
