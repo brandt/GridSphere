@@ -1,6 +1,5 @@
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
-import javax.portlet.ReadOnlyException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +12,7 @@ public class PersistencePreferenceAttribute {
 
     private String oid = null;
     protected boolean readonly = false;
+    protected String name = new String();
     protected List values = new ArrayList();
 
     public String getOid() {
@@ -27,6 +27,14 @@ public class PersistencePreferenceAttribute {
         this.readonly = readonly;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public void setValues(List values) {
         this.values = values;
     }
@@ -39,14 +47,10 @@ public class PersistencePreferenceAttribute {
         return readonly;
     }
 
-    public void setAValues(String[] values) throws ReadOnlyException {
-        if (!readonly) {
-            this.values = new ArrayList();
-            for (int i = 0; i < values.length; i++) {
-                this.values.add(values[i]);
-            }
-        } else {
-            throw new ReadOnlyException("value is ReadOnly");
+    public void setAValues(String[] values) {
+        this.values = new ArrayList();
+        for (int i = 0; i < values.length; i++) {
+            this.values.add(values[i]);
         }
     }
 
@@ -54,7 +58,7 @@ public class PersistencePreferenceAttribute {
         return (String[]) this.values.toArray();
     }
 
-    public void setValue(String value) throws ReadOnlyException {
+    public void setValue(String value)  {
         setAValues(new String[]{value});
     }
 
