@@ -10,6 +10,8 @@ import java.util.Vector;
 import java.util.List;
 import java.util.Properties;
 import java.util.Iterator;
+import java.io.PrintWriter;
+import java.io.PrintStream;
 
 public class SportletServiceDefinition {
 
@@ -73,6 +75,15 @@ public class SportletServiceDefinition {
         if (configProps == null)
             makeProperties();
         return configProps;
+    }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("service name: " + Name + "\n");
+        sb.append("description: " + Description + "\n");
+        sb.append("interface: " + Interface + "\n");
+        sb.append("Implementation: " + Implementation + "\n");
+        return sb.toString();
     }
 
 }

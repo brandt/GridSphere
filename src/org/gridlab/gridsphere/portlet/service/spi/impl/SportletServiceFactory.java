@@ -71,7 +71,8 @@ public class SportletServiceFactory implements PortletServiceFactory {
         Iterator it = services.iterator();
         while (it.hasNext()) {
             SportletServiceDefinition serviceDef = (SportletServiceDefinition)it.next();
-            allServices.put(serviceDef.getImplementation(), serviceDef);
+            allServices.put(serviceDef.getInterface(), serviceDef);
+            log.info("adding service: " + serviceDef.getInterface() + " service def: " + serviceDef.toString());
         }
     }
 
