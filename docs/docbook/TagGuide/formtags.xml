@@ -769,7 +769,7 @@
             <example>
                 <title>Usage of hiddenfield</title>
                 <screen>
-<![CDATA[<ui:textfield beanId="myHiddenField" name="fruit" value="orange"/>]]>
+<![CDATA[<ui:hiddenfield beanId="myHiddenField" name="fruit" value="orange"/>]]>
                 </screen>
                 This example creates a hiddenfield with a name and value. The beanId label can be used to
                 retrieve the bean from a portlet.
@@ -867,11 +867,11 @@
                 </tgroup>
             </table>
             <example>
-                <title>Usage of textfield</title>
+                <title>Usage of fileinput</title>
                 <screen>
-<![CDATA[<ui:textfield beanId="myTextField" value="Initial value" size="15"/>]]>
+<![CDATA[<ui:fileinput beanId="myFileInput" value="Initial value" size="15"/>]]>
                 </screen>
-                This example creates a textfield with the beanId myTextField such that it can be retrieved in the portlet
+                This example creates a fileinput with the beanId myFileInput such that it can be retrieved in the portlet
                 action method.
             </example>
         </sect2>
