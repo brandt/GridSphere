@@ -7,5 +7,5 @@
         <param name="user" value="sa" />
         <param name="password" value="" />
     </driver>
-    <mapping href="docletmapping.xml"/>
+    <mapping href="@CATALINA_HOME@/webapps/gridsphere/WEB-INF/database/docletmapping.xml"/>
 </database>
