@@ -9,4 +9,5 @@ package org.gridlab.gridsphere.portlet.service;
  * Portlets can obtain portlet service instances by calling the method PortletContext.getService.
  */
 public interface PortletService {
+
 }

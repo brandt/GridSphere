@@ -51,10 +51,10 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
     private Hashtable allServices = new Hashtable();
 
     // Hash of all user services
-    private Hashtable userServices = new Hashtable();
+    private static Hashtable userServices = new Hashtable();
 
     // List of all guest cached guest services
-    private List guestServices = new Vector();
+    private Hashtable guestServices = new Hashtable();
 
     /**
      * Private constructor. Use getDefault() instead.
@@ -73,7 +73,8 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
 
     public void logout(PortletSession session) throws PortletException {
         String userid = userSessionManager.getUserIdFromSession(session);
-        if (userid != null) {
+        if ((userid != null) && (userServices.containsKey(userid))) {
+            log.debug("Removing services for userid: " + userid);
             userServices.remove(userid);
         }
     }
@@ -102,7 +103,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         while (it.hasNext()) {
             SportletServiceDefinition serviceDef = (SportletServiceDefinition) it.next();
             allServices.put(serviceDef.getServiceInterface(), serviceDef);
-            log.info("adding service: " + serviceDef.getServiceInterface() + " service def: " + serviceDef.toString());
+            log.debug("adding service: " + serviceDef.getServiceInterface() + " service def: " + serviceDef.toString());
         }
     }
 
@@ -218,18 +219,16 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         }
 
         if (useCachedService) {
-            List userServiceList = (List)userServices.get(user.getUserID());
-            if (userServiceList != null) {
-                if (userServiceList.contains(serviceName)) {
-                    int idx = userServiceList.indexOf(serviceName);
-                    return (PortletService)userServiceList.get(idx);
+            Map userServiceMap = (Map)userServices.get(user.getID());
+            if (userServiceMap != null) {
+                if (userServiceMap.containsKey(serviceName)) {
+                    return (PortletService)userServiceMap.get(serviceName);
                 }
             }
         }
 
-        if (guestServices.contains(serviceName)) {
-            int idx = guestServices.indexOf(serviceName);
-            return (PortletService)guestServices.get(idx);
+        if ((user instanceof GuestUser) && (guestServices.containsKey(serviceName))) {
+            return (PortletService)guestServices.get(serviceName);
         }
 
         /* Create the service implementation */
@@ -268,14 +267,34 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         }
 
         if (user instanceof GuestUser) {
-            guestServices.add(psp);
+            guestServices.put(serviceName, psp);
             return psp;
         }
 
-        List userServiceList = (List)userServices.get(user.getUserID());
-        if (userServiceList == null) userServiceList = new ArrayList();
+        Map userServiceMap = (Map)userServices.get(user.getID());
+        if (userServiceMap == null) userServiceMap = new HashMap();
 
-        userServiceList.add(psp);
+        userServiceMap.put(serviceName, psp);
+        userServices.put(user.getID(), userServiceMap);
+
+        log.debug("printing user services " + user.getID());
+        Enumeration enum = userServices.keys();
+        while (enum.hasMoreElements()) {
+            String u = (String)enum.nextElement();
+            Map l = (Map)userServices.get(u);
+            Iterator it = l.keySet().iterator();
+            while (it.hasNext()) {
+                log.debug("service: " + (String)it.next());
+            }
+        }
+
+        log.debug("printing guest services");
+        enum = guestServices.keys();
+        while (enum.hasMoreElements()) {
+            String s = (String)enum.nextElement();
+            log.debug("service: " + s);
+        }
+
         PortletSession session = userSessionManager.getSession(user);
         portletSessionManager.addSessionListener(session.getId(), this);
 
