@@ -14,10 +14,9 @@ import java.util.*;
 
 import org.globus.io.gass.client.GassException;
 import org.globus.io.gass.server.GassServer;
-import org.globus.security.GlobusProxyException;
-import org.globus.security.GlobusProxy;
 import org.globus.util.GlobusURL;
 import org.globus.gram.Gram;
+import org.globus.gsi.gssapi.GlobusGSSException;
 
 import org.gridlab.gridsphere.services.grid.system.Local;
 import org.gridlab.gridsphere.services.grid.data.file.FileHandle;
@@ -28,6 +27,7 @@ import org.gridlab.gridsphere.services.grid.security.credential.CredentialExcept
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.ietf.jgss.GSSCredential;
 
 public class GridSphereGassManager implements GassManagerService {
 
@@ -56,11 +56,7 @@ public class GridSphereGassManager implements GassManagerService {
         String userId = user.getID();
         GassServer gassServer = (GassServer)this.gassServers.get(userId);
         if (gassServer == null) {
-            try {
-                gassServer = createGassServer(user);
-            } catch (GlobusProxyException e) {
-                throw new CredentialException(e.getMessage());
-            }
+            gassServer = createGassServer(user);
             gassServers.put(userId, gassServer);
         }
         return gassServer;
@@ -137,15 +133,15 @@ public class GridSphereGassManager implements GassManagerService {
     }
 
     private GassServer createGassServer(User user)
-            throws GlobusProxyException, IOException {
-        GlobusProxy globusProxy = null;
+            throws CredentialException, IOException {
+        GSSCredential globusProxy = null;
         try {
             System.out.println("GassServer.createGassServer(user)");
-            globusProxy = getUserDefaultGlobusProxy(user);
+            globusProxy = getUserDefaultGSSProxy(user);
         } catch (Exception e) {
             _logger.error("createGassServer", e);
             System.err.println(e);
-            throw new GlobusProxyException(e.getMessage());
+            throw new CredentialException(e.getMessage());
         }
         GassServer gassServer = null;
         try {
@@ -156,9 +152,6 @@ public class GridSphereGassManager implements GassManagerService {
                                    GassServer.READ_ENABLE |
                                    GassServer.WRITE_ENABLE );
              _logger.debug("GassFileHandle GASS server started at " + gassServer.getURL());
-        } catch (GlobusProxyException e) {
-            _logger.error("Unable to create gass server!", e);
-            throw e;
         } catch (IOException e) {
             _logger.error("Unable to create gass server!", e);
             throw e;
@@ -166,11 +159,11 @@ public class GridSphereGassManager implements GassManagerService {
         return gassServer;
     }
 
-    private GlobusProxy getUserDefaultGlobusProxy(User user) {
+    private GSSCredential getUserDefaultGSSProxy(User user) {
         if (credentialManager.hasActiveCredentials(user)) {
             List credentials = credentialManager.getActiveCredentials(user);
             GlobusCredential credential = (GlobusCredential)credentials.get(0);
-            return credential.getGlobusProxy();
+            return credential.getGSSProxy();
         }
         return null;
     }

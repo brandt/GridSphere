@@ -31,9 +31,7 @@ import org.apache.axis.configuration.SimpleProvider;
 import org.globus.axis.transport.GSIHTTPSender;
 import org.globus.axis.transport.GSIHTTPTransport;
 import org.globus.axis.util.Util;
-import org.globus.security.GlobusProxy;
-import org.globus.security.GlobusProxyException;
-import org.globus.security.auth.NoAuthorization;
+import org.globus.gsi.gssapi.auth.NoAuthorization;
 
 import org.gridlab.resmgmt.GsiScenarioBroker;
 import org.gridlab.resmgmt.GsiScenarioBrokerServiceLocator;
@@ -57,6 +55,7 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.ietf.jgss.GSSCredential;
 
 public class GrmsJobManager implements JobManagerService {
 
@@ -128,23 +127,6 @@ public class GrmsJobManager implements JobManagerService {
         }
     }
 
-    public GsiScenarioBroker connect() throws Exception {
-        GsiScenarioBroker grmsBroker = null;
-        try {
-            grmsBroker = this.serviceLocator.getgsiScenarioBroker(this.serviceURL);
-            _logger.info("GrmsJobManager: Got service");
-        } catch (Exception e) {
-            String message = "GrmsJobManager failed to get scenario broker service!";
-            _logger.error(message);
-            System.err.println(message);
-            throw e;
-        }
-        _logger.info("GrmsJobManager: Getting default proxy");
-        GlobusProxy globusProxy = GlobusProxy.getDefaultUserProxy();
-        setPortProperties(grmsBroker, globusProxy);
-        return grmsBroker;
-    }
-
     public GsiScenarioBroker connect(User user) throws Exception {
         GsiScenarioBroker grmsBroker = null;
         try {
@@ -157,16 +139,16 @@ public class GrmsJobManager implements JobManagerService {
             System.err.println(message);
             throw e;
         }
-        GlobusProxy globusProxy = getUserDefaultGlobusProxy(user);
-        setPortProperties(grmsBroker, globusProxy);
+        GSSCredential gssProxy = getUserDefaultGSSProxy(user);
+        setPortProperties(grmsBroker, gssProxy);
         return grmsBroker;
     }
 
-    private void setPortProperties(Remote ws, GlobusProxy globusProxy) {
+    private void setPortProperties(Remote ws, GSSCredential gssCredential) {
         _logger.info("GrmsJobManager: Setting port properties");
         Stub stub = (Stub) ws;
-        stub._setProperty(GSIHTTPTransport.GSI_CREDENTIALS, globusProxy);
-        stub._setProperty(GSIHTTPTransport.GSI_MODE, GSIHTTPTransport.GSI_MODE_FULL_DELEG);
+        stub._setProperty(GSIHTTPTransport.GSI_CREDENTIALS, gssCredential);
+        stub._setProperty( GSIHTTPTransport.GSI_MODE, GSIHTTPTransport.GSI_MODE_FULL_DELEG);
         stub._setProperty(GSIHTTPTransport.GSI_AUTHORIZATION, new NoAuthorization());
     }
 
@@ -661,12 +643,12 @@ public class GrmsJobManager implements JobManagerService {
         }
     }
 
-    private GlobusProxy getUserDefaultGlobusProxy(User user) {
+    private GSSCredential getUserDefaultGSSProxy(User user) {
         if (credentialManager.hasActiveCredentials(user)) {
             _logger.info("GrmsJobManager: Getting user proxy");
             List credentials = credentialManager.getActiveCredentials(user);
             GlobusCredential credential = (GlobusCredential)credentials.get(0);
-            return credential.getGlobusProxy();
+            return credential.getGSSProxy();
         } else {
             _logger.info("GrmsJobManager: User has no active proxies");
             return null;

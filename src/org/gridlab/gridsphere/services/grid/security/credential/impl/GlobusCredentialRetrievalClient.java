@@ -18,8 +18,8 @@ import org.gridlab.gridsphere.services.grid.security.credential.CredentialExcept
 /** Globus imports **/
 import org.globus.myproxy.MyProxy;
 import org.globus.myproxy.MyProxyException;
-import org.globus.security.GlobusProxy;
-import org.globus.security.GlobusProxyException;
+import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
+import org.globus.gsi.gssapi.GlobusGSSException;
 
 /** JDK imports **/
 import java.util.List;
@@ -36,8 +36,7 @@ public class GlobusCredentialRetrievalClient implements CredentialRetrievalClien
     private static PortletLog _log = SportletLog.getInstance(GlobusCredentialRetrievalClient.class);
 
     private MyProxy myProxy = null;
-    private GlobusProxy portalProxy = null;
-    private GlobusProxyException portalProxyException = null;
+    private GlobusGSSCredentialImpl portalProxy = null;
     private long lifetime = 0;
 
     private GlobusCredentialRetrievalClient() {
@@ -93,50 +92,40 @@ public class GlobusCredentialRetrievalClient implements CredentialRetrievalClien
 
     GlobusCredential getPortalCredential()
             throws CredentialException {
-        GlobusProxy proxy = null;
-        try {
-            proxy = getPortalGlobusProxy();
-        } catch (GlobusProxyException e) {
-            throw new CredentialException(e.getMessage());
-        }
+        GlobusGSSCredentialImpl proxy = null;
+        proxy = getPortalGlobusProxy();
         if (proxy == null) {
             return null;
         }
         return new GlobusCredential(proxy);
     }
 
-    private GlobusProxy getPortalGlobusProxy()
-            throws GlobusProxyException {
+    GlobusGSSCredentialImpl getPortalGlobusProxy()
+            throws CredentialException {
         // If portal proxy is null....
         if (this.portalProxy == null) {
-            // If we previously tried to set portal credential
-            // and encountered an exception, throw that exception
-            if (this.portalProxyException != null) {
-                _log.debug("Previously encountered error while setting portal credential");
-                throw portalProxyException;
-            }
             // Otherwise, attempt to get default user globus proxy
             _log.debug("Portal credential has not been set yet");
             try {
-                return GlobusProxy.getDefaultUserProxy();
-            } catch (GlobusProxyException e) {
+                org.globus.gsi.GlobusCredential globusProxy
+                        = org.globus.gsi.GlobusCredential.getDefaultCredential();
+
+            } catch (org.globus.gsi.GlobusCredentialException e) {
                 _log.error("Unable to get default user globus proxy", e);
-                throw e;
+                throw new CredentialException(e.getMessage());
             }
         }
         return this.portalProxy;
     }
 
-    void setPortalCredential(String x509UserCertificate, String x509UserKey, String x509CertificatesPath) {
+   public void setPortalCredential(String proxyFile)
+        throws CredentialException {
         try {
             // Set portal globus proxy
-            this.portalProxy = GlobusProxy.load(x509UserCertificate, x509UserKey, x509CertificatesPath);
-            // Clear portal globus proxy exception
-            this.portalProxyException = null;
-        } catch (GlobusProxyException e) {
+            org.globus.gsi.GlobusCredential globusProxy = new org.globus.gsi.GlobusCredential(proxyFile);
+        } catch (org.globus.gsi.GlobusCredentialException e) {
             _log.error("Unable to set portal globus proxy", e);
-            // Save portal globus proxy exception (to report reason for failure in myproxy get)
-            this.portalProxyException = e;
+            throw new CredentialException(e.getMessage());
         }
    }
 
@@ -193,22 +182,27 @@ public class GlobusCredentialRetrievalClient implements CredentialRetrievalClien
             _log.debug("Username = " + username);
             _log.debug("Lifetime = " + lifetime);
         }
-        // Retrieve Globus proxy from MyProxy
-        GlobusProxy userProxy = null;
+        // Get portal proxy
+        GlobusGSSCredentialImpl portalProxy = null;
         try {
-            // Get portal proxy
-            GlobusProxy portalProxy = getPortalGlobusProxy();
-            userProxy = this.myProxy.get(portalProxy, username, passphrase, (int)lifetime);
-        } catch (GlobusProxyException e) {
-            String m = "Portal credential is invalid: ";
+            portalProxy = getPortalGlobusProxy();
+        } catch (CredentialException e) {
+            String m = "Error retrieving Globus proxy with MyProxy client";
             _log.error(m, e);
             throw new CredentialRetrievalException(m, e);
+        }
+        // Retrieve Globus proxy from MyProxy
+        GlobusGSSCredentialImpl userProxy = null;
+        try {
+            userProxy =
+                (GlobusGSSCredentialImpl)
+                    this.myProxy.get(portalProxy, username, passphrase, (int)lifetime);
         } catch (MyProxyException e) {
             String m = "Error retrieving Globus proxy with MyProxy client";
             _log.error(m, e);
             throw new CredentialRetrievalException(m, e);
         }
-        _log.debug("User proxy dn = " + userProxy.getProxyCert().getSubjectDN());
+        _log.debug("User proxy dn = " + userProxy.getGlobusCredential().getIdentity());
         // Instantiate and return credential
         GlobusCredential credential = new GlobusCredential(userProxy);
         if (_log.isDebugEnabled()) {

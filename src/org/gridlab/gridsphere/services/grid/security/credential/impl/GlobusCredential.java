@@ -9,30 +9,35 @@
 package org.gridlab.gridsphere.services.grid.security.credential.impl;
 
 import org.gridlab.gridsphere.services.grid.security.credential.Credential;
-
-import org.globus.security.GlobusProxy;
-import org.globus.security.GlobusProxyException;
+import org.ietf.jgss.GSSCredential;
+import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
 
 import java.util.Date;
 import java.util.StringTokenizer;
 
 public class GlobusCredential implements Credential {
 
-    private GlobusProxy globusProxy = null;
+    //private org.globus.gsi.GlobusCredential globusProxy = null;
+    private GlobusGSSCredentialImpl gssCredential = null;
+
     private String dn = null;
     private String subject = null;
 
     private GlobusCredential() {
     }
 
-    public GlobusCredential(GlobusProxy globusProxy) {
-        this.globusProxy = globusProxy;
-        this.subject = translateSubject(globusProxy.getSubject());
+    public GlobusCredential(GlobusGSSCredentialImpl globusCredential) {
+        this.gssCredential = globusCredential;
+        this.subject = translateSubject(globusCredential.getGlobusCredential().getSubject());
         this.dn = retrieveDN(this.subject);
     }
 
-    public GlobusProxy getGlobusProxy() {
-        return this.globusProxy;
+    public GSSCredential getGSSProxy() {
+        return this.gssCredential;
+    }
+
+    public org.globus.gsi.GlobusCredential getGlobusProxy() {
+        return this.gssCredential.getGlobusCredential();
     }
 
     public String getDN() {
@@ -44,29 +49,28 @@ public class GlobusCredential implements Credential {
     }
 
     public String getIssuer() {
-        return this.globusProxy.getIssuer();
+        return this.gssCredential.getGlobusCredential().getIssuer();
     }
 
     public Date getTimeExpires() {
-        long value = (new Date()).getTime() + this.globusProxy.getTimeLeft();
+        long value = (new Date()).getTime() + this.gssCredential.getGlobusCredential().getTimeLeft();
         return new Date(value);
     }
 
     public long getTimeLeft() {
-        return this.globusProxy.getTimeLeft();
+        return this.gssCredential.getGlobusCredential().getTimeLeft();
     }
     
     public boolean isExpired() {
-        return (this.globusProxy.getTimeLeft() == 0);
+        return (this.gssCredential.getGlobusCredential().getTimeLeft() == 0);
     }
 
     public void destroy() {
-        this.globusProxy.release();
-        this.globusProxy = null;
+        this.gssCredential = null;
     }
 
     public String toString() {
-        return this.globusProxy.toString();
+        return this.gssCredential.toString();
     }
 
     /**

@@ -18,10 +18,17 @@ import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 
-import org.gridlab.gridsphere.services.grid.security.credential.*;
-
-import org.globus.security.GlobusProxy;
-import org.globus.security.GlobusProxyException;
+import org.gridlab.gridsphere.services.grid.security.credential.Credential;
+import org.gridlab.gridsphere.services.grid.security.credential.CredentialException;
+import org.gridlab.gridsphere.services.grid.security.credential.CredentialManagerService;
+import org.gridlab.gridsphere.services.grid.security.credential.CredentialMapping;
+import org.gridlab.gridsphere.services.grid.security.credential.CredentialMappingAction;
+import org.gridlab.gridsphere.services.grid.security.credential.CredentialMappingRequest;
+import org.gridlab.gridsphere.services.grid.security.credential.CredentialMappingNotFoundException;
+import org.gridlab.gridsphere.services.grid.security.credential.CredentialPermission;
+import org.gridlab.gridsphere.services.grid.security.credential.CredentialNotPermittedException;
+import org.gridlab.gridsphere.services.grid.security.credential.CredentialRetrievalClient;
+import org.gridlab.gridsphere.services.grid.security.credential.CredentialRetrievalException;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -130,18 +137,16 @@ public final class GlobusCredentialManager
     private void initPortalCredential(PortletServiceConfig config) {
         _log.info("Checking for portal credential parameters");
         // x509 user certificate parameter
-        String x509UserCertificate = config.getInitParameter("x509UserCertificate", "");
-        _log.info("x509UserCertificate = " + x509UserCertificate);
-        // x509 user key parameter
-        String x509UserKey = config.getInitParameter("x509UserKey", "");
-        _log.info("x509UserKey = " + x509UserKey);
-        // x509 certificates path
-        String x509CertificatesPath = config.getInitParameter("x509CertificatesPath", "");
-        _log.info("x509CertificatesPath = " + x509CertificatesPath);
+        String x509proxyFile = config.getInitParameter("x509proxyFile", "");
+        _log.info("x509proxyFile = " + x509proxyFile);
         // If all are set, then get proxy instance with given parameters
-        if (!x509UserCertificate.equals("") && !x509UserKey.equals("") && !x509CertificatesPath.equals("")) {
-            _log.info("Initializing portal credential with given x509 parameters...");
-            this.retrievalClient.setPortalCredential(x509UserCertificate, x509UserKey, x509CertificatesPath);
+        if (!x509proxyFile.equals("")) {
+            _log.info("Initializing portal credential with given x509 parameters");
+            try {
+                this.retrievalClient.setPortalCredential(x509proxyFile);
+            } catch (CredentialException e) {
+                _log.error("Unable to set portal credential with given x509 parameters");
+            }
         }
     }
 
