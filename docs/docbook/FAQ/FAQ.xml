@@ -2,66 +2,85 @@
 <!-- $Id$ -->
 
 <article>
-  <articleinfo>
-    <title>GridSphere Frequently Asked Questions</title>
-  </articleinfo>
-
+    <articleinfo>
         <title>GridSphere Frequently Asked Questions</title>
-        <para>
+    </articleinfo>
+
+    <title>GridSphere Frequently Asked Questions</title>
+    <para>
     This section contains a few Q's and A's on installing and configuring GridSphere
-        </para>
-        <qandaset defaultlabel="qanda">
-            <qandaentry>
-                <question>
-                    <para>
+    </para>
+    <qandaset defaultlabel="qanda">
+        <qandaentry>
+            <question>
+                <para>
                     I'm using JDK 1.4.1 and when the build script tries to build the docbook target it fails with:
-<literallayout>[style] : Fatal Error! org.apache.xml.dtm.DTMException:
+                    <literallayout>[style] : Fatal Error! org.apache.xml.dtm.DTMException:
 No more DTM IDs are available Cause: org.apache.xml.dtm.DTMException:
 No more DTM IDs are available</literallayout>
-                    </para>
-                </question>
-                <answer>
-                    <para>
+                </para>
+            </question>
+            <answer>
+                <para>
 For some reason the version of Xalan shipped with JDK1.4.1 has some bugs.
 The recommended solution is to get a recent xalan.jar from http://xml.apache.org/xalan-j/index.html to
-<filename>$JAVA_HOME/jre/lib/endorsed</filename>. (If you have an Apple with OS X then copy it to
-                        <filename>/System/Library/Frameworks/JavaVM.framework/Home/lib/endorsed/</filename>)
-                    </para>
-                </answer>
-            </qandaentry>
-            <qandaentry>
-                <question>
-                    <para>
+                    <filename>$JAVA_HOME/jre/lib/endorsed</filename>. (If you have an Apple with OS X then copy it to
+                    <filename>/System/Library/Frameworks/JavaVM.framework/Home/lib/endorsed/</filename>)
+                </para>
+            </answer>
+        </qandaentry>
+        <qandaentry>
+            <question>
+                <para>
                     Why is it called GridSphere-- I don't see anything Grid related in it!
-                    </para>
-                </question>
-                <answer>
-                    <para>
+                </para>
+            </question>
+            <answer>
+                <para>
                 In our first release of GridSphere we have developed a portal framework based upon the portlet
                 API. To provide greater reusability and flexibility, it was decided to not require any Grid
                 services for the proper functioning of the GridSphere portlet container. However, we are currently
                 developing many fundamental Grid portlets that will showcase GridLab and OGSA services.
-                    </para>
-                </answer>
-                </qandaentry>
-             <qandaentry>
-             <question>
-                    <para>
+                </para>
+            </answer>
+        </qandaentry>
+        <qandaentry>
+            <question>
+                <para>
                     I'm having problems what should I do?
-                    </para>
-                </question>
-                <answer>
-                    <para>
+                </para>
+            </question>
+            <answer>
+                <para>
                 Please join the mailing lists!
-                        <simplelist>
-                            <member><ulink url="https://www.gridlab.org/mailman/listinfo/gridsphere-users">gridsphere-users</ulink>
-                                - Discussion for gridsphere users</member>
-                            <member><ulink url="https://www.gridlab.org/mailman/listinfo/gridsphere-dev">gridsphere-dev</ulink>
-                                - Discussion for gridsphere developers</member>
-                        </simplelist>
-                    </para>
-                </answer>
-            </qandaentry>
-        </qandaset>
+                    <simplelist>
+                        <member>
+                            <ulink url="https://www.gridlab.org/mailman/listinfo/gridsphere-users">gridsphere-users</ulink>
+                                - Discussion for gridsphere users
+                        </member>
+                        <member>
+                            <ulink url="https://www.gridlab.org/mailman/listinfo/gridsphere-dev">gridsphere-dev</ulink>
+                                - Discussion for gridsphere developers
+                        </member>
+                    </simplelist>
+                </para>
+            </answer>
+        </qandaentry>
+
+        <qandaentry>
+            <question>
+                <para>
+                    I started my own portlets package and deployed it. Gridsphere now fails loading at startup!
+                        I think I edited all configuration files correctly. What's wrong?
+                </para>
+            </question>
+            <answer>
+                <para>
+                        Please doublecheck the xml configuration files and make sure that the packagename of the portlets
+                        contains '.portlets.' and of the services '.services.'.
+                </para>
+            </answer>
+        </qandaentry>
+    </qandaset>
 
 </article>
