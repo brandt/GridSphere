@@ -90,14 +90,15 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     }
 
     public String getTitle(String lang) {
+        if (lang == null) throw new IllegalArgumentException("lang is NULL");
         Iterator it = titles.iterator();
         String defTitle = title;
         while (it.hasNext()) {
             PortletTitle t = (PortletTitle)it.next();
+            if (t.getLang() == null) t.setLang(Locale.ENGLISH.getLanguage());
             if (lang.equals(t.getLang())) return t.getText();
-            if (lang.startsWith(t.getLang())) defTitle = t.getText();
-            if (t.getLang().startsWith(lang)) defTitle = t.getText();
-            if (t.getLang().startsWith(Locale.ENGLISH.getLanguage())) defTitle = t.getText();
+            if (t.getLang().regionMatches(0, lang, 0, 2)) return t.getText();
+            if (t.getLang().equals(Locale.ENGLISH.getLanguage())) defTitle = t.getText();
         }
         return defTitle;
     }
@@ -105,6 +106,9 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     public void setTitle(String lang, String title) {
         Iterator it = titles.iterator();
         boolean found = false;
+        if (lang == null) throw new IllegalArgumentException("lang is NULL");
+        if (title == null) throw new IllegalArgumentException("title is NULL");
+
         while (it.hasNext()) {
             PortletTitle t = (PortletTitle)it.next();
             if (lang.equalsIgnoreCase(t.getLang())) {

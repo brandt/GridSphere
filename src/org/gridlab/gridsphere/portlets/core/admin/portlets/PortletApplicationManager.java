@@ -42,13 +42,10 @@ public class PortletApplicationManager extends ActionPortlet {
 
     public void listPortlets(FormEvent event) throws PortletException {
         FrameBean frame = event.getFrameBean("errorFrame");
-
-        TextFieldBean tomcatPortTF = event.getTextFieldBean("tomcatPortTF");
-        tomcatPortTF.setValue(tomcat.getPort());
-
+        PortletRequest req = event.getPortletRequest();
         List result = new ArrayList();
         try {
-            result = tomcat.getPortletAppList();
+            result = tomcat.getPortletAppList(req);
             event.getPortletRequest().setAttribute("result", result);
             System.err.println("result is OK");
         } catch (TomcatManagerException e) {
@@ -109,7 +106,7 @@ public class PortletApplicationManager extends ActionPortlet {
                         webAppName = webAppContext.substring(1);
                         if (webappsList.contains(webAppName)) {
                             portletManager.destroyPortletWebApplication(webAppName, req, res);
-                            result = tomcat.removeWebApp(webAppName);
+                            result = tomcat.removeWebApp(req, webAppName);
                         }
                     }
                 }
@@ -122,25 +119,25 @@ public class PortletApplicationManager extends ActionPortlet {
                 }
             } else if ((operation != null) && (appName!= null)) {
                 if (operation.equals("start")) {
-                    result = tomcat.startWebApp(appName);
+                    result = tomcat.startWebApp(req, appName);
                     portletManager.destroyPortletWebApplication(appName, req, res);
                     portletManager.initPortletWebApplication(appName, req, res);
                 } else if (operation.equals("stop")) {
-                    result = tomcat.stopWebApp(appName);
+                    result = tomcat.stopWebApp(req, appName);
                 } else if (operation.equals("reload")) {
                     portletManager.destroyPortletWebApplication(appName, req, res);
-                    result = tomcat.stopWebApp(appName);
-                    result = tomcat.startWebApp(appName);
+                    result = tomcat.stopWebApp(req, appName);
+                    result = tomcat.startWebApp(req, appName);
                     portletManager.initPortletWebApplication(appName, req, res);
                 } else if (operation.equals("remove")) {
                     portletManager.destroyPortletWebApplication(appName, req, res);
-                    result = tomcat.removeWebApp(appName);
+                    result = tomcat.removeWebApp(req, appName);
                 } else if (operation.equals("deploy")) {
-                    result = tomcat.deployWebApp(appName);
-                    result = tomcat.startWebApp(appName);
+                    result = tomcat.deployWebApp(req, appName);
+                    result = tomcat.startWebApp(req, appName);
                     portletManager.initPortletWebApplication(appName, req, res);
                 } else if (operation.equals("undeploy")) {
-                    result = tomcat.undeployWebApp(appName);
+                    result = tomcat.undeployWebApp(req, appName);
                     portletManager.destroyPortletWebApplication(appName, req, res);
                 }
             }
@@ -181,7 +178,7 @@ public class PortletApplicationManager extends ActionPortlet {
             if (isWar > 0) {
                 String appName = fileName.substring(0, isWar);
                 log.debug("installing and initing webapp: " + appName);
-                tomcat.installWebApp(appName, fileName);
+                tomcat.installWebApp(req, appName, fileName);
                 portletManager.initPortletWebApplication(appName, req, res);
             }
             log.debug("fileinputbean value=" + fi.getValue());
@@ -212,7 +209,7 @@ public class PortletApplicationManager extends ActionPortlet {
                 throw new PortletException("PortletRegistry service unavailable! ", e);
             }
 
-            tomcat.installWebApp(webappName);
+            tomcat.installWebApp(req, webappName);
             portletManager.initPortletWebApplication(webappName, req, res);
 
         } catch (Exception e) {
@@ -220,19 +217,6 @@ public class PortletApplicationManager extends ActionPortlet {
             errMsg.setKey("PORTLET_ERR_DEPLOY");
             errMsg.setStyle("error");
             log.error("Unable to deploy webapp  ", e);
-        }
-        setNextState(req, DEFAULT_VIEW_PAGE);
-    }
-
-    public void configPort(FormEvent event) throws PortletException {
-        PortletRequest req = event.getPortletRequest();
-        TextFieldBean tf = event.getTextFieldBean("tomcatPortTF");
-        String portVal = tf.getValue();
-        try {
-            int port = Integer.parseInt(portVal);
-            tomcat.setPort(portVal);
-        } catch (IllegalArgumentException e) {
-            log.error("Port must be a valid integer!");
         }
         setNextState(req, DEFAULT_VIEW_PAGE);
     }

@@ -62,7 +62,6 @@ public interface SportletProperties {
      */
     public static final String SERVICE = "org.gridlab.gridsphere.portlet.lifecycle.service";
 
-
     // Portlet obects
     /**
      * The variable name of the PortletConfig object
@@ -156,6 +155,8 @@ public interface SportletProperties {
     public static final String CLIENT = "org.gridlab.gridsphere.portlet.Client";
 
     public static final String PORTLET_MODE = "gs_mode";
+
+    public static final String PORTLET_TITLE = "title";
 
     public static final String PREVIOUS_MODE = "org.gridlab.gridsphere.portlet.PreviousMode";
 

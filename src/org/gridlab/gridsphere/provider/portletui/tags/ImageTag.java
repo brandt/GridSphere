@@ -155,15 +155,7 @@ public class ImageTag extends BaseComponentTag {
         return height;
     }
 
-    public int doStartTag() throws JspException {
-        if (!beanId.equals("")) {
-            urlImageBean = (ImageBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
-            if (urlImageBean == null) {
-                urlImageBean = new ImageBean();
-            }
-        } else {
-            urlImageBean = new ImageBean();
-        }
+    private void setImageBean(ImageBean urlImageBean) {
         urlImageBean.setAlt(alt);
         urlImageBean.setTitle(title);
         urlImageBean.setSrc(src);
@@ -171,6 +163,20 @@ public class ImageTag extends BaseComponentTag {
         urlImageBean.setWidth(width);
         urlImageBean.setHeight(height);
         urlImageBean.setAlign(align);
+    }
+
+    public int doStartTag() throws JspException {
+        if (!beanId.equals("")) {
+            urlImageBean = (ImageBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            if (urlImageBean == null) {
+                urlImageBean = new ImageBean();
+                setImageBean(urlImageBean);
+            }
+        } else {
+            urlImageBean = new ImageBean();
+            setImageBean(urlImageBean);
+        }
+
         Tag parent = getParent();
         if (parent instanceof ActionLinkTag) {
             ActionLinkTag actionTag = (ActionLinkTag)parent;

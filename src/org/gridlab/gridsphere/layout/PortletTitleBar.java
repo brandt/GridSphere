@@ -498,7 +498,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
             smodes.remove(portletMode);
         }
 
-
          // Localize the portlet mode names
         String locStr = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
         Locale locale = new Locale(locStr, "", "");
