@@ -303,12 +303,13 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         }
 
         List sessions = userSessionManager.getSessions(user);
-        Iterator it = sessions.iterator();
-        while (it.hasNext()) {
-            PortletSession session = (PortletSession)it.next();
-            if (session != null) portletSessionManager.addSessionListener(session.getId(), this);
+        if (sessions != null) {
+            Iterator it = sessions.iterator();
+            while (it.hasNext()) {
+                PortletSession session = (PortletSession)it.next();
+                if (session != null) portletSessionManager.addSessionListener(session.getId(), this);
+            }
         }
-
         return psp;
     }
 
