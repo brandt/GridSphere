@@ -4,6 +4,6 @@
 
 <portletAPI:init/>
 
-<ui:text key="LOGIN_SUCCESS"/>
+<ui:text key="LOGIN_SUCCESS" style="nostyle"/>
 
 
