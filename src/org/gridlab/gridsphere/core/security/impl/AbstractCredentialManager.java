@@ -66,7 +66,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         try {
             String query = "select cp from "
                          + this.credentialPermissionImpl
-                         + " cp where cp.permittedsubjects=" + pattern;
+                         + " cp where cp.permittedSubjects=\"" + pattern + "\"";
             _log.debug(query);
             return (CredentialPermission)this.pm.restoreObject(query);
         } catch (PersistenceManagerException e) {
@@ -91,44 +91,49 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         String pattern = permission.getPermittedSubjects();
         // Check that no permission (already) exists with given pattern
         if (!existsCredentialPermission(pattern)) {
+            _log.debug("Creating credential permission " + pattern);
             try {
                 this.pm.create(permission);
             } catch (PersistenceManagerException e) {
-                _log.error("Error saving credential permission", e);
+                _log.error("Error creating credential permission", e);
             }
         }
     }
 
     public void updateCredentialPermission(CredentialPermission permission) {
+        String pattern = permission.getPermittedSubjects();
+        _log.debug("Updating credential permission " + pattern);
         try {
             this.pm.update(permission);
         } catch (PersistenceManagerException e) {
-            _log.error("Error saving credential permission", e);
+            _log.error("Error updating credential permission", e);
         }
     }
 
     public void deleteCredentialPermission(String pattern) {
+        _log.debug("Deleting credential permission " + pattern);
         try {
             CredentialPermission permission = getCredentialPermission(pattern);
             this.pm.delete(permission);
         } catch (PersistenceManagerException e) {
-            _log.error("Error removing credential permission", e);
+            _log.error("Error deleting credential permission", e);
         }
     }
 
     public boolean existsCredentialPermission(String pattern) {
+        _log.debug("Testing if permission " + pattern + " exists");
+        String value = null;
         try {
-            String query = "select cp.permittedsubjects from "
+            String query = "select cp.permittedSubjects from "
                          + this.credentialPermissionImpl
-                         + " cp";
+                         + " cp where cp.permittedSubjects=\"" + pattern + "\"";
             _log.debug(query);
-            this.pm.restoreObject(query);
-            // return true if we succeed
-            return true;
+            value = (String)this.pm.restoreObject(query);
         } catch (PersistenceManagerException e) {
-            // return false if we fail
+            _log.error("Error checking if credential permission exists", e);
             return false;
         }
+        return (value != null);
     }
 
     /****** CREDENTIAL PERMISSION CONVENIENCE METHODS *******/
@@ -136,7 +141,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
     public List getPermittedCredentialSubjects() {
         List permittedSubjects = null;
         try {
-            String query = "select cp.permittedsubjects from "
+            String query = "select cp.permittedSubjects from "
                          + this.credentialPermissionImpl
                          + " cp";
             _log.debug(query);
@@ -213,7 +218,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
                 try {
                     this.pm.create(mapping);
                 } catch (PersistenceManagerException e) {
-                    _log.error("Error saving credential mapping " + e);
+                    _log.error("Error creating credential mapping " + e);
                 }
             }
         } else {
@@ -228,7 +233,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
             try {
                 this.pm.update(mapping);
             } catch (PersistenceManagerException e) {
-                _log.error("Error saving credential mapping " + e);
+                _log.error("Error updating credential mapping " + e);
             }
         } else {
             throw new CredentialNotPermittedException("Credential subject not permitted");
@@ -246,7 +251,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         try {
             this.pm.delete(mapping);
         } catch (PersistenceManagerException e) {
-            _log.error("Error removing credential mapping ", e);
+            _log.error("Error deleting credential mapping ", e);
         }
     }
 
@@ -276,18 +281,19 @@ public abstract class AbstractCredentialManager implements CredentialManager {
     }
 
     public boolean existsCredentialMapping(String subject) {
+        _log.debug("Testing if mapping for " + subject + " exists");
+        String value = null;
         try {
             String query = "select cm.subject from "
                          + this.credentialMappingImpl
                          + " cm";
             _log.debug(query);
-            this.pm.restoreObject(query);
-            // return true if we succeed
-            return true;
+            value = (String)this.pm.restoreObject(query);
         } catch (PersistenceManagerException e) {
-            // return false if we fail
+            _log.error("Error checking if credential mapping exists", e);
             return false;
         }
+        return (value != null);
     }
 
     /****** CREDENTIAL MAPPING CONVENIENCE METHODS *******/

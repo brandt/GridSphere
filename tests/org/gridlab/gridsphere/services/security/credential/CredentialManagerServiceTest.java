@@ -131,22 +131,30 @@ public class CredentialManagerServiceTest extends ServiceTest {
     public void testCredentialPermission() {
 
         /*** Test get permissions (should be empty) ***/
-        _log.info("Testing get permissions.");
+        _log.info("Testing get permissions. Should be 0 entries.");
         List permissions = this.credentialManager.getCredentialPermissions();
         assertEquals(0, permissions.size());
 
-        /*** Test create and retrieve globus permission ***/
-        _log.info("Testing create and retrieve globus permission.");
+        /*** Test create globus permission ***/
+        _log.info("Testing create globus permission.");
         CredentialPermission permission = new GlobusCredentialPermission();
         String globusSubjects = "/O=Grid/O=Globus*";
         permission.setPermittedSubjects(globusSubjects);
         permission.setDescription("Permission to use Globus credentials");
         this.credentialManager.createCredentialPermission(permission);
+
+        /*** Test get permissions (should be 1 entry) ***/
+        _log.info("Testing get permissions. Should be 1 entry");
+        permissions = this.credentialManager.getCredentialPermissions();
+        assertEquals(1, permissions.size());
+
+        /*** Test retrieve globus permission ***/
+        _log.info("Testing retrieve globus permission.");
         permission = this.credentialManager.getCredentialPermission(globusSubjects);
         assertEquals(globusSubjects, permission.getPermittedSubjects());
 
         /*** Test update and retrieve globus permission ***/
-        _log.info("Testing update and retrieve globus permission.");
+        _log.info("Testing update globus permission.");
         globusSubjects = "/O=Grid/O=Globus/*";
         permission.setPermittedSubjects(globusSubjects);
         this.credentialManager.updateCredentialPermission(permission);
@@ -187,6 +195,12 @@ public class CredentialManagerServiceTest extends ServiceTest {
         _log.info("Testing globus is no longer supported.");
         answer = this.credentialManager.isCredentialPermitted(globusDummy);
         assertEquals(false, answer);
+
+        /*** Test globus credential is not permitted ***/
+        _log.info("Testing ncsa is supported still.");
+        String ncsaDummy = "/O=Grid/O=NCSA/OU=Dummy User";
+        answer = this.credentialManager.isCredentialPermitted(ncsaDummy);
+        assertEquals(true, answer);
 
         /*** Test remove last permission ***/
         _log.info("Testing remove last permission.");
