@@ -25,8 +25,8 @@ import java.util.Iterator;
 /**
  * A <code>PortletTab</code> represents the visual tab graphical interface and is contained
  * by a {@link PortletTabbedPane}. A tab contains a title and any additional
- * portlet component. Generally, it is either a {@link PortletPanel} or another
- * tabbed pane if a double level tabbed pane is desired.
+ * portlet component, such as another tabbed pane if a double level
+ * tabbed pane is desired.
  */
 public class PortletTab extends BasePortletComponent implements Serializable, Cloneable {
 
