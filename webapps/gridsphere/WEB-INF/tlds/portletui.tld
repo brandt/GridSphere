@@ -11,6 +11,25 @@
     <description>GridSphere Visual Portlet UI Tag Library</description>
 
     <tag>
+        <name>hasaction</name>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.HasActionTagImpl</tag-class>
+        <body-content>JSP</body-content>
+        <description>
+            Is used to create layout based on an action
+        </description>
+        <attribute>
+            <name>action</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>default</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
         <name>actionparam</name>
         <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.ActionParamTagImpl</tag-class>
         <body-content>empty</body-content>
@@ -347,6 +366,11 @@
         </attribute>
         <attribute>
             <name>zebra</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>maxrows</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -702,6 +726,64 @@
         </description>
         <attribute>
             <name>beanId</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>tabbedpane</name>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.TabbedPaneTagImpl</tag-class>
+        <body-content>JSP</body-content>
+        <description>
+            Creates a tabbed pane
+        </description>
+        <attribute>
+            <name>beanId</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>paneId</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>width</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>height</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>tab</name>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.TabTagImpl</tag-class>
+        <body-content>JSP</body-content>
+        <description>
+            Creates a tab
+        </description>
+        <attribute>
+            <name>beanId</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>width</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>title</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>page</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
