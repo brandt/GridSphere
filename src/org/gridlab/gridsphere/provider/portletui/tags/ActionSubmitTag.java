@@ -46,6 +46,7 @@ public class ActionSubmitTag extends ActionTag {
             actionSubmitBean = (ActionSubmitBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (actionSubmitBean == null) {
                 actionSubmitBean = new ActionSubmitBean();
+                paramBeans = new ArrayList();
             } else {
                 if (actionSubmitBean.getAction() != null) {
                     action = actionSubmitBean.getAction();
@@ -56,9 +57,13 @@ public class ActionSubmitTag extends ActionTag {
                 if (actionSubmitBean.getKey() != null) {
                     key = actionSubmitBean.getKey();
                 }
+                if (actionSubmitBean.getParamBeanList() != null) {
+                    paramBeans = new ArrayList();
+                }
             }
         } else {
             actionSubmitBean = new ActionSubmitBean();
+            paramBeans = new ArrayList();
         }
 
         if (!beanId.equals("")) {
@@ -66,8 +71,6 @@ public class ActionSubmitTag extends ActionTag {
         } else {
             this.setBaseComponentBean(actionSubmitBean);
         }
-
-        paramBeans = new ArrayList();
 
         actionSubmitBean.setName(createActionURI());
 
