@@ -4,21 +4,19 @@
  */
 package org.gridlab.gridsphere.portletcontainer;
 
-import org.gridlab.gridsphere.layout.PortletLayoutEngine;
-import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.*;
-import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
-import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
-import org.gridlab.gridsphere.portletcontainer.impl.SportletMessageManager;
-import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
-import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
-import org.gridlab.gridsphere.services.core.user.LoginService;
-import org.gridlab.gridsphere.services.core.security.AuthenticationException;
+
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
+import org.gridlab.gridsphere.services.core.security.AuthenticationException;
+import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
+import org.gridlab.gridsphere.services.core.user.LoginService;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
+import org.gridlab.gridsphere.portlet.impl.*;
+import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.layout.PortletLayoutEngine;
+import org.gridlab.gridsphere.portletcontainer.impl.SportletMessageManager;
+import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContextEvent;
@@ -69,7 +67,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         super.init(config);
         this.context = new SportletContext(config);
 
-        log.debug("in init of GridSphereServlet");
+        log.info("in init of GridSphereServlet");
         // Create an instance of the registry service used by the UserPortletManager
         try {
             portletManager = (PortletManagerService) factory.createUserPortletService(PortletManagerService.class, GuestUser.getInstance(), config, true);
@@ -166,7 +164,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             }
 
         }
-
         layoutEngine.service(event);
     }
 
@@ -287,7 +284,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
 
     /**
-     * Record the fact that this web application has been destroyed.
+     * Record the fact that this ui application has been destroyed.
      *
      * @param event The servlet context event
      */
@@ -300,7 +297,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
 
     /**
-     * Record the fact that this web application has been initialized.
+     * Record the fact that this ui application has been initialized.
      *
      * @param event The servlet context event
      */
