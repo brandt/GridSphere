@@ -18,12 +18,10 @@ import javax.servlet.UnavailableException;
 import java.util.*;
 import java.io.IOException;
 
-public class LayoutManagerPortlet extends ActionPortlet {
+public class UserLayoutPortlet extends ActionPortlet {
 
     // JSP pages used by this portlet
     public static final String VIEW_JSP = "layout/view.jsp";
-
-    public static final String CONFIGURE_JSP = "layout/configure.jsp";
 
     // Portlet services
     private LayoutManagerService layoutMgr = null;
@@ -168,16 +166,5 @@ public class LayoutManagerPortlet extends ActionPortlet {
         page.setTheme(theme);
         layoutMgr.reloadPage(req);       
     }
-
-    public void doConfigureLayout(FormEvent event) throws PortletException {
-        PortletRequest req = event.getPortletRequest();
-
-        String themes = getPortletSettings().getAttribute("supported-themes");
-        TextFieldBean themesTF = event.getTextFieldBean("themesTF");
-        themesTF.setValue(themes);
-
-        setNextState(req, CONFIGURE_JSP);
-    }
-
 
 }
