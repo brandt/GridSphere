@@ -12,6 +12,8 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.services.ServletParsingService;
 
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -107,15 +109,15 @@ public class SportletContext implements PortletContext {
     public void include(String path, PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
         RequestDispatcher rd = null;
-        rd = context.getRequestDispatcher(path);
+        rd = config.getServletContext().getRequestDispatcher(path);
         try {
-        if (rd != null) {
-            rd.include(request, response);
-        } else {
-            throw new PortletException("Unable to include resource: RequestDispatcher is null");
-        }
+            if (rd != null) {
+                rd.include(request, response);
+            } else {
+                throw new PortletException("Unable to include resource: RequestDispatcher is null");
+            }
         } catch (Exception e) {
-            throw new PortletException("Unable to include resource: RequestDispatcher is null");
+            throw new PortletException("Unable to include resource " + e.getMessage());
         }
     }
 

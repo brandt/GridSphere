@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletConfig;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.io.IOException;

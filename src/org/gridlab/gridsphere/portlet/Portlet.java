@@ -255,9 +255,7 @@ public abstract class Portlet extends HttpServlet
      *
      * @return the PortletConfig object
      */
-    protected PortletConfig getPortletConfig() {
-        return this.portletConfig;
-    }
+    protected abstract PortletConfig getPortletConfig();
 
     /**
      * Returns the PortletSettings object of the concrete portlet.

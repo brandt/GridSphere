@@ -16,8 +16,9 @@ import java.util.Enumeration;
  */
 public abstract class AbstractPortlet extends PortletAdapter implements PortletActionCommand {
 
-    public AbstractPortlet() {}
-
+    public AbstractPortlet() {
+        super();
+    }
 
     /**
      * Returns the portlet configuration.
@@ -25,7 +26,7 @@ public abstract class AbstractPortlet extends PortletAdapter implements PortletA
      * @return the portlet config
      */
     public PortletConfig getConfig() {
-        return super.portletConfig;
+        return super.getPortletConfig();
     }
 
     /**

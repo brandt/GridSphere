@@ -194,6 +194,30 @@ public class SportletResponseImpl implements PortletResponse {
         return res.getOutputStream();
     }
 
+    public final String encodeRedirectURL(String redirectURL) {
+        return res.encodeRedirectURL(redirectURL);
+    }
+
+    public final String encodeRedirectUrl(String redirectURL) {
+        return res.encodeRedirectUrl(redirectURL);
+    }
+
+    public final String encodeUrl(String url) {
+        return res.encodeUrl(url);
+    }
+
+    public final void sendError(int errno, String msg) throws IOException {
+        res.sendError(errno, msg);
+    }
+
+    public final void sendError(int errno) throws IOException {
+        res.sendError(errno);
+    }
+
+    public final void sendRedirect(String redirect) throws IOException {
+        res.sendRedirect(redirect);
+    }
+
     public final void setContentLength(int len) {
         res.setContentLength(len);
     }
@@ -224,6 +248,14 @@ public class SportletResponseImpl implements PortletResponse {
 
     public final void reset() {
         res.reset();
+    }
+
+    public final void setStatus(int status) {
+        res.setStatus(status);
+    }
+
+    public final void setStatus(int status, String msg) {
+        res.setStatus(status, msg);
     }
 
     public void setLocale(Locale loc) {

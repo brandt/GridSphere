@@ -53,7 +53,7 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      * normal initialization
      */
     public void init(PortletConfig config) throws UnavailableException {
-        // XXX: FILL ME IN
+        this.portletConfig = config;
         log.info("in init(PortletConfig)");
     }
 

@@ -4,12 +4,12 @@
 */
 package org.gridlab.gridsphere.portlet;
 
-import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.io.IOException;
 
-public interface PortletResponse extends ServletResponse {
+public interface PortletResponse extends HttpServletResponse {
 
     /**
      * Adds the specified cookie to the response.
