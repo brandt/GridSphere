@@ -48,7 +48,6 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
     public List init(PortletRequest req, List list) {
         list = super.init(req, list);
 
-
         ComponentIdentifier compId = new ComponentIdentifier();
         compId.setPortletComponent(this);
         compId.setComponentID(list.size());
@@ -128,39 +127,6 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
     }
 
     /**
-     * Performs an action on this portlet component
-     *
-     * @param event a gridsphere event
-     * @throws PortletLayoutException if a layout error occurs during rendering
-     * @throws IOException if an I/O error occurs during rendering
-     */
-    /*
-    public void actionPerformed(GridSphereEvent event) throws
-            PortletLayoutException, IOException {
-
-        super.actionPerformed(event);
-
-        PortletComponentEvent compEvt = event.getLastRenderEvent();
-        if ((compEvt != null) && (compEvt instanceof PortletFrameEvent)) {
-            PortletFrameEvent frameEvent = (PortletFrameEvent)compEvt;
-            handleFrameEvent(frameEvent);
-        }
-
-
-
-        List slisteners = Collections.synchronizedList(listeners);
-        synchronized (slisteners) {
-            Iterator it = slisteners.iterator();
-            PortletComponent comp;
-            while (it.hasNext()) {
-                comp = (PortletComponent) it.next();
-                event.addNewRenderEvent(compEvt);
-                comp.actionPerformed(event);
-            }
-        }
-    } */
-
-    /**
      * Performed when a frame maximized event has been received
      *
      * @param event a portlet frame event
@@ -196,14 +162,19 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
             Iterator it = scomponents.iterator();
             PortletComponent p = null;
             int id = event.getID();
-
             while (it.hasNext()) {
                 p = (PortletComponent) it.next();
                 if (p.getComponentID() == id) {
                     p.setWidth("");
+                    if (p instanceof PortletFrame) {
+                        PortletFrame f = (PortletFrame)p;
+                        System.err.println(f.getPortletClass());
+                    }
+
+                } else {
+                    p.setWidth(p.getDefaultWidth());
+                    p.setVisible(true);
                 }
-                p.setWidth(p.getDefaultWidth());
-                p.setVisible(true);
             }
         }
     }
@@ -225,8 +196,9 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
                     if (p instanceof PortletFrame) {
                         PortletFrame f = (PortletFrame) p;
                         f.setWidth(event.getOriginalWidth());
+                    } else {
+                        p.setWidth(p.getDefaultWidth());
                     }
-                    p.setWidth(p.getDefaultWidth());
                     //p.setWidth("");
                 } else {
                     p.setVisible(true);

@@ -267,6 +267,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         User user = event.getPortletRequest().getUser();
         PortletRequest request = event.getPortletRequest();
 
+        String id = request.getPortletSession(true).getId();
+
         hasTitleBarEvent = false;
 
         PortletComponentEvent titleBarEvent = event.getLastRenderEvent();
@@ -274,6 +276,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         if ((titleBarEvent != null) && (titleBarEvent instanceof PortletTitleBarEvent)) {
             PortletTitleBarEvent tbEvt = (PortletTitleBarEvent) titleBarEvent;
             if (titleBarEvent.getAction() == PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY) {
+                // remove cached output for any window action
+                cacheService.removeCached(portletClass + id);
+
                 PortletWindow.State state = tbEvt.getState();
                 PortletFrameEventImpl frameEvent = null;
                 if (state == PortletWindow.State.MINIMIZED) {
@@ -288,13 +293,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     frameEvent = new PortletFrameEventImpl(this, request, PortletFrameEvent.FrameAction.FRAME_MAXIMIZED, COMPONENT_ID);
                 } else if (state == PortletWindow.State.CLOSED) {
                     renderPortlet = true;
-
                     isClosing = true;
-                    // remove cached output
-                    String id = event.getPortletRequest().getPortletSession(true).getId();
-                    String pid = portletClass;
-
-                    cacheService.removeCached(pid + id);
 
                     // check for portlet closing action
                     if (event.hasAction()) {
@@ -352,10 +351,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             titleBar.setPortletMode(req.getMode());
 
             // remove cached output
-            String id = req.getPortletSession(true).getId();
-            String pid = portletClass;
 
-            cacheService.removeCached(pid + id);
+            cacheService.removeCached(portletClass + id);
 
             //System.err.println("in PortletFrame action invoked for " + portletClass);
             if (event.hasAction()
@@ -386,7 +383,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     comp.actionPerformed(event);
                 }
             }
-
         }
 
     }
@@ -411,7 +407,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             //boolean hasrole = hasRequiredRole(req, false);
             boolean hasrole = false;
 
-                hasrole = aclService.hasRequiredRole(req, portletClass, false);
+            hasrole = aclService.hasRequiredRole(req, portletClass, false);
 
             //boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
             //System.err.println("hasRole = " + hasrole + " portletclass= " + portletClass);
@@ -422,6 +418,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         }
 
         String id = event.getPortletRequest().getPortletSession(true).getId();
+
         StringBuffer frame = (StringBuffer) cacheService.getCached(portletClass + id);
         String nocache = (String) req.getAttribute(CacheService.NO_CACHE);
         if ((frame != null) && (nocache == null)) {
@@ -561,9 +558,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         out.println(frame.toString());
 
         if (cacheExpiration > 0) {
-            String pid = portletClass;
-
-            cacheService.cache(pid + id, frame, cacheExpiration);
+            cacheService.cache(portletClass + id, frame, cacheExpiration);
         }
     }
 

@@ -54,7 +54,7 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
     if (!components.isEmpty()) {
         //out.println("<table width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"> <!-- START COLUMN -->");
         
-    	out.println("<p />");
+    	out.println("<p/>");
         //out.println("<tbody>");
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
@@ -62,7 +62,7 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
 
                 p = (PortletComponent) scomponents.get(i);
 
-                out.print("<p />");
+                out.print("<p/>");
                 //out.print("<tr><td valign=\"top\" width=\"100%\">");
 
                 if (p.getVisible()) {

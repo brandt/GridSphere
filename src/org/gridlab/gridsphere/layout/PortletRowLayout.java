@@ -39,14 +39,14 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable, S
         //out.println("<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">");
         
         //out.println("<tbody><tr>");
-        out.println("<p />");
+        out.println("<p/>");
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
             for (int i = 0; i < scomponents.size(); i++) {
                 p = (PortletComponent) scomponents.get(i);
                 
                 //out.println("<td valign=\"top\" width=\"" + p.getWidth() + "\">");
-                out.println("<p />");
+                out.println("<p/>");
 
                 if (p.getVisible()) {
                     p.doRender(event);
@@ -55,7 +55,7 @@ public class PortletRowLayout extends PortletFrameLayout implements Cloneable, S
             }
             //out.println("</tr></tbody></table>");
             //out.println("<!-- END ROW -->");
-            out.println("<p />");        
+            out.println("<p/>");
 	}
 	}
     public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
