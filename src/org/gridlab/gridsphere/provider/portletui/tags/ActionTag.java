@@ -235,14 +235,14 @@ public abstract class ActionTag extends BaseComponentTag {
 
         if (action != null) {
             if (compId == null) {
-                portletAction = new DefaultPortletAction(action);
+                actionURL.setAction(action);
             } else {
-                portletAction = new DefaultPortletAction(compId + "%" + action);
+                actionURL.setAction(compId + "%" + action);
             }
         }
+
         if (!paramBeans.isEmpty()) {
             String id = createUniquePrefix(2);
-
             Iterator it = paramBeans.iterator();
             actionURL.setParameter(SportletProperties.PREFIX, id);
             while (it.hasNext()) {
@@ -252,16 +252,6 @@ public abstract class ActionTag extends BaseComponentTag {
             }
         }
 
-        if (action != null) {
-            if (compId == null) {
-                actionURL.setAction(action);
-            } else {
-                actionURL.setAction(compId + "%" + action);
-            }
-        }
-
-        //if (!action.equals("render"))
-        //}
         //System.err.println("printing URL = " + actionURL.toString());
         return actionURL.toString();
     }
