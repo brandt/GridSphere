@@ -29,31 +29,31 @@ Copyright:
 
     <!-- ow <property name="gridsphere.home" value="../.."/>  -->
 
-    <property name="optimize"    value="false"/>
-    <property name="debug"       value="on"/>
+    <property name="optimize" value="false"/>
+    <property name="debug" value="on"/>
     <property name="deprecation" value="true"/>
 
     <!-- Version properties -->
-    <property name="version"         value="1.0" />
-    <property name="release"         value="rc1" />
+    <property name="version" value="1.0"/>
+    <property name="release" value="rc1"/>
     <property name="version.release" value="${version} ${release}"/>
 
-    <property name="project"     value="${project.title} ${version.release}"/>
-    <property name="project.api" value="${project.title} API ${version.release}" />
+    <property name="project" value="${project.title} ${version.release}"/>
+    <property name="project.api" value="${project.title} API ${version.release}"/>
 
-    <property name="use.jsr"    value="@USE_JSR@"/>
+    <property name="use.jsr" value="@USE_JSR@"/>
 
     <!-- GridSphere build and dist directories -->
     <!-- home of the source code of gridsphere -->
     <property name="GRIDSPHERE_PROJECT" value="../../"/>
 
     <!-- GridSphere build targets -->
-    <property name="build.lib"    value="${project.build}/lib"/>
+    <property name="build.lib" value="${project.build}/lib"/>
     <property name="build.classes" value="${project.build}/classes"/>
     <property name="build.webapp" value="${project.build}/webapp"/>
-    <property name="build.docs"    value="${project.build}/docs"/>
+    <property name="build.docs" value="${project.build}/docs"/>
     <property name="build.javadoc" value="${build.docs}/javadocs"/>
-    <property name="build.tests"   value="${project.build}/tests"/>
+    <property name="build.tests" value="${project.build}/tests"/>
 
     <property environment="env"/>
 
@@ -116,9 +116,9 @@ Copyright:
         <property name="GRIDSPHERE_HOME" value="${env.CATALINA_HOME}/gridsphere"/>
         <property name="TEST_HOME" value="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/test"/>
 
-        <echo message="--- Build environment for ${project} ---" />
+        <echo message="--- Build environment for ${project} ---"/>
         <echo message="--- Flags (Note: If the {property name} is displayed,"/>
-        <echo message="           then the component is not present)" />
+        <echo message="           then the component is not present)"/>
         <echo message=""/>
 
         <echo message="ANT_HOME is set to = ${env.ANT_HOME}"/>
@@ -127,10 +127,10 @@ Copyright:
         <echo message="TEST_HOME is set to = ${TEST_HOME}"/>
         <echo message="GRIDSPHERE_HOME is set to = ${GRIDSPHERE_HOME}"/>
 
-        <echo message="--- Property values ---" />
-        <echo message="debug=${debug}" />
-        <echo message="deprecation=${deprecation}" />
-        <echo message="optimize=${optimize}" />
+        <echo message="--- Property values ---"/>
+        <echo message="debug=${debug}"/>
+        <echo message="deprecation=${deprecation}"/>
+        <echo message="optimize=${optimize}"/>
     </target>
 
     <!-- =================================================================== -->
@@ -158,7 +158,7 @@ Copyright:
     <!-- =================================================================== -->
     <target name="compile" depends="setenv" description="Compile @PROJECT_TITLE@ source code">
         <echo>Compiling @PROJECT_TITLE@ source code</echo>
-        <javac  srcdir="src"
+        <javac srcdir="src"
             destdir="${build.classes}"
             classpathref="classpath"
             debug="${debug}"
@@ -184,40 +184,49 @@ Copyright:
     <!-- Database stuff                                         -->
     <!-- =================================================================== -->
 
-     <target name="configure-database" depends="setenv">
-            <mkdir dir="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/persistence/"/>
-            <copy overwrite="true" file="webapp/WEB-INF/persistence/hibernate.properties" todir="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/persistence/"/>
-            <replace file="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/persistence/hibernate.properties"
-                token="@3RDPARTY_WEBAPP@"
-                value="${env.CATALINA_HOME}/webapps/${project.name}"/>
+    <target name="configure-database" depends="setenv">
+        <mkdir dir="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/persistence/"/>
+        <copy overwrite="true" file="webapp/WEB-INF/persistence/hibernate.properties" todir="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/persistence/"/>
+        <replace file="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/persistence/hibernate.properties"
+            token="@3RDPARTY_WEBAPP@"
+            value="${env.CATALINA_HOME}/webapps/${project.name}"/>
     </target>
 
     <target name="create-database" depends="setenv, configure-database, compile">
-          <taskdef name="schemaexport"
-              classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask"
-              classpathref="classpath"/>
+        <taskdef name="schemaexport"
+            classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask"
+            classpathref="classpath"/>
 
-          <schemaexport
-              properties="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/persistence/hibernate.properties"
-              quiet="yes"
-              text="no"
-              drop="no"
-              delimiter=";"
-              output="schema-export.sql">
-              <fileset dir="webapp/WEB-INF/persistence/">
-                  <include name="**/*.hbm.xml"/>
-              </fileset>
-          </schemaexport>
-      </target>
+        <pathconvert targetos="windows" dirsep="/" property="cathome">
+            <path location="${env.CATALINA_HOME}"/>
+        </pathconvert>
+
+        <schemaexport
+            properties="${cathome}/webapps/${project.name}/WEB-INF/persistence/hibernate.properties"
+            quiet="yes"
+            text="no"
+            drop="no"
+            delimiter=";"
+            output="schema-export.sql">
+            <fileset dir="webapp/WEB-INF/persistence/">
+                <include name="**/*.hbm.xml"/>
+            </fileset>
+        </schemaexport>
+    </target>
 
 
-        <target name="update-database" depends="setenv, compile">
+    <target name="update-database" depends="setenv, compile">
         <taskdef name="schemaupdate"
             classname="net.sf.hibernate.tool.hbm2ddl.SchemaUpdateTask"
             classpathref="classpath"/>
 
+
+        <pathconvert targetos="windows" dirsep="/" property="cathome">
+            <path location="${env.CATALINA_HOME}"/>
+        </pathconvert>
+
         <schemaupdate
-            properties="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/persistence/hibernate.properties"
+            properties="${cathome}/webapps/${project.name}/WEB-INF/persistence/hibernate.properties"
             quiet="yes">
             <fileset dir="webapp/WEB-INF/persistence/">
                 <include name="**/*.hbm.xml"/>
@@ -238,13 +247,13 @@ Copyright:
         <mkdir dir="${build.classes}/${project.name}"/>
 
         <copy file="config/log4j.properties"
-                  tofile="${build.classes}/${project.name}/log4j.properties"/>
+            tofile="${build.classes}/${project.name}/log4j.properties"/>
 
-        <jar jarfile="${build.lib}/${project.name}.jar" basedir="${build.classes}" >
+        <jar jarfile="${build.lib}/${project.name}.jar" basedir="${build.classes}">
             <include name="**/portlets/**"/>
-            <include name="${project.name}/**" />
+            <include name="${project.name}/**"/>
         </jar>
-     </target>
+    </target>
 
     <!-- =================================================================== -->
     <!-- Creates a @PROJECT_TITLE@ JAR library archive configured for Tomcat -->
@@ -255,13 +264,13 @@ Copyright:
         <mkdir dir="${build.classes}/${project.name}"/>
 
         <copy file="config/log4j.properties"
-                  tofile="${build.classes}/${project.name}/log4j.properties"/>
+            tofile="${build.classes}/${project.name}/log4j.properties"/>
 
-        <jar jarfile="${build.lib}/${project.name}-services.jar" basedir="${build.classes}" >
+        <jar jarfile="${build.lib}/${project.name}-services.jar" basedir="${build.classes}">
             <include name="**/services/**"/>
-            <include name="${project.name}/**" />
+            <include name="${project.name}/**"/>
         </jar>
-     </target>
+    </target>
 
     <!-- =================================================================== -->
     <!-- Cleans everything                                                   -->
@@ -283,16 +292,16 @@ Copyright:
         <delete quiet="true" dir="${build.javadoc}"/>
         <mkdir dir="${build.javadoc}"/>
         <javadoc sourcepath="src"
-                 classpathref="classpath"
-                 destdir="${build.javadoc}"
-                 author="true"
-                 version="true"
-                 splitindex="true"
-                 use="true"
-                 maxmemory="180m"
-                 windowtitle="${project.title}"
-                 doctitle="${project.api}">
-        <!-- bottom="Copyright &#169; 2002,2003 GridLab Project. All Rights Reserved."> -->
+            classpathref="classpath"
+            destdir="${build.javadoc}"
+            author="true"
+            version="true"
+            splitindex="true"
+            use="true"
+            maxmemory="180m"
+            windowtitle="${project.title}"
+            doctitle="${project.api}">
+            <!-- bottom="Copyright &#169; 2002,2003 GridLab Project. All Rights Reserved."> -->
         </javadoc>
     </target>
 
