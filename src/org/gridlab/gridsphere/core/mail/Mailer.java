@@ -14,13 +14,17 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.InternetAddress;
 
-public class MailUtils {
+/**
+ * <code>Mailer</code> is a mail utility used to send {@link MailMessage}s.
+ */
+public class Mailer {
 
     /**
      * Send an email regarding job completion
      *
      * @param msg the MailMessage containing e-mail parameters
      * @param mailServer the mail server
+     * @throws MessagingException if a an error occurs sending the message
      */
     public static void sendMail(MailMessage msg,
                                 String mailServer) throws MessagingException {

@@ -4,6 +4,9 @@
  */
 package org.gridlab.gridsphere.core.mail;
 
+/**
+ * The <code>MailMessage</code> utility class represents a mail message.
+ */
 public class MailMessage {
 
     public String subject = "";
@@ -12,13 +15,13 @@ public class MailMessage {
     public String sender = "";
 
     /**
-     * Constructor builds empty mail message
+     * Constructs an empty mail message
      */
     public MailMessage() {
     }
 
     /**
-     * Constructor builds a mail message
+     * Constructs a mail message given a subject, sender, body and email address
      *
      * @param subject the subject of the email
      * @param body the body of the email
