@@ -33,27 +33,19 @@
     </variable>
   </tag>
 
-  <tag>
-    <name>getMode</name>
-    <tag-class>org.gridlab.gridsphere.tags.portlet.PortletModeTag</tag-class>
-    <body-content>empty</body-content>
-    <description>
-        displays the current portlet mode
-    </description>
-    <variable>
-        <name-given>portletRequest</name-given>
-        <variable-class>org.gridlab.gridsphere.portlet.PortletRequest</variable-class>
-        <declare>true</declare>
-        <scope>AT_BEGIN</scope>
-        <description>The PortletRequest Object</description>
-    </variable>
-    <variable>
-        <name-given>portletResponse</name-given>
-        <variable-class>org.gridlab.gridsphere.portlet.PortletResponse</variable-class>
-        <declare>true</declare>
-        <scope>AT_BEGIN</scope>
-        <description>The PortletResponse Object</description>
-    </variable>
-  </tag>
+
+    <tag>
+        <name>required</name>
+        <tag-class>org.gridlab.gridsphere.tags.portlet.RequiredRoleTag</tag-class>
+        <body-content>JSP</body-content>
+        <description>
+            requires the user have the minimum role specified  to display content
+        </description>
+        <attribute>
+            <name>role</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+         </attribute>
+      </tag>
 
 </taglib>

@@ -51,7 +51,13 @@
                     <title>Bejelentkezés</title>
                     <title-short>Bejelentkezés</title-short>
                     <description>A portlet a portálba való bejelentkezésre szolgál</description>
-                    <keywords>bejelentkezés portlet (hu)</keywords>
+                    <keywords>bejelentkezés portlet</keywords>
+                </language>
+                <language locale="pl">
+                  <title>Logowanie</title>
+                  <title-short>Logowanie</title-short>
+                  <description>Portlet umo?liwia zalogowanie si?</description>
+                  <keywords>portlet logowanie loguj</keywords>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
@@ -90,6 +96,12 @@
                     <title-short>Kijelentkezés</title-short>
                     <description>A portlet a portálból való kijelentkezésre szolgál</description>
                     <keywords>kijelentkezés portlet</keywords>
+                </language>
+                <language locale="pl">
+                    <title>Wylogowanie</title>
+                    <title-short>Wylogowanie</title-short>
+                    <description>Portlet umo?liwia wylogowanie si?</description>
+                    <keywords>portlet wylogowanie wyloguj</keywords>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>

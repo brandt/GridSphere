@@ -48,10 +48,10 @@
         </attribute>
       </tag>
 
-  <tag>
+    <tag>
         <name>actionsubmit</name>
         <tag-class>org.gridlab.gridsphere.tags.portletui.ActionSubmitTag</tag-class>
-        <body-content>none</body-content>
+        <body-content>empty</body-content>
         <description>
             Creates a submit button
         </description>
@@ -66,8 +66,13 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <name>key</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>value</name>
-            <required>true</required>
+            <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
       </tag>
@@ -79,11 +84,44 @@
     <description>
         Shows text
     </description>
-      <attribute>
+    <attribute>
         <name>text</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
+    <attribute>
+        <name>key</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>beanId</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+
+    <tag>
+    <name>tableframe</name>
+    <tag-class>org.gridlab.gridsphere.tags.portletui.TableFrameTag</tag-class>
+    <body-content>JSP</body-content>
+    <description>
+        Shows table frame
+    </description>
+    <attribute>
+        <name>beanId</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+
+    <tag>
+    <name>tablepane</name>
+    <tag-class>org.gridlab.gridsphere.tags.portletui.TablePaneTag</tag-class>
+    <body-content>JSP</body-content>
+    <description>
+        Shows table pane which contains tableframes
+    </description>
     <attribute>
         <name>beanId</name>
         <required>false</required>
@@ -157,5 +195,29 @@
         <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
+
+    <tag>
+        <name>form</name>
+        <tag-class>org.gridlab.gridsphere.tags.portletui.FormTag</tag-class>
+        <body-content>JSP</body-content>
+        <description>
+            Wrapper around HTML form tag
+        </description>
+        <attribute>
+            <name>method</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>name</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>action</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+      </tag>
 
 </taglib>
