@@ -5,8 +5,9 @@
 package org.gridlab.gridsphere.services.impl;
 
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.services.AccountRequest;
 
-public class AccountRequest {
+public class AccountRequestImpl implements AccountRequest {
 
     private String firstName = "";
     private String givenName = "";
