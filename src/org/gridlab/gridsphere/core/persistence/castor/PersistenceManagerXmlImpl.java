@@ -11,6 +11,7 @@ import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.Unmarshaller;
 import org.exolab.castor.xml.ValidationException;
+import org.xml.sax.InputSource;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
@@ -125,9 +126,8 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
         Object object = null;
         try {
             log.debug("Using getConnectionURL() " + descriptorPath);
-            FileReader filereader = null;
 
-            filereader = new FileReader(descriptorPath);
+	    InputSource xmlSource = new InputSource(descriptorPath);
 
             Mapping mapping = new Mapping();
 
@@ -135,7 +135,7 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
             log.debug("Using  getMappingFile()" + mappingPath);
 
             Unmarshaller unmarshal = new Unmarshaller(mapping);
-            object = unmarshal.unmarshal(filereader);
+            object = unmarshal.unmarshal(xmlSource);
 
         } catch (MappingException e) {
             log.error("MappingException: " + e.getException().toString());

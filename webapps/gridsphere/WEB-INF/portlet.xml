@@ -43,7 +43,7 @@
                     <title>P≈ôihl√°≈°en√≠</title>
                     <title-short>P≈ôihl√°≈°en√≠</title-short>
                     <description>Portlet pro p≈ôihl√°≈°en√≠ u≈æivatele do syst√©mu</description>
-                    <keywords>p\xc5\x99ihl√°≈°en√≠ portlet</keywords>
+                    <keywords>p≈ôihl√°≈°en√≠ portlet</keywords>
                 </language>
                 <language locale="de">
                     <title>Anmelden</title>
@@ -52,10 +52,10 @@
                     <keywords>anmelden logout</keywords>
                 </language>
                 <language locale="hu">
-                    <title>Bejelentkezés</title>
-                    <title-short>Bejelentkezés</title-short>
-                    <description>A portlet a portálba való bejelentkezésre szolgál</description>
-                    <keywords>bejelentkezés portlet</keywords>
+                    <title>Bejelentkezs</title>
+                    <title-short>Bejelentkezs</title-short>
+                    <description>A portlet a portlba val bejelentkezsre szolgl</description>
+                    <keywords>bejelentkezs portlet</keywords>
                 </language>
                 <language locale="pl">
                   <title>Logowanie</title>
@@ -102,10 +102,10 @@
                     <keywords>portlet abmelden</keywords>
                 </language>
                 <language locale="hu">
-                    <title>Kijelentkezés</title>
-                    <title-short>Kijelentkezés</title-short>
-                    <description>A portlet a portálból való kijelentkezésre szolgál</description>
-                    <keywords>kijelentkezés portlet</keywords>
+                    <title>KijelentkezÔøΩs</title>
+                    <title-short>KijelentkezÔøΩs</title-short>
+                    <description>A portlet a portÔøΩlbÔøΩl valÔøΩ kijelentkezÔøΩsre szolgÔøΩl</description>
+                    <keywords>kijelentkezÔøΩs portlet</keywords>
                 </language>
                 <language locale="pl">
                     <title>Wylogowanie</title>
