@@ -46,6 +46,12 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface {
         log.info("Using '" + DatabaseName + "' as Databasename with the configfile '" + ConnectionURL + "'");
     }
 
+    public PersistenceManagerRdbms(String databasename, String url) {
+        super();
+        DatabaseName = databasename;
+        ConnectionURL = url;
+    }
+
     /**
      * gets the query for the database
      *

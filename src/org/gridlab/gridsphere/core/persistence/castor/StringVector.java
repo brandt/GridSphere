@@ -19,15 +19,10 @@ public class StringVector extends BaseObject {
     protected transient static PortletLog log = SportletLog.getInstance(StringVector.class);
 
     /**
-     * @sql-size 50
-     * @sql-name id
-     */
-    private String Id  = new String() ;
-    /**
      * @sql-size 128
      * @sql-name value
      */
-    private String Value  = new String();
+    protected String Value  = new String();
     /**
      * @sql-name
      */
@@ -41,14 +36,6 @@ public class StringVector extends BaseObject {
         super();
         Reference = (BaseObject)o;
         Value = value;
-    }
-
-    public String getId() {
-        return Id;
-    }
-
-    public void setId(String id) {
-        Id = id;
     }
 
     public Object getReference() {
