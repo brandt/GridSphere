@@ -11,11 +11,7 @@ import org.gridlab.gridsphere.core.persistence.UniqueID;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.exolab.castor.xml.Unmarshaller;
 import org.exolab.castor.jdo.conf.Mapping;
-/**
- * @table attribute
- * @key-generator UUID
- * @depends org.gridlab.gridsphere.portlet.impl.SportletUserImpl
- */
+
 public class Attribute extends BaseObject {
 
     /**
@@ -29,10 +25,6 @@ public class Attribute extends BaseObject {
      */
     private String Value  = new String();
 
-    /**
-     * @sql-name sportletuser
-     */
-    private SportletUserImpl User = new SportletUserImpl();
 
     public Attribute () {
         super();
@@ -42,14 +34,6 @@ public class Attribute extends BaseObject {
         Key = k;
         Value = v;
         this.setOid(UniqueID.get());
-    }
-
-    public SportletUserImpl getUser() {
-        return User;
-    }
-
-    public void setUser(SportletUserImpl user) {
-        User = user;
     }
 
     public String getKey() {

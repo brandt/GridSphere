@@ -41,6 +41,7 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface {
 
     public PersistenceManagerRdbms() {
         super();
+        log.info("Entering PM");
         DatabaseName = GridSphereConfig.getInstance().getProperty(GridSphereConfigProperties.PERSISTENCE_DBNAME);
         ConnectionURL = GridSphereConfig.getInstance().getProperty(GridSphereConfigProperties.PERSISTENCE_CONFIGFILE);
         log.info("Using '" + DatabaseName + "' as Databasename with the configfile '" + ConnectionURL + "'");
