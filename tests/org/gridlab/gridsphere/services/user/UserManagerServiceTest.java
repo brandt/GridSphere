@@ -103,12 +103,12 @@ public class UserManagerServiceTest extends ServiceTest {
 
     public void testSportletUserAttributes() {
         log.info("+ testSportletuserAttributes");
-        User jason = userManager.loginUser("jason");
+        User jason = userManager.loginUser("jason", null);
         SportletUser su = (SportletUser)jason;
         su.setAttribute("test","result");
         userManager.saveUser(su);
 
-        User jason2 = userManager.loginUser("jason");
+        User jason2 = userManager.loginUser("jason", null);
         String Attribute = (String)jason2.getAttribute("test");
         System.out.println("Attr:"+Attribute );
 
@@ -125,7 +125,7 @@ public class UserManagerServiceTest extends ServiceTest {
 
     public void testremoveUser() {
         log.info("+ testremoveUser");
-        User jason = userManager.loginUser("jason");
+        User jason = userManager.loginUser("jason", null);
         try {
             userManager.removeUser(jason, "michael");
             fail("Should fail here!");
@@ -144,7 +144,7 @@ public class UserManagerServiceTest extends ServiceTest {
 
     public void testdenyGroupRequest() {
         log.info("+ testdenygrouprequest");
-        User jason = userManager.loginUser("jason");
+        User jason = userManager.loginUser("jason", null);
         try {
             userManager.denyGroupRequest(superuser, jason,  portal, null);
         } catch (PermissionDeniedException e) {
@@ -165,7 +165,7 @@ public class UserManagerServiceTest extends ServiceTest {
 
     public void testApproveGroup() {
         log.info("+ testapprovegroup");
-        User jason = userManager.loginUser("jason");
+        User jason = userManager.loginUser("jason", null);
         try {
             userManager.approveGroupRequest(superuser, jason,  portal, null);
         } catch (PermissionDeniedException e) {
@@ -173,7 +173,7 @@ public class UserManagerServiceTest extends ServiceTest {
             fail("Should NOT fail");
         }
 
-        User michael = userManager.loginUser("michael");
+        User michael = userManager.loginUser("michael", null);
 
         try {
             userManager.approveGroupRequest(jason, michael, triana, null);
@@ -226,7 +226,7 @@ public class UserManagerServiceTest extends ServiceTest {
 
     public void testmodifyExistingUser() {
         log.info("+ testmodifyExistingUser");
-        User jason = userManager.loginUser("jason");
+        User jason = userManager.loginUser("jason", null);
         String jasonid = jason.getID();
         AccountRequest req = userManager.changeAccountRequest(jason);
         req.setFamilyName("Novotny");
@@ -253,7 +253,7 @@ public class UserManagerServiceTest extends ServiceTest {
         result = userManager.getAllUsers();
         assertEquals(5, result.size());
 
-        User newjason = userManager.loginUser("jason");
+        User newjason = userManager.loginUser("jason", null);
         assertEquals("Novotny", newjason.getFamilyName());
         assertEquals(jasonid, newjason.getID());
 
@@ -266,7 +266,7 @@ public class UserManagerServiceTest extends ServiceTest {
 
     public void testDenyAccountRequest() {
         log.info("+ testdenyAccountRequest");
-        User jason = userManager.loginUser("jason");
+        User jason = userManager.loginUser("jason", null);
         List result = userManager.getAccountRequests();
         try {
             userManager.denyAccountRequest(jason,(AccountRequest)result.get(0), null);
@@ -283,7 +283,7 @@ public class UserManagerServiceTest extends ServiceTest {
 
     public void testApproveAccount() {
         log.info("+ testApproveAccount");
-        User jason = userManager.loginUser("jason");
+        User jason = userManager.loginUser("jason", null);
         List result = userManager.getAccountRequests();
         try {
             userManager.approveAccountRequest(jason,(AccountRequest)result.get(0), null);
@@ -306,7 +306,7 @@ public class UserManagerServiceTest extends ServiceTest {
 
     public void testloginUser() {
         log.info("+ testLoginuser");
-        User u = userManager.loginUser("jason");
+        User u = userManager.loginUser("jason", null);
 
         assertEquals("Jason", u.getGivenName());
     }

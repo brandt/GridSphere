@@ -426,7 +426,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @return the correspodning userobject
      * @see User
      */
-    public User loginUser(String userName) {
+    public User loginUser(String userName, String passWord) {
         // same as getUser, we do add the user somewhere to the active users
         String command =
                 "select u from "+jdoSUImpl+" u where UserID=\"" + userName + "\"";
@@ -437,7 +437,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     /**
      * logoffUser release user information and serializes to DB
      */
-    public void logoffUser(User user) {
+    public void logoutUser(User user) {
 
     }
 
@@ -472,7 +472,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
         if (isSuperuser(approver)) {
             if (existsUser(userName)) {
-                User user = loginUser(userName);
+                User user = getUserByName(userName);
                 try {
                     List result = aclService.getGroups(user);
                     if (result.size() > 0) {

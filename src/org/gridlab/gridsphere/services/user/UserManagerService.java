@@ -96,16 +96,17 @@ public interface UserManagerService extends PortletService {
      * Login a user
      *
      * @param userName the user to login
+     * @param passWord the user's password
      * @return the retieved Role object
      */
-    public User loginUser(String userName);
+    public User loginUser(String userName, String passWord);
 
     /**
      * Logoff a user
      *
      * @param user the user to logoff
      */
-    public void logoffUser(User user);
+    public void logoutUser(User user);
 
     /**
      * Returns the users portlet data for the specified portlet
@@ -148,7 +149,6 @@ public interface UserManagerService extends PortletService {
      *
      * @param userID the user login ID
      * @return true if the user exists, false otherwise
-     * @see org.gridlab.gridsphere.portletcontainer.descriptor.Role
      */
     public boolean existsUser(String userID);
 
