@@ -48,28 +48,6 @@
   </script>
 <%  List usersNotInGroup = aclManagerBean.getUsersNotInGroup(); %>
 <table class="portlet-pane" cellspacing="1">
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-message">
-            Select the users you want to add to this group and specify the role each user plays within this group.
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-title">
-              Add Users To Group [<%=aclManagerBean.getGroupName()%>]
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
 <%  if (usersNotInGroup.size() == 0) { %>
   <tr>
     <td>
@@ -86,12 +64,6 @@
                    onClick="javascript:AccessControllerPortlet_listGroup_onClick()"/>
           </td>
         </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-message-alert">
             There are no users to add to this group.
@@ -114,6 +86,11 @@
                    name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_ADD_CANCEL%>"
                    value="Cancel Add"
                    onClick="javascript:AccessControllerPortlet_cancelAddGroupEntry_onClick()"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-message">
+            Select the users you want to add to this group and specify the role each user plays within this group.
           </td>
         </tr>
       </table>
@@ -157,11 +134,11 @@
           <td class="portlet-frame-text">
              <select name="groupEntryRoleName">
                <option label="USER"
-                       value="<%=user.getID()%>:user"/>
+                       value="<%=user.getID()%>:user"></option>
                <option label="ADMIN"
-                       value="<%=user.getID()%>:admin"=/>
+                       value="<%=user.getID()%>:admin"></option>
                <option label="GUEST"
-                       value="<%=user.getID()%>:guest"=/>
+                       value="<%=user.getID()%>:guest"></option>
              </select>
           </td>
         </tr>

@@ -1,9 +1,6 @@
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
-<jsp:useBean id="userManagerBean"
-             class="org.gridlab.gridsphere.portlets.core.user.UserManagerBean"
-             scope="request"/>
 <gs:form action="doListUser">
 <table class="portlet-pane" cellspacing="1">
   <tr>

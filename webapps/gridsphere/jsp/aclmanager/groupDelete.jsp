@@ -35,29 +35,6 @@
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td class="portlet-frame-message">
-            Click <span style="portlet-text-alert">Confirm Delete</span> to delete this group,
-            <span style="portlet-text-alert">Cancel Delete</span> otherwise.
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-title">
-              Delete Group [<%=aclManagerBean.getGroupName()%>]
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
           <td class="portlet-frame-actions">
             <input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_DELETE_CONFIRM%>"
@@ -67,6 +44,12 @@
                    name="<%=AccessControllerBean.ACTION_GROUP_DELETE_CANCEL%>"
                    value="Cancel Delete"
                    onClick="javascript:AccessControllerPortlet_cancelDeleteGroup_onClick()"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-message">
+            Click <span style="portlet-text-alert">Confirm Delete</span> to delete this group,
+            <span style="portlet-text-alert">Cancel Delete</span> otherwise.
           </td>
         </tr>
       </table>

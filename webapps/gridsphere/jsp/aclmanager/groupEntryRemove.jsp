@@ -40,29 +40,6 @@
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td class="portlet-frame-message">
-            Click <span style="portlet-text-alert">Confirm Remove</span> to remove the selected users,
-            <span style="portlet-text-alert">Cancel Remove</span> otherwise.
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-title">
-              Remove Users From Group <%=aclManagerBean.getGroupName()%>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
           <td class="portlet-frame-actions">
             <input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_REMOVE_CONFIRM%>"
@@ -72,6 +49,12 @@
                    name="<%=AccessControllerBean.ACTION_GROUP_ENTRY_REMOVE_CANCEL%>"
                    value="Cancel Remove"
                    onClick="javascript:AccessControllerPortlet_cancelRemoveGroupEntry_onClick()"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-message">
+            Click <span style="portlet-text-alert">Confirm Remove</span> to remove the selected users,
+            <span style="portlet-text-alert">Cancel Remove</span> otherwise.
           </td>
         </tr>
       </table>

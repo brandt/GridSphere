@@ -36,27 +36,6 @@
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td class="portlet-frame-message">
-            The following group was <span style="portlet-text-bold">deleted</span>.
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-title">
-              Deleted Group [<%=aclManagerBean.getGroupName()%>]
-          </td>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
           <td class="portlet-frame-actions">
             <input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_LIST%>"
@@ -66,6 +45,11 @@
                    name="<%=AccessControllerBean.ACTION_GROUP_EDIT%>"
                    value="New Group"
                    onClick="javascript:AccessControllerPortlet_newGroup_onClick()"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-message">
+            The following group was <span style="portlet-text-bold">deleted</span>.
           </td>
         </tr>
       </table>

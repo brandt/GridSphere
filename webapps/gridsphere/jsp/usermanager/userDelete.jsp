@@ -1,7 +1,7 @@
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
-<gs:form action="doViewUser">
+<gs:form action="doDeleteUser">
 <gs:hiddenfield bean="userID"/>
 <table class="portlet-pane" cellspacing="1" width="100%">
   <tr>

@@ -89,7 +89,7 @@ Version: $Id$
 }
 
 .portlet-frame-header-checkbox {
-  background-color: #cbccce;
+  background-color: #CCCCFF;
   border-none;
   color: #FFFFFF;
   font-family: inherit;
@@ -100,7 +100,7 @@ Version: $Id$
 }
 
 .portlet-frame-label {
-  background-color: #CCCCCC;
+  background-color: #CCCCFF;
   border: none;
   color: #000000;
   font-family: inherit;
@@ -112,7 +112,7 @@ Version: $Id$
 }
 
 .portlet-frame-label-alert {
-  background-color: #CCCCCC;
+  background-color: #CCCCFF;
   border: none;
   color: darkred;
   font-family: inherit;
@@ -196,7 +196,7 @@ Version: $Id$
 }
 
 .portlet-frame-entry-checkbox {
-  background-color: #CCCCCC;
+  background-color: #CCCCFF;
   border: none;
   color: #000000;
   font-family: inherit;

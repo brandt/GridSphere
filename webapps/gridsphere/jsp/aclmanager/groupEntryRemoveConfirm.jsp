@@ -33,27 +33,6 @@
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td class="portlet-frame-message">
-            The following entries were <span style="portlet-text-bold">removed</span> from this group.
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-title">
-             Entries Removed From Group [<%=aclManagerBean.getGroupName()%>]
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
           <td class="portlet-frame-actions">
             <input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_VIEW%>"
@@ -63,6 +42,11 @@
                    name="<%=AccessControllerBean.ACTION_GROUP_LIST%>"
                    value="Add Users"
                    onClick="javascript:AccessControllerPortlet_listGroup_onClick()"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-message">
+            The following entries were <span style="portlet-text-bold">removed</span> from this group.
           </td>
         </tr>
       </table>

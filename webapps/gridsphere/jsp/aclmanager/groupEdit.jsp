@@ -31,31 +31,9 @@
 
   </script>
 <table class="portlet-pane" cellspacing="1">
-<% if (aclManagerBean.isFormInvalid()) { %>
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-message-alert">
-            <%=aclManagerBean.getFormInvalidMessage()%>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-<% } %>
-  <tr>
-    <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
-        <tr>
-          <td class="portlet-frame-title">
-<% if (aclManagerBean.getGroupID().equals("")) { %>
-              New Group
-<% } else { %>
-              Edit Group [<%=aclManagerBean.getGroupName()%>]
-<% } %>
-          </td>
-        </tr>
         <tr>
           <td class="portlet-frame-actions">
             <input type="button"
@@ -66,6 +44,11 @@
                    name="<%=AccessControllerBean.ACTION_GROUP_EDIT_CANCEL%>"
                    value="Cancel Edit"
                    onClick="javascript:AccessControllerPortlet_cancelEditGroup_onClick()"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-message-alert">
+            <%=aclManagerBean.getFormInvalidMessage()%>
           </td>
         </tr>
       </table>
