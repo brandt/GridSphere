@@ -720,7 +720,4 @@ public class FormEventImpl implements FormEvent {
         }
     }
 
-    public Object getTagBean(String name) {
-        return null;
-    }
 }

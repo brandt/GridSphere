@@ -209,8 +209,11 @@ public class ActionPortlet extends AbstractPortlet {
 
         log.debug("method name to invoke: " + methodName);
 
-        doAction(req, res, methodName, parameterTypes, arguments);
-
+        try {
+            doAction(req, res, methodName, parameterTypes, arguments);
+        } catch (Exception e) {
+            setNextError(req, "Exception during actionPerformed: " + e.getMessage());
+        }
         formEvent.store();
         setTagBeans(req, formEvent.getTagBeans());
         if (hasError(req)) {
@@ -247,17 +250,20 @@ public class ActionPortlet extends AbstractPortlet {
 
             method.invoke(thisObject, arguments);
         } catch (NoSuchMethodException e) {
-            this.log.error("Error invoking action method: " + methodName, e);
+            String error = "No such method: " + methodName + "\n" + e.getMessage();
+            this.log.error(error, e);
             // If action is not illegal do error undefined action
-            doErrorInvalidAction(request, methodName);
+            doErrorInvalidAction(request, error);
         } catch (IllegalAccessException e) {
-            this.log.error("Error invoking action method: " + methodName, e);
+            String error = "Error accessing action method: " + methodName + "\n" + e.getMessage();
+            this.log.error(error, e);
             // If action is not illegal do error undefined action
-            doErrorInvalidAction(request, methodName);
+            doErrorInvalidAction(request, error);
         } catch (InvocationTargetException e) {
-            this.log.error("Error invoking action method: " + methodName, e);
+            String error = "Error invoking action method: " + methodName + "\n" + e.getMessage();
+            this.log.error(error, e);
             // If action is not illegal do error undefined action
-            doErrorInvalidAction(request, methodName);
+            doErrorInvalidAction(request, error);
         }
     }
 
@@ -265,17 +271,11 @@ public class ActionPortlet extends AbstractPortlet {
      * Sets an approriate error message to be displayed in the next render cycle
      *
      * @param req the portlet request
-     * @param action the attempted action
+     * @param errorMessage the error message
      */
-    public void doErrorInvalidAction(PortletRequest req, String action) {
+    public void doErrorInvalidAction(PortletRequest req, String errorMessage) {
         setNextTitle(req, "Error: Undefined Action");
-        String errorMessage = "Attempt to invoke invalid portlet action "
-                + this.getClass().getName()
-                + "."
-                + action
-                + "()";
         setNextError(req, errorMessage);
-        this.log.error(errorMessage);
     }
 
     /**
@@ -313,15 +313,20 @@ public class ActionPortlet extends AbstractPortlet {
             FormEvent formEvent = new FormEventImpl(request, response, tagBeans);
             Class[] paramTypes = new Class[] { FormEvent.class };
             Object[] arguments = new Object[] { formEvent };
-            doAction(request, response, next, paramTypes, arguments);
-            formEvent.store();
-            if (hasError(request)) {
-                log.debug("hasError = true");
-                doError(formEvent);
-            } else {
+            try {
+                doAction(request, response, next, paramTypes, arguments);
+                formEvent.store();
                 next = getNextState(request);
                 log.debug("in doView: next page is= " + next);
                 doViewJSP(request, response, next);
+            } catch (Exception e) {
+                PrintWriter out = response.getWriter();
+                if (hasError(request)) {
+                    log.debug("hasError = true");
+                    String message = getNextError(request);
+                    out.println(message);
+                }
+                out.println("Exception occured: " + e.getMessage());
             }
         }
     }

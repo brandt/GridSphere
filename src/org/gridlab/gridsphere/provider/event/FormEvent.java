@@ -178,5 +178,4 @@ public interface FormEvent extends ActionEvent {
      */
     public void store();
 
-    public Object getTagBean(String name);
 }

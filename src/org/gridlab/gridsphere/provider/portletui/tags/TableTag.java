@@ -81,7 +81,7 @@ public class TableTag extends BaseComponentTag {
      *
      * @param cellPadding the panel cell padding
      */
-    public void setCellPadding(String cellPadding) {
+    public void setCellpadding(String cellPadding) {
         this.cellPadding = cellPadding;
     }
 
@@ -90,7 +90,7 @@ public class TableTag extends BaseComponentTag {
      *
      * @return  the panel cell padding
      */
-    public String getCellPadding() {
+    public String getCellpadding() {
         return cellPadding;
     }
 

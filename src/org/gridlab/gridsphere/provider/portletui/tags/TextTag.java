@@ -46,6 +46,9 @@ public class TextTag extends BaseComponentTag {
      * <li>status</li>
      * <li>alert</li>
      * <li>success</li>
+     * <li>bold</li>
+     * <li>italic</li>
+     * <li>underline</li>
      *
      * @return the text style
      */
@@ -78,6 +81,7 @@ public class TextTag extends BaseComponentTag {
             if (textBean == null) {
                 textBean = new TextBean();
             }
+            key = textBean.getKey();
         } else {
             textBean = new TextBean();
             this.setBaseComponentBean(textBean);

@@ -202,5 +202,6 @@ public abstract class BaseComponentBean extends BaseBean {
     public void setSupportsJS(boolean supportsJS) {
         this.supportsJS = supportsJS;
     }
+
 }
 
