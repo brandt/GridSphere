@@ -23,12 +23,4 @@ public interface ActionListener extends EventListener {
      */
     public void actionPerformed(ActionEvent event) throws PortletException;
 
-    /**
-     * Notifies this listener that the action which the listener is watching for is about to be performed.
-     *
-     * @param event the action event
-     * @throws PortletException if the listener has trouble fulfilling the request
-     */
-    public void actionNotYetPerformed(ActionEvent event) throws PortletException;
-
 }

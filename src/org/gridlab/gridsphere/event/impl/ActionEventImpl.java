@@ -18,14 +18,13 @@ import java.util.EventObject;
  */
 public class ActionEventImpl extends EventObject implements ActionEvent {
 
-    private int eventType;
     private DefaultPortletAction action;
     private PortletRequest request;
     private PortletResponse response;
 
-    public ActionEventImpl(DefaultPortletAction action, int eventType, PortletRequest request, PortletResponse response) {
+    public ActionEventImpl(DefaultPortletAction action, PortletRequest request, PortletResponse response) {
         super(action);
-        this.eventType = eventType;
+        this.action = action;
         this.request = request;
         this.response = response;
     }
@@ -37,24 +36,6 @@ public class ActionEventImpl extends EventObject implements ActionEvent {
      */
     public PortletAction getAction() {
         return action;
-    }
-
-    /**
-     * Sets the type of action event either ACTION_PERFORMED or ACTION_NOTYETPERFORMED
-     *
-     * @param eventType the event type
-     */
-    public void setEventType(int eventType) {
-        this.eventType = eventType;
-    }
-
-    /**
-     * Returns the type of action event either ACTION_PERFORMED or ACTION_NOTYETPERFORMED
-     *
-     * @return the event type
-     */
-    public int getEventType() {
-        return eventType;
     }
 
     /**
