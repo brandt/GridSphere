@@ -20,7 +20,7 @@ public interface AccessControlManagerService extends PortletService {
 
     /*** PORTLET GROUP METHODS ***/
 
-    public PortletGroup createGroup(String groupName, Set portletRoleList);
+    public PortletGroup createGroup(String groupName, String groupDescription, Set portletRoleList);
 
     public List getGroups();
 

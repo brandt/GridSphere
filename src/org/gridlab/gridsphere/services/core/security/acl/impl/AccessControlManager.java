@@ -45,13 +45,12 @@ public class AccessControlManager implements AccessControlManagerService {
         registry = PortletRegistry.getInstance();
         pms = PortletManager.getInstance();
         userManager = UserManager.getInstance();
-        //initGroups();
     }
 
     public static void main(String[] args) throws Exception  {
         AccessControlManager gum = AccessControlManager.getInstance();
         gum.pm = PersistenceManagerFactory.createGridSphereRdbms();
-        gum.initSportletGroup((SportletGroup)SportletGroup.SUPER);
+        //gum.initSportletGroup((SportletGroup)SportletGroup.SUPER);
         gum.initSportletGroup((SportletGroup)PortletGroupFactory.GRIDSPHERE_GROUP);
     }
 
@@ -72,7 +71,7 @@ public class AccessControlManager implements AccessControlManagerService {
     private void initGroups() {
         log.info("Entering initGroups()");
 
-        initSportletGroup((SportletGroup)SportletGroup.SUPER);
+        //initSportletGroup((SportletGroup)SportletGroup.SUPER);
         initSportletGroup((SportletGroup)PortletGroupFactory.GRIDSPHERE_GROUP);
 
         List webappNames = pms.getPortletWebApplicationNames();
@@ -427,14 +426,14 @@ public class AccessControlManager implements AccessControlManagerService {
         oqlBuffer.append(jdoPortletGroup);
         oqlBuffer.append(" grp ");
         // Note, we don't return super groups
-        if (criteria.equals("")) {
-            oqlBuffer.append(" where ");
-        } else {
+        //if (criteria.equals("")) {
+        //    oqlBuffer.append(" where ");
+        //} else {
             oqlBuffer.append(criteria);
-            oqlBuffer.append(" and ");
-        }
-        oqlBuffer.append("grp.oid !='");
-        oqlBuffer.append(getSuperGroup().getID());
+            //oqlBuffer.append(" and ");
+        //}
+        //oqlBuffer.append("grp.oid !='");
+        //oqlBuffer.append(getSuperGroup().getID());
         oqlBuffer.append("'");
         // Generate object query
         String oql = oqlBuffer.toString();
@@ -452,9 +451,11 @@ public class AccessControlManager implements AccessControlManagerService {
         return selectSportletGroup("where grp.oid='" + id + "'");
     }
 
+    /*
     private PortletGroup getSuperGroup() {
         return SportletGroup.SUPER;
     }
+    */
 
     public PortletGroup getGroupByName(String name) {
         return getSportletGroupByName(name);
@@ -506,18 +507,19 @@ public class AccessControlManager implements AccessControlManagerService {
         return group;
     }
 
-    public PortletGroup createGroup(String groupName, Set portletRoleList) {
+    public PortletGroup createGroup(String groupName, String groupDescription, Set portletRoleList) {
         SportletGroup group = getSportletGroupByName(groupName);
         if (group == null) {
             group = new SportletGroup();
             group.setName(groupName);
+            group.setDescription(groupDescription);
             group.setPublic(true);
             Iterator it = portletRoleList.iterator();
             while (it.hasNext()) {
                 SportletRoleInfo info = (SportletRoleInfo)it.next();
                 System.err.println("XXX role= " + info.getRole() + " class=" + info.getPortletClass()+" OID "+info.getOid());
                 try {
-                    if (info.getOid()==null) {
+                    if (info.getOid() == null) {
                         pm.create(info);
                     } else {
                         pm.update(info);

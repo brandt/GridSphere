@@ -52,8 +52,8 @@ public class AccessControlManagerServiceImpl implements AccessControlManagerServ
 
     /*** PORTLET GROUP METHODS ***/
 
-    public PortletGroup createGroup(String groupName, Set portletRoleList) {
-       return aclManager.createGroup(groupName, portletRoleList);    
+    public PortletGroup createGroup(String groupName, String groupDescription, Set portletRoleList) {
+       return aclManager.createGroup(groupName, groupDescription, portletRoleList);
     }
 
     public void deleteGroup(PortletGroup group) {
