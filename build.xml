@@ -55,9 +55,6 @@ Copyright:
 
     <!-- GridSphere build and dist directories -->
 
-    <!--- Type of SQL Database to use -->
-    <property name="DATABASE_TYPE" value="${gridsphere.database.type}"/>
-
     <!-- GridSphere webapps files -->
     <property name="gswebapp.dir" value="webapps/gridsphere"/>
 
