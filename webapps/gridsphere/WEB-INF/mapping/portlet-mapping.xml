@@ -103,7 +103,7 @@
         <field name="AllowsWindowStates" type="org.gridlab.gridsphere.portletcontainer.impl.descriptor.AllowsWindowStates">
             <bind-xml name="allows"/>
         </field>
-        <field name="SupportsModes" type="org.gridlab.gridsphere.portletcontainer.impl.descriptor.SupportsModes">
+        <field name="Supports" type="org.gridlab.gridsphere.portletcontainer.impl.descriptor.Supports">
             <bind-xml name="supports"/>
         </field>
     </class>
@@ -123,7 +123,16 @@
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.portletcontainer.impl.descriptor.SupportsModes">
+    <class name="org.gridlab.gridsphere.portletcontainer.impl.descriptor.Supports">
+        <field name="Markups" type="org.gridlab.gridsphere.portletcontainer.impl.descriptor.Markup" collection="arraylist">
+            <bind-xml name="markup"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portletcontainer.impl.descriptor.Markup">
+        <field name="Name" type="string">
+            <bind-xml name="name" node="attribute"/>
+        </field>
         <field name="Modes" type="org.exolab.castor.types.AnyNode" collection="arraylist">
             <bind-xml matches="*"/>
         </field>

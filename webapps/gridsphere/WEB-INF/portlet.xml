@@ -6,8 +6,10 @@
             <portlet-name>File Manager Portlet</portlet-name>
             <servlet-name>FileManagerPortlet</servlet-name>
             <supports>
-                <view/>
-                <help/>
+                <markup name="html">
+                    <view/>
+                    <help/>
+                </markup>
             </supports>
         </portlet-app>
 
@@ -51,6 +53,14 @@
         <portlet-app id="org.gridlab.gridsphere.portlets.core.file.BannerPortlet">
             <portlet-name>Banner Portlet</portlet-name>
             <servlet-name>BannerPortlet</servlet-name>
+            <supports>
+                <markup name="html">
+                    <view/>
+                    <edit/>
+                    <configure/>
+                    <help/>
+                </markup>
+            </supports>
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.file.BannerPortlet.1">
@@ -111,8 +121,10 @@
                 <resizing/>
             </allows>
             <supports>
-                <view/>
-                <help/>
+                <markup name="html">
+                    <view/>
+                    <help/>
+                </markup>
             </supports>
         </portlet-app>
 
@@ -174,6 +186,12 @@
         <portlet-app id="org.gridlab.gridsphere.portlets.core.login.LogoutPortlet">
             <portlet-name>Logout</portlet-name>
             <servlet-name>LogoutPortlet</servlet-name>
+            <supports>
+                <markup name="html">
+                    <view/>
+                    <help/>
+                </markup>
+            </supports>
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.login.LogoutPortlet.1">
@@ -236,8 +254,10 @@
                 <resizing/>
             </allows>
             <supports>
-                <view/>
-                <help/>
+                <markup name="html">
+                    <view/>
+                    <help/>
+                </markup>
             </supports>
         </portlet-app>
 
@@ -294,8 +314,10 @@
                 <resizing/>
             </allows>
             <supports>
-                <view/>
-                <help/>
+                <markup name="html">
+                    <view/>
+                    <help/>
+                </markup>
             </supports>
         </portlet-app>
 
@@ -346,9 +368,11 @@
                 <resizing/>
             </allows>
             <supports>
-                <view/>
-                <edit/>
-                <help/>
+                <markup name="html">
+                    <view/>
+                    <edit/>
+                    <help/>
+                </markup>
             </supports>
         </portlet-app>
 
@@ -402,8 +426,10 @@
                 <resizing/>
             </allows>
             <supports>
-                <view/>
-                <help/>
+                <markup name="html">
+                    <view/>
+                    <help/>
+                </markup>
             </supports>
         </portlet-app>
 
@@ -455,9 +481,11 @@
                 <resizing/>
             </allows>
             <supports>
-                <view/>
-                <edit/>
-                <help/>
+                <markup name="html">
+                    <view/>
+                    <edit/>
+                    <help/>
+                </markup>
             </supports>
         </portlet-app>
 
@@ -511,9 +539,11 @@
                 <resizing/>
             </allows>
             <supports>
-                <view/>
-                <edit/>
-                <help/>
+                <markup name="html">
+                    <view/>
+                    <edit/>
+                    <help/>
+                </markup>
             </supports>
         </portlet-app>
 
@@ -558,7 +588,9 @@
             <portlet-name>Locale Portlet</portlet-name>
             <servlet-name>LocalePortlet</servlet-name>
             <supports>
-                <view/>
+                <markup name="html">
+                    <view/>
+                </markup>
             </supports>
         </portlet-app>
 
@@ -599,63 +631,14 @@
     </portlet-app-def>
 
     <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.subscription.SubscriptionPortlet">
-            <portlet-name>Subscription Portlet</portlet-name>
-            <servlet-name>SubscriptionPortlet</servlet-name>
-            <allows>
-                <minimized/>
-                <maximized/>
-                <resizing/>
-            </allows>
-            <supports>
-                <view/>
-                <help/>
-            </supports>
-        </portlet-app>
-
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.subscription.SubscriptionPortlet.1">
-            <concrete-portlet>
-                <portlet-name>Subscription Portlet</portlet-name>
-                <default-locale>en</default-locale>
-                <language locale="en">
-                    <title>Portlet Subscription</title>
-                    <description>Customizes users portlets</description>
-                </language>
-                <language locale="de">
-                    <title>Portlet Abonnementverwaltung</title>
-                    <description>Passt die Portlets des Benutzers an</description>
-                </language>
-                <language locale="fr">
-                    <title>Inscription Portlet</title>
-                    <description>Permet de s'inscrire a des portlets</description>
-                </language>
-                <language locale="it">
-                    <title>Sottoscrizione alla portlet</title>
-                    <description>Personalizza le portlet a cui l'utente è iscritto</description>
-                </language>
-                <language locale="cs">
-                    <title>Výběr zobrazovaných portletů</title>
-                    <description>Vybírání portletů zobrazovaných uživateli</description>
-                </language>
-                <language locale="hu">
-                    <title>Portlet Feliratkozás</title>
-                    <description>Felhasználói portletek testreszabása.</description>
-                </language>
-                <language locale="pl">
-                    <title>Subskrypcja portletów</title>
-                    <description>Dostosowywanie portletów użytkownika</description>
-                </language>
-            </concrete-portlet>
-        </concrete-portlet-app>
-    </portlet-app-def>
-
-    <portlet-app-def>
         <portlet-app id="org.gridlab.gridsphere.portlets.core.file.CommanderPortlet">
             <portlet-name>Commander Portlet</portlet-name>
             <servlet-name>CommanderPortlet</servlet-name>
             <supports>
-                <view/>
-                <help/>
+                <markup name="html">
+                    <view/>
+                    <help/>
+                </markup>
             </supports>
         </portlet-app>
 

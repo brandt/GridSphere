@@ -9,7 +9,7 @@
     $Id$
 -->
 
-<page-layout theme="default" title="GridSphere Portal">
+<page-layout theme="default" title="GridSphere Portal" keywords="gridsphere">
 
     <portlet-header>
         <table-layout style="header">
