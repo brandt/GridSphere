@@ -242,6 +242,9 @@ Copyright:
         <copy todir="${env.TOMCAT_HOME}/webapps/${Name}">
             <fileset dir="${install.war}/${Name}"/>
         </copy>
+
+        <copyfile src="conf/log4j.properties" dest="${env.TOMCAT_HOME}/webapps/${Name}/WEB-INF/conf/log4j.properties" />
+
     </target>
 
 
