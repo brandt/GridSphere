@@ -54,6 +54,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
     public TableBean(HttpServletRequest req) {
         super();
         this.request = req;
+        this.locale = this.request.getLocale();
     }
 
 
@@ -259,13 +260,13 @@ public class TableBean extends BaseComponentBean implements TagBean {
         String uri = "";
         if (showall) {
             uri = uriString;
-            sb.append("<a href=\"" + uri + "&" + TableBean.SHOW_PAGES + "\">" + "Show pages" + "</a>");
+            sb.append("<a href=\"" + uri + "&" + TableBean.SHOW_PAGES + "\">" + this.getLocalizedText("SHOW_PAGES") + "</a>");
         }
         if (maxRows > 0) {
             int numpages = (rowCount + 1) / maxRows + 1;
             int dispPage = currentPage + 1;
             int c = 0;
-            sb.append("Page " + dispPage + " out of " + numpages);
+            sb.append(this.getLocalizedText("PAGE") + dispPage + this.getLocalizedText("OUT_OF_PAGES") + numpages);
 
             for (int i = 0; i < numpages; i++) {
                 c = i + 1;
@@ -282,7 +283,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
             }
             uri = uriString;
             sb.append(" | ");
-            sb.append("<a href=\"" + uri + "&" + TableBean.SHOW_ALL + "\">" + "Show all" + "</a>");
+            sb.append("<a href=\"" + uri + "&" + TableBean.SHOW_ALL + "\">" + this.getLocalizedText("SHOW_ALL") + "</a>");
             rowCount = 0;
         }
 
