@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.tmf.Message;
 import org.gridlab.gridsphere.tmf.TmfCore;
+import org.gridlab.gridsphere.tmf.config.User;
 
 import java.util.List;
 
@@ -55,5 +56,12 @@ public class TextMessagingServiceImpl  implements TextMessagingService, PortletS
         return core.getServiceConfig();
     }
 
+    public void setUser(User user) {
+        core.setUser(user);
+    }
+
+    public User getUser(String userid) {
+        return core.getUser(userid);
+    }
 
 }
