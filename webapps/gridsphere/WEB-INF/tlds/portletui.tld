@@ -504,6 +504,30 @@
     </tag>
 
     <tag>
+        <name>actioncomponent</name>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ActionComponentTag</tag-class>
+        <body-content>empty</body-content>
+        <description>
+            Includes action components from any web application
+        </description>
+        <attribute>
+            <name>page</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>servletContext</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>beanId</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
         <name>list</name>
         <tag-class>org.gridlab.gridsphere.provider.portletui.tags.ListTag</tag-class>
         <body-content>empty</body-content>
