@@ -142,6 +142,24 @@ public abstract class BaseComponentTag extends BaseBeanTag {
     }
 
     /**
+     * Returns the CSS class name of the beans
+     *
+     * @return the name of the css class
+     */
+    public String getCssClass() {
+        return cssClass;
+    }
+
+    /**
+     * Sets the CSS class of the beans
+     *
+     * @param cssClass the class name to set for the beans
+     */
+    public void setCssClass(String cssClass) {
+        this.cssClass = cssClass;
+    }
+
+    /**
      * Sets the base component properties of the bean
      *
      * @param componentBean a ui bean

@@ -123,7 +123,7 @@ public class TableCellTag extends BaseComponentTag {
             if (align != null) cellBean.setAlign(align);
             if (valign != null) cellBean.setValign(align);
             if (cssClass != null) cellBean.setCssClass(cssClass);
-            if (cssStyle !=null) cellBean. setCssStyle(cssStyle);
+            if (cssStyle != null) cellBean.setCssStyle(cssStyle);
         }
 
         TableRowTag rowTag = (TableRowTag) getParent();
