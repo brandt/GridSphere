@@ -8,10 +8,11 @@ import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 
 import java.util.Date;
 
-public class DbmsUserPassword  implements DbmsPassword {
+public class DbmsUserPassword implements DbmsPassword {
 
     private String oid = null;
     private SportletUserImpl user;
+    // used for JSR/Tomcat/Realm
     private String userName;
     private String value = new String();
     private String hint = new String();
@@ -95,7 +96,7 @@ public class DbmsUserPassword  implements DbmsPassword {
     }
 
     public void setUser(User user) {
-        this.user = (SportletUserImpl)user;
+        this.user = (SportletUserImpl) user;
         this.userName = user.getUserName();
     }
 
