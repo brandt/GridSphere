@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletLog;
@@ -20,7 +21,8 @@ import java.util.List;
 /**
  *
  */
-public class NoteServiceImpl implements NoteService {
+public class NoteServiceImpl implements NoteService, PortletServiceProvider  {
+
     private static PortletLog log = SportletLog.getInstance(NoteServiceImpl.class);
 
     PersistenceManagerRdbms pm = null;
@@ -42,7 +44,7 @@ public class NoteServiceImpl implements NoteService {
     public Note getNoteByOid(String Oid) {
         Note result = null;
         try {
-            result = (Note)pm.restore("from "+Note.class.getName()+" as Note where Note.oid='"+Oid+"'");
+            result = (Note)pm.restore("from "+Note.class.getName()+" as note where note.oid='"+Oid+"'");
         } catch (PersistenceManagerException e) {
             e.printStackTrace();
         }
@@ -72,7 +74,7 @@ public class NoteServiceImpl implements NoteService {
     public List getNotes(User user) {
         List result = null;
         try {
-            String oql = "from "+Note.class.getName()+" as Note where Note.Userid='"+user.getID()+"'";
+            String oql = "from "+Note.class.getName()+" as note where note.Userid='"+user.getID()+"'";
             log.debug("Query with "+oql);
             result = pm.restoreList(oql);
         } catch (PersistenceManagerException e) {
@@ -85,7 +87,7 @@ public class NoteServiceImpl implements NoteService {
         List result = null;
         try {
             String oql =
-                    "from "+Note.class.getName()+" as Note where Note.Userid='"+user.getID()+"' and (Note.content like '%"+searchstring+"%' or Note.head like '%"+searchstring+"%')";
+                    "from "+Note.class.getName()+" as note where note.Userid='"+user.getID()+"' and (note.content like '%"+searchstring+"%' or note.name like '%"+searchstring+"%')";
             log.debug("Query with "+oql);
             result = pm.restoreList(oql);
         } catch (PersistenceManagerException e) {
@@ -102,6 +104,6 @@ public class NoteServiceImpl implements NoteService {
         }
     }
 }
- 
+
 
 

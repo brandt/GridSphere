@@ -74,5 +74,13 @@
         </service-config>
     </service>
 
+    <service>
+        <name>NotePadService</name>
+        <description>Provides a database storage for textnotes</description>
+        <interface>org.gridlab.gridsphere.services.core.note.NoteService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.note.impl.NoteServiceImpl</implementation>
+    </service>
+
+
 </portlet-services>
 

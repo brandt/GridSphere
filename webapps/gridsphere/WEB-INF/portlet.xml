@@ -211,5 +211,28 @@
         </concrete-portlet-app>
     </portlet-app-def>
 
+
+    <portlet-app-def>
+         <portlet-app id="org.gridlab.gridsphere.portlets.core.notepad.NotePadPortlet">
+             <portlet-name>NotePad Portlet</portlet-name>
+             <servlet-name>NotePadPortlet</servlet-name>
+             <supports>
+                 <view/>
+                 <help/>
+             </supports>
+         </portlet-app>
+
+         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.notepad.NotePadPortlet.1">
+             <concrete-portlet>
+                 <portlet-name>NotePad Portlet</portlet-name>
+                 <default-locale>en</default-locale>
+                 <language locale="en">
+                     <title>Notepad</title>
+                     <description>Provides users with a searchable NotePad</description>
+                 </language>
+             </concrete-portlet>
+         </concrete-portlet-app>
+     </portlet-app-def>
+
 </portlet-app-collection>
 

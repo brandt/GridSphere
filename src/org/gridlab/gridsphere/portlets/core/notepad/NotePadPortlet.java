@@ -22,14 +22,15 @@ import java.util.List;
  *
  */
 public class NotePadPortlet extends ActionPortlet {
+
     private static PortletLog log = SportletLog.getInstance(NotePadPortlet.class);
-private NoteService noteservice = null;
+    private NoteService noteservice = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
 
         try {
-            noteservice = (NoteService)config.getContext().getService(NoteService.class);
+            noteservice = (NoteService) config.getContext().getService(NoteService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize NoteService", e);
         }
@@ -40,10 +41,9 @@ private NoteService noteservice = null;
 
     public void showList(FormEvent event) throws PortletException {
         PortletRequest request = event.getPortletRequest();
-        PortletResponse response = event.getPortletResponse();
         User user = request.getUser();
         List allNotes = noteservice.getNotes(user);
-        request.setAttribute("Notes", allNotes);
+        request.setAttribute("notes", allNotes);
         setNextState(request, "notepad/main.jsp");
     }
 
@@ -52,22 +52,23 @@ private NoteService noteservice = null;
         String oid = event.getAction().getParameter("oid");
         Note Note = noteservice.getNoteByOid(oid);
         request.setAttribute("np_action", "view");
-        request.setAttribute("Note", Note);
+        request.setAttribute("note", Note);
         setNextState(request, "notepad/viewNote.jsp");
     }
 
     public void doShowNew(FormEvent event) throws PortletException {
         PortletRequest request = event.getPortletRequest();
         request.setAttribute("np_action", "new");
-        request.setAttribute("Note", new Note());
+        request.setAttribute("note", new Note());
         setNextState(request, "notepad/viewNote.jsp");
     }
 
     public void doShowEdit(FormEvent event) throws PortletException {
         PortletRequest request = event.getPortletRequest();
-        HiddenFieldBean oid = event.getHiddenFieldBean("Noteoid");
+        HiddenFieldBean oid = event.getHiddenFieldBean("noteoid");
+        log.debug("\n\n\n\n EDIT NOTE "+oid.getValue()+"\n\n\n");
         request.setAttribute("np_action", "edit");
-        request.setAttribute("Note", noteservice.getNoteByOid(oid.getValue()));
+        request.setAttribute("note", noteservice.getNoteByOid(oid.getValue()));
         setNextState(request, "notepad/viewNote.jsp");
     }
 
@@ -89,14 +90,14 @@ private NoteService noteservice = null;
 
     public void doDelete(FormEvent event) throws PortletException {
         PortletRequest request = event.getPortletRequest();
-        HiddenFieldBean oid = event.getHiddenFieldBean("Noteoid");
+        HiddenFieldBean oid = event.getHiddenFieldBean("noteoid");
         noteservice.deleteNote(noteservice.getNoteByOid(oid.getValue()));
         setNextState(request, "showList");
     }
 
     public void doUpdate(FormEvent event) throws PortletException {
         PortletRequest request = event.getPortletRequest();
-        HiddenFieldBean oid = event.getHiddenFieldBean("Noteoid");
+        HiddenFieldBean oid = event.getHiddenFieldBean("noteoid");
         TextAreaBean content = event.getTextAreaBean("content");
         TextFieldBean head = event.getTextFieldBean("head");
         Note Note = noteservice.getNoteByOid(oid.getValue());
@@ -104,7 +105,7 @@ private NoteService noteservice = null;
         Note.setName(head.getValue());
         noteservice.update(Note);
         request.setAttribute("np_action", "view");
-        request.setAttribute("Note", Note);
+        request.setAttribute("note", Note);
         setNextState(request, "notepad/viewNote.jsp");
     }
 
@@ -112,10 +113,10 @@ private NoteService noteservice = null;
         PortletRequest request = event.getPortletRequest();
         TextFieldBean search = event.getTextFieldBean("search");
         List result = noteservice.searchNotes(request.getUser(), search.getValue());
-        request.setAttribute("Notes", result);
+        request.setAttribute("notes", result);
         setNextState(request, "notepad/main.jsp");
     }
 }
- 
+
 
 

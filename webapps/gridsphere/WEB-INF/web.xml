@@ -84,6 +84,14 @@
         <servlet-class>org.apache.cactus.server.runner.ServletTestRunner</servlet-class>
     </servlet>
 
+    <servlet>
+
+        <servlet-name>NotePadPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.notepad.NotePadPortlet</servlet-class>
+    </servlet>
+
+
+
     <servlet-mapping>
         <servlet-name>gridsphere</servlet-name>
        <url-pattern>/gridsphere</url-pattern>
@@ -132,6 +140,11 @@
     <servlet-mapping>
         <servlet-name>ServletTestRunner</servlet-name>
         <url-pattern>/ServletTestRunner</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>NotePadPortlet</servlet-name>
+        <url-pattern>/note/notepad</url-pattern>
     </servlet-mapping>
 
     <mime-mapping>

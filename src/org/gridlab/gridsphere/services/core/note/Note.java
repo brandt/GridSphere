@@ -4,6 +4,10 @@
  */
 package org.gridlab.gridsphere.services.core.note;
 
+import org.radeox.engine.context.RenderContext;
+import org.radeox.engine.context.BaseRenderContext;
+import org.radeox.EngineManager;
+
 import java.util.Date;
 
 /**
@@ -86,6 +90,11 @@ public class Note {
 
     public void setUserid(String userid) {
         this.userid = userid;
+    }
+
+    public String getRadeoxMarkup() {
+        RenderContext context = new BaseRenderContext();
+        return EngineManager.getInstance().render(content, context);
     }
 
 }

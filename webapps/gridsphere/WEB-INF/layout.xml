@@ -30,6 +30,21 @@
                     </table-layout>
                 </portlet-panel>
             </portlet-tab>
+            <portlet-tab lable="utilities">
+                <title>Utilities</title>
+                <portlet-panel>
+                    <table-layout>
+                        <row-layout>
+                            <column-layout>
+                                <portlet-frame label="notepad">
+                                    <portlet-class>org.gridlab.gridsphere.portlets.core.notepad.NotePadPortlet.1</portlet-class>
+                                </portlet-frame>
+                            </column-layout>
+                        </row-layout>
+
+                    </table-layout>
+                </portlet-panel>
+            </portlet-tab>
         </portlet-tabbed-pane>
     </portlet-tab>
     <portlet-tab>
