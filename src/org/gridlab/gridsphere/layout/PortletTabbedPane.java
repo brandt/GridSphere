@@ -215,26 +215,29 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         if (selectedIndex < 0) selectedIndex = 0;
         PortletTab tab = null;
         List stabs = Collections.synchronizedList(tabs);
-        PortletRole role = req.getRole();
+        PortletRole userRole = req.getRole();
 
         synchronized (stabs) {
             List remtabs = new ArrayList();
             int i = 0;
             Iterator it = stabs.iterator();
+
+
             while (it.hasNext()) {
                 tab = (PortletTab)it.next();
-                System.err.println(tab.getTitle() + tab.getRequiredRole() + " myrole=" + role);
-                    if (role.compare(role, PortletRole.toPortletRole(tab.getRequiredRoleAsString())) < 0) {
-                        remtabs.add(tab);
-                    } else {
+                PortletRole tabRole = PortletRole.toPortletRole(tab.getRequiredRoleAsString());
+                //System.err.println(tab.getTitle() + tab.getRequiredRoleAsString() + " myrole=" + userRole);
+                if (userRole.compare(userRole, tabRole) >= 0) {
                     tab.setTheme(theme);
                     if (selectedIndex == i) tab.setSelected(true);
-
                     list = tab.init(req, list);
 
                     tab.addComponentListener(this);
                     tab.setParentComponent(this);
-                    }
+                } else {
+                    remtabs.add(tab);
+                }
+                i++;
 
             }
             it = remtabs.iterator();

@@ -9,6 +9,9 @@ import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 import org.gridlab.gridsphere.layout.event.PortletFrameEvent;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -44,29 +47,52 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      */
     public List init(PortletRequest req, List list) {
         list = super.init(req, list);
+        List remcomps = new ArrayList();
         List scomponents = Collections.synchronizedList(components);
         synchronized (scomponents) {
-        Iterator it = scomponents.iterator();
+            Iterator it = scomponents.iterator();
+            PortletRole userRole = req.getRole();
+            PortletComponent p = null;
+            List groups = (List)req.getAttribute(SportletProperties.PORTLETGROUPS);
+            while (it.hasNext()) {
+                p = (PortletComponent) it.next();
+                PortletRole reqRole = PortletRole.toPortletRole(p.getRequiredRoleAsString());
+                String group = p.getRequiredGroupAsString();
+                Iterator git = groups.iterator();
+                boolean found = false;
+                while (git.hasNext()) {
+                    PortletGroup g = (PortletGroup)git.next();
+                    if (g.getName().equalsIgnoreCase(group)) {
+                        found = true;
+                    }
+                }
+                if (!found) {
+                    remcomps.add(p);
+                }
+                if (userRole.compare(userRole, reqRole) < 0) {
+                    remcomps.add(p);
+                } else {
+                // all the components have the same theme
+                p.setTheme(theme);
+                // invoke init on each component
+                list = p.init(req, list);
 
-        PortletComponent p = null;
-        while (it.hasNext()) {
-            p = (PortletComponent) it.next();
-
-            // all the components have the same theme
-            p.setTheme(theme);
-            // invoke init on each component
-            list = p.init(req, list);
-
-            p.addComponentListener(this);
-            /*
-            // If the component is a frame we want to be notified
-            if (p instanceof PortletFrame) {
+                p.addComponentListener(this);
+                /*
+                // If the component is a frame we want to be notified
+                if (p instanceof PortletFrame) {
                 PortletFrame f = (PortletFrame) p;
                 f.addFrameListener(this);
+                }
+                */
+                p.setParentComponent(this);
+                }
             }
-            */
-            p.setParentComponent(this);
-        }
+            it = remcomps.iterator();
+            while (it.hasNext()) {
+                PortletComponent comp = (PortletComponent)it.next();
+                scomponents.remove(comp);
+            }
         }
         return list;
     }

@@ -39,7 +39,9 @@ public class PortletLayoutDescriptor {
      */
     public static PortletPage loadPortletPage(String layoutDescriptorPath, String layoutMappingPath) throws IOException, PersistenceManagerException {
         pmXML = PersistenceManagerFactory.createPersistenceManagerXml(layoutDescriptorPath, layoutMappingPath);
-        return (PortletPage) pmXML.load();
+        PortletPage page = (PortletPage)pmXML.load();
+        page.setLayoutDescriptor(layoutDescriptorPath);
+        return page;
     }
 
     /**
@@ -85,6 +87,7 @@ public class PortletLayoutDescriptor {
      * @throws PersistenceManagerException if a descriptor error occurs
      */
     public static void savePortletTabbedPane(PortletTabbedPane pane, String descriptorPath, String mappingPath) throws IOException, PersistenceManagerException {
+        System.err.println("setting descriptor" + descriptorPath);
         pmXML.setDescriptorPath(descriptorPath);
         pmXML.setMappingPath(mappingPath);
         pmXML.save(pane);

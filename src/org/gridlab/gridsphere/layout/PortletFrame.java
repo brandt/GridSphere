@@ -40,7 +40,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     private String innerPadding = "";   // has to be empty and not 0!
     private String outerPadding = "";   // has to be empty and not 0!
 
-    private PortletRole requiredRole = PortletRole.GUEST;
+    //private PortletRole requiredRole = PortletRole.GUEST;
 
     // keep track of the original width
     private String originalWidth = "";
@@ -175,11 +175,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             titleBar.setPortletClass(portletClass);
             list = titleBar.init(req, list);
             titleBar.addComponentListener(this);
-        }
-        try {
-            requiredRole = PortletRole.toPortletRole(roleString);
-        } catch (IllegalArgumentException e) {
-            requiredRole = PortletRole.GUEST;
         }
         return list;
     }

@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.PortletGroup;
 
 
 /**
@@ -103,6 +104,34 @@ public interface PortletComponent extends ComponentLifecycle {
      * @return the required portlet role expresses as a <code>PortletRole</code>
      */
     public PortletRole getRequiredRole();
+
+    /**
+     * Allows a required role to be associated with viewing this portlet
+     *
+     * @return the required portlet role expresses as a <code>PortletRole</code>
+     */
+    public String getRequiredRoleAsString();
+
+    /**
+     * Allows a required role to be associated with viewing this portlet
+     *
+     * @param requiredGroup the required portlet role expresses as a <code>String</code>
+     */
+    public void setRequiredGroup(PortletGroup requiredGroup);
+
+    /**
+     * Allows a required role to be associated with viewing this portlet
+     *
+     * @return the required portlet role expresses as a <code>PortletRole</code>
+     */
+    public PortletGroup getRequiredGroup();
+
+    /**
+     * Allows a required role to be associated with viewing this portlet
+     *
+     * @return the required portlet role expresses as a <code>PortletRole</code>
+     */
+    public String getRequiredGroupAsString();
 
     public void addComponentListener(PortletComponent component);
 

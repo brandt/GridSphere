@@ -394,7 +394,8 @@ public class PortletPage implements Serializable, Cloneable {
 
     public void save() throws IOException {
         try {
-            PortletLayoutDescriptor.savePortletTabbedPane(tabbedPane, layoutDescriptor, layoutMappingFile);
+            System.err.println("saving desc: " + layoutDescriptor + " and mapping: " + layoutMappingFile);
+            PortletLayoutDescriptor.savePortletPage(this, layoutDescriptor, layoutMappingFile);
         } catch (PersistenceManagerException e) {
             throw new IOException("Unable to save user's tabbed pane: " + e.getMessage());
         }

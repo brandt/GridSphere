@@ -47,12 +47,12 @@ public class PortletPageFactory implements PortletSessionListener {
 
         templatePage = PortletLayoutDescriptor.loadPortletPage(templateLayoutPath, layoutMappingFile);
         errorPage.setLayoutDescriptor(errorLayoutFile);
-        /*
+
         File userdir = new File(newuserLayoutPath);
         if (!userdir.exists()) {
             userdir.mkdir();
         }
-        */
+
         reloadGuestUserLayout();
     }
 
@@ -140,8 +140,7 @@ public class PortletPageFactory implements PortletSessionListener {
             //newPage.setPortletTabbedPane(pane);
             newPage.init(req, new ArrayList());
 
-            newPage.setLayoutDescriptor("/tmp/bob");
-            newPage.save();
+
             //newPage = (PortletPage)templatePage;
         } catch (Exception e) {
           log.error("Unable to make a clone of the templatePage", e);
@@ -216,14 +215,14 @@ public class PortletPageFactory implements PortletSessionListener {
 
             //sessionManager.addSessionListener(sessionId, this);
 
-        } catch (Exception e) {
+            } catch (Exception e) {
             log.error("Unable to create user layout: ", e);
-        }
+            }
 
-        return page;
+            return page;
 
-    }
-              */
+            }
+            */
 
     public PortletPage createPortletPage(PortletRequest req) {
 
@@ -235,6 +234,8 @@ public class PortletPageFactory implements PortletSessionListener {
         if (user instanceof GuestUser) {
             return createFromGuestLayoutXML(req);
         }
+
+        PortletPage page = null;
 
         // Need to provide one guest container per users session
         if (userLayouts.containsKey(sessionId)) {
@@ -248,26 +249,49 @@ public class PortletPageFactory implements PortletSessionListener {
                 guests.remove(sessionId);
             }
 
-            PortletPage page = null;
-            // is user a SUPER?
-            PortletRole role = req.getRole();
-            if (role.equals(PortletRole.SUPER)) {
+            String userLayout = userLayoutDir + File.separator + user.getID();
+
+            File f = new File(userLayout);
+            try {
+
+                if (f.exists()) {
+                    //page = (PortletPage)deepCopy(templatePage);
+                    //page.setLayoutDescriptor(userLayout);
+
+                    page = PortletLayoutDescriptor.loadPortletPage(userLayout, layoutMappingFile);
+                    //page.setPortletTabbedPane(pane);
+                    page.init(req, new ArrayList());
+                } else {
+
+                    // is user a SUPER?
+                    PortletRole role = req.getRole();
+                    if (role.equals(PortletRole.SUPER)) {
+
+                        page = createFromAllWebApps(req);
+
+
+                    }  else {
+
+                        List groups = (List)req.getAttribute(SportletProperties.PORTLETGROUPS);
+                        page = createFromGroups(req, groups);
+
+                    }
+
+                // save user's layout
                 try {
-                    page = createFromAllWebApps(req);
-                    userLayouts.put(sessionId, page);
-                    sessionManager.addSessionListener(sessionId, this);
-                } catch (Exception e) {
-                    log.error("Unable to clone layout: ", e);
+                    userLayout = userLayoutDir + File.separator + user.getID();
+                    page.setLayoutDescriptor(userLayout);
+
+                    page.save();
+                } catch (IOException e) {
+                    log.error("Unable to save users layout!", e);
                 }
-            }  else {
-                try {
-                    List groups = (List)req.getAttribute(SportletProperties.PORTLETGROUPS);
-                    page = createFromGroups(req, groups);
-                    userLayouts.put(sessionId, page);
-                    sessionManager.addSessionListener(sessionId, this);
-                } catch (Exception e) {
-                    log.error("Unable to create new user layout", e);
                 }
+
+                userLayouts.put(sessionId, page);
+                sessionManager.addSessionListener(sessionId, this);
+            } catch (Exception e) {
+                log.error("Unable to create new user layout", e);
             }
 
             return page;

@@ -6,6 +6,8 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portlet.PortletGroupFactory;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
@@ -28,7 +30,9 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected String theme = "xp";
     protected boolean isVisible = true;
     protected String roleString = "GUEST";
+    protected String groupString = PortletGroupFactory.GRIDSPHERE_GROUP.getName();
     protected PortletRole requiredRole = PortletRole.GUEST;
+    protected PortletGroup requiredGroup = PortletGroupFactory.GRIDSPHERE_GROUP;
     protected List listeners = null;
 
     /**
@@ -43,7 +47,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     public List init(PortletRequest req, List list) {
         listeners = new Vector();
         defaultWidth = width;
-         if (roleString != null) {
+        if (roleString != null) {
             try {
                 requiredRole = PortletRole.toPortletRole(roleString);
             } catch (IllegalArgumentException e) {
@@ -130,6 +134,42 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      */
     public PortletRole getRequiredRole() {
         return requiredRole;
+    }
+
+        /**
+     * Allows a required group to be associated with viewing this portlet
+     *
+     * @param groupString the required portlet group expresses as a <code>String</code>
+     */
+    public void setRequiredGroupAsString(String groupString) {
+        this.groupString = groupString;
+    }
+
+    /**
+     * Allows a required group to be associated with viewing this portlet
+     *
+     * @return the required portlet group expresses as a <code>String</code>
+     */
+    public String getRequiredGroupAsString() {
+        return groupString;
+    }
+
+    /**
+     * Allows a required group to be associated with viewing this portlet
+     *
+     * @param requiredGroup the required portlet group expresses as a <code>String</code>
+     */
+    public void setRequiredGroup(PortletGroup requiredGroup) {
+        this.requiredGroup = requiredGroup;
+    }
+
+    /**
+     * Allows a required group to be associated with viewing this portlet
+     *
+     * @return the required portlet group expresses as a <code>PortletGroup</code>
+     */
+    public PortletGroup getRequiredGroup() {
+        return requiredGroup;
     }
 
     /**
