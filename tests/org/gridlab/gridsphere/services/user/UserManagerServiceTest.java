@@ -147,15 +147,10 @@ public class UserManagerServiceTest extends ServiceTest {
 
     public void teardownUsers() {
         log.info("- setup groups");
-        try {
-            userManagerService.deleteAccount(jasonUser);
-            userManagerService.deleteAccount(michaelUser);
-            userManagerService.deleteAccount(oliverUser);
-            userManagerService.deleteAccount(ianUser);
-        } catch (PermissionDeniedException e) {
-            log.error("Exception " + e);
-            fail("Could not delete users ");
-        }
+        userManagerService.deleteAccount(jasonUser);
+        userManagerService.deleteAccount(michaelUser);
+        userManagerService.deleteAccount(oliverUser);
+        userManagerService.deleteAccount(ianUser);
     }
 
     public User getSuperUser() {

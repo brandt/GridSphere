@@ -23,7 +23,6 @@ import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.services.user.LoginService;
 import org.gridlab.gridsphere.services.user.UserManagerService;
 import org.gridlab.gridsphere.services.user.AccountRequest;
-import org.gridlab.gridsphere.services.user.PermissionDeniedException;
 
 import org.gridlab.gridsphere.services.security.acl.impl.UserACL;
 
@@ -127,7 +126,7 @@ public class CredentialManagerServiceTest extends ServiceTest {
         try {
             this.userManagerService.submitAccountRequest(req1);
             this.userManagerService.approveAccountRequest(req1);
-            testUser = this.userManagerService.getUser("test");
+            testUser = this.userManagerService.getUserByLoginName("test");
         } catch (PortletServiceException e) {
             _log.error("Exception " + e);
             fail("failed to generate AccountRequests");
@@ -136,12 +135,7 @@ public class CredentialManagerServiceTest extends ServiceTest {
     }
 
     private void deleteUsers() {
-        try {
-            this.userManagerService.deleteAccount(testUser);
-        } catch (PermissionDeniedException e) {
-            _log.error("Exception " + e);
-            fail("No permissions!");
-        }
+        this.userManagerService.deleteAccount(testUser);
     }
 
     public void testEverything() {

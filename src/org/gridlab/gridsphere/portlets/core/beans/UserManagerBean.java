@@ -15,7 +15,6 @@ import org.gridlab.gridsphere.services.security.password.PasswordBean;
 import org.gridlab.gridsphere.services.security.acl.*;
 import org.gridlab.gridsphere.services.user.UserManagerService;
 import org.gridlab.gridsphere.services.user.AccountRequest;
-import org.gridlab.gridsphere.services.user.PermissionDeniedException;
 import org.gridlab.gridsphere.services.user.UserManagerService;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
