@@ -6,7 +6,7 @@
 
 <!DOCTYPE web-app
     PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-    "http://java.sun.com/j2ee/dtds/web-app_2.3.dtd">
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
     <display-name>@PROJECT_TITLE@</display-name>
