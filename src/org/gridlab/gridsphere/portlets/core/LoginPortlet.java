@@ -72,7 +72,7 @@ public class LoginPortlet extends AbstractPortlet {
                     session.setAttribute(GridSphereProperties.USER, (User)user);
 
                     // now login to User Portal Registry service
-                    userRegistryService.login(req);
+                    userRegistryService.loginPortlets(req);
                 }
             }
         }
@@ -92,6 +92,15 @@ public class LoginPortlet extends AbstractPortlet {
             getPortletConfig().getContext().include("/jsp/viewuser.jsp", request, response);
         }
 
+    }
+
+    public void doTitle(PortletRequest request, PortletResponse response) throws PortletException, IOException {
+
+    }
+
+
+    public void doView(PortletRequest request, PortletResponse response) throws PortletException, IOException {
+        System.err.println("in doView()");
     }
 
 }
