@@ -49,6 +49,24 @@ public interface CredentialManagerService extends PortletService {
 
     public void deleteCredentialMappings(User user);
 
+    /****** CREDENTIAL MAPPING REQUEST METHODS *******/
+
+    public List getCredentialMappingRequests();
+
+    public List getCredentialMappingRequests(User user);
+
+    public CredentialMappingRequest getCredentialMappingRequest(String id);
+
+    public CredentialMappingRequest createCredentialMappingRequest();
+
+    public CredentialMappingRequest createCredentialMappingRequest(CredentialMapping mapping);
+
+    public void submitCredentialMappingRequest(CredentialMappingRequest mappingRequest);
+
+    public CredentialMapping approveCredentialMappingRequest(CredentialMappingRequest mappingRequest);
+
+    public void denyCredentialMappingRequest(CredentialMappingRequest mappingRequest);
+
     /****** CREDENTIAL MAPPING MANIPULATION METHODS *******/
 
     public User getCredentialUser(String subject);
@@ -127,4 +145,8 @@ public interface CredentialManagerService extends PortletService {
     public List getActiveCredentialSubjects();
 
     public List getActiveCredentialSubjects(User user);
+
+    public List getActiveCredentialMappings();
+
+    public List getActiveCredentialMappings(User user);
 }

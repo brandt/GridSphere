@@ -18,6 +18,10 @@ public interface CredentialMapping {
 
     /**
      */
+    public String getID();
+
+    /**
+     */
     public String getSubject();
 
     /**
@@ -31,10 +35,6 @@ public interface CredentialMapping {
     /**
      */
     public String getLabel();
-
-    /**
-     */
-    public void setLabel(String description);
 
     /**
      */

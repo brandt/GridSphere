@@ -14,10 +14,6 @@ import org.gridlab.gridsphere.portlet.User;
 
 public interface GroupRequest extends GroupEntry {
 
-    public static final String ACTION_ADD = "add";
-    public static final String ACTION_EDIT = "add";
-    public static final String ACTION_REMOVE = "remove";
-
     public void setUser(User user);
 
     public void setGroup(PortletGroup group);

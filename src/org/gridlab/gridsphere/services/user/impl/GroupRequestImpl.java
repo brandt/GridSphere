@@ -55,7 +55,7 @@ public class GroupRequestImpl
     private String role = null;
     /**
      * @sql-name action
-     * @sql-size 6
+     * @sql-size 128
      * @required
      */
     private String action = GroupAction.ADD.toString();

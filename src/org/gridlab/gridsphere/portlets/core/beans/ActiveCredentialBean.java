@@ -13,7 +13,7 @@ import org.gridlab.gridsphere.services.security.credential.*;
 
 import java.util.List;
 
-public class ActiveCredentialBean extends CredentialManagerBean {
+public class ActiveCredentialBean extends CredentialMappingBean {
 
     // Credential mapping actions
     public static final String ACTION_ACTIVE_CREDENTIAL_LIST = "doListActiveCredential";
@@ -70,7 +70,6 @@ public class ActiveCredentialBean extends CredentialManagerBean {
         setPage(PAGE_ACTIVE_CREDENTIAL_VIEW);
         this.log.debug("Exiting doViewActiveCredential");
     }
-
 
     /******************************************
      * Credential mapping methods

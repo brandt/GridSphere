@@ -6,7 +6,7 @@
  * To change template for new class use
  * Code Style | Class Templates options (Tools | IDE Options).
  */
-package org.gridlab.gridsphere.services.security.credential;
+package org.gridlab.gridsphere.services.security.credential.impl;
 
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
@@ -17,7 +17,7 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.services.security.AuthorizationException;
 import org.gridlab.gridsphere.services.security.AuthorizationUtility;
-import org.gridlab.gridsphere.services.security.credential.impl.GlobusCredentialManagerService;
+import org.gridlab.gridsphere.services.security.credential.*;
 
 import java.util.List;
 
@@ -26,21 +26,21 @@ import java.util.List;
  * interface. It throws AuthorizationException for each method in which the supplied
  * user is not authorized to call that method.
  */
-public class CredentialManagerProxy
+public class CredentialManagerServiceImpl
         implements PortletServiceProvider, CredentialManagerService {
 
-    private static PortletLog _log = SportletLog.getInstance(CredentialManagerProxy.class);
+    private static PortletLog _log = SportletLog.getInstance(CredentialManagerServiceImpl.class);
     private AuthorizationUtility authorizer = null;
-    private CredentialManagerService credentialManager = null;
+    private GlobusCredentialManager credentialManager = null;
 
-    private CredentialManagerProxy() {
+    private CredentialManagerServiceImpl() {
     }
 
-    public CredentialManagerProxy(PortletServiceProvider psp, User user) throws Exception {
+    public CredentialManagerServiceImpl(PortletServiceProvider psp, User user) throws Exception {
         if (psp instanceof CredentialManagerService) {
-            this.credentialManager = (CredentialManagerService) psp;
+            this.credentialManager = (GlobusCredentialManager) psp;
         } else {
-            throw new Exception("Unable to create CredentialManagerProxy");
+            throw new Exception("Unable to create CredentialManagerServiceImpl");
         }
         this.authorizer = new AuthorizationUtility(user, CredentialManagerService.class);
     }
@@ -48,9 +48,11 @@ public class CredentialManagerProxy
     /****** PORTLET SERVICE PROVIDER METHODS *******/
 
     public void init(PortletServiceConfig config) {
+        this.credentialManager.init(config);
     }
 
     public void destroy() {
+        this.credentialManager.destroy();
     }
 
     /****** CREDENTIAL PERMISSION PERSISTENCE METHODS *******/
@@ -180,6 +182,69 @@ public class CredentialManagerProxy
     public void deleteCredentialMappings(User user) {
         this.authorizer.authorizeSuperUser("deleteCredentialMappings");
         this.credentialManager.deleteCredentialMappings(user);
+    }
+
+    /*
+     * Must be super user
+     */
+    public List getCredentialMappingRequests() {
+        this.authorizer.authorizeSuperUser();
+        return this.credentialManager.getCredentialMappingRequests();
+    }
+
+    /*
+     * Must be super or same user
+     */
+    public List getCredentialMappingRequests(User user) {
+        this.authorizer.authorizeSuperUser();
+        return this.credentialManager.getCredentialMappingRequests(user);
+    }
+
+    /*
+     * Must be super user
+     */
+    public CredentialMappingRequest getCredentialMappingRequest(String id) {
+        this.authorizer.authorizeSuperUser();
+        return this.credentialManager.getCredentialMappingRequest(id);
+    }
+
+    /*
+     * Anybody can call
+     */
+    public CredentialMappingRequest createCredentialMappingRequest() {
+        return this.credentialManager.createCredentialMappingRequest();
+    }
+
+    /*
+     * Must be super or same user
+     */
+    public CredentialMappingRequest createCredentialMappingRequest(CredentialMapping mapping) {
+        this.authorizer.authorizeSuperOrSameUser(mapping.getUser());
+        return this.credentialManager.createCredentialMappingRequest(mapping);
+    }
+
+    /*
+     * Must be super or same user
+     */
+    public void submitCredentialMappingRequest(CredentialMappingRequest mappingRequest) {
+        this.authorizer.authorizeSuperOrSameUser(mappingRequest.getUser());
+        this.credentialManager.submitCredentialMappingRequest(mappingRequest);
+    }
+
+    /*
+     * Must be super user
+     */
+    public CredentialMapping approveCredentialMappingRequest(CredentialMappingRequest mappingRequest) {
+        this.authorizer.authorizeSuperUser();
+        return this.credentialManager.approveCredentialMappingRequest(mappingRequest);
+    }
+    /*
+     * Must be super user
+     */
+
+    public void denyCredentialMappingRequest(CredentialMappingRequest mappingRequest) {
+        this.authorizer.authorizeSuperUser();
+        this.credentialManager.denyCredentialMappingRequest(mappingRequest);
     }
 
     /****** CREDENTIAL MAPPING MANIPULATION METHODS *******/
@@ -441,5 +506,21 @@ public class CredentialManagerProxy
     public List getActiveCredentialSubjects(User user) {
         this.authorizer.authorizeSuperOrSameUser(user, "getActiveCredentialSubjects");
         return this.credentialManager.getActiveCredentialSubjects(user);
+    }
+
+    /*
+     * Must be super user
+     */
+    public List getActiveCredentialMappings() {
+        this.authorizer.authorizeSuperUser("getActiveCredentialMappings");
+        return this.credentialManager.getActiveCredentialMappings();
+    }
+
+    /*
+     * Must be super or same user
+     */
+    public List getActiveCredentialMappings(User user) {
+        this.authorizer.authorizeSuperOrSameUser(user, "getActiveCredentialMappings");
+        return this.credentialManager.getActiveCredentialMappings(user);
     }
 }

@@ -146,6 +146,15 @@ public class CredentialManagerServiceTest extends ServiceTest {
         numPermissions = permissions.size();
 
         /*** Test create globus permission ***/
+        permission = this.credentialManagerService.createCredentialPermission(this.globusSubjects,
+                this.globusDescription);
+        /*** Test get permissions (should be 1 entry) ***/
+        _log.info("Testing get permissions. Should be 1 entry");
+        permissions = this.credentialManagerService.getCredentialPermissions();
+        assertEquals(numPermissions + 1, permissions.size());
+
+
+        /*** Test create globus permission ***/
         _log.info("Testing create globus permission.");
         permission = this.credentialManagerService.createCredentialPermission(this.globusSubjects,
                 this.globusDescription);
@@ -242,6 +251,7 @@ public class CredentialManagerServiceTest extends ServiceTest {
         /*** Setup some variables first ***/
         List mappings = null;
         CredentialMapping mapping = null;
+        CredentialMappingRequest mappingRequest = null;
         int numMappings = 0;
         int numRootMappings = 0;
         int numTestMappings = 0;
@@ -277,14 +287,20 @@ public class CredentialManagerServiceTest extends ServiceTest {
         _log.info("Creating globus permissions.");
         permission = this.credentialManagerService.createCredentialPermission(this.globusSubjects);
         _log.info("Testing create guest mapping with globus permission.");
-        try {
-            mapping = this.credentialManagerService.createCredentialMapping(this.guestSubject,
-                    this.testUser);
-        } catch (CredentialNotPermittedException e) {
-            String msg = "This is bad. At this point, globus credentials should be permitted.";
-            _log.error(msg, e);
-            fail(msg);
-        }
+        //try {
+            _log.info("Testing create mapping request.");
+            mappingRequest = this.credentialManagerService.createCredentialMappingRequest();
+            mappingRequest.setUser(this.testUser);
+            mappingRequest.setSubject(this.guestSubject);
+            this.credentialManagerService.submitCredentialMappingRequest(mappingRequest);
+            mapping = this.credentialManagerService.approveCredentialMappingRequest(mappingRequest);
+            //mapping = this.credentialManagerService.createCredentialMapping(this.guestSubject,
+            //        this.testUser);
+        //} catch (CredentialNotPermittedException e) {
+        //    String msg = "This is bad. At this point, globus credentials should be permitted.";
+        //    _log.error(msg, e);
+        //    fail(msg);
+        //}
         // Testing number of mappings
         _log.info("Testing get all mappings. Should be 1 entry.");
         mappings = this.credentialManagerService.getCredentialMappings();
