@@ -33,6 +33,10 @@
             <param-name>defaultTheme</param-name>
             <param-value>default</param-value>
         </service-config>
+        <service-config>
+            <param-name>mailService</param-name>
+            <param-value></param-value>
+        </service-config>
     </service>
 
     <service>
@@ -63,6 +67,20 @@
         <description>Provides Password Management Capabilities</description>
         <interface>org.gridlab.gridsphere.services.core.security.password.PasswordManagerService</interface>
         <implementation>org.gridlab.gridsphere.services.core.security.password.impl.PasswordManagerServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Generic Request Service</name>
+        <description>Provides Generic Request Capabilities</description>
+        <interface>org.gridlab.gridsphere.services.core.request.RequestService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.request.impl.RequestServiceImpl</implementation>
+    </service>
+
+    <service>
+        <name>Mail Service</name>
+        <description>Provides Mail Capabilities</description>
+        <interface>org.gridlab.gridsphere.services.core.mail.MailService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.mail.impl.MailServiceImpl</implementation>
     </service>
 
     <service>

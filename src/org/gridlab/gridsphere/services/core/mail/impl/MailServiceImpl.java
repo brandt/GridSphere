@@ -2,7 +2,12 @@
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-package org.gridlab.gridsphere.core.mail;
+package org.gridlab.gridsphere.services.core.mail.impl;
+
+import org.gridlab.gridsphere.services.core.mail.MailMessage;
+import org.gridlab.gridsphere.services.core.mail.MailService;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -14,23 +19,38 @@ import java.util.Date;
 import java.util.Properties;
 
 /**
- * <code>Mailer</code> is a mail utility used to send {@link MailMessage}s.
+ * <code>MailServiceImpl</code> is a mail utility used to send {@link org.gridlab.gridsphere.services.core.mail.MailMessage}s.
  */
-public class Mailer {
+public class MailServiceImpl implements PortletServiceProvider, MailService {
+
+    private String mailServiceHost = null;
+
+    public void init(PortletServiceConfig config) {
+    
+    }
+
+    public void destroy() {
+    }
+
+    public String getMailServiceHost() {
+        return mailServiceHost;
+    }
+
+    public void setMailServiceHost(String mailServiceHost) {
+        this.mailServiceHost = mailServiceHost;
+    }
 
     /**
      * Send an email regarding job completion
      *
      * @param msg the MailMessage containing e-mail parameters
-     * @param mailServer the mail server
      * @throws MessagingException if a an error occurs sending the message
      */
-    public static void sendMail(MailMessage msg,
-                                String mailServer) throws MessagingException {
+    public void sendMail(MailMessage msg) throws MessagingException {
         Properties props = System.getProperties();
-        props.put("mail.smtp.host", mailServer);
+        if (mailServiceHost != null) props.put("mail.smtp.host", mailServiceHost);
         Session session = Session.getDefaultInstance(props, null);
-        session.setDebug(true);
+        //session.setDebug(true);
         Message mimeMessage = new MimeMessage(session);
         InternetAddress from = new InternetAddress(msg.getSender());
         InternetAddress to[] = InternetAddress.parse(msg.getEmailAddress());

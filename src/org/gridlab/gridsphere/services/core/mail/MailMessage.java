@@ -2,7 +2,7 @@
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-package org.gridlab.gridsphere.core.mail;
+package org.gridlab.gridsphere.services.core.mail;
 
 /**
  * The <code>MailMessage</code> utility class represents a mail message.
@@ -56,7 +56,7 @@ public class MailMessage {
     /**
      * Sets the email body
      *
-     * @param subject the email body
+     * @param body the email body
      */
     public void setBody(String body) {
         this.body = body;
@@ -74,7 +74,7 @@ public class MailMessage {
     /**
      * Sets the email address
      *
-     * @param subject the email address
+     * @param emailAddress the email address
      */
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
@@ -92,7 +92,7 @@ public class MailMessage {
     /**
      * Sets the email sender
      *
-     * @param subject the email sender
+     * @param sender the email sender
      */
     public void setSender(String sender) {
         this.sender = sender;

@@ -47,6 +47,9 @@
          </ui:tablecell>
          </ui:tablerow>
     </ui:table>
-    <% } %>
+        <p>
+        <% } %>
+
+ <ui:actionlink action="displayForgotPassword" key="LOGIN_FORGOT_PASSWORD"/>
 
 </ui:form>
