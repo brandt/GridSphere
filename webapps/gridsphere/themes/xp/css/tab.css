@@ -129,11 +129,11 @@ a.tab-sub-menu-active {
 }
 
 a.tab-sub-menu-active:link {
-  border: 1px solid #f9a61a;
+  border: 1px solid #397df3;
 }
 
 a.tab-sub-menu-active:visited {
-  border: 1px solid #f9a61a;
+  border: 1px solid #397df3;
 }
 
 a.tab-sub-menu-active:hover {
