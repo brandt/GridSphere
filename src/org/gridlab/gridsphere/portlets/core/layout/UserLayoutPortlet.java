@@ -12,9 +12,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
-import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
-import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
-import org.gridlab.gridsphere.provider.portletui.beans.RadioButtonBean;
+import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
@@ -60,7 +58,20 @@ public class UserLayoutPortlet extends ActionPortlet {
         String rbtype = rb.getSelectedValue();
 
         int cols = Integer.valueOf(rbtype).intValue();
-        PortletTabbedPane pane = layoutMgr.createUserTabbedPane(event.getPortletRequest(), cols, tabName);
+
+        PortletTabbedPane pane = layoutMgr.getUserTabbedPane(event.getPortletRequest());
+        if (pane != null) {
+        Iterator it = pane.getPortletTabs().iterator();
+        while (it.hasNext()) {
+            PortletTab tab = (PortletTab)it.next();
+            if (tab.getLabel().equals(tabName + "Tab")) {
+                createErrorMessage(event, this.getLocalizedText(event.getPortletRequest(), "LAYOUT_SAMETAB_ERROR"));
+                return;
+            }
+        }
+        }
+
+        pane = layoutMgr.createUserTabbedPane(event.getPortletRequest(), cols, tabName);
 
 
         PortletTab tab = pane.getLastPortletTab();
@@ -174,4 +185,9 @@ public class UserLayoutPortlet extends ActionPortlet {
         layoutMgr.reloadPage(req);
     }
 
+    private void createErrorMessage(FormEvent event, String msg) {
+        MessageBoxBean msgBox = event.getMessageBoxBean("msg");
+        msgBox.setMessageType(MessageStyle.MSG_ERROR);
+        msgBox.setValue(msg);
+    }
 }

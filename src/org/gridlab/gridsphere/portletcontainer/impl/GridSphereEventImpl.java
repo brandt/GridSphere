@@ -8,11 +8,11 @@ import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+import java.io.UnsupportedEncodingException;
 
 /**
  * The <code>GridSphereEventImpl</code> is an implementation of the <code>GridSphereEvent</code> interface.
@@ -35,7 +35,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
     protected Stack events = null;
 
-    public GridSphereEventImpl(AccessControlManagerService aclService, PortletContext ctx, HttpServletRequest req, HttpServletResponse res) {
+    public GridSphereEventImpl(PortletContext ctx, HttpServletRequest req, HttpServletResponse res) {
 
         portletRequest = new SportletRequestImpl(req);
         portletResponse = new SportletResponse(res, portletRequest);
@@ -63,6 +63,13 @@ public class GridSphereEventImpl implements GridSphereEvent {
             log.debug("Received a null component ID");
             portletComponentID = "";
         }
+
+        try {
+            portletComponentID = decodeUTF8(portletComponentID);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
         //}
         /*
         try {
@@ -78,7 +85,9 @@ public class GridSphereEventImpl implements GridSphereEvent {
         Enumeration enum;
         String name, newname, value;
         String actionStr = portletRequest.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
+        try {
         if (actionStr != null) {
+            actionStr = decodeUTF8(actionStr);
             log.debug("Received action=" + actionStr);
 
             action = new DefaultPortletAction(actionStr);
@@ -87,10 +96,13 @@ public class GridSphereEventImpl implements GridSphereEvent {
                 enum = portletRequest.getParameterNames();
 
                 while (enum.hasMoreElements()) {
-                    name = (String) enum.nextElement();
+                    name = decodeUTF8((String) enum.nextElement());
+
                     if (name.startsWith(prefix)) {
                         newname = name.substring(prefix.length() + 1);
                         value = portletRequest.getParameter(name);
+                        //newname = decodeUTF8(newname);
+                        //value = decodeUTF8(newname);
                         action.addParameter(newname, value);
                     }
                 }
@@ -138,6 +150,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
                         if (!prefix.equals("")) {
                             n = n.substring(prefix.length() + 1);
                         }
+
                         action.addParameter(n, v);
                     }
                     tmpParams = null;
@@ -145,6 +158,9 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
             }
         }
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
 
         /* This is where a DefaultPortletMessage gets put together if one exists */
         String messageStr = portletRequest.getParameter(SportletProperties.DEFAULT_PORTLET_MESSAGE);
@@ -153,24 +169,11 @@ public class GridSphereEventImpl implements GridSphereEvent {
             message = new DefaultPortletMessage(messageStr);
         }
 
-        /* This is where we get ACL info and update sportlet request */
-        /*
-        User user = portletRequest.getUser();
-        if (! (user instanceof GuestUser) ) {
-            log.debug("Role information for user: " + user.getUserID());
-            List groups = aclService.getGroups(user);
-            Iterator git = groups.iterator();
-            PortletGroup group = null;
-            while (git.hasNext()) {
-                group = (PortletGroup)git.next();
-                PortletRole role = aclService.getRoleInGroup(portletRequest.getUser(), group);
-                portletRequest.setRole(group, role);
-                log.debug("Group: " + group.toString() + " Role: " + role.toString());
-            }
-        }
-        */
     }
 
+    private String decodeUTF8(String string) throws UnsupportedEncodingException {
+        return new String(string.getBytes("iso-8859-1"), "UTF-8");
+    }
     public PortletRequest getPortletRequest() {
         return portletRequest;
     }

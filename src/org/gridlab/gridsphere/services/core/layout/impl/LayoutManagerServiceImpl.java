@@ -59,8 +59,8 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         return pageFactory.getUserTabbedPane(req);
     }
 
-    public PortletTabbedPane createUserTabbedPane(PortletRequest req, int cols, String label) {
-        return pageFactory.createNewUserPane(req, cols, label);
+    public PortletTabbedPane createUserTabbedPane(PortletRequest req, int cols, String tabName) {
+        return pageFactory.createNewUserPane(req, cols, tabName);
     }
 
     public PortletPage getPortletPage(PortletRequest req) {

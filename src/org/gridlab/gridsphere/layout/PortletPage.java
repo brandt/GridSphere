@@ -211,7 +211,6 @@ public class PortletPage implements Serializable, Cloneable {
             System.err.println("Unable to init Cache service! " + e.getMessage());
         }
 
-
         componentIdentifiers = new Vector();
 
         if (headerContainer != null) {
@@ -364,7 +363,10 @@ public class PortletPage implements Serializable, Cloneable {
                                 String portletClass = ((PortletFrame)comp).getPortletClass();
                                 boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
                                 System.err.println("hasRole = " + hasrole);
-                                if (!hasrole) return;
+                                if (!hasrole) {
+                                    System.err.println("User " + user + " does not have required role!");
+                                    return;
+                                }
 
                             }
                         } else if (comp instanceof PortletTitleBar) {
@@ -372,12 +374,12 @@ public class PortletPage implements Serializable, Cloneable {
                                 String portletClass = ((PortletTitleBar)comp).getPortletClass();
                                 boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
                                 System.err.println("hasRole = " + hasrole);
-                                if (!hasrole) return;
+                                if (!hasrole) {
+                                    System.err.println("User " + user + " does not have required role!");
+                                    return;
+                                }
                             }
-
                         }
-
-
                         System.err.println("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
                         comp.actionPerformed(event);
                     }

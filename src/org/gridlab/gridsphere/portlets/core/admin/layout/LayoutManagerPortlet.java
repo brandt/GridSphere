@@ -253,9 +253,9 @@ public class LayoutManagerPortlet extends ActionPortlet {
             String guestFile = PortletTabRegistry.getGuestLayoutFile();
             String tmpFile = guestFile + "-tmp";
             Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpFile), "UTF-8"));
-            byte[] text = newText.getBytes("iso-8859-1");
-            String newstring = new String(text, "UTF-8");
-            out.write(newstring);
+            //byte[] text = newText.getBytes("iso-8859-1");
+            //String newstring = new String(text, "UTF-8");
+            out.write(newText);
             out.close();
             try {
                 PortletTabRegistry.loadPage(tmpFile);
@@ -281,9 +281,9 @@ public class LayoutManagerPortlet extends ActionPortlet {
         log.info("saving group layout: " + group.getName());
         String tmpFile = groupFile + "-tmp";
         Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpFile), "UTF-8"));
-        byte[] text = newText.getBytes("iso-8859-1");
-        String newstring = new String(text, "UTF-8");
-        out.write(newstring);
+        //byte[] text = newText.getBytes("iso-8859-1");
+        //String newstring = new String(text, "UTF-8");
+        out.write(newText);
         out.close();
 
         // first validate tab

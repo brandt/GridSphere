@@ -356,7 +356,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
     }
 
-    public PortletTabbedPane createNewUserPane(PortletRequest req, int cols, String label) {
+    public PortletTabbedPane createNewUserPane(PortletRequest req, int cols, String tabName) {
 
         PortletTabbedPane pane = null;
 
@@ -372,21 +372,21 @@ public class PortletPageFactory implements PortletSessionListener {
 
             PortletTab topTab = new PortletTab();
             topTab.setCanModify(true);
-            topTab.setTitle(req.getLocale().getLanguage(), label);
+            topTab.setTitle(req.getLocale().getLanguage(), tabName);
             PortletTabbedPane childPane = new PortletTabbedPane();
             PortletTab childTab = new PortletTab();
 
             childPane.setStyle("sub-menu");
             topTab.setPortletComponent(childPane);
             pane.addTab(topTab);
-            topTab.setName(label);
-            topTab.setLabel(label + "Tab");
+            topTab.setName(tabName);
+            topTab.setLabel(tabName + "Tab");
             //pane.save(userLayout);
 
             PortletTableLayout table = new PortletTableLayout();
 
             table.setCanModify(true);
-            table.setLabel(label + "TL");
+            table.setLabel(tabName + "TL");
 
 
             PortletRowLayout row = new PortletRowLayout();

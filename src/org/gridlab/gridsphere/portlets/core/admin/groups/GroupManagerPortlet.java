@@ -81,17 +81,6 @@ public class GroupManagerPortlet extends ActionPortlet {
         Iterator it = groups.iterator();
         while (it.hasNext()) {
             PortletGroup g = (PortletGroup) it.next();
-
-            //String desc = g.getDescription();
-            if ((aclManagerService.hasAdminRoleInGroup(user, g)) && (!g.equals(coreGroup))) {
-                log.info("user " + user.getFullName() + " is admin");
-                //System.err.println("group= " + g.getName() + " ispublic=" + g.isPublic());
-
-                //System.err.println("desc=" + desc);
-
-            } else if (aclManagerService.hasSuperRole(user)) {
-                //    groupData.put(g, desc);
-            }
             groupList.add(g);
         }
         List webappNames = portletMgr.getWebApplicationNames();
@@ -136,14 +125,14 @@ public class GroupManagerPortlet extends ActionPortlet {
 
         Iterator it = webappNames.iterator();
 
-        String gsname = coreGroup.getName();
+        //String gsname = coreGroup.getName();
         PortletRole role = req.getRole();
         while (it.hasNext()) {
 
 
             String g = (String) it.next();
 
-            if (g.equals(gsname)) continue;
+            if ((g.equals(coreGroup.getName())) && (!role.equals(PortletRole.SUPER))) continue;
 
             TableRowBean tr = new TableRowBean();
             tr.setHeader(true);
@@ -210,6 +199,10 @@ public class GroupManagerPortlet extends ActionPortlet {
                                     if (reqRole.isUser()) item.setSelected(true);
                                     lb.addBean(item);
                                     item = new ListBoxItemBean();
+                                    item.setValue(PortletRole.GUEST.getName());
+                                    if (reqRole.isGuest()) item.setSelected(true);
+                                    lb.addBean(item);
+                                    item = new ListBoxItemBean();
                                     item.setValue(PortletRole.ADMIN.getName());
                                     if (reqRole.isAdmin()) item.setSelected(true);
                                     lb.addBean(item);
@@ -255,6 +248,9 @@ public class GroupManagerPortlet extends ActionPortlet {
                         if (!found) {
                             ListBoxItemBean item = new ListBoxItemBean();
                             item.setValue(PortletRole.USER.getName());
+                            lb.addBean(item);
+                            item = new ListBoxItemBean();
+                            item.setValue(PortletRole.GUEST.getName());
                             lb.addBean(item);
                             item = new ListBoxItemBean();
                             item.setValue(PortletRole.ADMIN.getName());

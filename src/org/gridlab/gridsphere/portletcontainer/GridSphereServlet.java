@@ -117,7 +117,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     public void processRequest(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         res.setContentType("text/html; charset=utf-8");
-        GridSphereEvent event = new GridSphereEventImpl(aclService, context, req, res);
+        GridSphereEvent event = new GridSphereEventImpl(context, req, res);
         PortletRequest portletReq = event.getPortletRequest();
         PortletResponse portletRes = event.getPortletResponse();
 
@@ -172,7 +172,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             if (event.getAction().getName().equals(SportletProperties.LOGOUT)) {
                 logout(event);
                 // since event is now invalidated, must create new one
-                event = new GridSphereEventImpl(aclService, context, req, res);
+                event = new GridSphereEventImpl(context, req, res);
             }
         }
 
@@ -303,6 +303,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             password = null;
             req.setAttribute(SportletProperties.PORTLET_USER, user);
             session.setAttribute(SportletProperties.PORTLET_USER, user.getID());
+            if (user.getAttribute(User.LOCALE) != null) {
+                session.setAttribute(User.LOCALE, new Locale((String)user.getAttribute(User.LOCALE), "", ""));
+            }
             if (aclService.hasSuperRole(user)) {
                 log.debug("User: " + user.getUserName() + " logged in as SUPER");
             }

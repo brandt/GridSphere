@@ -24,7 +24,7 @@ public interface LayoutManagerService extends PortletService {
 
     public PortletTabbedPane getUserTabbedPane(PortletRequest req);
 
-    public PortletTabbedPane createUserTabbedPane(PortletRequest req, int cols, String label);
+    public PortletTabbedPane createUserTabbedPane(PortletRequest req, int cols, String tabName);
 
     public PortletPage getPortletPage(PortletRequest req);
 

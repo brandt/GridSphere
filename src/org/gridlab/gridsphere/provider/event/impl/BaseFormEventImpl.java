@@ -416,7 +416,7 @@ public abstract class BaseFormEventImpl {
         Enumeration enum = request.getParameterNames();
         while (enum.hasMoreElements()) {
             String name = (String) enum.nextElement();
-            log.debug("\t\tname :" + name);
+            sb.append("\t\tname :" + name);
             String values[] = request.getParameterValues(name);
             if (values.length == 1) {
                 String pval = values[0];
