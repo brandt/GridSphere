@@ -123,7 +123,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
             while (it.hasNext()) {
                 AuthModuleEntry entry = (AuthModuleEntry) it.next();
                 String className = entry.getModuleClassName();
-                System.err.println("found a class=" + className);
+                //System.err.println("found a class=" + className);
                 if (activeAuthModules.containsKey(className)) mods.add(activeAuthModules.get(className));
             }
         }
@@ -131,7 +131,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
             Iterator it = activeAuthModules.values().iterator();
             while (it.hasNext()) {
                 LoginAuthModule module = (LoginAuthModule)it.next();                
-                System.err.println("found nothing-- adding " + module.getModuleName());
+                //System.err.println("found nothing-- adding " + module.getModuleName());
                 this.addActiveAuthModule(user, module);
                 mods.add(module);
             }
