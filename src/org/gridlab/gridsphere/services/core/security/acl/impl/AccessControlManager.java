@@ -12,6 +12,7 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 
@@ -511,6 +512,11 @@ public class AccessControlManager implements AccessControlManagerService {
             group = new SportletGroup();
             group.setName(groupName);
             group.setPublic(true);
+            Iterator it = portletRoleList.iterator();
+            while (it.hasNext()) {
+                SportletRoleInfo info = (SportletRoleInfo)it.next();
+                System.err.println("role= " + info.getRole() + " class=" + info.getPortletClass());
+            }
             group.setPortletRoleList(portletRoleList);
             try {
                 pm.create(group);
