@@ -894,14 +894,14 @@
                 <title>Usage of checkbox</title>
                 <screen>
 <![CDATA[
-<ui:checkbox name="name" value="value" checked="true" disabled="false"/>
+<ui:checkbox name="name" value="value" selected="true" disabled="false"/>
  ]]>
                 </screen>
                 This creates a selected checkbox with the name 'name' and the value 'value'.
                 <screen>
-<![CDATA[<ui:checkbox beanId="myCheckBox" value="value #1" checked="true"/>
- <ui:checkbox beanId="myCheckBox" value="value #2"/>
- <ui:checkbox beanId="myCheckBox" value="value #3"/>]]>
+<![CDATA[<ui:checkbox name="myCheckBox" value="value #1" selected="true"/>
+ <ui:checkbox name="myCheckBox" value="value #2"/>
+ <ui:checkbox name="myCheckBox" value="value #3"/>]]>
                 </screen>
                 This creates multiple check boxes identified by the same beanId with different display values
                 such that the bean can be retrieved in the portlet and will contain the selected check boxes
@@ -1163,13 +1163,13 @@
             <example>
                 <title>Usage of radiobutton</title>
                 <screen>
-<![CDATA[<ui:radiobutton name="name" value="value" checked="true" disabled="false"/>]]>
+<![CDATA[<ui:radiobutton name="name" value="value" selected="true" disabled="false"/>]]>
                 </screen>
                 This creates a selected radiobutton with the name 'name' and the value 'value'.
                 <screen>
-<![CDATA[<ui:radiobutton beanId="myButton" value="value #1" checked="true"/>
- <ui:radiobutton beanId="myButton" value="value #2"/>
- <ui:radiobutton beanId="myButton" value="value #3"/>]]>
+<![CDATA[<ui:radiobutton name="myButton" value="value #1" selected="true"/>
+ <ui:radiobutton name="myButton" value="value #2"/>
+ <ui:radiobutton name="myButton" value="value #3"/>]]>
                 </screen>
                 This creates multiple radio buttons identified by the same beanId with different display values
                 such that the bean can be retrieved in the portlet and will contain the selected radio button
