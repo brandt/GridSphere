@@ -24,14 +24,19 @@ import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
 import javax.mail.MessagingException;
 import javax.servlet.UnavailableException;
+import javax.servlet.http.Cookie;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Date;
 
 public class LoginPortlet extends ActionPortlet {
 
+    private static String FORGOT_PASSWORD_LABEL ="forgotpassword";
+    private static long PASSWORD_REQUEST_LIFETIME = 1000*60*24*7; // 1 week
+    
     public static final String LOGIN_ERROR_FLAG = "LOGIN_FAILED";
     public static final Integer LOGIN_ERROR_UNKNOWN = new Integer(-1);
 
@@ -84,6 +89,9 @@ public class LoginPortlet extends ActionPortlet {
         PasswordBean pass = event.getPasswordBean("password");
         pass.setValue("");
         request.setAttribute("user", user);
+
+        //CheckBoxBean cb = event.getCheckBoxBean("remloginCB");
+
 
         if (user instanceof GuestUser) {
             if (canUserCreateAccount) request.setAttribute("canUserCreateAcct", "true");
@@ -371,7 +379,10 @@ public class LoginPortlet extends ActionPortlet {
         }
 
         // create a request
-        GenericRequest request = requestService.createRequest();
+        GenericRequest request = requestService.createRequest(FORGOT_PASSWORD_LABEL);
+        long now = Calendar.getInstance().getTime().getTime();
+
+        request.setLifetime(new Date(now + PASSWORD_REQUEST_LIFETIME));
         request.setUserID(user.getID());
         requestService.saveRequest(request);
 
@@ -428,7 +439,7 @@ public class LoginPortlet extends ActionPortlet {
 
         String id = req.getParameter("reqid");
 
-        GenericRequest request = requestService.getRequest(id);
+        GenericRequest request = requestService.getRequest(id, FORGOT_PASSWORD_LABEL);
         if (request != null) {
             HiddenFieldBean reqid = evt.getHiddenFieldBean("reqid");
             reqid.setValue(id);
@@ -446,7 +457,7 @@ public class LoginPortlet extends ActionPortlet {
 
         HiddenFieldBean reqid = event.getHiddenFieldBean("reqid");
         String id = reqid.getValue();
-        GenericRequest request = requestService.getRequest(id);
+        GenericRequest request = requestService.getRequest(id, FORGOT_PASSWORD_LABEL);
         if (request != null) {
             String uid = request.getUserID();
             User user = userManagerService.getUser(uid);

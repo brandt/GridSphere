@@ -71,14 +71,18 @@ public class UserManagerPortlet extends ActionPortlet {
 
         String userID = evt.getAction().getParameter("userID");
         User user = this.userManagerService.getUser(userID);
-
-        req.setAttribute("user", user);
-        HiddenFieldBean hf = evt.getHiddenFieldBean("userID");
-        hf.setValue(user.getID());
-        PortletGroup coreGroup = aclManagerService.getCoreGroup();
-        PortletRole role = aclManagerService.getRoleInGroup(user, coreGroup);
-        req.setAttribute("role", role.toString());
-        setNextState(req, DO_VIEW_USER_VIEW);
+       // if (user != null) {
+            // should check for non-null user !
+            req.setAttribute("user", user);
+            HiddenFieldBean hf = evt.getHiddenFieldBean("userID");
+            hf.setValue(user.getID());
+            PortletGroup coreGroup = aclManagerService.getCoreGroup();
+            PortletRole role = aclManagerService.getRoleInGroup(user, coreGroup);
+            req.setAttribute("role", role.toString());
+            setNextState(req, DO_VIEW_USER_VIEW);
+       // } else {
+       //     setNextState(req, DEFAULT_VIEW_PAGE);
+       // }
     }
 
     public void doNewUser(FormEvent evt)
