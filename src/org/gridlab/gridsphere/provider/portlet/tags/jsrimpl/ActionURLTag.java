@@ -21,26 +21,8 @@ import java.util.ArrayList;
  */
 public class ActionURLTag extends ActionTag {
 
-    public static class TEI extends TagExtraInfo
-        {
-        public VariableInfo[] getVariableInfo(TagData tagData)
-        {
-            VariableInfo vi[] = null;
-            String var = tagData.getAttributeString("var");
-            if (var != null)
-            {
-                vi = new VariableInfo[1];
-                vi[0] = new VariableInfo(var, "java.lang.String", true, VariableInfo.AT_BEGIN);
-            }
-            return vi;
-        }
-    }
-
     protected ActionLinkBean actionlink = null;
-    protected String key = null;
     protected String style = TextBean.MSG_INFO;
-    protected ImageBean imageBean = null;
-    protected String var = null;
 
     /**
      * Sets the style of the text: Available styles are
@@ -74,60 +56,6 @@ public class ActionURLTag extends ActionTag {
         return style;
     }
 
-    /**
-     * Sets the name of the variable to export as a RenderURL object
-     *
-     * @param var the name of the variable to export as a RenderURL object
-     */
-    public void setVar(String var) {
-        this.var = var;
-    }
-
-    /**
-     * Returns the name of the exported RenderURL object
-     *
-     * @return the exported variable
-     */
-    public String getVar() {
-        return var;
-    }
-
-    /**
-     * Sets the action link key used to locate localized text
-     *
-     * @param key the action link key
-     */
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    /**
-     * Returns the action link key used to locate localized text
-     *
-     * @return the action link key
-     */
-    public String getKey() {
-        return key;
-    }
-
-    /**
-     * Sets the image bean
-     *
-     * @param imageBean the image bean
-     */
-    public void setImageBean(ImageBean imageBean) {
-        this.imageBean = imageBean;
-    }
-
-    /**
-     * Returns the image bean
-     *
-     * @return the image bean
-     */
-    public ImageBean getImageBean() {
-        return imageBean;
-    }
-
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
             actionlink = (ActionLinkBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
@@ -141,6 +69,9 @@ public class ActionURLTag extends ActionTag {
             this.setBaseComponentBean(actionlink);
             actionlink.setStyle(style);
         }
+
+        if (name != null) actionlink.setName(name);
+        if (anchor != null) actionlink.setAnchor(anchor);
 
         paramBeans = new ArrayList();
 

@@ -178,8 +178,8 @@ public class ImageTag extends BaseComponentTag {
         }
 
         Tag parent = getParent();
-        if (parent instanceof ActionLinkTag) {
-            ActionLinkTag actionTag = (ActionLinkTag)parent;
+        if (parent instanceof ActionTag) {
+            ActionTag actionTag = (ActionTag)parent;
             actionTag.setImageBean(urlImageBean);
         } else {
             try {

@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.provider.portlet.tags.jsrimpl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.provider.portletui.beans.ActionParamBean;
+import org.gridlab.gridsphere.provider.portletui.beans.ImageBean;
 
 import javax.portlet.RenderResponse;
 import javax.portlet.PortletURL;
@@ -15,6 +16,9 @@ import javax.portlet.PortletMode;
 import javax.portlet.WindowStateException;
 import javax.portlet.PortletModeException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.TagExtraInfo;
+import javax.servlet.jsp.tagext.VariableInfo;
+import javax.servlet.jsp.tagext.TagData;
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,6 +36,23 @@ public abstract class ActionTag extends BaseComponentTag {
     protected List paramBeans = null;
     protected String label = null;
     protected boolean isSecure = false;
+    protected String var = null;
+    protected String anchor = null;
+    protected String key = null;
+    protected ImageBean imageBean = null;
+
+    public static class TEI extends TagExtraInfo {
+
+        public VariableInfo[] getVariableInfo(TagData tagData) {
+            VariableInfo vi[] = null;
+            String var = tagData.getAttributeString("var");
+            if (var != null) {
+                vi = new VariableInfo[1];
+                vi[0] = new VariableInfo(var, "java.lang.String", true, VariableInfo.AT_BEGIN);
+            }
+            return vi;
+        }
+    }
 
     /**
      * Sets the label identified with the portlet component to link to
@@ -49,6 +70,78 @@ public abstract class ActionTag extends BaseComponentTag {
      */
     public String getLabel() {
         return label;
+    }
+
+    /**
+     * Sets the name of the variable to export as a RenderURL object
+     *
+     * @param var the name of the variable to export as a RenderURL object
+     */
+    public void setVar(String var) {
+        this.var = var;
+    }
+
+    /**
+     * Returns the name of the exported RenderURL object
+     *
+     * @return the exported variable
+     */
+    public String getVar() {
+        return var;
+    }
+
+    /**
+     * Sets the action link key used to locate localized text
+     *
+     * @param key the action link key
+     */
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    /**
+     * Returns the action link key used to locate localized text
+     *
+     * @return the action link key
+     */
+    public String getKey() {
+        return key;
+    }
+
+    /**
+     * Sets the text that should be added at the end of generated URL
+     *
+     * @param anchor the action link key
+     */
+    public void setAnchor(String anchor) {
+        this.anchor = anchor;
+    }
+
+    /**
+     * Returns the anchor used to identify text that should be added at the end of generated URL
+     *
+     * @return the anchor
+     */
+    public String getAnchor() {
+        return anchor;
+    }
+
+    /**
+     * Sets the image bean
+     *
+     * @param imageBean the image bean
+     */
+    public void setImageBean(ImageBean imageBean) {
+        this.imageBean = imageBean;
+    }
+
+    /**
+     * Returns the image bean
+     *
+     * @return the image bean
+     */
+    public ImageBean getImageBean() {
+        return imageBean;
     }
 
     public void setPortletMode(String portletMode) {
@@ -132,6 +225,9 @@ public abstract class ActionTag extends BaseComponentTag {
         }
 
         if (!paramBeans.isEmpty()) {
+            String id = createUniquePrefix(2);
+            portletAction.addParameter(SportletProperties.PREFIX, id);
+
             if (action != null) actionURL.setParameter(SportletProperties.DEFAULT_PORTLET_ACTION, action);
             Iterator it = paramBeans.iterator();
             while (it.hasNext()) {
@@ -140,6 +236,27 @@ public abstract class ActionTag extends BaseComponentTag {
             }
         }
         return actionURL.toString();
+    }
+
+    /**
+     *  A string utility that produces a string composed of
+     * <code>numChars</code> number of characters
+     *
+     * @param numChars the number of characters in the resulting <code>String</code>
+     * @return the <code>String</code>
+     */
+    private String createUniquePrefix(int numChars) {
+        StringBuffer s = new StringBuffer();
+        for (int i = 0; i <= numChars; i++) {
+            int nextChar = (int) (Math.random() * 62);
+            if (nextChar < 10) //0-9
+                s.append(nextChar);
+            else if (nextChar < 36) //a-z
+                s.append((char) (nextChar - 10 + 'a'));
+            else
+                s.append((char) (nextChar - 36 + 'A'));
+        }
+        return s.toString();
     }
 
 }
