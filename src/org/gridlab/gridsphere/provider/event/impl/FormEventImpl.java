@@ -439,13 +439,11 @@ public class FormEventImpl implements FormEvent {
      * @return a IncludeBean
      */
     public IncludeBean getIncludeBean(String beanId) {
-        log.debug("Getting include bean from request");
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
             return (IncludeBean)tagBeans.get(beanKey);
         }
         IncludeBean includeBean = new IncludeBean(request, response, beanId);
-        log.debug("Putting include bean in request");
         tagBeans.put(beanKey, includeBean);
         return includeBean;
     }
@@ -725,7 +723,7 @@ public class FormEventImpl implements FormEvent {
         Iterator it = tagBeans.values().iterator();
         while (it.hasNext()) {
             TagBean tagBean = (TagBean)it.next();
-            log.debug("storing bean id: " + tagBean.getBeanId());
+            //log.debug("storing bean id: " + tagBean.getBeanId());
             tagBean.store();
         }
         //printRequestAttributes();
