@@ -49,6 +49,10 @@ public class UserSessionManager implements PortletSessionListener {
         return (List) userSessions.get(user.getID());
     }
 
+    public List getSessions(String userid) {
+        return (List) userSessions.get(userid);
+    }
+
     public void addSession(User user, PortletSession session) {
         log.debug("Setting session for user " + user.getID());
         List sessions = null;
@@ -131,15 +135,26 @@ public class UserSessionManager implements PortletSessionListener {
             }
             userSessions.remove(user.getID());
         }
+    }
 
-        /*
-        if (user != null) {
-            if (user.getID() != null) {
-                log.debug("removing " + user.getID() + " from user session manager");
-                userSessions.remove(user.getID());
+    public void removeSessions(String userid) {
+        log.debug("Removing session for user " + userid);
+        //List userSessions = (List)userSessions.get(user.getID());
+        List s = getSessions(userid);
+        if (s != null) {
+            Iterator it = s.iterator();
+            while (it.hasNext()) {
+                PortletSession session = (PortletSession) it.next();
+                if (session != null) {
+                    try {
+                        session.invalidate();
+                    } catch (IllegalStateException e) {
+                        log.debug("session " + session.getId() + " for user " + userid + " has already been invalidated!");
+                    }
+                }
             }
+            userSessions.remove(userid);
         }
-        */
     }
 
     public void dumpSessions() {

@@ -94,6 +94,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         SportletLog.setConfigureURL(GridSphereConfig.getServletContext().getRealPath("/WEB-INF/classes/log4j.properties"));
         this.context = new SportletContext(config);
         factory = SportletServiceFactory.getInstance();
+        layoutEngine = PortletLayoutEngine.getInstance();
         log.debug("in init of GridSphereServlet");
     }
 
@@ -124,15 +125,13 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         processRequest(req, res);
-
-
     }
+
 
     public void processRequest(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         res.setContentType("text/html; charset=utf-8");
         GridSphereEvent event = new GridSphereEventImpl(context, req, res);
         PortletRequest portletReq = event.getPortletRequest();
-        PortletResponse portletRes = event.getPortletResponse();
 
         // If first time being called, instantiate all portlets
         if (firstDoGet.equals(Boolean.TRUE)) {
@@ -148,7 +147,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 } catch (Exception e) {
                     RequestDispatcher rd = req.getRequestDispatcher("/jsp/dberror.jsp");
                     log.error("Check DB failed: ", e);
-                    req.setAttribute(SportletProperties.ERROR, "DB Error! Please contact your GridSphere/Database Administrator!");
+                    req.setAttribute("error", "DB Error! Please contact your GridSphere/Database Administrator!");
                     rd.forward(req, res);
                     return;
                 }
@@ -162,26 +161,29 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                     // create a root user if none available
                     userManagerService.initRootUser();
                     // initialize all portlets
+
+                    PortletResponse portletRes = event.getPortletResponse();
                     PortletInvoker.initAllPortlets(portletReq, portletRes);
                     // deep inside a service is used which is why this must follow the factory.init
-                    layoutEngine = PortletLayoutEngine.getInstance();
 
-                } catch (PortletException e) {
-                    req.setAttribute(SportletProperties.ERROR, e);
-                    layoutEngine.doRenderError(event, e);
+                    layoutEngine.init();
+                } catch (Exception e) {
+                    log.error("GridSphere initialization failed!", e);
+                    RequestDispatcher rd = req.getRequestDispatcher("/jsp/error.jsp");
+                    req.setAttribute("error", e);
+                    rd.forward(req, res);
                     return;
                 }
                 firstDoGet = Boolean.FALSE;
             }
         }
 
-
         checkUserHasCookie(event);
 
         setUserAndGroups(portletReq);
 
         setTCKUser(portletReq);
-        
+
         // Handle user login and logout
         if (event.hasAction()) {
             if (event.getAction().getName().equals(SportletProperties.LOGIN)) {

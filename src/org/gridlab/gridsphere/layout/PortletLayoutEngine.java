@@ -30,21 +30,22 @@ public class PortletLayoutEngine {
     protected static PortletLog log = SportletLog.getInstance(PortletLayoutEngine.class);
     private static PortletLayoutEngine instance = new PortletLayoutEngine();
 
-    private PortletPageFactory pageFactory = null;
+    private PortletPageFactory pageFactory = PortletPageFactory.getInstance();
     private String error = "";
 
     /**
      * Constructs a concrete instance of the PortletLayoutEngine
      */
     private PortletLayoutEngine() {
+    }
+
+    public void init() throws PortletException {
         try {
-            pageFactory = PortletPageFactory.getInstance();
-        } catch (IOException e) {
-            error = "Caught IOException trying to unmarshall GuestUserLayout.xml" + e.getMessage();
+            pageFactory.init();
+        } catch (Exception e) {
+            error = "Unable to initialize PortletPageFactory!";
             log.error(error, e);
-        } catch (PersistenceManagerException e) {
-            error = "Caught PersistenceManagerException trying to unmarshall GuestUserLayout.xml" + e.getMessage();
-            log.error(error, e);
+            throw new PortletException(error, e);
         }
     }
 

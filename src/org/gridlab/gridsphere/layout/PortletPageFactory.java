@@ -50,29 +50,35 @@ public class PortletPageFactory implements PortletSessionListener {
     private static Map guests = new Hashtable();
 
 
-    private PortletPageFactory() throws IOException, PersistenceManagerException {
+    private PortletPageFactory() {
+
+    }
+
+    public void init() throws PortletException {
         String errorLayoutFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/ErrorLayout.xml");
-
-        errorPage = PortletLayoutDescriptor.loadPortletPage(errorLayoutFile, layoutMappingFile);
-
-        templatePage = PortletLayoutDescriptor.loadPortletPage(templateLayoutPath, layoutMappingFile);
-        errorPage.setLayoutDescriptor(errorLayoutFile);
-
+        try {
+            errorPage = PortletLayoutDescriptor.loadPortletPage(errorLayoutFile, layoutMappingFile);
+            templatePage = PortletLayoutDescriptor.loadPortletPage(templateLayoutPath, layoutMappingFile);
+            errorPage.setLayoutDescriptor(errorLayoutFile);
+        } catch (Exception e) {
+            throw new PortletException("Error unmarshalling layout file", e);
+        }
+        PortletServiceFactory factory = SportletServiceFactory.getInstance();
+        try {
+            portalConfigService = (PortalConfigService) factory.createPortletService(PortalConfigService.class, null, true);
+        } catch (PortletServiceException e) {
+            log.error("Unable to init portal config service! ", e);
+            throw new PortletException("Unable to init portal config service! ", e);
+        }
         File userdir = new File(newuserLayoutPath);
         if (!userdir.exists()) {
             userdir.mkdir();
         }
     }
 
-    public static synchronized PortletPageFactory getInstance() throws IOException, PersistenceManagerException {
+    public static synchronized PortletPageFactory getInstance() {
         if (instance == null) {
             instance = new PortletPageFactory();
-            PortletServiceFactory factory = SportletServiceFactory.getInstance();
-            try {
-                portalConfigService = (PortalConfigService) factory.createPortletService(PortalConfigService.class, null, true);
-            } catch (PortletServiceException e) {
-                System.err.println("Unable to init Cache service! " + e.getMessage());
-            }
         }
         return instance;
     }
@@ -323,8 +329,6 @@ public class PortletPageFactory implements PortletSessionListener {
                     }
                 }
             }
-
-            User user = req.getUser();
 
             // first use default theme
             setPageTheme(newPage, req);
