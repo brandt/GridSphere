@@ -59,6 +59,14 @@
         <interface>org.gridlab.gridsphere.services.grid.security.credential.CredentialManagerService</interface>
         <implementation>org.gridlab.gridsphere.services.grid.security.credential.impl.CredentialManagerServiceImpl</implementation>
         <service-config>
+            <param-name>permittedCredentialSubjects</param-name>
+            <param-value>/*</param-value>
+        </service-config>
+        <service-config>
+            <param-name>permittedCredentialDescriptions</param-name>
+            <param-value>All credentials</param-value>
+        </service-config>
+        <service-config>
             <param-name>retrievalHost</param-name>
             <param-value>supergrid.aei.mpg.de</param-value>
         </service-config>

@@ -60,6 +60,7 @@ public final class GlobusCredentialManager
     public void init(PortletServiceConfig config) {
         _log.info("Entering init()");
         initServices();
+        initCredentialPermissions(config);
         initCredentialRetrievalClient(config);
         initPortalCredential(config);
         _log.info("Exiting init()");
@@ -71,7 +72,38 @@ public final class GlobusCredentialManager
         // Instantiate helper services
     }
 
+    private void initCredentialPermissions(PortletServiceConfig config) {
+        _log.info("Checking for credential permission parameters");
+        // Permitted credential subjects
+        String permittedCredentialSubjects = config.getInitParameter("permittedCredentialSubjects", "");
+        _log.info("permittedCredentialSubjects = " + permittedCredentialSubjects);
+        // Permitted credential descriptions
+        String permittedCredentialDescriptions = config.getInitParameter("permittedCredentialDescriptions", "");
+        _log.info("permittedCredentialDescriptions = " + permittedCredentialDescriptions);
+        // If permitted subjects not set, warn admin if no permission exist.
+        if (permittedCredentialSubjects.equals("")) {
+            List credentialPermissions = getCredentialPermissions();
+            if (credentialPermissions.size() == 0) {
+                String message = "There are no credentials permitted for use with this installation of GridSphere. "
+                               + "See CredentialPermissionAdminPortlet for how to specify what credentials "
+                               + "are permitted for use with GridSphere.";
+               _log.warn(message);
+            }
+            return;
+        }
+        // If permitted subjects is set, then create permission if doesn't already exist.
+        if (!existsCredentialPermission(permittedCredentialSubjects)) {
+            _log.info("Creating permission for credentials with subjects matching \""
+                      + permittedCredentialSubjects + "\"");
+            createCredentialPermission(permittedCredentialSubjects, permittedCredentialDescriptions);
+        } else {
+            _log.info("A permission already exists for credentials with subjects matching \""
+                      + permittedCredentialSubjects + "\"");
+        }
+    }
+
     private void initCredentialRetrievalClient(PortletServiceConfig config) {
+        _log.info("Checking for credential retrieval parameters");
         // Hostname init parameter
         String host = config.getInitParameter("retrievalHost", GlobusCredentialRetrievalClient.DEFAULT_HOST);
         _log.info("Credential retrieval hostname = " + host);
@@ -96,17 +128,19 @@ public final class GlobusCredentialManager
     }
 
     private void initPortalCredential(PortletServiceConfig config) {
+        _log.info("Checking for portal credential parameters");
         // x509 user certificate parameter
         String x509UserCertificate = config.getInitParameter("x509UserCertificate", "");
+        _log.info("x509UserCertificate = " + x509UserCertificate);
         // x509 user key parameter
         String x509UserKey = config.getInitParameter("x509UserKey", "");
+        _log.info("x509UserKey = " + x509UserKey);
         // x509 certificates path
         String x509CertificatesPath = config.getInitParameter("x509CertificatesPath", "");
+        _log.info("x509CertificatesPath = " + x509CertificatesPath);
+        // If all are set, then get proxy instance with given parameters
         if (!x509UserCertificate.equals("") && !x509UserKey.equals("") && !x509CertificatesPath.equals("")) {
             _log.info("Initializing portal credential with given x509 parameters...");
-            _log.info("X509 user certificate = " + x509UserCertificate);
-            _log.info("X509 user key = " + x509UserKey);
-            _log.info("X509 certificates path = " + x509CertificatesPath);
             this.retrievalClient.setPortalCredential(x509UserCertificate, x509UserKey, x509CertificatesPath);
         }
     }
