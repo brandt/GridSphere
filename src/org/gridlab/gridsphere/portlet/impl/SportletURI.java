@@ -42,7 +42,7 @@ public class SportletURI implements PortletURI {
      */
     public SportletURI(HttpServletRequest req, HttpServletResponse res, String contextPath) {
         this.store = new HashMap();
-        this.contextPath = contextPath;
+        this.contextPath = "/gridsphere"; // contextPath;
         this.res = res;
         this.req = req;
 
@@ -63,7 +63,7 @@ public class SportletURI implements PortletURI {
     public SportletURI(HttpServletRequest req, HttpServletResponse res, String contextPath, boolean isSecure) {
         this.store = new HashMap();
         this.isSecure = isSecure;
-        this.contextPath = contextPath;
+        this.contextPath = "/gridsphere"; // contextPath;
         this.req = req;
         this.res = res;
         //this.id = createUniquePrefix(2);
@@ -188,6 +188,7 @@ public class SportletURI implements PortletURI {
             store.put(name, value);
         }
 
+        System.err.println("\t\t\t\tcontext path= " + contextPath);
         String url = contextPath;
         String newURL;
         Set set = store.keySet();
