@@ -213,7 +213,7 @@ public abstract class ActionTag extends BaseComponentTag {
             WindowState state = new WindowState(windowState);
             try {
                 //actionURL = res.createRenderURL();
-                System.err.println("set state to:" + state);
+                //System.err.println("set state to:" + state);
                 actionURL.setWindowState(state);
             } catch (WindowStateException e) {
                 throw new JspException("Unknown window state in renderURL tag: " + windowState);
@@ -224,7 +224,7 @@ public abstract class ActionTag extends BaseComponentTag {
             try {
                 //actionURL = res.createRenderURL();
                 actionURL.setPortletMode(mode);
-                System.err.println("set mode to:" + mode);
+                //System.err.println("set mode to:" + mode);
             } catch (PortletModeException e) {
                 throw new JspException("Unknown portlet mode in renderURL tag: " + portletMode);
             }
@@ -262,7 +262,7 @@ public abstract class ActionTag extends BaseComponentTag {
 
         //if (!action.equals("render"))
         //}
-        System.err.println("printing URL = " + actionURL.toString());
+        //System.err.println("printing URL = " + actionURL.toString());
         return actionURL.toString();
     }
 
