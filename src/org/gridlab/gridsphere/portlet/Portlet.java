@@ -4,17 +4,6 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import org.gridlab.gridsphere.portletcontainer.impl.ConcreteSportlet;
-import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication;
-import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
-import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication;
-import org.gridlab.gridsphere.portlet.impl.SportletConfig;
-import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
-import org.gridlab.gridsphere.services.security.acl.AccessControlService;
-import org.gridlab.gridsphere.core.persistence.PersistenceException;
-
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -74,7 +63,9 @@ public abstract class Portlet extends HttpServlet
     protected PortletConfig portletConfig = null;
     protected PortletSettings portletSettings = null;
 
-    private PortletRegistryService registryService = null;
+    //protected Cacheable cacheable = null;
+
+    //private PortletRegistryService registryService = null;
 
     private String registeryID = null;
 
@@ -340,6 +331,7 @@ public abstract class Portlet extends HttpServlet
 
         // create sportlet settings that is not modifiable initially
         portletSettings = concretePortlet.getPortletSettings(false);
+        cacheable = concretePortlet.getCacheablePortletInfo();
         context = concretePortlet.getPortletConfig().getContext();
         registryService = (PortletRegistryService)context.getService(PortletRegistryService.class);
         registeryID = registryService.registerPortlet(concretePortlet);
@@ -377,6 +369,12 @@ public abstract class Portlet extends HttpServlet
     public final void service(ServletRequest request, ServletResponse response)
             throws ServletException, IOException {
         log.info("in service(ServletRequest, ServletResponse) of Portlet");
+
+        // make cacheable
+        // serve cached portlet output
+        //if (cacheable.getExpiration() < 0) {
+
+        //}
         // redirect to GridSphere
     }
 
@@ -407,7 +405,7 @@ public abstract class Portlet extends HttpServlet
 
     public final void destroy() {
         super.destroy();
-        registryService.unregisterPortlet(registeryID);
+        //registryService.unregisterPortlet(registeryID);
     }
 
 }
