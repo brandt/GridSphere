@@ -87,36 +87,51 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
 
         List scomponents = Collections.synchronizedList(components);
         synchronized(scomponents) {
-        for (int i=0;i<scomponents.size();i++) {
-            p = (PortletComponent)scomponents.get(i);
-            if (p instanceof PortletLayout) {
-                PortletComponent maxi = getMaximizedComponent(scomponents);
-                if (maxi!=null) {
-                    out.println("<table border=\"0\" width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"><tbody><tr><td>");
-                    maxi.doRender(event);
-                    out.println("</td></tr></tbody></table>");
-                    return;
+            for (int i=0;i<scomponents.size();i++) {
+                p = (PortletComponent)scomponents.get(i);
+                if (p instanceof PortletLayout) {
+                    PortletComponent maxi = getMaximizedComponent(scomponents);
+                    if (maxi!=null) {
+                        out.println("<table border=\"0\" width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"><tbody><tr><td>");
+                        maxi.doRender(event);
+                        out.println("</td></tr></tbody></table>");
+                        return;
+                    }
                 }
             }
-        }
 
-        // starting of the gridtable
-        out.println("<table ");
-        if (this.style!=null) {
-                   out.print("class=\""+this.style+"\" ");
-        }
-        out.println("border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tbody>");
-
-        for (int i=0;i<scomponents.size();i++) {
-            p = (PortletComponent) scomponents.get(i);
-            out.println("<tr><td valign=\"top\" width=\"100%\">");
-            if (p.getVisible()) {
-                p.doRender(event);
-                //out.println("grid comp: "+i);
+            // starting of the gridtable
+            out.println("<table ");
+            if (this.style!=null) {
+                out.print("class=\""+this.style+"\" ");
             }
-            out.println("</td> </tr>");
-        }
-        out.println("</tbody></table>");
+            out.println("border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tbody>");
+
+            for (int i=0;i<scomponents.size();i++) {
+                p = (PortletComponent) scomponents.get(i);
+                out.println("<tr><td valign=\"top\" width=\"100%\">");
+                if (p.getVisible()) {
+                    p.doRender(event);
+                    //out.println("grid comp: "+i);
+                }
+                out.println("</td> </tr>");
+            }
+
+            /** setup bottom add portlet listbox */
+            /*
+            out.println("<tr>");
+            for (int i=0;i<scomponents.size();i++) {
+
+                out.println("<td valign=\"top\" width=\"100%\">");
+
+                out.println("<table><tr><td><b>hello</b></td></tr></table>");
+
+                out.println("</td>");
+            }
+            out.println("</tr>");
+            */
+
+            out.println("</tbody></table>");
         }
     }
 
