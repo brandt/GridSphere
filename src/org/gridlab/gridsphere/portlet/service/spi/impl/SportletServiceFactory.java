@@ -453,7 +453,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             // Check user services that contain service name
             Enumeration ukeys = userServices.keys();
             while (ukeys.hasMoreElements()) {
-                String userID = (String)keys.nextElement();
+                String userID = (String)ukeys.nextElement();
                 Map userServiceMap  = (Map)userServices.get(userID);
                 Set s = userServiceMap.keySet();
                 Iterator i = s.iterator();
