@@ -37,9 +37,9 @@
         <mkdir dir="projects"/>
         <input message="Please enter a Project Title e.g. Cool Portlets" addproperty="project.title"/>
 
-        <input message="Please enter a Project Name this will be used for your portlet web application and should be lowercase e.g. coolportlets" addproperty="project.name"/>
+        <input message="Please enter a Project Name this will be used for your portlet web application and should be lowercase e.g. coolportlets" addproperty="newproject.name"/>
 
-        <property name="project.dir" value="projects/${project.name}"/>
+        <property name="project.dir" value="projects/${newproject.name}"/>
 
         <antcall target="check-project-exists"/>
         <fail if="${new-project-exists}" message="This project already exists! Please delete the old one in ${project.dir}"/>
