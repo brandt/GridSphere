@@ -13,7 +13,7 @@ import java.util.List;
  * An <code>ApplicationPortlet</code> represents the portlet application instance
  * defined in the portlet descriptor file.
 
- * @see <code>org.gridlab.gridsphere.portletcontainer.impl.descriptor.ApplicationSportletConfig</code>
+ * @see <code>org.gridlab.gridsphere.portletcontainer.gs.descriptor.ApplicationSportletConfig</code>
  */
 public interface ApplicationPortlet {
 

@@ -48,4 +48,11 @@ public interface ApplicationPortletConfig {
      * @return the supported modes for this portlet
      */
     public List getSupportedModes();
+
+    /**
+     * returns the amount of time in seconds that a portlet's content should be cached
+     *
+     * @return the amount of time in seconds that a portlet's content should be cached
+     */
+    public long getCacheExpires();
 }
