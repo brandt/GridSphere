@@ -1,6 +1,6 @@
 <!-- =======================================================================
 
-   Build file for the GridSphere Portal
+   Build file for the GridSphere Portal source code
 
 Notes:
    This is a build file for use with the Jakarta Ant build tool.
@@ -10,7 +10,7 @@ Prerequisites:
    jakarta-ant from http://jakarta.apache.org
 
 Build Instructions:
-   To build, invoke "ant"
+   Invoke "ant help"
 
 Copyright:
   2002,2003
@@ -123,15 +123,13 @@ Copyright:
     <target name="help" description="shows help about useful target">
         <echo message="target                 description"/>
         <echo message="-----------------------------------------------------------------"/>
-        <echo message="install-fresh          will do everything (clean, compile, docs, "/>
-        <echo message="                           mapping,jar,deploy)                   "/>
-        <echo message="clean                  will clean up the build dir               "/>
-        <echo message="runtests               will build and run the tests              "/>
-        <echo message="deploy                 deploys GS to tomcat                      "/>
-        <echo message="dist                   builds a binary GS distribution           "/>
-        <echo message="force-mapping          will rebuild the mapping file for castor  "/>
-        <echo message="force-database         will rebuild the databasestructure        "/>
-        <echo message="                           in the deployed gridsphere            "/>
+        <echo message="install-fresh          Installs GridSphere from fresh CVS checkout"/>
+        <echo message="clean                  Cleans up the build dir                    "/>
+        <echo message="compile-all            Compiles all the code including tests      "/>
+        <echo message="docs-all               Creates Javadoc API and GridSphere guides  "/>
+        <echo message="tests                  Builds and runs the unit tests             "/>
+        <echo message="deploy                 Deploys GS to tomcat                       "/>
+        <echo message="dist                   Builds a binary GS distribution            "/>
     </target>
 
     <!-- =================================================================== -->
@@ -185,7 +183,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Compiles JUnit tests                                                -->
     <!-- =================================================================== -->
-    <target name="compile-unit-tests" if="junit.present" depends="compile-core" description="Compiles all JUnit tests">
+    <target name="compile-unit-tests" depends="compile-core" description="Compiles all JUnit tests">
         <echo>Compiling JUnit Tests</echo>
         <javac srcdir="tests"
 		    destdir="${build.classes}"
@@ -599,15 +597,20 @@ Copyright:
     <!-- Deploys GridSphere to Tomcat                                        -->
     <!-- =================================================================== -->
     <target name="deploy" depends="gridsphere-tomcat-jar, all-non-gridsphere-jars, deploy-portlets" description="Deploys GridSphere to a local server">
+
         <!-- Make core gridsphere directory if necessary -->
         <echo message="Deploying GridSphere to Tomcat servlet container at ${env.CATALINA_HOME}"/>
         <mkdir dir="${GRIDSPHERE_HOME}"/>
         <mkdir dir="${GRIDSPHERE_HOME}/creds"/>
+
+        <!-- Copy over configuration files -->
         <copy todir="${GRIDSPHERE_HOME}">
-            <fileset dir="config"/>
+            <fileset dir="config">
+                <exclude name="*.properties"/>
+            </fileset>
         </copy>
 
-        <!-- copy the gridsphere web app to build directory -->
+        <!-- Copy the gridsphere web app to build directory -->
         <copy todir="${build.webapps}/gridsphere">
             <fileset dir="${gswebapp.dir}"/>
         </copy>
@@ -708,7 +711,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Runs all JUnit tests: needs optional.jar and junit in classpath     -->
     <!-- =================================================================== -->
-    <target name="run-tests" depends="compile-unit-tests, gridsphere-junit-jar" if="junit.present" description="Runs all JUnit tests">
+    <target name="run-tests" depends="compile-unit-tests, gridsphere-junit-jar" description="Runs all JUnit tests">
         <echo message="Running the GridSphere Junit Tests"/>
         <mkdir dir="${gridsphere.build}/reports"/>
 
@@ -730,14 +733,14 @@ Copyright:
         </junit>
     </target>
 
-    <target name="make-test-reports" depends="run-tests" if="junit.present" description="Execute Unit Tests">
+    <target name="make-test-reports" depends="run-tests" description="Execute Unit Tests">
        <echo message="Making GridSphere Junit Test Reports"/>
        <mkdir dir="${gridsphere.build}/reports/html"/>
        <junitreport todir="${gridsphere.build}/reports">
             <fileset dir="${gridsphere.build}/reports">
                 <include name="TEST-*.xml"/>
             </fileset>
-            <report format="noframes" todir="${gridsphere.build}/reports/html"/>
+            <report format="frames" todir="${gridsphere.build}/reports/html"/>
         </junitreport>
     </target>
 
@@ -769,6 +772,7 @@ Copyright:
         <!-- copy dist files -->
         <copy file="README" todir="${gridsphere.dist}"/>
         <copy file="LICENSE" todir="${gridsphere.dist}"/>
+        <copy file="config/build/build.deploy.xml" todir="${gridsphere.dist}"/>
 
         <copy todir="${gridsphere.dist}">
             <fileset dir="${gridsphere.build}">
@@ -779,6 +783,12 @@ Copyright:
 
         <copy todir="${gridsphere.dist}/lib">
             <fileset dir="lib"/>
+        </copy>
+
+        <copy todir="${gridsphere.dist}/config">
+            <fileset dir="config">
+                <exclude name="build/build.deploy.xml"/>
+            </fileset>
         </copy>
     </target>
 
