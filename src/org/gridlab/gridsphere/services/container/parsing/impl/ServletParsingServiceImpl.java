@@ -22,9 +22,11 @@ import java.util.List;
 public class ServletParsingServiceImpl implements PortletServiceProvider, ServletParsingService {
 
     private static PortletLog log = SportletLog.getInstance(ServletParsingServiceImpl.class);
+    private PortletServiceConfig config;
 
     public void init(PortletServiceConfig config) {
         log.info("in init()");
+        this.config = config;
     }
 
     public void destroy() {
@@ -37,7 +39,7 @@ public class ServletParsingServiceImpl implements PortletServiceProvider, Servle
     }
 
     public PortletResponse getPortletResponse(HttpServletResponse res) {
-        SportletResponse sportletResponse = new SportletResponse(res);
+        SportletResponse sportletResponse = new SportletResponse(res, config.getServletConfig().getServletName());
         return (PortletResponse) sportletResponse;
     }
 
