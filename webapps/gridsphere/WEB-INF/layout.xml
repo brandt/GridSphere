@@ -21,12 +21,12 @@
                 <title lang="cs">Nastavení</title>
                 <table-layout>
                     <row-layout>
-                        <column-layout width="50%">
+                        <column-layout>
                             <portlet-frame label="profile">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
-                        <column-layout width="50%"/>
+             <!--           <column-layout width="50%"/>  -->
                     </row-layout>
                 </table-layout>
             </portlet-tab>
