@@ -4,7 +4,7 @@
   "../common/docbook-xml-4.3CR1/docbookx.dtd" [
   <!-- Useful snippets -->
 
-<!ENTITY % GridSphereLinks SYSTEM "file:../common/GridSphereLinks.xml">
+<!ENTITY % GridSphereLinks SYSTEM "../common/GridSphereLinks.xml">
 
 %GridSphereLinks;
   
