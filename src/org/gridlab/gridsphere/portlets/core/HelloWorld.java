@@ -1,0 +1,29 @@
+/*
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+ * @version $Id$
+ */
+package org.gridlab.gridsphere.portlets.core;
+
+import org.gridlab.gridsphere.portlet.*;
+
+import javax.servlet.UnavailableException;
+import javax.servlet.RequestDispatcher;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+public class HelloWorld extends AbstractPortlet {
+
+    public void init(PortletConfig config) throws UnavailableException {
+        super.init(config);
+    }
+
+    public void execute(PortletRequest request) throws PortletException {
+        // do nothing
+    }
+
+    public void service(PortletRequest request, PortletResponse response)
+            throws PortletException, IOException {
+        getPortletConfig().getContext().include("/jsp/hello.jsp", request, response);
+    }
+
+}
