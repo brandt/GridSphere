@@ -212,9 +212,8 @@ public class DBTask extends Task {
             }
 
         } catch (BuildException e) {
-            log.info("Could not do shit.\n"+e);
+            log.info("Database not correctly installed.\n"+e);
             throw new BuildException("The database is not correctly installed!");
         }
     }
-
 }
