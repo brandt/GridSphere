@@ -7,7 +7,10 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.exolab.castor.jdo.Database;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.services.user.UserManagerService;
 
 import javax.servlet.http.HttpSessionBindingListener;
 import javax.servlet.http.HttpSessionBindingEvent;
@@ -29,6 +32,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
 
     // store used to maintain user attributes
     private transient Hashtable Store = new Hashtable();
+    private transient PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
 
     // Data fields that make up the Role object
     /**
@@ -310,6 +314,12 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
 
     public void valueUnbound(HttpSessionBindingEvent event) {
         System.err.println("valueUnbound of SportletUserImpl invoked");
+        try {
+            pm.update(this);
+        } catch(PersistenceManagerException e) {
+            // what can we do??
+        }
+        pm = null;
     }
 
     /**
@@ -319,13 +329,13 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
      */
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("FamilyName: " + FamilyName);
-        sb.append("FullName: " + FullName);
-        sb.append("GivenName: " + GivenName);
-        sb.append("EmailAddress: " + EmailAddress);
-        sb.append("Id: " + getOid());
-        sb.append("UserID: " + UserID);
-        sb.append("LastLoginTime: " + LastLoginTime);
+        sb.append("FamilyName: " + FamilyName + "\n");
+        sb.append("FullName: " + FullName + "\n");
+        sb.append("GivenName: " + GivenName + "\n");
+        sb.append("EmailAddress: " + EmailAddress + "\n");
+        sb.append("Id: " + getOid() + "\n");
+        sb.append("UserID: " + UserID + "\n");
+        sb.append("LastLoginTime: " + LastLoginTime + "\n");
         return sb.toString();
     }
 }
