@@ -483,7 +483,7 @@ public class PortletPage implements Serializable, Cloneable {
         out.println("  <title>" + title + "</title>");
         out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>");
         out.println("<meta name=\"keywords\" content=\"" + keywords + "\"/>");
-        out.println("<meta http-equiv=\"Pragma content=\"no-cache\"/>");
+        out.println("<meta http-equiv=\"Pragma\" content=\"no-cache\"/>");
         out.println("  <link type=\"text/css\" href=\"themes/" + theme + "/css" +
                 "/default.css\" rel=\"stylesheet\"/>");
         out.println("<link rel=\"icon\" href=\"images/favicon.ico\" type=\"imge/x-icon\">");
