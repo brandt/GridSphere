@@ -14,7 +14,6 @@ Version: $Id$
 .window-title-inactive {
   background-color: #69a8e7;
   color: #000000;
-  font-size: 12px;
   width: 100%;
   border-top: 1px solid #0053e2;
   border-right: 1px solid #0053e2;
@@ -24,7 +23,6 @@ Version: $Id$
 .window-title-active {
   background-color: #0023B2;
   color: #000000;
-  font-size: 12px;
   width: 100%;
   border-top: 1px solid #0053e2;
   border-right: 1px solid #0053e2;
@@ -33,7 +31,7 @@ Version: $Id$
 
 .window-title-name {
   color: white;
-  font-family: 'Lucida Grande', Geneva, Verdana, Arial, sans-serif;;
+  font-family: inherit;
   text-align: center;
   font-weight: bold;
 }

@@ -18,7 +18,6 @@ Version: $Id$
 
 .ui-datagrid-title {
 
-    font-size: 18px;
     padding: 2px;
 
 }
@@ -29,14 +28,12 @@ Version: $Id$
 }
 
 .ui-datagrid-controls-element-inactive {
-    font-size: 10px;
     color: #bbbdb6;
     border-right: 1px solid #bbbdb6;
     padding-right: 5px;
 }
 
 a.ui-datagrid-controls-element-active {
-    font-size: 10px;
     color: #bbbdb6;
     border-right: 1px solid #bbbdb6;
     padding-right: 5px;

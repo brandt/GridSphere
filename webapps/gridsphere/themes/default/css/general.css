@@ -9,8 +9,6 @@ Version: $Id$
 
 a {
   color: #000000;
-  font-family: verdana, arial, sans-serif;
-  font-size:12px;
   text-decoration: none;
   /*font-weight:bold;  */
 }
@@ -34,9 +32,9 @@ a:hover {
 /* default settings                             */
 
 body {
-  font-family: verdana, arial, sans-serif;
-  font-size:12px;
+  font-family: lucida, verdana, "Lucida Grande", helvetica, arial, sans-serif;
   font-weight:normal;
+  font-size: 12px;
   margin: 0px;
   background-color: #FFFFFF;
   color: #000000;
@@ -61,6 +59,5 @@ input[type=submit] {
 
 input, select, textarea {
   font-size: inherit;
-  font-family: 'Lucida Grande', Geneva, Verdana, Arial, sans-serif;
 }
 

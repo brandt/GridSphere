@@ -5,8 +5,7 @@ Version: $Id$
 */
 
 #page-logo {
-  font-family:Franklin Gothic Medium, verdana, arial, sans-serif;
-  color: #FFFFFF;
+  color: #0079b8;
   font-size: 36px;
   font-weight: normal;
   background:#d6d6d6;
@@ -17,9 +16,7 @@ Version: $Id$
 }
 
 #page-tagline {
-  font-family:Franklin Gothic Medium, verdana, arial, sans-serif;
   color:#cbccce;
-  font-size:16px;
   background:#d6d6d6;
   padding-left: 15px;
   padding-right: 15px;

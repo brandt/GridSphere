@@ -82,7 +82,6 @@ Version: $Id$
   border: none;
   color: #000000;
   font-family: inherit;
-  font-size: 10px;
   text-align: center;
 }
 
@@ -91,7 +90,6 @@ Version: $Id$
   border: none;
   color: #FFFFFF;
   font-family: inherit;
-  font-size: -1;
   text-align: center;
   vertical-align: middle;
   width: 12;
@@ -166,7 +164,6 @@ Version: $Id$
   border: none;
   color: #000000;
   font-family: inherit;
-  font-size: -1;
   text-align: center;
   vertical-align: middle;
   width: 12;
@@ -180,10 +177,9 @@ used to display non-accentuated information
 .portlet-font {
    color:black;
    background-color:white;
-   font-size:12px;
    font-weight:normal;
    font-style:normal;
-   font-family:verdana, arial, sans-serif;
+   font-family:inherit;
    line-height:normal;
    text-align:left;
    text-decoration:none;
@@ -196,10 +192,9 @@ in lighter color
 .portlet-font-dim {
    color:gray;
    background-color:white;
-   font-size:12px;
    font-weight:normal;
    font-style:normal;
-   font-family:verdana, arial, sans-serif;
+   font-family:inherit;
    line-height:normal;
    text-align:left;
    text-decoration:none;
@@ -214,8 +209,6 @@ in lighter color
   Status of the current operation
 **********************************************/
 .portlet-msg-status {
-   font-size:13px;
-   /* font-family:verdana, arial,sans-serif; */
    font-family:inherit;
    color:darkblue;
    font-style:italic;
@@ -232,8 +225,6 @@ in lighter color
   information, etc.
 **********************************************/
 .portlet-msg-info {
-   font-size:11px;
-   /* font-family:courier, courier new, monospaced; */
    font-family:inherit;
    color:black;
    background-color:inherit;
@@ -247,8 +238,6 @@ in lighter color
   Error messages
 **********************************************/
 .portlet-msg-error {
-   font-size:14px;
-   /* font-family:verdana, arial, sans-serif; */
    font-family:inherit;
    font-variant:small-caps;
    color:darkred;
@@ -264,8 +253,6 @@ in lighter color
   Warning messages
 **********************************************/
 .portlet-msg-alert {
-   font-size:14px;
-   /* font-family:verdana, arial, sans-serif; */
    font-family:inherit;
    font-variant:small-caps;
    color:darkorange;
@@ -282,8 +269,6 @@ in lighter color
   of a task
 **********************************************/
 .portlet-msg-success {
-   font-size:14px;
-   /* font-family:courier, courier new, monospaced; */
    font-family:inherit;
    font-variant:small-caps;
    letter-spacing:2px;
@@ -308,7 +293,6 @@ in lighter color
   border: none;
   color: #000000;
   font-family: inherit;
-  font-size: 10px;
   text-align: center;
 }
 
@@ -339,10 +323,9 @@ in lighter color
 .portlet-section-selected {
    color:grey;
    background-color:white;
-   font-size:12px;
    font-weight:normal;
    font-style:normal;
-   font-family:verdana, arial, sans-serif;
+   font-family:inherit;
    line-height:normal;
    text-align:left;
    text-decoration:none;
@@ -357,10 +340,9 @@ in lighter color
 .portlet-section-subheader{
    color:black;
    background-color:white;
-   font-size:13px;
    font-weight:bold;
    font-style:normal;
-   font-family:verdana, arial, sans-serif;
+   font-family:inherit;
    line-height:normal;
    text-align:center;
    text-decoration:none;
@@ -375,10 +357,9 @@ in lighter color
 .portlet-section-footer{
    color:black;
    background-color:white;
-   font-size:10px;
    font-weight:normal;
    font-style:italic;
-   font-family:verdana, arial, sans-serif;
+   font-family:inherit;
    line-height:normal;
    text-align:left;
    text-decoration:none;
@@ -394,10 +375,9 @@ in lighter color
 .portlet-section-text{
    color:black;
    background-color:white;
-   font-size:11px;
    font-weight:lighter;
    font-style:italic;
-   font-family:verdana, arial, sans-serif;
+   font-family:inherit;
    line-height:normal;
    text-align:left;
    text-decoration:none;
@@ -417,10 +397,9 @@ in lighter color
 .portlet-form-label{
    color:black;
    /* background-color:white;  */
-   font-size:12px;
    font-weight:bold;
    font-style:normal;
-   font-family:verdana, arial, sans-serif;
+   font-family:inherit;
    line-height:normal;
    text-align:left;
    text-decoration:none;
@@ -431,11 +410,9 @@ in lighter color
 **********************************************/
 .portlet-form-input-field{
    color:black;
-   background-color:#f0f0f0;
-   font-size:12px;
+   background-color:#FFFFFF;
    font-weight:normal;
    font-style:normal;
-   font-family:verdana, sans-serif;
    font-family:inherit;
    line-height:normal;
    text-align:left;
@@ -448,10 +425,8 @@ in lighter color
 .portlet-form-button{
    color:black;
    background-color:#f0f0f0;
-   font-size:12px;
-   font-weight:bold;
+   font-weight:normal;
    font-style:normal;
-   font-family:verdana, sans-serif;
    font-family:inherit;
    line-height:normal;
    text-align:center;
@@ -465,10 +440,9 @@ in lighter color
 .portlet-icon-label{
    color:steelblue;
    background-color:white;
-   font-size:14px;
    font-weight:normal;
    font-style:normal;
-   font-family:verdana, arial, sans-serif;
+   font-family:inherit;
    line-height:normal;
    text-align:center;
    text-decoration:none;
@@ -481,10 +455,9 @@ in lighter color
 .portlet-dlg-icon-label{
    color:darkblue;
    background-color:white;
-   font-size:14px;
    font-weight:normal;
    font-style:normal;
-   font-family:verdana, arial, sans-serif;
+   font-family:inherit;
    line-height:normal;
    text-align:center;
    text-decoration:none;
@@ -497,10 +470,9 @@ in lighter color
 .portlet-form-field-label{
    color:black;
    background-color:white;
-   font-size:11px;
    font-weight:normal;
    font-style:normal;
-   font-family:courier, courier new, monospaced;
+   font-family:inherit;
    line-height:normal;
    text-align:left;
    text-decoration:none;
@@ -620,7 +592,6 @@ in lighter color
     color: #FFFFFF;
     font-weight: bold;
     text-align:center;
-    font-size: 12px;
     margin-bottom: 5px;
 
 }

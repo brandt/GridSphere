@@ -7,11 +7,13 @@ Version: $Id$
 .tab-pane {
    font-family: 'Lucida Grande', Geneva, Verdana, Arial, sans-serif;
    font-weight:normal;
+    background: #d6d6d6;
    border-bottom: 1px solid #0B54B0;
 }
 
 .tab-empty {
    border-bottom: 1px solid black;
+    background: #d6d6d6;
    border-right: 1px solid black;
 }
 
@@ -30,7 +32,7 @@ Version: $Id$
 
 .tab-active {
    color:black;
-   font-size: 10px;
+   font-size:11px;
 }
 
 
@@ -40,7 +42,7 @@ Version: $Id$
    padding-top: 3px;
    background-color: #7997de;
    color: black;
-   font-size:10px;
+   font-size:11px;
    margin-left: 10px;
    border-top: 1px solid black;
    border-bottom: 1px solid black;
@@ -50,7 +52,7 @@ Version: $Id$
 a.tab-menu {
   text-decoration:none;
   color: black;
-  font-size:10px;
+  font-size:11px;
 }
 
 a.tab-menu:link {
@@ -70,7 +72,7 @@ a.tab-menu:active {
 .tab-sub-active {
     font-weight: normal;
     color: white;
-    font-size: 10px;
+    font-size:11px;
     margin-left: 5px;
 }
 
@@ -87,38 +89,44 @@ a.tab-menu:active {
 
 a.tab-sub-menu {
     text-decoration:none;
-    font-size:10px;
+    font-size:11px;
     color: #000000;
 }
 
 a.tab-sub-menu:link {
-    font-size: 10px;
+    font-size:11px;
 }
 
 a.tab-sub-menu:visited {
+    font-size:11px;
 }
 
 a.tab-sub-menu:hover {
-  color: blue;
+    font-size:11px;
+    color: blue;
 }
 
 a.tab-sub-menu:active {
+    font-size:11px;
   color: #ebebeb;
 }
 
 a.tab-sub-menu-active {
-    font-size:inherit;
+    font-size:11px;
     color: white;
 }
 
 a.tab-sub-menu-active:link {
+    font-size:11px;
 }
 
 a.tab-sub-menu-active:visited {
+    font-size:11px;
 }
 
 a.tab-sub-menu-active:hover {
     color: blue;
+    font-size:11px;
 }
 
 a.tab-sub-menu-active:active {
