@@ -259,24 +259,28 @@ public class PortletTabBar extends BasePortletComponent {
         }
         req.setAttribute(LayoutProperties.TABLINKS, tabLinks);
 
-        // Render tabs titles
-        out.println("<div class=\"tab-sub-pane\">");
-        out.println("<div class=\"tab-sub-menu\">");
 
+        out.println("<table border=\"0\" class=\"tab-sub-pane\" width=\"100%\"><tr><td>");
+
+        out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>");
         PortletTabPage tabPage;
         for (i = 0; i < tabPages.size(); i++) {
             String title = getTitleAt(i);
             tabPage = (PortletTabPage)tabPages.get(i);
             if (tabPage.isSelected()) {
-                out.println("<span class=\"tab-sub-active\">" + title + "</span>");
+                ///out.println("<span class=\"tab-sub-active\">" + title + "</span>");
+                out.println("<td> <span class=\"tab-sub-active\">"+title+"</span></td>");
             } else {
-                out.println("<span class=\"tab-sub-inactive\"><a class=\"tab-sub-menu\" href=\"" + tabLinks[i] + "\" >" +  title + "</a></span>");
+                ///out.println("<span class=\"tab-sub-inactive\"><a class=\"tab-sub-menu\" href=\"" + tabLinks[i] + "\" >" +  title + "</a></span>");
+                out.println("<td> <span class=\"tab-sub-inactive\">");
+                out.println("<a class=\"tab-sub-menu\" href=\"" + tabLinks[i] + "\" >" +  title + "</a>");
+                out.println("</span></td>");
             }
         }
 
-        out.println("</div></div><div class=\"tab-bar\"></div>");
+        out.println("</tr></table>");
 
-
+        out.println("</td></tr></table>");
         LayoutManager layoutManager = selectedPanel.getLayoutManager();
         layoutManager.doRender(event);
 

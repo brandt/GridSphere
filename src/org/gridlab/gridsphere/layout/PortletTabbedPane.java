@@ -260,23 +260,31 @@ public class PortletTabbedPane extends BasePortletComponent {
         req.setAttribute(LayoutProperties.TABLINKS, tabLinks);
 
         // Render tabs titles
-        out.println("<div class=\"tab-pane\">");
-        out.println("<div class=\"tab-menu\">");
-        out.println("<span class=\"tab-empty\">&nbsp;</span>");
 
+        ///out.println("<div class=\"tab-pane\">");
+        ///out.println("<div class=\"tab-menu\">");
+        ///out.println("<span class=\"tab-empty\">&nbsp;</span>");
+
+        out.println("<table class=\"tab-pane\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
+        out.println("<tr>");
 
         PortletTab tab;
         for (i = 0; i < tabs.size(); i++) {
             String title = getTitleAt(i);
             tab = (PortletTab)tabs.get(i);
             if (tab.isSelected()) {
-                out.println("<span class=\"tab-active\">" + title + "</span>");
+           ///     out.println("<span class=\"tab-active\">" + title + "</span>");
+
+                out.println("<td class=\"tab-active\">" + title + "</td>");
             } else {
-                out.println("<span class=\"tab-inactive\"><a class=\"tab-menu\" href=\"" + tabLinks[i] + "\" >" +  title + "</a></span>");
+           ///     out.println("<span class=\"tab-inactive\"><a class=\"tab-menu\" href=\"" + tabLinks[i] + "\" >" +  title + "</a></span>");
+                out.println("<td class=\"tab-inactive\"><a class=\"tab-menu\" href=\"" + tabLinks[i] + "\" >" +  title + "</a>");
             }
+            out.println("<td class=\"tab-empty\">&nbsp;</td>");
         }
 
-        out.println("</div></div>");//<div id=\"tab-bar\"></div>");
+        ///out.println("</div></div>");//<div id=\"tab-bar\"></div>");
+        out.println("</tr></table>");
 
         selectedTabBar.doRender(event);
     }
