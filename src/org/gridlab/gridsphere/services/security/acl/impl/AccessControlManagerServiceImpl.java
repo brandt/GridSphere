@@ -27,10 +27,14 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     protected transient static PortletLog log = SportletLog.getInstance(AccessControlManagerServiceImpl.class);
 
     private PersistenceManagerRdbms pm = null;
+    private String jdoUserACL = new String();
+    private String jdoSportletGroup = new String();
 
     public AccessControlManagerServiceImpl() {
         super();
         pm = PersistenceManagerRdbms.getInstance();
+        jdoUserACL = UserACL.class.getName();
+        jdoSportletGroup = SportletGroup.class.getName();
     }
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
@@ -99,7 +103,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
      */
     public void renameGroup(PortletGroup group, String newGroupName) throws PortletServiceException {
         String command =
-                "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g where g.ObjectID=" + group.getID();
+                "select g from "+jdoSportletGroup+" g where g.ObjectID=" + group.getID();
         try {
             SportletGroup pg = (SportletGroup) pm.restoreObject(command);
             pg.setName(newGroupName);
@@ -117,11 +121,11 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     public void removeGroup(PortletGroup group) throws PortletServiceException {
         String groupid = group.getID();
         String command =
-                "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g where g.ObjectID=" + groupid;
+                "select g from "+jdoSportletGroup+" g where g.ObjectID=" + groupid;
         delete(command);
 
         command =
-                "select g from org.gridlab.gridsphere.services.security.acl.impl.UserACL g where g.GroupID=" + groupid;
+                "select g from "+jdoUserACL+" g where g.GroupID=" + groupid;
         delete(command);
     }
 
@@ -135,9 +139,9 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     public void approveUserInGroup(User user, PortletGroup group) throws PortletServiceException {
         // all users need to make an accountrequest to get in groups, without it ... no
 
-        String command2 = "select acl from org.gridlab.gridsphere.services.security.acl.impl.UserACL acl where " +
+        String command2 = "select acl from "+jdoUserACL+" acl where " +
                 "UserID=\"" + user.getID() + "\" and GroupID=\"" + group.getID() + "\" and Status=" + UserACL.STATUS_APPROVED;
-        String command = "select acl from org.gridlab.gridsphere.services.security.acl.impl.UserACL acl where " +
+        String command = "select acl from "+jdoUserACL+" acl where " +
                 "UserID=\"" + user.getID() + "\" and GroupID=\"" + group.getID() + "\" and Status=" + UserACL.STATUS_NOT_APPROVED;
 
         UserACL notapproved = null;
@@ -175,7 +179,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
      */
     public void removeUserFromGroup(User user, PortletGroup group) throws PortletServiceException {
         String command =
-                "select r from org.gridlab.gridsphere.services.security.acl.impl.UserACL r where r.UserID=" + user.getID() +
+                "select r from "+jdoUserACL+" r where r.UserID=" + user.getID() +
                 " and r.GroupID=" + group.getID() + " and r.Status=" + UserACL.STATUS_APPROVED;
         delete(command);
     }
@@ -187,7 +191,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
      */
     public void removeUserGroupRequest(User user, PortletGroup group) throws PortletServiceException {
         String command =
-                "select r from org.gridlab.gridsphere.services.security.acl.impl.UserACL r where r.UserID=" + user.getID() +
+                "select r from "+jdoUserACL+" r where r.UserID=" + user.getID() +
                 " and r.GroupID=" + group.getID() + " and r.Status=" + UserACL.STATUS_NOT_APPROVED;
         delete(command);
 

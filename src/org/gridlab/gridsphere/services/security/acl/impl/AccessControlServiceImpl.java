@@ -14,6 +14,7 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
+import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
@@ -29,14 +30,21 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
 
     protected transient static PortletLog log = SportletLog.getInstance(AccessControlServiceImpl.class);
 
-    PersistenceManagerRdbms pm = null;
+    private PersistenceManagerRdbms pm = null;
+    private String jdoUserACL = new String();
+    private String jdoSportletUserImpl = new String();
+    private String jdoSportletGroup = new String();
 
     public AccessControlServiceImpl() throws PersistenceManagerException {
         super();
 
         pm = PersistenceManagerRdbms.getInstance();
+        jdoUserACL = UserACL.class.getName();
+        jdoSportletUserImpl = SportletUserImpl.class.getName();
+        jdoSportletGroup = SportletGroup.class.getName();
 
         log.info("AccessControlServiceImpl constructor done ");
+
     }
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
@@ -82,12 +90,12 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
     // @todo check the length of the second query string, could get too long!
 
         String command =
-            "select u from org.gridlab.gridsphere.services.security.acl.impl.UserACL u where u.RoleID=\""+PortletRole.SUPER.getRole()+
+            "select u from "+jdoUserACL+" u where u.RoleID=\""+PortletRole.SUPER.getRole()+
                 "\" and u.Status="+UserACL.STATUS_APPROVED;
         //log.info(command);
         List acl = listACL(command);
 
-        command = "select u from org.gridlab.gridsphere.portlet.impl.SportletUserImpl u where ";
+        command = "select u from "+jdoSportletUserImpl+" u where ";
         for (int i=0;i<acl.size();i++) {
             if (i!=0) {
                 command = command +" and ";
@@ -114,7 +122,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
     public boolean hasRoleInGroup(User user, PortletGroup group, PortletRole role) throws PortletServiceException{
 
         String command =
-            " select ua from org.gridlab.gridsphere.services.security.acl.impl.UserACL ua where "+
+            " select ua from "+jdoUserACL+" ua where "+
             "UserID=\""+user.getID()+"\" and RoleID="+role.getID()+" and GroupID=\""+group.getID()+
             "\" and Status="+UserACL.STATUS_APPROVED;
 
@@ -131,7 +139,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
     public List getUsersInGroup(PortletRole role, PortletGroup group) throws PortletServiceException{
 
         String command =
-            "select u from org.gridlab.gridsphere.services.security.acl.impl.UserACL u where u.RoleID=\""+role.getID()+
+            "select u from "+jdoUserACL+" u where u.RoleID=\""+role.getID()+
             " and u.GroupID="+group.getID()+" and u.Status="+UserACL.STATUS_APPROVED;
         return listACL(command);
     }
@@ -144,7 +152,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
     public List getAllGroups() throws PortletServiceException {
 
         String command =
-            "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g";
+            "select g from "+jdoSportletGroup+" g";
         List result = null;
 
         try {
@@ -158,7 +166,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
 
     private PortletGroup getGroupByID(String id) throws PortletServiceException {
         String command =
-            "select g from org.gridlab.gridsphere.portlet.impl.SportletGroup g where g.ObjectID=\""+id+"\"";
+            "select g from "+jdoSportletGroup+" g where g.ObjectID=\""+id+"\"";
         PortletGroup g = null;
         try {
             g = (PortletGroup)pm.restoreObject(command);
@@ -183,7 +191,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
         log.info("ID "+user.getID());
 
         String command =
-            "select u from org.gridlab.gridsphere.services.security.acl.impl.UserACL u where u.UserID=\""+user.getID()+
+            "select u from "+jdoUserACL+" u where u.UserID=\""+user.getID()+
                 "\" and u.Status="+UserACL.STATUS_APPROVED;
         List acl = new Vector();
 
@@ -212,7 +220,7 @@ public class AccessControlServiceImpl  implements AccessControlService, PortletS
     public boolean isUserInGroup(User user, PortletGroup group) throws PortletServiceException{
 
         String command =
-            "select u from org.gridlab.gridsphere.services.security.acl.impl.UserACL u where u.UserID=\""+user.getID()+
+            "select u from "+jdoUserACL+" u where u.UserID=\""+user.getID()+
             "\" and u.GroupID="+group.getID()+" and u.Status="+UserACL.STATUS_APPROVED;
 
        return queryACL(command);

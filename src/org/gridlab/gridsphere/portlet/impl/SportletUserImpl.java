@@ -82,7 +82,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser {
     }
 
     /**
-     * Returns the value of the attribute with the given name,
+     * Returns the value of the attribute with the given name,s
      * or null if no attribute with the given name exists.
      *
      * @param name the attribute name
@@ -288,15 +288,23 @@ public class SportletUserImpl extends BaseObject implements SportletUser {
     }
 
     public void jdoBeforeCreate(Database database) throws Exception {
-        super.jdoBeforeCreate(database);
+
+        //super.jdoBeforeCreate(database);
         convert2vector();
     }
+
+
 
     public Class jdoLoad(short i) throws Exception {
         convert2hash();
         return super.jdoLoad(i);
-
     }
+
+    public void jdoUpdate() {
+        convert2vector();
+    }
+
+
 
     /**
      * Returns a string representaation of the User

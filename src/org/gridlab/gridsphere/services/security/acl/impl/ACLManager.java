@@ -23,6 +23,8 @@ import java.util.Vector;
 public class ACLManager {
 
 
+    // work in progress, all in one place
+
     protected transient static PortletLog log = SportletLog.getInstance(ACLManager.class);
 
     private PersistenceManagerRdbms pm = null;
