@@ -5,10 +5,12 @@
 package org.gridlab.gridsphere.portletcontainer;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.ServletParsingService;
 import org.gridlab.gridsphere.services.PortletRegistryService;
+import org.gridlab.gridsphere.portletcontainer.impl.RegisteredSportletImpl;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,8 +36,9 @@ public class GridSphere extends HttpServlet {
     private static PortletRegistryService registryService = null;
     private static ServletParsingService  parseService = null;
 
-    private static Set abstractPortlets = new HashSet();
-    private static Set registeredPortlets = null;
+    private static Collection abstractPortlets = new HashSet();
+    private static Collection registeredPortlets = null;
+    private static PortletConfig portletConfig;
 
     private static boolean firstDoGet = true;
 
@@ -45,6 +48,7 @@ public class GridSphere extends HttpServlet {
         synchronized (this.getClass()) {
             try {
                 configure(config);
+                portletConfig = new SportletConfig(config);
             } catch (Exception e) {
                 log.error("init failed: ", e);
             }
@@ -81,17 +85,20 @@ public class GridSphere extends HttpServlet {
 
         // Get available portlets from PortletRegistry the first time the portal is accessed
         if (firstDoGet) {
-                registeredPortlets = registryService.getRegisteredPortlets();
                 Iterator it = registryService.getRegisteredPortlets().iterator();
                 while (it.hasNext()) {
                     RegisteredPortlet regPortlet = (RegisteredPortlet)it.next();
+                    System.err.println("portlet name: " + regPortlet.getPortletName());
+
                     AbstractPortlet abPortlet = regPortlet.getActivePortlet();
                     abstractPortlets.add(abPortlet);
                     PortletConfig portletConfig = regPortlet.getPortletConfig();
                     PortletSettings portletSettings = regPortlet.getPortletSettings();
+
                     abPortlet.init(portletConfig);
                     abPortlet.initConcrete(portletSettings);
                 }
+
                 firstDoGet = false;
         }
 
@@ -158,6 +165,12 @@ public class GridSphere extends HttpServlet {
         //helloPortlet.service(portletRequest, portletResponse);
 
         Iterator it = abstractPortlets.iterator();
+        PrintWriter out = portletResponse.getWriter();
+
+        out.println("<html><body bcolor=white>");
+        out.println("<table>");
+        out.println("<tr><th>Portlet1</th></tr>");
+
         while (it.hasNext()) {
             AbstractPortlet ab = (AbstractPortlet)it.next();
 
@@ -165,13 +178,23 @@ public class GridSphere extends HttpServlet {
             ab.execute(portletRequest);
 
             // Second forward to presentation logic
+            out.println("<tr><th>Portlet2</th></tr>");
+            out.println("<tr>");
+            out.println();
+            ab.service(portletRequest, portletResponse);
+            out.println("</tr>");
+            out.println("<tr><th>Portlet3</th></tr>");
             ab.service(portletRequest, portletResponse);
         }
+
+        out.println("</table>");
+        out.println("</body></html>");
 
         //helloPortlet.logout(portletRequest.getPortletSession());
         //helloPortlet.destroyConcrete(portletSettings);
         //helloPortlet.destroy(portletConfig);
 
+        //portletConfig.getContext().include("/jsp/hello.jsp", portletRequest, portletResponse);
     }
 
     public final void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
