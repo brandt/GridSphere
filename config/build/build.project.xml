@@ -46,6 +46,7 @@ Copyright:
     <property name="GRIDSPHERE_PROJECT" value="../../"/>
 
     <!-- GridSphere build targets -->
+    <property name="build.lib"    value="${project.build}/lib"/>
     <property name="build.home"    value="${project.build}/home"/>
     <property name="build.classes" value="${project.build}/classes"/>
     <property name="build.webapp" value="${project.build}/webapp"/>
@@ -79,12 +80,16 @@ Copyright:
             <include name="*.jar"/>
         </fileset>
 
-        <fileset dir="${GRIDSPHERE_PROJECT}/lib">
+        <fileset dir="${env.CATALINA_HOME}/shared/lib">
             <include name="*.jar"/>
-            <include name="ext/*.jar"/>
+            <exclude name="${project.name}-services.jar"/>
         </fileset>
 
-        <fileset dir="lib/ext/">
+        <fileset dir="${GRIDSPHERE_PROJECT}/build/lib">
+            <include name="*.jar"/>
+        </fileset>
+
+        <fileset dir="lib">
             <include name="*.jar"/>
         </fileset>
 
@@ -99,9 +104,9 @@ Copyright:
         <!-- Make build directories -->
         <mkdir dir="src"/>
         <mkdir dir="lib"/>
-	    <mkdir dir="lib/ext"/>
         <mkdir dir="${project.build}"/>
         <mkdir dir="${build.home}"/>
+        <mkdir dir="${build.lib}"/>
         <mkdir dir="${build.classes}"/>
         <mkdir dir="${build.webapp}"/>
         <mkdir dir="${build.docs}"/>
@@ -227,9 +232,8 @@ Copyright:
         <copy file="config/log4j.properties"
                   tofile="${build.classes}/${project.name}/log4j.properties"/>
 
-        <jar jarfile="lib/${project.name}.jar" basedir="${build.classes}" >
-            <include name="**" />
-            <exclude name="**/services/**"/>
+        <jar jarfile="${build.lib}/${project.name}.jar" basedir="${build.classes}" >
+            <include name="**/portlets/**"/>
             <include name="${project.name}/**" />
         </jar>
      </target>
@@ -245,8 +249,9 @@ Copyright:
         <copy file="config/log4j.properties"
                   tofile="${build.classes}/${project.name}/log4j.properties"/>
 
-        <jar jarfile="lib/ext/${project.name}-services.jar" basedir="${build.classes}" >
+        <jar jarfile="${build.lib}/${project.name}-services.jar" basedir="${build.classes}" >
             <include name="**/services/**"/>
+            <include name="${project.name}/**" />
         </jar>
      </target>
 
@@ -310,19 +315,21 @@ Copyright:
         <copy file="${GRIDSPHERE_PROJECT}/build/lib/gridsphere-provider.jar" todir="${project.webapp}/WEB-INF/lib"/>
         <copy file="${GRIDSPHERE_PROJECT}/build/lib/gridsphere-ui-tags.jar" todir="${project.webapp}/WEB-INF/lib"/>
 
-        <copy todir="${project.webapp}/WEB-INF/lib">
-            <fileset dir="lib">
-                <include name="*portlets.jar"/>
+        <copy overwrite="true" todir="${project.webapp}/WEB-INF/lib">
+            <fileset dir="${build.lib}">
+                <include name="${project.name}.jar"/>
             </fileset>
         </copy>
 
         <copy todir="${env.CATALINA_HOME}/shared/lib">
-            <fileset dir="lib/ext">
-                <include name="*-services.jar"/>
-                <include name="*-test.jar"/>
+            <fileset dir="${build.lib}">
+                <include name="${project.name}-services.jar"/>
+                <include name="${project.name}-test.jar"/>
+            </fileset>
+            <fileset dir="lib">
+                <include name="*.jar"/>
             </fileset>
         </copy>
-
     </target>
 
     <target name="install" depends="deploy">
