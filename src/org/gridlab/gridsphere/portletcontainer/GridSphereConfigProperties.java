@@ -34,4 +34,10 @@ public interface GridSphereConfigProperties {
     public static final String LAYOUT_MAPPING_XML = "LAYOUT_MAPPING_XML";
     public static final String USER_LAYOUT_DIR = "USER_LAYOUT_DIR";
 
+    /**
+     * Configuration ofor the used persistence database
+     */
+    public static final String PERSISTENCE_CONFIGFILE = "PERSISTENCE_CONFIGFILE";
+    public static final String PERSISTENCE_DBNAME = "PERSISTENCE_DBNAME";
+
 }
