@@ -6,7 +6,6 @@ package org.gridlab.gridsphere.portletcontainer.descriptor;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.apache.cactus.ServletTestCase;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.Portlet;
 import org.gridlab.gridsphere.portlet.PortletRole;
@@ -15,7 +14,6 @@ import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereServletTest;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.*;
-import org.gridlab.gridsphere.GridSphereScenarios;
 
 import java.io.IOException;
 import java.util.Hashtable;

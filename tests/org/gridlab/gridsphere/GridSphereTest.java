@@ -12,7 +12,6 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.descriptor.ServiceDescrip
 import org.gridlab.gridsphere.portletcontainer.GridSphereServletTest;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDescriptorTest;
 import org.gridlab.gridsphere.services.core.user.SetupRootUserTest;
-import org.gridlab.gridsphere.services.core.user.SetupTestGroupsTest;
 import org.gridlab.gridsphere.services.core.user.SetupTestUsersTest;
 import org.gridlab.gridsphere.services.core.user.SetupUsersRolesTest;
 

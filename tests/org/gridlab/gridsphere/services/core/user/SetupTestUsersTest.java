@@ -6,15 +6,11 @@ package org.gridlab.gridsphere.services.core.user;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.GridSphereScenarios;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
-import org.apache.cactus.ServletTestCase;
 
 import java.util.List;
-import java.util.Iterator;
 
 public class SetupTestUsersTest extends SetupRootUserTest {
 

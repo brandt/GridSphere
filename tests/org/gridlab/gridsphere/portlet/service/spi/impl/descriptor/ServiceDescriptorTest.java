@@ -10,8 +10,6 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereServletTest;
-import org.gridlab.gridsphere.GridSphereScenarios;
-import org.apache.cactus.ServletTestCase;
 
 import java.io.IOException;
 import java.util.List;
