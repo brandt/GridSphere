@@ -126,7 +126,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
             pdd = new PortletDeploymentDescriptor(gsportletXMLfile, portletMappingFile);
         } catch (Exception e) {
             log.error("Mapping Error! " + webApplicationName, e);
-            throw new PortletException("Unable to load portlets from: " + webApplicationName + " + due to mapping error");
+            throw new PortletException("Unable to load portlets from: " + webApplicationName + " + due to mapping error!");
         }
         // Every SportletDefinition has a PortletApplication and possibly multiple ConcretePortletConfig's
         Iterator portletDefs = pdd.getPortletDefinitionList().iterator();
@@ -156,7 +156,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
                 PortletTabRegistry.copyFile(fin, groupName);
                 log.info("Loaded a layout descriptor " + groupName);
             } catch (Exception e) {
-                throw new PortletException("Unable to deserialize layout.xml for: " + groupName, e);
+                throw new PortletException("Unable to deserialize layout.xml for: " + groupName + "!", e);
             }
         } else {
             log.debug("Did not find layout.xml for: " + ctx.getServletContextName());
@@ -198,7 +198,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
      *
      * @param ctx the <code>ServletContext</code>
      */
-    protected void loadServices(ServletContext ctx) {
+    protected void loadServices(ServletContext ctx) throws PortletException {
         // load in the portlet.xml file
         if (isJSR) return;
         String descriptor = ctx.getRealPath("/WEB-INF/PortletServices.xml");

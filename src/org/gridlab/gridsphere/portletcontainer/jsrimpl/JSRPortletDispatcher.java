@@ -160,7 +160,7 @@ public class JSRPortletDispatcher implements PortletDispatcher {
             include(req, res);
         } catch (ServletException e) {
             log.error("Unable to perform service");
-            throw new PortletException("Unable to perform service", e);
+            throw new PortletException("Unable to perform service", e.getRootCause());
         }
         req.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
     }

@@ -72,7 +72,7 @@ public class SportletDispatcher implements PortletDispatcher {
             include(req, res);
         } catch (ServletException e) {
             //log.error("Unable to perform init on: " + appPortletConfig.getApplicationPortletID(), e);
-            throw new PortletException("Unable to perform init on: ", e);
+            throw new PortletException("Unable to initialize portlet: " + appPortletConfig.getApplicationPortletID(), e);
         }
     }
 

@@ -159,7 +159,7 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
      *
      * @param ctx the <code>ServletContext</code>
      */
-    protected void loadServices(String webappName, ServletContext ctx, ClassLoader loader) {
+    protected void loadServices(String webappName, ServletContext ctx, ClassLoader loader) throws PortletException {
         // load in the portlet.xml file
         String descriptor = ctx.getRealPath("/WEB-INF/PortletServices.xml");
         File f = new File(descriptor);

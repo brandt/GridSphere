@@ -319,7 +319,7 @@ public class PortletInvoker {
                 }
             }
         }
-        registry.logRegistry();
+        if (log.isDebugEnabled()) registry.logRegistry();
     }
 
     /**
