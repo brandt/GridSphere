@@ -65,6 +65,7 @@ public class UserManagerServiceTest extends ServiceTest {
             pm.deleteList("select u from org.gridlab.gridsphere.portlet.impl.SportletUserImpl u");
             pm.deleteList("select u from org.gridlab.gridsphere.portlet.impl.SportletGroup u");
             pm.deleteList("select u from org.gridlab.gridsphere.services.security.acl.impl.UserACL u");
+            pm.deleteList("select u from org.gridlab.gridsphere.portlet.impl.SportletData u");
         } catch (PersistenceManagerException e) {
             log.error("Exception " + e);
         }
@@ -101,16 +102,13 @@ public class UserManagerServiceTest extends ServiceTest {
     public void testSportletData() {
         log.info("+ testSportletData");
         User jason = userManager.loginUser("jason", null);
-        SportletData pd = (SportletData)userManager.getPortletData(jason, "1");
-        // @todo check this usage!
-        pd.enableConfigurePermission(true);
-
+        PortletData pd = (PortletData)userManager.getPortletData(jason, "1");
+        pd.setAttribute("test","result");
         try {
-            pd.setAttribute("test","result");
-        } catch (AccessDeniedException e) {
+            pd.store();
+        } catch (PersistenceManagerException e) {
 
         }
-        userManager.setPortletData(jason, "1", pd);
 
         User jason2 = userManager.loginUser("jason", null);
         PortletData pd2 = userManager.getPortletData(jason2, "1");
