@@ -11,7 +11,7 @@
 
 <article>
   <articleinfo>
-    <title>GridSphere 1.0 Portal Framework</title>
+    <title>GridSphere Documentation Project</title>
   </articleinfo>
 
   <sect1><title>GridSphere Technical References</title>
@@ -21,12 +21,21 @@
     </itemizedlist>
   </sect1>
 
-  <sect1><title>Getting Started</title>
+  <sect1><title>GridSphere Documentation</title>
      <itemizedlist>
-        <listitem><para><ulink url="UsersGuide/UsersGuide.html">GridSphere Installation Guide</ulink></para></listitem>
-        <listitem><para><ulink url="DevelopersGuide/DevelopersGuide.html">GridSphere Portlet Developer's Guide</ulink></para></listitem>
-        <listitem><para><ulink url="../javadocs/portletapi">Portlet API</ulink></para></listitem>
-        <listitem><para><ulink url="../javadocs/gridsphere">GridSphere Framework API</ulink></para></listitem>
+        <listitem><para>GridSphere User's Guide <ulink url="UsersGuide/UsersGuide.html">(HTML)</ulink>
+            <ulink url="UsersGuide/UsersGuide.pdf">(PDF)</ulink></para></listitem>
+
+        <listitem><para>GridSphere Portlet Developer's Guide <ulink url="DevelopersGuide/DevelopersGuide.html">(HTML)</ulink>
+            <ulink url="DevelopersGuide/DevelopersGuide.pdf">(PDF)</ulink></para></listitem>
+
+        <listitem><para><ulink url="../javadocs/gridsphere">GridSphere Framework and Portlet API</ulink></para></listitem>
+     </itemizedlist>
+  </sect1>
+
+  <sect1><title>GridSphere API</title>
+     <itemizedlist>
+        <listitem><para><ulink url="../javadocs/gridsphere/index.html">GridSphere Framework and Portlet API</ulink></para></listitem>
      </itemizedlist>
   </sect1>
 
