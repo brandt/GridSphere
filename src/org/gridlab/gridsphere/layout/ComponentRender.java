@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * The <code>ComponentRender</code> interface required by all PortletComponets to be displayed
  */
-public interface ComponentRender {
+public interface ComponentRender extends Cloneable {
 
     /**
      * Renders the portlet component
@@ -22,4 +22,5 @@ public interface ComponentRender {
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException;
 
+    public Object clone() throws CloneNotSupportedException;
 }

@@ -13,7 +13,7 @@ import java.util.List;
  * A <code>PortletPanel</code> is used to compose a collection of portlet components
  * in a specified layout.
  */
-public class PortletPanel extends BasePortletComponent {
+public class PortletPanel extends BasePortletComponent implements Cloneable {
 
     private PortletLayout layout = null;
 
@@ -79,4 +79,9 @@ public class PortletPanel extends BasePortletComponent {
         if (layout != null) layout.doRender(event);
     }
 
+    public Object clone() throws CloneNotSupportedException {
+        PortletPanel p = (PortletPanel)super.clone();
+        p.layout = (this.layout == null) ? null : (PortletLayout)this.layout.clone();
+        return p;
+    }
 }

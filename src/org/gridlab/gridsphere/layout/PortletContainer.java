@@ -37,20 +37,12 @@ public class PortletContainer implements Cloneable {
     protected List portlets = new ArrayList();
 
     protected String name = "";
-    protected String theme = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_DEFAULT_THEME);
+    protected String theme = GridSphereConfig.getProperty(GridSphereConfigProperties.DEFAULT_THEME);
 
     /**
      * Constructs an instance of PortletContainer
      */
     public PortletContainer() {
-    }
-
-    public PortletContainer(PortletContainer container) {
-        this.COMPONENT_ID = container.getComponentID();
-        this.componentIdentifiers = new ArrayList(container.getComponentIdentifierList());
-        this.components = new ArrayList(container.getPortletComponents());
-        this.theme = container.getTheme();
-        this.name = container.getContainerName();
     }
 
     /**
@@ -235,6 +227,7 @@ public class PortletContainer implements Cloneable {
             PortletComponent comp = compId.getPortletComponent();
             // perform an action if the component is non null
             if (comp != null) {
+                System.err.println("performing an event in :"+ compId.getClassName() + "  " + compId.getComponentID());
                 comp.actionPerformed(event);
             }
         }
@@ -267,4 +260,30 @@ public class PortletContainer implements Cloneable {
         out.println("</body></html>");
     }
 
+
+    public Object clone() throws CloneNotSupportedException {
+        int i;
+        PortletContainer c = (PortletContainer)super.clone();	// clone the stack
+        c.COMPONENT_ID = this.COMPONENT_ID;
+        c.theme = this.theme;
+        c.componentIdentifiers = new ArrayList(this.componentIdentifiers.size());
+        for (i = 0; i < this.componentIdentifiers.size(); i++) {
+            ComponentIdentifier cid = (ComponentIdentifier)this.componentIdentifiers.get(i);
+            c.componentIdentifiers.add(cid.clone());
+        }
+
+        c.name = this.name;
+        c.portlets = new ArrayList(this.portlets.size());
+        for (i = 0; i < this.portlets.size(); i++) {
+            String pclass = (String)this.portlets.get(i);
+            c.portlets.add(pclass);
+        }
+        c.components = new ArrayList(this.components.size());
+        for (i = 0; i < this.components.size(); i++) {
+            PortletComponent comp = (PortletComponent)this.components.get(i);
+            PortletComponent newcomp = (PortletComponent)comp.clone();
+            c.components.add(newcomp);
+        }
+        return c;
+    }
 }

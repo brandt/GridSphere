@@ -42,7 +42,7 @@ public class PortletLayoutEngine {
     private String newuserLayoutPath;
     private PortletContainer newuserContainer;
 
-    private String userLayoutDir = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_LAYOUT_DIR);
+    private String userLayoutDir = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_DIR);
 
     private String error = "";
 
@@ -98,14 +98,14 @@ public class PortletLayoutEngine {
             layDir.mkdir();
         }
 
-        layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_LAYOUT_MAPPING);
+        layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING);
 
-        String guestLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_GUEST_USER_LAYOUT);
+        String guestLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GUEST_USER_LAYOUT);
 
         guestContainer = PortletLayoutDescriptor.loadPortletContainer(guestLayoutFile, layoutMappingFile);
-        //guestContainer.init(new ArrayList());
+        guestContainer.init(new ArrayList());
 
-        newuserLayoutPath = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_NEW_USER_LAYOUT);
+        newuserLayoutPath = GridSphereConfig.getProperty(GridSphereConfigProperties.NEW_USER_LAYOUT);
 
         newuserContainer = PortletLayoutDescriptor.loadPortletContainer(newuserLayoutPath, layoutMappingFile);
         newuserContainer.init(new ArrayList());
@@ -137,13 +137,14 @@ public class PortletLayoutEngine {
                 return (PortletContainer)guests.get(id);
             } else {
                 System.err.println("creating new conatiner for:" + id);
-                String guestLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_GUEST_USER_LAYOUT);
+                String guestLayoutFile = GridSphereConfig.getProperty(GridSphereConfigProperties.GUEST_USER_LAYOUT);
                 PortletContainer newcontainer = null;
                 try {
-                 newcontainer = PortletLayoutDescriptor.loadPortletContainer(guestLayoutFile, layoutMappingFile);
-                //newcontainer = new PortletContainer(guestContainer);
-                    newcontainer.init(new ArrayList());
-                    guests.put(id, newcontainer);
+                 //newcontainer = PortletLayoutDescriptor.loadPortletContainer(guestLayoutFile, layoutMappingFile);
+                 newcontainer = (PortletContainer)guestContainer.clone();
+
+                 newcontainer.init(new ArrayList());
+                 guests.put(id, newcontainer);
                 } catch (Exception e) {
 
                 }
@@ -244,7 +245,7 @@ public class PortletLayoutEngine {
      * @throws IOException if an I/O error occurs during rendering
      */
     public void actionPerformed(GridSphereEvent event) throws IOException {
-        log.debug("in service()");
+        log.debug("in actionPerformed()");
         PortletContainer pc = null;
 
         // XXX: How do we signal a user has logged out so we can userLayouts.remove(user)???

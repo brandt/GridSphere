@@ -18,10 +18,10 @@ import java.io.IOException;
  */
 public abstract class BasePortletComponent extends BaseComponentLifecycle implements PortletComponent {
 
-    protected String width = "";
-    protected String height = "";
+    protected String width = new String();
+    protected String height = new String();
     protected String name = new String();
-    protected String theme = GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_DEFAULT_THEME);
+    protected String theme = GridSphereConfig.getProperty(GridSphereConfigProperties.DEFAULT_THEME);
     protected boolean isVisible = true;
 
     /**
@@ -136,6 +136,17 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletRequest req = event.getPortletRequest();
         req.setAttribute(GridSphereProperties.COMPONENT_ID, componentIDStr);
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+            System.err.println("in base portlet comp clone");
+            BasePortletComponent b = (BasePortletComponent)super.clone();
+            b.width = this.width;
+            b.height = this.height;
+            b.isVisible = this.isVisible;
+            b.name = this.name;
+            b.theme = this.theme;
+            return b;
     }
 
 }

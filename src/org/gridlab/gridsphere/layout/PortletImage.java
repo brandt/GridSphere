@@ -15,7 +15,7 @@ import java.io.PrintWriter;
  * page. A <code>PortletImage</code> is defined by an "img src" location of the image in the
  * web application directory
  */
-public class PortletImage extends BasePortletComponent {
+public class PortletImage extends BasePortletComponent implements Cloneable {
 
     private String image;
 
@@ -67,6 +67,12 @@ public class PortletImage extends BasePortletComponent {
         out.println("<spacer type=block width=\"100\"></td><td>");
         out.println("<img src=\"" + image + "\" align=\"right\">");
         out.println("</td></table>");
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        PortletImage i = (PortletImage)super.clone();
+        i.image = this.image;
+        return i;
     }
 
 }

@@ -20,5 +20,4 @@ public interface PortletTitleBarListener {
      */
     public void handleTitleBarEvent(PortletTitleBarEvent event) throws PortletLayoutException;
 
-
 }

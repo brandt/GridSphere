@@ -26,7 +26,7 @@ import java.util.List;
  * @see PortletFrameEvent
  */
 public abstract class PortletFrameLayout extends BasePortletComponent implements
-        PortletLayout, PortletFrameListener {
+        PortletLayout, PortletFrameListener, Cloneable {
 
     protected List components = new ArrayList();
 
@@ -184,6 +184,16 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
      */
     public List getPortletComponents() {
         return components;
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        PortletFrameLayout f = (PortletFrameLayout)super.clone();
+        f.components = new ArrayList(this.components.size());
+        for (int i = 0; i < this.components.size(); i++) {
+            PortletComponent comp = (PortletComponent)this.components.get(i);
+            f.components.add(comp.clone());
+        }
+        return f;
     }
 
 }

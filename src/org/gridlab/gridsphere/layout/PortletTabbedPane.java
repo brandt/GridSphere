@@ -20,7 +20,7 @@ import java.util.List;
  * The <code>PortletTabbedPane</code> represents the visual portlet tabbed pane interface
  * and is a container for a {@link PortletTab}.
  */
-public class PortletTabbedPane extends BasePortletComponent implements PortletTabListener {
+public class PortletTabbedPane extends BasePortletComponent implements PortletTabListener, Cloneable {
 
     private List tabs = new ArrayList();
     private int selectedIndex = 0;
@@ -314,4 +314,15 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
 
     }
 
+    public Object clone() throws CloneNotSupportedException {
+        PortletTabbedPane t = (PortletTabbedPane)super.clone();
+        t.style = this.style;
+        t.selectedIndex = this.selectedIndex;
+        t.tabs = new ArrayList(this.tabs.size());
+        for (int i = 0; i < this.tabs.size(); i++) {
+            PortletTab tab = (PortletTab)this.tabs.get(i);
+            t.tabs.add(tab.clone());
+        }
+        return t;
+    }
 }

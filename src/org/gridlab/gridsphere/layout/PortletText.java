@@ -16,7 +16,7 @@ import java.io.IOException;
  * <code>PortletText</code> is used to display the contents of an included
  * text file located in the web application.
  */
-public class PortletText extends BasePortletComponent {
+public class PortletText extends BasePortletComponent implements Cloneable {
 
     private String text;
 
@@ -62,6 +62,12 @@ public class PortletText extends BasePortletComponent {
         } catch (PortletException e) {
             throw new PortletLayoutException("Unable to include text: " + text, e);
         }
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        PortletText t = (PortletText)super.clone();
+        t.text = this.text;
+        return t;
     }
 
 }

@@ -11,17 +11,18 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.ArrayList;
 
 /**
  * The <code>PortletGridLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>
  * that organizes portlets into a grid with a provided number of columns.
  * Portlets are arranged in column-wise order starting from the left most column.
  */
-public class PortletGridLayout extends PortletFrameLayout {
+public class PortletGridLayout extends PortletFrameLayout implements Cloneable {
 
-    private int numColumns;
-    private int[] colSizes;
-    private String columnString;
+    private int numColumns = 1;
+    private List colSizes = new ArrayList();
+    private String columnString = null;
     private String style = "";
 
     /**
@@ -86,17 +87,15 @@ public class PortletGridLayout extends PortletFrameLayout {
             StringTokenizer st = new StringTokenizer(columnString, ",");
             numColumns = st.countTokens();
             if (numColumns < 1) numColumns = 1;
-            colSizes = new int[numColumns];
             int i = 0;
             while (st.hasMoreTokens()) {
                 String col = st.nextToken();
-                colSizes[i] = Integer.parseInt(col);
+                colSizes.add(col);
                 i++;
             }
         } else {
             numColumns = 1;
-            colSizes = new int[1];
-            colSizes[0] = 100;
+            colSizes.add("100");
         }
         return list;
     }
@@ -145,7 +144,7 @@ public class PortletGridLayout extends PortletFrameLayout {
         out.println("<tr> <!-- overall one row -->");
         for (int i = 0; i < numColumns; i++) {
             // new column
-            out.println("<td width=\"" + colSizes[i] + "%\" valign=\"top\"> <!-- this is a row -->");
+            out.println("<td width=\"" + colSizes.get(i) + "%\" valign=\"top\"> <!-- this is a row -->");
             // construct a table inside this column
             out.print("<table ");
             out.println("border=\"0\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"> <!-- this is table inside row (" + i + ")-->");
@@ -173,6 +172,18 @@ public class PortletGridLayout extends PortletFrameLayout {
         }
         out.println("</tr> <!-- end overall one row -->");
         out.println("</table> <!-- end overall gridlayout table -->");
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        PortletGridLayout g = (PortletGridLayout)super.clone();
+        g.numColumns = this.numColumns;
+        g.style = this.style;
+        g.colSizes = new ArrayList(this.colSizes.size());
+        for (int i = 0; i < this.colSizes.size(); i++) {
+            String size = (String)this.colSizes.get(i);
+            g.colSizes.add(size);
+        }
+        return g;
     }
 
 }

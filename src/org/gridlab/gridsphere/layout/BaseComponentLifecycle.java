@@ -72,4 +72,10 @@ public abstract class BaseComponentLifecycle implements ComponentLifecycle {
      */
     public abstract void doRender(GridSphereEvent event) throws PortletLayoutException, IOException;
 
+    public Object clone() throws CloneNotSupportedException {
+        BaseComponentLifecycle b = (BaseComponentLifecycle)super.clone();
+        b.COMPONENT_ID = this.COMPONENT_ID;
+        b.componentIDStr = this.componentIDStr;
+        return b;
+    }
 }

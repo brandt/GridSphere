@@ -23,11 +23,11 @@ import java.util.List;
  * portlet component. Generally, it is either a {@link PortletPanel} or another
  * tabbed pane if a double level tabbed pane is desired.
  */
-public class PortletTab extends BasePortletComponent {
+public class PortletTab extends BasePortletComponent implements Cloneable {
 
-    private String title;
+    private String title = "";
     private boolean selected = false;
-    private PortletComponent portletComponent;
+    private PortletComponent portletComponent = null;
     private List listeners = new ArrayList();
 
     /**
@@ -176,4 +176,11 @@ public class PortletTab extends BasePortletComponent {
         portletComponent.doRender(event);
     }
 
+    public Object clone() throws CloneNotSupportedException {
+        PortletTab t = (PortletTab)super.clone();
+        t.portletComponent = (this.portletComponent == null) ? null : (PortletComponent)this.portletComponent.clone();
+        t.title = this.title;
+        t.selected = this.selected;
+        return t;
+    }
 }

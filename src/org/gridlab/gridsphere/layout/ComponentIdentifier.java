@@ -7,12 +7,12 @@ package org.gridlab.gridsphere.layout;
 /**
  * A <code>ComponentIdentifier</code> contains meta information about a {@link PortletComponent}
  */
-public class ComponentIdentifier {
+public class ComponentIdentifier implements Cloneable {
 
-    private int id;
-    private String className;
-    private String portletClass;
-    private PortletComponent component;
+    private int id = -1;
+    private String className = null;
+    private String portletClass = null;
+    private PortletComponent component = null;
 
     /**
      * Constructs an instance of ComponentIdentifier
@@ -105,4 +105,12 @@ public class ComponentIdentifier {
         return component;
     }
 
+    public Object clone() throws CloneNotSupportedException {
+        ComponentIdentifier c = (ComponentIdentifier)super.clone();
+        c.component = (this.component == null) ? null : (PortletComponent)this.component.clone();
+        c.className = (this.className == null) ? null : this.className;
+        c.id = this.id;
+        c.portletClass = (this.portletClass == null) ? null : this.portletClass;
+        return c;
+    }
 }

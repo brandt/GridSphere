@@ -21,22 +21,17 @@ import java.util.*;
  * within a portlet frame and is contained by {@link PortletFrame}.
  * The title bar contains portlet mode and window state as well as a title.
  */
-public class PortletTitleBar extends BasePortletComponent {
+public class PortletTitleBar extends BasePortletComponent implements Cloneable {
 
     private String title = "Portlet Unavailable";
     private String portletClass = null;
     private PortletWindow.State windowState = PortletWindow.State.NORMAL;
-
     private List supportedModes = new ArrayList();
     private Portlet.Mode portletMode = Portlet.Mode.VIEW;
     private Portlet.Mode previousMode = null;
-
     private List listeners = new ArrayList();
-
-    private PortletSettings settings;
-
+    private PortletSettings settings = null;
     private List allowedWindowStates = new ArrayList();
-
     private String errorMessage = "";
     private boolean hasError = false;
 
@@ -671,4 +666,28 @@ public class PortletTitleBar extends BasePortletComponent {
         out.println("</td></tr>");
     }
 
+    public Object clone() throws CloneNotSupportedException {
+        PortletTitleBar t = (PortletTitleBar)super.clone();
+        t.title = this.title;
+        t.portletClass = this.portletClass;
+        t.portletMode = Portlet.Mode.toMode(this.portletMode.toString());
+        t.windowState = PortletWindow.State.toState(this.windowState.toString());
+        t.previousMode = this.previousMode;
+        t.errorMessage = this.errorMessage;
+        t.hasError = this.hasError;
+        // don't clone settings for now
+        t.settings = this.settings;
+        t.supportedModes = new ArrayList(this.supportedModes.size());
+        for (int i = 0; i < this.supportedModes.size(); i++) {
+            Portlet.Mode mode = (Portlet.Mode)supportedModes.get(i);
+            t.supportedModes.add(mode.clone());
+        }
+        t.allowedWindowStates = new ArrayList(this.allowedWindowStates.size());
+        for (int i = 0; i < this.allowedWindowStates.size(); i++) {
+            PortletWindow.State state = (PortletWindow.State)allowedWindowStates.get(i);
+            t.allowedWindowStates.add(state.clone());
+        }
+        return t;
+
+    }
 }

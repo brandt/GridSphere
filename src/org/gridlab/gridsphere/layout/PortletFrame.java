@@ -27,11 +27,10 @@ import java.util.List;
  * <code>PortletFrame</code> provides the visual representation of a portlet. A portlet frame
  * contains a portlet title bar unless visible is set to false.
  */
-public class PortletFrame extends BasePortletComponent implements PortletTitleBarListener {
+public class PortletFrame extends BasePortletComponent implements PortletTitleBarListener, Cloneable {
 
     // renderPortlet is true in doView and false on minimized
     private boolean renderPortlet = true;
-
     private String portletClass = null;
     private PortletTitleBar titleBar = null;
     private List listeners = new ArrayList();
@@ -89,6 +88,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         public void setException(Exception e) {
             this.msg += e.getMessage();
         }
+
 
     }
 
@@ -341,8 +341,6 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         }
 
         ///// begin portlet frame
-
-
         out.println("<!-- PORTLET STARTS HERE -->");
         //out.println("<div class=\"window-main\">");
         out.print("<table  ");
@@ -368,7 +366,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             if (!transparent) {
                 out.print("<tr><td  ");      // now the portlet content begins
                 if (!getInnerPadding().equals("")) {
-                    out.print("style=\"padding:"+getInnerPadding()+"px\"");
+                    out.print("style=\"padding:" + getInnerPadding() + "px\"");
                 }
                 out.println(" class=\"window-content\"> " );
             } else {
@@ -379,7 +377,6 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
                 out.println(errorFrame.getMessage());
                 errorFrame.clearMessage();
             } else {
-
                 try {
                     PortletInvoker.service(portletClass, req, res);
                 } catch (PortletException e) {
@@ -388,17 +385,23 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
                 errorFrame.clearMessage();
                 }
             }
-
-
             out.println("</td></tr>");
         } else {
             out.println("<tr><td class=\"window-content-minimize\">");      // now the portlet content begins
             out.println("</td></tr>");
         }
-
-
         out.println("</table>");
         out.println("<!--- PORTLET ENDS HERE -->");
     }
 
+    public Object clone() throws CloneNotSupportedException {
+        PortletFrame f = (PortletFrame)super.clone();
+        f.titleBar = (this.titleBar == null) ? null : (PortletTitleBar)this.titleBar.clone();
+        f.outerPadding = this.outerPadding;
+        f.transparent = this.transparent;
+        f.innerPadding = this.innerPadding;
+        f.portletClass = this.portletClass;
+        f.renderPortlet = this.renderPortlet;
+        return f;
+    }
 }
