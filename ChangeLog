@@ -11,3 +11,6 @@ Changes since GridSphere 1.0
 + Layouts are added and subtracted dynamically when user selects groups
 + Persistence DB uses separate databases per webapp
 + provider.jar also placed into WEB-INF/lib of webapp and not shared/lib
++ make user account creation configurable via config'ing the LoginPortlet
++ Fixed readonly attributes in input type portlet ui tags
+
