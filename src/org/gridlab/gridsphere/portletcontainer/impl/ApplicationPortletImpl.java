@@ -31,7 +31,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
     private List concretePortlets = null;
     private ApplicationPortletConfig appPortletConfig = null;
     private String webAppName = null;
-    private PortletDispatcher portletWrapper = null;
+    private PortletDispatcher portletDispatcher = null;
 
     /**
      * Default constructor is private
@@ -41,11 +41,12 @@ class ApplicationPortletImpl implements ApplicationPortlet {
     /**
      * Constructs an instance of ApplicationPortletImpl
      *
+     * @param pdd the <code>PortletDeploymentDescriptor</code>
      * @param portletDef a <code>SportletDefinition</code>
      * @param webApplication the web application name for this application portlet
      * @param context the <code>ServletContext</code> containing this application portlet
      */
-    public ApplicationPortletImpl(SportletDefinition portletDef,
+    public ApplicationPortletImpl(PortletDeploymentDescriptor pdd, SportletDefinition portletDef,
                                   String webApplication, ServletContext context) {
 
         this.webAppName = webApplication;
@@ -75,7 +76,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
         concretePortlets = new Vector();
         while (it.hasNext()) {
             ConcreteSportletDefinition concSportlet = (ConcreteSportletDefinition) it.next();
-            ConcretePortlet concretePortlet = new ConcreteSportlet(appPortletConfig, concSportlet);
+            ConcretePortlet concretePortlet = new ConcreteSportlet(pdd, appPortletConfig, concSportlet);
             concretePortlets.add(concretePortlet);
         }
         applicationPortletID = appPortletConfig.getApplicationPortletID();
@@ -88,7 +89,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
             log.error("Unable to create a dispatcher for portlet: " + portletName);
             log.error("Make sure the servletName: " + servletName + " is the servlet-name defined in web.xml");
         }
-        portletWrapper = new PortletDispatcher(rd, appPortletConfig);
+        portletDispatcher = new PortletDispatcher(rd, appPortletConfig);
     }
 
     /**
@@ -124,7 +125,7 @@ class ApplicationPortletImpl implements ApplicationPortlet {
      * @return PortletDispatcher the proxy portlet for this ApplicationPortlet
      */
     public PortletDispatcher getPortletDispatcher() {
-        return portletWrapper;
+        return portletDispatcher;
     }
 
     /**

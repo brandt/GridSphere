@@ -38,10 +38,12 @@ class ConcreteSportlet implements ConcretePortlet {
     /**
      * Constructs an instance of ConcreteSportlet
      *
+     * @param pdd a <code>PortletDeploymentDescriptor</code>
      * @param appPortletConfig an application portlet configuration
      * @param concSportletDef a concrete portlet descriptor
      */
-    public ConcreteSportlet(ApplicationPortletConfig appPortletConfig, ConcreteSportletDefinition concSportletDef) {
+    public ConcreteSportlet(PortletDeploymentDescriptor pdd, ApplicationPortletConfig appPortletConfig, ConcreteSportletDefinition concSportletDef) {
+        this.portletDD = pdd;
         this.concSportletConfig = concSportletDef.getConcreteSportletConfig();
         String appID, appname, cappname;
         int index;
