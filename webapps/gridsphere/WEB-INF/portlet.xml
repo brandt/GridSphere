@@ -6,8 +6,9 @@
             <portlet-name>File Manager Portlet</portlet-name>
             <servlet-name>FileManagerPortlet</servlet-name>
             <supports>
-                <view/>
-            </supports>
+                 <view/>
+                 <help/>
+             </supports>
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.file.FileManagerPortlet.1">
@@ -158,8 +159,8 @@
             <servlet-name>UserManagerPortlet</servlet-name>
             <supports>
                 <view/>
+                <help/>
             </supports>
-
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet.1">
@@ -187,7 +188,8 @@
             <portlet-name>Portlet Group Manager</portlet-name>
             <servlet-name>GroupManagerPortlet</servlet-name>
             <supports>
-                <view/>
+                 <view/>
+                 <help/>
             </supports>
         </portlet-app>
 
@@ -225,6 +227,28 @@
                  <language locale="de">
                      <title>Notizblock</title>
                      <description>Dieses Portlet stellt ein Notizblock zur Verfuegung</description>
+                 </language>
+             </concrete-portlet>
+         </concrete-portlet-app>
+     </portlet-app-def>
+
+    <portlet-app-def>
+         <portlet-app id="org.gridlab.gridsphere.portlets.core.layout.LayoutManagerPortlet">
+             <portlet-name>Layout Manager Portlet</portlet-name>
+             <servlet-name>LayoutPortlet</servlet-name>
+             <supports>
+                 <view/>
+                 <edit/>
+             </supports>
+         </portlet-app>
+
+         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.layout.LayoutManagerPortlet.1">
+             <concrete-portlet>
+                 <portlet-name>Layout Manager Portlet</portlet-name>
+                 <default-locale>en</default-locale>
+                 <language locale="en">
+                     <title>Layout Manager</title>
+                     <description>Provides user layout customization</description>
                  </language>
              </concrete-portlet>
          </concrete-portlet-app>

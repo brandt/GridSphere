@@ -30,6 +30,13 @@
                             </portlet-frame>
                         </column-layout>
                     </row-layout>
+                    <row-layout>
+                        <column-layout>
+                            <portlet-frame label="layout">
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.layout.LayoutManagerPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
                 </table-layout>
             </portlet-tab>
             <portlet-tab label="utilities" title="Utilities">

@@ -44,11 +44,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>SubscriptionPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.SubscriptionPortlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>FileManagerPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.file.FileManagerPortlet</servlet-class>
     </servlet>
@@ -88,6 +83,11 @@
         <servlet-class>org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>LayoutPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.layout.LayoutManagerPortlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>gridsphere</servlet-name>
        <url-pattern>/gridsphere</url-pattern>
@@ -104,8 +104,8 @@
     </servlet-mapping>
 
     <servlet-mapping>
-       <servlet-name>SubscriptionPortlet</servlet-name>
-       <url-pattern>/subscription</url-pattern>
+       <servlet-name>LayoutPortlet</servlet-name>
+       <url-pattern>/layout</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
