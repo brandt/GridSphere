@@ -151,6 +151,9 @@ public class SportletRequestImpl implements SportletRequest {
     public PortletSession getPortletSession(boolean create) {
         if ((hasSessionBeenCreated == false) && (create == false))
             return null;
+        if (create == true) {
+            portletSession = new SportletSession(req.getSession(true));
+        }
         return portletSession;
     }
 
