@@ -73,7 +73,6 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         //System.err.println("testing example portlets");
         //ServletContext testsc = context.getContext("/exampleportlets");
         //System.err.println("description: " + ctx.getServletContextName());
-        System.err.println("context path: " + ctx.getRealPath(""));
         //System.err.println("testing core portlets");
         //testsc = context.getContext("/coreportlets");
         //System.err.println("description: " + testsc.getServletContextName());
@@ -83,6 +82,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
             log.error( webApplicationName + ": Unable to get ServletContext for: " + contextURIPath);
             throw new PortletException(webApplicationName + ": Unable to get ServletContext for: " + contextURIPath);
         }
+        log.debug("context path: " + ctx.getRealPath(""));
         this.webAppDescription = ctx.getServletContextName();
 
         rd = ctx.getNamedDispatcher(webApplicationName);
