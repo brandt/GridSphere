@@ -123,13 +123,13 @@ public class UserManagerServiceTest extends ServiceTest {
         // make nobody admin of portals group
 
         log.info("RoleID: "+portals.getID());
-
+/*
         try {
             aclManagerService.addRoleInGroup(nobody, portals);
         } catch (PortletServiceException e) {
             log.error("Error :"+e);
         }
-
+  */
     }
 
     public static Test suite ( ) {

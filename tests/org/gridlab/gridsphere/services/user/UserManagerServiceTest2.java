@@ -35,6 +35,9 @@ public class UserManagerServiceTest2 extends ServiceTest {
     private static AccessControlManagerService aclManagerService = null;
     private static UserManagerService userManager = null;
     private PersistenceManagerRdbms pm = null;
+    private PortletGroup portal, triana, cactus;
+    private User superuser;
+
 
     public UserManagerServiceTest2(String name) {
         super(name);
@@ -98,6 +101,94 @@ public class UserManagerServiceTest2 extends ServiceTest {
 
 
     // === tests
+
+    public void testremoveUser() {
+        log.info("+ testremoveUser");
+        User jason = userManager.loginUser("jason");
+        try {
+            userManager.removeUser(jason, "michael");
+            fail("Should fail here!");
+        } catch (PermissionDeniedException e) {}
+
+        try {
+            userManager.removeUser(getSuperUser(), "michael");
+        } catch (PermissionDeniedException e) {
+            fail("should NOT fail here");
+        }
+
+        List users = userManager.getAllUsers();
+        assertEquals(2, users.size());
+
+    }
+
+    public void testdenyGroupRequest() {
+        log.info("+ testdenygrouprequest");
+        User jason = userManager.loginUser("jason");
+        try {
+            userManager.denyGroupRequest(superuser, jason,  portal, null);
+        } catch (PermissionDeniedException e) {
+            log.error("Exception " + e);
+            fail("Should NOT fail");
+        }
+    }
+
+    public void testApproveGroup() {
+        log.info("+ testapprovegroup");
+        User jason = userManager.loginUser("jason");
+        try {
+            userManager.approveGroupRequest(superuser, jason,  portal, null);
+        } catch (PermissionDeniedException e) {
+            log.error("Exception " + e);
+            fail("Should NOT fail");
+        }
+
+        User michael = userManager.loginUser("michael");
+
+        try {
+            userManager.approveGroupRequest(jason, michael, triana, null);
+            fail("This should fail!");
+        } catch (PermissionDeniedException e) {}
+
+        try {
+            userManager.approveGroupRequest(jason, michael, portal, null);
+        } catch (PermissionDeniedException e) {
+            log.error("Exception " + e);
+            fail("This should not fail");
+        }
+
+        List result = null;
+
+        try {
+            result = aclService.getGroups(michael);
+        } catch (PortletServiceException e) {
+            log.error("Exception " + e);
+            fail("should not fail");
+        }
+
+        assertEquals(1, result.size());
+
+    }
+
+    public void testremoveGroup() {
+        log.info("+ testremovegroup");
+        try {
+            aclManagerService.removeGroup(portal);
+        } catch (PortletServiceException e) {
+            log.error("Exception " + e);
+            fail("should not fail");
+        }
+
+        List result = null;
+        try {
+            result = aclService.getAllGroups();
+        } catch (PortletServiceException e) {
+            log.error("Exception " + e);
+            fail("Should not fail here");
+        }
+
+        assertEquals(2, result.size());
+    }
+
 
     //@todo test which tries to create a new user with existing login
     //@todo all that useracl stuff
@@ -237,8 +328,9 @@ public class UserManagerServiceTest2 extends ServiceTest {
                 assertTrue(!((PortletGroup)result.get(i)).getName().equals(groupname));
             }
         }
-
     }
+
+
 
     public void testAccountRequestImpl() {
         log.info("+ testAccountRequestImpl");
@@ -261,7 +353,7 @@ public class UserManagerServiceTest2 extends ServiceTest {
 
         UserACL rootacl = new UserACL();
         rootacl.setUserID(root.getOid());
-        rootacl.setRoleID(SportletRole.getSuperRole().getRole());
+        rootacl.setRoleID(SportletRole.SUPER);
         rootacl.setStatus(UserACL.STATUS_APPROVED);
 
         try {
@@ -270,6 +362,8 @@ public class UserManagerServiceTest2 extends ServiceTest {
         } catch (PersistenceException e) {
             log.error("Exception " + e);
         }
+
+        superuser = root;
     }
 
     public void setupUsers() {
@@ -282,10 +376,17 @@ public class UserManagerServiceTest2 extends ServiceTest {
 
         AccountRequest req1 = userManager.createAccountRequest();
         req1.setUserID("jason");req1.setGivenName("Jason");
+        req1.addToGroup(portal, SportletRole.getAdminRole());
+        req1.addToGroup(cactus, SportletRole.getUserRole());
+
         AccountRequest req2 = userManager.createAccountRequest();
         req2.setUserID("michael");req2.setGivenName("Michael");
+        req2.addToGroup(portal, SportletRole.getUserRole());
+        req2.addToGroup(triana, SportletRole.getUserRole());
+
         AccountRequest req3 = userManager.createAccountRequest();
         req3.setUserID("ian");req3.setGivenName("Ian");
+
         AccountRequest req4 = userManager.createAccountRequest();
         req4.setUserID("oliver");req4.setGivenName("Oliver");
 
@@ -310,13 +411,34 @@ public class UserManagerServiceTest2 extends ServiceTest {
     public void setupGroups(){
         log.info("- setup groups");
         try {
-            aclManagerService.createNewGroup("portals");
+            aclManagerService.createNewGroup("portal");
             aclManagerService.createNewGroup("triana");
             aclManagerService.createNewGroup("cactus");
         } catch (PortletServiceException e) {
             log.error("Exception " + e);
             fail("Could not create groups ");
         }
-    }
+        List groups = null;
+        try {
+            groups = aclService.getAllGroups();
+        } catch (PortletServiceException e) {
+            fail("shouldnot fail here");
+            log.error("Exception " + e);
+        }
 
+        for (int i=0; i<groups.size();i++) {
+            if (((PortletGroup)groups.get(i)).getName().equals("cactus")) {
+                cactus = (PortletGroup)groups.get(i);
+                log.info(cactus.getID());
+            }
+            if (((PortletGroup)groups.get(i)).getName().equals("triana")) {
+                triana = (PortletGroup)groups.get(i);
+            }
+            if (((PortletGroup)groups.get(i)).getName().equals("portal")) {
+                portal = (PortletGroup)groups.get(i);
+            }
+        }
+
+
+    }
 }

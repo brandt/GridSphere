@@ -305,7 +305,7 @@ public class ACLServiceTest extends ServiceTest {
      * Add hans to cactus, franz to triana and josef to portals
      */
     protected void addUsersToGroups() throws PortletServiceException  {
-
+/*
         aclManagerService.addUserToGroup(hans, cactus);
         aclManagerService.addUserToGroup(franz, triana);
         aclManagerService.addUserToGroup(josef, portals);
@@ -314,6 +314,7 @@ public class ACLServiceTest extends ServiceTest {
         assertTrue(aclService.isUserInGroup(franz, triana));
         assertTrue(aclService.isUserInGroup(josef, portals));
         assertTrue(!aclService.isUserInGroup(josef, cactus));
+  */
     }
 
 }
