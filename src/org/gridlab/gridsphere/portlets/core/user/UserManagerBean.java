@@ -18,10 +18,9 @@ import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.provider.ActionEventHandler;
 import org.gridlab.gridsphere.provider.PortletBean;
-import org.gridlab.gridsphere.provider.PortletActionHandler;
-import org.gridlab.gridsphere.tags.web.element.TextBean;
-import org.gridlab.gridsphere.tags.web.element.HiddenFieldBean;
+import org.gridlab.gridsphere.tags.web.element.*;
 
 import javax.servlet.UnavailableException;
 import java.util.Date;
@@ -33,7 +32,7 @@ import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.ParseException;
 
-public class UserManagerBean extends PortletActionHandler {
+public class UserManagerBean extends ActionEventHandler {
 
     // JSP pages used by this portlet
     public static final String PAGE_USER_LIST = "/jsp/usermanager/userList.jsp";
@@ -336,11 +335,60 @@ public class UserManagerBean extends PortletActionHandler {
 
     private void loadUserList() {
         this.userList = this.userManagerService.getUsers();
+        TableBean tableBean = null;
+        if (this.userList.size() == 0) {
+            String message = "No user accounts in database";
+            tableBean = createTableBeanWithMessage(message);
+        } else {
+            // Create headers
+            List headers = new Vector();
+            headers.add("User ID");
+            headers.add("User Name");
+            headers.add("Full Name");
+            headers.add("Email Address");
+            headers.add("Organization");
+            // Create table with headers
+            tableBean = createTableBeanWithHeaders(headers);
+            // Add rows to table
+            Iterator userIterator = this.userList.iterator();
+            while (userIterator.hasNext()) {
+                // Get next user
+                User user = (User)userIterator.next();
+                // Create new table row
+                TableRowBean rowBean = new TableRowBean();
+                // User id
+                PortletURI userIDLink = createPortletActionURI("doViewUser");
+                userIDLink.addParameter("userID", user.getID());
+                ActionLinkBean userIDLinkBean =
+                        new ActionLinkBean(userIDLink, "doViewAction", user.getID());
+                TableCellBean cellBean = createTableCellBean(userIDLinkBean);
+                rowBean.add(cellBean);
+                // User name
+                TextBean userNameBean = new TextBean(user.getUserName());
+                cellBean = createTableCellBean(userNameBean);
+                rowBean.add(cellBean);
+                // Full name
+                TextBean fullNameBean = new TextBean(user.getFullName());
+                cellBean = createTableCellBean(fullNameBean);
+                rowBean.add(cellBean);
+                // Email address
+                TextBean emailAddressBean = new TextBean(user.getEmailAddress());
+                cellBean = createTableCellBean(emailAddressBean);
+                rowBean.add(cellBean);
+                // Organization
+                TextBean organizationBean = new TextBean(user.getOrganization());
+                cellBean = createTableCellBean(organizationBean);
+                rowBean.add(cellBean);
+                // Add row to table
+                tableBean.add(rowBean);
+            }
+        }
+        tableBean.store("userList", request);
     }
 
     private void loadUser() {
         System.err.println("Calling loadUser()!");
-        String userID = getParameter("userID");
+        String userID = getActionPerformedParameter("userID");
         User user = this.userManagerService.getUser(userID);
         if (user == null) {
             initUser();
@@ -409,16 +457,6 @@ public class UserManagerBean extends PortletActionHandler {
                 this.baseGroupRole = PortletRole.USER;
             }
         }
-    }
-
-    private void setUserOld(User user) {
-        this.user = user;
-        this.userID = user.getID();
-        this.userName = user.getUserID();
-        this.familyName = user.getFamilyName();
-        this.givenName = user.getGivenName();
-        this.emailAddress = user.getEmailAddress();
-        this.organization = user.getOrganization();
     }
 
     private void editUser()

@@ -16,7 +16,7 @@ import java.util.*;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
-public class PortletActionHandler {
+public class ActionEventHandler {
 
     protected PortletConfig config = null;
     protected PortletContext context = null;
@@ -26,12 +26,14 @@ public class PortletActionHandler {
     protected User user = null;
     protected PortletSession session = null;
     protected ActionEvent actionEvent = null;
+    protected FormEvent formEvent = null;
+    protected String actionEventMethodName = null;
     protected String page = null;
     protected String title = null;
     protected boolean isFormInvalid = false;
     protected String formInvalidMessage = null;
 
-    public PortletActionHandler() {
+    public ActionEventHandler() {
     }
 
     public void init(PortletConfig config, PortletRequest request, PortletResponse response)
@@ -91,73 +93,131 @@ public class PortletActionHandler {
         return this.log;
     }
 
+    public PortletURI createPortletActionURI(String action) {
+        PortletURI actionURI = this.response.createReturnURI();
+        actionURI.addAction(new DefaultPortletAction(action));
+        return actionURI;
+    }
+
     public ActionEvent getActionPerformed() {
         return this.actionEvent;
     }
 
     public void setActionPerformed(ActionEvent actionEvent) {
         this.actionEvent = actionEvent;
+        // If action event not null figure out what kind of
+        // action event it is, and then get the appropriate
+        // name of action method to perform
+        if (this.actionEvent == null) {
+            this.log.error("No action event was provided!");
+        } else {
+            // If a submit button was presssed, the action method
+            // we call is the the name of the pressed button
+            FormEvent formEvent = new FormEventImpl(this.actionEvent);
+            this.actionEventMethodName = formEvent.getSubmitButtonName();
+            // If no submit button was pressed, then the action
+            // method we call is the name of the portlet action
+            if (this.actionEventMethodName == null) {
+                this.log.debug("Action performed was an action link event");
+                DefaultPortletAction action = (DefaultPortletAction)actionEvent.getAction();
+                actionEventMethodName = action.getName();
+            } else {
+                this.log.debug("Action performed was a form event");
+                this.formEvent = formEvent;
+            }
+        }
     }
 
     public String getActionPerformedMethodName() {
-        String actionMethodName = null;
-        // If action event not set, return null
-        if (this.actionEvent == null) {
-            return null;
-        }
-        // If a submit button was presssed, the action method
-        // we call is the the name of the pressed button
-        FormEvent form = new FormEventImpl(this.actionEvent);
-        actionMethodName = form.getSubmitButtonName();
-        // If no submit button was pressed, then the action
-        // method we call is the name of the portlet action
-        if (actionMethodName == null) {
-            DefaultPortletAction action = (DefaultPortletAction)actionEvent.getAction();
-            actionMethodName = action.getName();
-        }
-        return actionMethodName;
+        return this.actionEventMethodName;
+    }
+
+    public String getActionPerformedParameter(String paramName) {
+        DefaultPortletAction action = this.actionEvent.getAction();
+        Map parameters = action.getParameters();
+        return (String)parameters.get(paramName);
     }
 
     public Object getTagBean(String beanName) {
-        // We get the form event from the action event
-        FormEvent form = new FormEventImpl(this.actionEvent);
-        // Then we return the tag bean with form event
-        return form.getTagBean(beanName);
+        // If form event is null, it was a link event
+        if (this.formEvent == null) {
+            return null;
+        } else {
+            // Then we return the tag bean with form event
+            return this.formEvent.getTagBean(beanName);
+        }
     }
 
-    public Object getHiddenFieldBean(String beanName) {
-        // We get the form event from the action event
-        FormEvent form = new FormEventImpl(this.actionEvent);
+    public ParamBean getActionParamBean(String beanName) {
         // Then we return the tag bean with form event
-        return (HiddenFieldBean)form.getTagBean(beanName);
+        return (ParamBean)getTagBean(beanName);
     }
 
-    public Object getCheckBoxBean(String beanName) {
-        // We get the form event from the action event
-        FormEvent form = new FormEventImpl(this.actionEvent);
+    public HiddenFieldBean getHiddenFieldBean(String beanName) {
         // Then we return the tag bean with form event
-        return (CheckBoxBean)form.getTagBean(beanName);
+        return (HiddenFieldBean)getTagBean(beanName);
     }
 
-    public Object getTextFieldBean(String beanName) {
-        // We get the form event from the action event
-        FormEvent form = new FormEventImpl(this.actionEvent);
+    public CheckBoxBean getCheckBoxBean(String beanName) {
         // Then we return the tag bean with form event
-        return (TextFieldBean)form.getTagBean(beanName);
+        return (CheckBoxBean)getTagBean(beanName);
     }
 
-    public Object getTextAreaBean(String beanName) {
-        // We get the form event from the action event
-        FormEvent form = new FormEventImpl(this.actionEvent);
+    public TextFieldBean getTextFieldBean(String beanName) {
         // Then we return the tag bean with form event
-        return (TextAreaBean)form.getTagBean(beanName);
+        return (TextFieldBean)getTagBean(beanName);
     }
 
-    public Object getPasswordBean(String beanName) {
-        // We get the form event from the action event
-        FormEvent form = new FormEventImpl(this.actionEvent);
+    public TextAreaBean getTextAreaBean(String beanName) {
         // Then we return the tag bean with form event
-        return (PasswordBean)form.getTagBean(beanName);
+        return (TextAreaBean)getTagBean(beanName);
+    }
+
+    public PasswordBean getPasswordBean(String beanName) {
+        // Then we return the tag bean with form event
+        return (PasswordBean)getTagBean(beanName);
+    }
+
+    public TextBean createTextBeanAsActionLink(PortletURI portletURI) {
+        TextBean textBean = new TextBean();
+        String text = portletURI.toString();
+        textBean.setText(text);
+        return textBean;
+    }
+
+    public TableBean createTableBeanWithHeaders(List headerList) {
+        TableBean tableBean = new TableBean();
+        tableBean.setCssStyle("portlet-frame");
+        TableRowBean tableRowBean = new TableRowBean();
+        Iterator headerIterator = headerList.iterator();
+        while (headerIterator.hasNext()) {
+            String header = (String)headerIterator.next();
+            TableCellBean tableCellBean = new TableCellBean();
+            tableCellBean.setCssStyle("portlet-frame-header");
+            tableCellBean.add(new TextBean(header));
+            tableRowBean.add(tableCellBean);
+        }
+        tableBean.add(tableRowBean);
+        return tableBean;
+    }
+
+    public TableBean createTableBeanWithMessage(String emptyMessage) {
+        TableBean tableBean = new TableBean();
+        tableBean.setCssStyle("portlet-frame");
+        TableRowBean tableRowBean = new TableRowBean();
+        TableCellBean tableCellBean = new TableCellBean();
+        tableCellBean.setCssStyle("portlet-frame-text");
+        tableCellBean.add(new TextBean(emptyMessage));
+        tableRowBean.add(tableCellBean);
+        tableBean.add(tableRowBean);
+        return tableBean;
+    }
+
+    public TableCellBean createTableCellBean(TagBean tagBean) {
+        TableCellBean cellBean = new TableCellBean();
+        cellBean.setCssStyle("portlet-frame-text");
+        cellBean.add(tagBean);
+        return cellBean;
     }
 
     public void doConfigAction()

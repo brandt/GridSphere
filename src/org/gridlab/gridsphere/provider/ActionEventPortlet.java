@@ -11,10 +11,10 @@ import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public abstract class AbstractActionPortlet extends AbstractPortlet {
+public abstract class ActionEventPortlet extends AbstractPortlet {
 
     private String portletBeanName = null;
-    private Class portletBeanClass = PortletActionHandler.class;
+    private Class portletBeanClass = ActionEventHandler.class;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
@@ -57,7 +57,7 @@ public abstract class AbstractActionPortlet extends AbstractPortlet {
         PortletRequest request = event.getPortletRequest();
         PortletResponse response = event.getPortletResponse();
         // Get instance of portlet bean
-        PortletActionHandler portletBean = getPortletBean(request, response);
+        ActionEventHandler portletBean = getPortletBean(request, response);
         // Set action performed
         portletBean.setActionPerformed(event);
         log.debug("Exiting actionPerformed()");
@@ -68,7 +68,7 @@ public abstract class AbstractActionPortlet extends AbstractPortlet {
         PortletLog log = getPortletLog();
         log.debug("Entering doView()");
         // Get instance of user manager bean
-        PortletActionHandler portletBean = getPortletBean(request, response);
+        ActionEventHandler portletBean = getPortletBean(request, response);
         // Do view action
         portletBean.doViewAction();
         // Get next page to display
@@ -84,7 +84,7 @@ public abstract class AbstractActionPortlet extends AbstractPortlet {
         PortletLog log = getPortletLog();
         log.debug("Entering doConfig()");
         // Get instance of user manager bean
-        PortletActionHandler portletBean = getPortletBean(request, response);
+        ActionEventHandler portletBean = getPortletBean(request, response);
         // Do view action
         portletBean.doConfigAction();
         // Get next page to display
@@ -100,7 +100,7 @@ public abstract class AbstractActionPortlet extends AbstractPortlet {
         PortletLog log = getPortletLog();
         log.debug("Entering doEdit()");
         // Get instance of user manager bean
-        PortletActionHandler portletBean = getPortletBean(request, response);
+        ActionEventHandler portletBean = getPortletBean(request, response);
         // Do view action
         portletBean.doEditAction();
         // Get next page to display
@@ -116,7 +116,7 @@ public abstract class AbstractActionPortlet extends AbstractPortlet {
         PortletLog log = getPortletLog();
         log.debug("Entering doHelp()");
         // Get instance of user manager bean
-        PortletActionHandler portletBean = getPortletBean(request, response);
+        ActionEventHandler portletBean = getPortletBean(request, response);
         // Do view action
         portletBean.doHelpAction();
         // Get next page to display
@@ -132,7 +132,7 @@ public abstract class AbstractActionPortlet extends AbstractPortlet {
         PortletLog log = getPortletLog();
         log.debug("Entering doTitle()");
         // Get instance of user manager bean
-        PortletActionHandler portletBean = getPortletBean(request, response);
+        ActionEventHandler portletBean = getPortletBean(request, response);
         // Get next title to display
         String title = portletBean.getTitle();
         // Print the given title
@@ -151,20 +151,20 @@ public abstract class AbstractActionPortlet extends AbstractPortlet {
         getPortletConfig().getContext().include(nextPage, request, response);
     }
 
-    private PortletActionHandler getPortletBean(PortletRequest request, PortletResponse response)
+    private ActionEventHandler getPortletBean(PortletRequest request, PortletResponse response)
             throws PortletException {
         PortletLog log = getPortletLog();
         log.debug("Entering getPortletBean()");
         String portletBeanName = getPortletBeanName();
         log.debug("Getting " + portletBeanName);
-        PortletActionHandler portletBean =
-                (PortletActionHandler)request.getAttribute(portletBeanName);
+        ActionEventHandler portletBean =
+                (ActionEventHandler)request.getAttribute(portletBeanName);
         // Check if portlet bean already created
         if (portletBean == null) {
             // Create new instance of portlet bean if not created yet
             log.debug("Creating instance of " + portletBeanClass.getName());
             try {
-                portletBean = (PortletActionHandler)this.portletBeanClass.newInstance();
+                portletBean = (ActionEventHandler)this.portletBeanClass.newInstance();
             } catch (InstantiationException e) {
                 String m = "Unable to instantiate class " + portletBeanClass.getName();
                 log.error(m, e);

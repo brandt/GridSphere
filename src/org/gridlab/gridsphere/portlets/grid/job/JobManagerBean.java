@@ -5,7 +5,7 @@
 package org.gridlab.gridsphere.portlets.grid.job;
 
 import org.gridlab.gridsphere.provider.PortletBean;
-import org.gridlab.gridsphere.provider.PortletActionHandler;
+import org.gridlab.gridsphere.provider.ActionEventHandler;
 import org.gridlab.gridsphere.services.grid.job.*;
 import org.gridlab.gridsphere.services.grid.job.impl.grms.*;
 import org.gridlab.gridsphere.services.grid.security.credential.Credential;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-public class JobManagerBean extends PortletActionHandler {
+public class JobManagerBean extends ActionEventHandler {
 
     // User job pages
     public static final String PAGE_USER_JOB_LIST = "/jsp/job/userJobList.jsp";
