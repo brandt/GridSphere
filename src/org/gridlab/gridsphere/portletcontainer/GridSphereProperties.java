@@ -7,10 +7,13 @@ package org.gridlab.gridsphere.portletcontainer;
 public class GridSphereProperties {
 
     public static final String COMPONENT_ID = "cid";
-    public static final String ID = "ID";
+    public static final String ACTION = "action";
+    public static final String PORTLETID = "PortletID";
+    public static final String PORTLETTAB = "tab";
+
+    // Portlet API objects
     public static final String CLIENT = "Client";
     public static final String PORTLETMODE = "PortletMode";
-    public static final String PORTLETERROR = "PortletError";
     public static final String PREVIOUSMODE = "PreviousMode";
     public static final String MODEMODIFIER = "ModeModifier";
     public static final String PORTLETWINDOW = "PortletWindow";
@@ -20,11 +23,5 @@ public class GridSphereProperties {
     public static final String USER = "User";
     public static final String PORTLETROLES = "PortletRoles";
     public static final String PORTLETGROUPS = "PortletGroups";
-    public static final String ACTION = "action";
-    public static final String ACTION_TYPE = "atype";
-    public static final String SENSITIVEACTION = "saction";
-    public static final String PORTLETID = "PortletID";
-    public static final String PORTLETNAME = "PortletName";
-    public static final String TOKEN = "token";
-    public static final String PORTLETTAB = "tab";
+
 }

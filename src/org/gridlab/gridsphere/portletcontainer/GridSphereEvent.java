@@ -8,10 +8,9 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletResponse;
 import org.gridlab.gridsphere.portlet.impl.SportletURI;
 import org.gridlab.gridsphere.portlet.impl.SportletRequest;
+import org.gridlab.gridsphere.services.registry.PortletManagerService;
 
 public interface GridSphereEvent {
-
-
 
     public PortletContext getPortletContext();
 
@@ -19,7 +18,7 @@ public interface GridSphereEvent {
 
     public SportletResponse getSportletResponse();
 
-    public UserPortletManager getUserPortletManager();
+    public PortletEventDispatcher getPortletEventDispatcher();
 
     public DefaultPortletAction getAction();
 

@@ -34,10 +34,10 @@ public class ConcretePortletManager {
         return concPortletMgr;
     }
 
-    public void initConcretePortlets(HttpServletRequest req, HttpServletResponse res) {
+    public void initAllConcretePortlets(HttpServletRequest req, HttpServletResponse res) {
 
         // First initialize the application portlets
-        appPortletMgr.initApplicationPortlets(req, res);
+        appPortletMgr.initAllApplicationPortlets(req, res);
 
         // Second initialize all concrete portlets for each application portlet
         Collection appPortlets = registry.getAllApplicationPortlets();
@@ -61,11 +61,38 @@ public class ConcretePortletManager {
         }
     }
 
-    public void destroyConcretePortlets(HttpServletRequest req, HttpServletResponse res) {
+    public void initConcretePortlets(String webApplicationName, HttpServletRequest req, HttpServletResponse res) {
+
+        // First initialize the application portlets
+        appPortletMgr.initApplicationPortlets(webApplicationName, req, res);
+
+        // Second initialize all concrete portlets for each application portlet
+        Collection appPortlets = registry.getApplicationPortlets(webApplicationName);
+        PortletWrapper portletWrapper = null;
+        try {
+            Iterator it = appPortlets.iterator();
+            while (it.hasNext()) {
+                ApplicationPortlet appPortlet = (ApplicationPortlet)it.next();
+                portletWrapper = appPortlet.getPortletWrapper();
+                List concPortlets = appPortlet.getConcretePortlets();
+                Iterator concIt = concPortlets.iterator();
+                PortletSettings settings = null;
+                while (concIt.hasNext()) {
+                    ConcretePortlet concPortlet = (ConcretePortlet)concIt.next();
+                    settings = concPortlet.getSportletSettings();
+                    portletWrapper.initConcrete(settings, req, res);
+                }
+            }
+        } catch (Exception e) {
+            //throw new PortletLifecycleException(e);
+        }
+    }
+
+    public void destroyAllConcretePortlets(HttpServletRequest req, HttpServletResponse res) {
 
         // First destroy all concrete portlets for each application portlet
         Collection appPortlets = registry.getAllApplicationPortlets();
-        org.gridlab.gridsphere.portletcontainer.PortletWrapper portletWrapper = null;
+        PortletWrapper portletWrapper = null;
         try {
             Iterator it = appPortlets.iterator();
             while (it.hasNext()) {
@@ -85,7 +112,34 @@ public class ConcretePortletManager {
         }
 
         // Second destroy the application portlets
-        appPortletMgr.destroyApplicationPortlets(req, res);
+        appPortletMgr.destroyAllApplicationPortlets(req, res);
+    }
+
+    public void destroyConcretePortlets(String webApplicationName, HttpServletRequest req, HttpServletResponse res) {
+
+        // First destroy all concrete portlets for each application portlet
+        Collection appPortlets = registry.getApplicationPortlets(webApplicationName);
+        PortletWrapper portletWrapper = null;
+        try {
+            Iterator it = appPortlets.iterator();
+            while (it.hasNext()) {
+                ApplicationPortlet appPortlet = (ApplicationPortlet)it.next();
+                portletWrapper = appPortlet.getPortletWrapper();
+                List concPortlets = appPortlet.getConcretePortlets();
+                Iterator concIt = concPortlets.iterator();
+                PortletSettings settings = null;
+                while (concIt.hasNext()) {
+                    ConcretePortlet concPortlet = (ConcretePortlet)concIt.next();
+                    settings = concPortlet.getSportletSettings();
+                    portletWrapper.destroyConcrete(settings, req, res);
+                }
+            }
+        } catch (Exception e) {
+            //throw new PortletLifecycleException(e);
+        }
+
+        // Second destroy the application portlets
+        appPortletMgr.destroyApplicationPortlets(webApplicationName, req, res);
     }
 
     public void initConcretePortlet(String concretePortletID, HttpServletRequest req, HttpServletResponse res) {
@@ -101,7 +155,7 @@ public class ConcretePortletManager {
         }
     }
 
-    public void destroyConcretePortlet(String concretePortletID, HttpServletRequest req, HttpServletResponse res) {
+    public void destroyConcretePortlet(String webApplicationName, String concretePortletID, HttpServletRequest req, HttpServletResponse res) {
         String appID = getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         PortletWrapper wrapper = appPortlet.getPortletWrapper();

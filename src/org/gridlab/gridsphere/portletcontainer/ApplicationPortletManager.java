@@ -32,7 +32,7 @@ public class ApplicationPortletManager {
         return instance;
     }
 
-    public void initApplicationPortlets(HttpServletRequest req, HttpServletResponse res) {
+    public void initAllApplicationPortlets(HttpServletRequest req, HttpServletResponse res) {
         Collection appPortlets = registry.getAllApplicationPortlets();
         PortletWrapper portletWrapper = null;
         try {
@@ -47,8 +47,38 @@ public class ApplicationPortletManager {
         }
     }
 
-    public void destroyApplicationPortlets(HttpServletRequest req, HttpServletResponse res) {
+    public void initApplicationPortlets(String webApplicationName, HttpServletRequest req, HttpServletResponse res) {
+        Collection appPortlets = registry.getApplicationPortlets(webApplicationName);
+        PortletWrapper portletWrapper = null;
+        try {
+            Iterator it = appPortlets.iterator();
+            while (it.hasNext()) {
+                ApplicationPortlet appPortlet = (ApplicationPortlet)it.next();
+                portletWrapper = appPortlet.getPortletWrapper();
+                portletWrapper.init(req, res);
+            }
+        } catch (Exception e) {
+            //throw new PortletLifecycleException(e);
+        }
+    }
+
+    public void destroyAllApplicationPortlets(HttpServletRequest req, HttpServletResponse res) {
         Collection appPortlets = registry.getAllApplicationPortlets();
+        PortletWrapper portletWrapper = null;
+        try {
+            Iterator it = appPortlets.iterator();
+            while (it.hasNext()) {
+                ApplicationPortlet appPortlet = (ApplicationPortlet)it.next();
+                portletWrapper = appPortlet.getPortletWrapper();
+                portletWrapper.destroy(req, res);
+            }
+        } catch (Exception e) {
+            //throw new PortletLifecycleException(e);
+        }
+    }
+
+    public void destroyApplicationPortlets(String webApplicationName, HttpServletRequest req, HttpServletResponse res) {
+        Collection appPortlets = registry.getApplicationPortlets(webApplicationName);
         PortletWrapper portletWrapper = null;
         try {
             Iterator it = appPortlets.iterator();

@@ -8,8 +8,8 @@ import org.gridlab.gridsphere.event.MessageEvent;
 import org.gridlab.gridsphere.event.WindowEvent;
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.PortletProperties;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApp;
 
 import javax.servlet.RequestDispatcher;
@@ -47,8 +47,8 @@ public class PortletWrapper {
      * normal initialization
      */
     public void init(HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        req.setAttribute(PortletProperties.PORTLET_APPLICATION, portletApp);
-        req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.INIT);
+        req.setAttribute(SportletProperties.PORTLET_APPLICATION, portletApp);
+        req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.INIT);
         try {
             include(req, res);
         } catch (Exception e) {
@@ -69,7 +69,7 @@ public class PortletWrapper {
      * @param config the portlet configuration
      */
     public void destroy(HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.DESTROY);
+        req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.DESTROY);
         try {
             include(req, res);
         } catch (Exception e) {
@@ -92,8 +92,9 @@ public class PortletWrapper {
      * @param settings the portlet settings
      */
     public void initConcrete(PortletSettings settings, HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        req.setAttribute(PortletProperties.PORTLET_SETTINGS, settings);
-        req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.INIT_CONCRETE);
+        log.info("in initConcrete");
+        req.setAttribute(SportletProperties.PORTLET_SETTINGS, settings);
+        req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.INIT_CONCRETE);
         try {
             include(req, res);
         } catch (Exception e) {
@@ -114,8 +115,9 @@ public class PortletWrapper {
      * @param settings the portlet settings
      */
     public void destroyConcrete(PortletSettings settings, HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        req.setAttribute(PortletProperties.PORTLET_SETTINGS, settings);
-        req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.DESTROY_CONCRETE);
+        log.info("in destroyConcrete");
+        req.setAttribute(SportletProperties.PORTLET_SETTINGS, settings);
+        req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.DESTROY_CONCRETE);
         try {
             include(req, res);
         } catch (Exception e) {
@@ -138,7 +140,7 @@ public class PortletWrapper {
      */
     public void service(String concretePortletID, HttpServletRequest req, HttpServletResponse res) throws PortletException {
         req.setAttribute(GridSphereProperties.PORTLETID, concretePortletID);
-        req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.SERVICE);
+        req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         try {
             include(req, res);
         } catch (Exception e) {
@@ -156,7 +158,7 @@ public class PortletWrapper {
      * @param request the portlet request
      */
     public void login(HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.LOGIN);
+        req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.LOGIN);
         try {
             include(req, res);
         } catch (Exception e) {
@@ -178,7 +180,7 @@ public class PortletWrapper {
 
         //abstractPortlet.logout(session);
 
-        req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.LOGOUT);
+        req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.LOGOUT);
         try {
             include(req, res);
         } catch (Exception e) {
@@ -196,9 +198,9 @@ public class PortletWrapper {
      * @throws PortletException if the listener has trouble fulfilling the request
      */
     public void actionPerformed(DefaultPortletAction action, HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        req.setAttribute(PortletProperties.ACTION_EVENT, action);
-        req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.SERVICE);
-        req.setAttribute(PortletProperties.PORTLET_ACTION_METHOD, PortletProperties.ACTION_PERFORMED);
+        req.setAttribute(SportletProperties.ACTION_EVENT, action);
+        req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
+        req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.ACTION_PERFORMED);
         try {
             include(req, res);
         } catch (Exception e) {
@@ -215,9 +217,9 @@ public class PortletWrapper {
      * @throws PortletException if the listener has trouble fulfilling the request
      */
     public void messageReceived(MessageEvent event, HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        req.setAttribute(PortletProperties.MESSAGE_EVENT, event);
-        req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.SERVICE);
-        req.setAttribute(PortletProperties.PORTLET_ACTION_METHOD, PortletProperties.MESSAGE_RECEIVED);
+        req.setAttribute(SportletProperties.MESSAGE_EVENT, event);
+        req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
+        req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.MESSAGE_RECEIVED);
         try {
             include(req, res);
         } catch (Exception e) {
@@ -243,8 +245,8 @@ public class PortletWrapper {
      * @throws java.io.IOException if the streaming causes an I/O problem
      */
     public void doTitle(HttpServletRequest req, HttpServletResponse res) throws PortletException {
-        req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.SERVICE);
-        req.setAttribute(PortletProperties.PORTLET_ACTION_METHOD, PortletProperties.DO_TITLE);
+        req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
+        req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.DO_TITLE);
         try {
             include(req, res);
         } catch (Exception e) {
@@ -260,9 +262,9 @@ public class PortletWrapper {
      */
     public void windowEvent(WindowEvent event, HttpServletRequest req, HttpServletResponse res) throws PortletException {
         log.info("in PortletWrapper: windowEvent");
-        req.setAttribute(PortletProperties.WINDOW_EVENT, event);
-        req.setAttribute(PortletProperties.PORTLET_LIFECYCLE_METHOD, PortletProperties.SERVICE);
-        req.setAttribute(PortletProperties.PORTLET_ACTION_METHOD, PortletProperties.WINDOW_EVENT);
+        req.setAttribute(SportletProperties.WINDOW_EVENT, event);
+        req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
+        req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.WINDOW_EVENT);
         try {
             include(req, res);
         } catch (Exception e) {

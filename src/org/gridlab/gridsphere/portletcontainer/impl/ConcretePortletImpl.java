@@ -10,7 +10,7 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletRole;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletSettings;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortletException;
@@ -44,7 +44,7 @@ public class ConcretePortletImpl implements ConcretePortlet {
     private List groupList = new Vector();
     private List languageList = new Vector();
     private String defaultLocale = "en_US";
-    private PortletGroup ownerGroup = PortletGroup.BASE;
+    private PortletGroup ownerGroup = SportletGroup.BASE;
     private PortletRole ownerRole = PortletRole.GUEST;
     private SportletSettings sportletSettings = null;
     private PortletApp portletApp = null;
@@ -148,7 +148,7 @@ public class ConcretePortletImpl implements ConcretePortlet {
 
         // groupList should at least contain BASE group if empty
         if (groupList.isEmpty()) {
-            groupList.add(PortletGroup.BASE);
+            groupList.add(SportletGroup.BASE);
         }
 
         // Get roles list
