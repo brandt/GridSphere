@@ -11,7 +11,7 @@
             <concrete-portlet>
                 <portlet-name>Application Manager Portlet</portlet-name>
                 <default-locale>en</default-locale>
-                <language locale="en_US">
+                <language locale="en">
                     <title>Portlet Application Manager</title>
                     <description>Displays Portlet Variables and Settings</description>
                 </language>
@@ -29,11 +29,17 @@
             <concrete-portlet>
                 <portlet-name>Login</portlet-name>
                 <default-locale>en</default-locale>
-                <language locale="en_US">
+                <language locale="en">
                     <title>Login</title>
                     <title-short>Login</title-short>
                     <description>Portlet provides login capabilities</description>
                     <keywords>portlet login</keywords>
+                </language>
+                <language locale="de">
+                    <title>Anmelden</title>
+                    <title-short>Anmelden</title-short>
+                    <description>Anmelden Portlet ermoeglicht das Anmelden</description>
+                    <keywords>anmelden logout</keywords>
                 </language>
                 <language locale="hu">
                     <title>Bejelentkezés</title>
@@ -55,11 +61,17 @@
             <concrete-portlet>
                 <portlet-name>Logout</portlet-name>
                 <default-locale>en</default-locale>
-                <language locale="en_US">
+                <language locale="en">
                     <title>Logout</title>
                     <title-short>Logout</title-short>
                     <description>Portlet provides logout capabilities</description>
                     <keywords>portlet logout</keywords>
+                </language>
+                <language locale="de">
+                    <title>Abmelden</title>
+                    <title-short>Abmelden</title-short>
+                    <description>Abmelden Portlet ermoeglicht das Ausloggen</description>
+                    <keywords>abmelden logout</keywords>
                 </language>
                 <language locale="hu">
                     <title>Kijelentkezés</title>
@@ -81,11 +93,17 @@
             <concrete-portlet>
                 <portlet-name>User Account Manager</portlet-name>
                 <default-locale>en</default-locale>
-                <language locale="en_US">
+                <language locale="en">
                     <title>User Account Manager</title>
                     <title-short>UserManager</title-short>
                     <description>Enables portal administrators to administer user accounts</description>
                     <keywords>user account administration</keywords>
+                </language>
+                <language locale="de">
+                    <title>Konto Manager</title>
+                    <title-short>KontoManager</title-short>
+                    <description>Ermoeglicht das administrieren von Nutzer Konten</description>
+                    <keywords>nutzer konten administration</keywords>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
@@ -101,7 +119,7 @@
             <concrete-portlet>
                 <portlet-name>Portlet Group Manager</portlet-name>
                 <default-locale>en</default-locale>
-                <language locale="en_US">
+                <language locale="en">
                     <title>Portlet Group Manager</title>
                     <description>Enables portal administrators to administer portlet groups</description>
                 </language>
