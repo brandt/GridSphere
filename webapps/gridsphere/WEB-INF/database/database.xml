@@ -3,7 +3,7 @@
 	"http://castor.exolab.org/jdo-conf.dtd">
 <database name="gridsphere" engine="hsql">
     <driver class-name="org.hsqldb.jdbcDriver"
-            url="jdbc:hsqldb:/Users/novotny/Jakarta/jakarta-tomcat-4.1.18/webapps/gridsphere/WEB-INF/database/@DATABASE_NAME@">
+            url="jdbc:hsqldb:@CATALINA_HOME@/webapps/gridsphere/WEB-INF/database/@DATABASE_NAME@">
         <param name="user" value="sa" />
         <param name="password" value="" />
     </driver>
