@@ -23,6 +23,11 @@ public class PortletErrorFrame extends BasePortletComponent implements Cloneable
 
     }
 
+    public void clearError() {
+        message = null;
+        cause = null;
+    }
+
     public boolean hasError() {
         return ((message == null) && (cause == null)) ? false : true;
     }

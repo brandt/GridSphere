@@ -335,6 +335,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      * @throws IOException if an I/O error occurs during rendering
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
+
+        errorFrame.clearError();
         PortletRequest req = event.getPortletRequest();
         PortletRole userRole = req.getRole();
         if (userRole.compare(userRole, requiredRole) < 0) {

@@ -26,7 +26,7 @@ import java.util.*;
  */
 public class PortletTitleBar extends BasePortletComponent implements Serializable, Cloneable {
 
-    private String title = "Portlet Unavailable";
+    private String title = null;
     private String portletClass = null;
     private PortletWindow.State windowState = PortletWindow.State.NORMAL;
     private List supportedModes = new Vector();
@@ -354,10 +354,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         compId.setComponentLabel(label);
         compId.setClassName(this.getClass().getName());
         list.add(compId);
-        String pname = portletClass.substring(0, portletClass.length() - 1);
-        pname = pname.substring(0, pname.lastIndexOf("."));
-        pname = pname.substring(pname.lastIndexOf(".")+1);
-        title += ": " + pname;
         doConfig();
         return list;
     }
@@ -629,6 +625,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
 
+        hasError = false;
+
         // title bar: configure, edit, help, title, min, max
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
@@ -636,21 +634,16 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         // get the appropriate title for this client
         Client client = req.getClient();
 
-
+        Locale locale = Locale.getDefault();
         if (settings != null) {
-
-            Enumeration enum = req.getLocales();
-
-            Locale locale = req.getLocale();
-            while (enum.hasMoreElements()) {
-                Locale alocale = (Locale)enum.nextElement();
-                if (alocale.equals(locale)) title = settings.getTitle(locale, client);
-            }
-
-            if (title == null) {
-                Locale deflocale = settings.getDefaultLocale();
-                String deftitle =  settings.getTitle(deflocale, client);
-                title = deftitle;
+            User user = req.getUser();
+            String userlocale = (String)user.getAttribute(User.LOCALE);
+            if (userlocale != null) {
+                locale = new Locale(userlocale, "", "");
+                title = settings.getTitle(locale, client);
+            } else {
+                locale = settings.getDefaultLocale();
+                title =  settings.getTitle(locale, client);
             }
         }
 
@@ -699,7 +692,14 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 PortletInvoker.doTitle(portletClass, req, res);
                 //out.println(" (" + portletMode.toString() + ") ");
             } catch (PortletException e) {
-                errorMessage += "Unable to invoke doTitle on active portlet\n";
+                String pname = portletClass.substring(0, portletClass.length() - 1);
+                pname = pname.substring(0, pname.lastIndexOf("."));
+                pname = pname.substring(pname.lastIndexOf(".")+1);
+                ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
+                String value = bundle.getString("PORTLET_UNAVAILABLE");
+                title = value + " : " + pname;
+                out.println(title);
+                errorMessage = portletClass + " is currently unavailable!\n";
                 hasError = true;
             }
 
