@@ -8,6 +8,7 @@ package org.gridlab.gridsphere.core.persistence.castor;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerInterface;
 import org.gridlab.gridsphere.core.persistence.ConfigurationException;
+import org.gridlab.gridsphere.core.persistence.PersistenceInterface;
 
 public class BaseManager {
     static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(BaseManager.class.getName());
@@ -16,9 +17,9 @@ public class BaseManager {
         super();
     }
 
-    public PersistenceManager getPM() throws ConfigurationException {
+    public PersistenceInterface getPM() throws ConfigurationException {
 
-        PersistenceManager pm = new PersistenceManager("webapps/WEB-INF/conf/database.xml","portal");
+        PersistenceInterface pm = new PersistenceManager("webapps/WEB-INF/conf/database.xml","portal");
         return pm;
 
     }

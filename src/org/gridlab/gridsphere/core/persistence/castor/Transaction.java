@@ -22,6 +22,8 @@ public class Transaction {
      */
     public Transaction(Database database) {
         super();
+        cat.info("init transaction ");
+
         db = database;
     }
 
@@ -32,6 +34,7 @@ public class Transaction {
     public void begin() throws TransactionException {
         try {
             db.begin();
+            cat.info(" Tx begin ");
         } catch (Exception e) {
             throw new TransactionException("Exception in begin "+e);
         }
@@ -44,6 +47,10 @@ public class Transaction {
     public void commit() throws TransactionException {
         try {
             db.commit();
+            cat.info(" Tx commit");
+            //db.close();
+//        } catch (PersistenceException e) {
+//            throw new TransactionException("Exception in commit (not in progress) "+e);
         } catch (TransactionNotInProgressException e) {
             throw new TransactionException("Exception in commit (not in progress) "+e);
         } catch (TransactionAbortedException e) {
@@ -60,6 +67,21 @@ public class Transaction {
             db.rollback();
         } catch (TransactionNotInProgressException e) {
             throw new TransactionException("Exception in rollback "+e);
+        }
+    }
+
+    /**
+     * closes a transaction
+     * @throws TransactionException
+     */
+    public boolean close() {
+        try {
+            db.close();
+            cat.info( " Tx close ");
+            return true;
+        } catch (PersistenceException e) {
+            cat.error("Problem with Tx close "+e);
+            return false;
         }
     }
 }

@@ -6,51 +6,96 @@
 
 package org.gridlab.gridsphere.core.persistence.castor;
 
-import org.gridlab.gridsphere.core.persistence.*;
-import org.exolab.castor.mapping.MappingException;
-import org.exolab.castor.jdo.Database;
-import org.exolab.castor.jdo.JDO;
+import org.exolab.castor.jdo.*;
 import org.exolab.castor.jdo.PersistenceException;
-import org.exolab.castor.jdo.OQLQuery;
+import org.exolab.castor.mapping.MappingException;
+import org.gridlab.gridsphere.core.persistence.*;
 
-public class PersistenceManager implements PersistenceManagerInterface2 {
-    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(PersistenceManager.class.getName());
+public class PersistenceManager implements PersistenceInterface {
+    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(PersistenceInterface.class.getName());
 
-    Transaction tx = null;
-    Database db = null;
+    //Transaction tx = null;
+    private Database db = null;
+    private JDO jdo = null;
+
 
     /**
      * The great PersistenceManager
      * @param ConfigurationFile filename for the database.xml configurationfile for castor
      * @param Databasename which database to use in the database
      */
-    public PersistenceManager(String ConfigurationFile, String Databasename) throws ConfigurationException {
+    public PersistenceManager(String Configfile, String Databasename) throws ConfigurationException {
 
         try {
-            cat.info("Read from ConfigFile :"+ConfigurationFile+" and database "+Databasename);
-            JDO.loadConfiguration(ConfigurationFile);
-            JDO jdo;
-            jdo = new JDO(Databasename);
-            db = jdo.getDatabase();
-        } catch (MappingException e) {
-            throw new ConfigurationException("Error in configuration "+e);
-        } catch (Exception e) {
-            throw new ConfigurationException("Error in configuration "+e);
-        }
-        tx = new Transaction(db);
+            JDO.loadConfiguration(Configfile);
 
+            jdo = new JDO(Databasename);
+        } catch (MappingException e) {
+            throw new ConfigurationException("Error in configuration " + e);
+
+        } catch (Exception e) {
+            throw new ConfigurationException("Error in configuration " + e);
+        }
+
+        cat.info("PM init done");
     }
 
     /**
-     * returns the current Transaction
+     * begins a transaction
      *
-     * @return Transaction the currrent transaction
-     * @see Transaction
+     * @throws TransactionException of something went wrong
      */
-    public Transaction getCurrentTransaction() {
-        return tx;
+    public void begin() throws TransactionException {
+        try {
+            db = jdo.getDatabase();
+            db.begin();
+        } catch (PersistenceException e) {
+            throw new TransactionException("error in begin " + e);
+        }
     }
 
+    /**
+     * commits changes to the storage
+     *
+     * @throws TransactionException of something went wrong
+     */
+    public void commit() throws TransactionException {
+        try {
+            db.commit();
+        } catch (TransactionNotInProgressException e) {
+            throw new TransactionException("error in commit " + e);
+        } catch (TransactionAbortedException e) {
+            throw new TransactionException("error in commit " + e);
+        }
+    }
+
+    /**
+     * rollback the changes since begin()
+     *
+     * @throws TransactionException of something went wrong
+     */
+    public void rollback() throws TransactionException {
+        try {
+            db.rollback();
+        } catch (TransactionNotInProgressException e) {
+            throw new TransactionException("error in rollback " + e);
+
+        }
+    }
+
+    /**
+     * closes the transaction
+     *
+     * @throws TransactionException of something went wrong
+     */
+    public void close() {
+        try {
+            db.close();
+            db = null;
+        } catch (PersistenceException e) {
+            cat.error("Persistence Exception " + e);
+        }
+    }
 
     /**
      * uupdates the object in the storage
@@ -60,8 +105,9 @@ public class PersistenceManager implements PersistenceManagerInterface2 {
     public void update(Object object) throws UpdateException {
         try {
             db.update(object);
+            cat.info("update success");
         } catch (PersistenceException e) {
-            throw new UpdateException("Problem with update "+e);
+            throw new UpdateException("Problem with update " + e);
         }
     }
 
@@ -74,8 +120,9 @@ public class PersistenceManager implements PersistenceManagerInterface2 {
 
         try {
             db.create(object);
+            cat.info("create success");
         } catch (PersistenceException e) {
-            throw new CreateException("Problem with creation of the object "+e);
+            throw new CreateException("Problem with creation of the object " + e);
         }
     }
 
@@ -87,8 +134,9 @@ public class PersistenceManager implements PersistenceManagerInterface2 {
     public void delete(Object object) throws DeleteException {
         try {
             db.remove(object);
+            cat.info("delete success");
         } catch (PersistenceException e) {
-            throw new DeleteException("Problem with deletion of the object "+e);
+            throw new DeleteException("Problem with deletion of the object " + e);
         }
     }
 
@@ -98,29 +146,11 @@ public class PersistenceManager implements PersistenceManagerInterface2 {
      * @see Query
      */
     public Query getQuery() {
-
+        if (db.equals(null)) {
+            cat.error("ALERT!\n\n\n\n\n\n--------------");
+        }
         Query query = new Query(db);
         return query;
-    }
-
-    /**
-     * Creates an object to the database
-     *
-     * @param object to be marshalled
-     * @throws CreateException is creation went wrong
-     */
-    public void tCreate(Object object) throws CreateException {
-        Database db = null;
-        try {
-            db.begin();
-            db.create(object);
-            db.commit();
-            db.close();
-        } catch (PersistenceException e) {
-            cat.error("PersistenceException " + e);
-            throw new CreateException("Persistence Error "+e);
-        }
-
     }
 
 }
