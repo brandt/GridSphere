@@ -15,6 +15,7 @@ import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceAuthorizer;
 import org.gridlab.gridsphere.core.mail.MailMessage;
 import org.gridlab.gridsphere.services.user.impl.GridSphereUserManager;
 import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
@@ -27,10 +28,10 @@ import java.util.List;
 public class AccessControlManagerServiceImpl implements AccessControlManagerService, PortletServiceProvider {
 
     private GridSphereUserManager aclManager = GridSphereUserManager.getInstance();
-    private User user = null;
+    private PortletServiceAuthorizer authorizer = null;
 
-    public AccessControlManagerServiceImpl(User user) {
-        this.user = user;
+    public AccessControlManagerServiceImpl(PortletServiceAuthorizer authorizer) {
+        this.authorizer = authorizer;
     }
 
     /**

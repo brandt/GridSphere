@@ -19,16 +19,17 @@ import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceAuthorizer;
 
 import java.util.List;
 
 public class UserManagerServiceImpl implements UserManagerService, PortletServiceProvider {
 
     private GridSphereUserManager userManager = GridSphereUserManager.getInstance();
-    private User user = null;
+    private PortletServiceAuthorizer authorizer = null;
 
-    public UserManagerServiceImpl(User user) {
-        this.user = user;
+    public UserManagerServiceImpl(PortletServiceAuthorizer authorizer) {
+        this.authorizer = authorizer;
     }
 
     /**
