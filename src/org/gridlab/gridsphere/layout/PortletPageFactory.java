@@ -252,6 +252,7 @@ public class PortletPageFactory implements PortletSessionListener {
            PortletTab tab = new PortletTab();
             tabbedPane.addTab(tab);
 
+            /*
             if (f.exists()) {
                 //page = (PortletPage)deepCopy(templatePage);
                 //page.setLayoutDescriptor(userLayout);
@@ -306,10 +307,12 @@ public class PortletPageFactory implements PortletSessionListener {
             newPage.setPortletTabbedPane(pane);
             //newPage = (PortletPage)templatePage;
             newPage.init(req, new ArrayList());
+            */
         } catch (Exception e) {
             log.error("Unable to make a clone of the templatePage", e);
 
         }
+
         return newPage;
     }
 
