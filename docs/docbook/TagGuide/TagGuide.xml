@@ -28,12 +28,6 @@
 -->
 <book>
   <title>GridSphere Tag Library User's Guide</title>
-  <bookinfo>
-    <copyright>
-      <year>2003</year>
-      <holder>GridLab Project</holder>
-    </copyright>
-  </bookinfo>
 
   &chap-intro;
   &chap-formtags;

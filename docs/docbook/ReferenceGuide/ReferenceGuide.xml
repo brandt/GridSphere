@@ -32,12 +32,6 @@
 -->
 <book>
   <title>GridSphere Portlet Reference Guide</title>
-  <bookinfo>
-    <copyright>
-      <year>2003</year>
-      <holder>GridLab Project</holder>
-    </copyright>
-  </bookinfo>
 
   &portlet-intro;
   &portlet-lifecycle;
