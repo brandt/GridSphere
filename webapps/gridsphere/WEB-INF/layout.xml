@@ -6,13 +6,6 @@
             <portlet-tab label="home" title="Home">
                 <table-layout>
                     <row-layout>
-                        <column-layout width="50%">
-                            <portlet-frame label="filemanager">
-                                <portlet-class>org.gridlab.gridsphere.portlets.core.file.FileManagerPortlet.1</portlet-class>
-                            </portlet-frame>
-                        </column-layout>
-                    </row-layout>
-                    <row-layout>
                         <column-layout>
                             <portlet-frame label="banner">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.file.BannerPortlet.1</portlet-class>
@@ -68,6 +61,13 @@
                             </portlet-frame>
                         </column-layout>
                     </row-layout>
+                    <row-layout>
+                        <column-layout width="50%">
+                            <portlet-frame label="filemanager">
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.file.FileManagerPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                    </row-layout>
                 </table-layout>
             </portlet-tab>
         </portlet-tabbed-pane>
@@ -77,12 +77,12 @@
             <portlet-tab title="Portlets">
                 <table-layout>
                     <row-layout>
-                        <column-layout width="50%">
+                        <column-layout width="30%">
                             <portlet-frame label="loginconfig">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
-                        <column-layout width="50%">
+                        <column-layout width="70%">
                             <portlet-frame label="portletmanager">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager.1</portlet-class>
                             </portlet-frame>
@@ -93,7 +93,7 @@
             <portlet-tab title="Users">
                 <table-layout>
                     <row-layout>
-                        <column-layout width="80%">
+                        <column-layout width="50%">
                             <portlet-frame label="usermanager">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet.1</portlet-class>
                             </portlet-frame>
@@ -104,7 +104,7 @@
             <portlet-tab title="Groups">
                 <table-layout>
                     <row-layout>
-                        <column-layout width="80%">
+                        <column-layout width="50%">
                             <portlet-frame label="groupmanager">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet.1</portlet-class>
                             </portlet-frame>
