@@ -10,19 +10,19 @@
                     <table-layout>
                         <row-layout>
                             <column-layout width="30%">
-                                <portlet-frame>
+                                <portlet-frame label="login">
                                     <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
                                 </portlet-frame>
                             </column-layout>
                             <column-layout width="70%">
-                                <portlet-frame>
+                                <portlet-frame label="filemanager">
                                     <portlet-class>org.gridlab.gridsphere.portlets.core.file.FileManagerPortlet.1</portlet-class>
                                 </portlet-frame>
                             </column-layout>
                         </row-layout>
                         <row-layout>
                             <column-layout>
-                                <portlet-frame>
+                                <portlet-frame label="banner">
                                     <portlet-class>org.gridlab.gridsphere.portlets.core.file.BannerPortlet.1</portlet-class>
                                 </portlet-frame>
                             </column-layout>

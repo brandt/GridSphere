@@ -33,7 +33,7 @@
                             </column-layout>
 
                             <column-layout width="30%">
-                                <portlet-frame>
+                                <portlet-frame label="login">
                                     <portlet-class>org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1</portlet-class>
                                 </portlet-frame>
                             </column-layout>
