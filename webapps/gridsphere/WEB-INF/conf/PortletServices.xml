@@ -1,7 +1,10 @@
+<!-- $Id$ -->
+
 <portlet-services>
 
     <service>
         <name>Portlet Manager Service</name>
+        <user-required>true</user-required>
         <description>Provides Administration Capabilities for Portlet Web Applications</description>
         <interface>org.gridlab.gridsphere.services.registry.PortletManagerService</interface>
         <implementation>org.gridlab.gridsphere.services.registry.impl.PortletManagerServiceImpl</implementation>

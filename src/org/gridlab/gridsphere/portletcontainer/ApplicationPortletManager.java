@@ -16,7 +16,7 @@ import java.util.Iterator;
  * a Set of RegisteredPortlets and provides operations for the registration, unregistration and querying
  * of ConcretePortlet objects.
  */
-public class ApplicationPortletManager {
+class ApplicationPortletManager {
 
     private static ApplicationPortletManager instance = new ApplicationPortletManager();
 

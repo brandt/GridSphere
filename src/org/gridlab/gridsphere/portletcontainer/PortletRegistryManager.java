@@ -10,7 +10,7 @@ public class PortletRegistryManager {
 
     private static PortletRegistryManager instance = new PortletRegistryManager();
 
-    private Hashtable allApplicationPortlets = new Hashtable();
+    private Map allApplicationPortlets = new Hashtable();
 
     private PortletRegistryManager() {
     }
@@ -37,10 +37,12 @@ public class PortletRegistryManager {
 
     public Collection getApplicationPortlets(String webApplicationName) {
         List webappPortlets = new Vector();
-        Enumeration enum = allApplicationPortlets.elements();
+
+        Set set = allApplicationPortlets.keySet();
         ApplicationPortlet appPortlet;
-        while (enum.hasMoreElements()) {
-            appPortlet = (ApplicationPortlet) enum.nextElement();
+        Iterator it = set.iterator();
+        while (it.hasNext()) {
+            appPortlet = (ApplicationPortlet) it.next();
             if (appPortlet.getWebApplicationName().equals((webApplicationName))) {
                 webappPortlets.add(appPortlet);
             }
