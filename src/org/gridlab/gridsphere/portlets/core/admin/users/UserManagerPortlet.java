@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.portlets.core.admin.users;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
@@ -70,13 +69,8 @@ public class UserManagerPortlet extends ActionPortlet {
             throws PortletException {
         PortletRequest req = evt.getPortletRequest();
 
-
         String userID = evt.getAction().getParameter("userID");
-        if (userID == null) {
-
-        }
         User user = this.userManagerService.getUser(userID);
-
 
         req.setAttribute("user", user);
         HiddenFieldBean hf = evt.getHiddenFieldBean("userID");
@@ -134,10 +128,12 @@ public class UserManagerPortlet extends ActionPortlet {
             User user = null;
             HiddenFieldBean hf = evt.getHiddenFieldBean("newuser");
             String newuser = hf.getValue();
-
+            log.debug("in doConfirmEditUser: " + newuser);
             if (newuser.equals("true")) {
-                user = saveUser(evt, null);
                 validateUser(evt, true);
+                user = saveUser(evt, null);
+                HiddenFieldBean userHF = evt.getHiddenFieldBean("userID");
+                userHF.setValue(user.getID());
             } else {
                 validateUser(evt, false);
                 // load in User values
@@ -147,6 +143,7 @@ public class UserManagerPortlet extends ActionPortlet {
                 user = saveUser(evt, thisuser);
             }
             req.setAttribute("user", user);
+
             PortletRole role = aclManagerService.getRoleInGroup(user, PortletGroupFactory.GRIDSPHERE_GROUP);
             req.setAttribute("role", role.toString());
             setNextTitle(req, "User Account Manager [View User]");
@@ -221,11 +218,17 @@ public class UserManagerPortlet extends ActionPortlet {
         }
 
         if (newuser) {
+            log.debug("i am a new user checking for " + userName);
+            if (this.userManagerService.getUserByUserName(userName) != null) {
+                message.append("A user already exists with the same user name, please use a different name.\n");
+                isInvalid = true;
+            }
             if (this.userManagerService.existsUserName(userName)) {
                 message.append("A user already exists with the same user name, please use a different name.\n");
                 isInvalid = true;
             }
         }
+
         // Validate family name
         String familyName = event.getTextFieldBean("familyName").getValue();
         if (familyName.equals("")) {
@@ -239,9 +242,9 @@ public class UserManagerPortlet extends ActionPortlet {
             isInvalid = true;
         }
 
-        isInvalid = isInvalidPassword(event, message);
         // Throw exception if error was found
-        if (isInvalid) {
+        if (!isInvalid) {
+            isInvalid = isInvalidPassword(event, message);
             throw new PortletException(message.toString());
         }
         log.debug("Exiting validateUser()");
