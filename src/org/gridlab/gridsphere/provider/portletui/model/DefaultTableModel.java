@@ -1,5 +1,5 @@
 /*
- * @author <a href="oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
+ * @author <a href="novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
 package org.gridlab.gridsphere.provider.portletui.model;
@@ -8,18 +8,34 @@ import org.gridlab.gridsphere.provider.portletui.beans.*;
 
 import java.util.*;
 
+/**
+ * A <code>DefaultTableModel</code> provides a data model used by the <code>TableBean</code>
+ */
 public class DefaultTableModel extends BaseBean implements TagBean {
 
     protected List dataList = new Vector();
 
+    /**
+     * Constructs a default table model
+     */
     public DefaultTableModel() {
        dataList = new Vector();
     }
 
+    /**
+     * Constructs a default table model from a list of <code>TableRowBean</code>s
+     *
+     * @param dataList a list of <code>TableRowBean</code>s
+     */
     public DefaultTableModel(List dataList) {
         this.dataList = dataList;
     }
 
+    /**
+     * Constructs a default table model from a Map containing String name/value pairs
+     *
+     * @param paramMap a Map containing String name/value pairs
+     */
     public DefaultTableModel(Map paramMap) {
         TableRowBean tableRow = null;
         TableCellBean cellbean = null;
@@ -28,7 +44,6 @@ public class DefaultTableModel extends BaseBean implements TagBean {
         while (it.hasNext()) {
             tableRow = new TableRowBean();
             String key = (String)it.next();
-            //System.err.println("key= " + key);
             Object obj = paramMap.get(key);
             if (obj instanceof List) {
 
@@ -50,18 +65,36 @@ public class DefaultTableModel extends BaseBean implements TagBean {
         }
     }
 
+    /**
+     * Adds a <code>TableRowBean</code> to the model
+     *
+     * @param rowBean a <code>TableRowBean</code>
+     */
     public void addTableRowBean(TableRowBean rowBean) {
         dataList.add(rowBean);
     }
 
+    /**
+     * Clears the model
+     */
     public void clear() {
         dataList.clear();
     }
 
+    /**
+     * Sets the model with a list of <code>TableRowBean</code>s
+     *
+     * @param rowBeans a list of <code>TableRowBean</code>s
+     */
     public void setTableRowBeans(List rowBeans) {
         dataList = rowBeans;
     }
 
+    /**
+     * Returns a list of <code>TableRowBean</code>s
+     *
+     * @return a list of <code>TableRowBean</code>s
+     */
     public List getTableRowBeans() {
         return dataList;
     }
@@ -77,4 +110,7 @@ public class DefaultTableModel extends BaseBean implements TagBean {
         return sb.toString();
     }
 
+    public String toEndString() {
+        return "";
+    }
 }
