@@ -59,7 +59,7 @@ public class StoredPortletResponseImpl extends SportletResponse {
     }
 
     public ServletOutputStream getOutputStream() throws IOException {
-        throw new IllegalStateException();
+        return new StoredServletOutputStreamImpl(writer);
     }
 
     public void flushBuffer() throws IOException {
