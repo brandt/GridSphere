@@ -36,6 +36,9 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
         this.width = width;
     }
 
+    /**
+     * Renders the component
+     */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
