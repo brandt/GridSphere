@@ -101,6 +101,9 @@
         <portlet-app id="org.gridlab.gridsphere.portlets.core.login.LoginPortlet">
             <portlet-name>Login</portlet-name>
             <servlet-name>LoginPortlet</servlet-name>
+            <supports>
+                 <view/>
+             </supports>
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.login.LoginPortlet.1">
@@ -319,7 +322,6 @@
             <servlet-name>PortletApplicationManager</servlet-name>
             <supports>
                 <view/>
-                <help/>
             </supports>
         </portlet-app>
 
@@ -412,8 +414,7 @@
              <servlet-name>LayoutPortlet</servlet-name>
              <supports>
                  <view/>
-                 <configure/>
-                 <help/>
+                 <edit/>
              </supports>
          </portlet-app>
 
@@ -553,6 +554,9 @@
         <portlet-app id="org.gridlab.gridsphere.portlets.core.subscription.SubscriptionPortlet">
             <portlet-name>Subscription Portlet</portlet-name>
             <servlet-name>SubscriptionPortlet</servlet-name>
+            <supports>
+                 <view/>
+             </supports>
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.subscription.SubscriptionPortlet.1">
@@ -598,8 +602,6 @@
              <supports>
                  <view/>
                  <edit/>
-                 <configure/>
-                 <help/>
              </supports>
          </portlet-app>
 
