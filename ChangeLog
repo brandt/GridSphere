@@ -5,5 +5,9 @@ Changes since GridSphere 1.0
 + NPE fix to PanelBean so that beans can be created and used in PanelTag
 + Added cellpadding and border attributes to Table, Frame, Panel tags/beans
 + Added subscription and layout manager portlets and layout manager service
++ Added portlet manager portlet in admin tab to restart webapps
 + Made required-group an optional attribute in layout.xml descriptor
-
++ Fixes to portlet messaging 
++ Layouts are added and subtracted dynamically when user selects groups
++ Persistence DB uses separate databases per webapp
++ provider.jar also placed into WEB-INF/lib of webapp and not shared/lib
