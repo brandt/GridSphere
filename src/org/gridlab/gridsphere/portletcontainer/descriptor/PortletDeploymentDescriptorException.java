@@ -10,14 +10,14 @@ package org.gridlab.gridsphere.portletcontainer.descriptor;
 
 import org.gridlab.gridsphere.portlet.PortletException;
 
-public class PorletDescriptorException extends PortletException {
-    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(PorletDescriptorException.class.getName());
+public class PortletDeploymentDescriptorException extends PortletException {
+    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(PortletDeploymentDescriptorException.class.getName());
 
-    public  PorletDescriptorException () {
+    public  PortletDeploymentDescriptorException () {
         super();
     }
 
-    public  PorletDescriptorException (String msg) {
+    public  PortletDeploymentDescriptorException (String msg) {
         super(msg);
     }
 
