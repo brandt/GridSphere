@@ -34,6 +34,14 @@ public class ActionLinkTag extends ActionTag {
 
     public int doStartTag() throws JspException {
         paramBeans = new ArrayList();
+        createActionURI();
+        if (key != null) {
+            actionlink.setKey(key);
+            Locale locale = pageContext.getRequest().getLocale();
+            ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
+            actionlink.setValue(bundle.getString(actionlink.getKey()));
+        }
+
         return EVAL_BODY_INCLUDE;
     }
 
@@ -47,14 +55,6 @@ public class ActionLinkTag extends ActionTag {
         } else {
             actionlink = new ActionLinkBean();
             this.setBaseComponentBean(actionlink);
-        }
-
-
-        if (key != null) {
-            actionlink.setKey(key);
-            Locale locale = pageContext.getRequest().getLocale();
-            ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
-            actionlink.setValue(bundle.getString(actionlink.getKey()));
         }
 
         Iterator it = paramBeans.iterator();
