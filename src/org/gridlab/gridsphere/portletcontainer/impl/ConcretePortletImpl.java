@@ -41,9 +41,7 @@ class ConcretePortletImpl implements ConcretePortlet {
     private String portletClass = "Unknown Portlet Class";
     private String appID = null;
     private String concreteID = null;
-    private Owner owner;
-    private List roleList = new Vector();
-    private List groupList = new Vector();
+    private AllowedAccess access = null;
     private List languageList = new Vector();
     private String defaultLocale = "en_US";
     private PortletGroup ownerGroup = PortletGroup.BASE;
@@ -86,29 +84,6 @@ class ConcretePortletImpl implements ConcretePortlet {
         portletName = concDescriptor.getConcretePortletInfo().getName();
         servletName = appDescriptor.getServletName();
 
-        /*
-        log.info("creating new class: " + portletClass);
-        try {
-            Class cls =  classLoader.loadClass(portletClass);
-            abstractPortlet = (AbstractPortlet)classLoader.loadClass(portletClass).newInstance();
-        } catch (Exception e) {
-            log.error("Unable to create AbstractPortlet: " + portletClass, e);
-            throw new ConcretePortletException("Unable to create instance of portlet: " + portletClass);
-        }
-        */
-        /* need concrete portlet class to instantiate
-         now we need the web app nad servlet name
-         we could return that and set the request dispatcher later
-         */
-        //abstractPortlet = new PortletDispatcher();
-
-
-        // SINCE ACL SERVICE DOESN"T WORK YET
-        Vector knownGroups = new Vector();
-        Vector knownRoles = new Vector();
-        //knownGroups = aclService.getAllGroups();
-        //knownRoles = aclService.getAllRoles();
-
         // Get PortletConfig params
         List contextList = concDescriptor.getContextParamList();
         contextHash = new Hashtable(contextList.size());
@@ -133,72 +108,7 @@ class ConcretePortletImpl implements ConcretePortlet {
             configHash.put(param.getParamName(), param.getParamValue());
         }
 
-        // Get groups list
-        List groups = concPortInfo.getGroupList();
-        Iterator knownGroupsIt = knownGroups.iterator();
-        // Make sure groups exist
-        while (knownGroupsIt.hasNext()) {
-            PortletGroup pg = (PortletGroup) knownGroups.iterator().next();
-            while (groups.iterator().hasNext()) {
-                if (pg.getName().equalsIgnoreCase((String) groups.iterator().next())) {
-                    groupList.add(pg);
-                    break;
-                }
-            }
-        }
-
-        // groupList should at least contain BASE group if empty
-        if (groupList.isEmpty()) {
-            groupList.add(SportletGroup.BASE);
-        }
-
-        // Get roles list
-        /*
-        List roles = concPortInfo.getRoleList();
-        Iterator knownRolesIt = knownRoles.iterator();
-        // Make sure roles exist
-        while (knownRolesIt.hasNext()) {
-            PortletRole pr = (PortletRole)knownRolesIt.next();
-            Iterator rolesIt = roles.iterator();
-            while (rolesIt.hasNext()) {
-                if (pr.getRoleName().equalsIgnoreCase((String)rolesIt.next())) {
-                    roleList.add(pr);
-                    break;
-                }
-            }
-        }
-        */
-
-        // roleList should at least contain GUEST role if empty
-        if (roleList.isEmpty()) {
-            roleList.add(PortletRole.GUEST);
-        }
-
-        owner = concPortInfo.getOwner();
-        String groupName = owner.getGroupName();
-        it = knownGroups.iterator();
-
-        while (it.hasNext()) {
-            PortletGroup group = (PortletGroup) it.next();
-            if (group.getName().equalsIgnoreCase(groupName)) {
-                ownerGroup = group;
-                break;
-            }
-        }
-
-        String roleName = owner.getGroupName();
-        it = knownRoles.iterator();
-        /*
-        while (it.hasNext()) {
-            PortletRole role = (PortletRole)it.next();
-            if (role.getRoleName().equalsIgnoreCase(groupName)) {
-                ownerRole = role;
-                break;
-            }
-        }
-        */
-        owner.setGroup(ownerGroup);
-        owner.setRole(ownerRole);
+        access = concPortInfo.getAllowedAccess();
 
         portletSettings = new SportletSettings(this);
     }
@@ -270,36 +180,15 @@ class ConcretePortletImpl implements ConcretePortlet {
         return portletClass;
     }
 
-
     /**
-     * Return the Owner of the concrete portlet that can reconfigure the settings
-     *
-     * @return the concrete portlet owner
-     */
-    public Owner getPortletOwner() {
-        return owner;
-    }
-
-    /**
-     * Returns the list of supported groups
+     * Returns the allowed access defining who can access this portlet
      * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
      *
      * @return the list of supported PortletGroup objects
      */
-    public List getSupportedGroups() {
-        return groupList;
+    public AllowedAccess getAllowedAccess() {
+        return access;
     }
-
-    /**
-     * Returns the list of supported roles
-     * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
-     *
-     * @return the list of supported PortletRole objects
-     */
-    public List getSupportedRoles() {
-        return roleList;
-    }
-
     /**
      * gets the default locale of a portlet
      *

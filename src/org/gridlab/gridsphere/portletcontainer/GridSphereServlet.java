@@ -11,10 +11,10 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
-import org.gridlab.gridsphere.services.registry.PortletManagerService;
-import org.gridlab.gridsphere.services.user.UserManagerService;
-import org.gridlab.gridsphere.services.user.LoginService;
-import org.gridlab.gridsphere.services.security.AuthenticationException;
+import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
+import org.gridlab.gridsphere.services.core.user.UserManagerService;
+import org.gridlab.gridsphere.services.core.user.LoginService;
+import org.gridlab.gridsphere.services.core.security.password.AuthenticationException;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContextEvent;
@@ -306,7 +306,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event The session event
      */
     public void sessionCreated(HttpSessionEvent event) {
-
         log.info("sessionCreated('" + event.getSession().getId() + "')");
     }
 

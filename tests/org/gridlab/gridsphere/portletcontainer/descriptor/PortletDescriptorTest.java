@@ -84,7 +84,6 @@ public class PortletDescriptorTest extends TestCase {
         m = (Markup) mlist.get(1);
         assertEquals("wml", m.getName());
 
-
         // Check concrete one portal data
         assertEquals("org.gridlab.gridsphere.portlets.core.HelloWorld.666.2", concreteOne.getID());
 
@@ -120,19 +119,11 @@ public class PortletDescriptorTest extends TestCase {
         assertEquals("Hallo Welt - Sample Portlet #1", langTwo.getTitle());
         assertEquals("Hallo Welt", langTwo.getTitleShort());
 
-        Owner o = onePI.getOwner();
-        assertEquals(o.getRoleName(), "SUPER");
-
-        List groups = onePI.getGroupList();
-        assertEquals(groups.size(), 1);
-
-        Group g = (Group) groups.get(0);
-        assertEquals("ANY", g.getGroupName());
-
-        List roles = onePI.getRoleList();
-        assertEquals(groups.size(), 1);
-        Role r = (Role) roles.get(0);
-        assertEquals("GUEST", r.getRoleName());
+        AllowedAccess access = onePI.getAllowedAccess();
+        String role = access.getRole();
+        String vis = access.getVisibility();
+        assertEquals("PRIVATE", vis);
+        assertEquals("ADMIN", role);
 
         List configList = onePI.getConfigParamList();
         assertEquals(configList.size(), 1);
@@ -151,11 +142,11 @@ public class PortletDescriptorTest extends TestCase {
         assertEquals(one.getParamName(), "Portlet Master");
         assertEquals(one.getParamValue(), "secondguy@some.com");
 
-        onePI = concreteTwo.getConcretePortletInfo();
-        assertEquals(onePI.getName(), "Hello World 2");
-        assertEquals(onePI.getDefaultLocale(), "en");
+        ConcretePortletInfo twoPI = concreteTwo.getConcretePortletInfo();
+        assertEquals(twoPI.getName(), "Hello World 2");
+        assertEquals(twoPI.getDefaultLocale(), "en");
 
-        langList = onePI.getLanguageList();
+        langList = twoPI.getLanguageList();
         assertEquals(langList.size(), 1);
         langOne = (LanguageInfo) langList.get(0);
 
@@ -165,22 +156,13 @@ public class PortletDescriptorTest extends TestCase {
         assertEquals(langOne.getTitle(), "Hello World - Sample Portlet #2");
         assertEquals(langOne.getTitleShort(), "Hello World");
 
-        Owner ow = onePI.getOwner();
-        assertEquals(ow.getRoleName(), "ADMIN");
-        assertEquals(ow.getGroupName(), "CACTUS");
+        access = twoPI.getAllowedAccess();
+        role = access.getRole();
+        vis = access.getVisibility();
+        assertEquals("PUBLIC", vis);
+        assertEquals("USER", role);
 
-        List groupsList = onePI.getGroupList();
-        assertEquals(groups.size(), 1);
-
-        Group gr = (Group) groupsList.get(0);
-        assertEquals("CACTUS", gr.getGroupName());
-
-        List rolez = onePI.getRoleList();
-        assertEquals(groups.size(), 1);
-        Role rol = (Role) rolez.get(0);
-        assertEquals("USER", rol.getRoleName());
-
-        configList = onePI.getConfigParamList();
+        configList = twoPI.getConfigParamList();
         assertEquals(configList.size(), 1);
         one = (ConfigParam) configList.get(0);
         assertEquals("Portlet Master", one.getParamName());

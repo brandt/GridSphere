@@ -9,6 +9,9 @@ import junit.framework.TestSuite;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
+import org.gridlab.gridsphere.services.core.user.AccountRequest;
+import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
+import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
 import java.util.List;
 

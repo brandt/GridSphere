@@ -6,7 +6,7 @@ package org.gridlab.gridsphere.portletcontainer;
 
 import org.gridlab.gridsphere.portlet.PortletSettings;
 import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletDescriptor;
-import org.gridlab.gridsphere.portletcontainer.descriptor.Owner;
+import org.gridlab.gridsphere.portletcontainer.descriptor.AllowedAccess;
 
 import java.io.IOException;
 import java.util.Hashtable;
@@ -71,28 +71,8 @@ public interface ConcretePortlet {
      */
     public String getPortletClass();
 
-    /**
-     * Return the Owner of the concrete portlet that can reconfigure the settings
-     *
-     * @return the concrete portlet owner
-     */
-    public Owner getPortletOwner();
 
-    /**
-     * Returns the list of supported groups
-     * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
-     *
-     * @return the list of supported PortletGroup objects
-     */
-    public List getSupportedGroups();
-
-    /**
-     * Returns the list of supported roles
-     * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
-     *
-     * @return the list of supported PortletRole objects
-     */
-    public List getSupportedRoles();
+    public AllowedAccess getAllowedAccess();
 
     /**
      * gets the default locale of a portlet

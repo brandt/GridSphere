@@ -16,9 +16,7 @@ public class ConcretePortletInfo {
     private List languageList = new ArrayList();
     private String name = new String();
     private String Description = new String();
-    private Owner owner = new Owner();
-    private List groupList = new ArrayList();
-    private List roleList = new ArrayList();
+    private AllowedAccess access = new AllowedAccess();
     private List configParamList = new ArrayList();
 
     /**
@@ -75,58 +73,12 @@ public class ConcretePortletInfo {
         this.name = name;
     }
 
-    /**
-     * Returns the Owner defining who has authorization to configure this portlet
-     *
-     * @return owner the Owner defining who has authorization to configure this portlet
-     */
-    public Owner getOwner() {
-        return owner;
+    public AllowedAccess getAllowedAccess() {
+        return access;
     }
 
-    /**
-     * Sets the Owner defining who has authorization to configure this portlet
-     *
-     * @param owner the Owner defining who has authorization to configure this portlet
-     */
-    public void setOwner(Owner owner) {
-        this.owner = owner;
-    }
-
-    /**
-     * Returns the List of groups allowed access to this portlet
-     *
-     * @return ArrayList of groups allowed access to this portlet
-     */
-    public List getGroupList() {
-        return groupList;
-    }
-
-    /**
-     * Sets the ArrayList of groups allowed access to this portlet
-     *
-     * @param groupList the ArrayList of groups allowed access to this portlet
-     */
-    public void setGroupList(ArrayList groupList) {
-        this.groupList = groupList;
-    }
-
-    /**
-     * Returns the List of roles allowed access to this portlet
-     *
-     * @return ArrayList of roles allowed access to this portlet
-     */
-    public List getRoleList() {
-        return roleList;
-    }
-
-    /**
-     * Sets the ArrayList of roles allowed access to this portlet
-     *
-     * @param groupList the ArrayList of roles allowed access to this portlet
-     */
-    public void setRoleList(ArrayList roleList) {
-        this.roleList = roleList;
+    public void setAllowedAccess(AllowedAccess access) {
+        this.access = access;
     }
 
     /**

@@ -16,10 +16,11 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.ServiceTest;
-import org.gridlab.gridsphere.services.security.AuthenticationException;
-import org.gridlab.gridsphere.services.user.AccountRequest;
-import org.gridlab.gridsphere.services.user.LoginService;
-import org.gridlab.gridsphere.services.user.UserManagerService;
+import org.gridlab.gridsphere.services.core.security.password.AuthenticationException;
+import org.gridlab.gridsphere.services.core.user.AccountRequest;
+import org.gridlab.gridsphere.services.core.user.LoginService;
+import org.gridlab.gridsphere.services.core.user.UserManagerService;
+import org.gridlab.gridsphere.services.core.security.credential.*;
 
 import java.util.List;
 import java.util.Vector;

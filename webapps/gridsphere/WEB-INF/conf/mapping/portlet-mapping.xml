@@ -40,14 +40,8 @@
         <field name="LanguageList" type="org.gridlab.gridsphere.portletcontainer.descriptor.LanguageInfo" collection="arraylist">
             <bind-xml name="language"/>
         </field>
-        <field name="Owner" type="org.gridlab.gridsphere.portletcontainer.descriptor.Owner">
-            <bind-xml name="owner"/>
-        </field>
-        <field name="GroupList" type="org.gridlab.gridsphere.portletcontainer.descriptor.Group" collection="arraylist">
-            <bind-xml name="group"/>
-        </field>
-        <field name="RoleList" type="org.gridlab.gridsphere.portletcontainer.descriptor.Role" collection="arraylist">
-            <bind-xml name="role"/>
+        <field name="AllowedAccess" type="org.gridlab.gridsphere.portletcontainer.descriptor.AllowedAccess" collection="arraylist">
+            <bind-xml name="allowed-access"/>
         </field>
         <field name="ConfigParamList" type="org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam" collection="arraylist">
             <bind-xml name="config-param"/>
@@ -72,6 +66,14 @@
         </field>
     </class>
 
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.AllowedAccess">
+        <field name="Visibility" type="string">
+            <bind-xml name="visibility" node="attribute"/>
+        </field>
+        <field name="Role" type="string">
+            <bind-xml name="role"/>
+        </field>
+    </class>
 
     <class name="org.gridlab.gridsphere.portletcontainer.descriptor.ApplicationPortletDescriptor">
         <field name="ID" type="string">

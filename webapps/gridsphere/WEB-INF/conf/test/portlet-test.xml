@@ -56,16 +56,9 @@
                     <description>Hier ist ein gleicht portlet</description>
                     <keywords>portlet hallo welt</keywords>
                 </language>
-                <owner>
-                    <group-name></group-name>
-                    <role-name>SUPER</role-name>
-                </owner>
-                <group>
-                    <group-name>ANY</group-name>
-                </group>
-                <role>
-                    <role-name>GUEST</role-name>
-                </role>
+                <allowed-access visibility="private">
+                    <role>ADMIN</role>
+                </allowed-access>
                 <config-param>
                     <param-name>Portlet Mistress</param-name>
                     <param-value>mistress@domain.com</param-value>
@@ -87,16 +80,9 @@
                     <description>Here is another simple portlet</description>
                     <keywords>portlet hello world</keywords>
                 </language>
-                <owner>
-                    <group-name>CACTUS</group-name>
-                    <role-name>ADMIN</role-name>
-                </owner>
-                <group>
-                    <group-name>CACTUS</group-name>
-                </group>
-                <role>
-                    <role-name>USER</role-name>
-                </role>
+                <allowed-access visibility="public">
+                    <role>USER</role>
+                </allowed-access>
                 <config-param>
                     <param-name>Portlet Master</param-name>
                     <param-value>secondguy@some.com</param-value>
