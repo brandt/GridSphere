@@ -566,7 +566,7 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Deploys GridSphere and all project portlets to Tomcat                                        -->
+    <!-- Deploys GridSphere and all project portlets to Tomcat               -->
     <!-- =================================================================== -->
     <target name="deploy-all" depends="deploy" description="Compile all portlet subprojects">
         <foreach target="deploy-project" param="thisEnv">
@@ -601,7 +601,18 @@ Copyright:
     <!-- =================================================================== -->
     <target name="undeploy" depends="setenv" description="Undeploys GridSphere from a local server">
 
+        <!-- Delete GridSphere web app -->
         <delete dir="${env.CATALINA_HOME}/webapps/gridsphere"/>
+
+        <!-- Delete JAR files from Catalina -->
+        <delete>
+            <fileset dir="${env.CATALINA_HOME}/shared/lib">
+                <include name="gridsphere*"/>
+                <include name="portlet*"/>
+            </fileset>
+
+        </delete>
+
     </target>
 
     <!-- =================================================================== -->
@@ -622,7 +633,7 @@ Copyright:
                 <exclude name="*.LICENSE"/>
             </fileset>
             <fileset dir="lib">
-                <exclude name="portlet-widget-tags.jar"/>
+                <exclude name="gridsphere-ui-tags.jar"/>
                 <exclude name="coreportlets.jar"/>
                 <exclude name="ext/**"/>
             </fileset>
@@ -644,7 +655,7 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Deploys GridSphere Java Server Pages to Tomcat                                        -->
+    <!-- Deploys GridSphere Java Server Pages to Tomcat                      -->
     <!-- =================================================================== -->
     <target name="deploy-jsp">
 
