@@ -21,15 +21,6 @@ public class ActionSubmitTag extends ActionTag {
     protected String key = "";
 
     protected ActionSubmitBean actionSubmitBean = null;
-    protected boolean hideifjs = false;
-
-    public boolean isHideifjs() {
-        return hideifjs;
-    }
-
-    public void setHideifjs(boolean hideifjs) {
-        this.hideifjs = hideifjs;
-    }
 
     /**
      * Returns the action link key used to locate localized text
@@ -58,7 +49,6 @@ public class ActionSubmitTag extends ActionTag {
         paramBeans = new ArrayList();
 
         actionSubmitBean.setName(createActionURI());
-        actionSubmitBean.setHideIfJS(hideifjs);
 
         if (!key.equals("")) {
             actionSubmitBean.setKey(key);
