@@ -3,9 +3,9 @@
 	"http://castor.exolab.org/jdo-conf.dtd">
 <database name="junit" engine="hsql" >
  <driver class-name="org.hsqldb.jdbcDriver"
-          url="jdbc:hsqldb:junit">
+          url="jdbc:hsqldb:db/junit-db">
     <param name="user" value="sa" />
     <param name="password" value="" />
   </driver>
-  <mapping href="@CATALINA_HOME@/webapps/gridsphere/WEB-INF/conf/mapping/docletmapping.xml" />
+  <mapping href="webapps/gridsphere/WEB-INF/conf/mapping/docletmapping.xml" />
 </database>
