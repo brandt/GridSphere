@@ -6,5 +6,5 @@
          <param name="password" value="" />
     </driver>
 
-    <mapping href="webapps/WEB-INF/conf/mapping/postgresmapping.xml"/>
+    <mapping href="webapps/WEB-INF/conf/mapping/docletmapping.xml"/>
 </database>
