@@ -167,7 +167,7 @@ public class DBTask extends Task {
                     String filename = children[i];
                     if (filename.endsWith(".hbm.xml")) {
                         cfg.addFile(configDir + File.separator + filename);
-                        log.info("loading "+configDir + File.separator + filename);
+                        //log.info("loading "+configDir + File.separator + filename);
                     }
                 }
             }
