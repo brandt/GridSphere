@@ -2,6 +2,8 @@ package org.gridlab.gridsphere.core.persistence.hibernate;
 
 import org.gridlab.gridsphere.core.persistence.Transaction;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,6 +13,9 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
  * To change this template use Options | File Templates.
  */
 public class TransactionImpl implements Transaction {
+
+    private static PortletLog log = SportletLog.getInstance(SessionImpl.class);
+
     private net.sf.hibernate.Transaction hbTransaction = null;
 
     TransactionImpl(net.sf.hibernate.Transaction hbTransaction) {
@@ -27,6 +32,7 @@ public class TransactionImpl implements Transaction {
         try {
             this.hbTransaction.commit();
         } catch (Exception e) {
+            log.error("Unable to perform commit hibernate transaction", e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -40,6 +46,7 @@ public class TransactionImpl implements Transaction {
         try {
             this.hbTransaction.rollback();
         } catch (Exception e) {
+            log.error("Unable to perform rollback hibernate transaction", e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -54,6 +61,7 @@ public class TransactionImpl implements Transaction {
         try {
             return this.hbTransaction.wasRolledBack();
         } catch (Exception e) {
+            log.error("Unable to check if transaction was rolled back", e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -70,6 +78,7 @@ public class TransactionImpl implements Transaction {
         try {
             return this.hbTransaction.wasCommitted();
         } catch (Exception e) {
+            log.error("Unable to check if transaction was committed", e);
             throw new PersistenceManagerException(e);
         }
     }

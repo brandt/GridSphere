@@ -16,8 +16,6 @@ import javax.servlet.ServletContext;
 import java.io.*;
 import java.util.List;
 import java.util.Properties;
-import java.util.Map;
-import java.util.Iterator;
 
 /**
  *
@@ -56,7 +54,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         } catch (IOException e) {
             log.error("Unable to copy file from " + origPropsPath + " to " + gsPropsPath);
         } catch (HibernateException e) {
-            log.error("Could not instantiate Hibernate Factory " + e);
+            log.error("Could not instantiate Hibernate Factory", e);
         }
         log.info("Creating Hibernate RDBMS Impl using config in " + gsPropsPath);
     }
@@ -97,9 +95,9 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         } catch (FileNotFoundException e) {
             log.error("Could not find Hibernate config file. Make sure you have a file  " + file);
         } catch (IOException e) {
-            log.error("Could not load Hibernate config File: " + e);
+            log.error("Could not load Hibernate config File", e);
         } catch (HibernateException e) {
-            log.error("Could not instantiate Hibernate Factory " + e);
+            log.error("Could not instantiate Hibernate Factory", e);
         }
 
     }
@@ -132,7 +130,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             }
 
         } catch (MappingException e) {
-            log.error("Could not load Hibernate mapping files " + e);
+            log.error("Could not load Hibernate mapping files", e);
         }
 
         return cfg;
@@ -150,7 +148,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         try {
             return new SessionImpl(factory.openSession());
         } catch (Exception e) {
-            log.error("Could not open session " + e);
+            log.error("Could not open session", e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -161,6 +159,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         try {
             doTransaction(object, "", CMD_CREATE);
         } catch (Exception e) {
+            log.error("Could not create object", e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -169,6 +168,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         try {
             doTransaction(object, "", CMD_UPDATE);
         } catch (Exception e) {
+            log.error("Could not update object", e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -187,6 +187,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         try {
             return (List) doTransaction(null, query, CMD_RESTORE_LIST);
         } catch (Exception e) {
+            log.error("Could not restore list", e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -195,6 +196,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         try {
             doTransaction(object, "", CMD_DELETE);
         } catch (Exception e) {
+            log.error("Could not delete object", e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -203,6 +205,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         try {
             doTransaction(null, query, CMD_DELETE_LIST);
         } catch (Exception e) {
+            log.error("Could not delete list", e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -250,7 +253,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             if (tx != null) {
                 tx.rollback();
             }
-            log.error("Could not complete transaction: " + e);
+            log.error("Could not complete transaction", e);
             e.printStackTrace();
             throw e;
         } finally {
@@ -263,6 +266,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         try {
             factory.close();
         } catch (HibernateException e) {
+            log.error("Could not close session factory", e);
             throw new PersistenceManagerException(e);
         }
     }

@@ -3,6 +3,8 @@ package org.gridlab.gridsphere.core.persistence.hibernate;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.Transaction;
 import org.gridlab.gridsphere.core.persistence.Session;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 import java.util.List;
 import java.util.Iterator;
@@ -15,6 +17,8 @@ import java.util.Iterator;
  * To change this template use Options | File Templates.
  */
 public class SessionImpl implements Session {
+
+    private static PortletLog log = SportletLog.getInstance(SessionImpl.class);
 
     private net.sf.hibernate.Session hbSession = null;
 
@@ -32,6 +36,7 @@ public class SessionImpl implements Session {
         try {
             this.hbSession.flush();
         } catch (Exception e) {
+            log.error("Unable to flush hibernate session", e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -46,6 +51,7 @@ public class SessionImpl implements Session {
         try {
             this.hbSession.reconnect();
         } catch (Exception e) {
+            log.error("Unable to reconnect session", e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -60,6 +66,7 @@ public class SessionImpl implements Session {
         try {
             this.hbSession.close();
         } catch (Exception e) {
+            log.error("Unable to close hibernate session", e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -93,6 +100,7 @@ public class SessionImpl implements Session {
         try {
             return this.hbSession.isDirty();
         } catch (Exception e) {
+            log.error("Unable to check if hibernate session isdirty", e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -107,6 +115,7 @@ public class SessionImpl implements Session {
         try {
             this.hbSession.save(object);
         } catch (Exception e) {
+            log.error("Unable to save object in hibernate session", e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -126,6 +135,7 @@ public class SessionImpl implements Session {
         try {
             this.hbSession.saveOrUpdate(object);
         } catch (Exception e) {
+            log.error("Unable to save or update object in hibernate session", e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -146,6 +156,7 @@ public class SessionImpl implements Session {
         try {
             this.hbSession.update(object);
         } catch (Exception e) {
+            log.error("Unable to update object in hibernate session", e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -165,6 +176,7 @@ public class SessionImpl implements Session {
         try {
             return this.hbSession.saveOrUpdateCopy(object);
         } catch (Exception e) {
+            log.error("Unable to save or update object in hibernate session", e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -181,6 +193,7 @@ public class SessionImpl implements Session {
         try {
             this.hbSession.delete(object);
         } catch (Exception e) {
+            log.error("Unable to delete object in hibernate session", e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -197,6 +210,7 @@ public class SessionImpl implements Session {
         try {
             return this.hbSession.delete(query);
         } catch (Exception e) {
+            log.error("Unable to delete object in hibernate session", e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -211,6 +225,7 @@ public class SessionImpl implements Session {
         try {
             this.hbSession.refresh(object);
         } catch (Exception e) {
+            log.error("Unable to refresh object in hibernate session", e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -230,6 +245,7 @@ public class SessionImpl implements Session {
         try {
             return new TransactionImpl(this.hbSession.beginTransaction());
         } catch (Exception e) {
+            log.error("Unable to begin transaction in hibernate session", e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -248,6 +264,7 @@ public class SessionImpl implements Session {
             net.sf.hibernate.Query q = hbSession.createQuery(query);
             return q.list().get(0);
         } catch (Exception e) {
+            log.error("Unable to retrieve object in hibernate session with query " + query, e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -264,6 +281,7 @@ public class SessionImpl implements Session {
             net.sf.hibernate.Query q = hbSession.createQuery(query);
             return q.list();
         } catch (Exception e) {
+            log.error("Unable to retrieve list in hibernate session with query " + query, e);
             throw new PersistenceManagerException(e);
         }
     }
@@ -284,6 +302,7 @@ public class SessionImpl implements Session {
          try {
             return this.hbSession.iterate(query);
         } catch (Exception e) {
+             log.error("Unable to iterate objects in hibernate session with query " + query, e);
             throw new PersistenceManagerException(e);
         }
     }
