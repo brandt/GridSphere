@@ -55,26 +55,13 @@ public class PortletPreferencesManager {
         PersistencePreference prefs = null;
         try {
             prefs = (PersistencePreference) pm.restore(command);
-
-            PortletPreferencesImpl portletprefdefault = null;
             if (prefs == null) {
-                // try get one from the xml
-
-                // your part jason, to get from xml here
-
                 // we have no prefs in the xml so create one in the db...
-                if (portletprefdefault == null) {
-                    prefs = new PersistencePreference(pm);
-                    prefs.setPortletId(portletID);
-                    prefs.setUserId(user.getID());
-                } else {
-                    // we got one from xml, save it to db for the user
-                    prefs = new PersistencePreference(pm, portletprefdefault);
-                }
-
+                prefs = new PersistencePreference(pm, defaultPreferences);
+                prefs.setPortletId(portletID);
+                prefs.setUserId(user.getID());
                 prefs.store();
             }
-
         } catch (Exception e) {
             return defaultPreferences;
         }
