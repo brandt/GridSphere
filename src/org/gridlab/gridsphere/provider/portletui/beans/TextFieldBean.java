@@ -4,16 +4,13 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-public class TextFieldBean extends ReadOnlyBaseBean implements TagBean  {
+public class TextFieldBean extends InputBean implements TagBean  {
 
     public static final String TEXTFIELD_STYLE = "portlet-frame-text";
 
-    protected int size;
-    protected String inputType = "text";
-    protected int maxlength;
-
     public TextFieldBean() {
         super();
+        this.inputtype = "text";
         this.cssStyle = TEXTFIELD_STYLE;
     }
 
@@ -34,38 +31,7 @@ public class TextFieldBean extends ReadOnlyBaseBean implements TagBean  {
         this.maxlength = maxlength;
     }
 
-    /**
-     * Returns the (html) size of the field.
-     * @return size of the field
-     */
-    public int getSize() {
-        return size;
-    }
-
-    /**
-     * Sets the (html) size of the field
-     * @param size size of the field
-     */
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    /**
-     * Returns the (html) maxlength of the field
-     * @return maxlength of the field
-     */
-    public int getMaxLength() {
-        return maxlength;
-    }
-
-    /**
-     * Sets the (html) maxlnegth of the field
-     * @param maxlength maxlength of the field
-     */
-    public void setMaxLength(int maxlength) {
-        this.maxlength = maxlength;
-    }
-
+    /*
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<input type='");
@@ -90,5 +56,6 @@ public class TextFieldBean extends ReadOnlyBaseBean implements TagBean  {
         buffer.append("/>");
         return buffer.toString();
     }
+    */
 
 }

@@ -7,18 +7,18 @@ package org.gridlab.gridsphere.tags.portletui;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
-import org.gridlab.gridsphere.provider.portletui.beans.ParamBean;
+import org.gridlab.gridsphere.provider.portletui.beans.ActionParamBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 import java.util.*;
 
-public abstract class ActionTag extends BodyTagSupport {
+public abstract class ActionTag extends BaseBeanTag {
 
     protected String action = null;
     protected PortletURI actionURI = null;
     protected DefaultPortletAction portletAction = null;
-    protected List paramBeans = new ArrayList();
+    protected List paramBeans = null;
 
     public void setAction(String action) {
         this.action = action;
@@ -36,11 +36,11 @@ public abstract class ActionTag extends BodyTagSupport {
         return portletAction;
     }
 
-    public void addParamBean(ParamBean paramBean) {
+    public void addParamBean(ActionParamBean paramBean) {
         paramBeans.add(paramBean);
     }
 
-    public void removeParamBean(ParamBean paramBean) {
+    public void removeParamBean(ActionParamBean paramBean) {
         paramBeans.remove(paramBean);
     }
 
@@ -50,16 +50,17 @@ public abstract class ActionTag extends BodyTagSupport {
 
     public String createActionURI() {
 
-        // action is a required attribute except for FormTag
-        if (action == null) return "";
-
         // Builds a URI containing the actin and associated params
         PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
+
+        // action is a required attribute except for FormTag
+        if (action == null) return res.createURI().toString();
+
         actionURI = res.createURI();
         portletAction = new DefaultPortletAction(action);
         Iterator it = paramBeans.iterator();
         while (it.hasNext()) {
-            ParamBean pbean = (ParamBean)it.next();
+            ActionParamBean pbean = (ActionParamBean)it.next();
             portletAction.addParameter(pbean.getName(), pbean.getValue());
         }
         actionURI.addAction(portletAction);

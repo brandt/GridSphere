@@ -8,16 +8,17 @@ package org.gridlab.gridsphere.tags.portletui;
 import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
+import org.gridlab.gridsphere.provider.portletui.beans.PasswordBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class TextFieldTag extends BaseComponentTag {
+public class PasswordTag extends BaseComponentTag {
 
-    protected TextFieldBean textFieldBean = null;
-    public static final String TEXTFIELD_STYLE = "portlet-frame-text";
+    protected PasswordBean passwordBean = null;
+    public static final String PASSWORD_STYLE = "portlet-frame-text";
 
     protected int size = 10;
     protected int maxlength = 15;
@@ -57,31 +58,31 @@ public class TextFieldTag extends BaseComponentTag {
     public int doEndTag() throws JspException {
 
         if (!beanId.equals("")) {
-            textFieldBean = (TextFieldBean)pageContext.getSession().getAttribute(getBeanKey());
-            if (textFieldBean == null) textFieldBean = new TextFieldBean();
+            passwordBean = (PasswordBean)pageContext.getSession().getAttribute(getBeanKey());
+            if (passwordBean == null) {
+                passwordBean = new PasswordBean();
+            }
         } else {
-            textFieldBean = new TextFieldBean();
+                passwordBean = new PasswordBean();
         }
-
-        textFieldBean.setCssStyle(TEXTFIELD_STYLE);
-        textFieldBean.setMaxLength(maxlength);
-        textFieldBean.setSize(size);
-        this.setBaseComponentBean(textFieldBean);
-
+        passwordBean.setCssStyle(PASSWORD_STYLE);
+        passwordBean.setMaxLength(maxlength);
+        passwordBean.setSize(size);
+        this.setBaseComponentBean(passwordBean);
         if (!beanId.equals("")) {
             //System.err.println("storing bean in the session");
-            store(getBeanKey(), textFieldBean);
+            store(getBeanKey(), passwordBean);
         }
         //debug();
 
         Object parentTag = getParent();
         if (parentTag instanceof ContainerTag) {
             ContainerTag containerTag = (ContainerTag)parentTag;
-            containerTag.addTagBean(textFieldBean);
+            containerTag.addTagBean(passwordBean);
         } else {
             try {
                 JspWriter out = pageContext.getOut();
-                out.print(textFieldBean.toString());
+                out.print(passwordBean.toString());
             } catch (Exception e) {
                 throw new JspException(e.getMessage());
             }

@@ -16,7 +16,7 @@ public class HiddenFieldBean extends TextFieldBean {
     }
 
     public String toString() {
-        this.inputType = "hidden";
+        this.inputtype = "hidden";
         return super.toString();
     }
 

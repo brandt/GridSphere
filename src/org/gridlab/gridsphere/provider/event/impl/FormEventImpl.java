@@ -16,9 +16,10 @@ import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.ui.beans.*;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
@@ -87,12 +88,12 @@ public class FormEventImpl implements FormEvent {
 
     private Object getBean(String name) {
         HttpSession session = request.getSession();
-        log.debug("Try to get bean "+GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name+" from session.");
-        NameBean bean = (NameBean) session.getAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name);
+        log.debug("Try to get bean "+SportletProperties.PORTLETID+":"+request.getAttribute(SportletProperties.PORTLETID)+":"+name+" from session.");
+        NameBean bean = (NameBean) session.getAttribute(SportletProperties.PORTLETID+":"+request.getAttribute(SportletProperties.PORTLETID)+":"+name);
         if (bean==null) {
-            log.info("does not exists :"+GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name);
+            log.info("does not exists :"+SportletProperties.PORTLETID+":"+request.getAttribute(SportletProperties.PORTLETID)+":"+name);
         } else{
-            log.info("Check the bean content:"+GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name+" ->"+bean.toString());
+            log.info("Check the bean content:"+SportletProperties.PORTLETID+":"+request.getAttribute(SportletProperties.PORTLETID)+":"+name+" ->"+bean.toString());
             log.info("\n\n\n========"+bean.getName());
         }
         return bean;
@@ -113,7 +114,7 @@ public class FormEventImpl implements FormEvent {
         } else {
             //System.out.println("Getting Bean " + name + " from Session");
             //if (checkParameterName("gstag:"+bean.getName())) {
-            String beanKey = GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name;
+            String beanKey = SportletProperties.PORTLETID+":"+request.getAttribute(SportletProperties.PORTLETID)+":"+name;
             log.debug("Getting Bean '" + beanKey + "' from Session");
             if (bean instanceof TableBean) {
                 // has to be that hack since the individal components of a table
@@ -143,8 +144,8 @@ public class FormEventImpl implements FormEvent {
                 session.setAttribute(beanKey, tbean);
                 return tbean;
             } else {
-               // session.setAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name, bean);
-                String paramval = "gstag:"+GridSphereProperties.COMPONENT_ID+":"+request.getAttribute(GridSphereProperties.COMPONENT_ID).toString()+":"+ bean.getName();
+               // session.setAttribute(SportletProperties.PORTLETID+":"+request.getAttribute(SportletProperties.PORTLETID)+":"+name, bean);
+                String paramval = "gstag:"+SportletProperties.COMPONENT_ID+":"+request.getAttribute(SportletProperties.COMPONENT_ID).toString()+":"+ bean.getName();
                 String[] values = request.getParameterValues(paramval);
                 log.debug("Updating bean: " + " name req: "+name+" bean name: "+bean.getName()+"("+paramval+")");
                 bean.update(values);

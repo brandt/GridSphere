@@ -8,7 +8,7 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.provider.ActionEventPortlet;
 
 import javax.servlet.UnavailableException;

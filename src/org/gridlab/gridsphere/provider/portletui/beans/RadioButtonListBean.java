@@ -19,8 +19,9 @@ public class RadioButtonListBean extends CheckBoxListBean {
      * @param selected true of the radiobutton should be selected else false
      */
     public void add(String value, String label, boolean selected) {
-        RadioButtonBean cbb = new RadioButtonBean(this.name, value, selected, false);
-        cbb.setLabel(label);
+        RadioButtonBean cbb = new RadioButtonBean();
+        cbb.setSelected(selected);
+        cbb.setValue(label);
         list.add(cbb);
     }
 

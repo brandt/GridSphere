@@ -4,54 +4,22 @@
  */
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-public class FileInputBean extends ReadOnlyBaseBean implements Input {
-
-    protected int size;
-    protected String inputtype = "file";
-    protected int maxlength;
+public class FileInputBean extends InputBean implements TagBean {
 
     public FileInputBean() {
-        super();
+        this.inputtype = "file";
     }
 
     public FileInputBean(String name, String value, boolean disabled, boolean readonly, int size, int maxlength) {
         //  super(name, value, disabled, readonly);
         super();
+        this.inputtype = "file";
         this.name = name;
         this.value = value;
         this.disabled = disabled;
         this.readonly = readonly;
         this.size = size;
         this.maxlength = maxlength;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    public int getMaxlength() {
-        return maxlength;
-    }
-
-    public void setMaxlength(int maxlength) {
-        this.maxlength = maxlength;
-    }
-
-    public String getInputtype() {
-        return inputtype;
-    }
-
-    public void setInputtype(String inputtype) {
-        this.inputtype = inputtype;
-    }
-
-    public String toString() {
-        return "<input type='" + inputtype + "' name='" + name + "' value='" + value + "' size='"
-                + size + "' maxlength='" + maxlength +"'"+checkReadonly()+checkDisabled()+"/>";
     }
 
 }

@@ -6,12 +6,13 @@ package org.gridlab.gridsphere.provider;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.event.impl.FormEventImpl;
 import org.gridlab.gridsphere.provider.ui.beans.*;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import java.util.*;
 import java.lang.reflect.Method;
@@ -166,7 +167,7 @@ public class ActionEventHandler {
             if (actionPerformedParameter == null) {
                 // Else we see if it exists as a tag element
                 StringBuffer newParamName = new StringBuffer("gstag:cid:");
-                newParamName.append(this.request.getParameter(GridSphereProperties.COMPONENT_ID));
+                newParamName.append(this.request.getParameter(SportletProperties.COMPONENT_ID));
                 newParamName.append(":");
                 newParamName.append(paramName);
                 paramName = newParamName.toString();

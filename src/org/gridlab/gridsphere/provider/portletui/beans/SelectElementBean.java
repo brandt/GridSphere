@@ -5,19 +5,13 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-public abstract class SelectElementBean extends NameValueDisableBean implements Selectable {
+public abstract class SelectElementBean extends BaseComponentBean implements TagBean {
 
     protected boolean selected = false;
 
     public SelectElementBean() {
         super();
     }
-
-    public SelectElementBean(String name, String value, boolean selected, boolean disabled) {
-        super(name, value, disabled);
-        this.selected = selected;
-    }
-
 
     protected String checkSelected(String select) {
         if (selected) {

@@ -4,14 +4,16 @@
  */
 package org.gridlab.gridsphere.tags.portletui;
 
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.TagSupport;
+import javax.servlet.jsp.tagext.BodyTagSupport;
 import java.util.Enumeration;
 
-public abstract class BaseBeanTag extends TagSupport {
+public abstract class BaseBeanTag extends BodyTagSupport {
 
     protected String beanId = "";
 
@@ -24,14 +26,14 @@ public abstract class BaseBeanTag extends TagSupport {
     }
 
     protected String getBeanKey() {
-        String compId = (String)pageContext.findAttribute(GridSphereProperties.COMPONENT_ID);
-        System.err.println("in BaseBeanTag: beankey: " + beanId + "_" + compId);
+        String compId = (String)pageContext.findAttribute(SportletProperties.COMPONENT_ID);
+        //System.err.println("in BaseBeanTag: beankey: " + beanId + "_" + compId);
         return beanId + "_" + compId;
     }
 
     protected void store(String id, Object object) {
         if (!beanId.equals("")) {
-            System.err.println("in BaseBeanTag: saving " + id + " into session");
+            //System.err.println("in BaseBeanTag: saving " + id + " into session");
             pageContext.getSession().setAttribute(id, object);
         }
     }

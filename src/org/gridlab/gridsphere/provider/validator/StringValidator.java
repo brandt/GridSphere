@@ -12,7 +12,6 @@ import org.gridlab.gridsphere.tags.ui.BaseTag;
 
 import javax.servlet.jsp.tagext.TagSupport;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
 
 public class StringValidator extends TagSupport implements Validator {
 

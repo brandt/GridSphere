@@ -7,7 +7,8 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 import org.gridlab.gridsphere.provider.portletui.beans.TagBean;
 import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 
 /**
@@ -117,7 +118,7 @@ public abstract class BaseBean implements TagBean {
 
     protected void store(Object object) {
         if (!beanId.equals("")) {
-            System.err.println("saving " + beanId + " into session");
+            //System.err.println("saving " + beanId + " into session");
             if (request != null) {
                 request.getSession().setAttribute(getBeanKey(), object);
             }
@@ -125,8 +126,8 @@ public abstract class BaseBean implements TagBean {
     }
 
     protected String getBeanKey() {
-        String compId = (String)request.getAttribute(GridSphereProperties.COMPONENT_ID);
-        System.err.println("in BaseBeanImpl: beankey: " + beanId + "_" + compId);
+        String compId = (String)request.getAttribute(SportletProperties.COMPONENT_ID);
+        //System.err.println("in BaseBeanImpl: beankey: " + beanId + "_" + compId);
         return beanId + "_" + compId;
     }
 }

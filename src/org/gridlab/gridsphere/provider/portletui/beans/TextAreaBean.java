@@ -5,15 +5,12 @@
 
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-public class TextAreaBean extends ReadOnlyBaseBean implements TextArea {
+public class TextAreaBean extends BaseComponentBean implements TagBean {
 
     private int cols;
     private int rows;
 
-    public TextAreaBean(String name, String value, boolean disabled, boolean readonly, int rows, int cols) {
-        super(name, value, disabled, readonly);
-        this.cols = cols;
-        this.rows = rows;
+    public TextAreaBean() {
     }
 
     /**

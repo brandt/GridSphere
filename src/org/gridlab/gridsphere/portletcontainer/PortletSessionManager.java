@@ -53,25 +53,30 @@ public class PortletSessionManager implements HttpSessionListener {
         //loginService.sessionDestroyed(event.getSession());
         log.debug("sessionDestroyed('" + event.getSession().getId() + "')");
         //HttpSession session = event.getSession();
-        //User user = (User) session.getAttribute(GridSphereProperties.USER);
+        //User user = (User) session.getAttribute(SportletProperties.PORTLET_USER);
         //System.err.println("user : " + user.getUserID() + " expired!");
         //PortletLayoutEngine engine = PortletLayoutEngine.getDefault();
         //engine.removeUser(user);
         //engine.logoutPortlets(event);
         synchronized (sessions) {
-            List sessionListeners = (List)sessions.get(event.getSession().getId());
-            Iterator it = sessionListeners.iterator();
-            while (it.hasNext()) {
-                PortletSessionListener sessionListener = (PortletSessionListener)it.next();
-                PortletSession session = new SportletSession(event.getSession());
-                try {
-                    log.debug("logging a session listener out:");
-                    sessionListener.logout(session);
-                } catch (PortletException e) {
-                    log.error("Unable to invoke logout on session listener ", e);
+            String id = event.getSession().getId();
+            if (id != null) {
+                List sessionListeners = (List)sessions.get(id);
+                Iterator it = sessionListeners.iterator();
+                while (it.hasNext()) {
+                    PortletSessionListener sessionListener = (PortletSessionListener)it.next();
+                    PortletSession session = new SportletSession(event.getSession());
+                    try {
+                        log.debug("logging a session listener out:");
+                        sessionListener.logout(session);
+                    } catch (PortletException e) {
+                        log.error("Unable to invoke logout on session listener ", e);
+                    }
                 }
+                sessions.remove(event.getSession().getId());
+            } else {
+                log.info("Not sure why sessionDestroyed listener provides null session id!");
             }
-            sessions.remove(event.getSession().getId());
         }
         dumpSessions();
     }

@@ -11,10 +11,17 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.ArrayList;
 
-public class ActionSubmitTag extends BaseBeanTag {
+public class ActionSubmitTag extends ActionTag {
 
-    protected ActionSubmitBean actionSubmitBean = new ActionSubmitBean();
+    public static final String SUBMIT_STYLE = "portlet-frame-text";
+
+    protected String name = "";
+    protected String key = "";
+    protected String value = "";
+
+    protected ActionSubmitBean actionSubmitBean = null;
 
     public void setActionSubmitBean(ActionSubmitBean actionSubmitBean) {
         this.actionSubmitBean = actionSubmitBean;
@@ -25,46 +32,61 @@ public class ActionSubmitTag extends BaseBeanTag {
     }
 
     public String getName() {
-        return actionSubmitBean.getName();
+        return name;
     }
 
     public void setName(String name) {
-        this.actionSubmitBean.setName(name);
+        this.name = name;
     }
 
     public String getKey() {
-        return actionSubmitBean.getKey();
+        return key;
     }
 
     public void setKey(String key) {
-        this.actionSubmitBean.setKey(key);
+        this.key = key;
     }
 
     public String getValue() {
-        return actionSubmitBean.getValue();
+        return value;
     }
 
     public void setValue(String value) {
-        this.actionSubmitBean.setValue(value);
+        this.value = value;
     }
 
     public String getAction() {
-        return actionSubmitBean.getAction();
+        return action;
     }
 
     public void setAction(String action) {
-        this.actionSubmitBean.setAction(action);
+        this.action = action;
     }
 
     public int doStartTag() throws JspException {
+        actionSubmitBean = new ActionSubmitBean();
+        if (!beanId.equals("")) {
+            actionSubmitBean = (ActionSubmitBean)pageContext.getSession().getAttribute(getBeanKey());
+            if (actionSubmitBean == null) actionSubmitBean = new ActionSubmitBean();
+        }
+        actionSubmitBean.setCssStyle(SUBMIT_STYLE);
+        paramBeans = new ArrayList();
         return EVAL_BODY_INCLUDE;
     }
 
     public int doEndTag() throws JspException {
-        FormTag formTag = (FormTag)findAncestorWithClass(this, FormTag.class);
+
+        actionSubmitBean.setAction(action);
+        actionSubmitBean.setKey(key);
+        actionSubmitBean.setName(name);
+        actionSubmitBean.setValue(value);
+
+        /*
+        ActionFormTag formTag = (ActionFormTag)findAncestorWithClass(this, ActionFormTag.class);
         if (formTag != null) {
             formTag.setAction(actionSubmitBean.getAction());
         }
+        */
 
         if (!actionSubmitBean.getKey().equals("")) {
             Locale locale = pageContext.getRequest().getLocale();
@@ -74,11 +96,18 @@ public class ActionSubmitTag extends BaseBeanTag {
                 actionSubmitBean.setValue(localizedText);
             }
         }
-        try {
-            JspWriter out = pageContext.getOut();
-            out.print(actionSubmitBean.toString());
-        } catch (Exception e) {
-            throw new JspException(e.getMessage());
+
+        Object parentTag = getParent();
+        if (parentTag instanceof ContainerTag) {
+            ContainerTag containerTag = (ContainerTag)parentTag;
+            containerTag.addTagBean(actionSubmitBean);
+        } else {
+            try {
+                JspWriter out = pageContext.getOut();
+                out.print(actionSubmitBean.toString());
+            } catch (Exception e) {
+                throw new JspException(e.getMessage());
+            }
         }
         return EVAL_PAGE;
     }

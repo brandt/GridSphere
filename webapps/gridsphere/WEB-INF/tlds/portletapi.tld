@@ -31,6 +31,20 @@
         <scope>AT_BEGIN</scope>
         <description>The PortletResponse Object</description>
     </variable>
+    <variable>
+        <name-given>portletContext</name-given>
+        <variable-class>org.gridlab.gridsphere.portlet.PortletContext</variable-class>
+        <declare>true</declare>
+        <scope>AT_BEGIN</scope>
+        <description>The PortletContext Object</description>
+    </variable>
+    <variable>
+        <name-given>portletSettings</name-given>
+        <variable-class>org.gridlab.gridsphere.portlet.PortletSettings</variable-class>
+        <declare>true</declare>
+        <scope>AT_BEGIN</scope>
+        <description>The PortletSettings Object</description>
+    </variable>
   </tag>
 
 

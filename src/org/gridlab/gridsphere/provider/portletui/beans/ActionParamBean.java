@@ -4,14 +4,14 @@ package org.gridlab.gridsphere.provider.portletui.beans;
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
-public class ParamBean extends BaseBean {
+public class ActionParamBean extends BaseBean {
 
     private String name = "";
     private String value = "";
 
-    public ParamBean() {}
+    public ActionParamBean() {}
 
-    public ParamBean(String name, String value) {
+    public ActionParamBean(String name, String value) {
         this.name = name;
         this.value = value;
     }

@@ -8,13 +8,15 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Vector;
 
 public class TagBeanContainer extends BaseBean {
 
-    public List container = new ArrayList();
+    public List container  = new Vector();
 
     public TagBeanContainer() {
         super();
+
     }
 
     public void addTagBean(TagBean bean) {
@@ -34,8 +36,8 @@ public class TagBeanContainer extends BaseBean {
         StringBuffer sb = new StringBuffer();
         while (it.hasNext()) {
             TagBean tagBean = (TagBean)it.next();
-            sb.append(tagBean.toString());
-            System.err.println("its the tagbean out: " + tagBean.toString());
+            if (tagBean.toString() != null) sb.append(tagBean.toString());
+            //System.err.println("its the tagbean out: " + tagBean.toString());
         }
         return sb.toString();
     }

@@ -13,11 +13,10 @@ import javax.servlet.jsp.JspWriter;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class TextTag extends BaseBeanTag {
+public class TextTag extends BaseComponentTag {
 
     protected TextBean textBean = null;
     protected String key = null;
-    protected String text = "";
 
     public static final String TEXT_STYLE = "portlet-frame-label";
 
@@ -29,50 +28,54 @@ public class TextTag extends BaseBeanTag {
         this.key = key;
     }
 
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
     public int doStartTag() throws JspException {
-        System.err.println("in TextTag:doStart");
+        if (this.cssStyle.equals("")) this.cssStyle = TEXT_STYLE;
         textBean = new TextBean();
-        textBean.setText(text);
-        textBean.setKey(key);
-        textBean.setCssStyle(TEXT_STYLE);
-        TextBean tb = (TextBean)pageContext.getSession().getAttribute(getBeanKey());
-        if (tb != null) {
-            System.err.println("found a text bean in the session");
-            textBean = tb;
-        }
         if (!beanId.equals("")) {
-            System.err.println("storing bean in the session");
-            store(getBeanKey(), tb);
-        }
-        //debug();
+           //System.err.println("in TextTag: gettung text bean from session");
+           textBean = (TextBean)pageContext.getSession().getAttribute(getBeanKey());
+           if (textBean == null) {
+               textBean = new TextBean();
+           } else {
+               key = textBean.getKey();
+               value = textBean.getValue();
+           }
+       }
+       return EVAL_BODY_INCLUDE;
+    }
+
+   public int doEndTag() throws JspException {
+
+       //System.err.println("in TextTag:doEnd");
+       if (value != null) textBean.setValue(value);
+       if (key != null) textBean.setKey(key);
+       this.setBaseComponentBean(textBean);
+
+       //debug();
 
         if (textBean.getKey() != null) {
             Locale locale = pageContext.getRequest().getLocale();
             ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
-            textBean.setText(bundle.getString(textBean.getKey()));
+            textBean.setValue(bundle.getString(textBean.getKey()));
         }
 
         Object parentTag = getParent();
         if (parentTag instanceof ContainerTag) {
             ContainerTag containerTag = (ContainerTag)parentTag;
             containerTag.addTagBean(textBean);
-            System.err.println("inTextTag: adding " + textBean.toString());
+            //System.err.println("inTextTag: adding " + textBean.toString());
         } else {
             try {
-                System.err.println("writing text");
                 JspWriter out = pageContext.getOut();
                 out.print(textBean.toString());
             } catch (Exception e) {
                 throw new JspException(e.getMessage());
             }
+        }
+
+        if (!beanId.equals("")) {
+            //System.err.println("storing bean in the session");
+            store(getBeanKey(), textBean);
         }
         return EVAL_BODY_INCLUDE;
     }

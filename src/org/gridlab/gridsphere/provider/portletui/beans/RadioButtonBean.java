@@ -7,8 +7,7 @@ package org.gridlab.gridsphere.provider.portletui.beans;
 
 public class RadioButtonBean extends SelectElementBean {
 
-    public RadioButtonBean(String name, String value, boolean selected, boolean disabled) {
-        super(name, value, selected, disabled);
+    public RadioButtonBean() {
     }
 
     public String toString() {

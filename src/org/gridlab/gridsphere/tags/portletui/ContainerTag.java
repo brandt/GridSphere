@@ -16,6 +16,7 @@ public abstract class ContainerTag extends BaseBeanTag {
     protected List list = null;
 
     public void addTagBean(TagBean tagBean) {
+        //System.err.println("in the fucking container: adding " + tagBean.toString());
         list.add(tagBean);
     }
 
@@ -27,11 +28,7 @@ public abstract class ContainerTag extends BaseBeanTag {
         return list;
     }
 
-    public int doStartTag() throws JspException {
-        System.err.println("in ContainerTag:doStartTag");
-        list = new ArrayList();
-        return EVAL_PAGE;
-    }
+    public abstract int doStartTag() throws JspException;
 
     public abstract int doEndTag() throws JspException;
 

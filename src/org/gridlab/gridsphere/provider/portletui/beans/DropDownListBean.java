@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class DropDownListBean extends NameBean implements DropDownList {
+public class DropDownListBean extends BaseComponentBean implements TagBean {
 
     protected List list = new ArrayList();
 
@@ -23,7 +23,6 @@ public class DropDownListBean extends NameBean implements DropDownList {
     protected boolean isMultiple = false;
 
     public DropDownListBean(String name) {
-        super(name);
     }
 
     /**
@@ -67,7 +66,7 @@ public class DropDownListBean extends NameBean implements DropDownList {
      * Adds a selectable item to the list
      * @param item selectable item to be added
      */
-    public void add(Selectable item) {
+    public void add(ListBoxItemBean item) {
         list.add(item);
     }
 
@@ -86,7 +85,7 @@ public class DropDownListBean extends NameBean implements DropDownList {
         result = result +">";
         Iterator it = list.iterator();
         while (it.hasNext()) {
-            Selectable item = (Selectable)it.next();
+            ListBoxItemBean item = (ListBoxItemBean)it.next();
             result = result + item.toString();
         }
         result = result +"</select>";
@@ -101,7 +100,7 @@ public class DropDownListBean extends NameBean implements DropDownList {
         ArrayList result = new ArrayList();
         Iterator it = list.iterator();
         while (it.hasNext()) {
-            Selectable item = (Selectable)it.next();
+            ListBoxItemBean item = (ListBoxItemBean)it.next();
             if (item.isSelected()) {
                 result.add(item.getValue());
             }
@@ -117,7 +116,7 @@ public class DropDownListBean extends NameBean implements DropDownList {
         ArrayList result = new ArrayList();
         Iterator it = list.iterator();
         while (it.hasNext()) {
-            Selectable item = (Selectable)it.next();
+            ListBoxItemBean item = (ListBoxItemBean)it.next();
             if (item.isSelected()) {
                 result.add(item);
             }

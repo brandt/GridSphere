@@ -108,7 +108,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                     // initialize all portlets
                     PortletInvoker.initAllPortlets(portletReq, portletRes);
                 } catch (PortletException e) {
-                    req.setAttribute(GridSphereProperties.ERROR, e);
+                    req.setAttribute(SportletProperties.ERROR, e);
                 }
                 layoutEngine = PortletLayoutEngine.getInstance();
                 firstDoGet = Boolean.FALSE;
@@ -116,7 +116,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         }
 
         List groups = aclService.getGroups(portletReq.getUser());
-        portletReq.setAttribute(GridSphereProperties.PORTLETGROUPS, groups);
+        //portletReq.setAttribute(SportletProperties.PORTLETGROUPS, groups);
 
         // Handle user login and logout
         if (event.hasAction()) {
@@ -130,10 +130,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         }
 
         // Render layout
-
         layoutEngine.actionPerformed(event);
 
         // Handle any outstanding messages
+        // This needs work certainly!!!
         Map portletMessageLists = messageManager.retrieveAllMessages();
         if (!portletMessageLists.isEmpty()) {
             Set keys = portletMessageLists.keySet();
@@ -161,14 +161,12 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      */
     protected void login(GridSphereEvent event) {
         log.debug("in login of GridSphere Servlet");
-        String LOGIN_ERROR_FLAG = "LOGIN_ERROR";
-        Integer LOGIN_ERROR_UNKNOWN = new Integer(-1);
+
+        String LOGIN_ERROR_FLAG = "LOGIN_FAILED";
 
         PortletRequest req = event.getPortletRequest();
         PortletSession session = req.getPortletSession(true);
 
-        //SportletRequestImpl sreq = (SportletRequestImpl)req;
-        //sreq.logRequest();
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
@@ -182,19 +180,19 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             user.setFamilyName("Portal");
             user.setGivenName("Joey");
 
-            session.setAttribute(GridSphereProperties.USER, user);
+            session.setAttribute(SportletProperties.PORTLET_USER, user);
         } else {
             try {
                 User user = loginService.login(username, password);
-                session.setAttribute(GridSphereProperties.USER, user);
+                session.setAttribute(SportletProperties.PORTLET_USER, user);
                 if (aclService.hasSuperRole(user)) {
                     log.debug("User: " + user.getUserName() + " logged in as SUPER");
-                    req.setAttribute(GridSphereProperties.PORTLETROLE, PortletRole.SUPER);
+                    req.setAttribute(SportletProperties.PORTLET_ROLE, PortletRole.SUPER);
                 }
 
             } catch (AuthenticationException err) {
                 if(log.isDebugEnabled()) log.debug(err.getMessage());
-                req.setAttribute(LOGIN_ERROR_FLAG, LOGIN_ERROR_UNKNOWN);
+                req.setAttribute(LOGIN_ERROR_FLAG, LOGIN_ERROR_FLAG);
             }
         }
         layoutEngine.loginPortlets(event);
@@ -323,7 +321,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         //loginService.sessionDestroyed(event.getSession());
         log.debug("sessionDestroyed('" + event.getSession().getId() + "')");
         //HttpSession session = event.getSession();
-        //User user = (User) session.getAttribute(GridSphereProperties.USER);
+        //User user = (User) session.getAttribute(SportletProperties.PORTLET_USER);
         //System.err.println("user : " + user.getUserID() + " expired!");
         //PortletLayoutEngine engine = PortletLayoutEngine.getDefault();
         //engine.removeUser(user);

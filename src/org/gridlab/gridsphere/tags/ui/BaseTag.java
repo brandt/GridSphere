@@ -10,7 +10,8 @@ import org.gridlab.gridsphere.provider.validator.Validator;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -173,12 +174,12 @@ public class BaseTag extends TagSupport {
     public int doStartTag() throws JspException {
         log.debug("------------ START ");
         if (!bean.equals("")) {
-            Object beanElement = pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID)+":"+bean);
-            log.debug("GET: "+GridSphereProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID)+":"+bean);;
+            Object beanElement = pageContext.getRequest().getAttribute(SportletProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(SportletProperties.PORTLETID)+":"+bean);
+            log.debug("GET: "+SportletProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(SportletProperties.PORTLETID)+":"+bean);;
             try {
                 this.htmlelement = (TagBean) beanElement;
             } catch (Exception e) {
-                log.debug("This is an error retrieving tag bean with name: " + GridSphereProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID)+bean);
+                log.debug("This is an error retrieving tag bean with name: " + SportletProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(SportletProperties.PORTLETID)+bean);
                 if (beanElement == null) {
                     log.debug("Tag bean attribute with given name is not set!");
                 } else {
@@ -195,9 +196,9 @@ public class BaseTag extends TagSupport {
             try {
                 JspWriter out = pageContext.getOut();
                 // print out the beantag
-                htmlelement.setCID(pageContext.getRequest().getAttribute(GridSphereProperties.COMPONENT_ID).toString());
+                //htmlelement.setCID(pageContext.getRequest().getAttribute(SportletProperties.COMPONENT_ID).toString());
                 out.print(htmlelement.toString());
-                log.debug("Jup we got content :"+htmlelement.toString()+" for "+GridSphereProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID)+":"+bean);
+                log.debug("Jup we got content :"+htmlelement.toString()+" for "+SportletProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(SportletProperties.PORTLETID)+":"+bean);
             } catch (Exception e) {
                 System.err.println("Error printing tag bean");
                 throw new JspTagException(e.getMessage());

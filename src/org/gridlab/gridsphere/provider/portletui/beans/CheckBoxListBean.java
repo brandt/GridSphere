@@ -15,11 +15,9 @@ public class CheckBoxListBean extends DropDownListBean {
 
     /**
      * Adds a checkbox to the list.
-     * @param value vaule of the checkbox
-     * @param label label of the checkbox
      */
-    public void add(String value, String label) {
-        add(value, label, false);
+    public void add(CheckBoxBean checkboxBean) {
+        //add();
     }
 
     /**
@@ -29,8 +27,8 @@ public class CheckBoxListBean extends DropDownListBean {
      * @param selected selected status of the checkbox
      */
     public void add(String value, String label, boolean selected) {
-        CheckBoxBean cbb = new CheckBoxBean(this.name, value, selected, false);
-        cbb.setLabel(label);
+        CheckBoxBean cbb = new CheckBoxBean();
+        cbb.setValue(value);
         list.add(cbb);
     }
 
@@ -41,13 +39,14 @@ public class CheckBoxListBean extends DropDownListBean {
      * @param selected selected status of the checkbox
      */
     public void add(String value, String label, boolean selected, boolean disabled) {
-        CheckBoxBean cbb = new CheckBoxBean(this.name, value, selected, disabled);
-        cbb.setLabel(label);
+        CheckBoxBean cbb = new CheckBoxBean();
+        //cbb.setLabel(label);
         list.add(cbb);
     }
 
     public String toString() {
         String result = new String();
+        /*
         if (this.label!=null) {
             result = result + "<fieldset><legend>"+this.label.getValue()+"</legend>";
         }
@@ -65,7 +64,7 @@ public class CheckBoxListBean extends DropDownListBean {
         if (this.label!=null) {
             result = result +"</fieldset>";
         }
-
+        */
         return result;
 
     }

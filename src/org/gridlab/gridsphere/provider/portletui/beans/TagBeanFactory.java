@@ -1,10 +1,11 @@
 package org.gridlab.gridsphere.provider.portletui.beans;
 
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 /**
  * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
@@ -22,12 +23,24 @@ public class TagBeanFactory {
     }
 
     public static TagBean getTagBean(PortletRequest req, String id) {
+        //System.err.println("Retrieving bean: " + id + " " + getBeanKey(req, id));
         TagBean bean = (TagBean)req.getSession(true).getAttribute(getBeanKey(req, id));
+
         if (bean != null) {
             bean.setPortletRequest(req);
             System.err.println("found bean id " + id);
         }
         return bean;
+    }
+
+    public static void storeTagBean(PortletRequest req, TagBean tagBean) {
+        String id = tagBean.getBeanId();
+        if (!id.equals("")) {
+        //System.err.println("Storing bean: " + id + " " + getBeanKey(req, id));
+        req.getSession(true).setAttribute(getBeanKey(req, id), tagBean);
+        } else {
+            //System.err.println("trying to store bean without id to session");
+        }
     }
 
     public static TagBean createTagBean(Class tagBean, PortletRequest req, String id) {
@@ -43,8 +56,11 @@ public class TagBeanFactory {
     }
 
     protected static String getBeanKey(PortletRequest req, String id) {
-        String compId = req.getParameter(GridSphereProperties.COMPONENT_ID);
-        System.err.println("in formeventimpl beankey: " + id + "_" + compId);
+        String compId = req.getParameter(SportletProperties.COMPONENT_ID);
+        if (compId == null) {
+              compId = (String)req.getAttribute(SportletProperties.COMPONENT_ID);
+        }
+        log.debug("in getBeankKey: " + id + "_" + compId);
         return id + "_" + compId;
     }
 

@@ -12,7 +12,9 @@ public class DefaultTableModel extends BaseBean implements TagBean {
 
     protected List dataList = new Vector();
 
-    public DefaultTableModel() {}
+    public DefaultTableModel() {
+       dataList = new Vector();
+    }
 
     public DefaultTableModel(List dataList) {
         this.dataList = dataList;
@@ -26,43 +28,38 @@ public class DefaultTableModel extends BaseBean implements TagBean {
         while (it.hasNext()) {
             tableRow = new TableRowBean();
             String key = (String)it.next();
-
+            //System.err.println("key= " + key);
             Object obj = paramMap.get(key);
             if (obj instanceof List) {
 
             }
             if (obj instanceof String) {
-                System.err.println("its an instanceif String!!!");
                 String value = (String)paramMap.get(key);
                 TextBean tb1 = new TextBean();
-                tb1.setText(value);
+                tb1.setValue(key);
                 cellbean = new TableCellBean();
                 cellbean.addTagBean(tb1);
-                tableRow.addTableCellBean(cellbean);
-                tb1 = new TextBean();
-                tb1.setText(" " + value);
+                tableRow.addTagBean(cellbean);
+                TextBean tb2 = new TextBean();
+                tb2.setValue(" " + value);
                 cellbean = new TableCellBean();
-                cellbean.addTagBean(tb1);
-                tableRow.addTableCellBean(cellbean);
+                cellbean.addTagBean(tb2);
+                tableRow.addTagBean(cellbean);
                 dataList.add(tableRow);
             }
-            store(this);
         }
     }
 
     public void addTableRowBean(TableRowBean rowBean) {
         dataList.add(rowBean);
-        store(this);
     }
 
     public void clear() {
         dataList.clear();
-        store(this);
     }
 
     public void setTableRowBeans(List rowBeans) {
         dataList = rowBeans;
-        store(this);
     }
 
     public List getTableRowBeans() {
@@ -73,7 +70,7 @@ public class DefaultTableModel extends BaseBean implements TagBean {
         StringBuffer sb = new StringBuffer();
         Iterator it = dataList.iterator();
         while (it.hasNext()) {
-            System.err.println("printing DTM rows");
+            //System.err.println("printing DTM rows");
             TableRowBean trb = (TableRowBean)it.next();
             sb.append(trb.toString());
         }
