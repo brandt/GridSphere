@@ -37,7 +37,7 @@ public class ServletParsingServiceImpl implements PortletServiceProvider, Servle
     }
 
     public PortletResponse getPortletResponse(HttpServletResponse res) {
-        SportletResponseImpl sportletResponse = new SportletResponseImpl(res);
+        SportletResponse sportletResponse = new SportletResponse(res);
         return (PortletResponse) sportletResponse;
     }
 
