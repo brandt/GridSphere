@@ -246,6 +246,7 @@ public class PortletContainer implements Cloneable {
 
         out.println("<html>");
         out.println("<head>");
+        out.println("<meta http-equiv=\"content-type\" content=\"text/html; charset=iso-8859-1\">");
         out.println("  <title>" + name + "</title>");
         out.println("  <link type=\"text/css\" href=\"themes/" + theme + "/css" +
                 "/default.css\" rel=\"STYLESHEET\"/>");
