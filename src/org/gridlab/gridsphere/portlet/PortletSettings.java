@@ -41,6 +41,37 @@ public interface PortletSettings {
     public String getTitle(Locale locale, Client client);
 
     /**
+     * Returns the short title of this window for the provided locale, or null if none exists.
+     * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
+     *
+     * @param locale the locale-centric title
+     * @param client the given client
+     * @return the title of the portlet
+     */
+    public String getTitleShort(Locale locale, Client client);
+
+
+    /**
+     * Returns the description of this window for the provided locale, or null if none exists.
+     * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
+     *
+     * @param locale the locale-centric title
+     * @param client the given client
+     * @return the title of the portlet
+     */
+    public String getDescription(Locale locale, Client client);
+
+    /**
+     * Returns the keywords of this window for the provided locale, or null if none exists.
+     * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
+     *
+     * @param locale the locale-centric title
+     * @param client the given client
+     * @return the title of the portlet
+     */
+    public String getKeywords(Locale locale, Client client);
+
+    /**
      * Returns the list of supported groups
      * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
      *

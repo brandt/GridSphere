@@ -7,9 +7,7 @@ package org.gridlab.gridsphere.portlet.impl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication;
-import org.gridlab.gridsphere.portletcontainer.descriptor.PortletInfo;
-import org.gridlab.gridsphere.portletcontainer.descriptor.ConfigParam;
+import org.gridlab.gridsphere.portletcontainer.descriptor.*;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 
 import java.util.*;
@@ -23,9 +21,11 @@ import java.util.*;
 public class SportletSettings implements PortletSettings {
 
     private Hashtable store = new Hashtable();
-    private String title = "";
     private List roleList = new Vector();
     private List groupList = new Vector();
+    private List langList;
+
+
 
     /**
      * SportletSettings constructor
@@ -35,14 +35,14 @@ public class SportletSettings implements PortletSettings {
      * @param knownGroups a list of known groups obtained from the AccessControlService
      * @param knownRoles a list of known roles obtained from the AccessControlService
      */
-    public SportletSettings(PortletApplication portletApp, List knownGroups, List knownRoles) {
+    public SportletSettings(ConcretePortletApplication portletApp, List knownGroups, List knownRoles) {
 
-        PortletInfo portlet = portletApp.getPortletInfo();
-        title = portlet.getName();
-        store.put("portlet-description", portlet.getDescription());
+        ConcretePortletInfo portlet = portletApp.getConcretePortletInfo();
+
+        List langList = portlet.getLanguageList();
 
         // Stick <config-param> in store
-        Iterator configParamsIt = portlet.getConfigParamList().iterator();
+        Iterator configParamsIt = portletApp.getConfigParamList().iterator();
         while (configParamsIt.hasNext()) {
             ConfigParam configParam = (ConfigParam)configParamsIt.next();
             store.put(configParam.getParamName(), configParam.getParamValue());
@@ -106,14 +106,71 @@ public class SportletSettings implements PortletSettings {
     }
 
     /**
-     * Returns the title of this window.
+     * Returns the title of this window for the provided locale, or null if none exists.
      *
      * @param locale the locale-centric title
      * @param client the given client
      * @return the title of the portlet
      */
     public String getTitle(Locale locale, Client client) {
-        return title;
+        while (langList.iterator().hasNext()) {
+            LanguageInfo langInfo = (LanguageInfo)langList.iterator().next();
+            if (langInfo.getLocale().equals(locale)) {
+                return langInfo.getTitle();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns the short title of this window for the provided locale, or null if none exists.
+     *
+     * @param locale the locale-centric title
+     * @param client the given client
+     * @return the title of the portlet
+     */
+    public String getTitleShort(Locale locale, Client client) {
+        while (langList.iterator().hasNext()) {
+            LanguageInfo langInfo = (LanguageInfo)langList.iterator().next();
+            if (langInfo.getLocale().equals(locale)) {
+                return langInfo.getTitleShort();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns the description of this window for the provided locale, or null if none exists.
+     *
+     * @param locale the locale-centric title
+     * @param client the given client
+     * @return the title of the portlet
+     */
+    public String getDescription(Locale locale, Client client) {
+        while (langList.iterator().hasNext()) {
+            LanguageInfo langInfo = (LanguageInfo)langList.iterator().next();
+            if (langInfo.getLocale().equals(locale)) {
+                return langInfo.getDescription();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns the keywords of this window for the provided locale, or null if none exists.
+     *
+     * @param locale the locale-centric title
+     * @param client the given client
+     * @return the title of the portlet
+     */
+    public String getKeywords(Locale locale, Client client) {
+        while (langList.iterator().hasNext()) {
+            LanguageInfo langInfo = (LanguageInfo)langList.iterator().next();
+            if (langInfo.getLocale().equals(locale)) {
+                return langInfo.getKeywords();
+            }
+        }
+        return null;
     }
 
     /**
