@@ -265,7 +265,7 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
      * @param key   key of the render parameter
      * @param value value of the render parameter
      * @throws IllegalStateException if the method is invoked after <code>sendRedirect</code> has been called.
-     * @exception	IllegalArgumentException if key or value are <code>null</code>.
+     * @exception IllegalArgumentException if key or value are <code>null</code>.
      */
     public void setRenderParameter(String key, String value) {
         if (redirected) {
@@ -273,7 +273,7 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
         }
 
         if ((key == null) || (value == null)) {
-            throw new IllegalArgumentException("Render parameter key or value  must not be null.");
+            throw new IllegalArgumentException("Render parameter key or value must not be null.");
         }
 
         renderParams.put(SportletProperties.RENDER_PARAM_PREFIX + key, new String[]{value});
