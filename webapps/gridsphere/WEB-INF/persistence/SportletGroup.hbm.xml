@@ -12,7 +12,7 @@
 
         <id
             name="oid"
-            column="oid"
+            column="gsoid"
             type="java.lang.String"
             length="32"
             >

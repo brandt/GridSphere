@@ -12,7 +12,7 @@
 
         <id
             name="oid"
-            column="oid"
+            column="gsoid"
             type="java.lang.String"
             length="32"
             >
@@ -28,7 +28,7 @@
         <property name="Organization" type="string" column="organization"/>
         <property name="LastLoginTime" column="lastlogintime"/>
         <map name="attributes" table="sportletuserattributes">
-            <key column="oid"/>
+            <key column="gsoid"/>
             <index column="attribute" type="string"/>
             <element column="value" type="string"/>
         </map>

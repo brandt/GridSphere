@@ -8,14 +8,14 @@
 
     <class name="org.gridlab.gridsphere.services.core.security.auth.modules.impl.AuthModuleEntry" table="authentry">
 
-        <id name="oid" column="oid" type="string" length="32">
+        <id name="oid" column="gsoid" type="string" length="32">
             <generator class="uuid.hex"/>
         </id>
         <property name="ModuleClassName" column="moduleclassname"  type="string"/>
         <property name="UserId"          column="userid"           type="string"/>
 
         <map name="attributes"       table="authmoduleattributes">
-            <key column="oid"/>
+            <key column="gsoid"/>
             <index column="attribute" type="string"/>
             <element column="value" type="string"/>
         </map>
