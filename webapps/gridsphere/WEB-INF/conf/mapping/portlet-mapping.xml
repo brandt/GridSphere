@@ -138,25 +138,4 @@
         </field>
     </class>
 
-    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.Owner">
-        <field name="GroupName" type="string">
-            <bind-xml name="group-name"/>
-        </field>
-        <field name="RoleName" type="string">
-            <bind-xml name="role-name"/>
-        </field>
-    </class>
-
-    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.Group">
-        <field name="GroupName" type="string">
-            <bind-xml name="group-name"/>
-        </field>
-    </class>
-
-    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.Role">
-        <field name="RoleName" type="string">
-            <bind-xml name="role-name"/>
-        </field>
-    </class>
-
 </mapping>
