@@ -31,6 +31,7 @@ Copyright:
     <property name="version"         value="1.0" />
     <property name="release"         value="ea-dev" />
     <property name="version.release" value="${version} ${release}"/>
+    <property name="project"         value="GridSphere ${version.release}"/>
     <property name="gridsphere.name" value="GridSphere Portal Framework API ${version.release}" />
 
     <!-- GridSphere build and dist directories -->
@@ -114,14 +115,14 @@ Copyright:
         <echo message="ANT_HOME is set to = ${env.ANT_HOME}"/>
         <echo message="JAVA_HOME is set to = ${env.JAVA_HOME}"/>
         <echo message="CATALINA_HOME is set to = ${env.CATALINA_HOME}"/>
-        <echo message="${classpath}"/>
+        <echo message="classpath"/>
 
         <echo message="=== Required Libraries ===" />
-        <echo message="log4j.present=${log4j.present}" />
+        <echo message="log4j.present=$log4j.present"/>
 
         <echo message=""/>
         <echo message="--- Optional Libraries ---" />
-        <echo message="junit.present=${junit.present}" />
+        <echo message="junit.present=$junit.present"/>
         <echo message=""/>
         <echo message="--- Property values ---" />
         <echo message="debug=${debug}" />
@@ -177,8 +178,7 @@ Copyright:
             classpathref="classpath"
             debug="${debug}"
             optimize="${optimize}"
-            deprecation="false">
-        </javac>
+            deprecation="false"/>
     </target>
 
     <!-- =================================================================== -->
@@ -517,7 +517,11 @@ Copyright:
     <!-- Builds the GridSphere docbook documentation                         -->
     <!-- =================================================================== -->
     <target name="docbook" description="Builds the GridSphere docbook documentation.">
-        <ant dir="${docbook.dir}" target="docbook" inheritAll="false"/>
+        <mkdir dir="build/${docbook.dir}"/>
+        <copy todir="build/${docbook.dir}">
+            <fileset dir="${docbook.dir}"/>
+        </copy>
+        <ant dir="build/${docbook.dir}" target="docbook" inheritAll="false"/>
     </target>
 
 <!-- +++++++++++++++ END DOCUMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
