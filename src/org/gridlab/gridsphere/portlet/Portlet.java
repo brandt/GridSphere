@@ -313,31 +313,28 @@ public abstract class Portlet extends HttpServlet
         PortletResponse portletResponse = new SportletResponse(response, portletRequest);
         String method = (String) request.getAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
         if (method != null) {
-            try {
-                if (method.equals(SportletProperties.INIT)) {
-                    ApplicationPortletConfig app = (ApplicationPortletConfig) request.getAttribute(SportletProperties.PORTLET_APPLICATION);
-                    this.portletConfig = new SportletConfig(getServletConfig(), app);
-                    init(this.portletConfig);
-                } else if (method.equals(SportletProperties.SERVICE)) {
-                    service(portletRequest, portletResponse);
-                } else if (method.equals(SportletProperties.DESTROY)) {
-                    destroy(this.portletConfig);
-                } else if (method.equals(SportletProperties.INIT_CONCRETE)) {
-                    PortletSettings settings = (PortletSettings) request.getAttribute(SportletProperties.PORTLET_SETTINGS);
-                    initConcrete(settings);
-                } else if (method.equals(SportletProperties.DESTROY_CONCRETE)) {
-                    PortletSettings settings = (PortletSettings) request.getAttribute(SportletProperties.PORTLET_SETTINGS);
-                    destroyConcrete(settings);
-                } else if (method.equals(SportletProperties.LOGIN)) {
-                    login(portletRequest);
-                } else if (method.equals(SportletProperties.LOGOUT)) {
-                    PortletSession portletSession = portletRequest.getPortletSession();
-                    logout(portletSession);
-                }
-            } catch (PortletException e) {
-                PrintWriter out = response.getWriter();
-                e.printStackTrace(out);
+
+            if (method.equals(SportletProperties.INIT)) {
+                ApplicationPortletConfig app = (ApplicationPortletConfig) request.getAttribute(SportletProperties.PORTLET_APPLICATION);
+                this.portletConfig = new SportletConfig(getServletConfig(), app);
+                init(this.portletConfig);
+            } else if (method.equals(SportletProperties.SERVICE)) {
+                service(portletRequest, portletResponse);
+            } else if (method.equals(SportletProperties.DESTROY)) {
+                destroy(this.portletConfig);
+            } else if (method.equals(SportletProperties.INIT_CONCRETE)) {
+                PortletSettings settings = (PortletSettings) request.getAttribute(SportletProperties.PORTLET_SETTINGS);
+                initConcrete(settings);
+            } else if (method.equals(SportletProperties.DESTROY_CONCRETE)) {
+                PortletSettings settings = (PortletSettings) request.getAttribute(SportletProperties.PORTLET_SETTINGS);
+                destroyConcrete(settings);
+            } else if (method.equals(SportletProperties.LOGIN)) {
+                login(portletRequest);
+            } else if (method.equals(SportletProperties.LOGOUT)) {
+                PortletSession portletSession = portletRequest.getPortletSession();
+                logout(portletSession);
             }
+
         }
         request.removeAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD);
     }
