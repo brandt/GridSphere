@@ -10,9 +10,6 @@ import org.gridlab.gridsphere.services.grid.job.*;
 import org.gridlab.gridsphere.services.grid.job.impl.grms.*;
 import org.gridlab.gridsphere.services.grid.security.credential.Credential;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.tags.web.element.HiddenFieldBean;
-import org.gridlab.gridsphere.tags.web.element.TextBean;
-import org.gridlab.gridsphere.tags.web.element.TextFieldBean;
 
 import java.net.MalformedURLException;
 import java.util.List;
