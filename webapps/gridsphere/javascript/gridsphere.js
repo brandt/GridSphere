@@ -151,3 +151,7 @@
 
       return (list[0].value != "");
   }
+
+ function GridSphere_SelectLocale(aform) {
+    document.localeform.submit();
+ }
