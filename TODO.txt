@@ -6,7 +6,7 @@ Documentation
 + JavaDoc EVERYTHING! (All)
 + Tokyo presentation (Poland) (Michael)
 	Work on core set of technical slides (Jason)
-+ README, INSTALL (Jason, Oliver)	
++ README, INSTALL (Jason, Oliver)
 + Portlet User's Guides -- using the various portlets (Michael)
 + Portlet Developer's Guides -- Mid-March (Michael & Jason)
 
@@ -22,15 +22,15 @@ Code
 	Tags, Beans and Models (Oliver)
 + Portlet Tag Documentation (Oliver)
 
-+ DB Change Management (Michael) 
++ DB Change Management (Michael)
 + PortletData verified
 + Portlet Application Manager (Jason)
 + Portlet subscription (Michael)
 + Account request portlet (Michael)
 + Basic Grid portlets (Michael)
-+doHelp (Jason) 
++doHelp (Jason)
 	Get JScript code from Michael to display a new window
 + Allow multiple portlet deployment descriptors to deploy portlets/
 + Finish Portlet Message Service
 + Layout -- add 2 attributes to PortletFram for insets, outsets, make Logo and Title cool (Jason, Oliver)
-
++ Unit testing core services (Jason or Oliver)
