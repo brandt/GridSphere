@@ -811,6 +811,13 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
+    <!-- Creates a new portlet project "newproject" in projects directory    -->
+    <!-- =================================================================== -->
+    <target name="update-project" description="Updates a portlet project in projects directory">
+        <ant antfile="config/build/build-newproject.xml" target="update-project"/>
+    </target>
+
+    <!-- =================================================================== -->
     <!-- Make GridSphere distribution                                        -->
     <!-- =================================================================== -->
     <target name="dist" depends="clean, gridsphere-tomcat-jar, all-non-gridsphere-jars, war-all, docs-all" description="Build GridSphere binary distribution">
