@@ -531,11 +531,11 @@ in lighter color
 **********************************************/
 .portlet-form-input-field{
    color:black;
-   background-color:white;
+   background-color:#f0f0f0;
    font-size:12px;
    font-weight:normal;
    font-style:normal;
-   /* font-family:courier, courier new, monospaced; */
+   font-family:verdana, sans-serif;
    font-family:inherit;
    line-height:normal;
    text-align:left;
@@ -551,11 +551,11 @@ in lighter color
 **********************************************/
 .portlet-form-button{
    color:black;
-   background-color:white;
+   background-color:#f0f0f0;
    font-size:12px;
    font-weight:bold;
    font-style:normal;
-   /* font-family:courier, courier new, monospaced; */
+   font-family:verdana, sans-serif;
    font-family:inherit;
    line-height:normal;
    text-align:center;
@@ -652,13 +652,45 @@ in lighter color
   color, margins, etc.
 **********************************************/
 .portlet-menu{
+    color:black;
+    border: 1px dashed black;
+    padding-bottom: 5px;
+    text-align:center;
 }
+
+.portlet-menu a{
+    color:black;
+    font:normal 12px verdana, sans-serif;
+    margin:5px 0 5px 0;
+    padding:1px 3px 1px 4px;
+    text-decoration:none;
+    background:#f0f0f0;
+    border-top:1px solid #fafafa;
+    border-right:1px solid #848484;
+    border-bottom:1px solid #848484;
+    border-left:1px solid #fafafa;
+}
+
+
+.portlet-menu a:hover {
+    color:white;
+    background:#526ca4;
+    border-top:1px solid #848484;
+    border-right:1px solid #fafafa;
+    border-bottom:1px solid #fafafa;
+    border-left:1px solid #848484;
+}
+
+
 
 /**********************************************
   Normal, unselected menu item
 **********************************************/
 .portlet-menu-item{
+
 }
+
+
 
 /**********************************************
   Selected menu item
@@ -704,5 +736,12 @@ in lighter color
   Menu caption
 **********************************************/
 .portlet-menu-caption{
+    background-color: #4064ad;
+    color: #FFFFFF;
+    font-weight: bold;
+    text-align:center;
+    font-size: 12px;
+    margin-bottom: 5px;
+
 }
 
