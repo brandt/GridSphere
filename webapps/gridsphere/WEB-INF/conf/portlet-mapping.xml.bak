@@ -1,0 +1,182 @@
+<?xml version="1.0" ?>
+<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
+<mapping>
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.PortletCollection">
+        <map-to xml="portlet-app-collection"/>
+        <field name="PortletDefList" type="org.gridlab.gridsphere.portletcontainer.descriptor.PortletDefinition" collection="vector">
+            <bind-xml name="portlet-app-def"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.PortletDefinition">
+        <field name="PortletApp" type="org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication">
+            <bind-xml name="portlet-app"/>
+        </field>
+        <field name="ConcreteApps" type="org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication" collection="vector">
+            <bind-xml name="concrete-portlet-app"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletApplication">
+        <field name="UID" type="string">
+            <bind-xml name="uid" node="attribute"/>
+        </field>
+        <field name="Name" type="string">
+            <bind-xml name="portlet-app-name" attribute="element"/>
+        </field>
+        <field name="ContextParamList" type="org.gridlab.gridsphere.portletcontainer.descriptor.ConfigParam" collection="vector">
+            <bind-xml name="context-param"/>
+        </field>
+        <field name="ConcretePortletInfo" type="org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletInfo">
+            <bind-xml name="concrete-portlet"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletInfo">
+        <field name="Href" type="string">
+            <bind-xml name="href" node="attribute"/>
+        </field>
+        <field name="Name" type="string">
+            <bind-xml name="portlet-name" attribute="element"/>
+        </field>
+        <field name="DefaultLocale" type="string">
+            <bind-xml name="default-locale" attribute="element"/>
+        </field>
+        <field name="LanguageList" type="org.gridlab.gridsphere.portletcontainer.descriptor.LanguageInfo" collection="vector">
+            <bind-xml name="language"/>
+        </field>
+        <field name="Owner" type="org.gridlab.gridsphere.portletcontainer.descriptor.Owner">
+            <bind-xml name="owner"/>
+        </field>
+        <field name="GroupList" type="org.gridlab.gridsphere.portletcontainer.descriptor.Group" collection="vector">
+            <bind-xml name="group"/>
+        </field>
+        <field name="RoleList" type="org.gridlab.gridsphere.portletcontainer.descriptor.Role" collection="vector">
+            <bind-xml name="role"/>
+        </field>
+        <field name="ConfigParamList" type="org.gridlab.gridsphere.portletcontainer.descriptor.ConfigParam" collection="vector">
+            <bind-xml name="config-param"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.LanguageInfo">
+        <field name="Locale" type="string">
+            <bind-xml name="locale" node="attribute"/>
+        </field>
+        <field name="Title" type="string">
+            <bind-xml name="title"/>
+        </field>
+        <field name="TitleShort" type="string">
+            <bind-xml name="title-short"/>
+        </field>
+        <field name="Description" type="string">
+            <bind-xml name="description"/>
+        </field>
+        <field name="Keywords" type="string">
+            <bind-xml name="keywords"/>
+        </field>
+    </class>
+
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication">
+        <field name="UID" type="string">
+            <bind-xml name="uid" node="attribute"/>
+        </field>
+        <field name="PortletName" type="string">
+            <bind-xml name="portlet-app-name" attribute="element"/>
+        </field>
+        <field name="ServletName" type="string">
+            <bind-xml name="servlet-name" attribute="element"/>
+        </field>
+        <field name="PortletInfo" type="org.gridlab.gridsphere.portletcontainer.descriptor.PortletInfo">
+            <bind-xml name="portlet"/>
+        </field>
+    </class>
+
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.PortletInfo">
+        <field name="Href" type="string">
+            <bind-xml name="href" node="attribute"/>
+        </field>
+        <field name="Id" type="string">
+            <bind-xml name="id" node="attribute"/>
+        </field>
+        <field name="Name" type="string">
+            <bind-xml name="portlet-name"/>
+        </field>
+        <field name="ConfigParamList" type="org.gridlab.gridsphere.portletcontainer.descriptor.ConfigParam" collection="vector">
+            <bind-xml name="portlet-config"/>
+        </field>
+        <field name="CacheInfo" type="org.gridlab.gridsphere.portletcontainer.descriptor.CacheInfo">
+            <bind-xml name="cache"/>
+        </field>
+        <field name="AllowsWindowStates" type="org.gridlab.gridsphere.portletcontainer.descriptor.AllowsWindowStates">
+            <bind-xml name="allows"/>
+        </field>
+        <field name="SupportsModes" type="org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes">
+            <bind-xml name="supports"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.CacheInfo">
+        <field name="Expires" type="long">
+            <bind-xml name="expires"/>
+        </field>
+        <field name="Shared" type="string">
+            <bind-xml name="shared"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.AllowsWindowStates">
+        <field name="WindowStates" type="org.exolab.castor.types.AnyNode" collection="vector">
+            <bind-xml matches="*"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes">
+        <field name="MarkupList" type="org.gridlab.gridsphere.portletcontainer.descriptor.Markup" collection="vector">
+            <bind-xml name="markup"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.Markup">
+        <field name="Name" type="string">
+            <bind-xml name="name" node="attribute"/>
+        </field>
+        <field name="PortletModes" type="org.exolab.castor.types.AnyNode" collection="vector">
+            <bind-xml matches="*"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.ConfigParam">
+        <field name="ParamName" type="string">
+            <bind-xml name="param-name"/>
+        </field>
+        <field name="ParamValue" type="string">
+            <bind-xml name="param-value"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.Owner">
+        <field name="GroupName" type="string">
+            <bind-xml name="group-name"/>
+        </field>
+        <field name="RoleName" type="string">
+            <bind-xml name="role-name"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.Group">
+        <field name="GroupName" type="string">
+            <bind-xml name="group-name"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.Role">
+        <field name="RoleName" type="string">
+            <bind-xml name="role-name"/>
+        </field>
+    </class>
+
+</mapping>

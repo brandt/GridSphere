@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app-collection>
+
+<portlet-app-def>
+
+<portlet-app uid="org.gridlab.gridsphere.portlets.core.HelloWorld.666">
+    <portlet-app-name>Hello World Portlet Application</portlet-app-name>
+    <portlet href="WEB-INF/web.xml#Servlet_1902648613" id="Portlet_1">
+        <portlet-name>Hello World</portlet-name>
+        <cache>
+            <expires>120</expires>
+            <shared>true</shared>
+        </cache>
+        <allows>
+            <maximized/>
+            <minimized/>
+        </allows>
+        <supports>
+            <markup name="html">
+                <view/>
+                <edit/>
+                <help/>
+                <configure/>
+            </markup>
+            <markup name="wml">
+                <view/>
+                <edit/>
+                <help/>
+                <configure/>
+            </markup>
+        </supports>
+    </portlet>
+</portlet-app>
+
+<concrete-portlet-app uid="org.gridlab.gridsphere.portlets.core.HelloWorld.666.2">
+    <portlet-app-name>Concrete Hello World - Portlet Sample #1</portlet-app-name>
+    <context-param>
+        <param-name>Portlet Master</param-name>
+        <param-value>master@domain.com</param-value>
+    </context-param>
+    <context-param>
+        <param-name>Portlet Mistress</param-name>
+        <param-value>mistress@domain.com</param-value>
+    </context-param>
+    <concrete-portlet href="Portlet_1902648613">
+        <portlet-name>Hello World</portlet-name>
+        <default-locale>en</default-locale>
+        <language locale="en_US">
+            <title>Hello World - Sample Portlet #1</title>
+            <title-short>Hello World</title-short>
+            <description>Here is a simple portlet</description>
+            <keywords>portlet hello world</keywords>
+        </language>
+        <language locale="en_DE">
+            <title>Hallo Welt - Sample Portlet #1</title>
+            <title-short>Hallo Welt</title-short>
+            <description>Hier ist ein gleicht portlet</description>
+            <keywords>portlet hallo welt</keywords>
+        </language>
+        <owner>
+            <role-name>SUPER</role-name>
+        </owner>
+        <group>
+            <group-name>ANY</group-name>
+        </group>
+        <role>
+            <role-name>GUEST</role-name>
+        </role>
+        <config-param>
+            <param-name>Portlet Mistress</param-name>
+            <param-value>mistress@domain.com</param-value>
+        </config-param>
+    </concrete-portlet>
+</concrete-portlet-app>
+
+<concrete-portlet-app uid="org.gridlab.gridsphere.portlets.core.HelloWorld.666.4">
+    <portlet-app-name>Concrete Hello World - Portlet Sample #2</portlet-app-name>
+    <context-param>
+        <param-name>Portlet Master</param-name>
+        <param-value>secondguy@some.com</param-value>
+    </context-param>
+    <concrete-portlet href="Portlet_1902648615">
+        <portlet-name>Hello World</portlet-name>
+        <default-locale>en</default-locale>
+        <language locale="en_US">
+            <title>Hello World - Sample Portlet #2</title>
+            <title-short>Hello World</title-short>
+            <description>Here is another simple portlet</description>
+            <keywords>portlet hello world</keywords>
+        </language>
+        <owner>
+            <group-name>CACTUS</group-name>
+            <role-name>ADMIN</role-name>
+        </owner>
+        <group>
+            <group-name>CACTUS</group-name>
+        </group>
+        <role>
+            <role-name>USER</role-name>
+        </role>
+        <config-param>
+            <param-name>Portlet Master</param-name>
+            <param-value>secondguy@some.com</param-value>
+        </config-param>
+    </concrete-portlet>
+</concrete-portlet-app>
+
+
+</portlet-app-def>
+
+</portlet-app-collection>
