@@ -148,7 +148,7 @@ public interface FormEvent extends ActionEvent {
      * @param beanId the bean identifier
      * @return a TableCellBean
      */
-    //public TableCellBean getTableCellBean(String beanId);
+    public TableCellBean getTableCellBean(String beanId);
 
     /**
      * Return an existing <code>TableRowBean</code> or create a new one
@@ -156,7 +156,7 @@ public interface FormEvent extends ActionEvent {
      * @param beanId the bean identifier
      * @return a TableRowBean
      */
-    //public TableRowBean getTableRowBean(String beanId);
+    public TableRowBean getTableRowBean(String beanId);
 
     /**
      * Return an existing <code>TableBean</code> or create a new one
@@ -164,7 +164,7 @@ public interface FormEvent extends ActionEvent {
      * @param beanId the bean identifier
      * @return a TableBean
      */
-    //public TableBean getTableBean(String beanId);
+    public TableBean getTableBean(String beanId);
 
     /**
      * Returns the collection of visual tag beans contained by this form event
@@ -177,12 +177,6 @@ public interface FormEvent extends ActionEvent {
      * Stores any created beans into the request
      */
     public void store();
-
-    /**
-     * @deprecated
-     * @return a button name
-     */
-    public String getSubmitButtonName();
 
     public Object getTagBean(String name);
 }
