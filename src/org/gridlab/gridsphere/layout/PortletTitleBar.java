@@ -17,7 +17,6 @@ import org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes;
 import org.gridlab.gridsphere.event.impl.WindowEventImpl;
 import org.gridlab.gridsphere.event.WindowEvent;
 
-import javax.servlet.ServletException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -112,18 +111,10 @@ public class PortletTitleBar extends BasePortletComponent {
 
     public List makeWindowLinks(GridSphereEvent event) {
 
-        SportletRequest req = event.getSportletRequest();
-        SportletResponse res = event.getSportletResponse();
-
         SportletURI sportletURI;
 
         // subtract current window state
-        int i;
         List windowStates = new ArrayList(allowsWindowStates);
-        String state = null;
-        String minStr = PortletWindow.State.MINIMIZED.toString();
-        String maxStr = PortletWindow.State.MAXIMIZED.toString();
-        String resStr = PortletWindow.State.RESIZING.toString();
 
         if (portletWindowState == PortletWindow.State.NORMAL) {
             windowStates.remove(PortletWindow.State.RESIZING.toString().toLowerCase());
@@ -132,7 +123,6 @@ public class PortletTitleBar extends BasePortletComponent {
         windowStates.remove(portletWindowState.toString().toLowerCase());
 
         // create a URI for each of the window states
-        String stateString;
         PortletStateLink stateLink;
         List stateLinks = new Vector();
         Iterator it = windowStates.iterator();
@@ -159,11 +149,9 @@ public class PortletTitleBar extends BasePortletComponent {
         int i;
 
         SportletRequest req = event.getSportletRequest();
-        SportletResponse res = event.getSportletResponse();
 
         // get client preferred markup
         Client client = req.getClient();
-        String prefMarkup = client.getMarkupName();
 
         // Make sure Client supports supported modes
         Markup m = null;
@@ -176,7 +164,6 @@ public class PortletTitleBar extends BasePortletComponent {
         }
 
         // subtract current portlet mode
-        String s;
         for (i = 0; i < portletModes.length; i++) {
             if (portletModes[i].equalsIgnoreCase(portletMode.toString())) {
                 portletModes[i] = "";
@@ -185,10 +172,8 @@ public class PortletTitleBar extends BasePortletComponent {
 
         // create a URI for each of the portlet modes
         PortletURI sportletURI;
-        String modeString;
         PortletModeLink modeLink;
         List portletLinks = new Vector();
-        DefaultPortletAction modeAction;
         for (i = 0; i < portletModes.length; i++) {
             sportletURI = event.createNewAction(GridSphereEvent.Action.LAYOUT_ACTION, COMPONENT_ID, portletClass);
             //sportletURI.addParameter(GridSphereProperties.PORTLETID, (String)req.getAttribute(GridSphereProperties.PORTLETID));
@@ -252,7 +237,6 @@ public class PortletTitleBar extends BasePortletComponent {
         // title bar: configure, edit, help, title, min, max
         SportletRequest req = event.getSportletRequest();
         SportletResponse res = event.getSportletResponse();
-        PortletContext ctx = event.getPortletContext();
 
         // get the appropriate title for this client
         Client client = req.getClient();
