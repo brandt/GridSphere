@@ -68,13 +68,22 @@ public class FileManagerPortlet extends ActionPortlet {
             FileInputBean fi = event.getFileInputBean("userfile");
             User user = event.getPortletRequest().getUser();
             String fileName = fi.getFileName();
-	        System.err.println("filename = " + fileName);
+            System.err.println("filename = " + fileName);
             if (fileName.equals("")) return;
 
-            userStorage.storeFile(user, fi, fileName);
+            String userLoc = userStorage.getLocationPath(user, "");
+            File f = new File(userLoc);
+            if (!f.exists()) {
+                if (!f.mkdirs()) throw new IOException("Unable to create dir: " + userLoc);
+            }
+            String path = userStorage.getLocationPath(user, fileName);
+            System.err.println("storeFile: " + path);
+            fi.saveFile(path);
+
+            //userStorage.storeFile(user, fi, fileName);
             log.debug("fileinputbean value=" + fi.getValue());
         } catch (Exception e) {
-	        FrameBean errMsg = event.getFrameBean("errorFrame");
+            FrameBean errMsg = event.getFrameBean("errorFrame");
 	        errMsg.setValue(this.getLocalizedText(event.getPortletRequest(), "FILE_UPLOAD_FAIL"));
 	        errMsg.setStyle("error");
 	        log.error("Unable to store uploaded file ", e);

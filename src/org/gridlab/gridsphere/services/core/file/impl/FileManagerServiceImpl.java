@@ -10,7 +10,6 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.provider.portletui.beans.FileInputBean;
 import org.gridlab.gridsphere.services.core.file.FileManagerService;
 
 import java.io.*;
@@ -55,15 +54,18 @@ public class FileManagerServiceImpl implements FileManagerService, PortletServic
         return userLoc;
     }
 
+    /*
     public void storeFile(User user, FileInputBean inputBean, String fileName) throws IOException, Exception {
-
         String userLoc = getLocationPath(user, "");
         File f = new File(userLoc);
         if (!f.exists()) {
             if (!f.mkdirs()) throw new IOException("Unable to create dir: " + userLoc);
         }
-        inputBean.saveFile(getLocationPath(user, fileName));
+        String path = getLocationPath(user, fileName);
+        System.err.println("storeFile: " + path);
+        inputBean.saveFile(path);
     }
+    */
 
     public void deleteFile(User user, String filename) {
         File f = new File(getLocationPath(user, filename));

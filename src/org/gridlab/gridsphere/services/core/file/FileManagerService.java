@@ -20,7 +20,7 @@ public interface FileManagerService extends PortletService {
 
     public String getLocationPath(User user, String fileName);
 
-    public void storeFile(User user, FileInputBean file, String fileName) throws IOException, Exception;
+    //public void storeFile(User user, FileInputBean file, String fileName) throws IOException, Exception;
 
     public void deleteFile(User user, String fileName);
 
