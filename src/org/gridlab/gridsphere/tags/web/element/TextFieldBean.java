@@ -52,7 +52,7 @@ public class TextFieldBean extends ReadOnlyBaseBean implements Input {
 
     public String toString() {
         return getCSS("<input type='" + inputtype + "' name='" + getTagName() + name + "' value='" + value + "' size='"
-                + size + "' maxlength='" + maxlength + "'/>");
+                + size + "' maxlength='" + maxlength +"'"+checkReadonly()+checkDisabled()+"/>");
     }
 
 }

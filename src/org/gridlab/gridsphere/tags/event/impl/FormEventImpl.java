@@ -80,6 +80,7 @@ public class FormEventImpl implements FormEvent {
             //if (values.length>0) {
                 System.out.println("Updated bean: "+bean.getName());
                 bean.update(values);
+                session.setAttribute(name, bean);
             //}
         //}
         return bean;
