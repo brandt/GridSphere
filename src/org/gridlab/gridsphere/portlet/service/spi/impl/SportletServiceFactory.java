@@ -5,12 +5,14 @@
 package org.gridlab.gridsphere.portlet.service.spi.impl;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletConfig;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import javax.servlet.ServletConfig;
 import java.util.Enumeration;
@@ -74,17 +76,19 @@ public class SportletServiceFactory implements PortletServiceFactory {
             throws PortletServiceUnavailableException, PortletServiceNotFoundException {
 
         Properties serviceProperties = new Properties();
-        String appRoot = servletConfig.getServletContext().getRealPath("");
-        String serviceProps = servletConfig.getInitParameter("PortletServices.properties");
-        String propsPath = appRoot + "/" + serviceProps;
+        GridSphereConfig gsc = GridSphereConfig.getInstance();
+        String serviceProps = gsc.getProperty("PORTLET_SERVICE_PROPS");
+        //String appRoot = servletConfig.getServletContext().getRealPath("");
+        //String serviceProps = servletConfig.getInitParameter("PortletServices.properties");
+        //String propsPath = appRoot + "/" + serviceProps;
         FileInputStream fistream = null;
         try {
-            fistream = new FileInputStream(propsPath);
+            fistream = new FileInputStream(serviceProps);
             serviceProperties.load(fistream);
         } catch (IOException e) {
-            log.error("Unable to find properties file: " + propsPath);
-            log.error("Make sure location is specified in server.xml " + propsPath);
-            throw new PortletServiceUnavailableException("Unable to find/load properties file: " + propsPath);
+            log.error("Unable to find properties file: " + serviceProps);
+            log.error("Make sure location is specified in server.xml " + serviceProps);
+            throw new PortletServiceUnavailableException("Unable to find/load properties file: " + serviceProps);
         }
         return createPortletService(service, serviceProperties, servletConfig, useCachedService);
 
