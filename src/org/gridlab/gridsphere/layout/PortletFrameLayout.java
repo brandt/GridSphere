@@ -252,20 +252,9 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
                 // check for the frame that has been closed
                 if (p.getComponentID() == id) {
                     if (p instanceof PortletFrame) {
-                        components.remove(p);
-                        //this.remove(p, event.getRequest());
-                        /*
-                        try {
-                            System.err.println("removing and reinit page");
-                            PortletPageFactory pageFactory = PortletPageFactory.getInstance();
-                            PortletPage page = pageFactory.createPortletPage(event.getRequest());
-                            page.init(event.getRequest(), new Vector());
-                            //page.save();
-                        } catch (Exception e) {
-                            //log.error("Unable to save portlet page", e);
-                        }
-                        */
-                        return;
+                        it.remove();
+                    } else {
+                        p.setVisible(true);   
                     }
                 }
             }
