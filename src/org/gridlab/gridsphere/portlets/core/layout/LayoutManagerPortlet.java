@@ -61,6 +61,11 @@ public class LayoutManagerPortlet extends ActionPortlet {
     public void doViewLayout(FormEvent event) {
         PortletRequest req = event.getPortletRequest();
 
+        // get theme
+        String theme = layoutMgr.getTheme(req);
+        req.setAttribute("theme", theme);
+
+        // get tabs
         TableRowBean tr = event.getTableRowBean("tabsRow");
         String[] tabNames = layoutMgr.getTabNames(req);
         for (int i = 0; i < tabNames.length; i++) {
@@ -78,6 +83,16 @@ public class LayoutManagerPortlet extends ActionPortlet {
     public void doEditLayout(FormEvent event) {
         PortletRequest req = event.getPortletRequest();
 
+        ListBoxBean themeLB = event.getListBoxBean("themeLB");
+        String themes = getPortletSettings().getAttribute("supported-themes");
+        StringTokenizer st = new StringTokenizer(themes, ",");
+        while (st.hasMoreTokens()) {
+            ListBoxItemBean lb = new ListBoxItemBean();
+            String val = (String)st.nextElement();
+            lb.setValue(val);
+            themeLB.addBean(lb);
+        }
+
         TableRowBean tr = event.getTableRowBean("tabsRow");
         String[] tabNames = layoutMgr.getTabNames(req);
         for (int i = 0; i < tabNames.length; i++) {
@@ -91,8 +106,13 @@ public class LayoutManagerPortlet extends ActionPortlet {
         setNextState(req, EDIT_JSP);
     }
 
-    public void saveTabs(FormEvent event) {
+    public void saveChanges(FormEvent event) {
         PortletRequest req = event.getPortletRequest();
+
+        ListBoxBean themeLB = event.getListBoxBean("themeLB");
+        String theme = themeLB.getSelectedValue();
+        layoutMgr.setTheme(req, theme);
+
         String[] tabNames = layoutMgr.getTabNames(req);
         for (int i = 0; i < tabNames.length; i++) {
             TextFieldBean tf = event.getTextFieldBean("tab" + i);
@@ -101,14 +121,39 @@ public class LayoutManagerPortlet extends ActionPortlet {
             tabNames[i] = newtitle;
             System.err.println("settng " + tabNames[i]);
         }
+        layoutMgr.initPage(req);
+
         layoutMgr.setTabNames(req, tabNames);
     }
 
     public void doConfigureLayout(FormEvent event) throws PortletException {
         PortletRequest req = event.getPortletRequest();
 
+        String themes = getPortletSettings().getAttribute("supported-themes");
+        TextFieldBean themesTF = event.getTextFieldBean("themesTF");
+        themesTF.setValue(themes);
 
         setNextState(req, CONFIGURE_JSP);
+    }
+
+    public void doSaveThemes(FormEvent event) throws PortletException {
+        TextFieldBean tf = event.getTextFieldBean("themesTF");
+        String themes = tf.getValue();
+        FrameBean msg = event.getFrameBean("msgFrame");
+        if (themes != null) {
+            getPortletSettings().setAttribute("supported-themes", themes);
+            try {
+                getPortletSettings().store();
+            } catch (IOException e) {
+                msg.setValue("Unable to save locale settings!");
+                msg.setStyle("error");
+            }
+            msg.setValue("Saved locale settings");
+            msg.setStyle("success");
+        } else {
+              msg.setValue("Please specify at least one theme (xp)!");
+              msg.setStyle("error");
+        }
     }
 
 }

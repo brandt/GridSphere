@@ -3,6 +3,11 @@
 
 <portletAPI:init/>
 <ui:form>
+
+<ui:panel>
+<ui:listbox beanId="themeLB"/>
+
+</ui:panel>
 <ui:panel>
 
 Current top-level tabs:
@@ -13,6 +18,6 @@ Current top-level tabs:
 
 
 <ui:panel>
-<ui:actionsubmit action="saveTabs" value="Save titles"/>
+<ui:actionsubmit action="saveChanges" value="Save changes"/>
 </ui:panel>
 </ui:form>

@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Iterator;
 import java.util.Vector;
+import java.util.ArrayList;
 
 /**
  * The <code>LayoutManagerService</code> manages users layouts
@@ -40,6 +41,22 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
     }
 
     public void destroy() {}
+
+    public void setTheme(PortletRequest req, String theme) {
+        PortletPage page = pageFactory.createPortletPage(req);
+        page.setTheme(theme);
+        page.init(new Vector());
+    }
+
+    public void initPage(PortletRequest req) {
+        PortletPage page = pageFactory.createPortletPage(req);
+        page.init(new Vector());
+    }
+
+    public String getTheme(PortletRequest req) {
+        PortletPage page = pageFactory.createPortletPage(req);
+        return page.getTheme();
+    }
 
     public String[] getTabNames(PortletRequest req) {
         PortletPage page = pageFactory.createPortletPage(req);

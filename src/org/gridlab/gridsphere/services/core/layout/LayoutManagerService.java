@@ -20,6 +20,12 @@ public interface LayoutManagerService extends PortletService {
 
     //public String[] getPortletClassNames(PortletRequest req);
 
+    public void setTheme(PortletRequest req, String theme);
+
+    public String getTheme(PortletRequest req);
+
+    public void initPage(PortletRequest req);
+
     public String[] getTabNames(PortletRequest req);
 
     public void setTabNames(PortletRequest req, String[] tabNames);
