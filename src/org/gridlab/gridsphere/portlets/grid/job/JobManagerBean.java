@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.provider.ActionEventHandler;
 import org.gridlab.gridsphere.services.grid.job.*;
 import org.gridlab.gridsphere.services.grid.job.impl.grms.*;
 import org.gridlab.gridsphere.services.grid.security.credential.Credential;
+import org.gridlab.gridsphere.services.grid.data.file.FileHandle;
 import org.gridlab.gridsphere.portlet.*;
 
 import java.net.MalformedURLException;
@@ -105,6 +106,7 @@ public class JobManagerBean extends ActionEventHandler {
     public void doViewUserJob()
             throws PortletException {
         loadUserJob();
+        viewUserJob();
         setTitle("Job Manager [View Job]");
         setPage(PAGE_USER_JOB_VIEW);
     }
@@ -118,6 +120,7 @@ public class JobManagerBean extends ActionEventHandler {
     public void doStageUserJob()
             throws PortletException {
         loadUserJob();
+        editUserJob();
         setTitle("Job Manager [Stage Job]");
         setPage(PAGE_USER_JOB_EDIT);
     }
@@ -169,12 +172,14 @@ public class JobManagerBean extends ActionEventHandler {
         editUserJob();
         try {
             submitUserJob();
+            viewUserJob();
             setTitle("Job Manager [View Job]");
-            setPage(PAGE_USER_JOB_EDIT_VERIFY);
+            setPage(PAGE_USER_JOB_VIEW);
         } catch (PortletException e) {
             setIsFormInvalid(true);
             this.setFormInvalidMessage(e.getMessage());
-            doListUserJob();
+            setTitle("Job Manager [Edit Job]");
+            setPage(PAGE_USER_JOB_EDIT_VERIFY);
         }
     }
 
@@ -197,6 +202,7 @@ public class JobManagerBean extends ActionEventHandler {
         loadUserJob();
         try {
             migrateUserJob();
+            viewUserJob();
             setTitle("Job Manager [View Job]");
             setPage(PAGE_USER_JOB_VIEW);
         } catch (PortletException e) {
@@ -226,13 +232,87 @@ public class JobManagerBean extends ActionEventHandler {
     }
 
     public void loadUserJob() {
-        String jobID = getActionPerformedParameter("jobID");
+        String jobID = getParameter("jobID");
         if (!jobID.equals("")) {
             User user = getPortletUser();
             try {
                 this.userJob = jobManagerService.getJob(user, jobID);
             } catch (Exception e) {
-                this.log.error("Unable to load portlet user job list", e);
+                this.log.error("Unable to load portlet user job", e);
+            }
+        }
+    }
+
+    public void viewUserJob() {
+        PortletRequest request = getPortletRequest();
+        if (this.userJob == null) {
+            this.log.debug("No user job provided");
+            // Job runtime attributes
+            request.setAttribute("jobID", "");
+            request.setAttribute("jobStatus", "");
+            request.setAttribute("hostName", "");
+            request.setAttribute("jobScheduler", "");
+            request.setAttribute("jobQueue", "");
+            // Job specification
+            request.setAttribute("executable", "");
+            request.setAttribute("arguments", "");
+            request.setAttribute("environment", "");
+            request.setAttribute("stdout", "");
+            request.setAttribute("stderr", "");
+        } else {
+            this.log.debug("Getting job attributes");
+            // Job runtime attributes
+            request.setAttribute("jobID", this.userJob.getID());
+            request.setAttribute("jobStatus", this.userJob.getJobStatus());
+
+            String hostName = this.userJob.getRuntimeHost();
+            if (hostName == null) hostName = "";
+            request.setAttribute("hostName", hostName);
+
+            String jobScheduler = this.userJob.getRuntimeScheduler();
+            if (jobScheduler == null) jobScheduler = "";
+            request.setAttribute("jobScheduler", jobScheduler);
+
+            String jobQueue = this.userJob.getRuntimeQueue();
+            if (jobQueue == null) jobQueue = "";
+            request.setAttribute("jobQueue", this.userJob.getRuntimeQueue());
+
+            // Job specification
+            JobSpecification jobSpecification = this.userJob.getJobSpecification();
+
+            FileHandle executable = jobSpecification.getExecutable();
+            if (executable == null) {
+                request.setAttribute("executable", "");
+            } else {
+                request.setAttribute("executable", executable);
+            }
+
+            Arguments arguments = jobSpecification.getArguments();
+            if (arguments == null) {
+                request.setAttribute("arguments", "");
+            } else {
+                request.setAttribute("arguments", arguments);
+            }
+
+            Environment environment = jobSpecification.getEnvironment();
+            if (environment == null) {
+                request.setAttribute("environment", "");
+            } else {
+                request.setAttribute("environment", environment);
+            }
+
+            FileHandle stdout = jobSpecification.getStdout();
+            if (executable == null) {
+                request.setAttribute("stdout", "");
+            } else {
+                request.setAttribute("stdout", stdout);
+            }
+
+            FileHandle stderr = jobSpecification.getStderr();
+            if (executable == null) {
+                request.setAttribute("stderr", "");
+            } else {
+                request.setAttribute("stderr", stderr);
             }
         }
     }
@@ -240,13 +320,13 @@ public class JobManagerBean extends ActionEventHandler {
     public void editUserJob() {
     }
 
-    public GrmsJob submitUserJob()
+    public void submitUserJob()
             throws PortletException {
         User user = getPortletUser();
         try {
             GrmsJobSpecification jobSpecification = getJobSpecification();
             log.debug(jobSpecification.toString());
-            return (GrmsJob) jobManagerService.submitJob(user, jobSpecification);
+            this.userJob = jobManagerService.submitJob(user, jobSpecification);
         } catch (Exception e) {
             this.log.error("Unable to submit user job", e);
             throw new PortletException(e.getMessage());

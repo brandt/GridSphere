@@ -207,6 +207,11 @@ public class ActionEventHandler {
         return (DropDownListBean)getTagBean(beanName);
     }
 
+    public ListBoxBean getListBoxBean(String beanName) {
+        // Then we return the tag bean with form event
+        return (ListBoxBean)getTagBean(beanName);
+    }
+
     public TextBean createTextBeanAsActionLink(PortletURI portletURI) {
         TextBean textBean = new TextBean();
         String text = portletURI.toString();

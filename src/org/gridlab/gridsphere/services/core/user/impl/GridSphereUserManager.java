@@ -1056,6 +1056,11 @@ public class GridSphereUserManager implements LoginService, UserManagerService, 
         Iterator allUsers = getUsers().iterator();
         while (allUsers.hasNext()) {
             User user = (User)allUsers.next();
+            // If user has super role, don't include
+            if (hasSuperRole(user)) {
+                continue;
+            }
+            // Else, if user not in group, then include
             if (!isUserInGroup(user, group)) {
                 usersNotInGroup.add(user);
             }

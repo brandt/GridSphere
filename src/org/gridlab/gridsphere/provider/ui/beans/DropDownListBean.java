@@ -50,7 +50,7 @@ public class DropDownListBean extends BaseListBean implements DropDownList {
         ListBoxItemBean item = new ListBoxItemBean();
         item.setName(label);
         item.setValue(value);
-        item.setSelected(true);
+        item.setSelected(selected);
         list.addElement(item);
     }
 

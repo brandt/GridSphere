@@ -57,37 +57,10 @@ public class FileHandle {
     ***/
 
     public String getFileUrl() {
-        String url = null;
-        // If no url return blank
         if (this.nurl == null) {
-            url = "";
-        } else {
-            // If protocol is "file"...
-            if (this.protocol.equals(DEFAULT_PROTOCOL)) {
-                // If no host provided, then return the path only
-                if (this.nurl.getHost().equals("")) {
-                    url = this.nurl.getPath();
-                // Otherwise just return the url contents
-                } else {
-                    url = this.nurl.toString();
-                }
-            // If protocol is not "file"...
-            } else {
-                // VERY TEMPORARY HACK... How does one get
-                // Java to recognize other protocols?
-                if (protocol.equals("https")  ||
-                    protocol.equals("gsiftp") ||
-                    protocol.equals("gridftp")) {
-                    // We need to replace "file" with our protocol
-                    int len = DEFAULT_PROTOCOL.length();
-                    url = this.protocol + this.nurl.toString().substring(len);
-                // Otherwise just return the url contents
-                } else {
-                    url = this.nurl.toString();
-                }
-            }
+            return "";
         }
-        return url;
+        return this.protocol + "://" + this.nurl.getPath();
     }
 
     public void setFileUrl(String url)
@@ -95,17 +68,16 @@ public class FileHandle {
         int index = url.indexOf(":");
         // If there's no protocol, insert our default protocol
         if (index == -1) {
-            url = DEFAULT_PROTOCOL + ":" + url;
+            url = DEFAULT_PROTOCOL + "://" + url;
             this.nurl = new URL(url);
             this.protocol = DEFAULT_PROTOCOL;
         } else {
-            // VERY TEMPORARY HACK... How in the hell does
-            // one get Java to recognize other protocols?
+            // VERY TEMPORARY HACK...
             String protocol = url.substring(0, index);
             if (protocol.equals("https")  ||
                 protocol.equals("gsiftp") ||
                 protocol.equals("gridftp")) {
-                url = DEFAULT_PROTOCOL + url.substring(index);
+                url = DEFAULT_PROTOCOL + url.substring(index+3);
                 this.nurl = new URL(url);
                 this.protocol = protocol;
             // Otherwise, let URL bug out if it wants to
@@ -193,5 +165,9 @@ public class FileHandle {
         } else {
             throw new IOException("Remote file writer not supported yet!");
         }
+    }
+
+    public String toString() {
+        return getFileUrl();
     }
 }
