@@ -80,7 +80,7 @@ public class DBTask extends Task {
 
     private void createDatabase(Configuration cfg) throws BuildException {
         try {
-            new SchemaExport(cfg).create(true, true);
+            new SchemaExport(cfg).create(false, true);
         } catch (HibernateException e) {
             throw new BuildException("DB Error: "+CREATION_ERROR+" "+NOT_INSTALLED+" !");
         }
@@ -89,7 +89,7 @@ public class DBTask extends Task {
 
     private void updateDatabase(Configuration cfg) throws BuildException {
         try {
-            new SchemaUpdate(cfg).execute(true, true);
+            new SchemaUpdate(cfg).execute(false, true);
         } catch (HibernateException e) {
             throw new BuildException("DB Error: "+UPDATE_ERROR+" "+NOT_INSTALLED+" !");
         }
