@@ -443,7 +443,7 @@ public abstract class BaseFormEventImpl {
         sb.append("\n\n show request attributes\n--------------------\n");
         Enumeration e = request.getAttributeNames();
         while (e.hasMoreElements()) {
-            String name = (String) enum.nextElement();
+            String name = (String) e.nextElement();
             sb.append("name :" + name);
         }
         sb.append("--------------------\n");
@@ -558,8 +558,8 @@ public abstract class BaseFormEventImpl {
                     }
                     bean.setName(name);
                     tagBeans.put(beanKey, bean);
-                } catch (IOException e) {
-                    log.error("Unable to create file input bean: " + e);
+                } catch (IOException ex) {
+                    log.error("Unable to create file input bean: " + ex);
                 }
                 //System.err.println("putting a bean: " + beanId + "into tagBeans with name: " + name);
 
