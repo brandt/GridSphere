@@ -7,10 +7,10 @@ Version: $Id$
 
 #page-logo {
   font-family:Franklin Gothic Medium, verdana, arial, sans-serif;
-  color: #e6e6e6;
-  font-size: 30px;
+  color: #000000;
+  font-size: 12px;
   font-weight: normal;
-  background:#7997de;
+  background:#d6d6d6;
   padding-top: 3px;
   padding-left: 15px;
   padding-right: 15px;
@@ -21,7 +21,7 @@ Version: $Id$
   font-family:Franklin Gothic Medium, verdana, arial, sans-serif;
   color:#cbccce;
   font-size:16px;
-  background:#7997de;
+  background:#d6d6d6;
   padding-left: 15px;
   padding-right: 15px;
   padding-top: 1px;

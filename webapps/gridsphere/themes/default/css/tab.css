@@ -8,7 +8,8 @@ Version: $Id$
    font-family: verdana, arial, sans-serif;
    font-size:12px;
    font-weight:normal;
-   background-color:#ffffff;
+   background-color:#d6d6d6;
+   padding-top: 0px;
 }
 
 .tab-empty {
