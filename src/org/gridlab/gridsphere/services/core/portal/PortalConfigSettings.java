@@ -18,7 +18,7 @@ public class PortalConfigSettings {
 
     private Set defaultGroups = null;
 
-    private String defaultTheme = "default";
+    private String defaultTheme = null;
 
     private Map attributes = new HashMap();
 

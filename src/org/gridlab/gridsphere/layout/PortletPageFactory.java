@@ -24,6 +24,8 @@ public class PortletPageFactory implements PortletSessionListener {
 
     private String userLayoutDir = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/CustomPortal/layouts/users");
 
+    private static String DEFAULT_THEME = "default";
+
     private static PortletPageFactory instance = null;
     private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
     protected static PortalConfigService portalConfigService = null;
@@ -341,10 +343,11 @@ public class PortletPageFactory implements PortletSessionListener {
 
     protected void setPageTheme(PortletPage page, PortletRequest req) {
         String defaultTheme = portalConfigService.getPortalConfigSettings().getDefaultTheme();
-        page.setTheme(defaultTheme);
+        if (defaultTheme != null) page.setTheme(defaultTheme);
         User user = req.getUser();
         String theme = (String) user.getAttribute(User.THEME);
         if (theme != null) page.setTheme(theme);
+        if ((page.getTheme() == null) || (page.getTheme().equals(""))) page.setTheme(DEFAULT_THEME);
     }
 
     public PortletTabbedPane createNewUserPane(PortletRequest req, int cols, String tabName) {
@@ -547,8 +550,7 @@ public class PortletPageFactory implements PortletSessionListener {
 
                 newcontainer = (PortletPage) deepCopy(guestPage);
 
-                String defaultTheme = portalConfigService.getPortalConfigSettings().getDefaultTheme();
-                newcontainer.setTheme(defaultTheme);
+                this.setPageTheme(newcontainer, req);
 
                 // theme has to be set before it is inited
                 newcontainer.init(req, new ArrayList());

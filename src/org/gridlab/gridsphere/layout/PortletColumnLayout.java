@@ -75,7 +75,7 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
 
         // starting of the gridtable
         if (!components.isEmpty()) {
-            col.append("<table width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"> <!-- START COLUMN -->");
+            col.append(" <!-- START COLUMN --><table width=\"100%\" cellspacing=\"2\" cellpadding=\"0\">");
             col.append("<tbody>");
             List scomponents = Collections.synchronizedList(components);
             synchronized (scomponents) {

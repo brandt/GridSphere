@@ -53,7 +53,7 @@ public class PortalConfigServiceImpl implements PortletServiceProvider, PortalCo
             }
             configSettings.setDefaultGroups(defaultGroups);
             // set default theme
-            configSettings.setDefaultTheme(config.getInitParameter("defaultTheme"));
+            //configSettings.setDefaultTheme(config.getInitParameter("defaultTheme"));
             // set mailer
             savePortalConfigSettings(configSettings);
         }

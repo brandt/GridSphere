@@ -383,10 +383,10 @@ public class PortletPage implements Serializable, Cloneable {
 
                                 boolean hasrole = false;
 
-                                    hasrole = aclService.hasRequiredRole(req, portletClass, false);
-                             
+                                hasrole = aclService.hasRequiredRole(req, portletClass, false);
+
                                 //boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
-                                System.err.println("hasRole = " + hasrole);
+                                //System.err.println("hasRole = " + hasrole);
                                 if (!hasrole) {
                                     System.err.println("User " + user + " does not have required role!");
                                     return;
@@ -394,6 +394,10 @@ public class PortletPage implements Serializable, Cloneable {
                             }
                         }
                         System.err.println("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
+                        if (comp instanceof PortletFrame) {
+                            PortletFrame f = (PortletFrame)comp;
+                            System.err.println(" in portlet: " + f.getPortletClass());    
+                        }
                         comp.actionPerformed(event);
                     }
                 }
