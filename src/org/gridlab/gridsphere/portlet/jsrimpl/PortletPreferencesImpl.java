@@ -87,18 +87,6 @@ public class PortletPreferencesImpl implements PortletPreferences {
                 ppa.setReadOnly(Boolean.valueOf(prefs[i].getReadOnly().getContent()).booleanValue());
                 attributes.put(ppa.getName(), ppa);
             }
-
-            org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PreferencesValidator v = portletPrefs.getPreferencesValidator();
-            if (v != null) {
-                String validatorClass = v.getContent();
-                if (validatorClass != null) {
-                    try {
-                        validator = (PreferencesValidator) Class.forName(validatorClass, true, loader).newInstance();
-                    } catch (Exception e) {
-                        System.err.println("Unable to create validator: " + validatorClass + "! " + e.getMessage());
-                    }
-                }
-            }
         }
     }
 
@@ -112,6 +100,14 @@ public class PortletPreferencesImpl implements PortletPreferences {
 
     public void setOid(String oid) {
         this.oid = oid;
+    }
+
+    public PreferencesValidator getValidator() {
+        return validator;
+    }
+
+    public void setValidator(PreferencesValidator validator) {
+        this.validator = validator;
     }
 
     public void setRender(boolean isRender) {

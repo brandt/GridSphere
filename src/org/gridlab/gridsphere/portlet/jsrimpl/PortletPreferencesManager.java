@@ -13,6 +13,8 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRApplicationPortletImpl;
 
+import javax.portlet.PreferencesValidator;
+
 /**
  * The <code>PortletPreferencesManager</code> provides a a singleton implementation of the <code>PortletDataManager</code>
  * used for loading and storing <code>PortletData</code>.
@@ -54,13 +56,14 @@ public class PortletPreferencesManager {
                 "select u from " + PortletPreferencesImpl.class.getName() + " u where u.userId='" + user.getID() + "' and u.portletId='" + portletID + "'";
 
         // get persistence prefs if it exists
+        org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences prefDesc = appPortlet.getPortletPreferences();
         PortletPreferencesImpl prefs = null;
         try {
             prefs = (PortletPreferencesImpl) pm.restore(command);
             if (prefs == null) {
                 // we have no prefs in the xml so create one in the db...
                 log.debug("No prefs exist-- storing prefs for user: " + user.getID() + " portlet: " + portletID);
-                org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences prefDesc = appPortlet.getPortletPreferences();
+
                 prefs = new PortletPreferencesImpl(prefDesc, loader);
                 prefs.setPersistenceManager(pm);
                 prefs.setPortletId(portletID);
@@ -68,10 +71,23 @@ public class PortletPreferencesManager {
                 prefs.store();
             } else {
                 prefs.setPersistenceManager(pm);
+
                 log.debug("Retrieved prefs for user: " + user.getID() + " portlet: " + portletID);
             }
         } catch (Exception e) {
             log.error("Error attempting to restore persistent preferences: ", e);
+        }
+        org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PreferencesValidator v = prefDesc.getPreferencesValidator();
+        if (v != null) {
+            String validatorClass = v.getContent();
+            if (validatorClass != null) {
+                try {
+                    PreferencesValidator validator = (PreferencesValidator) Class.forName(validatorClass, true, loader).newInstance();
+                    prefs.setValidator(validator);
+                } catch (Exception e) {
+                    System.err.println("Unable to create validator: " + validatorClass + "! " + e.getMessage());
+                }
+            }
         }
         prefs.setRender(isRender);
         return prefs;
