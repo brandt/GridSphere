@@ -81,8 +81,8 @@ Copyright:
         <!-- Check for known OGSA libraries -->
         <condition property="grid.exists">
             <and>
-                <available file="${env.CATALINA_HOME}/common/lib/cog-jglobus.jar"/>
-                <available file="${env.CATALINA_HOME}/common/lib/cog-tomcat.jar"/>
+                <available file="${env.CATALINA_HOME}/common/lib/cog-jglobus.jarjarbinks"/>
+                <available file="${env.CATALINA_HOME}/common/lib/cog-tomcat.jarjarbinks"/>
             </and>
         </condition>
 
