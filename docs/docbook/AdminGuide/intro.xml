@@ -63,19 +63,24 @@
             The Administration=>Portlets tab displays the "Portlet Application Manager" portlet that displays the
             status of all known portlet groups. An admin may stop or restart a portlet group as well as deploy new
             portlet web applications to the portal. These features use the Tomcat manager web application to
-            perform web application reloading and initialization. If a GridSpher portlet web application has any portlet services,
-            these features will not work, since the service classes that are deployed to $CATALINA_HOME/shared/lib
-            may not be restarted by the manager web application. We'll be working on this in a future release. For now,
-            this portlet is useful if your webapp is a simple collection of portlets and no portlet services. Otherwise,
-            you are better off restarting the portal from the command line if portlet re-initialization is desired.
+            perform web application reloading and initialization. If the portlet web application is a GridSphere/WebSphere
+            application then reloading will not work if the application contains any portlet services,
+            since the service classes that are deployed to <filename>$CATALINA_HOME/shared/lib</filename>
+            may not be restarted by the manager web application. In this case, the best is to redeploy the portlet
+            application from the command line. If the portlet application is JSR compliant, then redeploying the
+            webapp via the "Portlet Application Manager" should work fine since all classes including service classes
+            are contained within the classloader of the webapp and no classes are deployed to <filename>$CATALINA_HOME/shared/lib</filename>.
         </para>
     </sect1>
 
     <sect1>
-        <title>Portal customization</title>
+        <title>Layout Administration</title>
         <para>
-            The Welcome->Layout portlet allows users to customize the theme and add/edit/delete personalized portal
-            pages. Once a new page is created, portlets can be added via the newly created page.
+            The Administartion=>Layouts tab offers the "Layout Manager Portlet" that allows an administartor to modify the
+            layout of a particular group. Currently, the layout descriptor must be hand edited in the text area and then saved.
+            The changes will take place when a user logs out and logs back in. This offers a simple yet effective way to edity the guest
+            user layout or the layouts of defined groups. In addition, the banner of the portal may be edited as well allowing
+            an admin to change the portal header including logo and title information.
         </para>
     </sect1>
 
