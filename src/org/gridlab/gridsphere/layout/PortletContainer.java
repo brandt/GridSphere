@@ -48,26 +48,39 @@ public class PortletContainer implements PortletLifecycle {
     public List init(List list) {
         log.info("in init()");
         Iterator it = components.iterator();
+        PortletLifecycle cycle;
         while (it.hasNext()) {
-            PortletLifecycle cycle = (PortletLifecycle)it.next();
+            cycle = (PortletLifecycle)it.next();
             list.add(cycle);
             portletComponents = cycle.init(list);
         }
 
         System.err.println("Made a components list!!!! " + portletComponents.size());
         for (int i = 0; i < portletComponents.size(); i++) {
-            PortletComponent c = (PortletComponent)portletComponents.get(i);
-            System.err.println(c.getClassName() + "  id: " + c.getID());
+            PortletLifecycle c = (PortletLifecycle)portletComponents.get(i);
+            System.err.println(c.getClass().getName());
         }
         return portletComponents;
     }
 
     public void login() {
-
+        log.info("in login()");
+        Iterator it = components.iterator();
+        PortletLifecycle cycle;
+        while (it.hasNext()) {
+            cycle = (PortletLifecycle)it.next();
+            cycle.login();
+        }
     }
 
     public void logout() {
-
+        log.info("in logout()");
+        Iterator it = components.iterator();
+        PortletLifecycle cycle;
+        while (it.hasNext()) {
+            cycle = (PortletLifecycle)it.next();
+            cycle.logout();
+        }
     }
 
     public void destroy() {

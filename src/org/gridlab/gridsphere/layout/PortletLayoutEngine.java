@@ -82,8 +82,7 @@ public class PortletLayoutEngine {
                 pld = loadUserLayout(user);
                 pc = pld.getPortletContainer();
                 pc.init(new ArrayList());
-                // initialize the user's portlet collection
-
+                pc.login();
             } catch (Exception e) {
                 log.error("Unable to loadUserLayout for user: " + user, e);
                 throw new PortletLayoutException("Unable to deserailize user layout from layout descriptor: " + e.getMessage());

@@ -13,7 +13,7 @@ public interface PortletComponent extends PortletLifecycle {
 
     public void setVisible(boolean isVisible);
 
-    public int getID();
+    public int getComponentID();
 
     public String getClassName();
 

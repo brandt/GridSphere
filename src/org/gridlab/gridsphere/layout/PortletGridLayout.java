@@ -17,7 +17,7 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
 
-public class PortletGridLayout extends BasePortletComponent implements PortletFrameListener, LayoutManager  {
+public class PortletGridLayout extends BaseLayoutManager {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletGridLayout.class);
 
@@ -51,64 +51,7 @@ public class PortletGridLayout extends BasePortletComponent implements PortletFr
         return cols;
     }
 
-    public List init(List list) {
-        this.id = list.size();
-        Iterator it = components.iterator();
-        PortletComponent p = null;
-        while (it.hasNext()) {
-            p = (PortletComponent)it.next();
-            //PortletRender a = (PortletRender)p;
-            list.add(p);
-            // invoke init on each component
-            list = p.init(list);
-            // If the component is a frame we want to be notified
-            if (p instanceof PortletFrame) {
-                PortletFrame f = (PortletFrame)p;
-                f.addFrameListener(this);
-            }
-        }
-        return list;
-    }
-
-    public void handleFrameMaximized(PortletFrameEvent event) {
-        Iterator it = components.iterator();
-        PortletComponent p = null;
-        int id = event.getID();
-
-        while (it.hasNext()) {
-            p = (PortletComponent)it.next();
-
-            // check for the frame that has been maximized
-            if (p.getID() == id) {
-                p.setWidth("100%");
-            } else {
-                // If this is not the right frame, make it invisible
-                p.setVisible(false);
-            }
-        }
-    }
-
-    public void handleFrameMinimized(PortletFrameEvent event) {
-        Iterator it = components.iterator();
-        PortletComponent p = null;
-        int id = event.getID();
-
-        while (it.hasNext()) {
-            p = (PortletComponent)it.next();
-            p.setVisible(true);
-        }
-    }
-
-    public void handleFrameEvent(PortletFrameEvent event) throws PortletLayoutException {
-        if (event.getAction() == PortletFrameEvent.Action.FRAME_MAXIMIZED) {
-            handleFrameMaximized(event);
-        } else if (event.getAction() == PortletFrameEvent.Action.FRAME_MINIMIZED) {
-            handleFrameMinimized(event);
-        }
-    }
-
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
-        super.doRender(event);
         SportletResponse res = event.getSportletResponse();
         PrintWriter out = res.getWriter();
 

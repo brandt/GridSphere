@@ -142,7 +142,7 @@ public class PortletTitleBar extends BasePortletComponent {
 
     public List init(List list) {
         log.info("in init()");
-
+        list = super.init(list);
         String appID = registryManager.getApplicationPortletID(portletClass);
         ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
 
@@ -154,8 +154,6 @@ public class PortletTitleBar extends BasePortletComponent {
         // Get window state settings
         AllowsWindowStates allowedWindowStates = appPortlet.getPortletApplicationDescriptor().getAllowsWindowStates();
         allowsWindowStates = allowedWindowStates.getWindowStatesAsStrings();
-
-        id = list.size();
         return list;
     }
 
@@ -197,7 +195,7 @@ public class PortletTitleBar extends BasePortletComponent {
         Iterator it = windowStates.iterator();
         while (it.hasNext()) {
             String winState = (String)it.next();
-            sportletURI = event.createNewAction(GridSphereEvent.Action.LAYOUT_ACTION, id, portletClass);
+            sportletURI = event.createNewAction(GridSphereEvent.Action.LAYOUT_ACTION, COMPONENT_ID, portletClass);
             try {
                 stateLink = new PortletStateLink(winState);
                 // Create portlet link Href
@@ -277,7 +275,7 @@ public class PortletTitleBar extends BasePortletComponent {
     }
 
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
-        PortletTitleBarEvent evt = new PortletTitleBarEventImpl(event, this.id);
+        PortletTitleBarEvent evt = new PortletTitleBarEventImpl(event, COMPONENT_ID);
         if (evt != null) fireTitleBarAction(evt);
     }
 
@@ -322,14 +320,14 @@ public class PortletTitleBar extends BasePortletComponent {
 
 
         // Invoke doTitle of portlet whose action was perfomed
-        if ((this.id == event.getPortletComponentID()) && (portletClass != null)) {
+        if ((getComponentID() == event.getPortletComponentID()) && (portletClass != null)) {
             try {
                 req.setPortletSettings(settings);
                 userManager.doTitle(portletClass, req, res);
                 title = "";
             } catch (PortletException e) {
                 ErrorMessage += "Unable to invoke doTitle on active portlet\n";
-                throw new PortletLayoutException("Unable to invoke doTitle on active portlet " + portletClass + "  " + id, e);
+                throw new PortletLayoutException("Unable to invoke doTitle on active portlet " + portletClass + "  " + COMPONENT_ID, e);
             }
         }
 

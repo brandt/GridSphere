@@ -28,7 +28,7 @@ public class PortletPanel extends BasePortletComponent {
 
     public List init(List list) {
         log.info("in init()");
-        this.id = list.size();
+        list = super.init(list);
         PortletLifecycle cycle = (PortletLifecycle)layoutManager;
         list.add(cycle);
         list = cycle.init(list);

@@ -15,11 +15,11 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-public class BasePortletComponent extends PortletContainer implements PortletComponent {
+public abstract class BasePortletComponent implements PortletComponent {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(BasePortletComponent.class);
 
-    protected int id = 0;
+    protected int COMPONENT_ID = -1;
     protected String width;
     protected String height;
     protected String name;
@@ -30,12 +30,23 @@ public class BasePortletComponent extends PortletContainer implements PortletCom
     protected boolean isVisible = true;
     protected String className = BasePortletComponent.class.getName();
 
+    public List init(List list) {
+        COMPONENT_ID = list.size();
+        return list;
+    }
+
+    public void login() {}
+
+    public void logout() {}
+
+    public void destroy() {}
+
     public String getClassName() {
         return className;
     }
 
-    public int getID() {
-        return id;
+    public int getComponentID() {
+        return COMPONENT_ID;
     }
 
     public String getBackground() {
@@ -108,7 +119,7 @@ public class BasePortletComponent extends PortletContainer implements PortletCom
 
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         SportletRequest req = event.getSportletRequest();
-        String sid = new Integer(id).toString();
+        String sid = new Integer(COMPONENT_ID).toString();
         req.setAttribute(LayoutProperties.ID, sid);
         req.setAttribute(LayoutProperties.NAME, name);
         req.setAttribute(LayoutProperties.BGCOLOR, bgColor);

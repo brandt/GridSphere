@@ -222,7 +222,7 @@ public class PortletTabbedPane extends BasePortletComponent {
 
     public List init(List list) {
         log.info("in init()");
-        this.id = list.size();
+        list = super.init(list);
         selectedPanel = getSelectedPortletPanel();
         PortletPanel panel = null;
         for (int i = 0; i < getTabCount(); i++) {
@@ -259,7 +259,7 @@ public class PortletTabbedPane extends BasePortletComponent {
         PortletURI sportletURI;
         String modeString;
         for (i = 0; i < tabs.size(); i++) {
-            sportletURI = event.createNewAction(GridSphereEvent.Action.LAYOUT_ACTION, this.id, null);
+            sportletURI = event.createNewAction(GridSphereEvent.Action.LAYOUT_ACTION, COMPONENT_ID, null);
             try {
                 // Create portlet link Href
                 PortletTab tab = (PortletTab)tabs.get(i);

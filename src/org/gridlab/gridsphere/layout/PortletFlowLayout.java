@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
 
-public class PortletFlowLayout extends BasePortletComponent implements LayoutManager {
+public class PortletFlowLayout extends BaseLayoutManager {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletFlowLayout.class);
 
@@ -76,7 +76,6 @@ public class PortletFlowLayout extends BasePortletComponent implements LayoutMan
     */
 
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
-        super.doRender(event);
         SportletRequest req = event.getSportletRequest();
         SportletResponse res = event.getSportletResponse();
         PrintWriter out = res.getWriter();

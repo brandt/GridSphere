@@ -30,11 +30,6 @@ public class PortletText extends BasePortletComponent {
         setText(text);
     }
 
-    public List init(List list) {
-        this.id = list.size();
-        return list;
-    }
-
     public void setText(String text) {
         this.text = text;
     }

@@ -17,9 +17,9 @@ public interface PortletLifecycle extends PortletRender {
 
     public List init(List list);
 
-    //public void login();
+    public void login();
 
-    //public void logout();
+    public void logout();
 
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException;
 

@@ -4,7 +4,8 @@
  */
 package org.gridlab.gridsphere.layout;
 
-
+import java.util.List;
+import java.util.Vector;
 
 
 /**
@@ -12,6 +13,10 @@ package org.gridlab.gridsphere.layout;
  * to the user's layout preferences.
  */
 public interface LayoutManager extends PortletLifecycle {
+
+    public void setPortletComponents(Vector components);
+
+    public List getPortletComponents();
 
 }
 

@@ -36,7 +36,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
     // renderPortlet is true in doView and false on minimized
     private boolean renderPortlet = true;
 
-    private String COMPONENT_ID = null;
+    private String componentIDStr = null;
 
     private PortletWindow portletWindow = null;
 
@@ -69,8 +69,8 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
     }
 
     public List init(List list) {
-        COMPONENT_ID = String.valueOf(list.size());
-        this.id = list.size();
+        list = super.init(list);
+        componentIDStr = String.valueOf(COMPONENT_ID);
         list.add((PortletComponent)titleBar);
         list = titleBar.init(list);
         titleBar.addTitleBarListener(this);
@@ -107,13 +107,13 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             PortletFrameEvent evt = null;
             if (state == PortletWindow.State.MINIMIZED) {
                 renderPortlet = false;
-                evt = new PortletFrameEventImpl(PortletFrameEvent.Action.FRAME_MINIMIZED, this.id);
+                evt = new PortletFrameEventImpl(PortletFrameEvent.Action.FRAME_MINIMIZED, COMPONENT_ID);
             } else if (state == PortletWindow.State.RESIZING) {
                 renderPortlet = true;
-                evt = new PortletFrameEventImpl(PortletFrameEvent.Action.FRAME_RESIZED, this.id);
+                evt = new PortletFrameEventImpl(PortletFrameEvent.Action.FRAME_RESIZED, COMPONENT_ID);
             } else if (state == PortletWindow.State.MAXIMIZED) {
                 renderPortlet = true;
-                evt = new PortletFrameEventImpl(PortletFrameEvent.Action.FRAME_MAXIMIZED, this.id);
+                evt = new PortletFrameEventImpl(PortletFrameEvent.Action.FRAME_MAXIMIZED, COMPONENT_ID);
             }
             fireFrameEvent(evt);
         }
@@ -124,7 +124,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         // process events
         SportletRequest req = event.getSportletRequest();
         SportletResponse res = event.getSportletResponse();
-        req.setAttribute(GridSphereProperties.COMPONENT_ID, COMPONENT_ID);
+        req.setAttribute(GridSphereProperties.COMPONENT_ID, componentIDStr);
         UserPortletManager userPortletManager = UserPortletManager.getInstance();
 
         // now perform actionPerformed on Portlet if it has an action
@@ -145,7 +145,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         super.doRender(event);
         SportletRequest req = event.getSportletRequest();
         SportletResponse res = event.getSportletResponse();
-        req.setAttribute(GridSphereProperties.COMPONENT_ID, COMPONENT_ID);
+        req.setAttribute(GridSphereProperties.COMPONENT_ID, componentIDStr);
 
         ///// begin portlet frame
         PrintWriter out = res.getWriter();
