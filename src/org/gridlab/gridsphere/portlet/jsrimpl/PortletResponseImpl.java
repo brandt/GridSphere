@@ -1,8 +1,6 @@
 
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletURL;
 import javax.servlet.http.HttpServletResponse;
@@ -12,7 +10,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * The <CODE>PortletResponse</CODE> defines the base interface to assist a

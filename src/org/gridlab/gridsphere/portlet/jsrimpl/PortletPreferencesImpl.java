@@ -65,6 +65,7 @@ public class PortletPreferencesImpl implements PortletPreferences
 
     public PortletPreferencesImpl(org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletPreferences portletPrefs, ClassLoader loader) {
         Map prefsMap = new HashMap();
+        if (portletPrefs != null) {
         Preference[] prefs = portletPrefs.getPreference();
         for (int i = 0; i < prefs.length; i++) {
             PersistencePreferenceAttribute ppa = new PersistencePreferenceAttribute();
@@ -93,7 +94,7 @@ public class PortletPreferencesImpl implements PortletPreferences
                 }
             }
         }
-
+        }
     }
 
     public void setPersistenceManager(PersistenceManagerRdbms pm) {
