@@ -93,6 +93,16 @@ public class SportletURI implements PortletURI {
     }
 
     /**
+     * Adds the given action to this URI.
+     *
+     * @param simpleAction the portlet action String
+     */
+    public void addAction(String simpleAction) {
+        DefaultPortletAction dpa = new DefaultPortletAction(simpleAction);
+        addAction(dpa);
+    }
+
+    /**
      * Adds the given action to this URI. The action is a portlet-defined
      * implementation of the portlet action interface. It can carry any information.
      * How the information is recovered should the next request be for this URI is

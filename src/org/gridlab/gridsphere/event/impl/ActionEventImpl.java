@@ -45,6 +45,15 @@ public class ActionEventImpl extends EventObject implements ActionEvent {
     }
 
     /**
+     * Returns the action that this action event carries.
+     *
+     * @return the portlet action
+     */
+    public String getActionString() {
+        return action.getName();
+    }
+
+    /**
      * Return the portlet request associated with this action event
      *
      * @return portletRequest the <code>PortletRequest</code>

@@ -202,7 +202,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
                                                    boolean useCachedService)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException {
 
-        PortletServiceProvider psp = null;
+        //PortletServiceProvider psp = null;
 
         String serviceName = service.getName();
 
@@ -248,6 +248,9 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         PortletServiceAuthorizer auth = new SportletServiceAuthorizer(user, userManager);
 
         // instantiate wrapper with user and impl
+        PortletServiceProvider psp = null;
+        //PortletServiceProvider psp = (PortletServiceProvider)initServices.get(service);
+        //if (psp == null) {
         try {
             Class c = Class.forName(serviceImpl);
             Class[] parameterTypes = new Class[]{PortletServiceAuthorizer.class};
@@ -261,6 +264,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
 
         try {
             psp.init(portletServiceConfig);
+            initServices.put(service, psp);
         } catch (PortletServiceUnavailableException e) {
             log.error("Unable to initialize portlet service: " + serviceImpl, e);
             throw new PortletServiceNotFoundException("The SportletServiceFactory was unable to initialize the portlet service: " + serviceImpl, e);

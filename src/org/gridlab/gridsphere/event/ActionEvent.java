@@ -28,6 +28,13 @@ public interface ActionEvent extends Event {
     public DefaultPortletAction getAction();
 
     /**
+     * Returns the action that this action event carries.
+     *
+     * @return the portlet action
+     */
+    public String getActionString();
+
+    /**
      * Return the portlet request associated with this action event
      *
      * @return the <code>PortletRequest</code>

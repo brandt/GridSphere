@@ -52,6 +52,13 @@ public interface PortletURI {
     public void addAction(PortletAction action);
 
     /**
+     * Adds the given action to this URI.
+     *
+     * @param simpleAction the portlet action String
+     */
+    public void addAction(String simpleAction);
+
+    /**
      * Returns the complete URI as a string. The string is ready to be
      * embedded in markup. Once the string has been created, adding more
      * parameters or other listeners will not modify the string. You have to
