@@ -52,14 +52,12 @@
 
     <sect1>
         <title>Portal Layout Configuration</title>
-        The two defined layouts used in GridSphere are found in <filename>config/layouts</filename> of your GridSphere
-        distribution and contain the <filename>GuestUserLayout.xml</filename>  and <filename>NewUserLayout.xml</filename>
-        which defines the guest and new user layout respectively. Initially before a user has logged in, they will see
-        the layout as presented in <filename>GuestUserLayout.xml</filename>. The guest layout conatins the Login portlet
+        The defined layouts used in GridSphere are found in <filename>config/layouts</filename> of your GridSphere
+        distribution and contain the <filename>GuestUserLayout.xml</filename>
+        which defines the guest layout. Initially before a user has logged in, they will see
+        the layout as presented in <filename>GuestUserLayout.xml</filename>. The guest layout contains the Login portlet
         to allow poeple to login and little else. This file may be edited to provide additional portlets to guest portal
-        users. The <filename>NewUserLayout.xml</filename> defines a layout that will appear to a user that has justlogged
-        into the portal for the first time. This layout is cloned for new users where they can further refine it by
-        manually editing the file or configuring it via the Layout Configuration portlet to appear in the next release.
+        users.
     </sect1>
 
     <sect1>
