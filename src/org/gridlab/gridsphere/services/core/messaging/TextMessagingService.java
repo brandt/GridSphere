@@ -27,7 +27,7 @@ public interface TextMessagingService extends PortletService {
 
     /**
      * Returns a list of tmf users objects
-     * @return list of users
+     * @return list of tmf users
      */
     List getUsers();
 
@@ -64,7 +64,7 @@ public interface TextMessagingService extends PortletService {
      * Checks if a user is 'online' if the service supports this.
      * @param userid
      * @param messagetype messagetype
-     * @return
+     * @return always false for now
      */
     boolean isUserOnline(String userid, String messagetype);
 
