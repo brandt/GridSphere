@@ -36,7 +36,7 @@ public interface FormEvent extends ActionEvent {
 
     public TextBean getTextBean(String beanId);
 
-    public URLImageBean getURLImageBean(String beadId);
+    public ImageBean getURLImageBean(String beadId);
 
     public ListBoxBean getListBoxBean(String beanId);
 

@@ -241,7 +241,7 @@ public class FormEventImpl implements FormEvent {
         return null;
     }
 
-    public URLImageBean getURLImageBean(String beadId) {
+    public ImageBean getURLImageBean(String beadId) {
         return null;
     }
 
