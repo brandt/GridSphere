@@ -153,6 +153,10 @@
         <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet">
             <portlet-name>User Account Manager</portlet-name>
             <servlet-name>UserManagerPortlet</servlet-name>
+            <supports>
+                <view/>
+            </supports>
+
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet.1">
@@ -179,6 +183,9 @@
         <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet">
             <portlet-name>Portlet Group Manager</portlet-name>
             <servlet-name>GroupManagerPortlet</servlet-name>
+            <supports>
+                <view/>
+            </supports>
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet.1">
@@ -212,6 +219,10 @@
                      <title>Notepad</title>
                      <description>Provides users with a searchable NotePad</description>
                  </language>
+                 <language locale="de">
+                     <title>Notizblock</title>
+                     <description>Dieses Portlet stellt ein Notizblock zur Verfuegung</description>
+                 </language>
              </concrete-portlet>
          </concrete-portlet-app>
      </portlet-app-def>
@@ -220,6 +231,9 @@
         <portlet-app id="org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet">
             <portlet-name>Profile Manager Portlet</portlet-name>
             <servlet-name>ProfileManagerPortlet</servlet-name>
+            <supports>
+                <view/>
+            </supports>
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet.1">
