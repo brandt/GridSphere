@@ -211,12 +211,14 @@ public class ActionPortlet extends GenericPortlet {
 
         log.debug("method name to invoke: " + methodName);
 
+        try {
         doAction(actionRequest, actionResponse, methodName, parameterTypes, arguments);
-
         formEvent.store();
         setTagBeans(actionRequest, formEvent.getTagBeans());
-        if (hasError(actionRequest)) {
-            setNextState(actionRequest, ERROR_PAGE);
+        } catch (PortletException e) {
+            if (hasError(actionRequest)) {
+                setNextState(actionRequest, ERROR_PAGE);
+            }
         }
     }
 

@@ -194,6 +194,21 @@ public class ActionPortlet extends AbstractPortlet {
         return tagBeans;
     }
 
+    protected void checkAdminRole(FormEvent event) throws PortletException {
+        PortletRequest req = event.getPortletRequest();
+        if (!req.getRole().isAdmin()) {
+             throw new PortletException("You must have admin access!");
+         }
+    }
+
+
+    protected void checkUserRole(FormEvent event) throws PortletException {
+        PortletRequest req = event.getPortletRequest();
+        if (!req.getRole().isUser()) {
+             throw new PortletException("You must have user access!");
+         }
+    }
+
     /**
      * Uses the action name obtained from the <code>ActionEvent</code> to invoke the
      * appropriate portlet action method.
@@ -213,12 +228,22 @@ public class ActionPortlet extends AbstractPortlet {
 
         log.debug("method name to invoke: " + methodName);
 
-        doAction(req, res, methodName, parameterTypes, arguments);
+        // have to perform user checking  --
+        //User user = req.getUser();
+        //if (user instanceof GuestUser) {
+        //    methodName = DEFAULT_VIEW_PAGE;
+        //    setNextState(req, DEFAULT_VIEW_PAGE);
+        //}
 
-        formEvent.store();
-        setTagBeans(req, formEvent.getTagBeans());
-        if (hasError(req)) {
-            setNextState(req, ERROR_PAGE);
+        try {
+            doAction(req, res, methodName, parameterTypes, arguments);
+
+            formEvent.store();
+            setTagBeans(req, formEvent.getTagBeans());
+        } catch (PortletException e) {
+            if (hasError(req)) {
+                setNextState(req, ERROR_PAGE);
+            }
         }
     }
 
