@@ -62,13 +62,17 @@ public class RenderLinkTag extends BaseComponentTag {
             renderlink = (RenderLinkBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (renderlink == null) {
                 renderlink = new RenderLinkBean();
-                renderlink.setAction(createRenderURI());
+                renderlink.setRenderURI(createRenderURI());
                 this.setBaseComponentBean(renderlink);
             }
         } else {
             renderlink = new RenderLinkBean();
-            renderlink.setAction(createRenderURI());
+            renderlink.setRenderURI(createRenderURI());
             this.setBaseComponentBean(renderlink);
+        }
+
+        if ((bodyContent != null) && (value == null)) {
+            renderlink.setValue(bodyContent.getString());
         }
 
         try {
