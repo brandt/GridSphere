@@ -19,7 +19,7 @@ public class GuestUser implements User {
     // store used to maintain user attributes
     private Hashtable store = new Hashtable();
 
-    private static GuestUser instance = null;
+    private static GuestUser instance = new GuestUser();
     // Data fields that make up the Role object
     private String familyName = null;
     private String fullName = null;
@@ -41,16 +41,7 @@ public class GuestUser implements User {
         lastLoginTime = -1;
     }
 
-    /**
-     * doSync is used to ensure only one thread has created an instance
-     */
-    private synchronized static void doSync() {}
-
     public static GuestUser getInstance() {
-        if (instance == null) {
-            doSync();
-            instance = new GuestUser();
-        }
         return instance;
     }
 
