@@ -7,7 +7,11 @@ package org.gridlab.gridsphere.portlet;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 import javax.servlet.UnavailableException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Hashtable;
 
 /**
@@ -116,8 +120,8 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
     public void service(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
 
+        // super.service((ServletRequest)request, (ServletResponse)response);
         // Forward to appropriate do... method
-
         Portlet.Mode mode = (Portlet.Mode) request.getMode();
         if (mode != null) {
             switch (mode.getMode()) {
@@ -134,9 +138,14 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
                     doHelp(request, response);
                     break;
                 default:
+                    doErrorMessage(request, response, "Received invalid PortletMode command : " + mode);
                     log.error("Received invalid PortletMode command : " + mode);
                     throw new PortletException("Received invalid PortletMode command");
             }
+        } else {
+            doErrorMessage(request, response, "Received NULL PortletMode command");
+            log.error("Received invalid PortletMode command : " + mode);
+            throw new PortletException("Received invalid PortletMode command");
         }
     }
 
@@ -198,6 +207,20 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
         return null;
     }
 
+    /**
+     * Helper method to serve up the CONFIGURE mode.
+     *
+     * @param request the portlet request
+     * @param response the portlet response
+     *
+     * @throws PortletException if an error occurs during processing
+     * @throws IOException if an I/O error occurs
+     */
+    protected void doErrorMessage(PortletRequest request, PortletResponse response, String message)
+            throws PortletException, IOException {
+        PrintWriter out = response.getWriter();
+        out.println("<b>" + message + "</b>");
+    }
 
     /**
      * Helper method to serve up the CONFIGURE mode.
@@ -210,7 +233,8 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      */
     public void doConfigure(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
-        // XXX: FILL ME IN
+        // default is doView
+        doView(request, response);
     }
 
     /**
@@ -224,7 +248,8 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      */
     public void doEdit(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
-        // XXX: FILL ME IN
+        // default is doView
+        doView(request, response);
     }
 
     /**
@@ -238,7 +263,8 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      */
     public void doHelp(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
-        // XXX: FILL ME IN
+        // default is doView()
+        doView(request, response);
     }
 
     /**
@@ -252,7 +278,8 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      */
     public void doView(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
-        // XXX: FILL ME IN
+        PrintWriter out = response.getWriter();
+        out.println("<center>Blank Portlet</center>");
     }
 
     /**
@@ -260,8 +287,10 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      *
      * @param name the variable name
      * @return the variable or null if it doesn't exist
+     *
+     * @throws AccessDeniedException if the method is called outside of a concrete portlet
      */
-    public Object getVariable(String name) {
+    public Object getVariable(String name) throws AccessDeniedException {
         return storeVars.get(name);
     }
 
@@ -269,8 +298,10 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      * Removes a transient variable of the concrete portlet.
      *
      * @param name the variable name
+     *
+     * @throws AccessDeniedException if the method is called outside of a concrete portlet
      */
-    public void removeVariable(String name) {
+    public void removeVariable(String name) throws AccessDeniedException {
         if (storeVars.containsKey(name)) {
             storeVars.remove(name);
         }
@@ -281,8 +312,10 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      *
      * @param name the variable name
      * @param the variable value
+     *
+     * @throws AccessDeniedException if the method is called outside of a concrete portlet
      */
-    public void setVariable(String name, Object value) {
+    public void setVariable(String name, Object value) throws AccessDeniedException {
         if ((name != null) && (value != null))
             storeVars.put(name, value);
     }
