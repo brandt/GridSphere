@@ -32,6 +32,42 @@ Version: $Id$
   width: 100%;
 }
 
+.portlet-frame-actions {
+  background-color: inherit;
+  border: 1px solid #CCCCFF;
+  padding: 0;
+  spacing: 0;
+  color: #000000;
+  font-family: inherit;
+}
+
+.portlet-frame-info {
+  background-color: inherit;
+  border: 1px solid #CCCCFF;
+  padding: 0;
+  spacing: 0;
+  color: #000000;
+  font-family: inherit;
+}
+
+.portlet-frame-alert {
+  background-color: inherit;
+  border: 1px solid #CCCCFF;
+  padding: 0;
+  spacing: 0;
+  color: darkorange;
+  font-family: inherit;
+}
+
+.portlet-frame-error {
+  background-color: inherit;
+  border: 1px solid #CCCCFF;
+  padding: 0;
+  spacing: 0;
+  color: darkred;
+  font-family: inherit;
+}
+
 .portlet-frame-title {
   background-color: #CCCCFF;
   border: none;
@@ -39,27 +75,6 @@ Version: $Id$
   font-family: inherit;
   font-weight: bold;
   text-align: center;
-}
-
-.portlet-frame-actions {
-  background-color: #FFFFFF;
-  border: none;
-  color: #000000;
-  font-family: inherit;
-}
-
-.portlet-frame-message {
-  background-color: #FFFFFF;
-  border: 1px solid #CCCCFF;
-  color: #000000;
-  font-family: inherit;
-}
-
-.portlet-frame-message-alert {
-  background-color: #FFFFFF;
-  border: none;
-  color: darkred;
-  font-family: inherit;
 }
 
 .portlet-frame-header {
