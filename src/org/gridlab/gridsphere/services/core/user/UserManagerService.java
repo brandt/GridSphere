@@ -48,11 +48,11 @@ public interface UserManagerService extends LoginUserModule {
     public List getUsers();
 
     /**
-     * Retrieves a user object with the given id from this service.
+     * Retrieves a user object with the given user name from this service.
      *
-     * @param id the user name or login id of the user in question
+     * @param userName the user name or login id of the user in question
      */
-    public User getUser(String id);
+    public User getUser(String userName);
 
     /**
      * Retrieves a user object with the given username from this service.
@@ -60,6 +60,13 @@ public interface UserManagerService extends LoginUserModule {
      * @param loginName the user name or login id of the user in question
      */
     public User getUserByUserName(String loginName);
+
+    /**
+     * Retrieves a user object with the given username from this service.
+     *
+     * @param userID the user id of the user in question
+     */
+    public User getUserByUserID(String userID);
 
     /**
      * Retrieves a user object with the given email from this service.
