@@ -102,6 +102,9 @@
         <field name="ConcretePortletClass" type="string">
             <bind-xml name="portlet-class"/>
         </field>
+        <field name="PortletMode" type="string">
+            <bind-xml name="portlet-mode"/>
+        </field>
         <field name="WindowState" type="string">
             <bind-xml name="window-state"/>
         </field>

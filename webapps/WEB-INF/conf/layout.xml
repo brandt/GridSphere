@@ -25,6 +25,7 @@
         <thickness>2</thickness>
     </portlet-border>
     <window-state>normal</window-state>
+    <portlet-mode>view</portlet-mode>
     <portlet-class>org.gridlab.gridsphere.portlets.core.LoginPortlet.129.2</portlet-class>
 </portlet-frame>
 
