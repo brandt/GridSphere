@@ -48,9 +48,13 @@
 
 <!-- Tabbed Panes -->
 <portlet-tabbed-pane selected="0" style="menu">
+  <!--  <selected>0</selected>
+    <style>menu</style>      -->
     <portlet-tab>
         <title>Configuration</title>
         <portlet-tabbed-pane selected="0" style="sub-menu">
+            <!--<selected>0</selected>
+            <style>sub-menu</style>     -->
             <portlet-tab>
                 <title>Login</title>
                 <portlet-panel>
