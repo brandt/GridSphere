@@ -591,8 +591,8 @@ Copyright:
 
         <antcall target="configure-database"/>
 
-        <copy todir="${env.CATALINA_HOME}/webapps/gridsphere">
-            <fileset dir="${build.webapps}/gridsphere"/>
+        <copy todir="${env.CATALINA_HOME}/webapps">
+            <fileset dir="${build.webapps}"/>
         </copy>
 
     </target>
@@ -614,6 +614,8 @@ Copyright:
         <copy todir="${build.webapps}/gridsphere">
             <fileset dir="${gswebapp.dir}"/>
         </copy>
+        <!-- Copy context file -->
+        <copy file="webapps/gridsphere-context.xml" todir="${build.webapps}"/>
 
         <copy overwrite="true" todir="${env.CATALINA_HOME}/shared/lib">
             <fileset dir="lib">
