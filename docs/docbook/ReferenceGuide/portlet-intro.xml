@@ -39,6 +39,18 @@
     settings or allow access to a different set of groups, etc.
     </para>
     <para>
+    The GridSphere framework provides built-in support for access control based upon the Role Based Access
+    Control (RBAC) model. GridSphere uses portlet web applications to define groups. Users may belong to one or more
+    groups (meaning they have access to one or more portlet web applications) and they have a <emphasis>role</emphasis>
+    within each group. the four supported roles are <emphasis>GUEST</emphasis>, <emphasis>USER</emphasis>,
+    <emphasis>ADMIN</emphasis> and <emphasis>SUPER</emphasis>. A user with the GUEST role will obtain a generic view of
+    the portal suitable to guests while a user that has logged on, will have the USER role and may be able to see the
+    portlet personalized with their settings. A user with the ADMIN role can have access to a portlet's CONFIGURE mode
+    described earlier and presumably configure a portlet's initialization settings. A user possesing the SUPER role can
+    essentially do anything they want to any portlet and is essentially equivalent to having root access in an
+    operating system.
+    </para>
+    <para>
     The Portlet API explained in greater detail in <link linkend='portlet-objects' endterm="portlet-objects-title"/>
     provides a much richer interface for web programming than the standard servlet model. In addition to providing
     information about the current portlet mode and window state, the API provides access to the portal user including

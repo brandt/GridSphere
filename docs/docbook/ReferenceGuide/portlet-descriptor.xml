@@ -66,7 +66,7 @@
         &lt;portlet-app id="org.myorganization.portlets.myportlet"&gt; <co id="app.id"/>
             &lt;portlet-name&gt;Hello World&lt;/portlet-name&gt; <co id="portlet.name"/>
             &lt;servlet-name&gt;hello&lt;/servlet-name&gt; <co id="servlet.name"/>
-            &lt;portlet-config&gt; <co id="portlet.config"/>
+            &lt;portlet-config&gt; <co id="app.portlet.config"/>
                 &lt;param-name&gt;AppConfigOne&lt;/param-name&gt;
                 &lt;param-value&gt;one&lt;/param-value&gt;
             &lt;/portlet-config&gt;
@@ -97,7 +97,7 @@
                 (Optional) An identifying name. Currently this is not used.
             </para>
             </callout>
-            <callout arearefs="portlet.config">
+            <callout arearefs="app.portlet.config">
             <para>
                 Defines configuration information for this portlet that is accessible via the
                 &PortletConfig; object described in the
@@ -122,8 +122,8 @@
 
     </sect1>
 
-    <sect1>
-        <title>The Concrete Portlet Definition</title>
+    <sect1 id="concrete.portlet">
+        <title id="concrete.portlet.title">The Concrete Portlet Definition</title>
         <para>A concrete portlet definition defines properties that are specific to
             each concrete portlet instance. Multiple concrete portlets can exist for a single
             application portlet. The following sample illustrates the elements and attributes

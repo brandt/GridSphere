@@ -7,75 +7,150 @@
     Version:    $Id$
 -->
 
-<chapter id="portlet-layout">
-    <title>Portlet Layout Framework</title>
-    <para>
+<chapter id="portlet-layout"><title id="portlet-layout-title">Portlet Layout Framework</title>
+<para>
 The Portal Layout components closely resemble the AWT/Swing components found in the standard Java classes.
 The reason for this is twofold: One, to provide a very close API to create web based visual components easily
 by anyone familiar with Java GUI development under AWT or Swing. The other reason is to follow the "Composite"
 design pattern which allows for maximal flexibility in developing new layouts composed of various changing
-components by composing objects, or portal components, into a tree based structure.
+components by composing objects, or portal components, into a tree based structure. GridSphere creates customized
+user layouts composed that are represented as XML layout descriptors.
 </para>
-The following list describes the supported list of portlet componets.
 
-PortletContainer -- This is the super class of all other components
+<sect1><title>Portlet Layout Components</title>
+<para>
+A portal layout is represented per-user as a &PortletContainer;. A &PortletContainer; can contain any number of
+portlet components. Generally, portal layout components inherit functionality from a &BasePortletComponent;
+that includes attributes for width, height and a CSS theme. Other layout components listed below may be used in
+creating a layout descriptor. For more details on component attributes, see the Javadoc API.
+</para>
+<variablelist>
+    <title>Portlet Layout Components</title>
+    <varlistentry><term>PortletContent</term>
+        <listitem>
+            <para>
+                Allows external content to be included in the layout using the <varname>include</varname> attribute.
+            </para>
+        </listitem>
+    </varlistentry>
+    <varlistentry><term>PortletPanel</term>
+        <listitem>
+            <para>
+                A panel contains a portlet layout which is responsible for component layout
+            </para>
+        </listitem>
+    </varlistentry>
+    <varlistentry><term>PortletGridLayout</term>
+        <listitem>
+            <para>
+                Lays out components in a grid
+            </para>
+        </listitem>
+    </varlistentry>
+    <varlistentry><term>PortletTabbedPane</term>
+        <listitem>
+            <para>
+                A tabbed pane is a container for portlet tabs
+            </para>
+        </listitem>
+    </varlistentry>
+    <varlistentry><term>PortletTab</term>
+        <listitem>
+            <para>
+                A tab specifies a title and a portlet component that is displayed when the tab is selected.
+                This is generally where portlet frames are placed
+            </para>
+        </listitem>
+    </varlistentry>
+    <varlistentry><term>PortletFrame</term>
+        <listitem>
+            <para>
+            A portlet frame is a visual representation of a portlet. It includes a title border and the classname of
+            the portlet to invoke for rendering. Unless the attribute <varname>transparent</varname> is set to true,
+            a title bar will be rendered. In addition, the <varname>required-role</varname> element may be included
+            which specifies one of "GUEST", "USER", "ADMIN" or "SUPER" that restricts access to this portlet based
+            upon a user's role.
+            </para>
+        </listitem>
+    </varlistentry>
+</variablelist>
+</sect1>
 
-PortletComponent -- An interface describing various portlet component features such as foreground, background color,
-                    width, height, PortletBorder and PortletInsets.
 
-BasePortletComponent -- Implements PortletComponent and extends PortletContainer. Provides a base portlet component
-                        that other portlet components inherit from
+<sect1><title>Specifying a Layout</title>
+<para>
+An external portlet web application specifies the arrangement of portlets in an XML descriptor file found in
+<filename>WEB-INF/layout.xml</filename>. The layout descriptor specifies the organization of portlets within a
+double-tabbed pane. An example illustration is shown:
+</para>
+<informalexample id="layout.def"><programlisting>
+    &lt;portlet-tab&gt; <co id="tab"/>
+        &lt;title&gt;Examples&lt;/title&gt; <co id="tab.title"/>
+        &lt;portlet-tabbed-pane style="sub-menu"&gt;  <co id="tab.pane"/>
+            &lt;portlet-tab&gt;
+                &lt;title&gt;Simple Examples&lt;/title&gt;
+                &lt;portlet-panel&gt;
+                    &lt;grid-layout columns="50,50"&gt;    <co id="grid.layout"/>
+                        &lt;portlet-frame&gt; <co id="frame"/>
+                            &lt;portlet-class&gt;org.myorg.portlets.examples.simpleone.1&lt;/portlet-class&gt;
+                        &lt;/portlet-frame&gt;
+                        &lt;portlet-frame&gt;
+                            &lt;portlet-class&gt;org.myorg.portlets.examples.simpletwo.1&lt;/portlet-class&gt;
+                        &lt;/portlet-frame&gt;
+                    &lt;/grid-layout&gt;
+                &lt;/portlet-panel&gt;
+            &lt;/portlet-tab&gt;
+            &lt;portlet-tab&gt;
+                &lt;title&gt;Demos&lt;/title&gt;
+                &lt;portlet-panel&gt;
+                    &lt;grid-layout&gt;
+                        &lt;portlet-frame&gt;
+                            &lt;name&gt;DemoPortlet&lt;/name&gt;
+                            &lt;portlet-class&gt;org.gridlab.gridsphere.portlets.examples.DemoPortlet.1&lt;/portlet-class&gt;
+                        &lt;/portlet-frame&gt;
+                    &lt;/grid-layout&gt;
+                &lt;/portlet-panel&gt;
+            &lt;/portlet-tab&gt;
+        &lt;/portlet-tabbed-pane&gt;
+    &lt;/portlet-tab&gt;
 
-
-PortletImage --  A simple widget to display images expressed as a file of JPEG, GIF, etc. format
-
-PortletText -- Another simple widget to display text that is expressed as the name of a file to include
-
-PortletPanel -- A panel contains a LayoutManager which is responsible for component layout
-
-PortletGridLayout -- The grid layout lays components in a grid defined by the number and wiidth of columns
-
-PortletTabbedPane -- A tabbed pane contains PortletTabs similar to Java Swing
-
-PortletTab -- A portlet tab contains a PortletPanel which can contain additional components. This is generally
-              where PortletFrames are placed
-
-PortletFrame -- A Portletframe is a visual represntation of a portlet. It includes a title border and the classname
-                of the portlet to invoke for rendering. (In the implementation, the PortletFrame gets an active portlet
-                instance of the portlet class from the portlet registry service and invokes the service() method)
-
-
-Every portlet component also provides the following three methods:
-
-public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res)
-            throws PortletLayoutException, IOException;
-
-
-
-During rendering, the PortletContainer which contains all the other components is traversed and the doRender()
-method is invoked for each component. The doRender() method may optionally print HTML to an OutputStream
-or it can include a JSP fragment responsible for the rendering of the component. This is done via the
-PortletContext.include(jsp file, PortletRequest, PortletResponse) method.
-If the rendering fails at any point a PortletLayoutException is thrown.
-
-2. Specifying a Layout
-
-The layout.xml file contains XML entries that describe the components and their properties. For instance a
-PortletBorder can define a color, title and font like so:
-
-<portlet-border>
-    <title-color>#FFFFFF</title-color>
-    <line-color>#336699</line-color>
-    <font>Arial, Helvetica, sans-serif</font>
-    <thickness>2</thickness>
-</portlet-border>
-
-By modifying/adding entries in the XML layout file, a new layout can be specified. To learn more about possible
-attributes and component relationships, look at the layout-mapping.xml file. This defines the relationship between
-the portlet component classes and the XML descriptions. Similary to create new components, create the class and add
-the necessary information the layout.xml and layout-mapping.xml file.
-
-
+</programlisting>
+    <calloutlist>
+            <callout arearefs="tab">
+            <para>
+                Every layout descriptor must begin with a tab element
+            </para>
+            </callout>
+            <callout arearefs="tab.title">
+            <para>
+                The tab title is the title string that is presented in the portal layout
+            </para>
+            </callout>
+            <callout arearefs="tab.pane">
+            <para>
+                Although not required, in general a tab contains either a sub-level tabbed pane or a
+                <varname>portlet-panel</varname>
+            </para>
+            </callout>
+            <callout arearefs="grid.layout">
+            <para>
+                Currently, the only supported panel layout is the grid layout. The <varname>columns</varname>
+                is a comma delimited list of values that represent the column sizes and must all add up to 100.
+            </para>
+            </callout>
+            <callout arearefs="frame">
+            <para>
+                The portlet frame is specified as the concrete portlet id representing the portlet class
+            </para>
+            </callout>
+    </calloutlist>
+</informalexample>
+<para>
+To learn more about possible attributes and component relationships, look at the
+<filename>config/mapping/layout-mapping.xml</filename> file in the GridSphere source. This defines the
+relationship between the portlet component classes and the XML descriptions.
+</para>
+</sect1>
 </chapter>
 
 

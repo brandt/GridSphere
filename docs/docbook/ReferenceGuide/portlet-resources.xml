@@ -13,16 +13,18 @@
 <para>
     The architecture of GridSphere and API definitions of key portlet concepts matches the portlet API provided
     by IBM WebSphere to a large extent. An excellent source of more information on portlets and portlet development
-    is the WebSphere Portlet Zone and the following IBM WebSphere documents:
-
-    IBM WebSphere 4.X Portlet Developer's Guide.
-
-    he Case for Portlets
-    http://www-106.ibm.com/developerworks/ibm/library/i-portletintro/
-
-    Portlet Application Programming
-    http://www-106.ibm.com/developerworks/ibm/library/i-portal/
-    http://www-106.ibm.com/developerworks/ibm/library/i-portal2/
+    is the <ulink url="http://www7b.boulder.ibm.com/wsdd/zones/portal/">IBM WebSphere Portal Zone</ulink>
+    and the following IBM WebSphere documents:
+    <itemizedlist>
+    <listitem><ulink url="http://www-106.ibm.com/developerworks/ibm/library/i-portletintro/">The Case for Portlets</ulink></listitem>
+    <listitem><ulink url="">IBM WebSphere 4.X Portlet Developer's Guide"</ulink></listitem>
+    Portlet Application Programming<listitem><ulink url="http://www-106.ibm.com/developerworks/ibm/library/i-portal/">(part 1)</ulink>
+    <ulink url="http://www-106.ibm.com/developerworks/ibm/library/i-portal2/">(part 2)</ulink></listitem>
+    </itemizedlist>
 </para>
+<para>
+    Currently the <ulink url="http://www.jcp.org/jsr/detail/168.jsp">Portlet Jave Specification Request</ulink> (JSR) has yet to be finalized so several implementations exist. The
+    <ulink url="http://jakarta.apache.org/jetspeed">Jetspeed</ulink> project provides an open-source portlet implementation.
 
+</para>
 </chapter>

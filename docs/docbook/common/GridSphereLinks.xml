@@ -5,9 +5,16 @@
 -->
 
 
+<!ENTITY String "<classname>String</classname>">
+<!ENTITY boolean "<classname>boolean</classname>">
+<!ENTITY int "<classname>int</classname>">
 
 <!ENTITY HttpServlet "<classname>javax.servlet.http.HttpServlet</classname>">
 <!ENTITY ServletException "<classname>javax.servlet.ServletException</classname>">
+<!ENTITY ServletConfig "<classname>javax.servlet.ServletConfig</classname>">
+<!ENTITY ServletContext "<classname>javax.servlet.ServletContext</classname>">
+<!ENTITY HttpServletRequest "<classname>javax.servlet.http.HttpServletRequest</classname>">
+<!ENTITY HttpServletResponse "<classname>javax.servlet.http.HttpServletResponse</classname>">
 <!ENTITY PortletException "<classname>PortletException</classname>">
 <!ENTITY PortletRequest "<classname>PortletRequest</classname>">
 <!ENTITY PortletResponse "<classname>PortletResponse</classname>">
@@ -17,14 +24,22 @@
 <!ENTITY PortletSettings "<classname>PortletSettings</classname>">
 <!ENTITY PortletApplicationSettings "<classname>PortletApplicationSettings</classname>">
 <!ENTITY PortletRole "<classname>PortletRole</classname>">
-<!ENTITY PortletGroup "<classname>PortletRole</classname>">
+<!ENTITY PortletGroup "<classname>PortletGroup</classname>">
 <!ENTITY PortletWindow "<classname>PortletWindow</classname>">
+<!ENTITY PortletWindowState "<classname>PortletWindow.State</classname>">
 <!ENTITY PortletMode "<classname>Portlet.Mode</classname>">
+<!ENTITY PortletLog "<classname>PortletLog</classname>">
 <!ENTITY Portlet "<classname>org.gridlab.gridsphere.portlet.Portlet</classname>">
 <!ENTITY AbstractPortlet "<classname>org.gridlab.gridsphere.portlet.AbstractPortlet</classname>">
 <!ENTITY PortletAdapter "<classname>org.gridlab.gridsphere.portlet.PortletAdapter</classname>">
 <!ENTITY PortletURI "<classname>PortletURI</classname>">
 <!ENTITY User "<classname>User</classname>">
+
+<!ENTITY PortletService "<classname>PortletService</classname>">
+<!ENTITY PortletServiceFactory "<classname>PortletServiceFactory</classname>">
+<!ENTITY PortletServiceConfig "<classname>PortletServiceConfig</classname>">
+<!ENTITY PortletServiceProvider "<classname>PortletServiceProvider</classname>">
+<!ENTITY PortletServiceAuthorizer "<classname>PortletServiceAuthorizer</classname>">
 
 <!ENTITY ActionEvent "<classname>ActionEvent</classname>">
 <!ENTITY WindowEvent "<classname>WindowEvent</classname>">

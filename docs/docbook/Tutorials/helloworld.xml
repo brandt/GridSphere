@@ -385,7 +385,6 @@ public class NameServiceImpl implements NameService, PortletServiceProvider {
                 </para>
             </para>
 
-
         </sect2>
     </sect1>
 

@@ -10,33 +10,67 @@
 <chapter id="portlet-persistence">
     <title>Portlet Persistence</title>
 <para>
-GridSphere provides a persistence framework implemented using Castor Java Data Objects (JDO)
+GridSphere provides a persistence framework implemented using &Castor; Java Data Objects (JDO)
 not to be confused with the actual Java Data Objects specification. Although Castor is not JDO compliant, it provides
 methods to store objects to a SQL based database and supports many database types. GridSphere by default
 is configured to use HSQL, a pure Java in-memory database useful for testing and development. MySQL and
 PostgreSQL are supported under Castor as well. Objects are made persistent by providing a mapping file that describes
 exactly how an object gets mapped to a SQL table.
-In addition, Castor doclets are used to simplify the task of generating the initial
+In addition, &Castordoclets; are used to simplify the task of generating the initial
 database configuration scripts and the generation of the mapping files. Ant tasks are then executed to create the
 initial GridSphere database.
 </para>
+<para>
+    In general when requiring persistence in a portlet, first see if the
+    <link linkend='portlet-objects'>&PortletData;</link> object can meet your needs. Although, it only provides
+    a container for simple &String; key/value pairs it can go a long way.
+</para>
+<para>
+    In the case that a portlet requires more sophisticated storage, the best approach is to create a separate
+    portlet service for this management. See <link linkend='portlet-service-example' endterm="portlet-service-example-title"/>
+</para>
+
+<sect1>
+    <title>Creating Persistent Objects</title>
+    <para>
+        I know I have to use castor doclet tags-- but which ones and why?
+
+    </para>
+</sect1>
 
 
-The PersistenceManagerFactory is used to create an instance of a PersistenceManager
+<sect1>
+    <title>The Persistence Manager</title>
+<para>
+    The <classname>PersistenceManagerRdbms</classname> interface defines methods for retrieving, creating, updating
+    and deleting objects from the database. A <classname>PersistenceManagerException</classname> is thrown in the
+    case that an error occurs.
+    The <classname>PersistenceManagerFactory</classname> is used to create database instances for clients to use.
+    The <methodname>createGridSphereRdbms</methodname> will return the default GridSphere database which is used
+    by core GridSphere services and &PortletData; objects. To obtain a database appropriate for your portlet service
+    The following listing illustrates the retrieval of an object from the database using the persitence manager.
+</para>
+    <informalexample>
+    <programlisting>
+        ...
 
-it provides many
+        PersistenceManagerRdbms pm =
+            PersistenceManagerFactory.createProjectPersistenceManagerRdbms(<emphasis>"webappname"</emphasis>);
+
+        // retrieve
+        // store persistent data
+        pm.store(pmdata);
+
+    </programlisting>
+    </informalexample>
+
+</sect1>
 
 
-    Everything you need to know about persistence.
 
-Until now the PersistenceManager (PM) is castor based.
-
-I'm providing functions to easily create/update/restore/delete
-object from storage.
-
-- create : creates a new object
+<!-- - create : creates a new object
 - restoreObject : restores a single object matchin the query in
-  rdbms (aka the first found object) , in xml one xml files 
+  rdbms (aka the first found object) , in xml one xml files
   represents one object it will return the object
 - restoreList : returns a list object conntaining all objects
   which matches the query (rdbms) in xml it returns a list with
@@ -49,7 +83,7 @@ object from storage.
 These methods are in the interface, further more there is
 
 - setConnectionURL : in rdbms sets the filename of the database.xml file,
-  in xml sets the filename to the xml file where you want to have your 
+  in xml sets the filename to the xml file where you want to have your
   data saved
 
 
@@ -58,7 +92,7 @@ In rdbms you need two more methods:
 - setDatabaseName : which database to save to (like 'portal')
 - setQuery : sets the actual query
 
-The CRUD methods are throwing exception, every one throws 
+The CRUD methods are throwing exception, every one throws
 ConfigurationException if the configuration was not ok (like
 connectionURL was not set) and Create/Restore/Update/Delete
 Exception (only in the corresponding methods of course)
@@ -70,7 +104,7 @@ Every objects needs an ObjectID (Oid) and for castortransactions
 the field timestamp is needed. For my classes I assume Oid and
 timestamp exists in every class which should be saved to a rdbms.
 You don't need this if you want to save to xml.
-Fuurthermore you need to 'normalize' your classes to store them in 
+Fuurthermore you need to 'normalize' your classes to store them in
 a database and structures like vector and list are not directly
 saved in the object itself but in a seperate table (since these
 structures can only be represented in a database as a table and
@@ -108,7 +142,7 @@ public class User {
     public void addComputer(String name) {
        Computer comp = new Computer(name);
        comp.setOwner(this.name);
-       persistencemanger.save(comp);       
+       persistencemanger.save(comp);
     }
 
     public void getComputers() {
@@ -116,7 +150,7 @@ public class User {
        Vector list = persistencemanager.getList(query database for all computers with this username);
        ListOfComputers = list;
 
-    } 
+    }
 
 }
 
@@ -125,11 +159,11 @@ public Computer {
    private String owner;
    get/set/constructor
 
-   
-}
- 
 
-  
+}
+
+
+
 If you want to make your object persistent, your object can only
 contain fields which are known to castor (see castor website
 for supprted types). Hashmap and map are NOT supported yet (or
@@ -146,5 +180,5 @@ this is somewhat memory intense, but with that it makes perfectly sense
 with object/relational mappers and this is the way todo it, because
 you can't make classical sql joins but you have to query the (sub)object
 directly. Thats why this is Object Query Language and not SQL.
-
+-->
 </chapter>

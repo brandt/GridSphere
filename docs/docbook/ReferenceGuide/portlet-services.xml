@@ -8,125 +8,565 @@
 -->
 
 <chapter id="portlet-services">
-    <title id="portlet-services-title">Portlet Service Framework</title>
 
-Portlet services allow for the easy separation of a service used to perform
-a set of operations from the portlets and the portlet container that use them.
+<title id="portlet-services-title">Portlet Service Framework</title>
 
-A portlet service is instantiated by a portlet service factory.
-The factory is responsible for the lifecycle management of
-portlet services. The factory has its own init() and destroy() methods
-that get invoked by the portlet container to startup and shutdown all
-portlet services.
+Portlet services encapsulate business or logic operations that can be re-used among portlets.
+The use of portlet services helps to minimize the amount of logic placed in a portlet and present it as
+a reusable library to other portlets. In addition, portlet services offer the following major advantages:
+    <itemizedlist>
+        <listitem>Persistence using built-in persistence framework makes it easy to serialize objects to a relational database</listitem>
+        <listitem>Method level security using built-in access control model makes it easy to provide "secure service" proxies that
+        perform the proper operations based on the user's role</listitem>
+        <listitem>Integration with testing framework makes it easy to write JUnit tests</listitem>
+    </itemizedlist>
 
-The PortletServiceFactory defines the following method:
-
-public PortletService createPortletService(Class service,
-                                           ServletConfig servletConfig,
-                                           boolean useCachedService)
-            throws PortletServiceUnavailableException, PortletServiceNotFoundException;
-
-The client is expected to provide the following data:
-service          -- the interface defining the service to be instantiated
-servletConfig    -- the ServletConfig object of the portlet conatiner
-useCachedService -- indicates to the factory of a new instance of the service
-                    should be created or reused if one currently exists
-
-The properties file, located in GridSphere under
-webapps/WEB-INF/conf/PortletServices.xml has entries like the following:
-
-<service>
-    <name>User Manager Service</name>
-    <description>Provides User Administration Capabilities</description>
-    <interface>org.gridlab.gridsphere.services.user.UserManagerService</interface>
-    <implementation>org.gridlab.gridsphere.services.user.impl.UserManagerServiceImpl</implementation>
-</service>
-
-This simply maps the interface of the service to its concrete implementation.
-In this way, new implementations for a given interface may be easily swapped
-in or out.
-
-Portlet services may be obtained in two ways:
-
-1) If the client is the portlet container or another portlet service an
-instance of the portlet service factory can be obtained via the implementing
-SportletServiceFactory class as shown:
-
-PortletServiceFactory factory = SportletServiceFactory.getInstance();
-PortletService coolService = factory.createService(CoolService.class,
-                                                   servletConfig,
-                                                   useCached);
-
-2) If the client is another portlet using the service, it can obtain a portlet
-service via the PortletContext as shown:
-
-portletService coolService
-                    = getConfig().getContext().getService(CoolService.class);
-
-In the second case, the portlet context hides the factory from the client and
-uses the default factory settings.
-
-2. A Portlet Service Example
-
-Suppose you want to create the CoolService. Here are the steps to follow:
-
-A) Create a new Service interface that extends PortletService:
-
- public interface CoolService extends PortletService {
-
-     public void doSomethingCool();
-
- }
-
-B) Create an implementing class CoolServiceImpl that also implements the
-PortletServiceProvider interface. The PortletServiceProvider defines
-an interface consisting of init() and destroy() methods for handling
-the Portlet Service lifecycle. Upon instantiation by the PortletServiceFactory,
-the init(PortletServiceConfig config) method of the portlet service is
-invoked. The PortletServiceConfig defines methods for retrieving information
-from the PortletServices.properties and the servlet.xml information. These two
-files can be potentially used for portlet service startup values rather than
-hardcoding them directly into the init() method. The example CoolServiceImpl
-is shown below:
+<sect1>
+    <title>Portlet Service Architecture</title>
+<para>
+    We borrow from the IBM WebSphere service interface to build a services architecture that we believe
+ will allow for future integration with a standardized Portlet API. The UML object diagram of the services
+framework is shown below:
+</para>
+    <figure>
+        <title>Portlet Service Architecture UML</title>
+        <graphic fileref="portletservices.png"/>
+    </figure>
+<para>
+A &PortletServiceFactory; is responsible for creating, initializing and destroying portlet services.
+A &PortletService; defines a blank interface that
+is enhanced by the &PortletServiceProvider; interface which defines a lifecycle consisting of
+<methodname>init()</methodname> and <methodname>destroy</methodname> methods used when the service is initialized and
+shutdown. A <link linkend='portlet-services-descriptor'>portlet services descriptor</link> is used to specify
+ class information and initialization parameters that is accessed via the
+&PortletServiceConfig;.
+</para>
+<para>
+    A portlet service can be obtained  from a portlet using the &PortletContext; object
+    <link linkend='portlet.objects.config' endterm='portlet.context'/>. Because the method
+    <methodname>getService()</methodname> returns a &PortletService;, it must be typecast to the approriate
+    service instance:
+    </para>
+    <para>
+    <programlisting>
+        ExampleService = (ExampleService)getPortletConfig().getContext().getService(ExampleService.class);
+    </programlisting>
+    </para>
+    <para>
+    Notice that only the service interface is specified and the factory will use the appropriate service
+    implementation specified in the services descriptor.
+</para>
+    <para>
+    A <emphasis>User Service</emphasis> allows a service to provide logic appropriate for the user's request. For exaple,
+    the method <methodname>deleteUser(User <varname>user</varname>)</methodname> in the <classname>UserManagerService</classname>
+    requires that a user with the role <constant>SUPER</constant> requested the service instance. For any other service
+    instance, the method will fail with a <classname>PortletServiceAuthorizationException</classname>. User serces not only help
+    provide a libarry that will "do the right thing" based on a client's role, but it makes the services much more
+    robust and secure for other portlet developers to take advantage of.
+    The only difference in the implementation
+</para>
+</sect1>
 
 
- public class CoolServiceImpl implements PortletServiceProvider, CoolService {
+<sect1 id="portlet-services-descriptor">
+    <title>Portlet Services Descriptor</title>
+    <para>
+The portlet services descriptor file located in <filename>WEB-INF/PortletServices.xml</filename> specifies
+the services provided by this portlet web application. The following example shows the actual service definitions for
+    the login and access control manager services.
+    </para>
+   <informalexample id="services.def"><programlisting>
 
-    public void init(PortletServiceConfig config)
+       &lt;portlet-services&gt;  <co id="portlet.services.def"/>
+
+           &lt;service&gt;   <co id="service.def"/>
+               &lt;name&gt;Login Service&lt;/name&gt;       <co id="service.name.def"/>
+               &lt;description&gt;Provides Login Capabilities&lt;/description&gt;   <co id="service.desc.def"/>
+               &lt;interface&gt;org.gridlab.gridsphere.services.core.user.LoginService&lt;/interface&gt;   <co id="service.iface.def"/>
+               &lt;implementation&gt;org.gridlab.gridsphere.services.core.user.impl.LoginServiceImpl&lt;/implementation&gt;  <co id="service.impl.def"/>
+           &lt;/service&gt;
+
+           &lt;service&gt;
+               &lt;name&gt;Access Control Manager Service&lt;/name&gt;
+               &lt;user-required&gt;true&lt;/user-required&gt;   <co id="service.user.def"/>
+               &lt;description&gt;Provides Authorization Capabilities to Portal Users&lt;/description&gt;
+               &lt;interface&gt;org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService&lt;/interface&gt;
+               &lt;implementation&gt;org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl&lt;/implementation&gt;
+               &lt;service-config&gt;         <co id="service.config.def"/>
+                &lt;param-name&gt;some parameter&lt;/param-name&gt;
+                &lt;param-value&gt;some value&lt;/param-value&gt;
+            &lt;/service-config&gt;
+           &lt;/service&gt;
+
+       &lt;/portlet-services&gt;
+
+  </programlisting>
+    <calloutlist>
+            <callout arearefs="portlet.services.def">
+            <para>
+            The <varname>portlet-services</varname> element delimits the start and end of a services descriptor
+            </para>
+            </callout>
+            <callout arearefs="service.def">
+            <para>
+           The <varname>services</varname> element delimits the start and end of a portlet service
+            </para>
+            </callout>
+            <callout arearefs="service.name.def">
+            <para>
+           The name of the portlet service. Not used currently, but could be used by tools, portlets, etc.
+            </para>
+            </callout>
+            <callout arearefs="service.desc.def">
+            <para>
+           The description of the portlet service. Not used currently, but could be used by tools, portlets, etc.
+            </para>
+            </callout>
+            <callout arearefs="service.iface.def">
+            <para>
+           The portlet service interface describing the services's methods
+            </para>
+            </callout>
+            <callout arearefs="service.impl.def">
+            <para>
+           The portlet service implementation class that implements the portlet service interface
+            </para>
+            </callout>
+            <callout arearefs="service.user.def">
+            <para>
+           This must be set to true for user services, where a User object will be supplied to create the
+           service instance.
+            </para>
+            </callout>
+            <callout arearefs="service.config.def">
+            <para>
+            Although not actually used in this service, any service can be configure with supplied initialization
+            settings expressed as string key value pairs in the displayed form
+            </para>
+            </callout>
+    </calloutlist>
+    </informalexample>
+</sect1>
+
+<sect1>
+    <title id="core-portlet-services">Core Portlet Services</title>
+GridSphere includes several core services that are used by the gridsphere portlets and may be used
+by other external portlets. Only the Login Service by necessity is not a user service.
+The <classname>UserManagerService</classname> and <classname>AccessControlService</classname> require
+a User object for creation.
+For more details on methods provided by the services, consult the Javadoc API
+<variablelist>
+    <title>Core Portlet Services</title>
+    <varlistentry><term>LoginService</term>
+        <listitem>
+            <para>
+                Provides login capabilities.
+            </para>
+        </listitem>
+    </varlistentry>
+    <varlistentry><term>AccessControlManagerService</term>
+        <listitem>
+            <para>
+                Provides Authorization Capabilities to Portal Users
+            </para>
+        </listitem>
+    </varlistentry>
+    <varlistentry><term>UserManagerService</term>
+        <listitem>
+            <para>
+                Provides User Administration Capabilities
+            </para>
+        </listitem>
+    </varlistentry>
+</variablelist>
+</sect1>
+
+<sect1 id="portlet-service-example">
+    <title id="portlet-service-example-title">Portlet Service Example</title>
+<para>
+    In the following example we illustrate the <classname>StockQuoteService</classname> with a single method
+    <methodname>getStockQuotes() : List</methodname> which returns a list of stock quotes obtained from the quote.com service.
+</para>
+
+    <sect2><title>Create service definition</title><para>Create a services definition entry in the <filename>WEB-INF/PortletServices.xml</filename> of
+    the portlet web application</para>
+
+    <informalexample id="services.def"><programlisting>
+
+        ...
+
+        &lt;service&gt;
+            &lt;name&gt;Stock Quote Service&lt;/name&gt;
+            &lt;description&gt;Provides Stock Quotes&lt;/description&gt;
+            &lt;interface&gt;org.myorg.services.StockQuoteService&lt;/interface&gt;   <co id="ex.iface"/>
+            &lt;implementation&gt;org.myorg.services.impl.StockQuoteServiceImpl&lt;/implementation&gt;
+            &lt;service-config&gt;
+                &lt;param-name&gt;quote_service&lt;/param-name&gt;
+                &lt;param-value&gt;quote.com&lt;/param-value&gt;
+            &lt;/service-config&gt;
+        &lt;/service&gt;
+
+    </programlisting>
+    <calloutlist>
+    <callout arearefs="ex.iface">
+            <para>
+           The class files should be named accordingly and must be located in any directory called <filename>services</filename>
+           in the <filename>src</filename> directory in order for the template project build script to handle them properly.
+            </para>
+            </callout>
+    </calloutlist>
+    </informalexample>
+    </sect2>
+
+    <sect2><title>Create service interface</title><para>Create a services interface as shown:</para>
+
+    <informalexample id="example.iface">
+    <programlisting>
+    package org.myorg.services.StockQuoteService;
+
+    import org.gridlab.gridsphere.portlet.service;
+    import java.util.List;
+
+    public interface StockQuoteService extends PortletService { <co id="def.serv"/>
+
+        public List getStockQuotes();  <co id="serv.method"/>
+
+    }
+    </programlisting>
+    <calloutlist>
+        <callout arearefs="def.serv">
+            <para>
+                The <classname>StockQuoteService</classname> must subclass from &PortletService;
+            </para>
+        </callout>
+        <callout arearefs="serv.method">
+            <para>
+                Single method <methodname>getStockQuotes</methodname> defined in the body
+            </para>
+        </callout>
+    </calloutlist>
+    </informalexample>
+    </sect2>
+
+    <sect2><title>Create service implementation</title><para>Create a
+        stock quote service implementation as shown:</para>
+
+    <informalexample id="example.impl">
+    <programlisting>
+    package org.myorg.services.impl.StockQuoteServiceImpl;
+
+    import org.myorg.services.StockQuoteService;
+    import org.gridlab.gridsphere.portlet.services.*;
+    import org.gridlab.gridsphere.portlet.services.spi.PortletServiceProvider;
+    import java.util.List;
+
+    public class StockQuoteServiceImpl implements PortletServiceProvider, StockQuoteService { <co id="def.serv.impl"/>
+
+        public void init(PortletServiceConfig config)       <co id="serv.init.method"/>
                     throws PortletServiceUnavailableException {
-        // Place optional startup routines e.g. loading data from database
+            // Place optional startup routines e.g. loading data from database
+        }
+
+        public void destroy() {                       <co id="serv.destroy.method"/>
+            // Place optional shutdown routines here e.g. saving data to database
+        }
+
+        public List getStockQuotes() {
+            // hypothetical code to return stock quotes
+        }
+
     }
+    </programlisting>
+    <calloutlist>
+        <callout arearefs="def.serv.impl">
+            <para>
+                The <classname>StockQuoteServiceImpl</classname> must provide implementations for the
+                <classname>StockQuoteService</classname> and the lifecycle routines from the &PortletServiceProvider;
+            </para>
+        </callout>
+        <callout arearefs="serv.init.method">
+            <para>
+                The <methodname>destroy</methodname>() method provides a service with the ability to perform any
+                initialization tasks before it used. The &PortletServiceConfig; object provides any initialization
+                data required.
+            </para>
+        </callout>
+        <callout arearefs="serv.init.method">
+            <para>
+                The <methodname>destroy</methodname>() method provides a service with the ability to perform any
+                cleanup tasks before it is shutdown such as freeing database connections, etc.
+            </para>
+        </callout>
+    </calloutlist>
+    </informalexample>
+    </sect2>
 
-    public void destroy() {
-        // Place optional shutdown routines here e.g. saving data to database
+    <sect2><title>Access service from portlet</title><para>The following skeleton portlet code
+        demonstrates how to obtain a stock quote service:</para>
+
+    <informalexample id="example.portlet">
+    <programlisting>
+    package org.myorg.portlets.StockQuotePortlet;
+
+    // imports omitted
+
+    public class StockQuotePortlet extends AbstractPortlet {
+
+        public void actionPerformed(ActionEvent event) {
+            PortletContext ctx = getPortletConfi().getContext();
+            StockQuoteService quoteService = null;
+            try {
+                StockQuoteService quoteService = (StockQuoteService)ctx.getService(StockQuoteService.class);
+            } catch (PortletServiceException e) {
+                getPortletLog().error("Couldn't get quote service instance", e);
+                return;
+            }
+
+            // get quotes and place in request
+            List quotes = quoteService.getStockQuotes();
+            req.setAttribute("stocks", quotes);
+        }
+
+        public void doView(PortletRequest req, PortletResponse res) {
+
+            // display stock quotes
+            List quotes = req.getAttribute("stocks");
+            ...
+        }
+
     }
+    </programlisting>
+    </informalexample>
+    </sect2>
 
-    public void doSomethingCool {
-        System.err.println("I'm doing something cool!");
+</sect1>
+
+<sect1>
+    <title>User Portlet Service Example</title>
+    <para>
+        Continuing with the stock quote example, assume we want to allow portal administrators the ability to
+        configure the quote service that it gets stock information from. In this case, the StockQuoteService
+        will become a user service.
+     </para>
+
+    <sect2><title>Create user service definition</title><para>The only addition to the service definition
+        is to set the <varname>user-required</varname> element to be <constant>true</constant></para>
+    <informalexample>
+    <programlisting>
+
+        ...
+
+        &lt;service&gt;
+            &lt;name&gt;Stock Quote Service&lt;/name&gt;
+            &lt;user-required&gt;true&lt;/user-required&gt;
+            &lt;description&gt;Provides Stock Quotes&lt;/description&gt;
+            &lt;interface&gt;org.myorg.services.StockQuoteService&lt;/interface&gt;   <co id="ex.uiface"/>
+            &lt;implementation&gt;org.myorg.services.impl.StockQuoteServiceImpl&lt;/implementation&gt;
+            &lt;service-config&gt;
+                &lt;param-name&gt;quote_service&lt;/param-name&gt;
+                &lt;param-value&gt;quote.com&lt;/param-value&gt;
+            &lt;/service-config&gt;
+        &lt;/service&gt;
+
+    </programlisting>
+    <calloutlist>
+        <callout arearefs="ex.uiface">
+            <para>
+                <important>Must set &lt;user-required&gt;true&lt;/user-required&gt;</important>
+            </para>
+        </callout>
+    </calloutlist>
+    </informalexample>
+    </sect2>
+
+    <sect2><title>Edit service interface</title>
+        <para>
+            Add the administrator required method below:
+        </para>
+
+    <programlisting>
+
+        ...
+
+        setQuoteService(String quoteService);
+
+        ....
+    </programlisting>
+    </sect2>
+
+    <sect2><title>Create user service implementation</title>
+        <para>
+            Now an additional class is created that handles all authorization decisions and passes control
+            to the original class. One useful approach is to copy the original implementation into a
+            singleton as follows and provide implementations of all service methods.
+        </para>
+    <informalexample>
+        <programlisting>
+    package org.myorg.services.impl.StockQuoteServiceFactory;
+
+    import org.myorg.services.StockQuoteService;
+    import org.gridlab.gridsphere.portlet.services.*;
+    import org.gridlab.gridsphere.portlet.services.spi.PortletServiceProvider;
+    import java.util.List;
+
+    public class StockQuoteServiceFactory implements PortletServiceProvider, StockQuoteService {
+
+        // create single instance
+        private instance = new StockQuoteFactory();
+
+        private StockQuoteServiceFactory() {}              <co id="make.singleton"/>
+
+        public static StockQuoteServiceFactory getInstance() {
+            return instance;
+        }
+
+        public void init(PortletServiceConfig config)
+                throws PortletServiceUnavailableException {
+            // Place optional startup routines e.g. loading data from database
+        }
+
+        public void destroy() {
+            // Place optional shutdown routines here e.g. saving data to database
+        }
+
+        public List getStockQuotes() {
+            // hypothetical code to return stock quotes
+        }
+
+        public void setStockQuoteService(String quoteService) {
+            // sets the quote service to be used for stock information
+        }
+
     }
+    </programlisting>
+    <calloutlist>
+         <callout arearefs="make.singleton">
+            <para>
+                To make a singleton, the constructor must be kept <emphasis>protected</emphasis>
+                or <emphasis>private</emphasis> so that the <methodname>getInstance</methodname>()
+                is used to return the single reference to this class.
+            </para>
+        </callout>
+    </calloutlist>
+    </informalexample>
 
- }
+        <para>
+        The next step is to add the required security checks into the existing StockQuoteServiceImpl
+        and configure it to use the StockQuoteServiceFactory just created.
+        </para>
+    <informalexample>
+    <programlisting>
+    package org.myorg.services.impl.StockQuoteServiceImpl;
 
-C) Add an entry to the PortletServices.properties file:
+    import org.myorg.services.StockQuoteService;
+    import org.gridlab.gridsphere.portlet.services.*;
+    import org.gridlab.gridsphere.portlet.services.spi.PortletServiceProvider;
+    import java.util.List;
 
-># Cool Service
->org.myproject.services.CoolService
->    = org.myproject.services.impl.CoolServiceImpl
+    public class StockQuoteServiceImpl implements PortletServiceProvider, StockQuoteService {
 
-<service>
-    <name>Cool Service</name>
-    <description>Solves the world's problems and puts hair on your head</description>
-    <interface>com.getrich.services.CoolService</interface>
-    <implementation>com.getrich.services.impl.CoolServiceImpl</implementation>
-</service>
+        private StockQuoteServiceFactory quoteServiceFactory = null;
 
-D) (Optional) Invoke service from portlet container or portlet as explained in (1)
+        private PortletServiceAuthorizer authorizer = null;
+
+        public UserManagerServiceImpl(PortletServiceAuthorizer authorizer) { <co id="def.userv.impl"/>
+           this.authorizer = authorizer;
+        }
+
+        public void init(PortletServiceConfig config)
+                    throws PortletServiceUnavailableException {
+            // Configure it to use StockQuoteServiceFactory
+            quoteServiceFactory = StockQuoteServiceFactory.getInstance();
+            quoteServiceFactory.init();
+        }
+
+        public void destroy() {
+            // Place optional shutdown routines here e.g. saving data to database
+            quoteServiceFactory.destroy();
+        }
+
+        public List getStockQuotes() {
+            quoteServiceFactory.getStockQuotes();
+        }
+
+        public void setStockQuoteService(String quoteService) {     <co id="def.setmeth.impl"/>
+            // sets the quote service to be used for stock information
+
+            // checks to see that the user invoking this method has super privilege or it will throw
+            // a runtime AccessDenied Exception
+            authorizer.authorizeSuperUser();
+
+            quoteServiceFactory.setStockQuoteService(quoteService);
+        }
+
+    }
+    </programlisting>
+    <calloutlist>
+        <callout arearefs="def.userv.impl">
+            <para>
+                <important>The constructor of a user service implementation as defined in the
+ descriptor file must require a &PortletServiceAuthorizer; object to be passed in. This is done by
+ the &PortletServiceFactory; is created allowing for service methods to make authorization checks using the
+&PortletServiceAuthorizer;</important>
+            </para>
+        </callout>
+         <callout arearefs="def.setmeth.impl">
+            <para>
+                The &PortletServiceAuthorizer; provides various authorization check methods that will throw a runtime
+                &AccesDeniedException; in the event they fail. If the check succeeds the underlying
+                <classname>StockQuoteServiceFactory</classname> method is invoked.
+            </para>
+        </callout>
+    </calloutlist>
+    </informalexample>
+
+    </sect2>
+
+    <sect2><title>Access the user service from a portlet</title>
+        <para>
+            The only difference from the previous example is passing in the &User; object to the
+            <methodname>getService</methodname>() method.
+        </para>
+
+    <programlisting>
+
+        ...
+
+        public void actionPerformed(ActionEvent event) {
+            PortletContext ctx = getPortletConfig().getContext();
+            PortletRequest req = event.getPortletRequest();
+            User user = req.getUser();
+            StockQuoteService quoteService = null;
+            try {
+                StockQuoteService quoteService = (StockQuoteService)ctx.getService(StockQuoteService.class, user);
+            } catch (PortletServiceException e) {
+                getPortletLog().error("Couldn't get quote service instance", e);
+                return;
+            }
+
+            // get quotes and place in request
+            List quotes = quoteService.getStockQuotes();
+            req.setAttribute("stocks", quotes);
+        }
 
 
-3. Portlet Service Testing
+        ....
+    </programlisting>
 
-Core services are tested using the JUnit testing framework http://www.junit.org. Check the tests/ directory in
-GridSphere to see how unit tests are created for services. Once a new test is created, it must be added to the
-AllJunitTests.java file.
+    </sect2>
+
+</sect1>
+
+<sect1 id="service.testing">
+    <title>Portlet Service Testing</title>
+
+    <para>
+    The GridSphere testing framework relies on the &JUnit; and Jakarta &Cactus; testing frameworks to
+    test portlet services that are deployed to a &Tomcat; container where they are tested.
+    Check the <filename>tests</filename> directory in GridSphere to see how unit tests are created for services.
+    Once a new test is created, it must be added to the AllJunitTests.java file.
+    </para>
+
+</sect1>
 
 </chapter>
