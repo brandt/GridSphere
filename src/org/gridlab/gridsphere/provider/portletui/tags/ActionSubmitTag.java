@@ -45,9 +45,10 @@ public class ActionSubmitTag extends ActionTag {
         if (!beanId.equals("")) {
             actionSubmitBean = (ActionSubmitBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (actionSubmitBean == null) {
-                actionSubmitBean = new ActionSubmitBean();
+                actionSubmitBean = new ActionSubmitBean(beanId);
                 paramBeans = new ArrayList();
             } else {
+                /*
                 if (actionSubmitBean.getAction() != null) {
                     action = actionSubmitBean.getAction();
                 }
@@ -60,16 +61,11 @@ public class ActionSubmitTag extends ActionTag {
                 if (actionSubmitBean.getParamBeanList() != null) {
                     paramBeans = actionSubmitBean.getParamBeanList();
                 }
+                */
             }
         } else {
             actionSubmitBean = new ActionSubmitBean();
             paramBeans = new ArrayList();
-        }
-
-        if (!beanId.equals("")) {
-            this.updateBaseComponentBean(actionSubmitBean);
-        } else {
-            this.setBaseComponentBean(actionSubmitBean);
         }
 
         actionSubmitBean.setName(createActionURI());
@@ -79,6 +75,12 @@ public class ActionSubmitTag extends ActionTag {
         if (!key.equals("")) {
             actionSubmitBean.setKey(key);
             value = getLocalizedText(key);
+        }
+
+        if (!beanId.equals("")) {
+            this.updateBaseComponentBean(actionSubmitBean);
+        } else {
+            this.setBaseComponentBean(actionSubmitBean);
         }
 
         actionSubmitBean.setAction(action);

@@ -97,11 +97,12 @@ public class ActionLinkTag extends ActionTag {
         if (!beanId.equals("")) {
             actionlink = (ActionLinkBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (actionlink == null) {
-                actionlink = new ActionLinkBean();
+                actionlink = new ActionLinkBean(beanId);
                 actionlink.setStyle(style);
                 this.setBaseComponentBean(actionlink);
                 paramBeans = new ArrayList();
             }  else {
+                /*
                 if (actionlink.getParamBeanList() != null) {
                     paramBeans = actionlink.getParamBeanList();
                 }
@@ -114,6 +115,7 @@ public class ActionLinkTag extends ActionTag {
                 if (actionlink.getKey() != null) {
                     key = actionlink.getKey();
                 }
+                */
             }
         } else {
             actionlink = new ActionLinkBean();
@@ -150,7 +152,7 @@ public class ActionLinkTag extends ActionTag {
             label = actionlink.getLabel();
             action = actionlink.getAction();
         }
-        
+
         actionlink.setPortletURI(createActionURI());
 
         if ((bodyContent != null) && (value == null)) {
