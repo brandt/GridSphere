@@ -6,7 +6,6 @@ package org.gridlab.gridsphere.portletcontainer.impl;
 
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.DescriptorException;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletSettings;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
@@ -18,7 +17,6 @@ import org.gridlab.gridsphere.portletcontainer.impl.descriptor.ConcreteSportletD
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * The <code>ConcreteSportlet</code> is an implementation of the <code>ConcretePortlet</code> that provides methods
@@ -29,23 +27,13 @@ class ConcreteSportlet implements ConcretePortlet {
     private static PortletLog log = SportletLog.getInstance(ConcreteSportlet.class);
 
     private PortletDeploymentDescriptor portletDD = null;
-
     private ConcretePortletConfig concSportletConfig = null;
-    //private AbstractPortlet abstractPortlet = null;
-    private Hashtable configHash = null;
     private Hashtable contextHash = null;
-    private String servletName = "Undefined Servlet";
     private String portletName = "Undefined PortletInfo";
-    private String portletClass = "Unknown Portlet Class";
-    private String appID = null;
     private String concreteID = null;
-   // private AccessRestrictions access = null;
-    private List languageList = new Vector();
+    private List languageList = null;
     private String defaultLocale = "en_US";
-    private PortletGroup ownerGroup = SportletGroup.BASE;
-    private PortletRole ownerRole = PortletRole.GUEST;
     private SportletSettings portletSettings = null;
-    private ApplicationPortletConfig appConfig = null;
 
     /**
      * Constructs an instance of ConcreteSportlet
@@ -54,12 +42,9 @@ class ConcreteSportlet implements ConcretePortlet {
      * @param concSportlet a concrete portlet descriptor
      */
     public ConcreteSportlet(ApplicationPortletConfig appPortletConfig, ConcreteSportletDefinition concSportlet) {
-        this.appConfig = appPortletConfig;
         this.concSportletConfig = concSportlet.getConcreteSportletConfig();
-
+        String appID, appname, cappname;
         int index;
-
-        String appname, cappname;
 
         // Get PortletApplication UID  e.g. classname.number
         appID = appPortletConfig.getApplicationPortletID();
@@ -67,7 +52,6 @@ class ConcreteSportlet implements ConcretePortlet {
         appname = appID.substring(0, index);
         String appNo = appID.substring(index + 1);
 
-        System.err.println("appId " + appID + " appNo:");
         concreteID = concSportlet.getConcretePortletID();
 
         // Get ConcretePortletConfig UID e.g. classname.number.number
@@ -81,23 +65,13 @@ class ConcreteSportlet implements ConcretePortlet {
         if ((!appNo.equals(cappNo)) || (!appname.equals(cappname))) {
             log.error("<portlet-app uid=" + appname + appNo + " does not match <concrete-portlet-app uid=" + cappname + cappNo);
         }
-
-        portletClass = cappname;
         portletName = concSportletConfig.getName();
-        servletName = appPortletConfig.getServletName();
-
-        // Get PortletConfig params
-        //Hashtable contextHash = concPortletConfig.getConfigParams();
 
         contextHash = concSportlet.getContextAttributes();
 
         // Get locale information
         defaultLocale = concSportletConfig.getDefaultLocale();
         languageList = concSportletConfig.getLanguageList();
-
-        // Get PortletConfig params
-        configHash = concSportletConfig.getConfigAttributes();
-
         portletSettings = new SportletSettings(this);
     }
 
@@ -125,7 +99,7 @@ class ConcreteSportlet implements ConcretePortlet {
      * @param concPortletConfig the concrete portlet configuration
      */
     public void setConcretePortletConfig(ConcretePortletConfig concPortletConfig) {
-        this.concSportletConfig = concSportletConfig;
+        this.concSportletConfig = concPortletConfig;
     }
 
     /**
