@@ -23,8 +23,8 @@ import org.gridlab.gridsphere.provider.ui.beans.TableBean;
 import org.gridlab.gridsphere.provider.ui.beans.TableCellBean;
 import org.gridlab.gridsphere.provider.ui.beans.TableRowBean;
 import org.gridlab.gridsphere.provider.ui.beans.TagBean;
-import org.gridlab.gridsphere.provider.portletui.beans.ErrorFrameBean;
-import org.gridlab.gridsphere.provider.portletui.beans.FrameBean;
+//import org.gridlab.gridsphere.provider.portletui.beans.TableBean;
+import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
 import org.gridlab.gridsphere.provider.portletui.beans.PasswordBean;
@@ -33,6 +33,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.TextAreaBean;
 import org.gridlab.gridsphere.provider.portletui.beans.FileInputBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.HiddenFieldBean;
+import org.gridlab.gridsphere.provider.portletui.beans.RadioButtonBean;
 
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
@@ -40,7 +41,6 @@ import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
 import java.io.IOException;
 
 public class FormEventImpl implements FormEvent {
@@ -245,9 +245,11 @@ public class FormEventImpl implements FormEvent {
         return null;
     }
 
+    /*
     public ErrorFrameBean getErrorFrameBean(String beanID) {
         return null;
     }
+    */
 
     public TextAreaBean getTextAreaBean(String beanId) {
         return null;
@@ -264,6 +266,16 @@ public class FormEventImpl implements FormEvent {
     public HiddenFieldBean getHiddenFieldBean(String beanId) {
         return null;
     }
+
+    public RadioButtonBean getRadioButtonBean(String beanId) {
+        return null;
+    }
+
+    /*
+    public TableBean getTableBean(String beanId) {
+        return null;
+    }
+    */
 
     public Map getTagBeans() {
         return null;

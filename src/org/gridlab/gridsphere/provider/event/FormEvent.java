@@ -20,9 +20,11 @@ public interface FormEvent extends ActionEvent {
 
     public FileInputBean getFileInputBean(String beanId) throws IOException;
 
-    public ErrorFrameBean getErrorFrameBean(String beanId);
+    //public ErrorFrameBean getErrorFrameBean(String beanId);
 
     public CheckBoxBean getCheckBoxBean(String beanId);
+
+    public RadioButtonBean getRadioButtonBean(String beanId);
 
     public TextFieldBean getTextFieldBean(String beanId);
 
@@ -35,6 +37,10 @@ public interface FormEvent extends ActionEvent {
     public TextBean getTextBean(String beanId);
 
     public ListBoxBean getListBoxBean(String beanId);
+
+    //public TableCellBean getTableCellBean(String beanId);
+    //public TableRowBean getTableRowBean(String beanId);
+    //public TableBean getTableBean(String beanId);
 
    /**
     * Returns the name of the pressed submit button.

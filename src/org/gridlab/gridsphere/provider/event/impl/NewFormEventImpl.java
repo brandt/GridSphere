@@ -161,6 +161,7 @@ public class NewFormEventImpl implements FormEvent {
         return fb;
     }
 
+    /*
     public ErrorFrameBean getErrorFrameBean(String beanId) {
         String beanKey = getBeanKey(beanId);
         if (tagBeans.containsKey(beanKey)) {
@@ -170,6 +171,7 @@ public class NewFormEventImpl implements FormEvent {
         tagBeans.put(beanKey, fb);
         return fb;
     }
+    */
 
     public TextBean getTextBean(String beanId) {
         String beanKey = getBeanKey(beanId);
@@ -180,6 +182,17 @@ public class NewFormEventImpl implements FormEvent {
         tagBeans.put(beanKey, tb);
         return tb;
     }
+
+    public TableBean getTableBean(String beanId) {
+        String beanKey = getBeanKey(beanId);
+        if (tagBeans.containsKey(beanKey)) {
+            return (TableBean)tagBeans.get(beanKey);
+        }
+        TableBean tb = new TableBean(request, beanId);
+        tagBeans.put(beanKey, tb);
+        return tb;
+    }
+
 
     public ListBoxBean getListBoxBean(String beanId) {
         String beanKey = getBeanKey(beanId);
@@ -267,20 +280,14 @@ public class NewFormEventImpl implements FormEvent {
      * Parses all request parameters for visual beans.
      * A visual bean parameter has the following encoding:
      * ui_<visual bean element>_<bean Id>_name
-     * where <visual bean element> can be one of the following:
+     * where <visual bean element> is a two letter encoding of the kind of
+     * visual bean that it is.
      *
-     * tf - TextFieldBean
-     * rb - RadioButtonBean
-     * cb - CheckBoxBean
-     * tb - TextBean
-     * ta - TextAreaBean
-     *
-     * @param req
+     * @param req the PortletRequest
      */
     protected void createTagBeans(PortletRequest req) {
         log.debug("in createTagBeans");
         if (tagBeans == null) tagBeans = new HashMap();
-
 
         Enumeration enum = request.getParameterNames();
         while (enum.hasMoreElements()) {
