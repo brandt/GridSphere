@@ -14,6 +14,7 @@ import org.exolab.castor.jdo.*;
 import org.exolab.castor.jdo.PersistenceException;
 import org.exolab.castor.mapping.MappingException;
 import org.gridlab.gridsphere.core.persistence.*;
+import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 
 //import org.gridlab.gridsphere.core.persistence.*;
 
@@ -23,7 +24,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-
 
 
 public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
