@@ -86,7 +86,7 @@ public class PortletLayoutEngine {
             page = getPortletPage(event);
             int numcomps = page.getComponentIdentifierList().size();
             if (event.getPortletComponentID() < 0 || event.getPortletComponentID() > numcomps) {
-                event.getPortletRequest().setAttribute(GridSphereProperties.COMPONENT_ID, "0");
+                event.getPortletRequest().setAttribute(GridSphereProperties.COMPONENT_ID, "-1");
             }
             page.doRender(event);
         } catch (PortletLayoutException e) {
@@ -147,7 +147,7 @@ public class PortletLayoutEngine {
             page = getPortletPage(event);
             int numcomps = page.getComponentIdentifierList().size();
             if (event.getPortletComponentID() < 0 || event.getPortletComponentID() > numcomps) {
-                event.getPortletRequest().setAttribute(GridSphereProperties.COMPONENT_ID, "0");
+                event.getPortletRequest().setAttribute(GridSphereProperties.COMPONENT_ID, "-1");
             } else {
                 page.actionPerformed(event);
             }
