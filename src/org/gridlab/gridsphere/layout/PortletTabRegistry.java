@@ -99,7 +99,18 @@ public class PortletTabRegistry {
     }
 
 
-    public static void newGroupTab(String groupName, Set portletRoleInfo) throws IOException, PersistenceManagerException {
+    public static void newEmptyGroupTab(String groupName) {
+        if (tabDescriptors.get(groupName) == null) {
+            File f = new File(groupLayoutDir);
+            if (!f.exists()) {
+                f.mkdir();
+            }
+            String groupFile = groupLayoutDir + File.separator + groupName + ".xml";
+            tabDescriptors.put(groupName, groupFile);
+        }
+    }
+
+    public static void newTemplateGroupTab(String groupName, Set portletRoleInfo) throws IOException, PersistenceManagerException {
         File f = new File(groupLayoutDir);
         if (!f.exists()) {
             f.mkdir();

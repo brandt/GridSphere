@@ -28,7 +28,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     private static AccessControlManagerServiceImpl instance = new AccessControlManagerServiceImpl();
     private static UserManagerServiceImpl userManager = UserManagerServiceImpl.getInstance();
 
-    private PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
+    private static PersistenceManagerRdbms pm = null;
 
     private String jdoGroupRequest = GroupRequestImpl.class.getName();
     private String jdoPortletGroup = SportletGroup.class.getName();
@@ -38,6 +38,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     }
 
     public static synchronized AccessControlManagerServiceImpl getInstance() {
+        pm = PersistenceManagerFactory.createGridSphereRdbms();
         return instance;
     }
 

@@ -22,13 +22,14 @@ import javax.portlet.PreferencesValidator;
 public class PortletPreferencesManager {
 
     private static PortletLog log = SportletLog.getInstance(PortletPreferencesManager.class);
-    private static PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
-    private static PortletPreferencesManager instance = new PortletPreferencesManager();
+    private static PersistenceManagerRdbms pm = null;
+    private static PortletPreferencesManager instance = null;
 
     /**
      * Default instantiation is disallowed
      */
     private PortletPreferencesManager() {
+        pm = PersistenceManagerFactory.createGridSphereRdbms();    
     }
 
     /**
@@ -36,7 +37,10 @@ public class PortletPreferencesManager {
      *
      * @return an instance of a <code>PortletDataManager</code>
      */
-    public static PortletPreferencesManager getInstance() {
+    public static synchronized PortletPreferencesManager getInstance() {
+        if (instance == null) {
+            instance = new PortletPreferencesManager();
+        }
         return instance;
     }
 

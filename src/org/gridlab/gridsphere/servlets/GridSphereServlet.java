@@ -142,7 +142,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 dt.setConfigDir(GridSphereConfig.getServletContext().getRealPath("/WEB-INF"));
                 try {
                     dt.execute();
-
                 } catch (Exception e) {
                     RequestDispatcher rd = req.getRequestDispatcher("/jsp/dberror.jsp");
                     log.error("Check DB failed: ", e);

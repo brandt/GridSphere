@@ -20,13 +20,14 @@ import org.gridlab.gridsphere.portletcontainer.PortletDataManager;
  */
 public class SportletDataManager implements PortletDataManager {
 
-    private static PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
-    private static PortletDataManager instance = new SportletDataManager();
+    private static PersistenceManagerRdbms pm = null;
+    private static PortletDataManager instance = null;
 
     /**
      * Default instantiation is disallowed
      */
     private SportletDataManager() {
+        pm = PersistenceManagerFactory.createGridSphereRdbms();    
     }
 
     /**
@@ -34,7 +35,10 @@ public class SportletDataManager implements PortletDataManager {
      *
      * @return an instance of a <code>PortletDataManager</code>
      */
-    public static PortletDataManager getInstance() {
+    public static synchronized PortletDataManager getInstance() {
+        if (instance == null) {
+            instance = new SportletDataManager();
+        }
         return instance;
     }
 

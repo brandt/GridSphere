@@ -31,10 +31,10 @@ public class PortalConfigServiceImpl implements PortletServiceProvider, PortalCo
 
     private PortletLog log = SportletLog.getInstance(PortalConfigServiceImpl.class);
 
-    private PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
+    private PersistenceManagerRdbms pm = null;
 
     public synchronized void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
-
+        if (pm == null) pm = PersistenceManagerFactory.createGridSphereRdbms();
         PortalConfigSettings configSettings = this.getPortalConfigSettings();
         if (configSettings == null) {
             configSettings = new PortalConfigSettings();

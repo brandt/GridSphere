@@ -44,7 +44,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     private static LoginUserModule activeLoginModule = null;
     private PasswordAuthModule passwdModule = null;
 
-    private PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
+    private PersistenceManagerRdbms pm = null;
 
     public LoginServiceImpl() {
     }
@@ -157,6 +157,7 @@ public class LoginServiceImpl implements LoginService, PortletServiceProvider {
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.debug("in login service init");
         if (!inited) {
+            pm = PersistenceManagerFactory.createGridSphereRdbms();
             passwdModule = new PasswordAuthModule("PASSWORD_AUTH_MODULE");
             authModules.put("PASSWORD_AUTH_MODULE", passwdModule);
 

@@ -48,7 +48,6 @@ public class PersistenceManagerFactory {
         if (!databases.containsKey(webappname)) {
             log.info("Creating new PM for :" + webappname);
             ServletContext ctx = GridSphereConfig.getServletContext();
-            //todo init from webappstartup with real fullpath? Did not work after loses...
             String path = ctx.getRealPath("../" + webappname + "/WEB-INF/persistence/");
             PersistenceManagerRdbms pm = new PersistenceManagerRdbmsImpl(path);
             databases.put(webappname, pm);

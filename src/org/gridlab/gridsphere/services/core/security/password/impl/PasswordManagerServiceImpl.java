@@ -23,13 +23,12 @@ import java.util.Calendar;
 public class PasswordManagerServiceImpl
         implements PortletServiceProvider, PasswordManagerService {
 
-    private static PasswordManagerService instance = new PasswordManagerServiceImpl();
     private static PortletLog _log = SportletLog.getInstance(PasswordManagerServiceImpl.class);
-    private PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
+    private static PersistenceManagerRdbms pm = null;
     private String userPasswordImpl = PasswordImpl.class.getName();
 
-    public static PasswordManagerService getInstance() {
-        return instance;
+    public PasswordManagerServiceImpl() {
+        pm = PersistenceManagerFactory.createGridSphereRdbms();
     }
 
     public void init(PortletServiceConfig config) {

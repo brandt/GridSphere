@@ -13,12 +13,11 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 
 import javax.servlet.ServletContext;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.Properties;
+import java.util.Map;
+import java.util.Iterator;
 
 /**
  *
@@ -85,6 +84,27 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         return factory;
     }
 
+    private void configureProperties(InputStream propsStream, String propsFile, Map attributes) {
+        Properties hibernateProperties = new Properties();
+        try {
+            hibernateProperties.load(propsStream);
+        } catch (IOException e) {
+            log.error("Unable to load properties file");
+        }
+        Iterator it = attributes.keySet().iterator();
+        while (it.hasNext()) {
+            String key = (String)it.next();
+            String val = (String)attributes.get(key);
+            hibernateProperties.setProperty(key, val);
+        }
+        try {
+            FileOutputStream fout = new FileOutputStream(propsFile);
+            hibernateProperties.store(fout, "Hibernate properties");
+        } catch (IOException e) {
+            log.error("Unable to save properties file");
+        }
+    }
+
     /**
      * Load the mappingfiles from the given dirctory location
      *
@@ -118,6 +138,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
         return cfg;
     }
 
+
     private Properties loadProperties(String file) {
         log.debug("Loading properties from :" + file);
         Properties prop = new Properties();
@@ -130,6 +151,20 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             log.error("Could not load Hibernate config File: " + e);
         }
         return prop;
+    }
+
+
+    private Properties loadProperties(InputStream is) {
+        log.debug("Loading properties from :");
+        Properties prop = new Properties();
+        try {
+            prop.load(is);
+        } catch (FileNotFoundException e) {
+            log.error("Could not find Hibernate config file");
+        } catch (IOException e) {
+            log.error("Could not load Hibernate config File: " + e);
+        }
+        return prop;
 
     }
 
@@ -138,8 +173,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
      */
     private Properties loadProperties() {
         ServletContext ctx = GridSphereConfig.getServletContext();
-        String persistenceConfigDir = ctx.getRealPath("/WEB-INF/persistence/");
-        return loadProperties(persistenceConfigDir + "/hibernate.properties");
+        return loadProperties(ctx.getResourceAsStream("/WEB-INF/persistence/hibernate.properties"));
     }
 
     public void create(Object object) throws PersistenceManagerException {

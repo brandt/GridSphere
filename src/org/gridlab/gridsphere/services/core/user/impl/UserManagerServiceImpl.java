@@ -32,7 +32,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     private static PortletLog log = SportletLog.getInstance(UserManagerServiceImpl.class);
     private static UserManagerServiceImpl instance = new UserManagerServiceImpl();
 
-    private PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
+    private static PersistenceManagerRdbms pm = null;
     private PasswordManagerService passwordManagerService = null;
     private AccessControlManagerService aclManager = null;
 
@@ -45,6 +45,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     }
 
     public static UserManagerServiceImpl getInstance() {
+        pm = PersistenceManagerFactory.createGridSphereRdbms();
         return instance;
     }
 
