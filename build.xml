@@ -157,7 +157,7 @@ Copyright:
         <echo message="compile                Compiles GridSphere source code   "/>
         <echo message="create-database        Creates a new GridSphere database"/>
         <echo message="docs                   Creates Javadoc API and GridSphere guides  "/>
-        <echo message="javadocs               Creates only Javadoc API"/>
+        <echo message="javadoc                Creates only Javadoc API"/>
         <echo message="run-tests              Builds and runs the JUnit tests            "/>
         <echo message="test-reports           Creates HTML test reports from the JUnit test results"/>
         <echo message="new-project            Creates a new portlet project in projects directory"/>
@@ -447,7 +447,7 @@ Copyright:
 
     <!-- +++++++++++++++ START DOCUMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
-    <target name="docs" depends="javadocs, docbook" description="Create GridSphere Documentation"/>
+    <target name="docs" depends="javadoc, docbook" description="Create GridSphere Documentation"/>
 
     <target name="check-javadocs">
         <condition property="javadocs.exists">
@@ -464,7 +464,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates all the API documentation                                   -->
     <!-- =================================================================== -->
-    <target name="javadocs" depends="setenv, check-javadocs" description="Create GridSphere Javadocs" unless="javadocs.exists">
+    <target name="javadoc" depends="setenv, check-javadocs" description="Create GridSphere Javadocs" unless="javadocs.exists">
         <mkdir dir="${build.javadoc}"/>
         <javadoc packagenames="org.gridlab.gridsphere.*, javax.*"
             sourcepath="src"
