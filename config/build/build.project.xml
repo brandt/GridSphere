@@ -184,7 +184,7 @@ Copyright:
             classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
             classpathref="classpath"/>
         <dbtask
-            configdir="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF"
+            configdir="${env.CATALINA_HOME}/webapps/${project.name}"
             action="CREATE"/>
     </target>
 
@@ -193,7 +193,7 @@ Copyright:
             classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
             classpathref="classpath"/>
         <dbtask
-            configdir="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/"
+            configdir="${env.CATALINA_HOME}/webapps/${project.name}"
             action="UPDATE"/>
     </target>
 
