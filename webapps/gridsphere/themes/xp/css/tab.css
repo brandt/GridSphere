@@ -16,6 +16,13 @@ Version: $Id$
 
 .tab-empty {
     width: 5px;
+
+    border-bottom: 1px solid black;
+}
+
+.tab-fillup {
+    width: 100%;
+    border-bottom: 1px solid black;
 }
 
 .tab-bar {
@@ -31,7 +38,8 @@ Version: $Id$
    margin-bottom: 0px;
    color:white;
    background-color: #397df3;
-   font-size:12px;
+   font-size:10px;
+   border-top: 1px solid black;
 }
 
 
@@ -40,39 +48,40 @@ Version: $Id$
    margin-bottom: 0px;
    padding-bottom: 0px;
    background-color: #7997de;
-   color: #ffffff;
-   font-size:12px;
+   color: black;
+   font-size:10px;
    margin-left: 10px;
+   border-top: 1px solid black;
+   border-bottom: 1px solid black;
 }
 
 a.tab-menu {
   text-decoration:none;
+  color: black;
+   font-size:10px;
 }
 
 a.tab-menu:link {
-  color: #ffffff;
 }
 
 a.tab-menu:visited {
-  color: #ffffff;
 }
 
 a.tab-menu:hover {
-  color: #ffffff;
 }
 
 a.tab-menu:active {
-  color: #ffffff;
 }
 
 /*  subpane */
 
 
 .tab-sub-active {
-    background-color: #ffffff;
-    border: 1px solid white;
+
+    border: 1px solid #397df3;
     font-weight: normal;
-    color: #397df3;
+    color: white;
+    font-size: 10px;
     padding-right: 0px;
     padding-bottom: 0px;
     padding-top: 0px;
@@ -86,6 +95,7 @@ a.tab-menu:active {
     padding-bottom: 1px;
     padding-top: 0px;
     padding-left: 2px;
+    border: 1px solid #397df3;
 }
 
 .tab-sub-pane {
@@ -93,31 +103,32 @@ a.tab-menu:active {
    margin: 0px;
    padding: 0px;
    height: 15px;
+   border-bottom: 1px solid black;
+   border-right: 1px solid black;
+   border-left: 1px solid black;
 }
 
 
 a.tab-sub-menu {
     text-decoration:none;
+    font-size:10px;
+    color: #000000;
 }
 
 a.tab-sub-menu:link {
-  color: #ebebeb;
-  font-size:12px;
+  border: 1px solid #397df3;
 }
 
 a.tab-sub-menu:visited {
-  color: #ebebeb;
-  font-size:12px;
+  border: 1px solid #397df3;
 }
 
 a.tab-sub-menu:hover {
-  color: #ebebeb;
-  font-size:12px;
+  border: 1px dashed black;
 }
 
 a.tab-sub-menu:active {
   color: #ebebeb;
-  font-size:12px;
 }
 
 
