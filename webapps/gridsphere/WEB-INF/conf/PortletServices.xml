@@ -15,14 +15,14 @@
         <name>Access Control Service</name>
         <description>Provides Access Control for Portlets</description>
         <interface>org.gridlab.gridsphere.services.security.acl.AccessControlService</interface>
-        <implementation>org.gridlab.gridsphere.services.security.acl.impl2.AccessControlServiceImpl</implementation>
+        <implementation>org.gridlab.gridsphere.services.security.acl.impl.AccessControlServiceImpl</implementation>
     </service>
 
     <service>
         <name>Access Control Manager Service</name>
         <description>Provides Authorization Capabilities to Portal Users</description>
         <interface>org.gridlab.gridsphere.services.security.acl.AccessControlManagerService</interface>
-        <implementation>org.gridlab.gridsphere.services.security.acl.impl2.AccessControlManagerServiceImpl</implementation>
+        <implementation>org.gridlab.gridsphere.services.security.acl.impl.AccessControlManagerServiceImpl</implementation>
     </service>
 
     <service>
