@@ -281,8 +281,6 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     public void saveTabs(FormEvent event) {
         PortletRequest req = event.getPortletRequest();
-
-
         String[] tabNames = layoutMgr.getTabNames(req);
         for (int i = 0; i < tabNames.length; i++) {
             TextFieldBean tf = event.getTextFieldBean("tab" + i);
@@ -351,25 +349,27 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletTabbedPane pane = page.getPortletTabbedPane();
         PortletTab toptab = new PortletTab();
         String tabName = event.getTextFieldBean("newTab").getValue();
-        String lang = req.getLocale().getLanguage();
-        toptab.setTitle(lang, tabName);
-        toptab.setLabel(tabName);
+        if (!tabName.equals("")) {
+            String lang = req.getLocale().getLanguage();
+            toptab.setTitle(lang, tabName);
+            toptab.setLabel(tabName);
 
-        PortletTab tab = new PortletTab();
-        String title = this.getLocalizedText(req, "LAYOUT_UNTITLED_TAB");
-        tab.setTitle(lang, title);
-        PortletTabbedPane newpane = new PortletTabbedPane();
-        newpane.setStyle("sub-menu");
-        toptab.setPortletComponent(newpane);
-        PortletTableLayout table = new PortletTableLayout();
-        PortletRowLayout row = new PortletRowLayout();
-        PortletColumnLayout col = new PortletColumnLayout();
-        row.addPortletComponent(col);
-        table.addPortletComponent(row);
-        tab.setPortletComponent(table);
-        newpane.addTab(tab);
-        pane.addTab(toptab);
-        layoutMgr.reloadPage(req);
+            PortletTab tab = new PortletTab();
+            String title = this.getLocalizedText(req, "LAYOUT_UNTITLED_TAB");
+            tab.setTitle(lang, title);
+            PortletTabbedPane newpane = new PortletTabbedPane();
+            newpane.setStyle("sub-menu");
+            toptab.setPortletComponent(newpane);
+            PortletTableLayout table = new PortletTableLayout();
+            PortletRowLayout row = new PortletRowLayout();
+            PortletColumnLayout col = new PortletColumnLayout();
+            row.addPortletComponent(col);
+            table.addPortletComponent(row);
+            tab.setPortletComponent(table);
+            newpane.addTab(tab);
+            pane.addTab(toptab);
+            layoutMgr.reloadPage(req);
+        }
     }
 
     public void createSubTab(FormEvent event) {
@@ -381,24 +381,25 @@ public class LayoutManagerPortlet extends ActionPortlet {
         String tabname = tabHF.getValue();
 
         System.err.println("getting tab " + tabname);
+        if (!tabname.equals("")) {
+            PortletTab toptab = pane.getPortletTab(tabname);
+            PortletTabbedPane subpane = (PortletTabbedPane)toptab.getPortletComponent();
 
-        PortletTab toptab = pane.getPortletTab(tabname);
-        PortletTabbedPane subpane = (PortletTabbedPane)toptab.getPortletComponent();
+            PortletTab tab = new PortletTab();
+            String subtabName = event.getTextFieldBean("newSubTab").getValue();
+            String lang = req.getLocale().getLanguage();
+            tab.setTitle(lang, subtabName);
+            tab.setLabel(subtabName);
 
-        PortletTab tab = new PortletTab();
-        String subtabName = event.getTextFieldBean("newSubTab").getValue();
-        String lang = req.getLocale().getLanguage();
-        tab.setTitle(lang, subtabName);
-        tab.setLabel(subtabName);
-
-        PortletTableLayout table = new PortletTableLayout();
-        PortletRowLayout row = new PortletRowLayout();
-        PortletColumnLayout col = new PortletColumnLayout();
-        row.addPortletComponent(col);
-        table.addPortletComponent(row);
-        tab.setPortletComponent(table);
-        subpane.addTab(tab);
-        layoutMgr.reloadPage(req);
+            PortletTableLayout table = new PortletTableLayout();
+            PortletRowLayout row = new PortletRowLayout();
+            PortletColumnLayout col = new PortletColumnLayout();
+            row.addPortletComponent(col);
+            table.addPortletComponent(row);
+            tab.setPortletComponent(table);
+            subpane.addTab(tab);
+            layoutMgr.reloadPage(req);
+        }
     }
 
     public void selectTab(FormEvent event) {
