@@ -6,13 +6,8 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
 
-import org.apache.log4j.PropertyConfigurator;
-import org.apache.log4j.Logger;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Priority;
+import org.apache.log4j.*;
 
-import java.util.Map;
-import java.util.HashMap;
 
 /**
  * The <code>PortletLog</code> provides the portlet with the ability to log
@@ -38,14 +33,13 @@ public class SportletLog implements PortletLog {
         PropertyConfigurator.configure(url);
     }
 
-    private Logger logger;
-
-    private static Map loggers = new HashMap();
+    private static final String FQCN = SportletLog.class.getName() + ".";
+    private final Logger logger;
 
     /**
      * Constructor not accessible. Use getDefault instead.
      */
-    private SportletLog(Class clazz) {
+    private SportletLog(final Class clazz) {
         logger = LogManager.getLogger(clazz);
     }
 
@@ -55,10 +49,7 @@ public class SportletLog implements PortletLog {
      * @return the PortletLog
      */
     public static synchronized PortletLog getInstance(Class clazz) {
-        if (!loggers.containsKey(clazz)) {
-            loggers.put(clazz, new SportletLog(clazz));
-        }
-        return (PortletLog)loggers.get(clazz);
+        return new SportletLog(clazz);
     }
 
     /**
@@ -76,7 +67,7 @@ public class SportletLog implements PortletLog {
      * @param text the informational text to log
      */
     public void debug(String text) {
-        logger.debug(text);
+        logger.log(FQCN, Level.DEBUG, text, null);
     }
 
     /**
@@ -94,7 +85,7 @@ public class SportletLog implements PortletLog {
      * @param text the informational text to log
      */
     public void info(String text) {
-        logger.info(text);
+        logger.log(FQCN, Level.INFO, text, null);
     }
 
     /**
@@ -112,7 +103,7 @@ public class SportletLog implements PortletLog {
      * @param text the warning text to log
      */
     public void warn(String text) {
-        logger.warn(text);
+        logger.log(FQCN, Level.WARN, text, null);
     }
 
     /**
@@ -130,7 +121,7 @@ public class SportletLog implements PortletLog {
      * @param text the error text to log
      */
     public void error(String text) {
-        logger.error(text);
+        logger.log(FQCN, Level.ERROR, text, null);
     }
 
     /**
@@ -140,7 +131,7 @@ public class SportletLog implements PortletLog {
      * @param cause the cause for logging
      */
     public void error(String text, Throwable cause) {
-        logger.error(text, cause);
+        logger.log(FQCN, Level.ERROR, text, cause);
     }
 
 }
