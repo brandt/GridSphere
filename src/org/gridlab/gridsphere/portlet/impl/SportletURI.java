@@ -25,6 +25,7 @@ public class SportletURI implements PortletURI {
     private boolean isSecure = false;
     private boolean redirect = true;
     private String contextPath = null;
+    private String servletPath = null;
     private Map actionParams = new HashMap();
     private Set sportletProps = null;
 
@@ -41,16 +42,7 @@ public class SportletURI implements PortletURI {
      * @param res         a <code>HttpServletResponse</code>
      */
     public SportletURI(HttpServletRequest req, HttpServletResponse res) {
-        this.store = new HashMap();
-        this.contextPath = GridSphereConfig.getContextPath();
-        this.res = res;
-        this.req = req;
-
-        // don't prefix these parameters of an action
-        sportletProps = new HashSet();
-        sportletProps.add(SportletProperties.COMPONENT_ID);
-        sportletProps.add(SportletProperties.PORTLET_WINDOW);
-        sportletProps.add(SportletProperties.PORTLET_MODE);
+        this(req, res, false);
     }
 
     /**
@@ -62,7 +54,8 @@ public class SportletURI implements PortletURI {
     public SportletURI(HttpServletRequest req, HttpServletResponse res, boolean isSecure) {
         this.store = new HashMap();
         this.isSecure = isSecure;
-        this.contextPath = GridSphereConfig.getContextPath(); // contextPath;
+        this.contextPath = (String)req.getAttribute(SportletProperties.CONTEXT_PATH); // contextPath;
+        this.servletPath = (String)req.getAttribute(SportletProperties.SERVLET_PATH); 
         this.req = req;
         this.res = res;
         //this.id = createUniquePrefix(2);
@@ -193,9 +186,9 @@ public class SportletURI implements PortletURI {
         Set set = store.keySet();
         if (!set.isEmpty()) {
             // add question mark
-            url = contextPath + contextPath + "?";
+            url = contextPath + servletPath + "?";
         } else {
-            return s.append(contextPath + url).toString();
+            return s.append(servletPath + url).toString();
         }
         boolean firstParam = true;
         it = set.iterator();
@@ -221,6 +214,7 @@ public class SportletURI implements PortletURI {
             newURL = res.encodeURL(url);
         }
         s.append(newURL);
+        System.err.println("url=" + s.toString());
         return s.toString();
     }
 

@@ -62,6 +62,7 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
 
     private static Hashtable webappServices = new Hashtable();
 
+    public static String servicesMappingPath = null;
     /**
      * Private constructor. Use getDefault() instead.
      */
@@ -80,8 +81,8 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         // Reads in the service definitions from the xml file and stores them in allServices
         // organized according to service interface keys and service definition values
         String servicesPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/GridSphereServices.xml");
-        String servicesMappingPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-services-mapping.xml");
-        addServices(GridSphereConfig.getServletContext(), servicesPath, servicesMappingPath);
+        servicesMappingPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-services-mapping.xml");
+        addServices(GridSphereConfig.getServletContext(), servicesPath);
     }
 
     public void login(PortletRequest req) throws PortletException {
@@ -109,16 +110,16 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
      * Umarshalls services from the descriptor file found in servicesPath
      * using the mapping file specified
      *
+     * @param ctx the servlet context
      * @param servicesPath the path to the portlet services descriptor file
-     * @param mappingPath  the path to the portlet services mapping file
      */
-    public synchronized void addServices(ServletContext ctx, String servicesPath, String mappingPath) throws PortletServiceException {
+    public synchronized void addServices(ServletContext ctx, String servicesPath) throws PortletServiceException {
         SportletServiceDescriptor descriptor = null;
         try {
-            descriptor = new SportletServiceDescriptor(servicesPath, mappingPath);
+            descriptor = new SportletServiceDescriptor(servicesPath, servicesMappingPath);
         } catch (Exception e) {
-            log.error("error unmarshalling " + servicesPath + " using " + mappingPath + " : " + e.getMessage());
-            throw new PortletServiceException("error unmarshalling " + servicesPath + " using " + mappingPath, e);
+            log.error("error unmarshalling " + servicesPath + " using " + servicesMappingPath + " : " + e.getMessage());
+            throw new PortletServiceException("error unmarshalling " + servicesPath + " using " + servicesMappingPath, e);
         }
         SportletServiceCollection serviceCollection = descriptor.getServiceCollection();
         List services = serviceCollection.getPortletServicesList();
@@ -144,16 +145,18 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
      * Umarshalls services from the descriptor file found in servicesPath
      * using the mapping file specified
      *
+     * @param webappName the name of the web application
+     * @param ctx the servlet context
      * @param servicesPath the path to the portlet services descriptor file
-     * @param mappingPath  the path to the portlet services mapping file
+     * @param loader the class loader
      */
-    public synchronized void addServices(String webappName, ServletContext ctx, String servicesPath, String mappingPath, ClassLoader loader) throws PortletServiceException {
+    public synchronized void addServices(String webappName, ServletContext ctx, String servicesPath, ClassLoader loader) throws PortletServiceException {
         SportletServiceDescriptor descriptor = null;
         try {
-            descriptor = new SportletServiceDescriptor(servicesPath, mappingPath);
+            descriptor = new SportletServiceDescriptor(servicesPath, servicesMappingPath);
         } catch (Exception e) {
-            log.error("Error unmarshalling " + servicesPath + " using " + mappingPath + " : " + e.getMessage());
-            throw new PortletServiceException("Error unmarshalling " + servicesPath + " using " + mappingPath, e);
+            log.error("Error unmarshalling " + servicesPath + " using " + servicesMappingPath + " : " + e.getMessage());
+            throw new PortletServiceException("Error unmarshalling " + servicesPath + " using " + servicesMappingPath, e);
         }
         SportletServiceCollection serviceCollection = descriptor.getServiceCollection();
         List services = serviceCollection.getPortletServicesList();

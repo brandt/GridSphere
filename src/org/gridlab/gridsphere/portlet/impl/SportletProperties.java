@@ -22,6 +22,16 @@ package org.gridlab.gridsphere.portlet.impl;
 public interface SportletProperties {
 
     /**
+     * Specifes GS context path for use in creating urls
+     */
+    public static final String CONTEXT_PATH = "org.gridlab.gridsphere.CONTEXT_PATH";
+
+    /**
+     * Specifes GS servlet path for use in creating urls
+     */
+    public static final String SERVLET_PATH = "org.gridlab.gridsphere.SERVLET_PATH";
+
+    /**
      * Determines which lifecycle command to invoke
      */
     public static final String PORTLET_LIFECYCLE_METHOD = "org.gridlab.gridsphere.portlet.portletLifecycleMethod";
