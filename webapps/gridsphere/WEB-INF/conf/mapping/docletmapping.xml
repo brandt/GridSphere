@@ -1,6 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
 <mapping>
+  <class name="org.gridlab.gridsphere.core.security.impl.GlobusCredentialPermission" identity="ObjectID">
+    <map-to table="credentialpermission" />
+    <field name="ObjectID" type="string" get-method="getOid" set-method="setOid">
+      <sql name="objectid" />
+      <bind-xml name="ObjectID" />
+    </field>
+    <field name="pattern" type="string">
+      <sql name="pattern" />
+      <bind-xml name="pattern" />
+    </field>
+    <field name="description" type="string">
+      <sql name="description" />
+      <bind-xml name="description" />
+    </field>
+  </class>
+  <class name="org.gridlab.gridsphere.core.security.impl.GlobusCredentialMapping" identity="ObjectID">
+    <map-to table="credentialmapping" />
+    <field name="ObjectID" type="string" get-method="getOid" set-method="setOid">
+      <sql name="objectid" />
+      <bind-xml name="ObjectID" />
+    </field>
+    <field name="user" type="org.gridlab.gridsphere.portlet.User">
+      <sql name="user" />
+      <bind-xml name="user" />
+    </field>
+    <field name="subject" type="string">
+      <sql name="subject" />
+      <bind-xml name="subject" />
+    </field>
+    <field name="tag" type="string">
+      <sql name="tag" />
+      <bind-xml name="tag" />
+    </field>
+    <field name="description" type="string">
+      <sql name="description" />
+      <bind-xml name="description" />
+    </field>
+    <field name="hostMappings" collection="vector" type="org.gridlab.gridsphere.core.security.impl.GlobusHostMapping">
+      <sql many-key="parent" />
+      <bind-xml name="hostMappings" />
+    </field>
+  </class>
+  <class name="org.gridlab.gridsphere.core.security.impl.GlobusHostMapping" identity="ObjectID">
+    <map-to table="credentialhostmapping" />
+    <field name="ObjectID" type="string" get-method="getOid" set-method="setOid">
+      <sql name="objectid" />
+      <bind-xml name="ObjectID" />
+    </field>
+    <field name="parent" type="org.gridlab.gridsphere.core.security.impl.GlobusCredentialMapping">
+      <sql name="mapping" />
+      <bind-xml name="parent" />
+    </field>
+    <field name="hostAddress" type="string">
+      <sql name="hostddress" />
+      <bind-xml name="hostAddress" />
+    </field>
+  </class>
   <class name="org.gridlab.gridsphere.portlet.impl.SportletGroup" identity="ObjectID">
     <map-to table="sportletgroup" />
     <field name="ObjectID" type="string" get-method="getOid" set-method="setOid">
@@ -10,6 +67,44 @@
     <field name="Name" type="string">
       <sql name="base" />
       <bind-xml name="Name" />
+    </field>
+  </class>
+  <class name="org.gridlab.gridsphere.portlet.impl.SportletData" identity="ObjectID">
+    <map-to table="sportletdata" />
+    <field name="ObjectID" type="string" get-method="getOid" set-method="setOid">
+      <sql name="objectid" />
+      <bind-xml name="ObjectID" />
+    </field>
+    <field name="Attributes" collection="vector" type="org.gridlab.gridsphere.portlet.impl.SportletDataAttribute">
+      <sql many-key="sportletdata" />
+      <bind-xml name="Attributes" />
+    </field>
+    <field name="UserID" type="string">
+      <sql name="userid" />
+      <bind-xml name="UserID" />
+    </field>
+    <field name="PortletID" type="string">
+      <sql name="portletid" />
+      <bind-xml name="PortletID" />
+    </field>
+  </class>
+  <class name="org.gridlab.gridsphere.portlet.impl.SportletDataAttribute" depends="org.gridlab.gridsphere.portlet.impl.SportletData" identity="ObjectID">
+    <map-to table="sdattribute" />
+    <field name="ObjectID" type="string" get-method="getOid" set-method="setOid">
+      <sql name="objectid" />
+      <bind-xml name="ObjectID" />
+    </field>
+    <field name="Key" type="string">
+      <sql name="key" />
+      <bind-xml name="Key" />
+    </field>
+    <field name="Value" type="string">
+      <sql name="value" />
+      <bind-xml name="Value" />
+    </field>
+    <field name="SportletData" type="org.gridlab.gridsphere.portlet.impl.SportletData">
+      <sql name="sportletdata" />
+      <bind-xml name="SportletData" />
     </field>
   </class>
   <class name="org.gridlab.gridsphere.portlet.impl.SportletUserImpl" identity="ObjectID">

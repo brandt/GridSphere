@@ -51,7 +51,7 @@ public class GlobusCredentialManagerServiceImpl extends AbstractCredentialManage
 
     private void setCredentialRetrievalClient(PortletServiceConfig config) {
         // Hostname init parameter
-        String host = config.getInitParameter("CredentialManagerService.retrievalHost");
+        String host = config.getInitParameter("retrievalHost");
         if (host == null) {
             host = "";
         }
@@ -62,14 +62,14 @@ public class GlobusCredentialManagerServiceImpl extends AbstractCredentialManage
         // Port init parameter
         int port = GlobusCredentialRetrievalClient.DEFAULT_PORT;
         try {
-            port = (new Integer(config.getInitParameter("CredentialManagerService.retrievalPort"))).intValue();
+            port = (new Integer(config.getInitParameter("retrievalPort"))).intValue();
         } catch (Exception e) {
             _log.warn("Credential retrieval port not valid. Using default value " + port);
         }
         // Lifetime init parameter
         long lifetime =  GlobusCredentialRetrievalClient.DEFAULT_LIFETIME;
         try {
-            lifetime = (new Long(config.getInitParameter("CredentialManagerService.retrievalLifetime"))).longValue();
+            lifetime = (new Long(config.getInitParameter("retrievalLifetime"))).longValue();
         } catch (Exception e) {
           _log.warn("Credential retrieval lifetime not valid. Using default value " + lifetime);
         }

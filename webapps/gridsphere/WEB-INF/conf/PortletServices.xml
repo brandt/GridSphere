@@ -37,13 +37,10 @@
         <description>Provides Credential Management Capabilities</description>
         <interface>org.gridlab.gridsphere.services.security.credential.CredentialManagerService</interface>
         <implementation>org.gridlab.gridsphere.services.security.credential.impl.GlobusCredentialManagerServiceImpl</implementation>
-    </service>
-
-    <service>
-        <name>Credential Retrieval Service</name>
-        <description>Provides Credential Retrieval Capabilities</description>
-        <interface>org.gridlab.gridsphere.services.security.credential.CredentialRetrievalService</interface>
-        <implementation>org.gridlab.gridsphere.services.security.credential.impl.GlobusCredentialRetrievalServiceImpl</implementation>
+        <service-config>
+            <param-name>retrievalHost</param-name>
+            <param-value>myproxy.gridlab.org</param-value>
+        </service-config>
     </service>
 
 </portlet-services>
