@@ -118,11 +118,14 @@ Select a theme: <ui:listbox beanId="themeLB"/> <ui:actionsubmit action="saveThem
 </ui:panel>
 
 <ui:panel>
+Portlet content configuration
 <ui:frame>
 <ui:tablerow>
 <ui:tablecell>
-<ui:text value="Portlet content configuration"/>
+<ui:text value="Select a subtab"/>
 </ui:tablecell>
+</ui:tablerow>
+<ui:tablerow>
 <ui:tablecell>
 <ui:listbox beanId="selsubtabsLB"/>
 <ui:actionsubmit action="selectSubTab" value="Select a subtab"/>
