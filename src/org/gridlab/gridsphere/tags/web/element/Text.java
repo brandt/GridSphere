@@ -8,16 +8,16 @@ package org.gridlab.gridsphere.tags.web.element;
 public interface Text extends Element {
 
     /**
-     * Gets the label of the bean.
-     * @return label of the bean
+     * Gets the text of the bean.
+     * @return text of the bean
      */
-    public String getLabel();
+    public String getText();
 
     /**
-     * Sets the label of the bean
-     * @param label the label to be set
+     * Sets the text of the bean
+     * @param text the text to be set
      */
-    public void setLabel(String label);
+    public void setText(String label);
 
 
 }

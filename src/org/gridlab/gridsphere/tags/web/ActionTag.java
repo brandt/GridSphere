@@ -61,7 +61,7 @@ public class ActionTag extends TagSupport {
         DefaultPortletAction action = (DefaultPortletAction) pageContext.getAttribute("_action");
         someURI.addAction(action);
         actionlink.setLink(someURI.toString());
-        actionlink.setLabel(label);
+        actionlink.setText(label);
         try {
             JspWriter out = pageContext.getOut();
             out.println(actionlink);

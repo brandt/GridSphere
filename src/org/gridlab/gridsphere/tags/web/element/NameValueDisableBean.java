@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public abstract class NameValueDisableBean extends NameValueBean implements Disableable  {
+public abstract class NameValueDisableBean extends LabelBean implements Disableable  {
 
     protected boolean disabled;
 

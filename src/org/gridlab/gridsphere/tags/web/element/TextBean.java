@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public class TextBean extends BaseElementBean implements Label {
+public class TextBean extends BaseElementBean implements Text {
 
     protected String label = new String();
 
@@ -22,7 +22,7 @@ public class TextBean extends BaseElementBean implements Label {
      * Gets the label of the bean.
      * @return label of the bean
      */
-    public String getLabel() {
+    public String getText() {
         return label;
     }
 
@@ -30,7 +30,7 @@ public class TextBean extends BaseElementBean implements Label {
      * Sets the label of the bean
      * @param label the label to be set
      */
-    public void setLabel(String label) {
+    public void setText(String label) {
         this.label = label;
     }
 
