@@ -9,12 +9,6 @@
     <ui:frame>
         <ui:tablerow>
             <ui:tablecell>
-                <ui:actionsubmit action="doViewConfirmChangeRole" key="SAVE"/>
-                <ui:actionsubmit action="doViewViewGroup" key="CANCEL"/>
-            </ui:tablecell>
-        </ui:tablerow>
-        <ui:tablerow>
-            <ui:tablecell>
                 <ui:text key="USERNAME"/>
                 <ui:text beanId="userName"/>
             </ui:tablecell>
@@ -39,6 +33,16 @@
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
+
+    <ui:frame>
+        <ui:tablerow>
+            <ui:tablecell>
+                <ui:actionsubmit action="doViewConfirmChangeRole" key="SAVE"/>
+                <ui:actionsubmit action="doViewViewGroup" key="CANCEL"/>
+            </ui:tablecell>
+        </ui:tablerow>
+    </ui:frame>
+
 
     </ui:panel>
 </ui:form>

@@ -6,48 +6,22 @@
 
 <% List groupEntryList = (List)request.getAttribute("groupEntryList"); %>
 
-<ui:form>
-<ui:hiddenfield beanId="groupID"/>
-<ui:panel>
+<ui:messagebox beanId="msg"/>
 
-    <ui:frame>
-        <ui:tablerow>
-            <ui:tablecell cssClass="portlet-frame-actions">
-                <ui:actionsubmit action="doViewListGroup" key="GROUP_LIST_GROUPS"/>
-                &nbsp;&nbsp;
-                <ui:actionsubmit action="doViewAddGroupEntry" key="GROUP_ADD_USERS"/>
-                &nbsp;&nbsp;
-                <ui:actionsubmit action="doViewRemoveGroupEntry" key="GROUP_REMOVE_USERS"/>
-            </ui:tablecell>
-        </ui:tablerow>
-    </ui:frame>
-
-    <ui:frame>
-        <ui:tablerow>
-            <ui:tablecell width="200">
-                <ui:text key="GROUP_NAME"/>
-            </ui:tablecell>
-            <ui:tablecell>
-                <ui:text beanId="groupName"/>
-            </ui:tablecell>
-        </ui:tablerow>
-
-        <ui:tablerow>
-            <ui:tablecell>
-                <ui:text key="GROUP_DESCRIPTION"/>
-            </ui:tablecell>
-            <ui:tablecell>
-                <ui:text beanId="groupDescription"/>
-            </ui:tablecell>
-        </ui:tablerow>
-    </ui:frame>
-
-
+<h3>Manage users in group: <ui:text beanId="groupName" style="nostyle"/></h3>
 
 <% if (groupEntryList.size() > 0) { %>
+<h3><ui:text key="GROUP_MODIFY_USERS" style="nostyle"/></h3>
+<ui:group>
+<ui:form>
+<ui:hiddenfield beanId="groupID"/>
 
-    <ui:frame>
+<ui:frame>
+
         <ui:tablerow header="true">
+            <ui:tablecell>
+                <ui:text key="DELETE"/>
+            </ui:tablecell>
             <ui:tablecell>
             <ui:text key="USERNAME"/>
             </ui:tablecell>
@@ -57,6 +31,7 @@
             <ui:tablecell>
             <ui:text key="GROUP_ROLEIN_GROUP"/>
             </ui:tablecell>
+
         </ui:tablerow>
 
 <%  Iterator groupIterator = groupEntryList.iterator();
@@ -65,15 +40,18 @@
 %>
                 <ui:tablerow>
                         <ui:tablecell>
-                            <ui:actionlink action="doViewViewGroupEntry" value="<%= groupEntry.getUser().getUserName() %>">
-                                <ui:actionparam name="groupEntryID" value="<%= groupEntry.getID() %>"/>
-                            </ui:actionlink>
+                            <ui:checkbox beanId="groupEntryIDCB" name="<%= groupEntry.getID() %>" value="<%= groupEntry.getID() %>"/>
+                        </ui:tablecell>
+                        <ui:tablecell>
+                                <ui:text value="<%= groupEntry.getUser().getUserName() %>"/>
                         </ui:tablecell>
                         <ui:tablecell>
                             <ui:text value="<%= groupEntry.getUser().getFullName() %>"/>
                         </ui:tablecell>
                         <ui:tablecell>
-                            <ui:text value="<%= groupEntry.getRole().toString() %>"/>
+                            <ui:actionlink action="doViewEditGroupEntry" value="<%= groupEntry.getRole().toString() %>">
+                                <ui:actionparam name="groupEntryID" value="<%= groupEntry.getID() %>"/>
+                            </ui:actionlink>
                         </ui:tablecell>
                 </ui:tablerow>
 
@@ -81,9 +59,68 @@
 
       </ui:frame>
 
-    <%              } %>
+    <ui:frame>
+                <ui:tablerow>
+                    <ui:tablecell>
+                        <ui:actionsubmit action="doViewViewGroup" key="DELETE"/>
+                    </ui:tablecell>
+                </ui:tablerow>
+            </ui:frame>
+            </ui:form>
+            </ui:group>
+
+     <%              } %>
 
 
-  </ui:panel>
+    <h3><ui:text key="GROUP_ADD_USERS" style="nostyle"/></h3>
+
+    <ui:group>
+    <ui:form>
+    <ui:hiddenfield beanId="groupID"/>
+
+    <ui:frame>
+        <ui:tablerow>
+            <ui:tablecell>
+                <ui:text key="GROUP_ADMIN_SELECT_USER"/>
+            </ui:tablecell>
+        </ui:tablerow>
+    </ui:frame>
+
+    <ui:frame>
+        <ui:tablerow>
+            <ui:tablecell>
+                <ui:text key="GROUP_ADD_USER"/>
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:listbox beanId="usersNotInGroupList"/>
+            </ui:tablecell>
+        </ui:tablerow>
+        <ui:tablerow>
+            <ui:tablecell>
+                <ui:text key="GROUP_ROLEIN_GROUP"/>
+            </ui:tablecell>
+            <ui:tablecell>
+                <ui:listbox beanId="groupEntryRoleLB"/>
+            </ui:tablecell>
+        </ui:tablerow>
+    </ui:frame>
+    <ui:frame>
+            <ui:tablerow>
+                <ui:tablecell>
+                    <ui:actionsubmit action="doViewViewGroup" key="OK"/>
+                </ui:tablecell>
+            </ui:tablerow>
+        </ui:frame>
+        </ui:form>
+     </ui:group>
+
+<ui:form>
+<ui:frame>
+        <ui:tablerow>
+            <ui:tablecell>
+                <ui:actionsubmit action="doViewListGroup" key="GROUP_LIST_GROUPS"/>
+            </ui:tablecell>
+        </ui:tablerow>
+    </ui:frame>
 
 </ui:form>

@@ -14,24 +14,6 @@
 
 <ui:panel>
 
-<ui:hasrole role="super">
-
-
-    <ui:frame>
-        <ui:tablerow>
-        <% if (request.getAttribute("create") != null) { %>
-            <ui:tablecell>
-                <ui:actionsubmit action="doCreateNewGroup" key="GROUP_CREATE_NEW"/>
-            </ui:tablecell>
-            <% } %>
-            <ui:tablecell>
-                <ui:actionsubmit action="doEditDefaultGroups" key="GROUP_EDIT_DEFS"/>
-            </ui:tablecell>
-        </ui:tablerow>
-    </ui:frame>
-
-</ui:hasrole>
-
     <ui:frame>
         <ui:tablerow header="true">
             <ui:tablecell>
@@ -79,6 +61,24 @@
 
 <%              } %>
     </ui:frame>
+
+    <ui:hasrole role="super">
+
+
+    <ui:frame>
+        <ui:tablerow>
+        <% if (request.getAttribute("create") != null) { %>
+            <ui:tablecell>
+                <ui:actionsubmit action="doCreateNewGroup" key="GROUP_CREATE_NEW"/>
+            </ui:tablecell>
+            <% } %>
+            <ui:tablecell>
+                <ui:actionsubmit action="doEditDefaultGroups" key="GROUP_EDIT_DEFS"/>
+            </ui:tablecell>
+        </ui:tablerow>
+    </ui:frame>
+
+    </ui:hasrole>
 
 </ui:panel>
 </ui:form>

@@ -7,18 +7,14 @@
 
 <% List groupEntryList = (List)request.getAttribute("groupEntryList"); %>
 
+<ui:messagebox beanId="msg"/>
+
 <ui:form>
 <ui:hiddenfield beanId="groupID"/>
 
 <ui:panel>
 
     <ui:frame>
-        <ui:tablerow>
-            <ui:tablecell>
-                <ui:actionsubmit action="doViewConfirmRemoveGroupEntry" key="GROUP_REMOVE_USERS"/>
-                <ui:actionsubmit action="doViewCancelRemoveGroupEntry" key="GROUP_CANCEL_REMOVE"/>
-            </ui:tablecell>
-        </ui:tablerow>
         <ui:tablerow>
             <ui:tablecell>
                 <ui:text key="GROUP_REMOVE_MSG"/>&nbsp;
@@ -68,6 +64,16 @@
 <%              } %>
 
     </ui:frame>
+
+    <ui:frame>
+        <ui:tablerow>
+            <ui:tablecell>
+                <ui:actionsubmit action="doViewRemoveGroupEntry" key="DELETE"/>
+                <ui:actionsubmit action="doViewViewGroup" key="CANCEL"/>
+            </ui:tablecell>
+        </ui:tablerow>
+    </ui:frame>
+
 </ui:panel>
 
 </ui:form>

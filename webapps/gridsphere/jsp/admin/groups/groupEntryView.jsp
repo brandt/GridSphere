@@ -7,15 +7,6 @@
 <ui:panel>
 
     <ui:frame>
-        <ui:tablerow>
-            <ui:tablecell>
-                    <ui:actionsubmit action="doViewViewGroup" key="GROUP_GO_BACK"/>
-                    <ui:actionsubmit action="doViewEditGroupEntry" key="GROUP_ROLE_CHANGE"/>
-            </ui:tablecell>
-        </ui:tablerow>
-    </ui:frame>
-
-    <ui:frame>
          <ui:tablerow>
                 <ui:tablecell width="200">
                     <ui:text key="GROUP_NAME"/>
@@ -62,5 +53,14 @@
 
         </ui:frame>
 
+    <ui:frame>
+            <ui:tablerow>
+                <ui:tablecell>
+                        <ui:actionsubmit action="doViewViewGroup" key="GROUP_GO_BACK"/>
+                        <ui:actionsubmit action="doViewEditGroupEntry" key="GROUP_ROLE_CHANGE"/>
+                </ui:tablecell>
+            </ui:tablerow>
+        </ui:frame>
+        
 </ui:panel>
 </ui:form>
