@@ -126,7 +126,7 @@ public class PortletGridLayout extends PortletFrameLayout implements Cloneable {
             p = (PortletComponent) components.get(i);
             if (p.getWidth().equals("100%")) {
                 // make another table around this, just for the padding
-                out.println("<table border=\"0\" width=\"100%\" cellpadding=\"2\" cellspacing=\"0\"> ");
+                out.println("<table border=\"0\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"> ");
                 out.println("<tr><td>");
                 p.doRender(event);
                 out.println("</td></tr></table>");
@@ -139,7 +139,7 @@ public class PortletGridLayout extends PortletFrameLayout implements Cloneable {
         if (!getStyle().equals("")) {
             out.print(" class='"+getStyle()+"' ");
         }
-        out.println("border=\"0\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"> <!-- overall gridlayout table -->");
+        out.println("border=\"0\" width=\"100%\" cellpadding=\"2\" cellspacing=\"0\"> <!-- overall gridlayout table -->");
 
         out.println("<tr> <!-- overall one row -->");
         for (int i = 0; i < numColumns; i++) {

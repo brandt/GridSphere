@@ -244,6 +244,8 @@ public class PortletContainer implements Cloneable {
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
 
+        res.setContentType("text/html");
+
         out.println("<html>");
         out.println("<head>");
         out.println("<meta http-equiv=\"content-type\" content=\"text/html; charset=iso-8859-1\">");

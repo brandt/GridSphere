@@ -232,8 +232,9 @@ public class PortletTabbedPane extends BasePortletComponent implements PortletTa
         PrintWriter out = res.getWriter();
 
         // Render tabs titles
+        out.println("<img height=\"3\" src=\"themes/" + theme + "/images/spacer.gif\"/>");
         out.println("<table class=\"tab-pane\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
-        out.println("<tr>");
+        out.println("<tr >");
         out.println("<td class=\"tab-empty\">&nbsp;</td>");
 
         PortletTab tab;

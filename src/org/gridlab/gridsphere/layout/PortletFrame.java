@@ -346,10 +346,10 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         out.print("<table  ");
 
         if (getOuterPadding().equals("")) {
-           out.print("cellpadding=\"0\" cellspacing=\"0\" class=\"window-main\" ");
+           out.print(" cellspacing=\"0\" class=\"window-main\" ");
         } else {
             //out.print("border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"");        // this is the main table around one portlet
-            out.print("cellpadding=\""+getOuterPadding()+"\" cellspacing=\""+getOuterPadding()+"\" style=\"spacing:"+getOuterPadding()+"px; padding:"+getOuterPadding()+"px\"  class=\"window-main\" ");        // this is the main table around one portlet
+            out.print(" cellspacing=\""+getOuterPadding()+"\" style=\"padding:"+getOuterPadding()+"px\"  class=\"window-main\" ");        // this is the main table around one portlet
             //out.print("cellpadding=\""+getOuterPadding()+"\" class=\"window-main\" ");        // this is the main table around one portlet
         }
 
