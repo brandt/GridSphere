@@ -9,20 +9,6 @@ Build include file for the GridSphere Portal source code, see build.xml
 <project name="GridSphere Deploy">
 
     <target name="deploy" depends="jar">
-        
-        <echo>------------------------------------------------------------</echo>
-        <echo>-- Installing GridSphere documentation is recommended  --</echo>
-        <echo>------------------------------------------------------------</echo>
-        <echo>Answering 'y' below will deploy GridSphere documentation.</echo>
-        <echo>If you answer 'n' you can deploy the documentation at a later time </echo>
-        <echo>with 'ant docs'.                                     </echo>
-        <echo>------------------------------------------------------------</echo>
-        <input message="Do you want to install GridSphere documentation? "
-               validargs="y,n" defaultvalue="y" addProperty="install.docs.agreed"/>
-        <condition property="install.docs">
-            <equals arg1="y" arg2="${install.docs.agreed}"/>
-        </condition>
-        <antcall target="answer-docs"/>
 
         <echo message="GridSphere AppServer: ${gridsphere.appserver}"/>
 

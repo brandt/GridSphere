@@ -233,8 +233,23 @@ Invoke "ant help"
     <!-- Builds and deploys GridSphere                                       -->
     <!-- =================================================================== -->
 
-    <target name="install" depends="clean, license, deploy, create-database" description="Build and deploy GridSphere">
+    <target name="install" depends="clean, license" description="Build and deploy GridSphere">
 <!--        <antcall target="create-database"/>-->
+        <echo>------------------------------------------------------------</echo>
+        <echo>-- Installing GridSphere documentation is recommended  --</echo>
+        <echo>------------------------------------------------------------</echo>
+        <echo>Answering 'y' below will deploy GridSphere documentation.</echo>
+        <echo>If you answer 'n' you can deploy the documentation at a later time </echo>
+        <echo>with 'ant docs'.                                     </echo>
+        <echo>------------------------------------------------------------</echo>
+        <input message="Do you want to install GridSphere documentation? "
+               validargs="y,n" defaultvalue="y" addProperty="install.docs.agreed"/>
+        <condition property="install.docs">
+            <equals arg1="y" arg2="${install.docs.agreed}"/>
+        </condition>
+        <antcall target="answer-docs"/>
+        <antcall target="deploy"/>
+        <antcall target="create-database"/>
         <echo message="GridSphere successfully installed."/>
         <echo message=" "/>
         <echo message="+--------------------------------------------------------------------------+"/>
