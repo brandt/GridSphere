@@ -14,8 +14,10 @@ import org.gridlab.gridsphere.portlet.impl.SportletWindow;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.portletcontainer.PortletErrorMessage;
-import org.gridlab.gridsphere.portletcontainer.UserPortletManager;
+import org.gridlab.gridsphere.portletcontainer.PortletEventDispatcher;
+//import org.gridlab.gridsphere.portletcontainer.UserPortletManager;
 import org.gridlab.gridsphere.services.user.UserManagerService;
+import org.gridlab.gridsphere.services.registry.PortletManagerService;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -159,8 +161,10 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         DefaultPortletAction action = event.getAction();
         if (action.getName() != "") {
             try {
-                UserPortletManager userPortletManager = event.getUserPortletManager();
-                userPortletManager.actionPerformed(portletClass, action, req, res);
+                PortletEventDispatcher dispatcher = event.getPortletEventDispatcher();
+                dispatcher.portletAction(portletClass, action);
+                //UserPortletManager userPortletManager = event.getUserPortletManager();
+                //userPortletManager.actionPerformed(portletClass, action, req, res);
             } catch (PortletException e) {
                 error = new PortletErrorMessage(portletClass, e);
             }
@@ -199,13 +203,13 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
                 } else {
                     out.println("<tr><td>");
                 }
-                UserPortletManager userPortletManager = event.getUserPortletManager();
+                PortletEventDispatcher dispatcher = event.getPortletEventDispatcher();
                 try {
-                    System.err.println("mode is " + req.getMode());
-                    userPortletManager.service(portletClass, req, res);
+                    dispatcher.portletService(portletClass);
                 } catch (PortletException e) {
                     out.println("Portlet Unavailable");
                     out.println(e.toString());
+                    e.printStackTrace();
                 }
                 out.println("</td></tr>");
             } else {

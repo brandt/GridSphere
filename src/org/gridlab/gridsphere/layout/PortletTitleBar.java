@@ -17,6 +17,7 @@ import org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApp;
 import org.gridlab.gridsphere.event.impl.WindowEventImpl;
 import org.gridlab.gridsphere.event.WindowEvent;
+import org.gridlab.gridsphere.services.registry.PortletManagerService;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -94,7 +95,6 @@ public class PortletTitleBar extends BasePortletComponent {
         PortletRegistryManager registryManager = PortletRegistryManager.getInstance();
         String appID = registryManager.getApplicationPortletID(portletClass);
         ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
-        System.err.println("Trying to get info for: " + appID);
         if (appPortlet != null) {
             SupportsModes supportedModes = appPortlet.getPortletApplicationDescriptor().getSupportsModes();
             modeList = supportedModes.getMarkupList();
@@ -200,7 +200,9 @@ public class PortletTitleBar extends BasePortletComponent {
         SportletRequest req = event.getSportletRequest();
         if (evt.getAction() == PortletTitleBarEvent.Action.WINDOW_MODIFY) {
             PortletResponse res = event.getSportletResponse();
-            UserPortletManager userManager = event.getUserPortletManager();
+            //UserPortletManager userManager = event.getUserPortletManager();
+            PortletEventDispatcher dispatcher = event.getPortletEventDispatcher();
+
             portletWindowState = evt.getState();
             WindowEvent winEvent = null;
 
@@ -213,7 +215,8 @@ public class PortletTitleBar extends BasePortletComponent {
             }
             if (winEvent != null) {
                 try {
-                    userManager.windowEvent(portletClass, winEvent, req, res);
+                    //userManager.windowEvent(portletClass, winEvent, req, res);
+                    dispatcher.portletWindowEvent(portletClass, winEvent);
                 } catch (PortletException e) {
                     throw new PortletLayoutException("Failed to invoke window event method of portlet: " + portletClass);
                 }
@@ -280,12 +283,10 @@ public class PortletTitleBar extends BasePortletComponent {
         String actionStr = req.getParameter(GridSphereProperties.ACTION);
         out.println("<td class=\"window-title-name\">");
         if (actionStr != null) {
-            UserPortletManager userManager = event.getUserPortletManager();
-            //req.setPortletSettings(settings);
+            PortletEventDispatcher dispatcher = event.getPortletEventDispatcher();
             try {
-                userManager.doTitle(portletClass, req, res);
+                dispatcher.portletTitle(portletClass);
                 out.println(" ("+portletMode.toString()+") ");
-                title = "";
             } catch (PortletException e) {
                 ErrorMessage += "Unable to invoke doTitle on active portlet\n";
                 throw new PortletLayoutException("Unable to invoke doTitle on active portlet " + portletClass + "  " + COMPONENT_ID, e);

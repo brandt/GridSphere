@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portletcontainer.*;
+import org.gridlab.gridsphere.services.registry.PortletManagerService;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -61,7 +62,7 @@ public class PortletContainer {
     }
 
     public void loginPortlets(GridSphereEvent event) throws PortletException {
-        UserPortletManager userPortletManager = event.getUserPortletManager();
+        PortletEventDispatcher dispatcher = event.getPortletEventDispatcher();
         Iterator it = componentIdentifiers.iterator();
         ComponentIdentifier cid = null;
         PortletFrame f = null;
@@ -71,13 +72,13 @@ public class PortletContainer {
             if (cid.getClassName().equals("org.gridlab.gridsphere.layout.PortletFrame")) {
                 f = (PortletFrame)cid.getPortletComponent();
                 portlets.add(f.getPortletClass());
-                userPortletManager.initUserPortlet(f.getPortletClass(), event.getSportletRequest(), event.getSportletResponse());
+                dispatcher.portletLogin(f.getPortletClass());
             }
         }
     }
 
     public void logoutPortlets(GridSphereEvent event) throws PortletException {
-        UserPortletManager userPortletManager = event.getUserPortletManager();
+        PortletEventDispatcher dispatcher = event.getPortletEventDispatcher();
         Iterator it = componentIdentifiers.iterator();
         ComponentIdentifier cid = null;
         PortletFrame f = null;
@@ -85,7 +86,7 @@ public class PortletContainer {
             cid = (ComponentIdentifier)it.next();
             if (cid.getPortletClass().equals("org.gridlab.gridsphere.layout.PortletFrame")) {
                 f = (PortletFrame)cid.getPortletComponent();
-                userPortletManager.destroyUserPortlet(f.getPortletClass(), event.getSportletRequest(), event.getSportletResponse());
+                dispatcher.portletLogout(f.getPortletClass());
             }
         }
     }

@@ -33,7 +33,7 @@ public class PortletLayoutEngine {
 
     private static PortletLayoutEngine instance = new PortletLayoutEngine();
 
-    private String layoutMappingPath;
+    private String layoutMappingPath = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING_XML);
 
     private PortletContainer guestContainer;
 
@@ -60,12 +60,17 @@ public class PortletLayoutEngine {
         return instance;
     }
 
-    public void addApplicationTab(String webApplicationName, PortletTab tab) {
-        applicationTabs.put(webApplicationName, tab);
+    public void addApplicationTab(String webAppName, String tabXMLfile) {
+        try {
+            PortletTab webAppTab = PortletLayoutDescriptor.loadPortletTab(tabXMLfile, layoutMappingPath);
+            applicationTabs.put(webAppName, webAppTab);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void removeApplicationTab(String webApplicationName) {
-        applicationTabs.remove(webApplicationName);
+    public void removeApplicationTab(String webAppName) {
+        applicationTabs.remove(webAppName);
     }
 
     public void init() throws IOException, DescriptorException {
@@ -77,7 +82,6 @@ public class PortletLayoutEngine {
         if (!layDir.exists()) {
             layDir.mkdir();
         }
-        layoutMappingPath = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING_XML);
         String guestLayoutPath =  GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_XML);
         guestContainer = PortletLayoutDescriptor.loadPortletContainer(guestLayoutPath, layoutMappingPath);
         guestContainer.init(new ArrayList());
