@@ -22,8 +22,6 @@ public interface AccessControlManagerService extends PortletService {
 
     public List getGroups();
 
-    public void modifyGroupAccess(PortletGroup group, boolean isPublic);
-
     public void deleteGroup(PortletGroup group);
 
     public PortletGroup getGroup(String groupId);

@@ -6,7 +6,7 @@
 
 <hibernate-mapping>
     <class
-        name="org.gridlab.gridsphere.services.core.user.impl.GroupEntryImpl"
+        name="org.gridlab.gridsphere.services.core.security.acl.impl.GroupEntryImpl"
         table="groupentryimpl"
         >
 

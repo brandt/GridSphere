@@ -6,7 +6,7 @@
 
 <hibernate-mapping>
     <class
-        name="org.gridlab.gridsphere.services.core.user.impl.GroupRequestImpl"
+        name="org.gridlab.gridsphere.services.core.security.acl.impl.GroupRequestImpl"
         table="grouprequestimpl"
         >
 
@@ -22,7 +22,7 @@
 
         <many-to-one
             name="groupEntry"
-            class="org.gridlab.gridsphere.services.core.user.impl.GroupEntryImpl">
+            class="org.gridlab.gridsphere.services.core.security.acl.impl.GroupEntryImpl">
         </many-to-one>
         <many-to-one
             name="sportletUser"

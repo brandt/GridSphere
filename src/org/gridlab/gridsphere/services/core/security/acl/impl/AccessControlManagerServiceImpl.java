@@ -68,11 +68,6 @@ public class AccessControlManagerServiceImpl implements AccessControlManagerServ
         return aclManager.getGroupByName(groupName);
     }
 
-    public void modifyGroupAccess(PortletGroup group, boolean isPublic) {
-        authorizer.authorizeSuperUser();
-        aclManager.modifyGroupAccess(group, isPublic);
-    }
-
     /*** GROUP REQUEST METHODS ***/
 
     public List getGroupRequests() {

@@ -19,8 +19,6 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 import org.gridlab.gridsphere.services.core.security.acl.*;
 import org.gridlab.gridsphere.services.core.user.impl.*;
-import org.gridlab.gridsphere.services.core.user.impl.GroupEntryImpl;
-import org.gridlab.gridsphere.services.core.user.impl.GroupRequestImpl;
 import org.gridlab.gridsphere.services.core.user.impl.UserManagerServiceImpl;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 
@@ -546,16 +544,6 @@ public class AccessControlManager implements AccessControlManagerService {
         return l;
     }
 
-    public void modifyGroupAccess(PortletGroup group, boolean isPublic) {
-        SportletGroup g = this.getSportletGroupByName(group.getName());
-        g.setPublic(isPublic);
-        try {
-            pm.update(g);
-        } catch (PersistenceManagerException e) {
-            String msg = "Error updating portlet group";
-            log.error(msg, e);
-        }
-    }
 
     public List getUsersNotInGroup(PortletGroup group) {
         List usersNotInGroup = new Vector();
