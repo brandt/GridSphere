@@ -49,7 +49,7 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
         } else {
             sname = action;
         }
-        return "name=\"" + sname + "\" value=\"" + value + "\">";
+        return "name=\"" + sname + "\" value=\"" + value + "\"/>";
     }
 
 }
