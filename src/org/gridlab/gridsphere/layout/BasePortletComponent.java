@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class BasePortletComponent extends PortletContainer implements PortletComponent {
+public class BasePortletComponent extends PortletContainer implements PortletComponent, LayoutActionListener {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(BasePortletComponent.class);
 
@@ -79,8 +79,11 @@ public class BasePortletComponent extends PortletContainer implements PortletCom
         this.insets = insets;
     }
 
+    public void doLayoutAction(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+
+    }
+
     public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        log.debug("in doRenderFirst()");
         req.setAttribute(LayoutProperties.NAME, name);
         req.setAttribute(LayoutProperties.BGCOLOR, bgColor);
         req.setAttribute(LayoutProperties.FGCOLOR, fgColor);
@@ -89,6 +92,7 @@ public class BasePortletComponent extends PortletContainer implements PortletCom
     }
 
     public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        log.debug("in doRenderLast()");
+
     }
+
 }

@@ -23,6 +23,7 @@ public class LayoutProperties {
     public static final String PORTLETMODELINKS = "portletmodelinks";
     public static final String WINDOWSTATES = "windowstate";
     public static final String WINDOWSTATELINKS = "windowstatelinks";
+    public static final String TABLINKS = "tablinks";
 
     /* These are used by the PortletFrame */
     public static final String EDITURI = "edituri";

@@ -6,11 +6,13 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletURI;
+import org.gridlab.gridsphere.portlet.impl.GuestUser;
 import org.gridlab.gridsphere.services.container.registry.UserPortletManager;
 import org.gridlab.gridsphere.services.container.registry.impl.PortletRegistryManager;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
+import org.gridlab.gridsphere.portletcontainer.GridSphereAction;
 import org.gridlab.gridsphere.portletcontainer.descriptor.Markup;
 import org.gridlab.gridsphere.portletcontainer.descriptor.SupportsModes;
 import org.gridlab.gridsphere.portletcontainer.descriptor.AllowsWindowStates;
@@ -26,7 +28,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.Iterator;
 
-public class PortletBorder implements PortletRender {
+public class PortletBorder implements LayoutActionListener {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletBorder.class);
 
@@ -40,6 +42,8 @@ public class PortletBorder implements PortletRender {
     private String thickness = "1";
     private String portletClass = null;
 
+    private Portlet.Mode portletMode;
+    private PortletWindow portletWindow;
 
     private String[] windowStates;
 
@@ -101,6 +105,22 @@ public class PortletBorder implements PortletRender {
         return portletClass;
     }
 
+    public void setPortletWindow(PortletWindow portletWindow) {
+        this.portletWindow = portletWindow;
+    }
+
+    public PortletWindow getPortletWindow() {
+        return portletWindow;
+    }
+
+    public void setPortletMode(Portlet.Mode portletMode) {
+        this.portletMode = portletMode;
+    }
+
+    public Portlet.Mode getPortletMode() {
+        return portletMode;
+    }
+
     /*
     public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
         log.debug("in doRenderFirst()");
@@ -115,7 +135,7 @@ public class PortletBorder implements PortletRender {
         int i;
 
         // get client preferred markup
-        Client client = (Client)req.getAttribute(GridSphereProperties.CLIENT);
+        Client client = (Client)req.getSession().getAttribute(GridSphereProperties.CLIENT);
         String prefMarkup = client.getMarkupName();
         log.info("Client: " + client.toString());
 
@@ -124,28 +144,61 @@ public class PortletBorder implements PortletRender {
         ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
 
         SupportsModes supportedModes = appPortlet.getPortletApplicationDescriptor().getSupportsModes();
-
         List modeList = supportedModes.getMarkupList();
         Iterator it = modeList.iterator();
         Markup m = null;
         String[] portletModes = new String[1];
         portletModes[0] = "view";
+
+        // Make sure Client supports supported modes
         while (it.hasNext()) {
             m = (Markup)it.next();
             if (m.getName().equals(client.getMarkupName())) {
                 portletModes = m.getPortletModesAsStrings();
             }
         }
-        // Make sure Client supports supported modes
+
+        // Only if user is logged in do they get non-view modes
+        User user = (User)req.getSession().getAttribute(GridSphereProperties.USER);
+        if (user instanceof GuestUser) {
+            portletModes = new String[1];
+            portletModes[0] = "view";
+        }
+
+        // subtract current portlet mode
+        String s;
+        for (i = 0; i < portletModes.length; i++) {
+            if (portletModes[i].equalsIgnoreCase(portletMode.toString())) {
+                portletModes[i] = "";
+            }
+        }
 
         ConcretePortlet concPortlet = appPortlet.getConcretePortlet(portletClass);
         PortletSettings settings = concPortlet.getSportletSettings();
         title = settings.getTitle(req.getLocale(), client);
 
+
         // Get window state settings
         AllowsWindowStates allowedWindowStates = appPortlet.getPortletApplicationDescriptor().getAllowsWindowStates();
-        String[] windowStates = allowedWindowStates.getWindowStatesAsStrings();
+        List windowStates = allowedWindowStates.getWindowStatesAsStrings();
 
+
+        // subtract current window state
+        String state = null;
+        String minStr = PortletWindow.State.MINIMIZED.toString();
+        String maxStr = PortletWindow.State.MAXIMIZED.toString();
+        String resStr = PortletWindow.State.RESIZING.toString();
+        for (i = 0; i < windowStates.size(); i++) {
+            state = (String)windowStates.get(i);
+            if (state.equalsIgnoreCase(portletWindow.toString())) {
+                windowStates.remove(i);
+            }
+
+            // add a resize state to list if contains minimized or maximized
+            if ((!windowStates.contains(resStr)) && ((state.equalsIgnoreCase(minStr)) || (state.equalsIgnoreCase(minStr)))) {
+                windowStates.add(resStr);
+            }
+        }
 
         // create a URI for each of the portlet modes
         PortletURI sportletURI;
@@ -157,14 +210,16 @@ public class PortletBorder implements PortletRender {
             sportletURI = new SportletURI(res);
             sportletURI.addParameter(GridSphereProperties.PORTLETID, (String)req.getAttribute(GridSphereProperties.PORTLETID));
             try {
-            modeLink = new PortletModeLink(portletModes[i]);
-            // Create portlet link Href
-            modeAction = new DefaultPortletAction(PortletAction.CHANGEMODE);
-            sportletURI.addAction(modeAction);
-            sportletURI.addParameter(GridSphereProperties.PORTLETMODE, portletModes[i]);
-            modeLink.setModeHref(sportletURI.toString());
-            portletLinks.add(modeLink);
-            log.info("mode: " + modeLink.toString());
+                modeLink = new PortletModeLink(portletModes[i]);
+                // Create portlet link Href
+
+                //modeAction = new DefaultPortletAction(PortletAction.CHANGEMODE);
+                //sportletURI.addAction(modeAction);
+
+                sportletURI.addParameter(GridSphereProperties.PORTLETMODE, portletModes[i]);
+                modeLink.setModeHref(sportletURI.toString());
+                portletLinks.add(modeLink);
+                log.info("mode: " + modeLink.toString());
             } catch (Exception e) {
                 log.error("Unable to create portlet link: " + e.getMessage());
             }
@@ -175,15 +230,17 @@ public class PortletBorder implements PortletRender {
         String stateString;
         PortletStateLink stateLink;
         List stateLinks = new Vector();
-        for (i = 0; i < windowStates.length; i++) {
+        it = windowStates.iterator();
+        while (it.hasNext()) {
+            String winState = (String)it.next();
             sportletURI = new SportletURI(res);
             sportletURI.addParameter(GridSphereProperties.PORTLETID, (String)req.getAttribute(GridSphereProperties.PORTLETID));
             try {
-            stateLink = new PortletStateLink(windowStates[i]);
+            stateLink = new PortletStateLink(winState);
             // Create portlet link Href
-            modeAction = new DefaultPortletAction(PortletAction.CHANGESTATE);
+            modeAction = new DefaultPortletAction(GridSphereAction.CHANGESTATE);
             sportletURI.addAction(modeAction);
-            sportletURI.addParameter(GridSphereProperties.PORTLETWINDOW, windowStates[i]);
+            sportletURI.addParameter(GridSphereProperties.PORTLETWINDOW, winState);
             stateLink.setStateHref(sportletURI.toString());
             stateLinks.add(stateLink);
             log.info("state: " + stateLink.toString());
@@ -195,9 +252,12 @@ public class PortletBorder implements PortletRender {
 
     }
 
+    public void doLayoutAction(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+
+    }
 
     public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        log.debug("in doRenderFirst()");
+
         // title bar: configure, edit, help, title, min, max
 
         if (portletClass != null) {
@@ -215,7 +275,7 @@ public class PortletBorder implements PortletRender {
             RequestDispatcher rd = ctx.getRequestDispatcher("/WEB-INF/conf/layout/portlet-border-first.jsp");
             rd.include(req, res);
         } catch (ServletException e) {
-            log.error("Unable to include component JSP", e);
+            log.error("Unable to include JSP", e);
             throw new PortletLayoutException("Unable to include JSP", e);
         }
 
@@ -230,10 +290,10 @@ public class PortletBorder implements PortletRender {
     }
     */
    public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        log.debug("in doRenderLast()");
 
+
+        // Invoke doTitle of portlet whose action was perfomed
         String id = (String)req.getParameter(GridSphereProperties.PORTLETID);
-
         if ((id != null) && (id.equals(portletClass))) {
             userManager.doTitle(portletClass, req, res);
             title = "";

@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-public class PortletContainer implements PortletRender {
+public class PortletContainer implements LayoutActionListener {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletContainer.class);
 
@@ -42,21 +42,29 @@ public class PortletContainer implements PortletRender {
         return name;
     }
 
+    public void doLayoutAction(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        // if there is a layout action do it!
+        Iterator it = components.iterator();
+        while (it.hasNext()) {
+            LayoutActionListener action = (LayoutActionListener)it.next();
+            action.doLayoutAction(ctx, req, res);
+        }
+    }
+
+
     public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        log.debug("in doRenderFirst()");
         PrintWriter out = res.getWriter();
         out.println("<html><head><meta HTTP-EQUIV=\"content-type\" CONTENT=\"text/html; charset=ISO-8859-1\">");
         out.println("<title>" + name + "</title>");
         Iterator it = components.iterator();
         while (it.hasNext()) {
-            PortletComponent comp = (PortletComponent)it.next();
-            comp.doRenderFirst(ctx, req, res);
-            comp.doRenderLast(ctx, req, res);
+            LayoutActionListener action = (LayoutActionListener)it.next();
+            action.doRenderFirst(ctx, req, res);
+            action.doRenderLast(ctx, req, res);
         }
     }
 
     public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        log.debug("in doRenderLast()");
         PrintWriter out = res.getWriter();
         out.println("</html>");
     }

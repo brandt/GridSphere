@@ -33,7 +33,7 @@ public class PortletLayoutDescriptor extends Descriptor {
      * @throws DescriptorException if the PortletLayoutDescriptor cannot be created
      */
     public PortletLayoutDescriptor(String layoutDescriptorPath, String layoutMappingPath) throws IOException, DescriptorException  {
-        pc =(PortletContainer)load(layoutDescriptorPath, layoutMappingPath);
+        pc = (PortletContainer)load(layoutDescriptorPath, layoutMappingPath);
     }
 
     /**

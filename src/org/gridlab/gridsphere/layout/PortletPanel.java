@@ -31,13 +31,15 @@ public class PortletPanel {
         return layoutManager;
     }
 
+    public void doLayoutAction(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        layoutManager.doLayoutAction(ctx, req, res);
+    }
+
     public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        log.debug("in doRenderFirst()");
         layoutManager.doRenderFirst(ctx, req, res);
     }
 
     public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
-        log.debug("in doRenderLast()");
         layoutManager.doRenderLast(ctx, req, res);
     }
 

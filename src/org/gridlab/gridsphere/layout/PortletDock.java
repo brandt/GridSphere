@@ -69,16 +69,15 @@ public class PortletDock extends BasePortletComponent {
 
     public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
         super.doRenderFirst(ctx, req, res);
-        log.debug("in doRenderFirst()");
         PrintWriter out = res.getWriter();
         out.write("<tr><td>" + title);
         ListIterator compIt = components.listIterator();
         while (compIt.hasNext()) {
-            PortletComponent comp = (PortletComponent)compIt.next();
-            comp.doRenderFirst(ctx, req, res);
+            LayoutActionListener action = (LayoutActionListener)compIt.next();
+            action.doRenderFirst(ctx, req, res);
             margin.doRenderFirst(ctx, req, res);
             margin.doRenderLast(ctx, req, res);
-            comp.doRenderLast(ctx, req, res);
+            action.doRenderLast(ctx, req, res);
         }
         out.write("</td></tr>");
     }

@@ -5,6 +5,9 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletURI;
+import org.gridlab.gridsphere.portlet.impl.SportletURI;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -203,20 +206,49 @@ public class PortletTabbedPane extends BasePortletComponent {
         return tabs;
     }
 
+    public void doLayoutAction(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        String tabchange = req.getParameter(GridSphereProperties.PORTLETTAB);
+        if (tabchange != null) {
+            int idx = indexOfTab(tabchange);
+            setSelectedIndex(idx);
+        }
+        selectedPanel = getSelectedPortletPanel();
+        selectedPanel.doLayoutAction(ctx, req, res);
+    }
+
     public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
         super.doRenderFirst(ctx, req, res);
-        log.debug("in doRenderFirst()");
 
+        int i;
         PrintWriter out = res.getWriter();
 
-        // First render tabs titles
+        // Make tab links
+        String[] tabLinks = new String[tabs.size()];
+
+        PortletURI sportletURI;
+        String modeString;
+        for (i = 0; i < tabs.size(); i++) {
+            sportletURI = new SportletURI(res);
+            try {
+                // Create portlet link Href
+                PortletTab tab = (PortletTab)tabs.get(i);
+                sportletURI.addParameter(GridSphereProperties.PORTLETTAB, tab.getTitle());
+                tabLinks[i] = sportletURI.toString();
+                log.info("tab: " + tabLinks[i]);
+            } catch (Exception e) {
+                log.error("Unable to create portlet tab link: " + e.getMessage());
+            }
+        }
+        req.setAttribute(LayoutProperties.TABLINKS, tabLinks);
+
+
+        // Render tabs titles
         out.println("<table width=\"100%\">");
-        for (int i = 0; i < tabs.size(); i++) {
+        for (i = 0; i < tabs.size(); i++) {
             String title = getTitleAt(i);
-            out.println("<th><b>" + title + "</b></th>");
+            out.println("<th><b>" + "<a href=\"" + tabLinks[i] + "\" >" +  title + "</a></b></th>");
         }
         out.println("</table>");
-        selectedPanel = getSelectedPortletPanel();
 
         out.println("<table width=\"100%\">");
         out.println("<tr><td>");

@@ -6,7 +6,7 @@ package org.gridlab.gridsphere.layout;
 
 
 
-public interface PortletComponent extends PortletRender {
+public interface PortletComponent {
 
     public String getBackground();
 

@@ -35,7 +35,6 @@ public class PortletText extends BasePortletComponent {
 
     public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
         super.doRenderFirst(ctx, req, res);
-        log.debug("in doRenderFirst()");
         try {
             RequestDispatcher rd = ctx.getRequestDispatcher(text);
             if (rd != null) rd.include(req, res);
@@ -47,7 +46,6 @@ public class PortletText extends BasePortletComponent {
 
     public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
         super.doRenderLast(ctx, req, res);
-        log.debug("in doRenderLast()");
     }
 
 

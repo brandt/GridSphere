@@ -80,16 +80,16 @@ public class PortletLayoutEngine {
         return pc;
     }
 
-    public void doRender(User user, ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException {
-        log.debug("in doRender()");
+    public void service(User user, ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException {
+        log.debug("in service()");
 
         PortletContainer pc = null;
 
         pc = getPortletContainer(user);
 
         // XXX: How do we signal a user has logged out so we can userLayouts.remove(user)???
-
         try {
+            pc.doLayoutAction(ctx, req, res);
             pc.doRenderFirst(ctx, req, res);
             pc.doRenderLast(ctx, req, res);
         } catch (IOException e) {

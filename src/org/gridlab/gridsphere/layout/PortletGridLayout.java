@@ -11,8 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 
-public class PortletGridLayout extends BasePortletComponent implements LayoutManager {
+public class PortletGridLayout extends BasePortletComponent implements LayoutManager  {
 
     private static PortletLog log = org.gridlab.gridsphere.portlet.impl.SportletLog.getInstance(PortletGridLayout.class);
 
@@ -42,9 +43,17 @@ public class PortletGridLayout extends BasePortletComponent implements LayoutMan
         return cols;
     }
 
+    public void doLayoutAction(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
+        Iterator it = components.iterator();
+        LayoutActionListener p = null;
+        while (it.hasNext()) {
+            p = (LayoutActionListener)it.next();
+            p.doLayoutAction(ctx, req, res);
+        }
+    }
+
     public void doRenderFirst(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
         super.doRenderFirst(ctx, req, res);
-        log.debug("in doRenderFirst()");
         PrintWriter out = res.getWriter();
 
         if (insets == null) insets = new PortletInsets();
@@ -54,7 +63,7 @@ public class PortletGridLayout extends BasePortletComponent implements LayoutMan
             throw new PortletLayoutException("Number of components specified exceeds rows * columns");
 
         int max = components.size();
-        PortletComponent p = null;
+        LayoutActionListener p = null;
 
         int gwidth = 100 / cols;
 
@@ -67,7 +76,7 @@ public class PortletGridLayout extends BasePortletComponent implements LayoutMan
             //insets.doRenderLast(ctx,req,res);
             while ((j < cols) && (k < max)) {
                 out.println("<td>");
-                p = (PortletComponent)components.get(k);
+                p = (LayoutActionListener)components.get(k);
                 p.doRenderFirst(ctx, req, res);
                 p.doRenderLast(ctx, req, res);
                 j++; k++;
@@ -83,7 +92,6 @@ public class PortletGridLayout extends BasePortletComponent implements LayoutMan
 
     public void doRenderLast(ServletContext ctx, HttpServletRequest req, HttpServletResponse res) throws PortletLayoutException, IOException {
         super.doRenderLast(ctx, req, res);
-        log.debug("in doRenderLast()");
     }
 
 }
