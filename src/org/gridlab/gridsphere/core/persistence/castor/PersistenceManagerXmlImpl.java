@@ -18,9 +18,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * The PersistenceManagerXmlImpl provides easy access to marshal/unmarshal Java objects to XML files
@@ -92,9 +90,9 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
      */
     public void save(Object object) throws PersistenceManagerException, IOException {
         try {
+            Writer w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(descriptorPath),"UTF-8"));
             FileWriter filewriter = new FileWriter(descriptorPath);
-
-            Marshaller marshal = new Marshaller(filewriter);
+            Marshaller marshal = new Marshaller(w);
             Mapping map = new Mapping();
             map.loadMapping(mappingPath);
             marshal.setMapping(map);
@@ -127,7 +125,7 @@ public class PersistenceManagerXmlImpl implements PersistenceManagerXml {
         try {
             log.debug("Using getConnectionURL() " + descriptorPath);
 
-	    InputSource xmlSource = new InputSource(descriptorPath);
+	        InputSource xmlSource = new InputSource(descriptorPath);
 
             Mapping mapping = new Mapping();
 
