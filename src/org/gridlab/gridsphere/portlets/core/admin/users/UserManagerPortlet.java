@@ -203,6 +203,7 @@ public class UserManagerPortlet extends ActionPortlet {
         event.getTextFieldBean("fullName").setValue(user.getFullName());
         event.getTextFieldBean("emailAddress").setValue(user.getEmailAddress());
         event.getTextFieldBean("organization").setValue(user.getOrganization());
+        event.getPasswordBean("password").setValue("");
     }
 
     private void validateUser(FormEvent event, boolean newuser)
@@ -227,15 +228,17 @@ public class UserManagerPortlet extends ActionPortlet {
         }
         */
         // Validate family name
+        /*
         String familyName = event.getTextFieldBean("familyName").getValue();
         if (familyName.equals("")) {
             message.append(this.getLocalizedText(req, "USER_FAMILYNAME_BLANK") + "<br>");
             isInvalid = true;
         }
+        */
         // Validate given name
-        String givenName = event.getTextFieldBean("givenName").getValue();
+        String givenName = event.getTextFieldBean("fullName").getValue();
         if (givenName.equals("")) {
-            message.append(this.getLocalizedText(req, "USER_GIVENNAME_BLANK") + "<br>");
+            message.append(this.getLocalizedText(req, "USER_FULLNAME_BLANK") + "<br>");
             isInvalid = true;
         }
 
@@ -337,8 +340,8 @@ public class UserManagerPortlet extends ActionPortlet {
     private void editAccountRequest(FormEvent event, SportletUser accountRequest) {
         log.debug("Entering editAccountRequest()");
         //accountRequest.setUserName(event.getTextFieldBean("userName").getValue());
-        accountRequest.setFamilyName(event.getTextFieldBean("familyName").getValue());
-        accountRequest.setGivenName(event.getTextFieldBean("givenName").getValue());
+        //accountRequest.setFamilyName(event.getTextFieldBean("familyName").getValue());
+        //accountRequest.setGivenName(event.getTextFieldBean("givenName").getValue());
         accountRequest.setFullName(event.getTextFieldBean("fullName").getValue());
         accountRequest.setEmailAddress(event.getTextFieldBean("emailAddress").getValue());
         accountRequest.setOrganization(event.getTextFieldBean("organization").getValue());

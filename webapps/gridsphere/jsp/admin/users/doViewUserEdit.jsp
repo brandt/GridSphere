@@ -26,7 +26,7 @@
                 <ui:textfield beanId="userName"/>
             </ui:tablecell>
         </ui:tablerow>
-
+<%--
         <ui:tablerow>
             <ui:tablecell width="200">
                 <ui:text key="FAMILYNAME"/>
@@ -44,6 +44,7 @@
                 <ui:textfield beanId="givenName"/>
             </ui:tablecell>
         </ui:tablerow>
+--%>
 
         <ui:tablerow>
             <ui:tablecell width="200">
@@ -84,6 +85,7 @@
         <ui:tablerow>
             <ui:tablecell width="200">
                 <ui:text key="PASSWORD"/>
+                <ui:text key="PASSWORD_ENTER_MSG"/>
             </ui:tablecell>
             <ui:tablecell>
                 <ui:password beanId="password"/>

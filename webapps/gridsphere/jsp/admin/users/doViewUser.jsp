@@ -12,7 +12,7 @@
                 <ui:text value="<%= user.getUserName() %>" style="plain"/>
             </ui:tablecell>
         </ui:tablerow>
-
+<%--
         <ui:tablerow>
             <ui:tablecell width="100">
                 <ui:text key="FAMILYNAME"/>
@@ -31,6 +31,7 @@
             </ui:tablecell>
         </ui:tablerow>
 
+--%>
         <ui:tablerow>
             <ui:tablecell width="100">
                 <ui:text key="FULLNAME"/>

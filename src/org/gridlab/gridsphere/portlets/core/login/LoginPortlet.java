@@ -63,12 +63,18 @@ public class LoginPortlet extends ActionPortlet {
         } catch (PortletServiceException e) {
             throw new UnavailableException("Unable to initialize services");
         }
-        DEFAULT_VIEW_PAGE = "doViewUser";
+        DEFAULT_VIEW_PAGE = "doViewFirstUser";
         DEFAULT_CONFIGURE_PAGE = "showConfigure";
     }
 
     public void initConcrete(PortletSettings settings) throws UnavailableException {
         super.initConcrete(settings);
+    }
+
+    public void doViewFirstUser(FormEvent event) throws PortletException {
+        MessageBoxBean msg = event.getMessageBoxBean("msg");
+        msg.clearMessage();
+        doViewUser(event);
     }
 
     public void doViewUser(FormEvent event) throws PortletException {
@@ -78,6 +84,7 @@ public class LoginPortlet extends ActionPortlet {
         PasswordBean pass = event.getPasswordBean("password");
         pass.setValue("");
         request.setAttribute("user", user);
+
         if (user instanceof GuestUser) {
             if (canUserCreateAccount) request.setAttribute("canUserCreateAcct", "true");
             setNextState(request, "login/login.jsp");
@@ -108,7 +115,9 @@ public class LoginPortlet extends ActionPortlet {
             MessageBoxBean frame = event.getMessageBoxBean("msg");
             frame.setKey(LoginPortlet.LOGIN_ERROR_FLAG);
             frame.setMessageType(TextBean.MSG_ERROR);
+            req.removeAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
         }
+
         setNextState(req, "doViewUser");
     }
 
