@@ -44,7 +44,7 @@ public class ConcreteSportlet implements ConcretePortlet {
     private List groupList = new Vector();
     private List portletModes = new Vector();
     private List windowStates = new Vector();
-    private Cacheable cacheable = null;
+    //private Cacheable cacheable = null;
     private PortletGroup ownerGroup = SportletGroup.getBaseGroup();
     private PortletRole ownerRole = SportletRole.getGuestRole();
 
@@ -83,18 +83,18 @@ public class ConcreteSportlet implements ConcretePortlet {
             log.error("<portlet-app uid=" + appname + appNo + " does not match <concrete-portlet-app uid=" + cappname + cappNo);
             throw new ConcretePortletException("<portlet-app uid=" + appname + appNo + " does not match <concrete-portlet-app uid=" + cappname + cappNo);
         }
-
+        /*
         cacheable = new Cacheable();
         String shared = portletApp.getPortletInfo().getCacheInfo().getShared();
         if ((shared != null) && (shared.equalsIgnoreCase("yes") || shared.equalsIgnoreCase("true"))) {
             cacheable.setShared(true);
         } else {
             cacheable.setShared(false);
-        }
+        }*/
 
         // get long value from deployment description
-        long expiration = portletApp.getPortletInfo().getCacheInfo().getExpires();
-        cacheable.setExpiration(expiration);
+        //long expiration = portletApp.getPortletInfo().getCacheInfo().getExpires();
+        //cacheable.setExpiration(expiration);
 
         portletClass = cappname;
         portletName = concreteApp.getName();
@@ -288,7 +288,7 @@ public class ConcreteSportlet implements ConcretePortlet {
      * shared: true if portlet output shared among all users or false if not
      */
     public Cacheable getCacheablePortletInfo() {
-        return cacheable;
+        return null; //cacheable;
     }
 
 
