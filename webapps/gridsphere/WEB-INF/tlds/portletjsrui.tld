@@ -6,111 +6,13 @@
     <tlib-version>1.0</tlib-version>
     <jsp-version>1.2</jsp-version>
     <short-name>portletui</short-name>
-    <uri>/portletUI</uri>
+    <uri>/portletjsrUI</uri>
     <display-name>Portlet UI Tags</display-name>
     <description>GridSphere Visual Portlet UI Tag Library</description>
 
     <tag>
-        <name>actionparam</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.ActionParamTagImpl</tag-class>
-        <body-content>empty</body-content>
-        <description>
-            Creates a portlet action parameter
-        </description>
-        <attribute>
-            <name>name</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>value</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>beanId</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-    </tag>
-
-    <tag>
-        <name>actionlink</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.ActionLinkTagImpl</tag-class>
-        <body-content>JSP</body-content>
-        <description>
-            Creates a portlet action link
-        </description>
-        <attribute>
-            <name>label</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>name</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>anchor</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>secure</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>style</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>portletMode</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>windowState</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>key</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>value</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>action</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>beanId</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>cssStyle</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>cssClass</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-    </tag>
-
-    <tag>
         <name>actionsubmit</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.ActionSubmitTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.ActionSubmitTagImpl</tag-class>
         <body-content>JSP</body-content>
         <description>
             Creates a submit button
@@ -164,7 +66,7 @@
 
     <tag>
         <name>checkbox</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.CheckboxTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.CheckboxTagImpl</tag-class>
         <body-content>empty</body-content>
         <description>
             Wraps HTML input checkbox tag
@@ -208,7 +110,7 @@
 
     <tag>
         <name>fileform</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.FileFormTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.FileFormTagImpl</tag-class>
         <body-content>JSP</body-content>
         <description>
             Wrapper around HTML form tag
@@ -232,7 +134,7 @@
 
     <tag>
         <name>fileinput</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.FileInputTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.FileInputTagImpl</tag-class>
         <body-content>empty</body-content>
         <description>
             Wraps HTML input file upload tag
@@ -271,10 +173,10 @@
 
     <tag>
         <name>form</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.ActionFormTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.ActionFormTagImpl</tag-class>
         <body-content>JSP</body-content>
         <description>
-            Wrapper around HTML form tag
+                Wrapper around HTML form tag
         </description>
         <attribute>
             <name>method</name>
@@ -305,7 +207,7 @@
 
     <tag>
         <name>frame</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.FrameTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.FrameTagImpl</tag-class>
         <body-content>JSP</body-content>
         <description>
             Shows table frame
@@ -370,7 +272,7 @@
 
     <tag>
         <name>hiddenfield</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.HiddenFieldTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.HiddenFieldTagImpl</tag-class>
         <body-content>empty</body-content>
         <description>
             makes a hidden text field
@@ -394,7 +296,7 @@
 
     <tag>
         <name>image</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.ImageTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.ImageTagImpl</tag-class>
         <body-content>empty</body-content>
         <description>
             Displays an image
@@ -443,7 +345,7 @@
 
     <tag>
         <name>include</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.IncludeTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.IncludeTagImpl</tag-class>
         <body-content>empty</body-content>
         <description>
             Includes pages from any web application
@@ -467,7 +369,7 @@
 
     <tag>
         <name>list</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.ListTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.ListTagImpl</tag-class>
         <body-content>empty</body-content>
         <description>
             makes a list
@@ -481,7 +383,7 @@
 
     <tag>
         <name>listbox</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.ListBoxTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.ListBoxTagImpl</tag-class>
         <body-content>JSP</body-content>
         <description>
             makes a listbox
@@ -515,7 +417,7 @@
 
     <tag>
         <name>listboxitem</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.ListBoxItemTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.ListBoxItemTagImpl</tag-class>
         <body-content>empty</body-content>
         <description>
             makes a listbox item
@@ -549,7 +451,7 @@
 
     <tag>
         <name>panel</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.PanelTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.PanelTagImpl</tag-class>
         <body-content>JSP</body-content>
         <description>
             Shows table pane which contains tableframes
@@ -603,7 +505,7 @@
 
     <tag>
         <name>password</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.PasswordTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.PasswordTagImpl</tag-class>
         <body-content>empty</body-content>
         <description>
             Wraps HTML input text tag
@@ -647,7 +549,7 @@
 
     <tag>
         <name>radiobutton</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.RadioButtonTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.RadioButtonTagImpl</tag-class>
         <body-content>empty</body-content>
         <description>
             Wraps HTML input radio button tag
@@ -681,7 +583,7 @@
 
     <tag>
         <name>special</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.SpecialTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.SpecialTag</tag-class>
         <body-content>JSP</body-content>
         <description>
             Shows table row
@@ -695,7 +597,7 @@
 
     <tag>
         <name>table</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.TableTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.TableTagImpl</tag-class>
         <body-content>JSP</body-content>
         <description>
             Shows table
@@ -744,7 +646,7 @@
 
     <tag>
         <name>tablerow</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.TableRowTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.TableRowTagImpl</tag-class>
         <body-content>JSP</body-content>
         <description>
             Shows table row
@@ -784,7 +686,7 @@
 
     <tag>
         <name>tablecell</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.TableCellTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.TableCellTagImpl</tag-class>
         <body-content>JSP</body-content>
         <description>
             Shows table cell
@@ -834,7 +736,7 @@
 
     <tag>
         <name>text</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.TextTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.TextTagImpl</tag-class>
         <body-content>JSP</body-content>
         <description>
             Shows text
@@ -879,7 +781,7 @@
 
     <tag>
         <name>textarea</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.TextAreaTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.TextAreaTagImpl</tag-class>
         <body-content>JSP</body-content>
         <description>
             Shows text
@@ -923,7 +825,7 @@
 
     <tag>
         <name>textfield</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.TextFieldTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.TextFieldTagImpl</tag-class>
         <body-content>empty</body-content>
         <description>
             Wraps HTML input text tag
@@ -970,167 +872,9 @@
         </attribute>
     </tag>
 
-
-    <tag>
-        <name>actionmenu</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.ActionMenuTagImpl</tag-class>
-        <body-content>JSP</body-content>
-        <description>
-            Creates an action menu
-        </description>
-        <attribute>
-            <name>title</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>layout</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>beanId</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>menutype</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>collapsible</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>collapsed</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>key</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-    </tag>
-
-
-    <tag>
-        <name>actionmenuitem</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.ActionMenuItemTagImpl</tag-class>
-        <body-content>JSP</body-content>
-        <description>
-            Creates an action menu item
-        </description>
-        <attribute>
-            <name>beanId</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>info</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-    </tag>
-
-
-    <tag>
-        <name>datagrid</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.DataGridTagImpl</tag-class>
-        <body-content>JSP</body-content>
-        <description>
-            Creates a datagrid
-        </description>
-        <attribute>
-            <name>beanId</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>header</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>dataList</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>startPos</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>size</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>key</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>
-                width
-            </name>
-            <required>
-                false
-            </required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-    </tag>
-
-    <tag>
-        <name>datagridcolumn</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.DataGridColumnTagImpl</tag-class>
-        <body-content>JSP</body-content>
-        <description>
-            Creates a column in a datagrid
-        </description>
-        <attribute>
-            <name>beanId</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>key</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>header</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>var</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>paramName</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>paramValue</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>varAttributes</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-    </tag>
-
     <tag>
         <name>group</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.GroupTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.GroupTagImpl</tag-class>
         <body-content>JSP</body-content>
         <description>
             Creates an group around other items
@@ -1154,7 +898,7 @@
 
     <tag>
         <name>messagebox</name>
-        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.gs.MessageBoxTagImpl</tag-class>
+        <tag-class>org.gridlab.gridsphere.provider.portletui.tags.jsr.MessageBoxTagImpl</tag-class>
         <body-content>JSP</body-content>
         <description>
             Creates an message box
