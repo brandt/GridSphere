@@ -295,10 +295,16 @@ public class PortletPage implements Serializable, Cloneable {
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletResponse res = event.getPortletResponse();
+        PrintWriter out = null;
+
+        try {
+            out = res.getWriter();
+        } catch (IllegalStateException e) {
+            // means the writer has already been obtained
+            return;
+        }
 
         res.setContentType("text/html; charset=utf-8");
-        PrintWriter out = res.getWriter();
-
         out.println("<html>");
         out.println("<head>");
         out.println("  <title>" + title + "</title>");
