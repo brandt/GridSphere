@@ -13,6 +13,7 @@ import javax.portlet.RenderResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Locale;
+import java.util.List;
 
 
 /**
@@ -41,10 +42,6 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
     public RenderResponseImpl(HttpServletRequest req, HttpServletResponse res, PortalContext portalContext) {
         super(req, res, portalContext);
         //contentType = res.getContentType();
-    }
-
-    private boolean isValidContentType(String type) {
-        return type.startsWith("text/html");
     }
 
     // Jakarta Pluto method
@@ -171,7 +168,8 @@ public class RenderResponseImpl extends PortletResponseImpl implements RenderRes
     public void setContentType(String type) {
         if (type == null) throw new IllegalArgumentException("supplied content type is null!");
         String mimeType = stripCharacterEncoding(type);
-        if (!isValidContentType(mimeType)) {
+        List mimeTypes = (List)req.getAttribute(SportletProperties.MIME_TYPES);
+        if (!mimeTypes.contains(type)) {
             throw new IllegalArgumentException(mimeType);
         }
         this.getHttpServletResponse().setContentType(mimeType);

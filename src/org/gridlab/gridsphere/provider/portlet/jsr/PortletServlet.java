@@ -237,9 +237,17 @@ public class PortletServlet extends HttpServlet
             return;
         }
 
+        // set the supported mime types
         Supports[] supports = appPortlet.getSupports();
-        setPortletModes(request, appPortlet);
+        List mimeTypes = new ArrayList();
+        for (int i = 0; i < supports.length; i++) {
+            Supports s = supports[i];
+            String mimeType = s.getMimeType().getContent();
+            mimeTypes.add(mimeType);
+            request.setAttribute(SportletProperties.MIME_TYPES, mimeTypes);
+        }
 
+        setPortletModes(request, appPortlet);
 
         // perform user conversion from gridsphere to JSR model
         User user = (User) request.getAttribute(SportletProperties.PORTLET_USER);
