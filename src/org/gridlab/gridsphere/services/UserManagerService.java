@@ -7,7 +7,7 @@ package org.gridlab.gridsphere.services;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.impl.SportletUser;
-import org.gridlab.gridsphere.services.impl.AccountRequest;
+import org.gridlab.gridsphere.services.AccountRequest;
 
 import java.util.List;
 

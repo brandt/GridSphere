@@ -8,7 +8,7 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.services.UserManagerService;
-import org.gridlab.gridsphere.services.impl.AccountRequest;
+import org.gridlab.gridsphere.services.AccountRequest;
 
 import javax.servlet.UnavailableException;
 import javax.servlet.RequestDispatcher;
@@ -37,8 +37,11 @@ public class AccountRequestSportlet extends AbstractPortlet {
         // get parameters out of request and then store with UserManagerService
         AccountRequest accountRequest = (AccountRequest)request.getAttribute("AccountRequestSportlet.account");
         if (accountRequest != null) {
-            userService.createAccountRequest(accountRequest);
+            userService.submitAccountRequest(accountRequest);
             ACTION = "SUBMITTED";
+        } else {
+            accountRequest = userService.createAccountRequest();
+            request.setAttribute("AccountRequestSportlet.account", accountRequest);
         }
     }
 

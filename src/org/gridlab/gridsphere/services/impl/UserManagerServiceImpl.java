@@ -11,7 +11,7 @@ import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUser;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.services.impl.AccountRequest;
+import org.gridlab.gridsphere.services.AccountRequest;
 import org.gridlab.gridsphere.services.UserManagerService;
 
 import java.util.List;
@@ -40,7 +40,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * Create a new account request
      */
     public AccountRequest createAccountRequest() {
-        return new AccountRequest();
+        return new AccountRequestImpl();
     }
 
     /**
