@@ -35,6 +35,12 @@
                     <description>Portlet provides login capabilities</description>
                     <keywords>portlet login</keywords>
                 </language>
+                <language locale="hu">
+                    <title>Bejelentkezés</title>
+                    <title-short>Bejelentkezés</title-short>
+                    <description>A portlet a portálba való bejelentkezésre szolgál</description>
+                    <keywords>bejelentkezés portlet (hu)</keywords>
+                </language>
             </concrete-portlet>
         </concrete-portlet-app>
     </portlet-app-def>
@@ -54,6 +60,12 @@
                     <title-short>Logout</title-short>
                     <description>Portlet provides logout capabilities</description>
                     <keywords>portlet logout</keywords>
+                </language>
+                <language locale="hu">
+                    <title>Kijelentkezés</title>
+                    <title-short>Kijelentkezés</title-short>
+                    <description>A portlet a portálból való kijelentkezésre szolgál</description>
+                    <keywords>kijelentkezés portlet</keywords>
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
@@ -98,3 +110,4 @@
     </portlet-app-def>
 
 </portlet-app-collection>
+
