@@ -1,3 +1,6 @@
+<%@ page import="java.util.Iterator,
+                 org.gridlab.gridsphere.services.core.security.auth.LoginAuthModule"%>
+
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
@@ -30,4 +33,5 @@ Configure supported locales by entering two letter lower-case ISO language codes
 </ui:form>
 
 
+<%@ include file="/jsp/login/configure.jsp" %>
 
