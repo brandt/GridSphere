@@ -105,6 +105,11 @@
                 <param-name>canUserCreateAccount</param-name>
                 <param-value>false</param-value>
             </portlet-config>
+            <allows>
+                <minimized/>
+                <maximized/>
+                <resizing/>
+            </allows>
             <supports>
                 <view/>
                 <help/>
@@ -225,6 +230,11 @@
         <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet">
             <portlet-name>User Account Manager</portlet-name>
             <servlet-name>UserManagerPortlet</servlet-name>
+            <allows>
+                <minimized/>
+                <maximized/>
+                <resizing/>
+            </allows>
             <supports>
                 <view/>
                 <help/>
@@ -278,6 +288,11 @@
         <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.groups.GroupManagerPortlet">
             <portlet-name>Portlet Group Manager</portlet-name>
             <servlet-name>GroupManagerPortlet</servlet-name>
+            <allows>
+                <minimized/>
+                <maximized/>
+                <resizing/>
+            </allows>
             <supports>
                 <view/>
                 <help/>
@@ -325,6 +340,11 @@
         <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager">
             <portlet-name>Portlet Application Manager</portlet-name>
             <servlet-name>PortletApplicationManager</servlet-name>
+            <allows>
+                <minimized/>
+                <maximized/>
+                <resizing/>
+            </allows>
             <supports>
                 <view/>
                 <help/>
@@ -418,6 +438,11 @@
         <portlet-app id="org.gridlab.gridsphere.portlets.core.layout.LayoutManagerPortlet">
             <portlet-name>Layout Manager Portlet</portlet-name>
             <servlet-name>LayoutPortlet</servlet-name>
+            <allows>
+                <minimized/>
+                <maximized/>
+                <resizing/>
+            </allows>
             <supports>
                 <view/>
                 <edit/>
@@ -469,6 +494,11 @@
         <portlet-app id="org.gridlab.gridsphere.portlets.core.user.ProfileManagerPortlet">
             <portlet-name>Profile Manager Portlet</portlet-name>
             <servlet-name>ProfileManagerPortlet</servlet-name>
+            <allows>
+                <minimized/>
+                <maximized/>
+                <resizing/>
+            </allows>
             <supports>
                 <view/>
                 <edit/>
@@ -565,6 +595,11 @@
         <portlet-app id="org.gridlab.gridsphere.portlets.core.subscription.SubscriptionPortlet">
             <portlet-name>Subscription Portlet</portlet-name>
             <servlet-name>SubscriptionPortlet</servlet-name>
+            <allows>
+                <minimized/>
+                <maximized/>
+                <resizing/>
+            </allows>
             <supports>
                 <view/>
                 <help/>
