@@ -121,8 +121,8 @@ public class PortletDescriptorTest extends TestCase {
 
         AllowedAccess access = onePI.getAllowedAccess();
         String role = access.getRole();
-        String vis = access.getVisibility();
-        assertEquals("PRIVATE", vis);
+        int scope = access.getScope();
+        assertEquals(AllowedAccess.PRIVATE, scope);
         assertEquals("ADMIN", role);
 
         List configList = onePI.getConfigParamList();
@@ -157,9 +157,9 @@ public class PortletDescriptorTest extends TestCase {
         assertEquals(langOne.getTitleShort(), "Hello World");
 
         access = twoPI.getAllowedAccess();
+        scope = access.getScope();
+        assertEquals(AllowedAccess.PUBLIC, scope);
         role = access.getRole();
-        vis = access.getVisibility();
-        assertEquals("PUBLIC", vis);
         assertEquals("USER", role);
 
         configList = twoPI.getConfigParamList();
