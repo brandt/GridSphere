@@ -17,9 +17,7 @@ import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
-import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-import org.gridlab.gridsphere.portletcontainer.PortletDataManager;
-import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
+import org.gridlab.gridsphere.portletcontainer.*;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletDataManager;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
 
@@ -48,6 +46,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     private boolean transparent = false;
     private String innerPadding = "";   // has to be empty and not 0!
     private String outerPadding = "";   // has to be empty and not 0!
+
+    private long cacheExpiration = 0;
 
     //private PortletRole requiredRole = PortletRole.GUEST;
 
@@ -191,7 +191,20 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             list = titleBar.init(req, list);
             titleBar.addComponentListener(this);
         }
+        doConfig();
         return list;
+    }
+
+    protected void doConfig() {
+        PortletRegistry registryManager = PortletRegistry.getInstance();
+        String appID = registryManager.getApplicationPortletID(portletClass);
+        ApplicationPortlet appPortlet = registryManager.getApplicationPortlet(appID);
+        if (appPortlet != null) {
+            ApplicationPortletConfig appConfig = appPortlet.getApplicationPortletConfig();
+            if (appConfig != null) {
+                cacheExpiration = appConfig.getCacheExpires();
+            }
+        }
     }
 
     public void remove(PortletComponent pc, PortletRequest req) {
@@ -495,7 +508,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         } else {
             out.println(frame.toString());
         }
-        cacheService.cache(portletClass + id, frame, 0, false);
+        if (cacheExpiration >= 0) {
+            cacheService.cache(portletClass + id, frame, cacheExpiration, false);
+        }
     }
 
     public Object clone() throws CloneNotSupportedException {
