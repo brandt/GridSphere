@@ -69,7 +69,7 @@ public class UserManagerBean extends ActionEventHandler {
     private TextFieldBean fullNameEditBean = null;
     private TextFieldBean emailAddressEditBean = null;
     private TextFieldBean organizationEditBean = null;
-    private DropDownListBean userRoleEditBean = null;
+    private ListBoxBean userRoleEditBean = null;
     private PasswordBean passwordEditBean = null;
     private PasswordBean confirmPasswordEditBean = null;
 
@@ -296,12 +296,7 @@ public class UserManagerBean extends ActionEventHandler {
         // Set user attributes
         PortletRequest portletRequest = getPortletRequest();
 
-        // Set user role here, it's value is set only if
-        // user is not null
-        userRoleEditBean = new DropDownListBean("userRole");
-        userRoleEditBean.add("Administrative Role", "admin");
-        userRoleEditBean.add("User Role", "user");
-        userRoleEditBean.add("Guest Role", "guest");
+        PortletRole selectedRole = null;
 
         if (this.user == null) {
             log.debug("Editing new user");
@@ -312,6 +307,7 @@ public class UserManagerBean extends ActionEventHandler {
             this.fullNameEditBean = new TextFieldBean("fullName", "");
             this.emailAddressEditBean = new TextFieldBean("emailAddress", "");
             this.organizationEditBean = new TextFieldBean("organization", "");
+            selectedRole = PortletRole.USER;
         } else {
             log.debug("Editing existing user");
             this.userIDBean = new HiddenFieldBean("userID", this.user.getID());
@@ -323,7 +319,12 @@ public class UserManagerBean extends ActionEventHandler {
             this.fullNameEditBean = new TextFieldBean("fullName", this.user.getFullName());
             this.emailAddressEditBean = new TextFieldBean("emailAddress", this.user.getEmailAddress());
             this.organizationEditBean = new TextFieldBean("organization", this.user.getOrganization());
+            selectedRole = this.userRole;
         }
+
+        // Set user role here, it's value is set only if
+        this.userRoleEditBean = createUserRoleEditBean(selectedRole);
+
         // Password always blank first page
         this.passwordEditBean = new PasswordBean("password", "", false, false, 20, 16);
         // Confirm always blank first page
@@ -333,6 +334,41 @@ public class UserManagerBean extends ActionEventHandler {
         storeUserEdit();
 
         log.debug("Exiting editUser()");
+    }
+
+    private ListBoxBean createUserRoleEditBean(PortletRole selectedRole) {
+        ListBoxBean userRoles = new ListBoxBean("userRole");
+        userRoles.setMultiple(false);
+        userRoles.setSize(1);
+        // Super role
+        if (selectedRole.isSuper()) {
+            this.log.debug("Setting super role");
+            userRoles.add("Super Role", "SUPER", true);
+        } else {
+            userRoles.add("Super Role", "SUPER", false);
+        }
+        // Administrative role
+        if (selectedRole.isAdmin()) {
+            this.log.debug("Setting admin role");
+            userRoles.add("Administrative Role", "ADMIN", true);
+        } else {
+            userRoles.add("Administrative Role", "ADMIN", false);
+        }
+        // User role
+        if (selectedRole.isUser()) {
+            this.log.debug("Setting user role");
+            userRoles.add("User Role", "USER", true);
+        } else {
+            userRoles.add("User Role", "USER", false);
+        }
+        // Guest role
+        if (selectedRole.isGuest()) {
+            this.log.debug("Setting guest role");
+            userRoles.add("Guest Role", "GUEST", true);
+        } else {
+            userRoles.add("Guest Role", "GUEST", false);
+        }
+        return userRoles;
     }
 
     private void updateUser() {
@@ -345,7 +381,7 @@ public class UserManagerBean extends ActionEventHandler {
         this.fullNameEditBean = getTextFieldBean("fullName");
         this.emailAddressEditBean = getTextFieldBean("emailAddress");
         this.organizationEditBean = getTextFieldBean("organization");
-        this.userRoleEditBean = getDropDownListBean("userRole");
+        this.userRoleEditBean = getListBoxBean("userRole");
         this.passwordEditBean = getPasswordBean("password");
         this.confirmPasswordEditBean = getPasswordBean("confirmPassword");
         log.debug("Exiting updateUser()");
@@ -429,6 +465,7 @@ public class UserManagerBean extends ActionEventHandler {
         this.emailAddressEditBean.store("emailAddress", portletRequest);
         this.organizationEditBean.store("organization", portletRequest);
         this.userRoleEditBean.store("userRole", portletRequest);
+        this.log.debug("User role " + this.userRoleEditBean.toString());
         this.passwordEditBean.store("password", portletRequest);
         this.confirmPasswordEditBean.store("confirmPassword", portletRequest);
    }
@@ -474,31 +511,48 @@ public class UserManagerBean extends ActionEventHandler {
         log.debug("Exiting editAccountRequest()");
     }
 
-
     private void saveUserRole()
             throws PortletException {
         log.debug("Entering saveUserRole()");
-        // Create appropriate access request
-        GroupRequest accessRequest = this.aclManagerService.createGroupRequest();
-        accessRequest.setUser(this.user);
-        accessRequest.setGroup(SportletGroup.CORE);
+
+        // Get selected role
+        PortletRole selectedRole = getSelectedUserRole();
+
         // If super role was chosen
-        if (this.userRole.equals(PortletRole.SUPER)) {
+        if (selectedRole.equals(PortletRole.SUPER)) {
             this.log.debug("Granting super role");
             // Grant super role
             this.aclManagerService.grantSuperRole(user);
-            this.log.debug("Granting admin role in base group");
         } else {
-            // Revoke super role
+            // Revoke super role (in case they had it)
             this.aclManagerService.revokeSuperRole(user);
-            this.log.debug("Granting " + userRole + " role in base group");
-            // Grant chosen role in base group
-            accessRequest.setRole(this.userRole);
+            // Create appropriate access request
+            GroupRequest accessRequest = this.aclManagerService.createGroupRequest();
+            accessRequest.setUser(this.user);
+            accessRequest.setGroup(SportletGroup.CORE);
+            accessRequest.setRole(selectedRole);
+            this.log.debug("Granting " + selectedRole + " role in gridsphere");
+            // Submit changes
+            this.aclManagerService.submitGroupRequest(accessRequest);
+            this.aclManagerService.approveGroupRequest(accessRequest);
         }
-        // Submit changes
-        this.aclManagerService.submitGroupRequest(accessRequest);
-        this.aclManagerService.approveGroupRequest(accessRequest);
         log.debug("Exiting saveUserRole()");
+    }
+
+    private PortletRole getSelectedUserRole() {
+        // Iterate through list, return selected value
+        List userRoleList = this.userRoleEditBean.getSelectedValues();
+        this.log.debug("Updated role list " + this.userRoleEditBean.toString());
+        if (userRoleList.size() == 0) {
+            this.log.debug("No role was selected, setting to user");
+            // Impossible, but if not selected return user role
+            return PortletRole.USER;
+        } else {
+            // Otherwise, return the first selected value
+            String userRoleItem = (String)userRoleList.get(0);
+            this.log.debug("Selected role was " + userRoleItem);
+            return PortletRole.toPortletRole(userRoleItem);
+        }
     }
 
     private void deleteUser() {
