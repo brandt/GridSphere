@@ -141,7 +141,7 @@
         <field name="Name" type="string">
             <bind-xml name="name" node="attribute"/>
         </field>
-        <field name="PortletModes" type="org.exolab.castor.types.AnyNode" collection="vector" container="false">
+        <field name="PortletModes" type="org.exolab.castor.types.AnyNode" collection="vector">
             <bind-xml matches="*"/>
         </field>
     </class>

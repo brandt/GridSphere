@@ -180,4 +180,76 @@
 
 </portlet-app-def>
 
+<portlet-app-def>
+
+<portlet-app uid="org.gridlab.gridsphere.portlets.core.SubscriptionPortlet.231">
+    <portlet-app-name>Login Portlet</portlet-app-name>
+    <portlet href="WEB-INF/web.xml#Servlet_1902648614" id="Portlet_1902648614">
+        <portlet-name>Login</portlet-name>
+    </portlet>
+</portlet-app>
+
+<concrete-portlet-app uid="org.gridlab.gridsphere.portlets.core.SubscriptionPortlet.231.2">
+    <portlet-app-name>Subscription Portlet</portlet-app-name>
+    <context-param>
+        <param-name>Portlet Master</param-name>
+        <param-value>yourid@yourdomain.com</param-value>
+    </context-param>
+    <concrete-portlet href="Portlet_1902648613">
+        <portlet-name>Subscription</portlet-name>
+        <default-locale>en</default-locale>
+        <language locale="en_US">
+            <title>Subscription</title>
+            <title-short>Subscription</title-short>
+            <description>Portlet provides subscription capabilities</description>
+            <keywords>portlet subscription</keywords>
+        </language>
+        <owner>
+            <role-name>SUPER</role-name>
+        </owner>
+        <group>
+            <group-name>ANY</group-name>
+        </group>
+        <role>
+            <role-name>GUEST</role-name>
+        </role>
+    </concrete-portlet>
+</concrete-portlet-app>
+
+</portlet-app-def>
+
+<portlet-app-def>
+
+<portlet-app uid="org.gridlab.gridsphere.portlets.core.ViewPortlet.231">
+    <portlet-app-name>View Portlet</portlet-app-name>
+    <portlet href="WEB-INF/web.xml#Servlet_1902648614" id="Portlet_1902648614">
+        <portlet-name>View</portlet-name>
+    </portlet>
+</portlet-app>
+
+<concrete-portlet-app uid="org.gridlab.gridsphere.portlets.core.ViewPortlet.231.2">
+    <portlet-app-name>View Portlet</portlet-app-name>
+    <concrete-portlet href="Portlet_1902648613">
+        <portlet-name>View Portlet</portlet-name>
+        <default-locale>en</default-locale>
+        <language locale="en_US">
+            <title>View Content</title>
+            <title-short>View Content</title-short>
+            <description>Portlet provides subscription capabilities</description>
+            <keywords>portlet subscription</keywords>
+        </language>
+        <owner>
+            <role-name>SUPER</role-name>
+        </owner>
+        <group>
+            <group-name>ANY</group-name>
+        </group>
+        <role>
+            <role-name>GUEST</role-name>
+        </role>
+    </concrete-portlet>
+</concrete-portlet-app>
+
+</portlet-app-def>
+
 </portlet-app-collection>
