@@ -528,6 +528,11 @@
                             <entry>cellspacing</entry><entry>no</entry><entry>integer: the cellspacing table width</entry>
                         </row>
                     </tbody>
+                    <tbody>
+                        <row>
+                            <entry>sortable</entry><entry>no</entry><entry>boolean: if true then the data in the table can be sorted by header</entry>
+                        </row>
+                    </tbody>
                 </tgroup>
             </table>
             <example>
@@ -707,6 +712,11 @@
                     <tbody>
                         <row>
                             <entry>cellspacing</entry><entry>no</entry><entry>integer: the cellspacing table width</entry>
+                        </row>
+                    </tbody>
+                    <tbody>
+                        <row>
+                            <entry>sortable</entry><entry>no</entry><entry>boolean: if true then the data in the table can be sorted by header</entry>
                         </row>
                     </tbody>
                     <tbody>
