@@ -215,5 +215,7 @@ public interface SportletProperties {
     public static final String RESPONSE_COMMITTED = "org.gridlab.gridsphere.RESPONSE_COMMITTED";
 
     public static final String RENDER_PARAM_PREFIX = "rp_";
+
+    public static final String RENDER_OUTPUT = "org.gridlab.gridsphere.layout.RENDER_OUTPUT.";
 }
 
