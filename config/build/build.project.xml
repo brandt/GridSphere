@@ -58,7 +58,7 @@ Copyright:
     <!-- Check for catalina.sh in CATALINA_HOME/bin -->
     <target name="check-catalina">
         <condition property="catalina.exists">
-            <available file="${env.CATALINA_HOME}/bin/catalina.sh"/>
+            <available file="${env.CATALINA_HOME}/bin/bootstrap.jar"/>
         </condition>
         <fail message="Unable to find Tomcat 4.1.+. Make sure you have set $CATALINA_HOME set" unless="catalina.exists"/>
     </target>

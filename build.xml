@@ -73,7 +73,7 @@ Copyright:
     <!-- Check for catalina.sh in CATALINA_HOME/bin -->
     <target name="check-catalina">
         <condition property="catalina.exists">
-            <available file="${env.CATALINA_HOME}/bin/catalina.sh"/>
+            <available file="${env.CATALINA_HOME}/bin/bootstrap.jar"/>
         </condition>
         <fail message="Unable to find Tomcat 4.1.+. Make sure you have set $CATALINA_HOME set" unless="catalina.exists"/>
     </target>
@@ -150,7 +150,9 @@ Copyright:
         <echo message="clean                  Cleans up the build dir                    "/>
         <echo message="compile-all            Compiles all the code including tests      "/>
         <echo message="docs-all               Creates Javadoc API and GridSphere guides  "/>
-        <echo message="tests                  Builds and runs the unit tests             "/>
+        <echo message="run-tests              Builds and runs the unit tests             "/>
+        <echo message="new-project            Creates a new portlet project in projects directory"/>
+        <echo message="update-project         Updates a new portlet project in projects directory"/>
         <echo message="deploy                 Deploys GS to tomcat                       "/>
         <echo message="dist                   Builds a binary GS distribution            "/>
     </target>
