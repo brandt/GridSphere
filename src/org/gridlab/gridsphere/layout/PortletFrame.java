@@ -591,16 +591,15 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             String titleStr = (String) req.getAttribute(SportletProperties.PORTLET_TITLE);
             if (titleStr == null) {
                 titleStr = titleBar.getTitle();                
-            } else {
-                req.removeAttribute(SportletProperties.PORTLET_TITLE);
-            }
+            } 
             frame.append(titleBar.getPreBufferedTitle());
             frame.append(titleStr);
             frame.append(titleBar.getPostBufferedTitle());
         }
+        req.removeAttribute(SportletProperties.PORTLET_TITLE);
         frame.append(postframe);
 
-        if (cacheExpiration > 0) {
+        if ((cacheExpiration > 0) || (cacheExpiration == -1)) {
             cacheService.cache(this.getComponentID() + portletClass + id, frame, cacheExpiration);
         }
     }
