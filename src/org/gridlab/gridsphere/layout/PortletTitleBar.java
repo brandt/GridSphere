@@ -33,7 +33,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
     private List supportedModes = new Vector();
     private transient Portlet.Mode portletMode = Portlet.Mode.VIEW;
     private transient Portlet.Mode previousMode = null;
-    private transient PortletSettings settings = null;
     private List allowedWindowStates = new Vector();
     private String errorMessage = "";
     private boolean hasError = false;
@@ -374,11 +373,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 // get supported modes from application portlet config
                 supportedModes = sort(appConfig.getSupportedModes());
 
-                ConcretePortlet concPortlet = appPortlet.getConcretePortlet(portletClass);
-                if (concPortlet != null) {
-                    settings = concPortlet.getPortletSettings();
-                }
-
                 // get window states from application portlet config
                 allowedWindowStates = sort(appConfig.getAllowedWindowStates());
             }
@@ -622,9 +616,11 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         Client client = req.getClient();
         Locale locale = req.getLocale();
 
+        /*
         if (settings != null) {
             title = settings.getTitle(locale, client);
         }
+        */
 
         List modeLinks = null, windowLinks = null;
         User user = req.getUser();
@@ -663,26 +659,22 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         // Invoke doTitle of portlet whose action was perfomed
         //String actionStr = req.getParameter(SportletProperties.DEFAULT_PORTLET_ACTION);
         out.println("<td class=\"window-title-name\">");
-        //if (actionStr != null) {
-            try {
-                //System.err.println("invoking  doTitle:" + title);
-                PortletInvoker.doTitle(portletClass, req, res);
-                //out.println(" (" + portletMode.toString() + ") ");
-            } catch (PortletException e) {
-                String pname = portletClass.substring(0, portletClass.length() - 1);
-                pname = pname.substring(0, pname.lastIndexOf("."));
-                pname = pname.substring(pname.lastIndexOf(".")+1);
-                ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
-                String value = bundle.getString("PORTLET_UNAVAILABLE");
-                title = value + " : " + pname;
-                out.println(title);
-                errorMessage = portletClass + " is currently unavailable!\n";
-                hasError = true;
-            }
 
-        //} else {
-        //    out.println(title);
-        //}
+        try {
+            //System.err.println("invoking  doTitle:" + title);
+            PortletInvoker.doTitle(portletClass, req, res);
+            //out.println(" (" + portletMode.toString() + ") ");
+        } catch (PortletException e) {
+            String pname = portletClass.substring(0, portletClass.length() - 1);
+            pname = pname.substring(0, pname.lastIndexOf("."));
+            pname = pname.substring(pname.lastIndexOf(".")+1);
+            ResourceBundle bundle = ResourceBundle.getBundle("gridsphere.resources.Portlet", locale);
+            String value = bundle.getString("PORTLET_UNAVAILABLE");
+            title = value + " : " + pname;
+            out.println(title);
+            errorMessage = portletClass + " is currently unavailable!\n";
+            hasError = true;
+        }
 
         out.println("</td>");
 
