@@ -55,7 +55,7 @@
         <default-locale>en</default-locale>
         <language locale="en_US">
             <title>Hello World - Sample Portlet #2</title>
-            <title-short>Hello World 2</title-short>
+            <title-short>Hello World</title-short>
             <description>Here is another simple portlet</description>
             <keywords>portlet hello world</keywords>
         </language>

@@ -43,7 +43,7 @@
         <field name="DefaultLocale" type="string">
             <bind-xml name="default-locale" attribute="element"/>
         </field>
-        <field name="LanguageInfo" type="org.gridlab.gridsphere.portletcontainer.descriptor.LanguageInfo" collection="vector">
+        <field name="LanguageList" type="org.gridlab.gridsphere.portletcontainer.descriptor.LanguageInfo" collection="vector">
             <bind-xml name="language"/>
         </field>
         <field name="GroupList" type="org.gridlab.gridsphere.portletcontainer.descriptor.Group" collection="vector">
