@@ -49,7 +49,7 @@ public class UserManagerServiceTest extends ServiceTest {
     }
 
     public static Test suite ( ) {
-        return new TestSuite(UserManagerServiceTest2.class);
+        return new TestSuite(UserManagerServiceTest.class);
     }
 
     protected void setUp() {
