@@ -646,6 +646,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                         boolean hasrole = aclService.hasRequiredRole(req, portletClass, true);
                         if (!hasrole) return;
                     }
+                    //System.err.println("mode = " + portletMode);
+                    //System.err.println("prev mode = " + previousMode);
                     previousMode = portletMode;
                     portletMode = titleBarEvent.getMode();
                 }
@@ -690,11 +692,9 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
     	String markupName=event.getPortletRequest().getClient().getMarkupName();
-    	if (markupName.equals("html")){
+    	if (markupName.equals("html")) {
     		doRenderHTML(event);
-    	}
-    	else
-    	{
+    	} else {
     		doRenderWML(event);
     	}
     }

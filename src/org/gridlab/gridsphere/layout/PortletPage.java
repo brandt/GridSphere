@@ -506,11 +506,22 @@ public class PortletPage implements Serializable, Cloneable {
 
         // A Portal page in 3 lines -- voila!
         //  -------- header ---------
-        if (headerContainer != null) headerContainer.doRender(event);
+        if (headerContainer != null) {
+            headerContainer.doRender(event);
+            out.println(headerContainer.getBufferedOutput());
+        }
+
+
         // ..| tabs | here |....
-        if (tabbedPane != null) tabbedPane.doRender(event);
+        if (tabbedPane != null) {
+            tabbedPane.doRender(event);
+            out.println(tabbedPane.getBufferedOutput());
+        }
         //.... the footer ..........
-        if (footerContainer != null) footerContainer.doRender(event);
+        if (footerContainer != null) {
+            footerContainer.doRender(event);
+            out.println(footerContainer.getBufferedOutput());
+        }
 
         out.println("</body></html>");
     }

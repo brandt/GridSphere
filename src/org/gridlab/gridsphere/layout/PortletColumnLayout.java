@@ -20,6 +20,8 @@ import java.util.List;
  */
 public class PortletColumnLayout extends PortletFrameLayout implements Cloneable, Serializable {
 
+    protected StringBuffer col = null;
+
     public PortletColumnLayout() {
     }
 
@@ -35,12 +37,11 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
     	String markupName=event.getPortletRequest().getClient().getMarkupName();
     	if (markupName.equals("html")){
     		doRenderHTML(event);
-    	}
-    	else
-    	{
+    	} else {
     		doRenderWML(event);
     	}
     }
+
     public void doRenderWML(GridSphereEvent event) throws PortletLayoutException, IOException {
         //System.err.println("\t\tin render ColumnLayout");
         PortletResponse res = event.getPortletResponse();
@@ -51,68 +52,49 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
 
         // starting of the gridtable
 
-    if (!components.isEmpty()) {
-        //out.println("<table width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"> <!-- START COLUMN -->");
-        
-    	out.println("<p/>");
-        //out.println("<tbody>");
-        List scomponents = Collections.synchronizedList(components);
-        synchronized (scomponents) {
-            for (int i = 0; i < scomponents.size(); i++) {
-
-                p = (PortletComponent) scomponents.get(i);
-
-                out.print("<p/>");
-                //out.print("<tr><td valign=\"top\" width=\"100%\">");
-
-                if (p.getVisible()) {
-                    p.doRender(event);
-                    //out.println("comp: "+i);
-                }
-
-                //out.println("</td></tr>");
-            }
-        }
-        out.println("<p />");
-        //out.println("</tbody>");
-        //out.println("</table> <!-- END COLUMN -->");
-    }
-    }
-    public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
-        //System.err.println("\t\tin render ColumnLayout");
-        PortletResponse res = event.getPortletResponse();
-        PortletRequest req = event.getPortletRequest();
-        PrintWriter out = res.getWriter();
-
-        PortletComponent p = null;
-
-        // starting of the gridtable
-
         if (!components.isEmpty()) {
-            out.println("<table width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"> <!-- START COLUMN -->");
-            //out.println("<table width=\"" + width + "\" cellspacing=\"2\" cellpadding=\"0\"> <!-- START COLUMN -->");
-
-            out.println("<tbody>");
+            out.println("<p/>");
             List scomponents = Collections.synchronizedList(components);
             synchronized (scomponents) {
                 for (int i = 0; i < scomponents.size(); i++) {
-
                     p = (PortletComponent) scomponents.get(i);
-
-                    //out.print("<tr><td valign=\"top\" width=\"" + p.getWidth() + "\">");
-                    out.print("<tr><td valign=\"top\" width=\"100%\">");
-
+                    out.print("<p/>");
                     if (p.getVisible()) {
                         p.doRender(event);
-                        //out.println("comp: "+i);
                     }
-
-                    out.println("</td></tr>");
                 }
             }
-            out.println("</tbody>");
-            out.println("</table> <!-- END COLUMN -->");
+            out.println("<p/>");
         }
+    }
+
+    public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
+        //System.err.println("\t\tin render ColumnLayout");
+        col = new StringBuffer();
+        PortletComponent p = null;
+
+        // starting of the gridtable
+        if (!components.isEmpty()) {
+            col.append("<table width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"> <!-- START COLUMN -->");
+            col.append("<tbody>");
+            List scomponents = Collections.synchronizedList(components);
+            synchronized (scomponents) {
+                for (int i = 0; i < scomponents.size(); i++) {
+                    p = (PortletComponent) scomponents.get(i);
+                    col.append("<tr><td valign=\"top\" width=\"100%\">");
+                    if (p.getVisible()) {
+                        p.doRender(event);
+                        col.append(p.getBufferedOutput());
+                    }
+                    col.append("</td></tr>");
+                }
+            }
+            col.append("</tbody></table> <!-- END COLUMN -->");
+        }
+    }
+
+    public StringBuffer getBufferedOutput() {
+        return col;
     }
 
     public Object clone() throws CloneNotSupportedException {

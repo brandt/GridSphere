@@ -66,6 +66,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
     private boolean isClosing = false;
 
+    private StringBuffer frame = new StringBuffer();
+
     /**
      * Constructs an instance of PortletFrame
      */
@@ -266,9 +268,10 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         User user = event.getPortletRequest().getUser();
         PortletRequest request = event.getPortletRequest();
-
         String id = request.getPortletSession(true).getId();
 
+        // remove cached output
+        cacheService.removeCached(portletClass + id);
         hasTitleBarEvent = false;
 
         PortletComponentEvent titleBarEvent = event.getLastRenderEvent();
@@ -344,15 +347,10 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 req.setMode(Portlet.Mode.VIEW);
             } else {
                 Portlet.Mode mode = titleBar.getPortletMode();
-                //System.err.println("mode = " + mode);
                 req.setMode(mode);
             }
 
             titleBar.setPortletMode(req.getMode());
-
-            // remove cached output
-
-            cacheService.removeCached(portletClass + id);
 
             //System.err.println("in PortletFrame action invoked for " + portletClass);
             if (event.hasAction()
@@ -365,12 +363,12 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                 } catch (PortletException e) {
                     // catch it and keep processing
                 }
-            }
 
-            // see if mode has been set
-            Portlet.Mode mymode = (Portlet.Mode)req.getAttribute(SportletProperties.PORTLET_MODE);
-            if (mymode != null) {
-                titleBar.setPortletMode(mymode);
+                // see if mode has been set
+                Portlet.Mode mymode = (Portlet.Mode)req.getAttribute(SportletProperties.PORTLET_MODE);
+                if (mymode != null) {
+                    titleBar.setPortletMode(mymode);
+                }
             }
 
             List slisteners = Collections.synchronizedList(listeners);
@@ -419,13 +417,13 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         String id = event.getPortletRequest().getPortletSession(true).getId();
 
-        StringBuffer frame = (StringBuffer) cacheService.getCached(portletClass + id);
+        frame = (StringBuffer) cacheService.getCached(portletClass + id);
+
         String nocache = (String) req.getAttribute(CacheService.NO_CACHE);
         if ((frame != null) && (nocache == null)) {
             out.println(frame.toString());
             return;
         }
-
         frame = new StringBuffer();
 
         req.setAttribute(SportletProperties.PORTLETID, portletClass);
@@ -470,6 +468,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         if (renderPortlet) {
             if (!transparent) {
+                postframe.append(titleBar.getBufferedOutput());
                 postframe.append("<tr><td  ");      // now the portlet content begins
                 if (!getInnerPadding().equals("")) {
                     writer.print("style=\"padding:" + getInnerPadding() + "px\"");
@@ -553,13 +552,18 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             frame.append(titleBar.getPostBufferedTitle());
         }
         frame.append(postframe);
-        out = res.getWriter();
 
-        out.println(frame.toString());
+        //out = res.getWriter();
+
+        //out.println(frame.toString());
 
         if (cacheExpiration > 0) {
             cacheService.cache(portletClass + id, frame, cacheExpiration);
         }
+    }
+
+    public StringBuffer getBufferedOutput() {
+        return frame;
     }
 
     public boolean hasError(PortletRequest req) {

@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.*;
@@ -18,6 +19,7 @@ public class PortletStaticContent extends BasePortletComponent implements Serial
 
     private String textFile = null;
     private String encoding = null;
+    protected StringBuffer content = null;
 
     /**
      * Constructs an instance of PortletContent
@@ -70,7 +72,8 @@ public class PortletStaticContent extends BasePortletComponent implements Serial
             try {
                 Client client = req.getClient();
 
-
+                StringWriter writer = new StringWriter();
+                PortletResponse sres = new StoredPortletResponseImpl(res, writer);
                 Locale locale = req.getLocale();
                 InputStream resourceStream = ctx.getResourceAsStream(textFile, client, locale);
                 if (resourceStream != null) {
@@ -80,12 +83,17 @@ public class PortletStaticContent extends BasePortletComponent implements Serial
                     } else {
                         reader = new BufferedReader(new InputStreamReader(resourceStream));
                     }
-                    writeData(reader, res.getWriter());
+                    writeData(reader, sres.getWriter());
+                    content = writer.getBuffer();
                 }
             } catch (PortletException e) {
                 throw new PortletLayoutException("Unable to include text: " + textFile, e);
             }
         }
+    }
+
+    public StringBuffer getBufferedOutput() {
+        return content;
     }
 
     private void writeData(Reader reader, Writer writer) throws PortletException {

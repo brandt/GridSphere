@@ -31,6 +31,7 @@ public class PortletContainer extends BasePortletComponent implements
         Serializable, Cloneable {
 
     protected List components = new ArrayList();
+    protected StringBuffer container = new StringBuffer();
 
     /**
      * Initializes the portlet component. Since the components are isolated
@@ -92,10 +93,14 @@ public class PortletContainer extends BasePortletComponent implements
             while (it.hasNext()) {
                 comp = (PortletComponent) it.next();
                 comp.doRender(event);
+                container = comp.getBufferedOutput();
             }
         }
     }
 
+    public StringBuffer getBufferedOutput() {
+        return container;
+    }
     /**
      * Adds a new portlet component to the layout
      *

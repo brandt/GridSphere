@@ -33,6 +33,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     private PortletComponent portletComponent = null;
     private int tabOrder = 50;
 
+    protected StringBuffer tab = null;
     /**
      * Constructs an instance of PortletTab
      */
@@ -251,9 +252,15 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletRole userRole = event.getPortletRequest().getRole();
+        tab = new StringBuffer();
         if (userRole.compare(userRole, requiredRole) >= 0) {
             portletComponent.doRender(event);
+            tab.append(portletComponent.getBufferedOutput());
         }
+    }
+
+    public StringBuffer getBufferedOutput() {
+        return tab;
     }
 
     public int compare(Object left, Object right) {

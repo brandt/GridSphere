@@ -8,12 +8,14 @@ import org.gridlab.gridsphere.portlet.PortletContext;
 import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import javax.servlet.ServletContext;
 import javax.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.StringWriter;
 
 /**
  * <code>PortletContent</code> is used to display the contents of an included
@@ -23,6 +25,7 @@ public class PortletContent extends BasePortletComponent implements Serializable
 
     private String textFile = null;
     private String context = null;
+    private StringBuffer content = null;
 
     /**
      * Constructs an instance of PortletContent
@@ -79,7 +82,10 @@ public class PortletContent extends BasePortletComponent implements Serializable
         ServletContext ctx = event.getPortletContext();
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
-        
+        StringWriter writer = new StringWriter();
+        StoredPortletResponseImpl sres = new StoredPortletResponseImpl(res, writer);
+        content = new StringBuffer();
+
         if (context != null) {
             if (!context.startsWith("/")) {
                 context = "/" + context;
@@ -91,14 +97,19 @@ public class PortletContent extends BasePortletComponent implements Serializable
             rd = ctx.getRequestDispatcher(textFile);
             try {
                 if (rd != null) {
-                    rd.include(req, res);
+                    rd.include(req, sres);
                 } else {
                     throw new PortletException("Unable to include resource: RequestDispatcher is null");
                 }
+                content = writer.getBuffer();
             } catch (Exception e) {
                 throw new PortletLayoutException("Unable to include textfile: " + textFile, e);
             }
         }
+    }
+
+    public StringBuffer getBufferedOutput() {
+        return content;
     }
 
     public Object clone() throws CloneNotSupportedException {
