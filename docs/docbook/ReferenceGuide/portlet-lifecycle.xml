@@ -32,8 +32,7 @@ that are currently displayed on the portal page. All lifecycle methods throw a &
 </para></listitem>
 <listitem><para>
     <important>Concrete portlets only exist in the WebSphere portlet model</important>
-    The concrete portlet is placed into service and parametrized with a &PortletSettings; object described in
-    <link linkend='portlet-objects' endterm="portlet-objects-title"/>
+    The concrete portlet is placed into service and parameterized with a &PortletSettings; object.
     <programlisting>
     <prompt>void</prompt> <methodname>initConcrete</methodname>(PortletSettings <emphasis>settings</emphasis>)
     </programlisting>

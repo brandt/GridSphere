@@ -16,7 +16,7 @@
     <sect1>
         <title>Configuration</title>
         <para>
-        The configuration file for the <link linkend='persist'>&PersistenceManager;</link> is
+        The configuration file for the &PersistenceManager; is
         <filename>$GRIDSPHERE_SOURCE/webapps/gridsphere/WEB-INF/persistence/hibernate.properties</filename>.
         For the available configuration options please see the &Hibernate; website. By default it is configured
         to use HSQL, a pure Java in-memory database useful for testing and development.
@@ -25,12 +25,12 @@
     </sect1>
     <sect1>
         <title>Simple Persistence</title>
-        <para>Making data persistent in portlets is done using the <link linkend='portlet.data'>&PortletData;</link>
-        object under WebSphere portlet API and the <link linkend='portlet.data'>&PortletPreferences;</link> object
+        <para>Making data persistent in portlets is done using the &PortletData;
+        object under WebSphere portlet API and the &PortletPreferences; object
         using the JSR 168 portlet API.</para>
         <para>
             In general when requiring persistence in a WebSphere portlet, first see if the
-            <link linkend='portlet.data'>&PortletData;</link> object can meet your needs. Although, it only provides
+            &PortletData; object can meet your needs. Although, it only provides
             a container for simple &String; key/value pairs it can go a long way.
             <informalexample>
                 <programlisting>
@@ -54,8 +54,8 @@
             PortletData saved values are on a per user basis.
         </para>
         <para>
-            JSR 168 provides a <link linkend='portlet.preferences'>&PortletPreferences;</link>
-            object available from the <link linkend='portlet.data'>&PortletRequest;</link>. It can also store key-value
+            JSR 168 provides a &PortletPreferences;
+            object available from the &PortletRequest;. It can also store key-value
             pairs (only in the processAction method and not in a render method).
             <informalexample>
                 <programlisting>

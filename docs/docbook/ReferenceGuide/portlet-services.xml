@@ -43,8 +43,7 @@ shutdown. A <link linkend='portlet-services-descriptor'>portlet services descrip
 &PortletServiceConfig;.
 </para>
 <para>
-    Under the WebSphere portlet model, a portlet service can be obtained  from a portlet using the &PortletContext; object
-    <link linkend='portlet.objects.config' endterm='portlet.context'/>. Because the method
+    Under the WebSphere portlet model, a portlet service can be obtained  from a portlet using the &PortletContext; object. Because the method
     <methodname>getService()</methodname> returns a &PortletService;, it must be typecast to the approriate
     service instance:
     </para>

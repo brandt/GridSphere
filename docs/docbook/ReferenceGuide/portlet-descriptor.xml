@@ -100,8 +100,7 @@
             <callout arearefs="app.portlet.config">
             <para>
                 Defines configuration information for this portlet that is accessible via the
-                &PortletConfig; object described in the
-                <link linkend='portlet-objects' endterm="portlet-objects-title"/> chapter.
+                &PortletConfig; object.
             </para>
             </callout>
             <callout arearefs="portlet.allows">
@@ -171,14 +170,12 @@
             </callout>
             <callout arearefs="conc.context">
             <para>
-                (Optional) Defines the portlet context information encapsulated by the &PortletApplicationSettings; object
-                described in the <link linkend='portlet-objects' endterm="portlet-objects-title"/> chapter.
+                (Optional) Defines the portlet context information encapsulated by the &PortletApplicationSettings; object.
             </para>
             </callout>
             <callout arearefs="conc.portlet">
             <para>
-               The concrete portlet is used to create the &PortletSettings; object
-               described in the <link linkend='portlet-objects' endterm="portlet-objects-title"/> chapter.
+               The concrete portlet is used to create the &PortletSettings; object.
             </para>
             </callout>
             <callout arearefs="conc.name">
@@ -223,14 +220,13 @@
                 (Optional) The <varname>visibility</varname> attribute defines who can see information about this portlet.
                 Allowed values are <constant>PRIVATE</constant> and <constant>PUBLIC</constant>. The
                 <varname>role</varname> attribute defines which role a user must have to have access to this portlet.
-                Valid values are any of the roles defined in the &PortletRole; object defined in more detail in the
-                <link linkend='portlet-objects' endterm="portlet-objects-title"/> chapter.
+                Valid values are any of the roles defined in the &PortletRole; object.
             </para>
             </callout>
             <callout arearefs="conc.config">
             <para>
                 Addtional concrete portlet settings that are maintained in the &PortletSettings;
-                object described in the <link linkend='portlet-objects' endterm="portlet-objects-title"/> chapter.
+                object.
             </para>
             </callout>
         </calloutlist>
