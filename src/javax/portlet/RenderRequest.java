@@ -1,8 +1,8 @@
 /**
-  * Copyright 2003 IBM Corporation and Sun Microsystems, Inc.
-  * All rights reserved.
-  * Use is subject to license terms.
-  */
+ * Copyright 2003 IBM Corporation and Sun Microsystems, Inc.
+ * All rights reserved.
+ * Use is subject to license terms.
+ */
 
 package javax.portlet;
 
@@ -18,8 +18,7 @@ package javax.portlet;
  * @see PortletRequest
  * @see ActionRequest
  */
-public interface RenderRequest extends PortletRequest
-{
+public interface RenderRequest extends PortletRequest {
 
 
 }

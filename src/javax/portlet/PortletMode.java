@@ -16,18 +16,17 @@ package javax.portlet;
  * content depending on the function they are currently performing.
  * When invoking a portlet, the portlet container provides the
  * current portlet mode to the portlet.
- * <p>
+ * <p/>
  * Portlets can programmatically change their portlet
  * mode when processing an action request.
  * <P>
  * This class defines the default portlet modes <code>EDIT, HELP, VIEW</code>.
  * Additional portlet modes may be defined by calling the constructor
- * of this class. If a portal/portlet-container does not support a 
- * custom portlet mode defined in the portlet application deployment descriptor, 
+ * of this class. If a portal/portlet-container does not support a
+ * custom portlet mode defined in the portlet application deployment descriptor,
  * the custom portlet mode will be ignored by the portal/portlet container.
  */
-public class PortletMode
-{
+public class PortletMode {
 
     /**
      * The expected functionality for a portlet in <code>VIEW</code> portlet mode
@@ -38,25 +37,25 @@ public class PortletMode
      * user interaction.
      * <P>
      * This mode must be supported by the portlet.
-     * <p>
+     * <p/>
      * The string value for this mode is <code>"view"</code>.
      */
-    public final static PortletMode VIEW = new PortletMode ("view");
+    public final static PortletMode VIEW = new PortletMode("view");
 
     /**
      * Within the <code>EDIT</code> portlet mode, a portlet should provide
      * content and logic that lets a user customize the behavior of the portlet.
      * The EDIT portlet mode may include one or more screens among which
      * users can navigate to enter their customization data.
-     * <p>
+     * <p/>
      * Typically, portlets in <code>EDIT</code> portlet mode will
      * set or update portlet preferences.
      * <P>
      * This mode is optional.
-     * <p>
+     * <p/>
      * The string value for this mode is <code>"edit"</code>.
      */
-    public final static PortletMode EDIT = new PortletMode ("edit");
+    public final static PortletMode EDIT = new PortletMode("edit");
 
     /**
      * When in <code>HELP</code> portlet mode, a portlet should provide help
@@ -65,23 +64,23 @@ public class PortletMode
      * coherent text or it could be context-sensitive help.
      * <P>
      * This mode is optional.
-     * <p>
+     * <p/>
      * The string value for this mode is <code>"help"</code>.
      */
-    public final static PortletMode HELP = new PortletMode ("help");
+    public final static PortletMode HELP = new PortletMode("help");
 
     private String _name;
 
     /**
      * Creates a new portlet mode with the given name.
-     * <p>
+     * <p/>
      * Upper case letters in the name are converted to
      * lower case letters.
      *
      * @param name The name of the portlet mode
      */
     public PortletMode(String name) {
-        if (name==null) {
+        if (name == null) {
             throw new IllegalArgumentException("PortletMode name can not be NULL");
         }
         _name = name.toLowerCase();
@@ -91,7 +90,7 @@ public class PortletMode
      * Returns a String representation of this portlet mode.
      * Portlet mode names are always lower case names.
      *
-     * @return  String representation of this portlet mode
+     * @return String representation of this portlet mode
      */
     public String toString() {
         return _name;
@@ -102,7 +101,7 @@ public class PortletMode
      * The hash code is constructed by producing the
      * hash value of the String value of this mode.
      *
-     * @return  hash code value for this portlet mode
+     * @return hash code value for this portlet mode
      */
     public int hashCode() {
         return _name.hashCode();
@@ -115,11 +114,10 @@ public class PortletMode
      * representing the two portlet modes returns <code>true</code>.
      *
      * @param object the portlet mode to compare this portlet mode with
-     *
      * @return true, if the specified object is equal with this portlet mode
      */
     public boolean equals(Object object) {
-        if ( object instanceof PortletMode )
+        if (object instanceof PortletMode)
             return _name.equals(((PortletMode) object)._name);
         else
             return false;
