@@ -15,6 +15,15 @@ public class FormTag extends BodyTagSupport {
     protected String action = new String();
     protected String method = "POST";
     protected PortletURI someURI;
+    protected String name = new String();
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public void setAction(String action) {
         this.action = action;
@@ -67,6 +76,9 @@ public class FormTag extends BodyTagSupport {
             out.print("\"");
             if (isMultipart) {
                 out.print(" enctype=\"multipart/form-data\"");
+            }
+            if (!name.equals("")) {
+                out.print(" name=\""+name+"\"");
             }
             out.println(">");
 
