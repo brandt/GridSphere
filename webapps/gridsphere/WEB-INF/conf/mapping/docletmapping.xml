@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
 <mapping>
+  <class name="org.gridlab.gridsphere.portlet.impl.SportletGroup" identity="ObjectID">
+    <map-to table="sportletgroup" />
+    <field name="ObjectID" type="string" get-method="getOid" set-method="setOid">
+      <sql name="objectid" />
+      <bind-xml name="ObjectID" />
+    </field>
+    <field name="Name" type="string">
+      <sql name="base" />
+      <bind-xml name="Name" />
+    </field>
+  </class>
   <class name="org.gridlab.gridsphere.portlet.impl.SportletUserImpl" identity="ObjectID">
     <map-to table="sportletuserimpl" />
     <field name="ObjectID" type="string" get-method="getOid" set-method="setOid">
@@ -35,12 +46,13 @@
       <sql name="lastlogintime" />
       <bind-xml name="LastLoginTime" />
     </field>
-    <field name="Attributes" collection="vector" direct="true" type="org.gridlab.gridsphere.core.persistence.castor.Attribute">
+    <field name="Attributes" collection="vector" direct="true" type="org.gridlab.gridsphere.portlet.impl.SportletUserImplAttribute">
+      <sql many-key="sportletuser" />
       <bind-xml name="Attributes" />
     </field>
   </class>
-  <class name="org.gridlab.gridsphere.core.persistence.castor.Attribute" key-generator="UUID" depends="org.gridlab.gridsphere.portlet.impl.SportletUserImpl" identity="ObjectID">
-    <map-to table="attribute" />
+  <class name="org.gridlab.gridsphere.portlet.impl.SportletUserImplAttribute" depends="org.gridlab.gridsphere.portlet.impl.SportletUserImpl" identity="ObjectID">
+    <map-to table="suiattribute" />
     <field name="ObjectID" type="string" get-method="getOid" set-method="setOid">
       <sql name="objectid" />
       <bind-xml name="ObjectID" />
@@ -56,17 +68,6 @@
     <field name="User" type="org.gridlab.gridsphere.portlet.impl.SportletUserImpl">
       <sql name="sportletuser" />
       <bind-xml name="User" />
-    </field>
-  </class>
-  <class name="org.gridlab.gridsphere.portlet.impl.SportletGroup" identity="ObjectID">
-    <map-to table="sportletgroup" />
-    <field name="ObjectID" type="string" get-method="getOid" set-method="setOid">
-      <sql name="objectid" />
-      <bind-xml name="ObjectID" />
-    </field>
-    <field name="Name" type="string">
-      <sql name="base" />
-      <bind-xml name="Name" />
     </field>
   </class>
   <class name="org.gridlab.gridsphere.services.security.acl.impl2.UserACL" identity="ObjectID">
@@ -122,16 +123,20 @@
       <sql name="organization" />
       <bind-xml name="Organization" />
     </field>
+    <field name="UserdnsSV" collection="vector" type="org.gridlab.gridsphere.services.user.impl.AccountRequestImplUserdns">
+      <sql many-key="reference" />
+      <bind-xml name="UserdnsSV" />
+    </field>
+    <field name="MyproxyUserNamesSV" collection="vector" type="org.gridlab.gridsphere.services.user.impl.AccountRequestImplMyproxyUserNames">
+      <sql many-key="reference" />
+      <bind-xml name="MyproxyUserNamesSV" />
+    </field>
   </class>
   <class name="org.gridlab.gridsphere.services.user.impl.AccountRequestImplUserdns" depends="org.gridlab.gridsphere.services.user.impl.AccountRequestImpl" identity="ObjectID">
     <map-to table="ariuserdns" />
     <field name="ObjectID" type="string" get-method="getOid" set-method="setOid">
       <sql name="objectid" />
       <bind-xml name="ObjectID" />
-    </field>
-    <field name="Id" type="string">
-      <sql name="id" />
-      <bind-xml name="Id" />
     </field>
     <field name="Value" type="string">
       <sql name="value" />
@@ -147,10 +152,6 @@
     <field name="ObjectID" type="string" get-method="getOid" set-method="setOid">
       <sql name="objectid" />
       <bind-xml name="ObjectID" />
-    </field>
-    <field name="Id" type="string">
-      <sql name="id" />
-      <bind-xml name="Id" />
     </field>
     <field name="Value" type="string">
       <sql name="value" />

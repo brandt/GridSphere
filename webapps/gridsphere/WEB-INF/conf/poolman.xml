@@ -4,5 +4,5 @@
      <driver url="jdbc:poolman://testdb" class-name="com.codestudio.sql.PoolMan">
 
      </driver>
-     <mapping href="webapps/WEB-INF/conf/mapping/docletmapping.xml"/>
+     <mapping href="webapps/gridpshere/WEB-INF/conf/mapping/docletmapping.xml"/>
 </database>

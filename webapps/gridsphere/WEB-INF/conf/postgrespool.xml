@@ -5,5 +5,5 @@
         <params database-name="testdb"/>
     </data-source>
 
-     <mapping href="webapps/WEB-INF/conf/mapping/docletmapping.xml"/>
+     <mapping href="webapps/gridsphere/WEB-INF/conf/mapping/docletmapping.xml"/>
 </database>
