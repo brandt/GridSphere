@@ -18,6 +18,8 @@ public interface Password {
 
     public String getHint();
 
+    public long getLifetime();
+
     public Date getDateExpires();
 
     public Date getDateCreated();

@@ -207,8 +207,12 @@ public class SportletRequestImpl implements SportletRequest {
      *
      * @see PortletRole
      */
-    public List getRoles(PortletGroup group) {
-        return (List)req.getAttribute(GridSphereProperties.PORTLETROLES);
+    public PortletRole[] getRoles(PortletGroup group) {
+        List roles = (List)req.getAttribute(GridSphereProperties.PORTLETROLES);
+        if (roles == null) {
+            roles = new ArrayList();
+        }
+        return (PortletRole[])roles.toArray(new PortletRole[0]);
     }
 
     /**
@@ -220,7 +224,7 @@ public class SportletRequestImpl implements SportletRequest {
      *
      * @see PortletRole
      */
-    public void setRoles(PortletGroup group, List roles) {
+    public void setRoles(PortletGroup group, PortletRole[] roles) {
         req.setAttribute(GridSphereProperties.PORTLETROLES, roles);
     }
 
@@ -233,8 +237,12 @@ public class SportletRequestImpl implements SportletRequest {
      *
      * @see PortletGroup
      */
-    public List getGroups() {
-        return (List)req.getAttribute(GridSphereProperties.PORTLETGROUPS);
+    public PortletGroup[] getGroups() {
+        List groups = (List)req.getAttribute(GridSphereProperties.PORTLETGROUPS);
+        if (groups == null) {
+            groups = new ArrayList();
+        }
+        return (PortletGroup[])groups.toArray(new PortletGroup[0]);
     }
 
     /**
@@ -245,7 +253,7 @@ public class SportletRequestImpl implements SportletRequest {
      *
      * @see PortletGroup
      */
-    public void setGroups(List groups) {
+    public void setGroups(PortletGroup[] groups) {
         req.setAttribute(GridSphereProperties.PORTLETGROUPS, groups);
     }
 

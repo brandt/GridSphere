@@ -10,6 +10,8 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
 
+import java.util.List;
+
 public interface SportletRequest extends PortletRequest {
 
     /**

@@ -180,6 +180,14 @@ public interface UserManagerService extends PortletService {
     public User getUser(String userName);
 
     /**
+     * Retrieves a user object with the given username from this service.
+     *
+     * @param String The user name or login id of the user in question
+     * @throws PermissionDeniedException If approver is not a super user
+     */
+    public User getUserByID(String id);
+
+    /**
      * Checks to see if account exists for a user
      *
      * @param userID the user login ID

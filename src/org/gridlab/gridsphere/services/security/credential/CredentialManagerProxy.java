@@ -45,6 +45,8 @@ public class CredentialManagerProxy
         this.authorizer = new AuthorizationUtility(user, CredentialManagerService.class);
     }
 
+    /****** PORTLET SERVICE PROVIDER METHODS *******/
+
     public void init(PortletServiceConfig config) {
     }
 

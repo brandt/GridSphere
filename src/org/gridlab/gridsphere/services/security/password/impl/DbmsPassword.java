@@ -32,12 +32,18 @@ public class DbmsPassword extends BaseObject implements Password {
      * @sql-name value
      * @required
      */
-    private String value;
+    private String value = new String();
     /**
      * @sql-size 256
      * @sql-name hint
      */
     private String hint = new String();
+
+    /**
+     * @sql-name lifetime
+     * @required
+     */
+    private long lifetime = -1;
     /**
      * @sql-name dateexpires
      */
@@ -76,6 +82,15 @@ public class DbmsPassword extends BaseObject implements Password {
     public void setValue(String value) {
         this.value = value;
     }
+
+    public long getLifetime() {
+        return this.lifetime;
+    }
+
+    public void setLifetime(long lifetime) {
+        this.lifetime = lifetime;
+    }
+
 
     public Date getDateExpires() {
         return this.dateExpires;

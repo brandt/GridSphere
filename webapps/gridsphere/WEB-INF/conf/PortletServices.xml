@@ -37,7 +37,7 @@
         </service-config>
         <service-config>
             <param-name>password</param-name>
-            <param-value>portal</param-value>
+            <param-value></param-value>
         </service-config>
     </service>
 

@@ -22,6 +22,7 @@ import org.gridlab.gridsphere.services.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 import org.gridlab.gridsphere.services.security.acl.impl.UserACL;
 import org.gridlab.gridsphere.services.security.password.PasswordManagerService;
+import org.gridlab.gridsphere.services.security.password.PasswordBean;
 import org.gridlab.gridsphere.services.user.AccountRequest;
 import org.gridlab.gridsphere.services.user.PermissionDeniedException;
 import org.gridlab.gridsphere.services.user.UserManagerService;
@@ -116,14 +117,14 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
                 //throw new PortletServiceUnavailableException(msg);
             }
             /* Create root password */
-            log.info("Creating root password.");
             String password = config.getInitParameter("password", "").trim();
+            log.info("Creating root password " + password);
             if (password.equals("")) {
                 log.info("Root user has no password! Please create one as soon as possible.");
             }
             try {
                 // Create password, but don't try to validate it...
-                this.passwordManager.createPassword(user, password, false);
+                this.passwordManager.savePassword(user, password, false);
             } catch (Exception e) {
                 String msg = "Unable to create password for root user";
                 log.error(msg, e);

@@ -200,7 +200,9 @@ public class UserManagerServiceTest extends ServiceTest {
         try {
           superUser = loginService.login("root", "");
         } catch (AuthenticationException e) {
-            fail("Should be able to login as root!");
+            String msg = "Unable to login as root!";
+            log.error(msg, e);
+            fail(msg);
         }
         return superUser;
     }
