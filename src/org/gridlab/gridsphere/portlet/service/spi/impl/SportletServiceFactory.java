@@ -71,8 +71,10 @@ public class SportletServiceFactory implements PortletServiceFactory {
             descriptor = new SportletServiceDescriptor(servicesPath, mappingPath);
         } catch (IOException e) {
             log.error("IO error unmarshalling " + servicesPath + " using " + mappingPath + " : " + e.getMessage());
+            return;
         } catch (PersistenceManagerException e) {
             log.error("Unable to unmarshall " + servicesPath + " using " + mappingPath + " : " + e.getMessage());
+            return;
         }
         SportletServiceCollection serviceCollection = descriptor.getServiceCollection();
         List services = serviceCollection.getPortletServicesList();
