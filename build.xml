@@ -34,6 +34,7 @@ Copyright:
   <property name="gswebapp.dir"   value="webapps/gridsphere"/>
   <property name="corewebapp.dir" value="webapps/coreportlets"/>
   <property name="test.dir"       value="tests"/>
+  <property name="perf.dir"       value="perf"/>
   <property name="dist.dir"       value="${Name}-${version}" />
   <property name="build.lib"      value="${build.dir}/lib"/>
   <property name="classes.dir"    value="${build.dir}/classes"/>
@@ -407,7 +408,7 @@ Copyright:
         <arg value="org.gridlab.gridsphere.AllJUnitTests"/>
         <classpath>
             <path refid="classpath" />
-            <pathelement location="${src.dir}" />
+            <!--<pathelement location="${src.dir}" />       -->
             <pathelement location="${build.dir}/lib/${Name}.jar"/>
         </classpath>
     </java>
@@ -420,5 +421,29 @@ Copyright:
   <target name="testusermanagerservice" depends="compile">
       <java classname="org.gridlab.gridsphere.services.user.UserManagerServiceTest2" classpathref="classpath"/>
   </target>
+
+
+    <!-- =================================================================== -->
+    <!-- compiles performance tests     -->
+    <!-- =================================================================== -->
+
+    <target name="compileperf" if="junit.present" depends="compile" description="Compiles all performance tests">
+        <javac  srcdir="${perf.dir}"
+		    destdir="${classes.dir}"
+		    classpathref="classpath"
+		    debug="${debug}"
+		    optimize="${optimize}"
+		    deprecation="${deprecation}">
+	    </javac>
+    </target>
+
+
+    <!-- =================================================================== -->
+    <!-- Runs performance tests     -->
+    <!-- =================================================================== -->
+    <target name="perfusermanager" depends="compileperf" >
+        <java classname="org.gridlab.gridsphere.usermanager.PerfUserManager" classpathref="classpath"/>
+    </target>
+
 
 </project>
