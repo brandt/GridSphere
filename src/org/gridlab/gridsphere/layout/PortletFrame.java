@@ -189,7 +189,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         ///// begin portlet frame
         PrintWriter out = res.getWriter();
 
-        out.println("<div id=\"window-main\">");
+        out.println("<div class=\"window-main\">");
 
         titleBar.doRender(event);
 
@@ -199,7 +199,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             out.println(error.getMessage());
         } else {
             if (renderPortlet) {
-                out.println("<div id=\"window-content\">");
+                out.println("<div class=\"window-content\">");
                 UserPortletManager userPortletManager = event.getUserPortletManager();
                 try {
                     userPortletManager.service(portletClass, req, res);

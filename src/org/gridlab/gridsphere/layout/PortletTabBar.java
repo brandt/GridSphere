@@ -234,21 +234,21 @@ public class PortletTabBar extends BasePortletComponent {
         req.setAttribute(LayoutProperties.TABLINKS, tabLinks);
 
         // Render tabs titles
-        out.println("<div id=\"tab-sub-pane\">");
-        out.println("<div class=\"tab--sub-menu\">");
+        out.println("<div class=\"tab-sub-pane\">");
+        out.println("<div class=\"tab-sub-menu\">");
 
         PortletTabPage tabPage;
         for (i = 0; i < tabPages.size(); i++) {
             String title = getTitleAt(i);
             tabPage = (PortletTabPage)tabPages.get(i);
             if (tabPage.isSelected()) {
-                out.println("<span id=\"tab-sub-active\">" + title + "</span>");
+                out.println("<span class=\"tab-sub-active\">" + title + "</span>");
             } else {
-                out.println("<span id=\"tab-sub-inactive\"><a class=\"tab-sub-menu\" href=\"" + tabLinks[i] + "\" >" +  title + "</a></span>");
+                out.println("<span class=\"tab-sub-inactive\"><a class=\"tab-sub-menu\" href=\"" + tabLinks[i] + "\" >" +  title + "</a></span>");
             }
         }
 
-        out.println("</div></div><div id=\"tab-bar\"></div>");
+        out.println("</div></div><div class=\"tab-bar\"></div>");
 
 
         LayoutManager layoutManager = selectedPanel.getLayoutManager();

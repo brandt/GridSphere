@@ -270,12 +270,12 @@ public class PortletTitleBar extends BasePortletComponent {
 
         PrintWriter out = res.getWriter();
 
-        out.println("<div id=\"window-title\">");
+        out.println("<div class=\"window-title\">");
 
         // Output portlet mode icons
         if (modeLinks != null) {
             Iterator modesIt = modeLinks.iterator();
-            out.println("<span id=\"window-icon-left\">");
+            out.println("<span class=\"window-icon-left\">");
             PortletModeLink mode;
             while (modesIt.hasNext()) {
                 mode = (PortletModeLink)modesIt.next();
@@ -290,7 +290,7 @@ public class PortletTitleBar extends BasePortletComponent {
             UserPortletManager userManager = event.getUserPortletManager();
             //req.setPortletSettings(settings);
             try {
-                out.println("<span id=\"window-title-name\">");
+                out.println("<span class=\"window-title-name\">");
                 userManager.doTitle(portletClass, req, res);
                 out.println("</span>");
                 title = "";
@@ -299,13 +299,13 @@ public class PortletTitleBar extends BasePortletComponent {
                 throw new PortletLayoutException("Unable to invoke doTitle on active portlet " + portletClass + "  " + COMPONENT_ID, e);
             }
         } else {
-            out.println("<span id=\"window-title-name\">" + title + "</span>");
+            out.println("<span class=\"window-title-name\">" + title + "</span>");
         }
 
         // Output window state icons
         if (windowLinks != null) {
             Iterator windowsIt = windowLinks.iterator();
-            out.println("<span id=\"window-icon-right\">");
+            out.println("<span class=\"window-icon-right\">");
             PortletStateLink state;
             while (windowsIt.hasNext()) {
                 state = (PortletStateLink)windowsIt.next();

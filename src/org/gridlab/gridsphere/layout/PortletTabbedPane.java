@@ -242,7 +242,7 @@ public class PortletTabbedPane extends BasePortletComponent {
         req.setAttribute(LayoutProperties.TABLINKS, tabLinks);
 
         // Render tabs titles
-        out.println("<div id=\"tab-pane\">");
+        out.println("<div class=\"tab-pane\">");
         out.println("<div class=\"tab-menu\">");
 
         PortletTab tab;
@@ -250,9 +250,9 @@ public class PortletTabbedPane extends BasePortletComponent {
             String title = getTitleAt(i);
             tab = (PortletTab)tabs.get(i);
             if (tab.isSelected()) {
-                out.println("<span id=\"tab-active\">" + title + "</span>");
+                out.println("<span class=\"tab-active\">" + title + "</span>");
             } else {
-                out.println("<span id=\"tab-inactive\"><a class=\"tab-menu\" href=\"" + tabLinks[i] + "\" >" +  title + "</a></span>");
+                out.println("<span class=\"tab-inactive\"><a class=\"tab-menu\" href=\"" + tabLinks[i] + "\" >" +  title + "</a></span>");
             }
         }
 

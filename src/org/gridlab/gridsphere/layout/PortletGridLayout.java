@@ -52,21 +52,30 @@ public class PortletGridLayout extends BaseLayoutManager {
         if (components.size() > rows*cols)
             throw new PortletLayoutException("Number of components specified exceeds rows * columns");
 
+        //out.println("row: "+rows+" columns "+cols);
+
         int max = components.size();
         PortletComponent p = null;
 
         //int gwidth = 100 / cols;
 
         //out.println("<table width=\"" + gwidth + "%\" border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#FFFFFF\">");
-        out.println("<table>");
+        out.println("<table border=\"0\" width=\"100%\">");
+
         while ((i < rows) && (k < max)) {
 
             out.println("<tr>");
             //insets.doRenderFirst(ctx,req,res);
             //insets.doRenderLast(ctx,req,res);
             while ((j < cols) && (k < max)) {
-                out.println("<td>");
                 p = (PortletComponent)components.get(k);
+                //@todo need that for defined with in the porlet component (oliver)
+
+                if (p.getWidth().equals("100%")) {
+                    out.println("<td width=\"100%\" valign=\"top\">");
+                } else {
+                    out.println("<td valign=\"top\">");
+                }
                 if (p.isVisible()) {
                     p.doRender(event);
                 }
