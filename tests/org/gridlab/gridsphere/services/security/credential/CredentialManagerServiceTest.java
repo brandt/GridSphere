@@ -269,6 +269,7 @@ public class CredentialManagerServiceTest extends ServiceTest {
         try {
             mapping = this.credentialManager.createCredentialMapping(this.guestSubject,
                                                                      this.testUser);
+            fail("This is bad. At this point, globus credentials should not be permitted.");
         } catch (CredentialNotPermittedException e) {
             _log.error("This is good. At this point, no globus credentials should be permitted.");
         }
@@ -285,11 +286,13 @@ public class CredentialManagerServiceTest extends ServiceTest {
             mapping = this.credentialManager.createCredentialMapping(this.guestSubject,
                                                                      this.testUser);
         } catch (CredentialNotPermittedException e) {
-            _log.error("This is bad. At this point, globus credentials should be permitted.", e);
+            String msg = "This is bad. At this point, globus credentials should be permitted.";
+            _log.error(msg, e);
+            fail(msg);
         }
         // Testing number of mappings
         _log.info("Testing get all mappings. Should be 1 entry.");
-        hosts = this.credentialManager.getCredentialMappings();
+        mappings = this.credentialManager.getCredentialMappings();
         assertEquals(numMappings+1, mappings.size());
 
         /*** Test get mapping for guest subject. ***/
