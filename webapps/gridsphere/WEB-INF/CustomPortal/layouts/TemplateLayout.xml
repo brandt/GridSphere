@@ -33,7 +33,7 @@ $Id$
     <!-- Footer components (if any) -->
 
     <portlet-footer>
-        <table-layout style="header">
+        <table-layout style="footer">
             <row-layout>
                 <column-layout width="40%"/>
                 <column-layout width="60%">
