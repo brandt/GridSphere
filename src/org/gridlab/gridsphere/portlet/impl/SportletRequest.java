@@ -3,7 +3,7 @@
  * User: novotny
  * Date: Dec 13, 2002
  * Time: 1:58:26 PM
- * To change template for new interface use 
+ * To change template for new interface use
  * Code Style | Class Templates options (Tools | IDE Options).
  */
 package org.gridlab.gridsphere.portlet.impl;
@@ -39,6 +39,17 @@ public interface SportletRequest extends PortletRequest {
      * @see PortletRole
      */
     public void setRoles(PortletGroup group, List roles);
+
+    /**
+     * Returns the roles this user has in the supplied PortletGroup. If no group
+     * is specified, the roles the user has in the BASE group are returned.
+     *
+     * @param group the PortletGroup to query the user's roles or null if BASE group
+     * @returns an array of PortletRole objects
+     *
+     * @see PortletRole
+     */
+    public List getRoles(PortletGroup group);
 
     /**
      * Returns the PortletGroup objects representing the users group membership
