@@ -111,14 +111,14 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
 
     public String toString() {
         String tagstring;
-        if (role == GUEST_ROLE) {
-            tagstring = "GUEST";
+        if (role == SUPER_ROLE) {
+            tagstring = "SUPER";
         } else if (role == USER_ROLE) {
             tagstring = "USER";
         } else if (role == ADMIN_ROLE) {
             tagstring = "ADMIN";
         } else {
-            tagstring = "SUPER";
+            tagstring = "GUEST";
         }
         return tagstring;
     }
