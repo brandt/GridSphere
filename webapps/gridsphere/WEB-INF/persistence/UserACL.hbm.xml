@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 1.1//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="org.gridlab.gridsphere.services.core.security.acl.impl.UserACL"
+        table="useracl"
+        >
+
+        <id
+            name="oid"
+            column="oid"
+            type="java.lang.String"
+            length="32"
+            >
+            <generator class="uuid.hex"/>
+
+        </id>
+
+        <property name="UserID" type="string" column="userid"/>
+        <property name="GroupID" type="string" column="groupid"/>
+        <property name="Status"  column="status"/>
+        <property name="RoleID" column="roleid"/>
+
+    </class>
+
+
+</hibernate-mapping>

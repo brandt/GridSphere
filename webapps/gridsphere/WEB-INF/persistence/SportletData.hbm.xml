@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 1.1//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="org.gridlab.gridsphere.portlet.impl.SportletData"
+        table="sportletdata"
+        >
+
+        <id
+            name="oid"
+            column="oid"
+            type="java.lang.String"
+            length="32"
+            >
+            <generator class="uuid.hex"/>
+
+        </id>
+
+        <property name="UserID" type="string" column="userid"/>
+        <property name="PortletID" type="string" column="portletid"/>
+        <map name="Attributes" table="sportletdataattributes">
+            <key column="oid"/>
+            <index column="attribute" type="string"/>
+            <element column="value" type="string"/>
+        </map>
+
+    </class>
+
+
+</hibernate-mapping>
