@@ -5,6 +5,13 @@
     <portlet-app-name>Hello World Portlet Application</portlet-app-name>
     <portlet href="WEB-INF/web.xml#Servlet_1902648613" id="Portlet_1902648613">
         <portlet-name>Hello World</portlet-name>
+        <description>Hello World - Sample Portlet #1</description>
+        <group>
+            <group-name>ANY</group-name>
+        </group>
+        <user>
+            <user-role>GUEST</user-role>
+        </user>
     </portlet>
 </portlet-app>
 

@@ -39,7 +39,29 @@
             <bind-xml name="portlet-name"/>
         </field>
 
+        <field name="Description" type="string">
+            <bind-xml name="portlet-description"/>
+        </field>
+
+        <field name="Group" type="org.gridlab.gridsphere.portletcontainer.descriptor.Group" collection="vector">
+            <bind-xml name="group"/>
+        </field>
+
+        <field name="User" type="org.gridlab.gridsphere.portletcontainer.descriptor.User" collection="vector">
+            <bind-xml name="user"/>
+        </field>
     </class>
 
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.Group">
+        <field name="GroupName" type="string">
+            <bind-xml name="group-name"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portletcontainer.descriptor.User">
+        <field name="UserRole" type="string">
+            <bind-xml name="user-role"/>
+        </field>
+    </class>
 
 </mapping>
