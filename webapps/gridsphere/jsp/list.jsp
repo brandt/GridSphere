@@ -1,6 +1,6 @@
 <%@ page import="java.util.List,
                  java.util.Iterator,
-                 org.gridlab.gridsphere.portlets.manager.tomcat.TomcatWebAppResult"%>
+                 org.gridlab.gridsphere.portlets.core.tomcat.TomcatWebAppResult"%>
 
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
@@ -27,7 +27,7 @@
 <% List descriptions = result.getWebAppDescriptions(); %>
 <% Iterator it = descriptions.iterator(); %>
 <% while (it.hasNext()) { %>
-<% org.gridlab.gridsphere.portlets.manager.tomcat.TomcatWebAppResult.TomcatWebAppDescription description = (org.gridlab.gridsphere.portlets.manager.tomcat.TomcatWebAppResult.TomcatWebAppDescription)it.next(); %>
+<% org.gridlab.gridsphere.portlets.core.tomcat.TomcatWebAppResult.TomcatWebAppDescription description = (org.gridlab.gridsphere.portlets.core.tomcat.TomcatWebAppResult.TomcatWebAppDescription)it.next(); %>
     <tr>
     <td><%= description.getContextPath() %></td>
     <td><%= description.getRunning() %></td>
