@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.ActionSubmitBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -42,12 +43,28 @@ public class ActionSubmitTag extends ActionTag {
 
     public int doStartTag() throws JspException {
         if (!beanId.equals("")) {
-            actionSubmitBean = (ActionSubmitBean) pageContext.getAttribute(getBeanKey());
+            actionSubmitBean = (ActionSubmitBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (actionSubmitBean == null) {
                 actionSubmitBean = new ActionSubmitBean();
+            } else {
+                if (actionSubmitBean.getAction() != null) {
+                    action = actionSubmitBean.getAction();
+                }
+                if (actionSubmitBean.getValue() != null) {
+                    value = actionSubmitBean.getValue();
+                }
+                if (actionSubmitBean.getKey() != null) {
+                    key = actionSubmitBean.getKey();
+                }
             }
         } else {
             actionSubmitBean = new ActionSubmitBean();
+        }
+
+        if (!beanId.equals("")) {
+            this.updateBaseComponentBean(actionSubmitBean);
+        } else {
+            this.setBaseComponentBean(actionSubmitBean);
         }
 
         paramBeans = new ArrayList();
@@ -59,12 +76,6 @@ public class ActionSubmitTag extends ActionTag {
         if (!key.equals("")) {
             actionSubmitBean.setKey(key);
             value = getLocalizedText(key);
-        }
-
-        if (!beanId.equals("")) {
-            this.updateBaseComponentBean(actionSubmitBean);
-        } else {
-            this.setBaseComponentBean(actionSubmitBean);
         }
 
         actionSubmitBean.setAction(action);
