@@ -415,40 +415,37 @@ Copyright:
     </target>
 
     <target name="db-postgresql" depends="mapping" description="creates postgres tables">
-      <sql
-          driver="org.postgresql.Driver"
-          url="jdbc:postgresql:gridsphere"
-          userid="portal"
-          password=""
-          onerror="continue"
-          src="${build.db}/dbcreate.sql">
-          <classpath refid="classpath"/>
+      <sql driver="org.postgresql.Driver"
+           url="jdbc:postgresql:gridsphere"
+           userid="portal"
+           password=""
+           onerror="continue"
+           src="${build.db}/dbcreate.sql">
+           <classpath refid="classpath"/>
         </sql>
     </target>
 
     <target name="db-hsqldb" depends="check-database-hsqldb,mapping" description="creates hsqldb tables" if="var_force_database">
-      <sql
-          driver="org.hsqldb.jdbcDriver"
-          url="jdbc:hsqldb:${build.db}/gridsphere-db"
-          userid="sa"
-          password=""
-          onerror="continue"
-          src="${build.db}/dbcreate.sql">
-          <classpath refid="classpath"/>
-        </sql>
+      <sql driver="org.hsqldb.jdbcDriver"
+           url="jdbc:hsqldb:${build.db}/gridsphere-db"
+           userid="sa"
+           password=""
+           onerror="continue"
+           src="${build.db}/dbcreate.sql">
+           <classpath refid="classpath"/>
+      </sql>
     </target>
 
     <target name="db-hsqldb-junit" depends="mapping" description="creates hsqldb tables for unit tests">
       <mkdir dir="db"/>
-      <sql
-          driver="org.hsqldb.jdbcDriver"
-          url="jdbc:hsqldb:${build.db}/junit-db"
-          userid="sa"
-          password=""
-          onerror="continue"
-          src="${build.db}/dbcreate.sql">
-          <classpath refid="classpath"/>
-        </sql>
+      <sql driver="org.hsqldb.jdbcDriver"
+           url="jdbc:hsqldb:${build.db}/junit-db"
+           userid="sa"
+           password=""
+           onerror="continue"
+           src="${build.db}/dbcreate.sql">
+           <classpath refid="classpath"/>
+      </sql>
     </target>
 
 <!-- +++++++++++++++ START DOCUMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
@@ -689,7 +686,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Deploys GridSphere portlets to a local server                       -->
     <!-- =================================================================== -->
-    <target name="deploy-portlets" depends="deploy-manager-portlet, deploy-core-portlets, deploy-grid-portlets, deploy-example-portlets" description="Deploys GridSphere portlets to a local server">
+    <target name="deploy-portlets" depends="deploy-manager-portlet, deploy-core-portlets, deploy-grid-portlets" description="Deploys GridSphere portlets to a local server">
     </target>
 
     <!-- =================================================================== -->

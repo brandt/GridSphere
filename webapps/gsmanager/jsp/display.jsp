@@ -7,7 +7,6 @@
 The Portlet Application Manager allows you to view and manage portlet
 web applications.
 
-
 <gs:actionlink action="list" label="view portlet web applications"/>
 
 <p>
@@ -23,18 +22,19 @@ web applications.
 
 <table border=0 cellpadding=3 cellspacing=0 width="178"><tr><td valign=top>
 
-    <gs:fileform action="install">
+ <gs:fileform action="install">
     <table cellspacing=2 cellpadding=2 border=0>
     <tr>
     <td align="right">File: </td>
     <td align="left"><gs:fileinput name="filename" size="8" maxlength="20"/></td>
     </tr>
     <tr>
-    <td colspan=5 align="center"><gs:submit name="option" value="Login"/></td>
+    <td colspan=5 align="center"><gs:submit name="option" value="Upload Portlet WAR"/></td>
     </tr>
     </table>
-    </gs:fileform>
+ </gs:fileform>
 
 </td>
 </tr>
 </table>
+
