@@ -159,7 +159,6 @@ Build include file for the GridSphere Portal source code, see build.xml
 
     -->
 
- 
 
     <target name="jsp-precompile" depends="gridsphere-ui-tags-jar">
 
@@ -170,16 +169,22 @@ Build include file for the GridSphere Portal source code, see build.xml
         <taskdef name="jspc50" classname="org.apache.jasper.JspC" classpathref="classpath">
         </taskdef>
 
+        
         <mkdir dir="${gridsphere.build}/jsp/source"/>
         <mkdir dir="${gridsphere.build}/jsp/classes"/>
+        <if>
+            <equals arg1="${gridsphere.useprecompiledjsp}" arg2="true"/>
+            <then>
 
-        <jspc50 outputDir="${gridsphere.build}/jsp/source"
-            uriroot="webapps/gridsphere/"
-            webXmlFragment="${gridsphere.build}/jsp/web.inc"
-            validateXml="false">
-            <!--                  <include name="**/*.jsp" />
-                        <exclude name="**/include/**/*.jsp" />-->
-        </jspc50>
+                <jspc50 outputDir="${gridsphere.build}/jsp/source"
+                    uriroot="webapps/gridsphere/"
+                    webXmlFragment="${gridsphere.build}/jsp/web.inc"
+                    validateXml="false">
+                    <!--                  <include name="**/*.jsp" />
+                                <exclude name="**/include/**/*.jsp" />-->
+                </jspc50>
+            </then>
+        </if>
 
     </target>
 
@@ -201,9 +206,14 @@ Build include file for the GridSphere Portal source code, see build.xml
     <!-- =================================================================== -->
 
     <target name="gridsphere-jsp-jar" depends="jsp-compile">
-        <jar jarfile="${build.lib}/gridsphere-jsp.jar" basedir="${gridsphere.build}/jsp/classes/">
-            <include name="**"/>
-        </jar>
+        <if>
+            <equals arg1="${gridsphere.useprecompiledjsp}" arg2="true"/>
+            <then>
+                <jar jarfile="${build.lib}/gridsphere-jsp.jar" basedir="${gridsphere.build}/jsp/classes/">
+                    <include name="**"/>
+                </jar>
+            </then>
+        </if>
     </target>
 
 </project>
