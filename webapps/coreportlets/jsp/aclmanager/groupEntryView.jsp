@@ -37,19 +37,17 @@
     }
 
   </script>
-<table border="0" cellspacing="1" cellpadding="2" width="100%">
+<table class="portlet-pane" cellspacing="1">
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td align="center" bgcolor="#6666FF">
-            <font color="WHITE"><strong>
+          <td class="portlet-frame-title">
               Group Entry for User <%=aclManagerBean.getGroupEntryUser().getUserName()%>
-            </strong></font>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-actions">
             <input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_VIEW%>"
                    value="Back To Group"
@@ -69,44 +67,44 @@
   </tr>
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td width="200" bgcolor="#CCCCCC">
+          <td class="portlet-frame-label" width="200">
              Entry:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
              <%=aclManagerBean.getGroupEntryID()%>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-label">
              Group:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
              <%=aclManagerBean.getGroupEntry().getGroup().getName()%>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-label">
              User:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
              <%=aclManagerBean.getGroupEntry().getUser().getUserName()%>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-label">
              Full Name:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
              <%=aclManagerBean.getGroupEntry().getUser().getFullName()%>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-label">
              Role:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
              <%=aclManagerBean.getGroupEntry().getRole().toString()%>
           </td>
         </tr>

@@ -29,21 +29,14 @@
     }
 
   </script>
-<table border="0" cellspacing="1" cellpadding="2" width="100%">
+<table class="portlet-pane" cellspacing="1">
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td align="center" bgcolor="#6666FF">
-            <font color="WHITE"><strong>
-              Delete Group [<%=aclManagerBean.getGroupName()%>]
-            </strong></font>
-          </td>
-        </tr>
-        <tr>
-          <td bgcolor="WHITE">
-            Click "<font color="DARKRED">Confirm Delete</font>" to delete this group,
-            "<font color="DARKRED">Cancel Delete</font>" otherwise.
+          <td class="portlet-frame-message">
+            Click "<span style="portlet-text-alert">Confirm Delete</span>" to delete this group,
+            "<span style="portlet-text-alert">Cancel Delete</span>" otherwise.
           </td>
         </tr>
       </table>
@@ -51,9 +44,20 @@
   </tr>
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-title">
+              Delete Group [<%=aclManagerBean.getGroupName()%>]
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="100%">
+        <tr>
+          <td class="portlet-frame-actions">
             <input type="submit"
                    name="<%=AccessControllerBean.ACTION_GROUP_DELETE_CONFIRM%>"
                    value="Confirm Delete"
@@ -69,28 +73,28 @@
   </tr>
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td width="200" bgcolor="#CCCCCC">
+          <td class="portlet-frame-label" width="200">
               Group Name:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
              <%=aclManagerBean.getGroupName()%>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-label">
               Group Label:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
              <%=aclManagerBean.getGroupName()%>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-label">
               Group Description:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
              <%=aclManagerBean.getGroupName()%>
           </td>
         </tr>
@@ -99,50 +103,40 @@
   </tr>
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
+<% Iterator groupEntries = aclManagerBean.getGroupEntryList().iterator();
+    if (groupEntries.hasNext()) { %>
         <tr>
-          <td bgcolor="#6666FF">
-            <font color="WHITE">
-              User
-            </font>
+          <td class="portlet-frame-header">
+            User
           </td>
-          <td bgcolor="#6666FF">
-            <font color="WHITE">
-              Full Name
-            </font>
+          <td class="portlet-frame-header">
+            Full Name
           </td>
-          <td bgcolor="#6666FF">
-            <font color="WHITE">
-              Role
-            </font>
+          <td class="portlet-frame-header">
+            Role
           </td>
         </tr>
-<% Iterator groupEntries = aclManagerBean.getGroupEntryList().iterator();
-    if (groupEntries.hasNext()) {
-        while (groupEntries.hasNext()) {
+<%      while (groupEntries.hasNext()) {
             GroupEntry groupEntry = (GroupEntry)groupEntries.next();
             User groupEntryUser = groupEntry.getUser();
             PortletRole groupEntryRole = groupEntry.getRole(); %>
         <tr>
-          <td bgcolor="WHITE">
-            <a href="javascript:AccessControllerPortlet_viewGroupEntry_onClick('<%=groupEntryUser.getID()%>')">
+          <td class="portlet-frame-text">
               <%=groupEntryUser.getUserID()%>
-            </a>
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
             <%=groupEntryUser.getFullName()%>
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
             <%=groupEntryRole%>
           </td>
         </tr>
 <%     }
     } else { %>
         <tr>
-          <td bgcolor="WHITE" colspan="4">
-            <font color="DARKRED">
-              No users in portlet group.
-            </font>
+          <td class="portlet-frame-message-alert">
+              There are no users in this group.
           </td>
         </tr>
 <%  } %>

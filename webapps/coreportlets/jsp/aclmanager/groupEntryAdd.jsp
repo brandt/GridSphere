@@ -47,20 +47,24 @@
 
   </script>
 <%  List usersNotInGroup = aclManagerBean.getUsersNotInGroup(); %>
-<table border="0" cellspacing="1" cellpadding="2" width="100%">
+<table class="portlet-pane" cellspacing="1">
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td align="center" bgcolor="#6666FF">
-            <font color="WHITE"><strong>
+          <td class="portlet-frame-title">
               Add Users To Group [<%=aclManagerBean.getGroupName()%>]
-            </strong></font>
           </td>
         </tr>
+      </table>
+    </td>
+  </tr>
 <%  if (usersNotInGroup.size() == 0) { %>
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-message-alert">
             There are no users to add to this group.
           </td>
         </tr>
@@ -69,9 +73,9 @@
   </tr>
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-actions">
             <input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_VIEW%>"
                    value="Back To Group"
@@ -86,8 +90,11 @@
     </td>
   </tr>
 <%  } else { %>
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-message">
             Select the users you want to add to this group and specify the role each user plays within this group.
           </td>
         </tr>
@@ -96,7 +103,7 @@
   </tr>
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td bgcolor="#CCCCCC">
             <input type="button"
@@ -114,51 +121,41 @@
   </tr>
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td bgcolor="#6666FF" align="center" valign="middle" width="12">
-            <font size="-1">
+          <td class="portlet-frame-header-checkbox">
               <input type="checkbox"
                name="groupEntryUserID"
                value=""
                onClick="javascript:GridSphere_CheckBoxList_checkAll(document.AccessControllerPortlet.groupEntryUserID)"/>
-            </font>
           </td>
-          <td bgcolor="#6666FF">
-            <font color="WHITE">
+          <td class="portlet-frame-header">
               User Name
-            </font>
           </td>
-          <td bgcolor="#6666FF">
-            <font color="WHITE">
+          <td class="portlet-frame-header">
               Full Name
-            </font>
           </td>
-          <td bgcolor="#6666FF">
-            <font color="WHITE">
+          <td class="portlet-frame-header">
               Group Role
-            </font>
           </td>
         </tr>
 <%      for (int ii = 0; ii < usersNotInGroup.size(); ++ii) {
             User user = (User)usersNotInGroup.get(ii); %>
         <tr>
-          <td bgcolor="#CCCCCC" align="center" valign="middle" width="12">
-            <font size="-1">
+          <td class="portlet-frame-entry-checkbox">
               <input type="checkbox"
                name="groupEntryUserID"
                value="<%=user.getID()%>"
                onClick="javascript:GridSphere_CheckBoxList_onClick(document.AccessControllerPortlet.groupEntryUserID,
                                                                    this)"/>
-            </font>
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
             <%=user.getUserName()%>
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
             <%=user.getFullName()%>
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
              <select name="groupEntryRoleName">
                <option label="USER"
                        value="<%=user.getID()%>:user"/>

@@ -30,38 +30,34 @@
     }
 
   </script>
+<table class="portlet-pane" cellspacing="1">
 <% if (aclManagerBean.isFormInvalid()) { %>
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td bgcolor="WHITE">
-            <font color="DARKRED"><bold>
-              <%=aclManagerBean.getFormInvalidMessage()%>
-            </bold></font>
+          <td class="portlet-frame-message-alert">
+            <%=aclManagerBean.getFormInvalidMessage()%>
           </td>
         </tr>
       </table>
     </td>
   </tr>
 <% } %>
-<table border="0" cellspacing="1" cellpadding="2" width="100%">
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td align="center" bgcolor="#6666FF">
-            <font color="WHITE"><strong>
+          <td class="portlet-frame-title">
 <% if (aclManagerBean.getGroupID().equals("")) { %>
               New Group
 <% } else { %>
               Edit Group [<%=aclManagerBean.getGroupName()%>]
 <% } %>
-            </strong></font>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-actions">
             <input type="submit"
                    name="<%=AccessControllerBean.ACTION_GROUP_EDIT_CONFIRM%>"
                    value="Save Group"
@@ -77,32 +73,32 @@
   </tr>
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td width="200" bgcolor="#CCCCCC">
+          <td class="portlet-frame-label" width="200">
                Group Name
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-input">
              <input type="text"
                     name="groupName"
                     value="<%=aclManagerBean.getGroupName()%>"/>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-label">
               Group Label:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-input">
              <input type="text"
                     name="groupLabel"
                     value=""/>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-label">
               Group Description:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-input">
              <input type="text"
                     name="groupLabel"
                     value=""/>

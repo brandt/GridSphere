@@ -30,20 +30,13 @@
     }
 
   </script>
-<table border="0" cellspacing="1" cellpadding="2" width="100%">
+<table class="portlet-pane" cellspacing="1">
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td align="center" bgcolor="#6666FF">
-            <font color="WHITE"><strong>
-              Deleted Group [<%=aclManagerBean.getGroupName()%>]
-            </strong></font>
-          </td>
-        </tr>
-        <tr>
-          <td bgcolor="WHITE">
-            The following group was <strong>deleted</strong>.
+          <td class="portlet-frame-message">
+            The following group was <span style="portlet-text-bold">deleted</span>.
           </td>
         </tr>
       </table>
@@ -51,9 +44,19 @@
   </tr>
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-title">
+              Deleted Group [<%=aclManagerBean.getGroupName()%>]
+          </td>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="100%">
+        <tr>
+          <td class="portlet-frame-actions">
             <input type="submit"
                    name="<%=AccessControllerBean.ACTION_GROUP_LIST%>"
                    value="List Groups"
@@ -69,28 +72,28 @@
   </tr>
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td width="200" bgcolor="#CCCCCC">
+          <td class="portlet-frame-label" width="200">
               Group Name:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
              <%=aclManagerBean.getGroupName()%>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-label">
               Group Label:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
              <%=aclManagerBean.getGroupName()%>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-label">
               Group Description:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
              <%=aclManagerBean.getGroupName()%>
           </td>
         </tr>

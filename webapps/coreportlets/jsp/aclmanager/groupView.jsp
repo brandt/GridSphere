@@ -87,19 +87,17 @@
     }
 
   </script>
-<table border="0" cellspacing="1" cellpadding="2" width="100%">
+<table class="portlet-pane" cellspacing="1">
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td align="center" bgcolor="#6666FF">
-            <font color="WHITE"><strong>
+          <td class="portlet-frame-title">
               View Group [<%=aclManagerBean.getGroupName()%>]
-            </strong></font>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-actions">
             <input type="submit"
                    name="<%=AccessControllerBean.ACTION_GROUP_LIST%>"
                    value="List Groups"
@@ -131,28 +129,28 @@
   </tr>
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td width="200" bgcolor="#CCCCCC">
+          <td class="portlet-frame-label" width="200">
               Group Name:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
              <%=aclManagerBean.getGroupName()%>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-label">
               Group Label:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
              <%=aclManagerBean.getGroupName()%>
           </td>
         </tr>
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-label">
               Group Description:&nbsp;
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
              <%=aclManagerBean.getGroupName()%>
           </td>
         </tr>
@@ -161,32 +159,24 @@
   </tr>
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
 <% Iterator groupEntries = aclManagerBean.getGroupEntryList().iterator();
    if (groupEntries.hasNext()) { %>
         <tr>
-          <td bgcolor="#6666FF" align="center" valign="middle" width="12">
-            <font size="-1">
+          <td class="portlet-frame-header-checkbox">
               <input type="checkbox"
                name="groupEntryID"
                value=""
                onClick="javascript:GridSphere_CheckBoxList_checkAll(document.AccessControllerPortlet.groupEntryID)"/>
-            </font>
           </td>
-          <td bgcolor="#6666FF">
-            <font color="WHITE">
+          <td class="portlet-frame-header" width="100">
               User
-            </font>
           </td>
-          <td bgcolor="#6666FF">
-            <font color="WHITE">
+          <td class="portlet-frame-header" width="150">
               Full Name
-            </font>
           </td>
-          <td bgcolor="#6666FF">
-            <font color="WHITE">
+          <td class="portlet-frame-header" width="100">
               Role
-            </font>
           </td>
         </tr>
 <%     while (groupEntries.hasNext()) {
@@ -194,7 +184,7 @@
            User groupEntryUser = groupEntry.getUser();
            PortletRole groupEntryRole = groupEntry.getRole(); %>
         <tr>
-          <td bgcolor="#CCCCCC" align="center" valign="middle" width="12">
+          <td class="portlet-frame-entry-checkbox">
             <font size="-1">
               <input type="checkbox"
                name="groupEntryID"
@@ -203,23 +193,21 @@
                                                                    this)"/>
             </font>
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
             <%=groupEntryUser.getUserID()%>
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
             <%=groupEntryUser.getFullName()%>
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
             <%=groupEntryRole%>
           </td>
         </tr>
 <%     }
    } else { %>
         <tr>
-          <td bgcolor="WHITE" colspan="4">
-            <font color="DARKRED">
-              No users in this group.
-            </font>
+          <td class="portlet-frame-message-alert">
+            There are no users in this group.
           </td>
         </tr>
   </tr>

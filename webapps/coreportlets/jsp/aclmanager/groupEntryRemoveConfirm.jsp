@@ -28,19 +28,13 @@
     }
 
   </script>
+<table class="portlet-pane" cellspacing="1">
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td align="center" bgcolor="#6666FF">
-            <font color="WHITE"><strong>
-             Entries Removed From Group [<%=aclManagerBean.getGroupName()%>]
-            </strong></font>
-          </td>
-        </tr>
-        <tr>
-          <td bgcolor="WHITE">
-            The following entries were <strong>removed</strong> from this group.
+          <td class="portlet-frame-message">
+            The following entries were <span style="portlet-text-bold">removed</span> from this group.
           </td>
         </tr>
       </table>
@@ -48,9 +42,19 @@
   </tr>
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td bgcolor="#CCCCCC">
+          <td class="portlet-frame-title">
+             Entries Removed From Group [<%=aclManagerBean.getGroupName()%>]
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="100%">
+        <tr>
+          <td class="portlet-frame-actions">
             <input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_VIEW%>"
                    value="Back To Group"
@@ -66,22 +70,16 @@
   </tr>
   <tr>
     <td>
-      <table bgcolor="BLACK" border="0" cellspacing="1" cellpadding="2" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
-          <td bgcolor="#6666FF">
-            <font color="WHITE">
+          <td class="portlet-frame-header" width="100">
               User
-            </font>
           </td>
-          <td bgcolor="#6666FF">
-            <font color="WHITE">
+          <td class="portlet-frame-header" width="150">
               Full Name
-            </font>
           </td>
-          <td bgcolor="#6666FF">
-            <font color="WHITE">
+          <td class="portlet-frame-header" width="100">
               Role
-            </font>
           </td>
         </tr>
 <% Iterator groupEntries = aclManagerBean.getGroupEntryList().iterator();
@@ -90,13 +88,13 @@
         User groupEntryUser = groupEntry.getUser();
         PortletRole groupEntryRole = groupEntry.getRole(); %>
         <tr>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
             <%=groupEntryUser.getUserID()%>
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
             <%=groupEntryUser.getFullName()%>
           </td>
-          <td bgcolor="WHITE">
+          <td class="portlet-frame-text">
             <%=groupEntryRole%>
           </td>
         </tr>
