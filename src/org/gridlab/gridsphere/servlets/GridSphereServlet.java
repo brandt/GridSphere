@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.servlets;
 
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.hibernate.DBTask;
 import org.gridlab.gridsphere.layout.PortletLayoutEngine;
 import org.gridlab.gridsphere.layout.PortletPageFactory;
@@ -34,6 +35,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
+import java.net.SocketException;
 
 
 /**
@@ -492,6 +494,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         } catch (SecurityException e) {
             // this gets thrown if a security policy applies to the file. see java.io.File for details.
             log.error("A security exception occured!", e);
+        } catch (SocketException e) {
+            log.error("Caught SocketException: " + e.getMessage());    
         } catch (IOException e) {
             log.error("Caught IOException", e);
             //response.sendError(HttpServletResponse.SC_INTERNAL_SERVER,e.getMessage());
