@@ -45,4 +45,9 @@ public interface PortletMessageManager {
      */
     public void clearAllMessages();
 
+    public void removeAllMessages();
+
+    public void removeMessages(String concretePortletID);
+
+    public void removeMessage(String concretePortletID, PortletMessage message);
 }
