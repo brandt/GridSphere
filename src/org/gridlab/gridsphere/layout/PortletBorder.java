@@ -18,6 +18,8 @@ public class PortletBorder {
     private String font = "Arial, Helvetica, sans-serif";
     private String lineColor = "#336699";
     private String thickness = "1";
+    private Boolean configMode = Boolean.TRUE;
+    private Boolean windowMode = Boolean.TRUE;
 
     public PortletBorder() {}
 
@@ -69,6 +71,22 @@ public class PortletBorder {
         this.thickness = thickness;
     }
 
+    public void setConfigMode(boolean configMode) {
+        this.configMode = new Boolean(configMode);
+    }
+
+    public void setWindowMode(boolean windowMode) {
+        this.windowMode = new Boolean(windowMode);
+    }
+
+    public boolean getConfigMode() {
+        return configMode.booleanValue();
+    }
+
+    public boolean getWindowMode() {
+        return windowMode.booleanValue();
+    }
+
     public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
         log.debug("in doRender()");
         try {
@@ -77,6 +95,8 @@ public class PortletBorder {
             req.setAttribute("linecolor", lineColor);
             req.setAttribute("font", font);
             req.setAttribute("titlecolor", titleColor);
+            req.setAttribute("configmode", configMode.toString());
+            req.setAttribute("windowmode", windowMode.toString());
             ctx.include("/WEB-INF/conf/layout/portlet-border.jsp", req, res);
         } catch (PortletException e) {
             log.error("Unable to include component JSP", e);
