@@ -29,7 +29,7 @@ Version: $Id$
 }
 
 .tab-active {
-   padding: 5px;
+   padding: 0px;
    padding-bottom: 1px;
    margin-bottom: 0px;
    color:white;
@@ -53,7 +53,7 @@ Version: $Id$
 a.tab-menu {
   text-decoration:none;
   color: black;
-   font-size:10px;
+  font-size:10px;
 }
 
 a.tab-menu:link {
@@ -70,7 +70,6 @@ a.tab-menu:active {
 
 /*  subpane */
 
-
 .tab-sub-active {
     border: 1px solid #397df3;
     font-weight: normal;
@@ -80,7 +79,6 @@ a.tab-menu:active {
     padding-bottom: 0px;
     padding-top: 0px;
     padding-left: 0px;
-
 }
 
 .tab-sub-inactive {
@@ -101,7 +99,6 @@ a.tab-menu:active {
    border-right: 1px solid black;
    border-left: 1px solid black;
 }
-
 
 a.tab-sub-menu {
     text-decoration:none;
@@ -127,3 +124,24 @@ a.tab-sub-menu:active {
 
 
 
+a.tab-sub-menu-active {
+    text-decoration:none;
+    font-size:10px;
+    color: white;
+}
+
+a.tab-sub-menu-active:link {
+  border: 1px solid #397df3;
+}
+
+a.tab-sub-menu-active:visited {
+  border: 1px solid #397df3;
+}
+
+a.tab-sub-menu-active:hover {
+  border: 1px dashed black;
+}
+
+a.tab-sub-menu-active:active {
+  color: #ebebeb;
+}
