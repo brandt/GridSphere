@@ -15,6 +15,5 @@ public interface PortletGroup {
 
     public int getID();
 
-    public int getGroup();
 
 }
