@@ -321,7 +321,6 @@ Copyright:
         <jar jarfile="${build.lib}/gridsphere-ui-tags.jar" basedir="${build.classes}">
             <include name="gridsphere/log4j.properties"/>
             <include name="org/gridlab/gridsphere/provider/portlet/**"/>
-            <exclude name="org/gridlab/gridsphere/provider/portlet/ActionPortlet.class"/>
             <include name="org/gridlab/gridsphere/provider/portletui/tags/**"/>
             <metainf dir="${gswebapp.dir}/WEB-INF/tlds"/>
         </jar>
@@ -336,7 +335,6 @@ Copyright:
         </copy>
         <jar jarfile="${build.lib}/gridsphere-provider.jar" basedir="${build.classes}">
             <include name="org/gridlab/gridsphere/provider/event/**"/>
-            <include name="org/gridlab/gridsphere/provider/portlet/ActionPortlet.class"/>
             <include name="org/gridlab/gridsphere/provider/portletui/beans/**"/>
             <include name="org/gridlab/gridsphere/provider/portletui/model/**"/>
             <include name="gridsphere/**"/>
@@ -648,7 +646,7 @@ Copyright:
                 <exclude name="*.LICENSE"/>
             </fileset>
             <fileset dir="${build.lib}">
-                <exclude name="gridsphere-test.jar"/>
+                <exclude name="gridsphere-test.jar"/>             
                 <exclude name="gridsphere-ui-tags.jar"/>
                 <exclude name="gridsphere-provider.jar"/>
                 <exclude name="coreportlets.jar"/>
