@@ -16,9 +16,8 @@ import org.gridlab.gridsphere.services.security.acl.impl2.UserACL;
 import org.gridlab.gridsphere.services.user.impl.AccountRequestImpl;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.ConfigurationException;
-import org.gridlab.gridsphere.core.persistence.CreateException;
-import org.gridlab.gridsphere.core.persistence.PersistenceException;
 import org.gridlab.gridsphere.core.persistence.DeleteException;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.framework.TestResult;
@@ -65,7 +64,7 @@ public class UserManagerServiceTest2 extends ServiceTest {
         } catch (Exception e) {
             log.error("Unable to initialize services: ", e);
         }
-        pm = new PersistenceManagerRdbms();
+        pm = PersistenceManagerRdbms.getInstance();
         System.out.println("Clean up the tables...");
 
         try {
@@ -73,7 +72,7 @@ public class UserManagerServiceTest2 extends ServiceTest {
             pm.deleteList("select u from org.gridlab.gridsphere.portlet.impl.SportletUserImpl u");
             pm.deleteList("select u from org.gridlab.gridsphere.portlet.impl.SportletGroup u");
             pm.deleteList("select u from org.gridlab.gridsphere.services.security.acl.impl2.UserACL u");
-        } catch (PersistenceException e) {
+        } catch (PersistenceManagerException e) {
             log.error("Exception " + e);
         }
 
@@ -387,7 +386,7 @@ public class UserManagerServiceTest2 extends ServiceTest {
         try {
             pm.create(root);
             pm.create(rootacl);
-        } catch (PersistenceException e) {
+        } catch (PersistenceManagerException e) {
             log.error("Exception " + e);
         }
 
