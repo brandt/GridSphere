@@ -57,9 +57,14 @@
             <portlet-tab label="utilities" title="Utilities">
                 <table-layout>
                     <row-layout>
-                        <column-layout>
+                        <column-layout width="50%">
                             <portlet-frame label="notepad">
                                 <portlet-class>org.gridlab.gridsphere.portlets.core.notepad.NotePadPortlet.1</portlet-class>
+                            </portlet-frame>
+                        </column-layout>
+                        <column-layout width="50%">
+                            <portlet-frame label="textmessaging">
+                                <portlet-class>org.gridlab.gridsphere.portlets.core.messaging.TextMessagingPortlet.1</portlet-class>
                             </portlet-frame>
                         </column-layout>
                     </row-layout>
