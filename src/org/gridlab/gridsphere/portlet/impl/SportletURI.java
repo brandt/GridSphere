@@ -173,9 +173,15 @@ public class SportletURI implements PortletURI {
             if (!firstParam)
                 url += "&";
             String name = (String)it.next();
+
             String encname = URLEncoder.encode(name);
-            String encvalue = URLEncoder.encode((String) store.get(name));
-            url += encname + "=" + encvalue;
+            String val = (String) store.get(name);
+            if (val != null) {
+                String encvalue = URLEncoder.encode(val);
+                url += encname + "=" + encvalue;
+            } else {
+                url += encname;
+            }
             firstParam = false;
         }
         /*
