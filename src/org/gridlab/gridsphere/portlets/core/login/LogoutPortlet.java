@@ -4,10 +4,7 @@
  */
 package org.gridlab.gridsphere.portlets.core.login;
 
-import org.gridlab.gridsphere.portlet.AbstractPortlet;
-import org.gridlab.gridsphere.portlet.PortletException;
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.*;
 
 import java.io.IOException;
 

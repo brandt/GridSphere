@@ -277,7 +277,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             } else {
                 if (titleBar != null) {
                     Portlet.Mode mode = titleBar.getPortletMode();
-                    System.err.println("setting mode in " + portletClass + " to " + mode.toString());
+                    //System.err.println("setting mode in " + portletClass + " to " + mode.toString());
                     req.setMode(mode);
                 } else {
                     req.setMode(Portlet.Mode.VIEW);
@@ -298,7 +298,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
             // now perform actionPerformed on Portlet if it has an action
 
-            System.err.println("in PortletFrame action invoked for " + portletClass);
+            //System.err.println("in PortletFrame action invoked for " + portletClass);
             if (event.hasAction()) {
                 DefaultPortletAction action = event.getAction();
                 if (action.getName() != "") {

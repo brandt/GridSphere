@@ -163,9 +163,9 @@ public abstract class PortletAdapter extends Portlet {
                     doEdit(request, response);
                     break;
                 case Portlet.Mode.CONFIGURE_MODE:
-                    System.err.println("about to invoke configure mode");
+                    //System.err.println("about to invoke configure mode");
                     if (role.compare(role, PortletRole.ADMIN) < 0) {
-                        log.debug("user not priveledged to access configure mode");
+                        log.debug("user not privledged to access configure mode");
                         request.setMode(Portlet.Mode.VIEW);
                         doView(request, response);
                     } else {

@@ -694,7 +694,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         out.println("<td class=\"window-title-name\">");
         //if (actionStr != null) {
             try {
-                System.err.println("invoking  doTitle:" + title);
+                //System.err.println("invoking  doTitle:" + title);
                 PortletInvoker.doTitle(portletClass, req, res);
                 //out.println(" (" + portletMode.toString() + ") ");
             } catch (PortletException e) {

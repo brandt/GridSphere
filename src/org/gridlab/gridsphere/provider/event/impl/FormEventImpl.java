@@ -307,7 +307,7 @@ public class FormEventImpl implements FormEvent {
             return (FrameBean)tagBeans.get(beanKey);
         }
         FrameBean fb = new FrameBean(request, beanId);
-        System.err.println("Creating new frame bean" + beanId + " bean key= " + beanKey);
+        //System.err.println("Creating new frame bean" + beanId + " bean key= " + beanKey);
         tagBeans.put(beanKey, fb);
         return fb;
     }

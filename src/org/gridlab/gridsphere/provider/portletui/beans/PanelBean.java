@@ -152,7 +152,7 @@ public class PanelBean extends BeanContainer implements TagBean {
             sb.append("<tr>");
             while ((j < numCols) && (i < numRows)) {
                 TagBean tagBean = (TagBean)container.get(i);
-                System.err.println("in panel bean colArray " + i + " " + colArray[j]);
+                //System.err.println("in panel bean colArray " + i + " " + colArray[j]);
                 sb.append("<td width=\"" + colArray[j] +"\">");
                 sb.append(tagBean.toStartString());
                 sb.append(tagBean.toEndString());

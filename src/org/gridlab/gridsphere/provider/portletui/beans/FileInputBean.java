@@ -107,7 +107,7 @@ public class FileInputBean extends InputBean implements TagBean {
         value = savedFileItem.getName();
         //savedFileItem.getStoreLocation();
 
-        System.err.println("saved file :" + value);
+        //System.err.println("saved file :" + value);
     }
 
 

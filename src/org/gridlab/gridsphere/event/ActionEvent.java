@@ -9,7 +9,8 @@ import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 
 /**
- * An <code>ActionEvent</code> is sent by the portlet container when an HTTP request is received that is associated with an action.
+ * An <code>ActionEvent</code> is sent by the portlet container when an HTTP request is received that is
+ * associated with an action.
  */
 public interface ActionEvent extends Event {
 

@@ -176,7 +176,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             } else {
                 dispVal = loc.getDisplayLanguage();
             }
-            System.err.println("selectedValue: " + selectedValue + " localeVal=" + localeVal);
+            //System.err.println("selectedValue: " + selectedValue + " localeVal=" + localeVal);
             if (selectedValue != null) {
                 if (localeVal.equals(selectedValue)) item.setSelected(true);
             } else {
@@ -224,7 +224,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             // make sure user cannot deselect core gridsphere group
             if (g.equals(PortletGroupFactory.GRIDSPHERE_GROUP)) cb.setDisabled(true);
 
-            System.err.println("g= " + g.getName() + " gridsphere group= " + PortletGroupFactory.GRIDSPHERE_GROUP.getName());
+            //System.err.println("g= " + g.getName() + " gridsphere group= " + PortletGroupFactory.GRIDSPHERE_GROUP.getName());
 
             TextBean groupTB = new TextBean();
             groupTB.setValue(g.getName());

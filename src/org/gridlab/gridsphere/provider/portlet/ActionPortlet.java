@@ -127,7 +127,7 @@ public class ActionPortlet extends AbstractPortlet {
     public void setNextTitle(PortletRequest request, String title) {
         this.log.debug("Setting title to " + title);
         String id = request.getPortletSettings().getConcretePortletID();
-        System.err.println("in setNextT: in attribute " + id + ".title");
+        //System.err.println("in setNextT: in attribute " + id + ".title");
         request.setAttribute(id + ".title", title);
     }
 

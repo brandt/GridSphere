@@ -272,7 +272,7 @@ public class UserManager implements UserManagerService {
         }
         log.debug("Saving password record for account request " + request.getUserName());
         // Otherwise attempt to save password edits
-        System.err.println("before save passwd request id: " + request.getID());
+        //System.err.println("before save passwd request id: " + request.getID());
         try {
             this.passwordManagerService.savePassword(passwordBean);
         } catch (InvalidPasswordException e) {
@@ -441,7 +441,6 @@ public class UserManager implements UserManagerService {
         String userName = request.getUserName();
         SportletUserImpl user = getSportletUserImplByLoginName(userName);
         if (user == null) {
-            System.err.println("user is null!!");
             user = new SportletUserImpl();
             user.setID(userID);
         }
