@@ -417,12 +417,6 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
                 i.remove();
             }
         }
-        initServices = null;
-        userServices = null;
-        serviceContexts = null;
-        classLoaders = null;
-        allServices = null;
-        webappServices = null;
     }
 
     /**
