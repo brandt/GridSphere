@@ -64,6 +64,7 @@ public class PortletLayoutEngine {
     }
 
     public void removeUser(User user) {
+        System.err.println("REMOVING USER: " + user.getFullName());
         if (userLayouts.containsKey(user)) {
             userLayouts.remove(user);
         }
@@ -109,9 +110,24 @@ public class PortletLayoutEngine {
         // XXX: How do we signal a user has logged out so we can userLayouts.remove(user)???
         try {
             pc = getPortletContainer(event);
-            pc.actionPerformed(event);
-            pc = getPortletContainer(event);
             pc.doRender(event);
+        } catch (PortletLayoutException e) {
+            error = e.getMessage();
+            SportletRequest req = event.getSportletRequest();
+            req.logRequest();
+            log.error("Caught LayoutException: ", e);
+        }
+    }
+
+    public void actionPerformed(GridSphereEvent event) throws IOException {
+        log.debug("in service()");
+        boolean doLayoutAction = false;
+        PortletContainer pc = null;
+
+        // XXX: How do we signal a user has logged out so we can userLayouts.remove(user)???
+        try {
+            pc = getPortletContainer(event);
+            pc.actionPerformed(event);
         } catch (PortletLayoutException e) {
             error = e.getMessage();
             SportletRequest req = event.getSportletRequest();

@@ -41,7 +41,7 @@ public class GridSphereConfig implements GridSphereConfigProperties {
      *
      * @return <code>String</code> the value for the given property key
      */
-    public static String getProperty(String type) {
+    public static final String getProperty(String type) {
         return configBundle.getString(type);
     }
 

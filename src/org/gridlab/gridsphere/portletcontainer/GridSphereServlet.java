@@ -74,7 +74,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             log.error("Unable to initialize Portlet Layout Engine: ", e);
             throw new ServletException("Unable to initialize Portlet Layout Engine: " + e.getMessage());
         }
-
     }
 
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
@@ -94,6 +93,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         GridSphereEvent event = new GridSphereEventImpl(context, req, res);
 
         // Render layout
+
+        layoutEngine.actionPerformed(event);
+
         layoutEngine.service(event);
     }
 
