@@ -46,7 +46,7 @@ public class SecureDirectory extends HttpServlet {
                     log("Initialization OK (Strong protection " + (strongProtection ? "enabled" : "DISABLED (better enable it check web.xml) !!!") + "). Setting secureDirPath to " + secureDirPath);
             } else {
                 if (DEBUG)
-                    log("Initialization problem, please check if " + getServletContext().getRealPath("/") + getInitParameter("secureDirPath") + " exists and if it is directory !!!");
+                    log("Initialization problem, please check if " + getServletContext().getRealPath("/WEB-INF/secure") + " exists and if it is directory !!!");
             }
         }
         dateFormat = DateFormat.getDateInstance();
