@@ -59,7 +59,7 @@ public abstract class AbstractPortlet extends PortletAdapter implements ActionLi
      * @throws <code>PortletException</code>if the portlet title has trouble fulfilling the rendering request
      * @throws java.io.IOException if the streaming causes an I/O problem
      */
-    public abstract void doTitle(PortletRequest request, PortletResponse response) throws PortletException, IOException;
+    public void doTitle(PortletRequest request, PortletResponse response) throws PortletException, IOException {}
 
     /**
      * Notifies this listener that a portlet window has been detached.

@@ -5,8 +5,6 @@
 package org.gridlab.gridsphere.portlet;
 
 import java.util.Enumeration;
-import java.util.Locale;
-import java.util.List;
 
 /**
  * The PortletApplicationSettings interface provides the portlet with the application's dynamic configuration.

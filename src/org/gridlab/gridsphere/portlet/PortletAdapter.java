@@ -4,8 +4,6 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-
 import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.util.Hashtable;

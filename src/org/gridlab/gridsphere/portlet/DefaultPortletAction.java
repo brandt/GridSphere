@@ -4,10 +4,8 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import org.gridlab.gridsphere.event.ActionEvent;
-
-import java.util.Map;
 import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * The DefaultPortletAction is a portlet action with default parameters.

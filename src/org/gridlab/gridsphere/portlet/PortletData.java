@@ -5,7 +5,6 @@
 package org.gridlab.gridsphere.portlet;
 
 import java.util.Enumeration;
-import java.util.Locale;
 
 /**
  * The PortletData contains information about the concrete portlet instance.

@@ -4,9 +4,6 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
-import org.gridlab.gridsphere.portlet.impl.SportletConfig;
-
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

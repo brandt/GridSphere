@@ -58,7 +58,8 @@ public interface PortletWindow {
 
         private int state = NORMAL_STATE;
 
-        private State() {}
+        private State() {
+        }
 
         private State(int state) {
             this.state = state;

@@ -4,8 +4,6 @@
  */
 package org.gridlab.gridsphere.portlet;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public interface PortletRole {
 

@@ -130,7 +130,6 @@ public interface PortletResponse extends HttpServletResponse {
      *
      * We need to think about all header methods and how to solve nameclashes, etc.
      *
-     *
      */
     public void setIntHeader(String name, int value);
 
