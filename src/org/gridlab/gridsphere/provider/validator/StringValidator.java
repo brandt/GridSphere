@@ -8,7 +8,7 @@
  */
 package org.gridlab.gridsphere.provider.validator;
 
-import org.gridlab.gridsphere.tags.web.BaseTag;
+import org.gridlab.gridsphere.tags.ui.BaseTag;
 
 import javax.servlet.jsp.tagext.TagSupport;
 import javax.servlet.jsp.JspException;
