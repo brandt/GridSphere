@@ -30,6 +30,10 @@ public class PortletSessionManager implements HttpSessionListener {
         return instance;
     }
 
+    public int getNumSessions() {
+        return sessions.size();        
+    }
+
     /**
      * Record the fact that a session has been created.
      *
