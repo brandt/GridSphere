@@ -29,7 +29,7 @@
         <itemizedlist>
         <listitem><para>JDK 1.3.1+ &JDK; or JRE if you don't need to build any
         source</para></listitem>
-        <listitem><para>Jakarta Ant 1.5+ &Ant; is used to compile and deploy
+        <listitem><para>Jakarta Ant 1.5.3-1+ &Ant; is used to compile and deploy
         the GridSphere framework</para>
         </listitem>
         <listitem><para>Jakarta Tomcat Servlet Container &Tomcat; 4.1.18+ is

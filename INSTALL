@@ -7,7 +7,7 @@ $Id$
 Requirements
 ------------
 
-1) Building the GridSphere distribution requires Ant available at
+1) Building the GridSphere distribution requires Ant 1.5.3-1+ available at
 http://jakarta.apache.org/ant. In addition, make sure the $ANT_HOME/lib
 directory contains junit.jar used for testing and xalan.jar used to
 construct the documentation from the XSL style sheets. Both junit.jar and
