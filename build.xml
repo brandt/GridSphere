@@ -468,6 +468,7 @@ Copyright:
             version="true"
             splitindex="true"
             use="true"
+            breakiterator="true"
             maxmemory="256m"
             windowtitle="${gridsphere.name}"
             doctitle="${gridsphere.api}"
