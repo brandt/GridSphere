@@ -63,6 +63,11 @@
     </servlet>
 
     <servlet>
+        <servlet-name>FileManagerPortlet</servlet-name>
+        <servlet-class>org.gridlab.gridsphere.portlets.core.file.FileManagerPortlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>UserManagerPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.admin.users.UserManagerPortlet</servlet-class>
     </servlet>
@@ -139,6 +144,11 @@
     <servlet-mapping>
         <servlet-name>LayoutPortlet</servlet-name>
         <url-pattern>/layout</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>FileManagerPortlet</servlet-name>
+        <url-pattern>/file/manager</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
