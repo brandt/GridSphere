@@ -27,8 +27,7 @@ public class SportletDataManager implements PortletDataManager {
 
     private static transient PortletLog log = SportletLog.getInstance(PortletDataManager.class);
     private PortletRegistry registry = PortletRegistry.getInstance();
-    //private static PersistenceManagerRdbms pm = null;
-    //PersistenceManagerFactory.createGridSphereRdbms();
+    private static PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
     private static PortletDataManager instance = new SportletDataManager();
 
     /**
@@ -54,7 +53,7 @@ public class SportletDataManager implements PortletDataManager {
      * @return the PortletData for this portlet or null if none exists.
      */
     public PortletData getPortletData(User user, String portletID) throws PersistenceManagerException {
-
+        /*
         String appID = PortletRegistry.getApplicationPortletID(portletID);
         PersistenceManagerRdbms pm = null;
         if (appID != null) {
@@ -64,6 +63,7 @@ public class SportletDataManager implements PortletDataManager {
                 pm = PersistenceManagerFactory.createProjectPersistenceManagerRdbms(webApp);
             }
         }
+        */
         if (user instanceof GuestUser) return null;
 
         String command =
