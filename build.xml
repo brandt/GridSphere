@@ -616,7 +616,7 @@ Copyright:
     <target name="deploy-install">
 
         <!-- Copy the gridsphere web app to build directory -->
-        <copy overwrite="true" todir="${build.webapps}/gridsphere">
+        <copy todir="${build.webapps}/gridsphere">
             <fileset dir="${gswebapp.dir}"/>
         </copy>
 
