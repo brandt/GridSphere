@@ -26,7 +26,11 @@
         <property name="GivenName" type="string" column="givenname"/>
         <property name="EmailAddress" type="string" column="emailaddress"/>
         <property name="Organization" type="string" column="organization"/>
-
+	<map name="attributes" table="accountrequestattributes">
+            <key column="oid"/>
+            <index column="attribute" type="string"/>
+            <element column="value" type="string"/>
+        </map>
     </class>
 
 
