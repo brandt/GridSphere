@@ -63,7 +63,7 @@ public class DemoPortlet extends AbstractPortlet {
         out.println("PortletApplicationSettings: <br><ul>");
         while (attrEnum.hasMoreElements()) {
             String attrName = (String)attrEnum.nextElement();
-            String attrValue = settings.getAttribute(attrName);
+            String attrValue = appSettings.getAttribute(attrName);
             out.println("<li>" + "name: " + attrName + " value: " + attrValue + "</li>");
         }
         out.println("</ul>PortletSettings: <br><ul>");
