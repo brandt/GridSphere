@@ -59,4 +59,11 @@ public class PortletMinimized extends BasePortletComponent {
             throw new PortletLayoutException("Unable to include PortletMinimized component JSP", e);
         }
     }
+
+    public void doRenderFirst(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
+        doRender(ctx, req, res);
+    }
+
+    public void doRenderLast(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {}
+
 }

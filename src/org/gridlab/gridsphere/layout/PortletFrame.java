@@ -113,9 +113,13 @@ public class PortletFrame extends BasePortletComponent {
         ///// begin portlet frame
         PrintWriter out = res.getWriter();
         out.println("<table width=\"" + width + "%\"  border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#FFFFFF\"><tr><td>");
+        out.println("<table width=\"100%\" border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#999999\">");
+        out.println("<tr><td width=\"100%\">");
 
         border.doRender(ctx, req, res);
 
+
+        out.println("</td></tr>");
         out.println("<tr><td valign=\"top\" align=\"left\"><table width=\"100%\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\" bgcolor=");
         out.println("\"" + bgColor + "\"<tr><td width=\"25%\" valign=\"center\">");
 
@@ -127,7 +131,17 @@ public class PortletFrame extends BasePortletComponent {
             log.error("Failed invoking portlet service method: ", e);
             throw new PortletLayoutException("Failed invoking portlet service method");
         }
+
         out.println("</tr></table></td></tr></table></td></tr></table>");
+
+
         ///// end portlet frame
     }
+
+    public void doRenderFirst(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
+        doRender(ctx, req, res);
+    }
+
+    public void doRenderLast(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {}
+
 }

@@ -50,7 +50,9 @@ public class PortletContainer {
         Iterator it = components.iterator();
         while (it.hasNext()) {
             PortletComponent comp = (PortletComponent)it.next();
-            comp.doRender(ctx, req, res);
+            //comp.doRender(ctx, req, res);
+            comp.doRenderFirst(ctx, req, res);
+            comp.doRenderLast(ctx, req, res);
         }
         out.println("</html>");
     }

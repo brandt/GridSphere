@@ -65,5 +65,12 @@ public class PortletGridLayout extends BasePortletComponent implements LayoutMan
         }
 
     }
+
+    public void doRenderFirst(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
+        doRender(ctx, req, res);
+    }
+
+    public void doRenderLast(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {}
+
 }
 

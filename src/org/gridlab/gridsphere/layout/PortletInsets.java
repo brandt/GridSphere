@@ -46,4 +46,12 @@ public class PortletInsets {
         PrintWriter out = res.getWriter();
         out.write("<img SRC=/images/spacer.gif" + " WIDTH=" + width + " HEIGHT=" + height + " BORDER=0>");
     }
+
+    public void doRenderFirst(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {
+        doRender(ctx, req, res);
+    }
+
+    public void doRenderLast(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException {}
+
 }
+

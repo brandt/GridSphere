@@ -9,7 +9,7 @@ import org.gridlab.gridsphere.portlet.*;
 import java.awt.*;
 import java.io.IOException;
 
-public interface PortletComponent {
+public interface PortletComponent extends PortletRender {
 
     public String getBackground();
 
@@ -40,7 +40,5 @@ public interface PortletComponent {
     public void setHeight(String height);
 
     public void setWidth(String width);
-
-    public void doRender(PortletContext ctx, PortletRequest req, PortletResponse res) throws PortletLayoutException, IOException;
 
 }
