@@ -148,8 +148,11 @@ public class RSSPortlet extends AbstractPortlet {
         if (interval==null) {
             interval = new RadioButtonListBean("interval");
             interval.add("30","30 seconds");
-            interval.add("1","1 minute");
-            interval.add("5", "5 minutes", true);
+            interval.add("60","1 minute");
+            interval.add("300", "5 minutes", true);
+            interval.add("1800", "30 minutes");
+            interval.add("3600","1 h");
+            interval.add("7200","2 h");
             interval.setLabel("cache time");
         }
         interval.store("interval",request);
