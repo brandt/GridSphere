@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -45,10 +46,17 @@ public class PortletPage implements Serializable, Cloneable {
     protected String title = "";
     protected String theme = GridSphereConfig.getProperty(GridSphereConfigProperties.DEFAULT_THEME);
 
+    private String layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING);
+    private String layoutDescriptor = null;
+
     /**
      * Constructs an instance of PortletPage
      */
     public PortletPage() {
+    }
+
+    public void setLayoutDescriptor(String layoutDescriptor) {
+        this.layoutDescriptor = layoutDescriptor;
     }
 
     /**
@@ -324,5 +332,13 @@ public class PortletPage implements Serializable, Cloneable {
         c.footerContainer = (this.footerContainer == null ) ? null : (PortletContainer)this.footerContainer.clone();
         c.tabbedPane = (this.tabbedPane == null) ? null : (PortletTabbedPane)this.tabbedPane.clone();
         return c;
+    }
+
+    public void save() throws IOException {
+        try {
+            PortletLayoutDescriptor.savePortletTabbedPane(tabbedPane, layoutDescriptor, layoutMappingFile);
+        } catch (PersistenceManagerException e) {
+            throw new IOException("Unable to save user's tabbed pane: " + e.getMessage());
+        }
     }
 }

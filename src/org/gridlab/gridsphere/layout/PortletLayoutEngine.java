@@ -13,7 +13,6 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import java.io.*;
-import java.util.*;
 
 /**
  * The <code>PortletLayoutEngine</code> is a singleton that is responsible for managing

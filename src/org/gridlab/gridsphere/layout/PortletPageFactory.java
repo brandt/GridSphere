@@ -53,6 +53,8 @@ public class PortletPageFactory implements PortletSessionListener {
         }  catch (Exception e) {
             log.error("Unable to create clone of user page", e);
         }
+        guestPage.setLayoutDescriptor(guestLayoutFile);
+        errorPage.setLayoutDescriptor(errorLayoutFile);
     }
 
     public static PortletPageFactory getInstance() throws IOException, PersistenceManagerException {
@@ -85,14 +87,12 @@ public class PortletPageFactory implements PortletSessionListener {
     public PortletPage createFromAllWebApps() throws CloneNotSupportedException {
 
         PortletPage newPage = null;
-        //PortletTab newTab = null;
         PortletTabbedPane pane = null;
         try {
-            //newPage = PortletLayoutDescriptor.loadPortletPage(templateLayoutFile, layoutMappingFile);
+
             newPage = (PortletPage)templatePage.clone();
             log.debug("Returning cloned layout from webapps:");
-            //newPage = (PortletPage)templatePage.clone();
-            //newPage.init(new ArrayList());
+
             pane = newPage.getPortletTabbedPane();
 
             PortletManager manager = PortletManager.getInstance();
@@ -121,17 +121,29 @@ public class PortletPageFactory implements PortletSessionListener {
         return newPage;
     }
 
-    public PortletPage createFromNewUserLayoutXML(PortletRequest req) throws PersistenceManagerException, IOException {
+    public PortletPage createFromNewUserLayoutXML(PortletRequest req) {
+        PortletPage page = null;
         String sessionId = req.getSession().getId();
         User user = req.getUser();
         String layoutPath = userLayoutDir + user.getID();
         File f = new File(layoutPath);
-        if (!f.exists()) {
-            f.createNewFile();
-            copyFile(new File(newuserLayoutPath), f);
+        try {
+            if (!f.exists()) {
+            //    f.createNewFile();
+            //    copyFile(new File(newuserLayoutPath), f);
+            // } else {
+                page = PortletLayoutDescriptor.loadPortletPage(layoutPath, layoutMappingFile);
+                // For now users also get ALL web app layouts
+                page = createFromAllWebApps();
+
+            }
+
+        } catch (Exception e) {
+            log.error("Unable to clone layout: ", e);
         }
-        PortletPage page = PortletLayoutDescriptor.loadPortletPage(layoutPath, layoutMappingFile);
+
         sessionManager.addSessionListener(sessionId, this);
+
         userLayouts.put(sessionId, page);
         return page;
 
@@ -155,7 +167,7 @@ public class PortletPageFactory implements PortletSessionListener {
             return (PortletPage) userLayouts.get(sessionId);
         } else {
 
-            // No wthe user is user so remove guest layout
+            // Now the user is user so remove guest layout
             if (guests.containsKey(sessionId)) {
                 log.debug("Removing guest container for:" + sessionId);
                 guests.remove(sessionId);
@@ -165,22 +177,16 @@ public class PortletPageFactory implements PortletSessionListener {
             // is user a SUPER?
             PortletRole role = req.getRole();
             if (role.equals(PortletRole.SUPER)) {
-
                 try {
                     page = createFromAllWebApps();
                 } catch (Exception e) {
                     log.error("Unable to clone layout: ", e);
                 }
             }  else {
-
                 try {
-
-                    // For now users also get ALL web app layouts
-                    page = createFromAllWebApps();
-
-                    //return createFromNewUserLayoutXML(req);
+                    page = createFromNewUserLayoutXML(req);
                 } catch (Exception e) {
-                    log.error("Unable to clone layout: ", e);
+                    log.error("Unable to create new user layout");
                 }
             }
             userLayouts.put(sessionId, page);
@@ -207,9 +213,9 @@ public class PortletPageFactory implements PortletSessionListener {
             }
             return newcontainer;
         }
-
     }
-     protected void copyFile(File oldFile, File newFile) throws IOException {
+
+    protected void copyFile(File oldFile, File newFile) throws IOException {
         // Destination and streams
         log.debug("in copyFile(): oldFile: " + oldFile.getAbsolutePath() + " newFile: " + newFile.getCanonicalPath());
         FileInputStream fis = new FileInputStream(oldFile);
