@@ -24,6 +24,7 @@ public class GuestUser implements User {
     private String familyName = "User";
     private String fullName = "Guest User";
     private String givenName = "Guest";
+    private String emailAddress = "me@myplace.com";
     private String id = "500";
     private String userID = "500";
     private long lastLoginTime;
@@ -95,6 +96,15 @@ public class GuestUser implements User {
      */
     public void setGivenName(String givenName) {
         this.givenName = givenName;
+    }
+
+    /**
+     * Returns the given e-mail of the user or null if none is available.
+     *
+     * @return the email address
+     */
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
     /**
