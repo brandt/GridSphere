@@ -193,7 +193,7 @@ Copyright:
             classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
             classpathref="classpath"/>
         <dbtask
-            configdir="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/persistence/"
+            configdir="${env.CATALINA_HOME}/webapps/${project.name}/WEB-INF/"
             action="UPDATE"/>
     </target>
 
