@@ -23,7 +23,7 @@ Copyright:
 
 ==================================================================== -->
 
-<project name="GridSphere" default="compile" basedir=".">
+<project name="GridSphere" default="help" basedir=".">
 
     <property name="project"        value="GridSphere"/>
     <property name="Name"           value="gridsphere"/>
@@ -49,6 +49,15 @@ Copyright:
     <property name="gridsphere.dir" value="${env.CATALINA_HOME}/${Name}"/>
     <property name="gridsphere-hsqldb.dir" value="${gridsphere.dir}/db"/>
     <property name="exclude.dirs" value=""/>
+
+  <!--
+    <property name="var_force_mapping" value=""/>
+    <property name="var_force_database" value=""/>
+
+        just for the records here, this will determine if the mapping target gets run
+        if called, if this is not set if does not get executed, so it will only be set
+        in the deploy-all or focre-mapping target
+    -->
 
     <property name="debug" value="on"/>
     <property name="deprecation" value="false"/>
@@ -124,10 +133,31 @@ Copyright:
         <echo message="optimize=${optimize}" />
     </target>
 
+
+    <!-- =================================================================== -->
+    <!-- puts out a HELP test                                                -->
+    <!-- =================================================================== -->
+
+    <target name="help" description="shows help about useful target">
+        <echo message="target                 description"/>
+        <echo message="-----------------------------------------------------------------"/>
+        <echo message="install-fresh          will do everything (clean, compile, docs, "/>
+        <echo message="                           mapping,jar,deploy)                   "/>
+        <echo message="clean                  will clean up the build dir               "/>
+        <echo message="runtests               will build and run the tests              "/>
+        <echo message="deploy                 deployes GS to tomcat                     "/>
+        <echo message="force-mapping          will rebuild the mapping file for castor  "/>
+        <echo message="force-database         will rebuild the databasestructure        "/>
+        <echo message="                           in the deployed gridsphere            "/>
+
+    </target>
+
+
+
     <!-- =================================================================== -->
     <!-- Builds and deploys GridSphere                                       -->
     <!-- =================================================================== -->
-    <target name="all" depends="clean,compile,docs,jar,deploy" description="Build and deploy GridSphere"/>
+    <target name="install-fresh" depends="clean,compile,docs,force-mapping,jar,deploy" description="Build and deploy GridSphere"/>
 
     <!-- =================================================================== -->
     <!-- Updates GridSphere source code                                      -->
@@ -160,6 +190,9 @@ Copyright:
         </javac>
 
     </target>
+
+
+<!-- +++++++++++++++++ START JARCREATION +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
     <!-- =================================================================== -->
     <!-- Creates a GridSphere JAR library archive                            -->
@@ -237,6 +270,10 @@ Copyright:
     <!-- =================================================================== -->
     <target name="jar" depends="gridsphere-jar, portlet-api-jar, portlet-widgets-jar" description="Creates all jars"/>
 
+
+<!-- +++++++++++++++++ END JARCREATION +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+
     <!-- =================================================================== -->
     <!-- Cleans everything                                                   -->
     <!-- =================================================================== -->
@@ -247,10 +284,20 @@ Copyright:
         <delete quiet="true" dir="${reports.tests}"/>
     </target>
 
+
+<!-- +++++++++++++++ START DATABASE STUFF ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
     <!-- =================================================================== -->
     <!-- Creates castor definitions                                          -->
     <!-- =================================================================== -->
-    <target name="mapping" depends="compile" description="creates the mapping files for castor">
+    <target name="mapping-internal" description="forces the execution of the mapping target (internal)">
+        <property name="var_force_mapping" value="goforit"/>
+    </target>
+
+    <target name="force-mapping" depends="mapping-internal, mapping" description="forces the execution of the mapping target"/>
+
+    <target name="mapping" depends="compile" description="creates the mapping files for castor" if="var_force_mapping">
+
         <javadoc packagenames="org.gridlab.gridsphere.*"
             sourcepath="src"
             private="true"
@@ -267,11 +314,19 @@ Copyright:
             additionalparam="-J-DFILE=webapps/gridsphere/WEB-INF/conf/mapping/docletmapping.xml -J-DLOG=1">
         <classpath refid="classpath"/>
         </javadoc>
+
     </target>
 
     <!-- =================================================================== -->
     <!-- create database tables inside different rdbms                       -->
     <!-- =================================================================== -->
+
+    <target name="force-database-internal"  description="forces to rebuild the database in the deployed gs">
+        <property name="force-database" value="goforit"/>
+    </target>
+
+    <target name="force-database" depends="force-database-internal, db-hsqldb" description="forces to rebuild the database in the deployed gs"/>
+
     <target name="db-mysql" depends="mapping" description="create the mysql tables (not working)">
       <sql
           driver="org.gjt.mm.mysql.Driver"
@@ -296,7 +351,7 @@ Copyright:
         </sql>
     </target>
 
-    <target name="db-hsqldb" depends="mapping" description="creates hsqldb tables">
+    <target name="db-hsqldb" depends="mapping" description="creates hsqldb tables" if="var_force_database">
       <sql
           driver="org.hsqldb.jdbcDriver"
           url="jdbc:hsqldb:conf/gridsphere-db"
@@ -338,6 +393,10 @@ Copyright:
                  bottom="Copyright &#169; 2002,2003 GridLab Project. All Rights Reserved."/>
     </target>
 
+<!-- +++++++++++++++ END DATABASE STUFF ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+<!-- +++++++++++++++ START WAR CREATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
     <!-- =================================================================== -->
     <!-- Creates the GridSphere WAR file                                                -->
     <!-- =================================================================== -->
@@ -372,6 +431,11 @@ Copyright:
         </war>
     </target>
 
+<!-- +++++++++++++++ END WAR CREATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+
+<!-- +++++++++++++++ START DEPLOY  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
     <!-- ================================================================= -->
     <!-- Deploys core portlets to a local server                              -->
     <!-- ================================================================= -->
@@ -387,6 +451,10 @@ Copyright:
         <mkdir dir="${env.CATALINA_HOME}/gridsphere/creds"/>
         <!-- where hsqldb stores the datafiles -->
         <mkdir dir="${env.CATALINA_HOME}/gridsphere/db"/>
+
+        <!-- delete those two files to make sure the correct db version gets packaged -->
+        <delete file="${build.dir}/lib/${Name}.jar"/>
+        <delete file="${build.dir}/${Name}/gridsphere.properties"/>
 
         <!-- we deploy, so we use the real hsqldb for now, this needs to be
            configurable for other DB as well -->
@@ -446,6 +514,10 @@ Copyright:
         </copy>
     </target>
 
+<!-- +++++++++++++++ END DEPLOY  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+
+<!-- +++++++++++++++ START TESTS +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
     <!-- =================================================================== -->
     <!-- Compiles and runs all JUnit tests: needs optional.jar and junit in classpath     -->
@@ -484,13 +556,18 @@ Copyright:
     <target name="test-prepare" description="prepares stuff for unit tests">
         <property name="DB_CONFIG_FILE" value="webapps/gridsphere/WEB-INF/conf/hsqldb-junit.xml"/>
         <property name="DB_DATABASE" value="junit"/>
-        <property name="DB_CREATE_DB" value="db-hsqldb-junit"/>
+        <!-- now delete the jar file to make sure we get a correct one -->
+        <delete file="${build.dir}/lib/${Name}.jar"/>
+        <delete file="${build.dir}/${Name}/gridsphere.properties"/>
+        <delete file="db/junit-db.script"/>
+        <delete file="db/junit-db.properties"/>
+
     </target>
 
     <!-- =================================================================== -->
     <!-- Runs all JUnit tests: needs optional.jar and junit in classpath     -->
     <!-- =================================================================== -->
-    <target name="runtests" depends="clean, test-prepare, compiletests,  db-hsqldb-junit, jar" if="junit.present" description="Runs all JUnit tests">
+    <target name="runtests" depends="test-prepare, compiletests,  db-hsqldb-junit, jar" if="junit.present" description="Runs all JUnit tests">
 
         <java fork="no" classname="junit.textui.TestRunner"
                 taskname="junit" failonerror="true">
@@ -502,6 +579,8 @@ Copyright:
             </classpath>
         </java>
     </target>
+
+<!-- +++++++++++++++ END TESTS +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
     <!-- =================================================================== -->
     <!-- compiles performance tests     -->
