@@ -10,6 +10,8 @@ import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
@@ -25,7 +27,7 @@ import java.util.Vector;
 
 public class AccessControlServiceImpl  implements AccessControlService, PortletServiceProvider {
 
-    static org.apache.log4j.Category cat = org.apache.log4j.Category.getInstance(AccessControlServiceImpl.class.getName());
+    protected transient static PortletLog cat = SportletLog.getInstance(AccessControlServiceImpl.class);
 
     PersistenceInterface pm = null;
 
