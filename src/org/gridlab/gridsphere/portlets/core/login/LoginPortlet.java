@@ -48,15 +48,7 @@ public class LoginPortlet extends ActionPortlet {
             userManagerService = (UserManagerService)getPortletConfig().getContext().getService(UserManagerService.class);
             aclService = (AccessControlManagerService)getPortletConfig().getContext().getService(AccessControlManagerService.class);
             passwordManagerService = (PasswordManagerService)getPortletConfig().getContext().getService(PasswordManagerService.class);
-            String createAllowed = config.getInitParameter("canUserCreateAccount");
-            if (createAllowed != null) {
-                    if (createAllowed.equalsIgnoreCase("false")) {
-                            canUserCreateAccount = false;
-                    }
-                    if (createAllowed.equalsIgnoreCase("true")) {
-                            canUserCreateAccount = true;
-                    }
-            }
+            canUserCreateAccount = userManagerService.canUserCreateNewAccount();
         } catch (PortletServiceException e) {
             throw new UnavailableException("Unable to initialize services");
         }
@@ -305,6 +297,7 @@ public class LoginPortlet extends ActionPortlet {
         } else {
             canUserCreateAccount = false;
         }
+        userManagerService.setUserCreateNewAccount(canUserCreateAccount);
         showConfigure(event);
     }
 }

@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
+import java.io.IOException;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
@@ -45,6 +46,8 @@ public class UserManager implements UserManagerService {
     private String jdoUser = SportletUserImpl.class.getName();
     private String jdoAccountRequest = AccountRequestImpl.class.getName();
 
+    private PortletServiceConfig config = null;
+
     protected UserManager() {
     }
 
@@ -55,6 +58,7 @@ public class UserManager implements UserManagerService {
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.info("Entering init()");
         if (!isInitialized) {
+            this.config = config;
             aclManager = AccessControlManager.getInstance();
             PortletServiceFactory factory = SportletServiceFactory.getInstance();
             try {
@@ -558,5 +562,17 @@ public class UserManager implements UserManagerService {
         return false;
     }
 
+    public boolean canUserCreateNewAccount() {
+        return Boolean.getBoolean(config.getInitParameter("canUserCreateNewAccount"));
+    }
+
+    public void setUserCreateNewAccount(boolean canUserCreateNewAccount) {
+        config.setInitParameter("canUserCreateNewAccount", Boolean.toString(canUserCreateNewAccount));
+        try {
+            config.store();
+        } catch (IOException e) {
+            log.error("Unable to set UserManager service entry", e);
+        }
+    }
 
 }

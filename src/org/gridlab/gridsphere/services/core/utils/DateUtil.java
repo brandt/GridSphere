@@ -24,9 +24,12 @@ public class DateUtil {
      */
     public static String getLocalizedDate(User user, Locale locale, long milisec, int dateFormat, int timeFormat) {
 
-        TimeZone tz = TimeZone.getTimeZone((String)user.getAttribute(User.TIMEZONE));
-        if (tz==null) {
+        TimeZone tz = null;
+        String tzStr = (String)user.getAttribute(User.TIMEZONE);
+        if (tzStr == null) {
             tz = TimeZone.getDefault();
+        } else {
+            tz = TimeZone.getTimeZone(tzStr);
         }
         if (locale==null) {
             locale = Locale.getDefault();
