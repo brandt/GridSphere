@@ -27,6 +27,7 @@ import java.util.Vector;
 
 //import com.stevesoft.pat.Regex;
 import org.apache.regexp.RE;
+import org.apache.regexp.RESyntaxException;
 
 /**
  * @table credentialpermission
@@ -109,7 +110,12 @@ public class GlobusCredentialPermission extends BaseObject implements Credential
         }
         return answer;
         ***/
-        RE ex = new RE(this.permittedSubjects);
+        RE ex = null;
+        try {
+            ex = new RE(this.permittedSubjects);
+        } catch (RESyntaxException e) {
+            return false;
+        }
         return ex.match(subject);
     }
 }
