@@ -1,106 +1,33 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
-import org.gridlab.gridsphere.provider.portletui.beans.BaseComponentBean;
-import org.gridlab.gridsphere.provider.portletui.beans.DataGridColumnBean;
 import org.gridlab.gridsphere.provider.portletui.beans.DataGridAttributes;
 
-import javax.servlet.jsp.JspException;
-import java.util.Iterator;
-import java.util.Vector;
-import java.util.Set;
-
-/*
- * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
+/**
+ * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
  * @version $Id$
  */
+public interface DataGridColumnTag extends ContainerTag {
+    DataGridAttributes getVarAttributes();
 
-public class DataGridColumnTag extends ContainerTag {
+    void setVarAttributes(DataGridAttributes varattributes);
 
-    private String header = null;
-    private String var = null;
-    private String paramName = null;
-    private String paramValue = null;
-    private String key = null;
-    private DataGridAttributes varattributes = null;
+    String getKey();
 
-    public DataGridAttributes getVarAttributes() {
-        return varattributes;
-    }
+    void setKey(String key);
 
-    public void setVarAttributes(DataGridAttributes varattributes) {
-        this.varattributes = varattributes;
-    }
+    String getParamValue();
 
-    public String getKey() {
-        return key;
-    }
+    void setParamValue(String paramValue);
 
-    public void setKey(String key) {
-        this.key = key;
-    }
+    String getParamName();
 
-    public String getParamValue() {
-        return paramValue;
-    }
+    void setParamName(String paramName);
 
-    public void setParamValue(String paramValue) {
-        this.paramValue = paramValue;
-    }
+    String getHeader();
 
-    public String getParamName() {
-        return paramName;
-    }
+    void setHeader(String header);
 
-    public void setParamName(String paramName) {
-        this.paramName = paramName;
-    }
+    String getVar();
 
-
-    public String getHeader() {
-        return header;
-    }
-
-    public void setHeader(String header) {
-        this.header = header;
-    }
-
-    public String getVar() {
-        return var;
-    }
-
-    public void setVar(String var) {
-        this.var = var;
-    }
-
-
-    public int doStartTag() throws JspException {
-        list = new Vector();
-
-        return EVAL_BODY_INCLUDE;
-    }
-
-
-    public int doEndTag() throws JspException {
-
-        DataGridTag dataGridTag = (DataGridTag) getParent();
-        if (dataGridTag != null) {
-            DataGridColumnBean dataGridColumnBean = new DataGridColumnBean();
-            dataGridColumnBean.setHeader(this.header);
-            if (key != null) {
-                dataGridColumnBean.setHeader(this.getLocalizedText(key));
-            }
-            dataGridColumnBean.setVar(this.var);
-            dataGridColumnBean.setParamName(this.paramName);
-            dataGridColumnBean.setParamValue(this.paramValue);
-            dataGridColumnBean.setAttributes(this.varattributes);
-
-            this.setBaseComponentBean(dataGridColumnBean);
-            Iterator it = list.iterator();
-            while (it.hasNext()) {
-                dataGridColumnBean.addBean((BaseComponentBean) it.next());
-            }
-            dataGridTag.addTagBean(dataGridColumnBean);
-        }
-        return EVAL_PAGE;
-    }
+    void setVar(String var);
 }
