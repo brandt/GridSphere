@@ -1,17 +1,7 @@
-<%@ page import="java.util.Iterator,
-                 org.gridlab.gridsphere.services.core.security.auth.LoginAuthModule"%>
-<%@ taglib uri="/portletUI" prefix="ui" %>
-<%@ taglib uri="/portletAPI" prefix="portletAPI" %>
-
-<portletAPI:init/>
 
 <%-- This is an ugly logic JSP page that iterates over the authorization modules --%>
 
-<table>
-
 <ui:text key="LOGIN_CONF_AUTH_MODULES"/>
-
-<p>
 
 <jsp:useBean id="supportedModules" class="java.util.List" scope="request"/>
 <jsp:useBean id="activeModules" class="java.util.List" scope="request"/>
