@@ -777,6 +777,7 @@ Copyright:
                 <exclude name="**/CVS"/>
                 <exclude name="*.ipr"/>
                 <exclude name="*.iws"/>
+                <exclude name="${gridsphere.project}-*.tgz"/>
             </tarfileset>
         </tar>
 
