@@ -6,18 +6,21 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
+import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
+import java.util.Vector;
+import java.util.Iterator;
 
 /**
  * A <code>ListBoxTag</code> represents a list box element
  */
-public class ListBoxTag extends BaseComponentTag {
+public class ListBoxTag extends ContainerTag {
 
     protected ListBoxBean listbox = null;
-
+    protected boolean isMultiple = false;
     protected int size = 1;
 
     /**
@@ -38,7 +41,34 @@ public class ListBoxTag extends BaseComponentTag {
         this.size = size;
     }
 
+    /**
+     * Sets multiple selection
+     *
+     * @param isMultiple is true if listbox provides multiple selections, false otherwise
+     */
+    public void setMultipleSelection(boolean isMultiple) {
+        this.isMultiple = isMultiple;
+    }
+
+    public void setListBoxBean(ListBoxBean listbox) {
+        this.listbox = listbox;
+    }
+
+    public ListBoxBean getListBoxBean() {
+        return listbox;
+    }
+
+    /**
+     * Indicates if multiple selection is provided
+     *
+     * @return true if this listbox supports multiple selection, false otherwise
+     */
+    public boolean getMultipleSelection() {
+        return isMultiple;
+    }
+
     public int doStartTag() throws JspException {
+        list = new Vector();
 
         if (!beanId.equals("")) {
             listbox = (ListBoxBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
@@ -65,6 +95,11 @@ public class ListBoxTag extends BaseComponentTag {
 
     public int doEndTag() throws JspException {
 
+        Iterator it = list.iterator();
+        while (it.hasNext()) {
+            ListBoxItemBean itembean = (ListBoxItemBean)it.next();
+            listbox.addBean(itembean);
+        }
         try {
             JspWriter out = pageContext.getOut();
             out.print(listbox.toEndString());

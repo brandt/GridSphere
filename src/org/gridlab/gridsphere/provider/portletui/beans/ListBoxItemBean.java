@@ -45,6 +45,7 @@ public class ListBoxItemBean extends SelectElementBean {
 
     public String toStartString() {
         String pval = (value == null) ? "" : value;
+        pval = (name == null) ? pval : name;
         String sname = pval;
         if (!beanId.equals("")) {
             sname = "ui_" + vbName + "_" + beanId + "_" + pval;

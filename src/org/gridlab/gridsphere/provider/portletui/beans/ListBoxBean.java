@@ -21,8 +21,6 @@ public class ListBoxBean extends BeanContainer implements TagBean {
     protected String LISTBOX_STYLE = "portlet-form-field";
     public static final String NAME = "lb";
 
-    protected transient static PortletLog log = SportletLog.getInstance(ListBoxBean.class);
-
     protected int size = 0;
     protected boolean isMultiple = false;
 
@@ -106,19 +104,19 @@ public class ListBoxBean extends BeanContainer implements TagBean {
             sb.append(" multiple='multiple'");
         }
         sb.append(">");
+        return sb.toString();
+    }
 
+    public String toEndString() {
+        StringBuffer sb = new StringBuffer();
         Iterator it = container.iterator();
         while (it.hasNext()) {
             ListBoxItemBean itemBean = (ListBoxItemBean)it.next();
             sb.append(itemBean.toStartString());
             sb.append(itemBean.toEndString());
         }
-
+        sb.append("</select>");
         return sb.toString();
-    }
-
-    public String toEndString() {
-        return "</select>";
     }
 
     /**

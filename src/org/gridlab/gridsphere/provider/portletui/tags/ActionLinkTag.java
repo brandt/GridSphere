@@ -55,7 +55,7 @@ public class ActionLinkTag extends ActionTag {
         }
 
         paramBeans = new ArrayList();
-        //createActionURI();
+
         if (key != null) {
             actionlink.setKey(key);
             Locale locale = pageContext.getRequest().getLocale();
@@ -67,12 +67,6 @@ public class ActionLinkTag extends ActionTag {
     }
 
     public int doEndTag() throws JspException {
-
-        Iterator it = paramBeans.iterator();
-        while (it.hasNext()) {
-            ActionParamBean pbean = (ActionParamBean)it.next();
-            portletAction.addParameter(pbean.getName(), pbean.getValue());
-        }
 
         actionlink.setAction(createActionURI());
 

@@ -6,9 +6,13 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
+import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TagBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
+import java.util.List;
+import java.util.Iterator;
 
 /**
  * A <code>ListBoxItemtag</code> represents a list box element
@@ -36,16 +40,68 @@ public class ListBoxItemTag extends BaseComponentTag {
         return selected;
     }
 
-    public int doStartTag() throws JspException {
-        listboxitem = new ListBoxItemBean();
-        this.setBaseComponentBean(listboxitem);
-        try {
-            JspWriter out = pageContext.getOut();
-            out.print(listboxitem.toStartString());
-        } catch (Exception e) {
-            throw new JspException(e.getMessage());
+    /**
+     * Checks to see if listbox tag already contains this list item
+     *
+     * @param listboxTag the listbox tag
+     * @return true if the listbox tag conatins this list item
+     */
+    protected boolean itemExists(ListBoxTag listboxTag) {
+        ListBoxBean listbox = listboxTag.getListBoxBean();
+        List beans = listbox.getBeans();
+        Iterator it = beans.iterator();
+        while (it.hasNext()) {
+            ListBoxItemBean listboxitem = (ListBoxItemBean)it.next();
+            if (name != null) {
+                if (name.equals(listboxitem.getName())) {
+                    listboxitem.setValue(value);
+                    return true;
+                }
+            }
+            if (value.equals(listboxitem.getValue())) {
+                return true;
+            }
         }
-        return SKIP_BODY;
+        return false;
+    }
+
+    /**
+     * Deselects an element if not multiple selection and an existing list item is already selected
+     *
+     * @param listboxTag the list box tag
+     */
+    protected void checkSelectedEntries(ListBoxTag listboxTag) {
+        if (selected) {
+            if (!listboxTag.getMultipleSelection()) {
+                ListBoxBean listbox = listboxTag.getListBoxBean();
+                List beans = listbox.getBeans();
+                Iterator it = beans.iterator();
+                while (it.hasNext()) {
+                    ListBoxItemBean listboxitem = (ListBoxItemBean)it.next();
+                    if (listboxitem.isSelected()) {
+                        selected = false;
+                    }
+                }
+            }
+        }
+    }
+
+    public int doEndTag() throws JspException {
+
+        ListBoxTag listboxTag = (ListBoxTag)getParent();
+        if (listboxTag != null) {
+            //System.err.println("Setting action param bean: " + name + " " + value);
+            ListBoxItemBean listboxitem = new ListBoxItemBean();
+            this.setBaseComponentBean(listboxitem);
+            // check that item doesn't already exist
+            if (!itemExists(listboxTag)) {
+                checkSelectedEntries(listboxTag);
+                listboxitem.setSelected(selected);
+                listboxTag.addTagBean(listboxitem);
+            }
+        }
+
+        return EVAL_PAGE;
     }
 
 }
