@@ -296,7 +296,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         // first validate tab
         try {
-            PortletTabRegistry.loadPage(tmpFile);
+            PortletTabRegistry.loadTab(tmpFile);
 
             copyFile(new File(tmpFile), new File(groupFile));
             PortletTabRegistry.reloadTab(groupHF.getValue(), groupFile);
