@@ -5,11 +5,10 @@
 package org.gridlab.gridsphere.portletcontainer;
 
 import org.gridlab.gridsphere.layout.PortletLayoutEngine;
-import org.gridlab.gridsphere.portlet.DefaultPortletAction;
-import org.gridlab.gridsphere.portlet.PortletException;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletRequest;
+import org.gridlab.gridsphere.portlet.impl.SportletContext;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
@@ -20,6 +19,9 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Vector;
 
 
 public class GridSphereServlet extends HttpServlet implements ServletContextListener,
@@ -40,12 +42,14 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     /* GridSphere Portlet layout Engine handles rendering */
     private static PortletLayoutEngine layoutEngine = null;
 
-    private ServletContext context = null;
+    private static List userSessions = new Vector();
+
+    private PortletContext context = null;
     private static boolean firstDoGet = true;
 
     public final void init(ServletConfig config) throws ServletException {
         super.init(config);
-        this.context = config.getServletContext();
+        this.context = new SportletContext(config);
 
         // Create an instance of the registry service used by the UserPortletManager
         try {
@@ -81,17 +85,16 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             firstDoGet = false;
         }
 
-        GridSphereEvent event = new GridSphereEventImpl(getServletConfig(), req, res);
+        System.err.println(context.getServletContextName());
 
-        res.setContentType("text/html");
+        System.err.println(req.getServletPath());
+
+        System.err.println(req.getContextPath());
+
+        GridSphereEvent event = new GridSphereEventImpl(context, req, res);
 
         // Render layout
-        try {
-            layoutEngine.service(event);
-        } catch (PortletException e) {
-            handleException(res, e);
-        }
-
+        layoutEngine.service(event);
     }
 
     public final void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
@@ -183,6 +186,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event The session event
      */
     public void sessionCreated(HttpSessionEvent event) {
+
         log.info("sessionCreated('" + event.getSession().getId() + "')");
     }
 
@@ -193,28 +197,11 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event The session event
      */
     public void sessionDestroyed(HttpSessionEvent event) {
-
         log.info("sessionDestroyed('" + event.getSession().getId() + "')");
-        //HttpSession session = event.getSession();
-        //User user = (User)session.getAttribute(GridSphereProperties.USER);
-        //PortletLayoutEngine engine = PortletLayoutEngine.getInstance();
-        //PortletContainer pc = engine.getPortletContainer(user);
-        //pc.logout();
+        HttpSession session = event.getSession();
+        User user = (User)session.getAttribute(GridSphereProperties.USER);
+        PortletLayoutEngine engine = PortletLayoutEngine.getInstance();
+        engine.removeUser(user);
     }
-
-    private final void handleException(HttpServletResponse res, Throwable t) {
-        // make sure that the stack trace makes it the log
-        log.error("GridSphere: handleException: " + t.getMessage());
-
-        String mimeType = "text/plain";
-        try {
-            PrintWriter out = res.getWriter();
-            out.print(t.getMessage());
-            t.printStackTrace(out);
-        } catch (IOException e) {
-            log.error("Couldn't even write the error to screen!: " + e.getMessage());
-        }
-    }
-
 
 }

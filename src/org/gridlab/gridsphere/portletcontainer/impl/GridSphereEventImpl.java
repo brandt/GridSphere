@@ -28,10 +28,10 @@ public class GridSphereEventImpl implements GridSphereEvent {
     protected String ActivePortletID = null;
     protected UserPortletManager userPortletManager = UserPortletManager.getInstance();
 
-    public GridSphereEventImpl(ServletConfig config, HttpServletRequest req, HttpServletResponse res) {
+    public GridSphereEventImpl(PortletContext ctx, HttpServletRequest req, HttpServletResponse res) {
         portletRequest = new SportletRequestImpl(req);
         portletResponse = new SportletResponse(res, portletRequest);
-        portletContext = new SportletContext(config);
+        portletContext = ctx;
 
         String cidStr = req.getParameter(GridSphereProperties.COMPONENT_ID);
         try {
