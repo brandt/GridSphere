@@ -12,5 +12,6 @@ public class GridSphereProperties {
     public static final String LOGIN = "GridSphere.login";
     public static final String LOGOFF = "GridSphere.logoff";
     public static final String USER = "GridSphere.user";
+    public static final String ACTION = "GridSphere.action";
 
 }

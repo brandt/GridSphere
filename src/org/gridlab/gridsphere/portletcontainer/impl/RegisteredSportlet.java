@@ -8,15 +8,20 @@ import org.gridlab.gridsphere.portlet.AbstractPortlet;
 import org.gridlab.gridsphere.portlet.PortletConfig;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletSettings;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.impl.SportletConfig;
+import org.gridlab.gridsphere.portlet.impl.SportletSettings;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletApplication;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
 import org.gridlab.gridsphere.portletcontainer.RegisteredPortlet;
+import org.gridlab.gridsphere.services.security.acl.AccessControlService;
 
 import javax.servlet.ServletConfig;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * A RegisteredSportlet provides the portlet container with information used to create and manage the
@@ -68,27 +73,26 @@ public class RegisteredSportlet implements RegisteredPortlet {
         if (portletMappingFile == null) {
             portletMappingFile = "/WEB-INF/conf/portlet-mapping.xml";
         }
-        String fullPath = appRoot + portletConfigFile;
-        String mappingPath = appRoot + portletMappingFile;
-        try {
-            fistream = new FileInputStream(fullPath);
-        } catch (FileNotFoundException e) {
-            log.error("Can't find file: " + fullPath);
-            throw new Exception("Unable to create registered portlet");
-        }
+        String portletFilePath = appRoot + portletConfigFile;
+        String mappingFilePath = appRoot + portletMappingFile;
+
         // Now parse portlet.xml and stick relevant info into portletSettings and portletConfig
         portletConfig = new SportletConfig(config);
 
-        // Here is where we need to have a Portal Deployment Descriptor that is marshalled into an object
-        String xmlFile = config.getInitParameter("portlet.xml");
+        // Create Access Control Service
+        AccessControlService aclService = (AccessControlService)portletConfig.getContext().getService(AccessControlService.class);
+        List groups = aclService.getAllGroups();
+        List roles = aclService.getAllRoles();
 
-        PortletDeploymentDescriptor pdd = new PortletDeploymentDescriptor(fullPath, mappingPath);
-        //portletSettings = new SportletSettings(pdd);
+        PortletDeploymentDescriptor pdd = new PortletDeploymentDescriptor(portletFilePath, mappingFilePath);
 
         //String portletClass = "org.gridlab.gridsphere.portlets.HelloWorld";
         Iterator portletApps = pdd.getPortletApp().iterator();
         while (portletApps.hasNext()) {
             PortletApplication portletApp = (PortletApplication) portletApps.next();
+
+            // create SportletSettings for each <portlet-app> definition
+            portletSettings = new SportletSettings(portletApp, groups, roles);
             String portletClass = portletApp.getUid();
             portletName = portletApp.getName();
             try {

@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.portletcontainer;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletConfig;
+import org.gridlab.gridsphere.portlet.impl.GuestUser;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.container.registry.PortletRegistryService;
 import org.gridlab.gridsphere.services.container.parsing.ServletParsingService;
@@ -141,6 +142,19 @@ public class GridSphere extends HttpServlet {
         portletRequest = parseService.getPortletRequest(req);
         portletResponse = parseService.getPortletResponse(res);
 
+        // Get the action tag indicating the portlet to execute
+        String action = portletRequest.getParameter(GridSphereProperties.ACTION);
+
+        // Check if user is guest
+        User user = portletRequest.getUser();
+
+        // If GuestUser then only display login portlet
+        if (user instanceof GuestUser) {
+
+            // Show LoginPortlet
+
+        }
+
         // Now we want to display a portlet!
 
         // These are the following eight calls that get invoked during the portlet lifecycle
@@ -167,16 +181,18 @@ public class GridSphere extends HttpServlet {
         //helloPortlet.login(portletRequest);
 
         // For now, use cheesy request parameters.. not sure what else...
+
+        // Check for LOGIN
         String login = (String) portletRequest.getAttribute(GridSphereProperties.LOGIN);
-        String logoff = (String) portletRequest.getAttribute(GridSphereProperties.LOGOFF);
         if (login != null) {
             doLogin(portletRequest, portletResponse);
         }
 
+        // Check for LOGOFF
+        String logoff = (String) portletRequest.getAttribute(GridSphereProperties.LOGOFF);
         if (logoff != null) {
             doLogoff(portletRequest, portletResponse);
         }
-
 
         // This gets called right here in servlets's service method-- just invokes portlet service method of the active portlet
         // Hmm... may invoke service of all methods if caching etc. is up to each portlet. definitely want to cache!!
@@ -220,7 +236,7 @@ public class GridSphere extends HttpServlet {
     }
 
     public final void destroy() {
-        // Shut down all Portlet Services.
+        // Shut down all PortletInfo Services.
         log.info("Shutting down GridSphere");
 
         // Destroy all portlets
