@@ -86,26 +86,7 @@ public class PortletRegistry {
         return null;
     }
 
-    /*
-    public String getPortletClassName(String appName, String portletName) {
-        Collection appColl = getAllApplicationPortlets();
-        Iterator appIt = appColl.iterator();
-        while (appIt.hasNext()) {
-            ApplicationPortlet app = (ApplicationPortlet) appIt.next();
-            if (app.getWebApplicationName().startsWith(appName)) {
-                List concPortlets = app.getConcretePortlets();
-                Iterator cit = concPortlets.iterator();
-                while (cit.hasNext()) {
-                    ConcretePortlet conc = (ConcretePortlet) cit.next();
-                    String name = conc.getPortletName();
-                    if (name.equals(portletName)) return conc.getConcretePortletID();
-                }
-            }
-        }
-        return null;
-    }
-    */
-
+ 
     /**
      * Returns all application portlets from the registry
      *

@@ -37,7 +37,6 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
 
     private PortletLog log = SportletLog.getInstance(JSRPortletWebApplicationImpl.class);
     private PortletApp portletWebApp = null;
-    private String servletName = null;
     protected Map appPortlets = new Hashtable();
     protected Map portletDefinitions = new Hashtable();
     protected RequestDispatcher rd = null;
@@ -48,7 +47,7 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
     // PortletLayout engine handles layout.xml
     //private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
 
-    public JSRPortletWebApplicationImpl(ServletContext context, String servletName, ClassLoader loader) throws PortletException {
+    public JSRPortletWebApplicationImpl(ServletContext context, ClassLoader loader) throws PortletException {
         String realPath = context.getRealPath("");
         int l = realPath.lastIndexOf(File.separator);
         String appName = realPath.substring(l + 1);
@@ -58,7 +57,6 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
         //webApplicationName = appName + ".1";
 
         this.webAppDescription = context.getServletContextName();
-        this.servletName = servletName;
 
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
@@ -107,7 +105,7 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
 
         // Iterate thru portlet definitions for portlet applications
         for (int i = 0; i < portletDefs.length; i++) {
-            ApplicationPortlet portletApp = new JSRApplicationPortletImpl(pdd, portletDefs[i], servletName, webApplicationName, ctx);
+            ApplicationPortlet portletApp = new JSRApplicationPortletImpl(pdd, portletDefs[i], webApplicationName, ctx);
 
             String portletClass = portletApp.getApplicationPortletID();
             /*
@@ -201,7 +199,6 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
         factory.shutdownServices(webApplicationName);
         PersistenceManagerFactory.destroyPersistenceManagerRdbms(webApplicationName);
         portletWebApp = null;
-        servletName = null;
         appPortlets = null;
         portletDefinitions = null;
         rd = null;

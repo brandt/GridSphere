@@ -37,7 +37,6 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
     private PortletDefinition portletDef = null;
     private String portletName = "";
     private String portletClassName = null;
-    private String servletName = "";
     private String webAppName = null;
     private Locale[] supportedLocales = null;
     private List concPortlets = null;
@@ -61,10 +60,9 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
      * @param webApplication the ui application name for this application portlet
      * @param context        the <code>ServletContext</code> containing this application portlet
      */
-    public JSRApplicationPortletImpl(PortletDeploymentDescriptor2 pdd, PortletDefinition portletDef, String servletName, String webApplication, ServletContext context)  {
+    public JSRApplicationPortletImpl(PortletDeploymentDescriptor2 pdd, PortletDefinition portletDef, String webApplication, ServletContext context)  {
         this.portletDef = portletDef;
         this.webAppName = webApplication;
-        this.servletName = servletName;
         this.portletClassName = portletDef.getPortletClass().getContent();
         this.portletName = portletDef.getPortletName().getContent();
         this.context = context;
@@ -204,7 +202,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
             if (val instanceof String[]) {
                 String[] vals = (String[]) val;
                 for (int j = 0; j < vals.length - 1; j++) {
-                    String encvalue = URLEncoder.encode(vals[j]);
+                    String encvalue = URLEncoder.encode(vals[j], "UTF-8");
                     extraInfo += encname + "=" + encvalue + "&";
                 }
                 String encvalue = URLEncoder.encode(vals[vals.length - 1], "UTF-8");
@@ -235,7 +233,7 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
 
         if (rd == null) {
             String msg = "Unable to create a dispatcher for portlet: " + portletName + "\n";
-            msg += "Make sure the servletName: " + servletName + " is the servlet-name defined in web.xml";
+            msg += "Make sure the servlet mapping: /jsr/" + webAppName + " is defined in web.xml";
             log.error(msg);
         }
         portletDispatcher = new SportletDispatcher(rd, null);
@@ -259,15 +257,6 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
      */
     public String getApplicationPortletName() {
         return portletName;
-    }
-
-    /**
-     * Returns the name of a servlet associated with this portlet defined in ui.xml as <servlet-name>
-     *
-     * @return the servlet name
-     */
-    public String getServletName() {
-        return servletName;
     }
 
     public String getApplicationPortletClassName() {
@@ -328,13 +317,13 @@ public class JSRApplicationPortletImpl implements ApplicationPortlet {
         sb.append("\t JSR Application Portlet:\n");
         sb.append("\t JSR Portlet Name: " + portletName + "\n");
         sb.append("\t Web app name: " + webAppName + "\n");
-        sb.append("\t Servlet Name: " + servletName + "\n");
-
+        /*
         if (portletDispatcher == null) {
             sb.append("\t Portlet dispatcher: NULL");
         } else {
             sb.append("\t Portlet dispatcher: OK");
         }
+        */
         return sb.toString();
     }
 }

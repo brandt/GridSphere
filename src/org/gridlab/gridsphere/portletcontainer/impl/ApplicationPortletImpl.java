@@ -197,15 +197,6 @@ class ApplicationPortletImpl implements ApplicationPortlet {
         return portletClass;
     }
 
-    /**
-     * Returns the name of a servlet associated with this portlet defined in ui.xml as <servlet-name>
-     *
-     * @return the servlet name
-     */
-    public String getServletName() {
-        return servletName;
-    }
-
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("\t Application Portlet:\n");
@@ -213,11 +204,13 @@ class ApplicationPortletImpl implements ApplicationPortlet {
         sb.append("\t Servlet Name: " + servletName + "\n");
         sb.append("\t Web App Name: " + webAppName + "\n");
         sb.append("\t App Portlet ID: " + applicationPortletID + "\n");
+        /*
         if (portletDispatcher == null) {
             sb.append("\t Portlet dispatcher: NULL");
         } else {
             sb.append("\t Portlet dispatcher: OK");
         }
+        */
         return sb.toString();
     }
 }

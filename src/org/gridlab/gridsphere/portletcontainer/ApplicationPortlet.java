@@ -64,13 +64,6 @@ public interface ApplicationPortlet {
     public String getApplicationPortletClassName();
 
     /**
-     * Returns the name of a servlet associated with this portlet defined in ui.xml as <servlet-name>
-     *
-     * @return the servlet name
-     */
-    public String getServletName();
-
-    /**
      * Returns a PortletDispatcher for this ApplicationPortlet
      *
      * @return PortletDispatcher the proxy portlet for this ApplicationPortlet
