@@ -23,7 +23,7 @@ Version: $Id$
 }
 
 .window-title-active {
-  background-color: orange;
+  background-color: #4464ac;
   color: #000000;
   font-size: 12px;
   height: 15px;

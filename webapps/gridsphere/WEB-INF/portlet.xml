@@ -5,6 +5,9 @@
         <portlet-app id="org.gridlab.gridsphere.portlets.core.file.FileManagerPortlet">
             <portlet-name>File Manager Portlet</portlet-name>
             <servlet-name>FileManagerPortlet</servlet-name>
+            <supports>
+                <view/>
+            </supports>
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.file.FileManagerPortlet.1">
