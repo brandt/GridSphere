@@ -610,7 +610,7 @@ Copyright:
         </copy>
 
         <!-- Copy over configuration files -->
-        <copy overwrite="true" todir="${GRIDSPHERE_HOME}">
+        <copy todir="${GRIDSPHERE_HOME}">
             <fileset dir="config">
                 <exclude name="*.properties"/>
                 <exclude name="test/**"/>
