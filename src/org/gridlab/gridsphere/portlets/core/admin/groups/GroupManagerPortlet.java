@@ -590,12 +590,17 @@ public class GroupManagerPortlet extends ActionPortlet {
         Set defaultGroups = new HashSet();
         PortalConfigSettings configSettings = portalConfigService.getPortalConfigSettings();
         defaultGroups = configSettings.getDefaultGroups();
+        defaultGroups.clear();
+        defaultGroups.add(aclManagerService.getCoreGroup());
         Iterator it = groups.iterator();
+
         while (it.hasNext()) {
             String name = (String) it.next();
             PortletGroup g = aclManagerService.getGroupByName(name);
             if (g != null) defaultGroups.add(g);
         }
+
+
         configSettings.setDefaultGroups(defaultGroups);
         portalConfigService.savePortalConfigSettings(configSettings);
         createSuccessMessage(evt, this.getLocalizedText(req, "GROUP_SAVE_DEFGROUPS_SUCCESS"));
