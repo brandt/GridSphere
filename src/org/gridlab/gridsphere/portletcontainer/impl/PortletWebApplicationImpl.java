@@ -170,6 +170,7 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
      * Under development. A portlet web application can unregister itself from the application server
      */
     public void destroy() {
+        log.debug("removing application tab :" + webApplicationName);
         PortletTabRegistry.removeApplicationTab(webApplicationName);
     }
 

@@ -211,7 +211,7 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static  void doTitle(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public final static void doTitle(String concretePortletID, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         log.debug("in doTitle " + concretePortletID);
         String appID = registry.getApplicationPortletID(concretePortletID);
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
@@ -220,6 +220,7 @@ public class PortletInvoker {
             dispatcher.doTitle(req, res);
         } else {
             log.info("in doTitle: Unable to find portlet in registry: " + concretePortletID);
+            throw new PortletException("Unable to find portlet in registry: " + concretePortletID);
         }
     }
 
@@ -374,8 +375,9 @@ public class PortletInvoker {
      * @throws IOException if an I/O error occurs
      * @throws PortletException if a portlet/servlet error occurs
      */
-    public final static  void destroyPortletWebApp(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
+    public final static void destroyPortletWebApp(String webApplicationName, PortletRequest req, PortletResponse res) throws IOException, PortletException {
         // First destroy all concrete portlets for each application portlet
+        log.debug("in destroyPortletWebApp " + webApplicationName);
         Collection appPortlets = registry.getApplicationPortlets(webApplicationName);
         PortletDispatcher portletDispatcher = null;
         Iterator it = appPortlets.iterator();
