@@ -32,7 +32,7 @@ public class ActionFormTag extends ActionTag {
         return EVAL_BODY_BUFFERED;
     }
 
-    public int doEndTag() throws JspTagException {
+    public int doEndTag() throws JspException {
         try {
             JspWriter out = pageContext.getOut();
 
@@ -45,12 +45,21 @@ public class ActionFormTag extends ActionTag {
             if (isMultipart) {
                 out.print(" enctype=\"multipart/form-data\"");
             }
-            if (name != null) {
-                out.print(" name=\""+name+"\"");
-            }
-            out.println(">");
+            if (name == null) name = "aform";
 
+            out.print(" name=\""+name+"\"");
+
+            out.println(">");
+            // add JS info
+            out.println("<input name=\"JavaScript\" value=\"\" type=\"hidden\">");
+
+            out.println("<script language=\"JavaScript\">");
+            out.println("document." + name + ".JavaScript.value = \"enabled\";");
+            out.println("</script>");
+
+            // write out rest of body
             bodyContent.writeOut(getPreviousOut());
+            // end form
             out.print("</form>");
         } catch (Exception e) {
             throw new JspTagException(e.getMessage());

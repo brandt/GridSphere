@@ -132,64 +132,6 @@
     </tag>
 
     <tag>
-        <name>errorframe</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.ErrorFrameTag</tag-class>
-        <body-content>JSP</body-content>
-        <description>
-            Shows error table frame
-        </description>
-        <attribute>
-            <name>beanId</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>cellspacing</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>width</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>key</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>value</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-    </tag>
-
-    <tag>
-        <name>errortext</name>
-        <tag-class>org.gridlab.gridsphere.tags.portletui.ErrorTextTag</tag-class>
-        <body-content>empty</body-content>
-        <description>
-            Shows text
-        </description>
-        <attribute>
-            <name>value</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>key</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>beanId</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-    </tag>
-
-    <tag>
         <name>fileform</name>
         <tag-class>org.gridlab.gridsphere.tags.portletui.FileFormTag</tag-class>
         <body-content>JSP</body-content>
@@ -288,6 +230,21 @@
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
+        <attribute>
+            <name>type</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>value</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>key</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
     </tag>
 
     <tag>
@@ -317,7 +274,7 @@
     <tag>
         <name>listbox</name>
         <tag-class>org.gridlab.gridsphere.tags.portletui.ListBoxTag</tag-class>
-        <body-content>empty</body-content>
+        <body-content>JSP</body-content>
         <description>
             makes a listbox
         </description>
@@ -327,7 +284,36 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <name>name</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>size</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>listboxitem</name>
+        <tag-class>org.gridlab.gridsphere.tags.portletui.ListBoxItemTag</tag-class>
+        <body-content>empty</body-content>
+        <description>
+            makes a listbox item
+        </description>
+        <attribute>
+            <name>beanId</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>selected</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>value</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -446,6 +432,20 @@
     </tag>
 
     <tag>
+        <name>special</name>
+        <tag-class>org.gridlab.gridsphere.tags.portletui.SpecialTag</tag-class>
+        <body-content>JSP</body-content>
+        <description>
+            Shows table row
+        </description>
+        <attribute>
+            <name>beanId</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
         <name>table</name>
         <tag-class>org.gridlab.gridsphere.tags.portletui.TableTag</tag-class>
         <body-content>JSP</body-content>
@@ -478,6 +478,11 @@
         </description>
         <attribute>
             <name>beanId</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>header</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -516,7 +521,7 @@
             Shows text
         </description>
         <attribute>
-            <name>error</name>
+            <name>style</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

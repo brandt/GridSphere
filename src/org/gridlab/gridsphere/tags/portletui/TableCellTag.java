@@ -4,9 +4,7 @@ import org.gridlab.gridsphere.provider.portletui.beans.*;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
-import java.util.List;
 import java.util.Iterator;
-import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -57,6 +55,7 @@ public class TableCellTag extends ContainerTag {
         ContainerTag rowTag = (ContainerTag)getParent();
         if (rowTag == null) return SKIP_BODY;
         return EVAL_BODY_INCLUDE;
+        //return EVAL_BODY_BUFFERED;
     }
 
     public int doEndTag() throws JspException {
@@ -64,16 +63,31 @@ public class TableCellTag extends ContainerTag {
         if (width != null) cellBean.setWidth(width);
         ContainerTag rowTag = (ContainerTag)getParent();
         if (rowTag != null) {
-            Iterator it = list.iterator();
-            while (it.hasNext()) {
-                BaseComponentBean bean = (BaseComponentBean)it.next();
-                if (bean.toString() != null) {
-                    cellBean.addBean(bean);
-                    cellBean.setCssStyle(bean.getCssStyle());
+            /* if (list.isEmpty()) {
+                None of this works yet--- to include non ui tags within tablecell tags
+                try {
+                    JspWriter out = pageContext.getOut();
+                    out.print("");
+                    JspWriter writer = getPreviousOut();
+
+                    if ((out != null) && (writer != null)) bodyContent.writeOut(writer);
+                } catch (IOException e) {
+                    throw new JspException("Unable to include body!", e);
                 }
-            }
-            rowTag.addTagBean(cellBean);
+
+            } else { */
+                Iterator it = list.iterator();
+                while (it.hasNext()) {
+                    BaseComponentBean bean = (BaseComponentBean)it.next();
+                    if (bean.toString() != null) {
+                        cellBean.addBean(bean);
+                        String css = bean.getCssStyle();
+                        if (css != null) cellBean.setCssStyle(bean.getCssStyle());
+                    }
+                }
+                rowTag.addTagBean(cellBean);
+
         }
-        return EVAL_BODY_INCLUDE;
+        return EVAL_PAGE;
     }
 }

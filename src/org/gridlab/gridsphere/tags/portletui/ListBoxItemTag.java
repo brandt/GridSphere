@@ -24,7 +24,7 @@ public class ListBoxItemTag extends BaseComponentTag {
         return selected;
     }
 
-    public int doEndTag() throws JspException {
+    public int doStartTag() throws JspException {
 
         if (!beanId.equals("")) {
             listboxitem = (ListBoxItemBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);

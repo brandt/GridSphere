@@ -17,6 +17,7 @@ public abstract class BaseComponentBean extends BaseBean {
     protected String font = "";
     protected String key = null;
     protected boolean visible = true;
+    protected boolean supportsJS = false;
 
     public BaseComponentBean() {
         super();
@@ -186,4 +187,13 @@ public abstract class BaseComponentBean extends BaseBean {
     public boolean getVisible() {
         return visible;
     }
+
+    public boolean supportsJS() {
+        return supportsJS;
+    }
+
+    public void setSupportsJS(boolean supportsJS) {
+        this.supportsJS = supportsJS;
+    }
 }
+

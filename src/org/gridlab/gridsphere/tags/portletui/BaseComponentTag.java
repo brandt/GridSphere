@@ -17,6 +17,7 @@ public abstract class BaseComponentTag extends BaseBeanTag   {
     protected String backgroundcolor = null;
     protected String cssStyle = null;
     protected String font = null;
+    protected boolean supportsJS = false;
 
     /**
      * Sets the name of the bean.
@@ -170,6 +171,12 @@ public abstract class BaseComponentTag extends BaseBeanTag   {
         if (font != null) componentBean.setFont(font);
         if (name != null) componentBean.setName(name);
         if (value != null) componentBean.setValue(value);
+        if (supportsJavaScript()) {
+            supportsJS = true;
+        } else {
+            supportsJS = false;
+        }
+        componentBean.setSupportsJS(supportsJS);
         componentBean.setReadonly(readonly);
     }
 
@@ -192,7 +199,11 @@ public abstract class BaseComponentTag extends BaseBeanTag   {
         if ((value != null) && (componentBean.getValue() == null)) {
             componentBean.setValue(value);
         }
-
+        if (supportsJavaScript()) {
+            supportsJS = true;
+        } else {
+            supportsJS = false;
+        }
     }
 
 

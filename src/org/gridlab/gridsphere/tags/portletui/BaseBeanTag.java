@@ -29,6 +29,18 @@ public abstract class BaseBeanTag extends BodyTagSupport {
         return beanId + "_" + compId;
     }
 
+    protected boolean supportsJavaScript() {
+        //System.err.println("in supportsJavaScript");
+        String isEnabled = pageContext.getRequest().getParameter("JavaScript");
+        //String isEnabled = (String)pageContext.getAttribute("JavaScript", PageContext.REQUEST_SCOPE);
+        if (isEnabled != null) {
+            System.err.println("JavaScript = " + isEnabled);
+            return ((isEnabled.equals("enabled")) ? true : false);
+        } else {
+            return false;
+        }
+    }
+
     protected void store(String id, Object object) {
         /*
         if (!beanId.equals("")) {

@@ -33,7 +33,7 @@ public class ActionSubmitBean extends ActionBean implements TagBean {
 
         String pname = (name == null) ? "" : name;
         String sname = pname;
-        System.err.println("pname=" + pname+createSubmitName());
+        //System.err.println("pname=" + pname+createSubmitName());
         if (!beanId.equals("")) {
             sname = "ui_" + vbName + "_" + beanId + "_" + pname;
         } else {

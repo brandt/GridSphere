@@ -10,7 +10,7 @@ public class FileFormTag extends ActionFormTag {
         return super.doStartTag();
     }
 
-    public int doEndTag() throws JspTagException {
+    public int doEndTag() throws JspException {
         return super.doEndTag();
     }
 

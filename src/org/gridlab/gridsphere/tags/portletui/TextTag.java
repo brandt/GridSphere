@@ -18,14 +18,14 @@ public class TextTag extends BaseComponentTag {
 
     protected TextBean textBean = null;
     protected String key = null;
-    protected boolean isError = false;
+    protected String style = "";
 
-    public void setError(boolean isError) {
-        this.isError = isError;
+    public void setStyle(String style) {
+        this.style = style;
     }
 
-    public boolean getError() {
-        return isError;
+    public String getStyle() {
+        return style;
     }
 
     public String getKey() {
@@ -63,7 +63,7 @@ public class TextTag extends BaseComponentTag {
             this.updateBaseComponentBean(textBean);
         } else {
             if (key != null) textBean.setKey(key);
-            textBean.setError(isError);
+            textBean.setStyle(style);
             this.setBaseComponentBean(textBean);
         }
         //debug();

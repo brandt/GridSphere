@@ -11,33 +11,43 @@ public class TextBean extends BaseComponentBean implements TagBean {
 
     public static final String NAME = "tb";
 
-    public static final String TEXT_STYLE = "portlet-frame-label";
+    public static final String TEXT_LABEL_STYLE = "portlet-frame-label";
+    public static final String TEXT_PLAIN_STYLE = "portlet-frame-text";
+    public static final String TEXT_MESSAGE_STYLE = "portlet-frame-message";
     public static final String TEXT_ERROR_STYLE = "portlet-frame-message-alert";
 
-    protected boolean isError = false;
+    protected String style = "";
 
     public TextBean() {
         super(NAME);
-        this.cssStyle = TEXT_STYLE;
+        this.cssStyle = TEXT_LABEL_STYLE;
     }
 
     public TextBean(PortletRequest req, String beanId) {
         super(NAME);
         this.beanId = beanId;
         this.request = req;
-        this.cssStyle = TEXT_STYLE;
+        this.cssStyle = TEXT_LABEL_STYLE;
     }
 
-    public boolean getError() {
-        return isError;
+    public String getStyle() {
+        return style;
     }
 
-    public void setError(boolean isError) {
-        this.isError = isError;
-        if (isError) this.cssStyle = TEXT_ERROR_STYLE;
+    public void setStyle(String style) {
+        this.style = style;
     }
 
     public String toString() {
+        if (style.equalsIgnoreCase("error")) {
+            this.cssStyle = TEXT_ERROR_STYLE;
+        } else if (style.equalsIgnoreCase("message")) {
+            this.cssStyle = TEXT_MESSAGE_STYLE;
+        } else if (style.equalsIgnoreCase("label")) {
+            this.cssStyle = TEXT_LABEL_STYLE;
+        } else if (style.equalsIgnoreCase("plain")) {
+            this.cssStyle = TEXT_PLAIN_STYLE;
+        }
         return value;
     }
 }

@@ -21,6 +21,7 @@ import java.util.Iterator;
 public class TableRowTag extends ContainerTag {
 
     protected TableRowBean rowBean = null;
+    protected boolean isHeader = false;
 
     public void setTableRowBean(TableRowBean tableRowBean) {
         rowBean = tableRowBean;
@@ -30,10 +31,16 @@ public class TableRowTag extends ContainerTag {
         return rowBean;
     }
 
+    public void setHeader(boolean isHeader) {
+        this.isHeader = isHeader;
+    }
+
+    public boolean getHeader() {
+        return isHeader;
+    }
+
     public int doStartTag() throws JspException {
         list = new Vector();
-
-
         if (!beanId.equals("")) {
             rowBean = (TableRowBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (rowBean == null) rowBean = new TableRowBean();
@@ -47,7 +54,7 @@ public class TableRowTag extends ContainerTag {
     public int doEndTag() throws JspException {
         TableTag tableTag = (TableTag)getParent();
         if (tableTag != null) {
-
+            rowBean.setHeader(isHeader);
             Iterator it = list.iterator();
             while (it.hasNext()) {
                 BaseComponentBean bean = (BaseComponentBean)it.next();

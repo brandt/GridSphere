@@ -38,10 +38,10 @@ public class ListBoxTag extends ContainerTag {
 
     public int doStartTag() throws JspException {
 
-        //System.err.println("in TableCellTag:doStartTag");
+        System.err.println("in ListBoxTag:doStartTag");
         list = new Vector();
 
-        //System.err.println("creating new list");
+        System.err.println("creating new list");
 
         if (!beanId.equals("")) {
             listbox = (ListBoxBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
@@ -74,17 +74,21 @@ public class ListBoxTag extends ContainerTag {
         Iterator it = list.iterator();
         while (it.hasNext()) {
             BaseComponentBean bc = (BaseComponentBean)it.next();
-            bc.setName(name);
+            if (name!= null) bc.setName(name);
+            System.err.println("adding bean to listbox: name= " + name);
             listbox.addBean(bc);
         }
+
         //debug();
 
         Object parentTag = getParent();
         if (parentTag instanceof ContainerTag) {
             ContainerTag containerTag = (ContainerTag)parentTag;
+            System.err.println("whats going on here? setting listbox name to: " + containerTag.getName());
             listbox.setName(containerTag.getName());
             containerTag.addTagBean(listbox);
         } else {
+            System.err.println("no container tag: just printing a listbox!");
             try {
                 JspWriter out = pageContext.getOut();
                 out.print(listbox.toString());
@@ -92,7 +96,7 @@ public class ListBoxTag extends ContainerTag {
                 throw new JspException(e.getMessage());
             }
         }
-        return EVAL_BODY_INCLUDE;
+        return EVAL_PAGE;
     }
 
 }
