@@ -18,6 +18,7 @@ import org.gridlab.gridsphere.services.user.AccountRequest;
 
 import java.util.List;
 import java.util.Vector;
+import java.util.Enumeration;
 
 /**
  * @table arimpl
@@ -126,6 +127,25 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
         this.UserID = userID;
     }
 
+    /**
+     * This is alias for the getUserID method, which for all intensive
+     * purposes represents the name required for this user to login.
+     *
+     * @return String the user id
+     */
+    public String getLoginName() {
+        return this.UserID;
+    }
+
+    /**
+     * This is an alias for the setUserID method, which for all intensive
+     * purposes represents the name required for this user to login.
+     *
+     * @param String the user id
+     */
+    public void setLoginName(String name) {
+        this.UserID = name;
+    }
 
     /**
      * Returns the full name of the user, or null if the full name is not available.
@@ -219,6 +239,57 @@ public class AccountRequestImpl extends BaseObject implements AccountRequest {
      */
     public String getOrganization() {
         return Organization;
+    }
+
+    /**
+     * Sets the value of the attribute with the given name,
+     *
+     * @param name the attribute name
+     * @param value the attribute value
+     */
+    public void setAttribute(String name, String value) {
+
+    }
+
+    /**
+     * Returns the value of the attribute with the given name,
+     * or null if no attribute with the given name exists.
+     *
+     * @param name the attribute name
+     * @return the attribute value
+     */
+    public Object getAttribute(String name) {
+        return null;
+    }
+
+    /**
+     * Returns an enumeration of names of all attributes available to this request.
+     * This method returns an empty enumeration if the request has no attributes available to it.
+     *
+     * @return an enumeration of attribute names
+     */
+    public Enumeration getAttributeNames() {
+        return null;
+    }
+
+    /**
+     * Returns the point of time that this user was last logged in, or null if this information is not available.
+     * The time is returned in number of milliseconds since January 1, 1970 GMT.
+     *
+     * @return the last login time
+     */
+    public long getLastLoginTime() {
+        return -1;
+    }
+
+    /**
+     * Sets the point of time that this user was last logged in, or null if this information is not available.
+     * The time is returned in number of milliseconds since January 1, 1970 GMT.
+     *
+     * @param lastLoginTime the last login time
+     */
+    public void setLastLoginTime(long lastLoginTime) {
+
     }
 
     // -----
