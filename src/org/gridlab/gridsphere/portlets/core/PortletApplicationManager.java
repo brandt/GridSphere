@@ -10,9 +10,6 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlets.core.tomcat.TomcatManagerWrapper;
 import org.gridlab.gridsphere.portlets.core.tomcat.TomcatWebAppResult;
-import org.gridlab.gridsphere.provider.event.FileFormEvent;
-import org.gridlab.gridsphere.provider.event.FileFormException;
-import org.gridlab.gridsphere.provider.event.impl.FileFormEventImpl;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 
 import javax.servlet.UnavailableException;
@@ -58,15 +55,17 @@ public class PortletApplicationManager extends AbstractPortlet {
                 result = tomcat.getWebAppList();
             } else if (action.getName().equals("install")) {
                 log.debug("In actionPerformed doing an install");
-                FileFormEvent fileformEvent = new FileFormEventImpl(event);
-                String portletWar = null;
 
+
+                String portletWar = null;
+                /*
+                FileFormEvent fileformEvent = new FileFormEventImpl(event);
                 try {
                     portletWar = fileformEvent.saveFile(PortletManagerService.WEB_APPLICATION_PATH);
                 } catch (FileFormException ffe) {
                     log.error("Unable to save file from form: " + ffe.getMessage());
                 }
-
+                */
                 /* Remove old portlet web app if it exists */
                 int idx = -1;
                 String webAppContext = null;

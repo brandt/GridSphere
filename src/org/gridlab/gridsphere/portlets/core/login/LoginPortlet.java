@@ -5,8 +5,8 @@
 package org.gridlab.gridsphere.portlets.core.login;
 
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
-import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
+import org.gridlab.gridsphere.provider.portletui.beans.*;
+import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridlab.gridsphere.provider.ActionPortlet;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 
@@ -33,15 +33,15 @@ public class LoginPortlet extends ActionPortlet {
         super.initConcrete(settings);
     }
 
-    public void doViewUser(FormEvent event) throws PortletException, IOException {
+    public void doViewUser(FormEvent event) throws PortletException {
         log.debug("in LoginPortlet: doViewUser");
         PortletRequest request = event.getPortletRequest();
         User user = request.getUser();
         request.setAttribute("user", user);
-        setNextPage(request, "login/login.jsp");
+        setNextPresentation(request, "login/login.jsp");
     }
 
-    public void doConfigModules(FormEvent event) throws PortletException, IOException {
+    public void doConfigModules(FormEvent event) throws PortletException {
         System.err.println("in LoginPortlet: doConfigure");
         PortletRequest request = event.getPortletRequest();
         LoginService loginService = (LoginService)getPortletConfig().getContext().getService(LoginService.class, request.getUser());
@@ -51,7 +51,7 @@ public class LoginPortlet extends ActionPortlet {
 
         request.setAttribute("activeModules", activeModules);
         request.setAttribute("supportedModules", supportedModules);
-        setNextPage(request, "login/configure.jsp");
+        setNextPresentation(request, "login/configure.jsp");
     }
 
     public void doTitle(PortletRequest request, PortletResponse response) throws PortletException, IOException {
@@ -74,13 +74,14 @@ public class LoginPortlet extends ActionPortlet {
     public void gs_login(FormEvent event) throws PortletException {
         log.debug("in LoginPortlet: gs_login");
         PortletRequest req = event.getPortletRequest();
-        TextBean errorMsg = event.getTextBean("errorMsg");
+
+        ErrorFrameBean frame = event.getErrorFrameBean("errorFrame");
         String errorKey = (String)req.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
-        if ((errorKey != null) && (errorMsg != null)) {
-            errorMsg.setKey(errorKey);
-            errorMsg.setError(true);
+        if ((errorKey != null) && (frame != null)) {
+            System.err.println("1. setting error key in frame");
+            frame.setKey(errorKey);
         }
-        setNextPage(req, "doViewUser");
+        setNextPresentation(req, "doViewUser");
     }
 
     public void configAuthModules(FormEvent event) throws PortletException {
@@ -121,10 +122,10 @@ public class LoginPortlet extends ActionPortlet {
             loginService.setActiveAuthModules(authModules);
         }
 
-        //setNextPage(CONFIGURE_PAGE);
+        //setNextPresentation(CONFIGURE_PAGE);
     }
 
     public void configLdapModule(FormEvent event) {
-        //setNextPage();
+        //setNextPresentation();
     }
 }
