@@ -57,6 +57,10 @@
 <!ENTITY FormEvent "<classname>FormEvent</classname>">
 
 
+<!ENTITY PersistenceManager "<classname>PersistenceManager</classname>">
+<!-- JSR classes -->
+<!ENTITY PortletPreferences "<classname>PortletPreferences</classname>">
+
 <!-- Common Tapestry classes -->
 
 <!ENTITY ApiRoot "../javadocs/org/gridlab/gridsphere">
