@@ -289,8 +289,9 @@ public class GroupManagerPortlet extends ActionPortlet {
             if (g.equals(PortletGroupFactory.GRIDSPHERE_GROUP.toString())) {
                 continue;
             }
+
             List appColl = portletRegistry.getApplicationPortlets(g);
-            if (appColl.isEmpty()) appColl = portletRegistry.getApplicationPortlets(g);
+
             Iterator appIt = appColl.iterator();
             while (appIt.hasNext()) {
                 ApplicationPortlet app = (ApplicationPortlet)appIt.next();
@@ -299,6 +300,7 @@ public class GroupManagerPortlet extends ActionPortlet {
                 while (cit.hasNext()) {
                     ConcretePortlet conc = (ConcretePortlet)cit.next();
                     String concID = conc.getConcretePortletID();
+                    System.err.println("a concID=" + concID);
                     ListBoxBean lb = evt.getListBoxBean(concID + "LB");
                     CheckBoxBean cb = evt.getCheckBoxBean(concID + "CB");
                     if (cb.isSelected()) {
@@ -322,7 +324,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         User user = evt.getPortletRequest().getUser();
         TextFieldBean groupTF = evt.getTextFieldBean("groupNameTF");
         TextFieldBean groupDescTF = evt.getTextFieldBean("groupDescTF");
-
+      
         try {
             if ((!groupTF.getValue().equals("")) && !portletRoles.isEmpty()) {
                 this.getACLService(user).createGroup(groupTF.getValue(), groupDescTF.getValue(), portletRoles);
