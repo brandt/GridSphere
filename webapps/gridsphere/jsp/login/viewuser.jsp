@@ -1,4 +1,7 @@
-<%@ page import="org.gridlab.gridsphere.portlet.User"%>
+<%@ page import="org.gridlab.gridsphere.portlet.User,
+                 java.util.Calendar,
+                 java.util.Date,
+                 java.text.DateFormat"%>
 
 <table border=0 cellpadding=0 cellspacing=0 >
 <tr>
@@ -16,20 +19,8 @@
     <td align="left"><%= user.getFullName() %></td>
     </tr>
     <tr>
-    <td align="right"><b>Family Name: </b></td>
-    <td align="left"><%= user.getFamilyName() %></td>
-    </tr>
-    <tr>
-    <td align="right"><b>Given Name: </b></td>
-    <td align="left"><%= user.getGivenName() %></td>
-    </tr>
-    <tr>
-    <td align="right"><b>User ID: </b></td>
-    <td align="left"><%= user.getID() %></td>
-    </tr>
-    <tr>
     <td align="right"><b>Last Login Time: </b></td>
-    <td align="left"><%= user.getLastLoginTime() %></td>
+    <td align="left"><%= DateFormat.getDateTimeInstance().format(new Date(user.getLastLoginTime())) %></td>
     </tr>
 
 </td>
