@@ -132,8 +132,11 @@ Copyright:
   <target name="compile" depends="setenv" description="Compile GridSphere source code">
 
     <!-- backup, deploy and preprocess the properties file -->
-    <copy file="conf/gridsphere.properties" tofile="conf/gridsphere.properties.bak"/>
-    <copy file="conf/gridsphere.properties" tofile="${classes.dir}/${Name}/gridsphere.properties"/>
+    <copy file="webapps/WEB-INF/conf/gridsphere.properties" tofile="webapps/WEB-INF/conf/gridsphere.properties.bak"/>
+    <copy file="webapps/WEB-INF/conf/gridsphere.properties" tofile="${classes.dir}/${Name}/gridsphere.properties"/>
+    <copy file="conf/log4j.properties" tofile="${classes.dir}/log4j.properties" />
+
+    <!-- <copy file="${webapp.dir}/WEB-INF/conf/${Name}.properties" tofile="${env.TOMCAT_HOME}/webapps/${Name}/WEB-INF/conf/${Name}.properties" />  -->
     <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@TOMCAT_HOME@" value="${env.TOMCAT_HOME}"/>
     <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@GRIDSPHERE_WEBAPP@" value="${env.TOMCAT_HOME}/webapps/${Name}"/>
     <replace file="${classes.dir}/${Name}/gridsphere.properties" token="@GRIDSPHERE_HOME@" value="${env.TOMCAT_HOME}/${Name}"/>
@@ -154,10 +157,12 @@ Copyright:
   <target name="gridsphere-jar" depends="compile" description="Create gridsphere.jar">
 
     <jar jarfile="${build.lib}/${Name}.jar" basedir="${classes.dir}" >
+        <include name="log4j.properties" />
         <include name="org/**" />
         <include name="${Name}/**" />
         <!-- don't include portlet API -->
         <exclude name="org/gridlab/gridsphere/portlet/**"/>
+        <exclude name="org/gridlab/gridsphere/event/**"/>
         <!-- don't include core portlets -->
         <exclude name="org/gridlab/gridsphere/portlets/**"/>
     </jar>
@@ -168,7 +173,9 @@ Copyright:
   <!-- =================================================================== -->
   <target name="portlet-api-jar" depends="compile" description="Create ${build.lib}/portlet-api.jar">
     <jar jarfile="${build.lib}/portlet-api.jar" basedir="${classes.dir}" >
+        <include name="log4j.properties"/>
         <include name="org/gridlab/gridsphere/portlet/**" />
+        <include name="org/gridlab/gridsphere/event/**" />
         <include name="${conf.dir}/log4j.properties"/>
     </jar>
   </target>
@@ -176,8 +183,9 @@ Copyright:
   <!-- =================================================================== -->
   <!-- Creates core portlets required by GridSphere                        -->
   <!-- =================================================================== -->
-  <target name="core-portlets-jar" depends="compile" description="Create ${build.lib}/coreportlets.jar">
-    <jar jarfile="${build.lib}/coreportlets.jar" basedir="${classes.dir}" >
+  <target name="core-portlets-jar" depends="compile" description="Create ${build.lib}/portlets/coreportlets.jar">
+    <mkdir dir="${build.lib}/portlets"/>
+    <jar jarfile="${build.lib}/portlets/coreportlets.jar" basedir="${classes.dir}" >
         <include name="org/gridlab/gridsphere/portlets/**" />
         <include name="${conf.dir}/log4j.properties"/>
     </jar>
@@ -296,7 +304,7 @@ Copyright:
     <!-- ================================================================= -->
     <!-- Deploys GridSphere to a local server                              -->
     <!-- ================================================================= -->
-    <target name="deploy" depends="jar" description="Deploys GridSphere to a local server">
+    <target name="deploy-all" depends="jar" description="Deploys GridSphere to a local server">
         <copy todir="${install.war}/${Name}">
             <fileset dir="${webapp.dir}"/>
         </copy>
@@ -305,14 +313,14 @@ Copyright:
                 <include name="*.jar"/>
                 <exclude name="servlet*.jar"/>
             </fileset>
+            <fileset dir="${build.lib}"/>
         </copy>
-        <copy todir="${install.war}/${Name}/WEB-INF/classes">
+        <!-- <copy todir="${install.war}/${Name}/WEB-INF/classes">
             <fileset dir="${classes.dir}">
-                <!-- Do not include test files in the runtime jar -->
                  <exclude name="**/Test*.*"/>
                  <exclude name="**/test*.*"/>
             </fileset>
-        </copy>
+        </copy> -->
         <copy todir="${env.TOMCAT_HOME}/webapps/${Name}">
             <fileset dir="${install.war}/${Name}"/>
         </copy>
@@ -323,7 +331,22 @@ Copyright:
         <!-- Make core gpdk directory if necessary -->
         <mkdir dir="${gridsphere.dir}"/>
         <mkdir dir="${gridsphere.dir}/creds"/>
+    </target>
 
+
+    <!-- ================================================================= -->
+    <!-- Deploys core portlets to a local server                           -->
+    <!-- ================================================================= -->
+    <target name="deploy-portlets" depends="core-portlets-jar" description="Deploys core portlets to a local server">
+        <copy todir="${install.war}/${Name}">
+            <fileset dir="${webapp.dir}"/>
+        </copy>
+        <copy todir="${env.TOMCAT_HOME}/webapps/${Name}/WEB-INF/lib/portlets">
+            <fileset dir="${build.lib}/portlets"/>
+        </copy>
+        <copy todir="${env.TOMCAT_HOME}/webapps/${Name}">
+            <fileset dir="${install.war}/${Name}"/>
+        </copy>
     </target>
 
 
@@ -369,6 +392,7 @@ Copyright:
         <classpath>
             <path refid="classpath" />
             <pathelement location="${src.dir}" />
+            <pathelement location="${build.dir}/lib/${Name}.jar"/>
         </classpath>
     </java>
     </target>
