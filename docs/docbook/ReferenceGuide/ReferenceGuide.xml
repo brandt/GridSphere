@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id$ -->
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1//EN"
+  "http://www.oasis-open.org/docbook/xml/4.1/docbookx.dtd" [
+  <!-- Useful snippets -->
+  
+<!ENTITY % GridSphereLinks SYSTEM "../common/GridSphereLinks.xml">
+  
+  %GridSphereLinks;
+  
+<!-- Each chapter is in its own file -->
+
+<!ENTITY portlet-intro SYSTEM "portlet-intro.xml">
+<!ENTITY portlet-lifecycle SYSTEM "portlet-lifecycle.xml">
+<!ENTITY portlet-descriptor SYSTEM "portlet-descriptor.xml">
+<!ENTITY layout-descriptor SYSTEM "layout-descriptor.xml">
+<!ENTITY services-descriptor SYSTEM "services-descriptor.xml">
+
+<!-- Application, page, library, component specification entities  -->
+]>
+
+<!-- Conventions:
+
+	Component ids are <varname>
+	Java packages and class names are <classname>
+	Tapestry component aliases are <classname>
+
+	In-line code snippets use <function>
+	Property paths and JavaBeans property names used <varname>
+-->
+<book>
+  <title>GridSphere Reference Guide</title>
+  <bookinfo>
+    <copyright>
+      <year>2003</year>
+      <holder>GridLab Project</holder>
+    </copyright>
+  </bookinfo>
+
+  &portlet-intro;
+  &portlet-lifecycle;
+  &portlet-descriptor;
+<!--
+  &portlet-layout
+  &layout-descriptor;
+  &portlet-services;
+  &services-descriptor;
+ -->
+
+</book>

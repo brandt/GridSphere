@@ -1,0 +1,60 @@
+<!--
+
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+    Author:     Jason Novotny
+    Version:    $Id$
+-->
+
+<chapter id="portlet-lifecycle">
+    <title>Portlet Lifecycle</title>
+
+<para>
+The following lifecycle methods are implemented or subclassed by the Portlet classes:
+</para>
+<itemizedlist>
+<listitem><para>
+    Application portlet initialization is the first phase of startup. The portlet is
+    instantiated with the &PortletConfig; information (see Basic Portlet Objects section)
+    </para><para>
+    <programlisting>
+    <prompt>void</prompt> <command>init</command>(PortletConfig <emphasis>config</emphasis>)
+    </programlisting>
+</para></listitem>
+<listitem><para>
+    The concrete portlet is placed into service and parametrized with a &PortletSettings; object (see Basic Portlet Objects section)
+    </para><para>
+    <programlisting>
+    <prompt>void</prompt> <command>initConcrete</command>(PortletSettings <emphasis>settings</emphasis>)
+    </programlisting>
+</para></listitem>
+<listitem><para>
+    The concrete portlet is taken out of service
+    </para><para>
+    <programlisting>
+    <prompt>void</prompt> <command>destroyConcrete</command>()
+    </programlisting>
+</para></listitem>
+
+void destroy() -- an application portlet is taken out of service
+
+void service(PortletRequest req, PortletResponse res) -- service gets invoked for every client request, based on the
+                                                         portlet mode or portlet action, it invokes the appropriate
+                                                         actionPerformed, doView, doEdit, etc, method.
+
+void actionPerformed(ActionEvent evt) -- this method is invoked when the portlet receives an action and must be
+                                         implemented by the portlet developer. This method is performed before any
+                                         rendering is done via doView, doEdit, etc.
+
+void do{View,Config,Edit,Help,Title}(PortletRequest req, PortletResponse res) -- renders the portlet  mode and is
+                                                                                 generally implemented by the portlet
+                                                                                 developer.
+
+void window{Maximized,Minimized,Closed,Resizing,...}(WindowEvent event) -- method is invoked when the portlet window
+                                                                           state changes.
+
+
+</itemizedlist>
+
+</chapter>

@@ -1,0 +1,64 @@
+<!--
+
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+    Author:     Jason Novotny
+    Version:    $Id$
+-->
+
+<chapter id="portlet-intro">
+    <title>Portlet Concepts</title>
+    <para>
+    Portlets are defined as visual components that can be assimilated into portal web pages. Portlets
+    provide "mini-applications" that can either display informational content or provide access to other services. The
+    GridSphere portal allows users to customize their workspace by adding and removing portlets as needed. In addition
+    to standard window states like minimized or maximized, portlets can also provide various "modes". The standard portlet
+    modes are <emphasis>view</emphasis>, <emphasis>edit</emphasis>, <emphasis>configure</emphasis> and
+    <emphasis>help</emphasis>. As an example, consider a stock quote portlet that allows users to
+    customize their stock quote information. View mode would display a user's stock information. Help mode provides users
+    with informational content about the stock quote portlet and how to use it. Edit mode allows users to change the list
+    of stocks they are intersted in monitoring. Finally, <emphasis>configure</emphasis> mode allows portlet
+    administrators to change persistent settings such as the stock quote service that is contacted.
+    </para>
+    <para>
+    The architecture of GridSphere and API definitions of key portlet concepts matches the portlet API provided
+    by IBM WebSphere to a large extent. An excellent source of more information on portlets and portlet development
+    is the WebSphere 4.X Portlet Developer's Guide.
+    </para>
+    <para>
+    In following largely the WebSphere specification, GridSphere also supports the notion that portlets inherit from
+    the servlet concept and API defined in Sun's Servlet Specification. Hence, GridSphere runs as a web application
+    that provides a portlet container for managing deployed portlets. Portlets are intended to be administered dynamically
+    and portlet administrators can deploy and undeploy portlets to the container.
+    </para>
+    <para>
+    The following inheritance hierarchy describes the relationship between servlets and portlets:
+    </para>
+    <para>
+        <itemizedlist>
+        <listitem>&HttpServlet;</listitem>
+        <listitem>org.gridlab.gridsphere.portlet.&Portlet;</listitem>
+        <listitem>org.gridlab.gridsphere.portlet.PortletAdaptor</listitem>
+        <listitem>org.gridlab.gridsphere.portlet.AbstractPortlet</listitem>
+        <listitem>com.mycom.MyPortlet</listitem>
+
+        </itemizedlist>
+
+    </para>
+
+
+    <figure><title>The Portlet Lifecycle</title>
+    <graphic fileref="lifecycle.png"/>
+    </figure>
+
+
+
+    <para>
+Application portlets are defined to be the portlets as servlets where a single instance exists for the duration
+of the portlet container. A concrete portlet instance is an application portlet parameterized with additional data
+found in the portlets's deployment descriptor (see next section). For instance, it's possible to provide access to
+multiple stock quote portlets that may have different configuration settings or allow access to a different set of
+groups, etc.
+</para>
+</chapter>

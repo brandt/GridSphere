@@ -119,6 +119,11 @@ http://jakarta.apache.org/proposals/tapestry
     		<include name="*.png"/>
     	</fileset>
     </copy>
+    <copy todir="${html.output.dir}">
+    	<fileset dir=".">
+    		<exclude name="*.xml"/>
+    	</fileset>
+    </copy>
 </target>
 
 

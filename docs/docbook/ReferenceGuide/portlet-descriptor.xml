@@ -1,0 +1,127 @@
+
+<!--
+
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+
+    Author:     Jason Novotny
+    Version:    $Id$
+-->
+
+<chapter id="portlet-descriptor">
+    <title>Portlet Descriptor</title>
+    <para>
+        The Portlet Descriptor known as <filename>portlet.xml</filename> defines the application
+        portlet definitions and one or more concrete portlet definitions. The following section describes
+        the available elements and attributes that can be used inside a portlet descriptor.
+    </para>
+    <para>
+        The Portlet Descriptor has the following structure:
+    </para>
+    <informalexample id="portlet.def">
+        <programlisting>
+
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;portlet-app-collection&gt; <co id="portlet.app.collection"/>
+    &lt;portlet-app-def&gt;  <co id="portlet.app.def"/>
+            &lt;portlet-app ...&gt;  <co id="portlet.app"/>
+            &lt;concrete-portlet-app ...&gt; <co id="portlet.concapp"/>
+            &lt;concrete-portlet-app ...&gt;
+      &lt;/portlet-app-def&gt;
+&lt;/portlet-app-collection&gt;
+        </programlisting>
+        <calloutlist>
+        <callout arearefs="portlet.app.collection">
+            <para>
+            The portlet-app-collection defines a collection of portlets
+            </para>
+        </callout>
+        <callout arearefs="portlet.app.def">
+            <para>
+            The portlet-app-def defines an application portlet and one or more concrete portlet instances
+            </para>
+        </callout>
+        <callout arearefs="portlet.app">
+            <para>
+                The portlet-app provides an application portlet definition
+            </para>
+        </callout>
+        <callout arearefs="portlet.concapp">
+            <para>
+                The concrete-portlet-app provides a concrete portlet definition
+            </para>
+        </callout>
+        </calloutlist>
+    </informalexample>
+
+    <sect1>
+      <title>The Application Portlet Definition</title>
+        <para>An application portlet definition defines properties that are fixed for all
+            concrete portlet instances of this portlet. The following sample illustrates
+            the elements and attributes associated with an application portlet definition.
+        </para>
+
+        <informalexample id="app.def">
+        <programlisting>
+        &lt;portlet-app id="org.myorganization.myportlet"&gt; <co id="app.id"/>
+            &lt;portlet-name&gt;Hello World&lt;/portlet-name&gt; <co id="portlet.name"/>
+            &lt;servlet-name&gt;hello&lt;/servlet-name&gt; <co id="servlet.name"/>
+            &lt;portlet-config&gt; <co id="portlet.config"/>
+                &lt;param-name&gt;AppConfigOne&lt;/param-name&gt;
+                &lt;param-value&gt;one&lt;/param-value&gt;
+            &lt;/portlet-config&gt;
+            &lt;portlet-config&gt;
+                &lt;param-name&gt;AppConfigTwo&lt;/param-name&gt;
+                &lt;param-value&gt;two&lt;/param-value&gt;
+            &lt;/portlet-config&gt;
+            &lt;allows&gt;           <co id="portlet.allows"/>
+                &lt;maximized/&gt;
+                &lt;minimized/&gt;
+            &lt;/allows&gt;
+            &lt;supports&gt;       <co id="portlet.supports"/>
+                &lt;view/&gt;
+                &lt;edit/&gt;
+                &lt;help/&gt;
+                &lt;configure/&gt;
+            &lt;/supports&gt;
+        &lt;/portlet-app&gt;
+       </programlisting>
+        <calloutlist>
+            <callout arearefs="app.id">
+            <para>
+                The <varname>id</varname> specifies the actual portlet class
+            </para>
+            </callout>
+            <callout arearefs="portlet.name">
+            <para>
+                (Optional)An identifying name. Currently this is not used.
+            </para>
+            </callout>
+            <callout arearefs="portlet.config">
+            <para>
+                Defines configuration information for this portlet that is accessible via the
+                &PortletConfig; object described in the section on "Basic Portlet Objects"
+            </para>
+            </callout>
+            <callout arearefs="portlet.allows">
+            <para>
+                (Optional) Defines the supported window states of this portlet. Possible
+                values include <emphasis>minimized</emphasis> and <emphasis>maximized</emphasis>.
+                If not specified both states are supported.
+            </para>
+            </callout>
+            <callout arearefs="portlet.supports">
+            <para>
+                (Optional) Defines which portlet modes are supported for various markups.
+                If this is not specified, all modes are enabled.
+            </para>
+            </callout>
+        </calloutlist>
+        </informalexample>
+
+    </sect1>
+
+    <sect1>
+        <title>The Concrete Portlet Definition</title>
+    </sect1>
+</chapter>
