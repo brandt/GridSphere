@@ -373,7 +373,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     titleBar.setPortletMode(mymode);
                 }
 
-		// see if state has been set
+                // see if state has been set
                 PortletFrameEventImpl frameEvent = null;
                 PortletWindow.State mystate  = (PortletWindow.State)request.getAttribute(SportletProperties.PORTLET_WINDOW);
                 if (mystate != null) {
@@ -401,9 +401,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                             comp.actionPerformed(event);
                         }
                     }
-
-
                 }
+
             }
 
             // see if render params are set
@@ -501,8 +500,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         }
 
         if (req.getAttribute(SportletProperties.RESPONSE_COMMITTED) != null) {
-	    renderPortlet = false;
-	}
+            renderPortlet = false;
+        }
+
 
         if (renderPortlet) {
             if (!transparent) {
@@ -582,7 +582,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         postframe.append("</table>");
         postframe.append("<!--- PORTLET ENDS HERE -->");
 
-	renderPortlet = true;
+        renderPortlet = true;
 
         // piece together portlet frame + title depending on whether title was set during doXXX method
         // or not
@@ -590,7 +590,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         if (!transparent) {
             String titleStr = (String) req.getAttribute(SportletProperties.PORTLET_TITLE);
             if (titleStr == null) {
-                titleStr = titleBar.getTitle();
+                titleStr = titleBar.getTitle();                
+            } else {
                 req.removeAttribute(SportletProperties.PORTLET_TITLE);
             }
             frame.append(titleBar.getPreBufferedTitle());
