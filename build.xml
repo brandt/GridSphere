@@ -437,7 +437,7 @@ Copyright:
         <mkdir dir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/"/>
         <copy overwrite="true" file="webapps/gridsphere/WEB-INF/persistence/hibernate.properties" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/"/>
         <property name="cathome" value="${env.CATALINA_HOME}"/>
-        <pathconvert targetos="windows"Êdirsep="/">
+        <pathconvert targetos="windows" dirsep="/">
             <map from="${env.CATALINA_HOME}" to="${cathome}"/>
         </pathconvert>
         <replace file="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/hibernate.properties"
