@@ -78,6 +78,7 @@ public class SportletConfig implements PortletConfig {
             configs.put(configParam.getParamName(), configParam.getParamValue());
         }
 
+        portletName = portletApp.getPortletName();
         //this.logConfig();
     }
 

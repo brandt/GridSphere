@@ -8,7 +8,6 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.services.security.acl.AccessControlService;
-import org.gridlab.gridsphere.core.persistence.PersistenceException;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
 import org.gridlab.gridsphere.portletcontainer.descriptor.PortletDeploymentDescriptor;
 import org.gridlab.gridsphere.portletcontainer.descriptor.ConcretePortletInfo;

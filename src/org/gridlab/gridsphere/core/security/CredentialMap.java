@@ -11,7 +11,6 @@
 package org.gridlab.gridsphere.core.security;
 
 import org.gridlab.gridsphere.core.persistence.BaseObject;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerInterface;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 
 import java.util.Date;
