@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<!--
+
+    Portlet group mapping file
+
+    $Id$
+
+-->
+<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://castor.exolab.org/mapping.dtd">
+<mapping>
+
+    <class name="org.gridlab.gridsphere.services.core.security.acl.impl.descriptor.PortletGroupDescription">
+        <map-to xml="portlet-group"/>
+        <field name="GroupName" type="string">
+            <bind-xml name="group-name"/>
+        </field>
+        <field name="GroupDescription" type="string">
+            <bind-xml name="group-description"/>
+        </field>
+        <field name="GroupVisibility" type="string">
+            <bind-xml name="group-visibility"/>
+        </field>
+        <field name="PortletRoleInfo" type="org.gridlab.gridsphere.portlet.impl.SportletRoleInfo" collection="set">
+            <bind-xml name="portlet-role-info"/>
+        </field>
+    </class>
+
+    <class name="org.gridlab.gridsphere.portlet.impl.SportletRoleInfo">
+        <map-to xml="portlet-role-info"/>
+        <field name="PortletClass" type="string">
+            <bind-xml name="portlet-class"/>
+        </field>
+        <field name="Role" type="string">
+            <bind-xml name="required-role"/>
+        </field>
+    </class>
+
+</mapping>
