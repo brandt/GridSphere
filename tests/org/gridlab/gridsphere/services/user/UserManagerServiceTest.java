@@ -370,7 +370,7 @@ public class UserManagerServiceTest extends ServiceTest {
         assertEquals(3,result.size());
 
         for (int i=0; i<result.size();i++) {
-            if (((PortletGroup)result.gets(i)).getID().equals(groupid)){
+            if (((PortletGroup)result.get(i)).getID().equals(groupid)){
                 assertTrue(!((PortletGroup)result.get(i)).getName().equals(groupname));
             }
         }
