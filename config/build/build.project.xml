@@ -41,7 +41,7 @@ Copyright:
     <property name="project.api" value="${project.title} API ${version.release}" />
 
     <!-- GridSphere build and dist directories -->
-    <property name="gridsphere.base" value="@GRIDSPHERE_BASE@"/>
+    <property name="gridsphere.base" value="../../"/>
 
     <!--- Type of SQL Database to use -->
     <property name="DATABASE_TYPE" value="${gridsphere.database.type}"/>
