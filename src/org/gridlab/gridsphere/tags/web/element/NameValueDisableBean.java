@@ -5,16 +5,15 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public abstract class BaseNameValueBean extends NameBean implements Valueable {
+public abstract class NameValueDisableBean extends NameValueBean implements Disableable  {
 
-    protected String value;
     protected boolean disabled;
 
-    public BaseNameValueBean() {
+    public NameValueDisableBean() {
         super();
     }
 
-    public BaseNameValueBean(String name, String value, boolean disabled) {
+    public NameValueDisableBean(String name, String value, boolean disabled) {
         super();
         this.name = name;
         this.value = value;
@@ -34,21 +33,6 @@ public abstract class BaseNameValueBean extends NameBean implements Valueable {
         }
     }
 
-    /**
-     * Sets the value of the bean.
-     * @param value the value
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    /**
-     * Gets the value of the bean.
-     * @return the value
-     */
-    public String getValue() {
-        return value;
-    }
 
     /**
      * Returns true if bean is in disabled state.

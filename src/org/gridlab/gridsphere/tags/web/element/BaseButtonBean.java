@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public class BaseButtonBean extends BaseNameValueBean implements Button {
+public class BaseButtonBean extends NameValueDisableBean implements Button {
 
     protected String type = new String();
 

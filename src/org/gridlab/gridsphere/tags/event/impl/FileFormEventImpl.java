@@ -9,7 +9,7 @@ import org.gridlab.gridsphere.tags.event.FormEvent;
 import org.gridlab.gridsphere.tags.event.FileFormEvent;
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.tags.web.element.Element;
-import org.gridlab.gridsphere.tags.web.element.BaseNameValueBean;
+import org.gridlab.gridsphere.tags.web.element.NameValueDisableBean;
 import org.gridlab.gridsphere.tags.event.FileFormException;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletException;

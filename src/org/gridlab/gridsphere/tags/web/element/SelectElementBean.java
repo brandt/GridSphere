@@ -5,7 +5,7 @@
 
 package org.gridlab.gridsphere.tags.web.element;
 
-public abstract class SelectElementBean extends BaseNameValueBean implements Selectable {
+public abstract class SelectElementBean extends NameValueDisableBean implements Selectable {
 
     protected boolean selected = false;
 

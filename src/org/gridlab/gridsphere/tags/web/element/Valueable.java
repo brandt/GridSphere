@@ -19,17 +19,5 @@ public interface Valueable extends Nameable {
      */
     public String getValue();
 
-    /**
-     * Return true/false if the bean is disabled.
-     * @return true/false if the bean is disabled
-     */
-    public boolean isDisabled();
-
-    /**
-     * Sets the bean to disabled depedinding on <code>flag</code>
-     * @param flag status if bean should be disabled
-     */
-    public void setDisabled(boolean flag);
-
 
 }
