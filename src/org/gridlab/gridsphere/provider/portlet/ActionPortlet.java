@@ -60,7 +60,7 @@ public class ActionPortlet extends AbstractPortlet {
      * @param request the <code>Portletrequest</code>
      * @param state the next display state
      */
-    protected void setNextState(PortletRequest request, String state) {
+    public void setNextState(PortletRequest request, String state) {
         String id = request.getPortletSettings().getConcretePortletID();
         request.setAttribute(id + ".state", state);
         log.debug("in ActionPortlet in setNextState: setting state to " + state);
