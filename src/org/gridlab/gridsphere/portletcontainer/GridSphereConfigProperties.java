@@ -49,7 +49,7 @@ public interface GridSphereConfigProperties {
     /**
      * LayoutEngine properties
      */
-    public static final String LAYOUT_XML = "LAYOUT_XML";
+    public static final String GUEST_USER_LAYOUT_XML = "GUEST_USER_LAYOUT_XML";
     public static final String NEW_USER_LAYOUT_XML = "NEW_USER_LAYOUT_XML";
     public static final String LAYOUT_MAPPING_XML = "LAYOUT_MAPPING_XML";
     public static final String USER_LAYOUT_DIR = "USER_LAYOUT_DIR";

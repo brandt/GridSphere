@@ -37,12 +37,13 @@ public class PortletRegistry {
 
     public Collection getApplicationPortlets(String webApplicationName) {
         List webappPortlets = new Vector();
-
         Set set = allApplicationPortlets.keySet();
         ApplicationPortlet appPortlet;
         Iterator it = set.iterator();
         while (it.hasNext()) {
-            appPortlet = (ApplicationPortlet) it.next();
+            String concretePortletID = (String)it.next();
+            System.err.println(concretePortletID);
+            appPortlet = (ApplicationPortlet) allApplicationPortlets.get(concretePortletID);
             if (appPortlet.getWebApplicationName().equals((webApplicationName))) {
                 webappPortlets.add(appPortlet);
             }

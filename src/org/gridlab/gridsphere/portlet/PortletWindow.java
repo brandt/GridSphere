@@ -67,21 +67,25 @@ public interface PortletWindow {
             this.state = state;
         }
 
-        public static final PortletWindow.State toPortletWindowState(String windowState) throws Exception {
-            if (windowState.equalsIgnoreCase("NORMAL")) {
+        /**
+         * Returns a State object from parsing the supplied state string
+         *
+         */
+        public static final PortletWindow.State toState(String windowState) throws IllegalArgumentException {
+            if ("NORMAL".equalsIgnoreCase(windowState)) {
                 return PortletWindow.State.NORMAL;
-            } else if (windowState.equalsIgnoreCase("MINIMIZED")) {
+            } else if ("MINIMIZED".equalsIgnoreCase(windowState)) {
                 return PortletWindow.State.MINIMIZED;
-            } else if (windowState.equalsIgnoreCase("MAXIMIZED")) {
+            } else if ("MAXIMIZED".equalsIgnoreCase(windowState)) {
                 return PortletWindow.State.MAXIMIZED;
-            } else if (windowState.equalsIgnoreCase("CLOSED")) {
+            } else if ("CLOSED".equalsIgnoreCase(windowState)) {
                 return PortletWindow.State.CLOSED;
-            } else if (windowState.equalsIgnoreCase("DETACHED")) {
+            } else if ("DETACHED".equalsIgnoreCase(windowState)) {
                 return PortletWindow.State.DETACHED;
-            } else if (windowState.equalsIgnoreCase("RESIZING")) {
+            } else if ("RESIZING".equalsIgnoreCase(windowState)) {
                 return PortletWindow.State.RESIZING;
             } else {
-                throw new Exception("Unable to create PortletWindow corresponding to: " + windowState);
+                throw new IllegalArgumentException("Unable to parse state: " + windowState);
             }
         }
 
@@ -99,7 +103,7 @@ public interface PortletWindow {
             } else if (state == RESIZING_STATE) {
                 return "RESIZING";
             }
-            return null;
+            return "Unknown State!";
         }
     }
 

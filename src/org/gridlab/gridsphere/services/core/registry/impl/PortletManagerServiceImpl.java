@@ -5,10 +5,7 @@
 package org.gridlab.gridsphere.services.core.registry.impl;
 
 import org.gridlab.gridsphere.layout.PortletLayoutEngine;
-import org.gridlab.gridsphere.portlet.PortletException;
-import org.gridlab.gridsphere.portlet.PortletLog;
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
@@ -31,16 +28,12 @@ import java.util.*;
  */
 public class PortletManagerServiceImpl implements PortletManagerService, PortletServiceProvider {
 
-    public final static String CORE_CONTEXT = "coreContext";
 
     private static PortletLog log = SportletLog.getInstance(PortletManagerServiceImpl.class);
-    private ServletContext context = null;
-    private static boolean isInitialized = false;
-    private PortletLayoutEngine layoutEngine = PortletLayoutEngine.getInstance();
-    private static PortletRegistry registry = PortletRegistry.getInstance();
+    private PortletManager portletManager = PortletManager.getInstance();
 
     // A multi-valued hashtable with a webapp key and a List value containing portletAppID's
-    private Map webapps = new Hashtable();
+    //private Map webapps = new Hashtable();
     //private UserPortletManager userPortletManager = UserPortletManager.getInstance();
 
     private PortletServiceAuthorizer authorizer = null;
@@ -55,45 +48,12 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
      */
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         log.info("in init()");
-        if (!isInitialized) {
-            this.context = config.getServletConfig().getServletContext();
-            String webapps = config.getInitParameter(CORE_CONTEXT);
-            if (webapps != null) {
-                String webapp;
-                StringTokenizer st = new StringTokenizer(webapps, ",");
-                if (st.countTokens() == 0) {
-                    webapp = webapps.trim();
-                    System.err.println("adding webapp:" + webapp);
-                    addWebApp(webapp);
-                } else {
-                    while (st.hasMoreTokens()) {
-                        webapp = (String) st.nextToken().trim();
-                        System.err.println("adding webapp:" + webapp);
-                        addWebApp(webapp);
-                    }
-                }
-            }
-            isInitialized = true;
-        }
+        portletManager.init(config);
     }
 
     public void destroy() {
         log.info("in destroy()");
     }
-
-    protected void addWebApp(String webApplicationName) {
-        PortletWebApplication portletWebApp = new PortletWebApplicationImpl(webApplicationName, context);
-        Collection appPortlets = portletWebApp.getAllApplicationPortlets();
-        Iterator it = appPortlets.iterator();
-        List appPortletList = new ArrayList();
-        while (it.hasNext()) {
-            ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
-            appPortletList.add(appPortlet);
-            registry.addApplicationPortlet(appPortlet);
-        }
-        webapps.put(webApplicationName, appPortletList);
-    }
-
 
     /**
      * Removes a portlet web application from the registry
@@ -101,37 +61,27 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
      * @param the web application name
      */
     public void removePortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) {
-        List webappsList = (List) webapps.get(webApplicationName);
-        Iterator it = webappsList.iterator();
-        while (it.hasNext()) {
-            ApplicationPortlet appPortlet = (ApplicationPortlet) it.next();
-            registry.removeApplicationPortlet((String) appPortlet.getPortletAppID());
-        }
-        webapps.remove(webApplicationName);
-
-        // Remove default tab from layout engine
-        layoutEngine.removeApplicationTab(webApplicationName);
+        portletManager.removePortletWebApplication(webApplicationName, req, res);
     }
 
     public void installPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws PortletException {
-        addWebApp(webApplicationName);
-        initPortletWebApplication(webApplicationName, req, res);
+        portletManager.installPortletWebApplication(webApplicationName, req, res);
     }
 
     public void initAllPortletWebApplications(PortletRequest req, PortletResponse res) throws PortletException {
-        PortletInvoker.initAllPortlets(req, res);
+        portletManager.initAllPortletWebApplications(req, res);
     }
 
     public void initPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws PortletException {
-        PortletInvoker.initPortletWebApp(webApplicationName, req, res);
+        portletManager.initPortletWebApplication(webApplicationName, req, res);
     }
 
     public void destroyAllPortletWebApplications(PortletRequest req, PortletResponse res) throws PortletException {
-        PortletInvoker.destroyAllPortlets(req, res);
+        portletManager.destroyAllPortletWebApplications(req, res);
     }
 
     public void destroyPortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws PortletException {
-        PortletInvoker.destroyPortletWebApp(webApplicationName, req, res);
+        portletManager.destroyPortletWebApplication(webApplicationName, req, res);
     }
 
     /**
@@ -140,13 +90,7 @@ public class PortletManagerServiceImpl implements PortletManagerService, Portlet
      * @return the list of web application names
      */
     public List getPortletWebApplications() {
-        List l = new ArrayList();
-        Set set = webapps.keySet();
-        Iterator it = set.iterator();
-        while (it.hasNext()) {
-            l.add((String) it.next());
-        }
-        return l;
+        return portletManager.getPortletWebApplications();
     }
 
 

@@ -89,7 +89,7 @@ public abstract class Portlet extends HttpServlet
             this.mode = mode;
         }
 
-        public static Portlet.Mode getInstance(String mode) {
+        public static Portlet.Mode toMode(String mode) throws IllegalArgumentException {
             if (mode == null) return null;
             if (mode.equalsIgnoreCase(EDIT.toString())) {
                 return EDIT;
@@ -100,7 +100,7 @@ public abstract class Portlet extends HttpServlet
             } else if (mode.equalsIgnoreCase(CONFIGURE.toString())) {
                 return CONFIGURE;
             }
-            return null;
+            throw new IllegalArgumentException("Unable to parse supplied mode: " + mode);
         }
 
         public int getMode() {
@@ -113,7 +113,7 @@ public abstract class Portlet extends HttpServlet
         }
 
         public String toString() {
-            String tagstring = null;
+            String tagstring = "Unknowm Portlet Mode!";
             if (mode == EDIT_MODE) {
                 tagstring = "EDIT";
             } else if (mode == HELP_MODE) {

@@ -6,7 +6,6 @@ package org.gridlab.gridsphere.services.core.registry;
 
 import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.event.WindowEvent;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
@@ -36,7 +35,7 @@ public interface PortletManagerService extends PortletService {
     /**
      * Removes a portlet web application from the registry
      *
-     * @param the web application name
+     * @param webApplicationName the web application name
      */
     public void removePortletWebApplication(String webApplicationName, PortletRequest req, PortletResponse res) throws PortletException;
 

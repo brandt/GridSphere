@@ -15,6 +15,7 @@ import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 import org.gridlab.gridsphere.portletcontainer.impl.GridSphereEventImpl;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletMessageManager;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
+import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.LoginService;
 import org.gridlab.gridsphere.services.core.security.AuthenticationException;
@@ -62,6 +63,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public final void init(ServletConfig config) throws ServletException {
         super.init(config);
         this.context = new SportletContext(config);
+
         log.debug("in init of GridSphereServlet");
         // Create an instance of the registry service used by the UserPortletManager
         try {
@@ -226,7 +228,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         PortletSession session = req.getPortletSession();
         session.invalidate();
         log.debug("in logout of GridSphere Servlet");
-        layoutEngine.logoutPortlets(event);
+        //layoutEngine.logoutPortlets(event);
     }
 
     public final void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
@@ -331,8 +333,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         log.info("sessionDestroyed('" + event.getSession().getId() + "')");
         HttpSession session = event.getSession();
         User user = (User) session.getAttribute(GridSphereProperties.USER);
+        System.err.println("user : " + user.getUserID() + " expired!");
         PortletLayoutEngine engine = PortletLayoutEngine.getInstance();
         engine.removeUser(user);
+        //engine.logoutPortlets(event);
     }
 
 }
