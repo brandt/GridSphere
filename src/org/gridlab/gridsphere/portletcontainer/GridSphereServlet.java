@@ -82,26 +82,9 @@ public class GridSphereServlet extends HttpServlet {
             firstDoGet = false;
         }
 
+
         PortletRequestParser requestParser = new PortletRequestParser(req);
-/*
-        GridSphereEvent event = new GridSphereEventImpl(req);
-
-        if (event.getAction().equals(GridSphereAction.LOGIN)) {
-        }
-
-        if (event.getAction().equals(GridSphereAction.LOGOUT)) {
-
-        }
-
-        if (event.getAction().equals(GridSphereAction.MODECHANGE)) {
-
-        }
-
-        if (event.getAction().equals(GridSphereAction.WINDOWCHANGE)) {
-
-        }
-*/
-
+        /*
         if (requestParser.hasPortletAction()) {
 
             System.err.println("Received ACTION: " + requestParser.toString());
@@ -114,6 +97,7 @@ public class GridSphereServlet extends HttpServlet {
             // Get the active portlet instance
 
         }
+        */
 
         // Render layout
         try {

@@ -108,6 +108,10 @@ public final class PortletRequestParser implements PortletAction {
         return req.getParameter(GridSphereProperties.ACTION);
     }
 
+    public String getActionType() {
+        return req.getParameter(GridSphereProperties.ACTION_TYPE);
+    }
+
     /**
      * Returns the constructed application portlet action.
      * Reconstructs the PortletAction attributes store from request names (painful!)

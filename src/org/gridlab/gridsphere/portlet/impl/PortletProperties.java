@@ -17,6 +17,7 @@ public class PortletProperties {
     public static final String ACTION_EVENT = "actionEvent";
     public static final String MESSAGE_EVENT = "messageEvent";
     public static final String WINDOW_EVENT = "windowEvent";
+    public static final String LAYOUT_EVENT = "layoutEvent";
 
     /* PORTLET_LIFECYCLE_METHOD determines which lifecycle method to invoke */
     public static final String PORTLET_LIFECYCLE_METHOD = "portletLifecycleMethod";
@@ -25,7 +26,7 @@ public class PortletProperties {
     public static final String DESTROY = "destroy";
     public static final String INIT_CONCRETE = "initConcrete";
     public static final String DESTROY_CONCRETE = "destroyConcrete";
-    public static final String LOGIN = "init";
+    public static final String LOGIN = "login";
     public static final String LOGOUT = "logout";
     public static final String SERVICE = "service";
 

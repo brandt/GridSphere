@@ -16,7 +16,10 @@ public class GridSphereProperties {
     public static final String PORTLETSETTINGS = "PortletSettings";
     public static final String PORTLETDATA = "PortletData";
     public static final String USER = "User";
+    public static final String PORTLETROLES = "PortletRoles";
+    public static final String PORTLETGROUPS = "PortletGroups";
     public static final String ACTION = "action";
+    public static final String ACTION_TYPE = "atype";
     public static final String SENSITIVEACTION = "saction";
     public static final String PORTLETID = "PortletID";
     public static final String PORTLETNAME = "PortletName";
