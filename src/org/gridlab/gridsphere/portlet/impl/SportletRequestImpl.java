@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.portlet.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
@@ -23,6 +24,8 @@ import java.io.UnsupportedEncodingException;
 public class SportletRequestImpl extends HttpServletRequestWrapper implements SportletRequest {
 
     private static PortletLog log = SportletLog.getInstance(SportletRequest.class);
+
+    private PortletSession portletSession = null;
 
     /**
      * Constructor creates a proxy for a HttpServletRequest
@@ -72,7 +75,7 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
      * @return the portlet session
      */
     public PortletSession getPortletSession() {
-        return new SportletSession(this.getHttpServletRequest().getSession(true));
+        return getPortletSession(true);
     }
 
     /**
@@ -85,10 +88,29 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
      * @return the portlet session
      */
     public PortletSession getPortletSession(boolean create) {
+
+        HttpSession httpSession = this.getHttpServletRequest().getSession(false);
+
+        if ((portletSession != null) && (httpSession == null)) {
+            portletSession = null;
+        } else if (httpSession != null) {
+            create = true;
+        }
+
+        if (create && portletSession == null) {
+            httpSession = this.getHttpServletRequest().getSession(create);
+            if (httpSession != null) {
+                portletSession = new SportletSession(this.getHttpServletRequest().getSession(true));
+            }
+        }
+
+        return portletSession;
+        /*
         if ((this.getHttpServletRequest().getSession() == null) && (create == false)) {
             return null;
         }
         return new SportletSession(this.getHttpServletRequest().getSession(true));
+        */
     }
 
     /**
@@ -98,18 +120,6 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
      */
     public Cookie[] getCookies() {
         return this.getHttpServletRequest().getCookies();
-    }
-
-    /**
-     * Clears all of the this.getHttpServletRequest()uest attributes associated with this this.getHttpServletRequest()uest
-     */
-    public void invalidate() {
-        // clear this.getHttpServletRequest()uest attributes
-        Enumeration attrnames = this.getHttpServletRequest().getAttributeNames();
-        while (attrnames.hasMoreElements()) {
-            String name = (String) attrnames.nextElement();
-            this.getHttpServletRequest().setAttribute(name, null);
-        }
     }
 
     /**

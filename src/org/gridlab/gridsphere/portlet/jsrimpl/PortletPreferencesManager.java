@@ -63,11 +63,9 @@ public class PortletPreferencesManager {
             if (prefs == null) {
                 // we have no prefs in the xml so create one in the db...
                 log.debug("No prefs exist-- storing prefs for user: " + user.getID() + " portlet: " + portletID);
-
                 prefs = new PortletPreferencesImpl();
                 prefs.setPortletId(portletID);
                 prefs.setUserId(user.getID());
-
             } else {
                 log.debug("Retrieved prefs for user: " + user.getID() + " portlet: " + portletID);
             }

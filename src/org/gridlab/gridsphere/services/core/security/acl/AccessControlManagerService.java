@@ -11,6 +11,7 @@ package org.gridlab.gridsphere.services.core.security.acl;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 
 import java.util.List;
@@ -82,6 +83,8 @@ public interface AccessControlManagerService extends PortletService {
 
     public PortletRole getRoleInGroup(User user, PortletGroup group);
 
+    public boolean hasRequiredRole(PortletRequest req, String portletClass, boolean checkAdmin);
+    
     public boolean hasRequiredRole(User user, String portletClass, boolean isAdmin);
 
     public boolean hasRoleInGroup(User user, PortletGroup group, PortletRole role);

@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
@@ -365,6 +366,47 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         }
         return entry.getRole();
         //}
+    }
+
+    public boolean hasRequiredRole(PortletRequest req, String portletClass, boolean checkAdmin) {
+        Map userGroups = (Map)req.getAttribute(SportletProperties.PORTLETGROUPS);
+
+        boolean found = false;
+
+        //Iterator it = aclService.getGroups().iterator();
+
+        Iterator it = userGroups.keySet().iterator();
+        while (it.hasNext()) {
+            PortletGroup group = (PortletGroup)it.next();
+            Set roleList = group.getPortletRoleList();
+            Iterator roleIt = roleList.iterator();
+            //System.err.println("group= " + group.getName());
+            while (roleIt.hasNext()) {
+                SportletRoleInfo roleInfo = (SportletRoleInfo)roleIt.next();
+                //System.err.println("class= " + roleInfo.getPortletClass());
+                if (roleInfo.getPortletClass().equals(portletClass)) {
+                    // check if user has this group
+                    found = true;
+                    //if (userGroups.containsKey(group)) {
+                        //System.err.println("group= " + group.getName());
+                        PortletRole usersRole = (PortletRole)userGroups.get(group);
+                        //System.err.println("usersRole= " + usersRole);
+                        PortletRole reqRole = PortletRole.toPortletRole(roleInfo.getRole());
+                        //System.err.println("reqRole= " + reqRole);
+                        if (usersRole.compare(usersRole, reqRole) >= 0) {
+                            if (checkAdmin) {
+                                if (usersRole.compare(usersRole, PortletRole.ADMIN) >= 0) {
+                                    return true;
+                                }
+                            } else {
+                                return true;
+                            }
+                        }
+                    //}
+                }
+            }
+        }
+        return (found == true) ? false : true;
     }
 
     public boolean hasRequiredRole(User user, String portletID, boolean checkAdmin) {

@@ -523,15 +523,10 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         // Unless user is admin they should not see configure mode
         boolean hasConfigurePermission = false;
-        //PortletRole role = req.getRole();
 
-        /*
-        if (role.isAdmin() || role.isSuper()) {
-            hasConfigurePermission = true;
-        }
-        */
         User user = req.getUser();
-        boolean hasrole = aclService.hasRequiredRole(user, portletClass, true);
+        boolean hasrole = aclService.hasRequiredRole(req, portletClass, true);
+        //boolean hasrole = aclService.hasRequiredRole(user, portletClass, true);
         if (hasrole) hasConfigurePermission = true;
 
         List smodes = new ArrayList();
@@ -625,7 +620,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 } else if (titleBarEvent.getAction().getID() == PortletTitleBarEvent.TitleBarAction.MODE_MODIFY.getID()) {
 
                     if (titleBarEvent.getMode().equals(Portlet.Mode.CONFIGURE)) {
-                        boolean hasrole = aclService.hasRequiredRole(user, portletClass, true);
+                        boolean hasrole = aclService.hasRequiredRole(req, portletClass, true);
+                        //boolean hasrole = aclService.hasRequiredRole(user, portletClass, true);
                         if (!hasrole) return;
                     }
                     previousMode = portletMode;

@@ -268,6 +268,7 @@ public class PortletPageFactory implements PortletSessionListener {
                 }
                 i++;
             }
+            allowedPortlets = null;
             tmpPane.save();
             return tmpPane;
         } catch (Exception e) {

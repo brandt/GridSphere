@@ -233,7 +233,6 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      */
     public PortletSession getPortletSession() {
         return getPortletSession(true);
-        //return new PortletSessionImpl(this.getHttpServletRequest().getSession(true), portletContext);
     }
 
     /**
@@ -253,12 +252,6 @@ public abstract class PortletRequestImpl extends HttpServletRequestWrapper imple
      * @return the portlet session
      */
     public PortletSession getPortletSession(boolean create) {
-        /*
-         if ((this.getHttpServletRequest().getSession() == null) && (create == false)) {
-             return null;
-         }
-         return new PortletSessionImpl(this.getHttpServletRequest().getSession(true), portletContext);
-         */
         // check if the session was invalidated
         HttpSession httpSession = this.getHttpServletRequest().getSession(false);
 

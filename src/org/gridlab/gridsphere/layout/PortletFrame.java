@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.layout.event.impl.PortletTitleBarEventImpl;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.portlet.impl.StoredPortletResponseImpl;
+import org.gridlab.gridsphere.portlet.impl.SportletRoleInfo;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
@@ -398,26 +399,18 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      * @throws IOException            if an I/O error occurs during rendering
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
-        PortletRequest req = event.getPortletRequest();
-
-        // now perform actionPerformed on Portlet if it has an action
-        //if (titleBar != null) titleBar.actionPerformed(event);
-
-        /*
-        PortletRole userRole = req.getRole();
-        if (userRole.compare(userRole, requiredRole) < 0) {
-            return;
-        }
-         */
-
         super.doRender(event);
 
+        PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
 
         User user = req.getUser();
         if (!(user instanceof GuestUser)) {
-            boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
+
+            //boolean hasrole = hasRequiredRole(req, false);
+            boolean hasrole = aclService.hasRequiredRole(req, portletClass, false);
+            //boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
             //System.err.println("hasRole = " + hasrole + " portletclass= " + portletClass);
             if (!hasrole) {
                 System.err.println("User " + user + " has no permissions to access portlet: " + portletClass + "!");
@@ -436,7 +429,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         frame = new StringBuffer();
 
         req.setAttribute(SportletProperties.PORTLETID, portletClass);
-
 
         // TODO try to cache portlet's rendering---
         StringWriter storedWriter = new StringWriter();
@@ -650,5 +642,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             super.messageEvent(concPortletID, msg, event);
         }
     }
+
 
 }

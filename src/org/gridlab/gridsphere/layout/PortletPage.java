@@ -353,13 +353,15 @@ public class PortletPage implements Serializable, Cloneable {
                 PortletRole userRole = event.getPortletRequest().getRole();
                 if (userRole.compare(userRole, comp.getRequiredRole()) >= 0) {
                     if (comp != null) {
-                        User user = event.getPortletRequest().getUser();
+                        PortletRequest req = event.getPortletRequest();
+                        User user = req.getUser();
                         if (comp instanceof PortletFrame) {
 
                             // do role checking if user is logged in
                             if (!(user instanceof GuestUser)) {
                                 String portletClass = ((PortletFrame)comp).getPortletClass();
-                                boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
+                                boolean hasrole = aclService.hasRequiredRole(req, portletClass, false);
+                                //boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
                                 if (!hasrole) {
                                     System.err.println("User " + user + " does not have required role!");
                                     return;
@@ -369,7 +371,8 @@ public class PortletPage implements Serializable, Cloneable {
                         } else if (comp instanceof PortletTitleBar) {
                             if (!(user instanceof GuestUser)) {
                                 String portletClass = ((PortletTitleBar)comp).getPortletClass();
-                                boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
+                                boolean hasrole = aclService.hasRequiredRole(req, portletClass, false);
+                                //boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
                                 System.err.println("hasRole = " + hasrole);
                                 if (!hasrole) {
                                     System.err.println("User " + user + " does not have required role!");

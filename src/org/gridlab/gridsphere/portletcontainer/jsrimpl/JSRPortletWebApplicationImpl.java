@@ -184,6 +184,11 @@ public class JSRPortletWebApplicationImpl implements PortletWebApplication {
         SportletServiceFactory factory = SportletServiceFactory.getInstance();
         factory.shutdownServices(webApplicationName);
         PersistenceManagerFactory.destroyPersistenceManagerRdbms(webApplicationName);
+        portletWebApp = null;
+        servletName = null;
+        appPortlets = null;
+        portletDefinitions = null;
+        rd = null;
     }
 
     public String getWebApplicationName() {

@@ -79,6 +79,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     private static final String COOKIE_REQUEST = "cookie-request";
     private int COOKIE_EXPIRATION_TIME = 60 * 60 * 24 * 7;  // 1 week (in secs)
 
+    private PortletGroup coreGroup = null;
+
     private boolean isTCK = false;
 
     /**
@@ -171,6 +173,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                     rd.forward(req, res);
                     return;
                 }
+                coreGroup = aclService.getCoreGroup();
                 firstDoGet = Boolean.FALSE;
             }
         }
@@ -254,7 +257,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             u.setUserName("tckuser");
             u.setUserID("tckuser");
             Map l = new HashMap();
-            l.put(aclService.getCoreGroup(), PortletRole.USER);
+            l.put(coreGroup, PortletRole.USER);
             req.setAttribute(SportletProperties.PORTLET_USER, u);
             req.setAttribute(SportletProperties.PORTLETGROUPS, l);
             req.setAttribute(SportletProperties.PORTLET_ROLE, PortletRole.USER);
@@ -273,7 +276,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
         }
         HashMap groups = new HashMap();
-        PortletGroup coreGroup = aclService.getCoreGroup();
+
         PortletRole role = PortletRole.GUEST;
         if (user == null) {
             user = GuestUser.getInstance();
