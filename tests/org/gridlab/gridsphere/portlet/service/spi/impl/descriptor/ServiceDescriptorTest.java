@@ -9,6 +9,7 @@ import junit.framework.TestSuite;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParam;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridlab.gridsphere.portletcontainer.GridSphereServletTest;
 import org.gridlab.gridsphere.GridSphereScenarios;
 import org.apache.cactus.ServletTestCase;
 
@@ -19,14 +20,14 @@ import java.util.List;
  * This is the base fixture for service testing. Provides a service factory and the
  * properties file.
  */
-public class ServiceDescriptorTest extends ServletTestCase {
+public class ServiceDescriptorTest extends GridSphereServletTest {
 
 
     public ServiceDescriptorTest(String name) {
         super(name);
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         junit.textui.TestRunner.run(suite());
     }
 
@@ -35,8 +36,7 @@ public class ServiceDescriptorTest extends ServletTestCase {
     }
 
     public void setUp() {
-        GridSphereScenarios scenario = new GridSphereScenarios(this);
-        scenario.setupGridSphereServlet();
+        super.testInitGridSphere();
     }
 
     public void testServiceDescriptor() {

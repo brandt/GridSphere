@@ -1,7 +1,7 @@
 /*
- * @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
- * @version $Id$
- */
+* @author <a href="mailto:novotny@aei.mpg.de">Jason Novotny</a>
+* @version $Id$
+*/
 package org.gridlab.gridsphere.portletcontainer;
 
 import junit.framework.Test;
@@ -11,7 +11,6 @@ import org.gridlab.gridsphere.portlet.PortletContext;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
-import org.gridlab.gridsphere.GridSphereScenarios;
 
 /**
  * This is the base fixture for service testing. Provides a service factory and the
@@ -36,8 +35,21 @@ public class GridSphereServletTest extends ServletTestCase {
     }
 
     public void testInitGridSphere() {
-        GridSphereScenarios scenario = new GridSphereScenarios(this);
-        scenario.setupGridSphereServlet();
+        gsServlet = new GridSphereServlet();
+        assertNotNull(gsServlet);
+        try {
+            gsServlet.init(config);
+        } catch (Exception e) {
+            fail("Unable to perform init() of GridSphereServlet!");
+        }
+        try {
+            gsServlet.initializeServices();
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Unable to initialize GridSphere Portlet services!");
+            log.error("Unable to initialize GridSphere Portlet services!", e);
+        }
+        factory = SportletServiceFactory.getInstance();
     }
 
     public static Test suite() {

@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.PortletWindow;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridlab.gridsphere.portletcontainer.GridSphereServletTest;
 import org.gridlab.gridsphere.portletcontainer.impl.descriptor.*;
 import org.gridlab.gridsphere.GridSphereScenarios;
 
@@ -24,13 +25,15 @@ import java.util.List;
  * This is the base fixture for service testing. Provides a service factory and the
  * properties file.
  */
-public class PortletDescriptorTest extends ServletTestCase {
+public class PortletDescriptorTest extends GridSphereServletTest {
+
+    //private GridSphereServletTest  servletTest = null;
 
     public PortletDescriptorTest(String name) {
         super(name);
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         junit.textui.TestRunner.run(suite());
     }
 
@@ -39,8 +42,7 @@ public class PortletDescriptorTest extends ServletTestCase {
     }
 
     public void setUp() {
-        GridSphereScenarios scenario = new GridSphereScenarios(this);
-        scenario.setupGridSphereServlet();
+        super.testInitGridSphere();
     }
 
     public void testPortletDescriptor() {
