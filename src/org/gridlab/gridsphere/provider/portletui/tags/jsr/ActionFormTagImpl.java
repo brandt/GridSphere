@@ -6,11 +6,13 @@ package org.gridlab.gridsphere.provider.portletui.tags.jsr;
 
 import org.gridlab.gridsphere.provider.portletui.tags.ActionFormTag;
 import org.gridlab.gridsphere.provider.portlet.tags.jsr.ActionTagImpl;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
+import javax.portlet.RenderResponse;
 import java.util.ArrayList;
 
 /**
@@ -67,10 +69,10 @@ public class ActionFormTagImpl extends ActionTagImpl implements ActionFormTag {
     public int doEndTag() throws JspException {
         try {
             JspWriter out = pageContext.getOut();
-
+            RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
             out.print("<form ");
             out.print("action=\"");
-            out.print(createActionURI().toString());
+            out.print(createActionURI(res.createActionURL()).toString());
             out.print("\" method=\"");
             out.print(method);
             out.print("\"");

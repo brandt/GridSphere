@@ -9,9 +9,12 @@ import org.gridlab.gridsphere.provider.portletui.beans.ActionSubmitBean;
 import org.gridlab.gridsphere.provider.portletui.tags.ActionSubmitTag;
 import org.gridlab.gridsphere.provider.portletui.tags.ContainerTag;
 import org.gridlab.gridsphere.provider.portlet.tags.jsr.ActionTagImpl;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
+import javax.portlet.RenderResponse;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -50,8 +53,8 @@ public class ActionSubmitTagImpl extends ActionTagImpl implements ActionSubmitTa
         }
         if (actionSubmitBean == null) actionSubmitBean = new ActionSubmitBean();
         paramBeans = new ArrayList();
-
-        actionSubmitBean.setName(createActionURI().toString());
+        RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
+        actionSubmitBean.setName(createActionURI(res.createActionURL()).toString());
 
         if (anchor != null) actionSubmitBean.setAnchor(anchor);
 
@@ -96,8 +99,8 @@ public class ActionSubmitTagImpl extends ActionTagImpl implements ActionSubmitTa
             ActionParamBean pbean = (ActionParamBean) it.next();
             portletAction.addParameter(pbean.getName(), pbean.getValue());
         }
-
-        String actionURI = createActionURI().toString();
+        RenderResponse res = (RenderResponse) pageContext.getAttribute(SportletProperties.RENDER_RESPONSE, PageContext.REQUEST_SCOPE);
+        String actionURI = createActionURI(res.createActionURL()).toString();
 
         actionSubmitBean.setName(actionURI);
 
