@@ -49,7 +49,7 @@ Copyright:
     <property name="docbook.dir" value="docs/docbook"/>
 
     <!-- GridSphere build targets -->
-    <property name="build.lib"     value="${gridsphere.build}/lib"/>
+    <property name="build.lib"     value="${gridsphere.build}/lib/ext"/>
     <property name="build.db"      value="${gridsphere.build}/db"/>
     <property name="build.classes" value="${gridsphere.build}/classes"/>
     <property name="build.webapps" value="${gridsphere.build}/webapps"/>
@@ -75,7 +75,7 @@ Copyright:
             <include name="*.jar"/>
         </fileset>
 
-        <fileset dir="lib">
+        <fileset dir="lib/ext">
             <include name="*.jar"/>
         </fileset>
         <pathelement path="${java.class.path}"/>
@@ -175,7 +175,7 @@ Copyright:
             classpathref="classpath"
             debug="${debug}"
             optimize="${optimize}"
-            deprecation="${deprecation}">
+            deprecation="false">
         </javac>
     </target>
 
@@ -194,7 +194,7 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Compiles JUnit tests                                            -->
+    <!-- Compiles JUnit tests                                                -->
     <!-- =================================================================== -->
     <target name="compile-unit-tests" if="junit.present" depends="compile-core" description="Compiles all JUnit tests">
         <echo>Compiling JUnit Tests</echo>
@@ -599,7 +599,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates all the WAR files                                           -->
     <!-- =================================================================== -->
-    <target name="war" depends="example-portlets-war, grid-portlets-war, core-portlets-war, gridsphere-war, manager-portlet-war" description="Make WAR!"/>
+    <target name="war-all" depends="example-portlets-war, grid-portlets-war, core-portlets-war, gridsphere-war, manager-portlet-war" description="Make WAR!"/>
 
 <!-- +++++++++++++++ END WAR CREATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
@@ -611,6 +611,7 @@ Copyright:
     <!-- =================================================================== -->
     <target name="deploy" depends="gridsphere-tomcat-jar, all-non-gridsphere-jars, deploy-portlets" description="Deploys GridSphere to a local server">
         <!-- Make core gridsphere directory if necessary -->
+        <echo message="Deploying GridSphere to Tomcat servlet container at ${env.CATALINA_HOME}"/>
         <mkdir dir="${GRIDSPHERE_HOME}"/>
         <mkdir dir="${GRIDSPHERE_HOME}/creds"/>
 
@@ -725,6 +726,7 @@ Copyright:
     <!-- Runs all JUnit tests: needs optional.jar and junit in classpath     -->
     <!-- =================================================================== -->
     <target name="run-tests" depends="compile-unit-tests, gridsphere-junit-jar" if="junit.present" description="Runs all JUnit tests">
+        <echo message="Running the GridSphere Junit Tests"/>
         <mkdir dir="${gridsphere.build}/reports"/>
 
         <mkdir dir="${GRIDSPHERE_HOME}"/>
@@ -746,6 +748,7 @@ Copyright:
     </target>
 
     <target name="make-test-reports" depends="run-tests" if="junit.present" description="Execute Unit Tests">
+       <echo message="Making GridSphere Junit Test Reports"/>
        <mkdir dir="${gridsphere.build}/reports/html"/>
        <junitreport todir="${gridsphere.build}/reports">
             <fileset dir="${gridsphere.build}/reports">
@@ -775,11 +778,23 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Make GridSphere distribution                                        -->
     <!-- =================================================================== -->
-    <target name="dist" depends="clean, gridsphere-tomcat-jar, all-non-gridsphere-jars, war" description="Build GridSphere binary distribution">
+    <target name="dist" depends="clean, gridsphere-tomcat-jar, all-non-gridsphere-jars, war-all, docs-all" description="Build GridSphere binary distribution">
+        <echo message="Building the binary GridSphere distribution" />
+
         <mkdir dir="${gridsphere.dist}"/>
-        <mkdir dir="${gridsphere.dist}/webapps"/>
+
+        <!-- copy dist files -->
+        <copy file="README" todir="${gridsphere.dist}"/>
+        <copy file="LICENSE" todir="${gridsphere.dist}"/>
+
         <copy todir="${gridsphere.dist}">
-            <fileset dir="${gridsphere.build}"/>
+            <fileset dir="${gridsphere.build}">
+                <exclude name="classes/**"/>
+            </fileset>
+        </copy>
+
+        <copy todir="${gridsphere.dist}/lib">
+            <fileset dir="${build.lib}"/>
         </copy>
     </target>
 
