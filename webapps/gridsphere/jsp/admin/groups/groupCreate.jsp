@@ -10,14 +10,14 @@
 <ui:hiddenfield beanId="groupId"/>
 
 <h3>Group information</h3>
-<ui:text value="Enter group name:"/>&nbsp;&nbsp;<ui:textfield beanId="groupNameTF"/>
+<ui:text key="GROUP_CREATE_NAME"/>&nbsp;&nbsp;<ui:textfield beanId="groupNameTF"/>
 <p>
-<ui:text value="Enter a brief description of group:"/>&nbsp;&nbsp;<ui:textfield beanId="groupDescTF"/>
+<ui:text key="GROUP_DESC_MSG"/>&nbsp;&nbsp;<ui:textfield beanId="groupDescTF"/>
 </p>
 
-<h3>Group visibility</h3>
+<h3><ui:text key="GROUP_VISIBILITY_MSG" style="nostyle"/></h3>
 
-<ui:text value="Select if group should be public or private. Anyone can add themselves to a public group, while private groups require authorization"/>
+<ui:text key="GROUP_VISIBILITY_DESC"/>
 <p>
 <% if (isPublic) { %>
     <ui:radiobutton beanId="groupVisibility" value="PUBLIC" selected="true"/>
@@ -33,13 +33,12 @@
 
 <h3>Select portlets</h3>
 
-<ui:text value="Select portlets that will be made available to the group. Users in this group will have the chance to
-add these portlets to their layout. In addition, required roles may be associated with the portlets"/>
+<ui:text key="GROUP_SELECT_MSG"/>
 <p>
 <ui:panel beanId="panel"/>
 
 
-<ui:actionsubmit action="doMakeGroup" value="Save"/>
-<ui:actionsubmit action="doViewListGroup" value="Cancel"/>
+<ui:actionsubmit action="doMakeGroup" key="SAVE"/>
+<ui:actionsubmit action="doViewListGroup" key="CANCEL"/>
 
 </ui:form>

@@ -7,14 +7,14 @@
 <portletAPI:init/>
 
 <ui:form>
-<h3>Editing <%= name %> layout</h3>
+<h3><ui:text key="LAYOUTMGR_GROUP_EDIT" style="nostyle"/>&nbsp; <%= name %></h3>
 <ui:hiddenfield beanId="layoutHF"/>
 <ui:hiddenfield beanId="typeHF"/>
 
 
 <% if (allowImport.booleanValue()) { %>
 
-<ui:text value="Import existing application layout:"/>
+<ui:text key="LAYOUTMGR_IMPORT"/>
 
 <ui:listbox beanId="appsLB"/>
 

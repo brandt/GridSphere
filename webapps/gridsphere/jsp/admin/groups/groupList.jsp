@@ -21,11 +21,11 @@
         <ui:tablerow>
         <% if (request.getAttribute("create") != null) { %>
             <ui:tablecell>
-                <ui:actionsubmit action="doCreateNewGroup" value="Create new group"/>
+                <ui:actionsubmit action="doCreateNewGroup" key="GROUP_CREATE_NEW"/>
             </ui:tablecell>
             <% } %>
             <ui:tablecell>
-                <ui:actionsubmit action="doEditDefaultGroups" value="Edit default groups"/>
+                <ui:actionsubmit action="doEditDefaultGroups" key="GROUP_EDIT_DEFS"/>
             </ui:tablecell>
         </ui:tablerow>
     </ui:frame>
@@ -61,7 +61,7 @@
                             </ui:actionlink>
                         </ui:tablecell>
                         <ui:tablecell>
-                            <ui:actionlink action="doViewViewGroup" value="Edit Users">
+                            <ui:actionlink action="doViewViewGroup" key="GROUP_EDIT_USERS">
                                 <ui:actionparam name="groupID" value="<%= group.getID() %>"/>
                             </ui:actionlink>
                         </ui:tablecell>
@@ -70,7 +70,7 @@
                         </ui:tablecell>
                         <ui:tablecell>
                         <% if (!group.getName().equals(SportletGroup.CORE.getName())) { %>
-                            <ui:actionsubmit action="deleteGroup" value="Delete">
+                            <ui:actionsubmit action="deleteGroup" key="DELETE">
                                 <ui:actionparam name="groupID" value="<%= group.getID() %>"/>
                             </ui:actionsubmit>
                         <% } %>

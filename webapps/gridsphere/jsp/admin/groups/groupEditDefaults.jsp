@@ -3,9 +3,9 @@
 <portletAPI:init/>
 
 <ui:form>
-<h3>Edit default groups</h3>
+<h3><ui:text key="GROUP_EDIT_DEFS" style="nostyle"/></h3>
 
-<ui:text value="When users are added to the portal they can be added automatically to the following selection of groups"/>
+<ui:text key="GROUP_EDIT_DEFS_MSG"/>
 <p>
 <ui:frame zebra="true" beanId="defaultTable"/>
 <p>

@@ -17,30 +17,30 @@
 
 <h3>Create new tab</h3>
 <ui:group>
-<ui:text value="Enter new tab name"/>&nbsp;&nbsp;<ui:textfield beanId="userTabTF"/>
+<ui:text key="LAYOUT_TAB_NAME"/>&nbsp;&nbsp;<ui:textfield beanId="userTabTF"/>
 <p>
 
-<ui:radiobutton beanId="colsRB" value="1"/><ui:text value="One column"/>
-<ui:radiobutton beanId="colsRB" value="2"/><ui:text value="Two columns"/>
-<ui:radiobutton beanId="colsRB" value="3"/><ui:text value="Three columns"/>
+<ui:radiobutton beanId="colsRB" value="1"/><ui:text key="LAYOUT_ONE_COL"/>
+<ui:radiobutton beanId="colsRB" value="2"/><ui:text key="LAYOUT_TWO_COL"/>
+<ui:radiobutton beanId="colsRB" value="3"/><ui:text key="LAYOUT_THREE_COL"/>
 
 <p>
-<ui:actionsubmit action="createNewTab" value="Create"/>
+<ui:actionsubmit action="createNewTab" key="CREATE"/>
 </ui:group>
 
-<h3>Display existing tabs</h3>
+<h3><ui:text key="LAYOUT_DISP_TABS" style="nostyle"/></h3>
 
 <% if (tabs.size() > 0) { %>
 <ui:table zebra="true">
     <ui:tablerow header="true">
     <ui:tablecell>
-        <ui:text value="Tab name"/>
+        <ui:text key="LAYOUT_SHOW_TAB"/>
     </ui:tablecell>
     <ui:tablecell>
-        <ui:text value="Edit tab name"/>
+        <ui:text key="LAYOUT_EDIT_TAB"/>
     </ui:tablecell>
      <ui:tablecell>
-        <ui:text value="Delete tab"/>
+        <ui:text key="LAYOUT_DELETE_TAB"/>
     </ui:tablecell>
     </ui:tablerow>
 
@@ -54,12 +54,12 @@
     </ui:tablecell>    
     <ui:tablecell>
         <ui:textfield name="myTF" value="<%= title %>"/>
-        <ui:actionsubmit action="saveTab" value="Save">
+        <ui:actionsubmit action="saveTab" key="SAVE">
             <ui:actionparam name="tabid" value="<%= tab.getLabel() %>"/>
         </ui:actionsubmit>
     </ui:tablecell>
     <ui:tablecell>
-        <ui:actionsubmit action="deleteTab" value="Delete">
+        <ui:actionsubmit action="deleteTab" key="DELETE">
             <ui:actionparam name="tabid" value="<%= tab.getLabel() %>"/>
         </ui:actionsubmit>
     </ui:tablecell>

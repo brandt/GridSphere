@@ -63,7 +63,7 @@
 
 <ui:form>
 
-<h3><ui:text value="Configure messaging service" style="nostyle"/></h3>
+<h3><ui:text key="PROFILE_CONFIG_MESSAGING" style="nostyle"/></h3>
 <ui:group>
 <ui:frame beanId="messagingFrame"/>
 </ui:group>
@@ -75,7 +75,7 @@
 
 <ui:form>
 
-<h3><ui:text value="Configure group membership" style="nostyle"/></h3>
+<h3><ui:text key="PROFILE_CONFIG_GROUPS" style="nostyle"/></h3>
 <ui:group>
 <ui:frame beanId="groupsFrame"/>
 <p>
@@ -85,7 +85,7 @@
 
 <ui:form>
 
-<h3><ui:text value="Update password" style="nostyle"/></h3>
+<h3><ui:text key="PROFILE_UPDATE_PASS" style="nostyle"/></h3>
 <ui:group>
 <ui:frame width="50%">
     <ui:tablerow>
