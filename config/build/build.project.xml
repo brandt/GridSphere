@@ -207,7 +207,7 @@ Copyright:
         </condition>
     </target>
 
-    <target name="doclet-mapping" depends="check-mapping" if="var_force_mapping, use.persistence"">
+    <target name="doclet-mapping" depends="check-mapping" if="var_force_mapping, use.persistence">
         <mkdir dir="${GRIDSPHERE_HOME}/${project.name}/database"/>
         <javadoc packagenames="*"
             sourcepath="src"
