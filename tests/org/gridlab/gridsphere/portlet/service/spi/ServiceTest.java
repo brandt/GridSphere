@@ -30,7 +30,7 @@ public class ServiceTest extends TestCase {
         PropertyConfigurator.configure("conf/log4j.properties");
     }
 
-    public void testCreateFactory() {
+    public void testCreateServiceFactory() {
         // create factory
         factory = SportletServiceFactory.getInstance();
         if (factory == null) fail("Unable to instantiate SportletServiceFactory!");

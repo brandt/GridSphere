@@ -30,11 +30,11 @@ public class SetupRootUserTest extends ServiceTest {
 
     protected void setUp() {
         super.setUp();
-        super.testCreateFactory();
-        testRootUser();
+        super.testCreateServiceFactory();
+        testCreateRootUser();
     }
 
-    public void testRootUser() {
+    public void testCreateRootUser() {
         log.info(" =====================================  setup");
         // Create a services using mock ServletConfig
         try {

@@ -14,16 +14,14 @@ import java.util.List;
 
 public class SetupTestUsersTest extends SetupTestGroupsTest {
 
-    private static UserManagerService userService = null;
+    private UserManagerService rootUserService = null;
     private AccountRequest jasonRequest = null;
     private AccountRequest michaelRequest = null;
     private AccountRequest oliverRequest = null;
-    private AccountRequest ianRequest = null;
 
     private User jason = null;
     private User michael = null;
     private User oliver = null;
-    private User ian = null;
 
     public SetupTestUsersTest(String name) {
         super(name);
@@ -43,7 +41,7 @@ public class SetupTestUsersTest extends SetupTestGroupsTest {
         log.info(" =====================================  setup");
         // Create a root user services using mock ServletConfig
         try {
-            userService = (UserManagerService) factory.createPortletUserService(UserManagerService.class, rootUser, null, true);
+            rootUserService = (UserManagerService) factory.createPortletUserService(UserManagerService.class, rootUser, null, true);
         } catch (Exception e) {
             log.error("Unable to initialize services: ", e);
         }
@@ -51,13 +49,11 @@ public class SetupTestUsersTest extends SetupTestGroupsTest {
 
     public void testSetupUsers() {
         log.info("- setup users");
-        List users = userService.getUsers();
-        int numUsers = users.size();
 
         // jason, michael should be users
         // oliver will be denied
 
-        AccountRequest jasonRequest = userService.createAccountRequest();
+        AccountRequest jasonRequest = rootUserService.createAccountRequest();
         jasonRequest.setUserID("jason");
         jasonRequest.setGivenName("Jason");
         jasonRequest.setPasswordValue("");
@@ -65,7 +61,7 @@ public class SetupTestUsersTest extends SetupTestGroupsTest {
         jasonRequest.addToGroup(portal, PortletRole.ADMIN);
         jasonRequest.addToGroup(cactus, PortletRole.USER);
 
-        AccountRequest michaelRequest = userService.createAccountRequest();
+        AccountRequest michaelRequest = rootUserService.createAccountRequest();
         michaelRequest.setUserID("michael");
         michaelRequest.setGivenName("Michael");
         michaelRequest.setPasswordValue("");
@@ -73,32 +69,56 @@ public class SetupTestUsersTest extends SetupTestGroupsTest {
         michaelRequest.addToGroup(portal, PortletRole.USER);
         michaelRequest.addToGroup(triana, PortletRole.USER);
 
-        AccountRequest oliverRequest = userService.createAccountRequest();
+        AccountRequest oliverRequest = rootUserService.createAccountRequest();
         oliverRequest.setUserID("oliver");
         oliverRequest.setGivenName("Oliver");
         oliverRequest.setPasswordValue("");
         oliverRequest.setPasswordValidation(false);
-
         try {
-            userService.submitAccountRequest(jasonRequest);
-            userService.submitAccountRequest(michaelRequest);
-            userService.submitAccountRequest(oliverRequest);
-            jason = userService.approveAccountRequest(jasonRequest);
-            michael = userService.approveAccountRequest(michaelRequest);
+            rootUserService.submitAccountRequest(jasonRequest);
+            rootUserService.submitAccountRequest(michaelRequest);
+            rootUserService.submitAccountRequest(oliverRequest);
+            jason = rootUserService.approveAccountRequest(jasonRequest);
+            michael = rootUserService.approveAccountRequest(michaelRequest);
+            oliver = rootUserService.approveAccountRequest(oliverRequest);
+            oliver = rootUserService.approveAccountRequest(oliverRequest);
         } catch (PortletServiceException e) {
             String msg = "Failed to setup users";
             log.error(msg, e);
             fail(msg);
         }
+
+        // test accessor methods
+        List users = rootUserService.getUsers();
+        assertEquals(true, users.contains(jason));
+        assertEquals(true, users.contains(michael));
+        assertEquals(true, users.contains(oliver));
     }
 
+    public void testAddRemoveUsers() {
+        AccountRequest franzReq = rootUserService.createAccountRequest();
+        franzReq.setLoginName("franz");
+        try {
+            rootUserService.submitAccountRequest(franzReq);
+        } catch (InvalidAccountRequestException e) {
+            fail("Unable to submit account request");
+        }
+        List reqs = rootUserService.getAccountRequests();
+        boolean isthere = reqs.contains(franzReq);
+        assertEquals(true, isthere);
+        User franz = rootUserService.approveAccountRequest(franzReq);
+        User newfranz = rootUserService.getUserByLoginName("franz");
+        assertEquals(franz, newfranz);
+        rootUserService.deleteAccount(franz);
+        newfranz = rootUserService.getUserByLoginName("franz");
+        assertEquals(null, newfranz);
+    }
 
     public void teardownUsers() {
         log.info("- teardown users");
-        userService.deleteAccount(jason);
-        userService.deleteAccount(michael);
-        userService.deleteAccount(oliver);
-        userService.deleteAccount(ian);
+        rootUserService.deleteAccount(jason);
+        rootUserService.deleteAccount(michael);
+        rootUserService.deleteAccount(oliver);
     }
 
     protected void tearDown() {

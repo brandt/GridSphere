@@ -23,6 +23,7 @@ public class UserManagerServiceTest extends SetupTestUsersTest {
 
     protected void setUp() {
         super.setUp();
+        super.testSetupUsers();
     }
 
     protected void tearDown() {
