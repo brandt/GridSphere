@@ -399,7 +399,7 @@
 
     <tag>
         <name>radiobutton</name>
-        <tag-class>org.gridlab.gridsphere.tags.ui.RadioButtonTag</tag-class>
+        <tag-class>org.gridlab.gridsphere.tags.portletui.RadioButtonTag</tag-class>
         <body-content>empty</body-content>
         <description>
             Wraps HTML input radio button tag
@@ -620,5 +620,33 @@
         </attribute>
     </tag>
 
+    <tag>
+        <name>urlimage</name>
+        <tag-class>org.gridlab.gridsphere.tags.portletui.URLImageTag</tag-class>
+        <body-content>empty</body-content>
+        <description>
+            Shows an image from an url
+        </description>
+        <attribute>
+            <name>url</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>alt</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>title</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>beanId</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
 
 </taglib>
