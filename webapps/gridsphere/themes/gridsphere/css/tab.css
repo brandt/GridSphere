@@ -58,35 +58,34 @@ a.tab-menu {
 }
 
 a.tab-menu:link {
-  color: #ffffff;
+  color: black;
 }
 
 a.tab-menu:visited {
-  color: #ffffff;
+  color: black;
 }
 
 a.tab-menu:hover {
-  color: #ffffff;
+  color: black;
   background-color: #cc6600;
 }
 
 a.tab-menu:active {
-  color: #ffffff;
+  color: black;
 }
 
 /*  subpane */
 
 
 .tab-sub-active {
-    border: 1px solid white;
-    color: #ffffff;
+    color: white;
     font-size:10px;
-    font-weight: bold;
     margin-left: 5px;
 
 }
 
 .tab-sub-inactive {
+    color: black;
     margin-left: 5px;
     border: 1px solid #f9a61a;
 }
@@ -107,38 +106,35 @@ a.tab-sub-menu {
 }
 
 a.tab-sub-menu:link {
-  color: white;
+  color: black;
   font-size:10px;
   border: 1px solid #f9a61a;
-  font-weight: bold;
   spacing-left: 2px;
   spacing-right: 2px;
 
 }
 
 a.tab-sub-menu:visited {
-  color: white;
+  color: black;
   font-size:10px;
   border: 1px solid #f9a61a;
-  font-weight: bold;
   spacing-left: 2px;
   spacing-right: 2px;
 }
 
 a.tab-sub-menu:hover {
-  border: 1px dashed white;
+  border: 1px dashed black;
   background-color: #f9a61a;
-  color: white;
+  color: black;
   font-size:10px;
-  font-weight: bold;
+  text-decoration: none;
   spacing-left: 2px;
   spacing-right: 2px;
 }
 
 a.tab-sub-menu:active {
-  color: white;
+  color: black;
   font-size:10px;
-  font-weight: bold;
   spacing-left: 2px;
   spacing-right: 2px;
 }
