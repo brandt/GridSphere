@@ -178,7 +178,7 @@ Copyright:
             value="${env.CATALINA_HOME}/webapps/${project.name}"/>
     </target>
 
-    <target name="create-database" depends="setenv, configure-database, compile">
+    <target name="create-database" depends="setenv, configure-database, deploy">
         <taskdef name="dbtask"
             classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
             classpathref="classpath"/>
@@ -187,7 +187,7 @@ Copyright:
             action="CREATE"/>
     </target>
 
-    <target name="update-database" depends="setenv, configure-database, compile">
+    <target name="update-database" depends="setenv, configure-database, deploy">
         <taskdef name="dbtask"
             classname="org.gridlab.gridsphere.core.persistence.hibernate.DBTask"
             classpathref="classpath"/>
