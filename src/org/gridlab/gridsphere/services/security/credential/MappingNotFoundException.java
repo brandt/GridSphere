@@ -5,7 +5,7 @@
  * This exception occurs when <code>CredentialManager</code> is unable to locate a
  * <code>CredentialMapping</code> for a given subject.
  */
-package org.gridlab.gridsphere.core.security;
+package org.gridlab.gridsphere.services.security.credential;
 
 public class MappingNotFoundException extends CredentialException {
 

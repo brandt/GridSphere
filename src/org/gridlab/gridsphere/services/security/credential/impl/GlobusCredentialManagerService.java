@@ -2,33 +2,40 @@
  * @author <a href="mailto:russell@aei-potsdam.mpg.de">Michael Paul Russell</a>
  * @version $Id$
  * <p>
- * GridSphere requires portlet users to authenticate with credentials at login. The
- * credentials that portlet users authenticate with are then kept in memory and used
- * as required to authenticate on behalf of portlet users to other Grid services.
- * <p>
- * This interface describes methods for permitting credentials for use within GridSphere,
- * mapping credential subjects to portlet users and hostnames, and finally methods for
- * managing credentials on the behalf of portlet users.
+ * This class is used for managing Globus credentials on behalf of portlet users.
  */
-package org.gridlab.gridsphere.core.security;
+package org.gridlab.gridsphere.services.security.credential.impl;
 
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.BaseObject;
-import org.gridlab.gridsphere.core.security.Credential;
-import org.gridlab.gridsphere.core.security.CredentialManager;
-import org.gridlab.gridsphere.core.security.CredentialPermission;
-import org.gridlab.gridsphere.core.security.CredentialNotPermittedException;
-import org.gridlab.gridsphere.core.security.CredentialMapping;
-import org.gridlab.gridsphere.core.security.MappingNotFoundException;
-import org.gridlab.gridsphere.core.security.CredentialRetrievalClient;
-import org.gridlab.gridsphere.core.security.CredentialRetrievalException;
+
+import org.gridlab.gridsphere.services.security.credential.Credential;
+import org.gridlab.gridsphere.services.security.credential.CredentialPermission;
+import org.gridlab.gridsphere.services.security.credential.CredentialNotPermittedException;
+import org.gridlab.gridsphere.services.security.credential.CredentialMapping;
+import org.gridlab.gridsphere.services.security.credential.MappingNotFoundException;
+import org.gridlab.gridsphere.services.security.credential.CredentialRetrievalClient;
+import org.gridlab.gridsphere.services.security.credential.CredentialRetrievalException;
+import org.gridlab.gridsphere.services.security.credential.CredentialManagerService;
+
+import org.gridlab.gridsphere.services.security.credential.impl.GlobusCredential;
+import org.gridlab.gridsphere.services.security.credential.impl.GlobusCredentialRetrievalClient;
+import org.gridlab.gridsphere.services.security.credential.impl.GlobusCredentialMapping;
+import org.gridlab.gridsphere.services.security.credential.impl.GlobusCredentialPermission;
+
+import org.gridlab.gridsphere.services.user.UserManagerService;
+
+import org.globus.security.GlobusProxy;
+import org.globus.security.GlobusProxyException;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -37,14 +44,73 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
-public abstract class AbstractCredentialManager implements CredentialManager {
+public final class GlobusCredentialManagerService
+    implements PortletServiceProvider, CredentialManagerService {
 
-    private static PortletLog _log = SportletLog.getInstance(AbstractCredentialManager.class);
-    private CredentialRetrievalClient retrievalClient = null;
+    private static PortletLog _log = SportletLog.getInstance(GlobusCredentialManagerService.class);
     private PersistenceManagerRdbms pm = PersistenceManagerRdbms.getInstance();
+    private UserManagerService userManager = null;
+    private CredentialRetrievalClient retrievalClient = null;
     private Map credentials = Collections.synchronizedSortedMap(new TreeMap());
-    private String credentialPermissionImpl = null;
-    private String credentialMappingImpl = null;
+    private String credentialPermissionImpl = GlobusCredentialPermission.class.getName();
+    private String credentialMappingImpl = GlobusCredentialMapping.class.getName();
+
+    /****** PORTLET SERVICE METHODS *******/
+
+    public void init(PortletServiceConfig config) {
+        _log.info("Entering init()");
+        initServices();
+        initCredentialRetrievalClient(config);
+        _log.info("Exiting init()");
+    }
+
+    private void initServices() {
+        // Get instance of service factory
+        PortletServiceFactory factory = SportletServiceFactory.getInstance();
+        // Get instance of helper services
+        try {
+            this.userManager
+                    = (UserManagerService)factory.createPortletService(UserManagerService.class,
+                                                                       null, true);
+        } catch (Exception e) {
+            _log.error("Unable to initialize services: ", e);
+        }
+    }
+
+    private void initCredentialRetrievalClient(PortletServiceConfig config) {
+        // Hostname init parameter
+        String host = config.getInitParameter("retrievalHost");
+        if (host == null) {
+            host = "";
+        }
+        if (host.equals("")) {
+            host = GlobusCredentialRetrievalClient.DEFAULT_HOST;
+            _log.warn("Credential retrieval host not set. Using default value " + host);
+        }
+        // Port init parameter
+        int port = GlobusCredentialRetrievalClient.DEFAULT_PORT;
+        try {
+            port = (new Integer(config.getInitParameter("retrievalPort"))).intValue();
+        } catch (Exception e) {
+            _log.warn("Credential retrieval port not valid. Using default value " + port);
+        }
+        // Lifetime init parameter
+        long lifetime =  GlobusCredentialRetrievalClient.DEFAULT_LIFETIME;
+        try {
+            lifetime = (new Long(config.getInitParameter("retrievalLifetime"))).longValue();
+        } catch (Exception e) {
+          _log.warn("Credential retrieval lifetime not valid. Using default value " + lifetime);
+        }
+        _log.info("Credential retrieval hostname = " + host);
+        _log.info("Credential retrieval port = " + port);
+        _log.info("Credential default lifetime = " + lifetime);
+        // Save credential retrieval client
+        this.retrievalClient = new GlobusCredentialRetrievalClient(host, port, lifetime);
+    }
+
+    public void destroy() {
+        destroyCredentials();
+    }
 
     /****** CREDENTIAL PERMISSION PERSISTENCE METHODS *******/
 
@@ -190,7 +256,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
             _log.debug(query);
             return this.pm.restoreList(query);
         } catch (PersistenceManagerException e) {
-            _log.error("Error retrieving credential maps ", e);
+            _log.error("Error retrieving credential mappings ", e);
             return new Vector();
         }
     }
@@ -210,15 +276,10 @@ public abstract class AbstractCredentialManager implements CredentialManager {
 
     public CredentialMapping createCredentialMapping(String subject, User user)
             throws CredentialNotPermittedException {
-        CredentialMapping mapping = null;
-        // Create new mapping of proper type
-        try {
-            mapping = (CredentialMapping)Class.forName(this.credentialMappingImpl).newInstance();
-        } catch (Exception e) {
-            _log.error("Error creating instance of credential mapping", e);
-        }
+        GlobusCredentialMapping mapping = null;
+        mapping = new GlobusCredentialMapping();
         mapping.setSubject(subject);
-        mapping.setUser(user.getID());
+        mapping.setUser(user);
         createCredentialMapping(mapping);
         return mapping;
     }
@@ -226,32 +287,33 @@ public abstract class AbstractCredentialManager implements CredentialManager {
     public void createCredentialMapping(CredentialMapping mapping)
             throws CredentialNotPermittedException {
         String subject = mapping.getSubject();
-        // Make sure the mapping subject is permitted
-        if (isCredentialPermitted(subject)) {
-            // Check that no mapping (already) exists with given subject
-            if (!existsCredentialMapping(subject)) {
-                try {
-                    this.pm.create(mapping);
-                } catch (PersistenceManagerException e) {
-                    _log.error("Error creating credential mapping " + e);
-                }
-            }
-        } else {
+        // Check that no mapping already exists for given subject
+        if (existsCredentialMapping(subject)) {
+            throw new CredentialNotPermittedException("Mapping already exists for given subject");
+        // Check that the subject is permitted for use by this manager
+        } else if (!isCredentialPermitted(subject)) {
             throw new CredentialNotPermittedException("Credential subject not permitted");
+        }
+        if (_log.isDebugEnabled()) {
+            _log.debug("Creating mapping " + mapping);
+        }
+        // Save a record of object to database
+        try {
+            this.pm.create(mapping);
+        } catch (PersistenceManagerException e) {
+            _log.error("Error creating credential mapping " + e);
         }
     }
 
     public void updateCredentialMapping(CredentialMapping mapping)
             throws CredentialNotPermittedException {
-        String subject = mapping.getSubject();
-        if (isCredentialPermitted(subject)) {
-            try {
-                this.pm.update(mapping);
-            } catch (PersistenceManagerException e) {
-                _log.error("Error updating credential mapping " + e);
-            }
-        } else {
-            throw new CredentialNotPermittedException("Credential subject not permitted");
+        if (_log.isDebugEnabled()) {
+            _log.debug("Updating mapping " + mapping);
+        }
+        try {
+            this.pm.update(mapping);
+        } catch (PersistenceManagerException e) {
+            _log.error("Error updating credential mapping " + e);
         }
     }
 
@@ -274,11 +336,11 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         try {
             String query = "select cm from "
                          + this.credentialMappingImpl
-                         + " cm where cm.user=\"" + user.getID() + "\"";
+                         + " cm where cm.user=" + user.getID();
             _log.debug(query);
             return this.pm.restoreList(query);
         } catch (PersistenceManagerException e) {
-            _log.error("Error retrieving credential maps for user", e);
+            _log.error("Error retrieving credential mappings for user", e);
             return new Vector();
         }
     }
@@ -287,7 +349,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         try {
             String query = "delete cm from "
                          + this.credentialMappingImpl
-                         + " cm where cm.user=\"" + user.getID() + "\"";
+                         + " cm where cm.user=" + user.getID();
             _log.debug(query);
             this.pm.deleteList(query);
         } catch (PersistenceManagerException e) {
@@ -315,10 +377,9 @@ public abstract class AbstractCredentialManager implements CredentialManager {
 
     public User getCredentialUser(String subject) {
         User user = null;
-        // Improve on this later...
         CredentialMapping mapping = getCredentialMapping(subject);
         if (mapping != null) {
-            // Get user with given id from UserManagerService
+            user = mapping.getUser();
         }
         return user;
     }
@@ -327,7 +388,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         List subjects = null;
         String query = "select cm.subject from "
                      + this.credentialMappingImpl
-                     + " cm where cm.user=\"" + user.getID() + "\"";
+                     + " cm where cm.user=" + user.getID();
         _log.debug(query);
         try {
             subjects = this.pm.restoreList(query);
@@ -342,7 +403,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         List tags = new Vector();
         String query = "select cm.tag from "
                      + this.credentialMappingImpl
-                     + " cm where cm.user=\"" + user.getID() + "\"";
+                     + " cm where cm.user=" + user.getID();
         _log.debug(query);
         try {
             tags = this.pm.restoreList(query);
@@ -531,7 +592,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
             throw new CredentialNotPermittedException("Credential mapping not found for " + subject);
         }
         // Get user's credential collection
-        Map userCredentials = getUserCredentials(user);
+        Map userCredentials = getUserCredentialsMap(user);
         // Add this credential to that collection
         userCredentials.put(user.getID(), credential);
     }
@@ -562,6 +623,31 @@ public abstract class AbstractCredentialManager implements CredentialManager {
                     credential.destroy();
                 }
             }
+        }
+    }
+
+    private void destroyCredentials() {
+        synchronized (this.credentials) {
+            // Iterate through each user collection
+            Iterator users = this.credentials.keySet().iterator();
+            while (users.hasNext()) {
+                User user = (User)users.next();
+                // Get user's credential collection
+                Map userCredentials = (Map)this.credentials.get(user);
+                // Just being safe...
+                if (userCredentials != null) {
+                    synchronized (userCredentials) {
+                        // Iterate through each credential and destroy it
+                        Iterator iterator = userCredentials.values().iterator();
+                        while (iterator.hasNext()) {
+                            Credential credential = (Credential)iterator.next();
+                            credential.destroy();
+                        }
+                    }
+                }
+            }
+            // Now clear everything
+            this.credentials.clear();
         }
     }
 
@@ -693,7 +779,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
     }
 
     public boolean hasActiveCredentials(User user) {
-        Map userCredentials = getUserCredentials(user);
+        Map userCredentials = getUserCredentialsMap(user);
         return (userCredentials.size() > 0);
     }
 
@@ -731,33 +817,7 @@ public abstract class AbstractCredentialManager implements CredentialManager {
         return subjectList;
     }
 
-    /*** PROTECTED METHODS ***/
-
-    protected String getCredentialPermissionImpl() {
-        return this.credentialPermissionImpl;
-    }
-
-    protected void setCredentialPermissionImpl(String impl) {
-        this.credentialPermissionImpl = impl;
-    }
-
-    protected String getCredentialMappingImpl() {
-        return this.credentialMappingImpl;
-    }
-
-    protected void setCredentialMappingImpl(String impl) {
-        this.credentialMappingImpl = impl;
-    }
-
-    protected CredentialRetrievalClient getCredentialRetrievalClient() {
-        return this.retrievalClient;
-    }
-
-    protected void setCredentialRetrievalClient(CredentialRetrievalClient client) {
-        this.retrievalClient = client;
-    }
-
-    protected Map getUserCredentials(User user) {
+    private Map getUserCredentialsMap(User user) {
         String userID = user.getID();
         // Get user's credentials
         Map userCredentials = (Map)this.credentials.get(userID);
@@ -767,30 +827,5 @@ public abstract class AbstractCredentialManager implements CredentialManager {
             credentials.put(userID, userCredentials);
         }
         return userCredentials;
-    }
-
-    protected void destroyAllCredentials() {
-        synchronized (this.credentials) {
-            // Iterate through each user collection
-            Iterator users = this.credentials.keySet().iterator();
-            while (users.hasNext()) {
-                User user = (User)users.next();
-                // Get user's credential collection
-                Map userCredentials = (Map)this.credentials.get(user);
-                // Just being safe...
-                if (userCredentials != null) {
-                    synchronized (userCredentials) {
-                        // Iterate through each credential and destroy it
-                        Iterator iterator = userCredentials.values().iterator();
-                        while (iterator.hasNext()) {
-                            Credential credential = (Credential)iterator.next();
-                            credential.destroy();
-                        }
-                    }
-                }
-            }
-            // Now clear everything
-            this.credentials.clear();
-        }
     }
 }

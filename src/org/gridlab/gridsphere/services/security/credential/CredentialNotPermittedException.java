@@ -5,7 +5,7 @@
  * This exception occurs when attempting to use a credential that is not permitted for use in
  * GridSphere. See <code>CredentialManager</code> for how this exception is applied.
  */
-package org.gridlab.gridsphere.core.security;
+package org.gridlab.gridsphere.services.security.credential;
 
 public class CredentialNotPermittedException extends CredentialException {
 

@@ -3,17 +3,17 @@
  * @version $Id$
  * <p>
  */
-package org.gridlab.gridsphere.core.security.impl;
+package org.gridlab.gridsphere.services.security.credential.impl;
 
 /** GridSphere portlet imports **/
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
 /** Security imports **/
-import org.gridlab.gridsphere.core.security.Credential;
-import org.gridlab.gridsphere.core.security.CredentialRetrievalClient;
-import org.gridlab.gridsphere.core.security.CredentialRetrievalException;
-import org.gridlab.gridsphere.core.security.impl.GlobusCredential;
+import org.gridlab.gridsphere.services.security.credential.Credential;
+import org.gridlab.gridsphere.services.security.credential.CredentialRetrievalClient;
+import org.gridlab.gridsphere.services.security.credential.CredentialRetrievalException;
+import org.gridlab.gridsphere.services.security.credential.impl.GlobusCredential;
 
 /** Globus imports **/
 import org.globus.myproxy.MyProxy;

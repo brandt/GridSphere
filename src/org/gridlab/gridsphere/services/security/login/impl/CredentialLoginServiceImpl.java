@@ -21,9 +21,9 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.services.security.login.LoginService;
 import org.gridlab.gridsphere.services.security.login.LoginException;
 import org.gridlab.gridsphere.services.security.credential.CredentialManagerService;
-import org.gridlab.gridsphere.services.security.credential.impl.GlobusCredentialManagerServiceImpl;
+import org.gridlab.gridsphere.services.security.credential.CredentialRetrievalException;
+import org.gridlab.gridsphere.services.security.credential.impl.GlobusCredentialManagerService;
 import org.gridlab.gridsphere.services.user.UserManagerService;
-import org.gridlab.gridsphere.core.security.CredentialRetrievalException;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 public class CredentialLoginServiceImpl
@@ -100,7 +100,11 @@ public class CredentialLoginServiceImpl
             ex.putInvalidParameter("username", "Username not provided!");
             throw ex;
         }
-        User user = this.userService.getUser(username);
+        // VERY LAME THAT I CANNOT SIMPLY RETRIEVE A USER OBJECT AS NEEDED!!!!!!!!!!!!!!!!!!
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //User user = this.userService.getUser(username);
+        User user = null;
         if (user == null) {
             LoginException ex = new LoginException();
             ex.putInvalidParameter("username", "No user exists with given username!");

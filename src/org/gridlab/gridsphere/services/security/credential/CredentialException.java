@@ -6,7 +6,7 @@
  * more easily attach the specific exception generated in the underlying
  * implementation of <code>org.gridlab.gridsphere.core.security.Credential</code>. 
  */
-package org.gridlab.gridsphere.core.security;
+package org.gridlab.gridsphere.services.security.credential;
 
 import org.globus.common.ChainedException;
 

@@ -17,14 +17,12 @@
  * and all credentials retrieved with this service should be maintined in memory only, and destroyed
  * either when a user logs out or when GridSphere is shutdown.
  */
-package org.gridlab.gridsphere.core.security;
+package org.gridlab.gridsphere.services.security.credential;
 
-/** GridSphere portlet imports **/
 import org.gridlab.gridsphere.portlet.User;
-import org.gridlab.gridsphere.core.security.Credential;
-import org.gridlab.gridsphere.core.security.CredentialRetrievalException;
+import org.gridlab.gridsphere.services.security.credential.Credential;
+import org.gridlab.gridsphere.services.security.credential.CredentialRetrievalException;
 
-/** Java imports **/
 import java.util.List;
 
 public interface CredentialRetrievalClient {

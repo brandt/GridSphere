@@ -8,7 +8,7 @@
  * can map to only one portlet user. See <code>CredentialManager</code> for more details on
  * the usage of this class.
  */
-package org.gridlab.gridsphere.core.security;
+package org.gridlab.gridsphere.services.security.credential;
 
 import org.gridlab.gridsphere.portlet.User;
 
@@ -22,15 +22,7 @@ public interface CredentialMapping {
 
     /**
      */
-    public void setSubject(String subject);
-
-    /**
-     */
-    public String getUser();
-
-    /**
-     */
-    public void setUser(String userId);
+    public User getUser();
 
     /**
      */

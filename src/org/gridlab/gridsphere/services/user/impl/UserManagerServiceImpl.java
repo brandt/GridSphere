@@ -170,7 +170,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
             throws PermissionDeniedException {
 
         //@todo check if a user with that userid already exists!
-        if (isSuperuser(approver)) {
+        if (isSuperUser(approver)) {
             String userid = request.getID();
             AccountRequestImpl requestImpl = null;
             String command =
@@ -224,7 +224,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public void denyAccountRequest(User denier, AccountRequest request, MailMessage mailMessage)
             throws PermissionDeniedException {
-        if (isSuperuser(denier)) {
+        if (isSuperUser(denier)) {
             // @TODO share code with approveAccountrequest
 
             String userid = request.getID();
@@ -267,7 +267,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      */
     public void approveGroupRequest(User approver, User user, PortletGroup group, MailMessage mailMessage)
             throws PermissionDeniedException {
-        if (isAdminuser(approver, group) || isSuperuser(approver)) {
+        if (isAdminUser(approver, group) || isSuperUser(approver)) {
             try {
                 aclManagerService.approveUserInGroup(user, group);
             } catch (PortletServiceException e) {
@@ -297,7 +297,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     public void denyGroupRequest(User denier, User user, PortletGroup group, MailMessage mailMessage)
             throws PermissionDeniedException {
 
-        if (isAdminuser(denier, group) || (isSuperuser(denier))) {
+        if (isAdminUser(denier, group) || (isSuperUser(denier))) {
             try {
                 aclManagerService.removeUserGroupRequest(user, group);
                 // Mail the user
@@ -384,45 +384,6 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     }
 
     /**
-     * Gets a user by a oql query
-     *
-     * @param command the oql query
-     * @return the requested user
-     */
-    public User getUser(String command) {
-        SportletUserImpl user = null;
-        try {
-            user = (SportletUserImpl) pm.restoreObject(command);
-        } catch (PersistenceManagerException e) {
-            log.error("PM Exception :" + e.toString());
-        }
-        return user;
-    }
-
-    /**
-     * Gets a user by the unique ID
-     * @param ID unique ID
-     * @return requested user
-     */
-    private User getUserByID(String ID) {
-        String command =
-                "select u from "+jdoSUImpl+" u where ObjectID=\"" + ID + "\"";
-        return getUser(command);
-    }
-
-    /**
-     * Gets a user by his loginname
-     * @param name loginname
-     * @return requested user object
-     */
-    private User getUserByName(String name) {
-        String command =
-                "select u from "+jdoSUImpl+" u where UserID=\"" + name + "\"";
-        return getUser(command);
-
-    }
-
-    /**
      * loginUser retrieves a new user
      *
      * @param userName
@@ -433,7 +394,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         // same as getUser, we do add the user somewhere to the active users
         String command =
                 "select u from "+jdoSUImpl+" u where UserID=\"" + userName + "\"";
-        return getUser(command);
+        return selectUser(command);
     }
 
     //@todo fill in logoffuser
@@ -444,24 +405,45 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
 
     }
 
-    //@todo fill in saveuser
     /**
-     * Save user to DB
+     * Retrieves a user object with the given username from this service.
+     * Requires a user with the "super user" privileges, since this
+     * by-passes the normal login mechanism of retrieving a user object.
+     *
+     * @param User The super user requesting the user object
+     * @param String The user name or login id of the user in question
+     * @throws PermissionDeniedException If approver is not a super user
      */
-    public void saveUser(String userName) {
-
+    public User getUser(User approver, String userName)
+            throws PermissionDeniedException {
+        if (isSuperUser(approver)) {
+            return getUser(userName);
+        } else {
+            throw new PermissionDeniedException("User "
+                                               + approver.getGivenName()
+                                               + " wanted to retrieve "
+                                               + userName + " (denied)");
+        }
     }
 
     /**
-     * save the userobjects to the database
-     * @param user the userobject
-     * @todo check/pass up the exception
+     * Retrieves a user object with the given username from this service.
+     * Requires a user with the "super user" privileges, since this
+     * by-passes the normal login mechanism of retrieving a user object.
+     *
+     * @param User The super user requesting the user object
+     * @param String The user name or login id of the user in question
+     * @throws PermissionDeniedException If approver is not a super user
      */
-    public void saveUser(User user) {
-        try {
-            pm.update(user);
-        } catch (PersistenceManagerException e) {
-            log.error("Persistence Exception !"+e);
+    public void saveUser(User approver, User user)
+            throws PermissionDeniedException {
+        if (isSuperUser(approver)) {
+            saveUser(user);
+        } else {
+            throw new PermissionDeniedException("User "
+                                               + approver.getGivenName()
+                                               + " wanted to make changes "
+                                               + user.getUserID() + " (denied)");
         }
     }
 
@@ -472,26 +454,13 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @throws PermissionDeniedException
      */
     public void removeUser(User approver, String userName) throws PermissionDeniedException {
-
-        if (isSuperuser(approver)) {
-            if (existsUser(userName)) {
-                User user = getUserByName(userName);
-                try {
-                    List result = aclService.getGroups(user);
-                    if (result.size() > 0) {
-                        for (int i = 0; i < result.size(); i++) {
-                            aclManagerService.removeUserFromGroup(user, ((PortletGroup) result.get(i)));
-                        }
-                    }
-                    pm.delete(user);
-                } catch (PortletServiceException e) {
-                    log.error("Could not delete the ACL of the user " + e);
-                } catch (PersistenceManagerException e) {
-                    log.error("Could not delete User " + e);
-                }
-            }
+        if (isSuperUser(approver)) {
+            removeUser(userName);
         } else {
-            throw new PermissionDeniedException("User " + approver.getGivenName() + " wanted to delete " + userName + " (denied)");
+            throw new PermissionDeniedException("User "
+                                               + approver.getGivenName()
+                                               + " wanted to retrieve "
+                                               + userName + " (denied)");
         }
     }
 
@@ -587,7 +556,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @param user userobject to be examined
      * @return true is the user is usperuser, false otherwise
      */
-    public boolean isSuperuser(User user) {
+    public boolean isSuperUser(User user) {
 
         try {
             return aclService.hasRoleInGroup(user, PortletGroup.SUPER, PortletRole.SUPER);
@@ -604,7 +573,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
      * @param group in that group
      * @return true/false if he is an admin
      */
-    public boolean isAdminuser(User user, PortletGroup group) {
+    public boolean isAdminUser(User user, PortletGroup group) {
         try {
             return aclService.hasRoleInGroup(user, group, PortletRole.ADMIN);
         } catch (PortletServiceException e) {
@@ -613,4 +582,83 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
         }
     }
 
+    /**
+     * Gets a user by his loginname
+     * @param name loginname
+     * @return requested user object
+     */
+    private User getUser(String name) {
+        String command =
+                "select u from "+jdoSUImpl+" u where UserID=\"" + name + "\"";
+        return selectUser(command);
+
+    }
+
+    /**
+     * Gets a user by the unique ID
+     * @param ID unique ID
+     * @return requested user
+     */
+    private User getUserByID(String ID) {
+        String command =
+                "select u from "+jdoSUImpl+" u where ObjectID=\"" + ID + "\"";
+        return selectUser(command);
+    }
+
+    /**
+     * Gets a user by a oql query
+     *
+     * @param command the oql query
+     * @return the requested user
+     */
+    private User selectUser(String oql) {
+        SportletUserImpl user = null;
+        try {
+            user = (SportletUserImpl) pm.restoreObject(oql);
+        } catch (PersistenceManagerException e) {
+            log.error("PM Exception :" + e.toString());
+        }
+        return user;
+    }
+
+    /**
+     * save the userobjects to the database
+     * @param user the userobject
+     * @todo check/pass up the exception
+     */
+    private void saveUser(User user) {
+        try {
+            pm.update(user);
+        } catch (PersistenceManagerException e) {
+            log.error("Persistence Exception !"+e);
+        }
+    }
+
+    /**
+     * save the userobjects to the database
+     * @param user the userobject
+     * @todo check/pass up the exception
+     */
+    private void removeUser(String userName) {
+        if (existsUser(userName)) {
+            User user = getUser(userName);
+            try {
+                List groups = aclService.getGroups(user);
+                for (int i = 0; i < groups.size(); i++) {
+                    PortletGroup group = (PortletGroup)groups.get(i);
+                    if (group == null) {
+                        log.error("Why in the hell is this group object null?!!!!!!");
+                    }
+                    aclManagerService.removeUserFromGroup(user, group);
+                }
+                pm.delete(user);
+            } catch (PortletServiceException e) {
+                log.error("Could not delete the ACL of the user " + e);
+            } catch (PersistenceManagerException e) {
+                log.error("Could not delete User " + e);
+            }
+        } else {
+            log.debug("User " + userName + " does not exist in database.");
+        }
+    }
 }

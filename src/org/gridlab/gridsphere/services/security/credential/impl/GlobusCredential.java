@@ -6,9 +6,9 @@
  * provides a method for retrieving the contained Globus proxy for using 
  * Globus services.
  */
-package org.gridlab.gridsphere.core.security.impl;
+package org.gridlab.gridsphere.services.security.credential.impl;
 
-import org.gridlab.gridsphere.core.security.Credential;
+import org.gridlab.gridsphere.services.security.credential.Credential;
 
 import org.globus.security.GlobusProxy;
 import org.globus.security.GlobusProxyException;

@@ -3,7 +3,7 @@
  * @version $Id$
  * <p>
  */
-package org.gridlab.gridsphere.core.security;
+package org.gridlab.gridsphere.services.security.credential;
 
 import java.util.Date;
 

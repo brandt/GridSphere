@@ -1,34 +1,31 @@
 /*
  * @author <a href="mailto:russell@aei-potsdam.mpg.de">Michael Paul Russell</a>
  * @version $Id$
- * <p>
- * This class describes the relationship in GridSphere between a credential subject, a
- * portlet user, and the hostnames for which the credential subject is known to
- * map the given portlet user to a local account. Note that in GridSphere a credential subject
- * can map to only one portlet user. See <code>CredentialManager</code> for more details on
- * the usage of this class.
  */
-package org.gridlab.gridsphere.core.security.impl;
+package org.gridlab.gridsphere.services.security.credential.impl;
 
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.impl.SportletLog;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
 /**
  * @table credentialhostmapping
+ * @depends GlobusCredentialMapping
  */
 public class GlobusHostMapping extends BaseObject {
 
+    private transient static PortletLog _log = SportletLog.getInstance(GlobusHostMapping.class);
+
     /**
-     * @sql-name parent
-     * @get-method getParent
-     * @set-method setParent
+     * @sql-name credentialmapping
+     * @required
      */
-    private GlobusCredentialMapping parent = null;
+    private GlobusCredentialMapping credentialMapping = null;
 
     /**
      * @sql-size 256
@@ -42,14 +39,14 @@ public class GlobusHostMapping extends BaseObject {
 
     /**
      */
-    public GlobusCredentialMapping getParent() {
-        return this.parent;
+    public GlobusCredentialMapping getCredentialMapping() {
+        return this.credentialMapping;
     }
 
     /**
      */
-    public void setParent(GlobusCredentialMapping mapping) {
-        this.parent = mapping;
+    public void setCredentialMapping(GlobusCredentialMapping mapping) {
+        this.credentialMapping = mapping;
     }
 
     /**

@@ -8,6 +8,9 @@
  */
 package org.gridlab.gridsphere.services.security.credential;
 
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
+import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+
 import org.gridlab.gridsphere.portlet.service.spi.ServiceTest;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.PortletLog;
@@ -16,16 +19,19 @@ import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
+
 import org.gridlab.gridsphere.services.user.UserManagerService;
 import org.gridlab.gridsphere.services.user.AccountRequest;
 import org.gridlab.gridsphere.services.user.PermissionDeniedException;
+
 import org.gridlab.gridsphere.services.security.acl.impl.UserACL;
-import org.gridlab.gridsphere.core.security.impl.GlobusCredentialPermission;
-import org.gridlab.gridsphere.core.security.CredentialPermission;
-import org.gridlab.gridsphere.core.security.CredentialMapping;
-import org.gridlab.gridsphere.core.security.CredentialNotPermittedException;
-import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
+
+import org.gridlab.gridsphere.services.security.credential.CredentialPermission;
+import org.gridlab.gridsphere.services.security.credential.CredentialMapping;
+import org.gridlab.gridsphere.services.security.credential.CredentialNotPermittedException;
+import org.gridlab.gridsphere.services.security.credential.impl.GlobusHostMapping;
+import org.gridlab.gridsphere.services.security.credential.impl.GlobusCredentialMapping;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -80,12 +86,12 @@ public class CredentialManagerServiceTest extends ServiceTest {
         } catch (Exception e) {
             _log.error("Unable to initialize services: ", e);
         }
-        //createUsers();
+        createUsers();
     }
 
     protected void tearDown() {
         _log.info(" ===================================== tear down");
-        //deleteUsers();
+        deleteUsers();
     }
 
     private void createUsers() {
@@ -117,14 +123,14 @@ public class CredentialManagerServiceTest extends ServiceTest {
 
     private User createTestUser(User rootUser) {
         _log.info("- create test user");
-
+        User testUser = null;
         AccountRequest req1 = userManager.createAccountRequest();
         req1.setUserID("test");
         req1.setGivenName("Test");
-
         try {
             this.userManager.submitAccountRequest(req1);
             this.userManager.approveAccountRequest(rootUser, req1, null);
+            testUser = this.userManager.getUser(this.rootUser, "test");
         } catch (PortletServiceException e) {
             _log.error("Exception " + e);
             fail("failed to generate AccountRequests");
@@ -132,7 +138,7 @@ public class CredentialManagerServiceTest extends ServiceTest {
             _log.error("Exception " + e);
             fail("No permissions!");
         }
-        return this.userManager.getUser("test");
+        return testUser;
     }
 
     private void deleteUsers() {
@@ -147,7 +153,7 @@ public class CredentialManagerServiceTest extends ServiceTest {
 
     public void testEverything() {
         permissionsTest();
-        //mappingsTest();
+        mappingsTest();
         //retrievalTest();
         //storageTest();
     }
@@ -198,7 +204,6 @@ public class CredentialManagerServiceTest extends ServiceTest {
 
         /*** Test create ncsa permission ***/
         _log.info("Testing create ncsa permission.");
-        permission = new GlobusCredentialPermission();
         permission = this.credentialManager.createCredentialPermission(this.ncsaSubjects,
                                                                        this.ncsaDescription);
 
@@ -290,7 +295,7 @@ public class CredentialManagerServiceTest extends ServiceTest {
             mapping = this.credentialManager.createCredentialMapping(this.guestSubject,
                                                                      this.testUser);
         } catch (CredentialNotPermittedException e) {
-            _log.error("This is good. At this point, no globus credentials should be permitted.", e);
+            _log.error("This is good. At this point, no globus credentials should be permitted.");
         }
 
         /*** Test create guest mapping with globus permission. ***/
@@ -304,9 +309,19 @@ public class CredentialManagerServiceTest extends ServiceTest {
             _log.error("This is bad. At this point, globus credentials should be permitted.", e);
         }
         assertEquals(this.guestSubject, mapping.getSubject());
-        assertEquals(this.testUser.getID(), mapping.getUser());
+        assertEquals(this.testUser.getID(), mapping.getUser().getID());
         assertEquals(null, mapping.getTag());
-        assertEquals(0, mapping.getHosts().size());
+        hosts = mapping.getHosts();
+        assertEquals(0, hosts.size());
+
+        /*** Test get mapping for guest subject. ***/
+        _log.info("Testing get mapping for guest subject.");
+        mapping = this.credentialManager.getCredentialMapping(this.guestSubject);
+        assertEquals(this.guestSubject, mapping.getSubject());
+        assertEquals(this.testUser.getID(), mapping.getUser().getID());
+        assertEquals(null, mapping.getTag());
+        hosts = mapping.getHosts();
+        assertEquals(0, hosts.size());
 
         /*** Test get all credential mappings. Should be 1 entry. ***/
         _log.info("Testing get all mappings. Should be 1 entry.");
@@ -327,13 +342,29 @@ public class CredentialManagerServiceTest extends ServiceTest {
         _log.info("Testing get mapping for guest subject.");
         mapping = this.credentialManager.getCredentialMapping(this.guestSubject);
         assertEquals(this.guestSubject, mapping.getSubject());
-        assertEquals(this.testUser.getID(), mapping.getUser());
+        assertEquals(this.testUser.getID(), mapping.getUser().getID());
         assertEquals(null, mapping.getTag());
-        assertEquals(0, mapping.getHosts().size());
+        hosts = mapping.getHosts();
+        assertEquals(0, hosts.size());
 
-        /*** Test update mapping for guest subject. ***/
-        _log.info("Testing update mapping for guest subject.");
+        /*** Test update mapping tag for guest subject. ***/
+        _log.info("Testing update mapping tag for guest subject.");
         mapping.setTag(this.guestTag);
+        try {
+            this.credentialManager.updateCredentialMapping(mapping);
+        } catch (CredentialNotPermittedException e) {
+            _log.error("This is bad. At this point, globus credentials should be permitted.", e);
+        }
+        mapping = this.credentialManager.getCredentialMapping(this.guestSubject);
+        assertEquals(this.guestSubject, mapping.getSubject());
+        assertEquals(this.testUser.getID(), mapping.getUser().getID());
+        assertEquals(this.guestTag, mapping.getTag());
+        hosts = mapping.getHosts();
+        assertEquals(0, hosts.size());
+
+        /*** Test update mapping hosts for guest subject. ***/
+        _log.info("Testing update mapping hosts for guest subject.");
+        hosts = new Vector();
         hosts.add(this.guestHost1);
         hosts.add(this.guestHost2);
         mapping.addHosts(hosts);
@@ -342,12 +373,28 @@ public class CredentialManagerServiceTest extends ServiceTest {
         } catch (CredentialNotPermittedException e) {
             _log.error("This is bad. At this point, globus credentials should be permitted.", e);
         }
+        _log.info("Asserting number of hosts for guest subject...");
         mapping = this.credentialManager.getCredentialMapping(this.guestSubject);
         hosts = mapping.getHosts();
-        assertEquals(this.guestSubject, mapping.getSubject());
-        assertEquals(this.testUser.getID(), mapping.getUser());
-        assertEquals(this.guestTag, mapping.getTag());
         assertEquals(2, hosts.size());
+
+        _log.info("Asserting host names for guest subject...");
+        assertEquals(true, mapping.hasHost(this.guestHost1));
+        assertEquals(true, mapping.hasHost(this.guestHost2));
+
+        _log.info("Asserting other mapping information is unchanged...");
+        assertEquals(this.guestSubject, mapping.getSubject());
+        assertEquals(this.testUser.getID(), mapping.getUser().getID());
+        assertEquals(this.guestTag, mapping.getTag());
+
+        /*** Testing delete mappping. ***/
+        _log.info("Testing delete mapping for guest subject.");
+        this.credentialManager.deleteCredentialMapping(this.guestSubject);
+
+        /*** Test get all mappings. Should be 0 entries. ***/
+        _log.info("Testing get all mappings. Should be 0 entries.");
+        mappings = this.credentialManager.getCredentialMappings();
+        assertEquals(0, mappings.size());
     }
 
     public void retrievalTest() {

@@ -178,9 +178,14 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
      * @param group the PortletGroup
      */
     public void removeUserFromGroup(User user, PortletGroup group) throws PortletServiceException {
+        String uid = user.getID();
+        String gid = group.getID();
+        if (log.isDebugEnabled()) {
+            log.debug("Attempting to remove user " + uid + " from group " + gid);
+        }
         String command =
-                "select r from "+jdoUserACL+" r where r.UserID=" + user.getID() +
-                " and r.GroupID=" + group.getID() + " and r.Status=" + UserACL.STATUS_APPROVED;
+                "select r from "+jdoUserACL+" r where r.UserID=" + uid +
+                " and r.GroupID=" + gid + " and r.Status=" + UserACL.STATUS_APPROVED;
         delete(command);
     }
 

@@ -127,24 +127,36 @@ public interface UserManagerService extends PortletService {
     public void setPortletData(User user, String portletID, PortletData data);
 
     /**
-     * Get user from DB
+     * Retrieves a user object with the given username from this service.
+     * Requires a user with the "super user" privileges, since this
+     * by-passes the normal login mechanism of retrieving a user object.
+     *
+     * @param User The super user requesting the user object
+     * @param String The user name or login id of the user in question
+     * @throws PermissionDeniedException If approver is not a super user
      */
-    public User getUser(String userName);
+    public User getUser(User approver, String userName)
+            throws PermissionDeniedException;
 
     /**
-     * Save user to DB
+     * Saves changes to a user object with the given username from this service.
+     * Requires a user with the "super user" privileges.
+     *
+     * @param User The super user making changes to the given user
+     * @param User The given use
+     * @throws PermissionDeniedException If approver is not a super user
      */
-    public void saveUser(String userName);
+    public void saveUser(User approver, User user)
+            throws PermissionDeniedException;
 
 
     /**
-     * Save a user to DB
-     */
-    public void saveUser(User user);
-
-
-    /**
-     * Remove a user permanently! Requires super user
+     * Removes a user object with the given username from this service.
+     * Requires a user with the "super user" privileges.
+     *
+     * @param User The super user requesting the user object
+     * @param String The user name or login id of the user in question
+     * @throws PermissionDeniedException If approver is not a super user
      */
     public void removeUser(User approver, String userName)
             throws PermissionDeniedException;
@@ -155,7 +167,7 @@ public interface UserManagerService extends PortletService {
      * @param userID the user login ID
      * @return true if the user exists, false otherwise
      */
-    public boolean existsUser(String userID);
+    public boolean existsUser(String userName);
 
     /**
      * Return a list of all portal users

@@ -10,7 +10,7 @@
  * &nbsp;&nbsp;&nbsp;&nbsp;"/O=Grid/O=Globus/OU=gridsphere.org/CN=John Doe"<br>
  * would be permitted for use with GridSphere.
  */
-package org.gridlab.gridsphere.core.security;
+package org.gridlab.gridsphere.services.security.credential;
 
 import org.gridlab.gridsphere.core.persistence.BaseObject;
 import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerRdbms;
