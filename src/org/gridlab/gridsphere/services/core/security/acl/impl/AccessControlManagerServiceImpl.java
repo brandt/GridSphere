@@ -204,7 +204,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
     }
 
     public PortletGroup getCoreGroup() {
-        return selectSportletGroup("where grp.Core='" + true + "'");
+        return selectSportletGroup("where grp.Core=" + true);
     }
 
     private SportletGroup selectSportletGroup(String criteria) {
