@@ -58,8 +58,7 @@
             <portlet-tab>
                 <title>Login</title>
                 <portlet-panel>
-                    <grid-layout>
-                        <columns>1</columns>
+                    <grid-layout columns="20,80">
                         <portlet-frame>
                             <width>60</width>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.LoginPortlet.1</portlet-class>
@@ -79,7 +78,6 @@
                 <title>Whatever</title>
                 <portlet-panel>
                     <grid-layout>
-                        <columns>1</columns>
                         <portlet-frame>
                             <name>HelloWorld</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.2</portlet-class>
@@ -95,7 +93,6 @@
                 <title>New Stuff</title>
                 <portlet-panel>
                     <grid-layout>
-                        <columns>2</columns>
                         <portlet-frame>
                             <name>RSS</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.RSSPortlet.1</portlet-class>

@@ -48,8 +48,8 @@
 
     <class name="org.gridlab.gridsphere.layout.PortletGridLayout" extends="org.gridlab.gridsphere.layout.BaseLayoutManager">
         <map-to xml="grid-layout"/>
-        <field name="Columns" type="integer">
-            <bind-xml name="columns"/>
+        <field name="Columns" type="string">
+            <bind-xml name="columns" node="attribute"/>
         </field>
     </class>
 
@@ -145,11 +145,11 @@
         <field name="PortletTabs" type="org.gridlab.gridsphere.layout.PortletTab" collection="arraylist">
             <bind-xml name="portlet-tab"/>
         </field>
-        <field name="Style" type="string" node="attribute">
-            <bind-xml name="style"/>
+        <field name="Style" type="string">
+            <bind-xml name="style" node="attribute"/>
         </field>
-        <field name="SelectedIndex" type="integer" node="attribute">
-            <bind-xml name="selected"/>
+        <field name="SelectedIndex" type="integer">
+            <bind-xml name="selected" node="attribute"/>
         </field>
     </class>
 

@@ -9,27 +9,48 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.StringTokenizer;
+import java.util.List;
+import java.util.ArrayList;
 
 public class PortletGridLayout extends BaseLayoutManager {
 
-    private int cols = 1;
+    private int numColumns;
+    private int[] colSizes;
+    private String columnString;
 
     public PortletGridLayout() {}
-
-    public PortletGridLayout(int cols) {
-        this.cols = cols;
-    }
 
     public String getClassName() {
         return PortletGridLayout.class.getName();
     }
 
-    public void setColumns(int cols) {
-        this.cols = cols;
+    public void setColumns(String columnString) {
+        this.columnString = columnString;
     }
 
-    public int getColumns() {
-        return cols;
+    public String getColumns() {
+        return columnString;
+    }
+
+    public List init(List list) {
+        list = super.init(list);
+        if (columnString != null) {
+            StringTokenizer st = new StringTokenizer(columnString, ",");
+            numColumns = st.countTokens();
+            colSizes = new int[numColumns];
+            int i = 0;
+            while (st.hasMoreTokens()) {
+                String col = st.nextToken();
+                colSizes[i] = Integer.parseInt(col);
+                i++;
+            }
+        } else {
+            numColumns = 1;
+            colSizes = new int[1];
+            colSizes[0] = 100;
+        }
+        return list;
     }
 
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
@@ -45,7 +66,7 @@ public class PortletGridLayout extends BaseLayoutManager {
         int max = components.size();
         PortletComponent p = null;
 
-        int gwidth = 100 / cols;
+        int gwidth = 100 / 1;
 
         //out.println("<table width=\"" + gwidth + "%\" border=\"0\" cellspacing=\"2\" cellpadding=\"0\" bgcolor=\"#FFFFFF\">");
         out.println("<table border=\"0\" width=\"100%\"> <!-- overall gridlayout table -->");
@@ -54,7 +75,7 @@ public class PortletGridLayout extends BaseLayoutManager {
             out.println("<tr> <!-- gridlayout row starts here -->");
             //insets.doRenderFirst(ctx,req,res);
             //insets.doRenderLast(ctx,req,res);
-            while (j < cols) {
+            while (j < 1) {
                 p = (PortletComponent)components.get(k);
 
                 if (p.getWidth().equals("100%")) {
