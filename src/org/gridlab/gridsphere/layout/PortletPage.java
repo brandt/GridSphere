@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.layout;
 
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.PortletException;
+import org.gridlab.gridsphere.portlet.PortletMessage;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
@@ -34,6 +35,7 @@ public class PortletPage implements Serializable, Cloneable {
 
     protected PortletContainer footerContainer = null;
     protected PortletContainer headerContainer = null;
+    protected PortletContainer bodyContainer = null;
     protected PortletTabbedPane tabbedPane = null;
 
     // The component ID's of each of the layout components
@@ -49,6 +51,7 @@ public class PortletPage implements Serializable, Cloneable {
     private String layoutDescriptor = null;
 
     private Hashtable labelsHash = new Hashtable();
+    private Hashtable portletHash = new Hashtable();
     /**
      * Constructs an instance of PortletPage
      */
@@ -131,6 +134,24 @@ public class PortletPage implements Serializable, Cloneable {
         return footerContainer;
     }
 
+    /**
+     * Sets the page body
+     *
+     * @param bodyContainer a portlet container with body components
+     */
+    public void setPortletBody(PortletContainer bodyContainer) {
+        this.bodyContainer = bodyContainer;
+    }
+    
+    /**
+     * Returns the page body
+     *
+     * @return a portlet container with body components
+     */
+    public PortletContainer getPortletBody() {
+        return bodyContainer;
+    }
+    
     public void setPortletTabbedPane(PortletTabbedPane tabbedPane) {
         this.tabbedPane = tabbedPane;
     }
@@ -191,6 +212,12 @@ public class PortletPage implements Serializable, Cloneable {
             list = tabbedPane.init(req, list);
         }
 
+        if (bodyContainer != null) {
+            bodyContainer.setTheme(theme);
+            list = bodyContainer.init(req, list);
+        }
+
+
         if (footerContainer != null) {
             footerContainer.setTheme(theme);
             list = footerContainer.init(req, list);
@@ -210,7 +237,10 @@ public class PortletPage implements Serializable, Cloneable {
         while (it.hasNext()) {
             ComponentIdentifier cid = (ComponentIdentifier)it.next();
             String compLabel = cid.getComponentLabel();
-
+            if (cid.hasPortlet()) {                    
+                String portletClass = cid.getPortletClass();
+                portletHash.put(portletClass, new Integer(cid.getComponentID()));
+            }
             if (!compLabel.equals("")) {
                 // create a labels to integer component id mapping
                 labelsHash.put(compLabel, new Integer(cid.getComponentID()));
@@ -274,6 +304,7 @@ public class PortletPage implements Serializable, Cloneable {
     public void destroy() {
         if (headerContainer != null) headerContainer.destroy();
         if (tabbedPane != null) tabbedPane.destroy();
+        if (bodyContainer != null) bodyContainer.destroy();
         if (footerContainer != null) footerContainer.destroy();
     }
 
@@ -367,6 +398,8 @@ public class PortletPage implements Serializable, Cloneable {
         if (headerContainer != null) headerContainer.doRender(event);
         // ..| tabs | here |....
         if (tabbedPane != null) tabbedPane.doRender(event);
+        // The body 
+        if (bodyContainer != null) bodyContainer.doRender(event);
         //.... the footer ..........
         if (footerContainer != null) footerContainer.doRender(event);
 
@@ -390,6 +423,7 @@ public class PortletPage implements Serializable, Cloneable {
         c.headerContainer = (this.headerContainer == null) ? null : (PortletContainer)this.headerContainer.clone();
         c.footerContainer = (this.footerContainer == null ) ? null : (PortletContainer)this.footerContainer.clone();
         c.tabbedPane = (this.tabbedPane == null) ? null : (PortletTabbedPane)this.tabbedPane.clone();
+        c.bodyContainer = (this.bodyContainer == null ) ? null : (PortletContainer)this.bodyContainer.clone();
         return c;
     }
 
@@ -401,4 +435,72 @@ public class PortletPage implements Serializable, Cloneable {
             throw new IOException("Unable to save user's tabbed pane: " + e.getMessage());
         }
     }
+
+/**
+ * Processes a message. The message is directed at a concrete portlet with 
+ * a given concrete portlet ID. If the target ID is "*" the message is delivered
+ * to every portlet in the PortletPage. 
+ * @param concPortletID  The target concrete portlet's ID
+ * @param msg  The message to deliver
+ * @param event The GridsphereEvent associated with the message delivery
+ */
+        public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) throws PortletException {
+
+            
+            // support for broadcast messages            
+            
+            if (concPortletID.equals("*")) {
+                    Iterator entryIter = portletHash.entrySet().iterator();
+                    while (entryIter.hasNext()) {
+                            Map.Entry entry = (Map.Entry) entryIter.next();
+                            Integer cint = (Integer) entry.getValue();
+                            String portletID = (String) entry.getKey();
+                            
+                            int compIntId =  cint.intValue();
+                            ComponentIdentifier compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
+
+                            if (compId != null) {
+                                PortletComponent comp = compId.getPortletComponent();
+                            
+                                // perform an action if the component is non null
+                                if (comp == null) {
+                                    //log.warn("Event has invalid component id associated with it!");
+                                } else {
+                                    //log.debug("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
+                                    comp.messageEvent(portletID, msg, event);
+                                }
+                            }
+                    }
+                    return ;
+            }
+
+
+            // the component id determines where in the list the portlet component is
+
+            // first check the hash
+            
+            ComponentIdentifier compId = null;
+
+            int compIntId = -1;
+            if (portletHash.containsKey(concPortletID)) {
+                Integer cint = (Integer) portletHash.get(concPortletID);
+                compIntId =  cint.intValue();
+                compId = (ComponentIdentifier) componentIdentifiers.get(compIntId);
+            } else {
+                throw new PortletException("Delivery of the message "+msg.toString()+" failed: "+concPortletID+" not found");
+            }
+
+            if (compId != null) {
+                PortletComponent comp = compId.getPortletComponent();
+                // perform an action if the component is non null
+                if (comp == null) {
+                    //log.warn("Event has invalid component id associated with it!");
+                } else {
+                    //log.debug("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
+                    comp.messageEvent(concPortletID, msg, event);
+                }
+            }
+        }
+
 }
+

@@ -4,17 +4,19 @@
  */
 package org.gridlab.gridsphere.layout;
 
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletRole;
-import org.gridlab.gridsphere.portlet.PortletGroup;
-import org.gridlab.gridsphere.portlet.PortletGroupFactory;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
-
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+
+import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portlet.PortletGroupFactory;
+import org.gridlab.gridsphere.portlet.PortletMessage;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletRole;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 /**
  * <code>BasePortletComponent</code> represents an abstract portlet component with a particular
@@ -283,5 +285,19 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
             b.requiredRole = ((this.requiredRole != null) ? (PortletRole)this.requiredRole.clone() : null);
             return b;
     }
+
+
+
+        /* (non-Javadoc)
+         * @see org.gridlab.gridsphere.layout.PortletComponent#messageEvent(java.lang.String, org.gridlab.gridsphere.portlet.PortletMessage, org.gridlab.gridsphere.portletcontainer.GridSphereEvent)
+         */
+        public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) {
+                Iterator iter = listeners.iterator();
+                while (iter.hasNext()) {
+                        PortletComponent comp = (PortletComponent) iter.next();
+                        comp.messageEvent(concPortletID, msg, event);
+                }
+
+        }
 
 }

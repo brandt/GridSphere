@@ -4,8 +4,10 @@
  */
 package org.gridlab.gridsphere.layout;
 
+import org.gridlab.gridsphere.portlet.PortletMessage;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 
 /**
@@ -138,4 +140,12 @@ public interface PortletComponent extends ComponentLifecycle {
     public PortletComponent getParentComponent();
 
     public void setParentComponent(PortletComponent parent);
+
+/**
+ * Delivers a message to the specified concrete portlet
+ * @param concPortletID
+ * @param msg
+ * @param event
+ */
+public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event);
 }

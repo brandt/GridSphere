@@ -232,7 +232,6 @@ public class PortletDispatcher {
      */
     public void messageEvent(String concreteID, PortletMessage message, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
         req.setAttribute(SportletProperties.MESSAGE_EVENT, message);
-        req.setAttribute(SportletProperties.PORTLETID, concreteID);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.MESSAGE_RECEIVED);
         try {

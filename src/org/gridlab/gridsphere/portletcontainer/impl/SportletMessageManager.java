@@ -48,6 +48,9 @@ public class SportletMessageManager implements PortletMessageManager {
      * @param message the portlet message to be sent
      */
     public void send(String concretePortletID, PortletMessage message) {
+        if (concretePortletID == null) {
+                concretePortletID = "*"; 
+        }
         List l = (List) messages.get(concretePortletID);
         if (l == null) l = new ArrayList();
         l.add(message);

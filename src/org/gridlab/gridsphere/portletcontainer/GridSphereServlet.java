@@ -167,7 +167,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 Iterator newit = messages.iterator();
                 while (newit.hasNext()) {
                     PortletMessage msg = (PortletMessage)newit.next();
-                    PortletInvoker.messageEvent(concPortletID, msg, portletReq, portletRes);
+                    layoutEngine.messageEvent(concPortletID, msg, event);
                     newit.remove();
                 }
             }

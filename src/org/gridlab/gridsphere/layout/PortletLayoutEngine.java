@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.layout;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.PortletException;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletMessage;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
@@ -178,6 +179,27 @@ public class PortletLayoutEngine {
         out.println("<h>Portlet PortletLayout Engine unable to render!</h>");
         out.println("<b>" + error + "</b>");
     }
+
+/**
+ * Delivers a message to a specified concrete portlet on the current portlet page.
+ * The method delegates the message delivery to the PortletPage implementation.
+ * @param concPortletID The concrete portlet ID of the target portlet
+ * @param msg The message to deliver
+ * @param event The event associated with the delivery
+ */
+public void messageEvent(String concPortletID, PortletMessage msg, GridSphereEvent event) throws PortletException {
+        log.debug("in messageEvent()");
+        PortletPage page = null;
+        try {
+            page = getPortletPage(event);
+                page.messageEvent(concPortletID, msg, event);
+        } catch (PortletLayoutException e) {
+            doRenderError(event.getPortletRequest(), event.getPortletResponse(), e);
+            log.error("Caught LayoutException: ", e);
+        }
+        log.debug("Exiting messageEvent()");
+        
+}
 
 
 }
