@@ -23,6 +23,7 @@ import java.io.IOException;
  */
 public class SportletApplicationSettings implements PortletApplicationSettings {
 
+    protected PortletDeploymentDescriptor pdd = null;
     protected Hashtable store = new Hashtable();
     protected ConcretePortletApplication portletApp = null;
     protected boolean hasConfigurePermission = false;
@@ -30,8 +31,9 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
     /**
      * SportletApplicationSettings constructor
      */
-    public SportletApplicationSettings(ConcretePortletApplication portletApp) {
+    public SportletApplicationSettings(PortletDeploymentDescriptor pdd, ConcretePortletApplication portletApp) {
 
+        this.pdd = pdd;
         this.portletApp = portletApp;
 
         // Stick <context-param> in store
@@ -39,6 +41,7 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
         while (contextParamsIt.hasNext()) {
             ConfigParam configParam = (ConfigParam)contextParamsIt.next();
             store.put(configParam.getParamName(), configParam.getParamValue());
+            System.err.println("name: " + configParam.getParamName() + " value: " + configParam.getParamValue());
         }
     }
 
@@ -104,13 +107,15 @@ public class SportletApplicationSettings implements PortletApplicationSettings {
         if (!hasConfigurePermission) {
             throw new AccessDeniedException("User is unauthorized to store portlet application settings");
         }
+        /*
         PortletDeploymentDescriptor pdd = null;
         try {
             pdd = new PortletDeploymentDescriptor();
         } catch (PortletDeploymentDescriptorException e) {
             throw new IOException("Unable to load PortletDeploymentDescriptor: " + e.getMessage());
         }
-        portletApp = pdd.getConcretePortletApplication(portletApp.getUID());
+        */
+        portletApp = pdd.getConcretePortletApplication(portletApp.getID());
         Enumeration enum = store.elements();
         Vector list = new Vector();
         while (enum.hasMoreElements()) {

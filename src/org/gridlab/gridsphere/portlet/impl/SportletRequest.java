@@ -71,7 +71,11 @@ public class SportletRequest implements PortletRequest {
             portletSession = new SportletSession(req.getSession(true));
         this.req = req;
         this.client = new ClientImpl(req);
-        this.logRequest();
+        //this.logRequest();
+
+        // clear old settings
+        //req.removeAttribute(GridSphereProperties.PORTLETMODE);
+        //req.removeAttribute(GridSphereProperties.PORTLETWINDOW);
     }
 
     /**
@@ -239,16 +243,7 @@ public class SportletRequest implements PortletRequest {
      * @return portletSettings the portlet settings
      */
     public PortletSettings getPortletSettings() {
-        return settings;
-    }
-
-    /**
-     * Returns the PortletSettings object of the concrete portlet.
-     *
-     * @param portletSettings the portlet settings
-     */
-    public void setPortletSettings(PortletSettings settings) {
-        this.settings = settings;
+        return (PortletSettings)req.getAttribute(GridSphereProperties.PORTLETSETTINGS);
     }
 
     /**
@@ -276,15 +271,6 @@ public class SportletRequest implements PortletRequest {
      */
     public PortletWindow getWindow() {
         return (PortletWindow)req.getAttribute(GridSphereProperties.PORTLETWINDOW);
-    }
-
-    /**
-     * Returns the window that the portlet is running in.
-     *
-     * @param window the portlet window
-     */
-    public void setWindow(PortletWindow window) {
-        this.window = window;
     }
 
     /**
@@ -318,15 +304,6 @@ public class SportletRequest implements PortletRequest {
      */
     public Portlet.Mode getMode() {
         return (Portlet.Mode)req.getAttribute(GridSphereProperties.PORTLETMODE);
-    }
-
-    /**
-     * Sets the mode that the portlet is running in.
-     *
-     * @param mode the portlet mode
-     */
-    public void setMode(Portlet.Mode mode) {
-        this.mode = mode;
     }
 
     /**

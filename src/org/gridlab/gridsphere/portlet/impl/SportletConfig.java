@@ -6,7 +6,6 @@ package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portletcontainer.descriptor.*;
-import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.exolab.castor.types.AnyNode;
 
 import javax.servlet.ServletConfig;
@@ -34,16 +33,14 @@ public class SportletConfig implements PortletConfig {
     /**
      * Constructor creates a PortletConfig from a ServletConfig
      */
-    public SportletConfig(ServletConfig servletConfig, PortletApplication portletApp) {
+    public SportletConfig(ServletConfig servletConfig, PortletApp portletApp) {
         this.servletConfig = servletConfig;
         this.context = new SportletContext(servletConfig);
         Iterator it;
 
-        PortletInfo portletInfo = portletApp.getPortletInfo();
-
          // set supported modes info
         supportedModes = new Hashtable();
-        SupportsModes smodes = portletInfo.getSupportsModes();
+        SupportsModes smodes = portletApp.getSupportsModes();
         List modesList = smodes.getMarkupList();
         it = modesList.iterator();
         while (it.hasNext()) {
@@ -59,7 +56,7 @@ public class SportletConfig implements PortletConfig {
         }
 
         // set allowed states info
-        AllowsWindowStates states = portletInfo.getAllowsWindowStates();
+        AllowsWindowStates states = portletApp.getAllowsWindowStates();
         List allowedStates = new Vector();
         it = states.getWindowStates().iterator();
         while (it.hasNext()) {
@@ -69,14 +66,14 @@ public class SportletConfig implements PortletConfig {
         }
 
         // set portlet config information
-        List configList = portletInfo.getConfigParamList();
+        List configList = portletApp.getConfigParamList();
         it = configList.iterator();
         while (it.hasNext()) {
             ConfigParam configParam = (ConfigParam)it.next();
             configs.put(configParam.getParamName(), configParam.getParamValue());
         }
 
-        this.logConfig();
+        //this.logConfig();
     }
 
     /**

@@ -22,6 +22,7 @@ import java.io.IOException;
  */
 public class SportletSettings implements PortletSettings {
 
+    protected PortletDeploymentDescriptor pdd = null;
     protected Hashtable store = new Hashtable();
     protected List langList = new Vector();
     protected ConcretePortletInfo concretePortletInfo = null;
@@ -41,16 +42,16 @@ public class SportletSettings implements PortletSettings {
      * @param knownGroups a list of known groups obtained from the AccessControlService
      * @param knownRoles a list of known roles obtained from the AccessControlService
      */
-    public SportletSettings(ConcretePortletApplication portletApp) {
+    public SportletSettings(PortletDeploymentDescriptor pdd, ConcretePortletApplication portletApp) {
 
+        this.pdd = pdd;
         this.concretePortletInfo = portletApp.getConcretePortletInfo();
-        this.concretePortletID = portletApp.getUID();
+        this.concretePortletID = portletApp.getID();
+        this.appSettings = new SportletApplicationSettings(pdd, portletApp);
 
         String localeStr = concretePortletInfo.getDefaultLocale();
         locale = new Locale(localeStr, "");
         langList = concretePortletInfo.getLanguageList();
-
-        appSettings = new SportletApplicationSettings(portletApp);
 
         // Stick <config-param> in store
         Iterator configParamsIt = concretePortletInfo.getConfigParamList().iterator();
@@ -212,12 +213,14 @@ public class SportletSettings implements PortletSettings {
         if (!hasConfigurePermission) {
             throw new AccessDeniedException("User is unauthorized to store portlet settings");
         }
+        /*
         PortletDeploymentDescriptor pdd = null;
         try {
             pdd = new PortletDeploymentDescriptor();
         } catch (PortletDeploymentDescriptorException e) {
             throw new IOException("Unable to load PortletDeploymentDescriptor: " + e.getMessage());
         }
+        */
         ConcretePortletApplication concPortletApp = pdd.getConcretePortletApplication(concretePortletID);
         ConcretePortletInfo concPortletInfo = concPortletApp.getConcretePortletInfo();
         Enumeration enum = store.elements();
