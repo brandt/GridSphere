@@ -46,6 +46,9 @@ public class FileManagerPortlet extends ActionPortlet {
         lb.clear();
         String[] list = userStorage.getUserFileList(user);
         // set the list box size to number of files plus padding
+        if (list.length == 0) {
+            list = new String[] {"empty directory"};
+        }
         lb.setSize(list.length + 3);
         for (int i = 0; i < list.length; i++) {
             ListBoxItemBean item = new ListBoxItemBean();
