@@ -1,162 +1,74 @@
+<%@ page import="java.util.List,
+                 org.gridlab.gridsphere.layout.PortletTab"%>
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 
 <portletAPI:init/>
+
+<% String lang = (String)request.getAttribute("lang"); %>
+<% List tabs = (List)request.getAttribute("tabs"); %>
+
 <ui:form>
 
-<ui:hiddenfield beanId="tabHF" value=""/>
-<ui:hiddenfield beanId="subtabHF" value=""/>
+<ui:messagebox beanId="messageBox"/>
 
-<ui:panel cellpadding="10">
-<ui:frame>
-<ui:tablerow>
-<ui:tablecell width="15%">
- <ui:text key="LAYOUT_THEME"/>
-</ui:tablecell>
-<ui:tablecell>
-<ui:text key="LAYOUT_SELECT_THEME"/>&nbsp;<ui:listbox beanId="themeLB"/> <ui:actionsubmit action="saveTheme" key="LAYOUT_THEME_SAVE"/>
-</ui:tablecell>
-</ui:tablerow>
-</ui:frame>
-</ui:panel>
+<h3><ui:text key="LAYOUT_THEME" style="nostyle"/></h3>
+<ui:group>
+<ui:text key="LAYOUT_SELECT_THEME"/>&nbsp;<ui:listbox beanId="themeLB"/> <ui:actionsubmit action="saveTheme" key="SAVE"/>
+</ui:group>
 
-<ui:panel cellpadding="10">
-<ui:frame>
-<ui:tablerow>
-<ui:tablecell width="15%">
- <ui:text key="LAYOUT_RESET"/>
-</ui:tablecell>
-<ui:tablecell>
-<ui:text style="alert" key="LAYOUT_RESET_WARNING"/>&nbsp;<ui:actionsubmit action="refreshLayout" key="LAYOUT_RESET"/>
-</ui:tablecell>
-</ui:tablerow>
-</ui:frame>
-</ui:panel>
+<h3>Create new tab</h3>
+<ui:group>
+<ui:text value="Enter new tab name"/>&nbsp;&nbsp;<ui:textfield beanId="userTabTF"/>
+<p>
 
-<ui:panel cellpadding="10">
-<ui:frame>
-<ui:tablerow>
-<ui:tablecell width="15%">
-<ui:text key="LAYOUT_TAB_CONFIG"/>
-</ui:tablecell>
-<ui:tablecell>
-<ui:text key="LAYOUT_TAB_EDIT"/>&nbsp;
-</ui:tablecell>
-<ui:tablecell beanId="tabsTC"/>
-<ui:tablecell>
-<ui:actionsubmit action="saveTabs" key="LAYOUT_APPLY"/>
-</ui:tablecell>
-</ui:tablerow>
-<ui:tablerow>
-<ui:tablecell width="15%">
-<ui:text key="LAYOUT_TAB_DEL"/>
-</ui:tablecell>
-<ui:tablecell>
-<ui:listbox beanId="deltabsLB"/>
- </ui:tablecell>
-<ui:tablecell>
-<ui:text style="alert" key="LAYOUT_WARNING"/>
-</ui:tablecell>
-<ui:tablecell>
-<ui:actionsubmit action="deleteTab" key="LAYOUT_TAB_DEL"/>
-</ui:tablecell>
+<ui:radiobutton beanId="colsRB" value="1"/><ui:text value="One column"/>
+<ui:radiobutton beanId="colsRB" value="2"/><ui:text value="Two columns"/>
+<ui:radiobutton beanId="colsRB" value="3"/><ui:text value="Three columns"/>
 
-</ui:tablerow>
-<ui:tablerow>
-<ui:tablecell width="15%">
-<ui:text key="LAYOUT_NEW_TAB"/>
-</ui:tablecell>
-<ui:tablecell>
-<ui:text key="LAYOUT_TAB_EDIT2"/>
-</ui:tablecell>
-<ui:tablecell>
-<ui:textfield beanId="newTab"/>
-</ui:tablecell>
-<ui:tablecell>
-<ui:actionsubmit action="createTab" key="LAYOUT_NEW_TAB"/>
-</ui:tablecell>
-</ui:tablerow>
-</ui:frame>
-</ui:panel>
+<p>
+<ui:actionsubmit action="createNewTab" value="Create"/>
+</ui:group>
 
-<ui:panel cellpadding="10">
-<ui:frame>
-<ui:tablerow>
-<ui:tablecell width="15%">
-<ui:text key="LAYOUT_SUBTAB_CONFIG"/>
-</ui:tablecell>
-<ui:tablecell>
-<ui:listbox beanId="seltabsLB"/>
-<ui:actionsubmit action="selectTab" key="LAYOUT_TAB_SELECT"/>
-</ui:tablecell>
-<ui:tablecell/>
-</ui:tablerow>
-<ui:tablerow>
-<ui:tablecell width="15%">
-<ui:text key="LAYOUT_SUBTAB_EDIT"/>&nbsp;
-</ui:tablecell>
-<ui:tablecell beanId="subtabsTC"/>
-<ui:tablecell>
-<ui:actionsubmit action="saveSubTabs" key="LAYOUT_APPLY"/>
-</ui:tablecell>
+<h3>Display existing tabs</h3>
 
-</ui:tablerow>
+<% if (tabs.size() > 0) { %>
+<ui:table sortable="true" zebra="true">
+    <ui:tablerow header="true">
+    <ui:tablecell>
+        <ui:text value="Tab name"/>
+    </ui:tablecell>
+     <ui:tablecell>
+        <ui:text value="Edit tab name"/>
+    </ui:tablecell>
+     <ui:tablecell>
+        <ui:text value="Delete tab"/>
+    </ui:tablecell>
+    </ui:tablerow>
 
-<ui:tablerow>
-<ui:tablecell width="15%">
-<ui:text key="LAYOUT_SUBTAB_DEL"/>
-</ui:tablecell>
-<ui:tablecell>
-<ui:listbox beanId="delsubtabsLB"/>
-<ui:text style="alert" key="LAYOUT_WARNING"/>
-</ui:tablecell>
-<ui:tablecell>
-<ui:actionsubmit action="deleteSubTab" key="LAYOUT_SUBTAB_DEL"/>
-</ui:tablecell>
-</ui:tablerow>
-<ui:tablerow>
-<ui:tablecell width="15%">
-<ui:text key="LAYOUT_NEW_SUBTAB"/>
-</ui:tablecell>
-<ui:tablecell>
-<ui:text key="LAYOUT_SUBTAB_EDIT2"/>
-<ui:textfield beanId="newSubTab"/>
-</ui:tablecell>
-<ui:tablecell>
-<ui:actionsubmit action="createSubTab" key="LAYOUT_NEW_SUBTAB"/>
-</ui:tablecell>
+    <% for (int i = 0; i < tabs.size(); i++) { 
+        PortletTab tab = (PortletTab)tabs.get(i);
+        String title = tab.getTitle(lang);
+    %>
+    <ui:tablerow>
+    <ui:tablecell>        
+        <ui:text value="<%= title %>"/>
+    </ui:tablecell>    
+    <ui:tablecell>
+        <ui:textfield name="myTF" value="<%= title %>"/>
+        <ui:actionsubmit action="saveTab" value="Save">
+            <ui:actionparam name="tabid" value="<%= tab.getLabel() %>"/>
+        </ui:actionsubmit>
+    </ui:tablecell>
+    <ui:tablecell>
+        <ui:actionsubmit action="deleteTab" value="Delete">
+            <ui:actionparam name="tabid" value="<%= tab.getLabel() %>"/>
+        </ui:actionsubmit>
+    </ui:tablecell>
+    </ui:tablerow>
+    <% } %>
 
-</ui:tablerow>
-</ui:frame>
-
-<ui:frame>
-<ui:tablerow>
-<ui:tablecell width="15%"><ui:text key="LAYOUT_PORTLET_CONF"/></ui:tablecell>
-<ui:tablecell>
-<ui:listbox beanId="selsubtabsLB"/>
-<ui:actionsubmit action="selectSubTab" key="LAYOUT_SUBTAB_SEL"/>
-</ui:tablecell>
-</ui:tablerow>
-<ui:tablerow>
-<ui:tablecell width="15%">
-<ui:text key="LAYOUT_TABLE"/>
-</ui:tablecell>
-<ui:tablecell>
-<ui:actionsubmit action="addTableRow" key="LAYOUT_ADD_ROW"/>
-</ui:tablecell>
-</ui:tablerow>
-</ui:frame>
-
-<ui:frame beanId="portletLayout"/>
-
-<ui:frame>
-<ui:tablerow>
-<ui:tablecell>
-<ui:actionsubmit action="savePortletFrames" key="LAYOUT_SAVE"/>
-</ui:tablecell>
-</ui:tablerow>
-</ui:frame>
-
-</ui:panel>
+</ui:table>
+<% } %>
 
 </ui:form>
