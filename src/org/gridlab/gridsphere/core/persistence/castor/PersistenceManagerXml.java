@@ -2,7 +2,7 @@ package org.gridlab.gridsphere.core.persistence.castor;
 
 
 /*
- * @author <a href="oliver@wehrens.de">Oliver Wehrens</a>
+ * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
  * @team sonicteam
  * @version $Id$
  *
@@ -16,7 +16,6 @@ import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.Unmarshaller;
 import org.exolab.castor.xml.ValidationException;
-import org.gridlab.gridsphere.core.persistence.ejp.*;
 import org.gridlab.gridsphere.core.persistence.*;
 
 import java.io.FileReader;

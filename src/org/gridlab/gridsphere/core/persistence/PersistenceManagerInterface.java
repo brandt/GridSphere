@@ -1,7 +1,7 @@
 package org.gridlab.gridsphere.core.persistence;
 
 /*
- * @author <a href="oliver@wehrens.de">Oliver Wehrens</a>
+ * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
  * @team sonicteam
  * @version $Id$
  */

@@ -1,7 +1,7 @@
 package org.gridlab.gridsphere.core.persistence.castor;
 
 /*
- * @author <a href="oliver@wehrens.de">Oliver Wehrens</a>
+ * @author <a href="mailto:oliver@wehrens.de">Oliver Wehrens</a>
  * @team sonicteam
  * @version $Id$
  *
@@ -12,7 +12,6 @@ package org.gridlab.gridsphere.core.persistence.castor;
 import org.apache.log4j.Category;
 import org.exolab.castor.jdo.*;
 import org.exolab.castor.mapping.MappingException;
-import org.gridlab.gridsphere.core.persistence.ejp.*;
 import org.gridlab.gridsphere.core.persistence.*;
 
 
