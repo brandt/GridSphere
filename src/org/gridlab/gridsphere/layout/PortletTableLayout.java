@@ -206,7 +206,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
                         maxi.doRender(event);
                         out.println("</td></tr></tbody></table>");
                         System.err.println("in porllet table layout handling maximized");
-                        if (canModify) {
+                        if ((canModify) && (!hasFrameMaximized)) {
                             renderUserSelects(event);
                         }
                         return;
@@ -235,7 +235,7 @@ public class PortletTableLayout extends PortletFrameLayout implements Cloneable 
             System.err.println("canModify" + canModify);
 
             /** setup bottom add portlet listbox */
-            if (canModify) {
+            if ((canModify) && (!hasFrameMaximized)) {
                 renderUserSelects(event);
             }
 

@@ -33,6 +33,8 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
 
     protected List components = new ArrayList();
 
+    protected boolean hasFrameMaximized = false;
+
     /**
      * Initializes the portlet component. Since the components are isolated
      * after Castor unmarshalls from XML, the ordering is determined by a
@@ -276,12 +278,16 @@ public abstract class PortletFrameLayout extends BasePortletComponent implements
     public void handleFrameEvent(PortletFrameEvent event)
             throws PortletLayoutException {
         if (event.getAction() == PortletFrameEvent.FrameAction.FRAME_MAXIMIZED) {
+            hasFrameMaximized = true;
             handleFrameMaximized(event);
         } else if (event.getAction() == PortletFrameEvent.FrameAction.FRAME_MINIMIZED) {
+            hasFrameMaximized = false;
             handleFrameMinimized(event);
         } else if (event.getAction() == PortletFrameEvent.FrameAction.FRAME_RESTORED) {
+            hasFrameMaximized = false;
             handleFrameRestore(event);
         } else if (event.getAction() == PortletFrameEvent.FrameAction.FRAME_CLOSED) {
+            hasFrameMaximized = false;
             handleFrameClosed(event);
         }
     }
