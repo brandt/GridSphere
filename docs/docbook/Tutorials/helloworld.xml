@@ -171,7 +171,7 @@ public class HelloWorld  extends AbstractPortlet {
         <title>Examples</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab>
-                <title>Hello World</title>
+                <title lang="en">Hello World</title>
                 <portlet-panel>
                     <table-layout>
                         <column-layout>
