@@ -4,13 +4,17 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
     <portlet>
-        <description xml:lang="en">Portlet displaying the time in different time zones</description>
-        <description xml:lang="de">Dieses Portlet zeigt die Zeit in verschiedenen Zeitzonen an.</description>
-        <portlet-name>TimeZoneClock</portlet-name>
-        <display-name xml:lang="en">Time Zone Clock Portlet</display-name>
-        <display-name xml:lang="de">ZeitzonenPortlet</display-name>
-        <portlet-class>org.gridlab.gridsphere.portlets.ZoneClock</portlet-class>
+        <!-- place portlet description here -->
+        <description xml:lang="en">This Portlet is a sample</description>
+        <description xml:lang="de">Diese Portlet ist ein sample</description>
+        <!-- place unique portlet name here -->
+        <portlet-name>SamplePortlet</portlet-name>
+        <display-name xml:lang="en">A sample Portlet</display-name>
+        <display-name xml:lang="de">Ein sample Portlet</display-name>
+        <!-- place your portlet class name here -->
+        <portlet-class>org.gridlab.gridsphere.portlets.SamplePortlet</portlet-class>
         <expiration-cache>60</expiration-cache>
+        <!-- place supported modes here -->
         <supports>
             <mime-type>text/html</mime-type>
             <portlet-mode>config</portlet-mode>
@@ -24,215 +28,60 @@
         </supports>
         <supported-locale>en</supported-locale>
         <portlet-info>
-            <title>Time Zone Clock</title>
-            <short-title>TimeZone</short-title>
-            <keywords>Time, Zone, World, Clock</keywords>
+            <title>A Sample Portlet</title>
+            <short-title>Sample</short-title>
+            <keywords>sample</keywords>
         </portlet-info>
+        <!-- place portlet preferences here -->
         <portlet-preferences>
             <preference>
-                <name>time-server</name>
-                <value>http://timeserver.myco.com</value>
+                <name>myPref</name>
+                <value>avalue</value>
                 <read-only>true</read-only>
             </preference>
-            <preference>
-                <name>port</name>
-                <value>404</value>
-                <read-only>true</read-only>
-            </preference>
-            <preference>
-                <name>time-format</name>
-                <value>HH</value>
-                <value>mm</value>
-                <value>ss</value>
-            </preference>
-        </portlet-preferences>
-        <security-role-ref>
-            <role-name>GUEST</role-name>
-            <role-link>auth-user</role-link>
-        </security-role-ref>
-    </portlet>
-    <portlet>
-        <portlet-name>JSPPortlet</portlet-name>
-        <portlet-class>com.sun.portal.portlet.samples.jspportlet.JSPPortlet</portlet-class>
-        <expiration-cache>0</expiration-cache>
-        <supports>
-            <mime-type>text/html</mime-type>
-            <portlet-mode>EDIT</portlet-mode>
-            <portlet-mode>HELP</portlet-mode>
-        </supports>
-        <supports>
-            <mime-type>text/wml</mime-type>
-            <portlet-mode>EDIT</portlet-mode>
-            <portlet-mode>HELP</portlet-mode>
-        </supports>
-        <resource-bundle>ShowTimePortletRB</resource-bundle>
-        <portlet-info>
-            <title>ShowTime Portlet</title>
-            <keywords>jsp, clock, test</keywords>
-        </portlet-info>
-        <portlet-preferences>
-            <preference>
-                <name>contentPage</name>
-                <value>/jsp/jspportlet/content.jsp</value>
-            </preference>
-            <preference>
-                <name>editPage</name>
-                <value>/jsp/jspportlet/edit.jsp</value>
-            </preference>
-            <preference>
-                <name>helpPage</name>
-                <value>/jsp/jspportlet/help.jsp</value>
-            </preference>
-            <preference>
-                <name>timezone</name>
-                <value></value>
-            </preference>
-        </portlet-preferences>
-    </portlet>
-    <portlet>
-        <portlet-name>NotepadPortlet</portlet-name>
-        <portlet-class>com.sun.portal.portlet.samples.notepad.NotepadPortlet</portlet-class>
-        <expiration-cache>0</expiration-cache>
-        <supports>
-            <mime-type>text/html</mime-type>
-            <portlet-mode>EDIT</portlet-mode>
-            <portlet-mode>HELP</portlet-mode>
-        </supports>
-        <supports>
-            <mime-type>text/wml</mime-type>
-            <portlet-mode>EDIT</portlet-mode>
-            <portlet-mode>HELP</portlet-mode>
-        </supports>
-        <portlet-info>
-            <title>Notepad Portlet</title>
-            <keywords>note, notepad, sample, test</keywords>
-        </portlet-info>
-        <portlet-preferences>
-            <preference>
-                <name>contentPage</name>
-                <value>/jsp/notepad/content.jsp</value>
-            </preference>
-            <preference>
-                <name>editPage</name>
-                <value>/jsp/notepad/edit.jsp</value>
-            </preference>
-            <preference>
-                <name>helpPage</name>
-                <value>/jsp/notepad/help.jsp</value>
-            </preference>
-            <preference>
-                <name>categories</name>
-            </preference>
-            <preference>
-                <name>displayMax</name>
-                <value>5</value>
-            </preference>
-        </portlet-preferences>
-    </portlet>
-    <portlet>
-        <portlet-name>BookmarkPortlet</portlet-name>
-        <portlet-class>com.sun.portal.portlet.samples.bookmarkportlet.BookmarkPortlet</portlet-class>
-        <expiration-cache>0</expiration-cache>
-        <supports>
-            <mime-type>text/html</mime-type>
-            <portlet-mode>EDIT</portlet-mode>
-            <portlet-mode>HELP</portlet-mode>
-        </supports>
-        <supports>
-            <mime-type>text/wml</mime-type>
-            <portlet-mode>EDIT</portlet-mode>
-            <portlet-mode>HELP</portlet-mode>
-        </supports>
-        <resource-bundle>BookmarkPortletRB</resource-bundle>
-        <portlet-info>
-            <title>BookmarkPortlet</title>
-        </portlet-info>
-        <portlet-preferences>
-            <preference>
-                <name>bookmarkContentPage</name>
-                <value>/jsp/bookmarkportlet/content.jsp</value>
-            </preference>
-            <preference>
-                <name>bookmarkEditPage</name>
-                <value>/jsp/bookmarkportlet/edit.jsp</value>
-            </preference>
-            <preference>
-                <name>bookmarkHelpPage</name>
-                <value>/jsp/bookmarkportlet/help.jsp</value>
-            </preference>
-            <preference>
-                <name>targets</name>
-                <value>Sun home page=http://www.sun.com</value>
-                <value>Oracle home page=http://www.oracle.com</value>
-                <value>AOL home page=http://www.aol.com</value>
-            </preference>
-            <preference>
-                <name>windowPref</name>
-                <value>all_new</value>
-            </preference>
-        </portlet-preferences>
-    </portlet>
-    <portlet>
-        <portlet-name>WeatherPortlet</portlet-name>
-        <portlet-class>com.sun.portal.portlet.samples.weather.WeatherPortlet</portlet-class>
-        <init-param>
-            <name>weather.url</name>
-            <value>http://services.xmethods.net:80/soap/servlet/rpcrouter</value>
-        </init-param>
-        <expiration-cache>3600</expiration-cache>
-        <supports>
-            <mime-type>text/html</mime-type>
-            <portlet-mode>EDIT</portlet-mode>
-            <portlet-mode>HELP</portlet-mode>
-        </supports>
-        <resource-bundle>WeatherPortletRB</resource-bundle>
-        <portlet-info>
-            <title>WeatherPortlet</title>
-        </portlet-info>
-        <portlet-preferences>
-            <preference>
-                <name>zip</name>
-                <value>95054</value>
-            </preference>
-            <preference>
-                <name>unit</name>
-                <value>F</value>
-            </preference>
-            <preference>
-                <name>contentPage</name>
-                <value>/jsp/weather/weatherView.jsp</value>
-            </preference>
-            <preference>
-                <name>editPage</name>
-                <value>/jsp/weather/weatherEdit.jsp</value>
-            </preference>
-            <preference>
-                <name>helpPage</name>
-                <value>/jsp/weather/weatherHelp.jsp</value>
-            </preference>
-            <preferences-validator>com.sun.portal.portlet.samples.weather.WeatherValidator</preferences-validator>
         </portlet-preferences>
     </portlet>
     <custom-portlet-mode>
         <description xml:lang="en">Pre-defined custom portlet mode CONFIGURE</description>
         <portlet-mode>CONFIGURE</portlet-mode>
     </custom-portlet-mode>
-    <custom-window-state>
-        <description xml:lang="en">Occupies 50% of the portal page</description>
-        <window-state>half-page</window-state>
-    </custom-window-state>
     <user-attribute>
-        <description xml:lang="en">Pre-defined attribute for the telephone number of the user at work.</description>
-        <name>workInfo/telephone</name>
+        <description xml:lang="en">User Name</description>
+        <name>user.name</name>
     </user-attribute>
     <user-attribute>
-        <description>Preferred TimeZone</description>
-        <name>timezone</name>
+        <description xml:lang="en">User Id</description>
+        <name>user.id</name>
     </user-attribute>
     <user-attribute>
-        <description>Preferred Locale</description>
-        <name>locale</name>
+        <description xml:lang="en">User Full Name</description>
+        <name>user.name.full</name>
     </user-attribute>
+    <user-attribute>
+        <description xml:lang="en">User E-Mail</description>
+        <name>user.email</name>
+    </user-attribute>
+    <user-attribute>
+        <description xml:lang="en">Company Organization</description>
+        <name>user.organization</name>
+    </user-attribute>
+    <user-attribute>
+        <description xml:lang="en">Last Login Time</description>
+        <name>user.lastlogintime</name>
+    </user-attribute>
+    <user-attribute>
+        <description xml:lang="en">Timezone</description>
+        <name>user.timezone</name>
+    </user-attribute>
+    <user-attribute>
+        <description xml:lang="en">Preferred Locale</description>
+        <name>user.locale</name>
+    </user-attribute>
+    <user-attribute>
+        <description xml:lang="en">Preferred Theme</description>
+        <name>user.theme</name>
+    </user-attribute>
+<!--
     <security-constraint>
         <portlet-collection>
             <portlet-name>TimeZoneClock</portlet-name>
@@ -241,4 +90,5 @@
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>
+-->
 </portlet-app>
