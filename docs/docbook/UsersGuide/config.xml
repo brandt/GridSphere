@@ -104,4 +104,13 @@
     </example>
     </sect1>
 
+    <sect1>
+        <title>Database Configuration</title>
+            By default, GridSphere is configured (using Hibernate) to use HSQL pure Java database. To configure
+            GridSphere to use some other database, please edit the
+            <filename>$CATALINA_HOME/webapps/gridsphere/WEB-INF/persistence/hibernate.properties</filename>.
+            file and comment out the HSQL lines and uncomment the lines for the database you wish to use.
+            The connection url setting should point to the physical location of your database.
+    </sect1>
+
 </chapter>
