@@ -473,7 +473,7 @@
 
    <tag>
     <name>hiddenfield</name>
-    <tag-class>org.gridlab.gridsphere.tags.web.HiddenTextTag</tag-class>
+    <tag-class>org.gridlab.gridsphere.tags.web.HiddenFieldTag</tag-class>
     <body-content>empty</body-content>
     <description>
         makes a hidden text field
