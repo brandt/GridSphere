@@ -11,6 +11,17 @@
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
+          <td class="portlet-frame-message-alert">
+            <gs:text name="errorMessageBean"/>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table class="portlet-frame" cellspacing="1" width="100%">
+        <tr>
           <td class="portlet-frame-actions">
             <gs:submit name="doConfirmEditUser" value="Save User"/>
             &nbsp;&nbsp;<gs:submit name="doCancelEditUser" value="Cancel Edit"/>
@@ -60,6 +71,14 @@
           </td>
           <td class="portlet-frame-text">
              <gs:textfield bean="emailAddress"/>
+          </td>
+        </tr>
+        <tr>
+          <td class="portlet-frame-label">
+             Organization:
+          </td>
+          <td class="portlet-frame-text">
+             <gs:textfield bean="organization"/>
           </td>
         </tr>
         <tr>

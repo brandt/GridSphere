@@ -5,10 +5,10 @@
              class="org.gridlab.gridsphere.portlets.core.user.UserManagerBean"
              scope="request"/>
 <gs:form action="doListUser">
-<table class="portlet-pane">
+<table class="portlet-pane" cellspacing="1">
   <tr>
     <td>
-      <table class="portlet-frame">
+      <table class="portlet-frame" cellspacing="1">
         <tr>
           <td class="portlet-frame-actions">
             <gs:submit name="doListUser" value="List Users"/>
@@ -20,7 +20,7 @@
   </tr>
   <tr>
     <td>
-      <gs:table bean="userList"/>
+      <gs:table bean="userList" cellspacing="1"/>
     </td>
   </tr>
 </table>
