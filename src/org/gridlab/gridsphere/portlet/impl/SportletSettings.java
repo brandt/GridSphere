@@ -20,10 +20,17 @@ import java.util.*;
  */
 public class SportletSettings implements PortletSettings {
 
-    private Hashtable store = new Hashtable();
-    private List roleList = new Vector();
-    private List groupList = new Vector();
-    private List langList = new Vector();
+    protected Hashtable store = new Hashtable();
+    protected List roleList = new Vector();
+    protected List groupList = new Vector();
+    protected List langList = new Vector();
+    protected PortletDeploymentDescriptor pdd = null;
+    protected PortletApplicationSettings applicationSettings = null;
+    protected ConcretePortletInfo concretePortletInfo = null;
+    protected String concretePortletID = null;
+    protected SportletApplicationSettings appSettings = null;
+    protected boolean hasConfigurePermission = false;
+
 
     /**
      * SportletSettings constructor
@@ -33,21 +40,25 @@ public class SportletSettings implements PortletSettings {
      * @param knownGroups a list of known groups obtained from the AccessControlService
      * @param knownRoles a list of known roles obtained from the AccessControlService
      */
-    public SportletSettings(ConcretePortletApplication portletApp, List knownGroups, List knownRoles) {
+    public SportletSettings(PortletDeploymentDescriptor pdd,
+                            ConcretePortletApplication portletApp,
+                            List knownGroups, List knownRoles, boolean hasConfigurePermission) {
+        this.hasConfigurePermission = hasConfigurePermission;
+        this.concretePortletInfo = portletApp.getConcretePortletInfo();
 
-        ConcretePortletInfo portlet = portletApp.getConcretePortletInfo();
+        this.concretePortletID = portletApp.getUID();
 
-        langList = portlet.getLanguageList();
+        langList = concretePortletInfo.getLanguageList();
 
         // Stick <config-param> in store
-        Iterator configParamsIt = portletApp.getConfigParamList().iterator();
+        Iterator configParamsIt = concretePortletInfo.getConfigParamList().iterator();
         while (configParamsIt.hasNext()) {
             ConfigParam configParam = (ConfigParam)configParamsIt.next();
             store.put(configParam.getParamName(), configParam.getParamValue());
         }
 
         // Get groups list
-        List groups = portlet.getGroupList();
+        List groups = concretePortletInfo.getGroupList();
 
         // Make sure groups exist
         while (knownGroups.iterator().hasNext()) {
@@ -66,7 +77,7 @@ public class SportletSettings implements PortletSettings {
         }
 
         // Get roles list
-        List roles = portlet.getRoleList();
+        List roles = concretePortletInfo.getRoleList();
         // Make sure roles exist
         while (knownRoles.iterator().hasNext()) {
             PortletRole pr = (PortletRole)knownRoles.iterator().next();
@@ -82,6 +93,10 @@ public class SportletSettings implements PortletSettings {
         if (roleList.isEmpty()) {
             roleList.add(SportletRole.getGuestRole());
         }
+    }
+
+    public void enableConfigurePermission(boolean hasConfigurePermission) {
+        this.hasConfigurePermission = hasConfigurePermission;
     }
 
     /**
@@ -193,6 +208,17 @@ public class SportletSettings implements PortletSettings {
     }
 
     /**
+     * Returns this portlets concrete ID. Used internally in Action tags
+     * to signal the portlet container which portlet needs to be executed
+     * NOTE: THIS IS NOT PART OF THE WPS PORTLET API 4.1
+     *
+     * @return the concrete portlet ID
+     */
+    public String getConcretePortletID() {
+        return concretePortletID;
+    }
+
+    /**
      * Removes the attribute with the given name.
      *
      * @param name the attribute name
@@ -200,6 +226,9 @@ public class SportletSettings implements PortletSettings {
      * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
     public void removeAttribute(String name) throws AccessDeniedException {
+        if (!hasConfigurePermission) {
+            throw new AccessDeniedException("User is unauthorized to remove portlet settings");
+        }
         store.remove(name);
     }
 
@@ -212,6 +241,9 @@ public class SportletSettings implements PortletSettings {
      * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
     public void setAttribute(String name, String value) throws AccessDeniedException {
+        if (!hasConfigurePermission) {
+            throw new AccessDeniedException("User is unauthorized to set portlet settings");
+        }
         store.put(name, value);
     }
 
@@ -221,15 +253,28 @@ public class SportletSettings implements PortletSettings {
      * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
     public void store() throws AccessDeniedException {
-        // XXX: FILL ME IN
+        if (!hasConfigurePermission) {
+            throw new AccessDeniedException("User is unauthorized to store portlet settings");
+        }
+        Enumeration enum = store.elements();
+        Vector list = new Vector();
+        while (enum.hasMoreElements()) {
+            String key = (String)enum.nextElement();
+            String value = (String)store.get(key);
+            ConfigParam parms = new ConfigParam(key, value);
+            list.add(parms);
+        }
+        concretePortletInfo.setConfigParamList(list);
+        pdd.save();
     }
 
     /**
-     * Loads all attributes
+     * Returns the portlet application settings
+     *
+     * @return the portlet application settings
      */
-    protected void load() {
-        // XXX: FILL ME IN
+    public PortletApplicationSettings getApplicationSettings() {
+        return applicationSettings;
     }
-
 
 }
