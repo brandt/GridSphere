@@ -51,19 +51,32 @@ public class GridSphereEventImpl implements GridSphereEvent {
         if (actionStr != null) {
             log.info("Received action: " + actionStr);
             action = new DefaultPortletAction(actionStr);
-            String prefix = portletRequest.getParameter(GridSphereProperties.PREFIX);
-            if (prefix != null) {
-                Enumeration enum = portletRequest.getParameterNames();
-                String name, newname, value;
-                while (enum.hasMoreElements()) {
-                    name = (String) enum.nextElement();
-                    if (name.startsWith(prefix)) {
-                        newname = name.substring(prefix.length() + 1);
-                        value = portletRequest.getParameter(name);
-                        action.addParameter(newname, value);
-                    }
+            //String prefix = portletRequest.getParameter(GridSphereProperties.PREFIX);
+            String prefix = "gstag:cid:"
+                          + portletRequest.getParameter(GridSphereProperties.COMPONENT_ID)
+                          + ":";
+            //if (prefix != null) {
+            Enumeration enum = portletRequest.getParameterNames();
+            while (enum.hasMoreElements()) {
+                String name = (String) enum.nextElement();
+                /* Forget component id and submit buttons */
+                if (name.equals("action") ||
+                    name.equals("cid") ||
+                    name.startsWith("gssubmit")) {
+                    continue;
                 }
+                String newname = name;
+                /* If name starts with prefix, strip away prefix */
+                if (newname.startsWith(prefix)) {
+                    //newname = name.substring(prefix.length() + 1);
+                    newname = newname.substring(prefix.length());
+                }
+                String value = portletRequest.getParameter(name);
+                log.debug("Adding action parameter " + newname);
+                action.addParameter(newname, value);
+                //}
             }
+        //}
         }
 
         /* This is where a DefaultPortletMessage gets put together if one exists */

@@ -270,6 +270,7 @@ public class PortletPage implements Serializable, Cloneable {
                     log.warn("Event has invalid component id associated with it!");
                 } else {
                 //if (comp != null) {
+                    log.debug("Calling action performed on " + comp.getClass().getName() + ":" + comp.getName());
                     comp.actionPerformed(event);
                 }
             }

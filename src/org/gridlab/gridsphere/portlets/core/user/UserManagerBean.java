@@ -22,11 +22,13 @@ import java.util.Vector;
 public class UserManagerBean extends ActionEventHandler {
 
     // JSP pages used by this portlet
-    public static final String PAGE_USER_LIST = "/jsp/usermanager/userList.jsp";
-    public static final String PAGE_USER_VIEW = "/jsp/usermanager/userView.jsp";
-    public static final String PAGE_USER_EDIT = "/jsp/usermanager/userEdit.jsp";
-    public static final String PAGE_USER_DELETE = "/jsp/usermanager/userDelete.jsp";
-    public static final String PAGE_USER_DELETE_CONFIRM = "/jsp/usermanager/userDeleteConfirm.jsp";
+    public static final String DO_VIEW_USER_LIST = "/jsp/usermanager/doViewUserList.jsp";
+    public static final String DO_VIEW_USER_VIEW = "/jsp/usermanager/doViewUserView.jsp";
+    public static final String DO_CONFIG_USER_LIST = "/jsp/usermanager/doConfigureUserList.jsp";
+    public static final String DO_CONFIG_USER_VIEW = "/jsp/usermanager/doConfigureUserView.jsp";
+    public static final String DO_CONFIG_USER_EDIT = "/jsp/usermanager/doConfigureUserEdit.jsp";
+    public static final String DO_CONFIG_USER_DELETE = "/jsp/usermanager/doConfigureUserDelete.jsp";
+    public static final String DO_CONFIG_USER_DELETE_CONFIRM = "/jsp/usermanager/doConfigureUserDeleteConfirm.jsp";
 
     // Portlet services
     private UserManagerService userManagerService = null;
@@ -77,42 +79,62 @@ public class UserManagerBean extends ActionEventHandler {
         this.log.debug("Exiting initServices()");
     }
 
-    public void doViewAction()
+    public void doView()
             throws PortletException {
-        doListUser();
+        doViewListUser();
     }
 
-    public void doListUser()
+    public void doViewListUser()
             throws PortletException {
         listUser();
-        setTitle("User Account Manager [List Users]");
-        setPage(PAGE_USER_LIST);
+        setTitle("User Accounts [List Users]");
+        setPage(DO_VIEW_USER_LIST);
     }
 
-    public void doViewUser()
+    public void doViewViewUser()
             throws PortletException {
         loadUser();
         viewUser();
-        setTitle("User Account Manager [View User]");
-        setPage(PAGE_USER_VIEW);
+        setTitle("User Accounts [View User]");
+        setPage(DO_VIEW_USER_VIEW);
     }
 
-    public void doNewUser()
+    public void doConfigure()
+            throws PortletException {
+        doConfigureListUser();
+    }
+
+    public void doConfigureListUser()
+            throws PortletException {
+        listUser();
+        setTitle("User Accounts [List Users]");
+        setPage(DO_CONFIG_USER_LIST);
+    }
+
+    public void doConfigureViewUser()
+            throws PortletException {
+        loadUser();
+        viewUser();
+        setTitle("User Accounts [View User]");
+        setPage(DO_CONFIG_USER_VIEW);
+    }
+
+    public void doConfigureNewUser()
             throws PortletException {
         editUser();
-        setTitle("User Account Manager [New User]");
-        setPage(PAGE_USER_EDIT);
+        setTitle("User Accounts [New User]");
+        setPage(DO_CONFIG_USER_EDIT);
     }
 
-    public void doEditUser()
+    public void doConfigureEditUser()
             throws PortletException {
         loadUser();
         editUser();
-        setTitle("User Account Manager [Edit User]");
-        setPage(PAGE_USER_EDIT);
+        setTitle("User Accounts [Edit User]");
+        setPage(DO_CONFIG_USER_EDIT);
     }
 
-    public void doConfirmEditUser()
+    public void doConfigureConfirmEditUser()
             throws PortletException {
         loadUser();
         updateUser();
@@ -123,40 +145,40 @@ public class UserManagerBean extends ActionEventHandler {
             storeUserEdit();
             setIsFormInvalid(true);
             setFormInvalidMessage(e.getMessage());
-            setTitle("User Account Manager [Edit User]");
-            setPage(PAGE_USER_EDIT);
+            setTitle("User Accounts [Edit User]");
+            setPage(DO_CONFIG_USER_EDIT);
             return;
         }
         viewUser();
-        setTitle("User Account Manager [View User]");
-        setPage(PAGE_USER_VIEW);
+        setTitle("User Accounts [View User]");
+        setPage(DO_CONFIG_USER_VIEW);
     }
 
-    public void doCancelEditUser()
+    public void doConfigureCancelEditUser()
             throws PortletException {
-        doListUser();
+        doConfigureListUser();
     }
 
-    public void doDeleteUser()
+    public void doConfigureDeleteUser()
             throws PortletException {
         loadUser();
         viewUser();
-        setTitle("User Account Manager [Delete User]");
-        setPage(PAGE_USER_DELETE);
+        setTitle("User Accounts [Delete User]");
+        setPage(DO_CONFIG_USER_DELETE);
     }
 
-    public void doConfirmDeleteUser()
+    public void doConfigureConfirmDeleteUser()
             throws PortletException {
         loadUser();
         viewUser();
         deleteUser();
-        setTitle("User Account Manager [Deleted User]");
-        setPage(PAGE_USER_DELETE_CONFIRM);
+        setTitle("User Accounts [Deleted User]");
+        setPage(DO_CONFIG_USER_DELETE_CONFIRM);
     }
 
-    public void doCancelDeleteUser()
+    public void doConfigureCancelDeleteUser()
             throws PortletException {
-        doListUser();
+        doConfigureListUser();
     }
 
     private User getUser() {
@@ -170,6 +192,16 @@ public class UserManagerBean extends ActionEventHandler {
             String message = "No user accounts in database";
             tableBean = createTableBeanWithMessage(message);
         } else {
+            // View action depends on which mode we're in...
+            String viewAction = null;
+            if (getPortletMode().equals(Portlet.Mode.CONFIGURE)) {
+                // If in config mode, then want config mode view user
+                viewAction = "doConfigureViewUser";
+            } else {
+                // Otherwise want view mode view user
+                viewAction = "doViewViewUser";
+            }
+
             // Create headers
             List headers = new Vector();
             headers.add("User ID");
@@ -187,10 +219,10 @@ public class UserManagerBean extends ActionEventHandler {
                 // Create new table row
                 TableRowBean rowBean = new TableRowBean();
                 // User id
-                PortletURI userIDLink = createPortletActionURI("doViewUser");
+                PortletURI userIDLink = createPortletActionURI(viewAction);
                 userIDLink.addParameter("userID", user.getID());
                 ActionLinkBean userIDLinkBean =
-                        new ActionLinkBean(userIDLink, "doViewUser", user.getID());
+                        new ActionLinkBean(userIDLink, viewAction, user.getID());
                 TableCellBean cellBean = createTableCellBean(userIDLinkBean);
                 rowBean.add(cellBean);
                 // User name
@@ -219,13 +251,14 @@ public class UserManagerBean extends ActionEventHandler {
     }
 
     private User loadUser() {
-        System.err.println("Calling loadUser()!");
+        log.debug("Entering loadUser()");
         String userID = getActionPerformedParameter("userID");
         this.user = this.userManagerService.getUser(userID);
         if (this.user != null) {
             //this.password = this.passwordManagerService.getValue(this.user);
             this.userRole = this.aclManagerService.getRoleInGroup(this.user, SportletGroup.CORE);
         }
+        log.debug("Exiting loadUser()");
         return user;
     }
 

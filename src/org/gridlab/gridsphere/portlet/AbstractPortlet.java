@@ -103,6 +103,7 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
      * @throws PortletException if the listener has trouble fulfilling the request
      */
     public void actionPerformed(ActionEvent event) throws PortletException {
+        log.debug("Calling actionPerformed()");
     }
 
     /**

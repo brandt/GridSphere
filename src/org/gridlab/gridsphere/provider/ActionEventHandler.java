@@ -76,8 +76,16 @@ public class ActionEventHandler {
         return this.session;
     }
 
+    public Portlet.Mode getPortletMode() {
+        return this.request.getMode();
+    }
+
     public User getPortletUser() {
         return this.user;
+    }
+
+    public PortletRole getPortletRole() {
+        return this.request.getRole();
     }
 
     public PortletService getPortletService(Class serviceClass)
@@ -138,28 +146,16 @@ public class ActionEventHandler {
     }
 
     public String getActionPerformedParameter(String paramName) {
-        System.out.println("Normal getParameter(paramName)" + getParameter(paramName));
-        System.out.println("Normal getParameter(gstag: paramName)" + getParameter("gstag:" + paramName));
-        System.out.println("Normal getParameter(paramName)"
-                + actionEvent.getAction().getParameters().get(paramName));
-        System.out.println("Normal getParameter(gstag: paramName)"
-                + actionEvent.getAction().getParameters().get("gstag:" + paramName));
-        if (this.formEvent == null) {
-            return getParameter(paramName);
+        String actionParameter = null;
+        if (this.actionEvent == null) {
+            actionParameter = "";
         } else {
-            return getParameter("gstag:" + paramName);
+            actionParameter = (String)this.actionEvent.getAction().getParameters().get(paramName);
+            if (actionParameter == null) {
+                actionParameter = "";
+            }
         }
-        /***
-        DefaultPortletAction action = this.actionEvent.getAction();
-        Map parameters = action.getParameters();
-        this.log.debug("Getting action event parameter " + paramName);
-        String paramValue = (String)parameters.get(paramName);
-        if (paramValue == null) {
-            this.log.debug("Action event parameter not set");
-            return "";
-        }
-        return paramValue;
-        ***/
+        return actionParameter;
     }
 
     public TagBean getTagBean(String beanName) {
@@ -254,19 +250,19 @@ public class ActionEventHandler {
         return cellBean;
     }
 
-    public void doConfigAction()
+    public void doConfigure()
            throws PortletException {
     }
 
-    public void doViewAction()
+    public void doView()
            throws PortletException {
     }
 
-    public void doEditAction()
+    public void doEdit()
            throws PortletException {
     }
 
-    public void doHelpAction()
+    public void doHelp()
            throws PortletException {
     }
 

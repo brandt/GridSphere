@@ -71,7 +71,7 @@ public abstract class ActionEventPortlet extends AbstractPortlet {
         ActionEventHandler portletBean = getPortletBean(request, response);
         // Do default view action if no action performed
         if (portletBean.getActionPerformed() == null) {
-            portletBean.doViewAction();
+            portletBean.doView();
         }
         // Get next page to display
         String nextPage = portletBean.getPage();
@@ -81,7 +81,7 @@ public abstract class ActionEventPortlet extends AbstractPortlet {
         getPortletLog().debug("Exiting doView()");
     }
 
-    public void doConfig(PortletRequest request, PortletResponse response)
+    public void doConfigure(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
         PortletLog log = getPortletLog();
         log.debug("Entering doConfig()");
@@ -89,7 +89,7 @@ public abstract class ActionEventPortlet extends AbstractPortlet {
         ActionEventHandler portletBean = getPortletBean(request, response);
         // Do default config action if no action performed
         if (portletBean.getActionPerformed() == null) {
-            portletBean.doConfigAction();
+            portletBean.doConfigure();
         }
         // Get next page to display
         String nextPage = portletBean.getPage();
@@ -107,7 +107,7 @@ public abstract class ActionEventPortlet extends AbstractPortlet {
         ActionEventHandler portletBean = getPortletBean(request, response);
         // Do default edit action if no action performed
         if (portletBean.getActionPerformed() == null) {
-            portletBean.doEditAction();
+            portletBean.doEdit();
         }
         // Get next page to display
         String nextPage = portletBean.getPage();
@@ -125,7 +125,7 @@ public abstract class ActionEventPortlet extends AbstractPortlet {
         ActionEventHandler portletBean = getPortletBean(request, response);
         // Do default help action if no action performed
         if (portletBean.getActionPerformed() == null) {
-            portletBean.doHelpAction();
+            portletBean.doHelp();
         }
         // Get next page to display
         String nextPage = portletBean.getPage();
