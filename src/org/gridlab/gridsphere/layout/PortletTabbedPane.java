@@ -27,7 +27,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
     private List tabs = new ArrayList();
     private int startIndex = 0;
-    private transient int selectedIndex = 0;
+    private int selectedIndex = 0;
     private String style = "menu";
 
     /**
@@ -74,21 +74,6 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
     public int getTabCount() {
         return tabs.size();
-    }
-
-    public int indexOfTab(String title) {
-        boolean found = false;
-        int i;
-        for (i = 0; i < tabs.size(); i++) {
-            PortletTab tab = (PortletTab) tabs.get(i);
-            if (tab.getTitle().equals(title)) {
-                found = true;
-                break;
-            }
-        }
-        if (found)
-            return i;
-        return -1;
     }
 
     public void insertTab(PortletTab tab, int index) {

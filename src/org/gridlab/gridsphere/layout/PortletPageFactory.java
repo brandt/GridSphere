@@ -152,10 +152,10 @@ public class PortletPageFactory {
             PortletPage newcontainer = null;
             try {
 
-                synchronized (new Integer(counter)) {
-                    counter = (counter >= MAX_GUEST_CONTAINERS) ? 0 : counter++;
+                //synchronized (new Integer(counter)) {
+                    //counter = (counter >= MAX_GUEST_CONTAINERS) ? 0 : counter++;
                     newcontainer = (PortletPage)guestPage.clone();
-                }
+                //}
                 newcontainer.init(new ArrayList());
                 guests.put(id, newcontainer);
             } catch (Exception e) {

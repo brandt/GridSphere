@@ -147,7 +147,7 @@ public class PortletLayoutEngine {
             page = getPortletPage(event);
             int numcomps = page.getComponentIdentifierList().size();
             if (event.getPortletComponentID() < 0 || event.getPortletComponentID() > numcomps) {
-                event.getPortletRequest().setAttribute(GridSphereProperties.COMPONENT_ID, "-1");
+                event.getPortletRequest().setAttribute(GridSphereProperties.COMPONENT_ID, "0");
             } else {
                 page.actionPerformed(event);
             }
