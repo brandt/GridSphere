@@ -99,8 +99,16 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
      * @param ctx the <code>ServletContext</code>
      */
     protected void loadPortlets(ServletContext ctx) throws PortletException {
-        // load in the portlet.xml file
-        String portletXMLfile = ctx.getRealPath("/WEB-INF/portlet.xml");
+
+        // First we see if this is a gridsphere portlet descriptor and load in as gridsphere-portlet.xml
+        log.info("Loading gridsphere-portlet.xml...");
+        String portletXMLfile = ctx.getRealPath("/WEB-INF/gridsphere-portlet.xml");
+        File f = new File(portletXMLfile);
+        if (!f.exists()) {
+            // trying
+            log.info("Instead loading portlet.xml as a gridsphere portlet descriptor...");
+            portletXMLfile = ctx.getRealPath("/WEB-INF/portlet.xml");
+        }
         //String portletMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.PORTLET_MAPPING);
 
         String portletMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-mapping.xml");
