@@ -251,6 +251,7 @@ public class ActionPortlet extends AbstractPortlet {
             formEvent.store();
             setTagBeans(req, formEvent.getTagBeans());
         } catch (PortletException e) {
+            log.error("Error invoking method: " + methodName, e.getCause());
             this.setNextError(req, e.getMessage());
             if (hasError(req)) {
                 setNextState(req, ERROR_PAGE);

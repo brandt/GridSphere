@@ -23,6 +23,7 @@ public class SportletGroup implements Serializable, Cloneable, PortletGroup {
     private String oid = null;
     //private static final String SUPER_GROUP = "super";
     private static final String CORE_GROUP = "gridsphere";
+    private static final String CORE_GROUP_DESC = "Core GridSphere Group";
 
     /**
      * The <code>SUPER</code> PortletGroup is the group that only super users of
@@ -34,7 +35,7 @@ public class SportletGroup implements Serializable, Cloneable, PortletGroup {
      * The <code>SUPER</code> PortletGroup is the group that only super users of
      * the portal belong to
      */
-    public static final PortletGroup CORE = new SportletGroup(SportletGroup.CORE_GROUP);
+    public static final PortletGroup CORE = new SportletGroup(SportletGroup.CORE_GROUP, CORE_GROUP_DESC);
 
     private String Name = "";
     private boolean isPublic = true;
@@ -57,6 +58,13 @@ public class SportletGroup implements Serializable, Cloneable, PortletGroup {
         super();
         if (groupName == null) Name = "Unknown Group";
         this.Name = groupName;
+    }
+
+    public SportletGroup(String groupName, String groupDescription) {
+        super();
+        if (groupName == null) Name = "Unknown Group";
+        this.Name = groupName;
+        this.description = groupDescription;
     }
 
     public Set getPortletRoleList() {

@@ -9,7 +9,6 @@ import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
-import org.gridlab.gridsphere.provider.portlet.jsr.PortletServlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
@@ -20,6 +19,8 @@ import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManag
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
@@ -47,6 +48,7 @@ public class GroupManagerPortlet extends ActionPortlet {
     // Portlet services
     private UserManagerService userManagerService = null;
     private LayoutManagerService  layoutMgr = null;
+    private PortalConfigService portalConfigService = null;
 
     private PortletManager portletMgr = null;
     private PortletRegistry portletRegistry = null;
@@ -57,6 +59,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         try {
             this.userManagerService = (UserManagerService)config.getContext().getService(UserManagerService.class);
             this.layoutMgr = (LayoutManagerService)config.getContext().getService(LayoutManagerService.class);
+            this.portalConfigService = (PortalConfigService)getPortletConfig().getContext().getService(PortalConfigService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
@@ -78,32 +81,28 @@ public class GroupManagerPortlet extends ActionPortlet {
         log.debug("Entering doViewListGroup");
         PortletRequest req = evt.getPortletRequest();
         User user = req.getUser();
-        List groupDescs = new Vector();
-        List groupList = new Vector();
+        List groupList = new ArrayList();
         List groups = getACLService(user).getGroups();
         Iterator it = groups.iterator();
         while (it.hasNext()) {
             PortletGroup g = (PortletGroup)it.next();
             AccessControlManagerService aclService = getACLService(user);
-            String desc = g.getDescription();
+            //String desc = g.getDescription();
             if ((aclService.hasAdminRoleInGroup(user, g)) && (!g.equals(PortletGroupFactory.GRIDSPHERE_GROUP))) {
                 log.info("user " + user.getFullName() + " is admin");
             //System.err.println("group= " + g.getName() + " ispublic=" + g.isPublic());
 
             //System.err.println("desc=" + desc);
-                groupDescs.add(desc);
-                groupList.add(g);
-            } else if (aclService.hasSuperRole(user)) {
 
-                groupDescs.add(desc);
-                groupList.add(g);
+            } else if (aclService.hasSuperRole(user)) {
+            //    groupData.put(g, desc);
             }
+            groupList.add(g);
         }
         List webappNames = portletMgr.getWebApplicationNames();
         if (webappNames.size() > 1) req.setAttribute("create", "yes");
 
         req.setAttribute("groupList", groupList);
-        req.setAttribute("groupDescs", groupDescs);
         setNextState(req, DO_VIEW_GROUP_LIST);
         log.debug("Exiting doViewListGroup");
     }
@@ -554,6 +553,7 @@ public class GroupManagerPortlet extends ActionPortlet {
     public void doEditDefaultGroups(FormEvent evt) {
         PortletRequest req = evt.getPortletRequest();
         User user = req.getUser();
+        Set existingDefaults = portalConfigService.getPortalConfigSettings().getDefaultGroups();
         List groups = getACLService(user).getGroups();
         req.setAttribute("groups", groups);
 
@@ -590,6 +590,8 @@ public class GroupManagerPortlet extends ActionPortlet {
             cb.setValue(g.getName());
             if (g.equals(PortletGroupFactory.GRIDSPHERE_GROUP)) {
                 cb.setDisabled(true);
+            }
+            if (existingDefaults.contains(g)) {
                 cb.setSelected(true);
             }
             //tc.addBean(cb);
@@ -611,6 +613,28 @@ public class GroupManagerPortlet extends ActionPortlet {
         defaultTable.setTableModel(tm);
 
         setNextState(req, DO_VIEW_GROUP_EDIT);
+    }
+
+    public void doSaveDefaultGroups(FormEvent evt) throws PortletException {
+        this.checkSuperRole(evt);
+        System.err.println("in doSaveDefaultGroups");
+        CheckBoxBean cb = evt.getCheckBoxBean("groupCB");
+        PortletRequest req = evt.getPortletRequest();
+        User user = req.getUser();
+
+        List groups = cb.getSelectedValues();
+        Set defaultGroups = new HashSet();
+        PortalConfigSettings configSettings = portalConfigService.getPortalConfigSettings();
+        defaultGroups = configSettings.getDefaultGroups();
+        Iterator it = groups.iterator();
+        while (it.hasNext()) {
+            String name = (String)it.next();
+            PortletGroup g = getACLService(user).getGroupByName(name);
+            if (g != null) defaultGroups.add(g);
+        }
+        configSettings.setDefaultGroups(defaultGroups);
+        portalConfigService.savePortalConfigSettings(configSettings);
+        setNextState(req, DEFAULT_VIEW_PAGE);
     }
 
     private PortletGroup loadGroup(FormEvent evt) {

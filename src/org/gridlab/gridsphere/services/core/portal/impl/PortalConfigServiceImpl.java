@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
@@ -19,6 +20,7 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Iterator;
 
 /**
  * Portal configuration service is used to manage portal administrative settings
@@ -41,7 +43,7 @@ public class PortalConfigServiceImpl implements PortletServiceProvider, PortalCo
             defaultGroups.add(SportletGroup.CORE);
             configSettings.setDefaultGroups(defaultGroups);
             // set default theme
-            configSettings.setDefaultTheme("default");
+            configSettings.setDefaultTheme(config.getInitParameter("defaultTheme"));
             savePortalConfigSettings(configSettings);
         }
 
@@ -52,6 +54,7 @@ public class PortalConfigServiceImpl implements PortletServiceProvider, PortalCo
     }
 
     public void savePortalConfigSettings(PortalConfigSettings configSettings) {
+
         try {
             if (configSettings.getOid() == null) {
                 pm.create(configSettings);

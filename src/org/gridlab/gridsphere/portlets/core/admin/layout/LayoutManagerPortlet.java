@@ -11,6 +11,8 @@ import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.portletui.beans.*;
 import org.gridlab.gridsphere.services.core.layout.LayoutManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigSettings;
 import org.gridlab.gridsphere.layout.*;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 
@@ -26,16 +28,18 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     // Portlet services
     private LayoutManagerService layoutMgr = null;
+    private PortalConfigService portalConfigService = null;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
-        this.log.debug("Entering initServices()");
+        log.debug("Entering initServices()");
         try {
             this.layoutMgr = (LayoutManagerService)config.getContext().getService(LayoutManagerService.class);
+            this.portalConfigService = (PortalConfigService)config.getContext().getService(PortalConfigService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
-        this.log.debug("Exiting initServices()");
+        log.debug("Exiting initServices()");
         //portletMgr = PortletManager.getInstance();
 
         DEFAULT_VIEW_PAGE = "doShowLayout";
@@ -67,6 +71,27 @@ public class LayoutManagerPortlet extends ActionPortlet {
         }
         reader.close();
         ta.setValue(sb.toString());
+
+        String themesPath = getPortletConfig().getContext().getRealPath("/themes");
+
+        System.err.println("themes path=" + themesPath);
+
+        String[] themes = null;
+        File f = new File(themesPath);
+        if (f.isDirectory()) {
+            themes = f.list();
+        }
+
+        String defaultTheme = portalConfigService.getPortalConfigSettings().getDefaultTheme();
+        ListBoxBean lb = event.getListBoxBean("themesLB");
+        ListBoxItemBean item;
+        for (int i = 0; i < themes.length; i++) {
+            item = new ListBoxItemBean();
+            item.setValue(themes[i]);
+            item.setName(themes[i]);
+            if (themes[i].equals(defaultTheme)) item.setSelected(true);
+            lb.addBean(item);
+        }
 
         Map tabs = PortletTabRegistry.getApplicationTabs();
 
@@ -125,8 +150,13 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
     public void saveDefaultTheme(FormEvent event) throws PortletException, IOException {
         this.checkSuperRole(event);
-        
-
+        ListBoxBean themesLB = event.getListBoxBean("themesLB");
+        String theme = themesLB.getSelectedValue();
+        if (!theme.equals("")) {
+            PortalConfigSettings configSettings = portalConfigService.getPortalConfigSettings();
+            configSettings.setDefaultTheme(theme);
+            portalConfigService.savePortalConfigSettings(configSettings);
+        }
     }
 
     public void importLayout(FormEvent event) throws PortletException, IOException {

@@ -7,7 +7,6 @@
 <portletAPI:init/>
 
 <% List groupList = (List)request.getAttribute("groupList"); %>
-<% List groupDescs = (List)request.getAttribute("groupDescs"); %> 
 
 <ui:form>
 
@@ -51,11 +50,9 @@
 
 <%
                 Iterator groupIterator = groupList.iterator();
-                Iterator descsIterator = groupDescs.iterator();
-                while ((groupIterator.hasNext() && descsIterator.hasNext())) {
+                while (groupIterator.hasNext()) {
                     // Get next user
                     PortletGroup group = (PortletGroup)groupIterator.next();
-                    String desc = (String)descsIterator.next();
 %>
                 <ui:tablerow>
                         <ui:tablecell>
@@ -69,7 +66,7 @@
                             </ui:actionlink>
                         </ui:tablecell>
                         <ui:tablecell>
-                            <ui:text value="<%= desc %>"/>
+                            <ui:text value="<%= group.getDescription() %>"/>
                         </ui:tablecell>
                         <ui:tablecell>
                         <% if (!group.getName().equals(SportletGroup.CORE.getName())) { %>

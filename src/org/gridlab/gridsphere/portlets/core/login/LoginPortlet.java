@@ -29,6 +29,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class LoginPortlet extends ActionPortlet {
 
@@ -276,14 +277,20 @@ public class LoginPortlet extends ActionPortlet {
         // Revoke super role (in case they had it)
         //this.aclService.revokeSuperRole(user);
         // Create appropriate access request
-        GroupRequest groupRequest = this.aclService.createGroupRequest();
-        groupRequest.setUser(user);
-        groupRequest.setGroup(PortletGroupFactory.GRIDSPHERE_GROUP);
-        groupRequest.setRole(PortletRole.USER);
+        Set groups = portalConfigService.getPortalConfigSettings().getDefaultGroups();
+        Iterator it = groups.iterator();
+        while (it.hasNext()) {
+            PortletGroup group = (PortletGroup)it.next();
+            GroupRequest groupRequest = this.aclService.createGroupRequest();
+            groupRequest.setUser(user);
+            groupRequest.setGroup(group);
+            groupRequest.setRole(PortletRole.USER);
 
-        // Submit changes
-        this.aclService.submitGroupRequest(groupRequest);
-        this.aclService.approveGroupRequest(groupRequest);
+            // Submit changes
+            this.aclService.submitGroupRequest(groupRequest);
+            this.aclService.approveGroupRequest(groupRequest);
+        }
+
     }
 
     public void showConfigure(FormEvent event) {

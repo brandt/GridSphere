@@ -15,6 +15,12 @@
 <p>
 <ui:actionsubmit action="saveBanner" key="SAVE"/>
 
+<h3>Choose Default Theme</h3>
+<ui:text value="Select from the list of available themes: "/>
+
+<ui:listbox beanId="themesLB"/>
+
+<ui:actionsubmit action="saveDefaultTheme" key="SAVE"/>
 
 <h3>Guest Layout</h3>
 

@@ -14,6 +14,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
 import org.gridlab.gridsphere.layout.event.PortletComponentEvent;
 import org.gridlab.gridsphere.services.core.cache.CacheService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -32,6 +33,7 @@ public class PortletPage implements Serializable, Cloneable {
     protected int COMPONENT_ID = -1;
 
     protected transient CacheService cacheService = null;
+    protected transient PortalConfigService portalConfigService = null;
 
     protected PortletContainer footerContainer = null;
     protected PortletContainer headerContainer = null;
@@ -46,7 +48,7 @@ public class PortletPage implements Serializable, Cloneable {
 
     protected String keywords = "";
     protected String title = "";
-    protected String theme = "default";
+    protected String theme = "";
 
     //private String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
     private String layoutDescriptor = null;
@@ -227,10 +229,12 @@ public class PortletPage implements Serializable, Cloneable {
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
         try {
             cacheService = (CacheService)factory.createPortletService(CacheService.class, null, true);
+            portalConfigService = (PortalConfigService)factory.createPortletService(PortalConfigService.class, null, true);
         } catch (PortletServiceException e) {
             System.err.println("Unable to init Cache service! " + e.getMessage());
         }
-
+        theme = portalConfigService.getPortalConfigSettings().getDefaultTheme();
+        
         componentIdentifiers = new Vector();
 
         if (headerContainer != null) {

@@ -19,9 +19,12 @@ import org.gridlab.gridsphere.services.core.security.password.Password;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
 import org.gridlab.gridsphere.services.core.user.AccountRequest;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
+import org.gridlab.gridsphere.services.core.portal.PortalConfigService;
 
 import javax.servlet.UnavailableException;
 import java.util.List;
+import java.util.Set;
+import java.util.Iterator;
 
 public class UserManagerPortlet extends ActionPortlet {
 
@@ -36,6 +39,8 @@ public class UserManagerPortlet extends ActionPortlet {
     private UserManagerService userManagerService = null;
     private PasswordManagerService passwordManagerService = null;
     private AccessControlManagerService aclManagerService = null;
+    private PortalConfigService portalConfigService = null;
+
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
@@ -44,6 +49,7 @@ public class UserManagerPortlet extends ActionPortlet {
             this.userManagerService = (UserManagerService)config.getContext().getService(UserManagerService.class);
             this.aclManagerService = (AccessControlManagerService)config.getContext().getService(AccessControlManagerService.class);
             this.passwordManagerService = (PasswordManagerService)config.getContext().getService(PasswordManagerService.class);
+            this.portalConfigService = (PortalConfigService)getPortletConfig().getContext().getService(PortalConfigService.class);
         } catch (PortletServiceException e) {
             log.error("Unable to initialize services!", e);
         }
@@ -347,14 +353,18 @@ public class UserManagerPortlet extends ActionPortlet {
             // Revoke super role (in case they had it)
             //this.aclManagerService.revokeSuperRole(user);
             // Create appropriate access request
-            GroupRequest groupRequest = this.aclManagerService.createGroupRequest();
-            groupRequest.setUser(user);
-            groupRequest.setGroup(PortletGroupFactory.GRIDSPHERE_GROUP);
-            groupRequest.setRole(selectedRole);
-            this.log.debug("Granting " + selectedRole + " role in gridsphere");
-            // Submit changes
-            this.aclManagerService.submitGroupRequest(groupRequest);
-            this.aclManagerService.approveGroupRequest(groupRequest);
+            Set groups = portalConfigService.getPortalConfigSettings().getDefaultGroups();
+            Iterator it = groups.iterator();
+            while (it.hasNext()) {
+                PortletGroup group = (PortletGroup)it.next();
+                GroupRequest groupRequest = this.aclManagerService.createGroupRequest();
+                groupRequest.setUser(user);
+                groupRequest.setRole(selectedRole);
+                this.log.debug("Granting " + selectedRole + " role in gridsphere");
+                // Submit changes
+                this.aclManagerService.submitGroupRequest(groupRequest);
+                this.aclManagerService.approveGroupRequest(groupRequest);
+            }
         }
         log.debug("Exiting saveUserRole()");
     }
