@@ -19,31 +19,10 @@ import org.gridlab.gridsphere.tags.web.element.NameBean;
 import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
 
-public class FormEventImpl implements FormEvent {
-
-    protected ActionEvent event;
-    protected PortletRequest request;
-    protected PortletResponse response;
-
-    public FormEventImpl(PortletRequest request) {
-        this.request = request;
-    }
+public class FormEventImpl extends ActionTagEventImpl implements FormEvent {
 
     public FormEventImpl(ActionEvent evt) {
-        event = evt;
-        request = evt.getPortletRequest();
-    }
-
-    public PortletRequest getPortletRequest() {
-        return request;
-    }
-
-    public PortletResponse getPortletResponse() {
-        return response;
-    }
-
-    public  DefaultPortletAction getAction() {
-        return event.getAction();
+        super(evt);
     }
 
     /**
@@ -53,7 +32,6 @@ public class FormEventImpl implements FormEvent {
      */
     public String getSubmitButtonName() {
         String result = null;
-
         PortletRequest req = event.getPortletRequest();
         Enumeration enum = req.getParameterNames();
         while (enum.hasMoreElements()) {
@@ -79,51 +57,15 @@ public class FormEventImpl implements FormEvent {
         return false;
     }
 
-    private Object getBean(String name, PortletRequest request) {
-        HttpSession session = request.getSession();
-        NameBean bean = (NameBean) session.getAttribute(name);
-        return bean;
-    }
-
-    /**
-     * Gets back the prev. saved bean with the modifications from the userinterface.
-     * @param name name of the bean
-     * @param request requestobject where the bean was stored (in the session of the request)
-     * @return updated elementbean
-     */
-    public Object getTagBean(String name, PortletRequest request) {
-        HttpSession session = request.getSession();
-        NameBean bean = (NameBean) getBean(name, request);
-        System.out.println("Getting Bean " + name + " from Session");
-        //if (checkParameterName("gstag:"+bean.getName())) {
-        String[] values = request.getParameterValues("gstag:" + bean.getName());
-        //if (values.length>0) {
-        System.out.println("Updated bean: " + bean.getName());
-        bean.update(values);
-        session.setAttribute(name, bean);
-        //}
-        //}
-        return bean;
-    }
 
     public CheckBoxBean getCheckBox(String name) {
-        CheckBoxBean checkbox = (CheckBoxBean) getBean(name, request);
+        CheckBoxBean checkbox = (CheckBoxBean) getBeanFromSession(name, request);
         if (checkParameterName("gstag:" + name)) {
             checkbox.setSelected(true);
         } else {
             checkbox.setSelected(false);
         }
         return checkbox;
-    }
-
-    /**
-     * Gets back the prev. saved bean with the modifications from the userinterface.
-     * @param name name of the bean
-     * @return updated elementbean
-     */
-    public Object getTagBean(String name) {
-        PortletRequest request = event.getPortletRequest();
-        return getTagBean(name, request);
     }
 
     /**
