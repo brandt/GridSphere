@@ -82,7 +82,7 @@ public class UserManagerServiceTest2 extends ServiceTest {
     }
 
     protected void tearDown() {
-        // delete hard all tables!
+
         log.info(" ===================================== tear down");
     }
 
@@ -130,6 +130,16 @@ public class UserManagerServiceTest2 extends ServiceTest {
             log.error("Exception " + e);
             fail("Should NOT fail");
         }
+
+        boolean isInGroup = false;
+        try {
+            isInGroup = aclService.isUserInGroup(jason, portal);
+        } catch (PortletServiceException e) {
+            log.error("Exception "+e);
+            fail("should not fail here");
+        }
+
+        assertTrue(!isInGroup);
     }
 
     public void testApproveGroup() {
@@ -354,6 +364,7 @@ public class UserManagerServiceTest2 extends ServiceTest {
         UserACL rootacl = new UserACL();
         rootacl.setUserID(root.getOid());
         rootacl.setRoleID(SportletRole.SUPER);
+        rootacl.setGroupID(SportletGroup.getSuperGroup().getID());
         rootacl.setStatus(UserACL.STATUS_APPROVED);
 
         try {
@@ -429,7 +440,6 @@ public class UserManagerServiceTest2 extends ServiceTest {
         for (int i=0; i<groups.size();i++) {
             if (((PortletGroup)groups.get(i)).getName().equals("cactus")) {
                 cactus = (PortletGroup)groups.get(i);
-                log.info(cactus.getID());
             }
             if (((PortletGroup)groups.get(i)).getName().equals("triana")) {
                 triana = (PortletGroup)groups.get(i);
@@ -438,7 +448,5 @@ public class UserManagerServiceTest2 extends ServiceTest {
                 portal = (PortletGroup)groups.get(i);
             }
         }
-
-
     }
 }
