@@ -1,5 +1,7 @@
-$Id$
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!-- $Id$ -->
+
 <portlet-layout>
 
 <container-name theme="xp">GridSphere Portal</container-name>
