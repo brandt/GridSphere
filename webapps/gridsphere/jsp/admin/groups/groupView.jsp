@@ -12,7 +12,7 @@
 
     <ui:frame>
         <ui:tablerow>
-            <ui:tablecell cssStyle="portlet-frame-actions">
+            <ui:tablecell cssClass="portlet-frame-actions">
                 <ui:actionsubmit action="doViewListGroup" key="GROUP_LIST_GROUPS"/>
                 &nbsp;&nbsp;
                 <ui:actionsubmit action="doViewAddGroupEntry" key="GROUP_ADD_USERS"/>

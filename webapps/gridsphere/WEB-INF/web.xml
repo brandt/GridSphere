@@ -67,21 +67,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>GridSphereConfig</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.admin.gridsphere.GridSpherePortlet</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>ServletRedirector</servlet-name>
-        <servlet-class>org.apache.cactus.server.ServletTestRedirector</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>ServletTestRunner</servlet-name>
-        <servlet-class>org.apache.cactus.server.runner.ServletTestRunner</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>NotePadPortlet</servlet-name>
         <servlet-class>org.gridlab.gridsphere.portlets.core.notepad.NotePadPortlet</servlet-class>
     </servlet>
@@ -111,6 +96,15 @@
         <servlet-class>org.gridlab.gridsphere.portlets.core.messaging.TextMessagingPortlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>ServletRedirector</servlet-name>
+        <servlet-class>org.apache.cactus.server.ServletTestRedirector</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ServletTestRunner</servlet-name>
+        <servlet-class>org.apache.cactus.server.runner.ServletTestRunner</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>gridsphere</servlet-name>

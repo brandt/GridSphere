@@ -95,6 +95,10 @@
         <description>Cache Service</description>
         <interface>org.gridlab.gridsphere.services.core.cache.CacheService</interface>
         <implementation>org.gridlab.gridsphere.services.core.cache.impl.CacheServiceImpl</implementation>
+        <service-config>
+            <param-name>isCachingOn</param-name>
+            <param-value>true</param-value>
+        </service-config>
     </service>
 
 </portlet-services>
