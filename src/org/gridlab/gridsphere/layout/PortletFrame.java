@@ -199,8 +199,10 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             titleBar.setCanModify(canModify);
             titleBar.setTheme(theme);
             list = titleBar.init(req, list);
+            //titleBar.setParentComponent(this);
             titleBar.addComponentListener(this);
             titleBar.setAccessControlService(aclService);
+
         }
         // invalidate cache 
         req.setAttribute(CacheService.NO_CACHE, "true");
@@ -256,24 +258,20 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         super.actionPerformed(event);
 
         User user = event.getPortletRequest().getUser();
-        // do role checking if user is logged in
-       /*
-        if (!(user instanceof GuestUser)) {
-            boolean hasrole = aclService.hasRequiredRole(user, portletClass);
-            System.err.println("hasRole = " + hasrole);
-            if (!hasrole) return;
-
-        }
-         */
         PortletRequest request = event.getPortletRequest();
+
+        /*
         if ((titleBar != null) && (!hasTitleBarEvent)) {
             titleBar.setActive(true);
             PortletTitleBarEvent tbEvent = new PortletTitleBarEventImpl(titleBar, event, COMPONENT_ID);
             if (tbEvent.getAction() != null) {
                 hasTitleBarEvent = true;
+
+                System.err.println("what am i doing here???");
                 titleBar.actionPerformed(event);
             }
         }
+        */
 
         hasTitleBarEvent = false;
 
@@ -350,7 +348,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             } else {
                 if (titleBar != null) {
                     Portlet.Mode mode = titleBar.getPortletMode();
-                    //System.err.println("setting mode in " + portletClass + " to " + mode.toString());
+
+                    //System.err.println("in portlet frame: setting mode in " + portletClass + " to " + mode.toString());
                     req.setMode(mode);
                 } else {
                     req.setMode(Portlet.Mode.VIEW);
@@ -447,8 +446,11 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         User user = req.getUser();
         if (!(user instanceof GuestUser)) {
             boolean hasrole = aclService.hasRequiredRole(user, portletClass, false);
-            System.err.println("hasRole = " + hasrole + " portletclass= " + portletClass);
-            if (!hasrole) return;
+            //System.err.println("hasRole = " + hasrole + " portletclass= " + portletClass);
+            if (!hasrole) {
+                System.err.println("User " + user + " has no permissions to access portlet: " + portletClass + "!");
+                return;
+            }
         }
 
         String id = event.getPortletRequest().getPortletSession(true).getId();
@@ -567,6 +569,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     postframe.append("</p></form>");
                 } else {
 
+                    //System.err.println("in portlet frame render: class= " + portletClass + " setting prev mode= " + req.getPreviousMode() + " cur mode= " + req.getMode());
                     try {
                         PortletInvoker.service(portletClass, req, wrappedResponse);
                         postframe.append(storedWriter.toString());

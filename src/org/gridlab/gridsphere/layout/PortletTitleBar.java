@@ -606,7 +606,6 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                     }
                     previousMode = portletMode;
                     portletMode = titleBarEvent.getMode();
-
                 }
             }
         }
@@ -614,6 +613,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         req.setAttribute(SportletProperties.PORTLET_WINDOW, windowState);
         req.setMode(portletMode);
         req.setAttribute(SportletProperties.PREVIOUS_MODE, previousMode);
+
+        //System.err.println("in title bar action portletclass=" + portletClass + " : setting prev mode= " + previousMode + " cur mode= " + portletMode);
 
         Iterator it = listeners.iterator();
         PortletComponent comp;
@@ -674,6 +675,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
                 windowLinks = createWindowLinks(event);
             }
         }
+
+        //System.err.println("in title bar render portletclass=" + portletClass + ": setting prev mode= " + previousMode + " cur mode= " + portletMode);
 
         req.setMode(portletMode);
         req.setAttribute(SportletProperties.PREVIOUS_MODE, previousMode);
