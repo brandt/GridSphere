@@ -105,5 +105,12 @@
         </service-config>
     </service>
 
+    <service>
+	<name>Secure Directory Service</name>
+	<description>Provides Secure Directory Capabilities</description>
+	<interface>org.gridlab.gridsphere.services.core.secdir.SecureDirectoryService</interface>
+	<implementation>org.gridlab.gridsphere.services.core.secdir.impl.SecureDirectoryServiceImpl</implementation>
+    </service>
+
 </portlet-services>
 
