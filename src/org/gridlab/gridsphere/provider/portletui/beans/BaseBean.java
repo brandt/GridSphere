@@ -50,9 +50,11 @@ public abstract class BaseBean implements TagBean {
     public BaseBean(String vbName, HttpServletRequest req) {
         this(vbName);
         this.request = req;
-        Locale locale = (Locale) request.getSession(true).getAttribute(SportletProperties.LOCALE);
-        if (locale == null)
-            locale = request.getLocale();
+        if (request != null) {
+            Locale locale = (Locale) request.getSession(true).getAttribute(SportletProperties.LOCALE);
+            if (locale == null)
+                locale = request.getLocale();
+        }
         if (locale == null) locale = Locale.ENGLISH;
     }
 
