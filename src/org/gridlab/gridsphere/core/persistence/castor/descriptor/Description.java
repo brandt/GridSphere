@@ -57,6 +57,10 @@ public class Description implements Serializable, Cloneable {
         return text;
     }
 
+    public String toString() {
+        return this.text;        
+    }
+
     public Object clone() throws CloneNotSupportedException {
         Description t = (Description) super.clone();
         t.lang = this.lang;
