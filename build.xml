@@ -44,8 +44,6 @@ Copyright:
 
     <!-- GridSphere webapps files -->
     <property name="gswebapp.dir"   value="webapps/gridsphere"/>
-    <property name="corewebapp.dir" value="webapps/coreportlets"/>
-    <property name="manwebapp.dir"  value="webapps/gsmanager"/>
 
     <!-- GridSphere DocBook documentation -->
     <property name="docbook.dir" value="docs/docbook"/>
@@ -159,13 +157,6 @@ Copyright:
     <!-- =================================================================== -->
     <target name="compile-all" depends="compile-projects, compile-tests" description="Compiles all source code in distribution"/>
 
-    <!-- =================================================================== -->
-    <!-- Compiles all portlets                                               -->
-    <!-- =================================================================== -->
-    <target name="compile" depends="compile-core-portlets" description="Compile GridSphere source code">
-        <echo>Compiling GridSphere</echo>
-    </target>
-
     <target name="compile-projects" depends="compile" description="Compile all portlet subprojects">
         <foreach target="compile-project" param="thisEnv">
         <path>
@@ -179,27 +170,13 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Compiles core portlets                                              -->
-    <!-- =================================================================== -->
-    <target name="compile-core-portlets" depends="compile-core" description="Compile core portlets">
-        <echo>Compiling core portlets</echo>
-        <javac srcdir="src/org/gridlab/gridsphere/portlets"
-            destdir="${build.classes}"
-            excludes="grid/**"
-            classpathref="classpath"
-            debug="${debug}"
-            optimize="${optimize}"
-            deprecation="${deprecation}"/>
-    </target>
-
-    <!-- =================================================================== -->
     <!-- Compiles core framework                                              -->
     <!-- =================================================================== -->
-    <target name="compile-core" depends="setenv" description="Compile core frameowrk">
+    <target name="compile" depends="setenv" description="Compile core frameowrk">
         <echo>Compiling core framework</echo>
         <javac srcdir="src"
             destdir="${build.classes}"
-            excludes="org/gridlab/gridsphere/portlets/**,
+            excludes="org/gridlab/gridsphere/portlets/grid/**,
                       org/gridlab/gridsphere/services/grid/**"
             classpathref="classpath"
             debug="${debug}"
@@ -210,7 +187,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Compiles JUnit tests                                                -->
     <!-- =================================================================== -->
-    <target name="compile-tests" depends="compile-core" description="Compiles all JUnit tests">
+    <target name="compile-tests" depends="compile" description="Compiles all JUnit tests">
         <echo>Compiling JUnit Tests</echo>
         <javac srcdir="tests"
 		    destdir="${build.classes}"
@@ -223,37 +200,10 @@ Copyright:
 
 <!-- +++++++++++++++++ END COMPILE +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
-
-<!-- +++++++++++++++++ START JAR CREATION +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-
-    <!-- =================================================================== -->
-    <!-- Creates a GridSphere JAR library archive configured for Tomcat      -->
-    <!-- =================================================================== -->
-    <target name="gridsphere-tomcat-jar" depends="compile-core" description="Create gridsphere.jar for Tomcat">
-        <echo>Creating GridSphere JAR for Tomcat</echo>
-        <property name="CATALINA_HOME" value="${env.CATALINA_HOME}"/>
-        <property name="GRIDSPHERE_HOME" value="${env.CATALINA_HOME}/gridsphere"/>
-        <property name="DATABASE_NAME" value="gridsphere-db"/>
-
-        <antcall target="make-gridsphere-jar"/>
-    </target>
-
-    <!-- =================================================================== -->
-    <!-- Creates a GridSphere JAR library archive configured for JUnit       -->
-    <!-- =================================================================== -->
-    <target name="gridsphere-junit-jar" depends="compile-core" description="Create gridsphere.jar">
-        <echo>Creating GridSphere JAR for Testing</echo>
-        <property name="CATALINA_HOME" value="Unit Testing"/>
-        <property name="GRIDSPHERE_HOME" value="${basedir}/${gridsphere.build}/home"/>
-        <property name="DATABASE_NAME" value="junit-db"/>
-
-        <antcall target="make-gridsphere-jar"/>
-    </target>
-
     <!-- =================================================================== -->
     <!-- Internal target to create the GridSphere JAR library archive        -->
     <!-- =================================================================== -->
-    <target name="make-gridsphere-jar">
+    <target name="gridsphere-jar">
 
         <mkdir dir="${build.classes}/gridsphere"/>
         <copy file="config/gridsphere.properties"
@@ -265,19 +215,22 @@ Copyright:
         <property name="gridsphere.properties"
                   value="${build.classes}/gridsphere/gridsphere.properties"/>
 
+        <property name="GRIDSPHERE_HOME" value="${env.CATALINA_HOME}/gridsphere"/>
+        <property name="TEST_HOME" value="${basedir}/${gridsphere.build}/home"/>
+
         <!-- Fills in appropriate configuration values for Tomcat -->
         <replace file="${gridsphere.properties}"
                  token="@CATALINA_HOME@"
-                 value="${CATALINA_HOME}"/>
+                 value="${env.CATALINA_HOME}"/>
         <replace file="${gridsphere.properties}"
                  token="@GRIDSPHERE_HOME@"
                  value="${GRIDSPHERE_HOME}"/>
         <replace file="${gridsphere.properties}"
+                 token="@TEST_HOME@"
+                 value="${TEST_HOME}"/>
+        <replace file="${gridsphere.properties}"
                  token="@DATABASE_TYPE@"
                  value="${DATABASE_TYPE}"/>
-        <replace file="${gridsphere.properties}"
-                 token="@DATABASE_NAME@"
-                 value="${DATABASE_NAME}"/>
         <replace file="${gridsphere.properties}"
                  token="@GRIDSPHERE_VERSION@"
                  value="${version}"/>
@@ -287,12 +240,11 @@ Copyright:
 
         <echo message="Configuring GridSphere jar settings:"/>
         <echo message="GridSphere Release  ${version.release}"/>
-        <echo message="Replaced CATALINA_HOME with : ${CATALINA_HOME}"/>
+        <echo message="Replaced CATALINA_HOME with : ${env.CATALINA_HOME}"/>
         <echo message="Replaced GRIDSPHERE_HOME with : ${GRIDSPHERE_HOME}"/>
         <echo message="Replaced GRIDSPHERE_VERSION with : ${version}"/>
         <echo message="Replaced GRIDSPHERE_RELEASE with : ${release}"/>
         <echo message="Replaced DB implementation with : ${DATABASE_TYPE}"/>
-        <echo message="Replaced DB name with : ${DATABASE_NAME}"/>
 
         <jar jarfile="lib/gridsphere.jar" basedir="${build.classes}" >
             <include name="org/**" />
@@ -301,18 +253,17 @@ Copyright:
             <exclude name="org/gridlab/gridsphere/portlet/**"/>
             <exclude name="org/gridlab/gridsphere/event/**"/>
             <!-- don't include portlets -->
-            <exclude name="org/gridlab/gridsphere/portlets/**"/>
+            <exclude name="org/gridlab/gridsphere/portlets/grid/**"/>
             <!-- don't include portlet widgets tag library -->
             <exclude name="org/gridlab/gridsphere/provider/**"/>
             <exclude name="org/gridlab/gridsphere/tags/**"/>
         </jar>
      </target>
 
-
     <!-- =================================================================== -->
     <!-- Creates a Portlet API JAR library archive                           -->
     <!-- =================================================================== -->
-    <target name="portlet-jar" depends="compile-core" description="Create lib/portlet.jar">
+    <target name="portlet-jar" depends="compile" description="Create lib/portlet.jar">
         <jar jarfile="lib/portlet-api.jar" basedir="${build.classes}" >
             <include name="org/gridlab/gridsphere/portlet/**"/>
             <include name="org/gridlab/gridsphere/event/**"/>
@@ -323,7 +274,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Creates the Portlet Widgets Tag Library                             -->
     <!-- =================================================================== -->
-    <target name="portlet-widgets-jar" depends="compile-core" description="Create lib/portlet-widget-tags.jar">
+    <target name="portlet-widgets-jar" depends="compile" description="Create lib/portlet-widget-tags.jar">
         <jar jarfile="lib/portlet-widget-tags.jar" basedir="${build.classes}" >
             <include name="org/gridlab/gridsphere/provider/**" />
             <include name="org/gridlab/gridsphere/tags/**" />
@@ -332,37 +283,11 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Creates GridSphere manager portlet                                  -->
-    <!-- =================================================================== -->
-    <target name="manager-portlet-jar" depends="compile-core" description="Create lib/gsmanager-portlet.jar">
-        <jar jarfile="lib/gsmanager-portlet.jar" basedir="${build.classes}" >
-            <include name="org/gridlab/gridsphere/portlets/manager/**" />
-            <include name="config/properties/log4j.properties"/>
-        </jar>
-    </target>
-
-
-    <!-- =================================================================== -->
-    <!-- Creates example portlets required by GridSphere                     -->
-    <!-- Creates core portlets required by GridSphere                        -->
-    <!-- =================================================================== -->
-    <target name="core-portlets-jar" depends="compile-core-portlets" description="Create lib/coreportlets.jar">
-        <jar jarfile="lib/coreportlets.jar" basedir="${build.classes}" >
-            <include name="org/gridlab/gridsphere/portlets/PortletBean.class" />
-            <include name="org/gridlab/gridsphere/portlets/core/**" />
-            <include name="config/properties/log4j.properties"/>
-        </jar>
-    </target>
-
-    <!-- =================================================================== -->
     <!-- Creates all JAR's                                                   -->
     <!-- =================================================================== -->
-    <target name="jar" depends="portlet-jar, portlet-widgets-jar, core-portlets-jar, manager-portlet-jar" description="Creates all jars"/>
+    <target name="jar" depends="gridsphere-jar, portlet-jar, portlet-widgets-jar" description="Creates all jars"/>
 
-
-<!-- +++++++++++++++++ END JAR CREATION +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-
-     <!-- =================================================================== -->
+    <!-- =================================================================== -->
     <!-- Cleans everything                                                   -->
     <!-- =================================================================== -->
     <target name="clean-all" depends="clean-projects" description="Delete classes and existing library">
@@ -396,16 +321,24 @@ Copyright:
     <!-- Creates castor definitions                                          -->
     <!-- =================================================================== -->
     <target name="configure-database" depends="doclet-mapping">
-
         <property name="DATABASE_FILE"
                   value="${GRIDSPHERE_HOME}/database/${DATABASE_TYPE}db.xml"/>
         <echo message="Preprocessing Database file: ${DATABASE_FILE}"/>
         <replace file="${DATABASE_FILE}"
                  token="@GRIDSPHERE_HOME@"
                  value="${GRIDSPHERE_HOME}"/>
+    </target>
+
+    <target name="configure-test-database" depends="doclet-mapping">
+        <property name="DATABASE_FILE"
+            value="${TEST_HOME}/database/${DATABASE_TYPE}db-test.xml"/>
+        <echo message="Preprocessing Database file: ${DATABASE_FILE}"/>
         <replace file="${DATABASE_FILE}"
-                 token="@DATABASE_NAME@"
-                 value="${DATABASE_NAME}"/>
+            token="@GRIDSPHERE_HOME@"
+            value="${GRIDSPHERE_HOME}"/>
+       <replace file="${DATABASE_FILE}"
+            token="@TEST_HOME@"
+            value="${TEST_HOME}"/>
     </target>
 
     <target name="check-mapping">
@@ -438,20 +371,42 @@ Copyright:
         </javadoc>
     </target>
 
-    <target name="check-database-exists">
+    <target name="check-real-database-exists">
         <echo message="force database: ${var_force_database}"/>
         <condition property="var_force_database">
             <not>
-                <available file="${GRIDSPHERE_HOME}/database/${DATABASE_NAME}.script"/>
+                <available file="${GRIDSPHERE_HOME}/database/gridsphere.script"/>
             </not>
         </condition>
     </target>
 
-    <target name="create-database" depends="configure-database, check-database-exists" if="var_force_database">
-        <echo message="Creating Database at: ${GRIDSPHERE_HOME}/database/${DATABASE_NAME}"/>
+    <target name="check-test-database-exists">
+        <echo message="force database: ${var_force_database}"/>
+        <condition property="var_force_database">
+            <not>
+                <available file="${TEST_HOME}/database/gridsphere-test.script"/>
+            </not>
+        </condition>
+    </target>
+
+    <target name="create-real-database" depends="configure-database, check-real-database-exists" if="var_force_database">
+        <echo message="Creating Database at: ${GRIDSPHERE_HOME}/database/gridsphere"/>
         <echo message="Using script: ${GRIDSPHERE_HOME}/database/dbcreate.sql"/>
         <sql driver="org.hsqldb.jdbcDriver"
-           url="jdbc:hsqldb:${GRIDSPHERE_HOME}/database/${DATABASE_NAME}"
+           url="jdbc:hsqldb:${GRIDSPHERE_HOME}/database/gridsphere"
+           userid="sa"
+           password=""
+           onerror="continue"
+           src="${GRIDSPHERE_HOME}/database/dbcreate.sql">
+           <classpath refid="classpath"/>
+        </sql>
+    </target>
+
+    <target name="create-test-database" depends="configure-test-database, check-test-database-exists" if="var_force_database">
+        <echo message="Creating Database at: ${TEST_HOME}/database/gridsphere-test"/>
+        <echo message="Using script: ${TEST_HOME}/database/dbcreate.sql"/>
+        <sql driver="org.hsqldb.jdbcDriver"
+           url="jdbc:hsqldb:${TEST_HOME}/database/gridsphere-test"
            userid="sa"
            password=""
            onerror="continue"
@@ -532,16 +487,10 @@ Copyright:
         <ant dir="${docbook.dir}" target="docbook" inheritAll="false"/>
     </target>
 
-<!-- +++++++++++++++ END DOCUMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-
-<!-- +++++++++++++++ END DATABASE STUFF ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-
-<!-- +++++++++++++++ START WAR CREATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-
     <!-- =================================================================== -->
     <!-- Creates the GridSphere WAR file                                  -->
     <!-- =================================================================== -->
-    <target name="gridsphere-war" depends="core-portlets-jar" description="Create coreportlets WAR">
+    <target name="war" depends="jar" description="Create GridSphere WAR">
         <war warfile="${build.webapps}/gridsphere.war" update="true"
             webxml="${gswebapp.dir}/WEB-INF/web.xml">
             <fileset dir="${gswebapp.dir}">
@@ -549,46 +498,6 @@ Copyright:
             </fileset>
         </war>
     </target>
-
-    <!-- =================================================================== -->
-    <!-- Creates the core portlets WAR file                                  -->
-    <!-- =================================================================== -->
-    <target name="core-portlets-war" depends="core-portlets-jar" description="Create coreportlets WAR">
-        <war warfile="${build.webapps}/coreportlets.war" update="true"
-            webxml="${corewebapp.dir}/WEB-INF/web.xml">
-            <lib dir="lib">
-                <include name="coreportlets.jar"/>
-            </lib>
-            <fileset dir="${corewebapp.dir}">
-                <exclude name="WEB-INF/web.xml"/>
-            </fileset>
-        </war>
-    </target>
-
-    <!-- =================================================================== -->
-    <!-- Creates the GS manager portlet WAR file                             -->
-    <!-- =================================================================== -->
-    <target name="manager-portlet-war" depends="manager-portlet-jar" description="Create gsmanager WAR">
-        <war warfile="${build.webapps}/gsmanager-portlet.war" update="true"
-            webxml="${manwebapp.dir}/WEB-INF/web.xml">
-            <lib dir="lib">
-                <include name="gsmanager-portlet.jar"/>
-            </lib>
-            <fileset dir="${manwebapp.dir}">
-                <exclude name="WEB-INF/web.xml"/>
-            </fileset>
-        </war>
-    </target>
-
-    <!-- =================================================================== -->
-    <!-- Creates all the WAR files                                           -->
-    <!-- =================================================================== -->
-    <target name="war" depends="core-portlets-war, gridsphere-war, manager-portlet-war" description="Make WAR!"/>
-
-<!-- +++++++++++++++ END WAR CREATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-
-
-<!-- +++++++++++++++ START DEPLOY  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
     <!-- =================================================================== -->
     <!-- Deploys GridSphere and all project portlets to Tomcat                                        -->
@@ -608,7 +517,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Deploys GridSphere to Tomcat                                        -->
     <!-- =================================================================== -->
-    <target name="deploy" depends="gridsphere-tomcat-jar, jar, deploy-portlets" description="Deploys GridSphere to a local server">
+    <target name="deploy" depends="jar" description="Deploys GridSphere to a local server">
 
         <!-- Make core gridsphere directory if necessary -->
         <echo message="Deploying GridSphere to Tomcat servlet container at ${env.CATALINA_HOME}"/>
@@ -624,24 +533,22 @@ Copyright:
         <copy todir="${GRIDSPHERE_HOME}">
             <fileset dir="config">
                 <exclude name="*.properties"/>
+                <exclude name="test/**"/>
+                <exclude name="build/**"/>
+                <exclude name="template/**"/>
             </fileset>
         </copy>
 
         <copy todir="${env.CATALINA_HOME}/shared/lib">
             <fileset dir="lib/ext">
-                <include name="*.jar"/>
-                <exclude name="servlet*.jar"/>
+                <exclude name="**/servlet*.jar"/>
             </fileset>
             <fileset dir="lib">
-                <exclude name="portlet-widget-tags.jar"/>
-                <exclude name="gsmanager-portlet.jar"/>
-                <exclude name="coreportlets.jar"/>
-                <exclude name="gridportlets.jar"/>
-                <exclude name="exampleportlets.jar"/>
+                <exclude name="ext/**"/>
             </fileset>
         </copy>
 
-        <antcall target="create-database"/>
+        <antcall target="create-real-database"/>
 
         <copy todir="${env.CATALINA_HOME}/webapps/gridsphere">
             <fileset dir="${build.webapps}/gridsphere"/>
@@ -652,64 +559,25 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Deploys GridSphere portlets to a local server                       -->
-    <!-- =================================================================== -->
-    <target name="deploy-portlets" depends="deploy-manager-portlet, deploy-core-portlets" description="Deploys GridSphere portlets to a local server">
-    </target>
-
-    <!-- =================================================================== -->
-    <!-- Deploys GS manager portlet to a local server                        -->
-    <!-- =================================================================== -->
-    <target name="deploy-manager-portlet" depends="manager-portlet-jar" description="Deploys GridSphere manager portlet to a local server">
-        <copy todir="${build.webapps}/gsmanager">
-            <fileset dir="${manwebapp.dir}"/>
-        </copy>
-        <copy file="lib/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/${manwebapp.dir}/WEB-INF/lib"/>
-        <copy file="lib/gsmanager-portlet.jar" todir="${env.CATALINA_HOME}/${manwebapp.dir}/WEB-INF/lib"/>
-        <copy todir="${env.CATALINA_HOME}/${manwebapp.dir}">
-            <fileset dir="${build.webapps}/gsmanager"/>
-        </copy>
-    </target>
-
-    <!-- =================================================================== -->
-    <!-- Deploys GS core portlets to a local server                          -->
-    <!-- =================================================================== -->
-    <target name="deploy-core-portlets" depends="core-portlets-jar" description="Deploys core portlets to a local server">
-        <copy todir="${build.webapps}/coreportlets">
-            <fileset dir="${corewebapp.dir}"/>
-        </copy>
-        <copy todir="${env.CATALINA_HOME}/webapps/coreportlets">
-            <fileset dir="${build.webapps}/coreportlets"/>
-        </copy>
-        <copy file="lib/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/coreportlets/WEB-INF/lib"/>
-        <copy file="lib/coreportlets.jar" todir="${env.CATALINA_HOME}/webapps/coreportlets/WEB-INF/lib"/>
-    </target>
-
-<!-- +++++++++++++++ END DEPLOY  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-
-
-<!-- +++++++++++++++ START TESTS +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-
-    <!-- =================================================================== -->
     <!-- Runs all JUnit tests: needs optional.jar and junit in classpath     -->
     <!-- =================================================================== -->
-    <target name="run-tests" depends="compile-tests, gridsphere-junit-jar" description="Runs all JUnit tests">
+    <target name="run-tests" depends="compile-tests, deploy" description="Runs all JUnit tests">
         <echo message="Running the GridSphere Junit Tests"/>
         <mkdir dir="${gridsphere.build}/reports"/>
 
-        <mkdir dir="${GRIDSPHERE_HOME}"/>
-        <copy todir="${GRIDSPHERE_HOME}">
+        <mkdir dir="${TEST_HOME}"/>
+        <copy todir="${TEST_HOME}">
             <fileset dir="config"/>
         </copy>
 
-        <antcall target="create-database"/>
+        <antcall target="create-test-database"/>
 
         <junit printsummary="yes" fork="yes" haltonfailure="no">
             <classpath>
                 <path refid="classpath"/>
                 <pathelement location="${gridsphere.build}/lib/gridsphere.jar"/>
             </classpath>
-            <test name="org.gridlab.gridsphere.AllJUnitTests" todir="${gridsphere.build}/reports">
+            <test name="org.gridlab.gridsphere.GridSphereTests" todir="${gridsphere.build}/reports">
                 <formatter type="xml"/>
             </test>
         </junit>
@@ -737,7 +605,7 @@ Copyright:
                 <path refid="classpath"/>
                 <pathelement location="${gridsphere.build}/lib/gridsphere.jar"/>
             </classpath>
-            <test name="org.gridlab.gridsphere.AllJUnitTests" todir="${gridsphere.build}/reports">
+            <test name="org.gridlab.gridsphere.GridSphereTests" todir="${gridsphere.build}/reports">
                 <formatter type="xml"/>
             </test>
         </junit>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<portlet-app-collection>
+<portlet-app-collection groupowner="The Test Group">
     <portlet-app-def>
         <portlet-app id="org.gridlab.gridsphere.portlets.core.HelloWorld.666">
             <portlet-name>Hello World</portlet-name>
