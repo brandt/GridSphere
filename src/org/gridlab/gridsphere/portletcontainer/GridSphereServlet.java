@@ -78,8 +78,8 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
 
     public synchronized void initializeServices() throws PortletServiceException {
         portletManager = (PortletManagerService) factory.createUserPortletService(PortletManagerService.class, GuestUser.getInstance(), getServletConfig(), true);
-        aclService = (AccessControlManagerService) factory.createPortletService(AccessControlManagerService.class, getServletConfig(), true);
-        loginService = (LoginService) factory.createPortletService(LoginService.class, getServletConfig(), true);
+        aclService = (AccessControlManagerService) factory.createUserPortletService(AccessControlManagerService.class, GuestUser.getInstance(), getServletConfig(), true);
+        loginService = (LoginService) factory.createUserPortletService(LoginService.class, GuestUser.getInstance(), getServletConfig(), true);
     }
 
     /**

@@ -120,7 +120,6 @@ public class FileManagerPortlet extends ActionPortlet {
         TextAreaBean ta = event.getTextAreaBean("fileTextArea");
         String newText = ta.getValue();
         try {
-            System.err.println(newText);
             File tmpFile = userStorage.getFile(user, fileName);
             FileWriter f = new FileWriter(tmpFile);
 
@@ -172,12 +171,12 @@ public class FileManagerPortlet extends ActionPortlet {
             log.debug("file length= " + (int)file.length());
             res.setContentLength((int)file.length());
             // force a save as dialog in recent browsers.
-            res.setHeader("Content-Disposition","attachment; filename=\"" + fileName + "\";");
+            //res.setHeader("Content-Disposition","attachment; filename=\"" + fileName + "\";");
+            //res.setHeader("Content-Disposition","attachment");
 
             // you should use a datahandler to write out data from a datasource.
             DataHandler handler = new DataHandler(fds);
             handler.writeTo(res.getOutputStream());
-            System.err.println("OK acttually wrote file to output!! :-)");
         } catch(FileNotFoundException e) {
             log.error("Unable to find file!", e);
         } catch(SecurityException e) {

@@ -13,11 +13,14 @@ import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 
+import javax.servlet.ServletContext;
 import java.util.*;
 
 public class PersistenceManagerFactory {
 
     protected transient static PortletLog log = SportletLog.getInstance(PersistenceManagerFactory.class);
+
+    public static String GRIDSPHERE_DATABASE_NAME = "gridsphere";
 
     protected static Map databases = new HashMap();
 
@@ -27,8 +30,9 @@ public class PersistenceManagerFactory {
 
     public static synchronized PersistenceManagerRdbms createGridSphereRdbms() {
 
-        String databaseConfigFile = GridSphereConfig.getProperty(GridSphereConfigProperties.DATABASE_CONFIG);
-        String databaseName = GridSphereConfig.getProperty(GridSphereConfigProperties.DATABASE_NAME);
+        ServletContext ctx = GridSphereConfig.getServletContext();
+        String databaseConfigFile = ctx.getRealPath("/WEB-INF/database/database.xml");
+        String databaseName = GRIDSPHERE_DATABASE_NAME;
 
         if (!databases.containsKey(databaseName)) {
             PersistenceManagerRdbms pm = new PersistenceManagerRdbmsImpl(databaseName, databaseConfigFile);

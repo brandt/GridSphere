@@ -21,12 +21,6 @@ import java.util.List;
 public interface PortletManagerService extends PortletService {
 
     /**
-     * The location of deployed portlet web applications
-     */
-    public static final String WEB_APPLICATION_PATH =
-            GridSphereConfig.getProperty(GridSphereConfigProperties.CATALINA_HOME) + "/webapps/";
-
-    /**
      * Initializes all the portlet web applications
      *
      * @param req the <code>PortletRequest</code>

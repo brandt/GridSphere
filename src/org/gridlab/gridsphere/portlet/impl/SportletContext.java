@@ -250,7 +250,7 @@ public class SportletContext implements PortletContext {
      * @return the major version
      */
     public String getVersionInfo() {
-        return GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_VERSION);
+        return GridSphereConfig.getServletConfig().getInitParameter("gridsphere_version");
     }
 
     public int getMajorVersion() {
@@ -267,7 +267,7 @@ public class SportletContext implements PortletContext {
      * @return the minor version
      */
     public String getReleaseInfo() {
-        return GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_RELEASE);
+        return GridSphereConfig.getServletConfig().getInitParameter("gridsphere_release");
     }
 
     /**
@@ -279,8 +279,8 @@ public class SportletContext implements PortletContext {
      */
     public String getContainerInfo() {
         return  GridSphereConfig.PROJECT_NAME + "/"
-                + GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_VERSION)
-                + "-" + GridSphereConfig.getProperty(GridSphereConfigProperties.GRIDSPHERE_RELEASE);
+                + getVersionInfo()
+                + "-" + getReleaseInfo();
     }
 
     /**

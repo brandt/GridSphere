@@ -27,9 +27,8 @@ public class FileManagerServiceImpl implements FileManagerService, PortletServic
 
     public void init(PortletServiceConfig config) {
         if (!inited) {
-            catalina = GridSphereConfig.getProperty(GridSphereConfigProperties.CATALINA_HOME);
-            String tmpDir = catalina + File.separator + config.getInitParameter("tmp_dir");
-            PORTAL_TMP_DIR = tmpDir;
+            String tmpDir = config.getInitParameter("tmp_dir");
+            PORTAL_TMP_DIR = GridSphereConfig.getServletContext().getRealPath("/" + tmpDir);
             File f = new File(PORTAL_TMP_DIR);
             if (!f.exists()) {
                 log.debug("Creating temp directory for users: " + PORTAL_TMP_DIR);

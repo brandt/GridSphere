@@ -4,18 +4,12 @@
  */
 package org.gridlab.gridsphere.services.core.file;
 
-import org.gridlab.gridsphere.portlet.PortletException;
-import org.gridlab.gridsphere.portlet.PortletRequest;
-import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.service.PortletService;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 
 import java.io.IOException;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.List;
 
 /**
  * The <code>UserStorageService</code> manages a temporary directory used for the storage of

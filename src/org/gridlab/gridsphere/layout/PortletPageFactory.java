@@ -24,17 +24,17 @@ public class PortletPageFactory implements PortletSessionListener {
 
     private static PortletLog log = SportletLog.getInstance(PortletPageFactory.class);
 
-    //private String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
+    private String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
 
-    private String layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING);
+    //private String layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING);
     private PortletPage templatePage = null;
     private PortletPage guestPage = null;
     private PortletPage newuserPage = null;
     private PortletPage errorPage = null;
 
-    //private String templateLayoutPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/TemplateLayout.xml");
+    private String templateLayoutPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/layouts/TemplateLayout.xml");
 
-    private String templateLayoutPath = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_DIR) + "/TemplateLayout.xml";
+    //private String templateLayoutPath = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_DIR) + "/TemplateLayout.xml";
 
     private String newuserLayoutPath = null;
 
@@ -269,6 +269,7 @@ public class PortletPageFactory implements PortletSessionListener {
         fos.close();
         fis.close();
     }
+
 
     static public Object deepCopy(Object oldObj) throws Exception
    {

@@ -70,7 +70,7 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
             db.close();
             db = null;
         } catch (PersistenceException e) {
-            log.error("PersistenceException " + e);
+            log.error("PersistenceException ", e);
             throw new PersistenceManagerException("Persistence Error " + e);
         }  finally {
             if (db != null) {
