@@ -67,6 +67,11 @@
             An administrator has the capability to add and remove users to the group they are administrator of as well as
  creating and editing groups on the portal.
         </para>
+        <para>
+            The "Edit default groups" button allows you to select default groups that new users will be subscribed to.
+            This makes it easy for administrators to ensure that newly created users will see the portlets offered them by the
+            chosen groups.
+        </para>
     </sect1>
 
     <sect1>
@@ -94,5 +99,26 @@
             user layout or the layouts of defined groups. In addition, the banner of the portal may be edited allowing
             an admin to modify the portal header including logo and title information. The defualt theme may be selected such that new users
             or users that have not selected a theme will see the selected default theme.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Customizing error pages</title>
+        <para>
+            By default, GridSphere uses the error page located in <filename>$CATALINA_HOME/webapps/gridsphere/jsp/errors/custom_error.jsp</filename>
+            to render a portlet when an error occurs. By default this page displays the stack trace to make development easier. However, for
+            production usage, this file should possibly be modified to display a comprehensible error message to end users.
+        </para>
+            In addition, an external portlet application may include its own error page that will be displayed when an occur occurs. This
+        error page must be placed in <filename>jsp/gs_error.jspn</filename> of the web application.
+    </sect1>
+
+    <sect1>
+        <title>Configuring the Portal URL</title>
+        <para>
+            By default, the portal is configured as http://localhost:8080/gridsphere/gridsphere.
+            It is possible to change the context by doing the following:
+
+            
         </para>
     </sect1>
