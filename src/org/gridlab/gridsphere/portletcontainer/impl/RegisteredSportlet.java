@@ -61,12 +61,12 @@ public class RegisteredSportlet implements RegisteredPortlet {
         log.info("configure() in PortletInfo");
         String appRoot = config.getServletContext().getRealPath("");
         String portletConfigFile = config.getInitParameter("portlet.xml");
-        String portletMappingFile = config.getInitParameter("portlet-mapping-file.xml");
+        String portletMappingFile = config.getInitParameter("portlet-mapping.xml");
         if (portletConfigFile == null) {
             portletConfigFile = "/WEB-INF/conf/portlet.xml";
         }
         if (portletMappingFile == null) {
-            portletMappingFile = "/WEB-INF/conf/portletdefinition-mapping.xml";
+            portletMappingFile = "/WEB-INF/conf/portlet-mapping.xml";
         }
         String fullPath = appRoot + portletConfigFile;
         String mappingPath = appRoot + portletMappingFile;
