@@ -49,7 +49,7 @@ public class GroupManagerPortlet extends ActionPortlet {
         }
 
         DEFAULT_VIEW_PAGE = "doViewListGroup";
-
+        DEFAULT_HELP_PAGE = "admin/groups/help.jsp";
         log.debug("Exiting init()");
     }
 

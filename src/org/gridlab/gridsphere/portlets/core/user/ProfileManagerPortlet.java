@@ -33,6 +33,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
     public static final String VIEW_USER_JSP = "profile/viewuser.jsp";
     public static final String EDIT_USER_JSP = "profile/edituser.jsp";
     public static final String CONFIGURE_JSP = "profile/configure.jsp";
+    public static final String HELP_JSP = "profile/help.jsp";
 
     // Portlet services
     private UserManagerService userManagerService = null;
@@ -54,6 +55,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
         DEFAULT_VIEW_PAGE = "doViewUser";
         DEFAULT_EDIT_PAGE = "doEditUser";
+        DEFAULT_HELP_PAGE = HELP_JSP;
         DEFAULT_CONFIGURE_PAGE = "doConfigureSettings";
     }
 

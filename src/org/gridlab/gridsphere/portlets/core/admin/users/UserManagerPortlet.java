@@ -48,7 +48,7 @@ public class UserManagerPortlet extends ActionPortlet {
             log.error("Unable to initialize services!", e);
         }
         this.log.debug("Exiting initServices()");
-
+        DEFAULT_HELP_PAGE = "admin/users/help.jsp";
         DEFAULT_VIEW_PAGE = "doListUsers";
     }
 

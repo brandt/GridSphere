@@ -28,6 +28,7 @@ public class FileManagerPortlet extends ActionPortlet {
             log.error("Unable to initialize FileManagerService", e);
         }
         DEFAULT_VIEW_PAGE = "doViewUserFiles";
+        DEFAULT_HELP_PAGE = "filemanager/help.jsp";
     }
 
     public void initConcrete(PortletSettings settings) throws UnavailableException {
@@ -62,20 +63,23 @@ public class FileManagerPortlet extends ActionPortlet {
 
     public void uploadFile(FormEvent event) throws PortletException {
         log.debug("in FileManagerPortlet: doUploadFile");
+
         try {
             FileInputBean fi = event.getFileInputBean("userfile");
             User user = event.getPortletRequest().getUser();
             String fileName = fi.getFileName();
+	        System.err.println("filename = " + fileName);
             if (fileName.equals("")) return;
             userStorage.storeFile(user, fi, fileName);
 
             //String location = userStorage.getLocationPath(user, "myfile");
-            //log.debug("fileinputbean value=" + fi.getValue() + " location to store=" + location);
+            log.debug("fileinputbean value=" + fi.getValue());
             //fi.saveFile(location);
-        } catch (IOException e) {
-            log.error("Unable to store uploaded file " + e.getMessage());
         } catch (Exception e) {
-            log.error("Unable to store uploaded file " + e.getMessage());
+	    FrameBean errMsg = event.getFrameBean("errorFrame");
+	    errMsg.setValue("Unable to store uploaded file " + e.getMessage());
+	    errMsg.setStyle("error");
+	   log.error("Unable to store uploaded file ", e);
         }
         setNextState(event.getPortletRequest(), DEFAULT_VIEW_PAGE);
     }
