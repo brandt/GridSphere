@@ -18,7 +18,7 @@ import org.gridlab.gridsphere.portletcontainer.ConcretePortletConfig;
  * <code>AccessRestrictions</code> also determnines which roles can have access to
  * this portlet.
  */
-public class AccessRestrictions {
+public class RequiredRole {
 
     private String role = PortletRole.GUEST.toString();
     private String visibility = ConcretePortletConfig.Scope.PUBLIC.toString();
@@ -26,7 +26,7 @@ public class AccessRestrictions {
     /**
      * Constructs an instance of AccessRestrictions
      */
-    public AccessRestrictions() {
+    public RequiredRole() {
     }
 
     /**
