@@ -64,7 +64,12 @@ public class GridSphere extends HttpServlet {
             registryService =
                 (PortletRegistryService) factory.createPortletService(PortletRegistryService.class, config, true);
 
-            layoutEngine = PortletLayoutEngine.getInstance(config);
+            // Get a portlet config object
+            portletConfig = parseService.getPortletConfig(config);
+
+            layoutEngine = PortletLayoutEngine.getInstance(portletConfig);
+            // used for debugging to reload descriptor each time
+            layoutEngine.setAutomaticReload(true);
 
             Iterator it = registryService.getRegisteredPortlets().iterator();
 
@@ -80,10 +85,6 @@ public class GridSphere extends HttpServlet {
             abPortlet.init(portletConfig);
             abPortlet.initConcrete(portletSettings);
         }
-
-
-        // Get a portlet config object
-        portletConfig = parseService.getPortletConfig(config);
 
         // read portlet.xml and retrieve portlet info
         log.info("configure() in GridSphere");
@@ -149,7 +150,7 @@ public class GridSphere extends HttpServlet {
     public void doRender(PortletRequest req, PortletResponse res) throws IOException, ServletException {
         // Make a layout
         log.info("in doRender()");
-        layoutEngine.doRender(res);
+        layoutEngine.doRender(req, res);
     }
 
     public void doPortletLifecycle(PortletRequest req, PortletResponse res) throws IOException, ServletException {
