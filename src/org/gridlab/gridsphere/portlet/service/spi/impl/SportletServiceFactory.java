@@ -235,8 +235,6 @@ public class SportletServiceFactory implements PortletServiceFactory {
             throw new PortletServiceNotFoundException("Unable to initialize portlet service: " + serviceImpl);
         }
 
-        initServices.put(service, psp);
-
         return psp;
     }
 

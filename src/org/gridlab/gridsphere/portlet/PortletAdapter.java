@@ -19,6 +19,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 import java.util.Map;
+import java.security.MessageDigest;
 
 /**
  * The PortletAdapter provides a default implementation for the PortletInfo interface.
@@ -177,8 +178,11 @@ public abstract class PortletAdapter extends Portlet implements PortletSessionLi
      * @param request the portlet request
      */
     public void login(PortletRequest request) {
+        // Create hash of user object and put in session
+
         // XXX: FILL ME IN
     }
+
 
     /**
      * Description copied from interface: PortletSessionListener

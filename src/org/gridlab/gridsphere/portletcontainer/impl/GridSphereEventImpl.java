@@ -45,17 +45,19 @@ public class GridSphereEventImpl implements GridSphereEvent {
 
         /* This is where a DefaultPortletAction gets put together if one exists */
         String actionStr = portletRequest.getParameter(GridSphereProperties.ACTION);
-        action = new DefaultPortletAction(actionStr);
-        String prefix = portletRequest.getParameter(GridSphereProperties.PREFIX);
-        if (prefix != null) {
-            Enumeration enum = portletRequest.getParameterNames();
-            String name, newname, value;
-            while (enum.hasMoreElements()) {
-                name = (String)enum.nextElement();
-                if (name.startsWith(prefix)) {
-                    newname = name.substring(prefix.length()+1);
-                    value = portletRequest.getParameter(name);
-                    action.addParameter(newname, value);
+        if (actionStr != null) {
+            action = new DefaultPortletAction(actionStr);
+            String prefix = portletRequest.getParameter(GridSphereProperties.PREFIX);
+            if (prefix != null) {
+                Enumeration enum = portletRequest.getParameterNames();
+                String name, newname, value;
+                while (enum.hasMoreElements()) {
+                    name = (String)enum.nextElement();
+                    if (name.startsWith(prefix)) {
+                        newname = name.substring(prefix.length()+1);
+                        value = portletRequest.getParameter(name);
+                        action.addParameter(newname, value);
+                    }
                 }
             }
         }
@@ -82,8 +84,7 @@ public class GridSphereEventImpl implements GridSphereEvent {
     }
 
     public boolean hasAction() {
-        if (getPortletComponentID() != -1) return true;
-        return false;
+        return (action != null) ? true : false;
     }
 
     public boolean hasMessagingAction() {

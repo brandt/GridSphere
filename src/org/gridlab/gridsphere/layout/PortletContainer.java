@@ -101,11 +101,10 @@ public class PortletContainer {
 
     public void actionPerformed(GridSphereEvent event) throws PortletLayoutException, IOException {
         // if there is a layout action do it!
-        if (event.hasAction()) {
+        if (event.getPortletComponentID() != -1) {
             // off by one calculations for array indexing (because all component id's are .size() which is
             // one more than we use to index the components
             ComponentIdentifier compId = (ComponentIdentifier)componentIdentifiers.get(event.getPortletComponentID());
-            System.err.println("handlingaction in " + event.getPortletComponentID() + compId.getClassName());
             PortletComponent comp = compId.getPortletComponent();
             if (comp != null) {
                 comp.actionPerformed(event);

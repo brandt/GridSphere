@@ -369,4 +369,20 @@ public class SportletUserImpl extends BaseObject implements SportletUser, HttpSe
         sb.append("LastLoginTime: " + LastLoginTime + "\n");
         return sb.toString();
     }
+
+    public boolean equals(Object obj) {
+        boolean b = true;
+        if ((obj != null) && (obj.getClass().equals(this.getClass()))) {
+            b = (((SportletUserImpl)obj).EmailAddress == this.EmailAddress);
+            b &= (((SportletUserImpl)obj).FamilyName == this.FamilyName);
+            b &= (((SportletUserImpl)obj).GivenName == this.GivenName);
+            b &= (((SportletUserImpl)obj).FullName == this.FullName);
+            b &= (((SportletUserImpl)obj).FullName == this.FullName);
+            b &= (((SportletUserImpl)obj).UserID == this.UserID);
+            b &= (((SportletUserImpl)obj).LastLoginTime == this.LastLoginTime);
+            b &= (((SportletUserImpl)obj).Organization == this.Organization);
+        }
+        return b;
+    }
+
 }

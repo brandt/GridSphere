@@ -19,18 +19,6 @@ import java.util.List;
 
 public class DemoPortlet extends AbstractPortlet {
 
-    public void init(PortletConfig config) throws UnavailableException {
-        super.init(config);
-        UserManagerService userService = null;
-        try {
-            userService = (UserManagerService)config.getContext().getService(UserManagerService.class);
-        } catch (PortletServiceUnavailableException e) {
-            System.err.println("UserManager service unavailable! ");
-        } catch (PortletServiceNotFoundException e) {
-            System.err.println("UserManagerService not found! ");
-        }
-    }
-
     public void actionPerformed(ActionEvent evt) throws PortletException {
         DefaultPortletAction action = (DefaultPortletAction)evt.getAction();
         String actionName = action.getName();

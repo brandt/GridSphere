@@ -60,4 +60,11 @@ public final class DefaultPortletAction implements PortletAction {
     public void setParameters(Map store) {
         this.store = store;
     }
+
+    public boolean equals(Object obj) {
+        if ((obj != null) && (obj.getClass().equals(this.getClass()))) {
+            return (((DefaultPortletAction)obj).getName().equals(this.getName()));
+        }
+        return false;
+    }
 }

@@ -12,6 +12,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.impl.SportletSettings;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.portletcontainer.ConcretePortletException;
 import org.gridlab.gridsphere.portletcontainer.descriptor.*;

@@ -37,7 +37,6 @@ public class PortletLayoutEngine {
 
     private PortletContainer guestContainer;
 
-
     private String newuserLayoutPath;
     private PortletContainer newuserContainer;
 
@@ -65,7 +64,7 @@ public class PortletLayoutEngine {
             PortletTab webAppTab = PortletLayoutDescriptor.loadPortletTab(tabXMLfile, layoutMappingPath);
             applicationTabs.put(webAppName, webAppTab);
         } catch (Exception e) {
-            e.printStackTrace();
+           // Don't worry- already logged
         }
     }
 
@@ -126,12 +125,19 @@ public class PortletLayoutEngine {
         return pc;
     }
 
+    public PortletContainer getPortletContainer(User user) {
+        if (user instanceof GuestUser) return guestContainer;
+        return (PortletContainer)userLayouts.get(user);
+    }
+
     public void service(GridSphereEvent event) throws IOException {
         log.debug("in service()");
         boolean doLayoutAction = false;
         PortletContainer pc = null;
 
         // XXX: How do we signal a user has logged out so we can userLayouts.remove(user)???
+        // XXX By jove I've got it! Via loggedIn method of UserService which in turn creates a hash of something
+
         try {
             pc = getPortletContainer(event);
             pc.doRender(event);
@@ -143,13 +149,28 @@ public class PortletLayoutEngine {
         }
     }
 
+    public void setPortletContainer(User user, PortletContainer container) {
+
+    }
+
+    public void reloadPortletContainer(User user) {
+
+    }
+
+    public void loginPortlets(GridSphereEvent event) {
+
+    }
+
+    public void logoutPortlets(GridSphereEvent event) {
+
+    }
+
     public PortletContainer getUserLayout(User user) {
         return (PortletContainer)userLayouts.get(user);
     }
 
     public void actionPerformed(GridSphereEvent event) throws IOException {
         log.debug("in service()");
-        boolean doLayoutAction = false;
         PortletContainer pc = null;
 
         // XXX: How do we signal a user has logged out so we can userLayouts.remove(user)???

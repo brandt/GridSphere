@@ -9,6 +9,11 @@ import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileUploadException;
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.GuestUser;
+import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
+import org.gridlab.gridsphere.services.layout.LayoutManagerService;
+import org.gridlab.gridsphere.tags.web.model.DefaultListModel;
 
 import javax.servlet.UnavailableException;
 import java.io.File;
@@ -22,91 +27,30 @@ import java.util.List;
  */
 public class SubscriptionPortlet extends AbstractPortlet {
 
-
-    protected static final int MAX_UPLOAD_SIZE = 1024 * 1024;
-    protected static final String TEMP_DIR = "/tmp";
+    protected LayoutManagerService layoutService;
 
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
         PortletContext context = config.getContext();
-
+        try {
+            layoutService = (LayoutManagerService) context.getService(LayoutManagerService.class);
+        } catch (PortletServiceUnavailableException e) {
+            throw new UnavailableException("layout service instance unavailable: " + e.toString());
+        } catch (PortletServiceNotFoundException e) {
+            throw new UnavailableException("layout service instance not found: " + e.toString());
+        }
+        System.err.println("init() in SubscriptionPortlet");
     }
 
     public void actionPerformed(ActionEvent evt) throws PortletException {
-        PortletAction _action = evt.getAction();
-        System.err.println("actionPerformed() in SubscriptionPortlet");
 
-        if (_action instanceof DefaultPortletAction) {
-            DefaultPortletAction action = (DefaultPortletAction) _action;
-            if (action.getName().equals("reload")) {
-                /*
-                try {
-                    userRegistryService.reloadPortlets();
-                } catch (PortletRegistryServiceException e) {
-                    throw new PortletException("Unable to reload classes: " + e.getMessage());
-                }
-                */
-            } else if (action.getName().equals("upload")) {
-                PortletRequest req = evt.getPortletRequest();
-                /* Check if request is a file upload */
-                String contType = req.getContentType();
-                if ((contType != null) && contType.startsWith("multipart/form-data")) {
-                    loadPortletWar(req);
-                }
-            }
-        }
     }
-
-    protected void loadPortletWar(PortletRequest request) throws PortletException {
-        // Create a new file upload handler
-        FileUpload upload = new FileUpload();
-
-        // Set upload parameters
-        upload.setSizeMax(MAX_UPLOAD_SIZE);
-        upload.setRepositoryPath(TEMP_DIR);
-
-        // Parse the request
-        List items = null;
-        try {
-            items = upload.parseRequest(request);
-        } catch (FileUploadException e) {
-            throw new PortletException("Unable to parse uploaded file: ", e);
-        }
-        // Process the uploaded fields
-        Iterator iter = items.iterator();
-        try {
-            while (iter.hasNext()) {
-                FileItem item = (FileItem) iter.next();
-                if (!item.isFormField()) {
-                    if (portletConfig.getContext() == null) {
-                        System.err.println("ARGGHHHH MOTHERFUCKERT");
-                    }
-                    String root = (getPortletConfig().getContext().getRealPath(""));
-
-                    item.write(root + "/WEB-INF/lib/portlets/" + item.getName());
-                    File file = item.getStoreLocation();
-                    System.err.println("file is : " + file.getAbsolutePath());
-                }
-            }
-        } catch (Exception e) {
-            throw new PortletException("Unable to save file", e);
-        }
-    }
-
 
     public void service(PortletRequest request, PortletResponse response) throws PortletException, IOException {
-        // Create URI's for upload and reload of portlets
-        PortletURI reloadURI = response.createURI();
-        DefaultPortletAction reloadAction = new DefaultPortletAction("reload");
-        reloadURI.addAction(reloadAction);
-        request.setAttribute("reload", reloadURI.toString());
-
-        PortletURI uploadURI = response.createURI();
-        DefaultPortletAction uploadAction = new DefaultPortletAction("upload");
-        reloadURI.addAction(uploadAction);
-        request.setAttribute("upload", uploadURI.toString());
-
-        getPortletConfig().getContext().include("/jsp/subscription.jsp", request, response);
+        User user = request.getUser();
+        //List tabList = layoutService.getTabbedLists(user);
+        //DefaultListModel listModel = new DefaultListModel(tabList);
+        getPortletConfig().getContext().include("/jsp/subscription/list.jsp", request, response);
     }
 
 }
