@@ -1,5 +1,5 @@
 /*
- * @author <a href="mailto:oliver.wehrens@aei.mpg.de">Oliver Wehrens</a>
+ * @author <a href="mailto:makub@ics.muni.cz">Martin Kuba</a>
  * @version $Id$
  */
 package org.gridlab.gridsphere.layout;
@@ -14,10 +14,18 @@ import java.util.List;
 import java.util.Collections;
 
 /**
- * The <code>PortletColumnLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>
- * that organizes portlets into a column.
+ * The <code>PortletVariableColumnLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>
+ * that organizes portlets into a column, but displays only one of its children. 
+ * Displays only the child, which has the same label as is value of session attribute
+ * with name <code>variant.layout.mylabel</code> where mylabel is label of this component.
+ * If such session attribute doesn't exist, displays the child specified by "variant" attribute.
  */
 public class PortletVariableColumnLayout extends PortletFrameLayout implements Cloneable {
+
+    /**
+     * Prefix to be prepended to component label when searching session for variant.
+     */
+    public static final String LABEL_PREFIX = "variant.layout";
 
     protected String variant = "";
 
@@ -61,16 +69,26 @@ public class PortletVariableColumnLayout extends PortletFrameLayout implements C
             out.println("<table width=\"100%\" cellspacing=\"2\" cellpadding=\"0\"> <!-- START COLUMN -->");
 
             out.println("<tbody>");
+
+	    //find which variant to display
+	    String thisLabel = this.getLabel();
+	    String sesvariant = null;
+	    if(thisLabel!=null) {
+	        Object _sesvariant = req.getSession(true).getAttribute(this.LABEL_PREFIX+thisLabel);
+	        if(_sesvariant instanceof String) { sesvariant=(String)_sesvariant; }
+	    }
+	    if(sesvariant==null) sesvariant=this.getVariant();
+
             List scomponents = Collections.synchronizedList(components);
             synchronized(scomponents) {
             for (int i=0;i<scomponents.size();i++) {
                 out.print("<tr><td valign=\"top\">");
 
                 p = (PortletComponent) scomponents.get(i);
+		String plabel = p.getLabel();
 
-                if (p.getVisible()) {
+                if (p.getVisible()&&sesvariant.equals(plabel)) {
                     p.doRender(event);
-                    //out.println("comp: "+i);
                 }
 
                 out.println("</td></tr>");
