@@ -47,8 +47,10 @@ public class SportletData implements PortletData {
      * Removes the attribute with the given name.
      *
      * @param name the attribute name
+     *
+     * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
-    public void removeAttribute(String name) {
+    public void removeAttribute(String name) throws AccessDeniedException {
         store.remove(name);
     }
 
@@ -66,8 +68,10 @@ public class SportletData implements PortletData {
 
     /**
      * Stores all attributes.
+     *
+     * @throws AccessDeniedException if the caller isn't authorized to access this data object
      */
-    public void store() {
+    public void store() throws AccessDeniedException {
         // XXX: FILL ME IN
     }
 

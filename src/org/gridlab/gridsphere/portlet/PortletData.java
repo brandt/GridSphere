@@ -35,7 +35,7 @@ public interface PortletData {
      *
      * @param name the attribute name
      */
-    public void removeAttribute(String name);
+    public void removeAttribute(String name) throws AccessDeniedException;
 
     /**
      * Sets the attribute with the given name and value.
@@ -50,6 +50,6 @@ public interface PortletData {
     /**
      * Stores all attributes.
      */
-    public void store();
+    public void store() throws AccessDeniedException;
 
 }
