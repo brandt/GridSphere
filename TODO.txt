@@ -1,0 +1,8 @@
+Stuff todo
+
+Version: $Id$
+---------
+
+- check the init of databases for 3rd party webapps (oliver)
+
+
