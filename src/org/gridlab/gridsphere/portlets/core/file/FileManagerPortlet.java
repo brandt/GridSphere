@@ -84,7 +84,7 @@ public class FileManagerPortlet extends ActionPortlet {
         List files = lb.getSelectedValues();
         User user = event.getPortletRequest().getUser();
         Iterator it = files.iterator();
-       String fname = null;
+        String fname = null;
         while (it.hasNext()) {
             fname = (String)it.next();
             userStorage.deleteFile(user, fname);
@@ -123,7 +123,7 @@ public class FileManagerPortlet extends ActionPortlet {
             //tmpFile.delete();
         } catch (IOException e) {
             log.error("Error saving file:" + fileName, e);
-            ErrorFrameBean error = event.getErrorFrameBean("editError");
+            FrameBean error = event.getFrameBean("editError");
             error.setValue("Unable to save file: " + fileName);
         }
     }
@@ -211,12 +211,14 @@ public class FileManagerPortlet extends ActionPortlet {
                 setNextState(req, "filemanager/edit.jsp");
             } catch (FileNotFoundException e) {
                 log.error("Error opening file:" + file, e);
-                ErrorFrameBean error = event.getErrorFrameBean("errorFrame");
+                FrameBean error = event.getFrameBean("errorFrame");
                 error.setValue("Unable to open file: " + file);
+                error.setStyle(FrameBean.ERROR_TYPE);
                 setNextState(req, DEFAULT_VIEW_PAGE);
             } catch (IOException e) {
                 log.error("Error opening file:" + file, e);
-                ErrorFrameBean error = event.getErrorFrameBean("errorFrame");
+                FrameBean error = event.getFrameBean("errorFrame");
+                error.setStyle(FrameBean.ERROR_TYPE);
                 error.setValue("Unable to open file: " + file);
                 setNextState(req, DEFAULT_VIEW_PAGE);
             }

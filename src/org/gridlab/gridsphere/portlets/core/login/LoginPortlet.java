@@ -73,11 +73,12 @@ public class LoginPortlet extends ActionPortlet {
         log.debug("in LoginPortlet: gs_login");
         PortletRequest req = event.getPortletRequest();
 
-        ErrorFrameBean frame = event.getErrorFrameBean("errorFrame");
+        FrameBean frame = event.getFrameBean("errorFrame");
         String errorKey = (String)req.getAttribute(LoginPortlet.LOGIN_ERROR_FLAG);
         if ((errorKey != null) && (frame != null)) {
             System.err.println("1. setting error key in frame");
             frame.setKey(errorKey);
+            frame.setStyle(FrameBean.ERROR_TYPE);
         }
         setNextState(req, "doViewUser");
     }
