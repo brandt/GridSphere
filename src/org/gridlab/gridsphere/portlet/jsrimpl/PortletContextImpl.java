@@ -1,5 +1,7 @@
 package org.gridlab.gridsphere.portlet.jsrimpl;
 
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
+
 import javax.portlet.PortletContext;
 import javax.portlet.PortletRequestDispatcher;
 import javax.servlet.RequestDispatcher;
@@ -33,9 +35,6 @@ import java.net.MalformedURLException;
  * a database to achieve sharing on a global scope.
  */
 public class PortletContextImpl implements PortletContext {
-    private final static int MAJOR_VERSION = 1;
-    private final static int MINOR_VERSION = 0;
-    private final static String SERVER_INFO = "GridSphere/2.0.2";
 
     //private ServletConfig config = null;
     private ServletContext context = null;
@@ -64,7 +63,7 @@ public class PortletContextImpl implements PortletContext {
      */
 
     public String getServerInfo() {
-        return SERVER_INFO;
+        return GridSphereConfigProperties.GRIDSPHERE_INFO;
     }
 
     /**
@@ -147,7 +146,7 @@ public class PortletContextImpl implements PortletContext {
      * @see #getMinorVersion()
      */
     public int getMajorVersion() {
-        return MAJOR_VERSION;
+        return GridSphereConfigProperties.JSR_MAJOR_VERSION;
     }
 
     /**
@@ -158,7 +157,7 @@ public class PortletContextImpl implements PortletContext {
      * @see #getMajorVersion()
      */
     public int getMinorVersion() {
-        return MINOR_VERSION;
+        return GridSphereConfigProperties.JSR_MINOR_VERSION;
     }
 
     /**

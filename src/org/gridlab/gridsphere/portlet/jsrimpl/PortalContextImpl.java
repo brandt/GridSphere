@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.portlet.jsrimpl;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletApp;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 
 import javax.portlet.PortalContext;
 import javax.portlet.PortletMode;
@@ -23,7 +24,7 @@ import java.util.Map;
  * The portlet can only read the <CODE>PortalContext</CODE> data.
  */
 public class PortalContextImpl implements PortalContext {
-    private static final String GRIDSPHERE_INFO = "GridSphere/2.0.2";
+
     private Map props = new HashMap();
     //private PortletApp portletApp = null;
     private List windowStates = null;
@@ -122,6 +123,6 @@ public class PortalContextImpl implements PortalContext {
      * @return a <CODE>String</CODE> containing at least the portal name and version number
      */
     public String getPortalInfo() {
-        return GRIDSPHERE_INFO;
+        return GridSphereConfigProperties.GRIDSPHERE_INFO;
     }
 }

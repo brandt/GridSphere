@@ -11,6 +11,23 @@ package org.gridlab.gridsphere.portletcontainer;
 public interface GridSphereConfigProperties {
 
     /**
+     * Location of GridSphere directory used to store persistent data
+     */
+    public static final String GRIDSPHERE_INFO = "GridSphere/2.0.2";
+
+    /**
+     * JSR 168 Portlet API version info
+     */
+    public final static int JSR_MAJOR_VERSION = 1;
+    public final static int JSR_MINOR_VERSION = 0;
+
+    /**
+     * GridSphere/WebSphere Portlet API version info
+     */
+    public final static int GS_MAJOR_VERSION = 4;
+    public final static int GS_MINOR_VERSION = 2;
+
+    /**
      * Location of Tomcat
      */
     public static final String TOMCAT_HOME = "TOMCAT_HOME";

@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
 import org.gridlab.gridsphere.portletcontainer.PortletMessageManager;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 import org.gridlab.gridsphere.portletcontainer.impl.SportletMessageManager;
 
 import javax.servlet.*;
@@ -32,7 +33,6 @@ import java.util.Set;
  */
 public class SportletContext implements PortletContext {
 
-    private static PortletLog log = SportletLog.getInstance(SportletContext.class);
     private static SportletServiceFactory factory = SportletServiceFactory.getInstance();
 
     private ServletContext context = null;
@@ -284,15 +284,15 @@ public class SportletContext implements PortletContext {
      * @return the major version
      */
     public String getVersionInfo() {
-        return GridSphereConfig.getServletConfig().getInitParameter("gridsphere_version");
+        return GridSphereConfigProperties.GRIDSPHERE_INFO;
     }
 
     public int getMajorVersion() {
-        return context.getMajorVersion();
+        return GridSphereConfigProperties.GS_MAJOR_VERSION;
     }
 
     public int getMinorVersion() {
-        return context.getMinorVersion();
+        return GridSphereConfigProperties.GS_MINOR_VERSION;
     }
 
     /**
@@ -301,7 +301,7 @@ public class SportletContext implements PortletContext {
      * @return the minor version
      */
     public String getReleaseInfo() {
-        return GridSphereConfig.getServletConfig().getInitParameter("gridsphere_release");
+        return GridSphereConfigProperties.GRIDSPHERE_INFO;
     }
 
     /**
@@ -324,7 +324,7 @@ public class SportletContext implements PortletContext {
      * @return the portlet log
      */
     public PortletLog getLog() {
-        return log;
+        return SportletLog.getInstance(SportletContext.class);
     }
 
     public final ServletContext getContext(String uripath) {
