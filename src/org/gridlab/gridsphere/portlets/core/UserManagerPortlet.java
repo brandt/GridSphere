@@ -44,7 +44,7 @@ public class UserManagerPortlet extends AbstractPortlet {
         // Get instance of user manager bean
         UserManagerBean userManagerBean = getUserManagerBean(request, response);
         // Then perform given action
-        userManagerBean.doAction(action);
+        userManagerBean.doViewAction(action);
         getPortletLog().debug("Exiting actionPerformed()");
     }
 
@@ -57,7 +57,7 @@ public class UserManagerPortlet extends AbstractPortlet {
             userManagerBean.doDefaultViewAction();
         }
         // Get next page from do view
-        String nextPage = userManagerBean.getNextPage();
+        String nextPage = userManagerBean.getPage();
         // Include the given page
         getPortletConfig().getContext().include(nextPage, request, response);
         getPortletLog().debug("Exiting doView()");
@@ -77,7 +77,7 @@ public class UserManagerPortlet extends AbstractPortlet {
         // Get instance of user manager bean
         UserManagerBean userManagerBean = getUserManagerBean(request, response);
         // Get next title to display
-        String title = userManagerBean.getNextTitle();
+        String title = userManagerBean.getTitle();
         // Print the given title
         response.getWriter().println(title);
         getPortletLog().debug("Exiting doTitle()");
@@ -90,7 +90,7 @@ public class UserManagerPortlet extends AbstractPortlet {
         UserManagerBean userManagerBean =
                 (UserManagerBean)request.getAttribute("userManagerBean");
         if (userManagerBean == null) {
-            getPortletLog().debug("Creating instance of user manager bean");
+            getPortletLog().debug("Creating instance of UserManagerBean");
             PortletConfig config = getPortletConfig();
             userManagerBean = new UserManagerBean(config, request, response);
             request.setAttribute("userManagerBean", userManagerBean);

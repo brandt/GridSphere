@@ -36,8 +36,8 @@
       <table class="portlet-frame" cellspacing="1" width="100%">
         <tr>
           <td class="portlet-frame-message">
-            Click "<span style="portlet-text-alert">Confirm Delete</span>" to delete this group,
-            "<span style="portlet-text-alert">Cancel Delete</span>" otherwise.
+            Click <span style="portlet-text-alert">Confirm Delete</span> to delete this group,
+            <span style="portlet-text-alert">Cancel Delete</span> otherwise.
           </td>
         </tr>
       </table>

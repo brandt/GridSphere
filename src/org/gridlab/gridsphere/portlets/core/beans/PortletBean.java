@@ -12,10 +12,8 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletService;
 
-import java.util.List;
-import java.util.Vector;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
+import java.lang.reflect.Method;
 
 public class PortletBean {
 
@@ -27,8 +25,8 @@ public class PortletBean {
     protected User user = null;
     protected PortletSession session = null;
     protected PortletAction actionPerformed = null;
-    protected String nextPage = null;
-    protected String nextTitle = null;
+    protected String page = null;
+    protected String title = null;
     protected boolean isFormInvalid = false;
     protected String formInvalidMessage = null;
 
@@ -127,23 +125,53 @@ public class PortletBean {
         this.actionPerformed = action;
     }
 
-    public String getNextTitle() {
-        return this.nextTitle;
+    public String getTitle() {
+        return this.title;
     }
 
-    public void setNextTitle(String title) {
-        this.log.debug("Setting next title to " + title);
-        this.nextTitle = title;
+    public void setTitle(String title) {
+        this.log.debug("Setting title to " + title);
+        this.title = title;
     }
 
-    public String getNextPage() {
-        return this.nextPage;
+    public String getPage() {
+        return this.page;
     }
 
-    public void setNextPage(String page) {
+    public void setPage(String page) {
         this.log.debug("Setting next page to " + page);
-        this.nextPage = page;
+        this.page = page;
     }
+
+    public void doViewAction(PortletAction action)
+            throws PortletException {
+        this.log.debug("Entering doAction(Object, String)");
+        // If action is not specified do default action
+        if (action == null) {
+            doDefaultViewAction();
+            return;
+        }
+        // Get object and class references
+        Object thisObject = (Object)this;
+        Class thisClass = thisObject.getClass();
+        // Set action performed (even if it fails below)
+        setActionPerformed(action);
+        // Get name of action peformed
+        String actionName = getActionPerformedName();
+        // Call method specified by action name
+        try {
+            if (this.log.isDebugEnabled()) {
+                this.log.debug("Getting method " + thisClass.getName() + "." + action + "()");
+            }
+            Method actionMethod = thisClass.getMethod(actionName, null);
+            this.log.debug("Invoking method");
+            actionMethod.invoke(thisObject, null);
+        } catch (Exception e) {
+            throw new PortletException(e);
+        }
+        this.log.debug("Exiting doAction(Object, String)");
+    }
+
 
     public void doAction(PortletAction action)
             throws PortletException {
@@ -152,14 +180,6 @@ public class PortletBean {
 
     public void doDefaultViewAction()
             throws PortletException {
-    }
-
-    public String doView()
-            throws PortletException {
-        if (this.actionPerformed == null) {
-            doDefaultViewAction();
-        }
-        return getNextPage();
     }
 
     public boolean isFormInvalid() {

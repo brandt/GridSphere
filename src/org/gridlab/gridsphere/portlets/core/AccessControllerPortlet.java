@@ -46,7 +46,7 @@ public class AccessControllerPortlet extends AbstractPortlet {
         // Get instance of group manager bean
         AccessControllerBean aclManagerBean = getAccessControlManagerBean(request, response);
         // Then perform given action
-        aclManagerBean.doAction(action);
+        aclManagerBean.doViewAction(action);
         _log.debug("Exiting actionPerformed()");
     }
 
@@ -60,7 +60,7 @@ public class AccessControllerPortlet extends AbstractPortlet {
             aclManagerBean.doDefaultViewAction();
         }
         // Get next page to display
-        String nextPage = aclManagerBean.getNextPage();
+        String nextPage = aclManagerBean.getPage();
         // Include the given page
         getPortletConfig().getContext().include(nextPage, request, response);
         _log.debug("Exiting doView()");
@@ -80,7 +80,7 @@ public class AccessControllerPortlet extends AbstractPortlet {
         // Get instance of group manager bean
         AccessControllerBean aclManagerBean = getAccessControlManagerBean(request, response);
         // Get next title to display
-        String title = aclManagerBean.getNextTitle();
+        String title = aclManagerBean.getTitle();
         // Print the given title
         response.getWriter().println(title);
         _log.debug("Exiting doTitle()");
@@ -93,7 +93,7 @@ public class AccessControllerPortlet extends AbstractPortlet {
         AccessControllerBean aclManagerBean =
                 (AccessControllerBean)request.getAttribute("aclManagerBean");
         if (aclManagerBean == null) {
-            _log.debug("Creating instance of acl manager bean");
+            _log.debug("Creating instance of AccessControllerBean");
             PortletConfig config = getPortletConfig();
             aclManagerBean = new AccessControllerBean(config, request, response);
             request.setAttribute("aclManagerBean", aclManagerBean);

@@ -43,25 +43,25 @@ public class AccessControllerBean extends PortletBean {
     public static final String PAGE_GROUP_ENTRY_REMOVE_CONFIRM = "/jsp/aclmanager/groupEntryRemoveConfirm.jsp";
 
     // Portlet actions available within this portlet
-    public static final String ACTION_GROUP_LIST = "groupList";
-    public static final String ACTION_GROUP_VIEW = "groupView";
-    public static final String ACTION_GROUP_EDIT = "groupEdit";
-    public static final String ACTION_GROUP_EDIT_CONFIRM = "groupEditConfirm";
-    public static final String ACTION_GROUP_EDIT_CANCEL = "groupEditCancel";
-    public static final String ACTION_GROUP_DELETE = "groupDelete";
-    public static final String ACTION_GROUP_DELETE_CONFIRM = "groupDeleteConfirm";
-    public static final String ACTION_GROUP_DELETE_CANCEL = "groupDeleteCancel";
+    public static final String ACTION_GROUP_LIST = "doListGroup";
+    public static final String ACTION_GROUP_VIEW = "doViewGroup";
+    public static final String ACTION_GROUP_EDIT = "doEditGroup";
+    public static final String ACTION_GROUP_EDIT_CONFIRM = "doConfirmEditGroup";
+    public static final String ACTION_GROUP_EDIT_CANCEL = "doCancelEditGroup";
+    public static final String ACTION_GROUP_DELETE = "doDeleteGroup";
+    public static final String ACTION_GROUP_DELETE_CONFIRM = "doConfirmDeleteGroup";
+    public static final String ACTION_GROUP_DELETE_CANCEL = "doCancelDeleteGroup";
 
-    public static final String ACTION_GROUP_ENTRY_VIEW = "groupEntryView";
-    public static final String ACTION_GROUP_ENTRY_EDIT = "groupEntryEdit";
-    public static final String ACTION_GROUP_ENTRY_EDIT_CONFIRM = "groupEntryConfirm";
-    public static final String ACTION_GROUP_ENTRY_EDIT_CANCEL = "groupEntryCancel";
-    public static final String ACTION_GROUP_ENTRY_ADD = "groupEntryAdd";
-    public static final String ACTION_GROUP_ENTRY_ADD_CONFIRM = "groupEntryAddConfirm";
-    public static final String ACTION_GROUP_ENTRY_ADD_CANCEL = "groupEntryAddCancel";
-    public static final String ACTION_GROUP_ENTRY_REMOVE = "groupEntryRemove";
-    public static final String ACTION_GROUP_ENTRY_REMOVE_CONFIRM = "groupEntryRemoveConfirm";
-    public static final String ACTION_GROUP_ENTRY_REMOVE_CANCEL = "groupEntryRemoveCancel";
+    public static final String ACTION_GROUP_ENTRY_VIEW = "doViewGroupEntry";
+    public static final String ACTION_GROUP_ENTRY_EDIT = "doEditGroupEntry";
+    public static final String ACTION_GROUP_ENTRY_EDIT_CONFIRM = "doConfirmEditGroupEntry";
+    public static final String ACTION_GROUP_ENTRY_EDIT_CANCEL = "doCancelEditGroupEntry";
+    public static final String ACTION_GROUP_ENTRY_ADD = "doAddGroupEntry";
+    public static final String ACTION_GROUP_ENTRY_ADD_CONFIRM = "doConfirmAddGroupEntry";
+    public static final String ACTION_GROUP_ENTRY_ADD_CANCEL = "doCancelAddGroupEntry";
+    public static final String ACTION_GROUP_ENTRY_REMOVE = "doRemoveGroupEntry";
+    public static final String ACTION_GROUP_ENTRY_REMOVE_CONFIRM = "doConfirmRemoveGroupEntry";
+    public static final String ACTION_GROUP_ENTRY_REMOVE_CANCEL = "doCancelRemoveGroupEntry";
 
     // Portlet services
     private UserManagerService userManagerService = null;
@@ -105,46 +105,7 @@ public class AccessControllerBean extends PortletBean {
     }
 
     private void initView() {
-        setNextPage(PAGE_GROUP_LIST);
-        setNextTitle("Access Control Manager");
-    }
-
-    public void doAction(PortletAction action)
-            throws PortletException {
-        super.doAction(action);
-        // Get name of action performed
-        String actionName = getActionPerformedName();
-        // Perform appropriate action
-        if (actionName.equals(ACTION_GROUP_LIST)) {
-            doListGroup();
-        } else if (actionName.equals(ACTION_GROUP_VIEW)) {
-            doViewGroup();
-        } else if (actionName.equals(ACTION_GROUP_EDIT)) {
-            doEditGroup();
-        } else if (actionName.equals(ACTION_GROUP_EDIT_CONFIRM)) {
-            doConfirmEditGroup();
-        } else if (actionName.equals(ACTION_GROUP_DELETE)) {
-            doDeleteGroup();
-        } else if (actionName.equals(ACTION_GROUP_DELETE_CONFIRM)) {
-            doConfirmDeleteGroup();
-        } else if (actionName.equals(ACTION_GROUP_ENTRY_VIEW)) {
-            doViewGroupEntry();
-        } else if (actionName.equals(ACTION_GROUP_ENTRY_EDIT)) {
-            doEditGroupEntry();
-        } else if (actionName.equals(ACTION_GROUP_ENTRY_EDIT_CONFIRM)) {
-            doConfirmEditGroupEntry();
-        } else if (actionName.equals(ACTION_GROUP_ENTRY_ADD)) {
-            doAddGroupEntry();
-        } else if (actionName.equals(ACTION_GROUP_ENTRY_ADD_CONFIRM)) {
-            doConfirmAddGroupEntry();
-        } else if (actionName.equals(ACTION_GROUP_ENTRY_REMOVE)) {
-            doRemoveGroupEntry();
-        } else if (actionName.equals(ACTION_GROUP_ENTRY_REMOVE_CONFIRM)) {
-            doConfirmRemoveGroupEntry();
-        } else {
-            doListGroup();
-        }
-        this.log.debug("Exiting doAction");
+        setTitle("Access Control Manager");
     }
 
     public void doDefaultViewAction()
@@ -156,7 +117,7 @@ public class AccessControllerBean extends PortletBean {
             throws PortletException {
         this.log.debug("Entering doListGroups");
         loadGroupList();
-        setNextPage(PAGE_GROUP_LIST);
+        setPage(PAGE_GROUP_LIST);
         this.log.debug("Exiting doListGroups");
     }
 
@@ -164,7 +125,7 @@ public class AccessControllerBean extends PortletBean {
             throws PortletException {
         this.log.debug("Entering doViewGroup");
         loadGroup();
-        setNextPage(PAGE_GROUP_VIEW);
+        setPage(PAGE_GROUP_VIEW);
         this.log.debug("Exiting doViewGroup");
     }
 
@@ -172,7 +133,7 @@ public class AccessControllerBean extends PortletBean {
             throws PortletException {
         this.log.debug("Entering doEditGroup");
         loadGroup();
-        setNextPage(PAGE_GROUP_EDIT);
+        setPage(PAGE_GROUP_EDIT);
         this.log.debug("Exiting doEditGroup");
     }
 
@@ -183,20 +144,28 @@ public class AccessControllerBean extends PortletBean {
             loadGroup();
             editGroup();
             saveGroup();
-            setNextPage(PAGE_GROUP_VIEW);
+            setPage(PAGE_GROUP_VIEW);
         } catch (PortletException e) {
             setIsFormInvalid(true);
             setFormInvalidMessage(e.getMessage());
-            setNextPage(PAGE_GROUP_EDIT);
+            setPage(PAGE_GROUP_EDIT);
         }
         this.log.debug("Exiting doConfirmEditGroup");
     }
+
+    public void doCancelEditGroup()
+            throws PortletException {
+        this.log.debug("Entering doCancelEditGroup");
+        doListGroup();
+        this.log.debug("Exiting doCancelEditGroup");
+    }
+
 
     public void doDeleteGroup()
             throws PortletException {
         this.log.debug("Entering doDeleteGroup");
         loadGroup();
-        setNextPage(PAGE_GROUP_DELETE);
+        setPage(PAGE_GROUP_DELETE);
         this.log.debug("Exiting doDeleteGroup");
     }
 
@@ -205,8 +174,15 @@ public class AccessControllerBean extends PortletBean {
         this.log.debug("Entering doConfirmDeleteGroup");
         loadGroup();
         deleteGroup();
-        setNextPage(PAGE_GROUP_DELETE_CONFIRM);
+        setPage(PAGE_GROUP_DELETE_CONFIRM);
         this.log.debug("Exiting doConfirmDeleteGroup");
+    }
+
+    public void doCancelDeleteGroup()
+            throws PortletException {
+        this.log.debug("Entering doCancelDeleteGroup");
+        doListGroup();
+        this.log.debug("Exiting doCancelDeleteGroup");
     }
 
     public void doViewGroupEntry()
@@ -214,7 +190,7 @@ public class AccessControllerBean extends PortletBean {
         this.log.debug("Entering doViewGroupEntry");
         loadGroup();
         loadGroupEntry();
-        setNextPage(PAGE_GROUP_ENTRY_VIEW);
+        setPage(PAGE_GROUP_ENTRY_VIEW);
         this.log.debug("Exiting doViewGroupEntry");
     }
 
@@ -223,7 +199,7 @@ public class AccessControllerBean extends PortletBean {
         this.log.debug("Entering doEditGroupEntry");
         loadGroup();
         loadGroupEntry();
-        setNextPage(PAGE_GROUP_ENTRY_EDIT);
+        setPage(PAGE_GROUP_ENTRY_EDIT);
         this.log.debug("Exiting doEditGroupEntry");
     }
 
@@ -235,13 +211,20 @@ public class AccessControllerBean extends PortletBean {
         try {
             editGroupEntry();
             saveGroupEntry();
-            setNextPage(PAGE_GROUP_ENTRY_VIEW);
+            setPage(PAGE_GROUP_ENTRY_VIEW);
         } catch (PortletException e) {
             setIsFormInvalid(true);
             setFormInvalidMessage(e.getMessage());
-            setNextPage(PAGE_GROUP_ENTRY_EDIT);
+            setPage(PAGE_GROUP_ENTRY_EDIT);
         }
         this.log.debug("Exiting doConfirmEditGroupEntry");
+    }
+
+    public void doCancelEditGroupEntry()
+            throws PortletException {
+        this.log.debug("Entering doCancelEditGroupEntry");
+        doViewGroup();
+        this.log.debug("Exiting doCancelEditGroupEntry");
     }
 
     public void doAddGroupEntry()
@@ -249,7 +232,7 @@ public class AccessControllerBean extends PortletBean {
         this.log.debug("Entering doAddGroupEntry");
         loadGroup();
         loadUserNotGroupList();
-        setNextPage(PAGE_GROUP_ENTRY_ADD);
+        setPage(PAGE_GROUP_ENTRY_ADD);
         this.log.debug("Exiting doAddGroupEntry");
     }
 
@@ -258,8 +241,15 @@ public class AccessControllerBean extends PortletBean {
         this.log.debug("Entering doConfirmAddGroupEntry");
         loadGroup();
         addGroupEntries();
-        setNextPage(PAGE_GROUP_ENTRY_ADD_CONFIRM);
+        setPage(PAGE_GROUP_ENTRY_ADD_CONFIRM);
         this.log.debug("Exiting doConfirmAddGroupEntry");
+    }
+
+    public void doCancelAddGroupEntry()
+            throws PortletException {
+        this.log.debug("Entering doCancelAddGroupEntry");
+        doViewGroup();
+        this.log.debug("Exiting doCancelAddGroupEntry");
     }
 
     public void doRemoveGroupEntry()
@@ -267,7 +257,7 @@ public class AccessControllerBean extends PortletBean {
         this.log.debug("Entering doRemoveGroupEntry");
         loadGroup();
         readGroupEntryList();
-        setNextPage(PAGE_GROUP_ENTRY_REMOVE);
+        setPage(PAGE_GROUP_ENTRY_REMOVE);
         this.log.debug("Exiting doRemoveGroupEntry");
     }
 
@@ -276,8 +266,15 @@ public class AccessControllerBean extends PortletBean {
         this.log.debug("Entering doConfirmRemoveGroupEntry");
         loadGroup();
         removeGroupEntries();
-        setNextPage(PAGE_GROUP_ENTRY_REMOVE_CONFIRM);
+        setPage(PAGE_GROUP_ENTRY_REMOVE_CONFIRM);
         this.log.debug("Exiting doConfirmRemoveGroupEntry");
+    }
+
+    public void doCancelRemoveGroupEntry()
+            throws PortletException {
+        this.log.debug("Entering doCancelRemoveGroupEntry");
+        doViewGroup();
+        this.log.debug("Exiting doCancelRemoveGroupEntry");
     }
 
     public List getAllRolesInBaseGroup() {

@@ -61,11 +61,11 @@
             <input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_LIST%>"
                    value="List Groups"
-                   onClick="javascript:AccessControlManagerPortlet_listGroup_onClick()"/>
+                   onClick="javascript:AccessControllerPortlet_listGroup_onClick()"/>
             &nbsp;&nbsp;<input type="button"
                    name="<%=AccessControllerBean.ACTION_GROUP_EDIT%>"
                    value="New Group"
-                   onClick="javascript:AccessControlManagerPortlet_newGroup_onClick()"/>
+                   onClick="javascript:AccessControllerPortlet_newGroup_onClick()"/>
           </td>
         </tr>
       </table>

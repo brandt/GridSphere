@@ -39,14 +39,14 @@ public class UserManagerBean extends PortletBean {
     public static final String PAGE_USER_DELETE = "/jsp/usermanager/userDelete.jsp";
     public static final String PAGE_USER_DELETE_CONFIRM = "/jsp/usermanager/userDeleteConfirm.jsp";
     // Portlet actions available within this portlet
-    public static final String ACTION_USER_LIST = "userList";
-    public static final String ACTION_USER_VIEW = "userView";
-    public static final String ACTION_USER_EDIT = "userEdit";
-    public static final String ACTION_USER_EDIT_CONFIRM = "userEditConfirm";
-    public static final String ACTION_USER_EDIT_CANCEL = "userEditCancel";
-    public static final String ACTION_USER_DELETE = "userDelete";
-    public static final String ACTION_USER_DELETE_CONFIRM = "userDeleteConfirm";
-    public static final String ACTION_USER_DELETE_CANCEL = "userDeleteCancel";
+    public static final String ACTION_USER_LIST = "doListUser";
+    public static final String ACTION_USER_VIEW = "doViewUser";
+    public static final String ACTION_USER_EDIT = "doEditUser";
+    public static final String ACTION_USER_EDIT_CONFIRM = "doConfirmEditUser";
+    public static final String ACTION_USER_EDIT_CANCEL = "doCancelEditUser";
+    public static final String ACTION_USER_DELETE = "doDeleteUser";
+    public static final String ACTION_USER_DELETE_CONFIRM = "doConfirmDeleteUser";
+    public static final String ACTION_USER_DELETE_CANCEL = "doCancelDeleteUser";
     // Portlet services
     private UserManagerService userManagerService = null;
     private PasswordManagerService passwordManagerService = null;
@@ -93,49 +93,30 @@ public class UserManagerBean extends PortletBean {
     }
 
     private void initView() {
-        setNextPage(PAGE_USER_LIST);
-        setNextTitle("User Account Manager");
+        setTitle("User Account Manager");
     }
 
-    public void doAction(PortletAction action)
+    public void doDefaultViewAction()
             throws PortletException {
-        super.doAction(action);
-        // Get name of action performed
-        String actionName = getActionPerformedName();
-        // Perform appropriate action
-        if (actionName.equals(ACTION_USER_LIST)) {
-            doListUser();
-        } else if (actionName.equals(ACTION_USER_VIEW)) {
-            doViewUser();
-        } else if (actionName.equals(ACTION_USER_EDIT)) {
-            doEditUser();
-        } else if (actionName.equals(ACTION_USER_EDIT_CONFIRM)) {
-            doConfirmEditUser();
-        } else if (actionName.equals(ACTION_USER_DELETE)) {
-            doDeleteUser();
-        } else if (actionName.equals(ACTION_USER_DELETE_CONFIRM)) {
-            doConfirmDeleteUser();
-        } else {
-            doListUser();
-        }
+        doListUser();
     }
 
     public void doListUser()
             throws PortletException {
         loadUserList();
-        setNextPage(PAGE_USER_LIST);
+        setPage(PAGE_USER_LIST);
     }
 
     public void doViewUser()
             throws PortletException {
         loadUser();
-        setNextPage(PAGE_USER_VIEW);
+        setPage(PAGE_USER_VIEW);
     }
 
     public void doEditUser()
             throws PortletException {
         loadUser();
-        setNextPage(PAGE_USER_EDIT);
+        setPage(PAGE_USER_EDIT);
     }
 
     public void doConfirmEditUser()
@@ -144,28 +125,33 @@ public class UserManagerBean extends PortletBean {
         try {
             editUser();
             saveUser();
-            setNextPage(PAGE_USER_VIEW);
+            setPage(PAGE_USER_VIEW);
         } catch (PortletException e) {
             setIsFormInvalid(true);
             setFormInvalidMessage(e.getMessage());
-            setNextPage(PAGE_USER_EDIT);
+            setPage(PAGE_USER_EDIT);
         }
+    }
+
+    public void doCancelEditUser()
+            throws PortletException {
+        doListUser();
     }
 
     public void doDeleteUser()
             throws PortletException {
         loadUser();
-        setNextPage(PAGE_USER_DELETE);
+        setPage(PAGE_USER_DELETE);
     }
 
     public void doConfirmDeleteUser()
             throws PortletException {
         loadUser();
         deleteUser();
-        setNextPage(PAGE_USER_DELETE_CONFIRM);
+        setPage(PAGE_USER_DELETE_CONFIRM);
     }
 
-    public void doDefaultViewAction()
+    public void doCancelDeleteUser()
             throws PortletException {
         doListUser();
     }

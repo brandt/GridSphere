@@ -1,31 +1,31 @@
 <%@ page import="org.gridlab.gridsphere.services.security.credential.Credential,
-                 org.gridlab.gridsphere.portlets.core.beans.CredentialManagerBean,
+                 org.gridlab.gridsphere.portlets.core.beans.ActiveCredentialBean,
                  java.util.List" %>
 <%@ taglib uri="/portletWidgets" prefix="gs" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
-<jsp:useBean id="credentialManagerBean"
-             class="org.gridlab.gridsphere.portlets.core.beans.CredentialManagerBean"
+<jsp:useBean id="activeCredentialBean"
+             class="org.gridlab.gridsphere.portlets.core.beans.ActiveCredentialBean"
              scope="request"/>
 <form name="ActiveCredentialPortlet" method="POST"
-      action="<%=credentialManagerBean.getPortletActionURI(CredentialManagerBean.ACTION_ACTIVE_CREDENTIAL_LIST)%>">
+      action="<%=activeCredentialBean.getPortletActionURI(ActiveCredentialBean.ACTION_ACTIVE_CREDENTIAL_LIST)%>">
   <input type="hidden" name="credentialID" value=""/>
   <script type="text/javascript">
     function ActiveCredentialPortlet_listCredential_onClick() {
-      document.ActiveCredentialPortlet.action="<%=credentialManagerBean.getPortletActionURI(CredentialManagerBean.ACTION_ACTIVE_CREDENTIAL_LIST)%>";
+      document.ActiveCredentialPortlet.action="<%=activeCredentialBean.getPortletActionURI(ActiveCredentialBean.ACTION_ACTIVE_CREDENTIAL_LIST)%>";
       document.ActiveCredentialPortlet.submit();
     }
 
     function ActiveCredentialPortlet_viewCredential_onClick(credentialID) {
       document.ActiveCredentialPortlet.credentialID.value=credentialID;
-      document.ActiveCredentialPortlet.action="<%=credentialManagerBean.getPortletActionURI(CredentialManagerBean.ACTION_ACTIVE_CREDENTIAL_VIEW)%>";
+      document.ActiveCredentialPortlet.action="<%=activeCredentialBean.getPortletActionURI(ActiveCredentialBean.ACTION_ACTIVE_CREDENTIAL_VIEW)%>";
       document.ActiveCredentialPortlet.submit();
     }
   </script>
 <table class="portlet-pane" cellspacing="1">
   <tr>
     <td>
-      <table class="portlet-frame" cellspacing="1" width="100%">
+      <table class="portlet-frame" cellspacing="1" width="500">
         <tr>
           <td class="portlet-frame-title">
               List Active Credentials
@@ -34,7 +34,7 @@
         <tr>
           <td class="portlet-frame-actions">
             <input type="button"
-                   name="<%=CredentialManagerBean.ACTION_ACTIVE_CREDENTIAL_LIST%>"
+                   name="<%=ActiveCredentialBean.ACTION_ACTIVE_CREDENTIAL_LIST%>"
                    value="List Credentials"
                    onClick="javascript:ActiveCredentialPortlet_listCredential_onClick()"/>
           </td>
@@ -45,7 +45,7 @@
   <tr>
     <td>
       <table class="portlet-frame" cellspacing="1" width="100%">
-<% List activeCredentialList = credentialManagerBean.getActiveCredentialList();
+<% List activeCredentialList = activeCredentialBean.getActiveCredentialList();
    int numCredentials = activeCredentialList.size();
    if (numCredentials == 0) { %>
         <tr>
