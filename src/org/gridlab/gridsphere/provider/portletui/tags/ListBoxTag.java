@@ -95,7 +95,7 @@ public class ListBoxTag extends ContainerTag {
         if (!beanId.equals("")) {
             listbox = (ListBoxBean) pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
             if (listbox == null) {
-                listbox = new ListBoxBean();
+                listbox = new ListBoxBean((HttpServletRequest)pageContext.getRequest(), beanId);
                 listbox.setSize(size);
                 listbox.setOnChange(onChange);
                 this.setBaseComponentBean(listbox);
