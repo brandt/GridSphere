@@ -85,7 +85,7 @@ public class FormEventImpl implements FormEvent {
         return false;
     }
 
-    private Object getBean(String name, PortletRequest request) {
+    private Object getBean(String name) {
         HttpSession session = request.getSession();
         NameBean bean = (NameBean) session.getAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name);
         return bean;
@@ -94,12 +94,11 @@ public class FormEventImpl implements FormEvent {
     /**
      * Gets back the prev. saved bean with the modifications from the userinterface.
      * @param name name of the bean
-     * @param request requestobject where the bean was stored (in the session of the request)
      * @return updated elementbean
      */
-    public Object getTagBean(String name, PortletRequest request) {
+    public Object getTagBean(String name) {
         HttpSession session = request.getSession();
-        NameBean bean = (NameBean) getBean(name, request);
+        NameBean bean = (NameBean) getBean(name);
         //System.out.println("Getting Bean " + name + " from Session");
         //if (checkParameterName("gstag:"+bean.getName())) {
         String beanKey = GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name;
@@ -142,23 +141,13 @@ public class FormEventImpl implements FormEvent {
     }
 
     public CheckBoxBean getCheckBox(String name) {
-        CheckBoxBean checkbox = (CheckBoxBean) getBean(name, request);
+        CheckBoxBean checkbox = (CheckBoxBean) getBean(name);
         if (checkParameterName("gstag:" + name)) {
             checkbox.setSelected(true);
         } else {
             checkbox.setSelected(false);
         }
         return checkbox;
-    }
-
-    /**
-     * Gets back the prev. saved bean with the modifications from the userinterface.
-     * @param name name of the bean
-     * @return updated elementbean
-     */
-    public Object getTagBean(String name) {
-        PortletRequest request = event.getPortletRequest();
-        return getTagBean(name, request);
     }
 
     /**
