@@ -102,7 +102,8 @@ public class FormEventImpl implements FormEvent {
         NameBean bean = (NameBean) getBean(name, request);
         //System.out.println("Getting Bean " + name + " from Session");
         //if (checkParameterName("gstag:"+bean.getName())) {
-        log.debug("Getting Bean '" + GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name + "' from Session");
+        String beanKey = GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name;
+        log.debug("Getting Bean '" + beanKey + "' from Session");
 
         if (bean instanceof TableBean) {
             // has to be that hack since the individal components of a table
@@ -129,13 +130,13 @@ public class FormEventImpl implements FormEvent {
                     }
                 }
             }
-            session.setAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name, tbean);
+            session.setAttribute(beanKey, tbean);
             return tbean;
         } else {
             String[] values = request.getParameterValues("gstag:" + bean.getName());
             log.debug("Updating bean: " + bean.getName());
             bean.update(values);
-            session.setAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+name, bean);
+            session.setAttribute(beanKey, bean);
             return bean;
         }
     }
@@ -194,8 +195,9 @@ public class FormEventImpl implements FormEvent {
      * @return bean
      */
     public Object getStoredTagBean(String beanname) {
-        log.debug("GET FROM SESSION FOR STORED TAG : "+GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+beanname);
-        Object ob = request.getSession().getAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+beanname);
+        String beanKey = GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+":"+beanname;
+        log.debug("GET FROM SESSION FOR STORED TAG : "+ beanKey);
+        Object ob = request.getSession().getAttribute(beanKey);
         return ob;
     }
 
