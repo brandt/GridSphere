@@ -1,5 +1,3 @@
-<%@ page import="java.util.Iterator,
-                 org.gridlab.gridsphere.services.core.security.auth.modules.LoginAuthModule"%>
 
 <%@ taglib uri="/portletUI" prefix="ui" %>
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
@@ -30,7 +28,3 @@
 </ui:panel>
 
 </ui:form>
-
-
-<%@ include file="/jsp/login/configure.jsp" %>
-
