@@ -65,14 +65,14 @@ public class PortletDeploymentDescriptor {
         try {
              pd = (PortletDefinition)pmx.restoreObject();
         } catch (RestoreException e) {
-            log.error("RestoreError "+e.getMessage());
+            log.error("RestoreError ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") "+e.getMessage());
             throw new PortletDeploymentDescriptorException("Unable to restore: "+e.getMessage());
         } catch (ConfigurationException e) {
-            log.error("ConfigurationError "+e);
+            log.error("ConfigurationError ("+pmx.getMappingFile()+", "+pmx.getConnectionURL()+") "+e);
             throw new PortletDeploymentDescriptorException("Configuration error: "+e.getMessage());
         }
 
-        this.PortletApp = (Vector)pd.getPortletAppList());
+        this.PortletApp = (Vector)pd.getPortletAppList();
     }
 
     /**
