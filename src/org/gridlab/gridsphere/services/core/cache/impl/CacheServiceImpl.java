@@ -27,6 +27,8 @@ import org.gridlab.gridsphere.services.core.timer.TimerService;
  */
 public class CacheServiceImpl implements PortletServiceProvider, CacheService {
 
+    private boolean isCachingOn = true;
+
     /**
      * Erases the timed out objects from the cache.
      */
@@ -73,6 +75,13 @@ public class CacheServiceImpl implements PortletServiceProvider, CacheService {
 
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         PortletServiceFactory factory = SportletServiceFactory.getInstance();
+        String isCachingOnStr = config.getInitParameter("isCachingOn");
+        if (!isCachingOnStr.equals("true") ||
+                !isCachingOnStr.equals("t") ||
+                !isCachingOnStr.equals("yes") ||
+                !isCachingOnStr.equals("y")) {
+            isCachingOn = false;
+        }
         try {
             timerService = (TimerService) factory.createPortletService(TimerService.class, config.getServletContext(), true);
             timerService.schedule("org.gridlab.gridslide.service.CacheService", new CacheServiceCleaner(this),1000,60000);
@@ -90,18 +99,22 @@ public class CacheServiceImpl implements PortletServiceProvider, CacheService {
     }
 
     public synchronized void cache(String key, Object object, long timeout, boolean rolling) {
-        key2object.put(key.intern(), new CacheObject(key.intern(), object, timeout, rolling));
+        if (isCachingOn)
+            key2object.put(key.intern(), new CacheObject(key.intern(), object, timeout, rolling));
     }
 
     public synchronized void cache(String key, Object object, Date timeout) {
-        key2object.put(key.intern(), new CacheObject(key.intern(), object, timeout.getTime(), false));
+        if (isCachingOn)
+            key2object.put(key.intern(), new CacheObject(key.intern(), object, timeout.getTime(), false));
     }
 
     public synchronized Object getCached(String key) {
-        CacheObject cobj = (CacheObject) key2object.get(key.intern());
-        if (cobj != null) {
-            cobj.rollExpiration();
-            return cobj.cached;
+        if (isCachingOn) {
+            CacheObject cobj = (CacheObject) key2object.get(key.intern());
+            if (cobj != null) {
+                cobj.rollExpiration();
+                return cobj.cached;
+            }
         }
         return null;
     }
@@ -123,7 +136,8 @@ public class CacheServiceImpl implements PortletServiceProvider, CacheService {
     }
 
     public synchronized void removeCached(String key) {
-        key2object.remove(key.intern());
+        if (isCachingOn)
+            key2object.remove(key.intern());
     }
 
 }

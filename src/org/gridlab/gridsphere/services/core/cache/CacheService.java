@@ -12,6 +12,7 @@ import java.util.Date;
  */
 public interface CacheService {
 
+    public static final String NO_CACHE =  "org.gridlab.gridsphere.services.core.cache.CacheService.NO_CACHE";
     void cache(String key, Object object, long timeout, boolean rolling);
 
     void cache(String key, Object object, Date timeout);

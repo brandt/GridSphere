@@ -9,6 +9,7 @@ import org.gridlab.gridsphere.provider.portlet.ActionPortlet;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
+import org.gridlab.gridsphere.services.core.cache.CacheService;
 
 import javax.servlet.UnavailableException;
 import java.util.Locale;
@@ -64,7 +65,7 @@ public class LocalePortlet extends ActionPortlet {
                 ListBoxItemBean localeBean = makeLocaleBean(displayLocale.getDisplayLanguage(displayLocale), displayLocaleStr, locale);
                 localeSelector.addBean(localeBean);
         }
-
+        request.setAttribute(CacheService.NO_CACHE, CacheService.NO_CACHE);
         setNextState(request, "locale/viewlocale.jsp");
     }
 
