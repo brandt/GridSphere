@@ -46,8 +46,8 @@ public class PortletPage implements Serializable, Cloneable {
     protected String title = "";
     protected String theme = "xp";
 
-    private String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
-
+    //private String layoutMappingFile = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/layout-mapping.xml");
+    private String layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING);
     private String layoutDescriptor = null;
 
     /**
