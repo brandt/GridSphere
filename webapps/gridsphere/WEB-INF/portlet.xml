@@ -2,54 +2,6 @@
 <portlet-app-collection>
 
     <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.file.FileManagerPortlet">
-            <portlet-name>File Manager Portlet</portlet-name>
-            <servlet-name>FileManagerPortlet</servlet-name>
-            <supports>
-                <markup name="html">
-                    <view/>
-                    <help/>
-                </markup>
-            </supports>
-        </portlet-app>
-
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.file.FileManagerPortlet.1">
-            <concrete-portlet>
-                <portlet-name>File Manager Portlet</portlet-name>
-                <default-locale>en</default-locale>
-                <language locale="en">
-                    <title>File Manager</title>
-                    <description>Provides users with a virtual filesystem</description>
-                </language>
-                <language locale="de">
-                    <title>Datei Manager</title>
-                    <description>Bietet dem Benutzer ein virtuelles Dateisystem</description>
-                </language>
-                <language locale="fr">
-                    <title>Gestionnaire de Ficher</title>
-                    <description>Donne a l'usager un system de ficher virtuel</description>
-                </language>
-                <language locale="it">
-                    <title>Gestione File</title>
-                    <description>Fornisce agli utenti un filesystem virtuale</description>
-                </language>
-                <language locale="hu">
-                    <title>File kezelő</title>
-                    <description>Egy virtuális file rendszer elérését teszi lehetővé.</description>
-                </language>
-                <language locale="cs">
-                    <title>Správce souborů</title>
-                    <description>Poskytuje uživatelům virtuální systém souborů</description>
-                </language>
-                <language locale="pl">
-                    <title>Menadżer plików</title>
-                    <description>Udostępnia użytkownikowi wirtualny system plików</description>
-                </language>
-            </concrete-portlet>
-        </concrete-portlet-app>
-    </portlet-app-def>   
-
-    <portlet-app-def>
         <portlet-app id="org.gridlab.gridsphere.portlets.core.login.LoginPortlet">
             <portlet-name>Login</portlet-name>
             <servlet-name>LoginPortlet</servlet-name>
@@ -300,63 +252,6 @@
         </concrete-portlet-app>
     </portlet-app-def>
 
-    <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet">
-            <portlet-name>Layout Manager Portlet</portlet-name>
-            <servlet-name>LayoutManagerPortlet</servlet-name>
-            <allows>
-                <minimized/>
-                <maximized/>
-                <resizing/>
-            </allows>
-            <supports>
-                <markup name="html">
-                    <view/>
-                    <edit/>
-                    <help/>
-                </markup>
-            </supports>
-        </portlet-app>
-
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.admin.layout.LayoutManagerPortlet.1">
-            <concrete-portlet>
-                <portlet-name>Layout Manager Portlet</portlet-name>
-                <default-locale>en</default-locale>
-                <language locale="en">
-                    <title>Layout Manager</title>
-                    <description>Provides user layout customization</description>
-                </language>
-                <language locale="de">
-                    <title>Layout Managieren</title>
-                    <description>Ermöglicht die benutzerspezifische Anpassung der Darstellung</description>
-                </language>
-                <language locale="fr">
-                    <title>Gestionnaire de Layout</title>
-                    <description>Permet a l'usager de modifier le layout</description>
-                </language>
-                <language locale="it">
-                    <title>Gestione Layout</title>
-                    <description>Consente la personalizzazione del layout utente</description>
-                </language>
-                <language locale="cs">
-                    <title>Správa umístění portletů</title>
-                    <description>Poskytuje uživatelem nastavitelné umístění portletů</description>
-                </language>
-                <language locale="hu">
-                    <title>Felépítés szekesztő</title>
-                    <description>Lehetővé teszi a portletekből egyéni weblapok felépítését</description>
-                </language>
-                <language locale="pl">
-                    <title>Menadżer układów graficznych</title>
-                    <description>Udostępnia użytkownikowi dostosowywanie układów graficznych</description>
-                </language>
-                <config-param>
-                    <param-name>supported-themes</param-name>
-                    <param-value>default, swamp</param-value>
-                </config-param>
-            </concrete-portlet>
-        </concrete-portlet-app>
-    </portlet-app-def>
 
     <portlet-app-def>
         <portlet-app id="org.gridlab.gridsphere.portlets.core.admin.portlets.PortletApplicationManager">
@@ -465,7 +360,7 @@
                 </language>
                 <config-param>
                     <param-name>supported-themes</param-name>
-                    <param-value>default, swamp</param-value>
+                    <param-value>default, swamp, lsu</param-value>
                 </config-param>
             </concrete-portlet>
         </concrete-portlet-app>
