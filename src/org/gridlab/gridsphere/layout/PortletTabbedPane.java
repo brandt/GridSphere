@@ -244,6 +244,8 @@ public class PortletTabbedPane extends BasePortletComponent {
         // Render tabs titles
         out.println("<div class=\"tab-pane\">");
         out.println("<div class=\"tab-menu\">");
+        out.println("<span class=\"tab-empty\">&nbsp;</span>");
+
 
         PortletTab tab;
         for (i = 0; i < tabs.size(); i++) {
