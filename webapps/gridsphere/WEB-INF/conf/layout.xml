@@ -97,8 +97,6 @@
                     <grid-layout>
                         <columns>2</columns>
                         <portlet-frame>
-                            <name>HelloWorld</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.2</portlet-class>
                             <name>RSS</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.RSSPortlet.1</portlet-class>
                         </portlet-frame>
