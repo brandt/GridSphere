@@ -63,12 +63,13 @@ public interface User {
     /**
      * Returns the internal unique user id.
      *
-     * @return the internal unique id
+     * @return the internal unique user id
      */
     public String getID();
 
     /**
      * Returns the user id of the user, or null if the user id is not available.
+     * The userid is the user's login name
      *
      * @return the user id
      */
