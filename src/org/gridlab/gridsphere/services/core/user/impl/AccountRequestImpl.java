@@ -249,7 +249,15 @@ public class AccountRequestImpl implements AccountRequest {
      * @return an enumeration of attribute names
      */
     public Enumeration getAttributeNames() {
-        return new Hashtable(attributes).keys();
+        Hashtable h = new  Hashtable();
+        Set s = attributes.keySet();
+        Iterator it = s.iterator();
+        while (it.hasNext()) {
+            String k = (String)it.next();
+            String v = (String)attributes.get(k);
+            if (v != null) h.put(k, v);
+        }
+        return h.keys();
     }
 
     /**

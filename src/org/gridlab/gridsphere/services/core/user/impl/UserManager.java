@@ -10,12 +10,15 @@ import org.gridlab.gridsphere.core.persistence.PersistenceManagerRdbms;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManager;
+import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
+import org.gridlab.gridsphere.services.core.security.acl.InvalidGroupRequestException;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
@@ -24,10 +27,7 @@ import org.gridlab.gridsphere.services.core.user.AccountRequest;
 import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
-import java.util.Calendar;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 public class UserManager implements UserManagerService {
 
@@ -36,7 +36,6 @@ public class UserManager implements UserManagerService {
 
     private PersistenceManagerRdbms pm = PersistenceManagerFactory.createGridSphereRdbms();
     private PasswordManagerService passwordManagerService = DbmsPasswordManagerService.getInstance();
-
     private AccessControlManager aclManager = null;
 
     private static boolean isInitialized = false;
@@ -120,6 +119,29 @@ public class UserManager implements UserManagerService {
                 aclManager.grantSuperRole(rootUser);
             }
         }
+
+        // put root in all groups
+        List groups = aclManager.getGroups();
+        Iterator it = groups.iterator();
+        while (it.hasNext()) {
+            PortletGroup group = (PortletGroup)it.next();
+            if (!aclManager.isUserInGroup(rootUser, group)) {
+                GroupRequest groupRequest = this.aclManager.createGroupRequest();
+                groupRequest.setUser(rootUser);
+                groupRequest.setGroup(group);
+                groupRequest.setRole(PortletRole.USER);
+
+                // Create access right
+                try {
+                    this.aclManager.submitGroupRequest(groupRequest);
+                } catch (InvalidGroupRequestException e) {
+                    log.error("in ProfileManagerPortlet invalid group request", e);
+                }
+                this.aclManager.approveGroupRequest(groupRequest);
+                log.debug("adding root user to group: " + group.getName());
+            }
+        }
+
         log.info("Exiting initRootUser()");
     }
 
@@ -415,7 +437,7 @@ public class UserManager implements UserManagerService {
     private SportletUserImpl editSportletUserImpl(AccountRequest request) {
         /* TODO: Account request id should not be same as user id */
         String userID = request.getID();
-        System.err.println("in  editSportletUser userID: " + userID);
+        log.debug("in  editSportletUser userID: " + userID);
         String userName = request.getUserName();
         SportletUserImpl user = getSportletUserImplByLoginName(userName);
         if (user == null) {
@@ -433,7 +455,7 @@ public class UserManager implements UserManagerService {
         while (enum.hasMoreElements()) {
             String attrName = (String)enum.nextElement();
             String attrVal = (String)request.getAttribute(attrName);
-            user.setAttribute(attrName, attrVal);
+            if (attrVal != null) user.setAttribute(attrName, attrVal);
         }
         return user;
     }
