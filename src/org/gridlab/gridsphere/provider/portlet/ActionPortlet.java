@@ -112,13 +112,7 @@ public class ActionPortlet extends AbstractPortlet {
         log.debug("ActionPortlet in getNextTitle: setting title attribute " + id+".title");
         String title = (String)request.getSession().getAttribute(id+".title");
         if (title == null) {
-            String locStr = (String)request.getPortletSession(true).getAttribute(User.LOCALE);
-            Locale locale = null;
-            if (locStr != null) {
-                locale = new Locale(locStr, "", "");
-            } else {
-                locale = getPortletSettings().getDefaultLocale();
-            }
+            Locale locale = request.getLocale();
             title = getPortletSettings().getTitle(locale, null);
             log.debug("Printing default title: " + title);
         }
@@ -411,9 +405,7 @@ public class ActionPortlet extends AbstractPortlet {
     }
 
     protected String getLocalizedText(PortletRequest req, String key) {
-        PortletSession session = req.getPortletSession(true);
-        String localeStr = (String)session.getAttribute(User.LOCALE);
-        Locale locale = new Locale(localeStr, "", "");
+        Locale locale = req.getLocale();
         ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
         return bundle.getString(key);
     }

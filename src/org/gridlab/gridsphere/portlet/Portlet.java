@@ -6,11 +6,19 @@ package org.gridlab.gridsphere.portlet;
 
 import org.gridlab.gridsphere.portlet.impl.*;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
+import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
+import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSessionAttributeListener;
+import javax.servlet.http.HttpSessionListener;
+import javax.servlet.http.HttpSessionActivationListener;
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Comparator;
@@ -60,7 +68,10 @@ import java.util.ResourceBundle;
  * When the administration is done, the portlet will be newly initialized.
  */
 public abstract class Portlet extends HttpServlet
-        implements PortletSessionListener, Servlet, ServletConfig, Serializable {
+        implements PortletSessionListener, Servlet, ServletConfig, Serializable, ServletContextListener,
+        HttpSessionAttributeListener, HttpSessionListener, HttpSessionActivationListener {
+
+    private static PortletSessionManager sessionManager = PortletSessionManager.getInstance();
 
     protected PortletConfig portletConfig = null;
     protected PortletSettings portletSettings = null;
@@ -440,6 +451,131 @@ public abstract class Portlet extends HttpServlet
 
     public void destroy() {
         super.destroy();
+    }
+
+
+    /**
+     * Record the fact that a servlet context attribute was added.
+     *
+     * @param event The session attribute event
+     */
+    public void attributeAdded(HttpSessionBindingEvent event) {
+
+        log.debug("attributeAdded('" + event.getSession().getId() + "', '" +
+                event.getName() + "', '" + event.getValue() + "')");
+
+    }
+
+
+    /**
+     * Record the fact that a servlet context attribute was removed.
+     *
+     * @param event The session attribute event
+     */
+    public void attributeRemoved(HttpSessionBindingEvent event) {
+
+        log.debug("attributeRemoved('" + event.getSession().getId() + "', '" +
+                event.getName() + "', '" + event.getValue() + "')");
+
+    }
+
+
+    /**
+     * Record the fact that a servlet context attribute was replaced.
+     *
+     * @param event The session attribute event
+     */
+    public void attributeReplaced(HttpSessionBindingEvent event) {
+
+        log.debug("attributeReplaced('" + event.getSession().getId() + "', '" +
+                event.getName() + "', '" + event.getValue() + "')");
+
+    }
+
+
+    /**
+     * Record the fact that this ui application has been destroyed.
+     *
+     * @param event The servlet context event
+     */
+    public void contextDestroyed(ServletContextEvent event) {
+        ServletContext ctx = event.getServletContext();
+        log.debug("contextDestroyed()");
+        log.debug("contextName: " + ctx.getServletContextName());
+        log.debug("context path: " + ctx.getRealPath(""));
+
+    }
+
+
+    /**
+     * Record the fact that this ui application has been initialized.
+     *
+     * @param event The servlet context event
+     */
+    public void contextInitialized(ServletContextEvent event) {
+        log.debug("contextInitialized()");
+        ServletContext ctx = event.getServletContext();
+        log.debug("contextName: " + ctx.getServletContextName());
+        log.debug("context path: " + ctx.getRealPath(""));
+
+    }
+
+    /**
+     * Record the fact that a session has been created.
+     *
+     * @param event The session event
+     */
+    public void sessionCreated(HttpSessionEvent event) {
+        log.debug("in Portlet sessionCreated('" + event.getSession().getId() + "')");
+        sessionManager.sessionCreated(event);
+    }
+
+
+    /**
+     * Record the fact that a session has been destroyed.
+     *
+     * @param event The session event
+     */
+    public void sessionDestroyed(HttpSessionEvent event) {
+        sessionManager.sessionDestroyed(event);
+        //loginService.sessionDestroyed(event.getSession());
+        log.debug("in Portlet: sessionDestroyed('" + event.getSession().getId() + "')");
+        HttpSession s = event.getSession();
+
+        //HttpSession session = event.getSession();
+        //User user = (User) session.getAttribute(SportletProperties.PORTLET_USER);
+        //System.err.println("user : " + user.getUserID() + " expired!");
+        //PortletLayoutEngine engine = PortletLayoutEngine.getDefault();
+        //engine.removeUser(user);
+        //engine.logoutPortlets(event);
+    }
+
+    /**
+     * Record the fact that a session has been created.
+     *
+     * @param event The session event
+     */
+    public void sessionDidActivate(HttpSessionEvent event) {
+        log.debug("sessionDidActivate('" + event.getSession().getId() + "')");
+        sessionManager.sessionCreated(event);
+    }
+
+
+    /**
+     * Record the fact that a session has been destroyed.
+     *
+     * @param event The session event
+     */
+    public void sessionWillPassivate(HttpSessionEvent event) {
+        sessionManager.sessionDestroyed(event);
+        //loginService.sessionDestroyed(event.getSession());
+        log.debug("sessionWillPassivate('" + event.getSession().getId() + "')");
+        //HttpSession session = event.getSession();
+        //User user = (User) session.getAttribute(SportletProperties.USER);
+        //System.err.println("user : " + user.getUserID() + " expired!");
+        //PortletLayoutEngine engine = PortletLayoutEngine.getDefault();
+        //engine.removeUser(user);
+        //engine.logoutPortlets(event);
     }
 
 }

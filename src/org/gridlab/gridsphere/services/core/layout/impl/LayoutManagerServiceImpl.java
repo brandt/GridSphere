@@ -265,7 +265,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         int i;
         for (i = 0; i < tabs.size(); i++) {
             PortletTab tab = (PortletTab)tabs.get(i);
-            String lang = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
+            String lang = req.getLocale().getLanguage();
             tabnames[i] = tab.getTitle(lang);
 
         }
@@ -276,7 +276,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         PortletPage page = pageFactory.createPortletPage(req);
         PortletTabbedPane pane = page.getPortletTabbedPane();
         List tabs = pane.getPortletTabs();
-        String lang = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
+        String lang = req.getLocale().getLanguage();
         if (tabNames.length == tabs.size()) {
             for (int i = 0; i < tabs.size(); i++) {
                 PortletTab tab = (PortletTab)tabs.get(i);
@@ -308,7 +308,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
                 PortletTabbedPane np = (PortletTabbedPane)pc;
                 List subtabs = np.getPortletTabs();
                 String[] newtabs = new String[subtabs.size()];
-                String lang = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
+                String lang = req.getLocale().getLanguage();
                 for (int j = 0; j < subtabs.size(); j++) {
                     PortletTab t = (PortletTab)subtabs.get(j);
 
@@ -324,7 +324,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
     public void setSubTabNames(PortletRequest req, String tabName, String[] subTabNames) {
         PortletTab tab = findPortletTab(req, tabName);
         if (tab != null) {
-            String lang = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
+            String lang = req.getLocale().getLanguage();
             PortletComponent pc = tab.getPortletComponent();
             if (pc instanceof PortletTabbedPane) {
                 PortletTabbedPane np = (PortletTabbedPane)pc;
@@ -377,7 +377,7 @@ public class LayoutManagerServiceImpl implements PortletServiceProvider, LayoutM
         PortletPage page = pageFactory.createPortletPage(req);
         PortletTabbedPane pane = page.getPortletTabbedPane();
         List tabs = pane.getPortletTabs();
-        String lang = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
+        String lang = req.getLocale().getLanguage();
         for (int i = 0; i < tabs.size(); i++) {
             PortletTab tab = (PortletTab)tabs.get(i);
             if (tab.getTitle(lang).equals(tabName)) {

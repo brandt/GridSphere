@@ -12,6 +12,10 @@ import org.gridlab.gridsphere.provider.portletui.beans.FrameBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ListBoxItemBean;
 import org.gridlab.gridsphere.provider.portletui.beans.TextFieldBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TextBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TableRowBean;
+import org.gridlab.gridsphere.provider.portletui.beans.TableCellBean;
+import org.gridlab.gridsphere.provider.portletui.model.DefaultTableModel;
 import org.gridlab.gridsphere.services.core.file.FileManagerService;
 
 import javax.servlet.UnavailableException;
@@ -40,9 +44,8 @@ public class BannerPortlet extends ActionPortlet {
             log.error("Unable to initialize FileManagerService", e);
         }
         DEFAULT_VIEW_PAGE = "doViewFile";
-        DEFAULT_EDIT_PAGE = "doEditEditViewFile";
-        DEFAULT_CONFIGURE_PAGE = "doEditConfigureViewFile";
-
+        DEFAULT_EDIT_PAGE = "doEditViewFile";
+        DEFAULT_CONFIGURE_PAGE = "doConfigureViewFile";
 
         DEFAULT_HELP_PAGE = HELP_JSP;
     }
@@ -61,7 +64,7 @@ public class BannerPortlet extends ActionPortlet {
       * @param event
       * @throws PortletException
       */
-     public void doEditConfigureViewFile(FormEvent event) throws PortletException {
+     public void doConfigureViewFile(FormEvent event) throws PortletException {
          PortletRequest req = event.getPortletRequest();
 
          TextFieldBean displayTitle = event.getTextFieldBean("displayTitle");
@@ -97,9 +100,15 @@ public class BannerPortlet extends ActionPortlet {
 
     public void setEditDisplayFile(FormEvent event) throws PortletException {
         log.debug("in BannerPortlet: setEditDisplayFile");
+        FrameBean alert = event.getFrameBean("alert");
         PortletRequest req = event.getPortletRequest();
         ListBoxBean lb = event.getListBoxBean("filelist");
         String file = lb.getSelectedValue();
+        if (file == null) {
+            log.error("did not select a file");
+            alert.setValue(this.getLocalizedText(req, "BANNER_NOFILE_SELECTED"));
+            alert.setStyle("error");
+        }
         User user = event.getPortletRequest().getUser();
         String fileURL = userStorage.getLocationPath(user, file);
         int tmpLoc = fileURL.indexOf("/tempdir");
@@ -111,7 +120,7 @@ public class BannerPortlet extends ActionPortlet {
         String title = displayTitle.getValue();
 
         data.setAttribute(TITLE, title);
-        FrameBean alert = event.getFrameBean("alert");
+
         try {
             data.store();
             alert.setValue(this.getLocalizedText(req, "BANNER_CONFIGURE"));
@@ -130,7 +139,7 @@ public class BannerPortlet extends ActionPortlet {
       * @param event
       * @throws PortletException
       */
-    public void doEditEditViewFile(FormEvent event) throws PortletException {
+    public void doEditViewFile(FormEvent event) throws PortletException {
         ListBoxBean lb = event.getListBoxBean("filelist");
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
@@ -143,9 +152,16 @@ public class BannerPortlet extends ActionPortlet {
             alertMsg += " " + "<a href=\"" + mgrURI.toString() + "\"/>" + " " + this.getLocalizedText(req, "BANNER_NOFILES_END");
 
             FrameBean alert = event.getFrameBean("alert");
-            alert.setValue(alertMsg);
-            //alert.setStyle("");
-
+            DefaultTableModel tm = new DefaultTableModel();
+            TableRowBean tr = new TableRowBean();
+            TableCellBean tc = new TableCellBean();
+            TextBean tb = new TextBean();
+            tb.setValue(alertMsg);
+            tb.setStyle("alert");
+            tc.addBean(tb);
+            tr.addBean(tc);
+            tm.addTableRowBean(tr);
+            alert.setTableModel(tm);
         } else {
             lb.clear();
             lb.setSize(list.length + 3);

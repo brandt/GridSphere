@@ -346,7 +346,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
         PortletTabbedPane pane = page.getPortletTabbedPane();
         PortletTab toptab = new PortletTab();
         String tabName = event.getTextFieldBean("newTab").getValue();
-        String lang = (String)req.getSession(true).getAttribute(User.LOCALE);
+        String lang = req.getLocale().getLanguage();
         toptab.setTitle(lang, tabName);
 
         PortletTab tab = new PortletTab();
@@ -381,7 +381,7 @@ public class LayoutManagerPortlet extends ActionPortlet {
 
         PortletTab tab = new PortletTab();
         String subtabName = event.getTextFieldBean("newSubTab").getValue();
-        String lang = (String)req.getSession(true).getAttribute(User.LOCALE);
+        String lang = req.getLocale().getLanguage();
         tab.setTitle(lang, subtabName);
 
         PortletTableLayout table = new PortletTableLayout();
@@ -416,18 +416,10 @@ public class LayoutManagerPortlet extends ActionPortlet {
     }
 
     public void selectSubTab(FormEvent event) {
-        PortletRequest req = event.getPortletRequest();
         ListBoxBean tabsLB = event.getListBoxBean("selsubtabsLB");
         HiddenFieldBean subtabHF = event.getHiddenFieldBean("subtabHF");
-
-        //event.getHiddenFieldBean("subtabHF").setValue("howdy ho");
-
         String selTab = tabsLB.getSelectedValue();
-
-        System.err.println("selected tab!!" + selTab);
-
         subtabHF.setValue(selTab);
-
     }
 
 

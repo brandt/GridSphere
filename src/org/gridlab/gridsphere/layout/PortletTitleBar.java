@@ -438,8 +438,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         // Localize the window state names
         PortletRequest req = event.getPortletRequest();
-        String locStr = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
-        Locale locale = new Locale(locStr, "", "");
+
+        Locale locale = req.getLocale();
 
         // create a URI for each of the window states
         PortletStateLink stateLink;
@@ -499,8 +499,7 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
         }
 
          // Localize the portlet mode names
-        String locStr = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
-        Locale locale = new Locale(locStr, "", "");
+        Locale locale = req.getLocale();
 
         List portletLinks = new ArrayList();
         for (i = 0; i < smodes.size(); i++) {
@@ -621,11 +620,8 @@ public class PortletTitleBar extends BasePortletComponent implements Serializabl
 
         // get the appropriate title for this client
         Client client = req.getClient();
-        Locale locale = null;
-        String locStr = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
-        if (locStr != null) {
-            locale = new Locale(locStr, "", "");
-        }
+        Locale locale = req.getLocale();
+
         if (settings != null) {
             title = settings.getTitle(locale, client);
         }

@@ -129,6 +129,7 @@ public class FrameTag extends TableTag {
             }
         }
 
+
         try {
             JspWriter out = pageContext.getOut();
             out.print(tableBean.toStartString());

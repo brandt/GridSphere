@@ -256,7 +256,11 @@ public class SportletRequestImpl implements SportletRequest {
      * @return the locale of the preferred language
      */
     public Locale getLocale() {
-        return req.getLocale();
+        Locale locale = (Locale)this.getPortletSession(true).getAttribute(User.LOCALE);
+        if (locale != null) return locale;
+        locale = req.getLocale();
+        if (locale != null) return locale;
+        return Locale.ENGLISH;
     }
 
     /**

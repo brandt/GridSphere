@@ -347,7 +347,8 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
 
                 if (userRole.compare(userRole, tabRole) >= 0) {
 
-                    String lang = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
+                    String lang = req.getLocale().getLanguage();
+
                     String title = tab.getTitle(lang);
 
                     if (tab.isSelected()) {
@@ -403,7 +404,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
                 PortletRole requiredRole = tab.getRequiredRole();
                 if (userRole.compare(userRole, requiredRole) >= 0) {
 
-                    String lang = (String)req.getPortletSession(true).getAttribute(User.LOCALE);
+                    String lang = req.getLocale().getLanguage();
                     String title = tab.getTitle(lang);
 
                     if (tab.isSelected()) {

@@ -23,7 +23,7 @@ public class LocalePortlet extends ActionPortlet {
     }
 
 
-    private ListBoxItemBean makeLocaleBean(String language, String name, String def) {
+    private ListBoxItemBean makeLocaleBean(String language, String name, Locale locale) {
         ListBoxItemBean bean = new ListBoxItemBean();
         String display = language;
         display = language.substring(0, 1).toUpperCase() + language.substring(1);
@@ -31,7 +31,7 @@ public class LocalePortlet extends ActionPortlet {
         bean.setValue(display);
         bean.setName(name);
 
-        if (def.equals(name)) {
+        if (locale.getLanguage().equals(name)) {
             bean.setSelected(true);
         }
         return bean;
@@ -39,14 +39,16 @@ public class LocalePortlet extends ActionPortlet {
 
     public void showLocale(FormEvent event) throws PortletException {
         PortletRequest request = event.getPortletRequest();
+        Locale locale = request.getLocale();
+        /*
         String locale = (String)request.getPortletSession(true).getAttribute(User.LOCALE);
-
         if (locale == null) {
             locale = Locale.ENGLISH.getLanguage();
             request.getPortletSession(true).setAttribute(User.LOCALE, locale);
         }
         Locale loc = new Locale(locale, "", "");
-        request.setAttribute("locale", loc);
+        */
+        request.setAttribute("locale", locale);
 
         ListBoxBean localeSelector = event.getListBoxBean("localeLB");
         localeSelector.clear();
@@ -70,19 +72,17 @@ public class LocalePortlet extends ActionPortlet {
         localeSelector.addBean(bean_pl);
         localeSelector.addBean(bean_it);
 
-       // localeSelector.sortByValue();
-
         setNextState(request, "locale/viewlocale.jsp");
-
-
     }
 
     public void selectLang(FormEvent event) throws PortletException {
         ListBoxBean localeSelector = event.getListBoxBean("localeLB");
-
-
         PortletSession session = event.getPortletRequest().getPortletSession(true);
-        session.setAttribute(User.LOCALE, localeSelector.getSelectedValue());
+        String loc = localeSelector.getSelectedValue();
+        if (loc != null) {
+            Locale locale = new Locale(loc, "", "");
+            session.setAttribute(User.LOCALE, locale);
+        }
     }
 
 }
