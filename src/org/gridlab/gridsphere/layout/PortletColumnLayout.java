@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Collections;
 
@@ -17,7 +18,7 @@ import java.util.Collections;
  * The <code>PortletColumnLayout</code> is a concrete implementation of the <code>PortletFrameLayout</code>
  * that organizes portlets into a column.
  */
-public class PortletColumnLayout extends PortletFrameLayout implements Cloneable {
+public class PortletColumnLayout extends PortletFrameLayout implements Cloneable, Serializable {
 
     public PortletColumnLayout() {
     }

@@ -9,13 +9,14 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Collections;
 
 /**
  *
  */
-public class PortletRowLayout extends PortletFrameLayout implements Cloneable {
+public class PortletRowLayout extends PortletFrameLayout implements Cloneable, Serializable {
 
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         PortletResponse res = event.getPortletResponse();

@@ -11,6 +11,7 @@ import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -21,7 +22,7 @@ import java.util.Collections;
  * that organizes portlets into a grid with a provided number of columns.
  * Portlets are arranged in column-wise order starting from the left most column.
  */
-public class PortletGridLayout extends PortletFrameLayout implements Cloneable {
+public class PortletGridLayout extends PortletFrameLayout implements Cloneable, Serializable {
 
     protected int numColumns = 1;
     protected List colSizes = new ArrayList();
