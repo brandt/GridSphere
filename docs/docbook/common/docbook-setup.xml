@@ -96,7 +96,7 @@ http://jakarta.apache.org/proposals/tapestry
 
 <target name="setup">
  <mkdir dir="${html.output.dir}"/>
- <mkdir dir="${images.src.dir}"/>
+
  <mkdir dir="${common-images.dest.dir}"/>
 
  <echo message="FOP_HOME is set to = ${env.FOP_HOME}"/>
@@ -109,9 +109,6 @@ http://jakarta.apache.org/proposals/tapestry
 </target>
 
 <target name="copy-images" depends="setup">
-    <copy todir="${images.dest.dir}" >
-      <fileset dir="${images.src.dir}"/>
-    </copy>
     <copy todir="${html.output.dir}/standard-images">
       <fileset dir="${docbook.xsl.dir}/images">
         <include name="callouts/*.png"/>
