@@ -69,6 +69,10 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             return msg;
         }
 
+        public void clearMessage() {
+            this.msg = "";
+        }
+
         public void setMessage(String msg) {
             this.msg += msg;
         }
@@ -293,6 +297,10 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
             } catch (PortletException e) {
                 errorFrame.setMessage("Unable to perform action", e);
             }
+            String message = (String)req.getAttribute(GridSphereProperties.PORTLETERROR);
+            if (message != null) {
+                errorFrame.setMessage(message);
+            }
         }
         // in case portlet mode got reset
         if (titleBar != null) titleBar.setPortletMode(req.getMode().toString());
@@ -309,8 +317,15 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         super.doRender(event);
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
+        PrintWriter out = res.getWriter();
 
         req.setAttribute(GridSphereProperties.PORTLETID, portletClass);
+
+        if (errorFrame.hasMessage()) {
+            out.println(errorFrame.getMessage());
+            errorFrame.clearMessage();
+            return;
+        }
 
         // Set the portlet data
         User user = req.getUser();
@@ -325,7 +340,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
         }
 
         ///// begin portlet frame
-        PrintWriter out = res.getWriter();
+
 
         out.println("<!-- PORTLET STARTS HERE -->");
         //out.println("<div class=\"window-main\">");
@@ -367,6 +382,7 @@ public class PortletFrame extends BasePortletComponent implements PortletTitleBa
 
             if (errorFrame.hasMessage()) {
                 out.println(errorFrame.getMessage());
+                errorFrame.clearMessage();
             }
 
             out.println("</td></tr>");

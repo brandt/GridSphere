@@ -103,7 +103,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         }
 
         // Get an instance of the UserPortletManager
-        //userPortletManager = UserPortletManager.getInstance();
+        //userPortletManager = UserPortletManager.getDefault();
 
         // Get an instance of the PortletLayoutEngine
         layoutEngine = PortletLayoutEngine.getInstance();
@@ -159,8 +159,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         List groups = new ArrayList();
         if (user instanceof GuestUser) {
             groups.add(SportletGroup.BASE);
-            portletReq.setAttribute(GridSphereProperties.PORTLETROLES, role);
-            portletReq.setAttribute(GridSphereProperties.PORTLETGROUPS, groups);
         } else {
             groups = aclService.getGroups(user);
             Iterator git = groups.iterator();
@@ -169,8 +167,10 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                 group = (PortletGroup)git.next();
                 role = aclService.getRoleInGroup(portletReq.getUser(), group);
             }
-            //portletReq.setAttribute();
         }
+
+        portletReq.setAttribute(GridSphereProperties.PORTLETROLES, role);
+        portletReq.setAttribute(GridSphereProperties.PORTLETGROUPS, groups);
 
         // Render layout
 
@@ -360,7 +360,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         HttpSession session = event.getSession();
         //User user = (User) session.getAttribute(GridSphereProperties.USER);
         //System.err.println("user : " + user.getUserID() + " expired!");
-        //PortletLayoutEngine engine = PortletLayoutEngine.getInstance();
+        //PortletLayoutEngine engine = PortletLayoutEngine.getDefault();
         //engine.removeUser(user);
         //engine.logoutPortlets(event);
     }

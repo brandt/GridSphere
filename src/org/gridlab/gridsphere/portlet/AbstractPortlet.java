@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.event.*;
 import org.gridlab.gridsphere.event.impl.ActionEventImpl;
 import org.gridlab.gridsphere.event.impl.MessageEventImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletProperties;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -74,19 +75,20 @@ public class AbstractPortlet extends PortletAdapter implements ActionListener, M
                             log.error("Received invalid WindowEvent : " + winEvent.getEventId());
                     }
                 } else if (method.equals(SportletProperties.ACTION_PERFORMED)) {
-                    // Set the appropiate portlet action
+                    // Set the appropriate portlet action
                     DefaultPortletAction action = (DefaultPortletAction) request.getAttribute(SportletProperties.ACTION_EVENT);
                     ActionEvent evt = new ActionEventImpl(action, request, response);
                     actionPerformed(evt);
                 } else if (method.equals(SportletProperties.MESSAGE_RECEIVED)) {
-                    // Set the appropiate portlet action
+                    // Set the appropriate portlet message
                     DefaultPortletMessage msg = (DefaultPortletMessage) request.getAttribute(SportletProperties.MESSAGE_EVENT);
                     MessageEvent evt = new MessageEventImpl(request, msg);
                     messageReceived(evt);
                 }
             } catch (Exception e) {
                 log.error("in PortletAdapter: service()", e);
-                doError(request, response, e);
+                request.setAttribute(GridSphereProperties.PORTLETERROR, "Error performing method:" + method + "");
+                //doError(request, response, e);
             }
         }
         request.removeAttribute(SportletProperties.PORTLET_ACTION_METHOD);
