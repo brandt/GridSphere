@@ -251,7 +251,7 @@ public abstract class ActionTag extends BaseComponentTag {
         }
 
         if (!paramBeans.isEmpty()) {
-            //String id = createUniquePrefix(2);
+            String id = createUniquePrefix(2);
             Iterator it = paramBeans.iterator();
             if (paramPrefixing) {
                 actionURL.setParameter(SportletProperties.PREFIX, id);
