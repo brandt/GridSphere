@@ -33,11 +33,19 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
 
     protected transient static PortletLog log = SportletLog.getInstance(PersistenceManagerRdbms.class);
 
-
     String ConnectionURL = null;
     String DatabaseName = null;
     String Query = null;
 
+
+
+    public PersistenceManagerRdbms() {
+        super();
+        // @todo read the configfile here
+        DatabaseName = "portal";
+        ConnectionURL = "/home/wehrens/Projects/gridsphere/webapps/WEB-INF/conf/database.xml";
+
+    }
 
     /**
      * gets the query for the database
@@ -114,7 +122,6 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
     /**
      * checks if all variables have been set
      *
-     * @return true if everything is ok; else false
      */
     private void checkSettings() throws ConfigurationException {
 
@@ -166,7 +173,7 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
      *
      * @param object to be updated
      * @throws ConfigurationException if configurations are not set
-     * @throws UpdateExcpetion if updated failed
+     * @throws UpdateException if updated failed
      */
     public void update(Object object) throws ConfigurationException, UpdateException {
 
@@ -203,8 +210,8 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
      *
      * @param query String object containing OQL query
      * @throws ConfigurationException if configurations are not set
-     * @throws RestoreExcpetion if restore failes for some reason
-     * @returns list of objects from OQL query
+     * @throws RestoreException if restore failes for some reason
+     * @return list of objects from OQL query
      */
     public List restoreList() throws ConfigurationException, RestoreException {
 
@@ -247,7 +254,7 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
     /**
      * unmarshales the queried object
      *
-     * @throws ConfigurationExcpetion if configuration failes
+     * @throws ConfigurationException if configuration failes
      * @throws RestoreException if restore failed
      * @return requested object defined by setQuery()
      */
@@ -333,7 +340,7 @@ public class PersistenceManagerRdbms implements PersistenceManagerInterface  {
      *
      * @param cl class of the object
      * @param Oid object id of the object
-     * @returns requested object or null if not found
+     * @return requested object or null if not found
      */
     public Object getObjectByOid(Class cl, String Oid) {
 
