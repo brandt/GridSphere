@@ -11,10 +11,10 @@ import javax.servlet.jsp.JspException;
 
 public class RadioButtonTag extends InputTag {
 
-    private RadioButton radiobutton;
-
     public int doStartTag() throws JspException {
-        this.htmlelement = new RadioButton(name, value, isChecked, isDisabled);
+        if (element.equals("")) {
+            this.htmlelement = new RadioButton(name, value, isChecked, isDisabled);
+        }
         return super.doStartTag();
     }
 

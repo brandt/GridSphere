@@ -12,10 +12,8 @@ import javax.servlet.jsp.JspException;
 public class PasswordFieldTag extends InputTag {
 
     public int doStartTag() throws JspException {
-        if (element.equals(null)) {
+        if (element.equals("")) {
             this.htmlelement = new PasswordField(name, value, isDisabled,  isReadonly, size, maxLength);
-        } else {
-            this.htmlelement = (PasswordField)pageContext.getRequest().getAttribute(element);
         }
         return super.doStartTag();
     }

@@ -8,7 +8,9 @@ import javax.servlet.jsp.JspTagException;
 public class CheckboxTag extends InputTag {
 
     public int doStartTag() throws JspException {
-        this.htmlelement = new CheckBox(name, value, isChecked, isDisabled);
+        if (element.equals("")) {
+            this.htmlelement = new CheckBox(name, value, isChecked, isDisabled);
+        }
         return super.doStartTag();
     }
 
