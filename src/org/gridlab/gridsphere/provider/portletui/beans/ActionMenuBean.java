@@ -16,8 +16,6 @@ public class ActionMenuBean extends BeanContainer implements TagBean {
     // public final static String TYPE_LINKTREE = "linktree";
     // public final static String TYPE_DROPDOWN = "dropdown";
 
-
-
     protected String align = BaseComponentBean.MENU_HORIZONTAL;
     protected String title = null;
     private boolean hasParentMenu = false;

@@ -100,7 +100,6 @@ public class ActionMenuTag extends ContainerTag {
             actionMenuBean.setHasParentMenu(true);
         }
 
-
         // TODO not working so far
         actionMenuBean.setCollapsible(this.collapsible);
         actionMenuBean.setCollapsed(this.collapsed);
@@ -108,10 +107,10 @@ public class ActionMenuTag extends ContainerTag {
         PortletURI uri = res.createURI();
         actionMenuBean.setPortletURI(uri);
 
+        // locale stuff
         if (key != null) {
-            actionMenuBean.setValue(getLocalizedText(key));
+            actionMenuBean.setTitle(getLocalizedText(key, "ActionMenu"));
         }
-
 
         try {
             JspWriter out = pageContext.getOut();

@@ -98,7 +98,7 @@ public class DataGridTag extends ContainerTag {
         dataGridBean.setUri(uri);
 
         if (key != null) {
-            dataGridBean.setHeader(getLocalizedText(key));
+            dataGridBean.setHeader(getLocalizedText(key, "DataGrid"));
         }
 
 
