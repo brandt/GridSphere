@@ -28,9 +28,13 @@
 
         <copy file="config/build/build.project.xml" tofile="${project.dir}/build.xml"/>
 
-        <filter token="PROJECT_TITLE" value="${project.title}"/>
-        <filter token="PROJECT_NAME" value="${project.name}"/>
         <copy file="config/build/build.properties" tofile="${project.dir}/build.properties" filtering="true"/>
+        <replace file="${project.dir}/build.xml"
+                 token="@PROJECT_TITLE@"
+                 value="${project.title}"/>
+        <replace file="${project.dir}/build.xml"
+                 token="@PROJECT_NAME@"
+                 value="${project.name}"/>
 
 
         <mkdir dir="${project.dir}/src"/>
