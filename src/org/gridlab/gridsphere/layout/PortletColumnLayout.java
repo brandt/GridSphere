@@ -24,19 +24,6 @@ public class PortletColumnLayout extends PortletFrameLayout implements Cloneable
     }
 
     /**
-     * Initializes the portlet component. Since the components are isolated
-     * after Castor unmarshalls from XML, the ordering is determined by a
-     * passed in List containing the previous portlet components in the tree.
-     *
-     * @param list a list of component identifiers
-     * @return a list of updated component identifiers
-     * @see ComponentIdentifier
-     */
-    public List init(PortletRequest req, List list) {
-        return  super.init(req, list);
-    }
-
-    /**
      * Renders the component
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {

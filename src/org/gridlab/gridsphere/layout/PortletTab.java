@@ -202,6 +202,7 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         list = portletComponent.init(req, list);
         portletComponent.addComponentListener(this);
         portletComponent.setParentComponent(this);
+        portletComponent.setTheme(theme);
         return list;
     }
 

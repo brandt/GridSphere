@@ -191,6 +191,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
             titleBar.setTheme(theme);
             list = titleBar.init(req, list);
             titleBar.addComponentListener(this);
+            titleBar.setTheme(theme);
         }
         doConfig();
         return list;
