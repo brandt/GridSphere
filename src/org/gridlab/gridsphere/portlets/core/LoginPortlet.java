@@ -4,22 +4,10 @@
  */
 package org.gridlab.gridsphere.portlets.core;
 
-import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.GuestUser;
-import org.gridlab.gridsphere.portlet.impl.SportletUser;
-import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
-import org.gridlab.gridsphere.portlet.impl.SportletProperties;
-import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
-import org.gridlab.gridsphere.services.core.security.AuthenticationException;
 
-import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Iterator;
 
 public class LoginPortlet extends AbstractPortlet {
 

@@ -4,10 +4,11 @@
  */
 package org.gridlab.gridsphere.portlets.core;
 
-import org.gridlab.gridsphere.event.ActionEvent;
-import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.AbstractPortlet;
+import org.gridlab.gridsphere.portlet.PortletException;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletResponse;
 
-import javax.servlet.UnavailableException;
 import java.io.IOException;
 
 public class LogoutPortlet extends AbstractPortlet {

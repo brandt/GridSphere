@@ -62,29 +62,49 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
         }
     }
 
-    public int getRole() {
-        return role;
-    }
-
+    /**
+     * Returns a unique id for this role
+     * @return a unique id for this role
+     */
     public int getID() {
         return role;
     }
 
+    /**
+     * Returns <code>true</code> if this role is <code>GUEST</code>, <code>false otherwise</code>
+     *
+     * @return <code>true</code> if this role is <code>GUEST</code>, <code>false otherwise</code>
+     */
     public boolean isGuest() {
         if (role == GUEST_ROLE) return true;
         return false;
     }
 
+    /**
+     * Returns <code>true</code> if this role is <code>USER</code>, <code>false otherwise</code>
+     *
+     * @return <code>true</code> if this role is <code>USER</code>, <code>false otherwise</code>
+     */
     public boolean isUser() {
         if (role == USER_ROLE) return true;
         return false;
     }
 
+    /**
+     * Returns <code>true</code> if this role is <code>ADMIN</code>, <code>false otherwise</code>
+     *
+     * @return <code>true</code> if this role is <code>ADMIN</code>, <code>false otherwise</code>
+     */
     public boolean isAdmin() {
         if (role == ADMIN_ROLE) return true;
         return false;
     }
 
+    /**
+     * Returns <code>true</code> if this role is <code>SUPER</code>, <code>false otherwise</code>
+     *
+     * @return <code>true</code> if this role is <code>SUPER</code>, <code>false otherwise</code>
+     */
     public boolean isSuper() {
         if (role == SUPER_ROLE) return true;
         return false;
@@ -111,8 +131,8 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
     }
 
     public int compare(Object left, Object right) {
-        int leftID  =  ((PortletRole)left).getRole();
-        int rightID  = ((PortletRole)right).getRole();
+        int leftID  =  ((PortletRole)left).getID();
+        int rightID  = ((PortletRole)right).getID();
         int result;
         if ( leftID < rightID ) { result = -1; }
         else if ( leftID > rightID ) { result = 1; }
@@ -132,7 +152,7 @@ public class PortletRole implements Serializable, Comparator, Cloneable {
         return role;
     }
 
-    private Object readResolve () {
+    private Object readResolve() {
         PortletRole r = PortletRole.GUEST;
         switch (role) {
             case GUEST_ROLE:

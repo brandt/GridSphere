@@ -248,7 +248,6 @@ public class SportletRequestImpl implements SportletRequest {
     public PortletRole getRole() {
         PortletRole role = (PortletRole)req.getAttribute(GridSphereProperties.PORTLETROLE);
         if (role == null) {
-            System.err.println("FARGH!!!!");
             return PortletRole.GUEST;
         }
         return role;

@@ -29,6 +29,7 @@ public class GridSphereProperties {
     public static final String PREFIX = "up";
     public static final String USER = "User";
     public static final String PORTLETGROUP = "PortletGroup";
+    public static final String PORTLETGROUPS = "PortletGroups";
     public static final String PORTLETROLE = "PortletRole";
     public static final String GROUPROLES = "GroupRoles";
 }

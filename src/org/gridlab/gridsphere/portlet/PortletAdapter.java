@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.List;
 
 /**
  * The <code>PortletAdapter</code> provides a default implementation for the
@@ -152,27 +153,23 @@ public abstract class PortletAdapter extends Portlet {
         if (mode == null) mode = Portlet.Mode.VIEW;
         log.debug("Displaying mode: " + mode);
         try {
-            if (mode != null) {
-                switch (mode.getMode()) {
-                    case Portlet.Mode.VIEW_MODE:
-                        doView(request, response);
-                        break;
-                    case Portlet.Mode.EDIT_MODE:
-                        doEdit(request, response);
-                        break;
-                    case Portlet.Mode.CONFIGURE_MODE:
-                        doConfigure(request, response);
-                        break;
-                    case Portlet.Mode.HELP_MODE:
-                        doHelp(request, response);
-                        break;
-                    default:
-                        log.error("Received invalid PortletMode command : " + mode);
-                        throw new IllegalArgumentException("Received invalid PortletMode command: " + mode);
-                }
-            } else {
-                log.error("Received NULL PortletMode command");
-                throw new IllegalArgumentException("Received NULL PortletMode command");
+
+            switch (mode.getMode()) {
+                case Portlet.Mode.VIEW_MODE:
+                    doView(request, response);
+                    break;
+                case Portlet.Mode.EDIT_MODE:
+                    doEdit(request, response);
+                    break;
+                case Portlet.Mode.CONFIGURE_MODE:
+                    doConfigure(request, response);
+                    break;
+                case Portlet.Mode.HELP_MODE:
+                    doHelp(request, response);
+                    break;
+                default:
+                    log.error("Received invalid PortletMode command : " + mode);
+                    throw new IllegalArgumentException("Received invalid PortletMode command: " + mode);
             }
         } catch (Exception e) {
             log.error("in PortletAdapter: service()", e);
@@ -188,7 +185,6 @@ public abstract class PortletAdapter extends Portlet {
      * @param request the portlet request
      */
     public void login(PortletRequest request) {
-        // XXX: FILL ME IN
     }
 
 
@@ -201,8 +197,6 @@ public abstract class PortletAdapter extends Portlet {
      * @param session the portlet session
      */
     public void logout(PortletSession session) {
-        // XXX: FILL ME IN
-
     }
 
     /**

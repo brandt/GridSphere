@@ -8,12 +8,12 @@ import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 import org.gridlab.gridsphere.portlets.core.tomcat.TomcatManagerWrapper;
 import org.gridlab.gridsphere.portlets.core.tomcat.TomcatWebAppResult;
 import org.gridlab.gridsphere.provider.event.FileFormEvent;
 import org.gridlab.gridsphere.provider.event.FileFormException;
 import org.gridlab.gridsphere.provider.event.impl.FileFormEventImpl;
+import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
@@ -38,15 +38,15 @@ public class PortletApplicationManager extends AbstractPortlet {
         DefaultPortletAction action = event.getAction();
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
-        PortletContext ctx = getPortletConfig().getContext();
+
         User user = event.getPortletRequest().getUser();
 
         try {
             portletManager = (PortletManagerService)getConfig().getContext().getService(PortletManagerService.class, user);
         } catch (PortletServiceUnavailableException e) {
-            System.err.println("PortletRegistry service unavailable! ");
+            throw new PortletException("PortletRegistry service unavailable! ", e);
         } catch (PortletServiceNotFoundException e) {
-            System.err.println("PortletRegistryService not found! ");
+            throw new PortletException("PortletRegistryService not found! ", e);
         }
 
         Map params = action.getParameters();
@@ -57,7 +57,7 @@ public class PortletApplicationManager extends AbstractPortlet {
             if (action.getName().equals("list")) {
                 result = tomcat.getWebAppList();
             } else if (action.getName().equals("install")) {
-                System.err.println("In actionPerformed doing an install");
+                log.debug("In actionPerformed doing an install");
                 FileFormEvent fileformEvent = new FileFormEventImpl(event);
                 String portletWar = null;
 

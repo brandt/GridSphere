@@ -110,6 +110,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
             firstDoGet = Boolean.FALSE;
         }
 
+        List groups = aclService.getGroups(portletReq.getUser());
+        portletReq.setAttribute(GridSphereProperties.PORTLETGROUPS, groups);
+
         // Handle user login and logout
         if (event.hasAction()) {
             if (event.getAction().getName().equals(SportletProperties.LOGIN)) {
@@ -122,8 +125,6 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
         }
 
         // Render layout
-
-        // Get an instance of the PortletLayoutEngine
 
         layoutEngine.actionPerformed(event);
 
@@ -306,8 +307,9 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @param event The session event
      */
     public void sessionDestroyed(HttpSessionEvent event) {
+        //loginService.sessionDestroyed(event.getSession());
         log.debug("sessionDestroyed('" + event.getSession().getId() + "')");
-        HttpSession session = event.getSession();
+        //HttpSession session = event.getSession();
         //User user = (User) session.getAttribute(GridSphereProperties.USER);
         //System.err.println("user : " + user.getUserID() + " expired!");
         //PortletLayoutEngine engine = PortletLayoutEngine.getDefault();

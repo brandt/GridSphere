@@ -81,8 +81,6 @@ public class SportletData extends BaseObject implements PortletData {
      * @return the value of the attribute
      */
     public String getAttribute(String name) {
-        System.out.println("========================== TRY TO GET ATTR: " + name);
-        System.out.println("STORESIZE: " + store.size());
         return (String) store.get(name);
     }
 
@@ -111,7 +109,6 @@ public class SportletData extends BaseObject implements PortletData {
      * @param value the attribute value
      */
     public void setAttribute(String name, String value) {
-        System.out.println(" ========================== PUT ATTRR :" + name + " VALUE " + value);
         store.put(name, value);
     }
 

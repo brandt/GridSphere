@@ -4,33 +4,20 @@
  */
 package org.gridlab.gridsphere.portlets.core.user;
 
+import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletGroup;
+import org.gridlab.gridsphere.provider.ActionEventHandler;
+import org.gridlab.gridsphere.provider.ui.beans.*;
+import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
+import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
 import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
-import org.gridlab.gridsphere.services.core.security.password.Password;
-import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
-import org.gridlab.gridsphere.services.core.security.acl.*;
-import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.AccountRequest;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.SportletLog;
-import org.gridlab.gridsphere.portlet.impl.SportletGroup;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.provider.ActionEventHandler;
-import org.gridlab.gridsphere.provider.PortletBean;
-import org.gridlab.gridsphere.provider.ui.beans.*;
 
-import javax.servlet.UnavailableException;
-import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-import java.util.Iterator;
-import java.security.acl.Group;
-import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.ParseException;
 
 public class UserManagerBean extends ActionEventHandler {
 
@@ -49,7 +36,6 @@ public class UserManagerBean extends ActionEventHandler {
     // User variables
     private List userList = null;
     private User user = null;
-    private Password password = new PasswordEditor();
     private PortletRole userRole = PortletRole.USER;
     // User id always in page
     private HiddenFieldBean userIDBean = null;
@@ -237,7 +223,7 @@ public class UserManagerBean extends ActionEventHandler {
         String userID = getActionPerformedParameter("userID");
         this.user = this.userManagerService.getUser(userID);
         if (this.user != null) {
-            this.password = this.passwordManagerService.getPassword(this.user);
+            //this.password = this.passwordManagerService.getValue(this.user);
             this.userRole = this.aclManagerService.getRoleInGroup(this.user, SportletGroup.CORE);
         }
         return user;

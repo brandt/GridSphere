@@ -4,14 +4,15 @@
  */
 package org.gridlab.gridsphere.services.core.registry;
 
+import org.gridlab.gridsphere.portlet.PortletException;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.service.PortletService;
-import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.portletcontainer.GridSphereConfig;
+import org.gridlab.gridsphere.portletcontainer.GridSphereConfigProperties;
 
-import java.util.List;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * The <code>PortletManagerService</code> is responsible for the initialization, installation, removal and overall

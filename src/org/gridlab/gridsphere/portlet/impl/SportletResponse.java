@@ -176,15 +176,6 @@ public class SportletResponse implements PortletResponse {
     }
 
     /**
-     * Returns the content type that can be used to contribute markup to the portlet response.
-     *
-     * @return the content type
-     */
-    public String getContentType() {
-        return "html";
-    }
-
-    /**
      * Returns the writer object that can be used to contribute markup to the portlet response.
      *
      * @return the writer

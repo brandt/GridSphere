@@ -5,35 +5,26 @@ package org.gridlab.gridsphere.portlets.core;
 
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.portlet.*;
-import org.gridlab.gridsphere.portlet.impl.*;
-import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 import org.gridlab.gridsphere.portlets.core.beans.AccessControllerBean;
 
 import javax.servlet.UnavailableException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Iterator;
-import java.util.List;
 
 public class AccessControllerPortlet extends AbstractPortlet {
 
-    private static PortletLog _log = SportletLog.getInstance(AccessControllerPortlet.class);
-
     public void init(PortletConfig config) throws UnavailableException {
         super.init(config);
-        _log.info("Exiting init()");
+        getPortletLog().info("Exiting init()");
     }
 
     public void initConcrete(PortletSettings settings) throws UnavailableException {
         super.initConcrete(settings);
-        _log.info("Exiting initConcrete()");
+        getPortletLog().info("Exiting initConcrete()");
     }
 
     public void actionPerformed(ActionEvent event) throws PortletException {
-        _log.debug("Entering actionPerformed()");
+        getPortletLog().debug("Entering actionPerformed()");
         PortletAction action = event.getAction();
         //'Get the portlet request and response
         PortletRequest request = event.getPortletRequest();
@@ -42,12 +33,12 @@ public class AccessControllerPortlet extends AbstractPortlet {
         AccessControllerBean aclManagerBean = getAccessControlManagerBean(request, response);
         // Then perform given action
         aclManagerBean.doViewAction(action);
-        _log.debug("Exiting actionPerformed()");
+        getPortletLog().debug("Exiting actionPerformed()");
     }
 
     public void doView(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
-        _log.debug("Entering doView()");
+        getPortletLog().debug("Entering doView()");
         // Get instance of group manager bean
         AccessControllerBean aclManagerBean = getAccessControlManagerBean(request, response);
         // If no action performed, then perform list groups
@@ -58,42 +49,42 @@ public class AccessControllerPortlet extends AbstractPortlet {
         String nextPage = aclManagerBean.getPage();
         // Include the given page
         getPortletConfig().getContext().include(nextPage, request, response);
-        _log.debug("Exiting doView()");
+        getPortletLog().debug("Exiting doView()");
     }
 
     public void doEdit(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
-        _log.debug("Entering doEdit()");
+        getPortletLog().debug("Entering doEdit()");
         PrintWriter out = response.getWriter();
         out.println("Edit mode not yet implemented.");
-        _log.debug("Exiting doEdit()");
+        getPortletLog().debug("Exiting doEdit()");
     }
 
     public void doTitle(PortletRequest request, PortletResponse response)
             throws PortletException, IOException {
-        _log.debug("Entering doTitle()");
+        getPortletLog().debug("Entering doTitle()");
         // Get instance of group manager bean
         AccessControllerBean aclManagerBean = getAccessControlManagerBean(request, response);
         // Get next title to display
         String title = aclManagerBean.getTitle();
         // Print the given title
         response.getWriter().println(title);
-        _log.debug("Exiting doTitle()");
+        getPortletLog().debug("Exiting doTitle()");
     }
 
     private AccessControllerBean getAccessControlManagerBean(PortletRequest request,
                                                PortletResponse response)
             throws PortletException {
-        _log.debug("Entering getAccessControllerBean()");
+        getPortletLog().debug("Entering getAccessControllerBean()");
         AccessControllerBean aclManagerBean =
                 (AccessControllerBean)request.getAttribute("aclManagerBean");
         if (aclManagerBean == null) {
-            _log.debug("Creating instance of AccessControllerBean");
+            getPortletLog().debug("Creating instance of AccessControllerBean");
             PortletConfig config = getPortletConfig();
             aclManagerBean = new AccessControllerBean(config, request, response);
             request.setAttribute("aclManagerBean", aclManagerBean);
         }
-        _log.debug("Exiting getAccessControllerBean()");
+        getPortletLog().debug("Exiting getAccessControllerBean()");
         return aclManagerBean;
     }
 }

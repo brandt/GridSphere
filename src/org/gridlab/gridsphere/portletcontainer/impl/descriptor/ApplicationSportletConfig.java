@@ -8,6 +8,8 @@ package org.gridlab.gridsphere.portletcontainer.impl.descriptor;
 
 import org.gridlab.gridsphere.core.persistence.castor.descriptor.ConfigParamList;
 import org.gridlab.gridsphere.portletcontainer.ApplicationPortletConfig;
+import org.gridlab.gridsphere.portlet.Portlet;
+import org.gridlab.gridsphere.portlet.PortletWindow;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -163,7 +165,13 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
      * <code>PortletWindow.State</code> elements allowed for this portlet
      */
     public List getAllowedWindowStates() {
-        return allowsWindowStates.getPortletWindowStates();
+        List states = allowsWindowStates.getPortletWindowStates();
+        if (states.isEmpty()) {
+            states.add(PortletWindow.State.MAXIMIZED);
+            states.add(PortletWindow.State.MINIMIZED);
+            states.add(PortletWindow.State.RESIZING);
+        }
+        return states;
     }
 
     /**
@@ -194,7 +202,14 @@ public class ApplicationSportletConfig implements ApplicationPortletConfig {
      * @return the supported modes for this portlet
      */
     public List getSupportedModes() {
-        return supportsModes.getPortletModes();
+        List modes = supportsModes.getPortletModes();
+        if (modes.isEmpty()) {
+            modes.add(Portlet.Mode.HELP);
+            modes.add(Portlet.Mode.EDIT);
+            modes.add(Portlet.Mode.CONFIGURE);
+            modes.add(Portlet.Mode.VIEW);
+        }
+        return modes;
     }
 
     /**

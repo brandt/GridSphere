@@ -68,14 +68,15 @@ public abstract class Portlet extends HttpServlet
 
     /**
      * A <code>Mode</code> is an immutable representation of the portlet mode.
-     * Possible mode values are <code>View</code>, <code>EDIT</code>,
+     * Possible mode values are <code>VIEW</code>, <code>EDIT</code>,
      * <code>HELP</code> and <code>CONFIGURE</code>
      */
     public static class Mode implements Comparator, Cloneable, Serializable {
 
-        protected static final int VIEW_MODE = 1;
-        protected static final int CONFIGURE_MODE = 2;
-        protected static final int EDIT_MODE = 3;
+        // Ordering determines title bar layout position!!
+        protected static final int CONFIGURE_MODE = 1;
+        protected static final int EDIT_MODE = 2;
+        protected static final int VIEW_MODE = 3;
         protected static final int HELP_MODE = 4;
 
         public static final Mode EDIT = new Mode(EDIT_MODE);
@@ -130,7 +131,7 @@ public abstract class Portlet extends HttpServlet
          * @return the portlet mode as a <code>String</code>
          */
         public String toString() {
-            String tagstring = "Unknowm Portlet Mode!";
+            String tagstring = "Unknown Portlet Mode!";
             if (mode == EDIT_MODE) {
                 tagstring = "EDIT";
             } else if (mode == HELP_MODE) {

@@ -5,13 +5,10 @@
 package org.gridlab.gridsphere.portlets.core.user;
 
 import org.gridlab.gridsphere.portlet.PortletConfig;
-import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletSettings;
 import org.gridlab.gridsphere.provider.ActionEventPortlet;
 
 import javax.servlet.UnavailableException;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 public class UserManagerPortlet extends ActionEventPortlet {
 

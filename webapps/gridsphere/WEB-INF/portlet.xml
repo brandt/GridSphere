@@ -2,32 +2,12 @@
 <portlet-app-collection>
 
     <portlet-app-def>
-
         <portlet-app id="org.gridlab.gridsphere.portlets.core.PortletApplicationManager">
             <portlet-name>Application Manager Portlet</portlet-name>
             <servlet-name>ManagerPortlet</servlet-name>
-            <portlet-config>
-                <param-name>Portlet Master</param-name>
-                <param-value>yourid@yourdomain.com</param-value>
-            </portlet-config>
-            <allows>
-                <maximized/>
-                <minimized/>
-                <resizing/>
-            </allows>
-            <supports>
-                <view/>
-                <edit/>
-                <help/>
-                <configure/>
-            </supports>
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.PortletApplicationManager.1">
-            <context-param>
-                <param-name>foobar</param-name>
-                <param-value>a value</param-value>
-            </context-param>
             <concrete-portlet>
                 <portlet-name>Application Manager Portlet</portlet-name>
                 <default-locale>en</default-locale>
@@ -37,35 +17,15 @@
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
-
     </portlet-app-def>
 
     <portlet-app-def>
-
         <portlet-app id="org.gridlab.gridsphere.portlets.core.LoginPortlet">
             <portlet-name>Login</portlet-name>
             <servlet-name>LoginPortlet</servlet-name>
-            <portlet-config>
-                <param-name>Portlet Master</param-name>
-                <param-value>yourid@yourdomain.com</param-value>
-            </portlet-config>
-            <cache>
-                <expires>120</expires>
-                <shared>true</shared>
-            </cache>
-            <supports>
-                <view/>
-                <edit/>
-                <help/>
-                <configure/>
-            </supports>
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.LoginPortlet.1">
-            <context-param>
-                <param-name>Portlet Master</param-name>
-                <param-value>yourid@yourdomain.com</param-value>
-            </context-param>
             <concrete-portlet>
                 <portlet-name>Login</portlet-name>
                 <default-locale>en</default-locale>
@@ -77,29 +37,15 @@
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
-
     </portlet-app-def>
 
     <portlet-app-def>
-
         <portlet-app id="org.gridlab.gridsphere.portlets.core.LogoutPortlet">
             <portlet-name>Logout</portlet-name>
             <servlet-name>LogoutPortlet</servlet-name>
-            <portlet-config>
-                <param-name>Portlet Master</param-name>
-                <param-value>yourid@yourdomain.com</param-value>
-            </portlet-config>
-            <cache>
-                <expires>120</expires>
-                <shared>true</shared>
-            </cache>
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.LogoutPortlet.1">
-            <context-param>
-                <param-name>Portlet Master</param-name>
-                <param-value>yourid@yourdomain.com</param-value>
-            </context-param>
             <concrete-portlet>
                 <portlet-name>Logout</portlet-name>
                 <default-locale>en</default-locale>
@@ -111,55 +57,15 @@
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
-
     </portlet-app-def>
 
     <portlet-app-def>
-
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.SubscriptionPortlet">
-            <portlet-name>Subscription</portlet-name>
-            <servlet-name>SubscriptionPortlet</servlet-name>
-        </portlet-app>
-
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.SubscriptionPortlet.1">
-            <context-param>
-                <param-name>Portlet Master</param-name>
-                <param-value>yourid@yourdomain.com</param-value>
-            </context-param>
-            <concrete-portlet>
-                <portlet-name>Subscription</portlet-name>
-                <default-locale>en</default-locale>
-                <language locale="en_US">
-                    <title>Subscription</title>
-                    <title-short>Subscription</title-short>
-                    <description>Portlet provides subscription capabilities</description>
-                    <keywords>portlet subscription</keywords>
-                </language>
-            </concrete-portlet>
-        </concrete-portlet-app>
-
-    </portlet-app-def>
-
-    <portlet-app-def>
-
         <portlet-app id="org.gridlab.gridsphere.portlets.core.user.UserManagerPortlet">
             <portlet-name>User Account Manager</portlet-name>
             <servlet-name>UserManagerPortlet</servlet-name>
-            <portlet-config>
-                <param-name>Portlet Master</param-name>
-                <param-value>yourid@yourdomain.com</param-value>
-            </portlet-config>
-            <cache>
-                <expires>120</expires>
-                <shared>false</shared>
-            </cache>
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.user.UserManagerPortlet.1">
-            <context-param>
-                <param-name>Portlet Master</param-name>
-                <param-value>yourid@yourdomain.com</param-value>
-            </context-param>
             <concrete-portlet>
                 <portlet-name>User Account Manager</portlet-name>
                 <default-locale>en</default-locale>
@@ -171,29 +77,15 @@
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
-
     </portlet-app-def>
 
     <portlet-app-def>
-
         <portlet-app id="org.gridlab.gridsphere.portlets.core.AccessControllerPortlet">
             <portlet-name>Access Control Manager</portlet-name>
             <servlet-name>AccessControllerPortlet</servlet-name>
-            <portlet-config>
-                <param-name>Portlet Master</param-name>
-                <param-value>yourid@yourdomain.com</param-value>
-            </portlet-config>
-            <cache>
-                <expires>120</expires>
-                <shared>false</shared>
-            </cache>
         </portlet-app>
 
         <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.AccessControllerPortlet.1">
-            <context-param>
-                <param-name>Portlet Master</param-name>
-                <param-value>yourid@yourdomain.com</param-value>
-            </context-param>
             <concrete-portlet>
                 <portlet-name>Access Control Manager</portlet-name>
                 <default-locale>en</default-locale>
@@ -205,7 +97,6 @@
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
-
     </portlet-app-def>
 
 </portlet-app-collection>

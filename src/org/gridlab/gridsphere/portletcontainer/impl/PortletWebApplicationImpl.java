@@ -133,7 +133,6 @@ public class PortletWebApplicationImpl implements PortletWebApplication {
         String layoutXMLfile = ctx.getRealPath("") + "/WEB-INF/layout.xml";
         File f = new File(layoutXMLfile);
         if (f.exists()) {
-            //String layoutMappingFile = GridSphereConfig.getProperty(GridSphereConfigProperties.LAYOUT_MAPPING);
             layoutEngine.addApplicationTab(webApplicationName, layoutXMLfile);
         } else {
             log.debug("Did not find layout.xml for: " + ctx.getServletContextName());

@@ -2,25 +2,19 @@
 
 <!--
 
-    User Layout Descriptor
+    Guest User Layout Descriptor
 
     This descriptor defines the guest user's portal layout configuration
 
     $Id$
 -->
 
-<container-layout>
+<page-layout title="GridSphere Portal">
 
-<container-name>GridSphere Portal</container-name>
-
-<!-- Title -->
-<!--
-<portlet-image>
-    <image>images/title.jpg</image>
-</portlet-image>
--->
-
-<portlet-text include="/html/pagehead.html"/>
+<!-- Header components -->
+<portlet-header>
+    <portlet-content include="/html/pagehead.html"/>
+</portlet-header>
 
 <!-- Tabbed Panes -->
 <portlet-tabbed-pane selected="0" style="menu">
@@ -32,7 +26,6 @@
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
-                            <name>Login</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.LoginPortlet.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
@@ -43,7 +36,6 @@
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
-                            <name>RSS</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.groupware.rss.RSSPortlet.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
@@ -59,19 +51,15 @@
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
-                            <name>HalloWelt</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.examples.HalloWelt.1</portlet-class>
                         </portlet-frame>
                         <portlet-frame>
-                            <name>HalloWelt</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.examples.HalloWelt.1</portlet-class>
                         </portlet-frame>
                         <portlet-frame>
-                            <name>HelloWorld</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.examples.HelloWorld.1</portlet-class>
                         </portlet-frame>
                         <portlet-frame>
-                            <name>HelloWorld</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.examples.HelloWorld.2</portlet-class>
                         </portlet-frame>
                     </grid-layout>
@@ -82,7 +70,6 @@
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
-                            <name>DemoPortlet</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.examples.DemoPortlet.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
@@ -92,4 +79,6 @@
     </portlet-tab>
 </portlet-tabbed-pane>
 
-</container-layout>
+<!-- Footer components (if any) -->
+
+</page-layout>

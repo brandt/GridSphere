@@ -5,17 +5,23 @@
 package org.gridlab.gridsphere.services.core.registry.impl;
 
 import org.gridlab.gridsphere.layout.PortletLayoutEngine;
-import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.PortletException;
+import org.gridlab.gridsphere.portlet.PortletLog;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
-import org.gridlab.gridsphere.portletcontainer.*;
+import org.gridlab.gridsphere.portletcontainer.ApplicationPortlet;
+import org.gridlab.gridsphere.portletcontainer.PortletInvoker;
+import org.gridlab.gridsphere.portletcontainer.PortletRegistry;
+import org.gridlab.gridsphere.portletcontainer.PortletWebApplication;
 import org.gridlab.gridsphere.portletcontainer.impl.PortletWebApplicationImpl;
 import org.gridlab.gridsphere.services.core.registry.PortletManagerService;
 
 import javax.servlet.ServletContext;
-import java.util.*;
 import java.io.IOException;
+import java.util.*;
 
 /**
  * The <code>PortletManager</code> is a singleton responsible for maintaining the registry of portlet
@@ -23,7 +29,7 @@ import java.io.IOException;
  */
 public class PortletManager implements PortletManagerService {
 
-    public final static String CORE_CONTEXT = "startup-portlet-webapps";
+    private final static String CORE_CONTEXT = "startup-portlet-webapps";
     private static PortletLog log = SportletLog.getInstance(PortletManager.class);
     private static PortletManager instance = new PortletManager();
     private ServletContext context = null;

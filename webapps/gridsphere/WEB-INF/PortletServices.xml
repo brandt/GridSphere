@@ -1,5 +1,4 @@
 <!--
-
     Portlet Services XML Descriptor
 
     Edit this file to add/modify GridSphere Portlet Services
@@ -45,13 +44,6 @@
         <description>Provides Password Management Capabilities</description>
         <interface>org.gridlab.gridsphere.services.core.security.password.PasswordManagerService</interface>
         <implementation>org.gridlab.gridsphere.services.core.security.password.impl.DbmsPasswordManagerService</implementation>
-    </service>
-
-    <service>
-        <name>Layout Service</name>
-        <description>Provides Layout Capabilities</description>
-        <interface>org.gridlab.gridsphere.services.core.layout.LayoutManagerService</interface>
-        <implementation>org.gridlab.gridsphere.services.core.layout.impl.LayoutManagerServiceImpl</implementation>
     </service>
 
 </portlet-services>

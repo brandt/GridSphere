@@ -4,24 +4,17 @@
  */
 package org.gridlab.gridsphere.portlets.core.beans;
 
-import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
-import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
-import org.gridlab.gridsphere.services.core.security.password.Password;
-import org.gridlab.gridsphere.services.core.security.password.PasswordEditor;
-import org.gridlab.gridsphere.services.core.security.acl.*;
-import org.gridlab.gridsphere.services.core.user.UserManagerService;
-import org.gridlab.gridsphere.services.core.user.AccountRequest;
-import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.portlet.*;
-
-import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
-import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.provider.PortletBean;
+import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
+import org.gridlab.gridsphere.services.core.security.acl.GroupAction;
+import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
+import org.gridlab.gridsphere.services.core.security.acl.GroupRequest;
+import org.gridlab.gridsphere.services.core.user.UserManagerService;
 
-import javax.servlet.UnavailableException;
-import java.util.*;
-import java.io.PrintWriter;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
 public class AccessControllerBean extends PortletBean {
 

@@ -4,7 +4,9 @@
  */
 package org.gridlab.gridsphere.portlets.core.beans;
 
-import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portlet.PortletResponse;
+import org.gridlab.gridsphere.portlet.PortletURI;
 
 public class LoginBean {
 

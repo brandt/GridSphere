@@ -9,33 +9,25 @@
     $Id$
 -->
 
-<container-layout>
+<page-layout title="GridSphere Portal">
 
-<container-name>GridSphere Portal</container-name>
-
-<!-- Title -->
-<!--
-<portlet-image>
-    <image>images/title.jpg</image>
-</portlet-image>
--->
-
-<portlet-panel>
-    <grid-layout columns="80,20" style="header">
-        <portlet-text include="/html/pagehead.html"/>
-        <portlet-frame transparent="true" outer-padding="0">
-            <portlet-class>org.gridlab.gridsphere.portlets.core.LogoutPortlet.1</portlet-class>
-        </portlet-frame>
-    </grid-layout>
-</portlet-panel>
+<!-- Header components -->
+<portlet-header>
+    <portlet-panel>
+        <grid-layout columns="80,20" style="header">
+            <portlet-content include="/html/pagehead.html"/>
+            <portlet-frame transparent="true" outer-padding="0">
+                <portlet-class>org.gridlab.gridsphere.portlets.core.LogoutPortlet.1</portlet-class>
+            </portlet-frame>
+        </grid-layout>
+    </portlet-panel>
+</portlet-header>
 
 <!-- Tabbed Panes -->
 <portlet-tabbed-pane selected="0" style="menu">
     <portlet-tab>
         <title>Home</title>
         <portlet-tabbed-pane selected="0" style="sub-menu">
-            <!--<selected>0</selected>
-            <style>sub-menu</style>     -->
             <portlet-tab>
                 <title>Welcome</title>
                 <portlet-panel>
@@ -43,17 +35,6 @@
                         <portlet-frame>
                             <name>Login</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.LoginPortlet.1</portlet-class>
-                        </portlet-frame>
-                    </grid-layout>
-                </portlet-panel>
-            </portlet-tab>
-            <portlet-tab>
-                <title>News</title>
-                <portlet-panel>
-                    <grid-layout>
-                        <portlet-frame inner-padding="20">
-                            <name>RSS</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.groupware.rss.RSSPortlet.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>
@@ -68,7 +49,7 @@
                 <portlet-panel>
                     <grid-layout>
                         <portlet-frame>
-                            <name>PortletApplicationManager</name>
+                            <required-role>SUPER</required-role>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.PortletApplicationManager.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
@@ -78,8 +59,8 @@
                 <title>Accounts</title>
                 <portlet-panel>
                     <grid-layout>
-                        <portlet-frame inner-padding="0">
-                            <name>UserManagerPortlet</name>
+                        <portlet-frame>
+                            <required-role>SUPER</required-role>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.user.UserManagerPortlet.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
@@ -89,8 +70,7 @@
                 <title>Access</title>
                 <portlet-panel>
                     <grid-layout>
-                        <portlet-frame inner-padding="0">
-                            <name>AccessControlManagerPortlet</name>
+                        <portlet-frame>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.AccessControllerPortlet.1</portlet-class>
                         </portlet-frame>
                     </grid-layout>
@@ -100,15 +80,14 @@
                 <title>Credentials</title>
                 <portlet-panel>
                     <grid-layout>
-                        <portlet-frame inner-padding="0">
-                            <name>CredentialPermissionAdminPortlet</name>
+                        <portlet-frame>
                             <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialPermissionAdminPortlet.1</portlet-class>
                         </portlet-frame>
-                        <portlet-frame inner-padding="0">
+                        <portlet-frame>
                             <name>CredentialMappingAdminPortlet</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialMappingAdminPortlet.1</portlet-class>
                         </portlet-frame>
-                        <portlet-frame inner-padding="0">
+                        <portlet-frame>
                             <name>CredentialManagerAdminPortlet</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialManagerAdminPortlet.1</portlet-class>
                         </portlet-frame>
@@ -124,11 +103,11 @@
                 <title>Welcome</title>
                 <portlet-panel>
                     <grid-layout>
-                        <portlet-frame inner-padding="0">
+                        <portlet-frame>
                             <name>CredentialRetrievalUserPortlet</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialRetrievalUserPortlet.1</portlet-class>
                         </portlet-frame>
-                        <portlet-frame inner-padding="0">
+                        <portlet-frame>
                             <name>CredentialMappingUserPortlet</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.grid.security.CredentialMappingUserPortlet.1</portlet-class>
                         </portlet-frame>
@@ -139,7 +118,7 @@
                 <title>Jobs</title>
                 <portlet-panel>
                     <grid-layout>
-                        <portlet-frame inner-padding="0">
+                        <portlet-frame>
                             <name>JobManagerPortlet</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.grid.job.JobManagerPortlet.1</portlet-class>
                         </portlet-frame>
@@ -189,4 +168,6 @@
     </portlet-tab>
 </portlet-tabbed-pane>
 
-</container-layout>
+<!-- Footer components (if any) -->
+
+</page-layout>

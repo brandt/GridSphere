@@ -2,19 +2,18 @@
 
 <!--
 
-    User Layout Descriptor
+    Error Layout Descriptor
 
-    This descriptor defines the guest user's portal layout configuration
+    This descriptor defines the error layout configuration
 
     $Id$
 -->
 
-<container-layout>
+<page-layout title="GridSphere Error Page">
 
-    <container-name>GridSphere Portal</container-name>
-
-    <portlet-text include="/html/pagehead.html"/>
-
+<portlet-header>
+    <portlet-content include="/html/pagehead.html"/>
     <portlet-error-frame/>
+</portlet-header>
 
-</container-layout>
+</page-layout>
