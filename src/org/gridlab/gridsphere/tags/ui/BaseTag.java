@@ -8,6 +8,7 @@ import org.gridlab.gridsphere.provider.ui.beans.TagBean;
 import org.gridlab.gridsphere.provider.validator.NoValidation;
 import org.gridlab.gridsphere.provider.validator.Validator;
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -167,11 +168,11 @@ public class BaseTag extends TagSupport {
 
     public int doStartTag() throws JspException {
         if (!bean.equals("")) {
-            Object beanElement = pageContext.getRequest().getAttribute(bean);
+            Object beanElement = pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID)+bean);
             try {
                 this.htmlelement = (TagBean) beanElement;
             } catch (Exception e) {
-                System.err.println("Error retrieving tag bean with name: " + bean);
+                System.err.println("This is an error retrieving tag bean with name: " + GridSphereProperties.PORTLETID+":"+pageContext.getRequest().getAttribute(GridSphereProperties.PORTLETID)+bean);
                 if (beanElement == null) {
                     System.err.println("Tag bean attribute with given name is not set!");
                 } else {

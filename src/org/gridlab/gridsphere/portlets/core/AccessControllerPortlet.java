@@ -1,10 +1,5 @@
 /*
- * Created by IntelliJ IDEA.
- * User: russell
- * Date: Jan 17, 2003
- * Time: 11:57:10 AM
- * To change template for new class use
- * Code Style | Class Templates options (Tools | IDE Options).
+ * $Id$
  */
 package org.gridlab.gridsphere.portlets.core;
 

@@ -14,6 +14,7 @@ import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.DefaultPortletAction;
 import org.gridlab.gridsphere.provider.event.FormEvent;
 import org.gridlab.gridsphere.provider.ui.beans.*;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
@@ -80,7 +81,7 @@ public class FormEventImpl implements FormEvent {
 
     private Object getBean(String name, PortletRequest request) {
         HttpSession session = request.getSession();
-        NameBean bean = (NameBean) session.getAttribute(name);
+        NameBean bean = (NameBean) session.getAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+name);
         return bean;
     }
 
@@ -95,6 +96,8 @@ public class FormEventImpl implements FormEvent {
         NameBean bean = (NameBean) getBean(name, request);
         //System.out.println("Getting Bean " + name + " from Session");
         //if (checkParameterName("gstag:"+bean.getName())) {
+        System.out.println("Getting Bean '" + GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+name + "' from Session");
+
         if (bean instanceof TableBean) {
             // has to be that hack since the individal components of a table
             // are not stored by itself in a session, kind of different
@@ -120,6 +123,7 @@ public class FormEventImpl implements FormEvent {
                     }
                 }
             }
+            session.setAttribute(request.getAttribute(GridSphereProperties.PORTLETID)+":"+name, tbean);
             return tbean;
         } else {
             String[] values = request.getParameterValues("gstag:" + bean.getName());
@@ -177,4 +181,18 @@ public class FormEventImpl implements FormEvent {
         }
         System.out.println("--------------------\n");
     }
+
+    /**
+     * Retrieves bean from the current session.
+     * @param beanname name of the bean
+     * @return bean
+     */
+    public Object getStoredTagBean(String beanname) {
+
+        Object ob = request.getSession().getAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+beanname);
+        return ob;
+    }
+
 }
+
+

@@ -37,4 +37,11 @@ public interface FormEvent extends ActionEvent {
      */
     public void printRequestParameter(PortletRequest req);
 
+    /**
+     * Retrieves bean from the current session.
+     * @param beanname name of the bean
+     * @return bean
+     */
+    public Object getStoredTagBean(String beanname);
+
 }

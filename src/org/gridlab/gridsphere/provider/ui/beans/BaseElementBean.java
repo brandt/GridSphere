@@ -6,6 +6,7 @@
 package org.gridlab.gridsphere.provider.ui.beans;
 
 import org.gridlab.gridsphere.portlet.PortletRequest;
+import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
 import javax.servlet.http.HttpSession;
 
@@ -115,9 +116,9 @@ public abstract class BaseElementBean implements TagBean {
     private void store(String id, PortletRequest request, Object ob) {
         System.err.println("Storing bean with [" + id + "][" + ob.getClass().getName());
         this.id = id;
-        request.setAttribute(id, ob);
+        request.setAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+id, ob);
         HttpSession session = request.getSession();
-        session.setAttribute(id, ob);
+        session.setAttribute(GridSphereProperties.PORTLETID+":"+request.getAttribute(GridSphereProperties.PORTLETID)+id, ob);
     }
 
     /**
