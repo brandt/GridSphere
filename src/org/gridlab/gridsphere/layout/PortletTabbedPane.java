@@ -317,14 +317,158 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
         }
         return result;
     }
-
     /**
      * Performs the rendering of a top-level tabbed pane for the "menu" style
      *
      * @param event the gridsphere event
      * @param links an array of URI links for the tabs
      */
-    protected void doRenderMenu(GridSphereEvent event, String[] links) throws PortletLayoutException, IOException {
+    protected void doRenderMenuWML(GridSphereEvent event, String[] links) throws PortletLayoutException, IOException {
+        PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
+        PrintWriter out = res.getWriter();
+
+        PortletRole userRole = req.getRole();
+
+        // put a spacing if a gfx theme
+        //out.println("<img height=\"3\" src=\"themes/" + theme + "/images/spacer.gif\"/>");
+        out.println("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
+        //      out.println("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
+        out.println("<tr >");
+
+        PortletTab tab;
+        for (int i = 0; i < tabs.size(); i++) {
+
+            tab = (PortletTab) tabs.get(i);
+            PortletRole tabRole = tab.getRequiredRole();
+            if (userRole.compare(userRole, tabRole) >= 0) {
+
+                String lang = req.getLocale().getLanguage();
+                String title = tab.getTitle(lang);
+
+                String path = "themes" + File.separator + theme + File.separator + "images" + File.separator;
+                if (tab.isSelected()) {
+                    /*out.println("<td height=\"24\" width=\"6\" background=\"" + path + "tab-active-left.gif\">");
+                    //out.println("&nbsp;");
+                    out.println("</td>");*/
+                    out.println("<td class=\"tabCell\">");
+                    out.println( replaceBlanks(title));
+                    //out.println("<td height=\"24\" width=\"6\" background=\"" + path + "tab-active-right.gif\">");
+                    //out.println("&nbsp;");
+                    out.println("</td>");
+
+                } else {
+                   // out.println("<td height=\"24\" width=\"6\" background=\"" + path + "tab-inactive-left.gif\">");
+                   // out.println("&nbsp;");
+                  // out.println("</td>");
+                    out.println("<td class=\"tabCellDeact\">");
+                    out.println("<a href=\"" + links[i] + "\">" + replaceBlanks(title) + "</a>");
+                  //  out.println("<td height=\"24\" width=\"6\" background=\"" + path + "tab-inactive-right.gif\">");
+                  //  out.println("&nbsp;");
+                    out.println("</td>");
+                }
+
+                //out.println("<td class=\"tab-empty\"></td>");
+            } else {
+                // if role is < required role we try selecting the next possible tab
+                //System.err.println("in PortletTabbedPane menu: role is < required role we try selecting the next possible tab");
+                if (tab.isSelected()) {
+                    int index = (i + 1);
+                    PortletTab newtab = (PortletTab) tabs.get(index);
+                    if (index < tabs.size()) {
+                        this.setSelectedPortletTab(newtab);
+                    }
+                }
+            }
+        }
+
+        //out.println("<td>&nbsp;</td>");
+        out.println("</tr></table>");
+
+        if (!tabs.isEmpty()) {
+            PortletTab selectedTab = getSelectedTab();
+            if (selectedTab != null) {
+                selectedTab.doRender(event);
+            }
+        }
+
+    }
+
+    /**
+     * Performs the rendering of a sub-level tabbed pane for the "sub-menu" style
+     *
+     * @param event the gridsphere event
+     * @param links an array of URI links for the tabs
+     */
+    protected void doRenderSubMenuWML(GridSphereEvent event, String[] links) throws PortletLayoutException, IOException {
+        PortletRequest req = event.getPortletRequest();
+        PortletResponse res = event.getPortletResponse();
+        PrintWriter out = res.getWriter();
+        PortletRole userRole = req.getRole();
+
+        //PortletTab parentTab = (PortletTab)this.getParentComponent();
+        //PortletThemeRegistry themeReg = PortletThemeRegistry.getInstance();
+        String path = "themes" + File.separator + theme + File.separator + "images" + File.separator;
+
+        // Render tabs titles get always the same componenttheme as the upper menu
+        out.println("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\"><tr>");
+        //out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" bgcolor=\"#EEEEEE\"><tr>");
+
+
+        PortletTab tab;
+
+        List stabs = Collections.synchronizedList(tabs);
+        synchronized (stabs) {
+            for (int i = 0; i < stabs.size(); i++) {
+                tab = (PortletTab) stabs.get(i);
+                PortletRole requiredRole = tab.getRequiredRole();
+                if (userRole.compare(userRole, requiredRole) >= 0) {
+
+                    String lang = req.getLocale().getLanguage();
+                    String title = tab.getTitle(lang);
+
+                    
+                    if (tab.isSelected()) {
+                    	out.println("<td class=\"tabCellSubm\">");
+                        //out.println("<span class=\"tab-sub-active\">");
+                        out.println("<a href=\"" + links[i] + "\">" + replaceBlanks(title) + "</a>");
+                        out.println("</td>");
+                    } else {
+                    	out.println("<td class=\"tabCellDeactSubm\">");
+                        //out.println("<span class=\"tab-sub-inactive\">");
+                        out.println("<a href=\"" + links[i] + "\">" + replaceBlanks(title) + "</a>");
+                        out.println("</td>");
+                        //out.println("</span>");
+                    }
+                    out.println("</td>");
+
+                } else {
+                    //System.err.println("in PortletTabbedPane submenu: role is < required role we try selecting the next possible tab");
+                    if (tab.isSelected()) {
+                        int index = (i + 1);
+                        PortletTab newtab = (PortletTab) stabs.get(index);
+                        if (index < tabs.size()) {
+                            this.setSelectedPortletTab(newtab);
+                        }
+                    }
+                }
+            }
+
+            out.println("</tr></table>");
+            //out.println("<td>"); //width=100
+            //out.println("&nbsp;</td></td></tr></table>");
+            PortletTab selectedTab = getSelectedTab();
+            if (selectedTab != null)
+                selectedTab.doRender(event);
+        }
+    }
+    /**
+     * Performs the rendering of a top-level tabbed pane for the "menu" style
+     *
+     * @param event the gridsphere event
+     * @param links an array of URI links for the tabs
+     */
+    protected void doRenderMenuHTML(GridSphereEvent event, String[] links) throws PortletLayoutException, IOException {
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
@@ -401,7 +545,7 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      * @param event the gridsphere event
      * @param links an array of URI links for the tabs
      */
-    protected void doRenderSubMenu(GridSphereEvent event, String[] links) throws PortletLayoutException, IOException {
+    protected void doRenderSubMenuHTML(GridSphereEvent event, String[] links) throws PortletLayoutException, IOException {
         PortletRequest req = event.getPortletRequest();
         PortletResponse res = event.getPortletResponse();
         PrintWriter out = res.getWriter();
@@ -469,14 +613,32 @@ public class PortletTabbedPane extends BasePortletComponent implements Serializa
      */
     public void doRender(GridSphereEvent event) throws PortletLayoutException, IOException {
         super.doRender(event);
-
+    	String markupName=event.getPortletRequest().getClient().getMarkupName();
+    	if (markupName.equals("html")){
+    		doRenderHTML(event);
+    	}
+    	else
+    	{
+    		doRenderWML(event);
+    	}
+    }
+    public void doRenderHTML(GridSphereEvent event) throws PortletLayoutException, IOException {
         String[] links = createTabLinks(event);
         if (style.equals("sub-menu")) {
-            doRenderSubMenu(event, links);
+            doRenderSubMenuHTML(event, links);
         } else {
-            doRenderMenu(event, links);
+            doRenderMenuHTML(event, links);
         }
     }
+    public void doRenderWML(GridSphereEvent event) throws PortletLayoutException, IOException {
+        String[] links = createTabLinks(event);
+        if (style.equals("sub-menu")) {
+            doRenderSubMenuWML(event, links);
+        } else {
+            doRenderMenuWML(event, links);
+        }
+    }
+    
 
     public void remove(PortletComponent pc, PortletRequest req) {
         tabs.remove(pc);
