@@ -31,6 +31,14 @@
         <interface>org.gridlab.gridsphere.services.user.UserManagerService</interface>
         <secure-wrapper>org.gridlab.gridsphere.services.user.impl.UserManagerServiceProxy</secure-wrapper>
         <implementation>org.gridlab.gridsphere.services.user.impl.UserManagerServiceImpl</implementation>
+        <service-config>
+            <param-name>userID</param-name>
+            <param-value>root</param-value>
+        </service-config>
+        <service-config>
+            <param-name>password</param-name>
+            <param-value>portal</param-value>
+        </service-config>
     </service>
 
     <service>

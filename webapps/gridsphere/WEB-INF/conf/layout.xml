@@ -10,14 +10,16 @@
 </portlet-image>
 -->
 
-<!-- Information -->
-<portlet-text>
-    <text>/html/info.html</text>
-</portlet-text>
-
-<portlet-frame transparent="true">
-    <portlet-class>org.gridlab.gridsphere.portlets.core.LogoutPortlet.1</portlet-class>
-</portlet-frame>
+<portlet-panel>
+    <grid-layout columns="80,20">
+        <portlet-text>
+            <text>/html/pagehead.html</text>
+        </portlet-text>
+        <portlet-frame transparent="true">
+            <portlet-class>org.gridlab.gridsphere.portlets.core.LogoutPortlet.1</portlet-class>
+        </portlet-frame>
+    </grid-layout>
+</portlet-panel>
 
 <!-- Login -->
 <!--
@@ -62,18 +64,26 @@
             <portlet-tab>
                 <title>Login</title>
                 <portlet-panel>
-                    <grid-layout columns="20,80">
+                    <grid-layout columns="40,30,30">
                         <portlet-frame>
                             <width>60</width>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.LoginPortlet.1</portlet-class>
+                        </portlet-frame>
+                        <portlet-frame>
+                            <name>RSS</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.RSSPortlet.1</portlet-class>
                         </portlet-frame>
                         <portlet-frame>
                             <name>DemoPortlet</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.DemoPortlet.2</portlet-class>
                         </portlet-frame>
                         <portlet-frame>
-                            <name>ManagerPortlet</name>
-                            <portlet-class>org.gridlab.gridsphere.portlets.core.PortletApplicationManager.1</portlet-class>
+                            <name>HelloWorld</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.4</portlet-class>
+                        </portlet-frame>
+                        <portlet-frame>
+                            <name>HelloWorld</name>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.4</portlet-class>
                         </portlet-frame>
                     </grid-layout>
                 </portlet-panel>
@@ -96,7 +106,7 @@
             <portlet-tab>
                 <title>New Stuff</title>
                 <portlet-panel>
-                    <grid-layout>
+                    <grid-layout columns="70,30">
                         <portlet-frame>
                             <name>RSS</name>
                             <portlet-class>org.gridlab.gridsphere.portlets.core.RSSPortlet.1</portlet-class>
