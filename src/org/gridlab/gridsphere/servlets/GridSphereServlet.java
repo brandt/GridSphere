@@ -338,9 +338,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                                     }
                                 }
                             }
-                        }  else {
-                            System.err.println("grrrr");
-                        }
+                        } 
                     }
                 }
             }
@@ -583,6 +581,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
     public void contextInitialized(ServletContextEvent event) {
         log.debug("contextInitialized()");
         ServletContext ctx = event.getServletContext();
+        GridSphereConfig.setServletContext(ctx);        
         log.debug("contextName: " + ctx.getServletContextName());
         log.debug("context path: " + ctx.getRealPath(""));
 
