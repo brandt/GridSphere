@@ -204,7 +204,7 @@ public class PortletPageFactory implements PortletSessionListener {
                 }
             }  else {
                 try {
-                    page = createFromNewUserLayoutXML(req);
+                    page = createFromAllWebApps(); //createFromNewUserLayoutXML(req);
                     userLayouts.put(sessionId, page);
                     sessionManager.addSessionListener(sessionId, this);
                 } catch (Exception e) {
