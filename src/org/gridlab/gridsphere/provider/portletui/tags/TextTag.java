@@ -112,9 +112,13 @@ public class TextTag extends BaseComponentTag {
     protected void overrideBaseComponentBean(BaseComponentBean componentBean) {
         super.setBaseComponentBean(componentBean);
         // 1st of property defined in tag put it in bean
-        if (style != null) ((TextBean)componentBean).setStyle(style);
+        //if (style != null) ((TextBean)componentBean).setStyle(style);
         // 2nd if property exists in bean then use it
-        if (((TextBean)componentBean).getStyle() != null) style = ((TextBean)componentBean).getStyle();
+        if (((TextBean)componentBean).getStyle() != null) {
+            style = ((TextBean)componentBean).getStyle();
+        } else {
+            ((TextBean)componentBean).setStyle(style);
+        }
     }
 
     public int doStartTag() throws JspException {
