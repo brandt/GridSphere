@@ -120,7 +120,9 @@ public class LoginPortlet extends ActionPortlet {
             User user = saveUser(evt);
             //show the data of this user
             FrameBean frame = evt.getFrameBean("errorFrame");
-            frame.setValue("New account created.<br> Please login as " + user.getUserName());
+            frame.setValue(this.getLocalizedText(req, "USER_NEW_ACCOUNT") +
+                    "<br>" + this.getLocalizedText(req, "USER_PLEASE_LOGIN") +
+                    " " + user.getUserName());
             frame.setStyle("success");
             setNextState(req, "doViewUser");
         } catch (PortletException e) {
@@ -142,17 +144,18 @@ public class LoginPortlet extends ActionPortlet {
     private void validateUser(FormEvent event)
             throws PortletException {
         log.debug("Entering validateUser()");
+        PortletRequest req = event.getPortletRequest();
         StringBuffer message = new StringBuffer();
         boolean isInvalid = false;
         // Validate user name
         String userName = event.getTextFieldBean("userName").getValue();
         if (userName.equals("")) {
-            message.append("User name cannot be blank<br>");
+            message.append(this.getLocalizedText(req, "USER_NAME_BLANK") + "<br>");
             isInvalid = true;
         }
 
         if (this.userManagerService.existsUserName(userName)) {
-            message.append("A user already exists with the same user name, please use a different name.<br>");
+            message.append(this.getLocalizedText(req, "USER_EXISTS") + "<br>");
             isInvalid = true;
         }
 
@@ -160,26 +163,26 @@ public class LoginPortlet extends ActionPortlet {
         // Validate family name
         String familyName = event.getTextFieldBean("familyName").getValue();
         if (familyName.equals("")) {
-            message.append("Family name cannot be blank<br>");
+            message.append(this.getLocalizedText(req, "USER_FAMILYNAME_BLANK") + "<br>");
             isInvalid = true;
         }
         // Validate given name
         String givenName = event.getTextFieldBean("givenName").getValue();
         if (givenName.equals("")) {
-            message.append("Given name cannot be blank<br>");
+            message.append(this.getLocalizedText(req, "USER_GIVENNAME_BLANK") + "<br>");
             isInvalid = true;
         }
 
         // Validate e-mail
         String eMail = event.getTextFieldBean("emailAddress").getValue();
         if (eMail.equals("")) {
-            message.append("Email address cannot be blank<br>");
+            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
             isInvalid = true;
         } else if ((eMail.indexOf("@") < 0)) {
-            message.append("Please provide a valid E-mail address<br>");
+            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
             isInvalid = true;
         } else if ((eMail.indexOf(".") < 0)) {
-            message.append("Please provide a valid E-mail address<br>");
+            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
             isInvalid = true;
         }
 
@@ -196,6 +199,7 @@ public class LoginPortlet extends ActionPortlet {
 
     private boolean isInvalidPassword(FormEvent event, StringBuffer message)
     {
+        PortletRequest req = event.getPortletRequest();
         // Validate password
         String passwordValue = event.getPasswordBean("password").getValue();
         String confirmPasswordValue = event.getPasswordBean("confirmPassword").getValue();
@@ -203,12 +207,12 @@ public class LoginPortlet extends ActionPortlet {
         // If user already exists and password unchanged, no problem
         if (passwordValue.length() == 0 ||
                 confirmPasswordValue.length() == 0) {
-            message.append("Password cannot be empty<br>");
+            message.append(this.getLocalizedText(req, "USER_PASSWORD_BLANK") + "<br>");
             return true;
         }
         // Otherwise, password must match confirmation
         if (!passwordValue.equals(confirmPasswordValue)) {
-            message.append("Password must match confirmation<br>");
+            message.append(this.getLocalizedText(req, "USER_PASSWORD_MISMATCH") + "<br>");
             return true;
             // If they do match, then validate password with our service
         } else {

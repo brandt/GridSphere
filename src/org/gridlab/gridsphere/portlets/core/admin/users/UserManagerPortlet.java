@@ -193,9 +193,6 @@ public class UserManagerPortlet extends ActionPortlet {
         event.getTextFieldBean("fullName").setValue(user.getFullName());
         event.getTextFieldBean("emailAddress").setValue(user.getEmailAddress());
         event.getTextFieldBean("organization").setValue(user.getOrganization());
-        //Password pwd = this.passwordManagerService.getPassword(user);
-        //event.getPasswordBean("password").setValue(pwd.getValue());
-        //event.getPasswordBean("confirmPassword").setValue(pwd.getValue());
     }
 
     private void validateUser(FormEvent event, boolean newuser)
@@ -221,26 +218,26 @@ public class UserManagerPortlet extends ActionPortlet {
         // Validate family name
         String familyName = event.getTextFieldBean("familyName").getValue();
         if (familyName.equals("")) {
-            message.append("Family name cannot be blank<br>");
+            message.append(this.getLocalizedText(req, "USER_FAMILYNAME_BLANK") + "<br>");
             isInvalid = true;
         }
         // Validate given name
         String givenName = event.getTextFieldBean("givenName").getValue();
         if (givenName.equals("")) {
-            message.append("Given name cannot be blank<br>");
+            message.append(this.getLocalizedText(req, "USER_GIVENNAME_BLANK") + "<br>");
             isInvalid = true;
         }
 
         // Validate e-mail
         String eMail = event.getTextFieldBean("emailAddress").getValue();
         if (eMail.equals("")) {
-            message.append("Email address cannot be blank<br>");
+            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
             isInvalid = true;
         } else if ((eMail.indexOf("@") < 0)) {
-            message.append("Please provide a valid E-mail address<br>");
+            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
             isInvalid = true;
         } else if ((eMail.indexOf(".") < 0)) {
-            message.append("Please provide a valid E-mail address<br>");
+            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
             isInvalid = true;
         }
 
@@ -258,6 +255,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
     private boolean isInvalidPassword(FormEvent event, boolean newuser, StringBuffer message) {
         // Validate password
+        PortletRequest req = event.getPortletRequest();
         String passwordValue = event.getPasswordBean("password").getValue();
         String confirmPasswordValue = event.getPasswordBean("confirmPassword").getValue();
 
@@ -265,14 +263,14 @@ public class UserManagerPortlet extends ActionPortlet {
         if (passwordValue.length() == 0 &&
                    confirmPasswordValue.length() == 0) {
             if (newuser) {
-                message.append("Password cannot be empty<br>");
+                message.append(this.getLocalizedText(req, "USER_PASSWORD_BLANK") + "<br>");
                 return true;
             }
             return false;
         }
         // Otherwise, password must match confirmation
         if (!passwordValue.equals(confirmPasswordValue)) {
-            message.append("Password must match confirmation<br>");
+            message.append(this.getLocalizedText(req, "USER_PASSWORD_MISMATCH") + "<br>");
             return true;
         // If they do match, then validate password with our service
         } else {

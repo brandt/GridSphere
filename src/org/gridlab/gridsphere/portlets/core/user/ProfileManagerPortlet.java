@@ -16,6 +16,7 @@ import org.gridlab.gridsphere.services.core.security.acl.InvalidGroupRequestExce
 import org.gridlab.gridsphere.services.core.security.acl.GroupEntry;
 import org.gridlab.gridsphere.services.core.security.acl.GroupAction;
 import org.gridlab.gridsphere.services.core.security.password.PasswordManagerService;
+import org.gridlab.gridsphere.services.core.security.password.InvalidPasswordException;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.core.user.AccountRequest;
 import org.gridlab.gridsphere.services.core.user.InvalidAccountRequestException;
@@ -40,6 +41,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
     // Portlet services
     private UserManagerService userManagerService = null;
+    private PasswordManagerService passwordManagerService = null;
     private AccessControlManagerService aclManagerService = null;
     private LayoutManagerService layoutMgr = null;
     private PortletRegistry portletRegistry = null;
@@ -52,6 +54,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         try {
             this.userManagerService = (UserManagerService)config.getContext().getService(UserManagerService.class);
             this.aclManagerService = (AccessControlManagerService)config.getContext().getService(AccessControlManagerService.class);
+            this.passwordManagerService = (PasswordManagerService)config.getContext().getService(PasswordManagerService.class);
             this.portletRegistry = PortletRegistry.getInstance();
             this.layoutMgr = (LayoutManagerService)config.getContext().getService(LayoutManagerService.class);
             this.tms = (TextMessagingService) config.getContext().getService(TextMessagingService.class);
@@ -137,7 +140,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
         organization.setValue(user.getOrganization());
         organization.setDisabled(disable);
 
-        TextFieldBean email =  event.getTextFieldBean("email");
+        TextFieldBean email =  event.getTextFieldBean("emailAddress");
         email.setValue(user.getEmailAddress());
         email.setDisabled(disable);
 
@@ -308,30 +311,17 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
         PortletRequest req = event.getPortletRequest();
         User user = req.getUser();
-        TextFieldBean userName =  event.getTextFieldBean("userName");
-        String username = userName.getValue();
 
-        TextFieldBean fullName =  event.getTextFieldBean("fullName");
-        String fullname = fullName.getValue();
-
-        TextFieldBean orgTF =  event.getTextFieldBean("organization");
-        String organization = orgTF.getValue();
-
-        TextFieldBean emailTF =  event.getTextFieldBean("email");
-        String email = emailTF.getValue();
-
-        AccountRequest acctReq = userManagerService.createAccountRequest(user);
-        if (email != null) acctReq.setEmailAddress(email);
-        if (username != null) acctReq.setUserName(username);
-        if (fullname != null) acctReq.setFullName(fullname);
-        if (organization != null) acctReq.setOrganization(organization);
-        acctReq.setPasswordValidation(false);
-        try {
-            userManagerService.submitAccountRequest(acctReq);
-        } catch (InvalidAccountRequestException e) {
-            log.error("in ProfileManagerPortlet invalid account request", e);
+        // validate user entries to create an account request
+        AccountRequest acctReq = validateUser(event);
+        if (acctReq != null) {
+            try {
+                userManagerService.submitAccountRequest(acctReq);
+            } catch (InvalidAccountRequestException e) {
+                log.error("in ProfileManagerPortlet invalid account request", e);
+            }
+            user = userManagerService.approveAccountRequest(acctReq);
         }
-        user = userManagerService.approveAccountRequest(acctReq);
 
         CheckBoxBean groupsCB = event.getCheckBoxBean("groupCheckBox");
         List groups = groupsCB.getSelectedValues();
@@ -421,6 +411,95 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
     }
 
+    private AccountRequest validateUser(FormEvent event) {
+        log.debug("Entering validateUser()");
+        PortletRequest req = event.getPortletRequest();
+        User user = req.getUser();
+        StringBuffer message = new StringBuffer();
+        boolean isInvalid = false;
 
+        // Validate user name
+        String userName = event.getTextFieldBean("userName").getValue();
+        if (userName.equals("")) {
+            message.append(this.getLocalizedText(req, "USER_NAME_BLANK") + "<br>");
+            isInvalid = true;
+        }
+
+        // Validate full name
+        String fullName = event.getTextFieldBean("fullName").getValue();
+        if (fullName.equals("")) {
+            message.append(this.getLocalizedText(req, "USER_FULLNAME_BLANK") + "<br>");
+            isInvalid = true;
+        }
+        // Validate given name
+        String organization = event.getTextFieldBean("organization").getValue();
+
+        // Validate e-mail
+        String eMail = event.getTextFieldBean("emailAddress").getValue();
+        if (eMail.equals("")) {
+            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
+            isInvalid = true;
+        } else if ((eMail.indexOf("@") < 0)) {
+            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
+            isInvalid = true;
+        } else if ((eMail.indexOf(".") < 0)) {
+            message.append(this.getLocalizedText(req, "USER_NEED_EMAIL") + "<br>");
+            isInvalid = true;
+        }
+
+        if (!isInvalid) {
+            isInvalid = isInvalidPassword(event, message);
+        }
+
+        // Throw exception if error was found
+        if (isInvalid) {
+            FrameBean errorFrame = event.getFrameBean("errorFrame");
+            errorFrame.setValue(message.toString());
+            return null;
+        }
+
+        AccountRequest acctReq = userManagerService.createAccountRequest(user);
+        acctReq.setEmailAddress(eMail);
+        acctReq.setUserName(userName);
+        acctReq.setFullName(fullName);
+        if (organization != null) acctReq.setOrganization(organization);
+
+        acctReq.setPasswordValidation(false);
+        // Save password parameters if password was altered
+        String passwordValue = event.getPasswordBean("password").getValue();
+        if (passwordValue.length() > 0) {
+            acctReq.setPasswordValue(passwordValue);
+        }
+
+        log.debug("Exiting validateUser()");
+        return acctReq;
+    }
+
+    private boolean isInvalidPassword(FormEvent event, StringBuffer message) {
+        // Validate password
+        PortletRequest req = event.getPortletRequest();
+        String passwordValue = event.getPasswordBean("password").getValue();
+        String confirmPasswordValue = event.getPasswordBean("confirmPassword").getValue();
+
+        // If user already exists and password unchanged, no problem
+        if (passwordValue.length() == 0 &&
+                   confirmPasswordValue.length() == 0) {
+            return false;
+        }
+        // Otherwise, password must match confirmation
+        if (!passwordValue.equals(confirmPasswordValue)) {
+            message.append(this.getLocalizedText(req, "USER_PASSWORD_MISMATCH") + "<br>");
+            return true;
+        // If they do match, then validate password with our service
+        } else {
+            try {
+                this.passwordManagerService.validatePassword(passwordValue);
+            } catch (InvalidPasswordException e) {
+                message.append(e.getMessage());
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
