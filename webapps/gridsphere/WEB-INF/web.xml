@@ -108,11 +108,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>TextMessagingPortlet</servlet-name>
-        <servlet-class>org.gridlab.gridsphere.portlets.core.messaging.TextMessagingPortlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>ServletRedirector</servlet-name>
         <servlet-class>org.apache.cactus.server.ServletTestRedirector</servlet-class>
     </servlet>
@@ -194,11 +189,6 @@
     <servlet-mapping>
         <servlet-name>ServletTestRunner</servlet-name>
         <url-pattern>/ServletTestRunner</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>TextMessagingPortlet</servlet-name>
-        <url-pattern>/textmessaging</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

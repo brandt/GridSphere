@@ -47,65 +47,7 @@
                 </language>
             </concrete-portlet>
         </concrete-portlet-app>
-    </portlet-app-def>
-
-    <portlet-app-def>
-        <portlet-app id="org.gridlab.gridsphere.portlets.core.file.BannerPortlet">
-            <portlet-name>Banner Portlet</portlet-name>
-            <servlet-name>BannerPortlet</servlet-name>
-            <supports>
-                <markup name="html">
-                    <view/>
-                    <edit/>
-                    <configure/>
-                    <help/>
-                </markup>
-            </supports>
-        </portlet-app>
-
-        <concrete-portlet-app id="org.gridlab.gridsphere.portlets.core.file.BannerPortlet.1">
-            <concrete-portlet>
-                <portlet-name>Banner Portlet</portlet-name>
-                <default-locale>en</default-locale>
-                <language locale="en">
-                    <title>Banner</title>
-                    <description>Displays a banner in a portlet</description>
-                </language>
-                <language locale="de">
-                    <title>Banner</title>
-                    <description>Zeigt ein Banner im Portlet an</description>
-                </language>
-                <language locale="fr">
-                    <title>Bannière</title>
-                    <description>Affiche une bannière dans un portlet</description>
-                </language>
-                <language locale="it">
-                    <title>Titolo</title>
-                    <description>Visualizza un titolo in una portlet</description>
-                </language>
-                <language locale="hu">
-                    <title>Felirat</title>
-                    <description>A portlet egy feliratot jelenít meg.</description>
-                </language>
-                <language locale="cs">
-                    <title>Reklamní tabule</title>
-                    <description>Zobrazuje libovolný statický obsah v portletu</description>
-                </language>
-                <language locale="pl">
-                    <title>Plakat</title>
-                    <description>Wyświetla plakat w portlecie</description>
-                </language>
-                <config-param>
-                    <param-name>title</param-name>
-                    <param-value>Welcome to GridSphere</param-value>
-                </config-param>
-                <config-param>
-                    <param-name>file</param-name>
-                    <param-value>/jsp/banner/main.html</param-value>
-                </config-param>
-            </concrete-portlet>
-        </concrete-portlet-app>
-    </portlet-app-def>
+    </portlet-app-def>   
 
     <portlet-app-def>
         <portlet-app id="org.gridlab.gridsphere.portlets.core.login.LoginPortlet">
