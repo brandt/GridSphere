@@ -15,6 +15,8 @@ import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRPortletWebApplicationI
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.JSRApplicationPortletImpl;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.PortletDefinition;
 import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.Supports;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomPortletMode;
+import org.gridlab.gridsphere.portletcontainer.jsrimpl.descriptor.CustomWindowState;
 import org.gridlab.gridsphere.services.core.security.acl.AccessControlManagerService;
 import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManager;
 import org.gridlab.gridsphere.services.core.registry.impl.PortletManager;
@@ -183,6 +185,9 @@ public class PortletServlet  extends HttpServlet
                 (JSRApplicationPortletImpl)registry.getApplicationPortlet(portletClassName);
 
         Supports[] supports = appPortlet.getSupports();
+        CustomPortletMode[] customModes =  portletWebApp.getCustomPortletModes();
+        CustomWindowState[] customStates = portletWebApp.getCustomWindowStates();
+
 
         // perform user conversion from gridsphere to JSR model
         User user = (User)request.getAttribute(SportletProperties.PORTLET_USER);
@@ -225,30 +230,36 @@ public class PortletServlet  extends HttpServlet
                 log.debug("in PortletServlet: action is not NULL");
                 if (action.equals(SportletProperties.DO_TITLE)) {
                     RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext, supports);
-                    RenderResponse renderResponse = new RenderResponseImpl(request, response);
+                    RenderResponse renderResponse = new RenderResponseImpl(request, response, portalContext);
                     renderRequest.setAttribute(SportletProperties.RENDER_REQUEST, renderRequest);
                     renderRequest.setAttribute(SportletProperties.RENDER_RESPONSE, renderResponse);
                     log.debug("in PortletServlet: do title " + portletClassName);
                     doTitle(portlet, renderRequest, renderResponse);
                 } else {
                     ActionRequest actionRequest = new ActionRequestImpl(request, portalContext, portletContext, supports);
-                    ActionResponse actionResponse = new ActionResponseImpl(request, response);
+                    ActionResponse actionResponse = new ActionResponseImpl(request, response, portalContext);
                     //setGroupAndRole(actionRequest, actionResponse);
                     log.debug("in PortletServlet: action handling portlet " + portletClassName);
                     doAction(portlet, actionRequest, actionResponse);
 
+                    System.err.println("placing render params in attribute: " + "renderParams" + "_" + portletClassName);
+                    Map params = ((ActionResponseImpl)actionResponse).getRenderParameters();
+                    actionRequest.setAttribute("renderParams" + "_" + portletClassName, params);
+
                     // TODO Enabling this passes some TCK tests
 
-                    //redirect(request, response, actionResponse);
+                    redirect(request, response, actionResponse);
                 }
             } else {
                 RenderRequest renderRequest = new RenderRequestImpl(request, portalContext, portletContext, supports);
-                RenderResponse renderResponse = new RenderResponseImpl(request, response);
+                RenderResponse renderResponse = new RenderResponseImpl(request, response, portalContext);
                 renderRequest.setAttribute(SportletProperties.RENDER_REQUEST, renderRequest);
                 renderRequest.setAttribute(SportletProperties.RENDER_RESPONSE, renderResponse);
                 //setGroupAndRole(renderRequest, renderResponse);
                 log.debug("in PortletServlet: rendering  portlet " + portletClassName);
-                doRender(portlet, renderRequest, renderResponse);
+                if (renderRequest.getAttribute(SportletProperties.RESPONSE_COMMITTED) == null) {
+                    doRender(portlet, renderRequest, renderResponse);
+                }
             }
             request.removeAttribute(SportletProperties.PORTLET_ACTION_METHOD);
         } else {
@@ -350,7 +361,7 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
             ActionResponseImpl aResponse = (ActionResponseImpl)actionResponse;
             location = aResponse.getRedirectLocation();
 
-            if (location == null) {
+            if (location != null) {
 
                 PortletURL redirectUrl = new PortletURLImpl(servletRequest, servletResponse);
                 //TODO: don't send changes in case of exception -> PORTLET:SPEC:17
@@ -383,16 +394,17 @@ request.setAttribute(SportletProperties.PORTLET_ROLE, role);
                 redirectUrl.setParameters(renderParameter);
 
                 location = servletResponse.encodeRedirectURL(redirectUrl.toString());
-            }
 
-            javax.servlet.http.HttpServletResponse redirectResponse = servletResponse;
-            while (redirectResponse instanceof javax.servlet.http.HttpServletResponseWrapper)
-            {
-                redirectResponse = (javax.servlet.http.HttpServletResponse)
-                        ((javax.servlet.http.HttpServletResponseWrapper)redirectResponse).getResponse();
+
+                javax.servlet.http.HttpServletResponse redirectResponse = servletResponse;
+                while (redirectResponse instanceof javax.servlet.http.HttpServletResponseWrapper)
+                {
+                    redirectResponse = (javax.servlet.http.HttpServletResponse)
+                            ((javax.servlet.http.HttpServletResponseWrapper)redirectResponse).getResponse();
+                }
+                System.err.println("redirecting to location= "+ location);
+                redirectResponse.sendRedirect(location);
             }
-            System.err.println("redirecting to location= "+ location);
-            redirectResponse.sendRedirect(location);
         }
 
     }
