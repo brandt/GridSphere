@@ -104,7 +104,7 @@ public class PortletServlet extends HttpServlet
         portletclasses = new Hashtable();
         portletConfigHash = new Hashtable();
 
-        portletWebApp = new JSRPortletWebApplicationImpl(ctx, "PortletServlet", Thread.currentThread().getContextClassLoader());
+        portletWebApp = new JSRPortletWebApplicationImpl(ctx, Thread.currentThread().getContextClassLoader());
         //registry.addApplicationPortlet(appPortlet);
 
         Collection appPortlets = portletWebApp.getAllApplicationPortlets();
@@ -118,7 +118,9 @@ public class PortletServlet extends HttpServlet
                 Portlet portletInstance = (Portlet) Class.forName(portletClass).newInstance();
                 //portlets.put(portletClass, portletInstance);
                 portlets.put(portletName, portletInstance);
-                portletclasses.put(portletClass, portletInstance);
+
+                // mappings between names and classes
+                portletclasses.put(portletClass, portletName);
                 log.debug("Creating new portlet instance: " + portletClass);
 
                 // put portlet web app in registry
@@ -137,12 +139,6 @@ public class PortletServlet extends HttpServlet
                 userKeys.put(key, "");
             }
         }
-
-
-        /*
-        PortletManager manager = PortletManager.getInstance();
-        manager.initPortletWebApplication(webapp);
-       */
 
         // create portlet context
         portletContext = new PortletContextImpl(ctx);
@@ -220,12 +216,15 @@ public class PortletServlet extends HttpServlet
         int idx = pid.indexOf("#");
         Portlet portlet = null;
         if (idx > 0) {
-        String pname = pid.substring(idx+1);
-        System.err.println("pname= " + pname);
+            String pname = pid.substring(idx+1);
             portlet = (Portlet) portlets.get(pname);
-        // this hack uses the portletclasses hash that identifies classname to portlet mappings
+            request.setAttribute(SportletProperties.PORTLET_CONFIG, portletConfigHash.get(pname));
+
+            // this hack uses the portletclasses hash that identifies classname to portlet mappings
         } else {
-            portlet = (Portlet)portletclasses.get(pid);
+            String pname = (String)portletclasses.get(pid);
+            portlet = (Portlet)portlets.get(pname);
+            request.setAttribute(SportletProperties.PORTLET_CONFIG, portletConfigHash.get(pname));
         }
 
         JSRApplicationPortletImpl appPortlet =
@@ -276,7 +275,6 @@ public class PortletServlet extends HttpServlet
         PortalContext portalContext = appPortlet.getPortalContext();
         request.setAttribute(SportletProperties.PORTAL_CONTEXT, portalContext);
 
-        request.setAttribute(SportletProperties.PORTLET_CONFIG, portletConfigHash.get(pid));
 
         if (portlet == null) {
             log.error("in PortletServlet: service(): No portlet matching " + pid + " found!");
@@ -334,6 +332,7 @@ public class PortletServlet extends HttpServlet
 
                 renderRequest.setAttribute(SportletProperties.RENDER_REQUEST, renderRequest);
                 renderRequest.setAttribute(SportletProperties.RENDER_RESPONSE, renderResponse);
+
                 //setGroupAndRole(renderRequest, renderResponse);
                 log.debug("in PortletServlet: rendering  portlet " + pid);
                 if (renderRequest.getAttribute(SportletProperties.RESPONSE_COMMITTED) == null) {
