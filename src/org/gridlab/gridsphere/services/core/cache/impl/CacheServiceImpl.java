@@ -94,7 +94,7 @@ public class CacheServiceImpl implements PortletServiceProvider, CacheService {
         long currentTime = System.currentTimeMillis();
         while (cacheIter.hasNext()) {
             CacheObject cobj = (CacheObject) cacheIter.next();
-            if (cobj.delay > 0 && cobj.expiration < currentTime) {
+            if ((cobj.delay > 0) && (cobj.expiration < currentTime)) {
                 expiredKeys.add(cobj.key);
             }
         }
