@@ -136,7 +136,6 @@ Copyright:
     <!-- backup, deploy and preprocess the properties file -->
     <copy file="${gswebapp.dir}/WEB-INF/conf/gridsphere.properties" tofile="${gswebapp.dir}/WEB-INF/conf/gridsphere.properties.bak"/>
     <copy file="${gswebapp.dir}/WEB-INF/conf/gridsphere.properties" tofile="${classes.dir}/${Name}/gridsphere.properties"/>
-    <copy file="${gswebapp.dir}/WEB-INF/conf/PortletServices.properties" tofile="${classes.dir}/${Name}/PortletServices.properties"/>
     <copy file="conf/log4j.properties" tofile="${classes.dir}/log4j.properties" />
 
     <!-- <copy file="${webapp.dir}/WEB-INF/conf/${Name}.properties" tofile="${env.TOMCAT_HOME}/webapps/${Name}/WEB-INF/conf/${Name}.properties" />  -->
@@ -400,7 +399,7 @@ Copyright:
     <!-- =================================================================== -->
     <!-- Runs all JUnit tests: needs optional.jar and junit in classpath     -->
     <!-- =================================================================== -->
-    <target name="runtests" depends="compiletests" if="junit.present" description="Runs all JUnit tests">
+    <target name="runtests" depends="compiletests, deploy" if="junit.present" description="Runs all JUnit tests">
     <java fork="no" classname="junit.textui.TestRunner"
             taskname="junit" failonerror="true">
         <arg value="org.gridlab.gridsphere.AllJUnitTests"/>
