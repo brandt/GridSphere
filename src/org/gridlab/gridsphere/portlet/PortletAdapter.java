@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.List;
 
 /**
  * The <code>PortletAdapter</code> provides a default implementation for the
@@ -156,8 +157,9 @@ public abstract class PortletAdapter extends Portlet {
 
         //if (this.getPortletConfig() == null) System.err.println("portletconfig is null!");
 
+        /*
         String groupName = this.getPortletConfig().getGroupName();
-        //String portletName = portletConfig.getName();
+        String portletName = portletConfig.getName();
         PortletGroup group = aclService.getGroupByName(groupName);
         if (group == null)
             group = PortletGroupFactory.createPortletGroup(groupName);
@@ -165,9 +167,20 @@ public abstract class PortletAdapter extends Portlet {
 
         log.debug("Setting Group: " + group.toString() + " Role: " + role.toString());
 
+
         request.setAttribute(SportletProperties.PORTLET_GROUP, group);
         request.setAttribute(SportletProperties.PORTLET_ROLE, role);
+        */
+        //List groups = aclService.getGroupsWithPortlet(portletID);
+        //if (groups != null) {
+            user = request.getUser();
+            PortletRole role = aclService.getRequiredRole(user, portletID);
 
+        //}
+
+
+        //request.getAttribute(SportletProperties.PO)
+        //PortletRole role = request.getRole();
         String method = (String) request.getAttribute(SportletProperties.PORTLET_ACTION_METHOD);
         if (method != null) return;
 

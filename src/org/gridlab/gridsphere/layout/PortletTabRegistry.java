@@ -183,6 +183,7 @@ public class PortletTabRegistry {
             tabDescriptors.remove(groupName);
         }
         groupTabs.remove(groupName);
+        applicationTabs.remove(groupName);
     }
 
     public static Map getApplicationTabs() {

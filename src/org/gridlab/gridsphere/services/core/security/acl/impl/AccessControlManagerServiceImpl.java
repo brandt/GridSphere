@@ -245,12 +245,12 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         }
     }
 
-    public PortletGroup getGroup(String id) {
-        return selectSportletGroup("where grp.oid='" + id + "'");
-    }
-
     public PortletGroup getGroupByName(String name) {
         return selectSportletGroup("where grp.Name='" + name + "'");
+    }
+
+    public PortletGroup getGroup(String id) {
+        return selectSportletGroup("where grp.oid='" + id + "'");
     }
 
 
@@ -415,6 +415,15 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
         }
         return entry.getRole();
         //}
+    }
+
+    public PortletRole getRequiredRole(User user, String portletID) {
+
+        List groups = getGroups(user);
+        Iterator it = groups.iterator();
+
+        return PortletRole.GUEST;
+
     }
 
     public void addGroupEntry(User user, PortletGroup group, PortletRole role) {

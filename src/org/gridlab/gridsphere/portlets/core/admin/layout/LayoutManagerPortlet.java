@@ -350,15 +350,23 @@ public class LayoutManagerPortlet extends ActionPortlet {
     }
 
     private void copyFile(File in, File out) throws Exception {
-        FileInputStream fis = new FileInputStream(in);
-        FileOutputStream fos = new FileOutputStream(out);
-        byte[] buf = new byte[1024];
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(in), "UTF-8"));
+
+        //while (line == (reader.))
+
+        //FileInputStream fis = new FileInputStream(in);
+        OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(out), "UTF-8");
+        //BufferedWriter writer = new BufferedWriter(new OutputStreamWriter())
+        char[] buf = new char[1024];
         int i = 0;
-        while ((i = fis.read(buf)) != -1) {
-            fos.write(buf, 0, i);
+        while ((i = reader.read(buf)) != -1) {
+            writer.write(buf, 0, i);
         }
-        fis.close();
-        fos.close();
+        //fis.close();
+        //fos.close();
+        reader.close();
+        writer.close();
+
     }
 
     private void createErrorMessage(FormEvent event, String msg) {

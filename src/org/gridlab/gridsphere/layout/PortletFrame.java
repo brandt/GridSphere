@@ -264,7 +264,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
 
         PortletComponentEvent titleBarEvent = event.getLastRenderEvent();
 
-
         if ((titleBarEvent != null) && (titleBarEvent instanceof PortletTitleBarEvent)) {
             PortletTitleBarEvent tbEvt = (PortletTitleBarEvent) titleBarEvent;
             if (titleBarEvent.getAction() == PortletTitleBarEvent.TitleBarAction.WINDOW_MODIFY) {
@@ -374,6 +373,12 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
                     && (!event.getAction().getName().equals(FRAME_CLOSE_CANCEL_ACTION))) {
                 DefaultPortletAction action = event.getAction();
                 //if (!action.getName().equals("")) {
+
+                // role checking
+                // given a portlet class, we get groups with that class
+
+                
+
                 try {
                     PortletInvoker.actionPerformed(portletClass, action, req, res);
                 } catch (Exception e) {

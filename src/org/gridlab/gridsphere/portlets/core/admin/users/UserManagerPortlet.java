@@ -151,9 +151,7 @@ public class UserManagerPortlet extends ActionPortlet {
 
             setNextState(req, "doListUsers");
         } catch (PortletException e) {
-            FrameBean err = evt.getFrameBean("errorFrame");
-            err.setValue(e.getMessage());
-            err.setStyle("alert");
+            createErrorMessage(evt, e.getMessage());
             setNextState(req, DO_VIEW_USER_EDIT);
         }
     }
@@ -417,7 +415,7 @@ public class UserManagerPortlet extends ActionPortlet {
     private void createSuccessMessage(FormEvent event, String msg) {
         MessageBoxBean msgBox = event.getMessageBoxBean("msg");
         msgBox.setMessageType(TextBean.MSG_SUCCESS);
-        msgBox.appendText(msg);
+        msgBox.setValue(msg);
     }
 
 
