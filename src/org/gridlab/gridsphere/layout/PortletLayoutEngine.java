@@ -23,7 +23,7 @@ public class PortletLayoutEngine {
     private PortletLayoutDescriptor templateLayout = null;
     private String templateLayoutPath, layoutMappingPath;
     private PortletLayoutDescriptor guestLayout = null;
-    private String guestLayoutPath = null;
+    private String layoutConfigPath = null;
 
     private boolean reload = false;
     private String error = "";
@@ -34,7 +34,7 @@ public class PortletLayoutEngine {
         gsConfig = GridSphereConfig.getInstance();
 
         String layoutMappingPath = gsConfig.getProperty("LAYOUT_MAPPING_XML");
-        String layoutConfigPath =  gsConfig.getProperty("LAYOUT_XML");
+        layoutConfigPath =  gsConfig.getProperty("LAYOUT_XML");
 
         guestLayout = new PortletLayoutDescriptor(layoutConfigPath, layoutMappingPath);
     }
@@ -139,7 +139,7 @@ public class PortletLayoutEngine {
         // if no layout file exists for user, make new one from template
         if (!f.exists()) {
             f.createNewFile();
-            copyFile(new File(guestLayoutPath), f);
+            copyFile(new File(layoutConfigPath), f);
         }
 
         PortletLayoutDescriptor userLayout = new PortletLayoutDescriptor(layoutPath, layoutMappingPath);
