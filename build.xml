@@ -38,9 +38,9 @@ Copyright:
   <property name="dist.dir"       value="${Name}-${version}" />
   <property name="build.lib"      value="${build.dir}/lib"/>
   <property name="classes.dir"    value="${build.dir}/classes"/>
+  <property name="build.war"      value="${build.dir}/webapp"/>
   <property name="docs.dir"       value="${build.dir}/docs"/>
   <property name="javadoc.dir"    value="${build.dir}/javadocs"/>
-  <property name="install.war"    value="${build.dir}/webapp"/>
   <property name="reports.tests"  value="${build.dir}/tests"/>
   <property name="test.cfg.dir"   value="${src.dir}"/>
 
@@ -82,6 +82,7 @@ Copyright:
   <target name="setenv" description="Check for libraries and print out config information">
 	<mkdir dir="${build.dir}"/>
     <mkdir dir="${build.lib}"/>
+    <mkdir dir="${build.war}"/>
 	<mkdir dir="${classes.dir}"/>
 
     <available property="cog.present"
@@ -350,13 +351,13 @@ Copyright:
   <!-- ================================================================= -->
   <!-- Deploys core portlets to a local server                              -->
   <!-- ================================================================= -->
-  <target name="deploy" depends="deploy-hsqldb, deploy-gs, deploy-portlets"/>
+  <target name="deploy" depends="deploy-gs, deploy-hsqldb, deploy-portlets"/>
 
     <!-- ================================================================= -->
     <!-- Deploys GridSphere to a local server                              -->
     <!-- ================================================================= -->
     <target name="deploy-gs" depends="jar" description="Deploys GridSphere to a local server">
-        <copy todir="${install.war}/${Name}">
+        <copy todir="${build.war}/${Name}">
             <fileset dir="${gswebapp.dir}"/>
         </copy>
         <copy todir="${env.CATALINA_HOME}/shared/lib">
@@ -370,9 +371,9 @@ Copyright:
             </fileset>
         </copy>
 
-     <!--   <replace file="${install.war}/${Name}/WEB-INF/conf/hsqldb-junit.xml" token="@CATALINA_HOME@" value="${env.CATALINA_HOME}"/>   -->
+     <!--   <replace file="${build.war}/${Name}/WEB-INF/conf/hsqldb-junit.xml" token="@CATALINA_HOME@" value="${env.CATALINA_HOME}"/>   -->
         <copy todir="${env.CATALINA_HOME}/webapps/${Name}">
-            <fileset dir="${install.war}/${Name}"/>
+            <fileset dir="${build.war}/${Name}"/>
         </copy>
 
         <copy file="conf/log4j.properties" tofile="${env.CATALINA_HOME}/webapps/${Name}/WEB-INF/log4j.properties" />
@@ -386,7 +387,7 @@ Copyright:
     <!-- Installs hsqldb to tomcat                                         -->
     <!-- ================================================================= -->
     <target name="deploy-hsqldb" depends="mapping, db-hsqldb" description="deploys the hsqldb to tomcat">
-        <replace file="${install.war}/${Name}/WEB-INF/conf/hsqldb.xml" token="@CATALINA_HOME@" value="${env.CATALINA_HOME}"/>
+        <replace file="${build.war}/${Name}/WEB-INF/conf/hsqldb.xml" token="@CATALINA_HOME@" value="${env.CATALINA_HOME}"/>
         <!-- where hsqldb stores the datafiles -->
         <mkdir dir="${env.CATALINA_HOME}/gridsphere/db"/>
         <copy file="conf/gridsphere-db.properties" tofile="${env.CATALINA_HOME}/gridsphere/db/gridsphere-db.properties" />
@@ -398,13 +399,13 @@ Copyright:
     <!-- Deploys core portlets to a local server                           -->
     <!-- ================================================================= -->
     <target name="deploy-portlets" depends="core-portlets-jar" description="Deploys core portlets to a local server">
-        <copy todir="${install.war}/coreportlets">
+        <copy todir="${build.war}/coreportlets">
             <fileset dir="${corewebapp.dir}"/>
         </copy>
         <copy file="${build.lib}/portlet-widget-tags.jar" todir="${env.CATALINA_HOME}/webapps/coreportlets/WEB-INF/lib"/>
         <copy file="${build.lib}/coreportlets.jar" todir="${env.CATALINA_HOME}/webapps/coreportlets/WEB-INF/lib"/>
         <copy todir="${env.CATALINA_HOME}/webapps/coreportlets">
-            <fileset dir="${install.war}/coreportlets"/>
+            <fileset dir="${build.war}/coreportlets"/>
         </copy>
     </target>
 
