@@ -56,7 +56,7 @@
         <name>Credential Manager Service</name>
         <user-required>true</user-required>
         <description>Provides Credential Management Capabilities</description>
-        <interface>org.gridlab.gridsphere.services.security.credential.CredentialManagerService</interface>
+        <interface>org.gridlab.gridsphere.services.core.security.credential.CredentialManagerService</interface>
         <implementation>org.gridlab.gridsphere.services.core.security.credential.impl.CredentialManagerServiceImpl</implementation>
         <service-config>
             <param-name>retrievalHost</param-name>
@@ -67,8 +67,8 @@
     <service>
         <name>Layout Service</name>
         <description>Provides Layout Capabilities</description>
-        <interface>org.gridlab.gridsphere.services.layout.LayoutManagerService</interface>
-        <implementation>org.gridlab.gridsphere.services.layout.impl.LayoutManagerServiceImpl</implementation>
+        <interface>org.gridlab.gridsphere.services.core.layout.LayoutManagerService</interface>
+        <implementation>org.gridlab.gridsphere.services.core.layout.impl.LayoutManagerServiceImpl</implementation>
     </service>
 
 </portlet-services>
