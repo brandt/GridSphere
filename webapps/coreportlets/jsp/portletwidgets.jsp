@@ -137,17 +137,24 @@ Example:
 
 <h4>Additional HTML Tags</h4>
 
-<b>textfield</b>
+<b>textfield</b><br/>
 
-&lt;gs:textfield name="username" size="8" maxlength="20"/&gt;
+&lt;gs:textfield name="username" size="8" maxlength="20"/&gt;  <p/>
 
-<b>password</b>
+<b>password</b><br/>
 
-&lt;gs:password name="password" size="8" minlength="6" maxlength="20"/&gt;
+&lt;gs:password name="password" size="8" minlength="6" maxlength="20"/&gt; <p/>
 
-<b>input</b>
+<b>input</b><br/>
 
-&lt;gs:input type="submit" name="option" value="Login"/&gt;
+&lt;gs:input type="submit" name="option" value="Login"/&gt;       <p/>
+
+<b>submit</b><br/>
+&lt;gs:submit name="cancel" value="Cancel" /&gt; <br/>
+
+This generates an html submit button with the name cancel. If this button is pressed
+FormEvent.getPressedSubmitButton() will return this name.
+
 
 <h4>More Information</h4>
 
