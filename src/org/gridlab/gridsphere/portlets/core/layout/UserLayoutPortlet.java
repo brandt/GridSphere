@@ -124,7 +124,7 @@ public class UserLayoutPortlet extends ActionPortlet {
             PortletTab tab = (PortletTab) it.next();
             if (tab.getLabel().equals(label)) {
                 tab.setTitle(lang, name);
-                tab.setLabel(URLEncoder.encode(name));
+                tab.setLabel(URLEncoder.encode(name, "UTF-8"));
             }
         }
         pane.save();
@@ -135,7 +135,7 @@ public class UserLayoutPortlet extends ActionPortlet {
             PortletTab tab = (PortletTab) it.next();
             if (tab.getLabel().equals(label)) {
                 tab.setTitle(lang, name);
-                tab.setLabel(URLEncoder.encode(name));
+                tab.setLabel(URLEncoder.encode(name, "UTF-8"));
             }
         }
         layoutMgr.reloadPage(event.getPortletRequest());
