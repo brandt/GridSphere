@@ -132,6 +132,7 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
                     dt.checkDBSetup(GridSphereConfig.getServletContext().getRealPath("/WEB-INF/persistence/"));
                 } catch (PersistenceManagerException e) {
                     RequestDispatcher rd = req.getRequestDispatcher("/jsp/dberror.jsp");
+                    log.error("Check DB failed: ", e);
                     req.setAttribute("error", "DB Error! Please contact your GridSphere/Database Administrator!");
                     rd.forward(req, res);
                     return;
