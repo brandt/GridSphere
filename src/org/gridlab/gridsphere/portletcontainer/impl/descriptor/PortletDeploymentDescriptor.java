@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.portletcontainer.ConcretePortlet;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerXml;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.core.persistence.PersistenceManagerFactory;
+import org.gridlab.gridsphere.core.persistence.castor.PersistenceManagerXmlImpl;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,9 +22,9 @@ import java.util.List;
  * marshalling/unmarshalling the XML portlet schema represntation and the
  * associated Java classes using Castor.
  */
-public class PortletDeploymentDescriptor {
+public class PortletDeploymentDescriptor implements Cloneable {
 
-    private static PersistenceManagerXml pmXML = null;
+    private PersistenceManagerXml pmXML = null;
     private SportletCollection sportletCollection = null;
 
     /**
