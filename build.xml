@@ -286,10 +286,11 @@ Copyright:
     </target>
 
     <!-- =================================================================== -->
-    <!-- Creates the GridSphere ui JAR                                       -->
+    <!-- Creates the GridSphere UI tags JAR                                  -->
     <!-- =================================================================== -->
     <target name="gridsphere-ui-tags-jar" depends="compile" description="Create lib/gridsphere-ui-tags.jar">
         <jar jarfile="${build.lib}/gridsphere-ui-tags.jar" basedir="${build.classes}">
+            <include name="org/gridlab/gridsphere/provider/portlet/ActionPortlet.class"/>
             <include name="org/gridlab/gridsphere/provider/portletui/tags/**"/>
             <include name="org/gridlab/gridsphere/provider/portlet/tags/**"/>
             <metainf dir="${gswebapp.dir}/WEB-INF/tlds"/>
@@ -301,9 +302,11 @@ Copyright:
     <!-- =================================================================== -->
     <target name="gridsphere-provider-jar" depends="compile" description="Create lib/gridsphere-provider.jar">
         <jar jarfile="${build.lib}/gridsphere-provider.jar" basedir="${build.classes}">
-            <include name="org/gridlab/gridsphere/provider/**"/>
-            <exclude name="org/gridlab/gridsphere/provider/portletui/tags/**"/>
-            <exclude name="org/gridlab/gridsphere/provider/portlet/tags/**"/>
+            <include name="org/gridlab/gridsphere/provider/event"/>
+            <include name="org/gridlab/gridsphere/provider/portlet/beans/**"/>
+            <include name="org/gridlab/gridsphere/provider/portletui/beans/**"/>
+            <include name="org/gridlab/gridsphere/provider/portlet/beans/**"/>
+            <include name="org/gridlab/gridsphere/provider/portletui/model/**"/>
         </jar>
     </target>
 
