@@ -207,11 +207,13 @@ public class ProfileManagerPortlet extends ActionPortlet {
         TableCellBean groupsDescTC = null;
         TableCellBean roleTC = null;
         while (it.hasNext()) {
+            PortletGroup g = (PortletGroup) it.next();
+            if ((g.getType().equals(PortletGroup.HIDDEN)) && (req.getRole().compare(req.getRole(), PortletRole.ADMIN) < 0)) continue;
             groupsTR = new TableRowBean();
             groupsTC = new TableCellBean();
             groupsDescTC = new TableCellBean();
             roleTC = new TableCellBean();
-            PortletGroup g = (PortletGroup) it.next();
+
             String groupDesc = g.getDescription();
 
             CheckBoxBean cb = new CheckBoxBean();
@@ -227,7 +229,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
 
             TextBean groupTB = new TextBean();
             groupTB.setValue(g.getName());
-            if (!g.isPublic() && (!cb.isSelected())) {
+            if (g.getType().equals(PortletGroup.PRIVATE) && (!cb.isSelected())) {
                 cb.setDisabled(true);
             }
             groupsTC.addBean(cb);
@@ -235,7 +237,7 @@ public class ProfileManagerPortlet extends ActionPortlet {
             TextBean groupDescTB = new TextBean();
             groupDescTB.setValue(groupDesc);
             groupsDescTC.addBean(groupDescTB);
-            if (!g.isPublic()) {
+            if (g.getType().equals(PortletGroup.PRIVATE)) {
                 TextBean priv = event.getTextBean("privateTB");
                 priv.setValue("<br>" + this.getLocalizedText(req, "GROUP_NOTIFY"));
                 List admins = aclManagerService.getUsers(g, PortletRole.ADMIN);

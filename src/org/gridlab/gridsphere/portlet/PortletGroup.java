@@ -16,6 +16,41 @@ import java.util.Set;
  */
 public interface PortletGroup extends Cloneable {
 
+    public final Type PUBLIC = new Type(1);
+    public final Type PRIVATE = new Type(2);
+    public final Type HIDDEN = new Type(3);
+
+    public class Type {
+
+        private int type = 1;
+
+        public Type() {}
+
+        private Type(int type) {
+            this.type = type;
+        }
+
+        public static Type getType(int type) {
+            if (type == 3) return HIDDEN;
+            if (type == 2) return PRIVATE;
+            if (type == 1) return PUBLIC;
+            throw new IllegalArgumentException("Specified group type: " + type + " doesn't exist!");
+        }
+
+        public boolean equals(Object object) {
+            if (object != null && (object.getClass().equals(this.getClass()))) {
+                Type gtype = (Type) object;
+                return type == gtype.getType();
+            }
+            return false;
+        }
+
+
+        public int getType() {
+            return type;
+        }
+    }
+
     /**
      * Returns the id of this group
      *
@@ -43,6 +78,8 @@ public interface PortletGroup extends Cloneable {
      * @return the label of this group
      */
     public String getLabel();
+
+    public PortletGroup.Type getType();
 
     public Set getPortletRoleList();
 

@@ -109,7 +109,8 @@ public class GroupManagerPortlet extends ActionPortlet {
                 groupNameTF.setValue(group.getName());
                 TextFieldBean groupDescTF = event.getTextFieldBean("groupDescTF");
                 groupDescTF.setValue(group.getDescription());
-                if (!group.isPublic()) req.setAttribute("isPrivate", "true");
+
+                req.setAttribute("groupType", group.getType());
 
                 portletRoleList = group.getPortletRoleList();
                 HiddenFieldBean gid = event.getHiddenFieldBean("groupId");
@@ -372,17 +373,21 @@ public class GroupManagerPortlet extends ActionPortlet {
             newgroup.setName(groupTF.getValue());
             newgroup.setDescription(groupDescTF.getValue());
             newgroup.setPortletRoleList(portletRoles);
+            if (groupVisibility.getSelectedValue().equals("PUBLIC")) {
+                newgroup.setGroupType(PortletGroup.PUBLIC.getType());
+            }
             if (groupVisibility.getSelectedValue().equals("PRIVATE")) {
-                newgroup.setPublic(false);
-            } else {
-                newgroup.setPublic(true);
+                newgroup.setGroupType(PortletGroup.PRIVATE.getType());
+            }
+            if (groupVisibility.getSelectedValue().equals("HIDDEN")) {
+                newgroup.setGroupType(PortletGroup.HIDDEN.getType());
             }
 
             aclManagerService.createGroup(newgroup);
 
             req.setAttribute("groupId", newgroup.getID());
             createSuccessMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_NEWGROUP_SUCCESS"));
-            if (!newgroup.getPublic()) {
+            if (newgroup.getGroupType() == PortletGroup.PRIVATE.getType()) {
                 createSuccessMessage(evt, this.getLocalizedText(evt.getPortletRequest(), "GROUP_VISIBILITY_MOREDESC"));
             }
             PortletTabRegistry.newEmptyGroupTab(groupTF.getValue());

@@ -21,9 +21,6 @@ import java.util.Set;
 public class SportletGroup implements Serializable, Cloneable, PortletGroup {
 
     private String oid = null;
-    //private static final String SUPER_GROUP = "super";
-    private static final String CORE_GROUP = "gridsphere";
-    private static final String CORE_GROUP_DESC = "Core GridSphere Group";
 
     /**
      * The <code>SUPER</code> PortletGroup is the group that only super users of
@@ -41,6 +38,8 @@ public class SportletGroup implements Serializable, Cloneable, PortletGroup {
     private boolean isPublic = true;
     private String description = "";
     private boolean isCore = false;
+
+    private int groupType = PortletGroup.PUBLIC.getType();
 
     private Set portletRoleList = new HashSet();
 
@@ -198,6 +197,18 @@ public class SportletGroup implements Serializable, Cloneable, PortletGroup {
 
     public boolean getPublic() {
         return isPublic;
+    }
+
+    public void setGroupType(int type) {
+        this.groupType = type;
+    }
+
+    public int getGroupType() {
+        return groupType;
+    }
+
+    public PortletGroup.Type getType() {
+        return PortletGroup.Type.getType(groupType);
     }
 
     /**

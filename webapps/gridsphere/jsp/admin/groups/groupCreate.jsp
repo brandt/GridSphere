@@ -4,7 +4,8 @@
 <%@ taglib uri="/portletAPI" prefix="portletAPI" %>
 <portletAPI:init/>
 
-<% boolean isPublic = ((request.getAttribute("isPrivate") != null) ? false : true); %>
+<% PortletGroup.Type gtype = (PortletGroup.Type)request.getAttribute("groupType"); %>
+<% if (gtype == null) gtype = PortletGroup.PUBLIC; %>
 
 <ui:form>
 
@@ -23,17 +24,13 @@
 <ui:text key="GROUP_VISIBILITY_DESC"/>
 <ui:text key="GROUP_VISIBILITY_MOREDESC"/>
 <p>
-<% if (isPublic) { %>
-    <ui:radiobutton beanId="groupVisibility" value="PUBLIC" selected="true"/>
+
+<ui:radiobutton beanId="groupVisibility" value="PUBLIC" selected="<%= (gtype.equals(PortletGroup.PUBLIC)) ? true : false %>"/>
     <ui:text key="GROUP_PUBLIC"/>
-    <ui:radiobutton beanId="groupVisibility" value="PRIVATE"/>
+    <ui:radiobutton beanId="groupVisibility" value="PRIVATE" selected="<%= (gtype.equals(PortletGroup.PRIVATE)) ? true : false %>"/>
     <ui:text key="GROUP_PRIVATE"/>
-<% } else { %>
-    <ui:radiobutton beanId="groupVisibility" value="PUBLIC"/>
-    <ui:text value="GROUP_PUBLIC"/>
-    <ui:radiobutton beanId="groupVisibility" value="PRIVATE" selected="true"/>
-    <ui:text value="GROUP_PRIVATE"/>
-<% } %>
+    <ui:radiobutton beanId="groupVisibility" value="HIDDEN" selected="<%= (gtype.equals(PortletGroup.HIDDEN)) ? true : false %>"/>
+    <ui:text key="GROUP_HIDDEN"/>
 
 <h3><ui:text key="GROUP_SELECT_PORTLETS" style="nostyle"/></h3>
 
