@@ -192,8 +192,8 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         list.add(compId);
         hasTitleBarEvent = false;
         this.originalWidth = width;
-        // if the portlet frame is transparent then it doesn't get a title bar
-        if ((transparent == false) && (titleBar == null)) titleBar = new PortletTitleBar();
+
+        if (titleBar == null) titleBar = new PortletTitleBar();
         if (titleBar != null) {
             // if title bar is not assigned a label and we have one then use it
             if ((!label.equals("")) && (titleBar.getLabel().equals(""))) titleBar.setLabel(label + "TB");
@@ -454,7 +454,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         StringBuffer postframe = new StringBuffer();
 
         // Render title bar
-        if (titleBar != null) {
+        if ((titleBar != null) && (!transparent)) {
             titleBar.doRender(event);
             /*
             if (titleBar.hasRenderError()) {
