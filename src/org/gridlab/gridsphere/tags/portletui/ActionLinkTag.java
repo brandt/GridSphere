@@ -6,10 +6,12 @@ package org.gridlab.gridsphere.tags.portletui;
 
 import org.gridlab.gridsphere.provider.portletui.beans.ActionLinkBean;
 import org.gridlab.gridsphere.provider.portletui.beans.ActionParamBean;
+import org.gridlab.gridsphere.provider.portletui.beans.CheckBoxBean;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
 
 import java.util.*;
 
@@ -31,22 +33,30 @@ public class ActionLinkTag extends ActionTag {
     }
 
     public int doStartTag() throws JspException {
-        actionlink = new ActionLinkBean();
         paramBeans = new ArrayList();
-        createActionURI();
+        return EVAL_BODY_INCLUDE;
+    }
 
-        actionlink.setValue(value);
-        if (getKey() != null) {
+    public int doEndTag() throws JspException {
+        if (!beanId.equals("")) {
+            actionlink = (ActionLinkBean)pageContext.getAttribute(getBeanKey(), PageContext.REQUEST_SCOPE);
+            if (actionlink == null) {
+                actionlink = new ActionLinkBean();
+                this.setBaseComponentBean(actionlink);
+            }
+        } else {
+            actionlink = new ActionLinkBean();
+            this.setBaseComponentBean(actionlink);
+        }
+
+
+        if (key != null) {
             actionlink.setKey(key);
             Locale locale = pageContext.getRequest().getLocale();
             ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
             actionlink.setValue(bundle.getString(actionlink.getKey()));
         }
-        this.setBaseComponentBean(actionlink);
-        return EVAL_BODY_INCLUDE;
-    }
 
-    public int doEndTag() throws JspException {
         Iterator it = paramBeans.iterator();
         while (it.hasNext()) {
             ActionParamBean pbean = (ActionParamBean)it.next();
@@ -55,20 +65,17 @@ public class ActionLinkTag extends ActionTag {
 
         actionlink.setAction(createActionURI());
 
-        Object parentTag = getParent();
-        if (parentTag instanceof ContainerTag) {
-            ContainerTag containerTag = (ContainerTag)parentTag;
-            containerTag.addTagBean(actionlink);
-        } else {
-
-            try {
-                JspWriter out = pageContext.getOut();
-                out.println(actionlink.toStartString());
-            } catch (Exception e) {
-                throw new JspTagException(e.getMessage());
-            }
-
+        if ((bodyContent != null) && (value == null)) {
+            actionlink.setValue(bodyContent.getString());
         }
+
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(actionlink.toEndString());
+        } catch (Exception e) {
+            throw new JspException(e.getMessage());
+        }
+
         return EVAL_PAGE;
     }
 }
