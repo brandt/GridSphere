@@ -79,10 +79,10 @@ public class ActionResponseImpl extends PortletResponseImpl implements ActionRes
         } else if (windowState == WindowState.NORMAL) {
             ws = PortletWindow.State.NORMAL;
         } else {
-            Enumeration enum = portalContext.getSupportedWindowStates();
+            Enumeration e = portalContext.getSupportedWindowStates();
             boolean found = false;
-            while (enum.hasMoreElements() && (!found)) {
-                WindowState s = (WindowState) enum.nextElement();
+            while (e.hasMoreElements() && (!found)) {
+                WindowState s = (WindowState) e.nextElement();
                 if (s.toString().equalsIgnoreCase(windowState.toString())) {
                     ws = PortletWindow.State.toState(s.toString());
                     found = true;

@@ -123,20 +123,16 @@ public class GridSphereServlet extends HttpServlet implements ServletContextList
      * @throws IOException      if an I/O error occurs
      * @throws ServletException if a servlet error occurs
      */
-
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         processRequest(req, res);
     }
 
-
     public void setHeaders(HttpServletResponse res) {
         res.setContentType("text/html; charset=utf-8"); // Necessary to display UTF-8 encoded characters
-        /*
         res.setHeader("Cache-Control","no-cache"); //Forces caches to obtain a new copy of the page from the origin server
         res.setHeader("Cache-Control","no-store"); //Directs caches not to store the page under any circumstance
         res.setDateHeader("Expires", 0); //Causes the proxy cache to see the page as "stale"
         res.setHeader("Pragma","no-cache"); //HTTP 1.0 backward compatibility
-        */
     }
 
     public void processRequest(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {

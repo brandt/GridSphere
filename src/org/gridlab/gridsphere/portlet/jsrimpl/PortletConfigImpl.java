@@ -68,9 +68,9 @@ public class PortletConfigImpl implements PortletConfig {
 
         private void importData(ResourceBundle bundle) {
             if (bundle != null) {
-                for (Enumeration enum = bundle.getKeys(); enum.hasMoreElements
+                for (Enumeration e = bundle.getKeys(); e.hasMoreElements
                         ();) {
-                    String key = (String) enum.nextElement();
+                    String key = (String) e.nextElement();
                     Object value = bundle.getObject(key);
                     data.put(key, value);
                 }

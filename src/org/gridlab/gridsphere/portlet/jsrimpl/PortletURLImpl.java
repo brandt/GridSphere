@@ -102,9 +102,9 @@ public class PortletURLImpl implements PortletURL {
             throws WindowStateException {
         if (windowState == null) throw new IllegalArgumentException("Window state cannot be null");
         boolean isSupported = false;
-        Enumeration enum = context.getSupportedWindowStates();
-        while (enum.hasMoreElements()) {
-            WindowState supported = (WindowState) enum.nextElement();
+        Enumeration e = context.getSupportedWindowStates();
+        while (e.hasMoreElements()) {
+            WindowState supported = (WindowState) e.nextElement();
             if (supported.equals(windowState)) {
                 isSupported = true;
                 break;

@@ -207,12 +207,12 @@ public class AuthModuleDefinition {
      * @param props the configuration properties
      */
     public void setConfigProperties(Properties props) {
-        Enumeration enum = props.keys();
+        Enumeration e = props.keys();
         if (!props.isEmpty()) {
             configParamList = new Vector();
         }
-        while (enum.hasMoreElements()) {
-            String key = (String) enum.nextElement();
+        while (e.hasMoreElements()) {
+            String key = (String) e.nextElement();
             ConfigParam param = new ConfigParam(key, props.getProperty(key));
             configParamList.add(param);
         }

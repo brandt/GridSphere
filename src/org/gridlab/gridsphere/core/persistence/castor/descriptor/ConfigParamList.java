@@ -63,12 +63,12 @@ public class ConfigParamList {
      */
     protected void createConfigList() {
         configList = new ArrayList();
-        Enumeration enum = configHash.keys();
+        Enumeration e = configHash.keys();
         ConfigParam configParam = null;
         String paramName = null;
         String paramVal = null;
-        while (enum.hasMoreElements()) {
-            paramName = (String) enum.nextElement();
+        while (e.hasMoreElements()) {
+            paramName = (String) e.nextElement();
             paramVal = (String) configHash.get(paramName);
             configParam = new ConfigParam(paramName, paramVal);
             configList.add(configParam);

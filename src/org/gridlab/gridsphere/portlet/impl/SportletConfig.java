@@ -130,18 +130,17 @@ public class SportletConfig implements PortletConfig {
     }
 
     public void logConfig() {
-        String name, paramvalue, vals;
-        Object attrvalue;
-        Enumeration enum, eenum;
+        String name, vals;
+        Enumeration e;
 
         log.debug("PortletConfig Information");
         log.debug("portlet name: " + this.getName());
         //log.debug("portlet group name: " + this.getGroupName());
         log.debug("servlet name: " + this.getServletName());
         log.debug("config init parameters: ");
-        enum = this.getInitParameterNames();
-        while (enum.hasMoreElements()) {
-            name = (String) enum.nextElement();
+        e = this.getInitParameterNames();
+        while (e.hasMoreElements()) {
+            name = (String) e.nextElement();
             vals = getInitParameter(name);
             log.debug("\t\tname=" + name + " value=" + vals);
         }

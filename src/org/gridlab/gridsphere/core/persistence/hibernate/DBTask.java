@@ -139,7 +139,7 @@ public class DBTask extends Task {
 
         try {
             
-            File hibFile = new File(hibPath);
+            //File hibFile = new File(hibPath);
             /*
             if (!hibFile.exists()) {
                 log.info("Copying template hibernate properties file from " + hibPath + " to " + hibPath);
@@ -225,8 +225,10 @@ public class DBTask extends Task {
             // try to load the properties
             Properties properties = null;
             if (configDir.endsWith("gridsphere")) {
+                log.info("Using GridSphere database");
                 properties = loadGSProperties();
             } else {
+                log.info("Using project database");
                 properties = loadProjectProperties();
             }
 

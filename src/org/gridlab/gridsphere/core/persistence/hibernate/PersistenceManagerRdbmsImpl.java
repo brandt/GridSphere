@@ -33,27 +33,52 @@ public class PersistenceManagerRdbmsImpl implements PersistenceManagerRdbms {
     private final static int CMD_UPDATE = 5;
     private final static int CMD_CREATE = 6;
 
+    static Properties prop = new Properties();
+
     public PersistenceManagerRdbmsImpl() {
         ServletContext ctx = GridSphereConfig.getServletContext();
         String origPropsPath = ctx.getRealPath("/WEB-INF/persistence/hibernate.properties");
         String gsPropsPath = ctx.getRealPath("/WEB-INF/CustomPortal/database/hibernate.properties");
         String mappingPath = ctx.getRealPath("/WEB-INF/persistence");
         File propsFile = new File(gsPropsPath);
+
         try {
             if (!propsFile.exists()) {
                 GridSphereConfig.copyFile(new File(origPropsPath), propsFile);
                 log.info("Copying hibernate properties from " + origPropsPath + " to " + gsPropsPath);
             }
-            Properties prop = new Properties();
+
             prop.load(ctx.getResourceAsStream("/WEB-INF/CustomPortal/database/hibernate.properties"));
             Configuration cfg = loadConfiguration(mappingPath, prop);
             factory = cfg.buildSessionFactory();
+
+
         } catch (IOException e) {
             log.error("Unable to copy file from " + origPropsPath + " to " + gsPropsPath);
         } catch (HibernateException e) {
             log.error("Could not instantiate Hibernate Factory " + e);
         }
         log.info("Creating Hibernate RDBMS Impl using config in " + gsPropsPath);
+    }
+
+
+    public void resetDatabase(String connURL) {
+
+        ServletContext ctx = GridSphereConfig.getServletContext();
+        String gsPropsPath = ctx.getRealPath("/WEB-INF/CustomPortal/database/hibernate.properties");
+        prop.setProperty("hibernate.connection.url", connURL);
+        try {
+            prop.store(new FileOutputStream(new File(gsPropsPath)), "hibernate.properties");
+            factory.close();
+            DBTask task = new DBTask();
+            task.setConfigDir(ctx.getRealPath(""));
+            task.setAction(DBTask.ACTION_CREATE);
+            task.execute();
+        } catch (Exception e) {
+
+        }
+
+
     }
 
     public PersistenceManagerRdbmsImpl(String persistenceConfigDir) {

@@ -313,14 +313,14 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
     public void logRequest() {
         String name, paramvalue, headervals;
         Object attrvalue;
-        Enumeration enum, eenum;
+        Enumeration e1, eenum;
 
         log.debug("PortletRequest Information");
         log.debug("\tthis.getHttpServletRequest()uest headers: ");
 
-        enum = getHeaderNames();
-        while (enum.hasMoreElements()) {
-            name = (String) enum.nextElement();
+        e1 = getHeaderNames();
+        while (e1.hasMoreElements()) {
+            name = (String) e1.nextElement();
             eenum = (Enumeration) getHeaders(name);
             headervals = "";
             while (eenum.hasMoreElements()) {
@@ -335,16 +335,16 @@ public class SportletRequestImpl extends HttpServletRequestWrapper implements Sp
         log.debug("\tremote host: " + getRemoteHost() + " " + getRemoteAddr());
         log.debug("\tthis.getHttpServletRequest()uest scheme: " + getScheme());
         log.debug("\tthis.getHttpServletRequest()uest attribute names: ");
-        enum = getAttributeNames();
-        while (enum.hasMoreElements()) {
-            name = (String) enum.nextElement();
+        e1 = getAttributeNames();
+        while (e1.hasMoreElements()) {
+            name = (String)e1.nextElement();
             attrvalue = (Object) getAttribute(name);
             log.debug("\t\tname=" + name + " object type=" + attrvalue.getClass().getName());
         }
         log.debug("\tthis.getHttpServletRequest()uest parameter names: note if a parameter has multiple values, only the first beans is displayed ");
-        enum = getParameterNames();
-        while (enum.hasMoreElements()) {
-            name = (String) enum.nextElement();
+        e1 = getParameterNames();
+        while (e1.hasMoreElements()) {
+            name = (String) e1.nextElement();
             paramvalue = getParameter(name);
             log.debug("\t\tname=" + name + " value=" + paramvalue);
         }

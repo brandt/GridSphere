@@ -6,17 +6,18 @@ import org.gridlab.gridsphere.services.core.secdir.impl.SecureDirectoryServiceIm
 import org.gridlab.gridsphere.services.core.charts.*;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
+import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.ValidationException;
 import org.apache.oro.text.perl.Perl5Util;
 
-import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileWriter;
 import java.io.FileReader;
-import java.util.Enumeration;
 import java.util.Date;
 
 /**
@@ -34,32 +35,13 @@ public class ChartServiceImpl implements ChartService, PortletServiceProvider {
     public void init(PortletServiceConfig config) throws PortletServiceUnavailableException {
         if (!inited) {
             System.setProperty("java.awt.headless", "true");
-            secureDirectoryService = new SecureDirectoryServiceImpl();
-            final ServletContext servletContext = config.getServletContext();
-            ((SecureDirectoryServiceImpl) secureDirectoryService).init(new PortletServiceConfig() {
-                public String getInitParameter(String name) {
-                    return null;
-                }
 
-                public void setInitParameter(String name, String value) {
-                }
-
-                public String getInitParameter(String name, String defaultValue) {
-                    return null;
-                }
-
-                public Enumeration getInitParameterNames() {
-                    return null;
-                }
-
-                public ServletContext getServletContext() {
-                    return servletContext;
-                }
-
-                public void store() throws IOException {
-                    throw new IOException();
-                }
-            });
+            PortletServiceFactory factory = SportletServiceFactory.getInstance();
+            try {
+                secureDirectoryService = (SecureDirectoryService)factory.createPortletService(SecureDirectoryService.class, config.getServletContext(), true);
+            } catch (PortletServiceException e) {
+                throw new PortletServiceUnavailableException("Unable to get instance of SecureDirectoryService!", e);
+            }
             inited = true;
         }
     }

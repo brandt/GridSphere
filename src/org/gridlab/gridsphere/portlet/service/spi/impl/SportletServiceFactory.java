@@ -4,7 +4,6 @@
  */
 package org.gridlab.gridsphere.portlet.service.spi.impl;
 
-import org.gridlab.gridsphere.core.persistence.PersistenceManagerException;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.service.PortletService;
@@ -23,8 +22,8 @@ import org.gridlab.gridsphere.portletcontainer.PortletSessionManager;
 import org.gridlab.gridsphere.services.core.security.acl.impl.AccessControlManagerServiceImpl;
 import org.gridlab.gridsphere.services.core.user.UserSessionManager;
 
+
 import javax.servlet.ServletContext;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.*;
 
@@ -63,6 +62,9 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
     private static Hashtable webappServices = new Hashtable();
 
     public static String servicesMappingPath = null;
+
+    //public WebApplicationContext springContext = null;
+
     /**
      * Private constructor. Use getDefault() instead.
      */
@@ -83,6 +85,11 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
         String servicesPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/GridSphereServices.xml");
         servicesMappingPath = GridSphereConfig.getServletContext().getRealPath("/WEB-INF/mapping/portlet-services-mapping.xml");
         addServices(GridSphereConfig.getServletContext(), servicesPath);
+
+        // playing with Spring
+        //springContext  = WebApplicationContextUtils.getRequiredWebApplicationContext(GridSphereConfig.getServletContext());
+
+
     }
 
     public void login(PortletRequest req) throws PortletException {
@@ -200,7 +207,20 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
                                                boolean useCachedService)
             throws PortletServiceUnavailableException, PortletServiceNotFoundException {
 
+
+
         PortletServiceProvider psp = null;
+        /*
+        try {
+        psp = (PortletServiceProvider)springContext.getBean(service.getName());
+        if (psp != null) {
+            System.err.println("Actually found " + service.getName() + " from spring!");
+            return psp;
+        }
+        } catch (BeansException e) {
+            log.info("Unable to find bean :" + service.getName());
+        }
+        */
 
         // see if we already have an instance of this service
         if (service == null) {
@@ -491,13 +511,13 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
     }
 
     public void logStatistics() {
-        Enumeration enum = null;
+        Enumeration e = null;
         if (initServices != null) {
             log.debug("printing inited services");
-            enum = initServices.keys();
+            e = initServices.keys();
             String ser = "services:\n";
-            while (enum.hasMoreElements()) {
-                String s = (String) enum.nextElement();
+            while (e.hasMoreElements()) {
+                String s = (String) e.nextElement();
                 ser += s + "\n";
             }
             log.debug(ser);
@@ -509,9 +529,9 @@ public class SportletServiceFactory implements PortletServiceFactory, PortletSes
             while (users.hasNext()) {
                 String uid = (String) users.next();
                 log.debug("user: " + uid);
-                enum = userServices.keys();
-                while (enum.hasMoreElements()) {
-                    String u = (String) enum.nextElement();
+                e = userServices.keys();
+                while (e.hasMoreElements()) {
+                    String u = (String) e.nextElement();
                     Map l = (Map) userServices.get(u);
                     Iterator it = l.keySet().iterator();
                     String ser = "services:\n";

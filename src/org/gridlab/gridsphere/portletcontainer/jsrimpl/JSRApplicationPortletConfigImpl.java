@@ -99,14 +99,6 @@ public class JSRApplicationPortletConfigImpl implements ApplicationPortletConfig
         states.add(PortletWindow.State.MINIMIZED);
         states.add(PortletWindow.State.RESIZING);
 
-        System.err.println("portletName " + portletName);
-        for (int i = 0; i < states.size(); i++) {
-
-            PortletWindow.State tmp = (PortletWindow.State) states.get(i);
-            System.err.println(tmp);
-        }
-
-
     }
 
     /**

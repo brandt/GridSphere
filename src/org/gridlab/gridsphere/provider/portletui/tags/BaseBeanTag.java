@@ -76,25 +76,25 @@ public abstract class BaseBeanTag extends BodyTagSupport {
      * Prints out all request attributes. Used for debugging
      */
     public void debug() {
-        Enumeration enum = pageContext.getAttributeNamesInScope(PageContext.REQUEST_SCOPE);
+        Enumeration e = pageContext.getAttributeNamesInScope(PageContext.REQUEST_SCOPE);
         System.err.println("Printing attribues in request scope");
-        while (enum.hasMoreElements()) {
-            System.err.println((String) enum.nextElement());
+        while (e.hasMoreElements()) {
+            System.err.println((String) e.nextElement());
         }
-        enum = pageContext.getAttributeNamesInScope(PageContext.SESSION_SCOPE);
+        e = pageContext.getAttributeNamesInScope(PageContext.SESSION_SCOPE);
         System.err.println("Printing attribues in session scope");
-        while (enum.hasMoreElements()) {
-            System.err.println((String) enum.nextElement());
+        while (e.hasMoreElements()) {
+            System.err.println((String) e.nextElement());
         }
-        enum = pageContext.getAttributeNamesInScope(PageContext.PAGE_SCOPE);
+        e = pageContext.getAttributeNamesInScope(PageContext.PAGE_SCOPE);
         System.err.println("Printing attribues in page scope");
-        while (enum.hasMoreElements()) {
-            System.err.println((String) enum.nextElement());
+        while (e.hasMoreElements()) {
+            System.err.println((String) e.nextElement());
         }
-        enum = pageContext.getAttributeNamesInScope(PageContext.APPLICATION_SCOPE);
+        e = pageContext.getAttributeNamesInScope(PageContext.APPLICATION_SCOPE);
         System.err.println("Printing attribues in application scope");
-        while (enum.hasMoreElements()) {
-            System.err.println((String) enum.nextElement());
+        while (e.hasMoreElements()) {
+            System.err.println((String) e.nextElement());
         }
     }
 

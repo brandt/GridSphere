@@ -413,9 +413,9 @@ public abstract class BaseFormEventImpl {
     public void logRequestParameters() {
         StringBuffer sb = new StringBuffer();
         sb.append("\n\n show request params\n--------------------\n");
-        Enumeration enum = request.getParameterNames();
-        while (enum.hasMoreElements()) {
-            String name = (String) enum.nextElement();
+        Enumeration e = request.getParameterNames();
+        while (e.hasMoreElements()) {
+            String name = (String) e.nextElement();
             sb.append("\t\tname :" + name);
             String values[] = request.getParameterValues(name);
             if (values.length == 1) {
@@ -441,8 +441,8 @@ public abstract class BaseFormEventImpl {
     public void logRequestAttributes() {
         StringBuffer sb = new StringBuffer();
         sb.append("\n\n show request attributes\n--------------------\n");
-        Enumeration enum = request.getAttributeNames();
-        while (enum.hasMoreElements()) {
+        Enumeration e = request.getAttributeNames();
+        while (e.hasMoreElements()) {
             String name = (String) enum.nextElement();
             sb.append("name :" + name);
         }
@@ -465,9 +465,9 @@ public abstract class BaseFormEventImpl {
         Map paramsMap = new HashMap();
         // check for file upload
         paramsMap = parseFileUpload(req);
-        Enumeration enum = request.getParameterNames();
-        while (enum.hasMoreElements()) {
-            String uiname = (String) enum.nextElement();
+        Enumeration e = request.getParameterNames();
+        while (e.hasMoreElements()) {
+            String uiname = (String) e.nextElement();
             String[] vals = request.getParameterValues(uiname);
             paramsMap.put(uiname, vals);
         }
