@@ -20,7 +20,7 @@
 
         </id>
 
-        <property name="readonly" type="boolean" column="readonly"/>
+        <property name="readOnly" type="boolean" column="readonly"/>
         <map name="values" table="persistenceprefattrvalues">
             <key column="oid"/>
             <index column="attribute" type="string"/>
