@@ -447,7 +447,7 @@ Copyright:
     <target name="doclet-mapping" depends="check-mapping" if="var_force_mapping">
         <mkdir dir="${gridsphere.core}/database"/>
         <javadoc packagenames="org.gridlab.gridsphere.*"
-            excludepackagenames="org.gridlab.gridsphere.services.grid.*"
+            excludepackagenames="org.gridlab.gridsphere.services.grid.*, org.gridlab.gridsphere.portlets.grid.*"
             sourcepath="src"
             private="true"
             doclet="org.castor.doclet.ddl.DDL"
@@ -456,7 +456,7 @@ Copyright:
             <classpath refid="classpath"/>
         </javadoc>
         <javadoc packagenames="org.gridlab.gridsphere.*"
-            excludepackagenames="org.gridlab.gridsphere.services.grid.*"
+            excludepackagenames="org.gridlab.gridsphere.services.grid.*, org.gridlab.gridsphere.portlets.grid.*"
             sourcepath="src"
             private="true"
             doclet="org.castor.doclet.jdo.JDO"
@@ -636,7 +636,7 @@ Copyright:
         </copy>
 
         <!-- Copy over configuration files -->
-        <copy todir="${GRIDSPHERE_HOME}">
+        <copy overwrite="true" todir="${GRIDSPHERE_HOME}">
             <fileset dir="config">
                 <exclude name="*.properties"/>
                 <exclude name="database/**"/>
