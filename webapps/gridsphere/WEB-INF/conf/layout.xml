@@ -6,7 +6,7 @@
 <!-- Title -->
 <portlet-image>
     <image>images/title.jpg</image>
-</portlet-image>
+</portlet-image> 
 
 <!-- Information -->
 <portlet-text>
@@ -16,37 +16,38 @@
 <!-- Login -->
 <portlet-frame>
     <width>60</width>
-    <portlet-border>
+    <portlet-title-bar>
         <title-color>#FFFFFF</title-color>
         <line-color>#336699</line-color>
         <font>Arial, Helvetica, sans-serif</font>
         <thickness>2</thickness>
-    </portlet-border>
-    <window-state>normal</window-state>
-    <portlet-class>org.gridlab.gridsphere.portlets.core.LoginPortlet.129.2</portlet-class>
+        <portlet-class>org.gridlab.gridsphere.portlets.core.LoginPortlet.1</portlet-class>
+    </portlet-title-bar>
 </portlet-frame>
 
 <!-- Portlet Dock -->
-<portlet-dock>
-    <title>Portlet Dock</title>
-    <orientation>1</orientation>
-    <portlet-insets>
-        <width>4</width>
-        <height>4</height>
-    </portlet-insets>
+<portlet-panel>
+    <portlet-dock>
+        <title>Portlet Dock</title>
+        <orientation>1</orientation>
+        <portlet-insets>
+            <width>4</width>
+            <height>4</height>
+        </portlet-insets>
 
-    <portlet-minimized>
-        <title>Hello</title>
-        <foreground>red</foreground>
-        <portlet-class>portletclass</portlet-class>
-    </portlet-minimized>
+        <portlet-minimized>
+            <title>Hello</title>
+            <foreground>red</foreground>
+            <portlet-class>portletclass</portlet-class>
+        </portlet-minimized>
 
-    <portlet-minimized>
-        <title>Bye</title>
-        <foreground>green</foreground>
-        <portlet-class>portletclass</portlet-class>
-    </portlet-minimized>
-</portlet-dock>
+        <portlet-minimized>
+            <title>Bye</title>
+            <foreground>green</foreground>
+            <portlet-class>portletclass</portlet-class>
+        </portlet-minimized>
+    </portlet-dock>
+</portlet-panel>
 
 <!-- Tabbed Panes -->
 <portlet-tabbed-pane>
@@ -66,43 +67,37 @@
                 <portlet-frame>
                     <name>HalloWelt</name>
                     <width>90</width>
-                    <portlet-border>
+                    <portlet-title-bar>
                         <title-color>#FFFFFF</title-color>
                         <line-color>#336699</line-color>
                         <font>Arial, Helvetica, sans-serif</font>
                         <thickness>2</thickness>
-                    </portlet-border>
-                    <window-state>normal</window-state>
-                    <portlet-mode>view</portlet-mode>
-                    <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.624.2</portlet-class>
+                        <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.624.2</portlet-class>
+                    </portlet-title-bar>
                 </portlet-frame>
 
                 <portlet-frame>
                     <name>HelloWorld</name>
                     <width>90</width>
-                    <portlet-border>
+                    <portlet-title-bar>
                         <title-color>#FFFFFF</title-color>
                         <line-color>#336699</line-color>
                         <font>Arial, Helvetica, sans-serif</font>
                         <thickness>2</thickness>
-                    </portlet-border>
-                    <window-state>normal</window-state>
-                    <portlet-mode>view</portlet-mode>
-                    <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.2</portlet-class>
+                        <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.2</portlet-class>
+                    </portlet-title-bar>
                 </portlet-frame>
 
                 <portlet-frame>
                     <name>HelloWorld</name>
                     <width>90</width>
-                    <portlet-border>
+                    <portlet-title-bar>
                         <title-color>#FFFFFF</title-color>
                         <line-color>#336699</line-color>
                         <font>Arial, Helvetica, sans-serif</font>
                         <thickness>2</thickness>
-                    </portlet-border>
-                    <window-state>normal</window-state>
-                    <portlet-mode>view</portlet-mode>
-                    <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.4</portlet-class>
+                        <portlet-class>org.gridlab.gridsphere.portlets.core.HelloWorld.666.4</portlet-class>
+                    </portlet-title-bar>
                 </portlet-frame>
             </grid-layout>
         </portlet-panel>
@@ -119,19 +114,16 @@
                     <hgap>1</hgap>
                     <vgap>1</vgap>
                     <portlet-frame>
-                        <portlet-border>
+                        <portlet-title-bar>
                             <title-color>#FFFFFF</title-color>
                             <line-color>#336699</line-color>
                             <font>Arial, Helvetica, sans-serif</font>
                             <thickness>2</thickness>
-                        </portlet-border>
-                        <window-state>normal</window-state>
-                        <portlet-mode>view</portlet-mode>
-                        <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.624.2</portlet-class>
+                            <portlet-class>org.gridlab.gridsphere.portlets.core.HalloWelt.624.2</portlet-class>
+                        </portlet-title-bar>
                     </portlet-frame>
                 </flow-layout>
             </portlet-panel>
-
         </portlet-tab>
     </portlet-tabbed-pane>
 
