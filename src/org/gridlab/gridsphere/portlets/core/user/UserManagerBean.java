@@ -18,7 +18,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletGroup;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portlets.PortletBean;
+import org.gridlab.gridsphere.provider.PortletBean;
 import org.gridlab.gridsphere.provider.PortletActionHandler;
 import org.gridlab.gridsphere.tags.web.element.TextBean;
 import org.gridlab.gridsphere.tags.web.element.HiddenFieldBean;
@@ -57,6 +57,15 @@ public class UserManagerBean extends PortletActionHandler {
     private String fullName = new String();
     private String emailAddress = new String();
     private String organization = new String();
+
+    private HiddenFieldBean userIDBean;
+    private TextBean userNameBean;
+    private TextBean familyNameBean;
+    private TextBean givenNameBean;
+    private TextBean emailAddressBean;
+    private TextBean organizationBean;
+    private TextBean userRoleBean;
+
     // Password attributes
     private Password password = null;
     private String passwordValue = new String();
@@ -104,6 +113,7 @@ public class UserManagerBean extends PortletActionHandler {
 
     public void doViewUser()
             throws PortletException {
+        System.err.println("Calling viewUser()!");
         loadUser();
         setTitle("User Account Manager [View User]");
         setPage(PAGE_USER_VIEW);
@@ -111,7 +121,7 @@ public class UserManagerBean extends PortletActionHandler {
 
     public void doNewUser()
             throws PortletException {
-        loadUser();
+        initUser();
         setTitle("User Account Manager [New User]");
         setPage(PAGE_USER_EDIT);
     }
@@ -170,53 +180,6 @@ public class UserManagerBean extends PortletActionHandler {
 
     public User getUser() {
         return this.user;
-    }
-
-    private void setUser(User user) {
-        PortletRequest portletRequest = getPortletRequest();
-        // User id
-        HiddenFieldBean userIDBean = new HiddenFieldBean();
-        userIDBean.store("userID", portletRequest);
-        // User name
-        TextBean userNameBean = new TextBean();
-        userNameBean.store("userName", portletRequest);
-        // Family name
-        TextBean familyNameBean = new TextBean();
-        familyNameBean.store("familyName", portletRequest);
-        // Given name
-        TextBean givenNameBean = new TextBean();
-        givenNameBean.store("givenName", portletRequest);
-        // Email address
-        TextBean emailAddressBean = new TextBean();
-        emailAddressBean.store("emailAddress", portletRequest);
-        // Organization
-        TextBean organizationBean = new TextBean();
-        organizationBean.store("organization", portletRequest);
-        // Access rights
-        TextBean userRoleBean = new TextBean();
-        userRoleBean.store("userRole", portletRequest);
-        // Set value of beans if user not null
-        if (user != null) {
-            userIDBean.setValue(user.getID());
-            userNameBean.setText(user.getUserName());
-            familyNameBean.setText(user.getFamilyName());
-            givenNameBean.setText(user.getGivenName());
-            emailAddressBean.setText(user.getEmailAddress());
-            organizationBean.setText(user.getOrganization());
-            userRoleBean.setText(getRoleInBaseGroup().toString());
-        }
-        // Staying backwards compatible
-        setUserOld(user);
-    }
-
-    public void setUserOld(User user) {
-        this.user = user;
-        this.userID = user.getID();
-        this.userName = user.getUserID();
-        this.familyName = user.getFamilyName();
-        this.givenName = user.getGivenName();
-        this.emailAddress = user.getEmailAddress();
-        this.organization = user.getOrganization();
     }
 
     public boolean isNewUser() {
@@ -376,22 +339,57 @@ public class UserManagerBean extends PortletActionHandler {
     }
 
     private void loadUser() {
-        // Get user id
+        System.err.println("Calling loadUser()!");
         String userID = getParameter("userID");
-        // Load user
-        loadUser(userID);
-    }
-
-    private void loadUser(String userID) {
         User user = this.userManagerService.getUser(userID);
-        if (user != null) {
-            // Save user attributes
+        if (user == null) {
+            initUser();
+        } else {
             setUser(user);
-            // Then load password
             loadPassword();
-            // Load user acl
             loadAccessRights();
         }
+    }
+
+    private void initUser() {
+        System.err.println("Calling initUser()!");
+        PortletRequest portletRequest = getPortletRequest();
+        userIDBean = new HiddenFieldBean();
+        userIDBean.store("userID", portletRequest);
+        userNameBean = new TextBean();
+        userNameBean.store("userName", portletRequest);
+        familyNameBean = new TextBean();
+        familyNameBean.store("familyName", portletRequest);
+        givenNameBean = new TextBean();
+        givenNameBean.store("givenName", portletRequest);
+        emailAddressBean = new TextBean();
+        emailAddressBean.store("emailAddress", portletRequest);
+        organizationBean = new TextBean();
+        organizationBean.store("organization", portletRequest);
+        userRoleBean = new TextBean();
+        userRoleBean.store("userRole", portletRequest);
+    }
+
+    private void setUser(User user) {
+        System.err.println("Calling setUser()!");
+        this.user = user;
+        PortletRequest portletRequest = getPortletRequest();
+        userIDBean = new HiddenFieldBean("userID", user.getID());
+        userIDBean.store("userID", portletRequest);
+        userNameBean = new TextBean(user.getUserName());
+        userNameBean.store("userName", portletRequest);
+        familyNameBean = new TextBean(user.getFamilyName());
+        familyNameBean.store("familyName", portletRequest);
+        givenNameBean = new TextBean(user.getGivenName());
+        givenNameBean.store("givenName", portletRequest);
+        emailAddressBean = new TextBean(user.getEmailAddress());
+        emailAddressBean.store("emailAddress", portletRequest);
+        organizationBean = new TextBean(user.getOrganization());
+        organizationBean.store("organization", portletRequest);
+        userRoleBean = new TextBean(getRoleInBaseGroup().toString());
+        userRoleBean.store("userRole", portletRequest);
+        // Staying backwards compatible
+        //setUserOld(user);
     }
 
     private void loadPassword() {
@@ -411,6 +409,16 @@ public class UserManagerBean extends PortletActionHandler {
                 this.baseGroupRole = PortletRole.USER;
             }
         }
+    }
+
+    private void setUserOld(User user) {
+        this.user = user;
+        this.userID = user.getID();
+        this.userName = user.getUserID();
+        this.familyName = user.getFamilyName();
+        this.givenName = user.getGivenName();
+        this.emailAddress = user.getEmailAddress();
+        this.organization = user.getOrganization();
     }
 
     private void editUser()

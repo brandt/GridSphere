@@ -9,7 +9,7 @@ import org.gridlab.gridsphere.services.grid.security.credential.*;
 import org.gridlab.gridsphere.services.core.user.UserManagerService;
 import org.gridlab.gridsphere.services.grid.security.credential.CredentialManagerService;
 import org.gridlab.gridsphere.services.grid.security.credential.CredentialMapping;
-import org.gridlab.gridsphere.portlets.PortletBean;
+import org.gridlab.gridsphere.provider.PortletBean;
 
 import java.util.List;
 

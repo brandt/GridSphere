@@ -113,6 +113,7 @@ public abstract class BaseElementBean implements TagBean {
     }
 
     private void store(String id, PortletRequest request, Object ob) {
+        System.err.println("Storing bean with [" + id + "][" + ob.getClass().getName());
         this.id = id;
         request.setAttribute(id, ob);
         HttpSession session = request.getSession();

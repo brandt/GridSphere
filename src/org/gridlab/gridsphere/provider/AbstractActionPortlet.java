@@ -73,6 +73,7 @@ public abstract class AbstractActionPortlet extends AbstractPortlet {
         portletBean.doViewAction();
         // Get next page to display
         String nextPage = portletBean.getPage();
+        log.debug("Next page = " + nextPage);
         // Include next page
         includeNextPage(request, response, nextPage);
         getPortletLog().debug("Exiting doView()");
@@ -88,6 +89,7 @@ public abstract class AbstractActionPortlet extends AbstractPortlet {
         portletBean.doConfigAction();
         // Get next page to display
         String nextPage = portletBean.getPage();
+        log.debug("Next page = " + nextPage);
         // Include next page
         includeNextPage(request, response, nextPage);
         log.debug("Exiting doConfig()");
@@ -103,6 +105,7 @@ public abstract class AbstractActionPortlet extends AbstractPortlet {
         portletBean.doEditAction();
         // Get next page to display
         String nextPage = portletBean.getPage();
+        log.debug("Next page = " + nextPage);
         // Include next page
         includeNextPage(request, response, nextPage);
         log.debug("Exiting doEdit()");
@@ -118,6 +121,7 @@ public abstract class AbstractActionPortlet extends AbstractPortlet {
         portletBean.doHelpAction();
         // Get next page to display
         String nextPage = portletBean.getPage();
+        log.debug("Next page = " + nextPage);
         // Include next page
         includeNextPage(request, response, nextPage);
         log.debug("Exiting doHelp()");
@@ -158,7 +162,7 @@ public abstract class AbstractActionPortlet extends AbstractPortlet {
         // Check if portlet bean already created
         if (portletBean == null) {
             // Create new instance of portlet bean if not created yet
-            log.debug("Getting instance of " + portletBeanClass.getName());
+            log.debug("Creating instance of " + portletBeanClass.getName());
             try {
                 portletBean = (PortletActionHandler)this.portletBeanClass.newInstance();
             } catch (InstantiationException e) {

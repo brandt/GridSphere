@@ -7,11 +7,13 @@ package org.gridlab.gridsphere.tags.web;
 import org.gridlab.gridsphere.tags.web.element.TagBean;
 import org.gridlab.gridsphere.tags.web.validator.NoValidation;
 import org.gridlab.gridsphere.tags.web.validator.Validator;
+import org.gridlab.gridsphere.portlet.PortletRequest;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
+import javax.servlet.ServletRequest;
 
 public class BaseTag extends TagSupport {
 
@@ -165,13 +167,30 @@ public class BaseTag extends TagSupport {
 
     public int doStartTag() throws JspException {
         if (!bean.equals("")) {
-            this.htmlelement = (TagBean) pageContext.getRequest().getAttribute(bean);
+            Object beanElement = pageContext.getRequest().getAttribute(bean);
+            try {
+                this.htmlelement = (TagBean) beanElement;
+            } catch (Exception e) {
+                System.err.println("Error retrieving tag bean with name: " + bean);
+                if (beanElement == null) {
+                    System.err.println("Tag bean attribute with given name is not set!");
+                } else {
+                    System.err.println("Tag bean attribute has invalid type: "
+                                       + beanElement.getClass().getName());
+                }
+                System.err.println(e.getMessage());
+           }
         }
-        try {
-            JspWriter out = pageContext.getOut();
-            out.print(htmlelement.toString());
-        } catch (Exception e) {
-            throw new JspTagException(e.getMessage());
+        if (this.htmlelement == null) {
+            System.err.println("Html bean element is null!");
+        } else {
+            try {
+                JspWriter out = pageContext.getOut();
+                out.print(htmlelement.toString());
+            } catch (Exception e) {
+                System.err.println("Error using element bean");
+                throw new JspTagException(e.getMessage());
+            }
         }
         return EVAL_BODY_INCLUDE;
     }

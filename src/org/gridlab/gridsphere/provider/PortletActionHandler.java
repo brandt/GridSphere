@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.portlet.service.PortletService;
 import org.gridlab.gridsphere.event.ActionEvent;
 import org.gridlab.gridsphere.tags.event.FormEvent;
 import org.gridlab.gridsphere.tags.event.impl.FormEventImpl;
+import org.gridlab.gridsphere.tags.web.element.*;
 
 import java.util.*;
 import java.lang.reflect.Method;
@@ -96,7 +97,6 @@ public class PortletActionHandler {
 
     public void setActionPerformed(ActionEvent actionEvent) {
         this.actionEvent = actionEvent;
-        PortletAction action = actionEvent.getAction();
     }
 
     public String getActionPerformedMethodName() {
@@ -116,6 +116,48 @@ public class PortletActionHandler {
             actionMethodName = action.getName();
         }
         return actionMethodName;
+    }
+
+    public Object getTagBean(String beanName) {
+        // We get the form event from the action event
+        FormEvent form = new FormEventImpl(this.actionEvent);
+        // Then we return the tag bean with form event
+        return form.getTagBean(beanName);
+    }
+
+    public Object getHiddenFieldBean(String beanName) {
+        // We get the form event from the action event
+        FormEvent form = new FormEventImpl(this.actionEvent);
+        // Then we return the tag bean with form event
+        return (HiddenFieldBean)form.getTagBean(beanName);
+    }
+
+    public Object getCheckBoxBean(String beanName) {
+        // We get the form event from the action event
+        FormEvent form = new FormEventImpl(this.actionEvent);
+        // Then we return the tag bean with form event
+        return (CheckBoxBean)form.getTagBean(beanName);
+    }
+
+    public Object getTextFieldBean(String beanName) {
+        // We get the form event from the action event
+        FormEvent form = new FormEventImpl(this.actionEvent);
+        // Then we return the tag bean with form event
+        return (TextFieldBean)form.getTagBean(beanName);
+    }
+
+    public Object getTextAreaBean(String beanName) {
+        // We get the form event from the action event
+        FormEvent form = new FormEventImpl(this.actionEvent);
+        // Then we return the tag bean with form event
+        return (TextAreaBean)form.getTagBean(beanName);
+    }
+
+    public Object getPasswordBean(String beanName) {
+        // We get the form event from the action event
+        FormEvent form = new FormEventImpl(this.actionEvent);
+        // Then we return the tag bean with form event
+        return (PasswordBean)form.getTagBean(beanName);
     }
 
     public void doConfigAction()

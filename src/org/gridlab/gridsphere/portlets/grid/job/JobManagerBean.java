@@ -4,7 +4,7 @@
  */
 package org.gridlab.gridsphere.portlets.grid.job;
 
-import org.gridlab.gridsphere.portlets.PortletBean;
+import org.gridlab.gridsphere.provider.PortletBean;
 import org.gridlab.gridsphere.provider.PortletActionHandler;
 import org.gridlab.gridsphere.services.grid.job.*;
 import org.gridlab.gridsphere.services.grid.job.impl.grms.*;

@@ -7,7 +7,7 @@ package org.gridlab.gridsphere.portlets.grid.security;
 import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.services.grid.security.credential.*;
 import org.gridlab.gridsphere.services.grid.security.credential.CredentialPermission;
-import org.gridlab.gridsphere.portlets.PortletBean;
+import org.gridlab.gridsphere.provider.PortletBean;
 
 import java.util.List;
 

@@ -25,8 +25,10 @@ public class TextTag extends BaseTag {
 
     public int doStartTag() throws JspException {
         if (bean.equals("")) {
+            System.err.println("Bean is empty");
             this.htmlelement = new TextBean(text);
         }
+        System.err.println("Bean is empty");
         return super.doStartTag();
     }
 

@@ -17,7 +17,7 @@ import org.gridlab.gridsphere.portlet.*;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceException;
-import org.gridlab.gridsphere.portlets.PortletBean;
+import org.gridlab.gridsphere.provider.PortletBean;
 
 import javax.servlet.UnavailableException;
 import java.util.*;
