@@ -24,7 +24,7 @@ public class SportletURI implements PortletURI {
     private boolean isSecure = false;
     private boolean redirect = true;
     private String contextPath = null;
-    private String id = "";
+    //private String id = "";
     private Map actionParams = new HashMap();
     private Set sportletProps = null;
 
@@ -46,7 +46,7 @@ public class SportletURI implements PortletURI {
         this.contextPath = contextPath;
         this.res = res;
         this.req = req;
-        this.id = createUniquePrefix(2);
+
         // don't prefix these parameters of an action
         sportletProps = new HashSet();
         sportletProps.add(SportletProperties.COMPONENT_ID);
@@ -67,7 +67,7 @@ public class SportletURI implements PortletURI {
         this.contextPath = contextPath;
         this.req = req;
         this.res = res;
-        this.id = createUniquePrefix(2);
+        //this.id = createUniquePrefix(2);
         // don't prefix these parameters of an action
         sportletProps = new HashSet();
         sportletProps.add(SportletProperties.COMPONENT_ID);
@@ -195,7 +195,6 @@ public class SportletURI implements PortletURI {
         StringBuffer s = new StringBuffer();
         if (isSecure) {
             s.append("https://");
-            System.err.println("USING SECURE HTTPS!!!!!!!!!!!!!!!!!!!");
         } else {
             s.append("http://");
         }
@@ -207,11 +206,12 @@ public class SportletURI implements PortletURI {
         Iterator it = paramSet.iterator();
         while (it.hasNext()) {
             String name = (String) it.next();
-            String newname = id + "_" + name;
+            //String newname = id + "_" + name;
             String value = (String) actionParams.get(name);
-            store.put(newname, value);
+            //store.put(newname, value);
+            store.put(name, value);
         }
-        if (!actionParams.isEmpty()) store.put(SportletProperties.PREFIX, id);
+        //if (!actionParams.isEmpty()) store.put(SportletProperties.PREFIX, id);
 
         String url = contextPath;
         String newURL;

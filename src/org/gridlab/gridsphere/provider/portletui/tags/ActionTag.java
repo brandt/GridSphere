@@ -5,6 +5,7 @@
 package org.gridlab.gridsphere.provider.portletui.tags;
 
 import org.gridlab.gridsphere.portlet.*;
+import org.gridlab.gridsphere.portlet.impl.SportletProperties;
 import org.gridlab.gridsphere.provider.portletui.beans.ActionParamBean;
 
 import java.util.Iterator;
@@ -143,14 +144,42 @@ public abstract class ActionTag extends BaseComponentTag {
         if (action != null) {
             portletAction = new DefaultPortletAction(action);
             Iterator it = paramBeans.iterator();
-            while (it.hasNext()) {
-                ActionParamBean pbean = (ActionParamBean) it.next();
-                portletAction.addParameter(pbean.getName(), pbean.getValue());
+
+            if (!paramBeans.isEmpty()) {
+                String id = createUniquePrefix(2);
+
+                portletAction.addParameter(SportletProperties.PREFIX, id);
+
+                while (it.hasNext()) {
+                    ActionParamBean pbean = (ActionParamBean) it.next();
+                    portletAction.addParameter(id + "_" + pbean.getName(), pbean.getValue());
+                }
             }
             actionURI.addAction(portletAction);
         }
         return actionURI;
 
+    }
+
+    /**
+     *  A string utility that produces a string composed of
+     * <code>numChars</code> number of characters
+     *
+     * @param numChars the number of characters in the resulting <code>String</code>
+     * @return the <code>String</code>
+     */
+    private String createUniquePrefix(int numChars) {
+        StringBuffer s = new StringBuffer();
+        for (int i = 0; i <= numChars; i++) {
+            int nextChar = (int) (Math.random() * 62);
+            if (nextChar < 10) //0-9
+                s.append(nextChar);
+            else if (nextChar < 36) //a-z
+                s.append((char) (nextChar - 10 + 'a'));
+            else
+                s.append((char) (nextChar - 36 + 'A'));
+        }
+        return s.toString();
     }
 
 }
