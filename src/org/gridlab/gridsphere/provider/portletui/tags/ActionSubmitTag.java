@@ -98,7 +98,7 @@ public class ActionSubmitTag extends ActionTag {
 
         actionSubmitBean.setName(actionURI);
 
-        actionSubmitBean.setAction(portletAction.toString());
+        if (portletAction != null) actionSubmitBean.setAction(portletAction.toString());
 
         if ((bodyContent != null) && (value == null)) {
             actionSubmitBean.setValue(bodyContent.getString());

@@ -22,6 +22,25 @@ public abstract class ActionTag extends BaseComponentTag {
     protected PortletURI actionURI = null;
     protected DefaultPortletAction portletAction = null;
     protected List paramBeans = null;
+    protected String label = null;
+
+    /**
+     * Sets the label identified with the portlet component to link to
+     *
+     * @param label the action link key
+     */
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    /**
+     * Returns the label identified with the portlet component to link to
+     *
+     * @return the label
+     */
+    public String getLabel() {
+        return label;
+    }
 
     public void setAction(String action) {
         this.action = action;
@@ -57,16 +76,20 @@ public abstract class ActionTag extends BaseComponentTag {
         PortletResponse res = (PortletResponse) pageContext.getAttribute("portletResponse");
 
         // action is a required attribute except for FormTag
-        if (action == null) return res.createURI().toString();
-
-        actionURI = res.createURI();
-        portletAction = new DefaultPortletAction(action);
-        Iterator it = paramBeans.iterator();
-        while (it.hasNext()) {
-            ActionParamBean pbean = (ActionParamBean)it.next();
-            portletAction.addParameter(pbean.getName(), pbean.getValue());
+        if (label != null) {
+            actionURI = res.createURI(label);
+        } else {
+            actionURI = res.createURI();
         }
-        actionURI.addAction(portletAction);
+        if (action != null) {
+            portletAction = new DefaultPortletAction(action);
+            Iterator it = paramBeans.iterator();
+            while (it.hasNext()) {
+                ActionParamBean pbean = (ActionParamBean)it.next();
+                portletAction.addParameter(pbean.getName(), pbean.getValue());
+            }
+            actionURI.addAction(portletAction);
+        }
         return actionURI.toString();
     }
 

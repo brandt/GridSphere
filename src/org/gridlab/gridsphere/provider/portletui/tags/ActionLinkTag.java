@@ -55,7 +55,7 @@ public class ActionLinkTag extends ActionTag {
         }
 
         paramBeans = new ArrayList();
-        createActionURI();
+        //createActionURI();
         if (key != null) {
             actionlink.setKey(key);
             Locale locale = pageContext.getRequest().getLocale();

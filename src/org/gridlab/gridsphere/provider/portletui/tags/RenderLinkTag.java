@@ -25,6 +25,25 @@ public class RenderLinkTag extends BaseComponentTag {
 
     protected RenderLinkBean renderlink = null;
     protected String label = null;
+    protected String key = null;
+
+    /**
+     * Sets the action link key used to locate localized text
+     *
+     * @param key the action link key
+     */
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    /**
+     * Returns the action link key used to locate localized text
+     *
+     * @return the action link key
+     */
+    public String getKey() {
+        return key;
+    }
 
     /**
      * Sets the label identified with the portlet component to link to
@@ -69,6 +88,12 @@ public class RenderLinkTag extends BaseComponentTag {
             renderlink = new RenderLinkBean();
             renderlink.setRenderURI(createRenderURI());
             this.setBaseComponentBean(renderlink);
+        }
+
+        if (key != null) {
+            Locale locale = pageContext.getRequest().getLocale();
+            ResourceBundle bundle = ResourceBundle.getBundle("Portlet", locale);
+            renderlink.setValue(bundle.getString(key));
         }
 
         if ((bodyContent != null) && (value == null)) {
