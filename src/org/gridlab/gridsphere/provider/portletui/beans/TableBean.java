@@ -274,7 +274,7 @@ public class TableBean extends BaseComponentBean implements TagBean {
                 } else {
                     // create an actionlink
                     uris = uriString;
-                    System.err.println("uri = " + uris);
+                    //System.err.println("uri = " + uris);
                     uri = uris + "&" + TableBean.CURRENT_PAGE + "=" + i;
 
                     sb.append(" | " + "<a href=\"" + uri + "\">" + c + "</a>");
