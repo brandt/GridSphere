@@ -45,7 +45,7 @@ Copyright:
 
     <!-- Version properties -->
     <property name="version" value="1.0"/>
-    <property name="release" value="rc-1"/>
+    <property name="release" value=""/>
     <property name="version.release" value="${version} ${release}"/>
     <property name="gridsphere.project" value="gridsphere"/>
     <property name="gridsphere.name" value="GridSphere ${version.release}"/>
@@ -369,26 +369,26 @@ Copyright:
         <mkdir dir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/"/>
         <copy overwrite="true" file="webapps/gridsphere/WEB-INF/persistence/hibernate.properties" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/"/>
         <replace file="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/hibernate.properties"
-                 token="@GRIDSPHERE_WEBAPP@"
-                 value="${env.CATALINA_HOME}/${gswebapp.dir}"/>
+            token="@GRIDSPHERE_WEBAPP@"
+            value="${env.CATALINA_HOME}/${gswebapp.dir}"/>
         <replace file="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/hibernate.properties"
-                 token="@GRIDSPHERE_DB@"
-                 value="gridsphere"/>
+            token="@GRIDSPHERE_DB@"
+            value="gridsphere"/>
     </target>
 
     <target name="configure-test-database" depends="setenv">
         <mkdir dir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/"/>
         <copy overwrite="true" file="webapps/gridsphere/WEB-INF/persistence/hibernate.properties" todir="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/"/>
         <replace file="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/hibernate.properties"
-                 token="@GRIDSPHERE_WEBAPP@"
-                 value="${env.CATALINA_HOME}/${gswebapp.dir}"/>
+            token="@GRIDSPHERE_WEBAPP@"
+            value="${env.CATALINA_HOME}/${gswebapp.dir}"/>
         <replace file="${env.CATALINA_HOME}/webapps/gridsphere/WEB-INF/persistence/hibernate.properties"
-                 token="@GRIDSPHERE_DB@"
-                 value="gridsphere-test"/>
+            token="@GRIDSPHERE_DB@"
+            value="gridsphere-test"/>
     </target>
 
-   <target name="create-database" depends="setenv, configure-database">
-       <taskdef name="schemaexport"
+    <target name="create-database" depends="setenv, configure-database">
+        <taskdef name="schemaexport"
             classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask"
             classpathref="classpath"/>
 
@@ -403,11 +403,11 @@ Copyright:
                 <include name="**/*.hbm.xml"/>
             </fileset>
         </schemaexport>
-       <echo message="Successfully created new database"/>
-     </target>
+        <echo message="Successfully created new database"/>
+    </target>
 
     <target name="create-test-database" depends="setenv, configure-test-database">
-       <taskdef name="schemaexport"
+        <taskdef name="schemaexport"
             classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask"
             classpathref="classpath"/>
 
@@ -422,8 +422,8 @@ Copyright:
                 <include name="**/*.hbm.xml"/>
             </fileset>
         </schemaexport>
-       <echo message="Successfully created test database"/>
-     </target>
+        <echo message="Successfully created test database"/>
+    </target>
 
     <target name="update-database" depends="configure-database">
         <taskdef name="schemaupdate"
@@ -638,21 +638,6 @@ Copyright:
 
     <!-- +++++++++++++++ END TESTS +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
-    <!-- ++++++++++++++ START CRUSECONTROL ++++++++++++++++++++ -->
-
-    <target name="cruisecontrol" depends="clean, compile" description="target for cruisecontrol">
-        <!-- <mkdir dir="${gridsphere.build}/reports"/>
-         <junit printsummary="yes" fork="yes" haltonfailure="no">
-             <classpath>
-                 <path refid="classpath"/>
-                 <pathelement location="${gridsphere.build}/lib/gridsphere.jar"/>
-             </classpath>
-             <test name="org.gridlab.gridsphere.GridSphereTest" todir="${gridsphere.build}/reports">
-                 <formatter type="xml"/>
-             </test>
-         </junit>  -->
-    </target>
-
     <!-- =================================================================== -->
     <!-- Creates a new portlet project "newproject" in projects directory    -->
     <!-- =================================================================== -->
@@ -782,4 +767,19 @@ Copyright:
         </junitreport>
     </target>
 
+
+    <target name="sourcetarball">
+        <antcall target="clean"/>
+        <tstamp/>
+
+        <tar destfile="../${gridsphere.project}-${version}-${DSTAMP}-src.tgz" compression="gzip">
+
+            <tarfileset dir=".">
+                <exclude name="**/CVS"/>
+                <exclude name="*.ipr"/>
+                <exclude name="*.iws"/>
+            </tarfileset>
+        </tar>
+
+    </target>
 </project>
