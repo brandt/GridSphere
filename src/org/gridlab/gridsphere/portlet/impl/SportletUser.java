@@ -73,4 +73,6 @@ public interface SportletUser extends User {
      */
     public void setLastLoginTime(long lastLoginTime);
 
+
+
 }

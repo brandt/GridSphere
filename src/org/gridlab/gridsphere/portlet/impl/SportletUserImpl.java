@@ -13,6 +13,7 @@ import org.gridlab.gridsphere.portlet.PortletLog;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.List;
 
 /**
  * The User interface is an abstract view on the user-specific data.
@@ -31,9 +32,10 @@ public class SportletUserImpl extends BaseObject implements SportletUser {
     private String FullName;
     private String GivenName;
     private String EmailAddress;
-    private String Id;
     private String UserID;
+    private String Organization;
     private long LastLoginTime;
+    private List ACL = new Vector();
 
     public Vector Attributes = new Vector();
 
@@ -138,7 +140,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser {
     /**
      * Sets the given e-mail of the user.
      *
-     * @param the email address
+     * @param emailAddress the email address
      */
     public void setEmailAddress(String emailAddress) {
         this.EmailAddress = emailAddress;
@@ -150,7 +152,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser {
      * @return the internal unique id
      */
     public String getID() {
-        return Id;
+        return getOid();
     }
 
     /**
@@ -159,7 +161,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser {
      * @param id the internal unique id
      */
     public void setID(String id) {
-        this.Id = id;
+        setOid(id);
     }
 
     /**
@@ -181,6 +183,24 @@ public class SportletUserImpl extends BaseObject implements SportletUser {
     }
 
     /**
+     * Gets the organization the user belongs to
+     *
+     * @return organization the organization
+     */
+    public String getOrganization() {
+        return Organization;
+    }
+
+    /**
+     * Sets the organization the user belongs to
+     *
+     * @param organization
+     */
+    public void setOrganization(String organization) {
+        this.Organization=organization;
+    }
+
+    /**
      * Returns the point of time that this user was last logged in, or null if this information is not available.
      * The time is returned in number of milliseconds since January 1, 1970 GMT.
      *
@@ -198,6 +218,14 @@ public class SportletUserImpl extends BaseObject implements SportletUser {
      */
     public void setLastLoginTime(long lastLoginTime) {
         this.LastLoginTime = lastLoginTime;
+    }
+
+    public List getACL() {
+        return ACL;
+    }
+
+    public void setACL(List acl) {
+        ACL = acl;
     }
 
     private void convert2vector() {
@@ -248,7 +276,7 @@ public class SportletUserImpl extends BaseObject implements SportletUser {
         sb.append("FullName: " + FullName);
         sb.append("GivenName: " + GivenName);
         sb.append("EmailAddress: " + EmailAddress);
-        sb.append("Id: " + Id);
+        sb.append("Id: " + getOid());
         sb.append("UserID: " + UserID);
         sb.append("LastLoginTime: " + LastLoginTime);
         return sb.toString();

@@ -35,11 +35,11 @@ public abstract class SportletApplicationSettings implements PortletApplicationS
         this.hasConfigurePermission = hasConfigurePermission;
 
         // Stick <context-param> in store
-        Iterator contextParamsIt = portletApp.getContextParamList().iterator();
+  /*      Iterator contextParamsIt = portletApp.getContextParamList().iterator();
         while (contextParamsIt.hasNext()) {
             ConfigParam configParam = (ConfigParam)contextParamsIt.next();
             store.put(configParam.getParamName(), configParam.getParamValue());
-        }
+        }*/
     }
 
     /**
@@ -101,14 +101,14 @@ public abstract class SportletApplicationSettings implements PortletApplicationS
         }
         Enumeration enum = store.elements();
         Vector list = new Vector();
-        while (enum.hasMoreElements()) {
+/*        while (enum.hasMoreElements()) {
             String key = (String)enum.nextElement();
             String value = (String)store.get(key);
             ConfigParam parms = new ConfigParam(key, value);
             list.add(parms);
         }
         portletApp.setContextParamList(list);
-        pdd.save();
+        pdd.save();*/
     }
 
 }

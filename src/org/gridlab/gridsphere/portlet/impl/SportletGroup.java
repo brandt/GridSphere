@@ -6,18 +6,34 @@
 package org.gridlab.gridsphere.portlet.impl;
 
 import org.gridlab.gridsphere.portlet.PortletGroup;
+import org.gridlab.gridsphere.portlet.User;
+import org.gridlab.gridsphere.core.persistence.BaseObject;
+import org.gridlab.gridsphere.services.user.AccountRequest;
+import org.gridlab.gridsphere.services.user.impl.AccountRequestImpl;
 
-public class SportletGroup implements PortletGroup {
+import java.util.Vector;
+import java.util.Random;
 
-    public static final int BASE = 0;
+public class SportletGroup extends BaseObject implements PortletGroup {
 
-    private int ID = BASE;
-    private String groupName = "BASE";
+    public static final String ROOT = "0";
+    public static final String BASE = "1";
+
+    private String Name = "BASE";
     private static final SportletGroup baseGroup = new SportletGroup(BASE, "BASE");
 
-    public SportletGroup(int id, String groupName) {
-        this.ID = id;
-        this.groupName = groupName;
+    // @todo why did we need the baseGroup thing??
+    // @todo elimnate the sportletgroup(id, name) thing
+
+    public SportletGroup(String ID, String groupName) {
+        super();
+        this.Name = groupName;
+        setOid(ID);
+    }
+
+    public SportletGroup(String groupName) {
+        super();
+        this.Name = groupName;
     }
 
     public SportletGroup() {
@@ -29,7 +45,7 @@ public class SportletGroup implements PortletGroup {
     }
 
     public boolean isBaseGroup() {
-        if (ID == BASE) {
+        if (getOid() == BASE) {
             return true;
         } else {
             return false;
@@ -37,11 +53,21 @@ public class SportletGroup implements PortletGroup {
     }
 
     public String getName() {
-        return groupName;
+        return Name;
     }
 
-    public int getID() {
-        return ID;
+    public String getID() {
+        return getOid();
+    }
+
+
+    public void setID(String id) {
+        setOid(id);
+    }
+
+
+    public void setName(String name) {
+        Name = name;
     }
 
 }

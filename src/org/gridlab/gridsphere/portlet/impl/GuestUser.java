@@ -27,6 +27,7 @@ public class GuestUser implements User {
     private String emailAddress = null;
     private String id = null;
     private String userID = null;
+    private String organization = null;
     private long lastLoginTime;
 
     private GuestUser() {
@@ -36,6 +37,7 @@ public class GuestUser implements User {
         emailAddress = "no email";
         id = "500";
         userID = "guest";
+        organization = "guest";
         lastLoginTime = -1;
     }
 
@@ -137,6 +139,10 @@ public class GuestUser implements User {
      */
     public String getUserID() {
         return userID;
+    }
+
+    public String getOrganization() {
+        return organization;
     }
 
     /**
