@@ -12,7 +12,7 @@ import java.util.List;
 
 public class SportletRole implements PortletRole {
 
-    public static final int CANDIDATE = 0;
+
     public static final int GUEST = 1;
     public static final int USER  = 2;
     public static final int ADMIN = 3;
@@ -24,7 +24,6 @@ public class SportletRole implements PortletRole {
     private static ArrayList roleNames = new ArrayList();
 
     static {
-        roleNames.add("CANDIDATE");
         roleNames.add("GUEST");
         roleNames.add("USER");
         roleNames.add("ADMIN");
@@ -33,10 +32,6 @@ public class SportletRole implements PortletRole {
 
     private SportletRole(int role) {
         this.role = role;
-    }
-
-    public static PortletRole getCandidateRole() {
-        return new SportletRole(CANDIDATE);
     }
 
     public static PortletRole getGuestRole() {
@@ -91,8 +86,6 @@ public class SportletRole implements PortletRole {
             tagstring = "USER";
         } else if (role == ADMIN) {
             tagstring = "ADMIN";
-        } else if (role == CANDIDATE) {
-            tagstring = "CANDIDATE";
         } else {
             tagstring = "SUPER";
         }

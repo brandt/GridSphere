@@ -13,8 +13,6 @@ public interface PortletRole {
 
     public boolean isSuperRole();
 
-    public boolean isCandidateRole();
-
     public int getRole();
 
     public int getID();
