@@ -28,27 +28,23 @@ public interface PortletRegistryService extends PortletService {
      *
      * @return the registered portlets
      */
-    public Collection getRegisteredPortlets();
+    public List getRegisteredPortlets();
 
-    /**
-     * Return the registered portlet IDs
-     *
-     * @return the registered portlet IDs
-     */
-    public Set getRegisteredPortletIDs();
 
     /**
      * Return a registered portlet given its identifier
      *
-     * @return the portletID
+     * @return the registered portlet
      */
-    public RegisteredPortlet getRegisteredPortlet(String portletID);
+    public RegisteredPortlet getRegisteredPortlet(String concretePortletID);
 
-    public Collection getRegisteredePortletsByGroup(PortletGroup group);
+    /*
+    public Collection getRegisteredPortletsByGroup(PortletGroup group);
 
-    public Collection getRegisteredPortletsbyRole(PortletRole role);
+    public Collection getRegisteredPortletsByRole(PortletRole role);
+    */
 
-    public AbstractPortlet getActivePortlet(String portletID);
+    public AbstractPortlet getActivePortlet(String concretePortletID);
 
     /**
      * Registers a portlet with the PortletRegistryService
