@@ -223,14 +223,16 @@ public class PortletDispatcher {
     /**
      * Notifies this listener that the message which the listener is watching for has been performed.
      *
+     * @param concreteID the concrete portlet id
      * @param message the default portlet message
      * @param req the servlet request
      * @param res the servlet response
      * @throws IOException if an I/O error occurs during dispatching
      * @throws PortletException if the listener has trouble fulfilling the request
      */
-    public void messageEvent(PortletMessage message, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
+    public void messageEvent(String concreteID, PortletMessage message, HttpServletRequest req, HttpServletResponse res) throws IOException, PortletException {
         req.setAttribute(SportletProperties.MESSAGE_EVENT, message);
+        req.setAttribute(SportletProperties.PORTLETID, concreteID);
         req.setAttribute(SportletProperties.PORTLET_LIFECYCLE_METHOD, SportletProperties.SERVICE);
         req.setAttribute(SportletProperties.PORTLET_ACTION_METHOD, SportletProperties.MESSAGE_RECEIVED);
         try {

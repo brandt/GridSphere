@@ -260,7 +260,7 @@ public class PortletInvoker {
         ApplicationPortlet appPortlet = registry.getApplicationPortlet(appID);
         if (appPortlet != null) {
             PortletDispatcher dispatcher = appPortlet.getPortletDispatcher();
-            dispatcher.messageEvent(msgEvent, req, res);
+            dispatcher.messageEvent(concretePortletID, msgEvent, req, res);
         } else {
             log.info("in messageEvent: Unable to find portlet in registry: " + concretePortletID);
         }
