@@ -6,22 +6,18 @@
 <gs:form action="rss_edit">
 
 
-    <gs:text bean="textid"/>
+    <table>
+        <tr>
+            <td><gs:listbox bean="rssfeeds"/> </td>
+         </tr>
+         <tr>
+            <td><gs:textarea bean="desc"/> </td>
+        </tr>
+    </table>
 
-    <gs:textfield bean="f"/>
+    <gs:submit name="show" value="Show this feed"/>
 
-    <gs:checkbox bean="cbb"/>
-
-    <gs:textarea bean="tab"/>
-
-    <gs:submit name="show" value="Show"/>
-
-    <gs:submit name="ok" value="Ok"/>
-
-
-    <gs:dropdownlist bean="ddl"/>
-
-    <gs:listbox bean="lbb"/>
+    <gs:submit name="desc" value="Show url"/>
 
 
 </gs:form>
