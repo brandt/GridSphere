@@ -13,8 +13,8 @@ public interface PortletGroup {
 
     public String getName();
 
-    public int getGroup();
-
     public int getID();
+
+    public int getGroup();
 
 }

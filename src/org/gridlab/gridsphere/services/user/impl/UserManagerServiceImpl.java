@@ -16,6 +16,7 @@ import org.gridlab.gridsphere.portlet.impl.SportletUserImpl;
 import org.gridlab.gridsphere.portlet.impl.SportletRole;
 import org.gridlab.gridsphere.portlet.service.PortletServiceNotFoundException;
 import org.gridlab.gridsphere.portlet.service.PortletServiceUnavailableException;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceConfig;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.PortletServiceProvider;
@@ -115,7 +116,7 @@ public class UserManagerServiceImpl implements PortletServiceProvider, UserManag
     /**
      * Submit the account request to the queue for administrative approval
      */
-    public void submitAccountRequest(AccountRequest request) {
+    public void submitAccountRequest(AccountRequest request) throws PortletServiceException {
 
         int i;
 

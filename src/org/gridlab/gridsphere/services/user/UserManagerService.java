@@ -7,6 +7,7 @@ package org.gridlab.gridsphere.services.user;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletGroup;
 import org.gridlab.gridsphere.portlet.service.PortletService;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.core.mail.MailMessage;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public interface UserManagerService extends PortletService {
      *
      * @param request the <code>AccountRequest</code> to submit
      */
-    public void submitAccountRequest(AccountRequest request);
+    public void submitAccountRequest(AccountRequest request) throws PortletServiceException ;
 
     /**
      * Administrators can retrieve all pending account request

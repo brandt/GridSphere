@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.portlet.service.spi.test;
 
 import junit.framework.TestCase;
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.impl.SportletLog;
 import org.gridlab.gridsphere.portlet.PortletLog;
 
@@ -32,7 +33,7 @@ public class ServiceTest extends TestCase {
         super(name);
     }
 
-    protected void setUp() {
+    protected void setUp() throws PortletServiceException {
 
         // create factory
         factory = SportletServiceFactory.getInstance();

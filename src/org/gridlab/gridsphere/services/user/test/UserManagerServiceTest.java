@@ -6,6 +6,7 @@ package org.gridlab.gridsphere.services.user.test;
 
 import org.gridlab.gridsphere.portlet.service.spi.impl.SportletServiceFactory;
 import org.gridlab.gridsphere.portlet.service.spi.test.ServiceTest;
+import org.gridlab.gridsphere.portlet.service.PortletServiceException;
 import org.gridlab.gridsphere.portlet.User;
 import org.gridlab.gridsphere.portlet.PortletLog;
 import org.gridlab.gridsphere.portlet.PortletGroup;
@@ -55,7 +56,7 @@ public class UserManagerServiceTest extends ServiceTest {
         junit.textui.TestRunner.run(suite());
     }
 
-    protected void setUp() {
+    protected void setUp() throws PortletServiceException {
         super.setUp();
         int i;
 
@@ -113,7 +114,7 @@ public class UserManagerServiceTest extends ServiceTest {
     }
 
 
-    public void testUserService() {
+    public void testUserService() throws PortletServiceException {
         AccountRequest req1, req2;
         // create mock accounts -- since createAccountRequest just returns new AccountRequest()
         // there's little need to test this method

@@ -122,6 +122,7 @@ public class AccessControlManagerServiceImpl implements PortletServiceProvider, 
      *
      * @param group the PortletGroup to modify
      * @param newGroupName the name of the new group
+     * @throws PortletServiceException
      */
     public void renameGroup(PortletGroup group, String newGroupName) throws PortletServiceException {
 
