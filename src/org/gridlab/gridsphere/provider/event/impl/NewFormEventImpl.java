@@ -538,9 +538,13 @@ public class NewFormEventImpl implements FormEvent {
                     log.debug("Creating a checkbox bean with id:" + beanId);
                     bean = new CheckBoxBean(req, beanId);
                     bean.setValue(vals[0]);
-                    bean.addSelectedValue(vals[0]);
+                    for (int i = 0; i < vals.length; i++) {
+                        String val = vals[i];
+                        bean.addSelectedValue(val);
+                    }
                     bean.setName(name);
                 } else {
+                    /*is this called anytime ? */
                     log.debug("Using existing checkbox bean with id:" + beanId);
                     bean.addSelectedValue(vals[0]);
                 }
