@@ -25,7 +25,7 @@
 
         <set name="portletRoleList" table="portletrolelist" cascade="all">
             <key column="role_oid"/>
-            <many-to-many column="role_info" class="org.gridlab.gridsphere.portlet.PortletRoleInfo"/>
+            <many-to-many column="role_info" class="org.gridlab.gridsphere.portlet.impl.SportletRoleInfo"/>
         </set>
 
 
