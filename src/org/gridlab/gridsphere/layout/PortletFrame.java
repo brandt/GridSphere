@@ -37,9 +37,9 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
     private List listeners = new ArrayList();
     private PortletErrorFrame errorFrame = new PortletErrorFrame();
     private boolean transparent = false;
-    private String innerPadding = "";
-    private String outerPadding = "";
-    private String roleString = "GUEST";
+    private String innerPadding = "0";
+    private String outerPadding = "0";
+
     private PortletRole requiredRole = PortletRole.GUEST;
 
     private transient PortletDataManager dataManager = SportletDataManager.getInstance();
@@ -122,24 +122,6 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
      */
     public boolean getTransparent() {
         return this.transparent;
-    }
-
-    /**
-     * Allows a required role to be associated with viewing this portlet
-     *
-     * @param roleString the required portlet role expresses as a <code>String</code>
-     */
-    public void setRequiredRole(String roleString) {
-        this.roleString = roleString;
-    }
-
-    /**
-     * Allows a required role to be associated with viewing this portlet
-     *
-     * @return the required portlet role expresses as a <code>String</code>
-     */
-    public String getRequiredRole() {
-        return roleString;
     }
 
     /**
@@ -236,6 +218,7 @@ public class PortletFrame extends BasePortletComponent implements Serializable, 
         // process events
         PortletRequest req = event.getPortletRequest();
         PortletRole role = req.getRole();
+
         if (role.compare(role, requiredRole) < 0) return;
 
         PortletResponse res = event.getPortletResponse();

@@ -24,6 +24,7 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
     protected String name = new String();
     protected String theme = GridSphereConfig.getProperty(GridSphereConfigProperties.DEFAULT_THEME);
     protected boolean isVisible = true;
+    protected String roleString = "GUEST";
 
     /**
      * Returns the portlet component name
@@ -41,6 +42,24 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Allows a required role to be associated with viewing this portlet
+     *
+     * @param roleString the required portlet role expresses as a <code>String</code>
+     */
+    public void setRequiredRoleAsString(String roleString) {
+        this.roleString = roleString;
+    }
+
+    /**
+     * Allows a required role to be associated with viewing this portlet
+     *
+     * @return the required portlet role expresses as a <code>String</code>
+     */
+    public String getRequiredRoleAsString() {
+        return roleString;
     }
 
     /**
@@ -141,12 +160,12 @@ public abstract class BasePortletComponent extends BaseComponentLifecycle implem
 
     public Object clone() throws CloneNotSupportedException {
             BasePortletComponent b = (BasePortletComponent)super.clone();
-
             b.width = this.width;
             b.height = this.height;
             b.isVisible = this.isVisible;
             b.name = this.name;
             b.theme = this.theme;
+            b.roleString = this.roleString;
             return b;
     }
 

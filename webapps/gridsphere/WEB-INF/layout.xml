@@ -13,6 +13,7 @@
         </portlet-panel>
     </portlet-tab>
     <portlet-tab>
+        <required-role>SUPER</required-role>
         <title>Administration</title>
         <portlet-tabbed-pane style="sub-menu">
             <portlet-tab>

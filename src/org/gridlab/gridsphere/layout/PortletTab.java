@@ -10,6 +10,7 @@ import org.gridlab.gridsphere.layout.event.impl.PortletTabEventImpl;
 import org.gridlab.gridsphere.portlet.PortletRequest;
 import org.gridlab.gridsphere.portlet.PortletResponse;
 import org.gridlab.gridsphere.portlet.PortletURI;
+import org.gridlab.gridsphere.portlet.PortletRole;
 import org.gridlab.gridsphere.portletcontainer.GridSphereEvent;
 import org.gridlab.gridsphere.portletcontainer.GridSphereProperties;
 
@@ -30,6 +31,8 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
     private boolean selected = false;
     private PortletComponent portletComponent = null;
     private List listeners = new ArrayList();
+
+    private PortletRole requiredRole = PortletRole.GUEST;
 
     /**
      * Constructs an instance of PortletTab
@@ -65,6 +68,10 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
      */
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public PortletRole getRequiredRole() {
+        return requiredRole;
     }
 
     /**
@@ -146,6 +153,11 @@ public class PortletTab extends BasePortletComponent implements Serializable, Cl
         compId.setComponentID(list.size());
         compId.setClassName(this.getClass().getName());
         list.add(compId);
+        try {
+            requiredRole = PortletRole.toPortletRole(roleString);
+        } catch (IllegalArgumentException e) {
+            requiredRole = PortletRole.GUEST;
+        }
         return portletComponent.init(list);
     }
 
